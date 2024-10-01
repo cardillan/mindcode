@@ -1,5 +1,6 @@
    178 instructions before optimizations.
-    20 instructions eliminated by Temp Variables Elimination.
+    18 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Case Expression Optimization.
     20 instructions eliminated by Dead Code Elimination (4 iterations).
     12 instructions eliminated by Jump Optimization (3 iterations).
      8 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
@@ -16,7 +17,180 @@
 Pass 1: speed optimization selection (cost limit 889):
   * Loop Optimization: replicate condition at line 57            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
+ 
+    18 print "\nFound: "
+    19 print block
+    20 sensor __tmp5 block @type
+-    * set __ast0 __tmp5
+-    * jump __label8 equal __ast0 @message
++   21 jump __label8 equal __tmp5 @message
+    22 jump __label7 always
+    23 label __label8
+    24 set MESSAGE block
+    25 set __tmp6 MESSAGE
+    26 jump __label6 always
+    27 label __label7
+-    * jump __label10 equal __ast0 @switch
++   28 jump __label10 equal __tmp5 @switch
+    29 jump __label9 always
+    30 label __label10
+    31 set SWITCH block
+    32 set __tmp6 SWITCH
+    33 jump __label6 always
+    34 label __label9
+-    * jump __label12 equal __ast0 @memory-bank
+-    * jump __label12 equal __ast0 @memory-cell
++   35 jump __label12 equal __tmp5 @memory-bank
++   36 jump __label12 equal __tmp5 @memory-cell
+    37 jump __label11 always
+    38 label __label12
+    39 set TARGET_MEMORY SOURCE_MEMORY
+ 
+    76 label __label16
+    77 set startIndex 0
+    78 sensor __tmp11 TARGET_MEMORY @type
+-    * set __ast1 __tmp11
+-    * jump __label19 equal __ast1 @memory-cell
++   79 jump __label19 equal __tmp11 @memory-cell
+    80 jump __label18 always
+    81 label __label19
+    82 set __tmp12 64
+    83 jump __label17 always
+    84 label __label18
+-    * jump __label21 equal __ast1 @memory-bank
++   85 jump __label21 equal __tmp11 @memory-bank
+    86 jump __label20 always
+    87 label __label21
+    88 set __tmp12 512
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-18 instructions):
+ 
+    22 jump __label7 always
+    23 label __label8
+    24 set MESSAGE block
+-    * set __tmp6 MESSAGE
+    25 jump __label6 always
+    26 label __label7
+    27 jump __label10 equal __tmp5 @switch
+    28 jump __label9 always
+    29 label __label10
+    30 set SWITCH block
+-    * set __tmp6 SWITCH
+    31 jump __label6 always
+    32 label __label9
+    33 jump __label12 equal __tmp5 @memory-bank
+ 
+    36 label __label12
+    37 set TARGET_MEMORY SOURCE_MEMORY
+    38 set SOURCE_MEMORY block
+-    * set __tmp6 SOURCE_MEMORY
+    39 jump __label6 always
+    40 label __label11
+-    * set __tmp6 null
+    41 label __label6
+    42 label __label4
+    43 jump __label3 always
+ 
+    53 op equal __tmp7 SOURCE_MEMORY null
+    54 jump __label13 equal __tmp7 false
+    55 print "\nNo memory."
+-    * set __tmp8 "\nNo memory."
+    56 jump __label14 always
+    57 label __label13
+-    * set __tmp8 null
+    58 label __label14
+    59 printflush MESSAGE
+    60 label __label1
+ 
+    63 op equal __tmp9 TARGET_MEMORY null
+    64 jump __label15 equal __tmp9 false
+    65 set TARGET_MEMORY SOURCE_MEMORY
+-    * set __tmp10 TARGET_MEMORY
+    66 jump __label16 always
+    67 label __label15
+-    * set __tmp10 null
+    68 label __label16
+    69 set startIndex 0
+    70 sensor __tmp11 TARGET_MEMORY @type
+ 
+    89 set startIndex __tmp15
+    90 op sub __tmp16 memSize 1
+    91 set memSize __tmp16
+-    * set __tmp14 memSize
+    92 jump __label23 always
+    93 label __label22
+-    * set __tmp14 null
+    94 label __label23
+    95 set __tmp17 @tick
+    96 set prevTick __tmp17
+ 
+   116 op add __tmp28 prevTick TICKS
+   117 set nextTick __tmp28
+   118 set currTick prevTick
+-    * set __tmp26 currTick
+   119 jump __label28 always
+   120 label __label27
+-    * set __tmp26 null
+   121 label __label28
+   122 label __label29
+   123 op lessThan __tmp29 @tick nextTick
+ 
+   125 op lessThan __tmp30 @tick prevTick
+   126 jump __label32 equal __tmp30 false
+   127 end
+-    * set __tmp31 null
+   128 jump __label33 always
+   129 label __label32
+   130 read __tmp32 SOURCE_MEMORY 0
+ 
+   139 label __label34
+   140 set __tmp34 null
+   141 label __label35
+-    * set __tmp31 __tmp34
+   142 label __label33
+   143 label __label30
+   144 jump __label29 always
+ 
+   150 op equal __tmp38 amount 0
+   151 jump __label36 equal __tmp38 false
+   152 set rate 0
+-    * set __tmp39 rate
+   153 jump __label37 always
+   154 label __label36
+   155 op div __tmp40 amount time
+   156 op max __tmp41 __tmp40 0
+   157 set rate __tmp41
+-    * set __tmp39 rate
+   158 label __label37
+   159 op add __tmp42 index 1
+   160 set index __tmp42
+ 
+   162 jump __label38 equal __tmp43 false
+   163 op add __tmp45 startIndex 1
+   164 set index __tmp45
+-    * set __tmp44 index
+   165 jump __label39 always
+   166 label __label38
+-    * set __tmp44 null
+   167 label __label39
+   168 write index TARGET_MEMORY startIndex
+   169 write rate TARGET_MEMORY index
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
+ 
+   134 set __tmp35 @tick
+   135 set currTick __tmp35
+   136 set curr value
+-    * set __tmp34 curr
+   137 jump __label35 always
+   138 label __label34
+-    * set __tmp34 null
+   139 label __label35
+   140 label __label33
+   141 label __label30
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-18 instructions):
  
      6 op equal __tmp0 SOURCE_MEMORY null
      7 jump __label2 equal __tmp0 false
@@ -35,281 +209,139 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 ins
 +   14 getlink block n
     15 print "\nFound: "
     16 print block
--    * sensor __tmp5 block @type
--    * set __ast0 __tmp5
-+   17 sensor __ast0 block @type
-    18 jump __label8 equal __ast0 @message
-    19 jump __label7 always
-    20 label __label8
+    17 sensor __tmp5 block @type
  
-    72 set __tmp10 null
-    73 label __label16
-    74 set startIndex 0
--    * sensor __tmp11 TARGET_MEMORY @type
--    * set __ast1 __tmp11
-+   75 sensor __ast1 TARGET_MEMORY @type
-    76 jump __label19 equal __ast1 @memory-cell
-    77 jump __label18 always
-    78 label __label19
- 
-    90 set memSize __tmp12
-    91 op equal __tmp13 SOURCE_MEMORY TARGET_MEMORY
-    92 jump __label22 equal __tmp13 false
+    82 set memSize __tmp12
+    83 op equal __tmp13 SOURCE_MEMORY TARGET_MEMORY
+    84 jump __label22 equal __tmp13 false
 -    * op idiv __tmp15 memSize 2
 -    * set startIndex __tmp15
 -    * op sub __tmp16 memSize 1
 -    * set memSize __tmp16
-+   93 op idiv startIndex memSize 2
-+   94 op sub memSize memSize 1
-    95 set __tmp14 memSize
-    96 jump __label23 always
-    97 label __label22
-    98 set __tmp14 null
-    99 label __label23
++   85 op idiv startIndex memSize 2
++   86 op sub memSize memSize 1
+    87 jump __label23 always
+    88 label __label22
+    89 label __label23
 -    * set __tmp17 @tick
 -    * set prevTick __tmp17
 -    * read __tmp18 SOURCE_MEMORY 0
 -    * set prev __tmp18
-+  100 set prevTick @tick
-+  101 read prev SOURCE_MEMORY 0
-   102 set currTick prevTick
-   103 set curr prev
-   104 read __tmp19 TARGET_MEMORY startIndex
++   90 set prevTick @tick
++   91 read prev SOURCE_MEMORY 0
+    92 set currTick prevTick
+    93 set curr prev
+    94 read __tmp19 TARGET_MEMORY startIndex
 -    * op max __tmp20 startIndex __tmp19
 -    * set index __tmp20
-+  105 op max index startIndex __tmp19
-   106 set nextTick prevTick
-   107 label __label24
-   108 sensor __tmp21 switch1 @enabled
-   109 op equal __tmp22 __tmp21 0
-   110 jump __label26 equal __tmp22 false
++   95 op max index startIndex __tmp19
+    96 set nextTick prevTick
+    97 label __label24
+    98 sensor __tmp21 switch1 @enabled
+    99 op equal __tmp22 __tmp21 0
+   100 jump __label26 equal __tmp22 false
 -    * op add __tmp23 nextTick TICKS
 -    * set nextTick __tmp23
-+  111 op add nextTick nextTick TICKS
-   112 op add __tmp24 nextTick TICKS
-   113 op greaterThan __tmp25 @tick __tmp24
-   114 jump __label27 equal __tmp25 false
++  101 op add nextTick nextTick TICKS
+   102 op add __tmp24 nextTick TICKS
+   103 op greaterThan __tmp25 @tick __tmp24
+   104 jump __label27 equal __tmp25 false
 -    * set __tmp27 @tick
 -    * set prevTick __tmp27
 -    * op add __tmp28 prevTick TICKS
 -    * set nextTick __tmp28
-+  115 set prevTick @tick
-+  116 op add nextTick prevTick TICKS
-   117 set currTick prevTick
-   118 set __tmp26 currTick
-   119 jump __label28 always
++  105 set prevTick @tick
++  106 op add nextTick prevTick TICKS
+   107 set currTick prevTick
+   108 jump __label28 always
+   109 label __label27
  
-   129 set __tmp31 null
-   130 jump __label33 always
-   131 label __label32
+   116 end
+   117 jump __label33 always
+   118 label __label32
 -    * read __tmp32 SOURCE_MEMORY 0
 -    * set value __tmp32
-+  132 read value SOURCE_MEMORY 0
-   133 op notEqual __tmp33 value curr
-   134 jump __label34 equal __tmp33 false
++  119 read value SOURCE_MEMORY 0
+   120 op notEqual __tmp33 value curr
+   121 jump __label34 equal __tmp33 false
 -    * set __tmp35 @tick
 -    * set currTick __tmp35
-+  135 set currTick @tick
-   136 set curr value
-   137 set __tmp34 curr
-   138 jump __label35 always
++  122 set currTick @tick
+   123 set curr value
+   124 jump __label35 always
+   125 label __label34
  
-   144 label __label30
-   145 jump __label29 always
-   146 label __label31
+   128 label __label30
+   129 jump __label29 always
+   130 label __label31
 -    * op sub __tmp36 curr prev
 -    * set amount __tmp36
 -    * op sub __tmp37 currTick prevTick
 -    * set time __tmp37
-+  147 op sub amount curr prev
-+  148 op sub time currTick prevTick
-   149 op equal __tmp38 amount 0
-   150 jump __label36 equal __tmp38 false
-   151 set rate 0
- 
-   153 jump __label37 always
-   154 label __label36
-   155 op div __tmp40 amount time
++  131 op sub amount curr prev
++  132 op sub time currTick prevTick
+   133 op equal __tmp38 amount 0
+   134 jump __label36 equal __tmp38 false
+   135 set rate 0
+   136 jump __label37 always
+   137 label __label36
+   138 op div __tmp40 amount time
 -    * op max __tmp41 __tmp40 0
 -    * set rate __tmp41
-+  156 op max rate __tmp40 0
-   157 set __tmp39 rate
-   158 label __label37
++  139 op max rate __tmp40 0
+   140 label __label37
 -    * op add __tmp42 index 1
 -    * set index __tmp42
-+  159 op add index index 1
-   160 op greaterThanEq __tmp43 index memSize
-   161 jump __label38 equal __tmp43 false
++  141 op add index index 1
+   142 op greaterThanEq __tmp43 index memSize
+   143 jump __label38 equal __tmp43 false
 -    * op add __tmp45 startIndex 1
 -    * set index __tmp45
-+  162 op add index startIndex 1
-   163 set __tmp44 index
-   164 jump __label39 always
-   165 label __label38
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-18 instructions):
- 
-    19 jump __label7 always
-    20 label __label8
-    21 set MESSAGE block
--    * set __tmp6 MESSAGE
-    22 jump __label6 always
-    23 label __label7
-    24 jump __label10 equal __ast0 @switch
-    25 jump __label9 always
-    26 label __label10
-    27 set SWITCH block
--    * set __tmp6 SWITCH
-    28 jump __label6 always
-    29 label __label9
-    30 jump __label12 equal __ast0 @memory-bank
- 
-    33 label __label12
-    34 set TARGET_MEMORY SOURCE_MEMORY
-    35 set SOURCE_MEMORY block
--    * set __tmp6 SOURCE_MEMORY
-    36 jump __label6 always
-    37 label __label11
--    * set __tmp6 null
-    38 label __label6
-    39 label __label4
-    40 jump __label3 always
- 
-    50 op equal __tmp7 SOURCE_MEMORY null
-    51 jump __label13 equal __tmp7 false
-    52 print "\nNo memory."
--    * set __tmp8 "\nNo memory."
-    53 jump __label14 always
-    54 label __label13
--    * set __tmp8 null
-    55 label __label14
-    56 printflush MESSAGE
-    57 label __label1
- 
-    60 op equal __tmp9 TARGET_MEMORY null
-    61 jump __label15 equal __tmp9 false
-    62 set TARGET_MEMORY SOURCE_MEMORY
--    * set __tmp10 TARGET_MEMORY
-    63 jump __label16 always
-    64 label __label15
--    * set __tmp10 null
-    65 label __label16
-    66 set startIndex 0
-    67 sensor __ast1 TARGET_MEMORY @type
- 
-    84 jump __label22 equal __tmp13 false
-    85 op idiv startIndex memSize 2
-    86 op sub memSize memSize 1
--    * set __tmp14 memSize
-    87 jump __label23 always
-    88 label __label22
--    * set __tmp14 null
-    89 label __label23
-    90 set prevTick @tick
-    91 read prev SOURCE_MEMORY 0
- 
-   105 set prevTick @tick
-   106 op add nextTick prevTick TICKS
-   107 set currTick prevTick
--    * set __tmp26 currTick
-   108 jump __label28 always
-   109 label __label27
--    * set __tmp26 null
-   110 label __label28
-   111 label __label29
-   112 op lessThan __tmp29 @tick nextTick
- 
-   114 op lessThan __tmp30 @tick prevTick
-   115 jump __label32 equal __tmp30 false
-   116 end
--    * set __tmp31 null
-   117 jump __label33 always
-   118 label __label32
-   119 read value SOURCE_MEMORY 0
- 
-   126 label __label34
-   127 set __tmp34 null
-   128 label __label35
--    * set __tmp31 __tmp34
-   129 label __label33
-   130 label __label30
-   131 jump __label29 always
- 
-   135 op equal __tmp38 amount 0
-   136 jump __label36 equal __tmp38 false
-   137 set rate 0
--    * set __tmp39 rate
-   138 jump __label37 always
-   139 label __label36
-   140 op div __tmp40 amount time
-   141 op max rate __tmp40 0
--    * set __tmp39 rate
-   142 label __label37
-   143 op add index index 1
-   144 op greaterThanEq __tmp43 index memSize
-   145 jump __label38 equal __tmp43 false
-   146 op add index startIndex 1
--    * set __tmp44 index
-   147 jump __label39 always
-   148 label __label38
--    * set __tmp44 null
-   149 label __label39
-   150 write index TARGET_MEMORY startIndex
-   151 write rate TARGET_MEMORY index
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
- 
-   121 jump __label34 equal __tmp33 false
-   122 set currTick @tick
-   123 set curr value
--    * set __tmp34 curr
-   124 jump __label35 always
-   125 label __label34
--    * set __tmp34 null
-   126 label __label35
-   127 label __label33
-   128 label __label30
++  144 op add index startIndex 1
+   145 jump __label39 always
+   146 label __label38
+   147 label __label39
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-5 instructions):
  
     15 print "\nFound: "
     16 print block
-    17 sensor __ast0 block @type
--    * jump __label8 equal __ast0 @message
+    17 sensor __tmp5 block @type
+-    * jump __label8 equal __tmp5 @message
 -    * jump __label7 always
-+   18 jump __label7 notEqual __ast0 @message
++   18 jump __label7 notEqual __tmp5 @message
     19 label __label8
     20 set MESSAGE block
     21 jump __label6 always
     22 label __label7
--    * jump __label10 equal __ast0 @switch
+-    * jump __label10 equal __tmp5 @switch
 -    * jump __label9 always
-+   23 jump __label9 notEqual __ast0 @switch
++   23 jump __label9 notEqual __tmp5 @switch
     24 label __label10
     25 set SWITCH block
     26 jump __label6 always
     27 label __label9
-    28 jump __label12 equal __ast0 @memory-bank
--    * jump __label12 equal __ast0 @memory-cell
+    28 jump __label12 equal __tmp5 @memory-bank
+-    * jump __label12 equal __tmp5 @memory-cell
 -    * jump __label11 always
-+   29 jump __label11 notEqual __ast0 @memory-cell
++   29 jump __label11 notEqual __tmp5 @memory-cell
     30 label __label12
     31 set TARGET_MEMORY SOURCE_MEMORY
     32 set SOURCE_MEMORY block
  
     62 label __label16
     63 set startIndex 0
-    64 sensor __ast1 TARGET_MEMORY @type
--    * jump __label19 equal __ast1 @memory-cell
+    64 sensor __tmp11 TARGET_MEMORY @type
+-    * jump __label19 equal __tmp11 @memory-cell
 -    * jump __label18 always
-+   65 jump __label18 notEqual __ast1 @memory-cell
++   65 jump __label18 notEqual __tmp11 @memory-cell
     66 label __label19
     67 set __tmp12 64
     68 jump __label17 always
     69 label __label18
--    * jump __label21 equal __ast1 @memory-bank
+-    * jump __label21 equal __tmp11 @memory-bank
 -    * jump __label20 always
-+   70 jump __label20 notEqual __ast1 @memory-bank
++   70 jump __label20 notEqual __tmp11 @memory-bank
     71 label __label21
     72 set __tmp12 512
     73 jump __label17 always
@@ -657,17 +689,17 @@ op sub n n 1
 getlink block n
 print "\nFound: "
 print block
-sensor __ast0 block @type
-jump __label7 notEqual __ast0 @message
+sensor __tmp5 block @type
+jump __label7 notEqual __tmp5 @message
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
-jump __label9 notEqual __ast0 @switch
+jump __label9 notEqual __tmp5 @switch
 set SWITCH block
 jump __label6 always 0 0
 label __label9
-jump __label12 equal __ast0 @memory-bank
-jump __label11 notEqual __ast0 @memory-cell
+jump __label12 equal __tmp5 @memory-bank
+jump __label11 notEqual __tmp5 @memory-cell
 label __label12
 set TARGET_MEMORY SOURCE_MEMORY
 set SOURCE_MEMORY block
@@ -692,12 +724,12 @@ jump __label15 notEqual TARGET_MEMORY null
 set TARGET_MEMORY SOURCE_MEMORY
 label __label15
 set startIndex 0
-sensor __ast1 TARGET_MEMORY @type
-jump __label18 notEqual __ast1 @memory-cell
+sensor __tmp11 TARGET_MEMORY @type
+jump __label18 notEqual __tmp11 @memory-cell
 set __tmp12 64
 jump __label17 always 0 0
 label __label18
-jump __label20 notEqual __ast1 @memory-bank
+jump __label20 notEqual __tmp11 @memory-bank
 set __tmp12 512
 jump __label17 always 0 0
 label __label20

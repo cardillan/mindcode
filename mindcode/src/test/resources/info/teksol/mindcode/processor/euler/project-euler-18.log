@@ -147,74 +147,6 @@ Pass 1: speed optimization selection (cost limit 310):
 Pass 1: speed optimization selection (cost limit 239):
   * Loop Unrolling: unroll loop at line 10                       cost   122, benefit      750,0, efficiency        6,1 (+77 instructions)
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
- 
-  1085 label __label244
-  1086 op greaterThanEq __tmp362 __fn121_row 0
-  1087 jump __label246 equal __tmp362 false
--    * op add __tmp363 __fn121_row 1
--    * set __fn121_col __tmp363
-+ 1088 op add __fn121_col __fn121_row 1
-  1089 label __label247
-  1090 op greaterThanEq __tmp364 __fn121_col 0
-  1091 jump __label249 equal __tmp364 false
- 
-  1094 set __fn122_col __fn121_col
-  1095 op mul __tmp367 16 __fn122_row
-  1096 op add __tmp368 __tmp367 __fn122_col
--    * read __tmp366 bank1 __tmp368
--    * set __tmp365 __tmp366
-+ 1097 read __tmp365 bank1 __tmp368
-  1098 label __label251
-  1099 op add __tmp369 __fn121_row 1
-  1100 label __label252
- 
-  1102 set __fn123_col __fn121_col
-  1103 op mul __tmp372 16 __fn123_row
-  1104 op add __tmp373 __tmp372 __fn123_col
--    * read __tmp371 bank1 __tmp373
--    * set __tmp370 __tmp371
-+ 1105 read __tmp370 bank1 __tmp373
-  1106 label __label253
-  1107 op add __tmp374 __fn121_row 1
-  1108 op add __tmp375 __fn121_col 1
- 
-  1111 set __fn124_col __tmp375
-  1112 op mul __tmp378 16 __fn124_row
-  1113 op add __tmp379 __tmp378 __fn124_col
--    * read __tmp377 bank1 __tmp379
--    * set __tmp376 __tmp377
-+ 1114 read __tmp376 bank1 __tmp379
-  1115 label __label255
-  1116 op max __tmp380 __tmp370 __tmp376
-  1117 op add __tmp381 __tmp365 __tmp380
- 
-  1125 set __tmp382 __fn125_num
-  1126 label __label257
-  1127 label __label248
--    * op sub __tmp385 __fn121_col 1
--    * set __fn121_col __tmp385
-+ 1128 op sub __fn121_col __fn121_col 1
-  1129 jump __label247 always
-  1130 label __label249
-  1131 label __label245
--    * op sub __tmp386 __fn121_row 1
--    * set __fn121_row __tmp386
-+ 1132 op sub __fn121_row __fn121_row 1
-  1133 jump __label244 always
-  1134 label __label246
-  1135 set __tmp361 null
- 
-  1144 set __fn127_col 0
-  1145 op mul __tmp390 16 __fn127_row
-  1146 op add __tmp391 __tmp390 __fn127_col
--    * read __tmp389 bank1 __tmp391
--    * set __tmp388 __tmp389
-+ 1147 read __tmp388 bank1 __tmp391
-  1148 label __label261
-  1149 label __label262
-  1150 set __fn128_v __tmp388
-
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-124 instructions):
  
      5 op mul __tmp2 16 __fn1_row
@@ -1177,33 +1109,33 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-124 instruc
    963 label __label242
    964 set __fn121_row 13
  
-  1002 op mul __tmp383 16 __fn125_row
-  1003 op add __tmp384 __tmp383 __fn125_col
-  1004 write __fn125_num bank1 __tmp384
+  1006 op mul __tmp383 16 __fn125_row
+  1007 op add __tmp384 __tmp383 __fn125_col
+  1008 write __fn125_num bank1 __tmp384
 -    * set __tmp382 __fn125_num
-  1005 label __label257
-  1006 label __label248
-  1007 op sub __fn121_col __fn121_col 1
+  1009 label __label257
+  1010 label __label248
+  1011 op sub __tmp385 __fn121_col 1
  
-  1011 op sub __fn121_row __fn121_row 1
-  1012 jump __label244 always
-  1013 label __label246
+  1017 set __fn121_row __tmp386
+  1018 jump __label244 always
+  1019 label __label246
 -    * set __tmp361 null
-  1014 label __label243
-  1015 label __label258
-  1016 set __fn126_v 1074
-  1017 print __fn126_v
+  1020 label __label243
+  1021 label __label258
+  1022 set __fn126_v 1074
+  1023 print __fn126_v
 -    * set __tmp387 __fn126_v
-  1018 label __label259
-  1019 label __label260
-  1020 set __fn127_row 0
+  1024 label __label259
+  1025 label __label260
+  1026 set __fn127_row 0
  
-  1026 label __label262
-  1027 set __fn128_v __tmp388
-  1028 print __fn128_v
+  1033 label __label262
+  1034 set __fn128_v __tmp388
+  1035 print __fn128_v
 -    * set __tmp392 __fn128_v
-  1029 label __label263
-  1030 end
+  1036 label __label263
+  1037 end
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructions):
  
@@ -1214,6 +1146,74 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructi
    960 label __label241
    961 label __label1
    962 label __label242
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
+ 
+   964 label __label244
+   965 op greaterThanEq __tmp362 __fn121_row 0
+   966 jump __label246 equal __tmp362 false
+-    * op add __tmp363 __fn121_row 1
+-    * set __fn121_col __tmp363
++  967 op add __fn121_col __fn121_row 1
+   968 label __label247
+   969 op greaterThanEq __tmp364 __fn121_col 0
+   970 jump __label249 equal __tmp364 false
+ 
+   973 set __fn122_col __fn121_col
+   974 op mul __tmp367 16 __fn122_row
+   975 op add __tmp368 __tmp367 __fn122_col
+-    * read __tmp366 bank1 __tmp368
+-    * set __tmp365 __tmp366
++  976 read __tmp365 bank1 __tmp368
+   977 label __label251
+   978 op add __tmp369 __fn121_row 1
+   979 label __label252
+ 
+   981 set __fn123_col __fn121_col
+   982 op mul __tmp372 16 __fn123_row
+   983 op add __tmp373 __tmp372 __fn123_col
+-    * read __tmp371 bank1 __tmp373
+-    * set __tmp370 __tmp371
++  984 read __tmp370 bank1 __tmp373
+   985 label __label253
+   986 op add __tmp374 __fn121_row 1
+   987 op add __tmp375 __fn121_col 1
+ 
+   990 set __fn124_col __tmp375
+   991 op mul __tmp378 16 __fn124_row
+   992 op add __tmp379 __tmp378 __fn124_col
+-    * read __tmp377 bank1 __tmp379
+-    * set __tmp376 __tmp377
++  993 read __tmp376 bank1 __tmp379
+   994 label __label255
+   995 op max __tmp380 __tmp370 __tmp376
+   996 op add __tmp381 __tmp365 __tmp380
+ 
+  1003 write __fn125_num bank1 __tmp384
+  1004 label __label257
+  1005 label __label248
+-    * op sub __tmp385 __fn121_col 1
+-    * set __fn121_col __tmp385
++ 1006 op sub __fn121_col __fn121_col 1
+  1007 jump __label247 always
+  1008 label __label249
+  1009 label __label245
+-    * op sub __tmp386 __fn121_row 1
+-    * set __fn121_row __tmp386
++ 1010 op sub __fn121_row __fn121_row 1
+  1011 jump __label244 always
+  1012 label __label246
+  1013 label __label243
+ 
+  1020 set __fn127_col 0
+  1021 op mul __tmp390 16 __fn127_row
+  1022 op add __tmp391 __tmp390 __fn127_col
+-    * read __tmp389 bank1 __tmp391
+-    * set __tmp388 __tmp389
++ 1023 read __tmp388 bank1 __tmp391
+  1024 label __label261
+  1025 label __label262
+  1026 set __fn128_v __tmp388
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  

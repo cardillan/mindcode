@@ -130,6 +130,453 @@ Pass 3: speed optimization selection (cost limit 130):
   ! Function Inlining: inline function call at line 91           cost   139, benefit      137,5, efficiency        1,0
   ! Function Inlining: inline function call at line 93           cost   139, benefit      137,5, efficiency        1,0
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
+ 
+    72 print "\n"
+    73 set __tmp8 true
+    74 jump __label12 always
+-    * set __tmp13 null
+    75 jump __label14 always
+    76 label __label13
+-    * set __tmp13 null
+    77 label __label14
+    78 set __tmp8 false
+    79 jump __label12 always
+ 
+   137 setaddr __fn1retaddr __label21
+   138 call __label1 __fn1retval
+   139 gotolabel __label21 __fn1
+-    * set __tmp25 __fn1retval
+   140 set __fn4_reactor reactor2
+   141 set __fn4_reactor_num 2
+   142 set __fn4_emerg_shutdown emerg_shutdown
+ 
+   154 setaddr __fn1retaddr __label23
+   155 call __label1 __fn1retval
+   156 gotolabel __label23 __fn1
+-    * set __tmp27 __fn1retval
+   157 set __fn2_unit TOWER
+   158 setaddr __fn2retaddr __label24
+   159 call __label2 __fn2retval
+ 
+   203 setaddr __fn1retaddr __label28
+   204 call __label1 __fn1retval
+   205 gotolabel __label28 __fn1
+-    * set __tmp35 __fn1retval
+   206 op or __tmp36 fuel_1 fuel_2
+   207 op or __tmp37 __tmp36 fuel_many
+   208 label __label29
+ 
+   237 print " Critical power.\n"
+   238 set __tmp51 null
+   239 label __label34
+-    * set __tmp50 __tmp51
+   240 jump __label32 always
+   241 label __label31
+   242 op equal __tmp52 __fn6_reactors_fueled false
+ 
+   258 print "\n"
+   259 set __tmp53 null
+   260 label __label36
+-    * set __tmp50 __tmp53
+   261 label __label32
+   262 op lessThan __tmp54 __fn6_fuel_stored __fn6_limit
+   263 set __tmp38 __tmp54
+ 
+   291 control enabled generator2 true
+   292 set __tmp63 true
+   293 label __label42
+-    * set __tmp56 __tmp63
+   294 label __label40
+   295 set __fn0_val AVG_SURPLUS
+   296 setaddr __fn0retaddr __label43
+ 
+   320 print "kJ. "
+   321 print surplus
+   322 print "kW flow.\n"
+-    * set __tmp68 null
+   323 jump __label46 always
+   324 label __label45
+   325 print "Power "
+ 
+   348 label __label52
+   349 set __tmp80 null
+   350 label __label53
+-    * set __tmp78 __tmp80
+   351 jump __label51 always
+   352 label __label50
+-    * set __tmp78 null
+   353 label __label51
+   354 op lessThan __tmp83 __fn8_stored 0.8
+   355 op mul __tmp84 GOAL_BUFFER 0.8
+ 
+   370 label __label55
+   371 set __tmp70 __tmp87
+   372 label __label49
+-    * set __tmp68 __tmp70
+   373 label __label46
+   374 op notEqual __tmp93 REACTORS_DESIRED 5
+   375 jump __label56 equal __tmp93 false
+   376 print "Require only "
+   377 print REACTORS_DESIRED
+   378 print "/5 reactors.\n"
+-    * set __tmp94 null
+   379 jump __label57 always
+   380 label __label56
+-    * set __tmp94 null
+   381 label __label57
+   382 printflush message1
+   383 label __label8
+ 
+   458 jump __label68 equal __tmp108 false
+   459 set __fn3retval 0
+   460 jump __label67 always
+-    * set __tmp109 null
+   461 jump __label69 always
+   462 label __label68
+-    * set __tmp109 null
+   463 label __label69
+   464 op sub __tmp110 30 __fn3_secs
+   465 set __fn3_time_left __tmp110
+ 
+   506 control enabled __fn4_reactor false
+   507 print "emergency mode\n"
+   508 set __fn4_supply_fuel false
+-    * set __tmp129 __fn4_supply_fuel
+   509 jump __label72 always
+   510 label __label71
+   511 jump __label73 equal __fn4_enabled false
+ 
+   686 label __label91
+   687 set __tmp130 __tmp165
+   688 label __label74
+-    * set __tmp129 __tmp130
+   689 label __label72
+   690 sensor __tmp187 __fn4_reactor @enabled
+   691 op notEqual __tmp188 __fn4_enabled __tmp187
+   692 jump __label102 equal __tmp188 false
+   693 set __tmp190 @tick
+   694 set RET_T_STARTUP __tmp190
+-    * set __tmp189 RET_T_STARTUP
+   695 jump __label103 always
+   696 label __label102
+-    * set __tmp189 null
+   697 label __label103
+   698 set __fn4retval __fn4_supply_fuel
+   699 jump __label70 always
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-12 instructions):
+ 
+   231 print " - "
+   232 jump __label33 equal __fn6_emerg_shutdown false
+   233 print " Enemies detected.\n"
+-    * set __tmp51 null
+   234 jump __label34 always
+   235 label __label33
+   236 print " Critical power.\n"
+-    * set __tmp51 null
+   237 label __label34
+   238 jump __label32 always
+   239 label __label31
+ 
+   245 print " / "
+   246 print __fn6_limit
+   247 print " (due to emergency)\n"
+-    * set __tmp53 null
+   248 jump __label36 always
+   249 label __label35
+   250 set __fn6_limit FUEL_LIMIT
+ 
+   253 print " / "
+   254 print __fn6_limit
+   255 print "\n"
+-    * set __tmp53 null
+   256 label __label36
+   257 label __label32
+   258 op lessThan __tmp54 __fn6_fuel_stored __fn6_limit
+ 
+   280 print "Differential now idle.\n"
+   281 control enabled generator1 false
+   282 control enabled generator2 false
+-    * set __tmp63 false
+   283 jump __label42 always
+   284 label __label41
+   285 control enabled generator1 true
+   286 control enabled generator2 true
+-    * set __tmp63 true
+   287 label __label42
+   288 label __label40
+   289 set __fn0_val AVG_SURPLUS
+ 
+   337 set REACTORS_DESIRED __tmp81
+   338 op sub __tmp82 AVG_SURPLUS GENERATOR_OUTPUT
+   339 set AVG_SURPLUS __tmp82
+-    * set __tmp80 AVG_SURPLUS
+   340 jump __label53 always
+   341 label __label52
+-    * set __tmp80 null
+   342 label __label53
+   343 jump __label51 always
+   344 label __label50
+ 
+   360 label __label54
+   361 set __tmp87 null
+   362 label __label55
+-    * set __tmp70 __tmp87
+   363 label __label49
+   364 label __label46
+   365 op notEqual __tmp93 REACTORS_DESIRED 5
+ 
+   400 set __tmp99 FUEL_OFF
+   401 label __label63
+   402 control config __fn1_uld_out __tmp99
+-    * set __fn1retval __tmp99
+   403 label __label59
+   404 goto __fn1retaddr __fn1
+   405 end
+ 
+   590 label __label78
+   591 set __tmp132 __tmp137
+   592 label __label76
+-    * set __tmp130 __tmp132
+   593 jump __label74 always
+   594 label __label73
+   595 op sub __tmp156 __fn4_charge START_POWER_REQ
+ 
+   673 label __label93
+   674 set __tmp165 __tmp168
+   675 label __label91
+-    * set __tmp130 __tmp165
+   676 label __label74
+   677 label __label72
+   678 sensor __tmp187 __fn4_reactor @enabled
+
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-6 instructions):
+ 
+   355 op add __tmp91 __fn8_needed REACTORS_DESIRED
+   356 op min __tmp92 5 __tmp91
+   357 set REACTORS_DESIRED __tmp92
+-    * set __tmp87 REACTORS_DESIRED
+   358 jump __label55 always
+   359 label __label54
+-    * set __tmp87 null
+   360 label __label55
+   361 label __label49
+   362 label __label46
+ 
+   501 jump __label75 equal __tmp131 false
+   502 control enabled __fn4_reactor false
+   503 print "STOP unwanted\n"
+-    * set __tmp132 null
+   504 jump __label76 always
+   505 label __label75
+   506 op greaterThan __tmp133 __fn4_reactor_num 1
+ 
+   585 label __label80
+   586 set __tmp137 __tmp139
+   587 label __label78
+-    * set __tmp132 __tmp137
+   588 label __label76
+   589 jump __label74 always
+   590 label __label73
+ 
+   603 jump __label90 equal __tmp164 false
+   604 print "IDLE\n"
+   605 set __fn4_supply_fuel false
+-    * set __tmp165 __fn4_supply_fuel
+   606 jump __label91 always
+   607 label __label90
+   608 op add __tmp166 __fn4_flow_units __fn4_charge_units
+ 
+   666 label __label95
+   667 set __tmp168 __tmp177
+   668 label __label93
+-    * set __tmp165 __tmp168
+   669 label __label91
+   670 label __label74
+   671 label __label72
+
+Modifications by Initial phase, Dead Code Elimination, iteration 4 (-4 instructions):
+ 
+   510 jump __label77 equal __tmp136 false
+   511 control enabled __fn4_reactor false
+   512 print "STOP system fuel low\n"
+-    * set __tmp137 null
+   513 jump __label78 always
+   514 label __label77
+   515 op lessThanEq __tmp138 __fn4_fuel 1
+ 
+   582 label __label82
+   583 set __tmp139 __tmp141
+   584 label __label80
+-    * set __tmp137 __tmp139
+   585 label __label78
+   586 label __label76
+   587 jump __label74 always
+ 
+   620 print __fn4_flow
+   621 print "W)\n"
+   622 set __fn4_supply_fuel false
+-    * set __tmp168 __fn4_supply_fuel
+   623 jump __label93 always
+   624 label __label92
+   625 op lessThan __tmp175 __fn4_fuel FUEL_REQ
+ 
+   661 label __label99
+   662 set __tmp177 __tmp183
+   663 label __label95
+-    * set __tmp168 __tmp177
+   664 label __label93
+   665 label __label91
+   666 label __label74
+
+Modifications by Initial phase, Dead Code Elimination, iteration 5 (-4 instructions):
+ 
+   516 jump __label79 equal __tmp138 false
+   517 control enabled __fn4_reactor false
+   518 print "STOP fuel low\n"
+-    * set __tmp139 null
+   519 jump __label80 always
+   520 label __label79
+   521 op lessThanEq __tmp140 __fn4_cryo CRYO_ABORT
+ 
+   579 label __label84
+   580 set __tmp141 __tmp143
+   581 label __label82
+-    * set __tmp139 __tmp141
+   582 label __label80
+   583 label __label78
+   584 label __label76
+ 
+   633 print "WAIT system fuel\n"
+   634 set __tmp180 null
+   635 label __label97
+-    * set __tmp177 __tmp180
+   636 jump __label95 always
+   637 label __label94
+   638 op mul __tmp181 FUEL_TOT_REQ __fn4_reactor_num
+ 
+   656 label __label101
+   657 set __tmp183 __tmp185
+   658 label __label99
+-    * set __tmp177 __tmp183
+   659 label __label95
+   660 label __label93
+   661 label __label91
+
+Modifications by Initial phase, Dead Code Elimination, iteration 6 (-6 instructions):
+ 
+   522 jump __label81 equal __tmp140 false
+   523 control enabled __fn4_reactor false
+   524 print "STOP out of cryo\n"
+-    * set __tmp141 null
+   525 jump __label82 always
+   526 label __label81
+   527 op lessThan __tmp142 __fn4_secs 30
+ 
+   576 label __label89
+   577 set __tmp143 __tmp153
+   578 label __label84
+-    * set __tmp141 __tmp143
+   579 label __label82
+   580 label __label80
+   581 label __label78
+ 
+   625 op greaterThan __tmp179 __tmp178 FUEL_REQ
+   626 jump __label96 equal __tmp179 false
+   627 print "WAIT fuel\n"
+-    * set __tmp180 null
+   628 jump __label97 always
+   629 label __label96
+   630 print "WAIT system fuel\n"
+-    * set __tmp180 null
+   631 label __label97
+   632 jump __label95 always
+   633 label __label94
+ 
+   635 op lessThan __tmp182 __fn4_fuel_stored __tmp181
+   636 jump __label98 equal __tmp182 false
+   637 print "WAIT buffer fuel\n"
+-    * set __tmp183 null
+   638 jump __label99 always
+   639 label __label98
+   640 op lessThan __tmp184 __fn4_cryo __fn4_cryo_req
+ 
+   649 control enabled __fn4_reactor true
+   650 set __tmp185 true
+   651 label __label101
+-    * set __tmp183 __tmp185
+   652 label __label99
+   653 label __label95
+   654 label __label93
+
+Modifications by Initial phase, Dead Code Elimination, iteration 7 (-4 instructions):
+ 
+   552 print "J\n"
+   553 set __tmp148 null
+   554 label __label87
+-    * set __tmp143 __tmp148
+   555 jump __label84 always
+   556 label __label83
+   557 op lessThan __tmp150 __fn4_charge PWR_ABANDON
+ 
+   573 print " mins\n"
+   574 set __tmp153 null
+   575 label __label89
+-    * set __tmp143 __tmp153
+   576 label __label84
+   577 label __label82
+   578 label __label80
+ 
+   638 op lessThan __tmp184 __fn4_cryo __fn4_cryo_req
+   639 jump __label100 equal __tmp184 false
+   640 print "WAIT cryo\n"
+-    * set __tmp185 null
+   641 jump __label101 always
+   642 label __label100
+   643 print "STARTUP\n"
+   644 op add __tmp186 START_POWER_REQ PWR_REQ
+   645 set START_POWER_REQ __tmp186
+   646 control enabled __fn4_reactor true
+-    * set __tmp185 true
+   647 label __label101
+   648 label __label99
+   649 label __label95
+
+Modifications by Initial phase, Dead Code Elimination, iteration 8 (-4 instructions):
+ 
+   540 control enabled __fn4_reactor false
+   541 print "START FAIL battery\n"
+   542 set __fn4_supply_fuel false
+-    * set __tmp148 __fn4_supply_fuel
+   543 jump __label87 always
+   544 label __label86
+   545 op sub __tmp149 30 __fn4_secs
+ 
+   549 print " secs, req "
+   550 print __fn4_charge_req
+   551 print "J\n"
+-    * set __tmp148 null
+   552 label __label87
+   553 jump __label84 always
+   554 label __label83
+ 
+   559 control enabled __fn4_reactor false
+   560 print "ABANDON - battery crit\n"
+   561 set __fn4_supply_fuel false
+-    * set __tmp153 __fn4_supply_fuel
+   562 jump __label89 always
+   563 label __label88
+   564 op idiv __tmp154 __fn4_secs 6
+ 
+   568 print "RUN "
+   569 print __fn4_mins
+   570 print " mins\n"
+-    * set __tmp153 null
+   571 label __label89
+   572 label __label84
+   573 label __label82
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-53 instructions):
  
     25 sensor __tmp0 node1 @powerNetIn
@@ -157,832 +604,387 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-53 ins
     63 op notEqual __tmp9 switch1 null
     64 sensor __tmp10 switch1 @enabled
  
-    78 jump __label12 always
-    79 set __tmp8 null
-    80 label __label12
+    76 jump __label12 always
+    77 set __tmp8 null
+    78 label __label12
 -    * op or __tmp14 emerg_shutdown __tmp8
 -    * set emerg_shutdown __tmp14
-+   81 op or emerg_shutdown emerg_shutdown __tmp8
-    82 set __fn3_reactor reactor1
-    83 set __fn3_time t_startup1
-    84 setaddr __fn3retaddr __label15
-    85 call __label3 __fn3retval
-    86 gotolabel __label15 __fn3
++   79 op or emerg_shutdown emerg_shutdown __tmp8
+    80 set __fn3_reactor reactor1
+    81 set __fn3_time t_startup1
+    82 setaddr __fn3retaddr __label15
+    83 call __label3 __fn3retval
+    84 gotolabel __label15 __fn3
 -    * set __tmp15 __fn3retval
 -    * set START_POWER_REQ __tmp15
-+   87 set START_POWER_REQ __fn3retval
-    88 set __fn3_reactor reactor2
-    89 set __fn3_time t_startup2
-    90 setaddr __fn3retaddr __label16
-    91 call __label3 __fn3retval
-    92 gotolabel __label16 __fn3
-    93 set __tmp16 __fn3retval
++   85 set START_POWER_REQ __fn3retval
+    86 set __fn3_reactor reactor2
+    87 set __fn3_time t_startup2
+    88 setaddr __fn3retaddr __label16
+    89 call __label3 __fn3retval
+    90 gotolabel __label16 __fn3
+    91 set __tmp16 __fn3retval
 -    * op add __tmp17 START_POWER_REQ __tmp16
 -    * set START_POWER_REQ __tmp17
-+   94 op add START_POWER_REQ START_POWER_REQ __tmp16
-    95 set __fn3_reactor reactor3
-    96 set __fn3_time t_startup3
-    97 setaddr __fn3retaddr __label17
-    98 call __label3 __fn3retval
-    99 gotolabel __label17 __fn3
-   100 set __tmp18 __fn3retval
++   92 op add START_POWER_REQ START_POWER_REQ __tmp16
+    93 set __fn3_reactor reactor3
+    94 set __fn3_time t_startup3
+    95 setaddr __fn3retaddr __label17
+    96 call __label3 __fn3retval
+    97 gotolabel __label17 __fn3
+    98 set __tmp18 __fn3retval
 -    * op add __tmp19 START_POWER_REQ __tmp18
 -    * set START_POWER_REQ __tmp19
-+  101 op add START_POWER_REQ START_POWER_REQ __tmp18
-   102 set __fn3_reactor reactor4
-   103 set __fn3_time t_startup4
-   104 setaddr __fn3retaddr __label18
-   105 call __label3 __fn3retval
-   106 gotolabel __label18 __fn3
-   107 set __tmp20 __fn3retval
++   99 op add START_POWER_REQ START_POWER_REQ __tmp18
+   100 set __fn3_reactor reactor4
+   101 set __fn3_time t_startup4
+   102 setaddr __fn3retaddr __label18
+   103 call __label3 __fn3retval
+   104 gotolabel __label18 __fn3
+   105 set __tmp20 __fn3retval
 -    * op add __tmp21 START_POWER_REQ __tmp20
 -    * set START_POWER_REQ __tmp21
-+  108 op add START_POWER_REQ START_POWER_REQ __tmp20
-   109 set __fn3_reactor reactor5
-   110 set __fn3_time t_startup5
-   111 setaddr __fn3retaddr __label19
-   112 call __label3 __fn3retval
-   113 gotolabel __label19 __fn3
-   114 set __tmp22 __fn3retval
++  106 op add START_POWER_REQ START_POWER_REQ __tmp20
+   107 set __fn3_reactor reactor5
+   108 set __fn3_time t_startup5
+   109 setaddr __fn3retaddr __label19
+   110 call __label3 __fn3retval
+   111 gotolabel __label19 __fn3
+   112 set __tmp22 __fn3retval
 -    * op add __tmp23 START_POWER_REQ __tmp22
 -    * set START_POWER_REQ __tmp23
-+  115 op add START_POWER_REQ START_POWER_REQ __tmp22
-   116 set __fn4_reactor reactor1
-   117 set __fn4_reactor_num 1
-   118 set __fn4_emerg_shutdown emerg_shutdown
++  113 op add START_POWER_REQ START_POWER_REQ __tmp22
+   114 set __fn4_reactor reactor1
+   115 set __fn4_reactor_num 1
+   116 set __fn4_emerg_shutdown emerg_shutdown
  
-   121 setaddr __fn4retaddr __label20
-   122 call __label4 __fn4retval
-   123 gotolabel __label20 __fn4
+   119 setaddr __fn4retaddr __label20
+   120 call __label4 __fn4retval
+   121 gotolabel __label20 __fn4
 -    * set __tmp24 __fn4retval
 -    * set fuel_1 __tmp24
-+  124 set fuel_1 __fn4retval
-   125 set t_startup1 RET_T_STARTUP
-   126 set __fn1_fuel fuel_1
-   127 set __fn1_uld_in ULD_IN_1
++  122 set fuel_1 __fn4retval
+   123 set t_startup1 RET_T_STARTUP
+   124 set __fn1_fuel fuel_1
+   125 set __fn1_uld_in ULD_IN_1
  
-   138 setaddr __fn4retaddr __label22
-   139 call __label4 __fn4retval
-   140 gotolabel __label22 __fn4
+   135 setaddr __fn4retaddr __label22
+   136 call __label4 __fn4retval
+   137 gotolabel __label22 __fn4
 -    * set __tmp26 __fn4retval
 -    * set fuel_2 __tmp26
-+  141 set fuel_2 __fn4retval
-   142 set t_startup2 RET_T_STARTUP
-   143 set __fn1_fuel fuel_2
-   144 set __fn1_uld_in ULD_IN_2
++  138 set fuel_2 __fn4retval
+   139 set t_startup2 RET_T_STARTUP
+   140 set __fn1_fuel fuel_2
+   141 set __fn1_uld_in ULD_IN_2
  
-   152 call __label2 __fn2retval
-   153 gotolabel __label24 __fn2
-   154 set __tmp28 __fn2retval
+   148 call __label2 __fn2retval
+   149 gotolabel __label24 __fn2
+   150 set __tmp28 __fn2retval
 -    * op or __tmp29 emerg_shutdown __tmp28
 -    * set emerg_shutdown __tmp29
-+  155 op or emerg_shutdown emerg_shutdown __tmp28
-   156 set __fn4_reactor reactor3
-   157 set __fn4_reactor_num 3
-   158 set __fn4_emerg_shutdown emerg_shutdown
++  151 op or emerg_shutdown emerg_shutdown __tmp28
+   152 set __fn4_reactor reactor3
+   153 set __fn4_reactor_num 3
+   154 set __fn4_emerg_shutdown emerg_shutdown
  
-   161 setaddr __fn4retaddr __label25
-   162 call __label4 __fn4retval
-   163 gotolabel __label25 __fn4
+   157 setaddr __fn4retaddr __label25
+   158 call __label4 __fn4retval
+   159 gotolabel __label25 __fn4
 -    * set __tmp30 __fn4retval
 -    * set fuel_3 __tmp30
-+  164 set fuel_3 __fn4retval
-   165 set t_startup3 RET_T_STARTUP
-   166 set __fn4_reactor reactor4
-   167 set __fn4_reactor_num 4
++  160 set fuel_3 __fn4retval
+   161 set t_startup3 RET_T_STARTUP
+   162 set __fn4_reactor reactor4
+   163 set __fn4_reactor_num 4
  
-   171 setaddr __fn4retaddr __label26
-   172 call __label4 __fn4retval
-   173 gotolabel __label26 __fn4
+   167 setaddr __fn4retaddr __label26
+   168 call __label4 __fn4retval
+   169 gotolabel __label26 __fn4
 -    * set __tmp31 __fn4retval
 -    * set fuel_4 __tmp31
-+  174 set fuel_4 __fn4retval
-   175 set t_startup4 RET_T_STARTUP
-   176 set __fn4_reactor reactor5
-   177 set __fn4_reactor_num 5
++  170 set fuel_4 __fn4retval
+   171 set t_startup4 RET_T_STARTUP
+   172 set __fn4_reactor reactor5
+   173 set __fn4_reactor_num 5
  
-   181 setaddr __fn4retaddr __label27
-   182 call __label4 __fn4retval
-   183 gotolabel __label27 __fn4
+   177 setaddr __fn4retaddr __label27
+   178 call __label4 __fn4retval
+   179 gotolabel __label27 __fn4
 -    * set __tmp32 __fn4retval
 -    * set fuel_5 __tmp32
-+  184 set fuel_5 __fn4retval
-   185 set t_startup5 RET_T_STARTUP
-   186 op or __tmp33 fuel_3 fuel_4
++  180 set fuel_5 __fn4retval
+   181 set t_startup5 RET_T_STARTUP
+   182 op or __tmp33 fuel_3 fuel_4
 -    * op or __tmp34 __tmp33 fuel_5
 -    * set fuel_many __tmp34
-+  187 op or fuel_many __tmp33 fuel_5
-   188 set __fn1_fuel fuel_many
-   189 set __fn1_uld_in ULD_IN_MANY
-   190 set __fn1_uld_out ULD_OUT_MANY
++  183 op or fuel_many __tmp33 fuel_5
+   184 set __fn1_fuel fuel_many
+   185 set __fn1_uld_in ULD_IN_MANY
+   186 set __fn1_uld_out ULD_OUT_MANY
  
-   198 set __fn6_reactors_fueled __tmp37
-   199 set __fn6_emerg_shutdown emerg_shutdown
-   200 sensor __tmp39 NODE @powerNetStored
+   193 set __fn6_reactors_fueled __tmp37
+   194 set __fn6_emerg_shutdown emerg_shutdown
+   195 sensor __tmp39 NODE @powerNetStored
 -    * op floor __tmp40 __tmp39
 -    * set __fn6_charge __tmp40
-+  201 op floor __fn6_charge __tmp39
-   202 sensor __tmp41 NODE @powerNetIn
-   203 sensor __tmp42 NODE @powerNetOut
-   204 op sub __tmp43 __tmp41 __tmp42
++  196 op floor __fn6_charge __tmp39
+   197 sensor __tmp41 NODE @powerNetIn
+   198 sensor __tmp42 NODE @powerNetOut
+   199 op sub __tmp43 __tmp41 __tmp42
 -    * op floor __tmp44 __tmp43
 -    * set __fn6_surplus __tmp44
 -    * sensor __tmp45 CONTAINER @blast-compound
 -    * set __fn6_fuel_stored __tmp45
-+  205 op floor __fn6_surplus __tmp43
-+  206 sensor __fn6_fuel_stored CONTAINER @blast-compound
-   207 op lessThan __tmp46 __fn6_charge PWR_ABORT
-   208 op lessThan __tmp47 __fn6_surplus FLOW_ABORT
-   209 op land __tmp48 __tmp46 __tmp47
++  200 op floor __fn6_surplus __tmp43
++  201 sensor __fn6_fuel_stored CONTAINER @blast-compound
+   202 op lessThan __tmp46 __fn6_charge PWR_ABORT
+   203 op lessThan __tmp47 __fn6_surplus FLOW_ABORT
+   204 op land __tmp48 __tmp46 __tmp47
  
-   247 label __label36
-   248 set __tmp50 __tmp53
-   249 label __label32
+   236 print "\n"
+   237 label __label36
+   238 label __label32
 -    * op lessThan __tmp54 __fn6_fuel_stored __fn6_limit
 -    * set __tmp38 __tmp54
-+  250 op lessThan __tmp38 __fn6_fuel_stored __fn6_limit
-   251 jump __label30 always
-   252 set __tmp38 null
-   253 label __label30
++  239 op lessThan __tmp38 __fn6_fuel_stored __fn6_limit
+   240 jump __label30 always
+   241 set __tmp38 null
+   242 label __label30
  
-   262 label __label39
-   263 sensor __tmp57 NODE @powerNetStored
-   264 sensor __tmp58 NODE @powerNetCapacity
+   251 label __label39
+   252 sensor __tmp57 NODE @powerNetStored
+   253 sensor __tmp58 NODE @powerNetCapacity
 -    * op div __tmp59 __tmp57 __tmp58
 -    * set __fn7_stored_pc __tmp59
-+  265 op div __fn7_stored_pc __tmp57 __tmp58
-   266 op greaterThan __tmp60 __fn7_stored_pc 0.9
-   267 op lessThan __tmp61 START_POWER_REQ 10
-   268 op land __tmp62 __tmp60 __tmp61
++  254 op div __fn7_stored_pc __tmp57 __tmp58
+   255 op greaterThan __tmp60 __fn7_stored_pc 0.9
+   256 op lessThan __tmp61 START_POWER_REQ 10
+   257 op land __tmp62 __tmp60 __tmp61
  
-   283 setaddr __fn0retaddr __label43
-   284 call __label0 __fn0retval
-   285 gotolabel __label43 __fn0
+   269 setaddr __fn0retaddr __label43
+   270 call __label0 __fn0retval
+   271 gotolabel __label43 __fn0
 -    * set __tmp64 __fn0retval
 -    * set surplus __tmp64
 -    * sensor __tmp65 NODE @powerNetStored
 -    * set __fn0_val __tmp65
-+  286 set surplus __fn0retval
-+  287 sensor __fn0_val NODE @powerNetStored
-   288 setaddr __fn0retaddr __label44
-   289 call __label0 __fn0retval
-   290 gotolabel __label44 __fn0
++  272 set surplus __fn0retval
++  273 sensor __fn0_val NODE @powerNetStored
+   274 setaddr __fn0retaddr __label44
+   275 call __label0 __fn0retval
+   276 gotolabel __label44 __fn0
 -    * set __tmp66 __fn0retval
 -    * set charge __tmp66
-+  291 set charge __fn0retval
-   292 op greaterThan __tmp67 START_POWER_REQ 0
-   293 jump __label45 equal __tmp67 false
-   294 set __fn0_val START_POWER_REQ
-   295 setaddr __fn0retaddr __label47
-   296 call __label0 __fn0retval
-   297 gotolabel __label47 __fn0
++  277 set charge __fn0retval
+   278 op greaterThan __tmp67 START_POWER_REQ 0
+   279 jump __label45 equal __tmp67 false
+   280 set __fn0_val START_POWER_REQ
+   281 setaddr __fn0retaddr __label47
+   282 call __label0 __fn0retval
+   283 gotolabel __label47 __fn0
 -    * set __tmp69 __fn0retval
 -    * set req __tmp69
-+  298 set req __fn0retval
-   299 print "Req "
-   300 print req
-   301 print "kJ / "
++  284 set req __fn0retval
+   285 print "Req "
+   286 print req
+   287 print "kJ / "
  
-   314 label __label48
-   315 sensor __tmp71 NODE @powerNetStored
-   316 sensor __tmp72 NODE @powerNetCapacity
+   299 label __label48
+   300 sensor __tmp71 NODE @powerNetStored
+   301 sensor __tmp72 NODE @powerNetCapacity
 -    * op div __tmp73 __tmp71 __tmp72
 -    * set __fn8_stored __tmp73
-+  317 op div __fn8_stored __tmp71 __tmp72
-   318 op greaterThan __tmp74 __fn8_stored 0.98
-   319 op add __tmp75 GENERATOR_OUTPUT GOAL_BUFFER
-   320 op greaterThan __tmp76 AVG_SURPLUS __tmp75
++  302 op div __fn8_stored __tmp71 __tmp72
+   303 op greaterThan __tmp74 __fn8_stored 0.98
+   304 op add __tmp75 GENERATOR_OUTPUT GOAL_BUFFER
+   305 op greaterThan __tmp76 AVG_SURPLUS __tmp75
  
-   322 jump __label50 equal __tmp77 false
-   323 op greaterThan __tmp79 REACTORS_DESIRED 2
-   324 jump __label52 equal __tmp79 false
+   307 jump __label50 equal __tmp77 false
+   308 op greaterThan __tmp79 REACTORS_DESIRED 2
+   309 jump __label52 equal __tmp79 false
 -    * op sub __tmp81 REACTORS_DESIRED 1
 -    * set REACTORS_DESIRED __tmp81
 -    * op sub __tmp82 AVG_SURPLUS GENERATOR_OUTPUT
 -    * set AVG_SURPLUS __tmp82
-+  325 op sub REACTORS_DESIRED REACTORS_DESIRED 1
-+  326 op sub AVG_SURPLUS AVG_SURPLUS GENERATOR_OUTPUT
-   327 set __tmp80 AVG_SURPLUS
-   328 jump __label53 always
-   329 label __label52
++  310 op sub REACTORS_DESIRED REACTORS_DESIRED 1
++  311 op sub AVG_SURPLUS AVG_SURPLUS GENERATOR_OUTPUT
+   312 jump __label53 always
+   313 label __label52
+   314 label __label53
  
-   341 jump __label54 equal __tmp86 false
-   342 op sub __tmp88 AVG_SURPLUS GOAL_BUFFER
-   343 op idiv __tmp89 __tmp88 GENERATOR_OUTPUT
+   322 jump __label54 equal __tmp86 false
+   323 op sub __tmp88 AVG_SURPLUS GOAL_BUFFER
+   324 op idiv __tmp89 __tmp88 GENERATOR_OUTPUT
 -    * op max __tmp90 1 __tmp89
 -    * set __fn8_needed __tmp90
-+  344 op max __fn8_needed 1 __tmp89
-   345 op add __tmp91 __fn8_needed REACTORS_DESIRED
++  325 op max __fn8_needed 1 __tmp89
+   326 op add __tmp91 __fn8_needed REACTORS_DESIRED
 -    * op min __tmp92 5 __tmp91
 -    * set REACTORS_DESIRED __tmp92
-+  346 op min REACTORS_DESIRED 5 __tmp91
-   347 set __tmp87 REACTORS_DESIRED
-   348 jump __label55 always
-   349 label __label54
++  327 op min REACTORS_DESIRED 5 __tmp91
+   328 jump __label55 always
+   329 label __label54
+   330 label __label55
  
-   370 end
-   371 label __label0
-   372 op idiv __tmp95 __fn0_val 100
+   345 end
+   346 label __label0
+   347 op idiv __tmp95 __fn0_val 100
 -    * op div __tmp96 __tmp95 10
 -    * set __fn0retval __tmp96
-+  373 op div __fn0retval __tmp95 10
-   374 jump __label58 always
-   375 set __fn0retval null
-   376 label __label58
++  348 op div __fn0retval __tmp95 10
+   349 jump __label58 always
+   350 set __fn0retval null
+   351 label __label58
  
-   397 goto __fn1retaddr __fn1
-   398 end
-   399 label __label2
+   371 goto __fn1retaddr __fn1
+   372 end
+   373 label __label2
 -    * radar enemy any any health __fn2_unit 1 __tmp100
 -    * set __fn2_enemy_found __tmp100
-+  400 radar enemy any any health __fn2_unit 1 __fn2_enemy_found
-   401 op notEqual __tmp101 __fn2_enemy_found null
-   402 jump __label65 equal __tmp101 false
-   403 control enabled projector1 true
++  374 radar enemy any any health __fn2_unit 1 __fn2_enemy_found
+   375 op notEqual __tmp101 __fn2_enemy_found null
+   376 jump __label65 equal __tmp101 false
+   377 control enabled projector1 true
  
-   431 end
-   432 label __label3
-   433 op sub __tmp103 @tick __fn3_time
+   405 end
+   406 label __label3
+   407 op sub __tmp103 @tick __fn3_time
 -    * op idiv __tmp104 __tmp103 60
 -    * set __fn3_secs __tmp104
-+  434 op idiv __fn3_secs __tmp103 60
-   435 op greaterThan __tmp105 __fn3_secs 30
-   436 sensor __tmp106 __fn3_reactor @enabled
-   437 op equal __tmp107 __tmp106 false
++  408 op idiv __fn3_secs __tmp103 60
+   409 op greaterThan __tmp105 __fn3_secs 30
+   410 sensor __tmp106 __fn3_reactor @enabled
+   411 op equal __tmp107 __tmp106 false
  
-   444 label __label68
-   445 set __tmp109 null
-   446 label __label69
+   416 jump __label69 always
+   417 label __label68
+   418 label __label69
 -    * op sub __tmp110 30 __fn3_secs
 -    * set __fn3_time_left __tmp110
-+  447 op sub __fn3_time_left 30 __fn3_secs
-   448 op mul __tmp111 __fn3_time_left __fn3_time_left
-   449 op mul __tmp112 __tmp111 25
++  419 op sub __fn3_time_left 30 __fn3_secs
+   420 op mul __tmp111 __fn3_time_left __fn3_time_left
+   421 op mul __tmp112 __tmp111 25
 -    * op floor __tmp113 __tmp112
 -    * set __fn3_charge_req __tmp113
-+  450 op floor __fn3_charge_req __tmp112
-   451 set __fn3retval __fn3_charge_req
-   452 jump __label67 always
-   453 set __fn3retval null
++  422 op floor __fn3_charge_req __tmp112
+   423 set __fn3retval __fn3_charge_req
+   424 jump __label67 always
+   425 set __fn3retval null
  
-   457 label __label4
-   458 set RET_T_STARTUP __fn4_t_startup
-   459 op sub __tmp114 @tick __fn4_t_startup
+   429 label __label4
+   430 set RET_T_STARTUP __fn4_t_startup
+   431 op sub __tmp114 @tick __fn4_t_startup
 -    * op idiv __tmp115 __tmp114 60
 -    * set __fn4_secs __tmp115
 -    * sensor __tmp116 __fn4_reactor @blast-compound
 -    * set __fn4_fuel __tmp116
-+  460 op idiv __fn4_secs __tmp114 60
-+  461 sensor __fn4_fuel __fn4_reactor @blast-compound
-   462 set __fn4_supply_fuel true
++  432 op idiv __fn4_secs __tmp114 60
++  433 sensor __fn4_fuel __fn4_reactor @blast-compound
+   434 set __fn4_supply_fuel true
 -    * sensor __tmp117 CONTAINER @blast-compound
 -    * set __fn4_fuel_stored __tmp117
 -    * sensor __tmp118 __fn4_reactor @cryofluid
 -    * set __fn4_cryo __tmp118
-+  463 sensor __fn4_fuel_stored CONTAINER @blast-compound
-+  464 sensor __fn4_cryo __fn4_reactor @cryofluid
-   465 sensor __tmp119 NODE @powerNetStored
++  435 sensor __fn4_fuel_stored CONTAINER @blast-compound
++  436 sensor __fn4_cryo __fn4_reactor @cryofluid
+   437 sensor __tmp119 NODE @powerNetStored
 -    * op floor __tmp120 __tmp119
 -    * set __fn4_charge __tmp120
-+  466 op floor __fn4_charge __tmp119
-   467 sensor __tmp121 NODE @powerNetIn
-   468 sensor __tmp122 NODE @powerNetOut
-   469 op sub __tmp123 __tmp121 __tmp122
++  438 op floor __fn4_charge __tmp119
+   439 sensor __tmp121 NODE @powerNetIn
+   440 sensor __tmp122 NODE @powerNetOut
+   441 op sub __tmp123 __tmp121 __tmp122
 -    * op floor __tmp124 __tmp123
 -    * set __fn4_surplus __tmp124
-+  470 op floor __fn4_surplus __tmp123
-   471 op mul __tmp125 AVG_SURPLUS 0.8
-   472 op mul __tmp126 __fn4_surplus 0.2
++  442 op floor __fn4_surplus __tmp123
+   443 op mul __tmp125 AVG_SURPLUS 0.8
+   444 op mul __tmp126 __fn4_surplus 0.2
 -    * op add __tmp127 __tmp125 __tmp126
 -    * set AVG_SURPLUS __tmp127
 -    * sensor __tmp128 __fn4_reactor @enabled
 -    * set __fn4_enabled __tmp128
-+  473 op add AVG_SURPLUS __tmp125 __tmp126
-+  474 sensor __fn4_enabled __fn4_reactor @enabled
-   475 print "#"
-   476 print __fn4_reactor_num
-   477 print " - "
++  445 op add AVG_SURPLUS __tmp125 __tmp126
++  446 sensor __fn4_enabled __fn4_reactor @enabled
+   447 print "#"
+   448 print __fn4_reactor_num
+   449 print " - "
  
-   533 set __tmp148 __fn4_supply_fuel
-   534 jump __label87 always
-   535 label __label86
+   499 set __fn4_supply_fuel false
+   500 jump __label87 always
+   501 label __label86
 -    * op sub __tmp149 30 __fn4_secs
 -    * set __fn4_time_left __tmp149
-+  536 op sub __fn4_time_left 30 __fn4_secs
-   537 print "Starting "
-   538 print __fn4_time_left
-   539 print " secs, req "
++  502 op sub __fn4_time_left 30 __fn4_secs
+   503 print "Starting "
+   504 print __fn4_time_left
+   505 print " secs, req "
  
-   554 set __tmp153 __fn4_supply_fuel
-   555 jump __label89 always
-   556 label __label88
+   517 set __fn4_supply_fuel false
+   518 jump __label89 always
+   519 label __label88
 -    * op idiv __tmp154 __fn4_secs 6
 -    * set __fn4_mins __tmp154
 -    * op div __tmp155 __fn4_mins 10
 -    * set __fn4_mins __tmp155
-+  557 op idiv __fn4_mins __fn4_secs 6
-+  558 op div __fn4_mins __fn4_mins 10
-   559 print "RUN "
-   560 print __fn4_mins
-   561 print " mins\n"
- 
-   577 op sub __tmp156 __fn4_charge START_POWER_REQ
-   578 op sub __tmp157 __tmp156 PWR_ABORT
-   579 op div __tmp158 __tmp157 PWR_REQ
--    * op mul __tmp159 __tmp158 PWR_RESERVE
--    * set __fn4_charge_units __tmp159
-+  580 op mul __fn4_charge_units __tmp158 PWR_RESERVE
-   581 op div __tmp160 __fn4_surplus FLOW_REQ
--    * op max __tmp161 -0.1 __tmp160
--    * set __fn4_flow_units __tmp161
-+  582 op max __fn4_flow_units -0.1 __tmp160
-   583 op mul __tmp162 CRYO_REQ_EA __fn4_reactor_num
--    * op add __tmp163 CRYO_REQ __tmp162
--    * set __fn4_cryo_req __tmp163
-+  584 op add __fn4_cryo_req CRYO_REQ __tmp162
-   585 op lessThan __tmp164 REACTORS_DESIRED __fn4_reactor_num
-   586 jump __label90 equal __tmp164 false
-   587 print "IDLE\n"
- 
-   594 jump __label92 equal __tmp167 false
-   595 op mul __tmp169 __fn4_flow_units 1000
-   596 op floor __tmp170 __tmp169
--    * op div __tmp171 __tmp170 10
--    * set __fn4_flow __tmp171
-+  597 op div __fn4_flow __tmp170 10
-   598 op mul __tmp172 __fn4_charge_units 1000
-   599 op floor __tmp173 __tmp172
--    * op div __tmp174 __tmp173 10
--    * set __fn4_charge __tmp174
-+  600 op div __fn4_charge __tmp173 10
-   601 print "WAIT power. (%"
-   602 print __fn4_charge
-   603 print "J + %"
- 
-   637 jump __label101 always
-   638 label __label100
-   639 print "STARTUP\n"
--    * op add __tmp186 START_POWER_REQ PWR_REQ
--    * set START_POWER_REQ __tmp186
-+  640 op add START_POWER_REQ START_POWER_REQ PWR_REQ
-   641 control enabled __fn4_reactor true
-   642 set __tmp185 true
-   643 label __label101
- 
-   656 sensor __tmp187 __fn4_reactor @enabled
-   657 op notEqual __tmp188 __fn4_enabled __tmp187
-   658 jump __label102 equal __tmp188 false
--    * set __tmp190 @tick
--    * set RET_T_STARTUP __tmp190
-+  659 set RET_T_STARTUP @tick
-   660 set __tmp189 RET_T_STARTUP
-   661 jump __label103 always
-   662 label __label102
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
- 
-    69 print "\n"
-    70 set __tmp8 true
-    71 jump __label12 always
--    * set __tmp13 null
-    72 jump __label14 always
-    73 label __label13
--    * set __tmp13 null
-    74 label __label14
-    75 set __tmp8 false
-    76 jump __label12 always
- 
-   127 setaddr __fn1retaddr __label21
-   128 call __label1 __fn1retval
-   129 gotolabel __label21 __fn1
--    * set __tmp25 __fn1retval
-   130 set __fn4_reactor reactor2
-   131 set __fn4_reactor_num 2
-   132 set __fn4_emerg_shutdown emerg_shutdown
- 
-   143 setaddr __fn1retaddr __label23
-   144 call __label1 __fn1retval
-   145 gotolabel __label23 __fn1
--    * set __tmp27 __fn1retval
-   146 set __fn2_unit TOWER
-   147 setaddr __fn2retaddr __label24
-   148 call __label2 __fn2retval
- 
-   187 setaddr __fn1retaddr __label28
-   188 call __label1 __fn1retval
-   189 gotolabel __label28 __fn1
--    * set __tmp35 __fn1retval
-   190 op or __tmp36 fuel_1 fuel_2
-   191 op or __tmp37 __tmp36 fuel_many
-   192 label __label29
- 
-   218 print " Critical power.\n"
-   219 set __tmp51 null
-   220 label __label34
--    * set __tmp50 __tmp51
-   221 jump __label32 always
-   222 label __label31
-   223 op equal __tmp52 __fn6_reactors_fueled false
- 
-   239 print "\n"
-   240 set __tmp53 null
-   241 label __label36
--    * set __tmp50 __tmp53
-   242 label __label32
-   243 op lessThan __tmp38 __fn6_fuel_stored __fn6_limit
-   244 jump __label30 always
- 
-   270 control enabled generator2 true
-   271 set __tmp63 true
-   272 label __label42
--    * set __tmp56 __tmp63
-   273 label __label40
-   274 set __fn0_val AVG_SURPLUS
-   275 setaddr __fn0retaddr __label43
- 
-   295 print "kJ. "
-   296 print surplus
-   297 print "kW flow.\n"
--    * set __tmp68 null
-   298 jump __label46 always
-   299 label __label45
-   300 print "Power "
- 
-   320 label __label52
-   321 set __tmp80 null
-   322 label __label53
--    * set __tmp78 __tmp80
-   323 jump __label51 always
-   324 label __label50
--    * set __tmp78 null
-   325 label __label51
-   326 op lessThan __tmp83 __fn8_stored 0.8
-   327 op mul __tmp84 GOAL_BUFFER 0.8
- 
-   340 label __label55
-   341 set __tmp70 __tmp87
-   342 label __label49
--    * set __tmp68 __tmp70
-   343 label __label46
-   344 op notEqual __tmp93 REACTORS_DESIRED 5
-   345 jump __label56 equal __tmp93 false
-   346 print "Require only "
-   347 print REACTORS_DESIRED
-   348 print "/5 reactors.\n"
--    * set __tmp94 null
-   349 jump __label57 always
-   350 label __label56
--    * set __tmp94 null
-   351 label __label57
-   352 printflush message1
-   353 label __label8
- 
-   425 jump __label68 equal __tmp108 false
-   426 set __fn3retval 0
-   427 jump __label67 always
--    * set __tmp109 null
-   428 jump __label69 always
-   429 label __label68
--    * set __tmp109 null
-   430 label __label69
-   431 op sub __fn3_time_left 30 __fn3_secs
-   432 op mul __tmp111 __fn3_time_left __fn3_time_left
- 
-   463 control enabled __fn4_reactor false
-   464 print "emergency mode\n"
-   465 set __fn4_supply_fuel false
--    * set __tmp129 __fn4_supply_fuel
-   466 jump __label72 always
-   467 label __label71
-   468 jump __label73 equal __fn4_enabled false
- 
-   634 label __label91
-   635 set __tmp130 __tmp165
-   636 label __label74
--    * set __tmp129 __tmp130
-   637 label __label72
-   638 sensor __tmp187 __fn4_reactor @enabled
-   639 op notEqual __tmp188 __fn4_enabled __tmp187
-   640 jump __label102 equal __tmp188 false
-   641 set RET_T_STARTUP @tick
--    * set __tmp189 RET_T_STARTUP
-   642 jump __label103 always
-   643 label __label102
--    * set __tmp189 null
-   644 label __label103
-   645 set __fn4retval __fn4_supply_fuel
-   646 jump __label70 always
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-12 instructions):
- 
-   212 print " - "
-   213 jump __label33 equal __fn6_emerg_shutdown false
-   214 print " Enemies detected.\n"
--    * set __tmp51 null
-   215 jump __label34 always
-   216 label __label33
-   217 print " Critical power.\n"
--    * set __tmp51 null
-   218 label __label34
-   219 jump __label32 always
-   220 label __label31
- 
-   226 print " / "
-   227 print __fn6_limit
-   228 print " (due to emergency)\n"
--    * set __tmp53 null
-   229 jump __label36 always
-   230 label __label35
-   231 set __fn6_limit FUEL_LIMIT
- 
-   234 print " / "
-   235 print __fn6_limit
-   236 print "\n"
--    * set __tmp53 null
-   237 label __label36
-   238 label __label32
-   239 op lessThan __tmp38 __fn6_fuel_stored __fn6_limit
- 
-   259 print "Differential now idle.\n"
-   260 control enabled generator1 false
-   261 control enabled generator2 false
--    * set __tmp63 false
-   262 jump __label42 always
-   263 label __label41
-   264 control enabled generator1 true
-   265 control enabled generator2 true
--    * set __tmp63 true
-   266 label __label42
-   267 label __label40
-   268 set __fn0_val AVG_SURPLUS
- 
-   309 jump __label52 equal __tmp79 false
-   310 op sub REACTORS_DESIRED REACTORS_DESIRED 1
-   311 op sub AVG_SURPLUS AVG_SURPLUS GENERATOR_OUTPUT
--    * set __tmp80 AVG_SURPLUS
-   312 jump __label53 always
-   313 label __label52
--    * set __tmp80 null
-   314 label __label53
-   315 jump __label51 always
-   316 label __label50
- 
-   330 label __label54
-   331 set __tmp87 null
-   332 label __label55
--    * set __tmp70 __tmp87
-   333 label __label49
-   334 label __label46
-   335 op notEqual __tmp93 REACTORS_DESIRED 5
- 
-   369 set __tmp99 FUEL_OFF
-   370 label __label63
-   371 control config __fn1_uld_out __tmp99
--    * set __fn1retval __tmp99
-   372 label __label59
-   373 goto __fn1retaddr __fn1
-   374 end
- 
-   544 label __label78
-   545 set __tmp132 __tmp137
-   546 label __label76
--    * set __tmp130 __tmp132
-   547 jump __label74 always
-   548 label __label73
-   549 op sub __tmp156 __fn4_charge START_POWER_REQ
- 
-   621 label __label93
-   622 set __tmp165 __tmp168
-   623 label __label91
--    * set __tmp130 __tmp165
-   624 label __label74
-   625 label __label72
-   626 sensor __tmp187 __fn4_reactor @enabled
-
-Modifications by Initial phase, Dead Code Elimination, iteration 3 (-6 instructions):
- 
-   325 op max __fn8_needed 1 __tmp89
-   326 op add __tmp91 __fn8_needed REACTORS_DESIRED
-   327 op min REACTORS_DESIRED 5 __tmp91
--    * set __tmp87 REACTORS_DESIRED
-   328 jump __label55 always
-   329 label __label54
--    * set __tmp87 null
-   330 label __label55
-   331 label __label49
-   332 label __label46
- 
-   458 jump __label75 equal __tmp131 false
-   459 control enabled __fn4_reactor false
-   460 print "STOP unwanted\n"
--    * set __tmp132 null
-   461 jump __label76 always
-   462 label __label75
-   463 op greaterThan __tmp133 __fn4_reactor_num 1
- 
-   539 label __label80
-   540 set __tmp137 __tmp139
-   541 label __label78
--    * set __tmp132 __tmp137
-   542 label __label76
-   543 jump __label74 always
-   544 label __label73
- 
-   554 jump __label90 equal __tmp164 false
-   555 print "IDLE\n"
-   556 set __fn4_supply_fuel false
--    * set __tmp165 __fn4_supply_fuel
-   557 jump __label91 always
-   558 label __label90
-   559 op add __tmp166 __fn4_flow_units __fn4_charge_units
- 
-   614 label __label95
-   615 set __tmp168 __tmp177
-   616 label __label93
--    * set __tmp165 __tmp168
-   617 label __label91
-   618 label __label74
-   619 label __label72
-
-Modifications by Initial phase, Dead Code Elimination, iteration 4 (-4 instructions):
- 
-   467 jump __label77 equal __tmp136 false
-   468 control enabled __fn4_reactor false
-   469 print "STOP system fuel low\n"
--    * set __tmp137 null
-   470 jump __label78 always
-   471 label __label77
-   472 op lessThanEq __tmp138 __fn4_fuel 1
- 
-   536 label __label82
-   537 set __tmp139 __tmp141
-   538 label __label80
--    * set __tmp137 __tmp139
-   539 label __label78
-   540 label __label76
-   541 jump __label74 always
- 
-   569 print __fn4_flow
-   570 print "W)\n"
-   571 set __fn4_supply_fuel false
--    * set __tmp168 __fn4_supply_fuel
-   572 jump __label93 always
-   573 label __label92
-   574 op lessThan __tmp175 __fn4_fuel FUEL_REQ
- 
-   609 label __label99
-   610 set __tmp177 __tmp183
-   611 label __label95
--    * set __tmp168 __tmp177
-   612 label __label93
-   613 label __label91
-   614 label __label74
-
-Modifications by Initial phase, Dead Code Elimination, iteration 5 (-4 instructions):
- 
-   473 jump __label79 equal __tmp138 false
-   474 control enabled __fn4_reactor false
-   475 print "STOP fuel low\n"
--    * set __tmp139 null
-   476 jump __label80 always
-   477 label __label79
-   478 op lessThanEq __tmp140 __fn4_cryo CRYO_ABORT
- 
-   533 label __label84
-   534 set __tmp141 __tmp143
-   535 label __label82
--    * set __tmp139 __tmp141
-   536 label __label80
-   537 label __label78
-   538 label __label76
- 
-   582 print "WAIT system fuel\n"
-   583 set __tmp180 null
-   584 label __label97
--    * set __tmp177 __tmp180
-   585 jump __label95 always
-   586 label __label94
-   587 op mul __tmp181 FUEL_TOT_REQ __fn4_reactor_num
- 
-   604 label __label101
-   605 set __tmp183 __tmp185
-   606 label __label99
--    * set __tmp177 __tmp183
-   607 label __label95
-   608 label __label93
-   609 label __label91
-
-Modifications by Initial phase, Dead Code Elimination, iteration 6 (-6 instructions):
- 
-   479 jump __label81 equal __tmp140 false
-   480 control enabled __fn4_reactor false
-   481 print "STOP out of cryo\n"
--    * set __tmp141 null
-   482 jump __label82 always
-   483 label __label81
-   484 op lessThan __tmp142 __fn4_secs 30
- 
-   530 label __label89
-   531 set __tmp143 __tmp153
-   532 label __label84
--    * set __tmp141 __tmp143
-   533 label __label82
-   534 label __label80
-   535 label __label78
- 
-   574 op greaterThan __tmp179 __tmp178 FUEL_REQ
-   575 jump __label96 equal __tmp179 false
-   576 print "WAIT fuel\n"
--    * set __tmp180 null
-   577 jump __label97 always
-   578 label __label96
-   579 print "WAIT system fuel\n"
--    * set __tmp180 null
-   580 label __label97
-   581 jump __label95 always
-   582 label __label94
- 
-   584 op lessThan __tmp182 __fn4_fuel_stored __tmp181
-   585 jump __label98 equal __tmp182 false
-   586 print "WAIT buffer fuel\n"
--    * set __tmp183 null
-   587 jump __label99 always
-   588 label __label98
-   589 op lessThan __tmp184 __fn4_cryo __fn4_cryo_req
- 
-   597 control enabled __fn4_reactor true
-   598 set __tmp185 true
-   599 label __label101
--    * set __tmp183 __tmp185
-   600 label __label99
-   601 label __label95
-   602 label __label93
-
-Modifications by Initial phase, Dead Code Elimination, iteration 7 (-4 instructions):
- 
-   508 print "J\n"
-   509 set __tmp148 null
-   510 label __label87
--    * set __tmp143 __tmp148
-   511 jump __label84 always
-   512 label __label83
-   513 op lessThan __tmp150 __fn4_charge PWR_ABANDON
- 
-   527 print " mins\n"
-   528 set __tmp153 null
-   529 label __label89
--    * set __tmp143 __tmp153
-   530 label __label84
-   531 label __label82
-   532 label __label80
- 
-   587 op lessThan __tmp184 __fn4_cryo __fn4_cryo_req
-   588 jump __label100 equal __tmp184 false
-   589 print "WAIT cryo\n"
--    * set __tmp185 null
-   590 jump __label101 always
-   591 label __label100
-   592 print "STARTUP\n"
-   593 op add START_POWER_REQ START_POWER_REQ PWR_REQ
-   594 control enabled __fn4_reactor true
--    * set __tmp185 true
-   595 label __label101
-   596 label __label99
-   597 label __label95
-
-Modifications by Initial phase, Dead Code Elimination, iteration 8 (-4 instructions):
- 
-   497 control enabled __fn4_reactor false
-   498 print "START FAIL battery\n"
-   499 set __fn4_supply_fuel false
--    * set __tmp148 __fn4_supply_fuel
-   500 jump __label87 always
-   501 label __label86
-   502 op sub __fn4_time_left 30 __fn4_secs
- 
-   505 print " secs, req "
-   506 print __fn4_charge_req
-   507 print "J\n"
--    * set __tmp148 null
-   508 label __label87
-   509 jump __label84 always
-   510 label __label83
- 
-   515 control enabled __fn4_reactor false
-   516 print "ABANDON - battery crit\n"
-   517 set __fn4_supply_fuel false
--    * set __tmp153 __fn4_supply_fuel
-   518 jump __label89 always
-   519 label __label88
-   520 op idiv __fn4_mins __fn4_secs 6
- 
++  520 op idiv __fn4_mins __fn4_secs 6
++  521 op div __fn4_mins __fn4_mins 10
    522 print "RUN "
    523 print __fn4_mins
    524 print " mins\n"
--    * set __tmp153 null
-   525 label __label89
-   526 label __label84
-   527 label __label82
+ 
+   533 op sub __tmp156 __fn4_charge START_POWER_REQ
+   534 op sub __tmp157 __tmp156 PWR_ABORT
+   535 op div __tmp158 __tmp157 PWR_REQ
+-    * op mul __tmp159 __tmp158 PWR_RESERVE
+-    * set __fn4_charge_units __tmp159
++  536 op mul __fn4_charge_units __tmp158 PWR_RESERVE
+   537 op div __tmp160 __fn4_surplus FLOW_REQ
+-    * op max __tmp161 -0.1 __tmp160
+-    * set __fn4_flow_units __tmp161
++  538 op max __fn4_flow_units -0.1 __tmp160
+   539 op mul __tmp162 CRYO_REQ_EA __fn4_reactor_num
+-    * op add __tmp163 CRYO_REQ __tmp162
+-    * set __fn4_cryo_req __tmp163
++  540 op add __fn4_cryo_req CRYO_REQ __tmp162
+   541 op lessThan __tmp164 REACTORS_DESIRED __fn4_reactor_num
+   542 jump __label90 equal __tmp164 false
+   543 print "IDLE\n"
+ 
+   549 jump __label92 equal __tmp167 false
+   550 op mul __tmp169 __fn4_flow_units 1000
+   551 op floor __tmp170 __tmp169
+-    * op div __tmp171 __tmp170 10
+-    * set __fn4_flow __tmp171
++  552 op div __fn4_flow __tmp170 10
+   553 op mul __tmp172 __fn4_charge_units 1000
+   554 op floor __tmp173 __tmp172
+-    * op div __tmp174 __tmp173 10
+-    * set __fn4_charge __tmp174
++  555 op div __fn4_charge __tmp173 10
+   556 print "WAIT power. (%"
+   557 print __fn4_charge
+   558 print "J + %"
+ 
+   586 jump __label101 always
+   587 label __label100
+   588 print "STARTUP\n"
+-    * op add __tmp186 START_POWER_REQ PWR_REQ
+-    * set START_POWER_REQ __tmp186
++  589 op add START_POWER_REQ START_POWER_REQ PWR_REQ
+   590 control enabled __fn4_reactor true
+   591 label __label101
+   592 label __label99
+ 
+   598 sensor __tmp187 __fn4_reactor @enabled
+   599 op notEqual __tmp188 __fn4_enabled __tmp187
+   600 jump __label102 equal __tmp188 false
+-    * set __tmp190 @tick
+-    * set RET_T_STARTUP __tmp190
++  601 set RET_T_STARTUP @tick
+   602 jump __label103 always
+   603 label __label102
+   604 label __label103
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  

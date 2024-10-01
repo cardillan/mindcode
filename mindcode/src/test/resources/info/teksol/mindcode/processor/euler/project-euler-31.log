@@ -20,6 +20,46 @@ Pass 1: speed optimization selection (cost limit 923):
 Pass 1: speed optimization selection (cost limit 942):
   * Return Optimization: optimize return at line 14              cost     2, benefit       13,0, efficiency        6,5 (+2 instructions)
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
+ 
+    40 label __label12
+    41 set __fn1_v 41
+    42 print __fn1_v
+-    * set __tmp2 __fn1_v
+    43 label __label13
+    44 set __fn0_amount 20
+    45 set __fn0_index 1
+ 
+    49 label __label15
+    50 set __fn2_v __tmp3
+    51 print __fn2_v
+-    * set __tmp4 __fn2_v
+    52 label __label16
+    53 end
+    54 label __label0
+ 
+    56 jump __label18 equal __tmp5 false
+    57 set __fn0retval 1
+    58 jump __label17 always
+-    * set __tmp6 null
+    59 jump __label19 always
+    60 label __label18
+-    * set __tmp6 null
+    61 label __label19
+    62 set __fn0_result 0
+    63 set __fn0_i __fn0_index
+ 
+    85 set __tmp11 __fn0retval
+    86 op add __tmp12 __fn0_result __tmp11
+    87 set __fn0_result __tmp12
+-    * set __tmp9 __fn0_result
+    88 jump __label24 always
+    89 label __label23
+-    * set __tmp9 null
+    90 label __label24
+    91 label __label21
+    92 op add __fn0_i __fn0_i 1
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
     31 set value 1
@@ -32,65 +72,25 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
     36 goto __tmp0 marker0
     37 gotolabel __label11 marker0
  
-    66 set __fn0_i __fn0_index
-    67 label __label20
-    68 jump __label22 greaterThanEq __fn0_i 8
+    62 set __fn0_i __fn0_index
+    63 label __label20
+    64 jump __label22 greaterThanEq __fn0_i 8
 -    * read __tmp7 bank1 __fn0_i
 -    * set __fn0_p __tmp7
-+   69 read __fn0_p bank1 __fn0_i
-    70 op lessThanEq __tmp8 __fn0_p __fn0_amount
-    71 jump __label23 equal __tmp8 false
-    72 op sub __tmp10 __fn0_amount __fn0_p
++   65 read __fn0_p bank1 __fn0_i
+    66 op lessThanEq __tmp8 __fn0_p __fn0_amount
+    67 jump __label23 equal __tmp8 false
+    68 op sub __tmp10 __fn0_amount __fn0_p
  
-    85 pop bank1 __fn0_index
-    86 pop bank1 __fn0_amount
-    87 set __tmp11 __fn0retval
--    * op add __tmp12 __fn0_result __tmp11
--    * set __fn0_result __tmp12
-+   88 op add __fn0_result __fn0_result __tmp11
-    89 set __tmp9 __fn0_result
-    90 jump __label24 always
-    91 label __label23
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
- 
-    39 label __label12
-    40 set __fn1_v 41
-    41 print __fn1_v
--    * set __tmp2 __fn1_v
-    42 label __label13
-    43 set __fn0_amount 20
-    44 set __fn0_index 1
- 
-    48 label __label15
-    49 set __fn2_v __tmp3
-    50 print __fn2_v
--    * set __tmp4 __fn2_v
-    51 label __label16
-    52 end
-    53 label __label0
- 
-    55 jump __label18 equal __tmp5 false
-    56 set __fn0retval 1
-    57 jump __label17 always
--    * set __tmp6 null
-    58 jump __label19 always
-    59 label __label18
--    * set __tmp6 null
-    60 label __label19
-    61 set __fn0_result 0
-    62 set __fn0_i __fn0_index
- 
+    81 pop bank1 __fn0_index
     82 pop bank1 __fn0_amount
     83 set __tmp11 __fn0retval
-    84 op add __fn0_result __fn0_result __tmp11
--    * set __tmp9 __fn0_result
+-    * op add __tmp12 __fn0_result __tmp11
+-    * set __fn0_result __tmp12
++   84 op add __fn0_result __fn0_result __tmp11
     85 jump __label24 always
     86 label __label23
--    * set __tmp9 null
     87 label __label24
-    88 label __label21
-    89 op add __fn0_i __fn0_i 1
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  

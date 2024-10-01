@@ -20,6 +20,7 @@ public interface InstructionProcessor {
     LogicLabel nextLabel();
     LogicVariable nextTemp();
     String nextFunctionPrefix();
+    LogicVariable unusedVariable();
 
     /**
      * Creates a sample logic instruction from given opcode variant.

@@ -10,9 +10,9 @@ enum OptimizationPhase {
      * of other optimizers (i.e. they won't benefit from multiple passes).
      */
     INITIAL("Initial",
-            TEMP_VARIABLES_ELIMINATION,
             CASE_EXPRESSION_OPTIMIZATION,
-            DEAD_CODE_ELIMINATION
+            DEAD_CODE_ELIMINATION,
+            TEMP_VARIABLES_ELIMINATION
     ),
 
     /**

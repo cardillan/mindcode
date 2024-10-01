@@ -262,7 +262,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                     ixArgs.add(LogicKeyword.create(a.name()));
                 } else if (a.type().isUnused()) {
                     // Unused inputs must be filled with defaults
-                    // Generate new temporary variable for unused outputs (may not be necessary)
+                    // Generate new temporary variable for unused outputs (will be replaced by the temp optimizer)
                     ixArgs.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
                 } else if (a.type().isInput()) {
                     // Input argument - take it as it is
@@ -581,8 +581,8 @@ public class BaseFunctionMapper implements FunctionMapper {
                     // Perhaps we might store the Operation into the NamedParameter directly to avoid lookup
                     ixArgs.add(getOpcode() == Opcode.OP ? Operation.fromMlog(a.name()) : LogicKeyword.create(a.name()));
                 } else if (a.type().isUnused()) {
-                    // Pass in zero for unused inputs
-                    // Generate new temporary variable for unused outputs (may not be necessary)
+                    // Unused inputs must be filled with defaults
+                    // Generate new temporary variable for unused outputs (will be replaced by the temp optimizer)
                     ixArgs.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
                 } else if (a.type().isInput()) {
                     // Input argument - take it as it is

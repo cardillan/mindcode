@@ -14,6 +14,66 @@
 Pass 1: speed optimization selection (cost limit 947):
   * Loop Optimization: replicate condition at line 30            cost     2, benefit      625,0, efficiency      312,5 (+1 instructions)
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
+ 
+    20 write __fn0_pv ARRAY __fn0_index
+    21 write __fn0_iv ARRAY __fn0_parent
+    22 set __fn0_index __fn0_parent
+-    * set __tmp8 __fn0_index
+    23 jump __label9 always
+    24 label __label8
+    25 jump __label7 always
+-    * set __tmp8 null
+    26 label __label9
+    27 label __label6
+    28 jump __label5 always
+    29 label __label7
+-    * set __tmp1 null
+    30 label __label4
+    31 label __label1
+    32 op add i i 1
+ 
+    70 label __label20
+    71 set __tmp24 null
+    72 label __label21
+-    * set __tmp20 __tmp24
+    73 jump __label19 always
+    74 label __label18
+-    * set __tmp20 null
+    75 label __label19
+    76 read __tmp27 ARRAY __fn1_parent
+    77 set __fn1_pv __tmp27
+ 
+    80 write __fn1_cv ARRAY __fn1_parent
+    81 write __fn1_pv ARRAY __fn1_child
+    82 set __fn1_parent __fn1_child
+-    * set __tmp29 __fn1_parent
+    83 jump __label23 always
+    84 label __label22
+    85 jump __label17 always
+-    * set __tmp29 null
+    86 label __label23
+    87 label __label16
+    88 jump __label15 always
+    89 label __label17
+-    * set __tmp14 null
+    90 label __label14
+    91 label __label11
+    92 jump __label10 always
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
+ 
+    65 set __fn1_child __tmp25
+    66 read __tmp26 ARRAY __fn1_child
+    67 set __fn1_cv __tmp26
+-    * set __tmp24 __fn1_cv
+    68 jump __label21 always
+    69 label __label20
+-    * set __tmp24 null
+    70 label __label21
+    71 jump __label19 always
+    72 label __label18
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  
      9 op greaterThan __tmp2 __fn0_index 0
@@ -32,122 +92,61 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 ins
     16 jump __label8 equal __tmp7 false
     17 write __fn0_pv ARRAY __fn0_index
  
-    32 op add i i 1
-    33 jump __label0 always
-    34 label __label2
+    29 op add i i 1
+    30 jump __label0 always
+    31 label __label2
 -    * op sub __tmp9 SIZE 1
 -    * set index __tmp9
-+   35 op sub index SIZE 1
-    36 label __label10
-    37 op greaterThan __tmp10 index 0
-    38 jump __label12 equal __tmp10 false
++   32 op sub index SIZE 1
+    33 label __label10
+    34 op greaterThan __tmp10 index 0
+    35 jump __label12 equal __tmp10 false
 -    * read __tmp11 ARRAY 0
 -    * set x __tmp11
-+   39 read x ARRAY 0
-    40 read __tmp12 ARRAY index
-    41 write __tmp12 ARRAY 0
-    42 write x ARRAY index
++   36 read x ARRAY 0
+    37 read __tmp12 ARRAY index
+    38 write __tmp12 ARRAY 0
+    39 write x ARRAY index
 -    * op sub __tmp13 index 1
 -    * set index __tmp13
-+   43 op sub index index 1
-    44 label __label13
-    45 set __fn1_index index
-    46 set __fn1_parent 0
-    47 label __label15
-    48 op mul __tmp15 __fn1_parent 2
++   40 op sub index index 1
+    41 label __label13
+    42 set __fn1_index index
+    43 set __fn1_parent 0
+    44 label __label15
+    45 op mul __tmp15 __fn1_parent 2
 -    * op add __tmp16 __tmp15 1
 -    * set __fn1_child __tmp16
-+   49 op add __fn1_child __tmp15 1
-    50 op lessThanEq __tmp17 __fn1_child __fn1_index
-    51 jump __label17 equal __tmp17 false
++   46 op add __fn1_child __tmp15 1
+    47 op lessThanEq __tmp17 __fn1_child __fn1_index
+    48 jump __label17 equal __tmp17 false
 -    * read __tmp18 ARRAY __fn1_child
 -    * set __fn1_cv __tmp18
-+   52 read __fn1_cv ARRAY __fn1_child
-    53 op lessThan __tmp19 __fn1_child __fn1_index
-    54 jump __label18 equal __tmp19 false
-    55 op add __tmp22 __fn1_child 1
-    56 read __tmp21 ARRAY __tmp22
-    57 op lessThan __tmp23 __fn1_cv __tmp21
-    58 jump __label20 equal __tmp23 false
++   49 read __fn1_cv ARRAY __fn1_child
+    50 op lessThan __tmp19 __fn1_child __fn1_index
+    51 jump __label18 equal __tmp19 false
+    52 op add __tmp22 __fn1_child 1
+    53 read __tmp21 ARRAY __tmp22
+    54 op lessThan __tmp23 __fn1_cv __tmp21
+    55 jump __label20 equal __tmp23 false
 -    * op add __tmp25 __fn1_child 1
 -    * set __fn1_child __tmp25
 -    * read __tmp26 ARRAY __fn1_child
 -    * set __fn1_cv __tmp26
-+   59 op add __fn1_child __fn1_child 1
-+   60 read __fn1_cv ARRAY __fn1_child
-    61 set __tmp24 __fn1_cv
-    62 jump __label21 always
-    63 label __label20
- 
-    68 label __label18
-    69 set __tmp20 null
-    70 label __label19
--    * read __tmp27 ARRAY __fn1_parent
--    * set __fn1_pv __tmp27
-+   71 read __fn1_pv ARRAY __fn1_parent
-    72 op lessThan __tmp28 __fn1_pv __fn1_cv
-    73 jump __label22 equal __tmp28 false
-    74 write __fn1_cv ARRAY __fn1_parent
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
- 
-    17 write __fn0_pv ARRAY __fn0_index
-    18 write __fn0_iv ARRAY __fn0_parent
-    19 set __fn0_index __fn0_parent
--    * set __tmp8 __fn0_index
-    20 jump __label9 always
-    21 label __label8
-    22 jump __label7 always
--    * set __tmp8 null
-    23 label __label9
-    24 label __label6
-    25 jump __label5 always
-    26 label __label7
--    * set __tmp1 null
-    27 label __label4
-    28 label __label1
-    29 op add i i 1
- 
-    60 label __label20
-    61 set __tmp24 null
-    62 label __label21
--    * set __tmp20 __tmp24
-    63 jump __label19 always
-    64 label __label18
--    * set __tmp20 null
-    65 label __label19
-    66 read __fn1_pv ARRAY __fn1_parent
-    67 op lessThan __tmp28 __fn1_pv __fn1_cv
- 
-    69 write __fn1_cv ARRAY __fn1_parent
-    70 write __fn1_pv ARRAY __fn1_child
-    71 set __fn1_parent __fn1_child
--    * set __tmp29 __fn1_parent
-    72 jump __label23 always
-    73 label __label22
-    74 jump __label17 always
--    * set __tmp29 null
-    75 label __label23
-    76 label __label16
-    77 jump __label15 always
-    78 label __label17
--    * set __tmp14 null
-    79 label __label14
-    80 label __label11
-    81 jump __label10 always
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
- 
-    55 jump __label20 equal __tmp23 false
-    56 op add __fn1_child __fn1_child 1
-    57 read __fn1_cv ARRAY __fn1_child
--    * set __tmp24 __fn1_cv
++   56 op add __fn1_child __fn1_child 1
++   57 read __fn1_cv ARRAY __fn1_child
     58 jump __label21 always
     59 label __label20
--    * set __tmp24 null
     60 label __label21
     61 jump __label19 always
     62 label __label18
+    63 label __label19
+-    * read __tmp27 ARRAY __fn1_parent
+-    * set __fn1_pv __tmp27
++   64 read __fn1_pv ARRAY __fn1_parent
+    65 op lessThan __tmp28 __fn1_pv __fn1_cv
+    66 jump __label22 equal __tmp28 false
+    67 write __fn1_cv ARRAY __fn1_parent
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-7 instructions):
  

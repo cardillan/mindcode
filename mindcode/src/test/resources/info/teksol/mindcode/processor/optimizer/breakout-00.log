@@ -26,6 +26,127 @@ Pass 1: speed optimization selection (cost limit 865):
 Pass 1: speed optimization selection (cost limit 863):
   * Loop Unrolling: unroll loop at line 82                       cost    63, benefit    62500,0, efficiency      992,1 (+50 instructions)
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instructions):
+ 
+    41 label __label11
+    42 set __tmp10 null
+    43 label __label12
+-    * set __tmp7 __tmp10
+    44 jump __label10 always
+    45 label __label9
+    46 op greaterThan __tmp12 paddleX 0
+ 
+    52 label __label13
+    53 set __tmp13 null
+    54 label __label14
+-    * set __tmp7 __tmp13
+    55 label __label10
+    56 op add __tmp15 ballX ballVX
+    57 set ballX __tmp15
+ 
+    67 jump __label15 equal __tmp21 false
+    68 op mul __tmp23 ballVX -1
+    69 set ballVX __tmp23
+-    * set __tmp22 ballVX
+    70 jump __label16 always
+    71 label __label15
+-    * set __tmp22 null
+    72 label __label16
+    73 op greaterThan __tmp24 ballYEnd 176
+    74 jump __label17 equal __tmp24 false
+    75 op mul __tmp26 ballVY -1
+    76 set ballVY __tmp26
+-    * set __tmp25 ballVY
+    77 jump __label18 always
+    78 label __label17
+-    * set __tmp25 null
+    79 label __label18
+    80 op greaterThan __tmp27 ballXEnd paddleX
+    81 op add __tmp28 paddleX paddleWidth
+ 
+    97 set ballVX __tmp42
+    98 op sub __tmp43 paddleWidth 1
+    99 set paddleWidth __tmp43
+-    * set __tmp35 paddleWidth
+   100 jump __label20 always
+   101 label __label19
+-    * set __tmp35 null
+   102 label __label20
+   103 set brickPtr 0
+   104 set y 126
+ 
+   146 label __label29
+   147 set __tmp57 null
+   148 label __label30
+-    * set __tmp47 __tmp57
+   149 jump __label28 always
+   150 label __label27
+-    * set __tmp47 null
+   151 label __label28
+   152 op add __tmp67 brickPtr 1
+   153 set brickPtr __tmp67
+ 
+   166 op or __tmp72 __tmp70 __tmp71
+   167 jump __label33 equal __tmp72 false
+   168 jump __label8 always
+-    * set __tmp73 null
+   169 jump __label34 always
+   170 label __label33
+-    * set __tmp73 null
+   171 label __label34
+   172 drawflush DISPLAY
+   173 label __label7
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructions):
+ 
+    36 jump __label11 equal __tmp9 false
+    37 op add __tmp11 paddleX 3
+    38 set paddleX __tmp11
+-    * set __tmp10 paddleX
+    39 jump __label12 always
+    40 label __label11
+-    * set __tmp10 null
+    41 label __label12
+    42 jump __label10 always
+    43 label __label9
+ 
+    45 jump __label13 equal __tmp12 false
+    46 op sub __tmp14 paddleX 3
+    47 set paddleX __tmp14
+-    * set __tmp13 paddleX
+    48 jump __label14 always
+    49 label __label13
+-    * set __tmp13 null
+    50 label __label14
+    51 label __label10
+    52 op add __tmp15 ballX ballVX
+ 
+   137 set ballVX __tmp66
+   138 set __tmp64 ballVX
+   139 label __label32
+-    * set __tmp57 __tmp64
+   140 jump __label30 always
+   141 label __label29
+-    * set __tmp57 null
+   142 label __label30
+   143 jump __label28 always
+   144 label __label27
+
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
+ 
+   130 jump __label31 equal __tmp63 false
+   131 op mul __tmp65 ballVY -1
+   132 set ballVY __tmp65
+-    * set __tmp64 ballVY
+   133 jump __label32 always
+   134 label __label31
+   135 op mul __tmp66 ballVX -1
+   136 set ballVX __tmp66
+-    * set __tmp64 ballVX
+   137 label __label32
+   138 jump __label30 always
+   139 label __label29
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
  
      5 jump __label2 equal true false
@@ -54,23 +175,20 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 ins
 -    * op add __tmp11 paddleX 3
 -    * set paddleX __tmp11
 +   34 op add paddleX paddleX 3
-    35 set __tmp10 paddleX
-    36 jump __label12 always
-    37 label __label11
+    35 jump __label12 always
+    36 label __label11
+    37 label __label12
  
-    42 label __label9
-    43 op greaterThan __tmp12 paddleX 0
-    44 jump __label13 equal __tmp12 false
+    39 label __label9
+    40 op greaterThan __tmp12 paddleX 0
+    41 jump __label13 equal __tmp12 false
 -    * op sub __tmp14 paddleX 3
 -    * set paddleX __tmp14
-+   45 op sub paddleX paddleX 3
-    46 set __tmp13 paddleX
-    47 jump __label14 always
-    48 label __label13
- 
-    50 label __label14
-    51 set __tmp7 __tmp13
-    52 label __label10
++   42 op sub paddleX paddleX 3
+    43 jump __label14 always
+    44 label __label13
+    45 label __label14
+    46 label __label10
 -    * op add __tmp15 ballX ballVX
 -    * set ballX __tmp15
 -    * op add __tmp16 ballY ballVY
@@ -79,215 +197,94 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 ins
 -    * set ballXEnd __tmp17
 -    * op add __tmp18 ballY 5
 -    * set ballYEnd __tmp18
-+   53 op add ballX ballX ballVX
-+   54 op add ballY ballY ballVY
-+   55 op add ballXEnd ballX 5
-+   56 op add ballYEnd ballY 5
-    57 op lessThan __tmp19 ballX 0
-    58 op greaterThan __tmp20 ballXEnd 176
-    59 op or __tmp21 __tmp19 __tmp20
-    60 jump __label15 equal __tmp21 false
++   47 op add ballX ballX ballVX
++   48 op add ballY ballY ballVY
++   49 op add ballXEnd ballX 5
++   50 op add ballYEnd ballY 5
+    51 op lessThan __tmp19 ballX 0
+    52 op greaterThan __tmp20 ballXEnd 176
+    53 op or __tmp21 __tmp19 __tmp20
+    54 jump __label15 equal __tmp21 false
 -    * op mul __tmp23 ballVX -1
 -    * set ballVX __tmp23
-+   61 op mul ballVX ballVX -1
-    62 set __tmp22 ballVX
-    63 jump __label16 always
-    64 label __label15
- 
-    66 label __label16
-    67 op greaterThan __tmp24 ballYEnd 176
-    68 jump __label17 equal __tmp24 false
++   55 op mul ballVX ballVX -1
+    56 jump __label16 always
+    57 label __label15
+    58 label __label16
+    59 op greaterThan __tmp24 ballYEnd 176
+    60 jump __label17 equal __tmp24 false
 -    * op mul __tmp26 ballVY -1
 -    * set ballVY __tmp26
-+   69 op mul ballVY ballVY -1
-    70 set __tmp25 ballVY
-    71 jump __label18 always
-    72 label __label17
++   61 op mul ballVY ballVY -1
+    62 jump __label18 always
+    63 label __label17
+    64 label __label18
  
-    81 op lessThan __tmp33 ballY 15
-    82 op land __tmp34 __tmp32 __tmp33
-    83 jump __label19 equal __tmp34 false
+    71 op lessThan __tmp33 ballY 15
+    72 op land __tmp34 __tmp32 __tmp33
+    73 jump __label19 equal __tmp34 false
 -    * op mul __tmp36 ballVY -1.1
 -    * set ballVY __tmp36
-+   84 op mul ballVY ballVY -1.1
-    85 op add __tmp37 ballX 2.5
-    86 op sub __tmp38 __tmp37 paddleX
-    87 op div __tmp39 paddleWidth 2
-    88 op add __tmp40 __tmp38 __tmp39
-    89 op div __tmp41 __tmp40 10
++   74 op mul ballVY ballVY -1.1
+    75 op add __tmp37 ballX 2.5
+    76 op sub __tmp38 __tmp37 paddleX
+    77 op div __tmp39 paddleWidth 2
+    78 op add __tmp40 __tmp38 __tmp39
+    79 op div __tmp41 __tmp40 10
 -    * op add __tmp42 ballVX __tmp41
 -    * set ballVX __tmp42
 -    * op sub __tmp43 paddleWidth 1
 -    * set paddleWidth __tmp43
-+   90 op add ballVX ballVX __tmp41
-+   91 op sub paddleWidth paddleWidth 1
-    92 set __tmp35 paddleWidth
-    93 jump __label20 always
-    94 label __label19
++   80 op add ballVX ballVX __tmp41
++   81 op sub paddleWidth paddleWidth 1
+    82 jump __label20 always
+    83 label __label19
+    84 label __label20
  
-   117 op land __tmp56 __tmp53 __tmp55
-   118 jump __label29 equal __tmp56 false
-   119 write 0 BRICKS brickPtr
+   105 op land __tmp56 __tmp53 __tmp55
+   106 jump __label29 equal __tmp56 false
+   107 write 0 BRICKS brickPtr
 -    * op sub __tmp58 brickCount 1
 -    * set brickCount __tmp58
-+  120 op sub brickCount brickCount 1
-   121 set brickWidthPlusBallSizeMinus1 62.666666666666664
-   122 op sub __tmp59 x 4
-   123 op greaterThan __tmp60 ballX __tmp59
++  108 op sub brickCount brickCount 1
+   109 set brickWidthPlusBallSizeMinus1 62.666666666666664
+   110 op sub __tmp59 x 4
+   111 op greaterThan __tmp60 ballX __tmp59
  
-   125 op lessThan __tmp62 ballX __tmp61
-   126 op land __tmp63 __tmp60 __tmp62
-   127 jump __label31 equal __tmp63 false
--    * op mul __tmp65 ballVY -1
--    * set ballVY __tmp65
-+  128 op mul ballVY ballVY -1
-   129 set __tmp64 ballVY
-   130 jump __label32 always
-   131 label __label31
--    * op mul __tmp66 ballVX -1
--    * set ballVX __tmp66
-+  132 op mul ballVX ballVX -1
-   133 set __tmp64 ballVX
-   134 label __label32
-   135 set __tmp57 __tmp64
- 
-   142 label __label27
-   143 set __tmp47 null
-   144 label __label28
--    * op add __tmp67 brickPtr 1
--    * set brickPtr __tmp67
-+  145 op add brickPtr brickPtr 1
-   146 label __label25
--    * op add __tmp68 x 58.666666666666664
--    * set x __tmp68
-+  147 op add x x 58.666666666666664
-   148 jump __label24 always
-   149 label __label26
-   150 label __label22
--    * op sub __tmp69 y 10
--    * set y __tmp69
-+  151 op sub y y 10
-   152 jump __label21 always
-   153 label __label23
-   154 op lessThan __tmp70 ballY 0
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instructions):
- 
-    37 label __label11
-    38 set __tmp10 null
-    39 label __label12
--    * set __tmp7 __tmp10
-    40 jump __label10 always
-    41 label __label9
-    42 op greaterThan __tmp12 paddleX 0
- 
-    47 label __label13
-    48 set __tmp13 null
-    49 label __label14
--    * set __tmp7 __tmp13
-    50 label __label10
-    51 op add ballX ballX ballVX
-    52 op add ballY ballY ballVY
- 
-    57 op or __tmp21 __tmp19 __tmp20
-    58 jump __label15 equal __tmp21 false
-    59 op mul ballVX ballVX -1
--    * set __tmp22 ballVX
-    60 jump __label16 always
-    61 label __label15
--    * set __tmp22 null
-    62 label __label16
-    63 op greaterThan __tmp24 ballYEnd 176
-    64 jump __label17 equal __tmp24 false
-    65 op mul ballVY ballVY -1
--    * set __tmp25 ballVY
-    66 jump __label18 always
-    67 label __label17
--    * set __tmp25 null
-    68 label __label18
-    69 op greaterThan __tmp27 ballXEnd paddleX
-    70 op add __tmp28 paddleX paddleWidth
- 
-    83 op div __tmp41 __tmp40 10
-    84 op add ballVX ballVX __tmp41
-    85 op sub paddleWidth paddleWidth 1
--    * set __tmp35 paddleWidth
-    86 jump __label20 always
-    87 label __label19
--    * set __tmp35 null
-    88 label __label20
-    89 set brickPtr 0
-    90 set y 126
- 
-   129 label __label29
-   130 set __tmp57 null
-   131 label __label30
--    * set __tmp47 __tmp57
-   132 jump __label28 always
-   133 label __label27
--    * set __tmp47 null
-   134 label __label28
-   135 op add brickPtr brickPtr 1
-   136 label __label25
- 
-   146 op or __tmp72 __tmp70 __tmp71
-   147 jump __label33 equal __tmp72 false
-   148 jump __label8 always
--    * set __tmp73 null
-   149 jump __label34 always
-   150 label __label33
--    * set __tmp73 null
-   151 label __label34
-   152 drawflush DISPLAY
-   153 label __label7
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructions):
- 
-    32 op lessThan __tmp9 paddleX __tmp8
-    33 jump __label11 equal __tmp9 false
-    34 op add paddleX paddleX 3
--    * set __tmp10 paddleX
-    35 jump __label12 always
-    36 label __label11
--    * set __tmp10 null
-    37 label __label12
-    38 jump __label10 always
-    39 label __label9
-    40 op greaterThan __tmp12 paddleX 0
-    41 jump __label13 equal __tmp12 false
-    42 op sub paddleX paddleX 3
--    * set __tmp13 paddleX
-    43 jump __label14 always
-    44 label __label13
--    * set __tmp13 null
-    45 label __label14
-    46 label __label10
-    47 op add ballX ballX ballVX
- 
-   120 op mul ballVX ballVX -1
-   121 set __tmp64 ballVX
-   122 label __label32
--    * set __tmp57 __tmp64
-   123 jump __label30 always
-   124 label __label29
--    * set __tmp57 null
-   125 label __label30
-   126 jump __label28 always
-   127 label __label27
-
-Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
- 
+   113 op lessThan __tmp62 ballX __tmp61
    114 op land __tmp63 __tmp60 __tmp62
    115 jump __label31 equal __tmp63 false
-   116 op mul ballVY ballVY -1
--    * set __tmp64 ballVY
+-    * op mul __tmp65 ballVY -1
+-    * set ballVY __tmp65
++  116 op mul ballVY ballVY -1
    117 jump __label32 always
    118 label __label31
-   119 op mul ballVX ballVX -1
--    * set __tmp64 ballVX
+-    * op mul __tmp66 ballVX -1
+-    * set ballVX __tmp66
++  119 op mul ballVX ballVX -1
    120 label __label32
    121 jump __label30 always
    122 label __label29
+ 
+   124 jump __label28 always
+   125 label __label27
+   126 label __label28
+-    * op add __tmp67 brickPtr 1
+-    * set brickPtr __tmp67
++  127 op add brickPtr brickPtr 1
+   128 label __label25
+-    * op add __tmp68 x 58.666666666666664
+-    * set x __tmp68
++  129 op add x x 58.666666666666664
+   130 jump __label24 always
+   131 label __label26
+   132 label __label22
+-    * op sub __tmp69 y 10
+-    * set y __tmp69
++  133 op sub y y 10
+   134 jump __label21 always
+   135 label __label23
+   136 op lessThan __tmp70 ballY 0
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 instructions):
  

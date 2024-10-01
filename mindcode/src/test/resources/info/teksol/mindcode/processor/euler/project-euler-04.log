@@ -17,6 +17,44 @@ Pass 2: speed optimization selection (cost limit 977):
 Pass 3: speed optimization selection (cost limit 977):
   ! Loop Unrolling: unroll loop at line 4                        cost  1421, benefit     4500,0, efficiency        3,2
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+ 
+    33 label __label13
+    34 set __tmp10 null
+    35 label __label14
+-    * set __tmp2 __tmp10
+    36 jump __label7 always
+    37 label __label6
+-    * set __tmp2 null
+    38 label __label7
+    39 label __label4
+    40 op add j j 1
+ 
+    47 label __label15
+    48 set __fn1_v 9009
+    49 print __fn1_v
+-    * set __tmp11 __fn1_v
+    50 label __label16
+    51 label __label17
+    52 set __fn2_v max
+    53 print __fn2_v
+-    * set __tmp12 __fn2_v
+    54 label __label18
+    55 end
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
+ 
+    28 op equal __tmp9 num __tmp3
+    29 jump __label13 equal __tmp9 false
+    30 set max num
+-    * set __tmp10 max
+    31 jump __label14 always
+    32 label __label13
+-    * set __tmp10 null
+    33 label __label14
+    34 jump __label7 always
+    35 label __label6
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
      4 set j i
@@ -41,44 +79,6 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
     20 label __label11
     21 jump __label10 always
     22 label __label12
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
- 
-    30 label __label13
-    31 set __tmp10 null
-    32 label __label14
--    * set __tmp2 __tmp10
-    33 jump __label7 always
-    34 label __label6
--    * set __tmp2 null
-    35 label __label7
-    36 label __label4
-    37 op add j j 1
- 
-    44 label __label15
-    45 set __fn1_v 9009
-    46 print __fn1_v
--    * set __tmp11 __fn1_v
-    47 label __label16
-    48 label __label17
-    49 set __fn2_v max
-    50 print __fn2_v
--    * set __tmp12 __fn2_v
-    51 label __label18
-    52 end
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
- 
-    25 op equal __tmp9 num __tmp3
-    26 jump __label13 equal __tmp9 false
-    27 set max num
--    * set __tmp10 max
-    28 jump __label14 always
-    29 label __label13
--    * set __tmp10 null
-    30 label __label14
-    31 jump __label7 always
-    32 label __label6
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 instructions):
  

@@ -1,6 +1,6 @@
     58 instructions before optimizations.
-     7 instructions eliminated by Temp Variables Elimination.
-     9 instructions eliminated by Dead Code Elimination (5 iterations).
+     6 instructions eliminated by Temp Variables Elimination.
+    10 instructions eliminated by Dead Code Elimination (6 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
     16 instructions modified by Expression Optimization (3 iterations).
     88 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
@@ -57,60 +57,6 @@ Pass 1: speed optimization selection (cost limit 892):
     Function Inlining: inline function call at line 13           cost    56, benefit        3,5, efficiency        0,1
     Function Inlining: inline function call at line 14           cost    56, benefit        3,5, efficiency        0,1
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
- 
-    19 set __tmp3 __fn0retval
-    20 end
-    21 label __label0
--    * op add __tmp4 10 __fn0_s
--    * set __fn1_n __tmp4
-+   22 op add __fn1_n 10 __fn0_s
-    23 setaddr __fn1retaddr __label7
-    24 call __label1 __fn1retval
-    25 gotolabel __label7 __fn1
-    26 set __tmp5 __fn1retval
--    * op add __tmp6 20 __fn0_s
--    * set __fn1_n __tmp6
-+   27 op add __fn1_n 20 __fn0_s
-    28 setaddr __fn1retaddr __label8
-    29 call __label1 __fn1retval
-    30 gotolabel __label8 __fn1
-    31 set __tmp7 __fn1retval
--    * op add __tmp8 30 __fn0_s
--    * set __fn1_n __tmp8
-+   32 op add __fn1_n 30 __fn0_s
-    33 setaddr __fn1retaddr __label9
-    34 call __label1 __fn1retval
-    35 gotolabel __label9 __fn1
-    36 set __tmp9 __fn1retval
--    * op add __tmp10 40 __fn0_s
--    * set __fn1_n __tmp10
-+   37 op add __fn1_n 40 __fn0_s
-    38 setaddr __fn1retaddr __label10
-    39 call __label1 __fn1retval
-    40 gotolabel __label10 __fn1
--    * set __tmp11 __fn1retval
--    * set __fn0retval __tmp11
-+   41 set __fn0retval __fn1retval
-    42 label __label6
-    43 goto __fn0retaddr __fn0
-    44 end
-    45 label __label1
-    46 set __fn1_sum 0
--    * op rand __tmp12 10
--    * set __fn1_r __tmp12
-+   47 op rand __fn1_r 10
-    48 set __fn1_i 0
-    49 label __label12
-    50 jump __label14 greaterThanEq __fn1_i 50
-    51 op add __tmp13 __fn1_n __fn1_r
--    * op add __tmp14 __fn1_sum __tmp13
--    * set __fn1_sum __tmp14
-+   52 op add __fn1_sum __fn1_sum __tmp13
-    53 label __label13
-    54 op add __fn1_i __fn1_i 1
-    55 jump __label12 always
-
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructions):
  
      1 setaddr __fn0retaddr __label2
@@ -134,44 +80,104 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructi
 -    * set __tmp3 __fn0retval
     16 end
     17 label __label0
-    18 op add __fn1_n 10 __fn0_s
-    19 setaddr __fn1retaddr __label7
-    20 call __label1 __fn1retval
-    21 gotolabel __label7 __fn1
+    18 op add __tmp4 10 __fn0_s
+ 
+    20 setaddr __fn1retaddr __label7
+    21 call __label1 __fn1retval
+    22 gotolabel __label7 __fn1
 -    * set __tmp5 __fn1retval
-    22 op add __fn1_n 20 __fn0_s
-    23 setaddr __fn1retaddr __label8
-    24 call __label1 __fn1retval
-    25 gotolabel __label8 __fn1
+    23 op add __tmp6 20 __fn0_s
+    24 set __fn1_n __tmp6
+    25 setaddr __fn1retaddr __label8
+    26 call __label1 __fn1retval
+    27 gotolabel __label8 __fn1
 -    * set __tmp7 __fn1retval
-    26 op add __fn1_n 30 __fn0_s
-    27 setaddr __fn1retaddr __label9
-    28 call __label1 __fn1retval
-    29 gotolabel __label9 __fn1
+    28 op add __tmp8 30 __fn0_s
+    29 set __fn1_n __tmp8
+    30 setaddr __fn1retaddr __label9
+    31 call __label1 __fn1retval
+    32 gotolabel __label9 __fn1
 -    * set __tmp9 __fn1retval
-    30 op add __fn1_n 40 __fn0_s
-    31 setaddr __fn1retaddr __label10
-    32 call __label1 __fn1retval
+    33 op add __tmp10 40 __fn0_s
+    34 set __fn1_n __tmp10
+    35 setaddr __fn1retaddr __label10
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructions):
  
-    31 setaddr __fn1retaddr __label10
-    32 call __label1 __fn1retval
-    33 gotolabel __label10 __fn1
--    * set __fn0retval __fn1retval
-    34 label __label6
-    35 goto __fn0retaddr __fn0
-    36 end
+    36 call __label1 __fn1retval
+    37 gotolabel __label10 __fn1
+    38 set __tmp11 __fn1retval
+-    * set __fn0retval __tmp11
+    39 label __label6
+    40 goto __fn0retaddr __fn0
+    41 end
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-1 instructions):
  
-    51 op add __tmp17 __tmp16 0.5
-    52 op floor __tmp18 __tmp17
-    53 print __tmp18
+    35 setaddr __fn1retaddr __label10
+    36 call __label1 __fn1retval
+    37 gotolabel __label10 __fn1
+-    * set __tmp11 __fn1retval
+    38 label __label6
+    39 goto __fn0retaddr __fn0
+    40 end
+
+Modifications by Initial phase, Dead Code Elimination, iteration 4 (-1 instructions):
+ 
+    57 op add __tmp17 __tmp16 0.5
+    58 op floor __tmp18 __tmp17
+    59 print __tmp18
 -    * set __fn1retval __tmp18
-    54 label __label11
-    55 goto __fn1retaddr __fn1
-    56 end
+    60 label __label11
+    61 goto __fn1retaddr __fn1
+    62 end
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
+ 
+    15 gotolabel __label5 __fn0
+    16 end
+    17 label __label0
+-    * op add __tmp4 10 __fn0_s
+-    * set __fn1_n __tmp4
++   18 op add __fn1_n 10 __fn0_s
+    19 setaddr __fn1retaddr __label7
+    20 call __label1 __fn1retval
+    21 gotolabel __label7 __fn1
+-    * op add __tmp6 20 __fn0_s
+-    * set __fn1_n __tmp6
++   22 op add __fn1_n 20 __fn0_s
+    23 setaddr __fn1retaddr __label8
+    24 call __label1 __fn1retval
+    25 gotolabel __label8 __fn1
+-    * op add __tmp8 30 __fn0_s
+-    * set __fn1_n __tmp8
++   26 op add __fn1_n 30 __fn0_s
+    27 setaddr __fn1retaddr __label9
+    28 call __label1 __fn1retval
+    29 gotolabel __label9 __fn1
+-    * op add __tmp10 40 __fn0_s
+-    * set __fn1_n __tmp10
++   30 op add __fn1_n 40 __fn0_s
+    31 setaddr __fn1retaddr __label10
+    32 call __label1 __fn1retval
+    33 gotolabel __label10 __fn1
+ 
+    36 end
+    37 label __label1
+    38 set __fn1_sum 0
+-    * op rand __tmp12 10
+-    * set __fn1_r __tmp12
++   39 op rand __fn1_r 10
+    40 set __fn1_i 0
+    41 label __label12
+    42 jump __label14 greaterThanEq __fn1_i 50
+    43 op add __tmp13 __fn1_n __fn1_r
+-    * op add __tmp14 __fn1_sum __tmp13
+-    * set __fn1_sum __tmp14
++   44 op add __fn1_sum __fn1_sum __tmp13
+    45 label __label13
+    46 op add __fn1_i __fn1_i 1
+    47 jump __label12 always
 
 Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
  

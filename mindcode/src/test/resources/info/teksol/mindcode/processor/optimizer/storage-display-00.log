@@ -1,6 +1,6 @@
    490 instructions before optimizations.
-    16 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Case Expression Optimization.
+    15 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Case Expression Optimization.
     48 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Normalization (4 iterations).
      9 instructions eliminated by Jump Optimization (4 iterations).
@@ -37,7 +37,477 @@ Pass 1: speed optimization selection (cost limit 330):
 Pass 1: speed optimization selection (cost limit 314):
   * Loop Optimization: replicate condition at line 56            cost     7, benefit       25,0, efficiency        3,6 (+7 instructions)
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-16 instructions):
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
+ 
+    18 print block
+    19 print "\n"
+    20 sensor __tmp4 block @type
+-    * set __ast0 __tmp4
+-    * jump __label8 equal __ast0 @message
++   21 jump __label8 equal __tmp4 @message
+    22 jump __label7 always
+    23 label __label8
+    24 set MESSAGE block
+    25 set __tmp5 MESSAGE
+    26 jump __label6 always
+    27 label __label7
+-    * jump __label10 equal __ast0 @memory-bank
+-    * jump __label10 equal __ast0 @memory-cell
++   28 jump __label10 equal __tmp4 @memory-bank
++   29 jump __label10 equal __tmp4 @memory-cell
+    30 jump __label9 always
+    31 label __label10
+    32 set MEMORY block
+    33 set __tmp5 MEMORY
+    34 jump __label6 always
+    35 label __label9
+-    * jump __label12 equal __ast0 @vault
+-    * jump __label12 equal __ast0 @container
+-    * jump __label12 equal __ast0 @core-shard
+-    * jump __label12 equal __ast0 @core-foundation
+-    * jump __label12 equal __ast0 @core-nucleus
++   36 jump __label12 equal __tmp4 @vault
++   37 jump __label12 equal __tmp4 @container
++   38 jump __label12 equal __tmp4 @core-shard
++   39 jump __label12 equal __tmp4 @core-foundation
++   40 jump __label12 equal __tmp4 @core-nucleus
+    41 jump __label11 always
+    42 label __label12
+    43 set CONTAINER block
+    44 set __tmp5 CONTAINER
+    45 jump __label6 always
+    46 label __label11
+-    * jump __label14 equal __ast0 @large-logic-display
++   47 jump __label14 equal __tmp4 @large-logic-display
+    48 jump __label13 always
+    49 label __label14
+    50 set DISPLAY block
+ 
+   355 set __fn4_x __fn3_x
+   356 set __fn4_y __fn3_y
+   357 set __fn4_digit __tmp50
+-    * set __ast1 __fn4_digit
+-    * jump __label91 equal __ast1 0
++  358 jump __label91 equal __fn4_digit 0
+   359 jump __label90 always
+   360 label __label91
+   361 op sub __tmp53 __fn4_x 2
+ 
+   366 set __tmp52 null
+   367 jump __label89 always
+   368 label __label90
+-    * jump __label93 equal __ast1 1
++  369 jump __label93 equal __fn4_digit 1
+   370 jump __label92 always
+   371 label __label93
+   372 op add __tmp57 __fn4_x 7
+ 
+   378 set __tmp52 null
+   379 jump __label89 always
+   380 label __label92
+-    * jump __label95 equal __ast1 2
++  381 jump __label95 equal __fn4_digit 2
+   382 jump __label94 always
+   383 label __label95
+   384 op add __tmp62 __fn4_x 7
+ 
+   401 set __tmp52 null
+   402 jump __label89 always
+   403 label __label94
+-    * jump __label97 equal __ast1 3
++  404 jump __label97 equal __fn4_digit 3
+   405 jump __label96 always
+   406 label __label97
+   407 op add __tmp74 __fn4_x 7
+ 
+   421 set __tmp52 null
+   422 jump __label89 always
+   423 label __label96
+-    * jump __label99 equal __ast1 4
++  424 jump __label99 equal __fn4_digit 4
+   425 jump __label98 always
+   426 label __label99
+   427 op add __tmp84 __fn4_x 7
+ 
+   438 set __tmp52 null
+   439 jump __label89 always
+   440 label __label98
+-    * jump __label101 equal __ast1 5
++  441 jump __label101 equal __fn4_digit 5
+   442 jump __label100 always
+   443 label __label101
+   444 op add __tmp92 __fn4_x 7
+ 
+   461 set __tmp52 null
+   462 jump __label89 always
+   463 label __label100
+-    * jump __label103 equal __ast1 6
++  464 jump __label103 equal __fn4_digit 6
+   465 jump __label102 always
+   466 label __label103
+   467 op add __tmp104 __fn4_y 12
+ 
+   483 set __tmp52 null
+   484 jump __label89 always
+   485 label __label102
+-    * jump __label105 equal __ast1 7
++  486 jump __label105 equal __fn4_digit 7
+   487 jump __label104 always
+   488 label __label105
+   489 op add __tmp115 __fn4_x 7
+ 
+   500 set __tmp52 null
+   501 jump __label89 always
+   502 label __label104
+-    * jump __label107 equal __ast1 8
++  503 jump __label107 equal __fn4_digit 8
+   504 jump __label106 always
+   505 label __label107
+   506 op sub __tmp124 __fn4_x 2
+ 
+   515 set __tmp52 null
+   516 jump __label89 always
+   517 label __label106
+-    * jump __label109 equal __ast1 9
++  518 jump __label109 equal __fn4_digit 9
+   519 jump __label108 always
+   520 label __label109
+   521 op add __tmp131 __fn4_x 7
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
+ 
+    22 jump __label7 always
+    23 label __label8
+    24 set MESSAGE block
+-    * set __tmp5 MESSAGE
+    25 jump __label6 always
+    26 label __label7
+    27 jump __label10 equal __tmp4 @memory-bank
+ 
+    29 jump __label9 always
+    30 label __label10
+    31 set MEMORY block
+-    * set __tmp5 MEMORY
+    32 jump __label6 always
+    33 label __label9
+    34 jump __label12 equal __tmp4 @vault
+ 
+    39 jump __label11 always
+    40 label __label12
+    41 set CONTAINER block
+-    * set __tmp5 CONTAINER
+    42 jump __label6 always
+    43 label __label11
+    44 jump __label14 equal __tmp4 @large-logic-display
+    45 jump __label13 always
+    46 label __label14
+    47 set DISPLAY block
+-    * set __tmp5 DISPLAY
+    48 jump __label6 always
+    49 label __label13
+-    * set __tmp5 null
+    50 label __label6
+    51 label __label4
+    52 jump __label3 always
+ 
+    69 jump __label15 equal __tmp8 false
+    70 print "No container or display."
+    71 print "\n"
+-    * set __tmp9 "No container or display."
+    72 jump __label16 always
+    73 label __label15
+-    * set __tmp9 null
+    74 label __label16
+    75 printflush MESSAGE
+    76 label __label1
+ 
+   106 draw rect 93 0 16 176
+   107 set __tmp22 null
+   108 label __label23
+-    * set __tmp21 __tmp22
+   109 label __label21
+   110 label __label24
+   111 set __fn1_first_column false
+ 
+   118 draw rect 93 0 16 176
+   119 set __tmp24 null
+   120 label __label27
+-    * set __tmp23 __tmp24
+   121 label __label25
+   122 draw color 255 255 255 255
+   123 set index 0
+ 
+   198 set y 152
+   199 set x 93
+   200 draw color 255 255 255 255
+-    * set __tmp33 null
+   201 jump __label48 always
+   202 label __label47
+-    * set __tmp33 null
+   203 label __label48
+   204 label __label28
+   205 goto __tmp25 marker0
+ 
+   219 draw rect 109 0 176 176
+   220 set __tmp35 null
+   221 label __label52
+-    * set __tmp34 __tmp35
+   222 label __label50
+   223 set index 0
+   224 setaddr __tmp36 __label56
+ 
+   310 label __label79
+   311 set __tmp42 __tmp44
+   312 label __label77
+-    * set __tmp40 __tmp42
+   313 jump __label75 always
+   314 label __label74
+   315 read __tmp45 MEMORY __fn3_index
+ 
+   332 label __label83
+   333 set __tmp47 __tmp49
+   334 label __label81
+-    * set __tmp40 __tmp47
+   335 label __label75
+   336 set __fn3_i 0
+   337 label __label84
+ 
+   526 label __label108
+   527 set __tmp52 null
+   528 label __label89
+-    * set __tmp51 __tmp52
+   529 label __label88
+   530 op sub __tmp143 __fn3_x 11
+   531 set __fn3_x __tmp143
+ 
+   534 op equal __tmp145 __fn3_amount 0
+   535 jump __label110 equal __tmp145 false
+   536 jump __label86 always
+-    * set __tmp146 null
+   537 jump __label111 always
+   538 label __label110
+-    * set __tmp146 null
+   539 label __label111
+   540 label __label85
+   541 op add __fn3_i __fn3_i 1
+   542 jump __label84 always
+   543 label __label86
+-    * set __tmp37 null
+   544 label __label73
+   545 op add __tmp147 index 1
+   546 set index __tmp147
+ 
+   564 label __label117
+   565 set __tmp151 __tmp152
+   566 label __label115
+-    * set __tmp150 __tmp151
+   567 jump __label113 always
+   568 label __label112
+-    * set __tmp150 null
+   569 label __label113
+   570 label __label53
+   571 goto __tmp36 marker1
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instructions):
+ 
+   100 draw color 0 0 80 255
+   101 jump __label22 equal __fn0_first_column false
+   102 draw rect 0 0 23 176
+-    * set __tmp22 null
+   103 jump __label23 always
+   104 label __label22
+   105 draw rect 93 0 16 176
+-    * set __tmp22 null
+   106 label __label23
+   107 label __label21
+   108 label __label24
+ 
+   110 draw color 0 0 80 255
+   111 jump __label26 equal __fn1_first_column false
+   112 draw rect 0 0 23 176
+-    * set __tmp24 null
+   113 jump __label27 always
+   114 label __label26
+   115 draw rect 93 0 16 176
+-    * set __tmp24 null
+   116 label __label27
+   117 label __label25
+   118 draw color 255 255 255 255
+ 
+   209 draw color 0 0 80 255
+   210 jump __label51 equal __fn2_first_column false
+   211 draw rect 23 0 70 176
+-    * set __tmp35 null
+   212 jump __label52 always
+   213 label __label51
+   214 draw rect 109 0 176 176
+-    * set __tmp35 null
+   215 label __label52
+   216 label __label50
+   217 set index 0
+ 
+   290 op equal __tmp41 __fn3_amount CAPACITY
+   291 jump __label76 equal __tmp41 false
+   292 draw color 0 255 0 255
+-    * set __tmp42 null
+   293 jump __label77 always
+   294 label __label76
+   295 op greaterThan __tmp43 __fn3_amount LIMIT
+ 
+   301 draw color 255 80 80 255
+   302 set __tmp44 null
+   303 label __label79
+-    * set __tmp42 __tmp44
+   304 label __label77
+   305 jump __label75 always
+   306 label __label74
+ 
+   310 op equal __tmp46 __fn3_amount __fn3_last
+   311 jump __label80 equal __tmp46 false
+   312 draw color 255 255 0 255
+-    * set __tmp47 null
+   313 jump __label81 always
+   314 label __label80
+   315 op lessThan __tmp48 __fn3_amount __fn3_last
+ 
+   321 draw color 0 255 0 255
+   322 set __tmp49 null
+   323 label __label83
+-    * set __tmp47 __tmp49
+   324 label __label81
+   325 label __label75
+   326 set __fn3_i 0
+ 
+   339 op sub __tmp55 __fn4_y 2
+   340 op add __tmp56 __tmp55 1
+   341 draw lineRect __tmp54 __tmp56 9 14
+-    * set __tmp52 null
+   342 jump __label89 always
+   343 label __label90
+   344 jump __label93 equal __fn4_digit 1
+ 
+   350 op sub __tmp60 __tmp59 1
+   351 op add __tmp61 __fn4_y 12
+   352 draw line __tmp58 __fn4_y __tmp60 __tmp61
+-    * set __tmp52 null
+   353 jump __label89 always
+   354 label __label92
+   355 jump __label95 equal __fn4_digit 2
+ 
+   372 op add __tmp72 __fn4_x 7
+   373 op add __tmp73 __fn4_y 12
+   374 draw line __fn4_x __tmp71 __tmp72 __tmp73
+-    * set __tmp52 null
+   375 jump __label89 always
+   376 label __label94
+   377 jump __label97 equal __fn4_digit 3
+ 
+   391 op add __tmp82 __fn4_x 7
+   392 op add __tmp83 __fn4_y 12
+   393 draw line __fn4_x __tmp81 __tmp82 __tmp83
+-    * set __tmp52 null
+   394 jump __label89 always
+   395 label __label96
+   396 jump __label99 equal __fn4_digit 4
+ 
+   407 op add __tmp90 __fn4_y 6
+   408 op add __tmp91 __fn4_y 12
+   409 draw line __fn4_x __tmp90 __fn4_x __tmp91
+-    * set __tmp52 null
+   410 jump __label89 always
+   411 label __label98
+   412 jump __label101 equal __fn4_digit 5
+ 
+   429 op add __tmp102 __fn4_x 7
+   430 op add __tmp103 __fn4_y 12
+   431 draw line __fn4_x __tmp101 __tmp102 __tmp103
+-    * set __tmp52 null
+   432 jump __label89 always
+   433 label __label100
+   434 jump __label103 equal __fn4_digit 6
+ 
+   450 op add __tmp113 __fn4_x 7
+   451 op add __tmp114 __fn4_y 12
+   452 draw line __fn4_x __tmp112 __tmp113 __tmp114
+-    * set __tmp52 null
+   453 jump __label89 always
+   454 label __label102
+   455 jump __label105 equal __fn4_digit 7
+ 
+   466 op sub __tmp122 __tmp121 1
+   467 op add __tmp123 __fn4_y 12
+   468 draw line __fn4_x __tmp120 __tmp122 __tmp123
+-    * set __tmp52 null
+   469 jump __label89 always
+   470 label __label104
+   471 jump __label107 equal __fn4_digit 8
+ 
+   480 op add __tmp129 __fn4_x 7
+   481 op add __tmp130 __fn4_y 6
+   482 draw line __fn4_x __tmp128 __tmp129 __tmp130
+-    * set __tmp52 null
+   483 jump __label89 always
+   484 label __label106
+   485 jump __label109 equal __fn4_digit 9
+ 
+   502 op add __tmp141 __fn4_x 7
+   503 op add __tmp142 __fn4_y 12
+   504 draw line __fn4_x __tmp140 __tmp141 __tmp142
+-    * set __tmp52 null
+   505 jump __label89 always
+   506 label __label108
+-    * set __tmp52 null
+   507 label __label89
+   508 label __label88
+   509 op sub __tmp143 __fn3_x 11
+ 
+   541 draw rect 109 0 176 176
+   542 set __tmp152 null
+   543 label __label117
+-    * set __tmp151 __tmp152
+   544 label __label115
+   545 jump __label113 always
+   546 label __label112
+
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-6 instructions):
+ 
+   295 op greaterThan __tmp43 __fn3_amount LIMIT
+   296 jump __label78 equal __tmp43 false
+   297 draw color 255 255 0 255
+-    * set __tmp44 null
+   298 jump __label79 always
+   299 label __label78
+   300 draw color 255 80 80 255
+-    * set __tmp44 null
+   301 label __label79
+   302 label __label77
+   303 jump __label75 always
+ 
+   313 op lessThan __tmp48 __fn3_amount __fn3_last
+   314 jump __label82 equal __tmp48 false
+   315 draw color 255 80 80 255
+-    * set __tmp49 null
+   316 jump __label83 always
+   317 label __label82
+   318 draw color 0 255 0 255
+-    * set __tmp49 null
+   319 label __label83
+   320 label __label81
+   321 label __label75
+ 
+   531 draw color 0 0 80 255
+   532 jump __label116 equal __fn5_first_column false
+   533 draw rect 23 0 70 176
+-    * set __tmp152 null
+   534 jump __label117 always
+   535 label __label116
+   536 draw rect 109 0 176 176
+-    * set __tmp152 null
+   537 label __label117
+   538 label __label115
+   539 jump __label113 always
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 instructions):
  
      4 label __label0
      5 print "Configuring storage display..."
@@ -58,556 +528,125 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-16 ins
     14 print "Found: "
     15 print block
     16 print "\n"
--    * sensor __tmp4 block @type
--    * set __ast0 __tmp4
-+   17 sensor __ast0 block @type
-    18 jump __label8 equal __ast0 @message
-    19 jump __label7 always
-    20 label __label8
  
-    90 op equal __tmp16 LINKS @links
-    91 op land __tmp17 __tmp15 __tmp16
-    92 jump __label19 equal __tmp17 false
+    83 op equal __tmp16 LINKS @links
+    84 op land __tmp17 __tmp15 __tmp16
+    85 jump __label19 equal __tmp17 false
 -    * set __tmp18 @time
 -    * set start __tmp18
 -    * sensor __tmp19 CONTAINER @itemCapacity
 -    * set CAPACITY __tmp19
 -    * op div __tmp20 CAPACITY 5
 -    * set LIMIT __tmp20
-+   93 set start @time
-+   94 sensor CAPACITY CONTAINER @itemCapacity
-+   95 op div LIMIT CAPACITY 5
-    96 draw stroke 2
-    97 set x 7
-    98 set y 152
++   86 set start @time
++   87 sensor CAPACITY CONTAINER @itemCapacity
++   88 op div LIMIT CAPACITY 5
+    89 draw stroke 2
+    90 set x 7
+    91 set y 152
  
-   192 op sub __tmp28 __tmp27 2
-   193 op add __tmp29 __tmp28 1
-   194 draw image __tmp26 __tmp29 item 16 0
+   179 op sub __tmp28 __tmp27 2
+   180 op add __tmp29 __tmp28 1
+   181 draw image __tmp26 __tmp29 item 16 0
 -    * op add __tmp30 index 1
 -    * set index __tmp30
 -    * op sub __tmp31 y 20
 -    * set y __tmp31
-+  195 op add index index 1
-+  196 op sub y y 20
-   197 op equal __tmp32 index 8
-   198 jump __label47 equal __tmp32 false
-   199 set y 152
++  182 op add index index 1
++  183 op sub y y 20
+   184 op equal __tmp32 index 8
+   185 jump __label47 equal __tmp32 false
+   186 set y 152
  
-   293 set __fn3_item item
-   294 set __fn3_x x
-   295 set __fn3_y y
+   275 set __fn3_item item
+   276 set __fn3_x x
+   277 set __fn3_y y
 -    * sensor __tmp38 CONTAINER __fn3_item
 -    * set __fn3_amount __tmp38
-+  296 sensor __fn3_amount CONTAINER __fn3_item
-   297 op strictEqual __tmp39 MEMORY null
-   298 jump __label74 equal __tmp39 false
-   299 op equal __tmp41 __fn3_amount CAPACITY
++  278 sensor __fn3_amount CONTAINER __fn3_item
+   279 op strictEqual __tmp39 MEMORY null
+   280 jump __label74 equal __tmp39 false
+   281 op equal __tmp41 __fn3_amount CAPACITY
  
-   316 set __tmp40 __tmp42
-   317 jump __label75 always
-   318 label __label74
+   293 label __label77
+   294 jump __label75 always
+   295 label __label74
 -    * read __tmp45 MEMORY __fn3_index
 -    * set __fn3_last __tmp45
-+  319 read __fn3_last MEMORY __fn3_index
-   320 write __fn3_amount MEMORY __fn3_index
-   321 op equal __tmp46 __fn3_amount __fn3_last
-   322 jump __label80 equal __tmp46 false
++  296 read __fn3_last MEMORY __fn3_index
+   297 write __fn3_amount MEMORY __fn3_index
+   298 op equal __tmp46 __fn3_amount __fn3_last
+   299 jump __label80 equal __tmp46 false
  
-   533 label __label89
-   534 set __tmp51 __tmp52
-   535 label __label88
+   492 label __label108
+   493 label __label89
+   494 label __label88
 -    * op sub __tmp143 __fn3_x 11
 -    * set __fn3_x __tmp143
 -    * op idiv __tmp144 __fn3_amount 10
 -    * set __fn3_amount __tmp144
-+  536 op sub __fn3_x __fn3_x 11
-+  537 op idiv __fn3_amount __fn3_amount 10
-   538 op equal __tmp145 __fn3_amount 0
-   539 jump __label110 equal __tmp145 false
-   540 jump __label86 always
++  495 op sub __fn3_x __fn3_x 11
++  496 op idiv __fn3_amount __fn3_amount 10
+   497 op equal __tmp145 __fn3_amount 0
+   498 jump __label110 equal __tmp145 false
+   499 jump __label86 always
  
-   549 label __label86
-   550 set __tmp37 null
-   551 label __label73
+   505 jump __label84 always
+   506 label __label86
+   507 label __label73
 -    * op add __tmp147 index 1
 -    * set index __tmp147
 -    * op sub __tmp148 y 20
 -    * set y __tmp148
-+  552 op add index index 1
-+  553 op sub y y 20
-   554 op equal __tmp149 index 8
-   555 jump __label112 equal __tmp149 false
-   556 drawflush display1
++  508 op add index index 1
++  509 op sub y y 20
+   510 op equal __tmp149 index 8
+   511 jump __label112 equal __tmp149 false
+   512 drawflush display1
  
-   580 label __label55
-   581 drawflush display1
-   582 op sub __tmp153 @time start
+   531 label __label55
+   532 drawflush display1
+   533 op sub __tmp153 @time start
 -    * op floor __tmp154 __tmp153
 -    * set elapsed __tmp154
-+  583 op floor elapsed __tmp153
-   584 print "Storage Display\nElapsed: "
-   585 print elapsed
-   586 print " ms"
-
-Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
- 
-   345 set __fn4_x __fn3_x
-   346 set __fn4_y __fn3_y
-   347 set __fn4_digit __tmp50
--    * set __ast1 __fn4_digit
--    * jump __label91 equal __ast1 0
-+  348 jump __label91 equal __fn4_digit 0
-   349 jump __label90 always
-   350 label __label91
-   351 op sub __tmp53 __fn4_x 2
- 
-   356 set __tmp52 null
-   357 jump __label89 always
-   358 label __label90
--    * jump __label93 equal __ast1 1
-+  359 jump __label93 equal __fn4_digit 1
-   360 jump __label92 always
-   361 label __label93
-   362 op add __tmp57 __fn4_x 7
- 
-   368 set __tmp52 null
-   369 jump __label89 always
-   370 label __label92
--    * jump __label95 equal __ast1 2
-+  371 jump __label95 equal __fn4_digit 2
-   372 jump __label94 always
-   373 label __label95
-   374 op add __tmp62 __fn4_x 7
- 
-   391 set __tmp52 null
-   392 jump __label89 always
-   393 label __label94
--    * jump __label97 equal __ast1 3
-+  394 jump __label97 equal __fn4_digit 3
-   395 jump __label96 always
-   396 label __label97
-   397 op add __tmp74 __fn4_x 7
- 
-   411 set __tmp52 null
-   412 jump __label89 always
-   413 label __label96
--    * jump __label99 equal __ast1 4
-+  414 jump __label99 equal __fn4_digit 4
-   415 jump __label98 always
-   416 label __label99
-   417 op add __tmp84 __fn4_x 7
- 
-   428 set __tmp52 null
-   429 jump __label89 always
-   430 label __label98
--    * jump __label101 equal __ast1 5
-+  431 jump __label101 equal __fn4_digit 5
-   432 jump __label100 always
-   433 label __label101
-   434 op add __tmp92 __fn4_x 7
- 
-   451 set __tmp52 null
-   452 jump __label89 always
-   453 label __label100
--    * jump __label103 equal __ast1 6
-+  454 jump __label103 equal __fn4_digit 6
-   455 jump __label102 always
-   456 label __label103
-   457 op add __tmp104 __fn4_y 12
- 
-   473 set __tmp52 null
-   474 jump __label89 always
-   475 label __label102
--    * jump __label105 equal __ast1 7
-+  476 jump __label105 equal __fn4_digit 7
-   477 jump __label104 always
-   478 label __label105
-   479 op add __tmp115 __fn4_x 7
- 
-   490 set __tmp52 null
-   491 jump __label89 always
-   492 label __label104
--    * jump __label107 equal __ast1 8
-+  493 jump __label107 equal __fn4_digit 8
-   494 jump __label106 always
-   495 label __label107
-   496 op sub __tmp124 __fn4_x 2
- 
-   505 set __tmp52 null
-   506 jump __label89 always
-   507 label __label106
--    * jump __label109 equal __ast1 9
-+  508 jump __label109 equal __fn4_digit 9
-   509 jump __label108 always
-   510 label __label109
-   511 op add __tmp131 __fn4_x 7
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
- 
-    19 jump __label7 always
-    20 label __label8
-    21 set MESSAGE block
--    * set __tmp5 MESSAGE
-    22 jump __label6 always
-    23 label __label7
-    24 jump __label10 equal __ast0 @memory-bank
- 
-    26 jump __label9 always
-    27 label __label10
-    28 set MEMORY block
--    * set __tmp5 MEMORY
-    29 jump __label6 always
-    30 label __label9
-    31 jump __label12 equal __ast0 @vault
- 
-    36 jump __label11 always
-    37 label __label12
-    38 set CONTAINER block
--    * set __tmp5 CONTAINER
-    39 jump __label6 always
-    40 label __label11
-    41 jump __label14 equal __ast0 @large-logic-display
-    42 jump __label13 always
-    43 label __label14
-    44 set DISPLAY block
--    * set __tmp5 DISPLAY
-    45 jump __label6 always
-    46 label __label13
--    * set __tmp5 null
-    47 label __label6
-    48 label __label4
-    49 jump __label3 always
- 
-    66 jump __label15 equal __tmp8 false
-    67 print "No container or display."
-    68 print "\n"
--    * set __tmp9 "No container or display."
-    69 jump __label16 always
-    70 label __label15
--    * set __tmp9 null
-    71 label __label16
-    72 printflush MESSAGE
-    73 label __label1
- 
-   100 draw rect 93 0 16 176
-   101 set __tmp22 null
-   102 label __label23
--    * set __tmp21 __tmp22
-   103 label __label21
-   104 label __label24
-   105 set __fn1_first_column false
- 
-   112 draw rect 93 0 16 176
-   113 set __tmp24 null
-   114 label __label27
--    * set __tmp23 __tmp24
-   115 label __label25
-   116 draw color 255 255 255 255
-   117 set index 0
- 
-   190 set y 152
-   191 set x 93
-   192 draw color 255 255 255 255
--    * set __tmp33 null
-   193 jump __label48 always
-   194 label __label47
--    * set __tmp33 null
-   195 label __label48
-   196 label __label28
-   197 goto __tmp25 marker0
- 
-   211 draw rect 109 0 176 176
-   212 set __tmp35 null
-   213 label __label52
--    * set __tmp34 __tmp35
-   214 label __label50
-   215 set index 0
-   216 setaddr __tmp36 __label56
- 
-   301 label __label79
-   302 set __tmp42 __tmp44
-   303 label __label77
--    * set __tmp40 __tmp42
-   304 jump __label75 always
-   305 label __label74
-   306 read __fn3_last MEMORY __fn3_index
- 
-   322 label __label83
-   323 set __tmp47 __tmp49
-   324 label __label81
--    * set __tmp40 __tmp47
-   325 label __label75
-   326 set __fn3_i 0
-   327 label __label84
- 
-   516 label __label108
-   517 set __tmp52 null
-   518 label __label89
--    * set __tmp51 __tmp52
-   519 label __label88
-   520 op sub __fn3_x __fn3_x 11
-   521 op idiv __fn3_amount __fn3_amount 10
-   522 op equal __tmp145 __fn3_amount 0
-   523 jump __label110 equal __tmp145 false
-   524 jump __label86 always
--    * set __tmp146 null
-   525 jump __label111 always
-   526 label __label110
--    * set __tmp146 null
-   527 label __label111
-   528 label __label85
-   529 op add __fn3_i __fn3_i 1
-   530 jump __label84 always
-   531 label __label86
--    * set __tmp37 null
-   532 label __label73
-   533 op add index index 1
-   534 op sub y y 20
- 
-   550 label __label117
-   551 set __tmp151 __tmp152
-   552 label __label115
--    * set __tmp150 __tmp151
-   553 jump __label113 always
-   554 label __label112
--    * set __tmp150 null
-   555 label __label113
-   556 label __label53
-   557 goto __tmp36 marker1
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instructions):
- 
-    94 draw color 0 0 80 255
-    95 jump __label22 equal __fn0_first_column false
-    96 draw rect 0 0 23 176
--    * set __tmp22 null
-    97 jump __label23 always
-    98 label __label22
-    99 draw rect 93 0 16 176
--    * set __tmp22 null
-   100 label __label23
-   101 label __label21
-   102 label __label24
- 
-   104 draw color 0 0 80 255
-   105 jump __label26 equal __fn1_first_column false
-   106 draw rect 0 0 23 176
--    * set __tmp24 null
-   107 jump __label27 always
-   108 label __label26
-   109 draw rect 93 0 16 176
--    * set __tmp24 null
-   110 label __label27
-   111 label __label25
-   112 draw color 255 255 255 255
- 
-   201 draw color 0 0 80 255
-   202 jump __label51 equal __fn2_first_column false
-   203 draw rect 23 0 70 176
--    * set __tmp35 null
-   204 jump __label52 always
-   205 label __label51
-   206 draw rect 109 0 176 176
--    * set __tmp35 null
-   207 label __label52
-   208 label __label50
-   209 set index 0
- 
-   281 op equal __tmp41 __fn3_amount CAPACITY
-   282 jump __label76 equal __tmp41 false
-   283 draw color 0 255 0 255
--    * set __tmp42 null
-   284 jump __label77 always
-   285 label __label76
-   286 op greaterThan __tmp43 __fn3_amount LIMIT
- 
-   292 draw color 255 80 80 255
-   293 set __tmp44 null
-   294 label __label79
--    * set __tmp42 __tmp44
-   295 label __label77
-   296 jump __label75 always
-   297 label __label74
- 
-   300 op equal __tmp46 __fn3_amount __fn3_last
-   301 jump __label80 equal __tmp46 false
-   302 draw color 255 255 0 255
--    * set __tmp47 null
-   303 jump __label81 always
-   304 label __label80
-   305 op lessThan __tmp48 __fn3_amount __fn3_last
- 
-   311 draw color 0 255 0 255
-   312 set __tmp49 null
-   313 label __label83
--    * set __tmp47 __tmp49
-   314 label __label81
-   315 label __label75
-   316 set __fn3_i 0
- 
-   329 op sub __tmp55 __fn4_y 2
-   330 op add __tmp56 __tmp55 1
-   331 draw lineRect __tmp54 __tmp56 9 14
--    * set __tmp52 null
-   332 jump __label89 always
-   333 label __label90
-   334 jump __label93 equal __fn4_digit 1
- 
-   340 op sub __tmp60 __tmp59 1
-   341 op add __tmp61 __fn4_y 12
-   342 draw line __tmp58 __fn4_y __tmp60 __tmp61
--    * set __tmp52 null
-   343 jump __label89 always
-   344 label __label92
-   345 jump __label95 equal __fn4_digit 2
- 
-   362 op add __tmp72 __fn4_x 7
-   363 op add __tmp73 __fn4_y 12
-   364 draw line __fn4_x __tmp71 __tmp72 __tmp73
--    * set __tmp52 null
-   365 jump __label89 always
-   366 label __label94
-   367 jump __label97 equal __fn4_digit 3
- 
-   381 op add __tmp82 __fn4_x 7
-   382 op add __tmp83 __fn4_y 12
-   383 draw line __fn4_x __tmp81 __tmp82 __tmp83
--    * set __tmp52 null
-   384 jump __label89 always
-   385 label __label96
-   386 jump __label99 equal __fn4_digit 4
- 
-   397 op add __tmp90 __fn4_y 6
-   398 op add __tmp91 __fn4_y 12
-   399 draw line __fn4_x __tmp90 __fn4_x __tmp91
--    * set __tmp52 null
-   400 jump __label89 always
-   401 label __label98
-   402 jump __label101 equal __fn4_digit 5
- 
-   419 op add __tmp102 __fn4_x 7
-   420 op add __tmp103 __fn4_y 12
-   421 draw line __fn4_x __tmp101 __tmp102 __tmp103
--    * set __tmp52 null
-   422 jump __label89 always
-   423 label __label100
-   424 jump __label103 equal __fn4_digit 6
- 
-   440 op add __tmp113 __fn4_x 7
-   441 op add __tmp114 __fn4_y 12
-   442 draw line __fn4_x __tmp112 __tmp113 __tmp114
--    * set __tmp52 null
-   443 jump __label89 always
-   444 label __label102
-   445 jump __label105 equal __fn4_digit 7
- 
-   456 op sub __tmp122 __tmp121 1
-   457 op add __tmp123 __fn4_y 12
-   458 draw line __fn4_x __tmp120 __tmp122 __tmp123
--    * set __tmp52 null
-   459 jump __label89 always
-   460 label __label104
-   461 jump __label107 equal __fn4_digit 8
- 
-   470 op add __tmp129 __fn4_x 7
-   471 op add __tmp130 __fn4_y 6
-   472 draw line __fn4_x __tmp128 __tmp129 __tmp130
--    * set __tmp52 null
-   473 jump __label89 always
-   474 label __label106
-   475 jump __label109 equal __fn4_digit 9
- 
-   492 op add __tmp141 __fn4_x 7
-   493 op add __tmp142 __fn4_y 12
-   494 draw line __fn4_x __tmp140 __tmp141 __tmp142
--    * set __tmp52 null
-   495 jump __label89 always
-   496 label __label108
--    * set __tmp52 null
-   497 label __label89
-   498 label __label88
-   499 op sub __fn3_x __fn3_x 11
- 
-   527 draw rect 109 0 176 176
-   528 set __tmp152 null
-   529 label __label117
--    * set __tmp151 __tmp152
-   530 label __label115
-   531 jump __label113 always
-   532 label __label112
-
-Modifications by Initial phase, Dead Code Elimination, iteration 3 (-6 instructions):
- 
-   286 op greaterThan __tmp43 __fn3_amount LIMIT
-   287 jump __label78 equal __tmp43 false
-   288 draw color 255 255 0 255
--    * set __tmp44 null
-   289 jump __label79 always
-   290 label __label78
-   291 draw color 255 80 80 255
--    * set __tmp44 null
-   292 label __label79
-   293 label __label77
-   294 jump __label75 always
- 
-   303 op lessThan __tmp48 __fn3_amount __fn3_last
-   304 jump __label82 equal __tmp48 false
-   305 draw color 255 80 80 255
--    * set __tmp49 null
-   306 jump __label83 always
-   307 label __label82
-   308 draw color 0 255 0 255
--    * set __tmp49 null
-   309 label __label83
-   310 label __label81
-   311 label __label75
- 
-   517 draw color 0 0 80 255
-   518 jump __label116 equal __fn5_first_column false
-   519 draw rect 23 0 70 176
--    * set __tmp152 null
-   520 jump __label117 always
-   521 label __label116
-   522 draw rect 109 0 176 176
--    * set __tmp152 null
-   523 label __label117
-   524 label __label115
-   525 jump __label113 always
++  534 op floor elapsed __tmp153
+   535 print "Storage Display\nElapsed: "
+   536 print elapsed
+   537 print " ms"
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-14 instructions):
  
     15 print block
     16 print "\n"
-    17 sensor __ast0 block @type
--    * jump __label8 equal __ast0 @message
+    17 sensor __tmp4 block @type
+-    * jump __label8 equal __tmp4 @message
 -    * jump __label7 always
-+   18 jump __label7 notEqual __ast0 @message
++   18 jump __label7 notEqual __tmp4 @message
     19 label __label8
     20 set MESSAGE block
     21 jump __label6 always
     22 label __label7
-    23 jump __label10 equal __ast0 @memory-bank
--    * jump __label10 equal __ast0 @memory-cell
+    23 jump __label10 equal __tmp4 @memory-bank
+-    * jump __label10 equal __tmp4 @memory-cell
 -    * jump __label9 always
-+   24 jump __label9 notEqual __ast0 @memory-cell
++   24 jump __label9 notEqual __tmp4 @memory-cell
     25 label __label10
     26 set MEMORY block
     27 jump __label6 always
  
-    30 jump __label12 equal __ast0 @container
-    31 jump __label12 equal __ast0 @core-shard
-    32 jump __label12 equal __ast0 @core-foundation
--    * jump __label12 equal __ast0 @core-nucleus
+    30 jump __label12 equal __tmp4 @container
+    31 jump __label12 equal __tmp4 @core-shard
+    32 jump __label12 equal __tmp4 @core-foundation
+-    * jump __label12 equal __tmp4 @core-nucleus
 -    * jump __label11 always
-+   33 jump __label11 notEqual __ast0 @core-nucleus
++   33 jump __label11 notEqual __tmp4 @core-nucleus
     34 label __label12
     35 set CONTAINER block
     36 jump __label6 always
     37 label __label11
--    * jump __label14 equal __ast0 @large-logic-display
+-    * jump __label14 equal __tmp4 @large-logic-display
 -    * jump __label13 always
-+   38 jump __label13 notEqual __ast0 @large-logic-display
++   38 jump __label13 notEqual __tmp4 @large-logic-display
     39 label __label14
     40 set DISPLAY block
     41 jump __label6 always
@@ -798,7 +837,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-9 inst
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-6 instructions):
  
-    37 jump __label13 notEqual __ast0 @large-logic-display
+    37 jump __label13 notEqual __tmp4 @large-logic-display
     38 label __label14
     39 set DISPLAY block
 -    * jump __label6 always
@@ -4724,27 +4763,27 @@ getlink block n
 print "Found: "
 print block
 print "\n"
-sensor __ast0 block @type
-jump __label7 notEqual __ast0 @message
+sensor __tmp4 block @type
+jump __label7 notEqual __tmp4 @message
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
-jump __label10 equal __ast0 @memory-bank
-jump __label9 notEqual __ast0 @memory-cell
+jump __label10 equal __tmp4 @memory-bank
+jump __label9 notEqual __tmp4 @memory-cell
 label __label10
 set MEMORY block
 jump __label6 always 0 0
 label __label9
-jump __label12 equal __ast0 @vault
-jump __label12 equal __ast0 @container
-jump __label12 equal __ast0 @core-shard
-jump __label12 equal __ast0 @core-foundation
-jump __label11 notEqual __ast0 @core-nucleus
+jump __label12 equal __tmp4 @vault
+jump __label12 equal __tmp4 @container
+jump __label12 equal __tmp4 @core-shard
+jump __label12 equal __tmp4 @core-foundation
+jump __label11 notEqual __tmp4 @core-nucleus
 label __label12
 set CONTAINER block
 jump __label6 always 0 0
 label __label11
-jump __label13 notEqual __ast0 @large-logic-display
+jump __label13 notEqual __tmp4 @large-logic-display
 set DISPLAY block
 label __label13
 label __label6

@@ -1,7 +1,7 @@
    410 instructions before optimizations.
-    10 instructions eliminated by Temp Variables Elimination.
+     7 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    34 instructions eliminated by Dead Code Elimination (6 iterations).
+    37 instructions eliminated by Dead Code Elimination (7 iterations).
     21 instructions eliminated by Jump Normalization (4 iterations).
      5 instructions eliminated by Jump Optimization (4 iterations).
     33 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -84,173 +84,98 @@ Pass 1: speed optimization selection (cost limit 461):
     Function Inlining: inline function call at line 50           cost   366, benefit       50,0, efficiency        0,1
     Function Inlining: inline function call at line 52           cost   366, benefit       50,0, efficiency        0,1
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 instructions):
- 
-    81 op sub __tmp5 __tmp4 2
-    82 op add __tmp6 __tmp5 1
-    83 draw image __tmp3 __tmp6 item 16 0
--    * op add __tmp7 index 1
--    * set index __tmp7
--    * op sub __tmp8 y 20
--    * set y __tmp8
-+   84 op add index index 1
-+   85 op sub y y 20
-    86 op equal __tmp9 index 8
-    87 jump __label24 equal __tmp9 false
-    88 set y 152
- 
-   176 setaddr __fn2retaddr __label48
-   177 call __label2 __fn2retval
-   178 gotolabel __label48 __fn2
--    * set __tmp15 __fn2retval
--    * set __tmp14 __tmp15
-+  179 set __tmp14 __fn2retval
-   180 jump __label47 always
-   181 label __label46
-   182 set __fn2_x 157
- 
-   184 setaddr __fn2retaddr __label49
-   185 call __label2 __fn2retval
-   186 gotolabel __label49 __fn2
--    * set __tmp16 __fn2retval
--    * set __tmp14 __tmp16
-+  187 set __tmp14 __fn2retval
-   188 label __label47
--    * op add __tmp17 index 1
--    * set index __tmp17
--    * op sub __tmp18 y 20
--    * set y __tmp18
-+  189 op add index index 1
-+  190 op sub y y 20
-   191 op equal __tmp19 index 8
-   192 jump __label50 equal __tmp19 false
-   193 drawflush display1
- 
-   196 setaddr __fn0retaddr __label52
-   197 call __label0 __fn0retval
-   198 gotolabel __label52 __fn0
--    * set __tmp21 __fn0retval
--    * set __tmp20 __tmp21
-+  199 set __tmp20 __fn0retval
-   200 jump __label51 always
-   201 label __label50
-   202 set __tmp20 null
- 
-   236 goto __fn1retaddr __fn1
-   237 end
-   238 label __label2
--    * op max __tmp24 AMOUNT 0
--    * set __fn2_amount __tmp24
-+  239 op max __fn2_amount AMOUNT 0
-   240 draw color 0 255 0 255
-   241 set __fn2_i 0
-   242 label __label60
- 
-   434 label __label65
-   435 set __tmp26 __tmp27
-   436 label __label64
--    * op sub __tmp118 __fn2_x 11
--    * set __fn2_x __tmp118
--    * op idiv __tmp119 __fn2_amount 10
--    * set __fn2_amount __tmp119
-+  437 op sub __fn2_x __fn2_x 11
-+  438 op idiv __fn2_amount __fn2_amount 10
-   439 op equal __tmp120 __fn2_amount 0
-   440 jump __label86 equal __tmp120 false
-   441 set __fn2retval null
-
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
-   246 set __fn3_x __fn2_x
-   247 set __fn3_y __fn2_y
-   248 set __fn3_digit __tmp25
+   254 set __fn3_x __fn2_x
+   255 set __fn3_y __fn2_y
+   256 set __fn3_digit __tmp25
 -    * set __ast0 __fn3_digit
 -    * jump __label67 equal __ast0 0
-+  249 jump __label67 equal __fn3_digit 0
-   250 jump __label66 always
-   251 label __label67
-   252 op sub __tmp28 __fn3_x 2
++  257 jump __label67 equal __fn3_digit 0
+   258 jump __label66 always
+   259 label __label67
+   260 op sub __tmp28 __fn3_x 2
  
-   257 set __tmp27 null
-   258 jump __label65 always
-   259 label __label66
+   265 set __tmp27 null
+   266 jump __label65 always
+   267 label __label66
 -    * jump __label69 equal __ast0 1
-+  260 jump __label69 equal __fn3_digit 1
-   261 jump __label68 always
-   262 label __label69
-   263 op add __tmp32 __fn3_x 7
++  268 jump __label69 equal __fn3_digit 1
+   269 jump __label68 always
+   270 label __label69
+   271 op add __tmp32 __fn3_x 7
  
-   269 set __tmp27 null
-   270 jump __label65 always
-   271 label __label68
+   277 set __tmp27 null
+   278 jump __label65 always
+   279 label __label68
 -    * jump __label71 equal __ast0 2
-+  272 jump __label71 equal __fn3_digit 2
-   273 jump __label70 always
-   274 label __label71
-   275 op add __tmp37 __fn3_x 7
++  280 jump __label71 equal __fn3_digit 2
+   281 jump __label70 always
+   282 label __label71
+   283 op add __tmp37 __fn3_x 7
  
-   292 set __tmp27 null
-   293 jump __label65 always
-   294 label __label70
+   300 set __tmp27 null
+   301 jump __label65 always
+   302 label __label70
 -    * jump __label73 equal __ast0 3
-+  295 jump __label73 equal __fn3_digit 3
-   296 jump __label72 always
-   297 label __label73
-   298 op add __tmp49 __fn3_x 7
++  303 jump __label73 equal __fn3_digit 3
+   304 jump __label72 always
+   305 label __label73
+   306 op add __tmp49 __fn3_x 7
  
-   312 set __tmp27 null
-   313 jump __label65 always
-   314 label __label72
+   320 set __tmp27 null
+   321 jump __label65 always
+   322 label __label72
 -    * jump __label75 equal __ast0 4
-+  315 jump __label75 equal __fn3_digit 4
-   316 jump __label74 always
-   317 label __label75
-   318 op add __tmp59 __fn3_x 7
++  323 jump __label75 equal __fn3_digit 4
+   324 jump __label74 always
+   325 label __label75
+   326 op add __tmp59 __fn3_x 7
  
-   329 set __tmp27 null
-   330 jump __label65 always
-   331 label __label74
+   337 set __tmp27 null
+   338 jump __label65 always
+   339 label __label74
 -    * jump __label77 equal __ast0 5
-+  332 jump __label77 equal __fn3_digit 5
-   333 jump __label76 always
-   334 label __label77
-   335 op add __tmp67 __fn3_x 7
++  340 jump __label77 equal __fn3_digit 5
+   341 jump __label76 always
+   342 label __label77
+   343 op add __tmp67 __fn3_x 7
  
-   352 set __tmp27 null
-   353 jump __label65 always
-   354 label __label76
+   360 set __tmp27 null
+   361 jump __label65 always
+   362 label __label76
 -    * jump __label79 equal __ast0 6
-+  355 jump __label79 equal __fn3_digit 6
-   356 jump __label78 always
-   357 label __label79
-   358 op add __tmp79 __fn3_y 12
++  363 jump __label79 equal __fn3_digit 6
+   364 jump __label78 always
+   365 label __label79
+   366 op add __tmp79 __fn3_y 12
  
-   374 set __tmp27 null
-   375 jump __label65 always
-   376 label __label78
+   382 set __tmp27 null
+   383 jump __label65 always
+   384 label __label78
 -    * jump __label81 equal __ast0 7
-+  377 jump __label81 equal __fn3_digit 7
-   378 jump __label80 always
-   379 label __label81
-   380 op add __tmp90 __fn3_x 7
++  385 jump __label81 equal __fn3_digit 7
+   386 jump __label80 always
+   387 label __label81
+   388 op add __tmp90 __fn3_x 7
  
-   391 set __tmp27 null
-   392 jump __label65 always
-   393 label __label80
+   399 set __tmp27 null
+   400 jump __label65 always
+   401 label __label80
 -    * jump __label83 equal __ast0 8
-+  394 jump __label83 equal __fn3_digit 8
-   395 jump __label82 always
-   396 label __label83
-   397 op sub __tmp99 __fn3_x 2
++  402 jump __label83 equal __fn3_digit 8
+   403 jump __label82 always
+   404 label __label83
+   405 op sub __tmp99 __fn3_x 2
  
-   406 set __tmp27 null
-   407 jump __label65 always
-   408 label __label82
+   414 set __tmp27 null
+   415 jump __label65 always
+   416 label __label82
 -    * jump __label85 equal __ast0 9
-+  409 jump __label85 equal __fn3_digit 9
-   410 jump __label84 always
-   411 label __label85
-   412 op add __tmp106 __fn3_x 7
++  417 jump __label85 equal __fn3_digit 9
+   418 jump __label84 always
+   419 label __label85
+   420 op add __tmp106 __fn3_x 7
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instructions):
  
@@ -267,238 +192,316 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instruct
     13 set index 0
     14 setaddr __tmp2 __label8
  
-    86 set y 152
-    87 set x 93
-    88 draw color 255 255 255 255
+    88 set y 152
+    89 set x 93
+    90 draw color 255 255 255 255
 -    * set __tmp10 null
-    89 jump __label25 always
-    90 label __label24
+    91 jump __label25 always
+    92 label __label24
 -    * set __tmp10 null
-    91 label __label25
-    92 label __label5
-    93 goto __tmp2 marker0
+    93 label __label25
+    94 label __label5
+    95 goto __tmp2 marker0
  
-    99 setaddr __fn0retaddr __label26
-   100 call __label0 __fn0retval
-   101 gotolabel __label26 __fn0
+   101 setaddr __fn0retaddr __label26
+   102 call __label0 __fn0retval
+   103 gotolabel __label26 __fn0
 -    * set __tmp11 __fn0retval
-   102 set index 0
-   103 setaddr __tmp12 __label30
-   104 set item @sand
+   104 set index 0
+   105 setaddr __tmp12 __label30
+   106 set item @sand
  
-   171 setaddr __fn2retaddr __label48
-   172 call __label2 __fn2retval
-   173 gotolabel __label48 __fn2
--    * set __tmp14 __fn2retval
-   174 jump __label47 always
-   175 label __label46
-   176 set __fn2_x 157
+   174 call __label2 __fn2retval
+   175 gotolabel __label48 __fn2
+   176 set __tmp15 __fn2retval
+-    * set __tmp14 __tmp15
+   177 jump __label47 always
+   178 label __label46
+   179 set __fn2_x 157
  
-   178 setaddr __fn2retaddr __label49
-   179 call __label2 __fn2retval
-   180 gotolabel __label49 __fn2
--    * set __tmp14 __fn2retval
-   181 label __label47
-   182 op add index index 1
-   183 op sub y y 20
+   182 call __label2 __fn2retval
+   183 gotolabel __label49 __fn2
+   184 set __tmp16 __fn2retval
+-    * set __tmp14 __tmp16
+   185 label __label47
+   186 op add __tmp17 index 1
+   187 set index __tmp17
  
-   189 setaddr __fn0retaddr __label52
-   190 call __label0 __fn0retval
-   191 gotolabel __label52 __fn0
--    * set __tmp20 __fn0retval
-   192 jump __label51 always
-   193 label __label50
+   196 call __label0 __fn0retval
+   197 gotolabel __label52 __fn0
+   198 set __tmp21 __fn0retval
+-    * set __tmp20 __tmp21
+   199 jump __label51 always
+   200 label __label50
 -    * set __tmp20 null
-   194 label __label51
-   195 label __label27
-   196 goto __tmp12 marker1
+   201 label __label51
+   202 label __label27
+   203 goto __tmp12 marker1
  
-   422 label __label84
-   423 set __tmp27 null
-   424 label __label65
+   430 label __label84
+   431 set __tmp27 null
+   432 label __label65
 -    * set __tmp26 __tmp27
-   425 label __label64
-   426 op sub __fn2_x __fn2_x 11
-   427 op idiv __fn2_amount __fn2_amount 10
+   433 label __label64
+   434 op sub __tmp118 __fn2_x 11
+   435 set __fn2_x __tmp118
  
-   429 jump __label86 equal __tmp120 false
-   430 set __fn2retval null
-   431 jump __label59 always
+   439 jump __label86 equal __tmp120 false
+   440 set __fn2retval null
+   441 jump __label59 always
 -    * set __tmp121 null
-   432 jump __label87 always
-   433 label __label86
+   442 jump __label87 always
+   443 label __label86
 -    * set __tmp121 null
-   434 label __label87
-   435 label __label61
-   436 op add __fn2_i __fn2_i 1
+   444 label __label87
+   445 label __label61
+   446 op add __fn2_i __fn2_i 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-15 instructions):
  
-   208 draw rect 109 0 176 176
-   209 set __tmp22 null
-   210 label __label55
--    * set __fn0retval __tmp22
-   211 label __label53
-   212 goto __fn0retaddr __fn0
-   213 end
+   173 setaddr __fn2retaddr __label48
+   174 call __label2 __fn2retval
+   175 gotolabel __label48 __fn2
+-    * set __tmp15 __fn2retval
+   176 jump __label47 always
+   177 label __label46
+   178 set __fn2_x 157
  
-   221 draw rect 93 0 16 176
-   222 set __tmp23 null
-   223 label __label58
+   180 setaddr __fn2retaddr __label49
+   181 call __label2 __fn2retval
+   182 gotolabel __label49 __fn2
+-    * set __tmp16 __fn2retval
+   183 label __label47
+   184 op add __tmp17 index 1
+   185 set index __tmp17
+ 
+   193 setaddr __fn0retaddr __label52
+   194 call __label0 __fn0retval
+   195 gotolabel __label52 __fn0
+-    * set __tmp21 __fn0retval
+   196 jump __label51 always
+   197 label __label50
+   198 label __label51
+ 
+   226 draw rect 93 0 16 176
+   227 set __tmp23 null
+   228 label __label58
 -    * set __fn1retval __tmp23
-   224 label __label56
-   225 goto __fn1retaddr __fn1
-   226 end
+   229 label __label56
+   230 goto __fn1retaddr __fn1
+   231 end
  
-   243 op sub __tmp30 __fn3_y 2
-   244 op add __tmp31 __tmp30 1
-   245 draw lineRect __tmp29 __tmp31 9 14
+   249 op sub __tmp30 __fn3_y 2
+   250 op add __tmp31 __tmp30 1
+   251 draw lineRect __tmp29 __tmp31 9 14
 -    * set __tmp27 null
-   246 jump __label65 always
-   247 label __label66
-   248 jump __label69 equal __fn3_digit 1
+   252 jump __label65 always
+   253 label __label66
+   254 jump __label69 equal __fn3_digit 1
  
-   254 op sub __tmp35 __tmp34 1
-   255 op add __tmp36 __fn3_y 12
-   256 draw line __tmp33 __fn3_y __tmp35 __tmp36
+   260 op sub __tmp35 __tmp34 1
+   261 op add __tmp36 __fn3_y 12
+   262 draw line __tmp33 __fn3_y __tmp35 __tmp36
 -    * set __tmp27 null
-   257 jump __label65 always
-   258 label __label68
-   259 jump __label71 equal __fn3_digit 2
+   263 jump __label65 always
+   264 label __label68
+   265 jump __label71 equal __fn3_digit 2
  
-   276 op add __tmp47 __fn3_x 7
-   277 op add __tmp48 __fn3_y 12
-   278 draw line __fn3_x __tmp46 __tmp47 __tmp48
+   282 op add __tmp47 __fn3_x 7
+   283 op add __tmp48 __fn3_y 12
+   284 draw line __fn3_x __tmp46 __tmp47 __tmp48
 -    * set __tmp27 null
-   279 jump __label65 always
-   280 label __label70
-   281 jump __label73 equal __fn3_digit 3
+   285 jump __label65 always
+   286 label __label70
+   287 jump __label73 equal __fn3_digit 3
  
-   295 op add __tmp57 __fn3_x 7
-   296 op add __tmp58 __fn3_y 12
-   297 draw line __fn3_x __tmp56 __tmp57 __tmp58
+   301 op add __tmp57 __fn3_x 7
+   302 op add __tmp58 __fn3_y 12
+   303 draw line __fn3_x __tmp56 __tmp57 __tmp58
 -    * set __tmp27 null
-   298 jump __label65 always
-   299 label __label72
-   300 jump __label75 equal __fn3_digit 4
+   304 jump __label65 always
+   305 label __label72
+   306 jump __label75 equal __fn3_digit 4
  
-   311 op add __tmp65 __fn3_y 6
-   312 op add __tmp66 __fn3_y 12
-   313 draw line __fn3_x __tmp65 __fn3_x __tmp66
+   317 op add __tmp65 __fn3_y 6
+   318 op add __tmp66 __fn3_y 12
+   319 draw line __fn3_x __tmp65 __fn3_x __tmp66
 -    * set __tmp27 null
-   314 jump __label65 always
-   315 label __label74
-   316 jump __label77 equal __fn3_digit 5
+   320 jump __label65 always
+   321 label __label74
+   322 jump __label77 equal __fn3_digit 5
  
-   333 op add __tmp77 __fn3_x 7
-   334 op add __tmp78 __fn3_y 12
-   335 draw line __fn3_x __tmp76 __tmp77 __tmp78
+   339 op add __tmp77 __fn3_x 7
+   340 op add __tmp78 __fn3_y 12
+   341 draw line __fn3_x __tmp76 __tmp77 __tmp78
 -    * set __tmp27 null
-   336 jump __label65 always
-   337 label __label76
-   338 jump __label79 equal __fn3_digit 6
+   342 jump __label65 always
+   343 label __label76
+   344 jump __label79 equal __fn3_digit 6
  
-   354 op add __tmp88 __fn3_x 7
-   355 op add __tmp89 __fn3_y 12
-   356 draw line __fn3_x __tmp87 __tmp88 __tmp89
+   360 op add __tmp88 __fn3_x 7
+   361 op add __tmp89 __fn3_y 12
+   362 draw line __fn3_x __tmp87 __tmp88 __tmp89
 -    * set __tmp27 null
-   357 jump __label65 always
-   358 label __label78
-   359 jump __label81 equal __fn3_digit 7
+   363 jump __label65 always
+   364 label __label78
+   365 jump __label81 equal __fn3_digit 7
  
-   370 op sub __tmp97 __tmp96 1
-   371 op add __tmp98 __fn3_y 12
-   372 draw line __fn3_x __tmp95 __tmp97 __tmp98
+   376 op sub __tmp97 __tmp96 1
+   377 op add __tmp98 __fn3_y 12
+   378 draw line __fn3_x __tmp95 __tmp97 __tmp98
 -    * set __tmp27 null
-   373 jump __label65 always
-   374 label __label80
-   375 jump __label83 equal __fn3_digit 8
+   379 jump __label65 always
+   380 label __label80
+   381 jump __label83 equal __fn3_digit 8
  
-   384 op add __tmp104 __fn3_x 7
-   385 op add __tmp105 __fn3_y 6
-   386 draw line __fn3_x __tmp103 __tmp104 __tmp105
+   390 op add __tmp104 __fn3_x 7
+   391 op add __tmp105 __fn3_y 6
+   392 draw line __fn3_x __tmp103 __tmp104 __tmp105
 -    * set __tmp27 null
-   387 jump __label65 always
-   388 label __label82
-   389 jump __label85 equal __fn3_digit 9
+   393 jump __label65 always
+   394 label __label82
+   395 jump __label85 equal __fn3_digit 9
  
-   406 op add __tmp116 __fn3_x 7
-   407 op add __tmp117 __fn3_y 12
-   408 draw line __fn3_x __tmp115 __tmp116 __tmp117
+   412 op add __tmp116 __fn3_x 7
+   413 op add __tmp117 __fn3_y 12
+   414 draw line __fn3_x __tmp115 __tmp116 __tmp117
 -    * set __tmp27 null
-   409 jump __label65 always
-   410 label __label84
+   415 jump __label65 always
+   416 label __label84
 -    * set __tmp27 null
-   411 label __label65
-   412 label __label64
-   413 op sub __fn2_x __fn2_x 11
-   414 op idiv __fn2_amount __fn2_amount 10
-   415 op equal __tmp120 __fn2_amount 0
-   416 jump __label86 equal __tmp120 false
--    * set __fn2retval null
-   417 jump __label59 always
-   418 jump __label87 always
-   419 label __label86
- 
-   458 label __label91
-   459 set __tmp122 __tmp124
-   460 label __label89
--    * set __fn2retval __tmp122
-   461 label __label59
-   462 goto __fn2retaddr __fn2
-   463 end
+   417 label __label65
+   418 label __label64
+   419 op sub __tmp118 __fn2_x 11
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-5 instructions):
  
-   202 draw color 0 0 80 255
-   203 jump __label54 equal __fn0_first_column false
-   204 draw rect 23 0 70 176
--    * set __tmp22 null
-   205 jump __label55 always
-   206 label __label54
-   207 draw rect 109 0 176 176
--    * set __tmp22 null
-   208 label __label55
-   209 label __label53
-   210 goto __fn0retaddr __fn0
+   212 draw rect 109 0 176 176
+   213 set __tmp22 null
+   214 label __label55
+-    * set __fn0retval __tmp22
+   215 label __label53
+   216 goto __fn0retaddr __fn0
+   217 end
  
-   213 draw color 0 0 80 255
-   214 jump __label57 equal __fn1_first_column false
-   215 draw rect 0 0 23 176
+   219 draw color 0 0 80 255
+   220 jump __label57 equal __fn1_first_column false
+   221 draw rect 0 0 23 176
 -    * set __tmp23 null
-   216 jump __label58 always
-   217 label __label57
-   218 draw rect 93 0 16 176
+   222 jump __label58 always
+   223 label __label57
+   224 draw rect 93 0 16 176
 -    * set __tmp23 null
-   219 label __label58
-   220 label __label56
-   221 goto __fn1retaddr __fn1
+   225 label __label58
+   226 label __label56
+   227 goto __fn1retaddr __fn1
  
-   452 draw line __fn4_x __tmp139 __tmp140 __tmp141
-   453 set __tmp124 null
-   454 label __label91
--    * set __tmp122 __tmp124
-   455 label __label89
-   456 label __label59
-   457 goto __fn2retaddr __fn2
+   419 set __fn2_amount __tmp119
+   420 op equal __tmp120 __fn2_amount 0
+   421 jump __label86 equal __tmp120 false
+-    * set __fn2retval null
+   422 jump __label59 always
+   423 jump __label87 always
+   424 label __label86
+ 
+   463 label __label91
+   464 set __tmp122 __tmp124
+   465 label __label89
+-    * set __fn2retval __tmp122
+   466 label __label59
+   467 goto __fn2retaddr __fn2
+   468 end
 
-Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructions):
+Modifications by Initial phase, Dead Code Elimination, iteration 4 (-3 instructions):
  
-   430 op sub __tmp128 __tmp127 1
-   431 op add __tmp129 __fn4_y 12
-   432 draw line __tmp126 __fn4_y __tmp128 __tmp129
--    * set __tmp124 null
-   433 jump __label91 always
-   434 label __label90
-   435 op add __tmp130 __fn4_x 7
+   206 draw color 0 0 80 255
+   207 jump __label54 equal __fn0_first_column false
+   208 draw rect 23 0 70 176
+-    * set __tmp22 null
+   209 jump __label55 always
+   210 label __label54
+   211 draw rect 109 0 176 176
+-    * set __tmp22 null
+   212 label __label55
+   213 label __label53
+   214 goto __fn0retaddr __fn0
  
-   449 op add __tmp140 __fn4_x 7
-   450 op add __tmp141 __fn4_y 12
-   451 draw line __fn4_x __tmp139 __tmp140 __tmp141
+   459 draw line __fn4_x __tmp139 __tmp140 __tmp141
+   460 set __tmp124 null
+   461 label __label91
+-    * set __tmp122 __tmp124
+   462 label __label89
+   463 label __label59
+   464 goto __fn2retaddr __fn2
+
+Modifications by Initial phase, Dead Code Elimination, iteration 5 (-2 instructions):
+ 
+   437 op sub __tmp128 __tmp127 1
+   438 op add __tmp129 __fn4_y 12
+   439 draw line __tmp126 __fn4_y __tmp128 __tmp129
 -    * set __tmp124 null
-   452 label __label91
-   453 label __label89
-   454 label __label59
+   440 jump __label91 always
+   441 label __label90
+   442 op add __tmp130 __fn4_x 7
+ 
+   456 op add __tmp140 __fn4_x 7
+   457 op add __tmp141 __fn4_y 12
+   458 draw line __fn4_x __tmp139 __tmp140 __tmp141
+-    * set __tmp124 null
+   459 label __label91
+   460 label __label89
+   461 label __label59
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
+ 
+    79 op sub __tmp5 __tmp4 2
+    80 op add __tmp6 __tmp5 1
+    81 draw image __tmp3 __tmp6 item 16 0
+-    * op add __tmp7 index 1
+-    * set index __tmp7
+-    * op sub __tmp8 y 20
+-    * set y __tmp8
++   82 op add index index 1
++   83 op sub y y 20
+    84 op equal __tmp9 index 8
+    85 jump __label24 equal __tmp9 false
+    86 set y 152
+ 
+   179 call __label2 __fn2retval
+   180 gotolabel __label49 __fn2
+   181 label __label47
+-    * op add __tmp17 index 1
+-    * set index __tmp17
+-    * op sub __tmp18 y 20
+-    * set y __tmp18
++  182 op add index index 1
++  183 op sub y y 20
+   184 op equal __tmp19 index 8
+   185 jump __label50 equal __tmp19 false
+   186 drawflush display1
+ 
+   221 goto __fn1retaddr __fn1
+   222 end
+   223 label __label2
+-    * op max __tmp24 AMOUNT 0
+-    * set __fn2_amount __tmp24
++  224 op max __fn2_amount AMOUNT 0
+   225 draw color 0 255 0 255
+   226 set __fn2_i 0
+   227 label __label60
+ 
+   406 label __label84
+   407 label __label65
+   408 label __label64
+-    * op sub __tmp118 __fn2_x 11
+-    * set __fn2_x __tmp118
+-    * op idiv __tmp119 __fn2_amount 10
+-    * set __fn2_amount __tmp119
++  409 op sub __fn2_x __fn2_x 11
++  410 op idiv __fn2_amount __fn2_amount 10
+   411 op equal __tmp120 __fn2_amount 0
+   412 jump __label86 equal __tmp120 false
+   413 jump __label59 always
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 instructions):
  

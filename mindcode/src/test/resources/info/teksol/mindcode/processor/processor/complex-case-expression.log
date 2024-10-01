@@ -9,6 +9,72 @@
      3 instructions eliminated by Unreachable Code Elimination.
     49 instructions after optimizations.
 
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+    11 set i __tmp0
+    12 label __label3
+    13 jump __label5 greaterThan i __tmp2
+-    * set __ast0 i
+    14 set __fn0_n 1
+    15 setaddr __fn0retaddr __label9
+    16 call __label0 __fn0retval
+    17 gotolabel __label9 __fn0
+    18 set __tmp4 __fn0retval
+-    * jump __label8 equal __ast0 __tmp4
++   19 jump __label8 equal i __tmp4
+    20 jump __label7 always
+    21 label __label8
+    22 set __tmp3 "A"
+ 
+    27 call __label0 __fn0retval
+    28 gotolabel __label12 __fn0
+    29 set __tmp5 __fn0retval
+-    * jump __label11 equal __ast0 __tmp5
++   30 jump __label11 equal i __tmp5
+    31 set __fn0_n 3
+    32 setaddr __fn0retaddr __label13
+    33 call __label0 __fn0retval
+    34 gotolabel __label13 __fn0
+    35 set __tmp6 __fn0retval
+-    * jump __label11 equal __ast0 __tmp6
+-    * jump __label11 equal __ast0 4
++   36 jump __label11 equal i __tmp6
++   37 jump __label11 equal i 4
+    38 jump __label10 always
+    39 label __label11
+    40 set __tmp3 "B"
+    41 jump __label6 always
+    42 label __label10
+-    * jump __label15 equal __ast0 5
++   43 jump __label15 equal i 5
+    44 jump __label14 always
+    45 label __label15
+    46 jump __label4 always
+ 
+    52 call __label0 __fn0retval
+    53 gotolabel __label19 __fn0
+    54 set __tmp7 __fn0retval
+-    * jump __label18 lessThan __ast0 __tmp7
++   55 jump __label18 lessThan i __tmp7
+    56 set __fn0_n 8
+    57 setaddr __fn0retaddr __label20
+    58 call __label0 __fn0retval
+    59 gotolabel __label20 __fn0
+    60 set __tmp8 __fn0retval
+-    * jump __label17 lessThanEq __ast0 __tmp8
++   61 jump __label17 lessThanEq i __tmp8
+    62 label __label18
+    63 jump __label16 always
+    64 label __label17
+    65 set __tmp3 "C"
+    66 jump __label6 always
+    67 label __label16
+-    * jump __label22 equal __ast0 10
++   68 jump __label22 equal i 10
+    69 jump __label21 always
+    70 label __label22
+    71 jump __label5 always
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
      6 setaddr __fn0retaddr __label2
@@ -20,72 +86,6 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     10 set i __tmp0
     11 label __label3
     12 jump __label5 greaterThan i __tmp2
-
-Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
- 
-    10 set i __tmp0
-    11 label __label3
-    12 jump __label5 greaterThan i __tmp2
--    * set __ast0 i
-    13 set __fn0_n 1
-    14 setaddr __fn0retaddr __label9
-    15 call __label0 __fn0retval
-    16 gotolabel __label9 __fn0
-    17 set __tmp4 __fn0retval
--    * jump __label8 equal __ast0 __tmp4
-+   18 jump __label8 equal i __tmp4
-    19 jump __label7 always
-    20 label __label8
-    21 set __tmp3 "A"
- 
-    26 call __label0 __fn0retval
-    27 gotolabel __label12 __fn0
-    28 set __tmp5 __fn0retval
--    * jump __label11 equal __ast0 __tmp5
-+   29 jump __label11 equal i __tmp5
-    30 set __fn0_n 3
-    31 setaddr __fn0retaddr __label13
-    32 call __label0 __fn0retval
-    33 gotolabel __label13 __fn0
-    34 set __tmp6 __fn0retval
--    * jump __label11 equal __ast0 __tmp6
--    * jump __label11 equal __ast0 4
-+   35 jump __label11 equal i __tmp6
-+   36 jump __label11 equal i 4
-    37 jump __label10 always
-    38 label __label11
-    39 set __tmp3 "B"
-    40 jump __label6 always
-    41 label __label10
--    * jump __label15 equal __ast0 5
-+   42 jump __label15 equal i 5
-    43 jump __label14 always
-    44 label __label15
-    45 jump __label4 always
- 
-    51 call __label0 __fn0retval
-    52 gotolabel __label19 __fn0
-    53 set __tmp7 __fn0retval
--    * jump __label18 lessThan __ast0 __tmp7
-+   54 jump __label18 lessThan i __tmp7
-    55 set __fn0_n 8
-    56 setaddr __fn0retaddr __label20
-    57 call __label0 __fn0retval
-    58 gotolabel __label20 __fn0
-    59 set __tmp8 __fn0retval
--    * jump __label17 lessThanEq __ast0 __tmp8
-+   60 jump __label17 lessThanEq i __tmp8
-    61 label __label18
-    62 jump __label16 always
-    63 label __label17
-    64 set __tmp3 "C"
-    65 jump __label6 always
-    66 label __label16
--    * jump __label22 equal __ast0 10
-+   67 jump __label22 equal i 10
-    68 jump __label21 always
-    69 label __label22
-    70 jump __label5 always
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-4 instructions):
  

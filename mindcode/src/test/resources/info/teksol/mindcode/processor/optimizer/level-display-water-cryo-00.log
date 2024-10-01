@@ -1,5 +1,6 @@
    124 instructions before optimizations.
-     9 instructions eliminated by Temp Variables Elimination.
+     8 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Case Expression Optimization.
      9 instructions eliminated by Dead Code Elimination (3 iterations).
      4 instructions eliminated by Jump Optimization (3 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
@@ -12,7 +13,98 @@
 Pass 1: speed optimization selection (cost limit 906):
   * Loop Optimization: replicate condition at line 43            cost     1, benefit       25,0, efficiency       25,0 (-4 instructions)
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 instructions):
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+    22 print "\nFound: "
+    23 print block
+    24 sensor __tmp9 block @type
+-    * set __ast0 __tmp9
+-    * jump __label8 equal __ast0 @message
++   25 jump __label8 equal __tmp9 @message
+    26 jump __label7 always
+    27 label __label8
+    28 set MESSAGE block
+    29 set __tmp10 MESSAGE
+    30 jump __label6 always
+    31 label __label7
+-    * jump __label10 equal __ast0 @switch
++   32 jump __label10 equal __tmp9 @switch
+    33 jump __label9 always
+    34 label __label10
+    35 set SWITCH block
+    36 set __tmp10 SWITCH
+    37 jump __label6 always
+    38 label __label9
+-    * jump __label12 equal __ast0 @liquid-tank
++   39 jump __label12 equal __tmp9 @liquid-tank
+    40 jump __label11 always
+    41 label __label12
+    42 set TANK_CRYO TANK_WATER
+ 
+    44 set __tmp10 TANK_WATER
+    45 jump __label6 always
+    46 label __label11
+-    * jump __label14 equal __ast0 @logic-display
++   47 jump __label14 equal __tmp9 @logic-display
+    48 jump __label13 always
+    49 label __label14
+    50 set DISPLAY block
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructions):
+ 
+    26 jump __label7 always
+    27 label __label8
+    28 set MESSAGE block
+-    * set __tmp10 MESSAGE
+    29 jump __label6 always
+    30 label __label7
+    31 jump __label10 equal __tmp9 @switch
+    32 jump __label9 always
+    33 label __label10
+    34 set SWITCH block
+-    * set __tmp10 SWITCH
+    35 jump __label6 always
+    36 label __label9
+    37 jump __label12 equal __tmp9 @liquid-tank
+ 
+    39 label __label12
+    40 set TANK_CRYO TANK_WATER
+    41 set TANK_WATER block
+-    * set __tmp10 TANK_WATER
+    42 jump __label6 always
+    43 label __label11
+    44 jump __label14 equal __tmp9 @logic-display
+    45 jump __label13 always
+    46 label __label14
+    47 set DISPLAY block
+-    * set __tmp10 DISPLAY
+    48 jump __label6 always
+    49 label __label13
+-    * set __tmp10 null
+    50 label __label6
+    51 label __label4
+    52 jump __label3 always
+ 
+    62 op equal __tmp11 TANK_CRYO null
+    63 jump __label15 equal __tmp11 false
+    64 print "\nNo cryofluid or water tank."
+-    * set __tmp12 "\nNo cryofluid or water tank."
+    65 jump __label16 always
+    66 label __label15
+-    * set __tmp12 null
+    67 label __label16
+    68 op equal __tmp13 DISPLAY null
+    69 jump __label17 equal __tmp13 false
+    70 print "\nNo display."
+-    * set __tmp14 "\nNo display."
+    71 jump __label18 always
+    72 label __label17
+-    * set __tmp14 null
+    73 label __label18
+    74 printflush MESSAGE
+    75 label __label1
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-8 instructions):
  
     10 op or __tmp4 __tmp2 __tmp3
     11 jump __label2 equal __tmp4 false
@@ -31,135 +123,76 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 inst
 +   18 getlink block n
     19 print "\nFound: "
     20 print block
--    * sensor __tmp9 block @type
--    * set __ast0 __tmp9
-+   21 sensor __ast0 block @type
-    22 jump __label8 equal __ast0 @message
-    23 jump __label7 always
-    24 label __label8
+    21 sensor __tmp9 block @type
  
-    87 sensor __tmp15 SWITCH @enabled
-    88 op equal __tmp16 __tmp15 0
-    89 jump __label21 equal __tmp16 false
+    78 sensor __tmp15 SWITCH @enabled
+    79 op equal __tmp16 __tmp15 0
+    80 jump __label21 equal __tmp16 false
 -    * set __tmp17 @time
 -    * set start_time __tmp17
-+   90 set start_time @time
-    91 draw clear 0 0 0
-    92 draw color 255 255 255 255
-    93 draw image 20 10 @water 16 0
++   81 set start_time @time
+    82 draw clear 0 0 0
+    83 draw color 255 255 255 255
+    84 draw image 20 10 @water 16 0
  
-    95 draw color 90 100 170 255
-    96 draw rect 14 20 12 55
-    97 draw color 255 255 16 255
+    86 draw color 90 100 170 255
+    87 draw rect 14 20 12 55
+    88 draw color 255 255 16 255
 -    * sensor __tmp18 TANK_WATER @totalLiquids
 -    * set water __tmp18
-+   98 sensor water TANK_WATER @totalLiquids
-    99 op mul __tmp19 water MULTIPLIER
++   89 sensor water TANK_WATER @totalLiquids
+    90 op mul __tmp19 water MULTIPLIER
 -    * op add __tmp20 __tmp19 20
 -    * set pos __tmp20
-+  100 op add pos __tmp19 20
-   101 op add __tmp21 pos 7
-   102 op sub __tmp22 pos 7
-   103 draw triangle 6 __tmp21 14 pos 6 __tmp22
++   91 op add pos __tmp19 20
+    92 op add __tmp21 pos 7
+    93 op sub __tmp22 pos 7
+    94 draw triangle 6 __tmp21 14 pos 6 __tmp22
  
-   107 draw color 110 200 230 255
-   108 draw rect 54 20 12 55
-   109 draw color 255 255 16 255
+    98 draw color 110 200 230 255
+    99 draw rect 54 20 12 55
+   100 draw color 255 255 16 255
 -    * sensor __tmp25 TANK_CRYO @totalLiquids
 -    * set cryo __tmp25
-+  110 sensor cryo TANK_CRYO @totalLiquids
-   111 op mul __tmp26 cryo MULTIPLIER
++  101 sensor cryo TANK_CRYO @totalLiquids
+   102 op mul __tmp26 cryo MULTIPLIER
 -    * op add __tmp27 __tmp26 20
 -    * set pos __tmp27
-+  112 op add pos __tmp26 20
-   113 op add __tmp28 pos 7
-   114 op sub __tmp29 pos 7
-   115 draw triangle 46 __tmp28 54 pos 46 __tmp29
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructions):
- 
-    23 jump __label7 always
-    24 label __label8
-    25 set MESSAGE block
--    * set __tmp10 MESSAGE
-    26 jump __label6 always
-    27 label __label7
-    28 jump __label10 equal __ast0 @switch
-    29 jump __label9 always
-    30 label __label10
-    31 set SWITCH block
--    * set __tmp10 SWITCH
-    32 jump __label6 always
-    33 label __label9
-    34 jump __label12 equal __ast0 @liquid-tank
- 
-    36 label __label12
-    37 set TANK_CRYO TANK_WATER
-    38 set TANK_WATER block
--    * set __tmp10 TANK_WATER
-    39 jump __label6 always
-    40 label __label11
-    41 jump __label14 equal __ast0 @logic-display
-    42 jump __label13 always
-    43 label __label14
-    44 set DISPLAY block
--    * set __tmp10 DISPLAY
-    45 jump __label6 always
-    46 label __label13
--    * set __tmp10 null
-    47 label __label6
-    48 label __label4
-    49 jump __label3 always
- 
-    59 op equal __tmp11 TANK_CRYO null
-    60 jump __label15 equal __tmp11 false
-    61 print "\nNo cryofluid or water tank."
--    * set __tmp12 "\nNo cryofluid or water tank."
-    62 jump __label16 always
-    63 label __label15
--    * set __tmp12 null
-    64 label __label16
-    65 op equal __tmp13 DISPLAY null
-    66 jump __label17 equal __tmp13 false
-    67 print "\nNo display."
--    * set __tmp14 "\nNo display."
-    68 jump __label18 always
-    69 label __label17
--    * set __tmp14 null
-    70 label __label18
-    71 printflush MESSAGE
-    72 label __label1
++  103 op add pos __tmp26 20
+   104 op add __tmp28 pos 7
+   105 op sub __tmp29 pos 7
+   106 draw triangle 46 __tmp28 54 pos 46 __tmp29
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-4 instructions):
  
     19 print "\nFound: "
     20 print block
-    21 sensor __ast0 block @type
--    * jump __label8 equal __ast0 @message
+    21 sensor __tmp9 block @type
+-    * jump __label8 equal __tmp9 @message
 -    * jump __label7 always
-+   22 jump __label7 notEqual __ast0 @message
++   22 jump __label7 notEqual __tmp9 @message
     23 label __label8
     24 set MESSAGE block
     25 jump __label6 always
     26 label __label7
--    * jump __label10 equal __ast0 @switch
+-    * jump __label10 equal __tmp9 @switch
 -    * jump __label9 always
-+   27 jump __label9 notEqual __ast0 @switch
++   27 jump __label9 notEqual __tmp9 @switch
     28 label __label10
     29 set SWITCH block
     30 jump __label6 always
     31 label __label9
--    * jump __label12 equal __ast0 @liquid-tank
+-    * jump __label12 equal __tmp9 @liquid-tank
 -    * jump __label11 always
-+   32 jump __label11 notEqual __ast0 @liquid-tank
++   32 jump __label11 notEqual __tmp9 @liquid-tank
     33 label __label12
     34 set TANK_CRYO TANK_WATER
     35 set TANK_WATER block
     36 jump __label6 always
     37 label __label11
--    * jump __label14 equal __ast0 @logic-display
+-    * jump __label14 equal __tmp9 @logic-display
 -    * jump __label13 always
-+   38 jump __label13 notEqual __ast0 @logic-display
++   38 jump __label13 notEqual __tmp9 @logic-display
     39 label __label14
     40 set DISPLAY block
     41 jump __label6 always
@@ -205,7 +238,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-4 inst
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-3 instructions):
  
-    37 jump __label13 notEqual __ast0 @logic-display
+    37 jump __label13 notEqual __tmp9 @logic-display
     38 label __label14
     39 set DISPLAY block
 -    * jump __label6 always
@@ -401,21 +434,21 @@ op sub n n 1
 getlink block n
 print "\nFound: "
 print block
-sensor __ast0 block @type
-jump __label7 notEqual __ast0 @message
+sensor __tmp9 block @type
+jump __label7 notEqual __tmp9 @message
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
-jump __label9 notEqual __ast0 @switch
+jump __label9 notEqual __tmp9 @switch
 set SWITCH block
 jump __label6 always 0 0
 label __label9
-jump __label11 notEqual __ast0 @liquid-tank
+jump __label11 notEqual __tmp9 @liquid-tank
 set TANK_CRYO TANK_WATER
 set TANK_WATER block
 jump __label6 always 0 0
 label __label11
-jump __label13 notEqual __ast0 @logic-display
+jump __label13 notEqual __tmp9 @logic-display
 set DISPLAY block
 label __label13
 label __label6

@@ -9,6 +9,50 @@
      2 instructions eliminated by Unreachable Code Elimination.
     14 instructions after optimizations.
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+ 
+    24 set pn __tmp14
+    25 op add __tmp15 p 3
+    26 set p __tmp15
+-    * set __tmp13 p
+    27 jump __label4 always
+    28 label __label3
+    29 op lessThan __tmp16 hn pn
+ 
+    38 jump __label2 always
+    39 set __tmp17 null
+    40 label __label6
+-    * set __tmp13 __tmp17
+    41 label __label4
+    42 label __label1
+    43 jump __label0 always
+ 
+    45 label __label7
+    46 set __fn0_v 1533776805
+    47 print __fn0_v
+-    * set __tmp20 __fn0_v
+    48 label __label8
+    49 label __label9
+    50 set __fn1_v hn
+    51 print __fn1_v
+-    * set __tmp21 __fn1_v
+    52 label __label10
+    53 end
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
+ 
+    32 set hn __tmp18
+    33 op add __tmp19 h 4
+    34 set h __tmp19
+-    * set __tmp17 h
+    35 jump __label6 always
+    36 label __label5
+    37 jump __label2 always
+-    * set __tmp17 null
+    38 label __label6
+    39 label __label4
+    40 label __label1
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 instructions):
      0 set p 165
      1 set h 143
@@ -44,64 +88,19 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 inst
 -    * set p __tmp15
 +   18 op add pn pn p
 +   19 op add p p 3
-    20 set __tmp13 p
-    21 jump __label4 always
-    22 label __label3
-    23 op lessThan __tmp16 hn pn
-    24 jump __label5 equal __tmp16 false
+    20 jump __label4 always
+    21 label __label3
+    22 op lessThan __tmp16 hn pn
+    23 jump __label5 equal __tmp16 false
 -    * op add __tmp18 hn h
 -    * set hn __tmp18
 -    * op add __tmp19 h 4
 -    * set h __tmp19
-+   25 op add hn hn h
-+   26 op add h h 4
-    27 set __tmp17 h
-    28 jump __label6 always
-    29 label __label5
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
- 
-    17 jump __label3 equal __tmp12 false
-    18 op add pn pn p
-    19 op add p p 3
--    * set __tmp13 p
-    20 jump __label4 always
-    21 label __label3
-    22 op lessThan __tmp16 hn pn
- 
-    29 jump __label2 always
-    30 set __tmp17 null
-    31 label __label6
--    * set __tmp13 __tmp17
-    32 label __label4
-    33 label __label1
-    34 jump __label0 always
- 
-    36 label __label7
-    37 set __fn0_v 1533776805
-    38 print __fn0_v
--    * set __tmp20 __fn0_v
-    39 label __label8
-    40 label __label9
-    41 set __fn1_v hn
-    42 print __fn1_v
--    * set __tmp21 __fn1_v
-    43 label __label10
-    44 end
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
- 
-    23 jump __label5 equal __tmp16 false
-    24 op add hn hn h
-    25 op add h h 4
--    * set __tmp17 h
++   24 op add hn hn h
++   25 op add h h 4
     26 jump __label6 always
     27 label __label5
     28 jump __label2 always
--    * set __tmp17 null
-    29 label __label6
-    30 label __label4
-    31 label __label1
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  

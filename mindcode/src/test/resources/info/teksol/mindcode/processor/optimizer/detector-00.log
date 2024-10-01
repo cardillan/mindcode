@@ -10,6 +10,159 @@
     50 instructions eliminated by Print Merging.
    173 instructions after optimizations.
 
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+    26 sensor __tmp9 BLOCK @type
+    27 print __tmp9
+    28 print " - "
+-    * set __ast0 page
+-    * jump __label9 equal __ast0 1
++   29 jump __label9 equal page 1
+    30 jump __label8 always
+    31 label __label9
+    32 print "contents:"
+ 
+    55 set __tmp10 __tmp16
+    56 jump __label7 always
+    57 label __label8
+-    * jump __label11 equal __ast0 2
++   58 jump __label11 equal page 2
+    59 jump __label10 always
+    60 label __label11
+    61 print "power:"
+ 
+    91 set __tmp10 __tmp26
+    92 jump __label7 always
+    93 label __label10
+-    * jump __label13 equal __ast0 3
++   94 jump __label13 equal page 3
+    95 jump __label12 always
+    96 label __label13
+    97 print "combat:"
+ 
+   115 set __tmp10 __tmp30
+   116 jump __label7 always
+   117 label __label12
+-    * jump __label15 equal __ast0 4
++  118 jump __label15 equal page 4
+   119 jump __label14 always
+   120 label __label15
+   121 print "status:"
+ 
+   143 set __tmp10 __tmp35
+   144 jump __label7 always
+   145 label __label14
+-    * jump __label17 equal __ast0 5
++  146 jump __label17 equal page 5
+   147 jump __label16 always
+   148 label __label17
+   149 print "position:"
+ 
+   167 set __tmp10 __tmp39
+   168 jump __label7 always
+   169 label __label16
+-    * jump __label19 equal __ast0 6
++  170 jump __label19 equal page 6
+   171 jump __label18 always
+   172 label __label19
+   173 print "unit:"
+ 
+   219 set __tmp10 __tmp50
+   220 jump __label7 always
+   221 label __label18
+-    * jump __label21 equal __ast0 7
++  222 jump __label21 equal page 7
+   223 jump __label20 always
+   224 label __label21
+   225 print "other:"
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+ 
+    10 op add __tmp5 __tmp4 1
+    11 set page __tmp5
+    12 control enabled switch1 false
+-    * set __tmp3 false
+    13 jump __label4 always
+    14 label __label3
+-    * set __tmp3 null
+    15 label __label4
+    16 print "Property detector - page "
+    17 print page
+ 
+   255 label __label20
+   256 set __tmp10 null
+   257 label __label7
+-    * set __tmp8 __tmp10
+   258 jump __label6 always
+   259 label __label5
+   260 print "No linked block found."
+   261 print "\n"
+-    * set __tmp8 "No linked block found."
+   262 label __label6
+   263 printflush message1
+   264 label __label1
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-8 instructions):
+ 
+    50 print "liquidCapacity: "
+    51 print __tmp16
+    52 print "\n"
+-    * set __tmp10 __tmp16
+    53 jump __label7 always
+    54 label __label8
+    55 jump __label11 equal page 2
+ 
+    85 print "powerNetOut: "
+    86 print __tmp26
+    87 print "\n"
+-    * set __tmp10 __tmp26
+    88 jump __label7 always
+    89 label __label10
+    90 jump __label13 equal page 3
+ 
+   108 print "maxHealth: "
+   109 print __tmp30
+   110 print "\n"
+-    * set __tmp10 __tmp30
+   111 jump __label7 always
+   112 label __label12
+   113 jump __label15 equal page 4
+ 
+   135 print "range: "
+   136 print __tmp35
+   137 print "\n"
+-    * set __tmp10 __tmp35
+   138 jump __label7 always
+   139 label __label14
+   140 jump __label17 equal page 5
+ 
+   158 print "size: "
+   159 print __tmp39
+   160 print "\n"
+-    * set __tmp10 __tmp39
+   161 jump __label7 always
+   162 label __label16
+   163 jump __label19 equal page 6
+ 
+   209 print "controller: "
+   210 print __tmp50
+   211 print "\n"
+-    * set __tmp10 __tmp50
+   212 jump __label7 always
+   213 label __label18
+   214 jump __label21 equal page 7
+ 
+   244 print "configure: "
+   245 print __tmp57
+   246 print "\n"
+-    * set __tmp10 __tmp57
+   247 jump __label7 always
+   248 label __label20
+-    * set __tmp10 null
+   249 label __label7
+   250 jump __label6 always
+   251 label __label5
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
      0 set page 0
      1 label __label0
@@ -27,161 +180,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
 -    * set page __tmp5
 +    8 op add page __tmp4 1
      9 control enabled switch1 false
-    10 set __tmp3 false
-    11 jump __label4 always
-
-Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
- 
-    23 sensor __tmp9 BLOCK @type
-    24 print __tmp9
-    25 print " - "
--    * set __ast0 page
--    * jump __label9 equal __ast0 1
-+   26 jump __label9 equal page 1
-    27 jump __label8 always
-    28 label __label9
-    29 print "contents:"
- 
-    52 set __tmp10 __tmp16
-    53 jump __label7 always
-    54 label __label8
--    * jump __label11 equal __ast0 2
-+   55 jump __label11 equal page 2
-    56 jump __label10 always
-    57 label __label11
-    58 print "power:"
- 
-    88 set __tmp10 __tmp26
-    89 jump __label7 always
-    90 label __label10
--    * jump __label13 equal __ast0 3
-+   91 jump __label13 equal page 3
-    92 jump __label12 always
-    93 label __label13
-    94 print "combat:"
- 
-   112 set __tmp10 __tmp30
-   113 jump __label7 always
-   114 label __label12
--    * jump __label15 equal __ast0 4
-+  115 jump __label15 equal page 4
-   116 jump __label14 always
-   117 label __label15
-   118 print "status:"
- 
-   140 set __tmp10 __tmp35
-   141 jump __label7 always
-   142 label __label14
--    * jump __label17 equal __ast0 5
-+  143 jump __label17 equal page 5
-   144 jump __label16 always
-   145 label __label17
-   146 print "position:"
- 
-   164 set __tmp10 __tmp39
-   165 jump __label7 always
-   166 label __label16
--    * jump __label19 equal __ast0 6
-+  167 jump __label19 equal page 6
-   168 jump __label18 always
-   169 label __label19
-   170 print "unit:"
- 
-   216 set __tmp10 __tmp50
-   217 jump __label7 always
-   218 label __label18
--    * jump __label21 equal __ast0 7
-+  219 jump __label21 equal page 7
-   220 jump __label20 always
-   221 label __label21
-   222 print "other:"
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
- 
-     7 op mod __tmp4 page 7
-     8 op add page __tmp4 1
-     9 control enabled switch1 false
--    * set __tmp3 false
     10 jump __label4 always
     11 label __label3
--    * set __tmp3 null
-    12 label __label4
-    13 print "Property detector - page "
-    14 print page
- 
-   252 label __label20
-   253 set __tmp10 null
-   254 label __label7
--    * set __tmp8 __tmp10
-   255 jump __label6 always
-   256 label __label5
-   257 print "No linked block found."
-   258 print "\n"
--    * set __tmp8 "No linked block found."
-   259 label __label6
-   260 printflush message1
-   261 label __label1
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-8 instructions):
- 
-    47 print "liquidCapacity: "
-    48 print __tmp16
-    49 print "\n"
--    * set __tmp10 __tmp16
-    50 jump __label7 always
-    51 label __label8
-    52 jump __label11 equal page 2
- 
-    82 print "powerNetOut: "
-    83 print __tmp26
-    84 print "\n"
--    * set __tmp10 __tmp26
-    85 jump __label7 always
-    86 label __label10
-    87 jump __label13 equal page 3
- 
-   105 print "maxHealth: "
-   106 print __tmp30
-   107 print "\n"
--    * set __tmp10 __tmp30
-   108 jump __label7 always
-   109 label __label12
-   110 jump __label15 equal page 4
- 
-   132 print "range: "
-   133 print __tmp35
-   134 print "\n"
--    * set __tmp10 __tmp35
-   135 jump __label7 always
-   136 label __label14
-   137 jump __label17 equal page 5
- 
-   155 print "size: "
-   156 print __tmp39
-   157 print "\n"
--    * set __tmp10 __tmp39
-   158 jump __label7 always
-   159 label __label16
-   160 jump __label19 equal page 6
- 
-   206 print "controller: "
-   207 print __tmp50
-   208 print "\n"
--    * set __tmp10 __tmp50
-   209 jump __label7 always
-   210 label __label18
-   211 jump __label21 equal page 7
- 
-   241 print "configure: "
-   242 print __tmp57
-   243 print "\n"
--    * set __tmp10 __tmp57
-   244 jump __label7 always
-   245 label __label20
--    * set __tmp10 null
-   246 label __label7
-   247 jump __label6 always
-   248 label __label5
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
      0 set page 0

@@ -22,6 +22,8 @@ The optimization is performed only when the following conditions are met:
    immediately precedes the instruction producing the temporary variable.
 * All arguments of the other instruction referencing the temporary variable are output ones.
 
+An additional optimization is performed when an instruction has a temporary output variable which isn't read by any other instruction. In this case, the unused output variable is replaced by `0` (literal zero value). Such an instruction will be executed correctly by Mindustry Logic, but to new variable will be allocated for the replaced argument.   
+
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the [Stack Optimization](#stack-optimization) down the line.
 

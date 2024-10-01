@@ -9,6 +9,200 @@
      2 instructions eliminated by Print Merging.
     71 instructions after optimizations.
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
+ 
+    27 label __label5
+    28 set __tmp11 null
+    29 label __label6
+-    * set __tmp8 __tmp11
+    30 label __label4
+    31 label __label7
+    32 set __fn1_unit @poly
+ 
+    42 label __label9
+    43 set __tmp16 null
+    44 label __label10
+-    * set __tmp13 __tmp16
+    45 label __label8
+    46 label __label11
+    47 set __fn2_unit @mega
+ 
+    57 label __label13
+    58 set __tmp21 null
+    59 label __label14
+-    * set __tmp18 __tmp21
+    60 label __label12
+    61 label __label15
+    62 set __fn3_unit @quad
+ 
+    72 label __label17
+    73 set __tmp26 null
+    74 label __label18
+-    * set __tmp23 __tmp26
+    75 label __label16
+    76 label __label19
+    77 set __fn4_unit @oct
+ 
+    87 label __label21
+    88 set __tmp31 null
+    89 label __label22
+-    * set __tmp28 __tmp31
+    90 label __label20
+    91 label __label23
+    92 set __fn5_unit @flare
+ 
+   102 label __label25
+   103 set __tmp36 null
+   104 label __label26
+-    * set __tmp33 __tmp36
+   105 label __label24
+   106 label __label27
+   107 set __fn6_unit @horizon
+ 
+   117 label __label29
+   118 set __tmp41 null
+   119 label __label30
+-    * set __tmp38 __tmp41
+   120 label __label28
+   121 label __label31
+   122 set __fn7_unit @zenith
+ 
+   132 label __label33
+   133 set __tmp46 null
+   134 label __label34
+-    * set __tmp43 __tmp46
+   135 label __label32
+   136 label __label35
+   137 set __fn8_unit @antumbra
+ 
+   147 label __label37
+   148 set __tmp51 null
+   149 label __label38
+-    * set __tmp48 __tmp51
+   150 label __label36
+   151 label __label39
+   152 set __fn9_unit @eclipse
+ 
+   162 label __label41
+   163 set __tmp56 null
+   164 label __label42
+-    * set __tmp53 __tmp56
+   165 label __label40
+   166 print "Remote vault [gold]#"
+   167 print LINK_ID
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-20 instructions):
+ 
+    22 ucontrol flag ANSWER_FLAG
+    23 op add __tmp12 SERVICED 1
+    24 set SERVICED __tmp12
+-    * set __tmp11 SERVICED
+    25 jump __label6 always
+    26 label __label5
+-    * set __tmp11 null
+    27 label __label6
+    28 label __label4
+    29 label __label7
+ 
+    35 ucontrol flag ANSWER_FLAG
+    36 op add __tmp17 SERVICED 1
+    37 set SERVICED __tmp17
+-    * set __tmp16 SERVICED
+    38 jump __label10 always
+    39 label __label9
+-    * set __tmp16 null
+    40 label __label10
+    41 label __label8
+    42 label __label11
+ 
+    48 ucontrol flag ANSWER_FLAG
+    49 op add __tmp22 SERVICED 1
+    50 set SERVICED __tmp22
+-    * set __tmp21 SERVICED
+    51 jump __label14 always
+    52 label __label13
+-    * set __tmp21 null
+    53 label __label14
+    54 label __label12
+    55 label __label15
+ 
+    61 ucontrol flag ANSWER_FLAG
+    62 op add __tmp27 SERVICED 1
+    63 set SERVICED __tmp27
+-    * set __tmp26 SERVICED
+    64 jump __label18 always
+    65 label __label17
+-    * set __tmp26 null
+    66 label __label18
+    67 label __label16
+    68 label __label19
+ 
+    74 ucontrol flag ANSWER_FLAG
+    75 op add __tmp32 SERVICED 1
+    76 set SERVICED __tmp32
+-    * set __tmp31 SERVICED
+    77 jump __label22 always
+    78 label __label21
+-    * set __tmp31 null
+    79 label __label22
+    80 label __label20
+    81 label __label23
+ 
+    87 ucontrol flag ANSWER_FLAG
+    88 op add __tmp37 SERVICED 1
+    89 set SERVICED __tmp37
+-    * set __tmp36 SERVICED
+    90 jump __label26 always
+    91 label __label25
+-    * set __tmp36 null
+    92 label __label26
+    93 label __label24
+    94 label __label27
+ 
+   100 ucontrol flag ANSWER_FLAG
+   101 op add __tmp42 SERVICED 1
+   102 set SERVICED __tmp42
+-    * set __tmp41 SERVICED
+   103 jump __label30 always
+   104 label __label29
+-    * set __tmp41 null
+   105 label __label30
+   106 label __label28
+   107 label __label31
+ 
+   113 ucontrol flag ANSWER_FLAG
+   114 op add __tmp47 SERVICED 1
+   115 set SERVICED __tmp47
+-    * set __tmp46 SERVICED
+   116 jump __label34 always
+   117 label __label33
+-    * set __tmp46 null
+   118 label __label34
+   119 label __label32
+   120 label __label35
+ 
+   126 ucontrol flag ANSWER_FLAG
+   127 op add __tmp52 SERVICED 1
+   128 set SERVICED __tmp52
+-    * set __tmp51 SERVICED
+   129 jump __label38 always
+   130 label __label37
+-    * set __tmp51 null
+   131 label __label38
+   132 label __label36
+   133 label __label39
+ 
+   139 ucontrol flag ANSWER_FLAG
+   140 op add __tmp57 SERVICED 1
+   141 set SERVICED __tmp57
+-    * set __tmp56 SERVICED
+   142 jump __label42 always
+   143 label __label41
+-    * set __tmp56 null
+   144 label __label42
+   145 label __label40
+   146 print "Remote vault [gold]#"
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 instructions):
      0 set LINK_ID 1
 -    * op add __tmp0 99999900 LINK_ID
@@ -40,293 +234,99 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op add __tmp12 SERVICED 1
 -    * set SERVICED __tmp12
 +   19 op add SERVICED SERVICED 1
-    20 set __tmp11 SERVICED
-    21 jump __label6 always
-    22 label __label5
- 
-    31 op equal __tmp15 __tmp14 QUERY_FLAG
-    32 jump __label9 equal __tmp15 false
-    33 ucontrol flag ANSWER_FLAG
--    * op add __tmp17 SERVICED 1
--    * set SERVICED __tmp17
-+   34 op add SERVICED SERVICED 1
-    35 set __tmp16 SERVICED
-    36 jump __label10 always
-    37 label __label9
- 
-    46 op equal __tmp20 __tmp19 QUERY_FLAG
-    47 jump __label13 equal __tmp20 false
-    48 ucontrol flag ANSWER_FLAG
--    * op add __tmp22 SERVICED 1
--    * set SERVICED __tmp22
-+   49 op add SERVICED SERVICED 1
-    50 set __tmp21 SERVICED
-    51 jump __label14 always
-    52 label __label13
- 
-    61 op equal __tmp25 __tmp24 QUERY_FLAG
-    62 jump __label17 equal __tmp25 false
-    63 ucontrol flag ANSWER_FLAG
--    * op add __tmp27 SERVICED 1
--    * set SERVICED __tmp27
-+   64 op add SERVICED SERVICED 1
-    65 set __tmp26 SERVICED
-    66 jump __label18 always
-    67 label __label17
- 
-    76 op equal __tmp30 __tmp29 QUERY_FLAG
-    77 jump __label21 equal __tmp30 false
-    78 ucontrol flag ANSWER_FLAG
--    * op add __tmp32 SERVICED 1
--    * set SERVICED __tmp32
-+   79 op add SERVICED SERVICED 1
-    80 set __tmp31 SERVICED
-    81 jump __label22 always
-    82 label __label21
- 
-    91 op equal __tmp35 __tmp34 QUERY_FLAG
-    92 jump __label25 equal __tmp35 false
-    93 ucontrol flag ANSWER_FLAG
--    * op add __tmp37 SERVICED 1
--    * set SERVICED __tmp37
-+   94 op add SERVICED SERVICED 1
-    95 set __tmp36 SERVICED
-    96 jump __label26 always
-    97 label __label25
- 
-   106 op equal __tmp40 __tmp39 QUERY_FLAG
-   107 jump __label29 equal __tmp40 false
-   108 ucontrol flag ANSWER_FLAG
--    * op add __tmp42 SERVICED 1
--    * set SERVICED __tmp42
-+  109 op add SERVICED SERVICED 1
-   110 set __tmp41 SERVICED
-   111 jump __label30 always
-   112 label __label29
- 
-   121 op equal __tmp45 __tmp44 QUERY_FLAG
-   122 jump __label33 equal __tmp45 false
-   123 ucontrol flag ANSWER_FLAG
--    * op add __tmp47 SERVICED 1
--    * set SERVICED __tmp47
-+  124 op add SERVICED SERVICED 1
-   125 set __tmp46 SERVICED
-   126 jump __label34 always
-   127 label __label33
- 
-   136 op equal __tmp50 __tmp49 QUERY_FLAG
-   137 jump __label37 equal __tmp50 false
-   138 ucontrol flag ANSWER_FLAG
--    * op add __tmp52 SERVICED 1
--    * set SERVICED __tmp52
-+  139 op add SERVICED SERVICED 1
-   140 set __tmp51 SERVICED
-   141 jump __label38 always
-   142 label __label37
- 
-   151 op equal __tmp55 __tmp54 QUERY_FLAG
-   152 jump __label41 equal __tmp55 false
-   153 ucontrol flag ANSWER_FLAG
--    * op add __tmp57 SERVICED 1
--    * set SERVICED __tmp57
-+  154 op add SERVICED SERVICED 1
-   155 set __tmp56 SERVICED
-   156 jump __label42 always
-   157 label __label41
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
- 
-    22 label __label5
-    23 set __tmp11 null
-    24 label __label6
--    * set __tmp8 __tmp11
-    25 label __label4
-    26 label __label7
-    27 set __fn1_unit @poly
- 
-    36 label __label9
-    37 set __tmp16 null
-    38 label __label10
--    * set __tmp13 __tmp16
-    39 label __label8
-    40 label __label11
-    41 set __fn2_unit @mega
- 
-    50 label __label13
-    51 set __tmp21 null
-    52 label __label14
--    * set __tmp18 __tmp21
-    53 label __label12
-    54 label __label15
-    55 set __fn3_unit @quad
- 
-    64 label __label17
-    65 set __tmp26 null
-    66 label __label18
--    * set __tmp23 __tmp26
-    67 label __label16
-    68 label __label19
-    69 set __fn4_unit @oct
- 
-    78 label __label21
-    79 set __tmp31 null
-    80 label __label22
--    * set __tmp28 __tmp31
-    81 label __label20
-    82 label __label23
-    83 set __fn5_unit @flare
- 
-    92 label __label25
-    93 set __tmp36 null
-    94 label __label26
--    * set __tmp33 __tmp36
-    95 label __label24
-    96 label __label27
-    97 set __fn6_unit @horizon
- 
-   106 label __label29
-   107 set __tmp41 null
-   108 label __label30
--    * set __tmp38 __tmp41
-   109 label __label28
-   110 label __label31
-   111 set __fn7_unit @zenith
- 
-   120 label __label33
-   121 set __tmp46 null
-   122 label __label34
--    * set __tmp43 __tmp46
-   123 label __label32
-   124 label __label35
-   125 set __fn8_unit @antumbra
- 
-   134 label __label37
-   135 set __tmp51 null
-   136 label __label38
--    * set __tmp48 __tmp51
-   137 label __label36
-   138 label __label39
-   139 set __fn9_unit @eclipse
- 
-   148 label __label41
-   149 set __tmp56 null
-   150 label __label42
--    * set __tmp53 __tmp56
-   151 label __label40
-   152 print "Remote vault [gold]#"
-   153 print LINK_ID
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-20 instructions):
- 
-    17 jump __label5 equal __tmp10 false
-    18 ucontrol flag ANSWER_FLAG
-    19 op add SERVICED SERVICED 1
--    * set __tmp11 SERVICED
     20 jump __label6 always
     21 label __label5
--    * set __tmp11 null
     22 label __label6
-    23 label __label4
-    24 label __label7
  
+    28 op equal __tmp15 __tmp14 QUERY_FLAG
     29 jump __label9 equal __tmp15 false
     30 ucontrol flag ANSWER_FLAG
-    31 op add SERVICED SERVICED 1
--    * set __tmp16 SERVICED
+-    * op add __tmp17 SERVICED 1
+-    * set SERVICED __tmp17
++   31 op add SERVICED SERVICED 1
     32 jump __label10 always
     33 label __label9
--    * set __tmp16 null
     34 label __label10
-    35 label __label8
-    36 label __label11
  
+    40 op equal __tmp20 __tmp19 QUERY_FLAG
     41 jump __label13 equal __tmp20 false
     42 ucontrol flag ANSWER_FLAG
-    43 op add SERVICED SERVICED 1
--    * set __tmp21 SERVICED
+-    * op add __tmp22 SERVICED 1
+-    * set SERVICED __tmp22
++   43 op add SERVICED SERVICED 1
     44 jump __label14 always
     45 label __label13
--    * set __tmp21 null
     46 label __label14
-    47 label __label12
-    48 label __label15
  
+    52 op equal __tmp25 __tmp24 QUERY_FLAG
     53 jump __label17 equal __tmp25 false
     54 ucontrol flag ANSWER_FLAG
-    55 op add SERVICED SERVICED 1
--    * set __tmp26 SERVICED
+-    * op add __tmp27 SERVICED 1
+-    * set SERVICED __tmp27
++   55 op add SERVICED SERVICED 1
     56 jump __label18 always
     57 label __label17
--    * set __tmp26 null
     58 label __label18
-    59 label __label16
-    60 label __label19
  
+    64 op equal __tmp30 __tmp29 QUERY_FLAG
     65 jump __label21 equal __tmp30 false
     66 ucontrol flag ANSWER_FLAG
-    67 op add SERVICED SERVICED 1
--    * set __tmp31 SERVICED
+-    * op add __tmp32 SERVICED 1
+-    * set SERVICED __tmp32
++   67 op add SERVICED SERVICED 1
     68 jump __label22 always
     69 label __label21
--    * set __tmp31 null
     70 label __label22
-    71 label __label20
-    72 label __label23
  
+    76 op equal __tmp35 __tmp34 QUERY_FLAG
     77 jump __label25 equal __tmp35 false
     78 ucontrol flag ANSWER_FLAG
-    79 op add SERVICED SERVICED 1
--    * set __tmp36 SERVICED
+-    * op add __tmp37 SERVICED 1
+-    * set SERVICED __tmp37
++   79 op add SERVICED SERVICED 1
     80 jump __label26 always
     81 label __label25
--    * set __tmp36 null
     82 label __label26
-    83 label __label24
-    84 label __label27
  
+    88 op equal __tmp40 __tmp39 QUERY_FLAG
     89 jump __label29 equal __tmp40 false
     90 ucontrol flag ANSWER_FLAG
-    91 op add SERVICED SERVICED 1
--    * set __tmp41 SERVICED
+-    * op add __tmp42 SERVICED 1
+-    * set SERVICED __tmp42
++   91 op add SERVICED SERVICED 1
     92 jump __label30 always
     93 label __label29
--    * set __tmp41 null
     94 label __label30
-    95 label __label28
-    96 label __label31
  
+   100 op equal __tmp45 __tmp44 QUERY_FLAG
    101 jump __label33 equal __tmp45 false
    102 ucontrol flag ANSWER_FLAG
-   103 op add SERVICED SERVICED 1
--    * set __tmp46 SERVICED
+-    * op add __tmp47 SERVICED 1
+-    * set SERVICED __tmp47
++  103 op add SERVICED SERVICED 1
    104 jump __label34 always
    105 label __label33
--    * set __tmp46 null
    106 label __label34
-   107 label __label32
-   108 label __label35
  
+   112 op equal __tmp50 __tmp49 QUERY_FLAG
    113 jump __label37 equal __tmp50 false
    114 ucontrol flag ANSWER_FLAG
-   115 op add SERVICED SERVICED 1
--    * set __tmp51 SERVICED
+-    * op add __tmp52 SERVICED 1
+-    * set SERVICED __tmp52
++  115 op add SERVICED SERVICED 1
    116 jump __label38 always
    117 label __label37
--    * set __tmp51 null
    118 label __label38
-   119 label __label36
-   120 label __label39
  
+   124 op equal __tmp55 __tmp54 QUERY_FLAG
    125 jump __label41 equal __tmp55 false
    126 ucontrol flag ANSWER_FLAG
-   127 op add SERVICED SERVICED 1
--    * set __tmp56 SERVICED
+-    * op add __tmp57 SERVICED 1
+-    * set SERVICED __tmp57
++  127 op add SERVICED SERVICED 1
    128 jump __label42 always
    129 label __label41
--    * set __tmp56 null
    130 label __label42
-   131 label __label40
-   132 print "Remote vault [gold]#"
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  

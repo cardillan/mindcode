@@ -8,6 +8,8 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Generic optimizer to remove all assignments to temporary variables that carry over the output value
@@ -24,20 +26,26 @@ import java.util.List;
  * eliminated variables later on.
  */
 class TempVariableEliminator extends BaseOptimizer {
+    private Set<LogicArgument> inputTempVariables;
+
     public TempVariableEliminator(OptimizationContext optimizationContext) {
         super(Optimization.TEMP_VARIABLES_ELIMINATION, optimizationContext);
     }
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        inputTempVariables = gatherInputTempVariables();
+
         try (LogicIterator itCurr = createIterator(); LogicIterator itPrev = createIterator()) {
             if (itCurr.hasNext()) {
-                itCurr.next(); // Skip first
+                // Skip first, but process unused outputs
+                replaceUnusedOutputs(itCurr);
             }
 
             while (itCurr.hasNext()) {
-                LogicInstruction current = itCurr.next();
+                LogicInstruction current = replaceUnusedOutputs(itCurr);
                 LogicInstruction previous = itPrev.next();
+
                 if (current instanceof SetInstruction set && set.getValue().isTemporaryVariable()) {
                     LogicArgument value = set.getValue();
                     List<LogicInstruction> list = instructions(
@@ -62,5 +70,29 @@ class TempVariableEliminator extends BaseOptimizer {
         }
 
         return false;
+    }
+
+    private LogicInstruction replaceUnusedOutputs(LogicIterator iterator) {
+        LogicInstruction instruction = iterator.next();
+        if (instruction.getOutputs() > 0) {
+            List<LogicArgument> unusedTemps = instruction.outputArgumentsStream()
+                    .filter(LogicArgument::isTemporaryVariable)
+                    .filter(var -> !inputTempVariables.contains(var))
+                    .toList();
+
+            for (LogicArgument unusedTemp : unusedTemps) {
+                instruction = replaceAllArgs(instruction, unusedTemp, instructionProcessor.unusedVariable());
+                iterator.set(instruction);
+            }
+        }
+
+        return instruction;
+    }
+
+    private Set<LogicArgument> gatherInputTempVariables() {
+        return optimizationContext.instructionStream()
+                .flatMap(LogicInstruction::inputArgumentsStream)
+                .filter(LogicArgument::isTemporaryVariable)
+                .collect(Collectors.toSet());
     }
 }

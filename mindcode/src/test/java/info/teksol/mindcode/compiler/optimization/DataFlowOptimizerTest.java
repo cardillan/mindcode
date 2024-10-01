@@ -415,16 +415,16 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         end
                         print(a)
                         """,
-                createInstruction(READ, "__ast0", "cell1", "0"),
-                createInstruction(JUMP, var(1002), "equal", "__ast0", "0"),
-                createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
-                createInstruction(JUMP, var(1001), "notEqual", "__ast0", "2"),
+                createInstruction(READ, var(0), "cell1", "0"),
+                createInstruction(JUMP, var(1002), "equal", var(0), "0"),
+                createInstruction(JUMP, var(1002), "equal", var(0), "1"),
+                createInstruction(JUMP, var(1001), "notEqual", var(0), "2"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(SET, var(1), "10"),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1003), "lessThan", "__ast0", "10"),
-                createInstruction(JUMP, var(1004), "lessThanEq", "__ast0", "20"),
+                createInstruction(JUMP, var(1003), "lessThan", var(0), "10"),
+                createInstruction(JUMP, var(1004), "lessThanEq", var(0), "20"),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(SET, var(1), "20"),
@@ -445,10 +445,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         end
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SENSOR, "__ast0", "switch1", "@enabled"),
-                createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
+                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
+                createInstruction(JUMP, var(1002), "equal", var(0), "1"),
                 createInstruction(SET, "x", "2"),
-                createInstruction(JUMP, "__start__", "notEqual", "__ast0", "2"),
+                createInstruction(JUMP, "__start__", "notEqual", var(0), "2"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, "x")
         );

@@ -10,6 +10,30 @@
      1 instructions eliminated by Unreachable Code Elimination.
     21 instructions after optimizations.
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+ 
+    14 op equal __tmp3 i 3
+    15 jump __label6 equal __tmp3 false
+    16 jump __label4 always
+-    * set __tmp4 null
+    17 jump __label7 always
+    18 label __label6
+-    * set __tmp4 null
+    19 label __label7
+    20 print i
+    21 set __fn0_n 5
+ 
+    26 op equal __tmp6 i __tmp5
+    27 jump __label9 equal __tmp6 false
+    28 jump __label5 always
+-    * set __tmp7 null
+    29 jump __label10 always
+    30 label __label9
+-    * set __tmp7 null
+    31 label __label10
+    32 label __label4
+    33 op add i i 1
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
      6 setaddr __fn0retaddr __label2
@@ -21,30 +45,6 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     10 set i __tmp0
     11 label __label3
     12 jump __label5 greaterThanEq i __tmp2
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
- 
-    13 op equal __tmp3 i 3
-    14 jump __label6 equal __tmp3 false
-    15 jump __label4 always
--    * set __tmp4 null
-    16 jump __label7 always
-    17 label __label6
--    * set __tmp4 null
-    18 label __label7
-    19 print i
-    20 set __fn0_n 5
- 
-    25 op equal __tmp6 i __tmp5
-    26 jump __label9 equal __tmp6 false
-    27 jump __label5 always
--    * set __tmp7 null
-    28 jump __label10 always
-    29 label __label9
--    * set __tmp7 null
-    30 label __label10
-    31 label __label4
-    32 op add i i 1
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  

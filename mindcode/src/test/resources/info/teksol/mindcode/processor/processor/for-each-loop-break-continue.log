@@ -13,6 +13,30 @@
 Pass 1: speed optimization selection (cost limit 955):
   * Loop Unrolling: unroll iteration loop at line 2              cost    57, benefit       20,0, efficiency        0,4 (+48 instructions)
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+ 
+    47 op equal __tmp5 __tmp4 3
+    48 jump __label15 equal __tmp5 false
+    49 jump __label1 always
+-    * set __tmp6 null
+    50 jump __label16 always
+    51 label __label15
+-    * set __tmp6 null
+    52 label __label16
+    53 print i
+    54 set __fn0_n i
+ 
+    59 op equal __tmp8 __tmp7 12
+    60 jump __label18 equal __tmp8 false
+    61 jump __label3 always
+-    * set __tmp9 null
+    62 jump __label19 always
+    63 label __label18
+-    * set __tmp9 null
+    64 label __label19
+    65 label __label1
+    66 goto __tmp0 marker0
+
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
      6 setaddr __fn0retaddr __label6
@@ -44,30 +68,6 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
     34 jump __label2 always
     35 gotolabel __label11 marker0
     36 setaddr __tmp0 __label13
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
- 
-    44 op equal __tmp5 __tmp4 3
-    45 jump __label15 equal __tmp5 false
-    46 jump __label1 always
--    * set __tmp6 null
-    47 jump __label16 always
-    48 label __label15
--    * set __tmp6 null
-    49 label __label16
-    50 print i
-    51 set __fn0_n i
- 
-    56 op equal __tmp8 __tmp7 12
-    57 jump __label18 equal __tmp8 false
-    58 jump __label3 always
--    * set __tmp9 null
-    59 jump __label19 always
-    60 label __label18
--    * set __tmp9 null
-    61 label __label19
-    62 label __label1
-    63 goto __tmp0 marker0
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  

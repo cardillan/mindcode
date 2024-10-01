@@ -3,6 +3,9 @@ package info.teksol.mindcode.logic;
 import java.util.Objects;
 
 public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress {
+    // Looks like a variable, but translates to 0 in mlog.
+    private static final LogicVariable UNUSED_VARIABLE = new LogicVariable(ArgumentType.TMP_VARIABLE, "0");
+
     public static final LogicVariable STACK_POINTER = LogicVariable.special("__sp");
     private static final String RETURN_VALUE = "retval";
     private static final String RETURN_ADDRESS = "retaddr";
@@ -142,5 +145,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable special(String name) {
         return new LogicVariable(ArgumentType.COMPILER, name);
+    }
+
+    /**
+     * Return the variable passed as an argument to unused instruction parameters.
+     * @return variable for unused instruction parameters
+     */
+    public static LogicVariable unusedVariable() {
+        return UNUSED_VARIABLE;
     }
 }

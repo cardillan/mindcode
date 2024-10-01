@@ -1,5 +1,6 @@
    166 instructions before optimizations.
-    13 instructions eliminated by Temp Variables Elimination.
+    11 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Case Expression Optimization.
     10 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
@@ -14,7 +15,146 @@
 Pass 1: speed optimization selection (cost limit 885):
   * Loop Optimization: replicate condition at line 68            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-13 instructions):
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
+ 
+    21 getlink __tmp3 n
+    22 set block __tmp3
+    23 sensor __tmp4 block @type
+-    * set __ast0 __tmp4
+-    * jump __label8 equal __ast0 @message
++   24 jump __label8 equal __tmp4 @message
+    25 jump __label7 always
+    26 label __label8
+    27 set MESSAGE block
+    28 set __tmp5 MESSAGE
+    29 jump __label6 always
+    30 label __label7
+-    * jump __label10 equal __ast0 @switch
++   31 jump __label10 equal __tmp4 @switch
+    32 jump __label9 always
+    33 label __label10
+    34 set SWITCH block
+    35 set __tmp5 SWITCH
+    36 jump __label6 always
+    37 label __label9
+-    * jump __label12 equal __ast0 @mass-driver
++   38 jump __label12 equal __tmp4 @mass-driver
+    39 jump __label11 always
+    40 label __label12
+    41 sensor __tmp6 block @firstItem
+-    * set __ast1 __tmp6
+-    * jump __label15 equal __ast1 @titanium
++   42 jump __label15 equal __tmp6 @titanium
+    43 jump __label14 always
+    44 label __label15
+    45 set TITANIUM block
+    46 set __tmp7 TITANIUM
+    47 jump __label13 always
+    48 label __label14
+-    * jump __label17 equal __ast1 @silicon
++   49 jump __label17 equal __tmp6 @silicon
+    50 jump __label16 always
+    51 label __label17
+    52 set SILICON block
+    53 set __tmp7 SILICON
+    54 jump __label13 always
+    55 label __label16
+-    * jump __label19 equal __ast1 @copper
++   56 jump __label19 equal __tmp6 @copper
+    57 jump __label18 always
+    58 label __label19
+    59 set COPPER block
+    60 set __tmp7 COPPER
+    61 jump __label13 always
+    62 label __label18
+-    * jump __label21 equal __ast1 @lead
++   63 jump __label21 equal __tmp6 @lead
+    64 jump __label20 always
+    65 label __label21
+    66 set LEAD block
+ 
+    72 set __tmp5 __tmp7
+    73 jump __label6 always
+    74 label __label11
+-    * jump __label23 equal __ast0 @logic-display
++   75 jump __label23 equal __tmp4 @logic-display
+    76 jump __label22 always
+    77 label __label23
+    78 set DISPLAY block
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
+ 
+    25 jump __label7 always
+    26 label __label8
+    27 set MESSAGE block
+-    * set __tmp5 MESSAGE
+    28 jump __label6 always
+    29 label __label7
+    30 jump __label10 equal __tmp4 @switch
+    31 jump __label9 always
+    32 label __label10
+    33 set SWITCH block
+-    * set __tmp5 SWITCH
+    34 jump __label6 always
+    35 label __label9
+    36 jump __label12 equal __tmp4 @mass-driver
+ 
+    67 label __label20
+    68 set __tmp7 null
+    69 label __label13
+-    * set __tmp5 __tmp7
+    70 jump __label6 always
+    71 label __label11
+    72 jump __label23 equal __tmp4 @logic-display
+    73 jump __label22 always
+    74 label __label23
+    75 set DISPLAY block
+-    * set __tmp5 DISPLAY
+    76 jump __label6 always
+    77 label __label22
+    78 print "\n"
+    79 print block
+    80 print " is not supported."
+-    * set __tmp5 " is not supported."
+    81 label __label6
+    82 print "\nNominal production: "
+    83 print EXPECTED_FLOW_STR
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-5 instructions):
+ 
+    41 jump __label14 always
+    42 label __label15
+    43 set TITANIUM block
+-    * set __tmp7 TITANIUM
+    44 jump __label13 always
+    45 label __label14
+    46 jump __label17 equal __tmp6 @silicon
+    47 jump __label16 always
+    48 label __label17
+    49 set SILICON block
+-    * set __tmp7 SILICON
+    50 jump __label13 always
+    51 label __label16
+    52 jump __label19 equal __tmp6 @copper
+    53 jump __label18 always
+    54 label __label19
+    55 set COPPER block
+-    * set __tmp7 COPPER
+    56 jump __label13 always
+    57 label __label18
+    58 jump __label21 equal __tmp6 @lead
+    59 jump __label20 always
+    60 label __label21
+    61 set LEAD block
+-    * set __tmp7 LEAD
+    62 jump __label13 always
+    63 label __label20
+-    * set __tmp7 null
+    64 label __label13
+    65 jump __label6 always
+    66 label __label11
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  
     11 print "\n"
     12 print "Configuring..."
@@ -29,184 +169,99 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-13 ins
 -    * set n __tmp2
 -    * getlink __tmp3 n
 -    * set block __tmp3
--    * sensor __tmp4 block @type
--    * set __ast0 __tmp4
 +   18 op sub n n 1
 +   19 getlink block n
-+   20 sensor __ast0 block @type
-    21 jump __label8 equal __ast0 @message
+    20 sensor __tmp4 block @type
+    21 jump __label8 equal __tmp4 @message
     22 jump __label7 always
-    23 label __label8
  
-    35 jump __label12 equal __ast0 @mass-driver
-    36 jump __label11 always
-    37 label __label12
--    * sensor __tmp6 block @firstItem
--    * set __ast1 __tmp6
-+   38 sensor __ast1 block @firstItem
-    39 jump __label15 equal __ast1 @titanium
-    40 jump __label14 always
-    41 label __label15
- 
-   127 set ICON_SIZE 16
-   128 set ICON_X 11
-   129 set ICON_Y1 11
+   117 set ICON_SIZE 16
+   118 set ICON_X 11
+   119 set ICON_Y1 11
 -    * op add __tmp15 ICON_Y1 ROW_HEIGHT
 -    * set ICON_Y2 __tmp15
 -    * op add __tmp16 ICON_Y2 ROW_HEIGHT
 -    * set ICON_Y3 __tmp16
 -    * op add __tmp17 ICON_Y3 ROW_HEIGHT
 -    * set ICON_Y4 __tmp17
-+  130 op add ICON_Y2 ICON_Y1 ROW_HEIGHT
-+  131 op add ICON_Y3 ICON_Y2 ROW_HEIGHT
-+  132 op add ICON_Y4 ICON_Y3 ROW_HEIGHT
-   133 set BAR_X 20
-   134 set BAR_Y1 4
++  120 op add ICON_Y2 ICON_Y1 ROW_HEIGHT
++  121 op add ICON_Y3 ICON_Y2 ROW_HEIGHT
++  122 op add ICON_Y4 ICON_Y3 ROW_HEIGHT
+   123 set BAR_X 20
+   124 set BAR_Y1 4
 -    * op add __tmp18 BAR_Y1 ROW_HEIGHT
 -    * set BAR_Y2 __tmp18
 -    * op add __tmp19 BAR_Y2 ROW_HEIGHT
 -    * set BAR_Y3 __tmp19
 -    * op add __tmp20 BAR_Y3 ROW_HEIGHT
 -    * set BAR_Y4 __tmp20
-+  135 op add BAR_Y2 BAR_Y1 ROW_HEIGHT
-+  136 op add BAR_Y3 BAR_Y2 ROW_HEIGHT
-+  137 op add BAR_Y4 BAR_Y3 ROW_HEIGHT
-   138 set BAR_LENGTH 56
++  125 op add BAR_Y2 BAR_Y1 ROW_HEIGHT
++  126 op add BAR_Y3 BAR_Y2 ROW_HEIGHT
++  127 op add BAR_Y4 BAR_Y3 ROW_HEIGHT
+   128 set BAR_LENGTH 56
 -    * op div __tmp21 BAR_LENGTH 200
 -    * set MULTIPLICATOR __tmp21
-+  139 op div MULTIPLICATOR BAR_LENGTH 200
-   140 control enabled SWITCH 0
-   141 label __label24
-   142 sensor __tmp22 SWITCH @enabled
-   143 op equal __tmp23 __tmp22 0
-   144 jump __label26 equal __tmp23 false
++  129 op div MULTIPLICATOR BAR_LENGTH 200
+   130 control enabled SWITCH 0
+   131 label __label24
+   132 sensor __tmp22 SWITCH @enabled
+   133 op equal __tmp23 __tmp22 0
+   134 jump __label26 equal __tmp23 false
 -    * set __tmp24 @time
 -    * set start __tmp24
-+  145 set start @time
-   146 draw clear 0 0 80
-   147 draw color 255 255 255 255
-   148 draw image ICON_X ICON_Y4 @titanium ICON_SIZE 0
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
- 
-    22 jump __label7 always
-    23 label __label8
-    24 set MESSAGE block
--    * set __tmp5 MESSAGE
-    25 jump __label6 always
-    26 label __label7
-    27 jump __label10 equal __ast0 @switch
-    28 jump __label9 always
-    29 label __label10
-    30 set SWITCH block
--    * set __tmp5 SWITCH
-    31 jump __label6 always
-    32 label __label9
-    33 jump __label12 equal __ast0 @mass-driver
- 
-    64 label __label20
-    65 set __tmp7 null
-    66 label __label13
--    * set __tmp5 __tmp7
-    67 jump __label6 always
-    68 label __label11
-    69 jump __label23 equal __ast0 @logic-display
-    70 jump __label22 always
-    71 label __label23
-    72 set DISPLAY block
--    * set __tmp5 DISPLAY
-    73 jump __label6 always
-    74 label __label22
-    75 print "\n"
-    76 print block
-    77 print " is not supported."
--    * set __tmp5 " is not supported."
-    78 label __label6
-    79 print "\nNominal production: "
-    80 print EXPECTED_FLOW_STR
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-5 instructions):
- 
-    38 jump __label14 always
-    39 label __label15
-    40 set TITANIUM block
--    * set __tmp7 TITANIUM
-    41 jump __label13 always
-    42 label __label14
-    43 jump __label17 equal __ast1 @silicon
-    44 jump __label16 always
-    45 label __label17
-    46 set SILICON block
--    * set __tmp7 SILICON
-    47 jump __label13 always
-    48 label __label16
-    49 jump __label19 equal __ast1 @copper
-    50 jump __label18 always
-    51 label __label19
-    52 set COPPER block
--    * set __tmp7 COPPER
-    53 jump __label13 always
-    54 label __label18
-    55 jump __label21 equal __ast1 @lead
-    56 jump __label20 always
-    57 label __label21
-    58 set LEAD block
--    * set __tmp7 LEAD
-    59 jump __label13 always
-    60 label __label20
--    * set __tmp7 null
-    61 label __label13
-    62 jump __label6 always
-    63 label __label11
++  135 set start @time
+   136 draw clear 0 0 80
+   137 draw color 255 255 255 255
+   138 draw image ICON_X ICON_Y4 @titanium ICON_SIZE 0
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-8 instructions):
  
     18 op sub n n 1
     19 getlink block n
-    20 sensor __ast0 block @type
--    * jump __label8 equal __ast0 @message
+    20 sensor __tmp4 block @type
+-    * jump __label8 equal __tmp4 @message
 -    * jump __label7 always
-+   21 jump __label7 notEqual __ast0 @message
++   21 jump __label7 notEqual __tmp4 @message
     22 label __label8
     23 set MESSAGE block
     24 jump __label6 always
     25 label __label7
--    * jump __label10 equal __ast0 @switch
+-    * jump __label10 equal __tmp4 @switch
 -    * jump __label9 always
-+   26 jump __label9 notEqual __ast0 @switch
++   26 jump __label9 notEqual __tmp4 @switch
     27 label __label10
     28 set SWITCH block
     29 jump __label6 always
     30 label __label9
--    * jump __label12 equal __ast0 @mass-driver
+-    * jump __label12 equal __tmp4 @mass-driver
 -    * jump __label11 always
-+   31 jump __label11 notEqual __ast0 @mass-driver
++   31 jump __label11 notEqual __tmp4 @mass-driver
     32 label __label12
-    33 sensor __ast1 block @firstItem
--    * jump __label15 equal __ast1 @titanium
+    33 sensor __tmp6 block @firstItem
+-    * jump __label15 equal __tmp6 @titanium
 -    * jump __label14 always
-+   34 jump __label14 notEqual __ast1 @titanium
++   34 jump __label14 notEqual __tmp6 @titanium
     35 label __label15
     36 set TITANIUM block
     37 jump __label13 always
     38 label __label14
--    * jump __label17 equal __ast1 @silicon
+-    * jump __label17 equal __tmp6 @silicon
 -    * jump __label16 always
-+   39 jump __label16 notEqual __ast1 @silicon
++   39 jump __label16 notEqual __tmp6 @silicon
     40 label __label17
     41 set SILICON block
     42 jump __label13 always
     43 label __label16
--    * jump __label19 equal __ast1 @copper
+-    * jump __label19 equal __tmp6 @copper
 -    * jump __label18 always
-+   44 jump __label18 notEqual __ast1 @copper
++   44 jump __label18 notEqual __tmp6 @copper
     45 label __label19
     46 set COPPER block
     47 jump __label13 always
     48 label __label18
--    * jump __label21 equal __ast1 @lead
+-    * jump __label21 equal __tmp6 @lead
 -    * jump __label20 always
-+   49 jump __label20 notEqual __ast1 @lead
++   49 jump __label20 notEqual __tmp6 @lead
     50 label __label21
     51 set LEAD block
     52 jump __label13 always
@@ -214,9 +269,9 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-8 ins
     54 label __label13
     55 jump __label6 always
     56 label __label11
--    * jump __label23 equal __ast0 @logic-display
+-    * jump __label23 equal __tmp4 @logic-display
 -    * jump __label22 always
-+   57 jump __label22 notEqual __ast0 @logic-display
++   57 jump __label22 notEqual __tmp4 @logic-display
     58 label __label23
     59 set DISPLAY block
     60 jump __label6 always
@@ -231,7 +286,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
 +   16 jump __label5 lessThanEq n 0
     17 op sub n n 1
     18 getlink block n
-    19 sensor __ast0 block @type
+    19 sensor __tmp4 block @type
  
    121 control enabled SWITCH 0
    122 label __label24
@@ -245,7 +300,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    48 jump __label20 notEqual __ast1 @lead
+    48 jump __label20 notEqual __tmp6 @lead
     49 label __label21
     50 set LEAD block
 -    * jump __label13 always
@@ -388,7 +443,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
 +   15 label __label27
     16 op sub n n 1
     17 getlink block n
-    18 sensor __ast0 block @type
+    18 sensor __tmp4 block @type
  
     67 print null
     68 print "/min"
@@ -420,26 +475,26 @@ Modifications by Loop Optimization: replicate condition at line 68 (+1 instructi
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-    32 jump __label14 notEqual __ast1 @titanium
+    32 jump __label14 notEqual __tmp6 @titanium
     33 label __label15
     34 set TITANIUM block
 -    * jump __label13 always
 +   35 jump __label6 always
     36 label __label14
-    37 jump __label16 notEqual __ast1 @silicon
+    37 jump __label16 notEqual __tmp6 @silicon
     38 label __label17
     39 set SILICON block
 -    * jump __label13 always
 +   40 jump __label6 always
     41 label __label16
-    42 jump __label18 notEqual __ast1 @copper
+    42 jump __label18 notEqual __tmp6 @copper
     43 label __label19
     44 set COPPER block
 -    * jump __label13 always
 +   45 jump __label6 always
     46 label __label18
--    * jump __label20 notEqual __ast1 @lead
-+   47 jump __label6 notEqual __ast1 @lead
+-    * jump __label20 notEqual __tmp6 @lead
++   47 jump __label6 notEqual __tmp6 @lead
     48 label __label21
     49 set LEAD block
     50 label __label20
@@ -521,34 +576,34 @@ jump __label5 lessThanEq n 0
 label __label27
 op sub n n 1
 getlink block n
-sensor __ast0 block @type
-jump __label7 notEqual __ast0 @message
+sensor __tmp4 block @type
+jump __label7 notEqual __tmp4 @message
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
-jump __label9 notEqual __ast0 @switch
+jump __label9 notEqual __tmp4 @switch
 set SWITCH block
 jump __label6 always 0 0
 label __label9
-jump __label11 notEqual __ast0 @mass-driver
-sensor __ast1 block @firstItem
-jump __label14 notEqual __ast1 @titanium
+jump __label11 notEqual __tmp4 @mass-driver
+sensor __tmp6 block @firstItem
+jump __label14 notEqual __tmp6 @titanium
 set TITANIUM block
 jump __label6 always 0 0
 label __label14
-jump __label16 notEqual __ast1 @silicon
+jump __label16 notEqual __tmp6 @silicon
 set SILICON block
 jump __label6 always 0 0
 label __label16
-jump __label18 notEqual __ast1 @copper
+jump __label18 notEqual __tmp6 @copper
 set COPPER block
 jump __label6 always 0 0
 label __label18
-jump __label6 notEqual __ast1 @lead
+jump __label6 notEqual __tmp6 @lead
 set LEAD block
 jump __label6 always 0 0
 label __label11
-jump __label22 notEqual __ast0 @logic-display
+jump __label22 notEqual __tmp4 @logic-display
 set DISPLAY block
 jump __label6 always 0 0
 label __label22

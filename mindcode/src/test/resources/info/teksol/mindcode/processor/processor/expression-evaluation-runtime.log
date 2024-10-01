@@ -6,158 +6,6 @@
      1 instructions eliminated by Unreachable Code Elimination.
    865 instructions after optimizations.
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 instructions):
- 
-  1302 call __label0 __fn0retval
-  1303 gotolabel __label241 __fn0
-  1304 set __tmp242 __fn0retval
--    * op pow __tmp243 a __tmp242
--    * set a __tmp243
-+ 1305 op pow a a __tmp242
-  1306 label __label242
-  1307 set __fn49_actual a
-  1308 set __fn49_expected 16
- 
-  1330 call __label0 __fn0retval
-  1331 gotolabel __label246 __fn0
-  1332 set __tmp247 __fn0retval
--    * op mul __tmp248 a __tmp247
--    * set a __tmp248
-+ 1333 op mul a a __tmp247
-  1334 label __label247
-  1335 set __fn50_actual a
-  1336 set __fn50_expected 8
- 
-  1358 call __label0 __fn0retval
-  1359 gotolabel __label251 __fn0
-  1360 set __tmp252 __fn0retval
--    * op div __tmp253 a __tmp252
--    * set a __tmp253
-+ 1361 op div a a __tmp252
-  1362 label __label252
-  1363 set __fn51_actual a
-  1364 set __fn51_expected 1.5
- 
-  1386 call __label0 __fn0retval
-  1387 gotolabel __label256 __fn0
-  1388 set __tmp257 __fn0retval
--    * op idiv __tmp258 a __tmp257
--    * set a __tmp258
-+ 1389 op idiv a a __tmp257
-  1390 label __label257
-  1391 set __fn52_actual a
-  1392 set __fn52_expected 1
- 
-  1414 call __label0 __fn0retval
-  1415 gotolabel __label261 __fn0
-  1416 set __tmp262 __fn0retval
--    * op mod __tmp263 a __tmp262
--    * set a __tmp263
-+ 1417 op mod a a __tmp262
-  1418 label __label262
-  1419 set __fn53_actual a
-  1420 set __fn53_expected 2
- 
-  1442 call __label0 __fn0retval
-  1443 gotolabel __label266 __fn0
-  1444 set __tmp267 __fn0retval
--    * op add __tmp268 a __tmp267
--    * set a __tmp268
-+ 1445 op add a a __tmp267
-  1446 label __label267
-  1447 set __fn54_actual a
-  1448 set __fn54_expected 6
- 
-  1470 call __label0 __fn0retval
-  1471 gotolabel __label271 __fn0
-  1472 set __tmp272 __fn0retval
--    * op sub __tmp273 a __tmp272
--    * set a __tmp273
-+ 1473 op sub a a __tmp272
-  1474 label __label272
-  1475 set __fn55_actual a
-  1476 set __fn55_expected 2
- 
-  1498 call __label0 __fn0retval
-  1499 gotolabel __label276 __fn0
-  1500 set __tmp277 __fn0retval
--    * op shl __tmp278 a __tmp277
--    * set a __tmp278
-+ 1501 op shl a a __tmp277
-  1502 label __label277
-  1503 set __fn56_actual a
-  1504 set __fn56_expected 4
- 
-  1526 call __label0 __fn0retval
-  1527 gotolabel __label281 __fn0
-  1528 set __tmp282 __fn0retval
--    * op shr __tmp283 a __tmp282
--    * set a __tmp283
-+ 1529 op shr a a __tmp282
-  1530 label __label282
-  1531 set __fn57_actual a
-  1532 set __fn57_expected 2
- 
-  1554 call __label0 __fn0retval
-  1555 gotolabel __label286 __fn0
-  1556 set __tmp287 __fn0retval
--    * op or __tmp288 a __tmp287
--    * set a __tmp288
-+ 1557 op or a a __tmp287
-  1558 label __label287
-  1559 set __fn58_actual a
-  1560 set __fn58_expected 3
- 
-  1582 call __label0 __fn0retval
-  1583 gotolabel __label291 __fn0
-  1584 set __tmp292 __fn0retval
--    * op and __tmp293 a __tmp292
--    * set a __tmp293
-+ 1585 op and a a __tmp292
-  1586 label __label292
-  1587 set __fn59_actual a
-  1588 set __fn59_expected 2
- 
-  1610 call __label0 __fn0retval
-  1611 gotolabel __label296 __fn0
-  1612 set __tmp297 __fn0retval
--    * op xor __tmp298 a __tmp297
--    * set a __tmp298
-+ 1613 op xor a a __tmp297
-  1614 label __label297
-  1615 set __fn60_actual a
-  1616 set __fn60_expected 1
- 
-  1638 call __label0 __fn0retval
-  1639 gotolabel __label301 __fn0
-  1640 set __tmp302 __fn0retval
--    * op land __tmp303 a __tmp302
--    * set a __tmp303
-+ 1641 op land a a __tmp302
-  1642 label __label302
-  1643 set __fn61_actual a
-  1644 set __fn61_expected false
- 
-  1666 call __label0 __fn0retval
-  1667 gotolabel __label306 __fn0
-  1668 set __tmp307 __fn0retval
--    * op land __tmp308 a __tmp307
--    * set a __tmp308
-+ 1669 op land a a __tmp307
-  1670 label __label307
-  1671 set __fn62_actual a
-  1672 set __fn62_expected true
- 
-  1694 call __label0 __fn0retval
-  1695 gotolabel __label311 __fn0
-  1696 set __tmp312 __fn0retval
--    * op or __tmp313 a __tmp312
--    * set a __tmp313
-+ 1697 op or a a __tmp312
-  1698 label __label312
-  1699 set __fn63_actual a
-  1700 set __fn63_expected 2
-
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instructions):
  
     22 print "\n"
@@ -544,125 +392,125 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1251 set a 2
   1252 set __fn0_n 4
  
-  1274 print "\n"
-  1275 set __tmp246 "\n"
-  1276 label __label245
+  1275 print "\n"
+  1276 set __tmp246 "\n"
+  1277 label __label245
 -    * set __tmp244 __tmp246
-  1277 label __label243
-  1278 set a 2
-  1279 set __fn0_n 4
+  1278 label __label243
+  1279 set a 2
+  1280 set __fn0_n 4
  
-  1301 print "\n"
-  1302 set __tmp251 "\n"
-  1303 label __label250
+  1303 print "\n"
+  1304 set __tmp251 "\n"
+  1305 label __label250
 -    * set __tmp249 __tmp251
-  1304 label __label248
-  1305 set a 6
-  1306 set __fn0_n 4
+  1306 label __label248
+  1307 set a 6
+  1308 set __fn0_n 4
  
-  1328 print "\n"
-  1329 set __tmp256 "\n"
-  1330 label __label255
+  1331 print "\n"
+  1332 set __tmp256 "\n"
+  1333 label __label255
 -    * set __tmp254 __tmp256
-  1331 label __label253
-  1332 set a 6
-  1333 set __fn0_n 4
+  1334 label __label253
+  1335 set a 6
+  1336 set __fn0_n 4
  
-  1355 print "\n"
-  1356 set __tmp261 "\n"
-  1357 label __label260
+  1359 print "\n"
+  1360 set __tmp261 "\n"
+  1361 label __label260
 -    * set __tmp259 __tmp261
-  1358 label __label258
-  1359 set a 6
-  1360 set __fn0_n 4
+  1362 label __label258
+  1363 set a 6
+  1364 set __fn0_n 4
  
-  1382 print "\n"
-  1383 set __tmp266 "\n"
-  1384 label __label265
+  1387 print "\n"
+  1388 set __tmp266 "\n"
+  1389 label __label265
 -    * set __tmp264 __tmp266
-  1385 label __label263
-  1386 set a 4
-  1387 set __fn0_n 2
+  1390 label __label263
+  1391 set a 4
+  1392 set __fn0_n 2
  
-  1409 print "\n"
-  1410 set __tmp271 "\n"
-  1411 label __label270
+  1415 print "\n"
+  1416 set __tmp271 "\n"
+  1417 label __label270
 -    * set __tmp269 __tmp271
-  1412 label __label268
-  1413 set a 4
-  1414 set __fn0_n 2
+  1418 label __label268
+  1419 set a 4
+  1420 set __fn0_n 2
  
-  1436 print "\n"
-  1437 set __tmp276 "\n"
-  1438 label __label275
+  1443 print "\n"
+  1444 set __tmp276 "\n"
+  1445 label __label275
 -    * set __tmp274 __tmp276
-  1439 label __label273
-  1440 set a 1
-  1441 set __fn0_n 2
+  1446 label __label273
+  1447 set a 1
+  1448 set __fn0_n 2
  
-  1463 print "\n"
-  1464 set __tmp281 "\n"
-  1465 label __label280
+  1471 print "\n"
+  1472 set __tmp281 "\n"
+  1473 label __label280
 -    * set __tmp279 __tmp281
-  1466 label __label278
-  1467 set a 9
-  1468 set __fn0_n 2
+  1474 label __label278
+  1475 set a 9
+  1476 set __fn0_n 2
  
-  1490 print "\n"
-  1491 set __tmp286 "\n"
-  1492 label __label285
+  1499 print "\n"
+  1500 set __tmp286 "\n"
+  1501 label __label285
 -    * set __tmp284 __tmp286
-  1493 label __label283
-  1494 set a 1
-  1495 set __fn0_n 2
+  1502 label __label283
+  1503 set a 1
+  1504 set __fn0_n 2
  
-  1517 print "\n"
-  1518 set __tmp291 "\n"
-  1519 label __label290
+  1527 print "\n"
+  1528 set __tmp291 "\n"
+  1529 label __label290
 -    * set __tmp289 __tmp291
-  1520 label __label288
-  1521 set a 3
-  1522 set __fn0_n 2
+  1530 label __label288
+  1531 set a 3
+  1532 set __fn0_n 2
  
-  1544 print "\n"
-  1545 set __tmp296 "\n"
-  1546 label __label295
+  1555 print "\n"
+  1556 set __tmp296 "\n"
+  1557 label __label295
 -    * set __tmp294 __tmp296
-  1547 label __label293
-  1548 set a 3
-  1549 set __fn0_n 2
+  1558 label __label293
+  1559 set a 3
+  1560 set __fn0_n 2
  
-  1571 print "\n"
-  1572 set __tmp301 "\n"
-  1573 label __label300
+  1583 print "\n"
+  1584 set __tmp301 "\n"
+  1585 label __label300
 -    * set __tmp299 __tmp301
-  1574 label __label298
-  1575 set a 1
-  1576 set __fn0_n 0
+  1586 label __label298
+  1587 set a 1
+  1588 set __fn0_n 0
  
-  1598 print "\n"
-  1599 set __tmp306 "\n"
-  1600 label __label305
+  1611 print "\n"
+  1612 set __tmp306 "\n"
+  1613 label __label305
 -    * set __tmp304 __tmp306
-  1601 label __label303
-  1602 set a 1
-  1603 set __fn0_n 2
+  1614 label __label303
+  1615 set a 1
+  1616 set __fn0_n 2
  
-  1625 print "\n"
-  1626 set __tmp311 "\n"
-  1627 label __label310
+  1639 print "\n"
+  1640 set __tmp311 "\n"
+  1641 label __label310
 -    * set __tmp309 __tmp311
-  1628 label __label308
-  1629 set a 0
-  1630 set __fn0_n 2
+  1642 label __label308
+  1643 set a 0
+  1644 set __fn0_n 2
  
-  1652 print "\n"
-  1653 set __tmp316 "\n"
-  1654 label __label315
+  1667 print "\n"
+  1668 set __tmp316 "\n"
+  1669 label __label315
 -    * set __tmp314 __tmp316
-  1655 label __label313
-  1656 end
-  1657 label __label0
+  1670 label __label313
+  1671 end
+  1672 label __label0
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instructions):
  
@@ -1434,245 +1282,397 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1154 label __label238
   1155 set a 2
  
-  1166 op equal __tmp245 __fn49_actual __fn49_expected
-  1167 jump __label244 equal __tmp245 false
-  1168 print "ok"
+  1167 op equal __tmp245 __fn49_actual __fn49_expected
+  1168 jump __label244 equal __tmp245 false
+  1169 print "ok"
 -    * set __tmp246 "ok"
-  1169 jump __label245 always
-  1170 label __label244
-  1171 print "Wrong operation "
+  1170 jump __label245 always
+  1171 label __label244
+  1172 print "Wrong operation "
  
-  1175 print ", but was "
-  1176 print __fn49_actual
-  1177 print "\n"
+  1176 print ", but was "
+  1177 print __fn49_actual
+  1178 print "\n"
 -    * set __tmp246 "\n"
-  1178 label __label245
-  1179 label __label243
-  1180 set a 2
+  1179 label __label245
+  1180 label __label243
+  1181 set a 2
  
-  1191 op equal __tmp250 __fn50_actual __fn50_expected
-  1192 jump __label249 equal __tmp250 false
-  1193 print "ok"
+  1193 op equal __tmp250 __fn50_actual __fn50_expected
+  1194 jump __label249 equal __tmp250 false
+  1195 print "ok"
 -    * set __tmp251 "ok"
-  1194 jump __label250 always
-  1195 label __label249
-  1196 print "Wrong operation "
+  1196 jump __label250 always
+  1197 label __label249
+  1198 print "Wrong operation "
  
-  1200 print ", but was "
-  1201 print __fn50_actual
-  1202 print "\n"
+  1202 print ", but was "
+  1203 print __fn50_actual
+  1204 print "\n"
 -    * set __tmp251 "\n"
-  1203 label __label250
-  1204 label __label248
-  1205 set a 6
+  1205 label __label250
+  1206 label __label248
+  1207 set a 6
  
-  1216 op equal __tmp255 __fn51_actual __fn51_expected
-  1217 jump __label254 equal __tmp255 false
-  1218 print "ok"
+  1219 op equal __tmp255 __fn51_actual __fn51_expected
+  1220 jump __label254 equal __tmp255 false
+  1221 print "ok"
 -    * set __tmp256 "ok"
-  1219 jump __label255 always
-  1220 label __label254
-  1221 print "Wrong operation "
+  1222 jump __label255 always
+  1223 label __label254
+  1224 print "Wrong operation "
  
-  1225 print ", but was "
-  1226 print __fn51_actual
-  1227 print "\n"
+  1228 print ", but was "
+  1229 print __fn51_actual
+  1230 print "\n"
 -    * set __tmp256 "\n"
-  1228 label __label255
-  1229 label __label253
-  1230 set a 6
+  1231 label __label255
+  1232 label __label253
+  1233 set a 6
  
-  1241 op equal __tmp260 __fn52_actual __fn52_expected
-  1242 jump __label259 equal __tmp260 false
-  1243 print "ok"
+  1245 op equal __tmp260 __fn52_actual __fn52_expected
+  1246 jump __label259 equal __tmp260 false
+  1247 print "ok"
 -    * set __tmp261 "ok"
-  1244 jump __label260 always
-  1245 label __label259
-  1246 print "Wrong operation "
+  1248 jump __label260 always
+  1249 label __label259
+  1250 print "Wrong operation "
  
-  1250 print ", but was "
-  1251 print __fn52_actual
-  1252 print "\n"
+  1254 print ", but was "
+  1255 print __fn52_actual
+  1256 print "\n"
 -    * set __tmp261 "\n"
-  1253 label __label260
-  1254 label __label258
-  1255 set a 6
+  1257 label __label260
+  1258 label __label258
+  1259 set a 6
  
-  1266 op equal __tmp265 __fn53_actual __fn53_expected
-  1267 jump __label264 equal __tmp265 false
-  1268 print "ok"
+  1271 op equal __tmp265 __fn53_actual __fn53_expected
+  1272 jump __label264 equal __tmp265 false
+  1273 print "ok"
 -    * set __tmp266 "ok"
-  1269 jump __label265 always
-  1270 label __label264
-  1271 print "Wrong operation "
+  1274 jump __label265 always
+  1275 label __label264
+  1276 print "Wrong operation "
  
-  1275 print ", but was "
-  1276 print __fn53_actual
-  1277 print "\n"
+  1280 print ", but was "
+  1281 print __fn53_actual
+  1282 print "\n"
 -    * set __tmp266 "\n"
-  1278 label __label265
-  1279 label __label263
-  1280 set a 4
+  1283 label __label265
+  1284 label __label263
+  1285 set a 4
  
-  1291 op equal __tmp270 __fn54_actual __fn54_expected
-  1292 jump __label269 equal __tmp270 false
-  1293 print "ok"
+  1297 op equal __tmp270 __fn54_actual __fn54_expected
+  1298 jump __label269 equal __tmp270 false
+  1299 print "ok"
 -    * set __tmp271 "ok"
-  1294 jump __label270 always
-  1295 label __label269
-  1296 print "Wrong operation "
+  1300 jump __label270 always
+  1301 label __label269
+  1302 print "Wrong operation "
  
-  1300 print ", but was "
-  1301 print __fn54_actual
-  1302 print "\n"
+  1306 print ", but was "
+  1307 print __fn54_actual
+  1308 print "\n"
 -    * set __tmp271 "\n"
-  1303 label __label270
-  1304 label __label268
-  1305 set a 4
+  1309 label __label270
+  1310 label __label268
+  1311 set a 4
  
-  1316 op equal __tmp275 __fn55_actual __fn55_expected
-  1317 jump __label274 equal __tmp275 false
-  1318 print "ok"
+  1323 op equal __tmp275 __fn55_actual __fn55_expected
+  1324 jump __label274 equal __tmp275 false
+  1325 print "ok"
 -    * set __tmp276 "ok"
-  1319 jump __label275 always
-  1320 label __label274
-  1321 print "Wrong operation "
+  1326 jump __label275 always
+  1327 label __label274
+  1328 print "Wrong operation "
  
-  1325 print ", but was "
-  1326 print __fn55_actual
-  1327 print "\n"
+  1332 print ", but was "
+  1333 print __fn55_actual
+  1334 print "\n"
 -    * set __tmp276 "\n"
-  1328 label __label275
-  1329 label __label273
-  1330 set a 1
+  1335 label __label275
+  1336 label __label273
+  1337 set a 1
  
-  1341 op equal __tmp280 __fn56_actual __fn56_expected
-  1342 jump __label279 equal __tmp280 false
-  1343 print "ok"
+  1349 op equal __tmp280 __fn56_actual __fn56_expected
+  1350 jump __label279 equal __tmp280 false
+  1351 print "ok"
 -    * set __tmp281 "ok"
-  1344 jump __label280 always
-  1345 label __label279
-  1346 print "Wrong operation "
+  1352 jump __label280 always
+  1353 label __label279
+  1354 print "Wrong operation "
  
-  1350 print ", but was "
-  1351 print __fn56_actual
-  1352 print "\n"
+  1358 print ", but was "
+  1359 print __fn56_actual
+  1360 print "\n"
 -    * set __tmp281 "\n"
-  1353 label __label280
-  1354 label __label278
-  1355 set a 9
+  1361 label __label280
+  1362 label __label278
+  1363 set a 9
  
-  1366 op equal __tmp285 __fn57_actual __fn57_expected
-  1367 jump __label284 equal __tmp285 false
-  1368 print "ok"
+  1375 op equal __tmp285 __fn57_actual __fn57_expected
+  1376 jump __label284 equal __tmp285 false
+  1377 print "ok"
 -    * set __tmp286 "ok"
-  1369 jump __label285 always
-  1370 label __label284
-  1371 print "Wrong operation "
+  1378 jump __label285 always
+  1379 label __label284
+  1380 print "Wrong operation "
  
-  1375 print ", but was "
-  1376 print __fn57_actual
-  1377 print "\n"
+  1384 print ", but was "
+  1385 print __fn57_actual
+  1386 print "\n"
 -    * set __tmp286 "\n"
-  1378 label __label285
-  1379 label __label283
-  1380 set a 1
+  1387 label __label285
+  1388 label __label283
+  1389 set a 1
  
-  1391 op equal __tmp290 __fn58_actual __fn58_expected
-  1392 jump __label289 equal __tmp290 false
-  1393 print "ok"
+  1401 op equal __tmp290 __fn58_actual __fn58_expected
+  1402 jump __label289 equal __tmp290 false
+  1403 print "ok"
 -    * set __tmp291 "ok"
-  1394 jump __label290 always
-  1395 label __label289
-  1396 print "Wrong operation "
+  1404 jump __label290 always
+  1405 label __label289
+  1406 print "Wrong operation "
  
-  1400 print ", but was "
-  1401 print __fn58_actual
-  1402 print "\n"
+  1410 print ", but was "
+  1411 print __fn58_actual
+  1412 print "\n"
 -    * set __tmp291 "\n"
-  1403 label __label290
-  1404 label __label288
-  1405 set a 3
+  1413 label __label290
+  1414 label __label288
+  1415 set a 3
  
-  1416 op equal __tmp295 __fn59_actual __fn59_expected
-  1417 jump __label294 equal __tmp295 false
-  1418 print "ok"
+  1427 op equal __tmp295 __fn59_actual __fn59_expected
+  1428 jump __label294 equal __tmp295 false
+  1429 print "ok"
 -    * set __tmp296 "ok"
-  1419 jump __label295 always
-  1420 label __label294
-  1421 print "Wrong operation "
+  1430 jump __label295 always
+  1431 label __label294
+  1432 print "Wrong operation "
  
-  1425 print ", but was "
-  1426 print __fn59_actual
-  1427 print "\n"
+  1436 print ", but was "
+  1437 print __fn59_actual
+  1438 print "\n"
 -    * set __tmp296 "\n"
-  1428 label __label295
-  1429 label __label293
-  1430 set a 3
+  1439 label __label295
+  1440 label __label293
+  1441 set a 3
  
-  1441 op equal __tmp300 __fn60_actual __fn60_expected
-  1442 jump __label299 equal __tmp300 false
-  1443 print "ok"
+  1453 op equal __tmp300 __fn60_actual __fn60_expected
+  1454 jump __label299 equal __tmp300 false
+  1455 print "ok"
 -    * set __tmp301 "ok"
-  1444 jump __label300 always
-  1445 label __label299
-  1446 print "Wrong operation "
+  1456 jump __label300 always
+  1457 label __label299
+  1458 print "Wrong operation "
  
-  1450 print ", but was "
-  1451 print __fn60_actual
-  1452 print "\n"
+  1462 print ", but was "
+  1463 print __fn60_actual
+  1464 print "\n"
 -    * set __tmp301 "\n"
-  1453 label __label300
-  1454 label __label298
-  1455 set a 1
+  1465 label __label300
+  1466 label __label298
+  1467 set a 1
  
-  1466 op equal __tmp305 __fn61_actual __fn61_expected
-  1467 jump __label304 equal __tmp305 false
-  1468 print "ok"
+  1479 op equal __tmp305 __fn61_actual __fn61_expected
+  1480 jump __label304 equal __tmp305 false
+  1481 print "ok"
 -    * set __tmp306 "ok"
-  1469 jump __label305 always
-  1470 label __label304
-  1471 print "Wrong operation "
+  1482 jump __label305 always
+  1483 label __label304
+  1484 print "Wrong operation "
  
-  1475 print ", but was "
-  1476 print __fn61_actual
-  1477 print "\n"
+  1488 print ", but was "
+  1489 print __fn61_actual
+  1490 print "\n"
 -    * set __tmp306 "\n"
-  1478 label __label305
-  1479 label __label303
-  1480 set a 1
+  1491 label __label305
+  1492 label __label303
+  1493 set a 1
  
-  1491 op equal __tmp310 __fn62_actual __fn62_expected
-  1492 jump __label309 equal __tmp310 false
-  1493 print "ok"
+  1505 op equal __tmp310 __fn62_actual __fn62_expected
+  1506 jump __label309 equal __tmp310 false
+  1507 print "ok"
 -    * set __tmp311 "ok"
-  1494 jump __label310 always
-  1495 label __label309
-  1496 print "Wrong operation "
+  1508 jump __label310 always
+  1509 label __label309
+  1510 print "Wrong operation "
  
-  1500 print ", but was "
-  1501 print __fn62_actual
-  1502 print "\n"
+  1514 print ", but was "
+  1515 print __fn62_actual
+  1516 print "\n"
 -    * set __tmp311 "\n"
-  1503 label __label310
-  1504 label __label308
-  1505 set a 0
+  1517 label __label310
+  1518 label __label308
+  1519 set a 0
  
-  1516 op equal __tmp315 __fn63_actual __fn63_expected
-  1517 jump __label314 equal __tmp315 false
-  1518 print "ok"
+  1531 op equal __tmp315 __fn63_actual __fn63_expected
+  1532 jump __label314 equal __tmp315 false
+  1533 print "ok"
 -    * set __tmp316 "ok"
-  1519 jump __label315 always
-  1520 label __label314
-  1521 print "Wrong operation "
+  1534 jump __label315 always
+  1535 label __label314
+  1536 print "Wrong operation "
  
-  1525 print ", but was "
-  1526 print __fn63_actual
-  1527 print "\n"
+  1540 print ", but was "
+  1541 print __fn63_actual
+  1542 print "\n"
 -    * set __tmp316 "\n"
-  1528 label __label315
-  1529 label __label313
-  1530 end
+  1543 label __label315
+  1544 label __label313
+  1545 end
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 instructions):
+ 
+  1158 call __label0 __fn0retval
+  1159 gotolabel __label241 __fn0
+  1160 set __tmp242 __fn0retval
+-    * op pow __tmp243 a __tmp242
+-    * set a __tmp243
++ 1161 op pow a a __tmp242
+  1162 label __label242
+  1163 set __fn49_actual a
+  1164 set __fn49_expected 16
+ 
+  1183 call __label0 __fn0retval
+  1184 gotolabel __label246 __fn0
+  1185 set __tmp247 __fn0retval
+-    * op mul __tmp248 a __tmp247
+-    * set a __tmp248
++ 1186 op mul a a __tmp247
+  1187 label __label247
+  1188 set __fn50_actual a
+  1189 set __fn50_expected 8
+ 
+  1208 call __label0 __fn0retval
+  1209 gotolabel __label251 __fn0
+  1210 set __tmp252 __fn0retval
+-    * op div __tmp253 a __tmp252
+-    * set a __tmp253
++ 1211 op div a a __tmp252
+  1212 label __label252
+  1213 set __fn51_actual a
+  1214 set __fn51_expected 1.5
+ 
+  1233 call __label0 __fn0retval
+  1234 gotolabel __label256 __fn0
+  1235 set __tmp257 __fn0retval
+-    * op idiv __tmp258 a __tmp257
+-    * set a __tmp258
++ 1236 op idiv a a __tmp257
+  1237 label __label257
+  1238 set __fn52_actual a
+  1239 set __fn52_expected 1
+ 
+  1258 call __label0 __fn0retval
+  1259 gotolabel __label261 __fn0
+  1260 set __tmp262 __fn0retval
+-    * op mod __tmp263 a __tmp262
+-    * set a __tmp263
++ 1261 op mod a a __tmp262
+  1262 label __label262
+  1263 set __fn53_actual a
+  1264 set __fn53_expected 2
+ 
+  1283 call __label0 __fn0retval
+  1284 gotolabel __label266 __fn0
+  1285 set __tmp267 __fn0retval
+-    * op add __tmp268 a __tmp267
+-    * set a __tmp268
++ 1286 op add a a __tmp267
+  1287 label __label267
+  1288 set __fn54_actual a
+  1289 set __fn54_expected 6
+ 
+  1308 call __label0 __fn0retval
+  1309 gotolabel __label271 __fn0
+  1310 set __tmp272 __fn0retval
+-    * op sub __tmp273 a __tmp272
+-    * set a __tmp273
++ 1311 op sub a a __tmp272
+  1312 label __label272
+  1313 set __fn55_actual a
+  1314 set __fn55_expected 2
+ 
+  1333 call __label0 __fn0retval
+  1334 gotolabel __label276 __fn0
+  1335 set __tmp277 __fn0retval
+-    * op shl __tmp278 a __tmp277
+-    * set a __tmp278
++ 1336 op shl a a __tmp277
+  1337 label __label277
+  1338 set __fn56_actual a
+  1339 set __fn56_expected 4
+ 
+  1358 call __label0 __fn0retval
+  1359 gotolabel __label281 __fn0
+  1360 set __tmp282 __fn0retval
+-    * op shr __tmp283 a __tmp282
+-    * set a __tmp283
++ 1361 op shr a a __tmp282
+  1362 label __label282
+  1363 set __fn57_actual a
+  1364 set __fn57_expected 2
+ 
+  1383 call __label0 __fn0retval
+  1384 gotolabel __label286 __fn0
+  1385 set __tmp287 __fn0retval
+-    * op or __tmp288 a __tmp287
+-    * set a __tmp288
++ 1386 op or a a __tmp287
+  1387 label __label287
+  1388 set __fn58_actual a
+  1389 set __fn58_expected 3
+ 
+  1408 call __label0 __fn0retval
+  1409 gotolabel __label291 __fn0
+  1410 set __tmp292 __fn0retval
+-    * op and __tmp293 a __tmp292
+-    * set a __tmp293
++ 1411 op and a a __tmp292
+  1412 label __label292
+  1413 set __fn59_actual a
+  1414 set __fn59_expected 2
+ 
+  1433 call __label0 __fn0retval
+  1434 gotolabel __label296 __fn0
+  1435 set __tmp297 __fn0retval
+-    * op xor __tmp298 a __tmp297
+-    * set a __tmp298
++ 1436 op xor a a __tmp297
+  1437 label __label297
+  1438 set __fn60_actual a
+  1439 set __fn60_expected 1
+ 
+  1458 call __label0 __fn0retval
+  1459 gotolabel __label301 __fn0
+  1460 set __tmp302 __fn0retval
+-    * op land __tmp303 a __tmp302
+-    * set a __tmp303
++ 1461 op land a a __tmp302
+  1462 label __label302
+  1463 set __fn61_actual a
+  1464 set __fn61_expected false
+ 
+  1483 call __label0 __fn0retval
+  1484 gotolabel __label306 __fn0
+  1485 set __tmp307 __fn0retval
+-    * op land __tmp308 a __tmp307
+-    * set a __tmp308
++ 1486 op land a a __tmp307
+  1487 label __label307
+  1488 set __fn62_actual a
+  1489 set __fn62_expected true
+ 
+  1508 call __label0 __fn0retval
+  1509 gotolabel __label311 __fn0
+  1510 set __tmp312 __fn0retval
+-    * op or __tmp313 a __tmp312
+-    * set a __tmp313
++ 1511 op or a a __tmp312
+  1512 label __label312
+  1513 set __fn63_actual a
+  1514 set __fn63_expected 2
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-63 instructions):
  

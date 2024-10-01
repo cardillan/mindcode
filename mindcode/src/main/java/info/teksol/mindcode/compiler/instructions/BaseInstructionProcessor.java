@@ -69,6 +69,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public LogicVariable unusedVariable() {
+        return LogicVariable.unusedVariable();
+    }
+
+    @Override
     public ProcessorVersion getProcessorVersion() {
         return processorVersion;
     }

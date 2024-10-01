@@ -151,11 +151,11 @@ public class Processor {
             case READ       -> executeRead((ReadInstruction) instruction);
             case SET        -> executeSet((SetInstruction) instruction);
             case STOP       -> false;
-            case WAIT       -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction.");
+            case WAIT       -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
             case WRITE      -> executeWrite((WriteInstruction) instruction);
             default         -> {
                 if (instruction.getOutputs() == 0) yield true;
-                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction.");
+                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
             }
         };
     }

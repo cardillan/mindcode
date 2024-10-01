@@ -17,18 +17,6 @@ Pass 1: speed optimization selection (cost limit 974):
 Pass 1: speed optimization selection (cost limit 936):
   * Loop Unrolling: unroll loop at line 17                       cost   147, benefit      800,0, efficiency        5,4 (+144 instructions)
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
- 
-    27 read __tmp9 BITMAP __tmp10
-    28 op mod __tmp11 __fn1_bitIndex BITS
-    29 op shl __tmp12 1 __tmp11
--    * op and __tmp13 __tmp9 __tmp12
--    * set __tmp8 __tmp13
-+   30 op and __tmp8 __tmp9 __tmp12
-    31 label __label9
-    32 jump __label10 equal __tmp8 false
-    33 set __tmp14 1
-
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
     12 op or __tmp6 __tmp2 __tmp5
@@ -38,6 +26,18 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
     15 label __label4
     16 label __label1
     17 op add i i 1
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+ 
+    26 read __tmp9 BITMAP __tmp10
+    27 op mod __tmp11 __fn1_bitIndex BITS
+    28 op shl __tmp12 1 __tmp11
+-    * op and __tmp13 __tmp9 __tmp12
+-    * set __tmp8 __tmp13
++   29 op and __tmp8 __tmp9 __tmp12
+    30 label __label9
+    31 jump __label10 equal __tmp8 false
+    32 set __tmp14 1
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1:
  
