@@ -7,6 +7,8 @@ public enum ProcessorVersion {
     V6,
     V7,
     V7A,
+    V8A,
+    MAX,
     ;
 
     public boolean matches(ProcessorVersion min, ProcessorVersion max) {
