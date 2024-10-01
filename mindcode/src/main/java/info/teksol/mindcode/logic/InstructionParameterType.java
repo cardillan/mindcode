@@ -7,33 +7,97 @@ import java.util.Set;
 import static info.teksol.mindcode.logic.ProcessorVersion.*;
 
 public enum InstructionParameterType {
-    /** Non-specific input parameter. Accepts literals and variables */
-    INPUT           (Flags.INPUT),
+    /** Alignment for the DRAW PRINT instruction. */
+    ALIGNMENT       (Flags.KEYWORD, "center", "top", "bottom", "left", "right",
+            "topLeft", "topRight", "bottomLeft", "bottomRight"),
 
     /** Input parameter accepting blocks (buildings). */
     BLOCK           (Flags.INPUT),
 
-    /** A label pseudo-parameter. */
-    LABEL           (Flags.INPUT),
+    /** Selector for the CONTROL instruction. */
+    BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Output parameter. Sets a value of a variable in parameter list. */
-    OUTPUT          (Flags.OUTPUT),
+    /** A boolean parameter - expected as an input */
+    BOOL            (Flags.INPUT),
 
-    /** Output parameter. Maps to the return value of a function. */
-    RESULT          (Flags.OUTPUT),
+    /** True/false to set/clear status in STATUS instruction. */
+    CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
+
+    /** Selector for the JUMP instruction. */
+    CONDITION       (Flags.SELECTOR),
+
+    /** Type of cut scene in CUTSCENE instruction */
+    CUTSCENE        (Flags.SELECTOR),
 
     /** Selector for the DRAW instruction. */
     DRAW            (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Selector for the CONTROL instruction. */
-    BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
+    /** Type of visual effect */
+    EFFECT          (Flags.SELECTOR),
+
+    /** Item to fetch in FETCH instruction */
+    FETCH           (Flags.SELECTOR),
+
+    /** An input parameter requiring a global variable - see the SYNC instruction. */
+    GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
+
+    /** A const parameter. Specifies group of buildings to locate. */
+    GROUP           (Flags.KEYWORD,
+            allVersions(
+                    "core", "storage", "generator", "turret", "factory", "repair", "battery", "reactor"),
+            specificVersion(V6,
+                    "rally", "resupply")
+    ),
+
+    /** Non-specific input parameter. Accepts literals and variables */
+    INPUT           (Flags.INPUT),
+
+    /** A label pseudo-parameter. */
+    LABEL           (Flags.INPUT),
+
+    /** Layer in getBlock instruction. */
+    LAYER           (Flags.KEYWORD, "floor", "ore", "block", "building"),
+
+    /** Selector for the ULOCATE instruction. No Flags.FUNCTION! */
+    LOCATE          (Flags.SELECTOR),
+
+    /**
+     * A const parameter. Specifies lookup category. The entire instruction is only available in V7;
+     * the parameter keywords therefore aren't version specific.
+     */
+    LOOKUP          (Flags.KEYWORD, "block", "unit", "item", "liquid"),
+
+    /** Type of message in MESSAGE instruction */
+    MESSAGE         (Flags.SELECTOR),
+
+    /** Selector for the OP instruction. */
+    OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
+
+    /** Input parameter accepting ore type. */
+    ORE             (Flags.INPUT,
+            allVersions(
+                    "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
+                    "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
+                    "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
+            specificVersions(V7, MAX,
+                    "@beryllium", "@tungsten", "@oxide", "@carbide", "@fissile-matter", "@dormant-cyst")
+    ),
+
+    /** Output parameter. Sets a value of a variable in parameter list. */
+    OUTPUT          (Flags.OUTPUT),
 
     /** A const parameter. Specifies properties of units searchable by radar. */
     RADAR           (Flags.KEYWORD, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
 
     /** A const parameter. Specifies property to sort radar outputs by. */
-    SORT            (Flags.KEYWORD, "distance", "health", "shield", "armor", "maxHealth"),
-    
+    RADAR_SORT      (Flags.KEYWORD, "distance", "health", "shield", "armor", "maxHealth"),
+
+    /** Output parameter. Maps to the return value of a function. */
+    RESULT          (Flags.OUTPUT),
+
+    /** Game rule in SETRULE instruction */
+    RULE            (Flags.SELECTOR),
+
     /** Input parameter accepting property id. */
     SENSOR          (Flags.INPUT,
             allVersions(
@@ -49,29 +113,32 @@ public enum InstructionParameterType {
                     "@name", "@payloadCount", "@payloadType", "@enabled", "@config"),
             specificVersion(V6,
                     "@commanded", "@configure"),
-            specificVersions(V7, V7A,
+            specificVersions(V7, MAX,
                     "@beryllium", "@tungsten", "@oxide", "@carbide",
                     "@neoplasm", "@arkycite", "@ozone", "@hydrogen", "@nitrogen", "@cyanogen",
-                    "@progress", "@speed", "@color")
+                    "@progress", "@speed", "@color"),
+            specificVersions(V7A, MAX,
+                    "@id")
     ),
 
-    /** Selector for the OP instruction. */
-    OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
+    /** Settable layer in SETBLOCK instruction */
+    SETTABLE_LAYER  (Flags.SELECTOR),
 
-    /** Selector for the JUMP instruction. */
-    CONDITION       (Flags.SELECTOR),
+    /** Unit status in STATUS instruction. */
+    STATUS          (Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
+            "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
 
     /** Input parameter accepting unit type. */
     UNIT            (Flags.INPUT,
             allVersions(
                     "@dagger", "@mace", "@fortress", "@scepter", "@reign",
-                    "@nova", "@pulsar", "@quasar", "@vela", "@corvus", 
+                    "@nova", "@pulsar", "@quasar", "@vela", "@corvus",
                     "@crawler", "@atrax", "@spiroct", "@arkyid", "@toxopid",
                     "@flare", "@horizon", "@zenith", "@antumbra", "@eclipse",
                     "@mono", "@poly", "@mega", "@quad", "@oct",
                     "@risso", "@minke", "@bryde", "@sei", "@omura",
                     "@alpha", "@beta", "@gamma"),
-            specificVersions(V7, V7A,
+            specificVersions(V7, MAX,
                     "@retusa", "@oxynoe", "@cyerce", "@aegires", "@navanax",
                     "@stell", "@locus", "@precept", "@vanquish", "@conquer",
                     "@merui", "@cleroi", "@anthicus", "@tecta", "@collaris",
@@ -82,73 +149,19 @@ public enum InstructionParameterType {
     /** Selector for the UCONTROL instruction. */
     UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Selector for the ULOCATE instruction. No Flags.FUNCTION! */
-    LOCATE          (Flags.SELECTOR),
-
-    /** A const parameter. Specifies group of buildings to locate. */
-    GROUP           (Flags.KEYWORD,
-            allVersions(
-                    "core", "storage", "generator", "turret", "factory", "repair", "battery", "reactor"),
-            specificVersion(V6,
-                    "rally", "resupply")
-    ),
-    /** Input parameter accepting ore type. */
-    ORE             (Flags.INPUT,
-            allVersions(
-                    "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
-                    "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
-                    "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
-            specificVersions(V7, V7A,
-                    "@beryllium", "@tungsten", "@oxide", "@carbide", "@fissile-matter", "@dormant-cyst")
-    ),
-
-    /**
-     * A const parameter. Specifies lookup category. The entire instruction is only available in V7;
-     * the parameter keywords therefore aren't version specific.
-     */
-    LOOKUP          (Flags.KEYWORD, "block", "unit", "item", "liquid"),
-
-    /** Layer in getBlock instruction. */
-    LAYER           (Flags.KEYWORD, "floor", "ore", "block", "building"),
-
-    /** Settable layer in SETBLOCK instruction */
-    SETTABLE_LAYER  (Flags.SELECTOR),
-
-    /** True/false to set/clear status in STATUS instruction. */
-    CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
-
-    /** Unit status in STATUS instruction. */
-    STATUS          (Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
-            "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
-
-    /** Game rule in SETRULE instruction */
-    RULE            (Flags.SELECTOR),
-
-    /** Type of message in MESSAGE instruction */
-    MESSAGE         (Flags.SELECTOR),
-
-    /** Type of cut scene in CUTSCENE instruction */
-    CUTSCENE        (Flags.SELECTOR),
-
-    /** Type of visual effect */
-    EFFECT          (Flags.SELECTOR),
-
-    /** Item to fetch in FETCH instruction */
-    FETCH           (Flags.SELECTOR),
+    /** Non-specific parameter type for generic instructions */
+    UNSPECIFIED     (0),
 
     /** An unused input parameter. Ignored by given opcode variant. */
     UNUSED          (Flags.UNUSED),
 
-    /** An input parameter requiring a global variable - see the SYNC instruction. */
-    GLOBAL          (Flags.GLOBAL | Flags.INPUT  | Flags.OUTPUT),
-
     /** An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. */
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
-    /** Non-specific parameter type for generic instructions */
-    UNSPECIFIED     (0),
+    WEATHER         (Flags.INPUT, "@snowing", "@rain", "@sandstorm", "@sporestorm", "@fog", "@suspend-particles"),
+
     ;
-    
+
     private final int flags;
     private final List<ParameterValues> allowedValues;
 
@@ -161,7 +174,7 @@ public enum InstructionParameterType {
         this.flags = flags;
         this.allowedValues = List.of(allVersions(keywords));
     }
-    
+
     InstructionParameterType(int flags, ParameterValues... keywords) {
         this.flags = flags;
         this.allowedValues = List.of(keywords);
@@ -180,7 +193,7 @@ public enum InstructionParameterType {
     public boolean isKeyword() {
         return flags == Flags.KEYWORD;
     }
-    
+
     /**
      * @return true if this parameter can read a variable
      */
@@ -258,24 +271,24 @@ public enum InstructionParameterType {
 
     private static final class Flags {
         /** Keyword parameter (cannot use a variable). */
-        private static final int KEYWORD    = 0;
+        private static final int KEYWORD = 0;
 
         /** Input parameter (can use a variable). */
-        private static final int INPUT      = 1;
+        private static final int INPUT = 1;
 
         /** Output parameter (must use a variable for output value). */
-        private static final int OUTPUT     = 2;
+        private static final int OUTPUT = 2;
 
         /**  Opcode-selecting parameter. Possible values are given by existing opcode variants for given version. */
-        private static final int SELECTOR   = 4;
+        private static final int SELECTOR = 4;
 
         /** Defines name of a function(or property). Must be a selector. */
-        private static final int FUNCTION   = 8;
+        private static final int FUNCTION = 8;
 
         /** Unused parameter. Doesn't map to Mindcode functions. */
-        private static final int UNUSED     = 16;
+        private static final int UNUSED = 16;
 
         /** Parameter requiring a global variable (see the SYNC instruction). */
-        private static final int GLOBAL     = 32;
+        private static final int GLOBAL = 32;
     }
 }

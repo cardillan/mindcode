@@ -106,6 +106,10 @@ abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createEnd(astContext);
     }
 
+    public FormatInstruction createFormat(AstContext astContext, LogicValue what) {
+        return instructionProcessor.createFormat(astContext, what);
+    }
+
     protected GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
         return instructionProcessor.createGoto(astContext, address, marker);
     }

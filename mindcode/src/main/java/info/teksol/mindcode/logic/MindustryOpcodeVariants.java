@@ -34,20 +34,25 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.READ,       out("result"), block("cell1"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.WRITE,      in("value"),   block("cell1"), in("at"));
 
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("clear"),    in("r"), in("g"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("color"),    in("r"), in("g"), in("b"), in("a"));
-        add(list, V7,  MAX, S, FUNC, Opcode.DRAW,       draw("col"),      in("color"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("stroke"),   in("width"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("line"),     in("x"), in("y"), in("x2"),    in("y2"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("rect"),     in("x"), in("y"), in("width"), in("height"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("lineRect"), in("x"), in("y"), in("width"), in("height"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("poly"),     in("x"), in("y"), in("sides"), in("radius"), in("rotation"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("linePoly"), in("x"), in("y"), in("sides"), in("radius"), in("rotation"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("triangle"), in("x"), in("y"), in("x2"),    in("y2"),     in("x3"), in("y3"));
-        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("image"),    in("x"), in("y"), in("image"), in("size"),   in("rotation"));
-        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("image"),    in("x"), in("y"), in("image"), in("size"),   in("rotation"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("clear"),      in("r"), in("g"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("color"),      in("r"), in("g"), in("b"), in("a"));
+        add(list, V7,  MAX, S, FUNC, Opcode.DRAW,       draw("col"),        in("color"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("stroke"),     in("width"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("line"),       in("x"), in("y"), in("x2"),    in("y2"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("rect"),       in("x"), in("y"), in("width"), in("height"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("lineRect"),   in("x"), in("y"), in("width"), in("height"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("poly"),       in("x"), in("y"), in("sides"), in("radius"), in("rotation"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("linePoly"),   in("x"), in("y"), in("sides"), in("radius"), in("rotation"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("triangle"),   in("x"), in("y"), in("x2"),    in("y2"),     in("x3"), in("y3"));
+        add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("image"),      in("x"), in("y"), in("image"), in("size"),   in("rotation"));
+        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("print"),      in("x"), in("y"), align("align"));
+        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("translate"),  in("x"), in("y"));
+        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("scale"),      in("x"), in("y"));
+        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("rotate"),     unused("x"), unused("y"), in("degrees"));
+        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("reset"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.PRINT,      in("what"));
+        add(list, V8A, MAX, S, FUNC, Opcode.FORMAT,     in("value"));
 
         add(list, V6,  MAX, S, BOTH, Opcode.DRAWFLUSH,  block("display1"));
         add(list, V6,  MAX, S, BOTH, Opcode.PRINTFLUSH, block("message1"));
@@ -61,7 +66,7 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, S, PROP, Opcode.CONTROL,    bctrl("config"),    block("block"), in("value"));
         add(list, V6,  MAX, S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("r"), in("g"), in("b"));
 
-        add(list, V6,  MAX, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), sort("sort"), block("turret"), in("order"), res("result"));
+        add(list, V6,  MAX, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), block("turret"), in("order"), res("result"));
 
         add(list, V6,  MAX, S, PROP, Opcode.SENSOR,     res("result"),      block("object"), sensor("property"));
 
@@ -151,7 +156,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("within"),    in("x"), in("y"), in("radius"), res("result"));
         add(list, V7,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("unbind"));
 
-        add(list, V6,  MAX, S, FUNC, Opcode.URADAR, radar("attr1"), radar("attr2"), radar("attr3"), sort("sort"), unused("0"), in("order"), res("result"));
+        add(list, V6,  MAX, S, FUNC, Opcode.URADAR, radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), unused("0"), in("order"), res("result"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.ULOCATE, locate("ore"),      unused("core"), unused("true"), ore("oreType"), out("outx"), out("outy"), res("found"), unusedOut("building"));
         add(list, V6,  V7,  S, FUNC, Opcode.ULOCATE, locate("building"), group("group"), in("enemy"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
@@ -171,6 +176,9 @@ public class MindustryOpcodeVariants {
 
         add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
         add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
+
+        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSENSE, res("result"),  in("y"));
+        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSET,   in("x"),  in("y"), in("natural"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.SPAWNWAVE, in("x"),  in("y"), in("natural"));
 
@@ -275,6 +283,10 @@ public class MindustryOpcodeVariants {
         return List.copyOf(list);
     }
 
+    public static NamedParameter align(String name) {
+        return new NamedParameter(InstructionParameterType.ALIGNMENT, name);
+    }
+
     public static NamedParameter bctrl(String name) {
         return new NamedParameter(InstructionParameterType.BLOCK_CONTROL, name);
     }
@@ -358,6 +370,10 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(InstructionParameterType.RADAR, name);
     }
 
+    public static NamedParameter radarSort(String name) {
+        return new NamedParameter(InstructionParameterType.RADAR_SORT, name);
+    }
+
     public static NamedParameter res(String name) {
         return new NamedParameter(InstructionParameterType.RESULT, name);
     }
@@ -368,10 +384,6 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter sensor(String name) {
         return new NamedParameter(InstructionParameterType.SENSOR, name);
-    }
-
-    public static NamedParameter sort(String name) {
-        return new NamedParameter(InstructionParameterType.SORT, name);
     }
 
     public static NamedParameter status(String name) {
@@ -392,5 +404,9 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter unusedOut(String name) {
         return new NamedParameter(InstructionParameterType.UNUSED_OUTPUT, name);
+    }
+
+    public static NamedParameter weather(String name) {
+        return new NamedParameter(InstructionParameterType.WEATHER, name);
     }
 }

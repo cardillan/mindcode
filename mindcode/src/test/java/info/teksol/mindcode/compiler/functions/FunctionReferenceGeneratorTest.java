@@ -32,7 +32,7 @@ public class FunctionReferenceGeneratorTest {
             instruction they encapsulate, so that functions with similar logic are listed together. The Mindcode source
             listed in the **Function call** column is compiled to the instruction in the **Generated instruction**
             column.
-                        
+            
             In some cases, a single instruction can be generated in more than one way (e.g. the `radar` instruction,
             which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).
             Both ways are identical. Additionally, some functions have optional parameters, which are marked by
@@ -47,6 +47,7 @@ public class FunctionReferenceGeneratorTest {
             "Function reference for Mindustry Logic 6", "FUNCTIONS_V6.markdown",
             "Function reference for Mindustry Logic 7", "FUNCTIONS_V7.markdown",
             "Function reference for Mindustry Logic 7A", "FUNCTIONS_V7A.markdown",
+            "Function reference for Mindustry Logic 8A", "FUNCTIONS_V8A.markdown",
             "Schemacode", "SCHEMACODE.markdown",
     };
 
@@ -65,6 +66,11 @@ public class FunctionReferenceGeneratorTest {
     @Test
     void createFunctionReferenceForV7A() throws IOException {
         createFunctionReference(ProcessorVersion.V7A);
+    }
+
+    @Test
+    void createFunctionReferenceForV8A() throws IOException {
+        createFunctionReference(ProcessorVersion.V8A);
     }
 
     private void createFunctionReference(ProcessorVersion version) throws IOException {

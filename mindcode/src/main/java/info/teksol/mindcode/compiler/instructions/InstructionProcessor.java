@@ -31,15 +31,16 @@ public interface InstructionProcessor {
     LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
 
 
-    CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue);
     CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue);
+    CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue);
     EndInstruction createEnd(AstContext astContext);
+    FormatInstruction createFormat(AstContext astContext, LogicValue what);
     GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker);
+    GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker);
     GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker);
     JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y);
     JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
     LabelInstruction createLabel(AstContext astContext, LogicLabel label);
-    GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker);
     NoOpInstruction createNoOp(AstContext astContext);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second);
@@ -55,6 +56,7 @@ public interface InstructionProcessor {
     SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address);
     StopInstruction createStop(AstContext astContext);
     WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index);
+
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments);
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
     LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
@@ -126,6 +128,16 @@ public interface InstructionProcessor {
      * @return true if the instruction is safe
      */
     boolean isSafe(LogicInstruction instruction);
+
+    /**
+     * Returns true if an instruction with given opcode and arguments is supported by current processor
+     * settings (version, edition).
+     *
+     * @param opcode instruction opcode
+     * @param arguments instruction arguments
+     * @return true if the instruction is supported
+     */
+    boolean isSupported(Opcode opcode, List<LogicArgument> arguments);
 
     /**
      * Determines whether the identifier could be a block name (such as switch1, cell2, projector3 etc.).

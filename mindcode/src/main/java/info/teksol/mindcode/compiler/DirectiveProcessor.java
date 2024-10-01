@@ -55,16 +55,19 @@ public class DirectiveProcessor {
     }
 
     private void setTarget(CompilerProfile profile, String target) {
-        switch (target) {
-            case "ML6"  -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
-            case "ML7", "ML7S" ->
-                           profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
-            case "ML7W" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
-            case "ML7A", "ML7AS" ->
-                           profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.STANDARD_PROCESSOR);
-            case "ML7AW"-> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.WORLD_PROCESSOR);
-            default     -> error("Invalid value '%s' of compiler directive 'target'.", target);
+        String value = target.toUpperCase();
+
+        if (value.startsWith("ML")) {
+            ProcessorEdition edition = ProcessorEdition.byCode(value.charAt(value.length() - 1));
+            ProcessorVersion version = ProcessorVersion.byCode(value.substring(2, value.length() - (edition == null ? 0 : 1)));
+
+            if (version != null) {
+                profile.setProcessorVersionEdition(version, edition != null ? edition : ProcessorEdition.S);
+                return;
+            }
         }
+
+        error("Invalid value '%s' of compiler directive 'target'.", target);
     }
 
     private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, String level) {

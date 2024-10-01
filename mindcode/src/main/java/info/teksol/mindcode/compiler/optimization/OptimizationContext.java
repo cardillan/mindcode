@@ -1284,6 +1284,10 @@ class OptimizationContext {
             return cursor;
         }
 
+        public int currentIndex() {
+            return lastRet;
+        }
+
         /**
          * @return true if there's a previous instruction.
          */

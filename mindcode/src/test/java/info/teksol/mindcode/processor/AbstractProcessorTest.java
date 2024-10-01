@@ -188,7 +188,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         logPerformance(title, code, compiled, processor);
 
         assertAll(
-                () -> evaluator.compare(true, processor.getTextBuffer()),
+                () -> evaluator.compare(true, processor.getPrintOutput()),
                 () -> assertNoUnexpectedMessages(compiler, s -> false)
         );
     }

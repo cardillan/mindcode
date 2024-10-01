@@ -5,7 +5,13 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PrintInstruction;
 import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mindcode.logic.LogicNull;
 import info.teksol.mindcode.logic.LogicString;
+import info.teksol.mindcode.logic.Opcode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 import static info.teksol.mindcode.logic.ArgumentType.STRING_LITERAL;
 
@@ -39,27 +45,32 @@ class PrintMerger extends BaseOptimizer {
         super(Optimization.PRINT_TEXT_MERGING, optimizationContext);
     }
 
+    private final List<PrintInstruction> printVars = new ArrayList<>();
     private LogicInstruction previous;
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        previous = null;
+        reset();
+
+        BiConsumer<LogicIterator, PrintInstruction> printMerger = experimental()
+                && instructionProcessor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))
+                && !containsDangerousStrings() ? this::tryMergeExperimental : this::tryMergeAdvanced;
 
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 LogicInstruction current = iterator.next();
                 switch (current.getOpcode()) {
-                    case PRINT  -> tryMerge(iterator, (PrintInstruction) current);
+                    case PRINT  -> printMerger.accept(iterator, (PrintInstruction) current);
                     case REMARK -> tryMerge(iterator, (RemarkInstruction) current);
 
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
                     case LABEL  -> {
                         if (isActive((LabelInstruction) current)) {
-                            previous = null;
+                            reset();
                         }
                     }
-                    case JUMP, GOTOLABEL, PRINTFLUSH -> previous = null;
+                    case JUMP, GOTOLABEL, PRINTFLUSH, FORMAT -> reset();
                 }
             }
         }
@@ -67,13 +78,18 @@ class PrintMerger extends BaseOptimizer {
         return false;
     }
 
+    private void reset() {
+        previous = null;
+        printVars.clear();
+    }
+
     // Tries to merge previous and current prints.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
-    private void tryMerge(LogicIterator iterator, PrintInstruction current) {
-        if (previous instanceof PrintInstruction previous && previous.getValue().isConstant() && current.getValue().isConstant()) {
-            if (advanced() || previous.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
-                String str1 = previous.getValue().format();
+    private void tryMergeAdvanced(LogicIterator iterator, PrintInstruction current) {
+        if (previous instanceof PrintInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
+            if (advanced() || prev.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
+                String str1 = prev.getValue().format();
                 String str2 = current.getValue().format();
                 // Do not merge strings if the combined length is over 34, unless advanced
                 if (advanced() || str1.length() + str2.length() <= 34) {
@@ -89,14 +105,37 @@ class PrintMerger extends BaseOptimizer {
         previous = current;
     }
 
+    private void tryMergeExperimental(LogicIterator iterator, PrintInstruction current) {
+        if (previous instanceof PrintInstruction prev && prev.getValue().isConstant()) {
+            StringBuilder str = new StringBuilder(prev.getValue().format());
+            if (current.getValue().isConstant()) {
+                for (PrintInstruction p : printVars) {
+                    str.append("{0}");
+                    optimizationContext.replaceInstruction(p, createFormat(p.getAstContext(), p.getValue()));
+                }
+                printVars.clear();
+                str.append(current.getValue().format());
+                iterator.remove();
+
+                PrintInstruction updated = createPrint(prev.getAstContext(), LogicString.create(str.toString()));
+                optimizationContext.replaceInstruction(prev, updated);
+                previous = updated;
+            } else {
+                printVars.add(current);
+            }
+        } else {
+            previous = current;
+        }
+    }
+
     // Tries to merge previous and current remarks.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
     private void tryMerge(LogicIterator iterator, RemarkInstruction current) {
-        if (previous instanceof RemarkInstruction previous && previous.getAstContext() == current.getAstContext() &&
-                previous.getValue().isConstant() && current.getValue().isConstant()) {
+        if (previous instanceof RemarkInstruction prev && prev.getAstContext() == current.getAstContext() &&
+                prev.getValue().isConstant() && current.getValue().isConstant()) {
             RemarkInstruction merged = createRemark(current.getAstContext(),
-                    LogicString.create(previous.getValue().format() + current.getValue().format()));
+                    LogicString.create(prev.getValue().format() + current.getValue().format()));
             removeInstruction(this.previous);
             iterator.set(merged);
             this.previous = merged;
@@ -108,5 +147,19 @@ class PrintMerger extends BaseOptimizer {
 
     private boolean isActive(LabelInstruction ix) {
         return optimizationContext.isActive(ix.getLabel());
+    }
+
+    private boolean containsDangerousStrings() {
+        return optimizationContext.instructionStream()
+                .flatMap(LogicInstruction::inputArgumentsStream)
+                .filter(LogicString.class::isInstance)
+                .map(LogicString.class::cast)
+                .map(LogicString::format)
+                .anyMatch(this::containsDangerousStrings);
+    }
+
+    private boolean containsDangerousStrings(String text) {
+        return text.endsWith("{") || text.startsWith("}")
+                || text.contains("{0}") || text.contains("{{") || text.contains("}}");
     }
 }

@@ -5,6 +5,8 @@ public enum Opcode {
     WRITE           ("write",           "Write a number to a linked memory cell."),
     DRAW            ("draw",            "Add an operation to the drawing buffer. Does not display anything until drawflush is used."),
     PRINT           ("print",           "Add text to the print buffer. Does not display anything until printflush is used."),
+    FORMAT          ("format",          "Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid."
+            + " Placeholder pattern: \"{number 0-9}\" Example: print \"test {0}\"; format \"example\""),
 
     DRAWFLUSH       ("drawflush",       "Flush queued Draw operations to a display."),
     PRINTFLUSH      ("printflush",      "Flush queued Print operations to a message block."),
@@ -32,6 +34,8 @@ public enum Opcode {
     SETBLOCK        ("setblock",        "Set tile data at any location."),
     SPAWN           ("spawn",           "Spawn unit at a location."),
     STATUS          ("status",          "Apply or clear a status effect from a unit."),
+    WEATHERSENSE    ("weathersense",    "Check if a type of weather is active."),
+    WEATHERSET      ("weatherset",      "Set the current state of a type of weather."),
     SPAWNWAVE       ("spawnwave",       "Spawn a wave."),
     SETRULE         ("setrule",         "Set a game rule."),
     MESSAGE         ("message",         "Display a message on the screen from the text buffer. Will wait until the previous message finishes."),

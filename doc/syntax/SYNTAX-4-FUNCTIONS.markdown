@@ -31,6 +31,7 @@ but it does not aim to describe the behavior of the functions/instructions.
 * [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
 * [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
 * [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
+* [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown)
 
 ## Instruction parameters
 

@@ -173,10 +173,10 @@ public class MindcodeCompiler implements Compiler<String> {
 
         try {
             processor.run(program, profile.getStepLimit());
-            return new RunResults(processor.getTextOutput(), processor.getSteps());
+            return new RunResults(processor.getTextBuffer(), processor.getSteps());
         } catch (ExecutionException e) {
-            String output = processor.getTextOutput();
-            return new RunResults(output.isEmpty() ? e.getMessage() : output + "\n" + e.getMessage(), processor.getSteps());
+            String textBuffer = processor.getTextBuffer();
+            return new RunResults(textBuffer.isEmpty() ? e.getMessage() : textBuffer + "\n" + e.getMessage(), processor.getSteps());
         }
     }
 

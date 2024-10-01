@@ -419,6 +419,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         // Handle special cases
         switch(opcode) {
+            case FORMAT:    return new FormatFunctionHandler(opcode.toString(), opcodeVariant);
             case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcodeVariant);
             case UBIND:     return new UbindFunctionHandler(opcode.toString(), opcodeVariant);
         }
@@ -459,6 +460,10 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     private String functionName(OpcodeVariant opcodeVariant, NamedParameter selector) {
         return switch (opcodeVariant.opcode()) {
+            case DRAW   -> switch (selector.name()) {
+                    case "print" -> "drawPrint";
+                    default      -> selector.name();
+            };
             case STOP   -> "stopProcessor";
             case STATUS -> switch (opcodeVariant.namedParameters().get(0).name()) {
                     case "true"  -> "clearStatus";
@@ -680,6 +685,24 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
             arguments.forEach(arg -> program.accept(createInstruction(Opcode.PRINT, arg)));
+            return arguments.get(arguments.size() - 1);
+        }
+
+        @Override
+        public String generateSampleCall() {
+            return getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
+        }
+    }
+
+    // Handles the format function
+    private class FormatFunctionHandler extends AbstractFunctionHandler {
+        FormatFunctionHandler(String name, OpcodeVariant opcodeVariant) {
+            super(name, opcodeVariant, 1);
+        }
+
+        @Override
+        public LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+            arguments.forEach(arg -> program.accept(createInstruction(Opcode.FORMAT, arg)));
             return arguments.get(arguments.size() - 1);
         }
 

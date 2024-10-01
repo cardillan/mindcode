@@ -53,7 +53,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             processor.addBlock(MindustryMemory.createMemoryBank("bank1"));
             processor.addBlock(MindustryMemory.createMemoryBank("bank2"));
             processor.run(instructions, MAX_STEPS);
-            return processor.getTextBuffer();
+            return processor.getPrintOutput();
         }
 
 

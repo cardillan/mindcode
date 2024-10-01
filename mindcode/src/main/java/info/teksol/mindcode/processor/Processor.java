@@ -21,7 +21,7 @@ public class Processor {
     private final BitSet coverage = new BitSet();
 
     private static final int TEXT_BUFFER_LIMIT = 10000;
-    private OutputBuffer outputBuffer;
+    private TextBuffer textBuffer;
 
     public Processor() {
         flags = EnumSet.allOf(ProcessorFlag.class);
@@ -40,12 +40,12 @@ public class Processor {
         variables.put(block.getName(), DoubleVariable.newObjectValue(true, block.getName(), block));
     }
 
-    public List<String> getTextBuffer() {
-        return outputBuffer.getOutput();
+    public List<String> getPrintOutput() {
+        return textBuffer.getPrintOutput();
     }
 
-    public String getTextOutput() {
-        return outputBuffer.getJoinedOutput();
+    public String getTextBuffer() {
+        return textBuffer.getTextBuffer();
     }
 
     public int getSteps() {
@@ -82,7 +82,7 @@ public class Processor {
         }
 
         steps = 0;
-        outputBuffer = new OutputBuffer(TEXT_BUFFER_LIMIT);
+        textBuffer = new TextBuffer(TEXT_BUFFER_LIMIT);
 
         counter.setIntValue(0);
         variables.put("@links", IntVariable.newIntValue(true, "@links", blocks.size()));
@@ -144,10 +144,12 @@ public class Processor {
     private boolean execute(LogicInstruction instruction) {
         return switch(instruction.getOpcode()) {
             case END        -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
+            case FORMAT     -> executeFormat((FormatInstruction) instruction); 
             case JUMP       -> executeJump((JumpInstruction) instruction);
             case OP         -> executeOp((OpInstruction) instruction);
             case PACKCOLOR  -> executePackColor((PackColorInstruction) instruction);
             case PRINT      -> executePrint((PrintInstruction) instruction);
+            case PRINTFLUSH -> { textBuffer.printflush(); yield true; }
             case READ       -> executeRead((ReadInstruction) instruction);
             case SET        -> executeSet((SetInstruction) instruction);
             case STOP       -> false;
@@ -214,10 +216,18 @@ public class Processor {
 
     private boolean executePrint(PrintInstruction ix) {
         Variable var = getExistingVariable(ix.getValue());
-        outputBuffer.append(var.toString());
+        textBuffer.print(var.toString());
         return true;
     }
 
+    private boolean executeFormat(FormatInstruction ix) {
+        Variable var = getExistingVariable(ix.getValue());
+        if (!textBuffer.format(var.toString())) {
+            throw new ExecutionException(ERR_INVALID_FORMAT, "No valid formatting placeholder found in the text buffer.");
+        }
+        return true;
+    }
+    
     private boolean executeRead(ReadInstruction ix) {
         Variable target = getOrCreateVariable(ix.getResult());
         Variable block = getExistingVariable(ix.getMemory());

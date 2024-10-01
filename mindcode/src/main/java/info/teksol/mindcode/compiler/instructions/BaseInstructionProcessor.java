@@ -102,13 +102,13 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
-        return (CallInstruction) createInstruction(astContext, CALL, address, returnValue);
+    public CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);
     }
 
     @Override
-    public CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);
+    public CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
+        return (CallInstruction) createInstruction(astContext, CALL, address, returnValue);
     }
 
     @Override
@@ -117,8 +117,18 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public FormatInstruction createFormat(AstContext astContext, LogicValue what) {
+        return (FormatInstruction) createInstruction(astContext, FORMAT, what);
+    }
+
+    @Override
     public GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
         return (GotoInstruction) createInstruction(astContext, GOTO, address, marker);
+    }
+
+    @Override
+    public GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
+        return (GotoLabelInstruction) createInstruction(astContext, GOTOLABEL, label, marker);
     }
 
     public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
@@ -138,11 +148,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public LabelInstruction createLabel(AstContext astContext, LogicLabel label) {
         return (LabelInstruction) createInstruction(astContext, LABEL, label);
-    }
-
-    @Override
-    public GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
-        return (GotoLabelInstruction) createInstruction(astContext, GOTOLABEL, label, marker);
     }
 
     @Override
@@ -239,9 +244,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case CALL       -> new CallInstruction(astContext, arguments, params);
             case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
             case END        -> new EndInstruction(astContext);
+            case FORMAT     -> new FormatInstruction(astContext, arguments, params);
             case GOTO       -> new GotoInstruction(astContext, arguments, params);
-            case GOTOOFFSET -> new GotoOffsetInstruction(astContext, arguments, params);
             case GOTOLABEL  -> new GotoLabelInstruction(astContext, arguments, params);
+            case GOTOOFFSET -> new GotoOffsetInstruction(astContext, arguments, params);
             case JUMP       -> new JumpInstruction(astContext, arguments, params);
             case LABEL      -> new LabelInstruction(astContext, arguments, params);
             case NOOP       -> new NoOpInstruction(astContext);
@@ -366,6 +372,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case READ, GETLINK, RADAR, SENSOR, SET, OP, LOOKUP, PACKCOLOR, NOOP -> true;
             default -> false;
         };
+    }
+
+    public boolean isSupported(Opcode opcode, List<LogicArgument> arguments) {
+        return getOpcodeVariant(opcode, arguments) != null;
     }
 
     /**

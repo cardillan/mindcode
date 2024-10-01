@@ -1,7 +1,9 @@
 package info.teksol.mindcode.logic;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public enum ProcessorVersion {
     V6,
@@ -20,4 +22,11 @@ public enum ProcessorVersion {
     }
 
     private static final List<ProcessorVersion> ALL = List.of(values());
+    private static final Map<String, ProcessorVersion> MAP = ALL.stream()
+            .filter(v -> v != MAX)
+            .collect(Collectors.toMap(v -> v.name().substring(1), v -> v));
+
+    public static ProcessorVersion byCode(String code) {
+        return MAP.get(code);
+    }
 }

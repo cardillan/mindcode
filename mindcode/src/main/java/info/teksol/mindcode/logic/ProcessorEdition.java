@@ -17,4 +17,12 @@ public enum ProcessorEdition {
 
     public static final ProcessorEdition S = ProcessorEdition.STANDARD_PROCESSOR;
     public static final ProcessorEdition W = ProcessorEdition.WORLD_PROCESSOR;
+
+    public static ProcessorEdition byCode(char code) {
+        return switch (code) {
+            case 'S' -> STANDARD_PROCESSOR;
+            case 'W' -> WORLD_PROCESSOR;
+            default -> null;
+        };
+    }
 }
