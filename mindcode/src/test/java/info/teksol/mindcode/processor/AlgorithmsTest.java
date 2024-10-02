@@ -3,6 +3,7 @@ package info.teksol.mindcode.processor;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.processor.graphics.LogicDisplay;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
                 s -> "AMOUNT = 12345\n" + s,
-                List.of(),
+                List.of(LogicDisplay.createLargeLogicDisplay("display1")),
                 List.of()
         );
     }

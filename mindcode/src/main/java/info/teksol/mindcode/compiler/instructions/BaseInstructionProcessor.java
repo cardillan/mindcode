@@ -243,6 +243,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return switch (opcode) {
             case CALL       -> new CallInstruction(astContext, arguments, params);
             case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
+            case DRAW       -> new DrawInstruction(astContext, arguments, params);
+            case DRAWFLUSH  -> new DrawflushInstruction(astContext, arguments, params);
             case END        -> new EndInstruction(astContext);
             case FORMAT     -> new FormatInstruction(astContext, arguments, params);
             case GOTO       -> new GotoInstruction(astContext, arguments, params);

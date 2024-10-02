@@ -2,6 +2,7 @@ package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.processor.graphics.GraphicsBuffer;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -21,7 +22,9 @@ public class Processor {
     private final BitSet coverage = new BitSet();
 
     private static final int TEXT_BUFFER_LIMIT = 10000;
+    private static final int GRAPHICS_BUFFER_LIMIT = 256;
     private TextBuffer textBuffer;
+    private GraphicsBuffer graphicsBuffer;
 
     public Processor() {
         flags = EnumSet.allOf(ProcessorFlag.class);
@@ -83,6 +86,7 @@ public class Processor {
 
         steps = 0;
         textBuffer = new TextBuffer(TEXT_BUFFER_LIMIT);
+        graphicsBuffer = new GraphicsBuffer(GRAPHICS_BUFFER_LIMIT);
 
         counter.setIntValue(0);
         variables.put("@links", IntVariable.newIntValue(true, "@links", blocks.size()));
@@ -143,6 +147,8 @@ public class Processor {
 
     private boolean execute(LogicInstruction instruction) {
         return switch(instruction.getOpcode()) {
+            case DRAW       -> executeDraw((DrawInstruction) instruction);
+            case DRAWFLUSH  -> executeDrawflush((DrawflushInstruction) instruction);
             case END        -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
             case FORMAT     -> executeFormat((FormatInstruction) instruction); 
             case JUMP       -> executeJump((JumpInstruction) instruction);
@@ -160,6 +166,17 @@ public class Processor {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
             }
         };
+    }
+
+    private boolean executeDraw(DrawInstruction ix) {
+        graphicsBuffer.draw(ix);
+        return true;
+    }
+
+    private boolean executeDrawflush(DrawflushInstruction ix) {
+        Variable display = getExistingVariable(ix.getDisplay());
+        display.getExistingObject().drawflush(graphicsBuffer);
+        return true;
     }
 
     private boolean executeSet(SetInstruction ix) {

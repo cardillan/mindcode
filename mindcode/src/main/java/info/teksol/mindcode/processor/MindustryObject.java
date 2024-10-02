@@ -1,5 +1,7 @@
 package info.teksol.mindcode.processor;
 
+import info.teksol.mindcode.processor.graphics.GraphicsBuffer;
+
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_UNSUPPORTED_BLOCK_OPERATION;
 
 public class MindustryObject {
@@ -30,5 +32,9 @@ public class MindustryObject {
 
     public void write(int index, double value) {
         throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation 'write' on '" + name + "' (class " + getClass().getSimpleName() + ").");
+    }
+
+    public void drawflush(GraphicsBuffer graphicsBuffer) {
+        throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation 'drawflush' on '" + name + "' (class " + getClass().getSimpleName() + ").");
     }
 }
