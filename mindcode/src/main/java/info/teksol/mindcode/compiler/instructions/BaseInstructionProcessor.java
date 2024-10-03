@@ -33,6 +33,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<InstructionParameterType, Set<String>> validArgumentValues;
+    protected final boolean mlog8;
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int functionIndex = 0;
@@ -44,6 +45,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
         this.opcodeVariants = opcodeVariants;
+        this.mlog8 = processorVersion.matches(ProcessorVersion.V8A, ProcessorVersion.MAX);
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream()
                 .collect(Collectors.toMap(k -> k, k -> getOpcodeVariantSelectorPosition(k, variantsByOpcode.get(k))));
@@ -362,7 +364,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public boolean isDeterministic(LogicInstruction instruction) {
-        // TODO Make sensor deterministic depending on the property being sensed
         return switch (instruction.getOpcode()) {
             case OP -> {
                 OpInstruction ix = (OpInstruction) instruction;
@@ -557,9 +558,13 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     // 20 digits precision
-    private static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
+    protected static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
 
-    private Optional<String> mlogFormat(double value, String literal) {
+    protected Optional<String> mlogFormat(double value, String literal) {
+        if (mlog8) {
+            return mlogFormat8(value, literal);
+        }
+
         if (Double.isFinite(value)) {
             double abs = Math.abs(value);
 
@@ -622,6 +627,62 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 return Optional.of(mlog);
             } else {
                 return Optional.of(literalFloat);
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    protected Optional<String> mlogFormat8(double value, String literal) {
+        if (Double.isFinite(value)) {
+            double abs = Math.abs(value);
+
+            // Can it be represented as a double at all?
+            if (!Double.isFinite(abs)) {
+                return Optional.empty();
+            }
+
+            // Is it zero?
+            if (abs <= Double.MIN_NORMAL) {
+                return Optional.of("0");
+            }
+
+            if (1e-20 <= abs && abs < Long.MAX_VALUE) {
+                // Fits into a long, Mindustry can convert it using decimal notation
+                // Hopefully more readable in mlog
+                BigDecimal decimal = new BigDecimal(literal, CONVERSION_CONTEXT);
+                return Optional.of(decimal.stripTrailingZeros().toPlainString());
+            }
+
+            // Cannot avoid exponent. Format it so that Mindustry understands it.
+            String literalDouble = Double.toString(value);
+            int dot = literalDouble.indexOf('.');
+            int exp = literalDouble.indexOf('E');
+
+            if (dot >= 0 && exp >= 0) {
+                if (dot >= exp) {
+                    return Optional.empty(); // Not possible, but hey
+                }
+
+                int exponent = Integer.parseInt(literalDouble.substring(exp + 1)) ;
+                String mantissa =  literalDouble.substring(0, dot) + literalDouble.substring(dot + 1, exp);
+                exponent -= (exp - dot - 1);
+
+                int lastValidDigit = mantissa.length() - 1;
+                while (mantissa.charAt(lastValidDigit) == '0') {
+                    if (--lastValidDigit < 0) {
+                        return Optional.of("0");
+                    }
+                    exponent++;
+                }
+
+                String mlog = exponent == 0
+                        ? mantissa.substring(0, lastValidDigit + 1)
+                        : mantissa.substring(0, lastValidDigit + 1) + literalDouble.charAt(exp) + exponent;
+
+                return Optional.of(mlog);
+            } else {
+                return Optional.of(literalDouble);
             }
         } else {
             return Optional.empty();

@@ -6,6 +6,7 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.logic.BaseArgument;
 import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.ParameterAssignment;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.mimex.BlockType;
 import org.junit.jupiter.api.Test;
 
@@ -100,7 +101,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     public void testHasPrecisionLoss() {
         List.of("33333333e-40", "99999999e-40", "3333333333e-40", "7777777777e10").forEach(number -> {
-            TestCompiler compiler = createTestCompiler();
+            TestCompiler compiler = createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A));
             compiler.processor.mlogRewrite(number);
             if (compiler.getMessages().isEmpty()) {
                 fail("No precision loss for number " + number);

@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.mimex.Icons;
 import org.junit.jupiter.api.Test;
 
@@ -80,7 +81,9 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void refusesMlogIncompatibleConstants() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("const A = 10**40"));
+                () -> generateInstructions(
+                        createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
+                        "const A = 10**40"));
     }
 
     @Test

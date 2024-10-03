@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -1241,7 +1242,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Test
     void avoidsIncompatibleLiterals() {
-        assertCompilesTo("""
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
+                        """
                         base = 2
                         a = base ** 8
                         b = base ** a
