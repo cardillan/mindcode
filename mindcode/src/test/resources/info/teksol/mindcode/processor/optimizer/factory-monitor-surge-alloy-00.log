@@ -648,38 +648,6 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     52 label __label9
     53 draw color 0 0 80 255
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
- 
-   179 set minimum a
-   180 jump __label35 always
-   181 label __label34
-+  182 set red 255
-   183 op greaterThan __tmp85 minimum 14
-   184 op greaterThanEq __tmp86 boost EXPECTED_BOOST
-   185 op land __tmp87 __tmp85 __tmp86
--    * jump __label36 equal __tmp87 false
--    * set __tmp88 0
-+  186 jump __label37 equal __tmp87 false
-+  187 set red 0
-   188 jump __label37 always
--    * label __label36
--    * set __tmp88 255
-   189 label __label37
--    * set red __tmp88
--    * jump __label38 lessThanEq minimum 7
--    * set __tmp90 255
-+  190 set green 0
-+  191 jump __label39 lessThanEq minimum 7
-+  192 set green 255
-   193 jump __label39 always
--    * label __label38
--    * set __tmp90 0
-   194 label __label39
--    * set green __tmp90
-   195 set blue 0
-   196 label __label35
-   197 label __label33
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set FROM_INDEX 0
      1 set EXPECTED_BOOST 1.5
@@ -737,14 +705,46 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     73 sensor __tmp28 smelter @type
     74 jump __label14 notEqual __tmp28 @surge-smelter
  
-   215 label __label15
-   216 label __label12
-   217 op add n n 1
+   219 label __label15
+   220 label __label12
+   221 op add n n 1
 -    * jump __label11 always
-+  218 jump __label42 lessThan n @links
-   219 label __label13
-   220 drawflush display1
-   221 op sub __tmp102 @time start
++  222 jump __label42 lessThan n @links
+   223 label __label13
+   224 drawflush display1
+   225 op sub __tmp102 @time start
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+   179 set minimum a
+   180 jump __label35 always
+   181 label __label34
++  182 set red 255
+   183 op greaterThan __tmp85 minimum 14
+   184 op greaterThanEq __tmp86 boost EXPECTED_BOOST
+   185 op land __tmp87 __tmp85 __tmp86
+-    * jump __label36 equal __tmp87 false
+-    * set __tmp88 0
++  186 jump __label37 equal __tmp87 false
++  187 set red 0
+   188 jump __label37 always
+-    * label __label36
+-    * set __tmp88 255
+   189 label __label37
+-    * set red __tmp88
+-    * jump __label38 lessThanEq minimum 7
+-    * set __tmp90 255
++  190 set green 0
++  191 jump __label39 lessThanEq minimum 7
++  192 set green 255
+   193 jump __label39 always
+-    * label __label38
+-    * set __tmp90 0
+   194 label __label39
+-    * set green __tmp90
+   195 set blue 0
+   196 label __label35
+   197 label __label33
 
 Modifications by Loop Optimization: replicate condition at line 26 (+1 instructions):
  

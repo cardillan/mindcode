@@ -170,9 +170,9 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    private void replaceInstruction(int index, LogicInstruction instruction, VariableStates variableStates) {
-        replaceInstruction(index, instruction);
-        instruction.inputArgumentsStream()
+    private void replaceInstruction(int index, LogicInstruction replacement, VariableStates variableStates) {
+        replaceInstruction(index, replacement);
+        replacement.inputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
                 .forEachOrdered(variableStates::protectVariable);

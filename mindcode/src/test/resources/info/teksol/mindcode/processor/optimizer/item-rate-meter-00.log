@@ -519,19 +519,6 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    133 print __tmp47
    134 print "[]/min\n"
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-   109 label __label31
-   110 op sub amount curr prev
-   111 op sub time currTick prevTick
--    * jump __label36 notEqual amount 0
-   112 set rate 0
--    * jump __label37 always
-+  113 jump __label37 equal amount 0
-   114 label __label36
-   115 op div __tmp40 amount time
-   116 op max rate __tmp40 0
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      1 set SOURCE_MEMORY null
@@ -604,6 +591,19 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    111 label __label31
    112 op sub amount curr prev
    113 op sub time currTick prevTick
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+   111 label __label31
+   112 op sub amount curr prev
+   113 op sub time currTick prevTick
+-    * jump __label36 notEqual amount 0
+   114 set rate 0
+-    * jump __label37 always
++  115 jump __label37 equal amount 0
+   116 label __label36
+   117 op div __tmp40 amount time
+   118 op max rate __tmp40 0
 
 Modifications by Loop Optimization: replicate condition at line 57 (+1 instructions):
  

@@ -81,6 +81,7 @@ class PropagateJumpTargets extends BaseOptimizer {
         }
 
         // Find next real instruction
+        // If null, it means the jump leads to a label which doesn't have a valid instruction after
         LogicInstruction next = firstInstruction(target + 1, ix -> ix.getRealSize() > 0);
         
         // Redirect compatible jumps
@@ -89,7 +90,7 @@ class PropagateJumpTargets extends BaseOptimizer {
         } 
 
         // Handle end instruction only in advanced mode
-        if (next instanceof EndInstruction && advanced()) {
+        if (next == null || (next instanceof EndInstruction && advanced())) {
             return FIRST_LABEL;
         }
 

@@ -33,31 +33,6 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 inst
     10 push bank1 __fn0_n
     11 set __fn0_n __tmp3
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-     5 print __tmp0
-     6 end
-     7 label __label0
--    * jump __label3 lessThanEq __fn0_n 0
-+    8 set __fn0retval null
-+    9 jump __label4 lessThanEq __fn0_n 0
-    10 op sub __tmp3 __fn0_n 1
-    11 push bank1 __fn0_n
-    12 set __fn0_n __tmp3
-    13 callrec bank1 __label0 __label5 __fn0retval
-    14 label __label5
-    15 pop bank1 __fn0_n
--    * set __tmp2 __fn0retval
-+   16 set __fn0retval __fn0retval
-    17 jump __label4 always
--    * label __label3
--    * set __tmp2 null
-    18 label __label4
--    * set __fn0retval __tmp2
-    19 label __label2
-    20 return bank1
-    21 end
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      2 callrec bank1 __label0 __label1 __fn0retval
@@ -67,15 +42,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    5 print __fn0retval
      6 end
      7 label __label0
-     8 set __fn0retval null
-     9 jump __label4 lessThanEq __fn0_n 0
-    10 op sub __tmp3 __fn0_n 1
-    11 push bank1 __fn0_n
+     8 jump __label3 lessThanEq __fn0_n 0
+     9 op sub __tmp3 __fn0_n 1
+    10 push bank1 __fn0_n
 -    * set __fn0_n __tmp3
-+   12 op sub __fn0_n __fn0_n 1
-    13 callrec bank1 __label0 __label5 __fn0retval
-    14 label __label5
-    15 pop bank1 __fn0_n
++   11 op sub __fn0_n __fn0_n 1
+    12 callrec bank1 __label0 __label5 __fn0retval
+    13 label __label5
+    14 pop bank1 __fn0_n
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -86,12 +60,35 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      4 print __fn0retval
      5 end
      6 label __label0
-     7 set __fn0retval null
-     8 jump __label4 lessThanEq __fn0_n 0
+     7 jump __label3 lessThanEq __fn0_n 0
 -    * op sub __tmp3 __fn0_n 1
+     8 push bank1 __fn0_n
+     9 op sub __fn0_n __fn0_n 1
+    10 callrec bank1 __label0 __label5 __fn0retval
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     4 print __fn0retval
+     5 end
+     6 label __label0
+-    * jump __label3 lessThanEq __fn0_n 0
++    7 set __fn0retval null
++    8 jump __label4 lessThanEq __fn0_n 0
      9 push bank1 __fn0_n
     10 op sub __fn0_n __fn0_n 1
     11 callrec bank1 __label0 __label5 __fn0retval
+    12 label __label5
+    13 pop bank1 __fn0_n
+-    * set __tmp2 __fn0retval
++   14 set __fn0retval __fn0retval
+    15 jump __label4 always
+-    * label __label3
+-    * set __tmp2 null
+    16 label __label4
+-    * set __fn0retval __tmp2
+    17 label __label2
+    18 return bank1
+    19 end
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  

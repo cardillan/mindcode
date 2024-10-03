@@ -95,8 +95,8 @@ class ReturnOptimizer extends BaseOptimizer {
             return OptimizationResult.INVALID;
         }
 
-        LogicInstruction newInstruction = action.replacement.withContext(action.original.getAstContext());
-        replaceInstruction(index, newInstruction);
+        LogicInstruction replacement = action.replacement.withContext(action.original.getAstContext());
+        replaceInstruction(index, replacement);
         count++;
         return OptimizationResult.REALIZED;
     }

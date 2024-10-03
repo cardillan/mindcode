@@ -3,10 +3,10 @@
    189 instructions eliminated by Dead Code Elimination (4 iterations).
     63 instructions eliminated by Jump Normalization (4 iterations).
     63 instructions eliminated by Jump Optimization (4 iterations).
-    63 instructions eliminated by Single Step Elimination (5 iterations).
+    64 instructions eliminated by Single Step Elimination (5 iterations).
    223 instructions eliminated by Data Flow Optimization (6 iterations).
    441 instructions eliminated by Unreachable Code Elimination.
-    64 instructions after optimizations.
+    63 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instructions):
  
@@ -5280,7 +5280,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
    314 label __label249
    315 end
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-63 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-64 instructions):
      0 label __label0
      1 print "ok"
 -    * jump __label3 always
@@ -5592,10 +5592,10 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-63 instruct
    246 label __label247
    247 label __label245
    248 label __label248
- 
-   250 jump __label251 always
-   251 label __label251
-   252 label __label249
+   249 print "ok"
+-    * jump __label251 always
+   250 label __label251
+   251 label __label249
 -    * end
 
 Final code before resolving virtual instructions:
@@ -5663,5 +5663,3 @@ print "ok"
 print "ok"
 print "ok"
 print "ok"
-jump __label251 always 0 0
-label __label251

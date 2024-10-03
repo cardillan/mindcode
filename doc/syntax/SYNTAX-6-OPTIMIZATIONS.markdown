@@ -174,12 +174,58 @@ producing a single value are handled, specifically:
 * `sensor`
 * `packcolor`
 
+### Value backpropagation
+
+If the instruction immediately following the `if` expression isn't a `set` instruction, but another instruction taking the resulting value of the `if` expression, and the resulting value is stored using a `set` instruction, the `set` instruction will be replaced by the instruction actually consuming the value. The optimization targets these conditional expressions passed as a parameter into a function, for example `print(a > 0 ? "positive" : "negative")`, which produces:
+
+```
+jump 3 lessThanEq a 0
+print "positive"
+jump 4 always 0 0
+print "negative"
+```
+
+This saves the execution of one instruction storing the resulting value ("positive" or "negative", in this case) before passing it into the print instruction.
+
+All kinds of instructions are supported, for example `approach(@thisx, @thisy, @unit.type == @mega ? 8 : 12)` produces
+
+```
+sensor __tmp0 @unit @type
+jump 4 notEqual __tmp0 @mega
+ucontrol approach @thisx @thisy 8 0 0
+jump 5 always 0 0
+ucontrol approach @thisx @thisy 12 0 0
+```
+
+The optimization handles even nested `if` expressions, such as
+
+```
+print(a < 100 ? a < 10 ? "units" : "tens" : a < 1000 ? "hundreds" : "thousands");
+```
+
+which produces 
+
+```
+jump 6 greaterThanEq a 100
+jump 4 greaterThanEq a 10
+print "units"
+jump 0 always 0 0
+print "tens"
+jump 0 always 0 0
+jump 9 greaterThanEq a 1000
+print "hundreds"
+jump 0 always 0 0
+print "thousands"
+```
+
+This optimization is currently available on the `experimental` level.
+
 ### Forward assignment
 
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
 ```
-print(x < 0 ? "negative" : "positive");
+text = x < 0 ? "negative" : "positive";
 ```
 
 Without If Expression Optimization, the produced code is
@@ -189,25 +235,24 @@ jump 3 greaterThanEq x 0
 set __tmp1 "negative"
 jump 4 always 0 0
 set __tmp1 "positive"
-print __tmp1
+set text __tmp1
 ```
 
 Execution speed:
-* x is negative: 4 instructions (0, 1, 2, 4) are executed,
-* x is positive: 3 instructions (0, 3, 4) are executed.
+* x is negative: 4 instructions (0, 1, 2) are executed,
+* x is positive: 3 instructions (0, 3) are executed.
 
 The If Expression Optimization turns the code into this:
 
 ```
-set __tmp1 "positive"
+set text "positive"
 jump 3 greaterThanEq x 0
-set __tmp1 "negative"
-print __tmp1
+set text "negative"
 ```
 
 Execution speed:
-* x is negative: 4 instructions (0, 1, 2, 3) are executed,
-* x is positive: 3 instructions (0, 1, 3) are executed.
+* x is negative: 4 instructions (0, 1, 2) are executed,
+* x is positive: 3 instructions (0, 1) are executed.
 
 The execution time is the same. However, one less instruction is generated.
 
@@ -322,7 +367,7 @@ understandable, but the optimizer would have to be more complex and therefore mo
 > * Do not modify instructions other than `set` instructions assigning values to program parameters in the compiled 
 >   code.
 >
-> **On basic and advanced optimization levels, global variables are handled in the same way as program parameters. On the experimental level, global
+> **On the `basic` and `advanced` optimization levels, global variables are handled in the same way as program parameters. On the `experimental` level, global
 > variables are fully optimized in a way similar to main or local variables. Always use program parameters for program
 > parametrization.**
 

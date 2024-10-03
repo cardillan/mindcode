@@ -305,6 +305,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
 
     @Test
     void handlesIfInsideLoop() {
+        // At this moment, invariant ifs aren't handled. Special handling of an entire IF context needs to be added.
         assertCompilesTo("""
                         param A = 10
                         i = 0
@@ -317,11 +318,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(SET, var(2), q("2")),
-                createInstruction(JUMP, var(1004), "equal", "A", "false"),
-                createInstruction(SET, var(2), q("1")),
+                createInstruction(JUMP, var(1003), "equal", "A", "false"),
+                createInstruction(PRINT, q("1")),
+                createInstruction(JUMP, var(1004), "always"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(PRINT, q("2")),
                 createInstruction(LABEL, var(1004)),
-                createInstruction(PRINT, var(2)),
                 createInstruction(JUMP, var(1005), "lessThan", "i", "1000")
         );
     }
@@ -372,15 +374,15 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(SET, "i", "1"),
-                createInstruction(SET, "a", "4"),
-                createInstruction(JUMP, var(1005), "greaterThanEq", "A", "0"),
-                createInstruction(SET, "a", "3"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
+                createInstruction(SET, var(2), "4"),
+                createInstruction(JUMP, var(1006), "greaterThanEq", "A", "0"),
+                createInstruction(SET, var(2), "3"),
                 createInstruction(LABEL, var(1006)),
-                createInstruction(PRINT, "a"),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(PRINT, var(2)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1006), "lessThan", "i", "A"),
+                createInstruction(JUMP, var(1007), "lessThan", "i", "A"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, q("finish"))
         );
@@ -398,16 +400,15 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(SET, "i", "1"),
-                createInstruction(SET, var(2), "4"),
-                createInstruction(JUMP, var(1005), "greaterThanEq", "A", "0"),
-                createInstruction(SET, var(2), "3"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(OP, "mul", "a", "10", var(2)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
+                createInstruction(OP, "mul", "a", "10", "4"),
+                createInstruction(JUMP, var(1006), "greaterThanEq", "A", "0"),
+                createInstruction(OP, "mul", "a", "10", "3"),
                 createInstruction(LABEL, var(1006)),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
+                createInstruction(LABEL, var(1007)),
                 createInstruction(PRINT, "a"),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1006), "lessThan", "i", "A"),
+                createInstruction(JUMP, var(1007), "lessThan", "i", "A"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, q("finish"))
         );

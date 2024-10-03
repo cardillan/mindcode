@@ -279,6 +279,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
 
     @Test
     void optimizesLoopsInConditions() {
+        // The loop condition in each of the loops is moved to the end of the loop
         assertCompilesTo("""
                         inline def sum(n)
                           c = 0
@@ -287,7 +288,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                           end
                           return c
                         end
-                                                
+
                         result = if sum(1000) < sum(2000)
                             print("Less")
                             0
@@ -296,7 +297,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         end
                         print(result)
                         """,
-                createInstruction(SET, "result", "1"),
+                createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "__fn0_c", "0"),
                 createInstruction(SET, "__fn0_i", "0"),
                 createInstruction(LABEL, var(1012)),
@@ -311,11 +312,11 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(OP, "add", "__fn1_c", "__fn1_c", var(6)),
                 createInstruction(OP, "add", "__fn1_i", "__fn1_i", "1"),
                 createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", "2000"),
-                createInstruction(JUMP, var(1011), "greaterThanEq", "__fn0_c", "__fn1_c"),
-                createInstruction(PRINT, q("Less")),
-                createInstruction(SET, "result", "0"),
-                createInstruction(LABEL, var(1011)),
-                createInstruction(PRINT, "result")
+                createInstruction(JUMP, var(1010), "greaterThanEq", "__fn0_c", "__fn1_c"),
+                createInstruction(PRINT, q("Less0")),
+                createInstruction(JUMP, "__start__", "always"),
+                createInstruction(LABEL, var(1010)),
+                createInstruction(PRINT, "1")
         );
     }
 

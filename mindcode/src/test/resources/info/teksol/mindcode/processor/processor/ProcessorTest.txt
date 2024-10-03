@@ -1,8 +1,8 @@
 assignments-in-expressions.mnd:             5 instructions,      5 steps, 100.0% coverage, source CRC 90D4C6A6823E16B5, compiled CRC B28E7894BDB75ADF
-compilesProperComparison:                 204 instructions,    186 steps,  91.1% coverage, source CRC DE32E1F0B3E8AB1E, compiled CRC 0DC0EEFF7B0E9568
+compilesProperComparison:                 204 instructions,    186 steps,  91.1% coverage, source CRC DE32E1F0B3E8AB1E, compiled CRC BA8241A70FA52F0B
 complex-case-expression.mnd:               49 instructions,    297 steps, 100.0% coverage, source CRC 866074324995752C, compiled CRC BD5DB148425EE646
 computesPackColor:                          2 instructions,      2 steps, 100.0% coverage, source CRC 4E502A534EB95B4B, compiled CRC ABF615458C567DDA
-expression-evaluation-compile-time.mnd:    64 instructions,     64 steps, 100.0% coverage, source CRC 2578184206F2586E, compiled CRC F13A744596C0D011
+expression-evaluation-compile-time.mnd:    63 instructions,     63 steps, 100.0% coverage, source CRC 2578184206F2586E, compiled CRC A9D303F9DE894A59
 expression-evaluation-runtime.mnd:        865 instructions,    548 steps,  49.0% coverage, source CRC 35BCBB548EC4BA62, compiled CRC 34078AA6C70AA9DB
 fixed-bounds-ranged-for.mnd:                1 instructions,      1 steps, 100.0% coverage, source CRC 95680BD7F4A1B50B, compiled CRC 397D2C8647927672
 for-each-loop-break-continue.mnd:          77 instructions,     90 steps,  83.1% coverage, source CRC 8A655B6298E9A06C, compiled CRC 435A11054CEBD1DA

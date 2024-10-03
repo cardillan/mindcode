@@ -985,7 +985,7 @@ class OptimizationContext {
     }
 
     /**
-     * Replaces an instruction at given index. The replaced instruction should either reuse the AST context
+     * Replaces an instruction at given index. The replacement instruction should either reuse the AST context
      * of the original instruction at this position, or use a new one specifically created for the purpose
      * of the replacement.
      * <p>
@@ -993,21 +993,22 @@ class OptimizationContext {
      * to be thrown.
      *
      * @param index index of an instruction to be replaced
-     * @param instruction new instruction for given index
+     * @param replacement new instruction for given index
+     * @return the new instruction
      * @throws MindcodeInternalError when trying to replace an instruction with itself, or when the replaced
      * instruction is already present elsewhere in the program
      */
-    protected void replaceInstruction(int index, LogicInstruction instruction) {
+    protected LogicInstruction replaceInstruction(int index, LogicInstruction replacement) {
         for (LogicInstruction logicInstruction : program) {
-            if (logicInstruction == instruction) {
-                throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + instruction);
+            if (logicInstruction == replacement) {
+                throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + replacement);
             }
         }
-        LogicInstruction original = program.set(index, instruction);
+        LogicInstruction original = program.set(index, replacement);
         instructionRemoved(original);
-        instructionAdded(instruction);
+        instructionAdded(replacement);
         updated = true;
-        int difference = original.getRealSize() - instruction.getRealSize();
+        int difference = original.getRealSize() - replacement.getRealSize();
         if (difference == 0) {
             modifications++;
         } else if (difference > 0) {
@@ -1015,6 +1016,8 @@ class OptimizationContext {
         } else {
             insertions -= difference;   // Flip sign
         }
+
+        return replacement;
     }
 
     /**
@@ -1080,14 +1083,15 @@ class OptimizationContext {
      * If the original instruction isn't found in the program, an exception is thrown.
      *
      * @param original index of an instruction to be replaced
-     * @param replaced new instruction for given index
+     * @param replacement new instruction to replace the old one
+     * @return the new instruction
      */
-    protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
-        replaceInstruction(existingInstructionIndex(original), replaced);
+    protected LogicInstruction replaceInstruction(LogicInstruction original, LogicInstruction replacement) {
+        return replaceInstruction(existingInstructionIndex(original), replacement);
     }
 
-    protected void replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {
-        replaceInstruction(instruction, instructionProcessor.replaceArgs(instruction, newArgs));
+    protected LogicInstruction replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {
+        return replaceInstruction(instruction, instructionProcessor.replaceArgs(instruction, newArgs));
     }
 
 
@@ -1337,15 +1341,15 @@ class OptimizationContext {
          * Replaces the last returned instruction with given instruction. If no instruction was returned,
          * or it was removed in the meantime, an exception is thrown.
          *
-         * @param instruction instruction with which to replace the last returned instruction
+         * @param replacement instruction with which to replace the last returned instruction
          */
         @Override
-        public void set(LogicInstruction instruction) {
+        public void set(LogicInstruction replacement) {
             checkClosed();
             if (lastRet < 0) {
                 throw new IllegalStateException();
             }
-            replaceInstruction(lastRet, instruction);
+            replaceInstruction(lastRet, replacement);
         }
 
         /**

@@ -212,32 +212,6 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     85 label __label22
     86 pop bank1 __fn0_new_pivot_index
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    17 label __label4
-    18 end
-    19 label __label0
--    * jump __label6 lessThanEq __fn0_right __fn0_left
-+   20 set __fn0retval null
-+   21 jump __label7 lessThanEq __fn0_right __fn0_left
-    22 op sub __tmp6 __fn0_right __fn0_left
-    23 op idiv __tmp7 __tmp6 2
-    24 op add __fn0_pivot_index __fn0_left __tmp7
- 
-    88 pop bank1 __fn0_pivot_index
-    89 pop bank1 __fn0_right
-    90 pop bank1 __fn0_left
--    * set __tmp5 __fn0retval
-+   91 set __fn0retval __fn0retval
-    92 jump __label7 always
--    * label __label6
--    * set __tmp5 null
-    93 label __label7
--    * set __fn0retval __tmp5
-    94 label __label5
-    95 return bank1
-    96 end
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
      8 set __tmp2 SIZE
@@ -249,56 +223,56 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     13 print __tmp3
     14 label __label3
  
-    26 set __fn1_left __fn0_left
-    27 set __fn1_right __fn0_right
-    28 set __fn1_pivot_index __fn0_pivot_index
+    25 set __fn1_left __fn0_left
+    26 set __fn1_right __fn0_right
+    27 set __fn1_pivot_index __fn0_pivot_index
 -    * read __fn1_pivot ARRAY __fn1_pivot_index
 -    * jump __label10 equal __fn1_pivot_index __fn1_right
 -    * read __tmp13 ARRAY __fn1_right
 -    * write __tmp13 ARRAY __fn1_pivot_index
 -    * write __fn1_pivot ARRAY __fn1_right
-+   29 read __fn1_pivot ARRAY __fn0_pivot_index
-+   30 jump __label10 equal __fn0_pivot_index __fn0_right
-+   31 read __tmp13 ARRAY __fn0_right
-+   32 write __tmp13 ARRAY __fn0_pivot_index
-+   33 write __fn1_pivot ARRAY __fn0_right
-    34 label __label10
-    35 label __label11
++   28 read __fn1_pivot ARRAY __fn0_pivot_index
++   29 jump __label10 equal __fn0_pivot_index __fn0_right
++   30 read __tmp13 ARRAY __fn0_right
++   31 write __tmp13 ARRAY __fn0_pivot_index
++   32 write __fn1_pivot ARRAY __fn0_right
+    33 label __label10
+    34 label __label11
 -    * set __fn1_index __fn1_left
 -    * set __tmp14 __fn1_right
 -    * set __fn1_i __fn1_left
-+   36 set __fn1_index __fn0_left
-+   37 set __tmp14 __fn0_right
-+   38 set __fn1_i __fn0_left
-    39 label __label12
++   35 set __fn1_index __fn0_left
++   36 set __tmp14 __fn0_right
++   37 set __fn1_i __fn0_left
+    38 label __label12
 -    * jump __label14 greaterThanEq __fn1_i __tmp14
-+   40 jump __label14 greaterThanEq __fn1_i __fn1_right
-    41 read __fn1_curr ARRAY __fn1_i
-    42 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
-    43 jump __label17 equal __fn1_i __fn1_index
++   39 jump __label14 greaterThanEq __fn1_i __fn1_right
+    40 read __fn1_curr ARRAY __fn1_i
+    41 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
+    42 jump __label17 equal __fn1_i __fn1_index
  
-    53 op add __fn1_i __fn1_i 1
-    54 jump __label12 always
-    55 label __label14
+    52 op add __fn1_i __fn1_i 1
+    53 jump __label12 always
+    54 label __label14
 -    * jump __label19 equal __fn1_index __fn1_right
-+   56 jump __label19 equal __fn1_index __fn0_right
-    57 read __tmp24 ARRAY __fn1_index
++   55 jump __label19 equal __fn1_index __fn0_right
+    56 read __tmp24 ARRAY __fn1_index
 -    * write __tmp24 ARRAY __fn1_right
-+   58 write __tmp24 ARRAY __fn0_right
-    59 write __fn1_pivot ARRAY __fn1_index
-    60 label __label19
-    61 label __label20
-    62 set __tmp9 __fn1_index
-    63 jump __label9 always
++   57 write __tmp24 ARRAY __fn0_right
+    58 write __fn1_pivot ARRAY __fn1_index
+    59 label __label19
+    60 label __label20
+    61 set __tmp9 __fn1_index
+    62 jump __label9 always
 -    * set __tmp9 null
-    64 label __label9
+    63 label __label9
 -    * set __fn0_new_pivot_index __tmp9
 -    * op sub __tmp25 __fn0_new_pivot_index 1
-+   65 set __fn0_new_pivot_index __fn1_index
-+   66 op sub __tmp25 __tmp9 1
-    67 push bank1 __fn0_left
-    68 push bank1 __fn0_right
-    69 push bank1 __fn0_pivot_index
++   64 set __fn0_new_pivot_index __fn1_index
++   65 op sub __tmp25 __tmp9 1
+    66 push bank1 __fn0_left
+    67 push bank1 __fn0_right
+    68 push bank1 __fn0_pivot_index
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
@@ -310,54 +284,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
      9 label __label2
     10 jump __label4 greaterThanEq i SIZE
  
-    22 op idiv __tmp7 __tmp6 2
-    23 op add __fn0_pivot_index __fn0_left __tmp7
-    24 label __label8
+    21 op idiv __tmp7 __tmp6 2
+    22 op add __fn0_pivot_index __fn0_left __tmp7
+    23 label __label8
 -    * set __fn1_left __fn0_left
-    25 set __fn1_right __fn0_right
+    24 set __fn1_right __fn0_right
 -    * set __fn1_pivot_index __fn0_pivot_index
-    26 read __fn1_pivot ARRAY __fn0_pivot_index
-    27 jump __label10 equal __fn0_pivot_index __fn0_right
-    28 read __tmp13 ARRAY __fn0_right
- 
-    31 label __label10
-    32 label __label11
-    33 set __fn1_index __fn0_left
--    * set __tmp14 __fn0_right
-    34 set __fn1_i __fn0_left
-    35 label __label12
--    * jump __label14 greaterThanEq __fn1_i __fn1_right
-+   36 jump __label14 greaterThanEq __fn1_i __fn0_right
-    37 read __fn1_curr ARRAY __fn1_i
-    38 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
-    39 jump __label17 equal __fn1_i __fn1_index
- 
-    59 jump __label9 always
-    60 label __label9
-    61 set __fn0_new_pivot_index __fn1_index
--    * op sub __tmp25 __tmp9 1
-+   62 op sub __tmp25 __fn1_index 1
-    63 push bank1 __fn0_left
-    64 push bank1 __fn0_right
-    65 push bank1 __fn0_pivot_index
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
- 
-    22 op idiv __tmp7 __tmp6 2
-    23 op add __fn0_pivot_index __fn0_left __tmp7
-    24 label __label8
--    * set __fn1_right __fn0_right
     25 read __fn1_pivot ARRAY __fn0_pivot_index
     26 jump __label10 equal __fn0_pivot_index __fn0_right
     27 read __tmp13 ARRAY __fn0_right
  
-    54 write __fn1_pivot ARRAY __fn1_index
-    55 label __label19
-    56 label __label20
+    30 label __label10
+    31 label __label11
+    32 set __fn1_index __fn0_left
+-    * set __tmp14 __fn0_right
+    33 set __fn1_i __fn0_left
+    34 label __label12
+-    * jump __label14 greaterThanEq __fn1_i __fn1_right
++   35 jump __label14 greaterThanEq __fn1_i __fn0_right
+    36 read __fn1_curr ARRAY __fn1_i
+    37 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
+    38 jump __label17 equal __fn1_i __fn1_index
+ 
+    58 jump __label9 always
+    59 label __label9
+    60 set __fn0_new_pivot_index __fn1_index
+-    * op sub __tmp25 __tmp9 1
++   61 op sub __tmp25 __fn1_index 1
+    62 push bank1 __fn0_left
+    63 push bank1 __fn0_right
+    64 push bank1 __fn0_pivot_index
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+ 
+    21 op idiv __tmp7 __tmp6 2
+    22 op add __fn0_pivot_index __fn0_left __tmp7
+    23 label __label8
+-    * set __fn1_right __fn0_right
+    24 read __fn1_pivot ARRAY __fn0_pivot_index
+    25 jump __label10 equal __fn0_pivot_index __fn0_right
+    26 read __tmp13 ARRAY __fn0_right
+ 
+    53 write __fn1_pivot ARRAY __fn1_index
+    54 label __label19
+    55 label __label20
 -    * set __tmp9 __fn1_index
-    57 jump __label9 always
-    58 label __label9
-    59 set __fn0_new_pivot_index __fn1_index
+    56 jump __label9 always
+    57 label __label9
+    58 set __fn0_new_pivot_index __fn1_index
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
@@ -375,22 +349,48 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     18 end
     19 label __label0
  
-    34 set __fn1_i __fn0_left
-    35 label __label12
-    36 jump __label14 greaterThanEq __fn1_i __fn0_right
-+   37 label __label24
-    38 read __fn1_curr ARRAY __fn1_i
-    39 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
-    40 jump __label17 equal __fn1_i __fn1_index
+    33 set __fn1_i __fn0_left
+    34 label __label12
+    35 jump __label14 greaterThanEq __fn1_i __fn0_right
++   36 label __label24
+    37 read __fn1_curr ARRAY __fn1_i
+    38 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
+    39 jump __label17 equal __fn1_i __fn1_index
  
-    48 label __label16
-    49 label __label13
-    50 op add __fn1_i __fn1_i 1
+    47 label __label16
+    48 label __label13
+    49 op add __fn1_i __fn1_i 1
 -    * jump __label12 always
-+   51 jump __label24 lessThan __fn1_i __fn0_right
-    52 label __label14
-    53 jump __label19 equal __fn1_index __fn0_right
-    54 read __tmp24 ARRAY __fn1_index
++   50 jump __label24 lessThan __fn1_i __fn0_right
+    51 label __label14
+    52 jump __label19 equal __fn1_index __fn0_right
+    53 read __tmp24 ARRAY __fn1_index
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    17 label __label4
+    18 end
+    19 label __label0
+-    * jump __label6 lessThanEq __fn0_right __fn0_left
++   20 set __fn0retval null
++   21 jump __label7 lessThanEq __fn0_right __fn0_left
+    22 op sub __tmp6 __fn0_right __fn0_left
+    23 op idiv __tmp7 __tmp6 2
+    24 op add __fn0_pivot_index __fn0_left __tmp7
+ 
+    83 pop bank1 __fn0_pivot_index
+    84 pop bank1 __fn0_right
+    85 pop bank1 __fn0_left
+-    * set __tmp5 __fn0retval
++   86 set __fn0retval __fn0retval
+    87 jump __label7 always
+-    * label __label6
+-    * set __tmp5 null
+    88 label __label7
+-    * set __fn0retval __tmp5
+    89 label __label5
+    90 return bank1
+    91 end
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  

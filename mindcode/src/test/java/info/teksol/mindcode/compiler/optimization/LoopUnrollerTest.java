@@ -86,12 +86,13 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         """,
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(SET, var(2), "2"),
                 createInstruction(OP, "mod", var(1), "i", "2"),
-                createInstruction(JUMP, var(1004), "equal", var(1), "false"),
-                createInstruction(SET, var(2), "1"),
+                createInstruction(JUMP, var(1003), "equal", var(1), "false"),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1004), "always"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(OP, "add", "i", "i", "2"),
                 createInstruction(LABEL, var(1004)),
-                createInstruction(OP, "add", "i", "i", var(2)),
                 createInstruction(PRINT, "i"),
                 createInstruction(JUMP, var(1005), "lessThan", "i", "10")
         );

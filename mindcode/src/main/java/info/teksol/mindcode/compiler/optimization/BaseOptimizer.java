@@ -463,12 +463,13 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * to be thrown.
      *
      * @param index index of an instruction to be replaced
-     * @param instruction new instruction for given index
+     * @param replacement new instruction for given index
+     * @return the new instruction
      * @throws MindcodeInternalError when trying to replace an instruction with itself, or when the replaced
      * instruction is already present elsewhere in the program
      */
-    protected void replaceInstruction(int index, LogicInstruction instruction) {
-        optimizationContext.replaceInstruction(index, instruction);
+    protected LogicInstruction replaceInstruction(int index, LogicInstruction replacement) {
+        return optimizationContext.replaceInstruction(index, replacement);
     }
 
     /**
@@ -542,10 +543,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * If the original instruction isn't found in the program, an exception is thrown.
      *
      * @param original index of an instruction to be replaced
-     * @param replaced new instruction for given index
+     * @param replacement new instruction for given index
+     * @return the new instruction
      */
-    protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
-        optimizationContext.replaceInstruction(original, replaced);
+    protected LogicInstruction replaceInstruction(LogicInstruction original, LogicInstruction replacement) {
+        return optimizationContext.replaceInstruction(original, replacement);
     }
 
     protected void replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {

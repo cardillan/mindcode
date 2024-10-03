@@ -25,10 +25,6 @@ class SingleStepJumpEliminator extends BaseOptimizer {
 
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
-                if (phase == OptimizationPhase.FINAL && !iterator.hasNext() && advanced() && isJumpToStart(ix)) {
-                    removableJumps.add(ix);
-                    continue;
-                }
 
                 if (ix instanceof LabeledInstruction il) {
                     isJumpToNext |= il.getLabel().equals(targetLabel);
@@ -55,6 +51,20 @@ class SingleStepJumpEliminator extends BaseOptimizer {
         }
 
         removableJumps.forEach(this::invalidateInstruction);
+
+        if (phase == OptimizationPhase.FINAL && advanced()) {
+            int index = optimizationContext.getProgram().size() - 1;
+            while (index >= 0) {
+                LogicInstruction lastIx = optimizationContext.getProgram().get(index);
+                if (isJumpToStart(lastIx)) {
+                    optimizationContext.removeInstruction(index);
+                } else if (lastIx.getRealSize() > 0) {
+                    break;
+                }
+                index--;
+            }
+        }
+
         return wasUpdated();
     }
 

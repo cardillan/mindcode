@@ -40,6 +40,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
         LogicInstruction lastFalse = getLastRealInstruction(falseBranch);
         JumpInstruction invertedJump = negateCompoundCondition(condition);
         boolean swappable = true;
+        boolean canMoveForward = true;
 
         // Can we rearrange branches?
         // Expensive tests last
@@ -48,35 +49,46 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
             LogicVariable resVar = resTrue.getResult();
+            LogicInstruction instructionAfter;
 
             // Replace the temporary variable with the actual target
             // Only if the temporary variable is not reused anywhere
             if (resVar.isTemporaryVariable()
-                    && instructionAfter(ifExpression) instanceof SetInstruction finalSet
-                    && finalSet.getValue().equals(resVar)
+                    && isReplaceable(instructionAfter = instructionAfter(ifExpression), resVar)
                     && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(resVar::equals)) == 1) {
-                resTrue = replaceAndGet(resTrue, resTrue.withResult(finalSet.getResult()));
-                resFalse = replaceAndGet(resFalse, resFalse.withResult(finalSet.getResult()));
-                removeInstruction(finalSet);
+                if (instructionAfter instanceof SetInstruction finalSet) {
+                    resTrue = replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
+                    resFalse = replaceInstruction(resFalse, resFalse.withResult(finalSet.getResult()));
+                    removeInstruction(finalSet);
+                } else if (resTrue instanceof SetInstruction setTrue && resFalse instanceof SetInstruction setFalse) {
+                    replaceInstruction(setTrue, replaceAllArgs(instructionAfter, resVar, setTrue.getValue())
+                            .withContext(setTrue.getAstContext()));
+                    replaceInstruction(setFalse, replaceAllArgs(instructionAfter, resVar, setFalse.getValue())
+                            .withContext(setFalse.getAstContext()));
+                    removeInstruction(instructionAfter);
+                    canMoveForward = false;
+                }
 
                 trueBranch = contextInstructions(ifExpression.child(1));
                 falseBranch = contextInstructions(ifExpression.child(3));
             }
 
-            LogicVariable updatedResVar = resTrue.getResult();
+            if (canMoveForward) {
+                LogicVariable updatedResVar = resTrue.getResult();
 
-            // Do not perform the optimization if the condition depends on the resulting variable
-            if (condition.stream().noneMatch(ix -> ix.inputArgumentsStream().anyMatch(updatedResVar::equals))) {
-                if (invertedJump != null && trueBranch.realSize() == 1 && !isVolatile(resTrue)) {
-                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
-                    swappable = false;
-                } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse)) {
-                    moveFalseBranch(condition, trueBranch, falseBranch, jump);
-                    swappable = false;
-                } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse()
-                        && !isVolatile(resTrue)) {
-                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
-                    swappable = false;
+                // Do not perform the optimization if the condition depends on the resulting variable
+                if (condition.stream().noneMatch(ix -> ix.inputArgumentsStream().anyMatch(updatedResVar::equals))) {
+                    if (invertedJump != null && trueBranch.realSize() == 1 && !isVolatile(resTrue)) {
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
+                        swappable = false;
+                    } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse)) {
+                        moveFalseBranch(condition, trueBranch, falseBranch, jump);
+                        swappable = false;
+                    } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse()
+                            && !isVolatile(resTrue)) {
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
+                        swappable = false;
+                    }
                 }
             }
         }
@@ -84,6 +96,11 @@ class IfExpressionOptimizer extends BaseOptimizer {
         if (swappable && invertedJump != null) {
             swapBranches(condition, trueBranch, falseBranch, invertedJump);
         }
+    }
+
+    private boolean isReplaceable(LogicInstruction instruction, LogicVariable resVar) {
+        return instruction instanceof SetInstruction set && set.getValue().equals(resVar)
+                || experimental() && instruction.inputArgumentsStream().anyMatch(resVar::equals);
     }
 
     private LogicInstruction getLastRealInstruction(LogicList instructions) {
@@ -96,9 +113,9 @@ class IfExpressionOptimizer extends BaseOptimizer {
         return null;
     }
 
-    private LogicResultInstruction replaceAndGet(LogicResultInstruction original, LogicResultInstruction replaced) {
-        replaceInstruction(original, replaced);
-        return replaced;
+    private LogicResultInstruction replaceInstruction(LogicResultInstruction original, LogicResultInstruction replacement) {
+        optimizationContext.replaceInstruction(original, replacement);
+        return replacement;
     }
 
     private boolean hasExpectedStructure(AstContext ifExpression) {

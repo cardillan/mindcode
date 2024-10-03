@@ -652,59 +652,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    186 label __label43
    187 label __label35
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
- 
-   111 set STATE __fn0_newState
-   112 op add CYCLES CYCLES 1
-   113 op xor ON INVERTED STATE
--    * jump __label27 equal ON false
--    * set __tmp20 "\nCurrently active:[green]"
-+  114 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-+  115 jump __label28 equal ON false
-+  116 set ACTIVE_TEXT "\nCurrently active:[green]"
-   117 jump __label28 always
--    * label __label27
--    * set __tmp20 "\nCurrently inactive:[salmon]"
-   118 label __label28
--    * set ACTIVE_TEXT __tmp20
-   119 label __label25
-   120 label __label26
-   121 label __label24
- 
-   151 set STATE __fn1_newState
-   152 op add CYCLES CYCLES 1
-   153 op xor ON INVERTED STATE
--    * jump __label40 equal ON false
--    * set __tmp40 "\nCurrently active:[green]"
-+  154 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-+  155 jump __label41 equal ON false
-+  156 set ACTIVE_TEXT "\nCurrently active:[green]"
-   157 jump __label41 always
--    * label __label40
--    * set __tmp40 "\nCurrently inactive:[salmon]"
-   158 label __label41
--    * set ACTIVE_TEXT __tmp40
-   159 label __label38
-   160 label __label39
-   161 label __label37
- 
-   168 set STATE __fn2_newState
-   169 op add CYCLES CYCLES 1
-   170 op xor ON INVERTED STATE
--    * jump __label48 equal ON false
--    * set __tmp48 "\nCurrently active:[green]"
-+  171 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-+  172 jump __label49 equal ON false
-+  173 set ACTIVE_TEXT "\nCurrently active:[green]"
-   174 jump __label49 always
--    * label __label48
--    * set __tmp48 "\nCurrently inactive:[salmon]"
-   175 label __label49
--    * set ACTIVE_TEXT __tmp48
-   176 label __label46
-   177 label __label47
-   178 label __label45
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
      2 set CONTAINER null
@@ -738,37 +685,37 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 +  110 jump __label25 equal STATE true
 +  111 set STATE true
 +  112 op xor ON INVERTED __fn0_newState
-   113 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   114 jump __label28 equal ON false
-   115 set ACTIVE_TEXT "\nCurrently active:[green]"
+   113 jump __label27 equal ON false
+   114 set __tmp20 "\nCurrently active:[green]"
+   115 jump __label28 always
  
-   146 jump __label34 greaterThan pct PCT_LOW
-   147 label __label36
-   148 set __fn1_newState true
+   148 jump __label34 greaterThan pct PCT_LOW
+   149 label __label36
+   150 set __fn1_newState true
 -    * jump __label38 equal STATE __fn1_newState
 -    * set STATE __fn1_newState
-+  149 jump __label38 equal STATE true
-+  150 set STATE true
-   151 op add CYCLES CYCLES 1
++  151 jump __label38 equal STATE true
++  152 set STATE true
+   153 op add CYCLES CYCLES 1
 -    * op xor ON INVERTED STATE
-+  152 op xor ON INVERTED __fn1_newState
-   153 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   154 jump __label41 equal ON false
-   155 set ACTIVE_TEXT "\nCurrently active:[green]"
++  154 op xor ON INVERTED __fn1_newState
+   155 jump __label40 equal ON false
+   156 set __tmp40 "\nCurrently active:[green]"
+   157 jump __label41 always
  
-   163 jump __label42 lessThan pct PCT_HIGH
-   164 label __label44
-   165 set __fn2_newState false
+   167 jump __label42 lessThan pct PCT_HIGH
+   168 label __label44
+   169 set __fn2_newState false
 -    * jump __label46 equal STATE __fn2_newState
 -    * set STATE __fn2_newState
-+  166 jump __label46 equal STATE false
-+  167 set STATE false
-   168 op add CYCLES CYCLES 1
++  170 jump __label46 equal STATE false
++  171 set STATE false
+   172 op add CYCLES CYCLES 1
 -    * op xor ON INVERTED STATE
-+  169 op xor ON INVERTED __fn2_newState
-   170 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   171 jump __label49 equal ON false
-   172 set ACTIVE_TEXT "\nCurrently active:[green]"
++  173 op xor ON INVERTED __fn2_newState
+   174 jump __label48 equal ON false
+   175 set __tmp48 "\nCurrently active:[green]"
+   176 jump __label49 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
@@ -799,27 +746,27 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
    111 set STATE true
 -    * op xor ON INVERTED __fn0_newState
 +  112 op xor ON INVERTED true
-   113 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   114 jump __label28 equal ON false
-   115 set ACTIVE_TEXT "\nCurrently active:[green]"
+   113 jump __label27 equal ON false
+   114 set __tmp20 "\nCurrently active:[green]"
+   115 jump __label28 always
  
-   149 jump __label38 equal STATE true
-   150 set STATE true
-   151 op add CYCLES CYCLES 1
+   151 jump __label38 equal STATE true
+   152 set STATE true
+   153 op add CYCLES CYCLES 1
 -    * op xor ON INVERTED __fn1_newState
-+  152 op xor ON INVERTED true
-   153 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   154 jump __label41 equal ON false
-   155 set ACTIVE_TEXT "\nCurrently active:[green]"
++  154 op xor ON INVERTED true
+   155 jump __label40 equal ON false
+   156 set __tmp40 "\nCurrently active:[green]"
+   157 jump __label41 always
  
-   166 jump __label46 equal STATE false
-   167 set STATE false
-   168 op add CYCLES CYCLES 1
+   170 jump __label46 equal STATE false
+   171 set STATE false
+   172 op add CYCLES CYCLES 1
 -    * op xor ON INVERTED __fn2_newState
-+  169 op xor ON INVERTED false
-   170 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   171 jump __label49 equal ON false
-   172 set ACTIVE_TEXT "\nCurrently active:[green]"
++  173 op xor ON INVERTED false
+   174 jump __label48 equal ON false
+   175 set __tmp48 "\nCurrently active:[green]"
+   176 jump __label49 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
@@ -846,21 +793,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    110 set STATE true
    111 op xor ON INVERTED true
  
-   144 op idiv pct __tmp31 max
-   145 jump __label34 greaterThan pct PCT_LOW
-   146 label __label36
+   146 op idiv pct __tmp31 max
+   147 jump __label34 greaterThan pct PCT_LOW
+   148 label __label36
 -    * set __fn1_newState true
-   147 jump __label38 equal STATE true
-   148 set STATE true
-   149 op add CYCLES CYCLES 1
+   149 jump __label38 equal STATE true
+   150 set STATE true
+   151 op add CYCLES CYCLES 1
  
-   160 label __label34
-   161 jump __label42 lessThan pct PCT_HIGH
-   162 label __label44
+   164 label __label34
+   165 jump __label42 lessThan pct PCT_HIGH
+   166 label __label44
 -    * set __fn2_newState false
-   163 jump __label46 equal STATE false
-   164 set STATE false
-   165 op add CYCLES CYCLES 1
+   167 jump __label46 equal STATE false
+   168 set STATE false
+   169 op add CYCLES CYCLES 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-3 instructions):
  
@@ -897,21 +844,74 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     83 print "Message: "
     84 print MESSAGE
  
-   196 set n START
-   197 label __label52
-   198 jump __label54 greaterThanEq n @links
-+  199 label __label56
-   200 getlink block n
-   201 control enabled block ON
-   202 print "\n    "
-   203 print block
-   204 op add n n 1
-   205 label __label53
+   202 set n START
+   203 label __label52
+   204 jump __label54 greaterThanEq n @links
++  205 label __label56
+   206 getlink block n
+   207 control enabled block ON
+   208 print "\n    "
+   209 print block
+   210 op add n n 1
+   211 label __label53
 -    * jump __label52 always
-+  206 jump __label56 lessThan n @links
-   207 label __label54
-   208 print "[]\n# of cycles: "
-   209 print CYCLES
++  212 jump __label56 lessThan n @links
+   213 label __label54
+   214 print "[]\n# of cycles: "
+   215 print CYCLES
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
+ 
+   107 jump __label25 equal null true
+   108 set STATE true
+   109 op xor ON INVERTED true
+-    * jump __label27 equal ON false
+-    * set __tmp20 "\nCurrently active:[green]"
++  110 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  111 jump __label28 equal ON false
++  112 set ACTIVE_TEXT "\nCurrently active:[green]"
+   113 jump __label28 always
+-    * label __label27
+-    * set __tmp20 "\nCurrently inactive:[salmon]"
+   114 label __label28
+-    * set ACTIVE_TEXT __tmp20
+   115 label __label25
+   116 label __label26
+   117 label __label24
+ 
+   146 set STATE true
+   147 op add CYCLES CYCLES 1
+   148 op xor ON INVERTED true
+-    * jump __label40 equal ON false
+-    * set __tmp40 "\nCurrently active:[green]"
++  149 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  150 jump __label41 equal ON false
++  151 set ACTIVE_TEXT "\nCurrently active:[green]"
+   152 jump __label41 always
+-    * label __label40
+-    * set __tmp40 "\nCurrently inactive:[salmon]"
+   153 label __label41
+-    * set ACTIVE_TEXT __tmp40
+   154 label __label38
+   155 label __label39
+   156 label __label37
+ 
+   162 set STATE false
+   163 op add CYCLES CYCLES 1
+   164 op xor ON INVERTED false
+-    * jump __label48 equal ON false
+-    * set __tmp48 "\nCurrently active:[green]"
++  165 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  166 jump __label49 equal ON false
++  167 set ACTIVE_TEXT "\nCurrently active:[green]"
+   168 jump __label49 always
+-    * label __label48
+-    * set __tmp48 "\nCurrently inactive:[salmon]"
+   169 label __label49
+-    * set ACTIVE_TEXT __tmp48
+   170 label __label46
+   171 label __label47
+   172 label __label45
 
 Modifications by Loop Optimization: replicate condition at line 72 (+1 instructions):
  

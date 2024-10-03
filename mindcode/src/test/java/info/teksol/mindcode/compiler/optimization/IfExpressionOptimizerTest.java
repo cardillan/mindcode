@@ -164,7 +164,6 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                             end
                         end
                         """,
-                createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "lessThanEq", "y", "0"),
                 createInstruction(JUMP, var(1003), "lessThanEq", "x", "0"),
                 createInstruction(JUMP, var(1002), "equal", "z", "0"),
@@ -174,7 +173,6 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(SET, var(2), "-2"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(SET, "y", var(2)),
-                createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1002))
         );
     }
@@ -253,6 +251,32 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(SET, "i", "6"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "i")
+        );
+    }
+
+    @Test
+    void pullsInstructionsIntoBranches() {
+        assertCompilesTo("""
+                        param a = 5;
+                        print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands"); 
+                        """,
+                createInstruction(SET, "a", "5"),
+                createInstruction(JUMP, var(1000), "greaterThanEq", "a", "10"),
+                createInstruction(PRINT, q("units")),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "a", "100"),
+                createInstruction(PRINT, q("tens")),
+                createInstruction(JUMP, var(1003), "always"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(JUMP, var(1004), "greaterThanEq", "a", "1000"),
+                createInstruction(PRINT, q("hundreds")),
+                createInstruction(JUMP, var(1005), "always"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(PRINT, q("thousands")),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1001))
         );
     }
 }
