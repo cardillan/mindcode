@@ -93,6 +93,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         // To convert it to keyword, we use the plain variable name.
         if (arg instanceof LogicVariable lv) {
             return LogicKeyword.create(lv.getName());
+        } else if (arg instanceof LogicBoolean lb) {
+            // Handles the case where true/false are used as a selector or keyword
+            return LogicKeyword.create(lb.toMlog());
         } else {
             throw new MindcodeInternalError("Unexpected type of argument " + arg);
         }
@@ -101,6 +104,9 @@ public class BaseFunctionMapper implements FunctionMapper {
     private LogicKeyword toKeywordOptional(LogicValue arg) {
         if (arg instanceof LogicVariable lv) {
             return LogicKeyword.create(lv.getName());
+        } else if (arg instanceof LogicBoolean lb) {
+            // Handles the case where true/false are used as a selector or keyword
+            return LogicKeyword.create(lb.toMlog());
         } else {
             return LogicKeyword.create("");        // A keyword that cannot exist
         }
@@ -433,7 +439,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         if (results > 1) {
             throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
-        } else if (outputs == 1 && results == 0 && opcodeVariant.opcode() != Opcode.SYNC) {
+        } else if (outputs == 1 && results == 0 && opcodeVariant.opcode() != Opcode.SYNC && opcodeVariant.opcode() != Opcode.MESSAGE) {
             // If there is exactly one output, it must be marked as a result
             throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }

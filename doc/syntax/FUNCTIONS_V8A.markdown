@@ -36,7 +36,7 @@ Add an operation to the drawing buffer. Does not display anything until drawflus
 |`drawPrint(x, y, align)`|`draw print x y align 0 0 0`|
 |`translate(x, y)`|`draw translate x y 0 0 0 0`|
 |`scale(x, y)`|`draw scale x y 0 0 0 0`|
-|`rotate(degrees)`|`draw rotate x y degrees 0 0 0`|
+|`rotate(degrees)`|`draw rotate 0 0 degrees 0 0 0`|
 |`reset()`|`draw reset 0 0 0 0 0 0`|
 
 ## Instruction `print`
@@ -280,7 +280,7 @@ Check if a type of weather is active.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = weathersense(y)`|`weathersense result y`|
+|`result = weathersense(weather)`|`weathersense result weather`|
 
 ## Instruction `weatherset`
 
@@ -288,7 +288,7 @@ Set the current state of a type of weather.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`weatherset(x, y, natural)`|`weatherset x y natural`|
+|`weatherset(weather, active)`|`weatherset weather active`|
 
 ## Instruction `spawnwave`
 
@@ -330,14 +330,14 @@ Set a game rule.
 
 ## Instruction `message`
 
-Display a message on the screen from the text buffer. Will wait until the previous message finishes.
+Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`message(notify)`|`message notify 0`|
-|`message(mission)`|`message mission 0`|
-|`message(announce, duration)`|`message announce duration`|
-|`message(toast, duration)`|`message toast duration`|
+|`message(notify, success?)`|`message notify 0 success`|
+|`message(mission, success?)`|`message mission 0 success`|
+|`message(announce, duration, success?)`|`message announce duration success`|
+|`message(toast, duration, success?)`|`message toast duration success`|
 
 ## Instruction `cutscene`
 
@@ -357,34 +357,34 @@ Create a particle effect.
 |-------------|---------------------|
 |`effect(warn, x, y)`|`effect warn x y 0 0 0`|
 |`effect(cross, x, y)`|`effect cross x y 0 0 0`|
-|`effect(blockFall, x, y, blocktype)`|`effect blockFall x y size color blocktype`|
+|`effect(blockFall, x, y, blocktype)`|`effect blockFall x y 0 0 blocktype`|
 |`effect(placeBlock, x, y, size)`|`effect placeBlock x y size 0 0`|
 |`effect(placeBlockSpark, x, y, size)`|`effect placeBlockSpark x y size 0 0`|
 |`effect(breakBlock, x, y, size)`|`effect breakBlock x y size 0 0`|
 |`effect(spawn, x, y)`|`effect spawn x y 0 0 0`|
 |`effect(trail, x, y, size, color)`|`effect trail x y size color 0`|
 |`effect(breakProp, x, y, size, color)`|`effect breakProp x y size color 0`|
-|`effect(smokeCloud, x, y, color)`|`effect smokeCloud x y size color 0`|
-|`effect(vapor, x, y, color)`|`effect vapor x y size color 0`|
-|`effect(hit, x, y, color)`|`effect hit x y size color 0`|
-|`effect(hitSquare, x, y, color)`|`effect hitSquare x y size color 0`|
+|`effect(smokeCloud, x, y, color)`|`effect smokeCloud x y 0 color 0`|
+|`effect(vapor, x, y, color)`|`effect vapor x y 0 color 0`|
+|`effect(hit, x, y, color)`|`effect hit x y 0 color 0`|
+|`effect(hitSquare, x, y, color)`|`effect hitSquare x y 0 color 0`|
 |`effect(shootSmall, x, y, rotation, color)`|`effect shootSmall x y rotation color 0`|
 |`effect(shootBig, x, y, rotation, color)`|`effect shootBig x y rotation color 0`|
-|`effect(smokeSmall, x, y, color)`|`effect smokeSmall x y size color 0`|
-|`effect(smokeBig, x, y, color)`|`effect smokeBig x y size color 0`|
+|`effect(smokeSmall, x, y, color)`|`effect smokeSmall x y 0 color 0`|
+|`effect(smokeBig, x, y, color)`|`effect smokeBig x y 0 color 0`|
 |`effect(smokeColor, x, y, rotation, color)`|`effect smokeColor x y rotation color 0`|
 |`effect(smokeSquare, x, y, rotation, color)`|`effect smokeSquare x y rotation color 0`|
 |`effect(smokeSquareBig, x, y, rotation, color)`|`effect smokeSquareBig x y rotation color 0`|
-|`effect(spark, x, y, color)`|`effect spark x y size color 0`|
-|`effect(sparkBig, x, y, color)`|`effect sparkBig x y size color 0`|
+|`effect(spark, x, y, color)`|`effect spark x y 0 color 0`|
+|`effect(sparkBig, x, y, color)`|`effect sparkBig x y 0 color 0`|
 |`effect(sparkShoot, x, y, rotation, color)`|`effect sparkShoot x y rotation color 0`|
 |`effect(sparkShootBig, x, y, rotation, color)`|`effect sparkShootBig x y rotation color 0`|
-|`effect(drill, x, y, color)`|`effect drill x y size color 0`|
-|`effect(drillBig, x, y, color)`|`effect drillBig x y size color 0`|
+|`effect(drill, x, y, color)`|`effect drill x y 0 color 0`|
+|`effect(drillBig, x, y, color)`|`effect drillBig x y 0 color 0`|
 |`effect(lightBlock, x, y, size, color)`|`effect lightBlock x y size color 0`|
 |`effect(explosion, x, y, size)`|`effect explosion x y size 0 0`|
-|`effect(smokePuff, x, y, color)`|`effect smokePuff x y size color 0`|
-|`effect(sparkExplosion, x, y, color)`|`effect sparkExplosion x y size color 0`|
+|`effect(smokePuff, x, y, color)`|`effect smokePuff x y 0 color 0`|
+|`effect(sparkExplosion, x, y, color)`|`effect sparkExplosion x y 0 color 0`|
 |`effect(crossExplosion, x, y, size, color)`|`effect crossExplosion x y size color 0`|
 |`effect(wave, x, y, size, color)`|`effect wave x y size color 0`|
 |`effect(bubble, x, y)`|`effect bubble x y 0 0 0`|
@@ -395,7 +395,7 @@ Create an explosion at a location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`explosion(team, x, y, radius, damage, air, ground, pierce)`|`explosion team x y radius damage air ground pierce`|
+|`explosion(team, x, y, radius, damage, air, ground, pierce, effect)`|`explosion team x y radius damage air ground pierce effect`|
 
 ## Instruction `setrate`
 
@@ -451,6 +451,60 @@ Sets a property of a unit or building.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`object.setprop(property, value)`|`setprop property object value`|
+
+## Instruction `playsound`
+
+Plays a sound. Volume and pan can be a global value, or calculated based on position.
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`playsound(true, sound, volume, pitch, x, y, limit)`|`playsound true sound volume pitch 0 x y limit`|
+|`playsound(false, sound, volume, pitch, pan, limit)`|`playsound false sound volume pitch pan 0 0 limit`|
+
+## Instruction `setmarker`
+
+Set a property for a marker. The ID used must be the same as in the Make Marker instruction. null values are ignored.
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`setmarker(remove, id)`|`setmarker remove id 0 0 0`|
+|`setmarker(world, id, boolean)`|`setmarker world id boolean 0 0`|
+|`setmarker(minimap, id, boolean)`|`setmarker minimap id boolean 0 0`|
+|`setmarker(autoscale, id, boolean)`|`setmarker autoscale id boolean 0 0`|
+|`setmarker(pos, id, x, y)`|`setmarker pos id x y 0`|
+|`setmarker(endPos, id, x, y)`|`setmarker endPos id x y 0`|
+|`setmarker(drawLayer, id, layer)`|`setmarker drawLayer id layer 0 0`|
+|`setmarker(color, id, color)`|`setmarker color id color 0 0`|
+|`setmarker(radius, id, radius)`|`setmarker radius id radius 0 0`|
+|`setmarker(stroke, id, stroke)`|`setmarker stroke id stroke 0 0`|
+|`setmarker(rotation, id, rotation)`|`setmarker rotation id rotation 0 0`|
+|`setmarker(shape, id, sides, fill, outline)`|`setmarker shape id sides fill outline`|
+|`setmarker(arc, id, from, to)`|`setmarker arc id from to 0`|
+|`setmarker(flushText, id, fetch)`|`setmarker flushText id fetch 0 0`|
+|`setmarker(fontSize, id, size)`|`setmarker fontSize id size 0 0`|
+|`setmarker(textHeight, id, height)`|`setmarker textHeight id height 0 0`|
+|`setmarker(labelFlags, id, background, outline)`|`setmarker labelFlags id background outline 0`|
+|`setmarker(texture, id, printFlush, name)`|`setmarker texture id printFlush name 0`|
+|`setmarker(textureSize, id, width, height)`|`setmarker textureSize id width height 0`|
+|`setmarker(posi, id, index, x, y)`|`setmarker posi id index x y`|
+|`setmarker(uvi, id, index, x, y)`|`setmarker uvi id index x y`|
+|`setmarker(colori, id, index, color)`|`setmarker colori id index color 0`|
+
+## Instruction `makemarker`
+
+Create a new logic marker in the world. An ID to identify this marker must be provided. Markers currently limited to 20,000 per world.
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`makemarker(marker, id, x, y, replace)`|`makemarker marker id x y replace`|
+
+## Instruction `localeprint`
+
+Add map locale property value to the text buffer. To set map locale bundles in map editor, check Map Info > Locale Bundles. If client is a mobile device, tries to print a property ending in ".mobile" first.
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`localeprint(property)`|`localeprint property`|
 
 ---
 

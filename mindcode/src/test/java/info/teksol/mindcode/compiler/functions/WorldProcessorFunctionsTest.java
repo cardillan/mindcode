@@ -122,15 +122,15 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesMessage() {
         assertCompilesTo("""
-                        message(notify)
-                        message(mission)
-                        message(announce, duration)
-                        message(toast, duration)
+                        message(notify, @wait)
+                        message(mission, @wait)
+                        message(announce, duration, result)
+                        message(toast, duration, result)
                         """,
-                createInstruction(MESSAGE, "notify"),
-                createInstruction(MESSAGE, "mission"),
-                createInstruction(MESSAGE, "announce", "duration"),
-                createInstruction(MESSAGE, "toast", "duration"),
+                createInstruction(MESSAGE, "notify", "0", "@wait"),
+                createInstruction(MESSAGE, "mission", "0", "@wait"),
+                createInstruction(MESSAGE, "announce", "duration", "result"),
+                createInstruction(MESSAGE, "toast", "duration", "result"),
                 createInstruction(END)
         );
     }
@@ -152,9 +152,9 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesExplosion() {
         assertCompilesTo("""
-                        explosion(team, x, y, radius, damage, air, ground, pierce)
+                        explosion(team, x, y, radius, damage, air, ground, pierce, true)
                         """,
-                createInstruction(EXPLOSION, "team", "x", "y", "radius", "damage", "air", "ground", "pierce"),
+                createInstruction(EXPLOSION, "team", "x", "y", "radius", "damage", "air", "ground", "pierce", "true"),
                 createInstruction(END)
         );
     }
@@ -301,34 +301,34 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         """,
                 createInstruction(EFFECT, "warn", "x", "y"),
                 createInstruction(EFFECT, "cross", "x", "y"),
-                createInstruction(EFFECT, "blockFall", "x", "y", "size", "color", "@vault"),
+                createInstruction(EFFECT, "blockFall", "x", "y", "0", "0", "@vault"),
                 createInstruction(EFFECT, "placeBlock", "x", "y", "size"),
                 createInstruction(EFFECT, "placeBlockSpark", "x", "y", "size"),
                 createInstruction(EFFECT, "breakBlock", "x", "y", "size"),
                 createInstruction(EFFECT, "spawn", "x", "y"),
                 createInstruction(EFFECT, "trail", "x", "y", "size", "color"),
                 createInstruction(EFFECT, "breakProp", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "smokeCloud", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "vapor", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "hit", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "hitSquare", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "smokeCloud", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "vapor", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "hit", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "hitSquare", "x", "y", "0", "color"),
                 createInstruction(EFFECT, "shootSmall", "x", "y", "rotation", "color"),
                 createInstruction(EFFECT, "shootBig", "x", "y", "rotation", "color"),
-                createInstruction(EFFECT, "smokeSmall", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "smokeBig", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "smokeSmall", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "smokeBig", "x", "y", "0", "color"),
                 createInstruction(EFFECT, "smokeColor", "x", "y", "rotation", "color"),
                 createInstruction(EFFECT, "smokeSquare", "x", "y", "rotation", "color"),
                 createInstruction(EFFECT, "smokeSquareBig", "x", "y", "rotation", "color"),
-                createInstruction(EFFECT, "spark", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "sparkBig", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "spark", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "sparkBig", "x", "y", "0", "color"),
                 createInstruction(EFFECT, "sparkShoot", "x", "y", "rotation", "color"),
                 createInstruction(EFFECT, "sparkShootBig", "x", "y", "rotation", "color"),
-                createInstruction(EFFECT, "drill", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "drillBig", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "drill", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "drillBig", "x", "y", "0", "color"),
                 createInstruction(EFFECT, "lightBlock", "x", "y", "size", "color"),
                 createInstruction(EFFECT, "explosion", "x", "y", "size"),
-                createInstruction(EFFECT, "smokePuff", "x", "y", "size", "color"),
-                createInstruction(EFFECT, "sparkExplosion", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "smokePuff", "x", "y", "0", "color"),
+                createInstruction(EFFECT, "sparkExplosion", "x", "y", "0", "color"),
                 createInstruction(EFFECT, "crossExplosion", "x", "y", "size", "color"),
                 createInstruction(EFFECT, "wave", "x", "y", "size", "color"),
                 createInstruction(EFFECT, "bubble", "x", "y"),

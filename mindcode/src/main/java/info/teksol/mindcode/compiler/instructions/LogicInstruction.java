@@ -4,6 +4,7 @@ import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.*;
+import org.antlr.v4.runtime.Token;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -75,5 +76,9 @@ public interface LogicInstruction {
 
     default boolean endsCodePath() {
         return false;
+    }
+
+    default Token startToken() {
+        return getAstContext() != null ? getAstContext().startToken() : null;
     }
 }

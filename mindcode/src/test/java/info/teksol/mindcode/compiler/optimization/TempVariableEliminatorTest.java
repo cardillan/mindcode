@@ -6,7 +6,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableEliminator> {
+class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableEliminator> {
 
     @Override
     protected Class<TempVariableEliminator> getTestedClass() {

@@ -12,7 +12,7 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DiffDebugPrinterTest extends AbstractGeneratorTest {
+class DiffDebugPrinterTest extends AbstractGeneratorTest {
     private final DiffDebugPrinter printer = new DiffDebugPrinter(1);
     private final List<String> messages = new ArrayList<>();
 

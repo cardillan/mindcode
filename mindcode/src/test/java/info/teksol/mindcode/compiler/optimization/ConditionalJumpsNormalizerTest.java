@@ -6,7 +6,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<ConditionalJumpsNormalizer> {
+class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<ConditionalJumpsNormalizer> {
 
     @Override
     protected Class<ConditionalJumpsNormalizer> getTestedClass() {

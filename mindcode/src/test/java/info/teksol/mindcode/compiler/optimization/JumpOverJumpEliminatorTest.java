@@ -9,7 +9,7 @@ import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.ADVANCED;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpEliminator> {
+class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpEliminator> {
 
     @Override
     protected Class<JumpOverJumpEliminator> getTestedClass() {

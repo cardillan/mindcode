@@ -8,7 +8,7 @@ import static info.teksol.mindcode.logic.Condition.EQUAL;
 import static info.teksol.mindcode.logic.Condition.NOT_EQUAL;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOptimizer> {
+class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOptimizer> {
 
     @Override
     protected Class<CaseExpressionOptimizer> getTestedClass() {

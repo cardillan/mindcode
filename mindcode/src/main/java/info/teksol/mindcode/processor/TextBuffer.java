@@ -31,35 +31,43 @@ public class TextBuffer {
      */
     public boolean format(String text) {
         if (buffer.length() > sizeLimit) {
-            // We didn't replace anything -- do not report error
+            // We didn't even try to replace anything -- do not report error
             return true;
         }
 
-        int placeholderIndex = -1;
-        int placeholderNumber = 10;
+        int index = findLeastPlaceholderIndex();
 
-        for (int i = flushIndex; i < buffer.length(); i++) {
-            if (buffer.charAt(i) == '{' && buffer.length() - i > 2) {
-                char numChar = buffer.charAt(i + 1);
+        if (index >= 0) {
+            buffer.replace(index, index + 3, text);
+            if (buffer.length() > sizeLimit) {
+                buffer.append("\nText buffer size limit exceeded.");
+            }
+        }
 
-                if (numChar >= '0' && numChar <= '9' && buffer.charAt(i + 2) == '}') {
-                    if (numChar - '0' < placeholderNumber) {
-                        placeholderNumber = numChar - '0';
-                        placeholderIndex = i;
-                    }
+        return index >= 0;
+    }
+
+    /**
+     * Finds the first occurrence of a placeholder with the least value in the text buffer and
+     * returns it's position (index in the text buffer).
+     * @return position of the placeholder to be replaced
+     */
+    private int findLeastPlaceholderIndex() {
+        int index = -1;
+        char minValue = '9' + 1;                // Least found value so far, won't be matched again
+        int limit = buffer.length() - 2;
+
+        for (int i = flushIndex; i < limit; i++) {
+            if (buffer.charAt(i) == '{') {
+                char placeholder = buffer.charAt(i + 1);
+                if (placeholder >= '0' && placeholder < minValue && buffer.charAt(i + 2) == '}') {
+                    minValue = placeholder;
+                    index = i;
                 }
             }
         }
 
-        if (placeholderIndex >= 0) {
-            buffer.replace(placeholderIndex, placeholderIndex + 3, text);
-        }
-
-        if (buffer.length() > sizeLimit) {
-            buffer.append("\nText buffer size limit exceeded.");
-        }
-
-        return placeholderIndex >= 0;
+        return index;
     }
 
     public void printflush() {

@@ -161,7 +161,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     // Configuration
 
     protected ProcessorVersion getProcessorVersion() {
-        return ProcessorVersion.V7A;
+        return ProcessorVersion.MAX;
     }
 
     protected ProcessorEdition getProcessorEdition() {

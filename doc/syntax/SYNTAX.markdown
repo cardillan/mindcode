@@ -38,6 +38,8 @@ Additional information on Mindcode and Mindustry Logic:
 * [Troubleshooting Mindcode](TROUBLESHOOTING.markdown)
 * [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown)
 
+New and modified functionality available in the upcoming version of Mindustry 8 is described [here](MINDUSTRY-8.markdown).
+
 ---
 
 # Mindcode basics

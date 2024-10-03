@@ -970,10 +970,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             printf("  dome:  [green]$[]\\n", level)
                         end
                         """,
+                createInstruction(PRINT, q("\n[green]Silicon[] status:\n  dome:  [green]{0}[]\n")),
                 createInstruction(SENSOR, "__fn0_level", "dome1", "@silicon"),
-                createInstruction(PRINT, q("\n[green]Silicon[] status:\n  dome:  [green]")),
-                createInstruction(PRINT, "__fn0_level"),
-                createInstruction(PRINT, q("[]\n"))
+                createInstruction(FORMAT, "__fn0_level")
         );
     }
     //</editor-fold>

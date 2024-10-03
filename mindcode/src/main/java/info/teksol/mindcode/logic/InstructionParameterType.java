@@ -68,6 +68,9 @@ public enum InstructionParameterType {
     LOOKUP          (Flags.KEYWORD, "block", "unit", "item", "liquid"),
 
     /** Type of message in MESSAGE instruction */
+    MAKE_MARKER     (Flags.KEYWORD, "shapeText", "point", "shape", "text", "line", "texture", "quad"),
+
+    /** Type of message in MESSAGE instruction */
     MESSAGE         (Flags.SELECTOR),
 
     /** Selector for the OP instruction. */
@@ -98,6 +101,9 @@ public enum InstructionParameterType {
     /** Game rule in SETRULE instruction */
     RULE            (Flags.SELECTOR),
 
+    /** Scope for the playsound instruction: true=positional, false=global */
+    SCOPE           (Flags.SELECTOR),
+
     /** Input parameter accepting property id. */
     SENSOR          (Flags.INPUT,
             allVersions(
@@ -121,8 +127,27 @@ public enum InstructionParameterType {
                     "@id")
     ),
 
+    /** For the SET MARKER instruction */
+    SET_MARKER      (Flags.SELECTOR),
+
     /** Settable layer in SETBLOCK instruction */
     SETTABLE_LAYER  (Flags.SELECTOR),
+
+    /** Sound to play */
+    SOUND           (Flags.INPUT, "@sfx-artillery", "@sfx-bang", "@sfx-beam", "@sfx-bigshot", "@sfx-bioLoop",
+            "@sfx-blaster", "@sfx-bolt", "@sfx-boom", "@sfx-break", "@sfx-build", "@sfx-buttonClick", "@sfx-cannon", "@sfx-click",
+            "@sfx-combustion", "@sfx-conveyor", "@sfx-corexplode", "@sfx-cutter", "@sfx-door", "@sfx-drill", "@sfx-drillCharge",
+            "@sfx-drillImpact", "@sfx-dullExplosion", "@sfx-electricHum", "@sfx-explosion", "@sfx-explosionbig", "@sfx-extractLoop",
+            "@sfx-fire", "@sfx-flame", "@sfx-flame2", "@sfx-flux", "@sfx-glow", "@sfx-grinding", "@sfx-hum", "@sfx-largeCannon",
+            "@sfx-largeExplosion", "@sfx-laser", "@sfx-laserbeam", "@sfx-laserbig", "@sfx-laserblast", "@sfx-lasercharge",
+            "@sfx-lasercharge2", "@sfx-lasershoot", "@sfx-machine", "@sfx-malignShoot", "@sfx-mediumCannon", "@sfx-minebeam",
+            "@sfx-mineDeploy", "@sfx-missile", "@sfx-missileLarge", "@sfx-missileLaunch", "@sfx-missileSmall", "@sfx-missileTrail",
+            "@sfx-mud", "@sfx-noammo", "@sfx-pew", "@sfx-place", "@sfx-plantBreak", "@sfx-plasmaboom", "@sfx-plasmadrop", "@sfx-pulse",
+            "@sfx-pulseBlast", "@sfx-railgun", "@sfx-rain", "@sfx-release", "@sfx-respawn", "@sfx-respawning", "@sfx-rockBreak",
+            "@sfx-sap", "@sfx-shield", "@sfx-shockBlast", "@sfx-shoot", "@sfx-shootAlt", "@sfx-shootAltLong", "@sfx-shootBig",
+            "@sfx-shootSmite", "@sfx-shootSnap", "@sfx-shotgun", "@sfx-smelter", "@sfx-spark", "@sfx-spellLoop", "@sfx-splash",
+            "@sfx-spray", "@sfx-steam", "@sfx-swish", "@sfx-techloop", "@sfx-thruster", "@sfx-titanExplosion", "@sfx-torch",
+            "@sfx-tractorbeam", "@sfx-wave", "@sfx-wind", "@sfx-wind2", "@sfx-wind3", "@sfx-windhowl"),
 
     /** Unit status in STATUS instruction. */
     STATUS          (Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
@@ -269,6 +294,8 @@ public enum InstructionParameterType {
         }
     }
 
+    // Note: FUNCTION >> SELECTOR >> KEYWORD
+
     private static final class Flags {
         /** Keyword parameter (cannot use a variable). */
         private static final int KEYWORD = 0;
@@ -279,10 +306,10 @@ public enum InstructionParameterType {
         /** Output parameter (must use a variable for output value). */
         private static final int OUTPUT = 2;
 
-        /**  Opcode-selecting parameter. Possible values are given by existing opcode variants for given version. */
+        /**  Opcode-variant-selecting parameter. Possible values are given by existing opcode variants for given version. */
         private static final int SELECTOR = 4;
 
-        /** Defines name of a function(or property). Must be a selector. */
+        /** Defines the name of a function (or property). Must be a selector. */
         private static final int FUNCTION = 8;
 
         /** Unused parameter. Doesn't map to Mindcode functions. */

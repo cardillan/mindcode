@@ -7,7 +7,7 @@ import java.util.List;
 import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCodeEliminator> {
+class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCodeEliminator> {
 
     @Override
     protected Class<UnreachableCodeEliminator> getTestedClass() {

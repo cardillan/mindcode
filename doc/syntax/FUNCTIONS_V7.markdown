@@ -301,7 +301,7 @@ Set a game rule.
 
 ## Instruction `message`
 
-Display a message on the screen from the text buffer. Will wait until the previous message finishes.
+Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
@@ -328,34 +328,34 @@ Create a particle effect.
 |-------------|---------------------|
 |`effect(warn, x, y)`|`effect warn x y 0 0 0`|
 |`effect(cross, x, y)`|`effect cross x y 0 0 0`|
-|`effect(blockFall, x, y, blocktype)`|`effect blockFall x y size color blocktype`|
+|`effect(blockFall, x, y, blocktype)`|`effect blockFall x y 0 0 blocktype`|
 |`effect(placeBlock, x, y, size)`|`effect placeBlock x y size 0 0`|
 |`effect(placeBlockSpark, x, y, size)`|`effect placeBlockSpark x y size 0 0`|
 |`effect(breakBlock, x, y, size)`|`effect breakBlock x y size 0 0`|
 |`effect(spawn, x, y)`|`effect spawn x y 0 0 0`|
 |`effect(trail, x, y, size, color)`|`effect trail x y size color 0`|
 |`effect(breakProp, x, y, size, color)`|`effect breakProp x y size color 0`|
-|`effect(smokeCloud, x, y, color)`|`effect smokeCloud x y size color 0`|
-|`effect(vapor, x, y, color)`|`effect vapor x y size color 0`|
-|`effect(hit, x, y, color)`|`effect hit x y size color 0`|
-|`effect(hitSquare, x, y, color)`|`effect hitSquare x y size color 0`|
+|`effect(smokeCloud, x, y, color)`|`effect smokeCloud x y 0 color 0`|
+|`effect(vapor, x, y, color)`|`effect vapor x y 0 color 0`|
+|`effect(hit, x, y, color)`|`effect hit x y 0 color 0`|
+|`effect(hitSquare, x, y, color)`|`effect hitSquare x y 0 color 0`|
 |`effect(shootSmall, x, y, rotation, color)`|`effect shootSmall x y rotation color 0`|
 |`effect(shootBig, x, y, rotation, color)`|`effect shootBig x y rotation color 0`|
-|`effect(smokeSmall, x, y, color)`|`effect smokeSmall x y size color 0`|
-|`effect(smokeBig, x, y, color)`|`effect smokeBig x y size color 0`|
+|`effect(smokeSmall, x, y, color)`|`effect smokeSmall x y 0 color 0`|
+|`effect(smokeBig, x, y, color)`|`effect smokeBig x y 0 color 0`|
 |`effect(smokeColor, x, y, rotation, color)`|`effect smokeColor x y rotation color 0`|
 |`effect(smokeSquare, x, y, rotation, color)`|`effect smokeSquare x y rotation color 0`|
 |`effect(smokeSquareBig, x, y, rotation, color)`|`effect smokeSquareBig x y rotation color 0`|
-|`effect(spark, x, y, color)`|`effect spark x y size color 0`|
-|`effect(sparkBig, x, y, color)`|`effect sparkBig x y size color 0`|
+|`effect(spark, x, y, color)`|`effect spark x y 0 color 0`|
+|`effect(sparkBig, x, y, color)`|`effect sparkBig x y 0 color 0`|
 |`effect(sparkShoot, x, y, rotation, color)`|`effect sparkShoot x y rotation color 0`|
 |`effect(sparkShootBig, x, y, rotation, color)`|`effect sparkShootBig x y rotation color 0`|
-|`effect(drill, x, y, color)`|`effect drill x y size color 0`|
-|`effect(drillBig, x, y, color)`|`effect drillBig x y size color 0`|
+|`effect(drill, x, y, color)`|`effect drill x y 0 color 0`|
+|`effect(drillBig, x, y, color)`|`effect drillBig x y 0 color 0`|
 |`effect(lightBlock, x, y, size, color)`|`effect lightBlock x y size color 0`|
 |`effect(explosion, x, y, size)`|`effect explosion x y size 0 0`|
-|`effect(smokePuff, x, y, color)`|`effect smokePuff x y size color 0`|
-|`effect(sparkExplosion, x, y, color)`|`effect sparkExplosion x y size color 0`|
+|`effect(smokePuff, x, y, color)`|`effect smokePuff x y 0 color 0`|
+|`effect(sparkExplosion, x, y, color)`|`effect sparkExplosion x y 0 color 0`|
 |`effect(crossExplosion, x, y, size, color)`|`effect crossExplosion x y size color 0`|
 |`effect(wave, x, y, size, color)`|`effect wave x y size color 0`|
 |`effect(bubble, x, y)`|`effect bubble x y 0 0 0`|

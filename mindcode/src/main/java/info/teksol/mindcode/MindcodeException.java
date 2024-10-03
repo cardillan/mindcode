@@ -8,8 +8,13 @@ public class MindcodeException extends RuntimeException {
         super(message);
     }
 
+    private MindcodeException(Token token, String message) {
+        this(token != null
+                ? String.format("Syntax error at %d:%d: %s", token.getLine(), token.getCharPositionInLine(), message)
+                : message);
+    }
+
     public MindcodeException(Token token, @PrintFormat String message, Object... args) {
-        super(String.format("Syntax error at %d:%d: %s", token.getLine(), token.getCharPositionInLine(),
-                String.format(message, args)));
+        this(token, String.format(message, args));
     }
 }

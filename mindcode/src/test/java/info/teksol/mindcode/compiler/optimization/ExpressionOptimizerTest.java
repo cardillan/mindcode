@@ -7,7 +7,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer> {
+class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer> {
 
     @Override
     protected Class<ExpressionOptimizer> getTestedClass() {

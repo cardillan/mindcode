@@ -4,6 +4,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import org.antlr.v4.runtime.Token;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -281,6 +282,10 @@ public final class AstContext {
 
     public AstNode node() {
         return node;
+    }
+
+    public Token startToken() {
+        return node != null ? node.startToken() : null;
     }
 
     public String functionPrefix() {

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.logic.BaseArgument;
@@ -32,6 +33,8 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
 
     @Test
     void rejectsInvalidArgumentsOnly() {
+        // This is an internal error, as draw type is derived from function name
+        // and won't be generated with invalid value from source code.
         assertThrows(MindcodeInternalError.class, () ->
                 createInstruction(DRAW, "fluffyBunny", "0", "0")
         );
@@ -40,11 +43,11 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
                 createInstruction(URADAR, "flying", "enemy", "boss", "health", "0", "MIN_MAX", "result")
         );
 
-        assertThrows(MindcodeInternalError.class, () ->
+        assertThrows(MindcodeException.class, () ->
                 createInstruction(URADAR, "flying", "enemy", "fluffyBunny", "health", "0", "MIN_MAX", "result")
         );
 
-        assertThrows(MindcodeInternalError.class, () ->
+        assertThrows(MindcodeException.class, () ->
                 createInstruction(URADAR, "flying", "enemy", "boss", "fluffyBunny", "0", "MIN_MAX", "result")
         );
 
@@ -52,7 +55,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
                 createInstruction(ULOCATE, "building", "core", "0", "@copper", "outx", "outy", "found", "building")
         );
 
-        assertThrows(MindcodeInternalError.class, () ->
+        assertThrows(MindcodeException.class, () ->
                 createInstruction(ULOCATE, "building", "fluffyBunny", "0", "@copper", "outx", "outy", "found", "building")
         );
     }

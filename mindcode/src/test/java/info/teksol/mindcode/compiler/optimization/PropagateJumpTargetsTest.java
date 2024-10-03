@@ -6,7 +6,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTargets> {
+class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTargets> {
 
     @Override
     protected Class<PropagateJumpTargets> getTestedClass() {

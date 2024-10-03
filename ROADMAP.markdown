@@ -450,7 +450,7 @@ case (a, b)
     when (x2, y2), (x3, y3)     // a == x2 and b == y2 or a == x3 and b == y3
     when (x4, )                 // a == x4, do not test b
     when (x5, ), (, y5)         // a == x5 or b == y5
-    when (x4, y4) .. (x5, y5)   // Ouch! Maybe one day
+    when (x6, y6) .. (x7, y7)   // a in x6 .. x7 and b in y6 .. y7
     when (,)                    // the same as else, wouldn't be allowed
 end  
 ```

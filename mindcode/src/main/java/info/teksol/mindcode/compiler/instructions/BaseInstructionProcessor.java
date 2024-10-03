@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -443,8 +444,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             LogicArgument argument = instruction.getArgs().get(i);
             InstructionParameterType type = namedParameter.type();
             if (!isValid(type, argument)) {
-                throw new MindcodeInternalError("Argument " + argument + " for parameter '" + namedParameter.name()
-                        + "' not compatible with argument type " + type + ". " + instruction);
+                throw new MindcodeException(instruction.startToken(),
+                        "Invalid value '%s' for parameter '%s': allowed values are '%s'.", argument.toMlog(),
+                        namedParameter.name(), String.join("', ", validArgumentValues.get(type)));
             }
         }
 

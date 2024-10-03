@@ -48,7 +48,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("print"),      in("x"), in("y"), align("align"));
         add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("translate"),  in("x"), in("y"));
         add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("scale"),      in("x"), in("y"));
-        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("rotate"),     unused("x"), unused("y"), in("degrees"));
+        add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("rotate"),     unused("0"), unused("0"), in("degrees"));
         add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("reset"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.PRINT,      in("what"));
@@ -177,8 +177,8 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
         add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
 
-        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSENSE, res("result"),  in("y"));
-        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSET,   in("x"),  in("y"), in("natural"));
+        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSENSE, res("result"),  weather("weather"));
+        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSET,   weather("weather"),  bool("active"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.SPAWNWAVE, in("x"),  in("y"), in("natural"));
 
@@ -206,10 +206,15 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("rtsMinWeight"),          in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("rtsMinSquad"),           in("value"), in("team"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.MESSAGE,   message("notify"));
-        add(list, V7,  MAX, W, FUNC, Opcode.MESSAGE,   message("mission"));
-        add(list, V7,  MAX, W, FUNC, Opcode.MESSAGE,   message("announce"), in("duration"));
-        add(list, V7,  MAX, W, FUNC, Opcode.MESSAGE,   message("toast"),    in("duration"));
+        add(list, V7,  V7A, W, FUNC, Opcode.MESSAGE,   message("notify"));
+        add(list, V7,  V7A, W, FUNC, Opcode.MESSAGE,   message("mission"));
+        add(list, V7,  V7A, W, FUNC, Opcode.MESSAGE,   message("announce"), in("duration"));
+        add(list, V7,  V7A, W, FUNC, Opcode.MESSAGE,   message("toast"),    in("duration"));
+
+        add(list, V8A, MAX, W, FUNC, Opcode.MESSAGE,   message("notify"),   unused("0"),    out("success"));
+        add(list, V8A, MAX, W, FUNC, Opcode.MESSAGE,   message("mission"),  unused("0"),    out("success"));
+        add(list, V8A, MAX, W, FUNC, Opcode.MESSAGE,   message("announce"), in("duration"), out("success"));
+        add(list, V8A, MAX, W, FUNC, Opcode.MESSAGE,   message("toast"),    in("duration"), out("success"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("pan"),  in("x"), in("y"), in("speed"));
         add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("zoom"), in("level"));
@@ -217,39 +222,41 @@ public class MindustryOpcodeVariants {
 
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("warn"),            in("x"), in("y"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("cross"),           in("x"), in("y"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("blockFall"),       in("x"), in("y"), unused("size"), unused("color"), in("blocktype"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("blockFall"),       in("x"), in("y"), unused("0"), unused("0"), in("blocktype"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("placeBlock"),      in("x"), in("y"), in("size"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("placeBlockSpark"), in("x"), in("y"), in("size"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("breakBlock"),      in("x"), in("y"), in("size"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("spawn"),           in("x"), in("y"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("trail"),           in("x"), in("y"), in("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("breakProp"),       in("x"), in("y"), in("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeCloud"),      in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("vapor"),           in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("hit"),             in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("hitSquare"),       in("x"), in("y"), unused("size"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("trail"),           in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("breakProp"),       in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeCloud"),      in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("vapor"),           in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("hit"),             in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("hitSquare"),       in("x"), in("y"), unused("0"),    in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("shootSmall"),      in("x"), in("y"), in("rotation"), in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("shootBig"),        in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSmall"),      in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeBig"),        in("x"), in("y"), unused("size"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSmall"),      in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeBig"),        in("x"), in("y"), unused("0"),    in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeColor"),      in("x"), in("y"), in("rotation"), in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSquare"),     in("x"), in("y"), in("rotation"), in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSquareBig"),  in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("spark"),           in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkBig"),        in("x"), in("y"), unused("size"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("spark"),           in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkBig"),        in("x"), in("y"), unused("0"),    in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkShoot"),      in("x"), in("y"), in("rotation"), in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkShootBig"),   in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("drill"),           in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("drillBig"),        in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("lightBlock"),      in("x"), in("y"), in("size"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("drill"),           in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("drillBig"),        in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("lightBlock"),      in("x"), in("y"), in("size"),     in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("explosion"),       in("x"), in("y"), in("size"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokePuff"),       in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkExplosion"),  in("x"), in("y"), unused("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("crossExplosion"),  in("x"), in("y"), in("size"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("wave"),            in("x"), in("y"), in("size"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokePuff"),       in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkExplosion"),  in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("crossExplosion"),  in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("wave"),            in("x"), in("y"), in("size"),     in("color"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("bubble"),          in("x"), in("y"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"));
+        add(list, V7,  V7A, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"));
+        add(list, V8A, MAX, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"), bool("effect"));
+
         add(list, V7,  MAX, W, FUNC, Opcode.SETRATE, in("ipt"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unitCount"),   res("result"), in("team"));
@@ -265,6 +272,36 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));
         add(list, V7,  MAX, W, PROP, Opcode.SETPROP, sensor("property"), block("object"), in("value"));
+
+        add(list, V8A, MAX, W, FUNC, Opcode.PLAYSOUND, scope("true"),  sound("sound"), in("volume"), in("pitch"), unused("0"), in("x"), in("y"), bool("limit"));
+        add(list, V8A, MAX, W, FUNC, Opcode.PLAYSOUND, scope("false"), sound("sound"), in("volume"), in("pitch"), in("pan"), unused("0"), unused("0"), bool("limit"));
+
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("remove"),      in("id"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("world"),       in("id"), in("boolean"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("minimap"),     in("id"), in("boolean"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("autoscale"),   in("id"), in("boolean"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("pos"),         in("id"), in("x"), in("y"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("endPos"),      in("id"), in("x"), in("y"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("drawLayer"),   in("id"), in("layer"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("color"),       in("id"), in("color"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("radius"),      in("id"), in("radius"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("stroke"),      in("id"), in("stroke"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("rotation"),    in("id"), in("rotation"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("shape"),       in("id"), in("sides"), in("fill"), in("outline"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("arc"),         in("id"), in("from"), in("to"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("flushText"),   in("id"), in("fetch"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("fontSize"),    in("id"), in("size"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("textHeight"),  in("id"), in("height"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("labelFlags"),  in("id"), in("background"), in("outline"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("texture"),     in("id"), in("printFlush"), in("name"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("textureSize"), in("id"), in("width"), in("height"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("posi"),        in("id"), in("index"), in("x"), in("y"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("uvi"),         in("id"), in("index"), in("x"), in("y"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("colori"),      in("id"), in("index"), in("color"));
+
+        add(list, V8A, MAX, W, FUNC, Opcode.MAKEMARKER, makemarker("marker"),    in("id"), in("x"), in("y"), bool("replace"));
+
+        add(list, V8A, MAX, W, FUNC, Opcode.LOCALEPRINT, in("property"));
 
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);
@@ -293,6 +330,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter block(String name) {
         return new NamedParameter(InstructionParameterType.BLOCK, name);
+    }
+
+    public static NamedParameter bool(String name) {
+        return new NamedParameter(InstructionParameterType.BOOL, name);
     }
 
     public static NamedParameter clear(String name) {
@@ -350,6 +391,10 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(InstructionParameterType.LOOKUP, name);
     }
 
+    public static NamedParameter makemarker(String name) {
+        return new NamedParameter(InstructionParameterType.MAKE_MARKER, name);
+    }
+
     public static NamedParameter message(String name) {
         return new NamedParameter(InstructionParameterType.MESSAGE, name);
     }
@@ -382,8 +427,20 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(InstructionParameterType.RULE, name);
     }
 
+    public static NamedParameter scope(String name) {
+        return new NamedParameter(InstructionParameterType.SCOPE, name);
+    }
+
+    public static NamedParameter setmarker(String name) {
+        return new NamedParameter(InstructionParameterType.SET_MARKER, name);
+    }
+
     public static NamedParameter sensor(String name) {
         return new NamedParameter(InstructionParameterType.SENSOR, name);
+    }
+
+    public static NamedParameter sound(String name) {
+        return new NamedParameter(InstructionParameterType.SOUND, name);
     }
 
     public static NamedParameter status(String name) {

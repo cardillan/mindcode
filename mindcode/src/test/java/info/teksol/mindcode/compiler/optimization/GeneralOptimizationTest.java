@@ -10,7 +10,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
+class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
 
     @Override
     protected Class<Optimizer> getTestedClass() {

@@ -1,12 +1,13 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
+class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
 
     @Override
     protected Class<PrintMerger> getTestedClass() {
@@ -18,6 +19,11 @@ public class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
         return List.of(
                 Optimization.PRINT_TEXT_MERGING
         );
+    }
+
+    @Override
+    protected ProcessorVersion getProcessorVersion() {
+        return ProcessorVersion.V7A;
     }
 
     @Test
