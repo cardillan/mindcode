@@ -5,7 +5,7 @@ import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
-public class ReadInstruction extends BaseInstruction implements LogicResultInstruction {
+public class ReadInstruction extends BaseResultInstruction {
 
     ReadInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.READ, args, params);
@@ -25,13 +25,9 @@ public class ReadInstruction extends BaseInstruction implements LogicResultInstr
         return new ReadInstruction(this, astContext);
     }
 
+    @Override
     public ReadInstruction withResult(LogicVariable result) {
         return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getParams());
-    }
-
-    @Override
-    public final LogicVariable getResult() {
-        return (LogicVariable) getArg(0);
     }
 
     public final LogicVariable getMemory() {

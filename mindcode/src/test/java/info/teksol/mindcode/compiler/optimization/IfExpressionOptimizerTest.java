@@ -96,14 +96,14 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void mergesWritesInLargeBranches() {
         assertCompilesTo("""
-                        y = if x >= 0
-                            print("positive")
-                            x
+                        y = if x >= 0 then
+                            print("positive");
+                            x;
                         else
                             print("negative");
-                            -x
-                        end
-                        print(y)
+                            -x;
+                        end;
+                        print(y);
                         """,
                 createInstruction(JUMP, var(1000), "lessThan", "x", "0"),
                 createInstruction(PRINT, q("positive")),
@@ -114,6 +114,30 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(OP, "mul", "y", "-1", "x"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "y")
+        );
+    }
+
+    @Test
+    void mergesLookupsInLargeBranches() {
+        assertCompilesTo("""
+                        a = if @links > 5 then
+                            print("Five");
+                            lookup(unit, 5);
+                        else
+                            print("Ten");
+                            lookup(unit, 10);
+                        end;
+                        print(a);
+                        """,
+                createInstruction(JUMP, var(1000), "lessThanEq", "@links", "5"),
+                createInstruction(PRINT, q("Five")),
+                createInstruction(LOOKUP, "unit", "a", "5"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("Ten")),
+                createInstruction(LOOKUP, "unit", "a", "10"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "a")
         );
     }
 

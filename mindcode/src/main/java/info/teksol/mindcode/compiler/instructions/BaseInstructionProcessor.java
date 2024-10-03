@@ -268,8 +268,18 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case SETADDR    -> new SetAddressInstruction(astContext, arguments, params);
             case STOP       -> new StopInstruction(astContext);
             case WRITE      -> new WriteInstruction(astContext, arguments, params);
-            default         -> new BaseInstruction(astContext, opcode, arguments, params);
+            default         -> createGenericInstruction(astContext, opcode, arguments, params);
         };
+    }
+
+    private LogicInstruction createGenericInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments,
+            List<InstructionParameterType> params) {
+        List<InstructionParameterType> outputs = params.stream().filter(InstructionParameterType::isOutput).toList();
+        if (outputs.size() == 1 && outputs.get(0) == InstructionParameterType.RESULT) {
+            return new BaseResultInstruction(astContext, opcode, arguments, params);
+        } else {
+            return new BaseInstruction(astContext, opcode, arguments, params);
+        }
     }
 
     @Override

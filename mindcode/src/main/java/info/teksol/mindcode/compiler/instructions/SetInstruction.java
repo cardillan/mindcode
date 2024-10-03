@@ -5,7 +5,7 @@ import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
-public class SetInstruction extends BaseInstruction implements LogicResultInstruction {
+public class SetInstruction extends BaseResultInstruction {
 
     SetInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.SET, args, params);
@@ -32,11 +32,6 @@ public class SetInstruction extends BaseInstruction implements LogicResultInstru
 
     public SetInstruction withValue(LogicValue value) {
         return new SetInstruction(astContext, List.of(getResult(), value), getParams());
-    }
-
-    @Override
-    public final LogicVariable getResult() {
-        return (LogicVariable) getArg(0);
     }
 
     public final LogicValue getValue() {

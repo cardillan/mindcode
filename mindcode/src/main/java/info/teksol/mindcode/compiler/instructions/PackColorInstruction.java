@@ -5,7 +5,7 @@ import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
-public class PackColorInstruction extends BaseInstruction implements LogicResultInstruction {
+public class PackColorInstruction extends BaseResultInstruction {
     PackColorInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.PACKCOLOR, args, params);
     }
@@ -24,13 +24,9 @@ public class PackColorInstruction extends BaseInstruction implements LogicResult
         return new PackColorInstruction(this, astContext);
     }
 
+    @Override
     public PackColorInstruction withResult(LogicVariable result) {
         return new PackColorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getParams());
-    }
-
-    @Override
-    public final LogicVariable getResult() {
-        return (LogicVariable) getArg(0);
     }
 
     public final LogicValue getR() {

@@ -6,7 +6,7 @@ import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
-public class OpInstruction extends BaseInstruction implements LogicResultInstruction {
+public class OpInstruction extends BaseResultInstruction {
 
     OpInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.OP, args, params);
@@ -53,11 +53,6 @@ public class OpInstruction extends BaseInstruction implements LogicResultInstruc
         } else {
             throw new MindcodeInternalError(getArg(0) + " is not an operation.");
         }
-    }
-
-    @Override
-    public final LogicVariable getResult() {
-        return (LogicVariable) getArg(1);
     }
 
     public final LogicValue getX() {

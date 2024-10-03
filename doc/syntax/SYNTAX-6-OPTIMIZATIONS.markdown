@@ -165,14 +165,7 @@ set abs x
 end
 ```
 
-As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions
-producing a single value are handled, specifically:
-
-* `set`
-* `op`
-* `read`
-* `sensor`
-* `packcolor`
+As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
 
 ### Value backpropagation
 
