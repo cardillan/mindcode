@@ -184,9 +184,9 @@ set @counter __fn0retaddr
 
 This is a viable workaround if you run into the described problem, until a better solution is implemented. 
 
-# Library functions
+# System functions
 
-Mindcode now defines a few library functions that enhance plain Mindustry Logic.
+Mindcode now defines a few system functions that enhance plain Mindustry Logic.
 
 ## printf
 
@@ -364,6 +364,10 @@ An alternative way to create a remark is the enhanced comment:
 ```
 
 which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment supports string interpolation just as the `remark` function does (`/// Iteration: $i` is the same as `remark("Iteration: $i"")`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1)`) cannot be expressed using an enhanced comment.       
+
+## System library
+
+The system function discussed so far are supported directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY).
 
 # User-defined functions
 

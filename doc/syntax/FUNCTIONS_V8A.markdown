@@ -508,4 +508,4 @@ Add map locale property value to the text buffer. To set map locale bundles in m
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)
+[« Previous: Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown) &nbsp; | &nbsp; [Next: Mindustry 8 »](MINDUSTRY-8.markdown)

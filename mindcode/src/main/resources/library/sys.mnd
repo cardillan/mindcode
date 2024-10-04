@@ -1,0 +1,137 @@
+// Mindcode system library for Mindustry Logic version 8
+
+const __DISPLAY_SIZE_SMALL =  80;
+const __DISPLAY_SIZE_LARGE = 176;
+
+// Small display transformations
+
+def rotateLeftSmall()
+    rotate(90);
+    translate(0, - __DISPLAY_SIZE_SMALL);
+end;
+
+def rotateRightSmall()
+    rotate(270);
+    translate(- __DISPLAY_SIZE_SMALL, 0);
+end;
+
+def upsideDownSmall()
+    rotate(180);
+    translate(- __DISPLAY_SIZE_SMALL, - __DISPLAY_SIZE_SMALL);
+end;
+
+def flipVerticalSmall() 
+    scale(1, -1);
+    translate(0, __DISPLAY_SIZE_SMALL);
+end;
+
+def flipHorizontalSmall()
+    scale(-1, 1);
+    translate(__DISPLAY_SIZE_SMALL, 0);
+end;
+
+// Large display transformations
+
+def rotateLeftLarge()
+    rotate(90);
+    translate(0, - __DISPLAY_SIZE_LARGE);
+end;
+
+def rotateRightLarge()
+    rotate(270);
+    translate(- __DISPLAY_SIZE_LARGE, 0);
+end;
+
+def upsideDownLarge()
+    rotate(180);
+    translate(- __DISPLAY_SIZE_LARGE, - __DISPLAY_SIZE_LARGE);
+end;
+
+def flipVerticalLarge() 
+    scale(1, -1);
+    translate(0, __DISPLAY_SIZE_LARGE);
+end;
+
+def flipHorizontalLarge()
+    scale(-1, 1);
+    translate(__DISPLAY_SIZE_LARGE, 0);
+end;
+
+// Generic display transformations
+
+def rotateLeft(display)
+    display.type == @large-logic-display ? rotateLeftLarge() : rotateLeftSmall();
+end;
+
+def rotateRight(display)
+    display.type == @large-logic-display ? rotateRightLarge() : rotateRightSmall();
+end;
+
+def upsideDown(display)
+    display.type == @large-logic-display ? upsideDownLarge() : upsideDownSmall();
+end;
+
+def flipVertical(display)
+    display.type == @large-logic-display ? flipVerticalLarge() : flipVerticalSmall();
+end;
+
+def flipHorizontal(display)
+    display.type == @large-logic-display ? flipHorizontalLarge() : flipHorizontalSmall();
+end;
+
+// Scaling
+
+def scaleSmallToLarge()
+    scale(__DISPLAY_SIZE_LARGE / __DISPLAY_SIZE_SMALL, __DISPLAY_SIZE_LARGE / __DISPLAY_SIZE_SMALL);
+end;
+
+def scaleLargeToSmall()
+    scale(__DISPLAY_SIZE_SMALL / __DISPLAY_SIZE_LARGE, __DISPLAY_SIZE_SMALL / __DISPLAY_SIZE_LARGE);
+end;
+
+// UNITS
+
+def findFreeUnit(unit_type, initial_flag)
+    // Keep looking for unit until one is found
+    while true do
+        ubind(unit_type);
+        if @unit == null then
+            print($"No unit of type $unit_type found.");
+        elsif @unit.controlled != 0 then
+            print($"Looking for a free $unit_type...");
+        else
+            flag(initial_flag);		// Mark unit as active
+            return @unit;
+        end;
+        printflush(message1);
+    end;
+end;
+
+// TEXT OUTPUT
+
+// Formats a number into the text buffer, without external memory.
+// The text buffer must not contain placeholders {0} and {1}. It must contain at least one placeholder ({2} or higher).
+def formatNumber(n)
+    n = floor(n);
+    if n < 0 then
+        format("-{2}");     // Prepend the minus sign
+        n = abs(n);
+    end;
+    while n > 1000
+        mod = n % 1000;
+        // Insert placeholder for the next group, thousands separator, leading zeroes (if any) and a placeholder for this group.
+        format(mod < 10 ? "{2},00{1}" : mod < 100 ? "{2},0{1}" : "{2},{1}");
+        format(mod);
+        n \= 1000;
+    end;
+
+    // Put the rest of the number into the remaining placeholder
+    format(n);
+end;
+
+// Prints the number straight away
+// The text buffer must not contain any placeholders lower than {3}.
+def printNumber(n)
+    print("{2}");
+    formatNumber(n);
+end;

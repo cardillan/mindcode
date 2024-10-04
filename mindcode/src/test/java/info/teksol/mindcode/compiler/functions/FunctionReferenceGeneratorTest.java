@@ -48,7 +48,7 @@ public class FunctionReferenceGeneratorTest {
             "Function reference for Mindustry Logic 7", "FUNCTIONS_V7.markdown",
             "Function reference for Mindustry Logic 7A", "FUNCTIONS_V7A.markdown",
             "Function reference for Mindustry Logic 8A", "FUNCTIONS_V8A.markdown",
-            "Schemacode", "SCHEMACODE.markdown",
+            "Mindustry 8", "MINDUSTRY-8.markdown",
     };
 
     private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();

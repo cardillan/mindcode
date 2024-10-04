@@ -6,19 +6,23 @@
 .idea/workspace.xml
 .idea/dbnavigator.xml
 .idea/codeStyles/Project.xml
+.idea/templateLanguages.xml
 
 # PostgreSQL cluster data directory
 db/cluster
 
 # Compiled artifacts
 Instruction_Samples_*.txt
+out/
 target
 tmp
-compiler/src/test/resources/scripts/*.mlog
-compiler/src/test/resources/euler/*.mlog
+mindcode/src/test/resources/scripts/*.mlog
+mindcode/src/test/resources/euler/*.mlog
 
-out/
-.idea/templateLanguages.xml
+# System library log files
+mindcode/src/main/resources/library/*.log
+mindcode/src/main/resources/library/*.mlog
+
 
 # Other
 *.orig

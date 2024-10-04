@@ -406,7 +406,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             case "println"  -> handleFormattedOutput(node, Formatter.PRINTLN);
             case "printf"   -> handleFormattedOutput(node, Formatter.PRINTF);
             case "remark"   -> handleFormattedOutput(node, Formatter.REMARK);
-            default         -> handleFunctionCall(node.getFunctionName(), node.getParams());
+            default         -> handleFunctionCall(node, node.getParams());
         };
     }
 
@@ -416,18 +416,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return nodeContext.encapsulate(() -> params.stream().map(this::visit).collect(Collectors.toList()));
     }
 
-    private LogicValue handleFunctionCall(String functionName, List<AstNode> params) {
+    private LogicValue handleFunctionCall(FunctionCall call, List<AstNode> params) {
+        String functionName = call.getFunctionName();
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<LogicValue> arguments = processArguments(params);
 
         setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-        LogicValue output = functionMapper.handleFunction(instructions::add, functionName, arguments);
+        LogicValue output = functionMapper.handleFunction(call.startToken(), instructions::add, functionName, arguments);
 
         if (output == null) {
             if (callGraph.containsFunction(functionName)) {
-                output = handleUserFunctionCall(functionName, arguments);
+                output = handleUserFunctionCall(call, arguments);
             } else {
-                throw new MindcodeException("Undefined function '" + functionName + "'");
+                throw new MindcodeException(call.startToken(), "Undefined function '%s'", functionName);
             }
         }
 
@@ -435,11 +436,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return output;
     }
 
-    private LogicValue handleUserFunctionCall(String functionName, List<LogicValue> arguments) {
+    private LogicValue handleUserFunctionCall(FunctionCall call, List<LogicValue> arguments) {
+        String functionName = call.getFunctionName();
         LogicFunction function = callGraph.getFunction(functionName);
         if (arguments.size() != function.getParamCount()) {
-            throw new MindcodeException("Function '" + functionName + "': wrong number of arguments (expected "
-                    + function.getParamCount() + ", found " + arguments.size() + ")");
+            throw new MindcodeException(call.startToken(), "Function '%s': wrong number of arguments (expected %d, found %d)",
+                    functionName, function.getParamCount(), arguments.size());
         }
 
         // Switching to new function prefix -- save/restore old one
@@ -735,7 +737,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             LogicValue propTarget = visit(propertyAccess.getTarget());
             LogicArgument prop = visit(propertyAccess.getProperty());
             String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
-            if (functionMapper.handleProperty(instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
+            if (functionMapper.handleProperty(node.startToken(), instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
                 throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", propTarget, prop);
             }
         } else if (node.getVar() instanceof VarRef varRef) {
@@ -1324,7 +1326,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitControl(Control node) {
         final LogicValue target = visit(node.getTarget());
         final List<LogicValue> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
-        LogicValue value = functionMapper.handleProperty(instructions::add, node.getProperty(), target, args);
+        LogicValue value = functionMapper.handleProperty(node.startToken(), instructions::add, node.getProperty(), target, args);
         if (value == null) {
             throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", target, node.getProperty());
         }

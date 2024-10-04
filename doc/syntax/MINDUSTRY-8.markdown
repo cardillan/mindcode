@@ -274,3 +274,7 @@ These instructions serve for displaying markers on the map or minimap, as part o
 ### `localeprint`
 
 Adds a map locale property value to the text buffer.
+
+---
+
+[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)

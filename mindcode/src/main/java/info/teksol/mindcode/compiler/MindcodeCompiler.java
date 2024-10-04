@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -15,24 +16,36 @@ import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.processor.ExecutionException;
 import info.teksol.mindcode.processor.MindustryMemory;
 import info.teksol.mindcode.processor.Processor;
 import info.teksol.mindcode.processor.ProcessorFlag;
 import org.antlr.v4.runtime.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
+    // Global cache
+    private static final Map<String, SourceFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
+    private static final Map<String, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
+
     private final CompilerProfile profile;
     private InstructionProcessor instructionProcessor;
 
     private final List<CompilerMessage> messages = new ArrayList<>();
     private final ErrorListener errorListener = new ErrorListener(messages);
+
     public MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
     }
@@ -46,17 +59,25 @@ public class MindcodeCompiler implements Compiler<String> {
             long parseStart = System.nanoTime();
             Seq program = null;
             for (SourceFile sourceFile : sourceFiles) {
-                final Seq next = parse(sourceFile);
-                program = Seq.append(program, next);
+                // Additional source files are put in front of the others
+                final Seq other = parse(sourceFile);
+                program = Seq.append(other, program);
                 if (messages.stream().anyMatch(CompilerMessage::isError)) {
                     return new CompilerOutput<>("", messages, null, 0);
                 }
             }
+
+            DirectiveProcessor.processDirectives(program, profile, messages::add);
+
+            if (profile.getProcessorVersion().matches(ProcessorVersion.V8A, ProcessorVersion.MAX)) {
+                Seq sys = parseLibrary("sys");
+                program = Seq.append(sys, program);
+            }
+
             printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
             long compileStart = System.nanoTime();
-            DirectiveProcessor.processDirectives(program, profile, messages::add);
             instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
             GeneratorOutput generated = generateCode(program);
             long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
@@ -102,13 +123,46 @@ public class MindcodeCompiler implements Compiler<String> {
                 e.printStackTrace();
             }
             if (e instanceof MindcodeException ex) {
-                messages.add(MindcodeMessage.error("Error while compiling source code: " + e.getMessage()));
+                if (!ex.isReported()) {
+                    messages.add(MindcodeMessage.error("Error while compiling source code: " + e.getMessage()));
+                }
             } else {
                 messages.add(MindcodeMessage.error("Internal error: " + e.getMessage()));
             }
         }
 
         return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
+    }
+
+    private static SourceFile loadLibrary(String filename) {
+        return LIBRARY_SOURCES.computeIfAbsent(filename, MindcodeCompiler::loadLibraryFromResource);
+    }
+
+    static SourceFile loadLibraryFromResource(String filename) {
+        try (final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + filename + ".mnd")))) {
+            final StringWriter out = new StringWriter();
+            reader.transferTo(out);
+            return new SourceFile("*" + filename, out.toString());
+        } catch (IOException e) {
+            throw new MindcodeInternalError(e, "Error loading library: " + filename);
+        }
+    }
+
+    private Seq parseLibrary(String filename) {
+        if (LIBRARY_PARSES.containsKey(filename)) {
+            return LIBRARY_PARSES.get(filename);
+        }
+
+        long before = messages.stream().filter(CompilerMessage::isErrorOrWarning).count();
+        Seq parsed = parse(loadLibrary(filename));
+        long after = messages.stream().filter(CompilerMessage::isErrorOrWarning).count();
+
+        if (before == after) {
+            LIBRARY_PARSES.put(filename, parsed);
+        }
+
+        return parsed;
     }
 
     /**
@@ -138,7 +192,16 @@ public class MindcodeCompiler implements Compiler<String> {
     private GeneratorOutput generateCode(Seq program) {
         final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
                 messages::add);
-        return generator.generate(program);
+        try {
+            return generator.generate(program);
+        } catch (MindcodeException ex) {
+            if (ex.getToken() != null) {
+                errorListener.syntaxError(null, null,
+                        ex.getToken().getLine(), ex.getToken().getCharPositionInLine(), ex.getMessage(), null);
+                ex.setReported(true);
+            }
+            throw ex;
+        }
     }
 
     private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {

@@ -21,11 +21,13 @@ public class Seq extends BaseAstNode {
         this.last = last;
     }
 
-    public static Seq append(Seq current, Seq next) {
-        if (current == null) {
-            return next;
+    public static Seq append(Seq first, Seq second) {
+        if (first == null) {
+            return second;
+        } else if (second == null) {
+            return first;
         } else {
-            return new Seq(next.startToken(), current.sourceFile(), current, next);
+            return new Seq(second.startToken(), first.sourceFile(), first, second);
         }
     }
 

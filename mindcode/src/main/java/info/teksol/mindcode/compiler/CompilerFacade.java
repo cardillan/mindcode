@@ -14,7 +14,7 @@ public class CompilerFacade {
 
     public static CompilerOutput<String> compile(String sourceCode, CompilerProfile profile) {
         MindcodeCompiler compiler = new MindcodeCompiler(profile);
-        return compiler.compile(SourceFile.code(sourceCode));
+        return compiler.compile(SourceFile.createSourceFiles(sourceCode));
     }
 
     public static CompilerOutput<String> compile(List<SourceFile> sourceFiles, CompilerProfile profile) {

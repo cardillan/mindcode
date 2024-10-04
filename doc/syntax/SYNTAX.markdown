@@ -21,6 +21,12 @@ Function reference for individual compiler versions:
 * [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
 * [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
 * [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
+* [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown)
+
+For Mindustry Logic 8 and higher, new mlog instructions and a Mindcode system library of functions are supported:
+
+* [Mindustry Logic 8](MINDUSTRY-8.markdown)
+* [System Library](SYSTEM-LIBRARY.markdown)
 
 Schemacode, a schematic definition language, is covered here:
 
@@ -37,8 +43,6 @@ Additional information on Mindcode and Mindustry Logic:
 
 * [Troubleshooting Mindcode](TROUBLESHOOTING.markdown)
 * [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown)
-
-New and modified functionality available in the upcoming version of Mindustry 8 is described [here](MINDUSTRY-8.markdown).
 
 ---
 
