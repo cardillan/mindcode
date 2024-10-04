@@ -28,6 +28,10 @@ When performing the _Compile Mindcode_ action, it is possible to use the `-a` or
 
 This feature is provisional and will be ultimately replaced by [Mindcode modules](https://github.com/cardillan/mindcode/issues/149).
 
+### MLog Watcher integration
+
+The command-line tool can send the compiled code directly into a processor in a running Mindustry game through the Mlog Watcher mod. See [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) for details.
+
 ## Log file
 
 The `-l` argument can be used to specify log file, a file which receives messages generated while running the tool. 

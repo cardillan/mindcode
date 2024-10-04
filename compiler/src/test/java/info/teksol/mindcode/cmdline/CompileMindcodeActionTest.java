@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
@@ -76,6 +75,57 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     }
 
     @Test
+    public void appendNotGiven() throws ArgumentParserException {
+        Namespace arguments =parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog");
+        assertNull(arguments.<List<File>>get("append"));
+    }
+
+    @Test
+    public void appendArgumentFileRequired() {
+        assertThrows(ArgumentParserException.class,
+                () -> parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog -a"));
+    }
+
+    @Test
+    public void appendArgumentOneFile() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog -a file1.mnd");
+        assertEquals(List.of(new File("file1.mnd")), arguments.get("append"));
+    }
+
+    @Test
+    public void appendArgumentTwoFiles() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog -a file1.mnd file2.mnd");
+        assertEquals(List.of(new File("file1.mnd"), new File("file2.mnd")), arguments.get("append"));
+    }
+
+    @Test
+    public void watcherArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog -w --watcher-port 1234 --watcher-timeout 2000");
+        assertTrue(arguments.getBoolean("watcher"));
+        assertEquals(1234, arguments.getInt("watcher_port"));
+        assertEquals(2000, arguments.getInt("watcher_timeout"));
+    }
+
+    @Test
+    public void noWatcherArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog");
+        assertFalse(arguments.getBoolean("watcher"));
+    }
+
+    @Test
+    public void clipboardArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog -c");
+        assertTrue(arguments.getBoolean("clipboard"));
+    }
+
+    @Test
+    public void noClipboardArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog");
+        assertFalse(arguments.getBoolean("clipboard"));
+    }
+
+
+    @Test
     public void optimizationArgument() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -o basic");
         assertEquals(OptimizationLevel.BASIC, arguments.get("optimization"));
@@ -83,7 +133,6 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void specificOptimizationArguments() throws ArgumentParserException {
-        @SuppressWarnings("unchecked")
         List<String> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.NONE.name());
         List<String> actual = new ArrayList<>();
         for (Optimization optimization : Optimization.LIST) {
@@ -185,7 +234,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(GenerationGoal.SIZE, actual.getGoal());
         assertEquals(Remarks.ACTIVE, actual.getRemarks());
         assertEquals(List.of(SortCategory.ALL), actual.getSortVariables());
-        assertEquals(false, actual.isSignature());
+        assertFalse(actual.isSignature());
         //assertEquals(MemoryModel.RESTRICTED, actual.getMemoryModel());
         assertEquals(FinalCodeOutput.SOURCE, actual.getFinalCodeOutput());
         assertTrue(actual.isPrintStackTrace());

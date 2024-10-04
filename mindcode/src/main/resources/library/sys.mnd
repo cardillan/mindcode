@@ -22,12 +22,12 @@ end;
 
 def flipVerticalSmall() 
     scale(1, -1);
-    translate(0, __DISPLAY_SIZE_SMALL);
+    translate(0, - __DISPLAY_SIZE_SMALL);
 end;
 
 def flipHorizontalSmall()
     scale(-1, 1);
-    translate(__DISPLAY_SIZE_SMALL, 0);
+    translate(- __DISPLAY_SIZE_SMALL, 0);
 end;
 
 // Large display transformations
@@ -49,12 +49,12 @@ end;
 
 def flipVerticalLarge() 
     scale(1, -1);
-    translate(0, __DISPLAY_SIZE_LARGE);
+    translate(0, - __DISPLAY_SIZE_LARGE);
 end;
 
 def flipHorizontalLarge()
     scale(-1, 1);
-    translate(__DISPLAY_SIZE_LARGE, 0);
+    translate(- __DISPLAY_SIZE_LARGE, 0);
 end;
 
 // Generic display transformations

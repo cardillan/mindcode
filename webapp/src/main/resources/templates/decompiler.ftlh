@@ -15,7 +15,7 @@
             <input type="hidden" name="id" value="${model.id}">
         </#if>
         <div class="grid grid-cols-2 gap-2">
-            <@com.codeareas sourceTitle="Encoded schematic:" targetTitle="Decompiled schemacode:" sourceLines="N" targetLines="Y" />
+            <@com.codeareas mlogWatcher="N" sourceTitle="Encoded schematic:" targetTitle="Decompiled schemacode:" sourceLines="N" targetLines="Y" />
             <div>
                 <div class="flex-wrap items-center space-x-2">
                     <input type="submit" value="Decompile" class="px-4 py-2 bg-gray-600 text-white my-2 rounded "/>

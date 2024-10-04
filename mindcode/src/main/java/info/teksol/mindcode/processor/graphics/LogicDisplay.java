@@ -48,4 +48,8 @@ public class LogicDisplay extends MindustryObject {
     public static LogicDisplay createLargeLogicDisplay(String name) {
         return new LogicDisplay(name, "display", 176);
     }
+
+    public static LogicDisplay createLogicDisplay(String name, boolean large) {
+        return new LogicDisplay(name, "display", large ? 176 : 80);
+    }
 }

@@ -28,6 +28,10 @@ When performing the _Compile Mindcode_ action, it is possible to use the `-a` or
 
 This feature is provisional and will be ultimately replaced by [Mindcode modules](https://github.com/cardillan/mindcode/issues/149).
 
+### MLog Watcher integration
+
+The command-line tool can send the compiled code directly into a processor in a running Mindustry game through the Mlog Watcher mod. See [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) for details.
+
 ## Log file
 
 The `-l` argument can be used to specify log file, a file which receives messages generated while running the tool. 
@@ -93,8 +97,9 @@ Actions:
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-l [LOG]] [-a [APPEND [APPEND ...]]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}]
-                [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}]
+usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-l [LOG]]
+                [-a FILE [FILE ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
+                [-r {NONE,PASSIVE,ACTIVE}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [--run] [--run-steps {1..1000000000}] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
@@ -111,14 +116,20 @@ Compile a mindcode source file into text mlog file.
 named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        copy compiled mlog code to clipboard
+  -w, --watcher          send compiled mlog code to the Mlog Watcher  mod  in  Mindustry (the code will be injected into
+                         the selected processor)
+  --watcher-port {0..65535}
+                         port number for communication with Mlog Watcher
+  --watcher-timeout {0..3600000}
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
 
 input/output files:
-  input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified.
+  input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified
   output                 Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
   -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
-  -a, --append [APPEND [APPEND ...]]
+  -a, --append FILE [FILE ...]
                          Additional Mindcode source file to  be  compiled  along  with  the  input file. Such additional
                          files may contain common functions. More than one file may be added this way.
 

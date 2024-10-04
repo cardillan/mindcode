@@ -18,5 +18,4 @@ installing the mod - or ask a question here on GitHub.
 
 ---
 
-[« Previous: Command line tool](TOOLS-CMDLINE.markdown) &nbsp; | &nbsp;
-[Next: Troubleshooting Mindcode »](TROUBLESHOOTING.markdown)
+[« Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Next: Troubleshooting Mindcode »](TROUBLESHOOTING.markdown)

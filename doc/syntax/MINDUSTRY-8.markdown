@@ -6,9 +6,7 @@ The instruction set and corresponding functions for Mindustry Logic v8 is availa
 
 ## Numeric literals
 
-Mindustry now handles the numeric literals with double precision, eliminating possible loss of precision when encoding some values into mlog, and allowing a wider range of numeric values to be represented as a numeric literal.
-
-Loss of precision, and inability to encode some numerical constants into mlog, no longer happen.  
+Mindustry now handles the numeric literals with double precision. Loss of precision, and inability to encode some numerical constants into mlog, no longer happen.  
 
 ## `format` instruction
 

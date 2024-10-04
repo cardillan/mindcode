@@ -13,6 +13,10 @@ public record CompilerOutput<T>(T output, List<CompilerMessage> messages, String
         this(output, messages, null, 0);
     }
 
+    public void addMessage(CompilerMessage message) {
+        messages.add(message);
+    }
+
     public List<String> texts() {
         return messages.stream().map(CompilerMessage::message).collect(Collectors.toList());
     }

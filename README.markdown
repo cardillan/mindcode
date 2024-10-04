@@ -19,12 +19,13 @@ complete with the code (specified in Mindcode or Mindustry Logic language) and l
 
 ## Latest development
 
-Some of the latest enhancements to Mindcode are:
+The most important recent changes to Mindcode include:
 
+* The compiled code can be injected from the web app or the command-line compiler right into a processor in a running Mindustry game thanks to the [Mlog Watcher mod](https://github.com/Sharlottes/MlogWatcher). [Instructions on use](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).  
 * Program parametrization should now be done using [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) instead of global variables.
 * [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) can now use more than one loop variable to iterate over the values in the list, and if the list consist of Mindcode variables, these variables can be modified by assigning a new value to the loop variable inside the loop.   
 * [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remark) can be now included in the compiled code.
-* If your Mindcode program prints some output and doesn't otherwise interact with the Mindustry World, it can be run after compilation using the **Compile and Run** button and its output is shown together with the compiled program on the web page.
+* If your Mindcode program prints some output and doesn't otherwise interact with the Mindustry World, it can be run in an emulated processor after compilation using the **Compile and Run** button and its output is shown together with the compiled program on the web page, or written to the log by the command-line tool.  
 * A button to copy the resulting program or schematic to clipboard is available in the web app.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
@@ -34,7 +35,7 @@ A [changelog](CHANGELOG.markdown) is now maintained for releases.
 Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mindustry Logic_ text area will contain the Logic version of your Mindcode. Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
 Select **Import from Clipboard**. Mindustry is now ready to execute your code.
 
-You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. If your code doesn't interact with a contents of the Mindustry world, the output produced by `print` statements in your code will be displayed.   
+You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` statements in your code will be displayed. Code executions stops when your program tries to interact with the Mindustry World.
 
 It is also possible use the [command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying the compiled code into the clipboard automatically if desired. The command line compiler can be set up in the following way:
 
@@ -42,10 +43,10 @@ It is also possible use the [command line tool](doc/syntax/TOOLS-CMDLINE.markdow
 2. Download `mindcode.jar` from the [releases page](https://github.com/cardillan/mindcode/releases) and place it in a directory on your computer.
 3. To run the command line compiler, use `java.exe -jar mindcode.jar <arguments>`. Provide full paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the `mindcode.jar` file downloaded in the second step. `<arguments>` are the command line arguments passed to the Mindcode compiler.
 
-For example, the following command compiles `program.mnd` into `program.mlog` and copies the resulting mlog code into the clipboard:
+For example, the following command compiles `program.mnd` into `program.mlog`, copies the resulting mlog code into the clipboard and attempts to send it directly to Mindustry (the [Mlog Watcher](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) mod must be installed for that):
 
 ```
-java.exe -jar mindcode.jar cm program.mnd program.mlog -c
+java.exe -jar mindcode.jar cm program.mnd program.mlog -c -w
 ```
 
 Documentation for the command line tool is available [here](doc/syntax/TOOLS-CMDLINE.markdown).
@@ -73,7 +74,7 @@ IntelliJ IDEA (even the Community edition) can be easily configured for basic Mi
   * _Name_: Mindcode
   * _Description_: Mindcode source file
   * _Line comment_: `//` (leave _Only at line start_ unchecked)
-  * _Block comment start/end_: leave empty
+  * _Block comment start/end_: `/*` and `*/`
   * _Hex prefix_: `0x`
   * _Number postfixes_: leave empty
   * _Keywords_: paste Mindcode keywords to the first list. Optionally, paste Mindustry Logic object names to the second list. 
@@ -84,7 +85,6 @@ IntelliJ IDEA (even the Community edition) can be easily configured for basic Mi
 
 ```
 allocate
-and
 break
 case
 const
@@ -101,9 +101,10 @@ if
 in
 inline
 loop
-not
+noinline
 null
-or
+out
+param
 return
 sensor
 stack

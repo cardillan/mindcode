@@ -1,8 +1,9 @@
+<#-- @ftlvariable name="model" type="info.teksol.mindcode.webapp.HomePageData" -->
 <#setting locale="en_US">
 
 <#macro header>
-<!DOCTYPE>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Mindcode: a Mindustry Logic high-level language</title>
@@ -18,6 +19,8 @@
             position: absolute;
             top: 10px;
             right: 20px;
+            width: 40px;
+            height: 40px;
             background: gray;
             color: white;
             padding: 8px 12px;
@@ -32,6 +35,25 @@
         .copy-btn i {
             font-size: 1.2rem;
         }
+
+        .mlog-btn {
+            position: absolute;
+            top: 10px;
+            right: 70px;
+            width: 40px;
+            height: 40px;
+            background: gray;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
     </style>
 </head>
 <body class="m-4">
@@ -59,7 +81,7 @@
 <li><a href="?s=${name}" class="block text-center py-2 px-4 mx-2 underline rounded <#if model.sample == name>font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>"><#nested></a>
 </#macro>
 
-<#macro codeareas sourceTitle targetTitle sourceLines targetLines>
+<#macro codeareas mlogWatcher sourceTitle targetTitle sourceLines targetLines>
     <label class="block font-bold" for="source">${sourceTitle}</label>
     <label class="block font-bold" for="target">${targetTitle}</label>
     <div>
@@ -72,6 +94,11 @@
         <button type="button" class="copy-btn bg-indigo-700" onclick="copyToClipboard()">
             <i id="copyIcon" class="fa-solid fa-copy"></i>
         </button>
+        <#if mlogWatcher = "Y">
+            <button type="button" class="mlog-btn bg-indigo-700">
+                <i id="mlogIcon" class="fa-solid fa-microchip"></i>
+            </button>
+        </#if>
     </div>
 </#macro>
 

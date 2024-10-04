@@ -44,7 +44,6 @@ public record MindcodeMessage(MessageLevel level, String message) implements Com
         return new MindcodeMessage(MessageLevel.DEBUG, String.format(Locale.US, format, args));
     }
 
-
     @Override
     public String source() {
         return "Mindcode";

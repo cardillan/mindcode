@@ -21,6 +21,7 @@ import info.teksol.mindcode.processor.ExecutionException;
 import info.teksol.mindcode.processor.MindustryMemory;
 import info.teksol.mindcode.processor.Processor;
 import info.teksol.mindcode.processor.ProcessorFlag;
+import info.teksol.mindcode.processor.graphics.LogicDisplay;
 import org.antlr.v4.runtime.*;
 
 import java.io.BufferedReader;
@@ -112,9 +113,9 @@ public class MindcodeCompiler implements Compiler<String> {
                 long runStart = System.nanoTime();
                 runResults = run(result);
                 long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
-                info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(parseTime, compileTime, optimizeTime, runTime));
+                info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(parseTime, compileTime, optimizeTime, runTime));
             } else {
-                info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
+                info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
             }
 
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
@@ -232,6 +233,7 @@ public class MindcodeCompiler implements Compiler<String> {
         for (int i = 1; i < 10; i++) {
             processor.addBlock(MindustryMemory.createMemoryCell("cell" + i));
             processor.addBlock(MindustryMemory.createMemoryBank("bank" + i));
+            processor.addBlock(LogicDisplay.createLogicDisplay("display" + i, i < 5));
         }
 
         try {

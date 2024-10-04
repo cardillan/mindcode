@@ -1,7 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.SourceFile;
@@ -31,10 +30,26 @@ public class CompileMindcodeAction extends ActionHandler {
                 .help("copy compiled mlog code to clipboard")
                 .action(Arguments.storeTrue());
 
+        subparser.addArgument("-w", "--watcher")
+                .help("send compiled mlog code to the Mlog Watcher mod in Mindustry (the code will be injected into the selected processor)")
+                .action(Arguments.storeTrue());
+
+        subparser.addArgument("--watcher-port")
+                .help("port number for communication with Mlog Watcher")
+                .choices(Arguments.range(0, 65535))
+                .type(Integer.class)
+                .setDefault(9992);
+
+        subparser.addArgument("--watcher-timeout")
+                .help("timeout in milliseconds when trying to establish a connection to Mlog Watcher")
+                .choices(Arguments.range(0, 3_600_000))
+                .type(Integer.class)
+                .setDefault(500);
+
         ArgumentGroup files = subparser.addArgumentGroup("input/output files");
 
         files.addArgument("input")
-                .help("Mindcode file to be compiled into an mlog file; uses stdin when not specified.")
+                .help("Mindcode file to be compiled into an mlog file; uses stdin when not specified")
                 .nargs("?")
                 .type(inputFileType.acceptSystemIn())
                 .setDefault(new File("-"));
@@ -54,8 +69,9 @@ public class CompileMindcodeAction extends ActionHandler {
         files.addArgument("-a", "--append")
                 .help("Additional Mindcode source file to be compiled along with the input file. Such additional files may " +
                         "contain common functions. More than one file may be added this way.")
-                .type(Arguments.fileType().verifyCanRead())
-                .nargs("*");
+                .type(Arguments.fileType())
+                .nargs("+")
+                .metavar("FILE");
 
         addCompilerOptions(subparser, defaults);
         addRunOptions(subparser, defaults);
@@ -109,35 +125,40 @@ public class CompileMindcodeAction extends ActionHandler {
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output(), false);
-            List<String> allTexts = result.texts();
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(result.output());
-                allTexts.add("");
-                allTexts.add("Compiled code was copied to the clipboard.");
+                result.addMessage(ToolMessage.info("\nCompiled mlog code was copied to the clipboard."));
+            }
+
+            if (arguments.getBoolean("watcher")) {
+                int port = arguments.getInt("watcher_port");
+                int timeout = arguments.getInt("watcher_timeout");
+                MlogWatcherClient.sendMlog(port, timeout, result, result.output());
             }
 
             if (compilerProfile.isRun()) {
-                allTexts.add("");
-                allTexts.add("Program output (%,d steps):".formatted(result.steps()));
+                result.addMessage(ToolMessage.info(""));
+                result.addMessage(ToolMessage.info("Program output (%,d steps):", result.steps()));
                 if (result.textBuffer() == null) {
-                    allTexts.add("Couldn't obtain program output.");
+                    result.addMessage(ToolMessage.error("Couldn't obtain program output."));
                 } else if (result.textBuffer().isEmpty()) {
-                    allTexts.add("The program didn't generate any output.");
+                    result.addMessage(ToolMessage.info("The program didn't generate any output."));
                 } else {
-                    allTexts.add(result.textBuffer());
+                    result.addMessage(ToolMessage.info(result.textBuffer()));
                 }
             }
 
             // If mlog gets written to stdout, write log to stderr
-            writeOutput(logFile, allTexts, mlogToStdErr);
-
-            // Print errors and warnings to console anyway
-            if (!isStdInOut(logFile)) {
+            if (isStdInOut(logFile)) {
+                boolean alwaysErr = isStdInOut(output);
+                result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.message()));
+            } else {
+                writeOutput(logFile, result.texts(), mlogToStdErr);
+                // Print errors and warnings to stderr anyway
                 result.messages().stream()
-                        .filter(m -> m.isError() || m.isWarning())
-                        .map(CompilerMessage::message)
-                        .forEach(mlogToStdErr ? System.err::println : System.out::println);
+                        .filter(m -> m.isErrorOrWarning() || m.isInfo())
+                        .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.message()));
             }
         } else {
             // Errors: print just them into stderr

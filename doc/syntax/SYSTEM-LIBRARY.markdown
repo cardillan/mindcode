@@ -76,7 +76,7 @@ To use the function, the text buffer must not contain placeholders `{0}`, `{1}` 
 
 # Additional resources
 
-The `sys.mnd` file can be found [here](/mindcode/src/main/resources/library/sys.mnd).
+The `sys.mnd` is integrated into the compiler and as such is available both to the command-line compiler and to the web application. The current version of teh file can be found [here](/mindcode/src/main/resources/library/sys.mnd).
 
 ---
 
