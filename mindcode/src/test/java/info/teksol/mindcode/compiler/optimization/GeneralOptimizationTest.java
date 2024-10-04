@@ -67,7 +67,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                             fn(n - 1)
                             2 * n
                         end
-                                        
+
                         $x = fn(4) + fn(5)
                         $y = $x + 1
                         """,

@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
 
-    // TODO Merge with MindcodeOptimizer
     protected class TestCompiler {
         private final List<CompilerMessage> messages = new ArrayList<>();
         private final List<CompilerMessage> readOnlyMessages = Collections.unmodifiableList(messages);
@@ -38,7 +37,6 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         }
 
         public void addMessage(CompilerMessage message) {
-            //System.out.println(message.message());
             messages.add(message);
         }
 
@@ -456,10 +454,10 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicLabel    label1    = LogicLabel.symbolic("label1");      
     protected static final LogicLabel    marker    = LogicLabel.symbolic("marker");
     protected static final LogicLabel    label2    = LogicLabel.symbolic("label2");
-    protected static final LogicVariable bank1     = LogicVariable.block("bank1");       
-    protected static final LogicVariable cell1     = LogicVariable.block("cell1");       
-    protected static final LogicVariable conveyor1 = LogicVariable.block("conveyor1");   
-    protected static final LogicVariable vault1    = LogicVariable.block("vault1");      
+    protected static final LogicVariable bank1     = LogicVariable.block("bank1");
+    protected static final LogicVariable cell1     = LogicVariable.block("cell1");
+    protected static final LogicVariable conveyor1 = LogicVariable.block("conveyor1");
+    protected static final LogicVariable vault1    = LogicVariable.block("vault1");
     protected static final LogicBuiltIn  coal      = LogicBuiltIn.create("coal");        
     protected static final LogicBuiltIn  lead      = LogicBuiltIn.create("lead");        
     protected static final LogicBuiltIn  firstItem = LogicBuiltIn.create("firstItem");   

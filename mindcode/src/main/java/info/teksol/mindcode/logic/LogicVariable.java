@@ -13,12 +13,18 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     protected final String functionPrefix;
     protected final String name;
     protected final String fullName;
+    protected final boolean volatileVar;
 
-    protected LogicVariable(ArgumentType argumentType, String name) {
+    protected LogicVariable(ArgumentType argumentType, String name, boolean volatileVar) {
         super(argumentType);
         this.functionPrefix = null;
         this.name = Objects.requireNonNull(name);
         this.fullName = name;
+        this.volatileVar = volatileVar;
+    }
+
+    private LogicVariable(ArgumentType argumentType, String name) {
+        this(argumentType, name, false);
     }
 
     private LogicVariable(ArgumentType argumentType, String functionPrefix, String name) {
@@ -26,6 +32,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
         this.name = Objects.requireNonNull(name);
         this.fullName = name;
+        this.volatileVar = false;
     }
 
     private LogicVariable(ArgumentType argumentType, String functionName, String functionPrefix, String name) {
@@ -34,11 +41,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         if (functionPrefix.isEmpty()) {
             throw new IllegalArgumentException("functionPrefix must not be empty");
         }
-        this.name = Objects.requireNonNull(name);
-        this.fullName = Objects.requireNonNull(functionName) + "." + name;
-        if (fullName.startsWith(".")) {
+        if (Objects.requireNonNull(functionName).isEmpty()) {
             throw new IllegalStateException("Empty function name.");
         }
+        this.name = Objects.requireNonNull(name);
+        this.fullName = functionName + "." + name;
+        this.volatileVar = false;
     }
 
     @Override
@@ -107,6 +115,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 "argumentType=" + argumentType +
                 ", fullName='" + fullName + '\'' +
                 ", functionPrefix='" + functionPrefix + '\'' +
+                ", volatileVar='" + volatileVar + '\'' +
                 '}';
     }
 
@@ -153,5 +162,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
      */
     public static LogicVariable unusedVariable() {
         return UNUSED_VARIABLE;
+    }
+
+    @Override
+    public boolean isVolatile() {
+        return volatileVar;
     }
 }

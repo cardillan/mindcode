@@ -145,7 +145,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Global variables/parameters">
+    //<editor-fold desc="Global variables/parameters/blocks">
     @Test
     void leavesGlobalParameters() {
         assertCompilesTo("""
@@ -176,9 +176,42 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         noinline def bar(x)
                             A = x;
                         end;
-                                        """,
+                        """,
                 "");
     }
+
+    // TODO Activate after adding support for volatile declaration for blocks
+    /*
+    @Test
+    void recognizesNonvolatileSensorWithBlocks() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setMemoryModel(MemoryModel.ALIASED)),
+                        """
+                        a = message1.type;
+                        b = message1.type;
+                        print(a, b);
+                        """,
+                createInstruction(SENSOR, "a", "message1", "@type"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "a")
+        );
+    }
+
+    @Test
+    void recognizesNonvolatileSensorWithVariables() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setMemoryModel(MemoryModel.ALIASED)),
+                        """
+                        block = getlink(0);
+                        a = block.type;
+                        b = block.type;
+                        print(a, b);
+                        """,
+                createInstruction(GETLINK, "block", "0"),
+                createInstruction(SENSOR, "a", "block", "@type"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "a")
+        );
+    }
+    */
     //</editor-fold>
 
 

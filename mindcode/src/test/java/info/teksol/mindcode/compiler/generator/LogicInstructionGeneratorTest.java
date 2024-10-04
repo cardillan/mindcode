@@ -715,7 +715,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesMainMemoryVariable() {
         assertCompilesTo(
-                "memory = cell1 memory[0] = rand(9**9)",
+                "memory = cell1; memory[0] = rand(9**9);",
                 createInstruction(SET, "memory", "cell1"),
                 createInstruction(OP, "rand", var(0), "387420489"),
                 createInstruction(WRITE, var(0), "memory", "0"),

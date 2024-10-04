@@ -369,13 +369,24 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 OpInstruction ix = (OpInstruction) instruction;
                 yield ix.getOperation().isDeterministic() && nonvolatileArguments(ix);
             }
+            case SENSOR -> {
+                // TODO Activate after support for volatile variable declaration
+                yield false;
+//                SensorInstruction ix = (SensorInstruction) instruction;
+//                yield nonvolatileArguments(instruction)
+//                        && ix.getProperty() instanceof LogicBuiltIn lbi
+//                        && CONSTANT_PROPERTIES.contains(lbi.getName());
+            }
             case SET, PACKCOLOR, LOOKUP -> nonvolatileArguments(instruction);
             case NOOP -> true;
             default -> false;
         };
     }
 
+    private static final Set<String> CONSTANT_PROPERTIES = Set.of("size", "speed", "type", "id");
+
     private boolean nonvolatileArguments(LogicInstruction instruction) {
+        // TODO Remove the exception for BLOCK after support for volatile variable declaration
         return instruction.inputArgumentsStream().noneMatch(v -> v.getType() == ArgumentType.BLOCK || v.isVolatile());
     }
 

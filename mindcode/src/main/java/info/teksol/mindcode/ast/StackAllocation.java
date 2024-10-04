@@ -13,6 +13,7 @@ public class StackAllocation extends BaseAstNode {
 
     StackAllocation(Token startToken, SourceFile sourceFile, String stack, Range range) {
         super(startToken, sourceFile);
+        // TODO This might not be a block variable actually. Review during refactoring
         this.stack = LogicVariable.block(stack);
         this.range = range;
     }
@@ -25,6 +26,7 @@ public class StackAllocation extends BaseAstNode {
 
     StackAllocation(Token startToken, SourceFile sourceFile, String stack) {
         super(startToken, sourceFile);
+        // TODO This might not be a block variable actually. Review during refactoring
         this.stack = LogicVariable.block(stack);
         this.range = null;
     }
