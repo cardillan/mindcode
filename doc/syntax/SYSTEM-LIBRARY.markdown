@@ -2,37 +2,58 @@
 
 Mindcode comes equipped with a system library. At this moment, the library is just a single source file, `sys.mnd`, which is automatically compiled together with each source file, both in the command line compiler and in the web app. The library is only included if the language target is 8A or higher, as it contains functions that build upon some of the instructions that will be added in the upcoming Mindustry 8 version.
 
+To use the functions and constants provided by the system library in your program, you need to compile for Mindustry Logic 8 y including `#set target = ML8A` in your program.
+
+The system library is an experimental feature. The functions provided by the library and the mechanism for its inclusion in your program may change in future releases. 
+
 Individual functions in the library are documented here.
 
 # Graphics transformations
 
 The provided library functions use transformations to rotate, invert or scale graphics output as needed for each display (large or small). Transformations are additive, so it is suggested to call `reset()` at the beginning of each program that uses transformations to clean up possible transformations from earlier runs.
 
-The parameters used for transformations must be adapted to the size of the output display being drawn. The transformation functions therefore exist in versions for both logic displays and large logic displays, plus a version which automatically detects the display type from a block passed in as a parameter.   
+The parameters used for transformations must be adapted to the size of the output display being drawn. The transformation functions therefore exist in versions for both logic displays and large logic displays, plus a version which automatically detects the display type from a block passed in as a parameter.
+
+## Display sizes
+
+### Constants
+
+Constants are defined for the small and large display sizes:  
+ 
+* `const DISPLAY_SIZE_SMALL =  80;`
+* `const DISPLAY_SIZE_LARGE = 176;`
+
+### `displaySize(display)`
+
+Returns the actual display size based on the type of display passed in as an argument. When the passed-in argument is not a display, the processor is stopped.
 
 ## Rotating graphics output
 
-The following functions use graphics transformation to rotate the graphics output in multiples of 90 degrees:
+The following functions use graphics transformation to rotate the graphics output in multiples of 90 degrees. Functions that take a display as a parameter choose the transformation parameters to match the display size. When the passed-in argument is not a display, the processor is stopped.
 
 ### `rotateRightSmall()`, `rotateRightLarge()`, `rotateRight(display)`
 
-Rotates the output to the right (clockwise) by 90 degrees for a small or a large display, or for a display given as a parameter.
+Rotates the output to the right (clockwise) by 90 degrees for a small or a large display, or for a display given as an argument.
 
 ### `rotateLeftSmall()`, `rotateLeftLarge()`, `rotateLeft(display)`
 
-Rotates the output to the left (counterclockwise) by 90 degrees for a small or a large display, or for a display given as a parameter.
+Rotates the output to the left (counterclockwise) by 90 degrees for a small or a large display, or for a display given as an argument.
 
 ### `upsideDownSmall()`, `upsideDownLarge()`, `upsideDown(display)`
 
-Rotates the output by 180 degrees (upside down) for a small or a large display, or for a display given as a parameter.
+Rotates the output by 180 degrees (upside down) for a small or a large display, or for a display given as an argument.
+
+## Flipping the output along the X or Y axis
 
 ### `flipVerticalSmall()`, `flipVerticalLarge()`, `flipVertical(display)`
 
-Flips the output vertically (along the Y axis) for a small or a large display, or for a display given as a parameter.
+Flips the output vertically (along the Y axis) for a small or a large display, or for a display given as an argument.
 
 ### `flipHorizontalSmall()`, `flipHorizontalLarge()`, `flipHorizontal(display)`
 
-Flips the output horizontally (along the X axis) for a small or a large display, or for a display given as a parameter.
+Flips the output horizontally (along the X axis) for a small or a large display, or for a display given as an argument.
+
+## Scaling the output
 
 ### `scaleSmallToLarge()`
 
@@ -44,13 +65,19 @@ Scales the graphics output so that an output that targets a large display gets d
 
 # Units
 
-## `findFreeUnit(unit_type, initial_flag)`
+## `findFreeUnit(unit_type, initial_flag, wait_for_units)`
 
 Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag.
 
+Inputs and outputs:
+* `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+* `initial_flag`: initial flag to set to he freshly bound unit.
+* `wait_for_units`: `true`/`false`. If true and no unit of the given type exists, returns immediately.
+* returns the freshly bound unit, or null if no unit of given type exists and `wait_for_units` is nonzero.
+
 The function doesn't use units that are controlled by a player or a different processor. The function doesn't return until required unit is found.
 
-The status of the search is output to `message1`. 
+The status of the search is output to `SYS_MESSAGE`. Either set the message to an existing memory block to receive the updates, or set `SYS_MESSAGE` to `null` to disable status updates.
 
 # Text output
 
@@ -73,6 +100,12 @@ To use the function, the text buffer must not contain placeholders `{0}`, `{1}` 
 
 > [!NOTE]
 > While the functions is optimized for performance, formatting numbers is many times slower than just printing them using the `print()` function.
+
+# Utility functions
+
+## `distance(x1, y1, x2, y2)`
+
+Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`). Uses the `len` instruction for efficient hypotenuse calculation.
 
 # Additional resources
 

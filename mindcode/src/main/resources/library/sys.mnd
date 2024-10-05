@@ -1,109 +1,142 @@
 // Mindcode system library for Mindustry Logic version 8
 
-const __DISPLAY_SIZE_SMALL =  80;
-const __DISPLAY_SIZE_LARGE = 176;
+const DISPLAY_SIZE_SMALL =  80;
+const DISPLAY_SIZE_LARGE = 176;
+
+// Display size
+
+def displaySize(display)
+    type = display.type;
+    type == @logic-display ? DISPLAY_SIZE_SMALL : type == @large-logic-display ? DISPLAY_SIZE_LARGE : null;
+end;
 
 // Small display transformations
 
 def rotateLeftSmall()
     rotate(90);
-    translate(0, - __DISPLAY_SIZE_SMALL);
+    translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
 def rotateRightSmall()
     rotate(270);
-    translate(- __DISPLAY_SIZE_SMALL, 0);
+    translate(- DISPLAY_SIZE_SMALL, 0);
 end;
 
 def upsideDownSmall()
     rotate(180);
-    translate(- __DISPLAY_SIZE_SMALL, - __DISPLAY_SIZE_SMALL);
+    translate(- DISPLAY_SIZE_SMALL, - DISPLAY_SIZE_SMALL);
 end;
 
 def flipVerticalSmall() 
     scale(1, -1);
-    translate(0, - __DISPLAY_SIZE_SMALL);
+    translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
 def flipHorizontalSmall()
     scale(-1, 1);
-    translate(- __DISPLAY_SIZE_SMALL, 0);
+    translate(- DISPLAY_SIZE_SMALL, 0);
 end;
 
 // Large display transformations
 
 def rotateLeftLarge()
     rotate(90);
-    translate(0, - __DISPLAY_SIZE_LARGE);
+    translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
 def rotateRightLarge()
     rotate(270);
-    translate(- __DISPLAY_SIZE_LARGE, 0);
+    translate(- DISPLAY_SIZE_LARGE, 0);
 end;
 
 def upsideDownLarge()
     rotate(180);
-    translate(- __DISPLAY_SIZE_LARGE, - __DISPLAY_SIZE_LARGE);
+    translate(- DISPLAY_SIZE_LARGE, - DISPLAY_SIZE_LARGE);
 end;
 
 def flipVerticalLarge() 
     scale(1, -1);
-    translate(0, - __DISPLAY_SIZE_LARGE);
+    translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
 def flipHorizontalLarge()
     scale(-1, 1);
-    translate(- __DISPLAY_SIZE_LARGE, 0);
+    translate(- DISPLAY_SIZE_LARGE, 0);
 end;
 
 // Generic display transformations
 
 def rotateLeft(display)
-    display.type == @large-logic-display ? rotateLeftLarge() : rotateLeftSmall();
+    case display.type
+        when @logic-display       then rotateLeftSmall();
+        when @large-logic-display then rotateLeftLarge();
+        else stopProcessor();
+    end;
 end;
 
 def rotateRight(display)
-    display.type == @large-logic-display ? rotateRightLarge() : rotateRightSmall();
+    case display.type
+        when @logic-display       then rotateRightSmall();
+        when @large-logic-display then rotateRightLarge();
+        else stopProcessor();
+    end;
 end;
 
 def upsideDown(display)
-    display.type == @large-logic-display ? upsideDownLarge() : upsideDownSmall();
+    case display.type
+        when @logic-display       then upsideDownSmall();
+        when @large-logic-display then upsideDownLarge();
+        else stopProcessor();
+    end;
 end;
 
 def flipVertical(display)
-    display.type == @large-logic-display ? flipVerticalLarge() : flipVerticalSmall();
+    case display.type
+        when @logic-display       then flipVerticalSmall();
+        when @large-logic-display then flipVerticalLarge();
+        else stopProcessor();
+    end;
 end;
 
 def flipHorizontal(display)
-    display.type == @large-logic-display ? flipHorizontalLarge() : flipHorizontalSmall();
+    case display.type
+        when @logic-display       then flipHorizontalSmall();
+        when @large-logic-display then flipHorizontalLarge();
+        else stopProcessor();
+    end;
 end;
 
 // Scaling
 
 def scaleSmallToLarge()
-    scale(__DISPLAY_SIZE_LARGE / __DISPLAY_SIZE_SMALL, __DISPLAY_SIZE_LARGE / __DISPLAY_SIZE_SMALL);
+    scale(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
 end;
 
 def scaleLargeToSmall()
-    scale(__DISPLAY_SIZE_SMALL / __DISPLAY_SIZE_LARGE, __DISPLAY_SIZE_SMALL / __DISPLAY_SIZE_LARGE);
+    scale(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
 end;
 
 // UNITS
 
-def findFreeUnit(unit_type, initial_flag)
+// Searches for and binds a free unit of given type.
+// unit_type: type of the unit, @flare, @mono, @poly etc.
+// initial_flag: initial flag to set to he freshly bound unit.
+// wait_for_units: if no unit of the given type exists, returns immediately with a value of null
+// returns the freshly bound unit
+def findFreeUnit(unit_type, initial_flag, wait_for_units)
     // Keep looking for unit until one is found
     while true do
         ubind(unit_type);
         if @unit == null then
-            print($"No unit of type $unit_type found.");
+            if SYS_MESSAGE then print($"No unit of type $unit_type found."); end;
+            if !wait_for_units then return; end;
         elsif @unit.controlled != 0 then
-            print($"Looking for a free $unit_type...");
+            if SYS_MESSAGE then print($"Looking for a free $unit_type..."); end;
         else
             flag(initial_flag);		// Mark unit as active
             return @unit;
         end;
-        printflush(message1);
+        if SYS_MESSAGE then printflush(SYS_MESSAGE); end;
     end;
 end;
 
@@ -135,3 +168,12 @@ def printNumber(n)
     print("{2}");
     formatNumber(n);
 end;
+
+// UTILITY FUNCTIONS
+
+// Computes the distance between points (x1, y1) and (x2, y2).
+// Uses the len instruction for efficient hypotenuse calculation
+def distance(x1, y1, x2, y2)
+    len(x2 - x1, y2 - y1);
+end;
+
