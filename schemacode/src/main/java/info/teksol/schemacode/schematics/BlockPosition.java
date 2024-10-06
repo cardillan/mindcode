@@ -12,7 +12,7 @@ public interface BlockPosition {
     Position position();
     
     default String name() {
-        return blockType().name();
+        return blockType().varName();
     }
 
     default int size() {

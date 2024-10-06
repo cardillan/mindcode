@@ -41,6 +41,7 @@ public interface InstructionProcessor {
     JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y);
     JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
     LabelInstruction createLabel(AstContext astContext, LogicLabel label);
+    LookupInstruction createLookup(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property);
     NoOpInstruction createNoOp(AstContext astContext);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second);

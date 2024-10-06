@@ -130,6 +130,10 @@ abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createLabel(astContext, label);
     }
 
+    protected LookupInstruction createLookup(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
+        return instructionProcessor.createLookup(astContext, result, target, property);
+    }
+
     public GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
         return instructionProcessor.createGotoLabel(astContext, label, marker);
     }

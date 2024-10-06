@@ -1,7 +1,6 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.processor.MindustryObject;
-import info.teksol.mindcode.processor.MindustryValueType;
+import info.teksol.emulator.MindustryString;
 
 import java.util.Objects;
 
@@ -40,13 +39,12 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
-    public MindustryValueType getMindustryValueType() {
-        return MindustryValueType.OBJECT;
-    }
-
-    @Override
     public boolean isNull() {
         return false;
+    }
+
+    public boolean isObject() {
+        return true;
     }
 
     @Override
@@ -61,7 +59,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     @Override
     public Object getObject() {
-        return new MindustryObject(stringValue, stringValue);
+        return new MindustryString(stringValue);
     }
 }
 

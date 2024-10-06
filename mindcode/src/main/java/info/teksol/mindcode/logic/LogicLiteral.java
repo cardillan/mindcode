@@ -1,8 +1,8 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.processor.MindustryValue;
+import info.teksol.emulator.processor.LogicReadable;
 
-public interface LogicLiteral extends LogicValue, MindustryValue {
+public interface LogicLiteral extends LogicValue, LogicReadable {
 
     default boolean isLiteral() {
         return true;

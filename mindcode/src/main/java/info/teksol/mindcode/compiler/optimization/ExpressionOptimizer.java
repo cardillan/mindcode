@@ -4,7 +4,7 @@ import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.mimex.NumberedConstants;
+import info.teksol.mindcode.mimex.MindustryContents;
 
 import java.util.List;
 import java.util.Optional;
@@ -148,7 +148,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             LogicBuiltIn.create(object.getName() + property.getName())));
                 }
             } else if (advanced() && property.getName().equals("id")) {
-                int id = NumberedConstants.getId(object.getName());
+                int id = MindustryContents.getId(object.getName());
                 if (id != -1) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.get(id)));
                 }

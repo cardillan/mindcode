@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.emulator.processor.LogicReadable;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstContext;
@@ -9,7 +10,6 @@ import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.processor.MindustryValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -532,7 +532,7 @@ class OptimizationContext {
         return expressionEvaluator.normalizeMul(op, variable, number);
     }
 
-    public LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
+    public LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
         return expressionEvaluator.evaluate(operation, a, b);
     }
 
@@ -554,7 +554,7 @@ class OptimizationContext {
         LogicValue argX = resolveValue(vs, jump.getX());
         LogicValue argY = resolveValue(vs, jump.getY());
 
-        if (argX instanceof MindustryValue x && argY instanceof MindustryValue y) {
+        if (argX instanceof LogicReadable x && argY instanceof LogicReadable y) {
             LogicLiteral result = expressionEvaluator.evaluate(jump.getCondition().toOperation(), x, y);
             if (result instanceof LogicBoolean b) {
                 return b;

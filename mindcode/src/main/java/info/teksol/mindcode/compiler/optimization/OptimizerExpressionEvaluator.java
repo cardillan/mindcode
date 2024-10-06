@@ -1,13 +1,13 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.emulator.processor.ExpressionEvaluator;
+import info.teksol.emulator.processor.LogicReadable;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
-import info.teksol.mindcode.processor.MindustryValue;
 
 import static info.teksol.mindcode.logic.Operation.*;
 
@@ -166,7 +166,7 @@ class OptimizerExpressionEvaluator {
         return op;
     }
 
-    public LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
+    public LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
         ExpressionEvaluator.getOperation(operation).execute(expressionValue, a, b);
         return expressionValue.getLiteral();
     }

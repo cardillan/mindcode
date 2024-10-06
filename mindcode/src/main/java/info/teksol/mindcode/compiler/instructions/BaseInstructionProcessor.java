@@ -154,6 +154,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public LookupInstruction createLookup(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
+        return (LookupInstruction) createInstruction(astContext, LOOKUP, result, target, property);
+    }
+
+    @Override
     public NoOpInstruction createNoOp(AstContext astContext) {
         return (NoOpInstruction) createInstruction(astContext, NOOP);
     }
@@ -255,6 +260,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case GOTOOFFSET -> new GotoOffsetInstruction(astContext, arguments, params);
             case JUMP       -> new JumpInstruction(astContext, arguments, params);
             case LABEL      -> new LabelInstruction(astContext, arguments, params);
+            case LOOKUP     -> new LookupInstruction(astContext, arguments, params);
             case NOOP       -> new NoOpInstruction(astContext);
             case OP         -> new OpInstruction(astContext, arguments, params);
             case PACKCOLOR  -> new PackColorInstruction(astContext, arguments, params);

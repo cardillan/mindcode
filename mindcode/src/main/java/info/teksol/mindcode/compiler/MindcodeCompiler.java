@@ -1,5 +1,10 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.blocks.Memory;
+import info.teksol.emulator.blocks.graphics.LogicDisplay;
+import info.teksol.emulator.processor.ExecutionException;
+import info.teksol.emulator.processor.Processor;
+import info.teksol.emulator.processor.ProcessorFlag;
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
@@ -17,11 +22,6 @@ import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.processor.ExecutionException;
-import info.teksol.mindcode.processor.MindustryMemory;
-import info.teksol.mindcode.processor.Processor;
-import info.teksol.mindcode.processor.ProcessorFlag;
-import info.teksol.mindcode.processor.graphics.LogicDisplay;
 import org.antlr.v4.runtime.*;
 
 import java.io.BufferedReader;
@@ -231,9 +231,9 @@ public class MindcodeCompiler implements Compiler<String> {
         Processor processor = new Processor();
         processor.setFlag(ProcessorFlag.ERR_UNINITIALIZED_VAR, false);
         for (int i = 1; i < 10; i++) {
-            processor.addBlock(MindustryMemory.createMemoryCell("cell" + i));
-            processor.addBlock(MindustryMemory.createMemoryBank("bank" + i));
-            processor.addBlock(LogicDisplay.createLogicDisplay("display" + i, i < 5));
+            processor.addBlock("cell" + i, Memory.createMemoryCell());
+            processor.addBlock("bank" + i, Memory.createMemoryBank());
+            processor.addBlock("display" + i, LogicDisplay.createLogicDisplay(i < 5));
         }
 
         try {

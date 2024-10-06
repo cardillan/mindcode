@@ -1,16 +1,16 @@
 package info.teksol.mindcode.mimex;
 
 public record Liquid(
-        String baseName,
         String name,
+        String varName,
         int id
-) implements NumberedConstant {
+) implements MindustryContent {
 
     public static Liquid forId(int id) {
-        return NumberedConstants.LIQUID_ID_MAP.get(id);
+        return MindustryContents.LIQUID_ID_MAP.get(id);
     }
 
     public static Liquid forName(String name) {
-        return NumberedConstants.LIQUID_MAP.get(name);
+        return MindustryContents.LIQUID_MAP.get(name);
     }
 }

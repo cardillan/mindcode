@@ -148,9 +148,12 @@ public class HomeController {
                         result.warnings(),
                         result.infos(),
                         optimizationLevel,
-                        run ? result.textBuffer() : null,
+                        run ? processRunOutput(result.textBuffer()) : null,
                         result.steps())
         );
     }
 
+    private String processRunOutput(String output) {
+        return output == null || output.isEmpty() ? "The program produced no output." : output;
+    }
 }

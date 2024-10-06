@@ -86,6 +86,11 @@ class MindcodeCompilerTest {
     public void compilesAllSysFunctions() {
         SourceFile source = MindcodeCompiler.loadLibraryFromResource("sys");
 
+        String initializations = """
+                #set target = ML8A;
+                SYS_MESSAGE = null;
+                """;
+
         String variables = source.code().lines()
                 .filter(line -> line.startsWith("def "))
                 .flatMap(MindcodeCompilerTest::extractVariables)
@@ -100,7 +105,7 @@ class MindcodeCompilerTest {
                 .collect(Collectors.joining("\n"));
 
         // We know there must be a variable names display
-        String code = "#set target = ML8A;\n" + variables + "\n" + functionCalls;
+        String code = initializations + "\n" + variables + "\n" + functionCalls;
 
         CompilerOutput<String> result = compiler.compile(SourceFile.createSourceFiles(code));
 

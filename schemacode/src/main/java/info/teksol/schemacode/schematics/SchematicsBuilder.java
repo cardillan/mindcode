@@ -242,7 +242,7 @@ public class SchematicsBuilder {
 
         if (!blockPos.configurationType().isCompatible(configuration)) {
             error("Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
-                    blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
+                    blockPos.blockType().varName(), blockPos.position().toStringAbsolute(),
                     blockPos.configurationType(), ConfigurationType.fromInstance(configuration));
             return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
         } else {

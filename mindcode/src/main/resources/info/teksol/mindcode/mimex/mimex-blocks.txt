@@ -403,12 +403,12 @@ switch;399;shown;1;SwitchBlock;true;logic;0.0;false;false;false;10;false;true;fa
 micro-processor;400;shown;1;LogicBlock;true;logic;10.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 logic-processor;401;shown;2;LogicBlock;true;logic;22.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 hyper-processor;402;shown;3;LogicBlock;true;logic;42.0;false;false;false;10;false;true;true;false;10.0;false;true;false;true;false;0;true;false;
-memory-cell;403;shown;1;MemoryBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-memory-bank;404;shown;2;MemoryBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+memory-cell;403;shown;1;MemoryBlock;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+memory-bank;404;shown;2;MemoryBlock;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 logic-display;405;shown;3;LogicDisplay;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 large-logic-display;406;shown;6;LogicDisplay;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 canvas;407;shown;2;CanvasBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 reinforced-message;408;shown;1;MessageBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 world-processor;409;editorOnly;1;LogicBlock;true;logic;4.2535293329816107E37;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-world-cell;410;editorOnly;1;MemoryBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+world-cell;410;editorOnly;1;MemoryBlock;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 world-message;411;editorOnly;1;MessageBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;

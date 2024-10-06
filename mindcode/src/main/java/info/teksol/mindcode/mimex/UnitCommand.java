@@ -1,16 +1,16 @@
 package info.teksol.mindcode.mimex;
 
 public record UnitCommand(
-        String baseName,
         String name,
+        String varName,
         int id
-) implements NumberedConstant {
+) implements MindustryContent {
 
     public static UnitCommand forId(int id) {
-        return NumberedConstants.UNITCOMMAND_ID_MAP.get(id);
+        return MindustryContents.UNITCOMMAND_ID_MAP.get(id);
     }
 
     public static UnitCommand forName(String name) {
-        return NumberedConstants.UNITCOMMAND_MAP.get(name);
+        return MindustryContents.UNITCOMMAND_MAP.get(name);
     }
 }

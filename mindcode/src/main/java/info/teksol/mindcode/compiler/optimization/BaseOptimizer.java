@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.emulator.processor.LogicReadable;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.AstContext;
@@ -13,7 +14,6 @@ import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.processor.MindustryValue;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -174,7 +174,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.normalizeMul(op, variable, number);
     }
 
-    public LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
+    public LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
         return optimizationContext.evaluate(operation, a, b);
     }
 

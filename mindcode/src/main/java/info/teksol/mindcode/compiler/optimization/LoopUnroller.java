@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.emulator.MindustryVariable;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.AstContext;
@@ -8,7 +9,6 @@ import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.processor.DoubleVariable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -238,8 +238,8 @@ class LoopUnroller extends BaseOptimizer {
 
     private int findLoopCountAdvanced(AstContext loop, JumpInstruction jump, LogicVariable loopControl,
             LogicLiteral initLiteral, List<LogicInstruction> controlIxs, int loopLimit) {
-        DoubleVariable controlVariable = DoubleVariable.newDoubleValue(false, loopControl.toMlog(),
-                initLiteral.getDoubleValue());
+        MindustryVariable controlVariable = MindustryVariable.createVar(loopControl.toMlog());
+        controlVariable.setDoubleValue(initLiteral.getDoubleValue());
         LogicBoolean terminatingValue = LogicBoolean.get(!isTrailingCondition(loop));
 
         for (int loops = 1; loops <= loopLimit; loops++) {

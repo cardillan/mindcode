@@ -1,14 +1,14 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.emulator.processor.LogicWritable;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
-import info.teksol.mindcode.processor.MindustryResult;
 
 import java.util.Optional;
 
-class ExpressionValue implements MindustryResult {
+class ExpressionValue implements LogicWritable {
     private final InstructionProcessor instructionProcessor;
 
     private LogicLiteral literal;

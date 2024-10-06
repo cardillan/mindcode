@@ -1,7 +1,6 @@
 package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.processor.MindustryValueType;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,8 +26,8 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
-    public MindustryValueType getMindustryValueType() {
-        return MindustryValueType.DOUBLE;
+    public boolean isObject() {
+        return false;
     }
 
     @Override

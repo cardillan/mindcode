@@ -1,7 +1,5 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.processor.MindustryValueType;
-
 public enum LogicBoolean implements LogicLiteral {
     FALSE("false"),
     TRUE("true"),
@@ -19,8 +17,8 @@ public enum LogicBoolean implements LogicLiteral {
     }
 
     @Override
-    public MindustryValueType getMindustryValueType() {
-        return MindustryValueType.BOOLEAN;
+    public boolean isObject() {
+        return false;
     }
 
     @Override
