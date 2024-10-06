@@ -1,4 +1,4 @@
-package info.teksol.emulator.processor;
+package info.teksol.evaluator;
 
 import info.teksol.mindcode.logic.Operation;
 
@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class ExpressionEvaluator {
 
-    public static OperationEval getOperation(Operation operation) {
+    public static LogicOperation getOperation(Operation operation) {
         return OPERATIONS.get(operation);
     }
 
@@ -53,11 +53,11 @@ public class ExpressionEvaluator {
         return Math.abs(a - b) < 0.000001;
     }
 
-    private static final Map<Operation, OperationEval> OPERATIONS = createOperationsMap();
+    private static final Map<Operation, LogicOperation> OPERATIONS = createOperationsMap();
     private static final Map<Operation, Integer> ARGUMENTS = createArgumentsMap();
 
-    private static Map<Operation, OperationEval> createOperationsMap() {
-        Map<Operation, OperationEval> map = new EnumMap<>(Operation.class);
+    private static Map<Operation, LogicOperation> createOperationsMap() {
+        Map<Operation, LogicOperation> map = new EnumMap<>(Operation.class);
 
         map.put(Operation.ADD,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() + b.getDoubleValue()));
         map.put(Operation.SUB,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() - b.getDoubleValue()));

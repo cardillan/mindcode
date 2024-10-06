@@ -6,6 +6,10 @@ public record Unit(
         int id
 ) implements MindustryContent {
 
+    public static int count() {
+        return MindustryContents.UNIT_MAP.size();
+    }
+
     public static Unit forId(int id) {
         return MindustryContents.UNIT_ID_MAP.get(id);
     }

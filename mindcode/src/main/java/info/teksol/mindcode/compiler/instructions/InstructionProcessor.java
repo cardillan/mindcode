@@ -35,13 +35,14 @@ public interface InstructionProcessor {
     CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue);
     EndInstruction createEnd(AstContext astContext);
     FormatInstruction createFormat(AstContext astContext, LogicValue what);
+    GetlinkInstruction createGetLink(AstContext astContext, LogicVariable result, LogicValue index);
     GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker);
     GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker);
     GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker);
     JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y);
     JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
     LabelInstruction createLabel(AstContext astContext, LogicLabel label);
-    LookupInstruction createLookup(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property);
+    LookupInstruction createLookup(AstContext astContext, LogicKeyword type, LogicVariable result, LogicValue index);
     NoOpInstruction createNoOp(AstContext astContext);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second);

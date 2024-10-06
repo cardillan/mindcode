@@ -211,10 +211,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createLabel(astContext, label);
     }
 
-    public LookupInstruction createLookup(LogicVariable result, LogicValue target, LogicValue property) {
-        return instructionProcessor.createLookup(astContext, result, target, property);
-    }
-
     public GotoLabelInstruction createGotoLabel(LogicLabel label, LogicLabel marker) {
         return instructionProcessor.createGotoLabel(astContext, label, marker);
     }

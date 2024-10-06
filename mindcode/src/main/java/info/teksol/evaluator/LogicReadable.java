@@ -1,4 +1,4 @@
-package info.teksol.emulator.processor;
+package info.teksol.evaluator;
 
 public interface LogicReadable {
     double getDoubleValue();

@@ -1,9 +1,9 @@
 package info.teksol.emulator;
 
 import info.teksol.emulator.processor.ExecutionException;
-import info.teksol.emulator.processor.LogicReadable;
-import info.teksol.emulator.processor.LogicWritable;
 import info.teksol.emulator.processor.ProcessorFlag;
+import info.teksol.evaluator.LogicReadable;
+import info.teksol.evaluator.LogicWritable;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.mimex.MindustryContents;
 
@@ -195,6 +195,10 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public String print() {
         return isObject ? print(object) : print(numericValue);
+    }
+
+    public boolean isValidNumber() {
+        return !isObject && !invalid(numericValue);
     }
 
     // TODO: compiler/optimizer will need to use this eventually

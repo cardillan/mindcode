@@ -6,6 +6,10 @@ public record Liquid(
         int id
 ) implements MindustryContent {
 
+    public static int count() {
+        return MindustryContents.LIQUID_MAP.size();
+    }
+
     public static Liquid forId(int id) {
         return MindustryContents.LIQUID_ID_MAP.get(id);
     }

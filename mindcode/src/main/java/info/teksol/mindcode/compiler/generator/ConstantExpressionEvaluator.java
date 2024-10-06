@@ -3,8 +3,8 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.emulator.MindustryObject;
 import info.teksol.emulator.MindustryString;
 import info.teksol.emulator.MindustryVariable;
-import info.teksol.emulator.processor.ExpressionEvaluator;
-import info.teksol.emulator.processor.OperationEval;
+import info.teksol.evaluator.ExpressionEvaluator;
+import info.teksol.evaluator.LogicOperation;
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -58,7 +58,7 @@ public class ConstantExpressionEvaluator {
     private AstNode evaluateBinaryOp(BinaryOp node) {
         Operation operation = Operation.fromMindcode(node.getOp());
         if (operation.isDeterministic()) {
-            OperationEval eval = ExpressionEvaluator.getOperation(operation);
+            LogicOperation eval = ExpressionEvaluator.getOperation(operation);
             if (eval != null) {
                 MindustryVariable a = variableFromNode("a", evaluateInner(node.getLeft()));
                 MindustryVariable b = variableFromNode("b", evaluateInner(node.getRight()));
@@ -127,7 +127,7 @@ public class ConstantExpressionEvaluator {
 
     private AstNode evaluateFunctionCall(FunctionCall node) {
         Operation operation = Operation.fromMindcode(node.getFunctionName());
-        OperationEval eval = ExpressionEvaluator.getOperation(operation);
+        LogicOperation eval = ExpressionEvaluator.getOperation(operation);
         int numArgs = ExpressionEvaluator.getNumberOfArguments(operation);
         if (eval != null && numArgs == node.getParams().size()) {
             List<ConstantAstNode> evaluated = node.getParams().stream()
@@ -164,7 +164,7 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateUnaryOp(UnaryOp node) {
-        OperationEval eval = ExpressionEvaluator.getOperation(Operation.fromMindcode(node.getOp()));
+        LogicOperation eval = ExpressionEvaluator.getOperation(Operation.fromMindcode(node.getOp()));
         if (eval != null) {
             MindustryVariable a = variableFromNode("a", evaluateInner(node.getExpression()));
             if (a != null) {

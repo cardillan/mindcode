@@ -3,8 +3,7 @@ package info.teksol.emulator.processor;
 import info.teksol.emulator.MindustryVariable;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.mimex.MindustryContent;
-import info.teksol.mindcode.mimex.MindustryContents;
+import info.teksol.mindcode.mimex.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +17,6 @@ public class MindustryVariables {
 
     private final Processor processor;
     public final MindustryVariable counter = MindustryVariable.createCounter();
-    public final MindustryVariable links = MindustryVariable.createVar("@links");
     public final MindustryVariable null_ = MindustryVariable.createNull();
 
     private final Map<String, MindustryVariable> variables = new HashMap<>();
@@ -26,12 +24,16 @@ public class MindustryVariables {
     public MindustryVariables(Processor processor) {
         this.processor = processor;
         variables.put("@counter", counter);
-        variables.put("@links", links);
         variables.put("null", null_);
         variables.put("true", MindustryVariable.createConst("true", true));
         variables.put("false", MindustryVariable.createConst("false", false));
         variables.put("0", MindustryVariable.createConst("0", 0));
         variables.put("1", MindustryVariable.createConst("1", 1));
+
+        variables.put("@blockCount", MindustryVariable.createConst("blockCount", BlockType.count()));
+        variables.put("@unitCount", MindustryVariable.createConst("unitCount", Unit.count()));
+        variables.put("@itemCount", MindustryVariable.createConst("itemCount", Item.count()));
+        variables.put("@liquidCount", MindustryVariable.createConst("liquidCount", Liquid.count()));
     }
 
     public void addConstVariable(String name, int value) {

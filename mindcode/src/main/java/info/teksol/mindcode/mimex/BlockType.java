@@ -20,6 +20,10 @@ public record BlockType(
         List<String> unitPlans
 ) implements MindustryContent {
 
+    public static int count() {
+        return MindustryContents.BLOCK_MAP.size();
+    }
+
     public static BlockType forName(String name) {
         return MindustryContents.BLOCK_MAP.get(name);
     }

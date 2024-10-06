@@ -1,6 +1,6 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.emulator.processor.LogicReadable;
+import info.teksol.evaluator.LogicReadable;
 
 public interface LogicLiteral extends LogicValue, LogicReadable {
 

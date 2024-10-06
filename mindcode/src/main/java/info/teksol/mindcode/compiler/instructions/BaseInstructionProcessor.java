@@ -125,6 +125,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public GetlinkInstruction createGetLink(AstContext astContext, LogicVariable result, LogicValue index) {
+        return (GetlinkInstruction) createInstruction(astContext, GETLINK, result, index);
+    }
+
+    @Override
     public GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
         return (GotoInstruction) createInstruction(astContext, GOTO, address, marker);
     }
@@ -154,8 +159,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LookupInstruction createLookup(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
-        return (LookupInstruction) createInstruction(astContext, LOOKUP, result, target, property);
+    public LookupInstruction createLookup(AstContext astContext, LogicKeyword type, LogicVariable result, LogicValue index) {
+        return (LookupInstruction) createInstruction(astContext, LOOKUP, type, result, index);
     }
 
     @Override
@@ -255,6 +260,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case DRAWFLUSH  -> new DrawflushInstruction(astContext, arguments, params);
             case END        -> new EndInstruction(astContext);
             case FORMAT     -> new FormatInstruction(astContext, arguments, params);
+            case GETLINK    -> new GetlinkInstruction(astContext, arguments, params);
             case GOTO       -> new GotoInstruction(astContext, arguments, params);
             case GOTOLABEL  -> new GotoLabelInstruction(astContext, arguments, params);
             case GOTOOFFSET -> new GotoOffsetInstruction(astContext, arguments, params);

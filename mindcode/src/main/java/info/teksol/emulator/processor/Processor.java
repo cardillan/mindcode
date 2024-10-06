@@ -6,8 +6,13 @@ import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.blocks.graphics.GraphicsBuffer;
 import info.teksol.emulator.blocks.graphics.LogicDisplay;
+import info.teksol.evaluator.ConditionEvaluator;
+import info.teksol.evaluator.ExpressionEvaluator;
+import info.teksol.evaluator.LogicCondition;
+import info.teksol.evaluator.LogicOperation;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.mimex.*;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -20,7 +25,8 @@ import static info.teksol.emulator.processor.ProcessorFlag.*;
 public class Processor {
     private final Set<ProcessorFlag> flags;
     private final MindustryVariables variables;
-    private final List<MindustryBlock> blocks = new ArrayList<>();
+    private final Map<String, MindustryBlock> blockMap = new LinkedHashMap<>();
+    private List<MindustryBlock> blocks = List.of();
     private final MindustryVariable counter;
     private int steps = 0;
     private int instructions = 0;
@@ -38,9 +44,9 @@ public class Processor {
     }
 
     public void addBlock(String name, MindustryBlock block) {
-        blocks.removeIf(b -> b.name().equals(block.name()));
-        blocks.add(block);
+        blockMap.put(name, block);
         variables.addLinkedBlock(name, block);
+        blocks= List.copyOf(blockMap.values());
     }
 
     public List<String> getPrintOutput() {
@@ -151,7 +157,9 @@ public class Processor {
             case DRAWFLUSH  -> executeDrawflush((DrawflushInstruction) instruction);
             case END        -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
             case FORMAT     -> executeFormat((FormatInstruction) instruction); 
+            case GETLINK    -> executeGetlink((GetlinkInstruction) instruction);
             case JUMP       -> executeJump((JumpInstruction) instruction);
+            case LOOKUP     -> executeLookup((LookupInstruction) instruction);
             case OP         -> executeOp((OpInstruction) instruction);
             case PACKCOLOR  -> executePackColor((PackColorInstruction) instruction);
             case PRINT      -> executePrint((PrintInstruction) instruction);
@@ -169,13 +177,8 @@ public class Processor {
         };
     }
 
-    private boolean executeDraw(DrawInstruction ix) {
-        graphicsBuffer.draw(ix);
-        return true;
-    }
-
     @SuppressWarnings("unchecked")
-    private <T extends MindustryObject> void executeOperation(LogicVariable value, Class<T> type, Consumer<T> operation) {
+    private <T extends MindustryObject> void blockOperation(LogicVariable value, Class<T> type, Consumer<T> operation) {
         MindustryVariable variable = getExistingVariable(value);
         if (variable.getObject() == null) {
             throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable '" + value.toMlog() + "' is not an object.");
@@ -187,27 +190,36 @@ public class Processor {
         }
     }
 
+    private boolean executeDraw(DrawInstruction ix) {
+        graphicsBuffer.draw(ix);
+        return true;
+    }
+
     private boolean executeDrawflush(DrawflushInstruction ix) {
-        executeOperation(ix.getDisplay(), LogicDisplay.class, display -> display.drawflush(graphicsBuffer));
+        blockOperation(ix.getDisplay(), LogicDisplay.class, display -> display.drawflush(graphicsBuffer));
         return true;
     }
 
-    private boolean executeSet(SetInstruction ix) {
-        MindustryVariable target = getOrCreateVariable(ix.getArg(0));
-        MindustryVariable value = getExistingVariable(ix.getArg(1));
-        target.assign(value);
-        return true;
-    }
-
-    private boolean executeOp(OpInstruction ix) {
-        MindustryVariable target = getOrCreateVariable(ix.getArg(1));
-        MindustryVariable a = getExistingVariable(ix.getX());
-        MindustryVariable b = getExistingVariable(ix.hasSecondOperand() ? ix.getY() : LogicNumber.ZERO);
-        OperationEval op = ExpressionEvaluator.getOperation(ix.getOperation());
-        if (op == null) {
-            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation '" + ix.getOperation() + "'.");
+    private boolean executeGetlink(GetlinkInstruction ix) {
+        MindustryVariable index = getExistingVariable(ix.getIndex());
+        MindustryVariable result = getOrCreateVariable(ix.getResult());
+        if (!index.isValidNumber()) {
+            result.setNull();
+            throw new ExecutionException(ERR_NOT_A_NUMBER, "Invalid numeric value in getlink index '%s'.", ix.getIndex().toMlog());
         }
-        op.execute(target, a, b);
+        if (!index.isValidNumber() || index.getIntValue() < 0 || index.getIntValue() >= blockMap.size()) {
+            result.setNull();
+            throw new ExecutionException(ERR_INVALID_LINK, "Invalid link index %d.", index.getIntValue());
+        }
+        result.setObject(blocks.get(index.getIntValue()));
+        return true;
+    }
+
+    private boolean executeFormat(FormatInstruction ix) {
+        MindustryVariable var = getExistingVariable(ix.getValue());
+        if (!textBuffer.format(var.print())) {
+            throw new ExecutionException(ERR_INVALID_FORMAT, "No valid formatting placeholder found in the text buffer.");
+        }
         return true;
     }
 
@@ -218,15 +230,48 @@ public class Processor {
         } else {
             MindustryVariable a = getExistingVariable(ix.getX());
             MindustryVariable b = getExistingVariable(ix.getY());
-            ConditionEval conditionEval = CONDITIONS.get(ix.getCondition());
-            if (conditionEval == null) {
+            LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
+            if (logicCondition == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '" + ix.getCondition() + "'.");
             }
-            if (conditionEval.evaluate(a, b)) {
+            if (logicCondition.evaluate(a, b)) {
                 counter.setIntValue(address);
             }
         }
 
+        return true;
+    }
+
+    private boolean executeLookup(LookupInstruction ix) {
+        LogicKeyword type = ix.getType();
+        MindustryVariable index = getExistingVariable(ix.getIndex());
+        MindustryContent object = switch (type.getKeyword()) {
+            case "block"    -> BlockType.forId(index.getIntValue());
+            case "unit"     -> Unit.forId(index.getIntValue());
+            case "item"     -> Item.forId(index.getIntValue());
+            case "liquid"   -> Liquid.forId(index.getIntValue());
+            default         -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid lookup type '" + type.getKeyword() + "'.");
+        };
+        MindustryVariable result = getOrCreateVariable(ix.getResult());
+        result.setObject(object);
+        if (!index.isValidNumber()) {
+            throw new ExecutionException(ERR_NOT_A_NUMBER, "Invalid numeric value in lookup index '%s'.", ix.getIndex().toMlog());
+        }
+        if (object == null || !index.isValidNumber()) {
+            throw new ExecutionException(ERR_INVALID_CONTENT, "Invalid lookup index %d for type '%s'.", index.getIntValue(), type.getKeyword());
+        }
+        return true;
+    }
+
+    private boolean executeOp(OpInstruction ix) {
+        MindustryVariable target = getOrCreateVariable(ix.getArg(1));
+        MindustryVariable a = getExistingVariable(ix.getX());
+        MindustryVariable b = getExistingVariable(ix.hasSecondOperand() ? ix.getY() : LogicNumber.ZERO);
+        LogicOperation op = ExpressionEvaluator.getOperation(ix.getOperation());
+        if (op == null) {
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation '" + ix.getOperation() + "'.");
+        }
+        op.execute(target, a, b);
         return true;
     }
 
@@ -250,27 +295,11 @@ public class Processor {
         return true;
     }
 
-    private boolean executeFormat(FormatInstruction ix) {
-        MindustryVariable var = getExistingVariable(ix.getValue());
-        if (!textBuffer.format(var.print())) {
-            throw new ExecutionException(ERR_INVALID_FORMAT, "No valid formatting placeholder found in the text buffer.");
-        }
-        return true;
-    }
-
     private boolean executeRead(ReadInstruction ix) {
         MindustryVariable target = getOrCreateVariable(ix.getResult());
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        executeOperation(ix.getMemory(), Memory.class,
+        blockOperation(ix.getMemory(), Memory.class,
                 memory -> target.setDoubleValue(memory.read(index.getIntValue())));
-        return true;
-    }
-
-    private boolean executeWrite(WriteInstruction ix) {
-        MindustryVariable source = getExistingVariable(ix.getArg(0));
-        MindustryVariable index = getExistingVariable(ix.getIndex());
-        executeOperation(ix.getMemory(), Memory.class,
-                memory -> memory.write(index.getIntValue(), source.getDoubleValue()));
         return true;
     }
 
@@ -298,30 +327,26 @@ public class Processor {
         }
     }
 
+    private boolean executeSet(SetInstruction ix) {
+        MindustryVariable target = getOrCreateVariable(ix.getArg(0));
+        MindustryVariable value = getExistingVariable(ix.getArg(1));
+        target.assign(value);
+        return true;
+    }
+
+    private boolean executeWrite(WriteInstruction ix) {
+        MindustryVariable source = getExistingVariable(ix.getArg(0));
+        MindustryVariable index = getExistingVariable(ix.getIndex());
+        blockOperation(ix.getMemory(), Memory.class,
+                memory -> memory.write(index.getIntValue(), source.getDoubleValue()));
+        return true;
+    }
+
     private MindustryVariable getOrCreateVariable(LogicArgument value) {
         return variables.getOrCreateVariable(value);
     }
 
     private MindustryVariable getExistingVariable(LogicArgument value) {
         return variables.getExistingVariable(value);
-    }
-
-    private static final Map<Condition, ConditionEval> CONDITIONS = createConditionsMap();
-
-    private interface ConditionEval {
-        boolean evaluate(LogicReadable a, LogicReadable b);
-    }
-
-    private static Map<Condition, ConditionEval> createConditionsMap() {
-        Map<Condition, ConditionEval> map = new HashMap<>();
-        map.put(Condition.EQUAL,           ExpressionEvaluator::equals);
-        map.put(Condition.NOT_EQUAL,       (a,  b) -> !ExpressionEvaluator.equals(a, b));
-        map.put(Condition.LESS_THAN,       (a,  b) -> a.getDoubleValue() <  b.getDoubleValue());
-        map.put(Condition.LESS_THAN_EQ,    (a,  b) -> a.getDoubleValue() <= b.getDoubleValue());
-        map.put(Condition.GREATER_THAN,    (a,  b) -> a.getDoubleValue() >  b.getDoubleValue());
-        map.put(Condition.GREATER_THAN_EQ, (a,  b) -> a.getDoubleValue() >= b.getDoubleValue());
-        map.put(Condition.STRICT_EQUAL,    (a,  b) -> a.isObject() == b.isObject() && ExpressionEvaluator.equals(a, b));
-        map.put(Condition.ALWAYS,          (a,  b) -> true);
-        return map;
     }
 }

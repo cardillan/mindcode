@@ -1,6 +1,7 @@
 package info.teksol.emulator.processor;
 
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import org.intellij.lang.annotations.PrintFormat;
 
 public class ExecutionException extends RuntimeException {
     private final ProcessorFlag flag;
@@ -11,6 +12,10 @@ public class ExecutionException extends RuntimeException {
     public ExecutionException(ProcessorFlag flag, String message) {
         super(message);
         this.flag = flag;
+    }
+
+    public ExecutionException(ProcessorFlag flag, @PrintFormat String message, Object... args) {
+        this(flag, String.format(message, args));
     }
 
     public ProcessorFlag getFlag() {
