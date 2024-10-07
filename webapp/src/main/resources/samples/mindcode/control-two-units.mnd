@@ -17,7 +17,7 @@ def controlUnit(my_unit)
     // Binds the unit stored in a variable
     ubind(my_unit);
     move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
-    printf("Currently bound unit is ${@unit}.");
+    print($"Currently bound unit is ${@unit}.");
     printflush(message1);
     wait(0.8);
     ANGLE += 45;

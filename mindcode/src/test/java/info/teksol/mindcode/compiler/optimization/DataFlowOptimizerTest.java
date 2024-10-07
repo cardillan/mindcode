@@ -1001,7 +1001,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         inline def printDomeStatus(item, text)
                             print(text)
                             level = dome1.sensor(item)
-                            printf("  dome:  [green]$[]\\n", level)
+                            print($"  dome:  [green]$[]\\n", level)
                         end
                         """,
                 createInstruction(PRINT, q("\n[green]Silicon[] status:\n  dome:  [green]{0}[]\n")),

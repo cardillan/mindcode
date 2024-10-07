@@ -9,7 +9,7 @@ The perils of using a high-level language for Mindustry code are inefficient cod
 * Efficiency: while there's still a lot of room for improvement, the mlog code produced by Mindcode is quite efficient today. Mindcode is capable of simplifying expressions, removing unnecessary or unreachable code and using available instruction space to produce faster code by unrolling loops or inlining functions automatically. 
 * Reliability: this project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they usually get resolved quickly. 
 
-> [!NOTE]
+> [!IMPORTANT]
 > Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142). These changes will be substantial, and any comments and suggestions are welcome now while the changes are still being deliberated.
 > 
 > Most importantly, semicolons separating statements and expressions will become compulsory in Mindcode. As they are optional at this moment, you can start adding them to your code now to prepare for the change.  
@@ -24,7 +24,7 @@ The most important recent changes to Mindcode include:
 * The compiled code can be injected from the web app or the command-line compiler right into a processor in a running Mindustry game thanks to the [Mlog Watcher mod](https://github.com/Sharlottes/MlogWatcher). [Instructions on use](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).  
 * Program parametrization should now be done using [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) instead of global variables.
 * [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) can now use more than one loop variable to iterate over the values in the list, and if the list consist of Mindcode variables, these variables can be modified by assigning a new value to the loop variable inside the loop.   
-* [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remark) can be now included in the compiled code.
+* [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks) can be now included in the compiled code.
 * If your Mindcode program prints some output and doesn't otherwise interact with the Mindustry World, it can be run in an emulated processor after compilation using the **Compile and Run** button and its output is shown together with the compiled program on the web page, or written to the log by the command-line tool.  
 * A button to copy the resulting program or schematic to clipboard is available in the web app.
 

@@ -9,7 +9,7 @@ while true
         switch1.enabled = false;
     end;
 
-    printf("Property detector - page $page/$NUM_PAGES\n");
+    print($"Property detector - page $page/$NUM_PAGES\n");
 
     if BLOCK.dead === 0
         print(BLOCK.type, " - ");

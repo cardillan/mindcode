@@ -97,7 +97,7 @@ DEC_MAX                 = -1;                       // Max decrease in one loop
 /////////////////////////////////////////////////////////
 ubind(UNIT);
 while @unit == null
-    printf("[salmon]No unit of type $UNIT found.");
+    print($"[salmon]No unit of type $UNIT found.");
     printflush(message1);
     ubind(UNIT);
 end;
@@ -164,7 +164,7 @@ if LINK_ID == 0
     DISCARD_UNIT_MAX_ITEMS = UNIT_CAPACITY;       // Can discard anything to the core
 else
     printflush(message2);
-    printf("[green]Locating vault #$LINK_ID...");
+    print($"[green]Locating vault #$LINK_ID...");
     printflush(message1);
     while CORE == null
         QUERY_FLAG = 99999900 + LINK_ID;
@@ -188,7 +188,7 @@ else
             end;
             CORE = getBlock(CORE_X, CORE_Y, b_type);
             if b_type != @vault
-                printf("[salmon]Building at $CORE_X, $CORE_Y is not a vault!");
+                print($"[salmon]Building at $CORE_X, $CORE_Y is not a vault!");
                 printflush(message2);
                 CORE = null;
             end;
@@ -319,7 +319,7 @@ while true
     ubind(UNIT);
     while @unit == null
         // All units have died, poor bastards
-        printf("No unit of type $UNIT found.");
+        print($"No unit of type $UNIT found.");
         printflush(message1);
         ubind(UNIT);
     end;
@@ -487,40 +487,40 @@ while true
         end;
 
         print(MESSAGE);
-        printf("Moving [green]$ITEM[]$DIRECTION$LINK_TXT");
+        print($"Moving [green]$ITEM[]$DIRECTION$LINK_TXT");
         print(AUTO_ALLOCATION_TXT);
         if TARGET > 0
             if active >= TARGET
-                printf("\nUsing [green]$active/$TARGET[] units ($UNIT) [gold]+$items_in_transit");
+                print($"\nUsing [green]$active/$TARGET[] units ($UNIT) [gold]+$items_in_transit");
             else
-                printf("\nUsing [salmon]$active/$TARGET[] units ($UNIT) [gold]+$items_in_transit");
+                print($"\nUsing [salmon]$active/$TARGET[] units ($UNIT) [gold]+$items_in_transit");
             end;
             if CHANGE > 0
                 print("\n[][salmon]Cannot acquire additional units![]");
             end;
         end;
-        printf("\n[]Local items: [gold]$container_items");
+        print($"\n[]Local items: [gold]$container_items");
         if LOCAL_LIMIT < 100
-            printf("[] (limit [orange]$LOCAL_MARGIN[])");
+            print($"[] (limit [orange]$LOCAL_MARGIN[])");
         end
         if SHOW_REMOTE_LEVEL
             remote_level = CORE.sensor(ITEM);
-            printf("\n[]Remote items: [gold]$remote_level");
+            print($"\n[]Remote items: [gold]$remote_level");
             if REMOTE_LIMIT < 100
-                printf("[] (limit [orange]$REMOTE_MARGIN[])");
+                print($"[] (limit [orange]$REMOTE_MARGIN[])");
             end;
         end;
         if TARGET > 0
-            printf("\n[]Speed: [green]$items_per_min$CORR_SIGN$corr_per_min$SPEED_UNIT_TXT");
+            print($"\n[]Speed: [green]$items_per_min$CORR_SIGN$corr_per_min$SPEED_UNIT_TXT");
             if AUTO_ALLOCATION
-                printf("\nUnit throughput: [green]$items_per_min_unit[]/min");
-                printf("\nMin/last round: [green]$turnaround_str[]/[green]$elapsed_str[] s");
+                print($"\nUnit throughput: [green]$items_per_min_unit[]/min");
+                print($"\nMin/last round: [green]$turnaround_str[]/[green]$elapsed_str[] s");
             else
-                printf("\nLast round: [green]$elapsed_str[] s");
+                print($"\nLast round: [green]$elapsed_str[] s");
             end
-            printf("\nTotal wait time: [green]$wait_time_str[] s");
+            print($"\nTotal wait time: [green]$wait_time_str[] s");
         end;
-        printf("\n[lightgray]Loop: $loop_time_ms ms");
+        print($"\n[lightgray]Loop: $loop_time_ms ms");
         printflush(message1);
 
         CHANGE = TARGET - active;
@@ -588,7 +588,7 @@ while true
                     if within(DROP_X, DROP_Y, RADIUS_WITHIN)
                         itemDrop(DROP_TARGET, UNIT_CAPACITY);
                     end;
-                    printf("[]\nUnloading previous items: [green]");
+                    print($"[]\nUnloading previous items: [green]");
                 end;
             end;
 
@@ -597,9 +597,9 @@ while true
                 if within(SRC_X, SRC_Y, RADIUS_WITHIN)
                     state = S_LOAD_ITEMS;
                 elsif SHOW_UNIT_DISTANCE
-                    printf("[]\n[gold]$ sec[] to source: [green]", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
+                    print($"[]\n[gold]$ sec[] to source: [green]", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
                 else
-                    printf("[]\nGoing to source: [green]");
+                    print($"[]\nGoing to source: [green]");
                 end;
             end;
 
@@ -611,7 +611,7 @@ while true
                 if @unit.totalItems >= UNIT_CAPACITY
                     state = S_APPROACH_DST;
                 else
-                    printf("[]\nWaiting at source: [green]");
+                    print($"[]\nWaiting at source: [green]");
                     // Keep the unit in place
                     approach(SRC_X, SRC_Y, RADIUS_APPROACH);
                     // Time waited
@@ -628,9 +628,9 @@ while true
                     transfers += 1;
                     state = S_DROP_ITEMS;
                 elsif SHOW_UNIT_DISTANCE
-                    printf("[]\n[gold]$ sec[] to destination: [green]", len(DST_X - @unit.x, DST_Y - @unit.y) \ SPEED_SEC / 10);
+                    print($"[]\n[gold]$ sec[] to destination: [green]", len(DST_X - @unit.x, DST_Y - @unit.y) \ SPEED_SEC / 10);
                 else
-                    printf("[]\nGoing to destination: [green]");
+                    print($"[]\nGoing to destination: [green]");
                 end;
             end;
 
@@ -644,12 +644,12 @@ while true
                     // Issue the command now to save one loop
                     approach(SRC_X, SRC_Y, RADIUS_APPROACH);
                     if SHOW_UNIT_DISTANCE
-                        printf("[]\n[gold]$ sec[] to source: [green]", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
+                        print($"[]\n[gold]$ sec[] to source: [green]", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
                     else
-                        printf("[]\nGoing to source: [green]");
+                        print($"[]\nGoing to source: [green]");
                     end;
                 else
-                    printf("[]\nWaiting at destination: [green]");
+                    print($"[]\nWaiting at destination: [green]");
                     // Keep the unit in place
                     approach(DST_X, DST_Y, RADIUS_APPROACH);
                     // Time waited
@@ -664,7 +664,7 @@ while true
 
             // Quit using this unit: move it to the core and unload whatever it's carrying
             if state == S_DISCARD
-                printf("[]\nParking: [green]");
+                print($"[]\nParking: [green]");
                 approach(DROP_X, DROP_Y, RADIUS_APPROACH);
                 if within(DROP_X, DROP_Y, RADIUS_WITHIN)
                     itemDrop(DROP_TARGET, UNIT_CAPACITY);

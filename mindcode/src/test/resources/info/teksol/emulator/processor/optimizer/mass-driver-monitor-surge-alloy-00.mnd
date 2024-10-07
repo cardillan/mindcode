@@ -31,8 +31,8 @@ do
 			else
 				print("\n", block, " is not supported.");
 		end;
-		printf("\nNominal production: $EXPECTED_FLOW_STR/min");
-		printf("\nActual production: $flow_str/min");
+		print($"\nNominal production: $EXPECTED_FLOW_STR/min");
+		print($"\nActual production: $flow_str/min");
 	end;
 	
 	println("Message: ", MESSAGE);

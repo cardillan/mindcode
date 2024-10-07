@@ -214,7 +214,7 @@ while true
 		when STARTUP then	"[gold]STARTUP[]";
 		when RUNNING then	"[green]RUNNING[]";
 	end;
-	printf("$STR_MODE, reactors [green]$REACTORS_ON/$reactors[]");
+	print($"$STR_MODE, reactors [green]$REACTORS_ON/$reactors[]");
 	if OVERDRIVE
 		multiplier = floor(100 * boosts / REACTORS_ON + 0.5) / 100;
 		print(" ([gold]", multiplier, "x[])");
@@ -228,12 +228,12 @@ while true
 	end;
 	if enough_battery == false
 		print("\n[salmon]Insufficient battery storage![]");
-		printf("\nLink [gold]$missing_battery K[] of additional storage to internal battery.");
+		print($"\nLink [gold]$missing_battery K[] of additional storage to internal battery.");
 	end;
-	printf("\nInternal battery:    [gold]$battery_level_str[]/[green]50[] K");
-	printf("\nTotal battery:        [gold]$total_battery_str[]/[green]$total_capacity_str[] K");
-	printf("\nBattery change:     [gold]$battery_change[]");
-	printf("\nPower balance:       [gold]$net_power[]");
+	print($"\nInternal battery:    [gold]$battery_level_str[]/[green]50[] K");
+	print($"\nTotal battery:        [gold]$total_battery_str[]/[green]$total_capacity_str[] K");
+	print($"\nBattery change:     [gold]$battery_change[]");
+	print($"\nPower balance:       [gold]$net_power[]");
 	
 	case MODE
 		when SHUTDOWN then
@@ -269,9 +269,9 @@ while true
 				end;
 			else
 				outputs = OUTPUT_1 + OUTPUT_2 + OUTPUT_3;
-				printf("\n[gold]$outputs[] surge tower(s) online");
+				print($"\n[gold]$outputs[] surge tower(s) online");
 				if OUTPUT_3 == 0
-					printf("\nRequired power level: [gold]$neededPower[]");
+					print($"\nRequired power level: [gold]$neededPower[]");
 				end;
 			
 				// A reactor is running. Activate boost as soon as power is positive

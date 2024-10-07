@@ -57,7 +57,7 @@ value is `3`.
 Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second 
 is not and could be used as a variable or function name).
 
-You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remark) to place comments or notes directly to the compiled code.
+You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks) to place comments or notes directly to the compiled code.
 
 A text enclosed between `/*` and `*/` is a comment that can span several lines. Additionally, anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
 
@@ -216,7 +216,7 @@ escaped, i.e. `\"`, and even then they're replaced by single quotes in the compi
 
 #### Formattable string literals
 
-Formattable string literals are a special case of string literals which can only be used with [`printf`, `print`, `println`, and `remark` functions](SYNTAX-4-FUNCTIONS.markdown#printf). They are prepended by the `$` character: 
+Formattable string literals are a special case of string literals which can only be used with [`print`, `println`, and `remark` functions](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). They are prepended by the `$` character: 
 
 `$"A formattable string literal."`
 

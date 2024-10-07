@@ -77,9 +77,9 @@ while true
     if CONTAINER == null
         println("[salmon]No destination.");
     elsif (DROP_TARGET != null) and (DROP_TARGET.itemCapacity < 300)
-        printf("Destination: $CONTAINER\n");
-        printf("Item dump: $DROP_TARGET\n");
-        printf("[salmon]Item dump must be a container or a vault!");
+        print($"Destination: $CONTAINER\n");
+        print($"Item dump: $DROP_TARGET\n");
+        print($"[salmon]Item dump must be a container or a vault!");
     else
         break;
     end;
@@ -96,7 +96,7 @@ if LINK_ID == 0
     // Use existing unit
     CORE = ulocate(building, core, false, CORE_X, CORE_Y);
 else
-    printf("[gold]Locating vault #$LINK_ID...");
+    print($"[gold]Locating vault #$LINK_ID...");
     printflush(message1);
     QUERY_FLAG = 99999900 + LINK_ID;
     flag = QUERY_FLAG;
@@ -271,23 +271,23 @@ while true
 
     if FAST_UPDATE ? true : (iter > 3)
         iter = 0;
-        printf("Moving [green]$ITEM$DIRECTION$LINK_TXT\n");
-        printf("Local items: [gold]$[]", CONTAINER.sensor(ITEM));
+        print($"Moving [green]$ITEM$DIRECTION$LINK_TXT\n");
+        print($"Local items: [gold]$[]", CONTAINER.sensor(ITEM));
         if LOCAL_LIMIT < 100
-            printf(" (limit [orange]$LOCAL_MARGIN[])");
+            print($" (limit [orange]$LOCAL_MARGIN[])");
         end;
         if SHOW_REMOTE_LEVEL
-            printf("\nRemote items: [gold]$[]", CORE.sensor(ITEM));
+            print($"\nRemote items: [gold]$[]", CORE.sensor(ITEM));
             if REMOTE_LIMIT < 100
-                printf(" (limit [orange]$REMOTE_MARGIN[])");
+                print($" (limit [orange]$REMOTE_MARGIN[])");
             end;
         end;
         println(MSG, @unit.totalItems, "[]");
         if SHOW_UNIT_DISTANCE
             if show_state == S_APPROACH_SRC
-                printf("[]  arriving in [gold]$ sec[]\n", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
+                print($"[]  arriving in [gold]$ sec[]\n", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
             elsif show_state == S_APPROACH_DST
-                printf("[]  arriving in [gold]$ sec[]\n", len(DST_X - @unit.x, DST_Y - @unit.y) \ SPEED_SEC / 10);
+                print($"[]  arriving in [gold]$ sec[]\n", len(DST_X - @unit.x, DST_Y - @unit.y) \ SPEED_SEC / 10);
             end;
         end;
         println("[lightgray]Loop time: ", floor(loop_time), " ms[]");
@@ -332,7 +332,7 @@ inline def rebindUnit()
             first_unit = @unit;
             break;
         end;
-        printf("[salmon]No unit of type $UNIT found. 1");
+        print($"[salmon]No unit of type $UNIT found. 1");
         printflush(message1);
     end;
 
@@ -342,7 +342,7 @@ inline def rebindUnit()
             return;
         end;
         ubind(UNIT);
-        printf("[gold]Looking for old unit...");
+        print($"[gold]Looking for old unit...");
         printflush(message1);
     loop while @unit != first_unit and first_unit.dead === 0;
 
@@ -355,9 +355,9 @@ inline def findUnit()
     while true
         ubind(UNIT);
         if @unit == null
-            printf("[salmon]No unit of type $UNIT found. 2");
+            print($"[salmon]No unit of type $UNIT found. 2");
         elsif @unit.controlled != 0
-            printf("[salmon]Looking for a free $UNIT...");
+            print($"[salmon]Looking for a free $UNIT...");
         else
             return;
         end;

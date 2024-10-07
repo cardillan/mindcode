@@ -53,7 +53,7 @@ TYPE = chooseUnitType();
 
 // BASIC INITIALIZATION - REBINDING UNIT
 /////////////////////////////////////////////////////////
-printf("[gold]Binding units...");
+print($"[gold]Binding units...");
 printflush(message1);
 rebindUnits();
 
@@ -128,7 +128,7 @@ unitCheck = @time + UNIT_CHECK_TIME;
 while switch1.enabled do
     start = @time;
     println(" === [gold]Supplying Overdrive Dome[] === ");
-    printf("\nUnit type: [green]$TYPE[]\n");
+    print($"\nUnit type: [green]$TYPE[]\n");
 
     // Note: processUnit rebinds a unit if it is lost. Store it back
     printDomeStatus(@silicon, "\n[green]Silicon[] status:\n");
@@ -145,7 +145,7 @@ while switch1.enabled do
         SUPPLY_P_FIRST = SUPPLY_P_FIRST ? UNIT_P1.totalItems > 0 : UNIT_P2.totalItems == 0;
     end
 
-    printf("\n[lightgray]Loop time: $ ms", floor(@time - start));
+    print($"\n[lightgray]Loop time: $ ms", floor(@time - start));
     printflush(message1);
 
     if TYPE != UNIT_TYPE and unitCheck > @time then
@@ -208,8 +208,8 @@ inline def areUnitsAvailable(type, output)
     end;
 
     if output then
-        printf("$type: occupied: $occupied, free: $free");
-        if needed > 0 then printf(", needed: $needed"); end;
+        print($"$type: occupied: $occupied, free: $free");
+        if needed > 0 then print($", needed: $needed"); end;
         println();
     end;
 
@@ -350,9 +350,9 @@ inline def processUnit(unit, item, group, supply)
 
     flag(state);
 
-    printf("  $group: [$color]$[]", @unit.totalItems);
+    print($"  $group: [$color]$[]", @unit.totalItems);
     if distance >= 0 then
-        printf("$msg$distance[] sec\n");
+        print($"$msg$distance[] sec\n");
     else
         print(msg);
     end;
@@ -364,8 +364,8 @@ inline def printDomeStatus(item, text)
     print(text);
     level = DOME.sensor(item);
     if level > 3 then
-        printf("  dome:  [green]$[]\n", level);
+        print($"  dome:  [green]$[]\n", level);
     else
-        printf("  dome:  [coral]$[]\n", level);
+        print($"  dome:  [coral]$[]\n", level);
     end;
 end;

@@ -153,6 +153,6 @@ while SWITCH.enabled == 0
 	drawflush(DISPLAY);
 
 	println("Mass Driver Monitor");
-	printf("[lightgray]Draw time: $ ms", floor(@time - start));
+	print($"[lightgray]Draw time: $ ms", floor(@time - start));
 	printflush(MESSAGE);
 end;

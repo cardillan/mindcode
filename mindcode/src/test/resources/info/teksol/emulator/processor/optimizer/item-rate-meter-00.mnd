@@ -92,11 +92,11 @@ while switch1.enabled == 0
 	TARGET_MEMORY[index] = rate;
 	
 	println("Item Rate Meter");
-	printf("Total items: [gold]$curr[]\n");
-	printf("Current rate [green]$[]/min\n", floor(rate * 3600));
-	printf("  memory start: [gold]$startIndex[]\n");
-	printf("  memory index: [gold]$index[]\n");
-	printf("[lightgray]Loop time: $ ms", floor(time));
+	print($"Total items: [gold]$curr[]\n");
+	print($"Current rate [green]$[]/min\n", floor(rate * 3600));
+	print($"  memory start: [gold]$startIndex[]\n");
+	print($"  memory index: [gold]$index[]\n");
+	print($"[lightgray]Loop time: $ ms", floor(time));
 	printflush(message1);
 	
 	prevTick = currTick;

@@ -35,14 +35,14 @@ while switch1.enabled == 0
 	if COORD.dead === 0
         for n = 0; n < TOTAL; n += 1
             m = COORD[n];
-            printf("\nCoord: [gold]$m[]");
+            print($"\nCoord: [gold]$m[]");
             maximum = max(maximum, m);
         end;
     end;
 	scale = 150 / maximum;
 
-	printf("\nMaximum: [green]$[]", ceil(maximum));
-	printf("\nScale: [green]$[]", floor(scale));
+	print($"\nMaximum: [green]$[]", ceil(maximum));
+	print($"\nScale: [green]$[]", floor(scale));
 	
 	clear(0,0,80);
 	color(0,80,0,255);
@@ -87,7 +87,7 @@ while switch1.enabled == 0
 	end;
 	COORD[POSITION] = maximum;
 	
-	printf("\n[lightgray]Loop time: $ ms", floor(@time - start));
+	print($"\n[lightgray]Loop time: $ ms", floor(@time - start));
 
 	wait = FREQ * ceil(@time / FREQ);
 	loops = 0;

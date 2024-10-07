@@ -23,10 +23,10 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void removesConstantsInPrintf() {
+    void removesConstantsInPrintFmt() {
         assertCompilesTo("""
                         const VALUE = 100
-                        printf("Value: $VALUE")
+                        print($"Value: $VALUE")
                         """,
                 createInstruction(PRINT, q("Value: ")),
                 createInstruction(PRINT, "100"),

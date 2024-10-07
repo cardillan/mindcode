@@ -101,7 +101,7 @@ You can use this for any property, not just item types, such as `@unit.dead` ins
 
 Again, the `vault1` or `storage` in the examples can be a variable or a linked block object.
 
-> [!NOTE]
+> [!IMPORTANT]
 > In the case of property access, the `@` character at the beginning of the property name is omitted - 
 > `storage.thorium` is the right syntax, `storage.@thorium` is wrong.
 
@@ -118,7 +118,7 @@ This constraint makes sense semantically as well: a scope of a global variable i
 variable is synced, its scope becomes even broader and is shared between multiple processors; using a local variable 
 in this place doesn't therefore make sense.
 
-> [!NOTE]
+> [!IMPORTANT]
 > By using a variable in a sync function, the variable effectively becomes volatile - its value can change 
 > externally, and it needs to be read from that variable on every access. Mindustry at the moment doesn't have a 
 > mechanism for correctly handling volatile variables, although such mechanism is planned.
@@ -184,88 +184,93 @@ set @counter __fn0retaddr
 
 This is a viable workaround if you run into the described problem, until a better solution is implemented. 
 
-# System functions
+# Built-in functions
 
-Mindcode now defines a few system functions that enhance plain Mindustry Logic.
+Mindcode defines a few built-in functions that enhance plain Mindustry Logic.
 
-## printf
+## Text output
 
-The `printf` function takes a formattable string literal, a string literal or a string constant as its first argument.
-It then looks for the `$` characters and replaces them with values like this:
+There are several functions that can be used to send output to the text buffer, from where it can be transferred into a message block using `printflush()` or, from Mindustry Logic 8 onwards, used to draw text using the `drawPrint()` function.
+
+### Plain text output
+
+Printing text, variables and expressions just as they are is possible using the `print` and `println` functions. These functions take any number of arguments and generate a `print` instruction for each of them. The `println` function outputs one additional `print` instruction containing just the `\n` (newline) character, creating a new line in the text to be printed.
+
+The value returned by functions performing plain text output corresponds to the value of the last argument in the argument list. If there were no arguments in the list (e.g. `println()`), the returned value is `null`.  
+
+### Compile-time formatting
+
+If the first argument passed to the `print()` or `println()` function is a formattable string literal, the functions perform compile-time formatting. All `$` characters inside the formattable string literal are replaced with variables and expressions like this:
+
 * If the `$` character is followed by a variable name, the variable is printed (external variables, e.g. `$X`, aren't supported).
-* If the `$` is not followed by a variable name, next argument from the argument list is printed.
-* To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`.
-  This is not necessary if the next character cannot be part of a variable name.
-  `${}` can be used to place an argument from the argument list immediately followed by some text.
+* If the `$` character is not followed by a variable name, next argument from the argument list is printed.
+* To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`. This is not necessary if the next character cannot be part of a variable name. `${}` can be used to place an argument from the argument list immediately followed by some text.
 * To print the `$` character, use `\$`.
 
-| `printf()` call                                                         | is the same as                                                           |
-|-------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| `printf("$@unit at position $x, $y\n")`                                 | `println(@unit, " at position ", x, ", ", y)`                            |
-| `printf("Time: $ sec, increment: $\n", floor(@second), current - last)` | `println("Time: ", floor(@second), " sec, increment: ", current - last)` |
-| `printf("Coordinates: ${real}+${imag}i")`                               | `print("Coordinates: ", real, "+", imag, "i")`                           |
-| `printf("Price: \$$price")`                                             | `print("Price: $", price)`                                               |
-| `printf("Speed: ${}m/s", distance / time)`                              | `print("Speed: ", distance / time, "m/s")`                               |
-| `printf($"Speed: ${}m/s", distance / time)`                             | same as above, only using the formattable string literal.                |
+| `print()` call                                                        | is the same as                                                         |
+|-----------------------------------------------------------------------|------------------------------------------------------------------------|
+| `print($"$@unit at position $x, $y")`                                 | `print(@unit, " at position ", x, ", ", y)`                            |
+| `print($"Time: $ sec, increment: $", floor(@second), current - last)` | `print("Time: ", floor(@second), " sec, increment: ", current - last)` |
+| `print($"Coordinates: ${real}+${imag}i")`                             | `print("Coordinates: ", real, "+", imag, "i")`                         |
+| `print($"Price: \$$price")`                                           | `print("Price: $", price)`                                             |
+| `print($"Speed: ${}m/s", distance / time)`                            | `print("Speed: ", distance / time, "m/s")`                             |
 
-The function was inspired by string interpolation in Ruby, but there are differences.
-Firstly, the first argument to `printf` must be a formattable string literal or a constant string expression, as the formatting takes place at compile time
-(Mindustry Logic doesn't provide means to do it at runtime). Secondly, only variables are allowed in curly braces,
-not expressions:
+The `println()` function works the same, but outputs an additional newline character to the text buffer.  
+
+The function was inspired by string interpolation in Ruby, but there are important differences. Firstly, the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide means to do it at runtime). Secondly, only variables are allowed in curly braces, not expressions:
 
 ```
-x = 5;
-y = 10;
-format = "Position: $, $\n";
-printf(format, x, y);               // Not allowed - format must be a string constant
-printf("Distance: ${len(x, y)}");   // No expressions allowed
+x = 3;
+y = 4;
+println("Position: $, $", x, y);      // No formatting - the first parameter isn't a formattable string literal
+                                      // Will output "Position: $, $34\n"
+println($"Position: $, $", x, y);     // Will be formatted and will ultimately output "Position: 3, 4\n"
 
-const fmt = "Position: $, $\n";
-printf(fmt, x, y);                  // Allowed - fmt is a string constant
+println($"Distance: ${len(x, y)}");   // Not allowed - expressions within the string aren't supported
+                                      // Causes compilation error
+println($"Distance: $", len(x, y));   // Allowed - the expression for $ is taken from the list
+                                      // Will output "Distance: 5\n"
 ```
 
-The value returned by this function is always `NULL`. 
+Compile-time formatting is supported by the `print()` and `println()` functions. The value returned by these functions performing compile-time formatting is always `null`.
 
-## print
+### Run-time formatting
 
-The `print` function corresponds to the `print` instruction, but accepts more than one argument. All arguments passed to the function are printed using individual `print` instructions. The returned value is the value of the last argument.
+Since version 8, Mindustry Logic supports run-time text formatting. This is done by putting placeholders `{0}` to `{9}` into the text buffer, which can be later replaced with an actual value using the `format` instruction. As the placeholders can be put into the text buffer using `print` instruction, it is possible to store and pass around the formatting string in a variable and thus separate the formatting template from actual values being output.
 
-If the first argument passed to the print function is a formattable string literal, the function uses it to format its subsequent arguments in the same way as the `printf` function described above. In this case, the value returned by `print` is also `NULL`:
-
-```
-x = 5;
-y = 10;
-print($"Position: $, $\n", x, y);
-```
-
-## println
-
-The `println` function prints all its arguments and adds a newline (`"\n"`) at the end.
-The returned value is that of the last argument, or `null` if no argument was passed:
+Run-time formatting can be accomplished by the `printf()` function. This function takes several arguments (typically at least two). The first argument is the format string, which may be a text constant, or a string variable, and is passed into a `print` instruction. All the remaining arguments are passed into `format` instructions. Therefore, `printf(fmt, a, b, c)` gets translated to
 
 ```
-println("Position: ", x, ", ", y);
-println();
-println("Elapsed time: ", elapsed, " sec");
-printflush(message1);
-```
+print fmt
+format a
+format b
+format c
+```  
 
-If the first argument passed to the print function is a formattable string literal, the function uses it to format its subsequent arguments in the same way as the `printf` function described above, appending a newline after printing out the formatted string. In this case, the value returned by `println` is also `NULL`:
+The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a possibility for building outputs incrementally.
 
-```
-x = 5;
-y = 10;
-// All these function calls are equivalent
-println($"Position: $, $", x, y);
-print($"Position: $, $\n", x, y);
-printf("Position: $, $\n", x, y);
-```
+Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2, ...)` function call is therefore just a shorthand for `print(fmt); format(value1, value2, ...);`.
 
-## remark
+> [!TIP]
+> Since the `format` instruction allows to decouple the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction, even when their arguments get resolved to constant values during optimizations. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
 
-The `remark` function has the same syntax as the `printf` function. It produces print instructions similarly to the 
-`printf` function, but the way these instructions are generated into the code can be controlled using the [`remarks` 
-option](SYNTAX-5-OTHER.markdown#option-remarks).
+> [!TIP]
+> Print merging optimizations can utilize the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the user code. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
+
+> [!WARNING]
+> The `printf()` function has two forms depending on the language target:
+> - For ML7A and lower, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument.
+> - For ML8A and higher, the `printf()` function performs the run-time formatting described in this chapter.
+> 
+> When migrating from Mindustry Logic 7 to Mindustry Logic 8, replace all occurrences of `printf("` with `print($"` in your codebase.
+
+## Remarks
+
+The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just lke the `print()` function does. It also produces `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
+
+* `none`: remarks are suppressed in the compiled code - they do not appear there at all.
+* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statement themselves aren't executed. This is the default value.
+* `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
 Example:
 
@@ -297,12 +302,7 @@ jump 8 lessThanEq i MAX
 end
 ```
 
-Note that remarks are preceded by a jump that skips their execution - this is the default behavior. Remarks can also 
-be made active, which removes the jumps, or not included in the compiled code at all, depending on the `remarks` 
-compiler option. 
-
-Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get 
-fully evaluated when possible:
+Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get fully evaluated when possible:
 
 ```
 for i in 1 .. 3
@@ -363,11 +363,11 @@ An alternative way to create a remark is the enhanced comment:
 /// This is an enhanced comment
 ```
 
-which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment supports string interpolation just as the `remark` function does (`/// Iteration: $i` is the same as `remark("Iteration: $i"")`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1)`) cannot be expressed using an enhanced comment.       
+which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment supports compile-time formatting just as the `remark` function does (`///Iteration: $i` is the same as `remark($"Iteration: $i");`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1);` cannot be expressed using an enhanced comment).       
 
-## System library
+# System library
 
-The system function discussed so far are supported directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY).
+The system function discussed so far are supported directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY.markdown).
 
 # User-defined functions
 

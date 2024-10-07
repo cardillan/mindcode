@@ -46,7 +46,7 @@ while switch1.enabled == 0
 			prev = MEMORY[n];
 			curr = block.totalItems;
 			MEMORY[n] = curr;
-			//printf("$n: $curr\n");
+			//print($"$n: $curr\n");
 			if curr < prev
 				total += 10;
 				MEMORY[0] = total;
@@ -72,13 +72,13 @@ while switch1.enabled == 0
 		ratePerMin = 0;
 		startTime = @time;
 	end;
-	printf("Item Counter                  \n");
-	printf("Total items: [gold]$total[]\n");
-	printf("Rate: [green]$ratePerMin[] items/min\n");
-	//printf("Overall rate: [green]$[] items/min\n", floor(total / (@time - totalStart) * 60000));
-	printf("Batch size: [green]$batch[]\n");
-	printf("Batch time: [gold]$elapsed[] ms\n");
-	printf("[lightgray]Loop time: $ ms", floor(@time - start));
+	print($"Item Counter                  \n");
+	print($"Total items: [gold]$total[]\n");
+	print($"Rate: [green]$ratePerMin[] items/min\n");
+	//print($"Overall rate: [green]$[] items/min\n", floor(total / (@time - totalStart) * 60000));
+	print($"Batch size: [green]$batch[]\n");
+	print($"Batch time: [gold]$elapsed[] ms\n");
+	print($"[lightgray]Loop time: $ ms", floor(@time - start));
 	printflush(message1);
 end;
 switch1.enabled = 0;

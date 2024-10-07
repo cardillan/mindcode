@@ -17,9 +17,9 @@ while true
     procesUnit(@zenith);
     procesUnit(@antumbra);
     procesUnit(@eclipse);
-    printf("Remote vault [gold]#$LINK_ID[]\n");
-    printf("Queries serviced: [green]$SERVICED[]\n");
-    printf("[lightgray]Loop time: $ ms", floor(@time - start));
+    print($"Remote vault [gold]#$LINK_ID[]\n");
+    print($"Queries serviced: [green]$SERVICED[]\n");
+    print($"[lightgray]Loop time: $ ms", floor(@time - start));
     printflush(message1);
 end;
 

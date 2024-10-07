@@ -161,8 +161,8 @@ while SWITCH.enabled == 0
 	start = @time;
 
 	println("Universal Factory Monitor");
-    //printf("$clx, $cly, $clw, $clh\n");
-    //printf("$crx, $cry, $crw, $crh\n");
+    //print($"$clx, $cly, $clw, $clh\n");
+    //print($"$crx, $cry, $crw, $crh\n");
 	print("Monitoring: ", TYPE);
 
     color(0, 0, 80, 255);

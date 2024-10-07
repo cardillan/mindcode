@@ -9,7 +9,7 @@ Variables aren't declared in Mindcode, they're created with first use. `count = 
 Mindustry Logic. Once set, processor variables are preserved (even across game saves/loads) until the processor code 
 is modified or the processor is destroyed.
 
-> [!NOTE]
+> [!IMPORTANT]
 > Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations, such as 
 > `&` or `<<`, the value is converted to a 64-bit integer (a Java `long`), the operation is performed and the result 
 > is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold only 
@@ -107,7 +107,7 @@ examples), since both `x` and `local` in the `foo` function are local variables 
 
 Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
 
-> [!NOTE]
+> [!IMPORTANT]
 > In previous versions of Mindcode, global variables also served as program parameters described below. This usage 
 > of global variables will cease to be supported be removed in a future release. Please modify your programs to use 
 > program parameters instead.
@@ -162,7 +162,7 @@ purpose of the mlog variable in the compiled code clearer.
 Unlike other types of variables, program parameters are never optimized away from the code. Only when the program
 parameter is not used at all in the program, it may be removed by the Dead Code optimization.
 
-> [!NOTE]
+> [!IMPORTANT]
 > Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When assigning a non-constant value (for example `@links`) to a program parameter, or when the value of the parameter may be read before being initialized, the behavior of the resulting code is generally undefined.
 
 # External memory
@@ -239,7 +239,9 @@ cell4[38] = cell4[39] = 50
 ```
 
 > [!NOTE]
-> External variables are allocated on a first-come, first-served basis. If you had the following code:
+> External variables are allocated on a first-come, first-served basis.
+
+If you had the following code:
 
 ```
 allocate heap in cell2[61 .. 63];
@@ -528,7 +530,7 @@ end;
 
 the entire `if DEBUG ... end` statement will be skipped and not included in the compiled code.
 
-> [!NOTE]
+> [!IMPORTANT]
 > It is not possible to define a constant for a formattable string literal. The following declaration isn't allowed:
 > 
 > `const FMT = $"Position: ($x, $y)";

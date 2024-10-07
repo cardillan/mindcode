@@ -61,8 +61,8 @@ while switch1.enabled == 0
                 rect(0, 0, 156, 176);
             end
         end
-        printf("\nNominal production: $EXPECTED_FLOW_STR/min");
-        printf("\nActual production: $flow_str/min");
+        print($"\nNominal production: $EXPECTED_FLOW_STR/min");
+        print($"\nActual production: $flow_str/min");
     end;
 
     start = @time;
@@ -168,6 +168,6 @@ while switch1.enabled == 0
 
     drawflush(display1);
 
-    printf("\nUpdate time: $ ms", floor(@time - start));
+    print($"\nUpdate time: $ ms", floor(@time - start));
     printflush(message1);
 end;

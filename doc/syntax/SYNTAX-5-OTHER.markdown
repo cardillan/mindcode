@@ -25,10 +25,12 @@ Possible values for this option are:
 * `ML7W`: compile for Mindcode Logic version 7 world processor
 * `ML7AS`: compile for Mindcode Logic version 7 (revision A) standard processors
 * `ML7AW`: compile for Mindcode Logic version 7 (revision A) world processor
+* `ML8AS`: compile for Mindcode Logic version 8 (revision A) standard processors
+* `ML8AW`: compile for Mindcode Logic version 8 (revision A) world processor
 
 ## Option `remarks`
 
-This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remark), 
+This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks), 
 are propagated to the compiled code. Remarks are written into the compiled code as `print` instructions. Possible values 
 of the `remarks` option are:
 

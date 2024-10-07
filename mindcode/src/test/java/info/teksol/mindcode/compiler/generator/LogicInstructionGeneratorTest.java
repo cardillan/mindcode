@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
@@ -1387,6 +1388,18 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         /// This is a remark
                         """,
                 createInstruction(REMARK, q("This is a remark")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesPrintfML8() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
+                        """
+                        printf("{1}", "a");
+                        """,
+                createInstruction(PRINT, q("{1}")),
+                createInstruction(FORMAT, q("a")),
                 createInstruction(END)
         );
     }

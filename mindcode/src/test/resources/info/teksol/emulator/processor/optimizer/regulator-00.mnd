@@ -74,9 +74,9 @@ while SWITCH.enabled == 0
 	item = SORTER.config;
 	if item == null || SENSOR != @totalItems
 		item = SENSOR;
-		printf("Measuring [gold]total[] in $CONTAINER");
+		print($"Measuring [gold]total[] in $CONTAINER");
 	else
-		printf("Measuring [gold]$item[] in $CONTAINER");
+		print($"Measuring [gold]$item[] in $CONTAINER");
 	end;
 	max = CONTAINER.sensor(MAXIMUM);
 	amount = CONTAINER.sensor(item);
@@ -88,13 +88,13 @@ while SWITCH.enabled == 0
         setState(false);
 	end;
 	
-	printf("\nLevel: [gold]$pct%[]");
+	print($"\nLevel: [gold]$pct%[]");
 	if INVERTED 
-		printf("\nActivate above [green]$PCT_HIGH%[]");
-		printf("\nDeactivate below [salmon]$PCT_LOW%[]");
+		print($"\nActivate above [green]$PCT_HIGH%[]");
+		print($"\nDeactivate below [salmon]$PCT_LOW%[]");
 	else
-		printf("\nActivate below [green]$PCT_LOW%[]");
-		printf("\nDeactivate above [salmon]$PCT_HIGH%[]");
+		print($"\nActivate below [green]$PCT_LOW%[]");
+		print($"\nDeactivate above [salmon]$PCT_HIGH%[]");
 	end;
 
     print(ACTIVE_TEXT);
@@ -107,8 +107,8 @@ while SWITCH.enabled == 0
 		n += 1;
 	end;
 
-	printf("[]\n# of cycles: $CYCLES");
-	printf("\n[lightgray]Loop: $ ms", floor(@time - start));
+	print($"[]\n# of cycles: $CYCLES");
+	print($"\n[lightgray]Loop: $ ms", floor(@time - start));
 	printflush(MESSAGE);
 end;
 

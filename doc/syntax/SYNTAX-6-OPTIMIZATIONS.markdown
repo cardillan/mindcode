@@ -334,33 +334,20 @@ same value. The goal of these replacements is to allow elimination of some instr
 avoid variable replacements that do not lead to instruction elimination - this would make the resulting code more
 understandable, but the optimizer would have to be more complex and therefore more prone to errors.
 
-> [!NOTE]
-> One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change
-> crucial parameters in the compiled code without a need to recompile entire program. To this end, assignments to
-> [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) are never removed. Any changes to `set`
-> instructions in the compiled code assigning value to program parameters are fully supported and the resulting 
-> program is fully functional, as if the value was assigned to the program parameter in the source code itself.
+> [!IMPORTANT]
+> One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change crucial parameters in the compiled code without a need to recompile entire program. To this end, assignments to [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) are never removed. Any changes to `set` instructions in the compiled code assigning value to program parameters are fully supported and the resulting program is fully functional, as if the value was assigned to the program parameter in the source code itself.
 > 
-> All other variables, including [main variables](SYNTAX-1-VARIABLES.markdown#main-variables) and
-> [local variables](SYNTAX-1-VARIABLES.markdown#local-variables), can be completely removed by this optimization.
-> Even if they stay in the compiled code, changing the value assigned to a main variable may not produce the same
-> effect as compiling the program with the changed value. In other words, **changing a value assigned to main variable
-> in the compiled code may break the compiled program.**
->
+> All other variables can be completely removed by this optimization. Even if they stay in the compiled code, changing the value assigned to any variables other than program parameters may not produce the same effect as compiling the program with the changed value. In other words, **changing a value assigned to a global, main or local variable in the compiled code may break the compiled program.**
+
 > If you wish to create a parametrized code, follow these rules for best results:
 >
 > * Use program parameters as placeholders for the parametrized values.
-> * Declare the parameters at the very beginning of the program (this way the parameters will be easy to find in
->   the compiled code).
-> * If you sanitize or otherwise modify the parameter value before being used by the program, store the results
->   of these operations in another variable. Program parameters are read-only in Mindcode and cannot be modified 
->   once set.
-> * Do not modify instructions other than `set` instructions assigning values to program parameters in the compiled 
->   code.
->
-> **On the `basic` and `advanced` optimization levels, global variables are handled in the same way as program parameters. On the `experimental` level, global
-> variables are fully optimized in a way similar to main or local variables. Always use program parameters for program
-> parametrization.**
+> * Declare the parameters at the very beginning of the program (this way the parameters will be easy to find in the compiled code).
+> * If you sanitize or otherwise modify the parameter value before being used by the program, store the results of these operations in another variable. Program parameters are read-only in Mindcode and cannot be modified once set.
+> * Do not modify instructions other than `set` instructions assigning values to program parameters in the compiled code.
+ 
+> [!WARNING]
+> In older versions of Mindcode, global variables served from program parametrization. For backwards compatibility, this optimization on the `basic` and `advanced` optimization levels handles global variables in the same way older versions did. On the `experimental` level, global variables are fully optimized in a way similar to main or local variables. Eventually the `experimental` level optimization will be merged into the `advanced` level and there won't be any way to use global variables for program parametrization. 
 
 ### Optimization levels
 

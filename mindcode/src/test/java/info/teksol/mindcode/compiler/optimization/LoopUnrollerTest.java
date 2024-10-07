@@ -63,7 +63,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
         assertCompilesTo(createTestCompiler(basicProfile),
                 """
                         for k = 1; k < 100000; k <<= 1
-                            printf(" $k")
+                            print($" $k")
                         end
                         """,
                 createInstruction(SET, "k", "1"),
@@ -487,7 +487,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
         assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
                 """
                         for k = 1; k < 100000; k <<= 1
-                            printf(" $k")
+                            print($" $k")
                         end
                         """,
                 createInstruction(PRINT, q(" 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536"))

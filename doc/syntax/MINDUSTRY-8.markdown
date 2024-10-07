@@ -2,7 +2,32 @@
 
 Mindustry version 8 will hopefully be released in November 2024. The expected new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to 8A either by command-line argument, or by the `#set target = ML8A;` directive.
 
-The instruction set and corresponding functions for Mindustry Logic v8 is available here: [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown).
+The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown).
+
+To run the code produced by Mindcode for language target `ML8A`, you need to use one of the latest, unreleased version of Mindustry (a "bleeding-edge" version).
+
+## Running development versions of Mindustry
+
+Instructions for running a development version of Mindustry on a PC:
+
+> [!CAUTION]
+> If you save a game or a campaign in a development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game, particularly in the official Mindustry 7 version. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using, meaning there would be no official release which would be able to read your game state.
+> 
+> It is strongly recommended to back up the state of your current game (Settings/Game Data/Export data) before running any development version of Mindustry.
+
+1. Download a Java installation package from https://github.com/Anuken/MindustryJreBuilds/releases/tag/v1.
+2. Extract the package into a directory on your computer.
+3. Obtain a development version of Mindustry from https://github.com/Anuken/MindustryBuilds/releases.
+   - This link leads to all the versions of mindustry ever released. Use the latest version if you don't know which to use, or version [25368](https://github.com/Anuken/MindustryBuilds/releases/tag/25368).
+   - Download the `Mindustry-BE-Desktop-<build number>.jar` file
+4. Run the following command:
+
+```
+java.exe -jar Mindustry-BE-Desktop-<build number>.jar
+```
+
+- Use the full path to java.exe from the directory into which you've placed the files in step 2.
+- Use the full path including a correct name of the file you've downloaded in step 3.
 
 ## Numeric literals
 
@@ -30,11 +55,11 @@ format b
 format c
 ```
 
-The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is generally impossible with statical analysis). The existing compile time formatting (e.g. `println($"Position: $x$y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
+The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is not universally possible with statical analysis). The existing compile time formatting (e.g. `println($"Position: $x, $y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
 
-Apart from the `printf`, Mindcode supports new `format()` function, which just outputs the `format` instruction for each of its arguments.
+Apart from the `printf()`, Mindcode supports new `format()` function, which just outputs the `format` instruction for each of its arguments.
 
-The format instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`! On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
+The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
 
 ```
 #set target = ML8A;

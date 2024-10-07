@@ -191,6 +191,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createEnd(astContext);
     }
 
+    public FormatInstruction createFormat(LogicValue what) {
+        return instructionProcessor.createFormat(astContext, what);
+    }
+
     public GotoInstruction createGoto(LogicVariable address, LogicLabel marker) {
         return instructionProcessor.createGoto(astContext, address, marker);
     }
@@ -323,7 +327,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         } else if (identifiers.containsKey(name)) {
             throw new MindcodeException(value.startToken(), "cannot redefine variable or function parameter '%s' as a constant.", name);
         } else if (value instanceof FormattableLiteral) {
-            throw new MindcodeException(value.startToken(), "formattable literals can only be used with function calls.", name);
+            throw new MindcodeException(value.startToken(), "formattable literals can only be used with function calls.");
         }
         identifiers.put(name, value.toLogicLiteral(instructionProcessor));
     }
@@ -402,9 +406,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitFunctionCall(FunctionCall node) {
         // Solve special cases
         return switch (node.getFunctionName()) {
+            case "printf"   -> handlePrintf(node);
             case "print"    -> handleFormattedOutput(node, Formatter.PRINT);
             case "println"  -> handleFormattedOutput(node, Formatter.PRINTLN);
-            case "printf"   -> handleFormattedOutput(node, Formatter.PRINTF);
             case "remark"   -> handleFormattedOutput(node, Formatter.REMARK);
             default         -> handleFunctionCall(node, node.getParams());
         };
@@ -1361,6 +1365,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         boolean requiresParameter() {
             return this == PRINTF || this == REMARK;
+        }
+    }
+
+    private LogicValue handlePrintf(FunctionCall node) {
+        if (instructionProcessor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))) {
+            String functionName = node.getFunctionName();
+            setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+            final List<LogicValue> arguments = processArguments(node.getParams());
+            setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            for (int i = 0; i < arguments.size(); i++) {
+                emit(i == 0 ? createPrint(arguments.get(i)) : createFormat(arguments.get(i)));
+            }
+            clearSubcontextType();
+            return arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1);
+        } else {
+            return handleFormattedOutput(node, Formatter.PRINTF);
         }
     }
 

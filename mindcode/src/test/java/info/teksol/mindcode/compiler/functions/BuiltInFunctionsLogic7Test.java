@@ -2,12 +2,18 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class BuiltInFunctionsTest extends AbstractGeneratorTest {
+class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
+
+    @Override
+    protected ProcessorVersion getProcessorVersion() {
+        return ProcessorVersion.V7A;
+    }
 
     @Test
     void generatesPrintln() {
@@ -28,8 +34,8 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void handlesEmptyPrintf() {
         assertCompilesTo("""
-                        print($"")
-                        print($"foo")
+                        printf("")
+                        printf("foo")
                         """,
                 createInstruction(PRINT, q("foo")),
                 createInstruction(END)
@@ -37,9 +43,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesPositionalParameters() {
+    void printfHandlesPositionalParameters() {
         assertCompilesTo("""
-                        print($"x: $, y: $, z: $", x, y, 10)
+                        printf("x: $, y: $, z: $", x, y, 10)
                         """,
                 createInstruction(PRINT, q("x: ")),
                 createInstruction(PRINT, "x"),
@@ -52,9 +58,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesEscapedDollarSign() {
+    void printfHandlesEscapedDollarSign() {
         assertCompilesTo("""
-                        print($"Amount: \\$$", 100)
+                        printf("Amount: \\$$", 100)
                         """,
                 createInstruction(PRINT, q("Amount: $")),
                 createInstruction(PRINT, "100"),
@@ -63,30 +69,30 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtCatchesTooFewArguments() {
+    void printfCatchesTooFewArguments() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        print($"Text: $")
+                        printf("Text: $")
                         """
                 )
         );
     }
 
     @Test
-    void printFmtCatchesTooManyArguments() {
+    void printfCatchesTooManyArguments() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        print($"Text: $", 10, 20)
+                        printf("Text: $", 10, 20)
                         """
                 )
         );
     }
 
     @Test
-    void printFmtHandlesVariableReference() {
+    void printfHandlesVariableReference() {
         assertCompilesTo("""
                         x = 10
-                        print($"x=$x")
+                        printf("x=$x")
                         """,
                 createInstruction(SET, "x", "10"),
                 createInstruction(PRINT, q("x=")),
@@ -97,10 +103,10 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesLocalVariableReference() {
+    void printfHandlesLocalVariableReference() {
         assertCompilesTo("""
                         def foo(x)
-                            print($"x=$x")
+                            printf("x=$x")
                         end
                         foo(5)
                         """,
@@ -115,10 +121,10 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesGlobalVariableReference() {
+    void printfHandlesGlobalVariableReference() {
         assertCompilesTo("""
                         def foo()
-                            print($"X=$X")
+                            printf("X=$X")
                         end
                         X = 10
                         foo()
@@ -134,9 +140,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesEnclosedVariableReference() {
+    void printfHandlesEnclosedVariableReference() {
         assertCompilesTo("""
-                        print($"Time: ${time}sec")
+                        printf("Time: ${time}sec")
                         """,
                 createInstruction(PRINT, q("Time: ")),
                 createInstruction(PRINT, "time"),
@@ -146,9 +152,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesSequentialVariableReference() {
+    void printfHandlesSequentialVariableReference() {
         assertCompilesTo("""
-                        print($"Text: ${x}$y")
+                        printf("Text: ${x}$y")
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -158,9 +164,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesVariableReferenceThenPositionalArgument() {
+    void printfHandlesVariableReferenceThenPositionalArgument() {
         assertCompilesTo("""
-                        print($"Text: ${x}$", y)
+                        printf("Text: ${x}$", y)
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -170,9 +176,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesAdjacentPositionalArguments() {
+    void printfHandlesAdjacentPositionalArguments() {
         assertCompilesTo("""
-                        print($"Text: ${}${}", x, y)
+                        printf("Text: ${}${}", x, y)
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -236,10 +242,10 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void printFmtHandlesFormattableStringLiterals() {
+    void printfHandlesFormattableStringLiterals() {
         assertCompilesTo("""
                         x = 10;
-                        print($"Position: $x");
+                        printf($"Position: $x");
                         """,
                 createInstruction(SET, "x", "10"),
                 createInstruction(PRINT, q("Position: ")),

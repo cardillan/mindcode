@@ -103,13 +103,13 @@ while true
     charge = kilo(NODE.powerNetStored);
     if START_POWER_REQ > 0
         req = kilo(START_POWER_REQ);
-        printf("Req ${req}kJ / ${charge}kJ. ${surplus}kW flow.\n");
+        print($"Req ${req}kJ / ${charge}kJ. ${surplus}kW flow.\n");
     else
-        printf("Power ${surplus}kW, ${charge}kJ\n");
+        print($"Power ${surplus}kW, ${charge}kJ\n");
         update_reactors_desired();
     end;
     if REACTORS_DESIRED != 5
-        printf("Require only ${REACTORS_DESIRED}/5 reactors.\n");
+        print($"Require only ${REACTORS_DESIRED}/5 reactors.\n");
     end;
     printflush(message1);
 end;
@@ -149,47 +149,47 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
     AVG_SURPLUS = AVG_SURPLUS * 0.8 + surplus * 0.2;
     enabled = reactor.enabled;
 
-    printf("#$reactor_num - ");
+    print($"#$reactor_num - ");
     if emerg_shutdown
         reactor.enabled = false;
-        printf("emergency mode\n");
+        print($"emergency mode\n");
         supply_fuel = false;
     elsif enabled
         if REACTORS_DESIRED < reactor_num
             reactor.enabled = false;
-            printf("STOP unwanted\n");
+            print($"STOP unwanted\n");
         elsif reactor_num > 1 and fuel_stored < FUEL_TOT_ABORT * reactor_num
             reactor.enabled = false;
-            printf("STOP system fuel low\n");
+            print($"STOP system fuel low\n");
         elsif fuel <= 1
             // Not enough fuel to run
             reactor.enabled = false;
-            printf("STOP fuel low\n");
+            print($"STOP fuel low\n");
         elsif cryo <= CRYO_ABORT
             reactor.enabled = false;
-            printf("STOP out of cryo\n");
+            print($"STOP out of cryo\n");
         elsif secs < 30
             // Reactor still in startup
             charge_req = calc_charge_req(reactor, t_startup);
 
             if charge - charge_req < PWR_ABORT and surplus < FLOW_ABORT
                 reactor.enabled = false;
-                printf("START FAIL battery\n");
+                print($"START FAIL battery\n");
                 supply_fuel = false;
             else
                 time_left = 30 - secs;
-                printf("Starting $time_left secs, req ${charge_req}J\n");
+                print($"Starting $time_left secs, req ${charge_req}J\n");
             end;
         elsif charge < PWR_ABANDON and surplus < FLOW_ABORT
             reactor.enabled = false;
-            printf("ABANDON - battery crit\n");
+            print($"ABANDON - battery crit\n");
             supply_fuel = false;
         else
             // Running, generating power
             // Round to 1 dp
             mins = secs \ 6;
             mins = mins / 10;
-            printf("RUN $mins mins\n");
+            print($"RUN $mins mins\n");
         end;
     else
         // Not running
@@ -199,29 +199,29 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
         cryo_req = CRYO_REQ + CRYO_REQ_EA * reactor_num;
 
         if REACTORS_DESIRED < reactor_num
-            printf("IDLE\n");
+            print($"IDLE\n");
             supply_fuel = false;
         elsif flow_units + charge_units < 1
             flow = floor(flow_units * 1000) / 10;
             charge = floor(charge_units * 1000) / 10;
-            printf("WAIT power. (%${charge}J + %${flow}W)\n");
+            print($"WAIT power. (%${charge}J + %${flow}W)\n");
             supply_fuel = false;
         elsif fuel_on and fuel < FUEL_REQ
             if fuel + fuel_stored > FUEL_REQ
                 // Start or continue fueling (note fuel on conveyor is not counted)
-                printf("WAIT fuel\n");
+                print($"WAIT fuel\n");
             else
-                printf("WAIT system fuel\n");
+                print($"WAIT system fuel\n");
             end;
         elsif fuel_stored < FUEL_TOT_REQ * reactor_num
             // Keep waiting until enough fuel accumulates
-            printf("WAIT buffer fuel\n");
+            print($"WAIT buffer fuel\n");
         elsif cryo < cryo_req
             // Keep waiting for cryo to be made
-            printf("WAIT cryo\n");
+            print($"WAIT cryo\n");
         else
             // Ready to startup!
-            printf("STARTUP\n");
+            print($"STARTUP\n");
             START_POWER_REQ += PWR_REQ;
             reactor.enabled = true;
         end;
@@ -239,18 +239,18 @@ def throttle_blast(reactors_fueled, emerg_shutdown)
     fuel_stored = CONTAINER.blast-compound;
     if (charge < PWR_ABORT and surplus < FLOW_ABORT) or emerg_shutdown
         limit = 0; // Don't produce any
-        printf("Central Fuel at $fuel_stored / $limit - ");
+        print($"Central Fuel at $fuel_stored / $limit - ");
         if emerg_shutdown
-            printf(" Enemies detected.\n");
+            print($" Enemies detected.\n");
         else
-            printf(" Critical power.\n");
+            print($" Critical power.\n");
         end;
     elsif !reactors_fueled
         limit = FUEL_LIMIT_LOW;
-        printf("Fuel $fuel_stored / $limit (due to emergency)\n");
+        print($"Fuel $fuel_stored / $limit (due to emergency)\n");
     else
         limit = FUEL_LIMIT;
-        printf("Fuel $fuel_stored / $limit\n");
+        print($"Fuel $fuel_stored / $limit\n");
     end;
 
     return fuel_stored < limit;
@@ -298,7 +298,7 @@ def diff_generators()
     stored_pc = NODE.powerNetStored / NODE.powerNetCapacity;
     if stored_pc > 0.90 and START_POWER_REQ < 10
         // We don't need the differential reactors now
-        printf("Differential now idle.\n");
+        print($"Differential now idle.\n");
         generator1.enabled = false;
         generator2.enabled = false;
     else

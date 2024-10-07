@@ -34,10 +34,10 @@ while true
 	loop while n > 0;
 
     if LINKED == 0
-        printf("Item Counter\n[salmon]No plastanium conveyor attached (maximum: $MAX_LINKED, found: $LINKED)");
+        print($"Item Counter\n[salmon]No plastanium conveyor attached (maximum: $MAX_LINKED, found: $LINKED)");
         printflush(message1);
     elsif LINKED > MAX_LINKED
-        printf("Item Counter\n[salmon]Too many plastanium conveyors attached (maximum: $MAX_LINKED, found: $LINKED)");
+        print($"Item Counter\n[salmon]Too many plastanium conveyors attached (maximum: $MAX_LINKED, found: $LINKED)");
         printflush(message1);
     elsif MEMORY == null
     	print("Item Counter\n[salmon]No memory attached.");
@@ -92,10 +92,10 @@ while switch1.enabled == 0
     // Write it
     MEMORY[0] = total = batches * 10;
 
-	printf("Item Counter                  \n");
-	printf("Monitoring [green]$LINKED[] conveyors\n");
-	printf("Total items: [gold]$total[]\n");
-	printf("Rate: [green]$ratePerMin[] items/min\n");
+	print($"Item Counter                  \n");
+	print($"Monitoring [green]$LINKED[] conveyors\n");
+	print($"Total items: [gold]$total[]\n");
+	print($"Rate: [green]$ratePerMin[] items/min\n");
 
     // b is current, a is previous
 	if MAX_LINKED > 0 b1 = CONV1.totalItems; if b1 < a1 batches += 1; end; end;

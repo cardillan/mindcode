@@ -1025,7 +1025,7 @@ end
 The relative file path is evaluated from the directory containing the file being compiled; if the compiled code is 
 read from standard input, it is evaluated from the current directory.
 
-> [!NOTE]
+> [!IMPORTANT]
 > Only command line tool allows you to use code from an external file. The web application cannot access your local 
 > files by specified path, and the `file` option is therefore disabled there.
 

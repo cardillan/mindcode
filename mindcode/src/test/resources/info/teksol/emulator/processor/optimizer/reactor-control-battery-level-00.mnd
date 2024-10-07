@@ -63,11 +63,11 @@ while true
 
 	index = (index + 1) % SAMPLES;
 	
-	printf("Measured interval: [green]$SECONDS[] seconds\n");
-	printf("Consumption: [green]$consumption[]\n");
-	printf("Production: [green]$production[]\n");
-	printf("Net power: [green]$net_power[]\n");
-	printf("Battery change: [green]$battery_change[]");
+	print($"Measured interval: [green]$SECONDS[] seconds\n");
+	print($"Consumption: [green]$consumption[]\n");
+	print($"Production: [green]$production[]\n");
+	print($"Net power: [green]$net_power[]\n");
+	print($"Battery change: [green]$battery_change[]");
 
 	loops = 0;
     start = @time;
@@ -75,6 +75,6 @@ while true
 		loops += 1;
 	end;
 
-	printf("\n[lightgray]Loops: $loops");
+	print($"\n[lightgray]Loops: $loops");
 	printflush(message1);
 end;

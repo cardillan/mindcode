@@ -102,7 +102,7 @@ while CONTAINER.dead === 0 and DISPLAY.dead === 0 and LINKS == @links
     drawflush(display1);
 
     elapsed = floor(@time - start);
-    printf("Storage Display\nElapsed: $elapsed ms");
+    print($"Storage Display\nElapsed: $elapsed ms");
     printflush(message1);
 end;
 

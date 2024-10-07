@@ -89,7 +89,7 @@ To use the function, a placeholder must be inserted into the text buffer prior t
 
 The number will be rendered at the place of the lowest formatting placeholder.
 
-> [!NOTE]
+> [!TIP]
 > While the functions is optimized for performance, formatting numbers is many times slower than just printing them using the `print()` function.
 
 ## `printNumber(n)`
@@ -98,7 +98,7 @@ Prints the number passed in as a parameter, using comma as thousands separator. 
 
 To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`. The number will be printed at the end of the print buffer.
 
-> [!NOTE]
+> [!TIP]
 > While the functions is optimized for performance, formatting numbers is many times slower than just printing them using the `print()` function.
 
 # Utility functions

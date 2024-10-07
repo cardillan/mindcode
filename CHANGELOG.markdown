@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+* **Breaking:** the implementation of the `printf()` function is changed under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function now uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting). 
 * Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.  
@@ -32,6 +33,8 @@ All notable changes to this project will be documented in this file.
 * Changed the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to remove the last instruction if it jumps to the start of the program (not just `end`, but also unconditional jump) on `advanced` optimization level.
 
 ## 2.2.0 - 2024-09-29
+
+**Breaking:** this release comes with three new keywords in Mindcode syntax (`noinline`, `out` and `param`), which break existing code where those new keywords were used as a variable or function name. 
 
 ### Fixed
 
@@ -51,7 +54,7 @@ All notable changes to this project will be documented in this file.
 
 #### Experimental features
 
-Experimental features may contain bugs or produce suboptimal code, and are subject to change.
+Experimental features may contain bugs, break existing code or produce suboptimal code, and are subject to change.
 
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
 * Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
@@ -62,7 +65,7 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 * Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does. 
 * Added [enhanced comments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks.
 * Added new [`sort-variables` compiler directive](doc/syntax/SYNTAX-5-OTHER.markdown#option-sort-variables) which ensures that user variables will be accessed in a well-defined order, to make inspecting the variables in the Mindustry processors **Vars** screen easier.
-* Added generation of signature at the end of the compiled code. The signature is a `print` instruction (which is not executed) with the text "Compiled by Mindcode - github.com/cardillan/mindcode". The signature is not added should the instruction limit be exceeded, or when the program doesn't naturally end in an unconditional jump. Adding the signature can be disabled in the command line tool by the `--no-signature` command line argument.  
+* Added generation of signature at the end of the compiled code. The signature is a `print` instruction (which is not executed) with the text `Compiled by Mindcode - github.com/cardillan/mindcode`. The signature is not added should the instruction limit be exceeded, or when the program doesn't naturally end in an unconditional jump. Adding the signature can be disabled in the command line tool by the `--no-signature` command line argument.  
 
 ### Changed
 
@@ -90,7 +93,7 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 
 ### Added
 
-* New [`remark()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remark), as described
+* New [`remark()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks), as described
   [here](https://github.com/cardillan/mindcode/issues/140).
 
 ### Changed
