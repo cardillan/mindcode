@@ -43,6 +43,16 @@ public class MindustryContents {
         return content == null ? -1 : content.id();
     }
 
+    public static Map<Integer, ? extends MindustryContent> getLookupMap(String type) {
+        return switch (type) {
+            case "block"    -> BLOCK_ID_MAP;
+            case "liquid"   -> LIQUID_ID_MAP;
+            case "item"     -> ITEM_ID_MAP;
+            case "unit"     -> UNIT_ID_MAP;
+            default         -> null;
+        };
+    }
+
     public static MindustryContent unregistered(String name) {
         return new MindustryContent() {
             @Override

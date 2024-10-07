@@ -4,9 +4,11 @@ import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -38,6 +40,7 @@ class ExpressionOptimizer extends BaseOptimizer {
             while (it.hasNext()) {
                 LogicInstruction ix = it.next();
                 switch (ix.getOpcode()) {
+                    case LOOKUP   -> processLookupInstruction(it, (LookupInstruction) ix);
                     case OP       -> processOpInstruction(it, (OpInstruction) ix);
                     case SET      -> processSetInstruction(it, (SetInstruction) ix);
                     case SENSOR   -> processSensorInstruction(it, (SensorInstruction) ix);
@@ -47,6 +50,18 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
 
         return false;
+    }
+
+    private void processLookupInstruction(LogicIterator logicIterator, LookupInstruction ix) {
+        if (advanced() && ix.getIndex() instanceof LogicNumber number) {
+            Map<Integer, ? extends MindustryContent> lookupMap = MindustryContents.getLookupMap(ix.getType().getKeyword());
+            if (lookupMap != null) {
+                MindustryContent object = lookupMap.get(number.getIntValue());
+                if (object != null) {
+                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object.name())));
+                }
+            }
+        }
     }
 
     private void processOpInstruction(LogicIterator logicIterator, OpInstruction ix) {

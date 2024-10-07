@@ -151,7 +151,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     }
 
     @Test
-    void optimizesConstantId() {
+    void optimizesSensor() {
         assertOptimizesTo(
                 List.of(
                         createInstruction(SENSOR, tmp0, lead, id),
@@ -160,6 +160,21 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
 
                 List.of(
                         createInstruction(SET, tmp0, P1),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesLookup() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(LOOKUP,  item, tmp0, P1),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, lead),
                         createInstruction(END)
                 )
         );

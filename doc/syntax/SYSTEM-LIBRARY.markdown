@@ -109,7 +109,7 @@ Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`). Uses the `le
 
 # Additional resources
 
-The `sys.mnd` is integrated into the compiler and as such is available both to the command-line compiler and to the web application. The current version of teh file can be found [here](/mindcode/src/main/resources/library/sys.mnd).
+The `sys.mnd` is integrated into the compiler and as such is available to both the command-line compiler and the web application. The current version of the file can be found [here](/mindcode/src/main/resources/library/sys.mnd).
 
 ---
 

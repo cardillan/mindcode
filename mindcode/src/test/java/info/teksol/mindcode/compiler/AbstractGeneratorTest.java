@@ -471,6 +471,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicBuiltIn  thisy     = LogicBuiltIn.create("thisy");
     protected static final LogicBuiltIn  id        = LogicBuiltIn.create("id");
     protected static final LogicKeyword  color     = LogicKeyword.create("color");
+    protected static final LogicKeyword  item      = LogicKeyword.create("item");
     protected static final LogicVariable C         = LogicVariable.global("C");
     protected static final LogicVariable a         = LogicVariable.main("a");
     protected static final LogicVariable b         = LogicVariable.main("b");           

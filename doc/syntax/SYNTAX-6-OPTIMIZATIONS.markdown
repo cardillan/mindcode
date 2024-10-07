@@ -124,12 +124,10 @@ optimizations are available:
 
 If the optimization level is `advanced`, the following additional expressions are handled:
 
-* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, 
-  the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where ID is a 
-  numeric literal. Mindcode contains a list of known Mindustry objects and their IDs, obtained by using Mindustry 
-  Metadata Extraction extension on the latest Mindustry version. These IDs are expected to be immutable, but the 
-  optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be 
-  different from the IDs known to Mindcode.   
+* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
+* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given id and if it finds one, the instruction is replaced by `set var <object>`, where `<object>` is an item, liquid, block or unit literal.      
+
+Mindcode contains a list of known Mindustry objects and their IDs, obtained from the latest Mindustry version. These IDs are expected to be immutable, but the optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be different from the IDs known to Mindcode.   
 
 ## If Expression Optimization
 
@@ -178,7 +176,7 @@ jump 4 always 0 0
 print "negative"
 ```
 
-This saves the execution of one instruction storing the resulting value ("positive" or "negative", in this case) before passing it into the print instruction.
+This saves the execution of one instruction storing the resulting value (`positive` or `negative`, in this case) before passing it into the `print` instruction.
 
 All kinds of instructions are supported, for example `approach(@thisx, @thisy, @unit.type == @mega ? 8 : 12)` produces
 

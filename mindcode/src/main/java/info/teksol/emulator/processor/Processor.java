@@ -12,7 +12,8 @@ import info.teksol.evaluator.LogicCondition;
 import info.teksol.evaluator.LogicOperation;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.mimex.*;
+import info.teksol.mindcode.mimex.MindustryContent;
+import info.teksol.mindcode.mimex.MindustryContents;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -245,13 +246,11 @@ public class Processor {
     private boolean executeLookup(LookupInstruction ix) {
         LogicKeyword type = ix.getType();
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        MindustryContent object = switch (type.getKeyword()) {
-            case "block"    -> BlockType.forId(index.getIntValue());
-            case "unit"     -> Unit.forId(index.getIntValue());
-            case "item"     -> Item.forId(index.getIntValue());
-            case "liquid"   -> Liquid.forId(index.getIntValue());
-            default         -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid lookup type '" + type.getKeyword() + "'.");
-        };
+        Map<Integer, ? extends MindustryContent> lookupMap = MindustryContents.getLookupMap(type.getKeyword());
+        if (lookupMap == null) {
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid lookup type '" + type.getKeyword() + "'.");
+        }
+        MindustryContent object = lookupMap.get(index.getIntValue());
         MindustryVariable result = getOrCreateVariable(ix.getResult());
         result.setObject(object);
         if (!index.isValidNumber()) {
