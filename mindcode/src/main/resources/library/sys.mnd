@@ -143,14 +143,14 @@ end;
 // TEXT OUTPUT
 
 // Formats a number into the text buffer, without external memory.
-// The text buffer must not contain placeholders {0} and {1}. It must contain at least one placeholder ({2} or higher).
+// The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
 def formatNumber(n)
     n = floor(n);
     if n < 0 then
         format("-{2}");     // Prepend the minus sign
         n = abs(n);
     end;
-    while n > 1000
+    while n > 999 do
         mod = n % 1000;
         // Insert placeholder for the next group, thousands separator, leading zeroes (if any) and a placeholder for this group.
         format(mod < 10 ? "{2},00{1}" : mod < 100 ? "{2},0{1}" : "{2},{1}");

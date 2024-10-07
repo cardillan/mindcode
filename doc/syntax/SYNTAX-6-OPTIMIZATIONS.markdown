@@ -1412,6 +1412,67 @@ print " of "
 print 10
 print "\n"
 ```
+
+### The `format` instruction
+
+The `format` instruction included in Mindustry Logic 8 allows more efficient optimizations to be done. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` without using the `format` instruction gets compiled to this:
+
+```
+print `Minimum: `
+print min
+print `, middle: `
+print mid
+print `, maximum: `
+print max
+print `\n`
+```
+
+The optimization utilizing `format` saves three instructions by producing
+
+```
+print `Minimum: {0}, middle: {0}, maximum: {0}\n`
+format min
+format mid
+format max
+```
+
+The format instruction is used in optimization when these conditions are met:
+
+- The language target supports the format instruction (`8A` or higher)
+- The optimization level is `experimental`
+- The compiled code entering this optimization contains neither a string literal containing a `{0}` placeholder, nor any other substrings that could produce the `{0}` in a text buffer (for example, `print("{{1}}"); format("0");` produces `{0}` in the text buffer and disables this optimization).
+
+If the `{0}` placeholder is avoided, the formatting mechanism can be used freely in the code without any limitations and the print merging optimization with the format instruction can still happen. Just use placeholders starting at `{1}`:
+
+```
+#set target = ML8A;
+#set optimization = experimental;
+param a = 10;               // prevent a from being propagated as a constant
+println("{2} {1}");         // if you use "{0} {1}" instead - different optimization will happen 
+format("Before");
+println($"Value: $a");
+format("After");
+```
+
+This program will compile to
+
+```
+set a 10
+print `{2} {1}\n`
+format `Before`
+print `Value: {0}\n`
+format a
+format `After`
+```
+
+and will output
+
+```
+After Before
+Value: 10
+```
+
+
 ### String length limit
 
 On `basic` level, the optimization won't merge print instructions if the merge would produce a string

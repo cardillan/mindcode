@@ -52,16 +52,18 @@ class PrintMerger extends BaseOptimizer {
     protected boolean optimizeProgram(OptimizationPhase phase) {
         reset();
 
-        BiConsumer<LogicIterator, PrintInstruction> printMerger = experimental()
-                && instructionProcessor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))
-                && !containsDangerousStrings() ? this::tryMergeExperimental : this::tryMergeAdvanced;
+        BiConsumer<LogicIterator, PrintInstruction> printMerger =
+                experimental()
+                        && instructionProcessor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))
+                        && !containsDangerousStrings()
+                ? this::tryMergeUsingFormat : this::tryMergeUsingPrint;
 
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 LogicInstruction current = iterator.next();
                 switch (current.getOpcode()) {
                     case PRINT  -> printMerger.accept(iterator, (PrintInstruction) current);
-                    case REMARK -> tryMerge(iterator, (RemarkInstruction) current);
+                    case REMARK -> tryMergeRemark(iterator, (RemarkInstruction) current);
 
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
@@ -86,7 +88,7 @@ class PrintMerger extends BaseOptimizer {
     // Tries to merge previous and current prints.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
-    private void tryMergeAdvanced(LogicIterator iterator, PrintInstruction current) {
+    private void tryMergeUsingPrint(LogicIterator iterator, PrintInstruction current) {
         if (previous instanceof PrintInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
             if (advanced() || prev.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
                 String str1 = prev.getValue().format();
@@ -105,7 +107,10 @@ class PrintMerger extends BaseOptimizer {
         previous = current;
     }
 
-    private void tryMergeExperimental(LogicIterator iterator, PrintInstruction current) {
+    // Tries to merge previous and current format.
+    // When successful, updates instructions and sets previous to the newly merged instruction.
+    // If the merge is not possible, sets previous to current
+    private void tryMergeUsingFormat(LogicIterator iterator, PrintInstruction current) {
         if (previous instanceof PrintInstruction prev && prev.getValue().isConstant()) {
             StringBuilder str = new StringBuilder(prev.getValue().format());
             if (current.getValue().isConstant()) {
@@ -131,7 +136,8 @@ class PrintMerger extends BaseOptimizer {
     // Tries to merge previous and current remarks.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
-    private void tryMerge(LogicIterator iterator, RemarkInstruction current) {
+    // Format isn't used for remarks
+    private void tryMergeRemark(LogicIterator iterator, RemarkInstruction current) {
         if (previous instanceof RemarkInstruction prev && prev.getAstContext() == current.getAstContext() &&
                 prev.getValue().isConstant() && current.getValue().isConstant()) {
             RemarkInstruction merged = createRemark(current.getAstContext(),

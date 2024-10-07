@@ -83,7 +83,7 @@ The status of the search is output to `SYS_MESSAGE`. Either set the message to a
 
 ## `formatNumber(n)`
 
-Formats the number passed in as a parameter into the text buffer, using comma as thousands separator. Fractional parts of the number to be printed is ignored. 
+Formats the number passed in as a parameter into the text buffer, using comma as thousands separator. Fractional part of the number to be printed is ignored. 
 
 To use the function, a placeholder must be inserted into the text buffer prior to the call of this function. The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved.
 

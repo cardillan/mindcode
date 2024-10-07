@@ -10,7 +10,7 @@ Mindustry now handles the numeric literals with double precision. Loss of precis
 
 ## `format` instruction
 
-Allows dynamic text formatting. It is possible to output special placeholders `{0}` to `{9}` into the text buffer. The `format` instruction will then replace a placeholder with actual value. Example:
+Allows dynamic text formatting. It is possible to output special placeholders `{0}` to `{9}` into the text buffer. The `format` instruction then replaces a placeholder with actual value. Example:
 
 ```
 print `Test: {1}{0}`
@@ -21,7 +21,7 @@ printflush message1
 
 will output `Test: BA` to message1.
 
-The `printf` function will be probably repurposed to use this mechanism: `printf(fmt, a, b, c)` will get translated to
+The `printf` function was repurposed in ML8+ to use this mechanism: `printf(fmt, a, b, c)` gets translated to
 
 ```
 print fmt
@@ -30,37 +30,38 @@ format b
 format c
 ```
 
-Apart from the `printf`, Mindcode will support new `format()` function, which will just output the `format` instruction for each of its arguments.
+The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is generally impossible with statical analysis). The existing compile time formatting (e.g. `println($"Position: $x$y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
 
-The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally won't be possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is either impossible, or way too complicated). The existing compile time formatting (e.g. `println($"Position: $x$y");`) will optimize better if the parameters resolve down to constant values.
+Apart from the `printf`, Mindcode supports new `format()` function, which just outputs the `format` instruction for each of its arguments.
 
-The format instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` will therefore output `AB{1}` and not `AAB`, which might be expected. On the other hand, `printf("A{0}B", "1{0}2", "X")` will output `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
+The format instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`! On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
 
 ```
 #set target = ML8A;
 
 // Formats a number into the text buffer, without external memory.
-// The text buffer must not contain placeholders {0} and {1}; it needs to start from {2}.
-inline def formatNumber(n)
+// The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
+def formatNumber(n)
+    n = floor(n);
     if n < 0 then
-        format("-{2}");
-        n = -n;
+        format("-{2}");     // Prepend the minus sign
+        n = abs(n);
     end;
-    while n > 1000
+    while n > 999 do
         mod = n % 1000;
-        // Insert placeholder for the next group, separator, leading zeroes (if any) and a placeholder for this group.
+        // Insert placeholder for the next group, thousands separator, leading zeroes (if any) and a placeholder for this group.
         format(mod < 10 ? "{2},00{1}" : mod < 100 ? "{2},0{1}" : "{2},{1}");
         format(mod);
         n \= 1000;
     end;
 
-    // Put the reaining number into the remaining placeholder 
+    // Put the rest of the number into the remaining placeholder
     format(n);
 end;
 
 // Prints the number straight away
-// The text buffer must not contain any placeholders lower than {3}. 
-inline def printNumber(n)
+// The text buffer must not contain any placeholders lower than {3}.
+def printNumber(n)
     print("{2}");
     formatNumber(n);
 end;
@@ -71,7 +72,7 @@ formatNumber(-floor(rand(1000000000)));
 printNumber(floor(rand(100000)));
 ```
 
-Existing print merger will be enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` today compiles into
+Existing print merger is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target lower than ML8A compiles into
 
 ```
 print `Minimum: `
@@ -83,7 +84,7 @@ print max
 print `\n`
 ```
 
-New print merger optimization utilizing `format` will save three instructions by producing
+The new print merger optimization utilizing `format` saves three instructions by producing
 
 ```
 print `Minimum: {0}, middle: {0}, maximum: {0}\n`
@@ -92,23 +93,23 @@ format mid
 format max
 ```
 
-To prevent the new print merger optimization interfering with custom uses of the format instruction, it won't be used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, will be detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format`:
+To prevent the new print merger optimization interfering with custom uses of the format instruction, it isn't used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, are detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format` with no restrictions:
 
 ```
 #set target = ML8A;
 #set optimization = experimental;
 param a = 10;               // prevent a from being propagated as a constant
-println(`{1} {2}`);         // try `{0} {1}` instead - different optimization will happen 
-format(`Before`);
-println($`Value: $a`);
-format(`After`);
+println("{2} {1}");         // if you use "{1} {0}" instead, the output will be the same, but different optimization will happen 
+format("Before");
+println($"Value: $a");
+format("After");
 ```
 
 This program will compile to
 
 ```
 set a 10
-print `{1} {2}\n`
+print `{2} {1}\n`
 format `Before`
 print `Value: {0}\n`
 format a
@@ -118,10 +119,9 @@ format `After`
 and will output
 
 ```
-Before After
+After Before
 Value: 10
 ```
-
 The new print merging functionality is available on the experimental optimization level. The `format` instruction is also supported by the emulator, allowing to experiment with the new print support right away in the web app.
 
 ## New drawing commands
