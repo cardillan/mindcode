@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## 2.3.0 - Unreleased
 
+### Fixed
+
+* Fixed wrong compilation order of appended files ([#155](https://github.com/cardillan/mindcode/issues/155)).
+* Fixed inadequate reporting of syntax error ([#156](https://github.com/cardillan/mindcode/issues/156)).
+
 ### Added
 
 * Added support for the [Mlog Watcher](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.  
@@ -18,7 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* **Breaking:** the implementation of the `printf()` function is changed under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function now uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting). 
+* **Breaking:** the implementation of the `printf()` function is changed under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting). 
 * Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.  

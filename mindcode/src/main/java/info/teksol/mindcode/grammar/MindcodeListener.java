@@ -28,6 +28,36 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#optional_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void enterOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#optional_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void exitOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#optional_do}.
+	 * @param ctx the parse tree
+	 */
+	void enterOptional_do(MindcodeParser.Optional_doContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#optional_do}.
+	 * @param ctx the parse tree
+	 */
+	void exitOptional_do(MindcodeParser.Optional_doContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#optional_then}.
+	 * @param ctx the parse tree
+	 */
+	void enterOptional_then(MindcodeParser.Optional_thenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#optional_then}.
+	 * @param ctx the parse tree
+	 */
+	void exitOptional_then(MindcodeParser.Optional_thenContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code constant}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

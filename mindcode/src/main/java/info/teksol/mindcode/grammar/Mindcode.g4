@@ -1,10 +1,30 @@
 grammar Mindcode;
 
+@parser::members {
+// This variable will control if semicolons are mandatory or optional
+public boolean strictSyntax = false;
+}
+
 program : expression_list? EOF;
 
-expression_list : expression SEMICOLON?
-                | expression_list expression SEMICOLON?
+expression_list : expression optional_semicolon
+                | expression_list expression optional_semicolon
                 ;
+
+optional_semicolon
+    : {strictSyntax}? SEMICOLON
+    | {strictSyntax == false}? SEMICOLON?
+    ;
+
+optional_do
+    : {strictSyntax}? DO
+    | {strictSyntax == false}? DO?
+    ;
+
+optional_then
+    : {strictSyntax}? THEN
+    | {strictSyntax == false}? THEN?
+    ;
 
 expression : directive                                                                          # compiler_directive
            | MINUS numeric_t                                                                    # literal_minus
@@ -58,7 +78,7 @@ directive : HASHSET option=ID ASSIGN value=INT                  # numeric_direct
           ;
 
 directive_list
-    : ID ( COMMA ID)*
+    : ID ( COMMA ID )*
     ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
@@ -92,17 +112,17 @@ arg_decl_list : var_ref
               | arg_decl_list COMMA var_ref
               ;
 
-while_expression : ( label=loop_label COLON )? WHILE cond=expression DO? loop_body END;
+while_expression : ( label=loop_label COLON )? WHILE cond=expression optional_do loop_body END;
 
 do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=expression;
 
-for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression DO? loop_body END       # ranged_for
+for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression optional_do loop_body END       # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
-                            SEMICOLON increment=incr_list DO? loop_body END                         # iterated_for
+                            SEMICOLON increment=incr_list optional_do loop_body END                         # iterated_for
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET DO? loop_body END        # for_each_1
+                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET optional_do loop_body END        # for_each_1
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            values=value_list DO? loop_body END                                     # for_each_2
+                            values=value_list optional_do loop_body END                                     # for_each_2
                ;
 
 iterator
@@ -117,9 +137,7 @@ value_list
     : expression ( COMMA expression )*
     ;
 
-loop_body : loop_body expression_list
-          | expression_list
-          ;
+loop_body : expression_list ;
 
 continue_st : CONTINUE ( label=loop_label )? ;
 
@@ -151,10 +169,10 @@ arg_list : arg
 
 arg : expression;
 
-if_expr : IF cond=expression THEN? true_branch=expression_list? if_trailer? END;
+if_expr : IF cond=expression optional_then true_branch=expression_list? if_trailer? END;
 
 if_trailer : ELSE false_branch=expression_list?
-           | ELSIF cond=expression THEN? true_branch=expression_list? if_trailer?
+           | ELSIF cond=expression optional_then true_branch=expression_list? if_trailer?
            ;
 
 case_expr : CASE cond=expression alternative_list? ( ELSE else_branch=expression_list )? END;
@@ -163,7 +181,7 @@ alternative_list : alternative
                  | alternative_list alternative
                  ;
 
-alternative : WHEN values=when_value_list THEN? body=expression_list?;
+alternative : WHEN values=when_value_list optional_then body=expression_list?;
 
 when_expression : expression
                 | range_expression

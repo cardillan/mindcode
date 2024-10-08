@@ -7,6 +7,7 @@ import info.teksol.emulator.processor.Processor;
 import info.teksol.emulator.processor.ProcessorFlag;
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -119,6 +120,8 @@ public class MindcodeCompiler implements Compiler<String> {
             }
 
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
+        } catch (ParserAbort ignored) {
+            // Do nothing
         } catch (Exception e) {
             if (profile.isPrintStackTrace()) {
                 e.printStackTrace();
@@ -262,17 +265,22 @@ public class MindcodeCompiler implements Compiler<String> {
         }
 
         public void setFileName(String fileName) {
-            this.fileNameText = fileName.isEmpty() ? "" : " in " + fileName;
+            this.fileNameText = fileName.isEmpty() ? "" : " in file " + fileName;
         }
 
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-                String msg, RecognitionException e) {
-            if (offendingSymbol == null) {
-                errors.add(MindcodeMessage.error("Syntax error%s on line %d:%d: %s", fileNameText, line, charPositionInLine, msg));
+                String msg, RecognitionException exception) {
+            String offendingTokenText = getOffendingTokenText(exception);
+            if (offendingTokenText == null) {
+                errors.add(MindcodeMessage.error("Error %sat line %d, column %d: %s", fileNameText, line, charPositionInLine, msg));
             } else {
-                errors.add(MindcodeMessage.error("Syntax error: %s%s on line %d:%d: %s", offendingSymbol, fileNameText, line, charPositionInLine, msg));
+                errors.add(MindcodeMessage.error("Error %sat line %d, column %d, symbol '%s': %s", fileNameText, line, charPositionInLine, offendingTokenText, msg));
             }
+        }
+
+        private String getOffendingTokenText(RecognitionException ex) {
+            return ex != null && ex.getOffendingToken() != null ? ex.getOffendingToken().getText() : null;
         }
     }
 }

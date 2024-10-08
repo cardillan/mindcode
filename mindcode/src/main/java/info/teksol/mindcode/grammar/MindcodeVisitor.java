@@ -23,6 +23,24 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#optional_semicolon}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#optional_do}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOptional_do(MindcodeParser.Optional_doContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#optional_then}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOptional_then(MindcodeParser.Optional_thenContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code constant}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

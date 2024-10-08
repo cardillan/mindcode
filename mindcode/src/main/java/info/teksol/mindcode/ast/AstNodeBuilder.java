@@ -2,9 +2,12 @@ package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.*;
 
@@ -24,6 +27,14 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         final AstNodeBuilder builder = new AstNodeBuilder(sourceFile);
         final AstNode node = builder.visit(program);
         return (Seq) node;
+    }
+
+    @Override
+    public AstNode visit(ParseTree tree) {
+        if (tree instanceof ParserRuleContext ctx && ctx.exception != null) {
+            throw new ParserAbort();
+        }
+        return super.visit(tree);
     }
 
     @Override
