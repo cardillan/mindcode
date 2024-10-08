@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.logic.LogicLabel;
+import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -17,10 +18,10 @@ public class LoopStack {
     private final Map<String, LogicLabel> breakMap = new HashMap<>();
     private final Map<String, LogicLabel> continueMap = new HashMap<>();
 
-    void enterLoop(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
+    void enterLoop(Token token, String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
         if (loopLabel != null) {
             if (continueMap.containsKey(loopLabel)) {
-                throw new MindcodeException("Loop label '" + loopLabel + "' already in use.");
+                throw new MindcodeException(token, "Loop label '%s' already in use.", loopLabel);
             }
             continueMap.put(loopLabel, continueLabel);
             breakMap.put(loopLabel, breakLabel);
@@ -29,17 +30,17 @@ public class LoopStack {
         breakStack.push(breakLabel);
     }
 
-    LogicLabel getBreakLabel(String loopLabel) {
-        return getLabel(loopLabel, breakStack, breakMap, "break");
+    LogicLabel getBreakLabel(Token token, String loopLabel) {
+        return getLabel(token, loopLabel, breakStack, breakMap, "break");
     }
 
-    LogicLabel getContinueLabel(String loopLabel) {
-        return getLabel(loopLabel, continueStack, continueMap, "continue");
+    LogicLabel getContinueLabel(Token token, String loopLabel) {
+        return getLabel(token, loopLabel, continueStack, continueMap, "continue");
     }
 
-    private LogicLabel getLabel(String loopLabel, Deque<LogicLabel> stack, Map<String, LogicLabel> map, String statement) {
+    private LogicLabel getLabel(Token token, String loopLabel, Deque<LogicLabel> stack, Map<String, LogicLabel> map, String statement) {
         if (stack.isEmpty()) {
-            throw new MindcodeException(statement + " statement outside of a do/while/for loop.");
+            throw new MindcodeException(token, "'%s' statement outside of a do/while/for loop.", statement);
         }
 
         if (loopLabel == null) {
@@ -47,7 +48,7 @@ public class LoopStack {
         } else {
             LogicLabel label = map.get(loopLabel);
             if (label == null) {
-                throw new MindcodeException("Undefined label '" + loopLabel + "'.");
+                throw new MindcodeException(token, "Undefined label '%s'.", loopLabel);
             }
             return label;
         }

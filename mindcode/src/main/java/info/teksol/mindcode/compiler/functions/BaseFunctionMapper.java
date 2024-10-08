@@ -253,8 +253,9 @@ public class BaseFunctionMapper implements FunctionMapper {
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    throw new MindcodeException("Using argument '" + fnArgs.get(argIndex).toMlog() + "' in a call to '" + name
-                            + "' not allowed (a global variable is required)");
+                    throw new MindcodeException(token,
+                            "Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
+                            fnArgs.get(argIndex).toMlog(), name);
                 }
 
                 if (a.type() == InstructionParameterType.RESULT) {
@@ -579,8 +580,9 @@ public class BaseFunctionMapper implements FunctionMapper {
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    throw new MindcodeException("Using argument '" + fnArgs.get(argIndex).toMlog() + "' in a call to '" + name
-                            + "' not allowed (a global variable is required)");
+                    throw new MindcodeException(token,
+                            "Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
+                            fnArgs.get(argIndex).toMlog(), name);
                 }
 
                 if (a.type() == InstructionParameterType.RESULT) {
@@ -608,7 +610,8 @@ public class BaseFunctionMapper implements FunctionMapper {
                         LogicValue argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
                             throw new MindcodeException(token,
-                                    "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)", argument.toMlog(), name);
+                                    "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)",
+                                    argument.toMlog(), name);
                         }
                         ixArgs.add(argument);
                     }

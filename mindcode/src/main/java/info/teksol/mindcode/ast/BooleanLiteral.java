@@ -25,6 +25,11 @@ public class BooleanLiteral extends ConstantAstNode {
     }
 
     @Override
+    public BooleanLiteral withToken(Token startToken) {
+        return new BooleanLiteral(startToken, sourceFile(), value);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

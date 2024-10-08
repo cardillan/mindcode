@@ -15,4 +15,6 @@ public abstract class ConstantAstNode extends BaseAstNode {
     public abstract double getAsDouble();
 
     public abstract LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor);
+
+    public abstract ConstantAstNode withToken(Token startToken);
 }

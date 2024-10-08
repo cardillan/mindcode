@@ -20,6 +20,11 @@ public class FormattableLiteral extends StringLiteral {
     }
 
     @Override
+    public FormattableLiteral withToken(Token startToken) {
+        return new FormattableLiteral(startToken, sourceFile(), text);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

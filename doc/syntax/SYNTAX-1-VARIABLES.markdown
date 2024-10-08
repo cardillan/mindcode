@@ -503,6 +503,7 @@ const HIGH_SPEED = 50;
 const LOW_SPEED = HIGH_SPEED / 2;
 const RATIO = sqrt(2);
 const message = DEBUG ? "Debug" : "Release";
+const FORMAT = $"Position: $, $"; 
 ```
 
 Constants are global, even if their names contain lower-case characters. The value assigned to them must be either a 
@@ -529,13 +530,6 @@ end;
 ```
 
 the entire `if DEBUG ... end` statement will be skipped and not included in the compiled code.
-
-> [!IMPORTANT]
-> It is not possible to define a constant for a formattable string literal. The following declaration isn't allowed:
-> 
-> `const FMT = $"Position: ($x, $y)";
-> 
-> The formattable string literal must be passed directly into the `print`, `println`, `printf` or `remark` functions.
 
 ## Built-in icons
 

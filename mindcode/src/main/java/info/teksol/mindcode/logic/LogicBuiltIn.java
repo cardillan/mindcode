@@ -1,6 +1,6 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeInternalError;
 
 import java.util.Objects;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         super(ArgumentType.BUILT_IN);
         this.name = Objects.requireNonNull(name);
         if (name.startsWith("@")) {
-            throw new MindcodeException("Unexpected '@' at the beginning of property name " + name);
+            throw new MindcodeInternalError(String.format("Unexpected '@' at the beginning of property name '%s'", name));
         }
     }
 

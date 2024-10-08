@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
+import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -27,17 +28,17 @@ public class ReturnStack {
         stack.pop();
     }
 
-    LogicLabel getReturnLabel() {
+    LogicLabel getReturnLabel(Token token) {
         if (stack.isEmpty()) {
-            throw new MindcodeException("return statement outside of a function.");
+            throw new MindcodeException(token, "Return statement outside of a function.");
         }
 
         return stack.peek().label;
     }
 
-    LogicVariable getReturnValue() {
+    LogicVariable getReturnValue(Token token) {
         if (stack.isEmpty()) {
-            throw new MindcodeException("return statement outside of a function.");
+            throw new MindcodeException(token, "Return statement outside of a function.");
         }
 
         return stack.peek().retval;

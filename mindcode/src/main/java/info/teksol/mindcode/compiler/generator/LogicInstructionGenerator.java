@@ -12,6 +12,7 @@ import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
+import org.antlr.v4.runtime.Token;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -52,7 +53,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     // Key is the name of variable/constant
     // Value is either an LogicLiteral (for a constant), LogicVariable (for a parameter) or null (for a variable)
     // Initialized to contain icon constants
+    // TODO move to a separate class
     private final Map<String, LogicValue> identifiers = Icons.createIconMap();
+    private final Map<String, FormattableLiteral> formattables = new HashMap<>();
 
     // Tracks all local function variables, including function parameters - once accessed, they have to be preserved.
     private LocalContext functionContext = new LocalContext();
@@ -304,15 +307,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private void verifyStackAllocation() {
-        if (callGraph.containsRecursiveFunction()) {
-            if (callGraph.getAllocatedStack() == null) {
-                throw new MindcodeException("Cannot use recursive functions when no stack was allocated.");
-            }
+        if (callGraph.getAllocatedStack() == null) {
+            callGraph.recursiveFunctions().forEach(function -> {
+                throw new MindcodeException(function.getToken(),
+                        "Function '%s' is recursive and no stack was allocated.", function.getName());
+            });
         }
     }
 
-    private LogicValue queryConstantName(String name) {
-        if (identifiers.get(name) != null) {
+    private LogicValue queryConstantName(Token token, String name) {
+        if (formattables.containsKey(name)) {
+            throw new MindcodeException(token,
+                    "Constant '%s' represents a formattable string literal. It can only be used with print() functions.", name);
+        } else if (identifiers.get(name) != null) {
             return identifiers.get(name);
         } else {
             // Register the identifier as a variable name
@@ -322,22 +329,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private void registerConstant(String name, ConstantAstNode value) {
-        if (identifiers.get(name) != null) {
-            throw new MindcodeException(value.startToken(), "multiple declarations of '%s'.", name);
+        if (identifiers.get(name) != null || formattables.containsKey(name)) {
+            throw new MindcodeException(value.startToken(), "Multiple declarations of '%s'.", name);
         } else if (identifiers.containsKey(name)) {
-            throw new MindcodeException(value.startToken(), "cannot redefine variable or function parameter '%s' as a constant.", name);
-        } else if (value instanceof FormattableLiteral) {
-            throw new MindcodeException(value.startToken(), "formattable literals can only be used with function calls.");
+            throw new MindcodeException(value.startToken(), "Cannot redefine variable or function parameter '%s' as a constant.", name);
+        } else if (value instanceof FormattableLiteral fmt) {
+            formattables.put(name, fmt);
+        } else {
+            identifiers.put(name, value.toLogicLiteral(instructionProcessor));
         }
-        identifiers.put(name, value.toLogicLiteral(instructionProcessor));
     }
 
     private LogicParameter registerParameter(Parameter parameter, LogicValue logicValue) {
         final String name = parameter.getName();
-        if (identifiers.get(name) != null) {
-            throw new MindcodeException(parameter.startToken(), "multiple declarations of '%s'.", name);
+        if (identifiers.get(name) != null || formattables.containsKey(name)) {
+            throw new MindcodeException(parameter.startToken(), "Multiple declarations of '%s'.", name);
         } else if (identifiers.containsKey(name)) {
-            throw new MindcodeException(parameter.startToken(), "cannot redefine variable or function parameter '%s' as a global parameter.", name);
+            throw new MindcodeException(parameter.startToken(), "Cannot redefine variable or function parameter '%s' as a program parameter.", name);
         }
         LogicParameter logicParameter = LogicParameter.parameter(name, logicValue);
         identifiers.put(name, logicParameter);
@@ -388,7 +396,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
         emit(createSet(LogicVariable.fnRetVal(functionPrefix), body));
-        emit(createLabel(returnStack.getReturnLabel()));
+        emit(createLabel(returnStack.getReturnLabel(function.getToken())));
         emit(createReturn(stackName()));
     }
 
@@ -396,7 +404,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
         emit(createSet(LogicVariable.fnRetVal(functionPrefix), body));
-        emit(createLabel(returnStack.getReturnLabel()));
+        emit(createLabel(returnStack.getReturnLabel(function.getToken())));
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         emit(createGoto(LogicVariable.fnRetAddr(functionPrefix), LogicLabel.symbolic(functionPrefix)));
@@ -444,7 +452,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         String functionName = call.getFunctionName();
         LogicFunction function = callGraph.getFunction(functionName);
         if (arguments.size() != function.getParamCount()) {
-            throw new MindcodeException(call.startToken(), "Function '%s': wrong number of arguments (expected %d, found %d)",
+            throw new MindcodeException(call.startToken(), "Function '%s': wrong number of arguments (expected %d, found %d).",
                     functionName, function.getParamCount(), arguments.size());
         }
 
@@ -597,7 +605,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         } else {
             int index = ((NumericLiteral)node.getAddress()).getAsInteger();
             if (index >= heapSize) {
-                throw new MindcodeException("Allocated heap is too small! Increase the size of the allocation," +
+                throw new MindcodeException(node.startToken(),
+                        "Allocated heap is too small! Increase the size of the allocation," +
                         " or switch to a Memory Bank to give the heap even more space.");
             }
             return LogicNumber.get(index + heapBaseAddress);
@@ -608,7 +617,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitHeapAccess(HeapAccess node) {
         final LogicVariable tmp = nextNodeResult();
         final LogicValue index = resolveHeapIndex(node);
-        emit(createRead(tmp, createMemoryVariable(node.getCellName()), index));
+        emit(createRead(tmp, createMemoryVariable(node.startToken(), node.getCellName()), index));
         return tmp;
     }
 
@@ -678,7 +687,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitConstant(Constant node) {
         if (!functionPrefix.isEmpty()) {
-            throw new MindcodeException(node.startToken(), "constant declaration not allowed in user function '%s'.", node.getName());
+            throw new MindcodeException(node.startToken(), "Constant declaration not allowed in user function '%s'.", node.getName());
         }
         AstNode value = expressionEvaluator.evaluate(node.getValue());
         if (value instanceof ConstantAstNode constant) {
@@ -692,7 +701,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicParameter visitParameter(Parameter node) {
         if (!functionPrefix.isEmpty()) {
-            throw new MindcodeException(node.startToken(), "parameter declaration not allowed in user function '%s'.", node.getName());
+            throw new MindcodeException(node.startToken(), "Parameter declaration not allowed in user function '%s'.", node.getName());
         }
         LogicValue logicValue = extractParameterValue(node);    // throws exception if not permissible
         LogicParameter parameter = registerParameter(node, logicValue);
@@ -736,18 +745,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         if (node.getVar() instanceof HeapAccess heapAccess) {
             final LogicValue address = resolveHeapIndex(heapAccess);
-            emit(createWrite(rvalue, createMemoryVariable(heapAccess.getCellName()), address));
+            emit(createWrite(rvalue, createMemoryVariable(heapAccess.startToken(), heapAccess.getCellName()), address));
         } else if (node.getVar() instanceof PropertyAccess propertyAccess) {
             LogicValue propTarget = visit(propertyAccess.getTarget());
             LogicArgument prop = visit(propertyAccess.getProperty());
             String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
             if (functionMapper.handleProperty(node.startToken(), instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
-                throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", propTarget, prop);
+                throw new MindcodeException(node.startToken(), "Undefined property '%s.%s'.", propTarget, prop);
             }
         } else if (node.getVar() instanceof VarRef varRef) {
             String name = varRef.getName();
-            if (identifiers.get(name) != null) {
-                throw new MindcodeException(node.startToken(), "assignment to constant or parameter '%s' not allowed.", name);
+            if (identifiers.get(name) != null || formattables.containsKey(name)) {
+                throw new MindcodeException(node.startToken(), "Assignment to constant or parameter '%s' not allowed.", name);
             }
 
             final LogicValue target = visit(node.getVar());
@@ -756,13 +765,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     emit(createSet(variable, rvalue));
                     return target;
                 } else {
-                    throw new MindcodeException(node.startToken(), "assignment to variable '%s' not allowed (name reserved for linked blocks).", target);
+                    throw new MindcodeException(node.startToken(), "Assignment to variable '%s' not allowed (name reserved for linked blocks).", target);
                 }
             } else {
-                throw new MindcodeInternalError("Unsupported assignment target '" + target + "'.");
+                throw new MindcodeInternalError("Unsupported assignment target '%s'.", target);
             }
         } else {
-            throw new MindcodeInternalError("Unhandled assignment target in " + node);
+            throw new MindcodeInternalError("Unhandled assignment target in %s.", node);
         }
 
         if (rvalue instanceof LogicVariable variable) {
@@ -811,10 +820,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final List<LogicVariable> outValues = new ArrayList<>();
 
         if (values.size() % iterators.size() != 0) {
-            throw new MindcodeException("Number of values in the list must be an integer multiple of the number of iterators.");
+            throw new MindcodeException(node.startToken(),
+                    "The number of values in the list must be an integer multiple of the number of iterators.");
         }
 
-        loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
+        loopStack.enterLoop(node.startToken(), node.getLabel(), exitLabel, contLabel);
 
         // All but the last value
         int limit = values.size() - iterators.size();
@@ -834,7 +844,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     if (element instanceof LogicVariable var && var.isUserWritable()) {
                         outValues.add(var);
                     } else {
-                        throw new MindcodeException(values.get(index).startToken(), "Element assigned to %s is not writable.", iterator.var.getFullName());
+                        throw new MindcodeException(values.get(index).startToken(), "Element assigned to '%s' is not writable.", iterator.var.getFullName());
                     }
                 }
                 if (iterator.in) {
@@ -864,7 +874,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 if (element instanceof LogicVariable var && var.isUserWritable()) {
                     outValues.add(var);
                 } else {
-                    throw new MindcodeException(values.get(index).startToken(), "Element assigned to %s is not writable.", iterator.var.getFullName());
+                    throw new MindcodeException(values.get(index).startToken(), "Element assigned to '%s' is not writable.", iterator.var.getFullName());
                 }
             }
             if (iterator.in) {
@@ -929,7 +939,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
-        loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        loopStack.enterLoop(node.startToken(), node.getLabel(), doneLabel, continueLabel);
         setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         emit(createLabel(beginLabel));
         emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, fixedUpperBound));
@@ -955,7 +965,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
-        loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        loopStack.enterLoop(node.startToken(), node.getLabel(), doneLabel, continueLabel);
         setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         emit(createLabel(beginLabel));
         final LogicValue cond = visit(node.getCondition());
@@ -979,7 +989,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
-        loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        loopStack.enterLoop(node.startToken(), node.getLabel(), doneLabel, continueLabel);
         setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         emit(createLabel(beginLabel));
         visit(node.getBody());
@@ -1051,34 +1061,30 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitVarRef(VarRef node) {
-        return createVariableOrConstant(node.getName(), false, null);
+        return createVariableOrConstant(node.startToken(),node.getName(), false, null);
     }
 
     private LogicVariable visitVariableVarRef(VarRef node) {
-        return (LogicVariable) createVariableOrConstant(node.getName(), true, null);
+        return (LogicVariable) createVariableOrConstant(node.startToken(),node.getName(), true, null);
     }
 
     private LogicVariable visitVariableVarRef(VarRef node, String errorMessage) {
-        return (LogicVariable) createVariableOrConstant(node.getName(), true, errorMessage);
+        return (LogicVariable) createVariableOrConstant(node.startToken(),node.getName(), true, errorMessage);
     }
 
-    // A variable is required here
-    private LogicVariable createVariable(String identifier) {
-        return (LogicVariable) createVariableOrConstant(identifier, true, null);
+    private LogicValue createValue(Token token, String identifier) {
+        return createVariableOrConstant(token, identifier, false, null);
     }
 
-    private LogicValue createValue(String identifier) {
-        return createVariableOrConstant(identifier, false, null);
-    }
-
-    private LogicValue createVariableOrConstant(String identifier, boolean requireVariable, String errorMessage) {
+    private LogicValue createVariableOrConstant(Token token, String identifier, boolean requireVariable, String errorMessage) {
         // If the name refers to a constant/parameter, use it.
         // If it wasn't a constant already, the name will be reserved for a variable
-        LogicValue constant = queryConstantName(identifier);
+        LogicValue constant = queryConstantName(token, identifier);
         if (constant != null) {
             if (requireVariable) {
-                throw new MindcodeException(errorMessage != null ? errorMessage
-                        : '\'' + identifier + "' is a constant or parameter; a variable is expected here.");
+                throw new MindcodeException(token, "%s", errorMessage != null
+                        ? errorMessage
+                        : "'" + identifier + "' is a constant or parameter; a variable is expected here.");
             }
             return constant;
         }
@@ -1102,17 +1108,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     // A variable is required here
-    private LogicVariable createMemoryVariable(String identifier) {
-        LogicValue constant = queryConstantName(identifier);
+    private LogicVariable createMemoryVariable(Token token, String identifier) {
+        LogicValue constant = queryConstantName(token, identifier);
         if (constant != null) {
             if (constant instanceof LogicParameter p && p.getValue().getType() == ArgumentType.BLOCK) {
                 return p;
             } else {
-                throw new MindcodeException("'" + identifier + "' cannot be used for external memory access.");
+                throw new MindcodeException(token, "'%s' cannot be used for external memory access.", identifier);
             }
         }
 
-        return (LogicVariable) createVariableOrConstant(identifier, true, null);
+        return (LogicVariable) createVariableOrConstant(token, identifier, true, null);
     }
 
     @Override
@@ -1132,7 +1138,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitFormattableLiteral(FormattableLiteral node) {
-        throw new MindcodeException(node.startToken(), "Formattable string not allowed here.");
+        throw new MindcodeException(node.startToken(), "Formattable string not allowed here. It can only be used with print() functions.");
     }
 
     @Override
@@ -1244,20 +1250,20 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             if (first instanceof NumericLiteral firstLit && last instanceof NumericLiteral lastLit) {
                 if (firstLit.notInteger() || lastLit.notInteger()) {
-                    throw new MindcodeException(heap.startToken(), "heap declarations must use integer range.");
+                    throw new MindcodeException(heap.startToken(), "Heap declarations must use integer range.");
                 }
 
                 int firstInt = firstLit.getAsInteger();
                 int lastInt = lastLit.getAsInteger() + (heap.getRange() instanceof InclusiveRange ? 1 : 0);
 
                 if (firstInt >= lastInt) {
-                    throw new MindcodeException(heap.startToken(), "empty or invalid range in heap declaration.");
+                    throw new MindcodeException(heap.startToken(), "Empty or invalid range in heap declaration.");
                 }
 
                 heapBaseAddress = firstInt;
                 heapSize = lastInt - firstInt;
             } else {
-                throw new MindcodeException(heap.startToken(), "heap declarations must use constant range.");
+                throw new MindcodeException(heap.startToken(), "Heap declarations must use constant range.");
             }
         } else {
             heapBaseAddress = 0;
@@ -1278,19 +1284,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             if (first instanceof NumericLiteral firstLit && last instanceof NumericLiteral lastLit) {
                 if (firstLit.notInteger() || lastLit.notInteger()) {
-                    throw new MindcodeException(stack.startToken(), "stack declarations must use integer range.");
+                    throw new MindcodeException(stack.startToken(), "Stack declarations must use integer range.");
                 }
 
                 int firstInt = firstLit.getAsInteger();
                 int lastInt = lastLit.getAsInteger() + (stack.getRange() instanceof InclusiveRange ? 1 : 0);
 
                 if (firstInt >= lastInt) {
-                    throw new MindcodeException(stack.startToken(), "empty or invalid range in stack declaration.");
+                    throw new MindcodeException(stack.startToken(), "Empty or invalid range in stack declaration.");
                 }
 
                 start = firstInt;
             } else {
-                throw new MindcodeException(stack.startToken(), "stack declarations must use constant range.");
+                throw new MindcodeException(stack.startToken(), "Stack declarations must use constant range.");
             }
         }
 
@@ -1304,22 +1310,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitBreakStatement(BreakStatement node) {
-        final LogicLabel label = loopStack.getBreakLabel(node.getLabel());
+        final LogicLabel label = loopStack.getBreakLabel(node.startToken(), node.getLabel());
         emit(createJumpUnconditional(label));
         return NULL;
     }
 
     @Override
     public LogicValue visitContinueStatement(ContinueStatement node) {
-        final LogicLabel label = loopStack.getContinueLabel(node.getLabel());
+        final LogicLabel label = loopStack.getContinueLabel(node.startToken(), node.getLabel());
         emit(createJumpUnconditional(label));
         return NULL;
     }
 
     @Override
     public LogicValue visitReturnStatement(ReturnStatement node) {
-        final LogicVariable retval = returnStack.getReturnValue();
-        final LogicLabel label = returnStack.getReturnLabel();
+        final LogicVariable retval = returnStack.getReturnValue(node.startToken());
+        final LogicLabel label = returnStack.getReturnLabel(node.startToken());
         final LogicValue expression = visit(node.getRetval());
         emit(createSet(retval, expression));
         emit(createJumpUnconditional(label));
@@ -1332,7 +1338,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final List<LogicValue> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
         LogicValue value = functionMapper.handleProperty(node.startToken(), instructions::add, node.getProperty(), target, args);
         if (value == null) {
-            throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", target, node.getProperty());
+            throw new MindcodeException(node.startToken(), "Undefined property '%s.%s'.", target, node.getProperty());
         }
         return value;
     }
@@ -1384,10 +1390,20 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private String evaluateFormattableNode(AstNode node) {
+        if (node instanceof FormattableLiteral fmt) {
+            return fmt.getText();
+        } else if (node instanceof VarRef var && formattables.containsKey(var.getName())) {
+            return formattables.get(var.getName()).getText();
+        } else {
+            return null;
+        }
+    }
+
     private LogicValue handleFormattedOutput(FunctionCall node, Formatter formatter) {
         if (node.getParams().isEmpty()) {
             if (formatter.requiresParameter()) {
-                throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a formattable string or constant string value.", formatter.function);
+                throw new MindcodeException(node.startToken(), "First parameter of the '%s' function must be a formattable string or constant string value.", formatter.function);
             }
             if (formatter.createsNewLine()) {
                 emit(formatter.createInstruction(this,LogicString.NEW_LINE));
@@ -1395,21 +1411,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return NULL;
         }
 
-        boolean formatting = node.getParams().get(0) instanceof FormattableLiteral || formatter.formatVariantOnly();
-        String pattern = null;
-        if (formatting) {
-            // Processing the first argument
-            if (node.getParams().get(0) instanceof FormattableLiteral fmt) {
-                // Supported in all cases
-                pattern = fmt.getText();
-            } else {
-                // The printf variant
-                AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
-                if (!(astFormat instanceof StringLiteral format)) {
-                    throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a formattable string or constant string value.", formatter.function);
-                }
-                pattern = format.getText();
+        String pattern = evaluateFormattableNode(node.getParams().get(0));
+        boolean formatting = pattern != null || formatter.formatVariantOnly();
+        if (formatting && pattern == null) {
+            // Use normal string constant/literal as pattern
+            AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
+            if (!(astFormat instanceof StringLiteral format)) {
+                throw new MindcodeException(node.startToken(), "First parameter of the '%s' function must be a formattable string or constant string value.", formatter.function);
             }
+            pattern = format.getText();
         }
 
         // Process arguments except the format string, if any
@@ -1463,13 +1473,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         if (position < params.size()) {
                             emit(formatter.createInstruction(this,params.get(position++)));
                         } else {
-                            throw new MindcodeException(node.startToken(), "not enough arguments for %s() format string.", formatter.function);
+                            throw new MindcodeException(node.startToken(), "Not enough arguments for '%s' format string.", formatter.function);
                         }
                     } else {
                         // Going through createValue ensures proper handling and registering of local variables
                         LogicValue eval = variable.startsWith("@")
                                 ? LogicBuiltIn.create(variable.substring(1))
-                                : createValue(variable);
+                                : createValue(node.startToken(), variable);
                         emit(formatter.createInstruction(this,eval));
                     }
 
@@ -1500,7 +1510,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         if (position < params.size()) {
-            throw new MindcodeException(node.startToken(), "too many arguments for %s() format string.", formatter.function);
+            throw new MindcodeException(node.startToken(), "Too many arguments for '%s' format string.", formatter.function);
         }
 
         return NULL;

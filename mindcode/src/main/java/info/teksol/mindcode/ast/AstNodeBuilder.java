@@ -34,7 +34,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private void allocateHeap(MindcodeParser.Alloc_listContext ctx) {
         if (allocatedHeap != null) {
-            throw new MindcodeException(ctx.getStart(), "multiple stack/heap allocations.");
+            throw new MindcodeException(ctx.getStart(), "Multiple stack/heap allocations.");
         }
 
         final String name = ctx.id().getText();
@@ -51,7 +51,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private void allocateStack(MindcodeParser.Alloc_listContext ctx) {
         if (allocatedStack != null) {
-            throw new MindcodeException(ctx.getStart(), "multiple stack declarations.");
+            throw new MindcodeException(ctx.getStart(), "Multiple stack declarations.");
         }
 
         final String name = ctx.id().getText();
@@ -454,7 +454,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
         if (allocatedHeap == null) {
-            throw new MindcodeException(ctx.getStart(), "the heap must be allocated before using it.");
+            throw new MindcodeException(ctx.getStart(), "The heap must be allocated before using it.");
         }
 
         final String name = ctx.name.getText();

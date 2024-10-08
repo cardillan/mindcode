@@ -28,6 +28,11 @@ public class NullLiteral extends ConstantAstNode {
     }
 
     @Override
+    public NullLiteral withToken(Token startToken) {
+        return new NullLiteral(startToken, sourceFile());
+    }
+
+    @Override
     public String toString() {
         return "NullLiteral{}";
     }

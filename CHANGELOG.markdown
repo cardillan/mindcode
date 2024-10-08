@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Added support for the [Mlog Watcher](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.  
-* Added an optimization of the `lookup` instruction to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). When possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Active on `aggresive` optimization level.
+* Added an optimization of the `lookup` instruction to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). When possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
+* Added support for creating constants with a formattable string literals as a value.   
 
 #### Experimental features
  

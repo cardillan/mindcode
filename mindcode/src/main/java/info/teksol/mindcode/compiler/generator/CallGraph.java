@@ -4,10 +4,12 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
+import org.antlr.v4.runtime.Token;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Holds information about calls between individual user-defined functions. Information is gathered by inspecting
@@ -87,6 +89,15 @@ public final class CallGraph {
      */
     public boolean containsRecursiveFunction() {
         return functions.values().stream().filter(LogicFunction::isUsed).anyMatch(LogicFunction::isRecursive);
+    }
+
+    /**
+     * Creates a stream of active, recursive functions.
+     *
+     * @return a stream of active, recursive functions.
+     */
+    public Stream<LogicFunction> recursiveFunctions() {
+        return functions.values().stream().filter(LogicFunction::isRecursive).filter(LogicFunction::isUsed);
     }
 
     /**
@@ -348,6 +359,10 @@ public final class CallGraph {
         @Override
         public int hashCode() {
             return Integer.hashCode(id);
+        }
+
+        public Token getToken() {
+            return declaration != null ? declaration.startToken() : null;
         }
     }
 }

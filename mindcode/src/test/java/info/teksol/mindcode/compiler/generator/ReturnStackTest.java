@@ -21,8 +21,8 @@ public class ReturnStackTest {
     void remembersLabels() {
         returnStack.enterFunction(label1, fnRetVal1);
 
-        assertEquals(label1, returnStack.getReturnLabel());
-        assertEquals(fnRetVal1, returnStack.getReturnValue());
+        assertEquals(label1, returnStack.getReturnLabel(null));
+        assertEquals(fnRetVal1, returnStack.getReturnValue(null));
     }
 
     @Test
@@ -30,8 +30,8 @@ public class ReturnStackTest {
         returnStack.enterFunction(label1, fnRetVal1);
         returnStack.enterFunction(label2, fnRetVal2);
 
-        assertEquals(label2, returnStack.getReturnLabel());
-        assertEquals(fnRetVal2, returnStack.getReturnValue());
+        assertEquals(label2, returnStack.getReturnLabel(null));
+        assertEquals(fnRetVal2, returnStack.getReturnValue(null));
     }
 
     @Test
@@ -40,14 +40,14 @@ public class ReturnStackTest {
         returnStack.enterFunction(label2, fnRetVal2);
         returnStack.exitFunction();
 
-        assertEquals(label1, returnStack.getReturnLabel());
-        assertEquals(fnRetVal1, returnStack.getReturnValue());
+        assertEquals(label1, returnStack.getReturnLabel(null));
+        assertEquals(fnRetVal1, returnStack.getReturnValue(null));
     }
 
     @Test
     void rejectsProvidingValuesOnEmptyStack() {
-        Assertions.assertThrows(MindcodeException.class, returnStack::getReturnLabel);
-        Assertions.assertThrows(MindcodeException.class, returnStack::getReturnValue);
+        Assertions.assertThrows(MindcodeException.class, () -> returnStack.getReturnLabel(null));
+        Assertions.assertThrows(MindcodeException.class, () -> returnStack.getReturnValue(null));
     }
 
     @Test

@@ -230,6 +230,9 @@ println($"Distance: ${len(x, y)}");   // Not allowed - expressions within the st
                                       // Causes compilation error
 println($"Distance: $", len(x, y));   // Allowed - the expression for $ is taken from the list
                                       // Will output "Distance: 5\n"
+                                      
+const FORMAT = $"Position: $, $"; 
+println(FORMAT, x, y);                // Allowed - the formattable string can be assigned to a constant                                      
 ```
 
 Compile-time formatting is supported by the `print()` and `println()` functions. The value returned by these functions performing compile-time formatting is always `null`.

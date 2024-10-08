@@ -220,7 +220,12 @@ Formattable string literals are a special case of string literals which can only
 
 `$"A formattable string literal."`
 
-Double quotes aren't supported in formattable string literal, even if they're escaped. No other operations are allowed on them.
+Double quotes aren't supported in formattable string literal, even if they're escaped. Concatenation of strings with the formattable string liteeral is supported through the formatting function:
+
+```
+const FORMAT = $"$ITEM_COAL coal: $";
+println(FORMAT, vault1.coal); 
+```
 
 ---
 

@@ -12,12 +12,6 @@ public class MindcodeException extends RuntimeException {
         this.token = token;
     }
 
-    // TODO Needs to put Token everywhere
-    @Deprecated
-    public MindcodeException(String message) {
-        this(null, message);
-    }
-
     public MindcodeException(Token token, @PrintFormat String message, Object... args) {
         this(token, String.format(message, args));
     }

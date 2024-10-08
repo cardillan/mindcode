@@ -44,23 +44,23 @@ public class CallGraphCreator  {
 
     private void validateFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
         if (function.isInline() && function.isRecursive()) {
-            throw new MindcodeException("Recursive function declared inline: " + function.getName());
+            throw new MindcodeException(function.getToken(), "Recursive function '%s' declared inline.", function.getName());
         }
 
         function.getParams().stream()
                 .map(VarRef::getName)
                 .filter(instructionProcessor::isBlockName)
-                .forEach(name -> { 
-                    throw new MindcodeException("Function " + function.getName()
-                        + " has parameter named " + name + "; this name is reserved for linked blocks");
+                .forEach(name -> {
+                    throw new MindcodeException(function.getToken(),
+                            "Parameter '%s' of function '%s' uses name reserved for linked blocks.", name, function.getName());
                 });
 
         function.getParams().stream()
                 .map(VarRef::getName)
                 .filter(instructionProcessor::isGlobalName)
                 .forEach(name -> {
-                    throw new MindcodeException("Function " + function.getName()
-                        + " has parameter named " + name + "; this name is reserved for global variable");
+                    throw new MindcodeException(function.getToken(),
+                            "Parameter '%s' of function '%s' uses name reserved for global variables.", name, function.getName());
                 });
     }
     
@@ -85,8 +85,8 @@ public class CallGraphCreator  {
 
     private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
         if (functions.containsKey(functionDeclaration.getName())) {
-            throw new MindcodeException("Multiple declarations of function " + functionDeclaration.getName()
-                    + " at line " + functionDeclaration.startToken().getLine());
+            throw new MindcodeException(functionDeclaration.startToken(),
+                    "Multiple declarations of function '%s'.", functionDeclaration.getName());
         }
         functions.put(functionDeclaration.getName(), functionDeclaration);
         callMap.put(functionDeclaration.getName(), new ArrayList<>());
@@ -98,12 +98,12 @@ public class CallGraphCreator  {
 
     private void  visitStackAllocation(StackAllocation node) {
         if (allocatedStack != null) {
-            throw new MindcodeException(node.startToken(), "multiple stack allocations.");
+            throw new MindcodeException(node.startToken(), "Multiple stack allocations.");
         }
 
         if (encounteredNodes.stream().anyMatch(ControlBlockAstNode.class::isInstance)) {
             throw new MindcodeException(node.startToken(),
-                    "stack allocation must not be preceded by a control statement or a function call.");
+                    "Stack allocation must not be preceded by a control statement or a function call.");
         }
 
         allocatedStack = node;
