@@ -1,7 +1,7 @@
 bitmap-get-set.mnd:                     : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 bitmap-get.mnd:                         : parse:        200 ms, compile:          0 ms, optimize:        200 ms
 compute-recursive-fibonacci.mnd:        : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-compute-sum-of-primes.mnd:              : parse:          0 ms, compile:          0 ms, optimize:        200 ms
+compute-sum-of-primes.mnd:              : parse:        200 ms, compile:          0 ms, optimize:        200 ms
 memory-read-write.mnd:                  : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 sorting with bubble-sort.mnd:           : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 sorting with heap-sort.mnd:             : parse:          0 ms, compile:          0 ms, optimize:          0 ms

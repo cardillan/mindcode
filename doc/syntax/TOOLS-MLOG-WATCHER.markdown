@@ -16,6 +16,14 @@ You can install the mod directly from Mindustry using the mod browser:
 
 After installing the mod, the game will exit so that the newly installed mod can be loaded on the next start. Just start the game again. 
 
+## Selecting a processor
+
+Mlog Watcher injects the received code into a processor which is bound to it. 
+
+When you select a processor by tapping or clicking on it, it becomes bound to Mlog Watcher as well. Mlog Watcher indicates the selected status by drawing a diamond over/around the processor. Tapping the processor again makes it unselected, hiding the highlights over the blocks that are linked to the processor, but keeps the processor bound to Mlog Watcher. This is useful when your code produces a graphical output to a display, as the display is unobstructed by the link highlights.
+
+Tapping or clicking away from the processor clears the processor selection in Mlog Watcher, which will no longer forward the received code to any processor.
+
 ## Mindcode web application
 
 The panel with the compiled mlog code contains two buttons in the upper right corner. The left button sends the contents of the pane into a Mindustry game running on your computer. If there's an Mlog Watcher running within the game, it will accept the code and a checkmark will be displayed briefly. Mlog Watcher then injects the received code into the selected processor. If there's no selected processor in Mindustry game, or a map isn't loaded but Mindustry is running, the checkmark will still be displayed, but the code won't be processed by Mlog Watcher. 
@@ -38,7 +46,7 @@ Mlog Watcher runs a WebSocket server on your machine on port `9992` (the port nu
 
 If you need to run the communication on a different port, you need to change the port number in Mindustry Mlog Watcher settings, and provide the new port number to Mindcode compiler using the `--watcher-port` command-line option. Additionally, there's a 500 millisecond timeout interval when trying to connect to Mlog Watcher, which can be also changed through the `--watcher-timeout` command--line option.
 
-When the communication with Mlog Watcher fails, Mindcode compiler writes out an error message and produces all other outputs as usual. It is feasible to use the `-w` command on every compilation.  
+When the communication with Mlog Watcher fails, Mindcode compiler writes out an error message and produces all other outputs as usual.
 
 ---
 

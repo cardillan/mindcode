@@ -38,6 +38,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitRelaxed_directive(MindcodeParser.Relaxed_directiveContext ctx) {
+        return new NoOp();
+    }
+
+    @Override
+    public AstNode visitStrict_directive(MindcodeParser.Strict_directiveContext ctx) {
+        return new NoOp();
+    }
+
+    @Override
     protected AstNode aggregateResult(AstNode aggregate, AstNode nextResult) {
         if (nextResult != null) return nextResult;
         return aggregate;

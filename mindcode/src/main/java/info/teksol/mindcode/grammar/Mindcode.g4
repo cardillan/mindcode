@@ -80,6 +80,8 @@ expression : directive                                                          
 directive : HASHSET option=ID ASSIGN value=INT                  # numeric_directive
           | HASHSET option=ID ASSIGN value=ID                   # string_directive
           | HASHSET option=ID ( ASSIGN value=directive_list )?  # list_directive
+          | HASHSTRICT   {strictSyntax = true;}                 # strict_directive
+          | HASHRELAXED  {strictSyntax = false;}                # relaxed_directive
           ;
 
 directive_list
@@ -121,13 +123,13 @@ while_expression : ( label=loop_label COLON )? WHILE cond=expression optional_do
 
 do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=expression;
 
-for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression optional_do loop_body END       # ranged_for
+for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression optional_do loop_body END   # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
-                            SEMICOLON increment=incr_list optional_do loop_body END                         # iterated_for
+                            SEMICOLON increment=incr_list optional_do loop_body END                     # iterated_for
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET optional_do loop_body END        # for_each_1
+                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET optional_do loop_body END    # for_each_1
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            values=value_list optional_do loop_body END                                     # for_each_2
+                            values=value_list DO loop_body END                                          # for_each_2
                ;
 
 iterator
@@ -285,6 +287,8 @@ PLUS : '+';
 QUESTION_MARK : '?';
 SEMICOLON : ';';
 HASHSET : '#set';
+HASHSTRICT : '#strict';
+HASHRELAXED : '#relaxed';
 
 EXP_ASSIGN : '**=';
 MUL_ASSIGN : '*=';

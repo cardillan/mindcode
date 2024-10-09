@@ -7,12 +7,15 @@ Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.co
 The perils of using a high-level language for Mindustry code are inefficient code generation and the possibility of compiler bugs. Mindcode strives to address both of these issues:
 
 * Efficiency: while there's still a lot of room for improvement, the mlog code produced by Mindcode is quite efficient today. Mindcode is capable of simplifying expressions, removing unnecessary or unreachable code and using available instruction space to produce faster code by unrolling loops or inlining functions automatically. 
-* Reliability: this project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they usually get resolved quickly. 
+* Reliability: this project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they usually get resolved quickly.
 
 > [!IMPORTANT]
-> Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142). These changes will be substantial, and any comments and suggestions are welcome now while the changes are still being deliberated.
+> Since the [2.3.0 release](CHANGELOG.markdown#230), Mindcode supports two variants of the syntax: `strict` and `relaxed`. In the `strict` syntax, which is now the default, semicolons and the `do` and `then` keywords are no longer optional. This change breaks a lot of existing code and fixing all the errors can be a bit time-consuming. To make adapting to the change easier, it is possible to switch to the original syntax by putting the `#relaxed;` directive (including the semicolon) at the beginning of the source file. The relaxed syntactic rules will take place for code following the directive.
 > 
-> Most importantly, semicolons separating statements and expressions will become compulsory in Mindcode. As they are optional at this moment, you can start adding them to your code now to prepare for the change.  
+> The relaxed variant of syntax is deprecated and will eventually be removed.    
+
+> [!TIP]
+> Please have a look at other planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142). These changes will be substantial, and any comments and suggestions are welcome now while the changes are still being deliberated.
 
 **Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into Mindustry schematics, either as a binary `.msch` file, or as a text. Processors can be included in these schematics, 
 complete with the code (specified in Mindcode or Mindustry Logic language) and linked blocks.

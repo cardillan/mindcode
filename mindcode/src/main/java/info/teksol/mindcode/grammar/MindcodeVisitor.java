@@ -349,6 +349,20 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitList_directive(MindcodeParser.List_directiveContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code strict_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStrict_directive(MindcodeParser.Strict_directiveContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code relaxed_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelaxed_directive(MindcodeParser.Relaxed_directiveContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#directive_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
