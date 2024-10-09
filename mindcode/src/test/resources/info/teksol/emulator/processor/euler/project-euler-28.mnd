@@ -5,11 +5,11 @@ current = 3;
 step = 2;
 count = 1;
 
-while current <= LIMIT
+while current <= LIMIT do
     sum += current;
     current += step;
     count += 1;
-    if count > 3
+    if count > 3 then
         step += 2;
         count = 0;
     end;

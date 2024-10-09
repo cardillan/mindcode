@@ -14,8 +14,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void removesConstantsFromCode() {
         assertCompilesTo("""
-                        const VALUE = 100
-                        print(VALUE)
+                        const VALUE = 100;
+                        print(VALUE);
                         """,
                 createInstruction(PRINT, "100"),
                 createInstruction(END)
@@ -25,8 +25,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void removesConstantsInPrintFmt() {
         assertCompilesTo("""
-                        const VALUE = 100
-                        print($"Value: $VALUE")
+                        const VALUE = 100;
+                        print($"Value: $VALUE");
                         """,
                 createInstruction(PRINT, q("Value: ")),
                 createInstruction(PRINT, "100"),
@@ -37,7 +37,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void evaluatesExpressionsWithBinaryLiterals() {
         assertCompilesTo("""
-                        print(0b0011 + 0b1100)
+                        print(0b0011 + 0b1100);
                         """,
                 createInstruction(PRINT, "15"),
                 createInstruction(END)
@@ -47,8 +47,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void acceptsStringConstants() {
         assertCompilesTo("""
-                        const TEXT = "Hello"
-                        print(TEXT)
+                        const TEXT = "Hello";
+                        print(TEXT);
                         """,
                 createInstruction(PRINT, q("Hello")),
                 createInstruction(END)
@@ -58,21 +58,21 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void refusesVariableBasedConstant() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("a = 10  const A = a"));
+                () -> generateInstructions("a = 10;  const A = a;"));
     }
 
     @Test
     void refusesNondeterministicConstant() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("const A = rand(10)"));
+                () -> generateInstructions("const A = rand(10);"));
     }
 
     @Test
     void refusesFunctionBasedConstant() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        def foo() 5 end
-                        const A = foo()
+                        def foo() 5; end;
+                        const A = foo();
                         """
                 )
         );
@@ -80,17 +80,18 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesMlogIncompatibleConstants() {
+        // TODO Should work in 8A
         assertThrows(MindcodeException.class,
                 () -> generateInstructions(
                         createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
-                        "const A = 10**40"));
+                        "const A = 10**40;"));
     }
 
     @Test
     void evaluatesStringConcatenation() {
         assertCompilesTo("""
-                        a = "A" + "B"
-                        print(a)
+                        a = "A" + "B";
+                        print(a);
                         """,
                 createInstruction(SET, "a", q("AB")),
                 createInstruction(PRINT, "a"),
@@ -101,9 +102,9 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void evaluatesStringConcatenationWithConstant() {
         assertCompilesTo("""
-                        const A = "A"
-                        a = A + "B"
-                        print(a)
+                        const A = "A";
+                        a = A + "B";
+                        print(a);
                         """,
                 createInstruction(SET, "a", q("AB")),
                 createInstruction(PRINT, "a"),
@@ -114,8 +115,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void evaluatesStringConcatenationWithIcon() {
         assertCompilesTo("""
-                        a = "[]" + ITEM_COAL
-                        print(a)
+                        a = "[]" + ITEM_COAL;
+                        print(a);
                         """,
                 createInstruction(SET, "a", q("[]" + Icons.getIconValue("ITEM_COAL").format())),
                 createInstruction(PRINT, "a"),
@@ -126,9 +127,9 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void evaluatesStringConcatenationWithNumber() {
         assertCompilesTo("""
-                        const COUNT = 10
-                        a = "Total: " + COUNT
-                        print(a)
+                        const COUNT = 10;
+                        a = "Total: " + COUNT;
+                        print(a);
                         """,
                 createInstruction(SET, "a", q("Total: 10")),
                 createInstruction(PRINT, "a"),
@@ -139,9 +140,9 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void evaluatesBooleanConcatenationWithString() {
         assertCompilesTo("""
-                        const TRUTH = 1 < 10
-                        a = TRUTH + " is true"
-                        print(a)
+                        const TRUTH = 1 < 10;
+                        a = TRUTH + " is true";
+                        print(a);
                         """,
                 createInstruction(SET, "a", q("1 is true")),
                 createInstruction(PRINT, "a"),
@@ -153,8 +154,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     void refusesInvalidStringOperation() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        a = "A" - "B"
-                        print(a)
+                        a = "A" - "B";
+                        print(a);
                         """
                 )
         );
@@ -164,8 +165,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     void refusesPartialStringConcatenation() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        a = "A" + B
-                        print(a)
+                        a = "A" + B;
+                        print(a);
                         """
                 )
         );
@@ -175,8 +176,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     void refusesStringFunction() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        a = max("A", "B")
-                        print(a)
+                        a = max("A", "B");
+                        print(a);
                         """
                 )
         );
@@ -186,8 +187,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     void refusesPartialStringFunction() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        a = max("A", 0)
-                        print(a)
+                        a = max("A", 0);
+                        print(a);
                         """
                 )
         );
@@ -197,8 +198,8 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     void refusesUnaryStringFunction() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        a = not "A"
-                        print(a)
+                        a = not "A";
+                        print(a);
                         """
                 )
         );

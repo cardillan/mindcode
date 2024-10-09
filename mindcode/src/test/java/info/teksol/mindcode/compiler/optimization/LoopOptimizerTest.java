@@ -28,10 +28,10 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesRangedForLoops() {
         assertCompilesTo("""
-                        for i in 0 ... 1000
-                            cell1[i] = 1
-                        end
-                        print("Done.")
+                        for i in 0 ... 1000 do
+                            cell1[i] = 1;
+                        end;
+                        print("Done.");
                         """,
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1003)),
@@ -45,11 +45,11 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoop() {
         assertCompilesTo("""
-                        i = 1000
-                        while i > 0
-                            print(i)
-                            i -= 1
-                        end
+                        i = 1000;
+                        while i > 0 do
+                            print(i);
+                            i -= 1;
+                        end;
                         """,
                 createInstruction(SET, "i", "1000"),
                 createInstruction(LABEL, var(1003)),
@@ -62,11 +62,11 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoopComparingToNull() {
         assertCompilesTo("""
-                        block = null
-                        while block == null
-                            block = getlink(1)
-                        end
-                        print(block)
+                        block = null;
+                        while block == null do
+                            block = getlink(1);
+                        end;
+                        print(block);
                         """,
                 createInstruction(SET, "block", "null"),
                 createInstruction(LABEL, var(1003)),
@@ -80,10 +80,10 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     void optimizesWhileLoopStrictEqual() {
         assertCompilesToWithMessages(ignore("List of uninitialized variables: i, state."),
                 """
-                        while state === 0
-                            print(i)
-                            state = @unit.dead
-                        end
+                        while state === 0 do
+                            print(i);
+                            state = @unit.dead;
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(OP, "strictEqual", var(0), "state", "0"),
@@ -98,10 +98,10 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoopWithInitialization() {
         assertCompilesTo("""
-                        count = 0
-                        while switch1.enabled
-                            print(count += 1)
-                        end
+                        count = 0;
+                        while switch1.enabled do
+                            print(count += 1);
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "count", "0"),
@@ -118,9 +118,9 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoopWithInitializationAndStrictEqual() {
         assertCompilesTo("""
-                        while @unit.dead === 0
-                            print("Got unit!")
-                        end
+                        while @unit.dead === 0 do
+                            print("Got unit!");
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
@@ -136,12 +136,12 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesRangedForLoopsWithBreak() {
         assertCompilesTo("""
-                        for i in 1 .. 1000
-                            print(i)
-                            if i > 5
-                                break
-                            end
-                        end
+                        for i in 1 .. 1000 do
+                            print(i);
+                            if i > 5 then
+                                break;
+                            end;
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "i", "1"),
@@ -156,14 +156,14 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoopWithContinue() {
         assertCompilesTo("""
-                        i = 1000
-                        while i > 0
-                            i -= 1
-                            if i == 4
-                                continue
-                            end
-                            print(i)
-                        end
+                        i = 1000;
+                        while i > 0 do
+                            i -= 1;
+                            if i == 4 then
+                                continue;
+                            end;
+                            print(i);
+                        end;
                         """,
                 createInstruction(SET, "i", "1000"),
                 createInstruction(LABEL, var(1005)),
@@ -180,12 +180,12 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
         assertCompilesTo(createTestCompiler(CompilerProfile.fullOptimizations(false)),
                 """
                         def getBit(bitIndex)
-                          bitIndex % 2
-                        end
-                                                
-                        for i in 0 ... 1000
-                            print(getBit(i) ? 1 : 0)
-                        end
+                          bitIndex % 2;
+                        end;
+
+                        for i in 0 ... 1000 do
+                            print(getBit(i) ? 1 : 0);
+                        end;
                         """,
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1007)),
@@ -203,10 +203,10 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesUpdatesInConditions() {
         assertCompilesTo("""
-                        i = 0
-                        while (i += 1) <= 2000
-                            print(i)
-                        end
+                        i = 0;
+                        while (i += 1) <= 2000 do
+                            print(i);
+                        end;
                         """,
                 createInstruction(SET, "i", "1"),
                 createInstruction(LABEL, var(1003)),

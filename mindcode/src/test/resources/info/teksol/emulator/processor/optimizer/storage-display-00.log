@@ -3791,9 +3791,9 @@ Modifications by Loop Optimization: replicate condition at line 56 (+7 instructi
   1010 label __label18
 -    * jump __label17 always
 + 1011 sensor __tmp11 CONTAINER @dead
-+ 1012 op strictEqual __tmp12 __tmp11 0
++ 1012 op equal __tmp12 __tmp11 0
 + 1013 sensor __tmp13 DISPLAY @dead
-+ 1014 op strictEqual __tmp14 __tmp13 0
++ 1014 op equal __tmp14 __tmp13 0
 + 1015 op land __tmp15 __tmp12 __tmp14
 + 1016 op equal __tmp16 LINKS @links
 + 1017 op land __tmp17 __tmp15 __tmp16
@@ -4813,9 +4813,9 @@ label __label15
 printflush MESSAGE
 jump __label0 equal CONTAINER null
 sensor __tmp11 CONTAINER @dead
-op strictEqual __tmp12 __tmp11 0
+op equal __tmp12 __tmp11 0
 sensor __tmp13 DISPLAY @dead
-op strictEqual __tmp14 __tmp13 0
+op equal __tmp14 __tmp13 0
 op land __tmp15 __tmp12 __tmp14
 op equal __tmp16 LINKS @links
 op land __tmp17 __tmp15 __tmp16
@@ -5505,9 +5505,9 @@ print elapsed
 print " ms"
 printflush message1
 sensor __tmp11 CONTAINER @dead
-op strictEqual __tmp12 __tmp11 0
+op equal __tmp12 __tmp11 0
 sensor __tmp13 DISPLAY @dead
-op strictEqual __tmp14 __tmp13 0
+op equal __tmp14 __tmp13 0
 op land __tmp15 __tmp12 __tmp14
 op equal __tmp16 LINKS @links
 op land __tmp17 __tmp15 __tmp16

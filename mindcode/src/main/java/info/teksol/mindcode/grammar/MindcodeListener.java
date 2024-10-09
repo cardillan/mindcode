@@ -28,6 +28,30 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code single_exp}
+	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingle_exp(MindcodeParser.Single_expContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code single_exp}
+	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingle_exp(MindcodeParser.Single_expContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code rem_comment}
+	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRem_comment(MindcodeParser.Rem_commentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code rem_comment}
+	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRem_comment(MindcodeParser.Rem_commentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#optional_semicolon}.
 	 * @param ctx the parse tree
 	 */
@@ -189,18 +213,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNot_expr(MindcodeParser.Not_exprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code rem_comment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRem_comment(MindcodeParser.Rem_commentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code rem_comment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRem_comment(MindcodeParser.Rem_commentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code literal_null}
 	 * labeled alternative in {@link MindcodeParser#expression}.

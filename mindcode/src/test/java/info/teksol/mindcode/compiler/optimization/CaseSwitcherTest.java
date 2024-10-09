@@ -28,21 +28,21 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
     @Test
     void processesBasicSwitch() {
         assertCompilesTo("""
-                        i = rand(10)
+                        i = rand(10);
                         case i
-                            when 0 then print(0)
-                            when 1 then print(1)
-                            when 2 then print(2)
-                            when 3 then print(3)
-                            when 4 then print(4)
-                            when 5 then print(5)
-                            when 6 then print(6)
-                            when 7 then print(7)
-                            when 8 then print(8)
-                            when 9 then print(9)
-                            else print("oh no!")
-                        end
-                        print("end")
+                            when 0 then print(0);
+                            when 1 then print(1);
+                            when 2 then print(2);
+                            when 3 then print(3);
+                            when 4 then print(4);
+                            when 5 then print(5);
+                            when 6 then print(6);
+                            when 7 then print(7);
+                            when 8 then print(8);
+                            when 9 then print(9);
+                            else print("oh no!");
+                        end;
+                        print("end");
                         """,
                 createInstruction(OP, "rand", "i", "10"),
                 createInstruction(JUMP, var(1021), "lessThan", "i", "0"),
@@ -108,20 +108,20 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
     @Test
     void processesBasicSwitchNoElse() {
         assertCompilesTo("""
-                        i = rand(10)
+                        i = rand(10);
                         case i
-                            when 0 then print(0)
-                            when 1 then print(1)
-                            when 2 then print(2)
-                            when 3 then print(3)
-                            when 4 then print(4)
-                            when 5 then print(5)
-                            when 6 then print(6)
-                            when 7 then print(7)
-                            when 8 then print(8)
-                            when 9 then print(9)
-                        end
-                        print("end")
+                            when 0 then print(0);
+                            when 1 then print(1);
+                            when 2 then print(2);
+                            when 3 then print(3);
+                            when 4 then print(4);
+                            when 5 then print(5);
+                            when 6 then print(6);
+                            when 7 then print(7);
+                            when 8 then print(8);
+                            when 9 then print(9);
+                        end;
+                        print("end");
                         """,
                 createInstruction(OP, "rand", "i", "10"),
                 createInstruction(JUMP, var(1021), "lessThan", "i", "0"),
@@ -185,16 +185,16 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
     @Test
     void processesReturningSwitchWithElse() {
         assertCompilesTo("""
-                        value = floor(rand(20))
+                        value = floor(rand(20));
                         text = case value
-                            when 0 then "None"
-                            when 1 then "One"
-                            when 2, 3, 4 then "A few"
-                            when 5, 6, 7, 8 then "Several"
-                            when 10 then "Ten"
-                            else "I don't known this number!"
-                        end
-                        print(text)
+                            when 0 then "None";
+                            when 1 then "One";
+                            when 2, 3, 4 then "A few";
+                            when 5, 6, 7, 8 then "Several";
+                            when 10 then "Ten";
+                            else "I don't known this number!";
+                        end;
+                        print(text);
                         """,
                 createInstruction(OP, "rand", var(0), "20"),
                 createInstruction(OP, "floor", "value", var(0)),

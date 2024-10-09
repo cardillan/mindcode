@@ -23,6 +23,20 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code single_exp}
+	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingle_exp(MindcodeParser.Single_expContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code rem_comment}
+	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRem_comment(MindcodeParser.Rem_commentContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#optional_semicolon}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -117,13 +131,6 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNot_expr(MindcodeParser.Not_exprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code rem_comment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRem_comment(MindcodeParser.Rem_commentContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code literal_null}
 	 * labeled alternative in {@link MindcodeParser#expression}.

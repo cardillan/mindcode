@@ -45,8 +45,8 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void printsItemIds() {
         testCode("""
-                        param p = @coal
-                        print(p.id)
+                        param p = @coal;
+                        print(p.id);
                         """,
                 "5"
         );
@@ -55,7 +55,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void printsNumbersStringsObjects() {
         testCode("""
-                        print("Hello", 10, 5.5, bank1, bank1.type, null, true, false)
+                        print("Hello", 10, 5.5, bank1, bank1.type, null, true, false);
                         """,
                 "Hello", "10", "5.5", "bank", "memory-bank", "null", "1", "0"
         );
@@ -66,7 +66,7 @@ public class ProcessorTest extends AbstractProcessorTest {
         testCode("""
                         param a = 1;
                         param b = 0;
-                        print(a / b)
+                        print(a / b);
                         """,
                 "null"
         );
@@ -76,8 +76,8 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void computesPackColor() {
         testCode("""
-                        c = packcolor(1.0, 1.0, 1.0, 1.0)
-                        print(c)
+                        c = packcolor(1.0, 1.0, 1.0, 1.0);
+                        print(c);
                         """,
                 "0"
         );
@@ -86,8 +86,8 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void handlesChainedAssignments() {
         testCode("""
-                        a = b = @counter
-                        print(a == b)
+                        a = b = @counter;
+                        print(a == b);
                         """,
                 "1"
         );

@@ -130,505 +130,504 @@ end
 // Note: using compiled mlog code to avoid delays while compiling mindcode in the web app
 
 control = """
-    const DISPLAY_SIZE = 176
-    const HALF_SIZE = DISPLAY_SIZE / 2
-    const MAX_DEPTH = 63
-    const SKIP = 17
+    const DISPLAY_SIZE = 176;
+    const HALF_SIZE = DISPLAY_SIZE / 2;
+    const MAX_DEPTH = 63;
+    const SKIP = 17;
 
-    const VARIABLES = MAX_DEPTH + 1
-    const BOOKMARKS = VARIABLES + 16
-    const BOOKMARK_COUNT = 13
-    const BOOKMARK_SIZE = 6
-    const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE
-    const PROCESSORS = SLOTS + DISPLAY_SIZE
+    const VARIABLES = MAX_DEPTH + 1;
+    const BOOKMARKS = VARIABLES + 16;
+    const BOOKMARK_COUNT = 13;
+    const BOOKMARK_SIZE = 6;
+    const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE;
+    const PROCESSORS = SLOTS + DISPLAY_SIZE;
 
-    allocate heap in memory[VARIABLES ... BOOKMARKS]
+    allocate heap in memory[VARIABLES ... BOOKMARKS];
 
     // Amount of pixels to move the center when direction button is clicked
-    const SHIFT = 44
+    const SHIFT = 44;
 
-    const RUNNING_TEXT = "Rendering...\n-------------------------\n"
-    const FINISHED_TEXT = "Finished.\n-------------------------\n"
+    const RUNNING_TEXT = "Rendering...\n-------------------------\n";
+    const FINISHED_TEXT = "Finished.\n-------------------------\n";
 
-    do text1 = "" loop while bank1 == null
-    do text1 = "" loop while message1 == null
-    do text1 = "" loop while message2 == null
-    do text1 = "" loop while message3 == null
+    do text1 = ""; loop while bank1 == null;
+    do text1 = ""; loop while message1 == null;
+    do text1 = ""; loop while message2 == null;
+    do text1 = ""; loop while message3 == null;
 
-    memory = bank1
+    memory = bank1;
 
-    print("Initializing...")
-    printflush(message1)
+    print("Initializing...");
+    printflush(message1);
 
-    text0 = RUNNING_TEXT
-    text1 = ""
-    text2 = ""
+    text0 = RUNNING_TEXT;
+    text1 = "";
+    text2 = "";
 
-    X = -0.8
-    Y = 0
-    ZOOM = 50
-    JULIA = false
-    JULIA_X = 0
-    JULIA_Y = 0
+    X = -0.8;
+    Y = 0;
+    ZOOM = 50;
+    JULIA = false;
+    JULIA_X = 0;
+    JULIA_Y = 0;
 
-    i = BOOKMARKS
-    i = bookmark(memory, i, -0.8,           0,           50)
-    i = bookmark(memory, i, -0.14375,     1.0,         1600)
-    i = bookmark(memory, i, -1.675,       0.0,        25600)
-    i = bookmark(memory, i, -1.413547,   -0.03234831,  2500)
-    i = bookmark(memory, i,  0.37359375,  0.09015625, 12800)
-    i = bookmark(memory, i, -1.408547,   -0.03734831, 10000)
-    i = bookmark(memory, i,  0.371875,    0.078125,    3200)
-    i = bookmark(memory, i, -1.382347,   -0.02114831,  5000)
-    i = bookmark(memory, i,  0.355,       0.66,        3200)
-    i = bookmark(memory, i,  0.018125,   -0.818125,    6400)
+    i = BOOKMARKS;
+    i = bookmark(memory, i, -0.8,           0,           50);
+    i = bookmark(memory, i, -0.14375,     1.0,         1600);
+    i = bookmark(memory, i, -1.675,       0.0,        25600);
+    i = bookmark(memory, i, -1.413547,   -0.03234831,  2500);
+    i = bookmark(memory, i,  0.37359375,  0.09015625, 12800);
+    i = bookmark(memory, i, -1.408547,   -0.03734831, 10000);
+    i = bookmark(memory, i,  0.371875,    0.078125,    3200);
+    i = bookmark(memory, i, -1.382347,   -0.02114831,  5000);
+    i = bookmark(memory, i,  0.355,       0.66,        3200);
+    i = bookmark(memory, i,  0.018125,   -0.818125,    6400);
 
-    i = bookmark_julia(memory, i,  0.0,        0.0,           50,  -0.8,       0.0)
-    i = bookmark_julia(memory, i, -0.14375,    1.03125,     3200,  -0.14375,   1.0)
-    i = bookmark_julia(memory, i, -1.403547,   -0.02734831, 5000,  -1.408547, -0.03734831)
+    i = bookmark_julia(memory, i,  0.0,        0.0,           50,  -0.8,       0.0);
+    i = bookmark_julia(memory, i, -0.14375,    1.03125,     3200,  -0.14375,   1.0);
+    i = bookmark_julia(memory, i, -1.403547,   -0.02734831, 5000,  -1.408547, -0.03734831);
 
-    while i < SLOTS
-        i = bookmark(memory, i, X, Y, ZOOM)
-    end
+    while i < SLOTS do
+        i = bookmark(memory, i, X, Y, ZOOM);
+    end;
 
-    $STATE = 0
-    $STOP = 1
-    $X = X
-    $Y = Y
-    $ZOOM = ZOOM
-    $JULIA = JULIA
-    $JULIA_X = JULIA_X
-    $JULIA_Y = JULIA_Y
-    $PALETTE = PALETTE
+    $STATE = 0;
+    $STOP = 1;
+    $X = X;
+    $Y = Y;
+    $ZOOM = ZOOM;
+    $JULIA = JULIA;
+    $JULIA_X = JULIA_X;
+    $JULIA_Y = JULIA_Y;
+    $PALETTE = PALETTE;
 
-    switch7.enabled = JULIA
+    switch7.enabled = JULIA;
 
     // Palette creation
-    r = 128; g = 192; b = 64
+    r = 128; g = 192; b = 64;
 
-    for i in 0 ... MAX_DEPTH
-        memory[i] = packcolor(r / 256, g / 256, b / 256, 255)
-        r = (r + 147) % 256
-        g = (g +  87) % 256
-        b = (b +  59) % 256
-    end
+    for i in 0 ... MAX_DEPTH do
+        memory[i] = packcolor(r / 256, g / 256, b / 256, 255);
+        r = (r + 147) % 256;
+        g = (g +  87) % 256;
+        b = (b +  59) % 256;
+    end;
 
-    memory[MAX_DEPTH] = packcolor(0, 0, 0, 1)
+    memory[MAX_DEPTH] = packcolor(0, 0, 0, 1);
 
-    bookmark_x = message2.x
-    bookmark_y = message2.y
-    bookmark = 1
-    bookmark_clr = -1
-    position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1)
+    bookmark_x = message2.x;
+    bookmark_y = message2.y;
+    bookmark = 1;
+    bookmark_clr = -1;
+    position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
 
-    palette_x = message3.x
-    PALETTE = 1
-    palette_clr = -1
+    palette_x = message3.x;
+    PALETTE = 1;
+    palette_clr = -1;
 
     // Skip first n blocks that are not on the bookmark/palette bar
-    for first_link in 0 ... @links
-        switch = getlink(first_link)
-        if switch.y == bookmark_y break end
-    end
+    for first_link in 0 ... @links do
+        switch = getlink(first_link);
+        if switch.y == bookmark_y then break; end;
+    end;
 
-    checking = 999
-    CHANGE = false
-    update_bookmarks = true
+    checking = 999;
+    CHANGE = false;
+    update_bookmarks = true;
 
     // Initialization complete
-    $STATE = 1
+    $STATE = 1;
 
-    while true
-        println("Mandelbrot Mania! v3.0")
-        print(text0)
-        if JULIA
-            println("Julia set of Mandelbrot")
-            println("fractal at coordinates")
-            printf("   X: $JULIA_X\n")
-            printf("   Y: $JULIA_Y\n")
+    while true do
+        println("Mandelbrot Mania! v3.0");
+        print(text0);
+        if JULIA then
+            println($"Julia set of Mandelbrot");
+            println($"fractal at coordinates");
+            println($"   X: $JULIA_X");
+            println($"   Y: $JULIA_Y");
         else
-            println("Mandelbrot set")
-        end
-        println("-------------------------")
-        printf("X: $X\n")
-        printf("Y: $Y\n")
-        printf("Zoom: $ZOOM\n")
-        println(text1, text2)
-        printflush(message1)
+            println("Mandelbrot set");
+        end;
+        println("-------------------------");
+        println($"X: $X");
+        println($"Y: $Y");
+        println($"Zoom: $ZOOM");
+        println(text1, text2);
+        printflush(message1);
 
-        handle_move(switch1,  0,  1, 1)   // up
-        handle_move(switch2, -1,  0, 1)   // left
-        handle_move(switch3,  1,  0, 1)   // right
-        handle_move(switch4,  0, -1, 1)   // down
-        handle_move(switch5,  0,  0, 2)   // zoom in
-        handle_move(switch6,  0,  0, 0.5) // zoom out
+        handle_move(switch1,  0,  1, 1);    // up
+        handle_move(switch2, -1,  0, 1);    // left
+        handle_move(switch3,  1,  0, 1);    // right
+        handle_move(switch4,  0, -1, 1);    // down
+        handle_move(switch5,  0,  0, 2);    // zoom in
+        handle_move(switch6,  0,  0, 0.5);  // zoom out
 
-        if switch7.enabled != JULIA
-            CHANGE = true
-            JULIA = switch7.enabled
-            if JULIA
-                JULIA_X = X
-                JULIA_Y = Y
-            end
-        end
+        if switch7.enabled != JULIA then
+            CHANGE = true;
+            JULIA = switch7.enabled;
+            if JULIA then
+                JULIA_X = X;
+                JULIA_Y = Y;
+            end;
+        end;
 
-        if CHANGE
-            text1 = text2 = ""
-        end
+        if CHANGE then
+            text1 = text2 = "";
+        end;
 
-        if switch8.enabled
+        if switch8.enabled then
             // Load bookmark
-            X = memory[position]
-            Y = memory[position + 1]
-            ZOOM = memory[position + 2]
-            JULIA = memory[position + 3]
-            JULIA_X = memory[position + 4]
-            JULIA_Y = memory[position + 5]
-            switch7.enabled = JULIA
-            switch8.enabled = false
-            text1 = "\nLoaded from #"
-            text2 = bookmark
-            CHANGE = true
-        end
+            X = memory[position];
+            Y = memory[position + 1];
+            ZOOM = memory[position + 2];
+            JULIA = memory[position + 3];
+            JULIA_X = memory[position + 4];
+            JULIA_Y = memory[position + 5];
+            switch7.enabled = JULIA;
+            switch8.enabled = false;
+            text1 = "\nLoaded from #";
+            text2 = bookmark;
+            CHANGE = true;
+        end;
 
-        if switch9.enabled
+        if switch9.enabled then
             // Store bookmark
-            memory[position] = X
-            memory[position + 1] = Y
-            memory[position + 2] = ZOOM
-            memory[position + 3] = JULIA
-            memory[position + 4] = JULIA_X
-            memory[position + 5] = JULIA_Y
-            switch9.enabled = false
-            text1 = "\nSaved to #"
-            text2 = bookmark
-            update_bookmarks = true
-        end
+            memory[position] = X;
+            memory[position + 1] = Y;
+            memory[position + 2] = ZOOM;
+            memory[position + 3] = JULIA;
+            memory[position + 4] = JULIA_X;
+            memory[position + 5] = JULIA_Y;
+            switch9.enabled = false;
+            text1 = "\nSaved to #";
+            text2 = bookmark;
+            update_bookmarks = true;
+        end;
 
-        for n in first_link ... @links
-            switch = getlink(n)
-            if switch.type == @switch and switch.y == bookmark_y
-                button_x = switch.x
-                if button_x >= palette_x
-                    index = button_x - palette_x
-                    if index == PALETTE
-                        switch.enabled = true
-                    elsif index == palette_clr
-                        switch.enabled = false
-                        palette_clr = -1
-                    elsif switch.enabled
-                        palette_clr = PALETTE
-                        PALETTE = index
-                        CHANGE = true
-                    end
+        for n in first_link ... @links do
+            switch = getlink(n);
+            if switch.type == @switch and switch.y == bookmark_y then
+                button_x = switch.x;
+                if button_x >= palette_x then
+                    index = button_x - palette_x;
+                    if index == PALETTE then
+                        switch.enabled = true;
+                    elsif index == palette_clr then
+                        switch.enabled = false;
+                        palette_clr = -1;
+                    elsif switch.enabled then
+                        palette_clr = PALETTE;
+                        PALETTE = index;
+                        CHANGE = true;
+                    end;
                 else
-                    index = button_x - bookmark_x
-                    if index == bookmark
-                        switch.enabled = true
-                    elsif index == bookmark_clr
-                        switch.enabled = false
-                        bookmark_clr = -1
-                    elsif switch.enabled
-                        bookmark_clr = bookmark
-                        bookmark = index
-                        position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1)
-                        update_bookmarks = true
-                    end
-                end
-            end
-        end
+                    index = button_x - bookmark_x;
+                    if index == bookmark then
+                        switch.enabled = true;
+                    elsif index == bookmark_clr then
+                        switch.enabled = false;
+                        bookmark_clr = -1;
+                    elsif switch.enabled then
+                        bookmark_clr = bookmark;
+                        bookmark = index;
+                        position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
+                        update_bookmarks = true;
+                    end;
+                end;
+            end;
+        end;
 
-        if update_bookmarks
-            println("BOOKMARKS")
-            println("[o] [o] [o] [o] ...")
-            println("      [o] Load")
-            println("      [o] Save")
-            println("-------------------------")
-            printf("Selected bookmark #$bookmark:\n")
-            if memory[position + 3]
-                println("Julia set of Mandelbrot")
-                println("fractal at coordinates")
-                printf("   X: $\n", memory[position + 4])
-                printf("   Y: $\n", memory[position + 5])
+        if update_bookmarks then
+            println($"BOOKMARKS");
+            println($"[o] [o] [o] [o] ...");
+            println($"      [o] Load");
+            println($"      [o] Save");
+            println($"-------------------------");
+            println($"Selected bookmark #$bookmark:");
+            if memory[position + 3] then
+                println($"Julia set of Mandelbrot");
+                println($"fractal at coordinates");
+                println($"   X: $", memory[position + 4]);
+                println($"   Y: $", memory[position + 5]);
             else
-                println("Mandelbrot set")
-            end
-            println("-------------------------")
-            printf("X: $\n", memory[position])
-            printf("Y: $\n", memory[position + 1])
-            printf("Zoom: $\n", memory[position + 2])
-            printflush(message2)
+                println("Mandelbrot set");
+            end;
+            println("-------------------------");
+            println($"X: $", memory[position]);
+            println($"Y: $", memory[position + 1]);
+            println($"Zoom: $", memory[position + 2]);
+            printflush(message2);
 
-            update_bookmarks = false
-        end
+            update_bookmarks = false;
+        end;
 
-        print("Palette #", PALETTE)
-        printflush(message3)
+        print("Palette #", PALETTE);
+        printflush(message3);
 
-        if memory[checking] == 0
-            checking -= 2
-            if checking <= PROCESSORS
-                text0 = FINISHED_TEXT
-            end
-        end
+        if memory[checking] == 0 then
+            checking -= 2;
+            if checking <= PROCESSORS then
+                text0 = FINISHED_TEXT;
+            end;
+        end;
 
-        if CHANGE
-            print("Initializing...")
-            printflush(message1)
+        if CHANGE then
+            print("Initializing...");
+            printflush(message1);
 
             // Sent signal to stop all processors
-            $STOP += 1
+            $STOP += 1;
 
             // Waiting for all processors to actually stop
-            for i = 511; i > PROCESSORS; i -= 2
+            for i = 511; i > PROCESSORS; i -= 2 do
                 do
                     // Mindcode doesn't allow empty loop body
-                    // This assignment is a noop, as it is dead and will be optimized away
-                    CHANGE = false
-                loop while memory[i] > 0
-            end
+                    null;
+                loop while memory[i] > 0;
+            end;
 
-            CHANGE = false
+            CHANGE = false;
 
-            for i in SLOTS ... PROCESSORS
-                memory[i] = 0
-            end
-            color(86, 86, 102, 192)
-            rect(0, 0, 176, 176)
-            drawflush(display1)
-            $X = X
-            $Y = Y
-            $ZOOM = ZOOM
-            $JULIA = JULIA
-            $JULIA_X = JULIA_X
-            $JULIA_Y = JULIA_Y
-            $PALETTE = PALETTE
-            $STATE += 1
+            for i in SLOTS ... PROCESSORS do
+                memory[i] = 0;
+            end;
+            color(86, 86, 102, 192);
+            rect(0, 0, 176, 176);
+            drawflush(display1);
+            $X = X;
+            $Y = Y;
+            $ZOOM = ZOOM;
+            $JULIA = JULIA;
+            $JULIA_X = JULIA_X;
+            $JULIA_Y = JULIA_Y;
+            $PALETTE = PALETTE;
+            $STATE += 1;
 
-            checking = 999
-            text0 = RUNNING_TEXT
-        end
-    end
+            checking = 999;
+            text0 = RUNNING_TEXT;
+        end;
+    end;
 
     inline def handle_move(switch, x, y, z)
-        if switch.enabled
-            CHANGE = true
-            if x != 0
-                X = X + x * SHIFT / ZOOM
-            end
-            if y != 0
-                Y = Y + y * SHIFT / ZOOM
-            end
-            if z != 1
-                ZOOM = ZOOM * z
-            end
-            switch.enabled = false
-        end
-    end
+        if switch.enabled then
+            CHANGE = true;
+            if x != 0 then
+                X = X + x * SHIFT / ZOOM;
+            end;
+            if y != 0 then
+                Y = Y + y * SHIFT / ZOOM;
+            end;
+            if z != 1 then
+                ZOOM = ZOOM * z;
+            end;
+            switch.enabled = false;
+        end;
+    end;
 
     inline def bookmark(memory, position, x, y, zoom)
-        memory[position] = x;       position = position + 1
-        memory[position] = y;       position = position + 1
-        memory[position] = zoom;    position = position + 1
-        memory[position] = false;   position = position + 1
-        position + 2
-    end
+        memory[position] = x;       position = position + 1;
+        memory[position] = y;       position = position + 1;
+        memory[position] = zoom;    position = position + 1;
+        memory[position] = false;   position = position + 1;
+        position += 2;
+    end;
 
     inline def bookmark_julia(memory, position, x, y, zoom, julia_x, julia_y)
-        memory[position] = x;       position = position + 1
-        memory[position] = y;       position = position + 1
-        memory[position] = zoom;    position = position + 1
-        memory[position] = true;    position = position + 1
-        memory[position] = julia_x; position = position + 1
-        memory[position] = julia_y; position = position + 1
-    end
+        memory[position] = x;       position = position + 1;
+        memory[position] = y;       position = position + 1;
+        memory[position] = zoom;    position = position + 1;
+        memory[position] = true;    position = position + 1;
+        memory[position] = julia_x; position = position + 1;
+        memory[position] = julia_y; position = position + 1;
+    end;
     """
 
 compute = """
-    const DISPLAY_SIZE = 176
-    const HALF_SIZE = DISPLAY_SIZE / 2
-    const MAX_DEPTH = 63
-    const SKIP = 17
+    const DISPLAY_SIZE = 176;
+    const HALF_SIZE = DISPLAY_SIZE / 2;
+    const MAX_DEPTH = 63;
+    const SKIP = 17;
 
-    const VARIABLES = MAX_DEPTH + 1
-    const BOOKMARKS = VARIABLES + 16
-    const BOOKMARK_COUNT = 13
-    const BOOKMARK_SIZE = 6
-    const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE
-    const PROCESSORS = SLOTS + DISPLAY_SIZE
+    const VARIABLES = MAX_DEPTH + 1;
+    const BOOKMARKS = VARIABLES + 16;
+    const BOOKMARK_COUNT = 13;
+    const BOOKMARK_SIZE = 6;
+    const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE;
+    const PROCESSORS = SLOTS + DISPLAY_SIZE;
 
-    allocate heap in memory[VARIABLES ... BOOKMARKS]
+    allocate heap in memory[VARIABLES ... BOOKMARKS];
 
-    const ONE_TO_LOG = 1 / log(2)
-    const QUARTER_TO_LOG = 0.25 / log(2)
+    const ONE_TO_LOG = 1 / log(2);
+    const QUARTER_TO_LOG = 0.25 / log(2);
 
-    display = null
-    memory = null
+    display = null;
+    memory = null;
 
-    while display == null || memory == null
-        for n in 0 ... @links
-            block = getlink(n)
+    while display == null || memory == null do
+        for n in 0 ... @links do
+            block = getlink(n);
             case block.type
-                when @large-logic-display   then display = block
-                when @memory-bank           then memory = block
-            end
-        end
-    end
+                when @large-logic-display   then display = block;
+                when @memory-bank           then memory = block;
+            end;
+        end;
+    end;
 
-    control = 0
+    control = 0;
 
-    ID = @this.x + 10000 * @this.y
+    ID = @this.x + 10000 * @this.y;
 
-    PROC_ID = PROCESSORS
-    PROC_STATE = PROCESSORS + 1
+    PROC_ID = PROCESSORS;
+    PROC_STATE = PROCESSORS + 1;
 
-    while true
+    while true do
         // Waiting for state to change
-        while control == $STATE
-            storeState(memory, 0)
-        end
+        while control == $STATE do
+            storeState(memory, 0);
+        end;
 
-        control = $STATE
-        stop = $STOP
-        X = $X
-        Y = $Y
-        ZOOM = $ZOOM
-        JULIA = $JULIA
-        JULIA_X = $JULIA_X
-        JULIA_Y = $JULIA_Y
-        PALETTE = $PALETTE
+        control = $STATE;
+        stop = $STOP;
+        X = $X;
+        Y = $Y;
+        ZOOM = $ZOOM;
+        JULIA = $JULIA;
+        JULIA_X = $JULIA_X;
+        JULIA_Y = $JULIA_Y;
+        PALETTE = $PALETTE;
 
-        SMOOTH = PALETTE > 1
+        SMOOTH = PALETTE > 1;
 
-        storeState(memory, control)
+        storeState(memory, control);
 
-        OFFSET_X = -HALF_SIZE / ZOOM + X
-        OFFSET_Y = -HALF_SIZE / ZOOM + Y
+        OFFSET_X = -HALF_SIZE / ZOOM + X;
+        OFFSET_Y = -HALF_SIZE / ZOOM + Y;
 
-        line = 8
-        increment = 8
-        next_increment = 16
-        wait(rand(0.1))
+        line = 8;
+        increment = 8;
+        next_increment = 16;
+        wait(rand(0.1));
 
     MasterLoop:
-        for lines in 0 ... DISPLAY_SIZE
+        for lines in 0 ... DISPLAY_SIZE do
             // Find a line
-            x = (SKIP * line) % DISPLAY_SIZE
-            position = x + SLOTS
+            x = (SKIP * line) % DISPLAY_SIZE;
+            position = x + SLOTS;
 
-            if memory[position] == 0
-                memory[position] = ID
+            if memory[position] == 0 then
+                memory[position] = ID;
 
-                for y in 0 ... DISPLAY_SIZE
-                    iterations = compute(x, y)
-                    if SMOOTH
-                        if iterations == MAX_DEPTH
-                            color(0, 0, 0, 255)
+                for y in 0 ... DISPLAY_SIZE do
+                    iterations = compute(x, y);
+                    if SMOOTH then
+                        if iterations == MAX_DEPTH then
+                            color(0, 0, 0, 255);
                         else
                             case PALETTE
                                 when 2 then
-                                    r = 255 - 7 * abs(32 - iterations)
-                                    g = 240 - 6 * abs(iterations - 32)
-                                    b = 120 + 4 * abs(32 - iterations)
-                                    color(r, g, b, 255)
+                                    r = 255 - 7 * abs(32 - iterations);
+                                    g = 240 - 6 * abs(iterations - 32);
+                                    b = 120 + 4 * abs(32 - iterations);
+                                    color(r, g, b, 255);
 
                                 when 3 then
-                                    r = 255 * sin(iterations / MAX_DEPTH * 360)
-                                    g = 255 * cos(iterations / MAX_DEPTH * 360)
-                                    b = 100 + 4 * abs(iterations - 32)
-                                    color(r, g, b, 255)
+                                    r = 255 * sin(iterations / MAX_DEPTH * 360);
+                                    g = 255 * cos(iterations / MAX_DEPTH * 360);
+                                    b = 100 + 4 * abs(iterations - 32);
+                                    color(r, g, b, 255);
 
                                 when 4 then
-                                    r = 4 * iterations
-                                    g = 96 + 1.5 * iterations
-                                    color(r, g, 0, 255)
+                                    r = 4 * iterations;
+                                    g = 96 + 1.5 * iterations;
+                                    color(r, g, 0, 255);
 
                                 else
-                                    r = 255 - 4 * iterations
-                                    color(r, r, 0, 255)
-                            end
-                        end
+                                    r = 255 - 4 * iterations;
+                                    color(r, r, 0, 255);
+                            end;
+                        end;
                     else
-                        clr = memory[iterations]
-                        col(clr)
-                    end
-                    rect(x, y, 1, 1)
-                    drawflush(display)
+                        clr = memory[iterations];
+                        col(clr);
+                    end;
+                    rect(x, y, 1, 1);
+                    drawflush(display);
 
-                    if memory[position] != ID
-                        break   // Another processor took over this line
-                    end
+                    if memory[position] != ID then
+                        break;   // Another processor took over this line
+                    end;
 
-                    if stop != $STOP
-                        break MasterLoop        // Break is signalled
-                    end
-                end
-            end
+                    if stop != $STOP then
+                        break MasterLoop;        // Break is signalled
+                    end;
+                end;
+            end;
 
-            line = line + increment
-            if line > DISPLAY_SIZE
-                next_increment /= 2
-                increment = next_increment
-                line = increment / 2
-            end
-        end
-    end
+            line = line + increment;
+            if line > DISPLAY_SIZE then
+                next_increment /= 2;
+                increment = next_increment;
+                line = increment / 2;
+            end;
+        end;
+    end;
 
     def compute(x, y)
-        zx = x / ZOOM + OFFSET_X
-        zy = y / ZOOM + OFFSET_Y
+        zx = x / ZOOM + OFFSET_X;
+        zy = y / ZOOM + OFFSET_Y;
 
-        if JULIA
-            cx = JULIA_X
-            cy = JULIA_Y
+        if JULIA then
+            cx = JULIA_X;
+            cy = JULIA_Y;
         else
-            cx = x / ZOOM + OFFSET_X
-            cy = y / ZOOM + OFFSET_Y
+            cx = x / ZOOM + OFFSET_X;
+            cy = y / ZOOM + OFFSET_Y;
 
             // Cardioid test
-            p = len(cx - 0.25, cy)
-            if cx <= p - 2 * p * p + 0.25
-                return MAX_DEPTH
-            end
+            p = len(cx - 0.25, cy);
+            if cx <= p - 2 * p * p + 0.25 then
+                return MAX_DEPTH;
+            end;
 
             // Bulb test
-            if len(cx + 1, cy) <= 0.25
-                return MAX_DEPTH
-            end
-        end
+            if len(cx + 1, cy) <= 0.25 then
+                return MAX_DEPTH;
+            end;
+        end;
 
-        for i in 0 ... MAX_DEPTH
-            x1 = zx
-            y1 = zy
-            zx = x1 * x1 - y1 * y1 + cx
-            zy = 2 * x1 * y1 + cy
-            dist = len(zx, zy)
-            if dist >= 64
-                break
-            end
-        end
+        for i in 0 ... MAX_DEPTH do
+            x1 = zx;
+            y1 = zy;
+            zx = x1 * x1 - y1 * y1 + cx;
+            zy = 2 * x1 * y1 + cy;
+            dist = len(zx, zy);
+            if dist >= 64 then
+                break;
+            end;
+        end;
 
-        if i < SMOOTH * MAX_DEPTH
+        if i < SMOOTH * MAX_DEPTH then
             correction = 4 - log(log(dist) * QUARTER_TO_LOG) * ONE_TO_LOG;
-            i += correction
-        end
+            i += correction;
+        end;
 
-        return i
-    end
+        return i;
+    end;
 
     def storeState(memory, state)
-        while PROC_STATE < 512
-            if memory[PROC_ID] == ID
-                memory[PROC_STATE] = state
-                break
-            elsif memory[PROC_ID] == 0
-                memory[PROC_ID] = ID
-                memory[PROC_STATE] = state
-                break
+        while PROC_STATE < 512 do
+            if memory[PROC_ID] == ID then
+                memory[PROC_STATE] = state;
+                break;
+            elsif memory[PROC_ID] == 0 then
+                memory[PROC_ID] = ID;
+                memory[PROC_STATE] = state;
+                break;
             else
-                PROC_ID += 2
-                PROC_STATE += 2
-            end
-        end
-    end
+                PROC_ID += 2;
+                PROC_STATE += 2;
+            end;
+        end;
+    end;
     """

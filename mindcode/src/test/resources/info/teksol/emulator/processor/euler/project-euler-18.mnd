@@ -6,8 +6,8 @@ expect(1074);
 actual(r(0, 0));
 
 def run()
-    for row = LENGTH - 2; row >= 0; row -= 1
-        for col = row + 1; col >= 0; col -= 1
+    for row = LENGTH - 2; row >= 0; row -= 1 do
+        for col = row + 1; col >= 0; col -= 1 do
             w(row, col, r(row, col) + max(r(row + 1, col), r(row + 1, col + 1)));
         end;
     end;

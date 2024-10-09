@@ -14,7 +14,7 @@ param UNIT = @poly;
 // Find a unit if we don't have one
 if @unit.dead !== 0 or @unit.controller != @this then
     findUnit();
-end
+end;
 
 if ulocate(damaged, dmgx, dmgy) then
     println($"Found damaged block at $dmgx, $dmgy");

@@ -1,4 +1,4 @@
-   149 instructions before optimizations.
+   152 instructions before optimizations.
     14 instructions eliminated by Temp Variables Elimination.
     30 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (3 iterations).
@@ -6,7 +6,7 @@
     10 instructions eliminated by Single Step Elimination (4 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
-     2 instructions eliminated by Print Merging.
+     5 instructions eliminated by Print Merging.
     71 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
@@ -698,29 +698,35 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   112 printflush message1
-   113 label __label1
-   114 jump __label0 always
+   115 printflush message1
+   116 label __label1
+   117 jump __label0 always
 -    * label __label2
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
    100 label __label40
    101 print "Remote vault [gold]#"
    102 print LINK_ID
--    * print "[]\n"
+-    * print "[]"
+-    * print "\n"
 -    * print "Queries serviced: [green]"
 +  103 print "[]\nQueries serviced: [green]"
    104 print SERVICED
--    * print "[]\n"
+-    * print "[]"
+-    * print "\n"
    105 op sub __tmp58 @time start
    106 op floor __tmp59 __tmp58
 -    * print "[lightgray]Loop time: "
 +  107 print "[]\n[lightgray]Loop time: "
    108 print __tmp59
-   109 print " ms"
+-    * print " ms"
+-    * print "\n"
++  109 print " ms\n"
    110 printflush message1
+   111 label __label1
+   112 jump __label0 always
 
 Final code before resolving virtual instructions:
 
@@ -803,6 +809,6 @@ op sub __tmp58 @time start
 op floor __tmp59 __tmp58 0
 print "[]\n[lightgray]Loop time: "
 print __tmp59
-print " ms"
+print " ms\n"
 printflush message1
 jump __label0 always 0 0

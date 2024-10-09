@@ -12,9 +12,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesPrintln() {
         assertCompilesTo("""
-                        println()
-                        println(10)
-                        println("foo")
+                        println();
+                        println(10);
+                        println("foo");
                         """,
                 createInstruction(PRINT, q("\n")),
                 createInstruction(PRINT, "10"),
@@ -28,8 +28,8 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void handlesEmptyPrintf() {
         assertCompilesTo("""
-                        print($"")
-                        print($"foo")
+                        print($"");
+                        print($"foo");
                         """,
                 createInstruction(PRINT, q("foo")),
                 createInstruction(END)
@@ -39,7 +39,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesPositionalParameters() {
         assertCompilesTo("""
-                        print($"x: $, y: $, z: $", x, y, 10)
+                        print($"x: $, y: $, z: $", x, y, 10);
                         """,
                 createInstruction(PRINT, q("x: ")),
                 createInstruction(PRINT, "x"),
@@ -54,7 +54,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesEscapedDollarSign() {
         assertCompilesTo("""
-                        print($"Amount: \\$$", 100)
+                        print($"Amount: \\$$", 100);
                         """,
                 createInstruction(PRINT, q("Amount: $")),
                 createInstruction(PRINT, "100"),
@@ -66,7 +66,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printFmtCatchesTooFewArguments() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        print($"Text: $")
+                        print($"Text: $");
                         """
                 )
         );
@@ -76,7 +76,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printFmtCatchesTooManyArguments() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        print($"Text: $", 10, 20)
+                        print($"Text: $", 10, 20);
                         """
                 )
         );
@@ -85,8 +85,8 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesVariableReference() {
         assertCompilesTo("""
-                        x = 10
-                        print($"x=$x")
+                        x = 10;
+                        print($"x=$x");
                         """,
                 createInstruction(SET, "x", "10"),
                 createInstruction(PRINT, q("x=")),
@@ -100,9 +100,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printFmtHandlesLocalVariableReference() {
         assertCompilesTo("""
                         def foo(x)
-                            print($"x=$x")
-                        end
-                        foo(5)
+                            print($"x=$x");
+                        end;
+                        foo(5);
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -118,10 +118,10 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printFmtHandlesGlobalVariableReference() {
         assertCompilesTo("""
                         def foo()
-                            print($"X=$X")
-                        end
-                        X = 10
-                        foo()
+                            print($"X=$X");
+                        end;
+                        X = 10;
+                        foo();
                         """,
                 createInstruction(SET, "X", "10"),
                 createInstruction(LABEL, var(1000)),
@@ -136,7 +136,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesEnclosedVariableReference() {
         assertCompilesTo("""
-                        print($"Time: ${time}sec")
+                        print($"Time: ${time}sec");
                         """,
                 createInstruction(PRINT, q("Time: ")),
                 createInstruction(PRINT, "time"),
@@ -148,7 +148,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesSequentialVariableReference() {
         assertCompilesTo("""
-                        print($"Text: ${x}$y")
+                        print($"Text: ${x}$y");
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -160,7 +160,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesVariableReferenceThenPositionalArgument() {
         assertCompilesTo("""
-                        print($"Text: ${x}$", y)
+                        print($"Text: ${x}$", y);
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -172,7 +172,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printFmtHandlesAdjacentPositionalArguments() {
         assertCompilesTo("""
-                        print($"Text: ${}${}", x, y)
+                        print($"Text: ${}${}", x, y);
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -184,8 +184,8 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesRemarks() {
         assertCompilesTo("""
-                        remark("foo")
-                        remark("bar")
+                        remark("foo");
+                        remark("bar");
                         """,
                 createInstruction(REMARK, q("foo")),
                 createInstruction(REMARK, q("bar")),

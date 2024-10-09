@@ -1,12 +1,12 @@
 S0 = S1 = S2 = S3 = S4 = S5 = S6 = S7 = S8 = S9 = 0;
 
-for i in 1 .. 100
+for i in 1 .. 100 do
    processNumber(i);
 end;
 print(S0, S1, S2, S3, S4, S5, S6, S7, S8, S9);
 
 def processNumber(n)
-    while n > 0
+    while n > 0 do
         processDigit(n % 10);
         n \= 10;
     end;

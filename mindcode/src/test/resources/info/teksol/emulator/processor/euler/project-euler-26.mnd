@@ -1,9 +1,9 @@
 const LIMIT = 100;
 maxlen = 0;
 maxnum = 0;
-for d in 2 .. LIMIT
+for d in 2 .. LIMIT do
     len = getRepeatLength(d);
-    if len > maxlen
+    if len > maxlen then
         maxlen = len;
         maxnum = d;
     end;
@@ -14,16 +14,16 @@ actual(maxnum);
 
 def getRepeatLength(d)
     n = d;
-    while n % 5 == 0 n /= 5; end;
-    while n % 2 == 0 n /= 2; end;
-    if n < 2
+    while n % 5 == 0 do n /= 5; end;
+    while n % 2 == 0 do n /= 2; end;
+    if n < 2 then
         return 0;
     end;
 
     power = 1;
-    for i in 1 ... LIMIT
+    for i in 1 ... LIMIT do
         power = power * 10 % n;
-        if power == 1
+        if power == 1 then
             return i;
         end;
     end;

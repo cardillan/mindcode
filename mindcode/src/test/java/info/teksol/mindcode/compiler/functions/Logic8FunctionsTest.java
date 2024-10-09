@@ -131,7 +131,7 @@ public class Logic8FunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesLocaleprint() {
         assertCompilesTo("""
-                        localeprint(property)
+                        localeprint(property);
                         """,
                 createInstruction(LOCALEPRINT, "property"),
                 createInstruction(END)

@@ -1,7 +1,7 @@
 allocate stack in bank1[0...512];
 
 def foo(n)
-    if n > 0
+    if n > 0 then
         foo(n - 1);
     end;
 end;

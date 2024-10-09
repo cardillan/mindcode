@@ -21,9 +21,9 @@ class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<ConditionalJu
     @Test
     void normalizesConditionalJump() {
         assertCompilesTo("""
-                        while false
-                            print("Here")
-                        end
+                        while false do
+                            print("Here");
+                        end;
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "always"),
@@ -37,9 +37,9 @@ class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<ConditionalJu
     @Test
     void removesAlwaysFalseJump() {
         assertCompilesTo("""
-                        while true
-                            1
-                        end
+                        while true do
+                            1;
+                        end;
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1000), "always"),

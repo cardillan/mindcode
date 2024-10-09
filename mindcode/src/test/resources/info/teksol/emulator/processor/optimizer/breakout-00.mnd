@@ -28,7 +28,7 @@ const ballSizeMinus1 = ballSize - 1;
 
 color(255, 255, 255, 255);
 
-while true
+while true do
     paddleWidth = 40;
     paddleX = size / 2 - paddleWidth / 2;
 
@@ -38,20 +38,20 @@ while true
     ballVY = rand(ballMaxStartSpeed * 2) - ballMaxStartSpeed;
 
     brickCount = brickTotal;
-    for i in 0 ... brickTotal
+    for i in 0 ... brickTotal do
         BRICKS[i] = 1;
     end;
 
-    while true
+    while true do
         clear(0, 0, 0);
         rect(paddleX, paddleY, paddleWidth, paddleHeight);
         rect(ballX, ballY, ballSize, ballSize);
 
-        if PADDLECONTROLLER.enabled
-            if paddleX < size - paddleWidth
+        if PADDLECONTROLLER.enabled then
+            if paddleX < size - paddleWidth then
                 paddleX += paddleSpeed;
             end;
-        elsif paddleX > 0
+        elsif paddleX > 0 then
             paddleX -= paddleSpeed;
         end;
 
@@ -63,15 +63,15 @@ while true
         ballYEnd = ballY + ballSize;
 
         // handle ball-wall collision
-        if ballX < 0 || ballXEnd > size
+        if ballX < 0 || ballXEnd > size then
             ballVX *= -1;
         end;
-        if ballYEnd > size
+        if ballYEnd > size then
             ballVY *= -1;
         end;
 
         // handle ball-paddle collision
-        if ballXEnd > paddleX && ballX < paddleX + paddleWidth && ballYEnd > paddleY && ballY < paddleY + paddleHeight
+        if ballXEnd > paddleX && ballX < paddleX + paddleWidth && ballYEnd > paddleY && ballY < paddleY + paddleHeight then
             ballVY *= -1.1;
             ballVX += (ballX + ballSize / 2 - paddleX + paddleWidth / 2) / 10;
             paddleWidth -= 1;
@@ -79,27 +79,27 @@ while true
 
         // render BRICKS and handle ball-brick collision
         brickPtr = 0;
-        for y = brickStartY; y > brickEndY; y -= brickHeight
-            for x = 1; x < size; x += brickWidth
+        for y = brickStartY; y > brickEndY; y -= brickHeight do
+            for x = 1; x < size; x += brickWidth do
                 // check if brick exists
-                if BRICKS[brickPtr]
+                if BRICKS[brickPtr] then
                     // render the brick
                     rect(x, y, brickWidth - 1, brickHeight - 1);
 
                     // detect collision
-                    if (
+                    if
                         ballXEnd > x &&
                         ballX < x + brickWidth &&
                         ballYEnd > y &&
                         ballY < y + brickHeight
-                    )
+                     then
                         BRICKS[brickPtr] = 0;
                         brickCount -= 1;
                         brickWidthPlusBallSizeMinus1 = brickWidth + ballSizeMinus1;
-                        if (
+                        if
                             ballX > x - ballSizeMinus1 &&
                             ballX < x + brickWidthPlusBallSizeMinus1
-                        )
+                         then
                             ballVY *= -1;
                         else
                             ballVX *= -1;
@@ -111,7 +111,7 @@ while true
         end;
 
         // check game over
-        if ballY < 0 || brickCount == 0
+        if ballY < 0 || brickCount == 0 then
             break;
         end;
 

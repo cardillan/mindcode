@@ -14,13 +14,13 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 ip,
                                 profile,
                                 generateInstructions("""
-                                        target = uradar(enemy, ground, any, health, MIN_TO_MAX)
-                                        if target != null
-                                            approach(target.x, target.y, 10)
-                                            if within(target.x, target.y, 10)
-                                                target(target.x, target.y, SHOOT)
-                                            end
-                                        end
+                                        target = uradar(enemy, ground, any, health, MIN_TO_MAX);
+                                        if target != null then
+                                            approach(target.x, target.y, 10);
+                                            if within(target.x, target.y, 10) then
+                                                target(target.x, target.y, SHOOT);
+                                            end;
+                                        end;
                                         """
                                 ).instructions()
                         )
@@ -36,10 +36,10 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 ip,
                                 profile,
                                 generateInstructions("""
-                                        ulocate(ore, @surge-alloy, outx, outy)
-                                        ulocate(building, core, ENEMY, outx, outy, outbuilding)
-                                        ulocate(spawn, outx, outy, outbuilding)
-                                        ulocate(damaged, outx, outy, outbuilding)
+                                        ulocate(ore, @surge-alloy, outx, outy);
+                                        ulocate(building, core, ENEMY, outx, outy, outbuilding);
+                                        ulocate(spawn, outx, outy, outbuilding);
+                                        ulocate(damaged, outx, outy, outbuilding);
                                         """
                                 ).instructions()
                         )
@@ -57,7 +57,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 compiler.processor,
                                 compiler.profile,
                                 generateInstructions(compiler,
-                                        "itemDrop(found, @silicon, @unit.totalItems)"
+                                        "itemDrop(found, @silicon, @unit.totalItems);"
                                 ).instructions()
                         )
                 )
@@ -73,13 +73,13 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 compiler.processor,
                                 compiler.profile,
                                 generateInstructions("""
-                                        leader = getlink(0)
-                                        count = 1
-                                        while count < @links
-                                            turret = getlink(count)
-                                            turret.shoot(leader.shootX, leader.shootY, leader.shooting)
-                                            count = count + 1
-                                        end
+                                        leader = getlink(0);
+                                        count = 1;
+                                        while count < @links do
+                                            turret = getlink(count);
+                                            turret.shoot(leader.shootX, leader.shootY, leader.shooting);
+                                            count = count + 1;
+                                        end;
                                         """
                                 ).instructions()
                         )
@@ -106,7 +106,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 compiler.processor,
                                 compiler.profile,
                                 generateInstructions("""
-                                        triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)
+                                        triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20);
                                         """).instructions()
                         )
                 )
@@ -169,27 +169,27 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 compiler.processor,
                                 compiler.profile,
                                 generateInstructions("""
-                                        STORAGE = nucleus1
-                                        MSG = message1
-                                        capacity = STORAGE.itemCapacity
+                                        STORAGE = nucleus1;
+                                        MSG = message1;
+                                        capacity = STORAGE.itemCapacity;
 
-                                        print("capacity: ", capacity, "\\n")
+                                        print("capacity: ", capacity, "\\n");
 
-                                        for n = 0 ; n < @links ; n += 1
-                                            building = getlink(n)
-                                            type = building.type
+                                        for n = 0 ; n < @links ; n += 1 do
+                                            building = getlink(n);
+                                            type = building.type;
                                             if type == @conveyor
                                                     || type == @titanium-conveyor
-                                                    || type == @plastanium-conveyor
-                                                resource = building.firstItem
-                                                if resource != null
-                                                    level = nucleus1.resource
-                                                    building.enabled = level < capacity
-                                                    print("\\n", n, ": ", resource, " @ ", level)
-                                                end
-                                            end
-                                        end
-                                        printflush(MSG)
+                                                    || type == @plastanium-conveyor then
+                                                resource = building.firstItem;
+                                                if resource != null then
+                                                    level = nucleus1.resource;
+                                                    building.enabled = level < capacity;
+                                                    print("\\n", n, ": ", resource, " @ ", level);
+                                                end;
+                                            end;
+                                        end;
+                                        printflush(MSG);
                                         """
                                 ).instructions()
                         )

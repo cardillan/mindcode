@@ -33,9 +33,9 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             }
                         ]""",
                 printLinearized("""
-                        print(a)
-                        print(b)
-                        print(c)
+                        print(a);
+                        print(b);
+                        print(c);
                         """
                 )
         );
@@ -61,9 +61,9 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             }
                         }""",
                 printNested("""
-                        print(a)
-                        print(b)
-                        print(c)
+                        print(a);
+                        print(b);
+                        print(c);
                         """
                 )
         );
@@ -121,15 +121,15 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             }
                         ]""",
                 printLinearized("""
-                        x = 10
-                        y = 20 + 30
-                        z = ~y
-                        b = true
+                        x = 10;
+                        y = 20 + 30;
+                        z = ~y;
+                        b = true;
                         case x
-                          when 0 "zero"
-                          when y, z "y or z"
-                          else "other"
-                        end
+                          when 0 then "zero";
+                          when y, z then "y or z";
+                          else "other";
+                        end;
                         """
                 )
         );
@@ -168,13 +168,13 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             }
                         ]""",
                 printLinearized("""
-                        while true
-                          print("In loop")
-                          if @unit.dead === 0
-                            break
-                          end
-                        end
-                        print("Out of loop")
+                        while true do
+                          print("In loop");
+                          if @unit.dead === 0 then
+                            break;
+                          end;
+                        end;
+                        print("Out of loop");
                         """
                 )
         );
@@ -241,22 +241,22 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             }
                         ]""",
                 printLinearized("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
 
                         def fib(n)
-                          if n <= 0
-                            0
+                          if n <= 0 then
+                            0;
                           else
                             case n
-                            when 1
-                              1
+                            when 1 then
+                              1;
                             else
-                              fib(n - 1) + fib(n - 2)
-                            end
-                          end
-                        end
+                              fib(n - 1) + fib(n - 2);
+                            end;
+                          end;
+                        end;
 
-                        print(fib(5))
+                        print(fib(5));
                         """
                 )
         );

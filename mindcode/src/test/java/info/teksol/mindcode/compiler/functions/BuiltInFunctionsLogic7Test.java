@@ -18,9 +18,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void generatesPrintln() {
         assertCompilesTo("""
-                        println()
-                        println(10)
-                        println("foo")
+                        println();
+                        println(10);
+                        println("foo");
                         """,
                 createInstruction(PRINT, q("\n")),
                 createInstruction(PRINT, "10"),
@@ -34,8 +34,8 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void handlesEmptyPrintf() {
         assertCompilesTo("""
-                        printf("")
-                        printf("foo")
+                        printf("");
+                        printf("foo");
                         """,
                 createInstruction(PRINT, q("foo")),
                 createInstruction(END)
@@ -45,7 +45,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesPositionalParameters() {
         assertCompilesTo("""
-                        printf("x: $, y: $, z: $", x, y, 10)
+                        printf("x: $, y: $, z: $", x, y, 10);
                         """,
                 createInstruction(PRINT, q("x: ")),
                 createInstruction(PRINT, "x"),
@@ -60,7 +60,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesEscapedDollarSign() {
         assertCompilesTo("""
-                        printf("Amount: \\$$", 100)
+                        printf("Amount: \\$$", 100);
                         """,
                 createInstruction(PRINT, q("Amount: $")),
                 createInstruction(PRINT, "100"),
@@ -72,7 +72,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     void printfCatchesTooFewArguments() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        printf("Text: $")
+                        printf("Text: $");
                         """
                 )
         );
@@ -82,7 +82,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     void printfCatchesTooManyArguments() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        printf("Text: $", 10, 20)
+                        printf("Text: $", 10, 20);
                         """
                 )
         );
@@ -91,8 +91,8 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesVariableReference() {
         assertCompilesTo("""
-                        x = 10
-                        printf("x=$x")
+                        x = 10;
+                        printf("x=$x");
                         """,
                 createInstruction(SET, "x", "10"),
                 createInstruction(PRINT, q("x=")),
@@ -106,9 +106,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     void printfHandlesLocalVariableReference() {
         assertCompilesTo("""
                         def foo(x)
-                            printf("x=$x")
-                        end
-                        foo(5)
+                            printf("x=$x");
+                        end;
+                        foo(5);
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -124,10 +124,10 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     void printfHandlesGlobalVariableReference() {
         assertCompilesTo("""
                         def foo()
-                            printf("X=$X")
-                        end
-                        X = 10
-                        foo()
+                            printf("X=$X");
+                        end;
+                        X = 10;
+                        foo();
                         """,
                 createInstruction(SET, "X", "10"),
                 createInstruction(LABEL, var(1000)),
@@ -142,7 +142,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesEnclosedVariableReference() {
         assertCompilesTo("""
-                        printf("Time: ${time}sec")
+                        printf("Time: ${time}sec");
                         """,
                 createInstruction(PRINT, q("Time: ")),
                 createInstruction(PRINT, "time"),
@@ -154,7 +154,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesSequentialVariableReference() {
         assertCompilesTo("""
-                        printf("Text: ${x}$y")
+                        printf("Text: ${x}$y");
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -166,7 +166,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesVariableReferenceThenPositionalArgument() {
         assertCompilesTo("""
-                        printf("Text: ${x}$", y)
+                        printf("Text: ${x}$", y);
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -178,7 +178,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfHandlesAdjacentPositionalArguments() {
         assertCompilesTo("""
-                        printf("Text: ${}${}", x, y)
+                        printf("Text: ${}${}", x, y);
                         """,
                 createInstruction(PRINT, q("Text: ")),
                 createInstruction(PRINT, "x"),
@@ -190,8 +190,8 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void generatesRemarks() {
         assertCompilesTo("""
-                        remark("foo")
-                        remark("bar")
+                        remark("foo");
+                        remark("bar");
                         """,
                 createInstruction(REMARK, q("foo")),
                 createInstruction(REMARK, q("bar")),

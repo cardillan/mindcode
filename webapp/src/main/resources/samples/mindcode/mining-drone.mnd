@@ -8,7 +8,7 @@ param PATCH_Y = 17;
 // by a player or processor (@unit.controlled == 0)
 do
     print("Searching available unit...");
-	printflush(message1);
+    printflush(message1);
     ubind(@poly);
 loop while (@unit.dead !== 0) or (@unit.controlled != 0);
 
@@ -20,18 +20,18 @@ flag(rand(1000));
 // Mine until the unit is lost or killed
 // Then the program restarts, acquiring another unit
 while (@unit.controller == @this) and (@unit.dead === 0) do
-	if @unit.totalItems < @unit.itemCapacity then
-		println("State: mining");
-		approach(PATCH_X, PATCH_Y, 3);
-		mine(PATCH_X, PATCH_Y);
-	else
-		println("State: dropping");
-		approach(CONTAINER.x, CONTAINER.y, 3);
-		itemDrop(CONTAINER, @unit.totalItems);
-	end;
+    if @unit.totalItems < @unit.itemCapacity then
+        println("State: mining");
+        approach(PATCH_X, PATCH_Y, 3);
+        mine(PATCH_X, PATCH_Y);
+    else
+        println("State: dropping");
+        approach(CONTAINER.x, CONTAINER.y, 3);
+        itemDrop(CONTAINER, @unit.totalItems);
+    end;
 
-	println("Unit capacity: ", @unit.itemCapacity);
-	println("Total items: ", @unit.totalItems);
-	println("First item: ", @unit.firstItem);
-	printflush(message1);
+    println("Unit capacity: ", @unit.itemCapacity);
+    println("Total items: ", @unit.totalItems);
+    println("First item: ", @unit.firstItem);
+    printflush(message1);
 end;

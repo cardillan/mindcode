@@ -1,5 +1,5 @@
 noinline def d(n) n; end;
-for i in d(1) .. d(10)
+for i in d(1) .. d(10) do
     str = case i
         when d(1) then "A";
         when d(2), d(3), 4 then "B";

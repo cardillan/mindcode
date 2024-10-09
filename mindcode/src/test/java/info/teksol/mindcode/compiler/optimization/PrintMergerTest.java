@@ -29,8 +29,8 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void mergesTwoPrints() {
         assertCompilesTo("""
-                        print("a")
-                        print("b")
+                        print("a");
+                        print("b");
                         """,
                 createInstruction(PRINT, "\"ab\""),
                 createInstruction(END)
@@ -40,9 +40,9 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void mergesThreePrints() {
         assertCompilesTo("""
-                        print("a")
-                        print("b")
-                        print("c")
+                        print("a");
+                        print("b");
+                        print("c");
                         """,
                 createInstruction(PRINT, "\"abc\""),
                 createInstruction(END)
@@ -72,10 +72,10 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void handlesInterleavedPrints() {
         assertCompilesTo("""
-                         print("a")
-                         print(x)
-                         print("c")
-                         print("d")
+                         print("a");
+                         print(x);
+                         print("c");
+                         print("d");
                         """,
                 createInstruction(PRINT, "\"a\""),
                 createInstruction(PRINT, "x"),
@@ -87,11 +87,11 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void skipsJumps() {
         assertCompilesTo("""
-                        print("a")
-                        if x
-                          print(x)
-                        end
-                        print("b")
+                        print("a");
+                        if x then
+                          print(x);
+                        end;
+                        print("b");
                         """,
                 createInstruction(PRINT, "\"a\""),
                 createInstruction(JUMP, var(1000), "equal", "x", "false"),
@@ -109,8 +109,8 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void mergesAcrossInstructions() {
         assertCompilesTo("""
-                        println("Rate: ", rate, " items/sec")
-                        println("Elapsed: ", @time - start, " ms")
+                        println("Rate: ", rate, " items/sec");
+                        println("Elapsed: ", @time - start, " ms");
                         """,
                 createInstruction(PRINT, "\"Rate: \""),
                 createInstruction(PRINT, "rate"),
@@ -126,8 +126,8 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void mergesRemarks() {
         assertCompilesTo("""
-                        remark("Processing: ${}", @mono); 
-                        remark("bar"); 
+                        remark("Processing: ${}", @mono);
+                        remark("bar");
                         """,
                 createInstruction(REMARK, q("Processing: mono")),
                 createInstruction(REMARK, q("bar")),

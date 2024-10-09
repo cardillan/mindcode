@@ -1,11 +1,11 @@
 const LIMIT = 100;
 max = 0;
 
-for i in 10 ... LIMIT
-    for j in i ... LIMIT
+for i in 10 ... LIMIT do
+    for j in i ... LIMIT do
         num = i * j;
-        if num > max
-            if num == revert(num)
+        if num > max then
+            if num == revert(num) then
                 max = num;
             end;
         end;
@@ -17,7 +17,7 @@ actual(max);
 
 def revert(num)
     res = 0;
-    while num > 0
+    while num > 0 do
         res = 10 * res + num % 10;
         num \= 10;
     end;

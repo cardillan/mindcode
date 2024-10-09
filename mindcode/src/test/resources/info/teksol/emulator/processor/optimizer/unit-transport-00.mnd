@@ -32,8 +32,8 @@ CONTAINER_INDEX = CORE_X = CORE_Y = ITEM = ITEM_ICON = STATE_LIMIT = null;
 //  SETTINGS LOAD/SAVE
 /////////////////////////////////////////////////////////
 MESSAGE = "";
-if cell1 != null
-    if cell1[0] == 2
+if cell1 != null then
+    if cell1[0] == 2 then
         // Restore
         LINK_ID = cell1[1];
         AUTO_ALLOCATION = cell1[2];
@@ -96,7 +96,7 @@ DEC_MAX                 = -1;                       // Max decrease in one loop
 //  Used when processor resets or buildings change
 /////////////////////////////////////////////////////////
 ubind(UNIT);
-while @unit == null
+while @unit == null do
     print($"[salmon]No unit of type $UNIT found.");
     printflush(message1);
     ubind(UNIT);
@@ -106,8 +106,8 @@ SPEED_SEC = @unit.speed / 10;
 SPEED = @unit.speed / 1000;                          // Unit speed in tiles/ms
 TARGET = 0;
 repeat = true;
-while repeat
-    if @unit.controller == @this
+while repeat do
+    if @unit.controller == @this then
         state = @unit.flag;
         // Don't count S_DISCARD units as active
         TARGET += (state >= S_FIRST) and (state < S_LAST);
@@ -125,11 +125,11 @@ first_unit = null;
 
 //  LOCAL CONTAINER INITIALIZATION
 /////////////////////////////////////////////////////////
-while true
+while true do
     CONTAINER = null;
     DROP_TARGET = null;
     n = @links;
-    while n > 0
+    while n > 0 do
         n = n - 1;
         block = getlink(n);
         case block.type
@@ -139,7 +139,7 @@ while true
                 CONTAINER_INDEX = n;
         end;
     end;
-    if CONTAINER == null
+    if CONTAINER == null then
         print("[salmon]No vault or container.");
         printflush(message1);
     else
@@ -151,12 +151,12 @@ end;
 //  Includes locating remote vault
 /////////////////////////////////////////////////////////
 CORE = null;
-if LINK_ID == 0
-    while CORE == null
+if LINK_ID == 0 then
+    while CORE == null do
         print("[green]Locating core...");
         printflush(message1);
         ubind(UNIT);
-        if @unit.controlled == 0
+        if @unit.controlled == 0 then
             CORE = ulocate(building, core, false, CORE_X, CORE_Y);
             flag(S_UNUSED);
         end;
@@ -166,28 +166,28 @@ else
     printflush(message2);
     print($"[green]Locating vault #$LINK_ID...");
     printflush(message1);
-    while CORE == null
+    while CORE == null do
         QUERY_FLAG = 99999900 + LINK_ID;
         flag = QUERY_FLAG;
         ubind(UNIT);
-        while @unit.controlled != 0
+        while @unit.controlled != 0 do
             ubind(UNIT);
         end;
         flag(flag);
-        while flag == QUERY_FLAG and @unit.dead === 0
+        while flag == QUERY_FLAG and @unit.dead == 0 do
             stop();                 // Keep controlling the unit
             flag = @unit.flag;
         end;
-        if flag != QUERY_FLAG
+        if flag != QUERY_FLAG then
             position = flag \ 100;
             CORE_X = position % @mapw;
             CORE_Y = position \ @mapw;
             // §§§ B and not A --> B > A
-            while @unit.dead == 0 and !within(CORE_X, CORE_Y, RADIUS_WITHIN)
+            while @unit.dead == 0 and !within(CORE_X, CORE_Y, RADIUS_WITHIN) do
                 approach(CORE_X, CORE_Y, RADIUS_APPROACH);
             end;
             CORE = getBlock(CORE_X, CORE_Y, b_type);
-            if b_type != @vault
+            if b_type != @vault then
                 print($"[salmon]Building at $CORE_X, $CORE_Y is not a vault!");
                 printflush(message2);
                 CORE = null;
@@ -202,9 +202,9 @@ end;
 /////////////////////////////////////////////////////////
 SORTER = sorter1;
 sorter_type = SORTER.type;
-while (sorter_type != @sorter) and (sorter_type != @inverted-sorter)
+while (sorter_type != @sorter) and (sorter_type != @inverted-sorter) do
     println("[salmon]Block sorter1 is neither a sorter, nor an inverted sorter.");
-    if SORTER != null
+    if SORTER != null then
         print("Block found: ", SORTER);
     end;
     printflush(message1);
@@ -212,7 +212,7 @@ while (sorter_type != @sorter) and (sorter_type != @inverted-sorter)
     sorter_type = SORTER.type;
 end;
 
-if sorter_type == @sorter
+if sorter_type == @sorter then
     SHOW_REMOTE_LEVEL = true;
     SRC = CORE;
     DST = CONTAINER;
@@ -263,7 +263,7 @@ DISTANCE = (len(DST_X - SRC_X, DST_Y - SRC_Y) - RADIUS_APPROACH) / 100;
 
 //  PARKING/DROPPING POSITION
 /////////////////////////////////////////////////////////
-if DROP_TARGET == null
+if DROP_TARGET == null then
     DROP_TARGET = CORE;
     DROP_X = CORE_X;
     DROP_Y = CORE_Y;
@@ -301,7 +301,7 @@ last_level = loop_time_ms = max_level = min_level = remote_wait_time
     = total_flow_1 = total_flow_2 = transferred = transfers = wait_time = 0;
 
 
-if AUTO_ALLOCATION
+if AUTO_ALLOCATION then
     CORR_SIGN = "[]([green]+";
     corr_per_min = 0;
     SPEED_UNIT_TXT = "[])/min";
@@ -315,9 +315,9 @@ end;
 
 //    MAIN LOOP
 /////////////////////////////////////////////////////////
-while true
+while true do
     ubind(UNIT);
-    while @unit == null
+    while @unit == null do
         // All units have died, poor bastards
         print($"No unit of type $UNIT found.");
         printflush(message1);
@@ -325,7 +325,7 @@ while true
     end;
 
     // Manipulate target
-    if switch1.enabled
+    if switch1.enabled then
         switch1.enabled = false;
         AUTO_ALLOCATION = false;
         AUTO_ALLOCATION_TXT = "";
@@ -336,9 +336,9 @@ while true
         WAIT_LIMIT = 30000;
     end;
 
-    if switch2.enabled
+    if switch2.enabled then
         switch2.enabled = false;
-        if TARGET < 1
+        if TARGET < 1 then
             AUTO_ALLOCATION = true;
             TARGET = 1;
             DEC_LIMIT = 0;           // No change for next iteration
@@ -364,8 +364,8 @@ while true
     // Do loop initializations
     // Note: first unit is not necessarily controlled by us
     // Condition equivalent to "not alive or (@unit === first_unit)", but shorter
-    if alive <= (@unit === first_unit)
-        if active == 0
+    if alive <= (@unit === first_unit) then
+        if active == 0 then
             print("\n[salmon]No active units.[]");
         end;
         printflush(message2);
@@ -373,8 +373,8 @@ while true
         // Configure item to transport
         STATE_LIMIT = S_LAST;
         ITEM = SORTER.config;
-        if ITEM != LAST_ITEM
-            while ITEM == null
+        if ITEM != LAST_ITEM then
+            while ITEM == null do
                 print("[salmon]No item type selected for transport.[]");
                 printflush(message1);
                 ITEM = SORTER.config;
@@ -399,7 +399,7 @@ while true
         loop_time_ms = (loop_time * 100) \ 6;
 
         // Transfer speed calculation
-        if transfers >= active or wait_time > WAIT_LIMIT
+        if transfers >= active or wait_time > WAIT_LIMIT then
             wait_time_str = ceil(wait_time / 100) / 10;
             elapsed_ticks = @tick - TRANSFER_START;
             TRANSFER_START = @tick;
@@ -411,7 +411,7 @@ while true
             transfers = 0;
 
             // Auto allocation uses computed transfer speed
-            if AUTO_ALLOCATION
+            if AUTO_ALLOCATION then
                 AUTO_ALLOCATION_TXT = "\n=== [gold]Unit auto allocation[] ===";
                 // Turnaround time in seconds
                 // Travel time (in ms) plus extra loop time (with ticks to ms converstion)
@@ -432,18 +432,18 @@ while true
                 // Output update
                 corr_per_min = floor(60000 * corr_per_ms);
                 CORR_SIGN = "[]([green]";
-                if (corr_per_min >= 0) CORR_SIGN = "[]([green]+"; end;
+                if corr_per_min >= 0 then CORR_SIGN = "[]([green]+"; end;
                 SPEED_UNIT_TXT = "[])/min";
 
                 // Don't adjust TARGET after first unit is lost
-                if alive
+                if alive then
                     // Additional boost when approaching a limit
                     trigger = min_level < LOW_LEVEL_TRIGGER or max_level > HIGH_LEVEL_TRIGGER;
 
-                    if wait_time == 0 or (trigger > remote_wait_time)
+                    if wait_time == 0 or (trigger > remote_wait_time) then
                         // There were no waits, or there's a level trigger and no remote wait: we might need to add units
                         // Compute new target from flow rate with correction
-                        if STABILIZATION
+                        if STABILIZATION then
                             // Compute average for better stability
                             // It's not displayed anywhere
                             total_flow_3 = total_flow_2;
@@ -481,7 +481,7 @@ while true
             wait_time = 0;
             remote_wait_time = 0;
 
-            if @tick >= MESSAGE_TIMEOUT
+            if @tick >= MESSAGE_TIMEOUT then
                 MESSAGE = "";
             end;
         end;
@@ -489,35 +489,35 @@ while true
         print(MESSAGE);
         print($"Moving [green]$ITEM[]$DIRECTION$LINK_TXT");
         print(AUTO_ALLOCATION_TXT);
-        if TARGET > 0
-            if active >= TARGET
+        if TARGET > 0 then
+            if active >= TARGET then
                 print($"\nUsing [green]$active/$TARGET[] units ($UNIT) [gold]+$items_in_transit");
             else
                 print($"\nUsing [salmon]$active/$TARGET[] units ($UNIT) [gold]+$items_in_transit");
             end;
-            if CHANGE > 0
+            if CHANGE > 0 then
                 print("\n[][salmon]Cannot acquire additional units![]");
             end;
         end;
         print($"\n[]Local items: [gold]$container_items");
-        if LOCAL_LIMIT < 100
+        if LOCAL_LIMIT < 100 then
             print($"[] (limit [orange]$LOCAL_MARGIN[])");
-        end
-        if SHOW_REMOTE_LEVEL
+        end;
+        if SHOW_REMOTE_LEVEL then
             remote_level = CORE.sensor(ITEM);
             print($"\n[]Remote items: [gold]$remote_level");
-            if REMOTE_LIMIT < 100
+            if REMOTE_LIMIT < 100 then
                 print($"[] (limit [orange]$REMOTE_MARGIN[])");
             end;
         end;
-        if TARGET > 0
+        if TARGET > 0 then
             print($"\n[]Speed: [green]$items_per_min$CORR_SIGN$corr_per_min$SPEED_UNIT_TXT");
-            if AUTO_ALLOCATION
+            if AUTO_ALLOCATION then
                 print($"\nUnit throughput: [green]$items_per_min_unit[]/min");
                 print($"\nMin/last round: [green]$turnaround_str[]/[green]$elapsed_str[] s");
             else
                 print($"\nLast round: [green]$elapsed_str[] s");
-            end
+            end;
             print($"\nTotal wait time: [green]$wait_time_str[] s");
         end;
         print($"\n[lightgray]Loop: $loop_time_ms ms");
@@ -531,17 +531,17 @@ while true
 
         print("Unit status:");        // For message2
 
-        if SRC.dead != 0 break; end;
-        if DST.dead != 0 break; end;
-        if SORTER.dead != 0 break; end;
+        if SRC.dead != 0 then break; end;
+        if DST.dead != 0 then break; end;
+        if SORTER.dead != 0 then break; end;
 
         // Detect container relinking
-        if CONTAINER != getlink(CONTAINER_INDEX) break; end;
+        if CONTAINER != getlink(CONTAINER_INDEX) then break; end;
     end;
 
     // We want to add a unit and this one is free
-    if CHANGE > 0
-        if @unit.controlled == 0
+    if CHANGE > 0 then
+        if @unit.controlled == 0 then
             CHANGE -= 1;
             // Flag it now so that the unit is marked as controlled by us for other processors to see
             flag(S_FIRST);
@@ -554,17 +554,17 @@ while true
     // for a brief period of time, so we ignore them here
     // Normally, S_UNUSED is zero, but it can be set to a nonzero, in which case
     // the unit will be found by a housekeeping processor and parked away from core.
-    if @unit.controller == @this
+    if @unit.controller == @this then
         state = @unit.flag;
-        if state != S_UNUSED
+        if state != S_UNUSED then
             // Two instructions to limit state to valid range & applying state limit
             state = min(max(state, S_FIRST), STATE_LIMIT);
 
             // Do we want to let go a unit?
-            if CHANGE < 0
+            if CHANGE < 0 then
                 // S_DISCARD marks units that are being cleaned up -- can't let them go again
-                if state != S_DISCARD
-                    if @unit.totalItems <= DISCARD_UNIT_MAX_ITEMS
+                if state != S_DISCARD then
+                    if @unit.totalItems <= DISCARD_UNIT_MAX_ITEMS then
                         CHANGE += 1;
                         state = S_DISCARD;
                     end;
@@ -578,37 +578,37 @@ while true
 
             // Unloads everything to the core. Used as starting state, to make sure
             // the unit is free to accept whatever it has to transport
-            if state == S_UNLOAD
-                if @unit.totalItems == 0
+            if state == S_UNLOAD then
+                if @unit.totalItems == 0 then
                     state = S_APPROACH_SRC;
-                elsif @unit.firstItem == ITEM
+                elsif @unit.firstItem == ITEM then
                     state = S_APPROACH_DST;
                 else
                     approach(DROP_X, DROP_Y, RADIUS_APPROACH);
-                    if within(DROP_X, DROP_Y, RADIUS_WITHIN)
+                    if within(DROP_X, DROP_Y, RADIUS_WITHIN) then
                         itemDrop(DROP_TARGET, UNIT_CAPACITY);
                     end;
                     print($"[]\nUnloading previous items: [green]");
                 end;
             end;
 
-            if state == S_APPROACH_SRC
+            if state == S_APPROACH_SRC then
                 approach(SRC_X, SRC_Y, RADIUS_APPROACH);
-                if within(SRC_X, SRC_Y, RADIUS_WITHIN)
+                if within(SRC_X, SRC_Y, RADIUS_WITHIN) then
                     state = S_LOAD_ITEMS;
-                elsif SHOW_UNIT_DISTANCE
+                elsif SHOW_UNIT_DISTANCE then
                     print($"[]\n[gold]$ sec[] to source: [green]", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
                 else
                     print($"[]\nGoing to source: [green]");
                 end;
             end;
 
-            if state == S_LOAD_ITEMS
+            if state == S_LOAD_ITEMS then
                 max_load = SRC.sensor(ITEM) - LOAD_LEVEL;
-                if max_load >= LOAD_PACK
+                if max_load >= LOAD_PACK then
                     itemTake(SRC, ITEM, max_load);
                 end;
-                if @unit.totalItems >= UNIT_CAPACITY
+                if @unit.totalItems >= UNIT_CAPACITY then
                     state = S_APPROACH_DST;
                 else
                     print($"[]\nWaiting at source: [green]");
@@ -620,30 +620,30 @@ while true
                 end;
             end;
 
-            if state == S_APPROACH_DST
+            if state == S_APPROACH_DST then
                 approach(DST_X, DST_Y, RADIUS_APPROACH);
-                if within(DST_X, DST_Y, RADIUS_WITHIN)
+                if within(DST_X, DST_Y, RADIUS_WITHIN) then
                     // Update transfer statistics
                     transferred += @unit.totalItems;
                     transfers += 1;
                     state = S_DROP_ITEMS;
-                elsif SHOW_UNIT_DISTANCE
+                elsif SHOW_UNIT_DISTANCE then
                     print($"[]\n[gold]$ sec[] to destination: [green]", len(DST_X - @unit.x, DST_Y - @unit.y) \ SPEED_SEC / 10);
                 else
                     print($"[]\nGoing to destination: [green]");
                 end;
             end;
 
-            if state == S_DROP_ITEMS
+            if state == S_DROP_ITEMS then
                 max_drop = DROP_LEVEL - DST.sensor(ITEM);
-                if max_drop >= DROP_PACK
+                if max_drop >= DROP_PACK then
                     itemDrop(DST, max_drop);
                 end;
-                if @unit.totalItems <= 0
+                if @unit.totalItems <= 0 then
                     state = S_APPROACH_SRC;
                     // Issue the command now to save one loop
                     approach(SRC_X, SRC_Y, RADIUS_APPROACH);
-                    if SHOW_UNIT_DISTANCE
+                    if SHOW_UNIT_DISTANCE then
                         print($"[]\n[gold]$ sec[] to source: [green]", len(SRC_X - @unit.x, SRC_Y - @unit.y) \ SPEED_SEC / 10);
                     else
                         print($"[]\nGoing to source: [green]");
@@ -663,13 +663,13 @@ while true
             items_in_transit += items;
 
             // Quit using this unit: move it to the core and unload whatever it's carrying
-            if state == S_DISCARD
+            if state == S_DISCARD then
                 print($"[]\nParking: [green]");
                 approach(DROP_X, DROP_Y, RADIUS_APPROACH);
-                if within(DROP_X, DROP_Y, RADIUS_WITHIN)
+                if within(DROP_X, DROP_Y, RADIUS_WITHIN) then
                     itemDrop(DROP_TARGET, UNIT_CAPACITY);
                     items = @unit.totalItems;
-                    if items <= PARK_ITEM_LIMIT
+                    if items <= PARK_ITEM_LIMIT then
                         move(PARK_X, PARK_Y);
                         state = S_UNUSED;
                     end;
@@ -691,15 +691,15 @@ while true
     end;
 end;
 
-while SORTER.dead !== 0
+while SORTER.dead !== 0 do
     print("[salmon]sorter1 is missing![]\nPlease place and link sorter or inverted sorter to the processor.");
     printflush(message1);
     printflush(message2);
     SORTER = sorter1;
 end;
 
-if SRC.dead !== 0 or DST.dead !== 0
-    while !(switch1.enabled or switch2.enabled)
+if SRC.dead !== 0 or DST.dead !== 0 then
+    while !(switch1.enabled or switch2.enabled) do
         print("[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize.");
         printflush(message1);
         printflush(message2);

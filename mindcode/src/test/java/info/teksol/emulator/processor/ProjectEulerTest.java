@@ -53,7 +53,7 @@ public class ProjectEulerTest extends AbstractProcessorTest {
         result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
                 createTestCompiler(),
                 fileName,
-                s -> s + "\ndef expect(v) print(v) end def actual(v) print(v) end",
+                s -> s + "\ndef expect(v) print(v); end; def actual(v) print(v); end;",
                 Map.of("bank2", Memory.createMemoryBank()),
                 (useAsserts, actualOutput) -> {
                     if (useAsserts) {

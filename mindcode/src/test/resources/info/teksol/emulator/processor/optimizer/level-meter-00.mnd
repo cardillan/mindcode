@@ -22,88 +22,88 @@ CONTAINER = MAXIMUM = SENSOR = null;
 R0 = G0 = B0 = R1 = G1 = B1 = null;
 
 
-while true
-	print("Item/Liquid/Energy Level Meter");
-	CONTAINER = null;
-	MEMORY = null;
-	n = @links;
-	while n > 0
-		n = n - 1;
-		block = getlink(n);
-		print("\nFound: ", block);
-		case block.type
-			when @message then
-				MESSAGE = block;
-			when @switch then
-				SWITCH = block;
-			when @memory-bank then
-				MEMORY = block;
-				START_INDEX = 264;
-				END_INDEX = 511;
-				SIZE = 248;
-			when @memory-cell then
-				MEMORY = block;
-				START_INDEX = 40;
-				END_INDEX = 63;
-				SIZE = 24;
+while true do
+    print("Item/Liquid/Energy Level Meter");
+    CONTAINER = null;
+    MEMORY = null;
+    n = @links;
+    while n > 0 do
+        n = n - 1;
+        block = getlink(n);
+        print("\nFound: ", block);
+        case block.type
+            when @message then
+                MESSAGE = block;
+            when @switch then
+                SWITCH = block;
+            when @memory-bank then
+                MEMORY = block;
+                START_INDEX = 264;
+                END_INDEX = 511;
+                SIZE = 248;
+            when @memory-cell then
+                MEMORY = block;
+                START_INDEX = 40;
+                END_INDEX = 63;
+                SIZE = 24;
 
-			when @vault, @container then
-				CONTAINER = block;
-				SENSOR = @totalItems;
-				MAXIMUM = @itemCapacity;
-				R0 = 0;
-				G0 = 80;
-				B0 = 0;
-				R1 = 80;
-				G1 = 255;
-				B1 = 80;
-				
-			when @battery, @battery-large then
-				CONTAINER = block;
-				SENSOR = @totalPower;
-				MAXIMUM = @powerCapacity;
-				R0 = 80;
-				G0 = 80;
-				B0 = 0;
-				R1 = 255;
-				G1 = 255;
-				B1 = 80;
+            when @vault, @container then
+                CONTAINER = block;
+                SENSOR = @totalItems;
+                MAXIMUM = @itemCapacity;
+                R0 = 0;
+                G0 = 80;
+                B0 = 0;
+                R1 = 80;
+                G1 = 255;
+                B1 = 80;
 
-			when @liquid-tank, @liquid-container then
-				CONTAINER = block;
-				SENSOR = @totalLiquids;
-				MAXIMUM = @liquidCapacity;
-				R0 = 0;
-				G0 = 0;
-				B0 = 192;
-				R1 = 192;
-				G1 = 192;
-				B1 = 255;
-				
-			when @power-node, @power-node-large, @surge-tower then
-				CONTAINER = block;
-				SENSOR = @powerNetStored;
-				MAXIMUM = @powerNetCapacity;
-				R0 = 80;
-				G0 = 80;
-				B0 = 0;
-				R1 = 255;
-				G1 = 255;
-				B1 = 80;
-		end;
-	end;
-	
-	print("\nMessage: ", MESSAGE);
-	print("\nSwitch: ", SWITCH);
-	print("\nMemory: ", MEMORY);
-	print("\nContainer: ", CONTAINER);
-	if CONTAINER == null || MEMORY == null
-		print("\nNo memory or container.");
-		printflush(MESSAGE);
-	else
-		printflush(MESSAGE);
-		break;
-	end;
+            when @battery, @battery-large then
+                CONTAINER = block;
+                SENSOR = @totalPower;
+                MAXIMUM = @powerCapacity;
+                R0 = 80;
+                G0 = 80;
+                B0 = 0;
+                R1 = 255;
+                G1 = 255;
+                B1 = 80;
+
+            when @liquid-tank, @liquid-container then
+                CONTAINER = block;
+                SENSOR = @totalLiquids;
+                MAXIMUM = @liquidCapacity;
+                R0 = 0;
+                G0 = 0;
+                B0 = 192;
+                R1 = 192;
+                G1 = 192;
+                B1 = 255;
+
+            when @power-node, @power-node-large, @surge-tower then
+                CONTAINER = block;
+                SENSOR = @powerNetStored;
+                MAXIMUM = @powerNetCapacity;
+                R0 = 80;
+                G0 = 80;
+                B0 = 0;
+                R1 = 255;
+                G1 = 255;
+                B1 = 80;
+        end;
+    end;
+
+    print("\nMessage: ", MESSAGE);
+    print("\nSwitch: ", SWITCH);
+    print("\nMemory: ", MEMORY);
+    print("\nContainer: ", CONTAINER);
+    if CONTAINER == null || MEMORY == null then
+        print("\nNo memory or container.");
+        printflush(MESSAGE);
+    else
+        printflush(MESSAGE);
+        break;
+    end;
 end;
 
 MEMORY[M_START_INDEX] = START_INDEX;
@@ -119,38 +119,38 @@ index = min(max(START_INDEX, MEMORY[M_CURRENT_INDEX]), END_INDEX);
 nextTick = @tick;
 
 SWITCH.enabled = 0;
-while SWITCH.enabled == 0
-	startTime = @time;
-	prevTick = nextTick;
-	nextTick = nextTick + TICKS;
-	
-	if @tick > nextTick + TICKS 
-		// @tick has jumped too far to the future, reset it
-		prevTick = @tick;
-		nextTick = prevTick + TICKS;
-	end;
-	
-	while @tick < nextTick
-		if @tick < prevTick     // can happen after loading game
-			end();
-		end;
-	end;
-	
-	amount = CONTAINER.sensor(SENSOR);
-	max = CONTAINER.sensor(MAXIMUM);
-	scaled = 10 + amount * 150 / max;
-	
-	index = index + 1;
-	if index > END_INDEX index = START_INDEX; end;
-	MEMORY[M_START_INDEX] = index;
-	MEMORY[index] = scaled;
-	MEMORY[index - SIZE] = scaled;
-	
-	print("Item/Liquid/Energy Level Meter\n");
-	print("StartIndex: ", START_INDEX, "\n");
-	print("Index: ", index, "\n");
-	print("Amount: ", amount, "\n");
-	print("Scaled: ", scaled, "\n");
-	print("Elapsed: ", @time - startTime, "\n");
-	printflush(MESSAGE);
+while SWITCH.enabled == 0 do
+    startTime = @time;
+    prevTick = nextTick;
+    nextTick = nextTick + TICKS;
+
+    if @tick > nextTick + TICKS then
+        // @tick has jumped too far to the future, reset it
+        prevTick = @tick;
+        nextTick = prevTick + TICKS;
+    end;
+
+    while @tick < nextTick do
+        if @tick < prevTick then    // can happen after loading game
+            end();
+        end;
+    end;
+
+    amount = CONTAINER.sensor(SENSOR);
+    max = CONTAINER.sensor(MAXIMUM);
+    scaled = 10 + amount * 150 / max;
+
+    index = index + 1;
+    if index > END_INDEX then index = START_INDEX; end;
+    MEMORY[M_START_INDEX] = index;
+    MEMORY[index] = scaled;
+    MEMORY[index - SIZE] = scaled;
+
+    print("Item/Liquid/Energy Level Meter\n");
+    print("StartIndex: ", START_INDEX, "\n");
+    print("Index: ", index, "\n");
+    print("Amount: ", amount, "\n");
+    print("Scaled: ", scaled, "\n");
+    print("Elapsed: ", @time - startTime, "\n");
+    printflush(MESSAGE);
 end;

@@ -11,7 +11,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void handlesFunctionlessProgram() {
         Assertions.assertDoesNotThrow(() ->
                 CallGraphCreator.createFunctionGraph(
-                        (Seq) translateToAst("a = 10"),
+                        (Seq) translateToAst("a = 10;"),
                         createTestCompiler().processor
                 )
         );
@@ -21,7 +21,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void handlesBuiltinFunctions() {
         Assertions.assertDoesNotThrow(() ->
                 CallGraphCreator.createFunctionGraph(
-                        (Seq) translateToAst("print(a)"),
+                        (Seq) translateToAst("print(a);"),
                         createTestCompiler().processor
                 )
         );
@@ -31,8 +31,8 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void detectsRecursion() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
-                        def a  a() end
-                        a()
+                        def a  a(); end;
+                        a();
                         """
                 ),
                 createTestCompiler().processor
@@ -49,9 +49,9 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void detectsDoubleRecursion() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
-                        def a  b() end
-                        def b  a() end
-                        a()
+                        def a()  b(); end;
+                        def b()  a(); end;
+                        a();
                         """
                 ),
                 createTestCompiler().processor
@@ -72,10 +72,10 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void detectsNonRecursiveCalls() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
-                        def a  a() b() c() end
-                        def b  b() end
-                        def c  x=10 end
-                        a()
+                        def a  a(); b(); c(); end;
+                        def b  b(); end;
+                        def c  x=10; end;
+                        a();
                         """
                 ),
                 createTestCompiler().processor
@@ -95,10 +95,10 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void detectsIndirectCalls() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
-                        def a(n) n + 1       end
-                        def b(n) a(n) + 1    end
-                        def c(n) a(n) + b(n) end
-                        print(c(1))
+                        def a(n) n + 1;       end;
+                        def b(n) a(n) + 1;    end;
+                        def c(n) a(n) + b(n); end;
+                        print(c(1));
                         """
                 ),
                 createTestCompiler().processor

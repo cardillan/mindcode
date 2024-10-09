@@ -49,7 +49,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     @Test
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
-                s -> "AMOUNT = 12345\n" + s,
+                s -> "AMOUNT = 12345;\n" + s,
                 Map.of("display1", LogicDisplay.createLargeLogicDisplay()),
                 List.of()
         );
@@ -65,7 +65,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         testAndEvaluateCode(
                 compiler,
                 "sorting with " + fileName,
-                "param SIZE = " + arrayLength + "\n" + readFile(fileName),
+                "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
                 Map.of("bank2", Memory.createMemoryBank(array)),
                 createEvaluator(compiler, expectedOutput),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")

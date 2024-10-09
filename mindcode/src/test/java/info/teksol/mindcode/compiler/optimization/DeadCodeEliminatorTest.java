@@ -21,11 +21,11 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     @Test
     void removesDeadSetsInIfExpression() {
         assertCompilesTo("""
-                        if x == 3
-                            1
+                        if x == 3 then
+                            1;
                         else
-                            end()
-                        end
+                            end();
+                        end;
                         """,
                 createInstruction(OP, "equal", var(0), "x", "3"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
@@ -40,12 +40,12 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     @Test
     void keepsUsefulIfAssignments() {
         assertCompilesTo("""
-                        n = if x == 3
-                            1
+                        n = if x == 3 then
+                            1;
                         else
-                            41
-                        end
-                        move(73, n)
+                            41;
+                        end;
+                        move(73, n);
                         """,
                 createInstruction(OP, "equal", var(0), "x", "3"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
@@ -64,13 +64,13 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     void preventsEliminationOfUradarUsages() {
         assertCompilesToWithMessages(ignore("List of uninitialized variables: MIN_TO_MAX, SHOOT."),
                 """
-                        target = uradar(enemy, ground, any, health, MIN_TO_MAX)
-                        if target != null
-                            approach(target.x, target.y, 10)
-                            if within(target.x, target.y, 10)
-                                target(target.x, target.y, SHOOT)
-                            end
-                        end
+                        target = uradar(enemy, ground, any, health, MIN_TO_MAX);
+                        if target != null then
+                            approach(target.x, target.y, 10);
+                            if within(target.x, target.y, 10) then
+                                target(target.x, target.y, SHOOT);
+                            end;
+                        end;
                         """,
                 createInstruction(URADAR, "enemy", "ground", "any", "health", "0", "MIN_TO_MAX", var(0)),
                 createInstruction(SET, "target", var(0)),
@@ -102,14 +102,14 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         "List of unused variables: found, outbuilding.",
                         "List of uninitialized variables: ENEMY."),
                 """
-                        ulocate(ore, @surge-alloy, outx, outy)
-                        approach(outx, outy, 4)
-                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
-                        approach(outx, outy, 4)
-                        outbuilding = ulocate(spawn, outx, outy, found)
-                        approach(outx, outy, 4)
-                        outbuilding = ulocate(damaged, outx, outy, found)
-                        approach(outx, outy, 4)
+                        ulocate(ore, @surge-alloy, outx, outy);
+                        approach(outx, outy, 4);
+                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found);
+                        approach(outx, outy, 4);
+                        outbuilding = ulocate(spawn, outx, outy, found);
+                        approach(outx, outy, 4);
+                        outbuilding = ulocate(damaged, outx, outy, found);
+                        approach(outx, outy, 4);
                         """,
                 createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
                 createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
@@ -127,8 +127,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     void completelyRemovesDeadCode() {
         assertCompilesToWithMessages(ignore("List of unused variables: n."),
                 """
-                        n = 1
-                        n = 1
+                        n = 1;
+                        n = 1;
                         """,
                 createInstruction(END)
         );
@@ -138,9 +138,9 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     void removesUnusedUlocate() {
         assertCompilesToWithMessages(ignore("List of unused variables: x, y."),
                 """
-                        ulocate(ore, @surge-alloy, outx, outy)
-                        ulocate(ore, @surge-alloy, x, y)
-                        approach(outx, outy, 4)
+                        ulocate(ore, @surge-alloy, outx, outy);
+                        ulocate(ore, @surge-alloy, x, y);
+                        approach(outx, outy, 4);
                         """,
                 createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
                 createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
@@ -154,8 +154,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         "List of unused variables: found, outx, outy.",
                         "List of uninitialized variables: ENEMY."),
                 """
-                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
-                        print(outbuilding)
+                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found);
+                        print(outbuilding);
                         """,
                 createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(0)),
                 createInstruction(SET, "outbuilding", var(0)),
@@ -167,7 +167,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     @Test
     void generatesUnusedWarning() {
         assertGeneratesWarnings("""
-                        X = 10
+                        X = 10;
                         """,
                 "List of unused variables: X.");
     }
@@ -175,7 +175,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     @Test
     void generatesUninitializedWarning() {
         assertGeneratesWarnings("""
-                        print(X, Y)
+                        print(X, Y);
                         """,
                 "List of uninitialized variables: X, Y.");
     }
@@ -184,10 +184,10 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     void generatesNoUnexpectedWarnings() {
         assertGeneratesWarnings("""
                         def foo(n)
-                            n = n + 1
-                        end
-                        z = foo(5)
-                        print(z)
+                            n = n + 1;
+                        end;
+                        z = foo(5);
+                        print(z);
                         """,
                 "");
     }
@@ -197,10 +197,10 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
         assertGeneratesWarnings(
                 """
                         def foo(n)
-                            n = n + 1
-                        end
-                        z = foo(5)
-                        print(Z)
+                            n = n + 1;
+                        end;
+                        z = foo(5);
+                        print(Z);
                         """,
                 """
                         List of unused variables: z.
@@ -213,11 +213,11 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     void eliminatesUnusedReturnValues() {
         assertCompilesTo("""
                         def foo(n)
-                            print(n)
-                            n * 2
-                        end
-                        foo(2)
-                        foo(4)
+                            print(n);
+                            n * 2;
+                        end;
+                        foo(2);
+                        foo(4);
                         """,
                 createInstruction(SET, "__fn0_n", "2"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),

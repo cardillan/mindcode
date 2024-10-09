@@ -11,7 +11,7 @@
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instructions):
  
     16 print "\n"
-    17 set __tmp2 "\n"
+    17 set __tmp2 null
     18 label __label3
 -    * set __tmp0 __tmp2
     19 label __label1
@@ -19,7 +19,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
     21 set __fn1_actual 1
  
     36 print "\n"
-    37 set __tmp5 "\n"
+    37 set __tmp5 null
     38 label __label7
 -    * set __tmp3 __tmp5
     39 label __label5
@@ -27,7 +27,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
     41 set __fn2_actual 6
  
     56 print "\n"
-    57 set __tmp8 "\n"
+    57 set __tmp8 null
     58 label __label11
 -    * set __tmp6 __tmp8
     59 label __label9
@@ -35,7 +35,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
     61 set __fn3_actual 1.5
  
     76 print "\n"
-    77 set __tmp11 "\n"
+    77 set __tmp11 null
     78 label __label15
 -    * set __tmp9 __tmp11
     79 label __label13
@@ -43,7 +43,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
     81 set __fn4_actual 0.00001
  
     96 print "\n"
-    97 set __tmp14 "\n"
+    97 set __tmp14 null
     98 label __label19
 -    * set __tmp12 __tmp14
     99 label __label17
@@ -51,7 +51,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    101 set __fn5_actual 1
  
    116 print "\n"
-   117 set __tmp17 "\n"
+   117 set __tmp17 null
    118 label __label23
 -    * set __tmp15 __tmp17
    119 label __label21
@@ -59,7 +59,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    121 set __fn6_actual 2
  
    136 print "\n"
-   137 set __tmp20 "\n"
+   137 set __tmp20 null
    138 label __label27
 -    * set __tmp18 __tmp20
    139 label __label25
@@ -67,7 +67,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    141 set __fn7_actual 16
  
    156 print "\n"
-   157 set __tmp23 "\n"
+   157 set __tmp23 null
    158 label __label31
 -    * set __tmp21 __tmp23
    159 label __label29
@@ -75,7 +75,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    161 set __fn8_actual true
  
    176 print "\n"
-   177 set __tmp26 "\n"
+   177 set __tmp26 null
    178 label __label35
 -    * set __tmp24 __tmp26
    179 label __label33
@@ -83,7 +83,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    181 set __fn9_actual false
  
    196 print "\n"
-   197 set __tmp29 "\n"
+   197 set __tmp29 null
    198 label __label39
 -    * set __tmp27 __tmp29
    199 label __label37
@@ -91,7 +91,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    201 set __fn10_actual true
  
    216 print "\n"
-   217 set __tmp32 "\n"
+   217 set __tmp32 null
    218 label __label43
 -    * set __tmp30 __tmp32
    219 label __label41
@@ -99,7 +99,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    221 set __fn11_actual false
  
    236 print "\n"
-   237 set __tmp35 "\n"
+   237 set __tmp35 null
    238 label __label47
 -    * set __tmp33 __tmp35
    239 label __label45
@@ -107,7 +107,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    241 set __fn12_actual true
  
    256 print "\n"
-   257 set __tmp38 "\n"
+   257 set __tmp38 null
    258 label __label51
 -    * set __tmp36 __tmp38
    259 label __label49
@@ -115,7 +115,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    261 set __fn13_actual false
  
    276 print "\n"
-   277 set __tmp41 "\n"
+   277 set __tmp41 null
    278 label __label55
 -    * set __tmp39 __tmp41
    279 label __label53
@@ -123,7 +123,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    281 set __fn14_actual false
  
    296 print "\n"
-   297 set __tmp44 "\n"
+   297 set __tmp44 null
    298 label __label59
 -    * set __tmp42 __tmp44
    299 label __label57
@@ -131,7 +131,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    301 set __fn15_actual true
  
    316 print "\n"
-   317 set __tmp47 "\n"
+   317 set __tmp47 null
    318 label __label63
 -    * set __tmp45 __tmp47
    319 label __label61
@@ -139,7 +139,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    321 set __fn16_actual true
  
    336 print "\n"
-   337 set __tmp50 "\n"
+   337 set __tmp50 null
    338 label __label67
 -    * set __tmp48 __tmp50
    339 label __label65
@@ -147,7 +147,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    341 set __fn17_actual false
  
    356 print "\n"
-   357 set __tmp53 "\n"
+   357 set __tmp53 null
    358 label __label71
 -    * set __tmp51 __tmp53
    359 label __label69
@@ -155,7 +155,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    361 set __fn18_actual true
  
    376 print "\n"
-   377 set __tmp56 "\n"
+   377 set __tmp56 null
    378 label __label75
 -    * set __tmp54 __tmp56
    379 label __label73
@@ -163,7 +163,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    381 set __fn19_actual false
  
    396 print "\n"
-   397 set __tmp59 "\n"
+   397 set __tmp59 null
    398 label __label79
 -    * set __tmp57 __tmp59
    399 label __label77
@@ -171,7 +171,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    401 set __fn20_actual true
  
    416 print "\n"
-   417 set __tmp62 "\n"
+   417 set __tmp62 null
    418 label __label83
 -    * set __tmp60 __tmp62
    419 label __label81
@@ -179,7 +179,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    421 set __fn21_actual false
  
    436 print "\n"
-   437 set __tmp65 "\n"
+   437 set __tmp65 null
    438 label __label87
 -    * set __tmp63 __tmp65
    439 label __label85
@@ -187,7 +187,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    441 set __fn22_actual true
  
    456 print "\n"
-   457 set __tmp68 "\n"
+   457 set __tmp68 null
    458 label __label91
 -    * set __tmp66 __tmp68
    459 label __label89
@@ -195,7 +195,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    461 set __fn23_actual false
  
    476 print "\n"
-   477 set __tmp71 "\n"
+   477 set __tmp71 null
    478 label __label95
 -    * set __tmp69 __tmp71
    479 label __label93
@@ -203,7 +203,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    481 set __fn24_actual false
  
    496 print "\n"
-   497 set __tmp74 "\n"
+   497 set __tmp74 null
    498 label __label99
 -    * set __tmp72 __tmp74
    499 label __label97
@@ -211,7 +211,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    501 set __fn25_actual true
  
    516 print "\n"
-   517 set __tmp77 "\n"
+   517 set __tmp77 null
    518 label __label103
 -    * set __tmp75 __tmp77
    519 label __label101
@@ -219,7 +219,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    521 set __fn26_actual 4
  
    536 print "\n"
-   537 set __tmp80 "\n"
+   537 set __tmp80 null
    538 label __label107
 -    * set __tmp78 __tmp80
    539 label __label105
@@ -227,7 +227,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    541 set __fn27_actual 2
  
    556 print "\n"
-   557 set __tmp83 "\n"
+   557 set __tmp83 null
    558 label __label111
 -    * set __tmp81 __tmp83
    559 label __label109
@@ -235,7 +235,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    561 set __fn28_actual 3
  
    576 print "\n"
-   577 set __tmp86 "\n"
+   577 set __tmp86 null
    578 label __label115
 -    * set __tmp84 __tmp86
    579 label __label113
@@ -243,7 +243,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    581 set __fn29_actual 2
  
    596 print "\n"
-   597 set __tmp89 "\n"
+   597 set __tmp89 null
    598 label __label119
 -    * set __tmp87 __tmp89
    599 label __label117
@@ -251,7 +251,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    601 set __fn30_actual 1
  
    616 print "\n"
-   617 set __tmp92 "\n"
+   617 set __tmp92 null
    618 label __label123
 -    * set __tmp90 __tmp92
    619 label __label121
@@ -259,7 +259,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    621 set __fn31_actual -1
  
    636 print "\n"
-   637 set __tmp95 "\n"
+   637 set __tmp95 null
    638 label __label127
 -    * set __tmp93 __tmp95
    639 label __label125
@@ -267,7 +267,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    641 set __fn32_actual -65536
  
    656 print "\n"
-   657 set __tmp98 "\n"
+   657 set __tmp98 null
    658 label __label131
 -    * set __tmp96 __tmp98
    659 label __label129
@@ -275,7 +275,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    661 op not __tmp99 a
  
    680 print "\n"
-   681 set __tmp104 "\n"
+   681 set __tmp104 null
    682 label __label135
 -    * set __tmp102 __tmp104
    683 label __label133
@@ -283,7 +283,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    685 set __fn34_actual 4
  
    700 print "\n"
-   701 set __tmp107 "\n"
+   701 set __tmp107 null
    702 label __label139
 -    * set __tmp105 __tmp107
    703 label __label137
@@ -291,7 +291,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    705 set __fn35_actual 2
  
    720 print "\n"
-   721 set __tmp110 "\n"
+   721 set __tmp110 null
    722 label __label143
 -    * set __tmp108 __tmp110
    723 label __label141
@@ -299,7 +299,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    725 set __fn36_actual 2
  
    740 print "\n"
-   741 set __tmp113 "\n"
+   741 set __tmp113 null
    742 label __label147
 -    * set __tmp111 __tmp113
    743 label __label145
@@ -307,7 +307,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    745 set __fn37_actual 1
  
    760 print "\n"
-   761 set __tmp116 "\n"
+   761 set __tmp116 null
    762 label __label151
 -    * set __tmp114 __tmp116
    763 label __label149
@@ -315,7 +315,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    765 set __fn38_actual 1
  
    780 print "\n"
-   781 set __tmp119 "\n"
+   781 set __tmp119 null
    782 label __label155
 -    * set __tmp117 __tmp119
    783 label __label153
@@ -323,7 +323,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    785 set __fn39_actual 2
  
    800 print "\n"
-   801 set __tmp122 "\n"
+   801 set __tmp122 null
    802 label __label159
 -    * set __tmp120 __tmp122
    803 label __label157
@@ -331,7 +331,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    805 set __fn40_actual 3
  
    820 print "\n"
-   821 set __tmp125 "\n"
+   821 set __tmp125 null
    822 label __label163
 -    * set __tmp123 __tmp125
    823 label __label161
@@ -339,7 +339,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    825 set __fn41_actual 4
  
    840 print "\n"
-   841 set __tmp128 "\n"
+   841 set __tmp128 null
    842 label __label167
 -    * set __tmp126 __tmp128
    843 label __label165
@@ -347,7 +347,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    845 set __fn42_actual 45
  
    860 print "\n"
-   861 set __tmp131 "\n"
+   861 set __tmp131 null
    862 label __label171
 -    * set __tmp129 __tmp131
    863 label __label169
@@ -355,7 +355,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    865 set __fn43_actual 90
  
    880 print "\n"
-   881 set __tmp134 "\n"
+   881 set __tmp134 null
    882 label __label175
 -    * set __tmp132 __tmp134
    883 label __label173
@@ -363,7 +363,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    885 set __fn44_actual -8
  
    900 print "\n"
-   901 set __tmp137 "\n"
+   901 set __tmp137 null
    902 label __label179
 -    * set __tmp135 __tmp137
    903 label __label177
@@ -371,7 +371,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    905 set __fn45_actual true
  
    920 print "\n"
-   921 set __tmp140 "\n"
+   921 set __tmp140 null
    922 label __label183
 -    * set __tmp138 __tmp140
    923 label __label181
@@ -379,7 +379,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    925 set __fn46_actual false
  
    940 print "\n"
-   941 set __tmp143 "\n"
+   941 set __tmp143 null
    942 label __label187
 -    * set __tmp141 __tmp143
    943 label __label185
@@ -387,7 +387,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    945 set __fn47_actual false
  
    960 print "\n"
-   961 set __tmp146 "\n"
+   961 set __tmp146 null
    962 label __label191
 -    * set __tmp144 __tmp146
    963 label __label189
@@ -395,7 +395,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    965 op pow __tmp147 a 4
  
    983 print "\n"
-   984 set __tmp150 "\n"
+   984 set __tmp150 null
    985 label __label195
 -    * set __tmp148 __tmp150
    986 label __label193
@@ -403,7 +403,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
    988 op mul __tmp151 a 4
  
   1006 print "\n"
-  1007 set __tmp154 "\n"
+  1007 set __tmp154 null
   1008 label __label199
 -    * set __tmp152 __tmp154
   1009 label __label197
@@ -411,7 +411,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1011 op div __tmp155 a 4
  
   1029 print "\n"
-  1030 set __tmp158 "\n"
+  1030 set __tmp158 null
   1031 label __label203
 -    * set __tmp156 __tmp158
   1032 label __label201
@@ -419,7 +419,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1034 op idiv __tmp159 a 4
  
   1052 print "\n"
-  1053 set __tmp162 "\n"
+  1053 set __tmp162 null
   1054 label __label207
 -    * set __tmp160 __tmp162
   1055 label __label205
@@ -427,7 +427,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1057 op mod __tmp163 a 4
  
   1075 print "\n"
-  1076 set __tmp166 "\n"
+  1076 set __tmp166 null
   1077 label __label211
 -    * set __tmp164 __tmp166
   1078 label __label209
@@ -435,7 +435,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1080 op add __tmp167 a 2
  
   1098 print "\n"
-  1099 set __tmp170 "\n"
+  1099 set __tmp170 null
   1100 label __label215
 -    * set __tmp168 __tmp170
   1101 label __label213
@@ -443,7 +443,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1103 op sub __tmp171 a 2
  
   1121 print "\n"
-  1122 set __tmp174 "\n"
+  1122 set __tmp174 null
   1123 label __label219
 -    * set __tmp172 __tmp174
   1124 label __label217
@@ -451,7 +451,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1126 op shl __tmp175 a 2
  
   1144 print "\n"
-  1145 set __tmp178 "\n"
+  1145 set __tmp178 null
   1146 label __label223
 -    * set __tmp176 __tmp178
   1147 label __label221
@@ -459,7 +459,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1149 op shr __tmp179 a 2
  
   1167 print "\n"
-  1168 set __tmp182 "\n"
+  1168 set __tmp182 null
   1169 label __label227
 -    * set __tmp180 __tmp182
   1170 label __label225
@@ -467,7 +467,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1172 op or __tmp183 a 2
  
   1190 print "\n"
-  1191 set __tmp186 "\n"
+  1191 set __tmp186 null
   1192 label __label231
 -    * set __tmp184 __tmp186
   1193 label __label229
@@ -475,7 +475,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1195 op and __tmp187 a 2
  
   1213 print "\n"
-  1214 set __tmp190 "\n"
+  1214 set __tmp190 null
   1215 label __label235
 -    * set __tmp188 __tmp190
   1216 label __label233
@@ -483,7 +483,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1218 op xor __tmp191 a 2
  
   1236 print "\n"
-  1237 set __tmp194 "\n"
+  1237 set __tmp194 null
   1238 label __label239
 -    * set __tmp192 __tmp194
   1239 label __label237
@@ -491,7 +491,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1241 set a false
  
   1258 print "\n"
-  1259 set __tmp197 "\n"
+  1259 set __tmp197 null
   1260 label __label243
 -    * set __tmp195 __tmp197
   1261 label __label241
@@ -499,7 +499,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1263 op land __tmp198 a 2
  
   1281 print "\n"
-  1282 set __tmp201 "\n"
+  1282 set __tmp201 null
   1283 label __label247
 -    * set __tmp199 __tmp201
   1284 label __label245
@@ -507,7 +507,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instruct
   1286 set a true
  
   1303 print "\n"
-  1304 set __tmp204 "\n"
+  1304 set __tmp204 null
   1305 label __label251
 -    * set __tmp202 __tmp204
   1306 label __label249
@@ -526,7 +526,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
     13 print ", but was "
     14 print __fn0_actual
     15 print "\n"
--    * set __tmp2 "\n"
+-    * set __tmp2 null
     16 label __label3
     17 label __label1
     18 label __label4
@@ -542,7 +542,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
     31 print ", but was "
     32 print __fn1_actual
     33 print "\n"
--    * set __tmp5 "\n"
+-    * set __tmp5 null
     34 label __label7
     35 label __label5
     36 label __label8
@@ -558,7 +558,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
     49 print ", but was "
     50 print __fn2_actual
     51 print "\n"
--    * set __tmp8 "\n"
+-    * set __tmp8 null
     52 label __label11
     53 label __label9
     54 label __label12
@@ -574,7 +574,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
     67 print ", but was "
     68 print __fn3_actual
     69 print "\n"
--    * set __tmp11 "\n"
+-    * set __tmp11 null
     70 label __label15
     71 label __label13
     72 label __label16
@@ -590,7 +590,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
     85 print ", but was "
     86 print __fn4_actual
     87 print "\n"
--    * set __tmp14 "\n"
+-    * set __tmp14 null
     88 label __label19
     89 label __label17
     90 label __label20
@@ -606,7 +606,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    103 print ", but was "
    104 print __fn5_actual
    105 print "\n"
--    * set __tmp17 "\n"
+-    * set __tmp17 null
    106 label __label23
    107 label __label21
    108 label __label24
@@ -622,7 +622,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    121 print ", but was "
    122 print __fn6_actual
    123 print "\n"
--    * set __tmp20 "\n"
+-    * set __tmp20 null
    124 label __label27
    125 label __label25
    126 label __label28
@@ -638,7 +638,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    139 print ", but was "
    140 print __fn7_actual
    141 print "\n"
--    * set __tmp23 "\n"
+-    * set __tmp23 null
    142 label __label31
    143 label __label29
    144 label __label32
@@ -654,7 +654,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    157 print ", but was "
    158 print __fn8_actual
    159 print "\n"
--    * set __tmp26 "\n"
+-    * set __tmp26 null
    160 label __label35
    161 label __label33
    162 label __label36
@@ -670,7 +670,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    175 print ", but was "
    176 print __fn9_actual
    177 print "\n"
--    * set __tmp29 "\n"
+-    * set __tmp29 null
    178 label __label39
    179 label __label37
    180 label __label40
@@ -686,7 +686,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    193 print ", but was "
    194 print __fn10_actual
    195 print "\n"
--    * set __tmp32 "\n"
+-    * set __tmp32 null
    196 label __label43
    197 label __label41
    198 label __label44
@@ -702,7 +702,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    211 print ", but was "
    212 print __fn11_actual
    213 print "\n"
--    * set __tmp35 "\n"
+-    * set __tmp35 null
    214 label __label47
    215 label __label45
    216 label __label48
@@ -718,7 +718,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    229 print ", but was "
    230 print __fn12_actual
    231 print "\n"
--    * set __tmp38 "\n"
+-    * set __tmp38 null
    232 label __label51
    233 label __label49
    234 label __label52
@@ -734,7 +734,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    247 print ", but was "
    248 print __fn13_actual
    249 print "\n"
--    * set __tmp41 "\n"
+-    * set __tmp41 null
    250 label __label55
    251 label __label53
    252 label __label56
@@ -750,7 +750,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    265 print ", but was "
    266 print __fn14_actual
    267 print "\n"
--    * set __tmp44 "\n"
+-    * set __tmp44 null
    268 label __label59
    269 label __label57
    270 label __label60
@@ -766,7 +766,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    283 print ", but was "
    284 print __fn15_actual
    285 print "\n"
--    * set __tmp47 "\n"
+-    * set __tmp47 null
    286 label __label63
    287 label __label61
    288 label __label64
@@ -782,7 +782,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    301 print ", but was "
    302 print __fn16_actual
    303 print "\n"
--    * set __tmp50 "\n"
+-    * set __tmp50 null
    304 label __label67
    305 label __label65
    306 label __label68
@@ -798,7 +798,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    319 print ", but was "
    320 print __fn17_actual
    321 print "\n"
--    * set __tmp53 "\n"
+-    * set __tmp53 null
    322 label __label71
    323 label __label69
    324 label __label72
@@ -814,7 +814,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    337 print ", but was "
    338 print __fn18_actual
    339 print "\n"
--    * set __tmp56 "\n"
+-    * set __tmp56 null
    340 label __label75
    341 label __label73
    342 label __label76
@@ -830,7 +830,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    355 print ", but was "
    356 print __fn19_actual
    357 print "\n"
--    * set __tmp59 "\n"
+-    * set __tmp59 null
    358 label __label79
    359 label __label77
    360 label __label80
@@ -846,7 +846,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    373 print ", but was "
    374 print __fn20_actual
    375 print "\n"
--    * set __tmp62 "\n"
+-    * set __tmp62 null
    376 label __label83
    377 label __label81
    378 label __label84
@@ -862,7 +862,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    391 print ", but was "
    392 print __fn21_actual
    393 print "\n"
--    * set __tmp65 "\n"
+-    * set __tmp65 null
    394 label __label87
    395 label __label85
    396 label __label88
@@ -878,7 +878,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    409 print ", but was "
    410 print __fn22_actual
    411 print "\n"
--    * set __tmp68 "\n"
+-    * set __tmp68 null
    412 label __label91
    413 label __label89
    414 label __label92
@@ -894,7 +894,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    427 print ", but was "
    428 print __fn23_actual
    429 print "\n"
--    * set __tmp71 "\n"
+-    * set __tmp71 null
    430 label __label95
    431 label __label93
    432 label __label96
@@ -910,7 +910,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    445 print ", but was "
    446 print __fn24_actual
    447 print "\n"
--    * set __tmp74 "\n"
+-    * set __tmp74 null
    448 label __label99
    449 label __label97
    450 label __label100
@@ -926,7 +926,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    463 print ", but was "
    464 print __fn25_actual
    465 print "\n"
--    * set __tmp77 "\n"
+-    * set __tmp77 null
    466 label __label103
    467 label __label101
    468 label __label104
@@ -942,7 +942,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    481 print ", but was "
    482 print __fn26_actual
    483 print "\n"
--    * set __tmp80 "\n"
+-    * set __tmp80 null
    484 label __label107
    485 label __label105
    486 label __label108
@@ -958,7 +958,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    499 print ", but was "
    500 print __fn27_actual
    501 print "\n"
--    * set __tmp83 "\n"
+-    * set __tmp83 null
    502 label __label111
    503 label __label109
    504 label __label112
@@ -974,7 +974,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    517 print ", but was "
    518 print __fn28_actual
    519 print "\n"
--    * set __tmp86 "\n"
+-    * set __tmp86 null
    520 label __label115
    521 label __label113
    522 label __label116
@@ -990,7 +990,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    535 print ", but was "
    536 print __fn29_actual
    537 print "\n"
--    * set __tmp89 "\n"
+-    * set __tmp89 null
    538 label __label119
    539 label __label117
    540 label __label120
@@ -1006,7 +1006,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    553 print ", but was "
    554 print __fn30_actual
    555 print "\n"
--    * set __tmp92 "\n"
+-    * set __tmp92 null
    556 label __label123
    557 label __label121
    558 label __label124
@@ -1022,7 +1022,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    571 print ", but was "
    572 print __fn31_actual
    573 print "\n"
--    * set __tmp95 "\n"
+-    * set __tmp95 null
    574 label __label127
    575 label __label125
    576 label __label128
@@ -1038,7 +1038,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    589 print ", but was "
    590 print __fn32_actual
    591 print "\n"
--    * set __tmp98 "\n"
+-    * set __tmp98 null
    592 label __label131
    593 label __label129
    594 set a 0xabcdefabcdefabc
@@ -1054,7 +1054,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    611 print ", but was "
    612 print __fn33_actual
    613 print "\n"
--    * set __tmp104 "\n"
+-    * set __tmp104 null
    614 label __label135
    615 label __label133
    616 label __label136
@@ -1070,7 +1070,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    629 print ", but was "
    630 print __fn34_actual
    631 print "\n"
--    * set __tmp107 "\n"
+-    * set __tmp107 null
    632 label __label139
    633 label __label137
    634 label __label140
@@ -1086,7 +1086,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    647 print ", but was "
    648 print __fn35_actual
    649 print "\n"
--    * set __tmp110 "\n"
+-    * set __tmp110 null
    650 label __label143
    651 label __label141
    652 label __label144
@@ -1102,7 +1102,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    665 print ", but was "
    666 print __fn36_actual
    667 print "\n"
--    * set __tmp113 "\n"
+-    * set __tmp113 null
    668 label __label147
    669 label __label145
    670 label __label148
@@ -1118,7 +1118,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    683 print ", but was "
    684 print __fn37_actual
    685 print "\n"
--    * set __tmp116 "\n"
+-    * set __tmp116 null
    686 label __label151
    687 label __label149
    688 label __label152
@@ -1134,7 +1134,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    701 print ", but was "
    702 print __fn38_actual
    703 print "\n"
--    * set __tmp119 "\n"
+-    * set __tmp119 null
    704 label __label155
    705 label __label153
    706 label __label156
@@ -1150,7 +1150,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    719 print ", but was "
    720 print __fn39_actual
    721 print "\n"
--    * set __tmp122 "\n"
+-    * set __tmp122 null
    722 label __label159
    723 label __label157
    724 label __label160
@@ -1166,7 +1166,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    737 print ", but was "
    738 print __fn40_actual
    739 print "\n"
--    * set __tmp125 "\n"
+-    * set __tmp125 null
    740 label __label163
    741 label __label161
    742 label __label164
@@ -1182,7 +1182,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    755 print ", but was "
    756 print __fn41_actual
    757 print "\n"
--    * set __tmp128 "\n"
+-    * set __tmp128 null
    758 label __label167
    759 label __label165
    760 label __label168
@@ -1198,7 +1198,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    773 print ", but was "
    774 print __fn42_actual
    775 print "\n"
--    * set __tmp131 "\n"
+-    * set __tmp131 null
    776 label __label171
    777 label __label169
    778 label __label172
@@ -1214,7 +1214,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    791 print ", but was "
    792 print __fn43_actual
    793 print "\n"
--    * set __tmp134 "\n"
+-    * set __tmp134 null
    794 label __label175
    795 label __label173
    796 label __label176
@@ -1230,7 +1230,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    809 print ", but was "
    810 print __fn44_actual
    811 print "\n"
--    * set __tmp137 "\n"
+-    * set __tmp137 null
    812 label __label179
    813 label __label177
    814 label __label180
@@ -1246,7 +1246,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    827 print ", but was "
    828 print __fn45_actual
    829 print "\n"
--    * set __tmp140 "\n"
+-    * set __tmp140 null
    830 label __label183
    831 label __label181
    832 label __label184
@@ -1262,7 +1262,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    845 print ", but was "
    846 print __fn46_actual
    847 print "\n"
--    * set __tmp143 "\n"
+-    * set __tmp143 null
    848 label __label187
    849 label __label185
    850 label __label188
@@ -1278,7 +1278,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    863 print ", but was "
    864 print __fn47_actual
    865 print "\n"
--    * set __tmp146 "\n"
+-    * set __tmp146 null
    866 label __label191
    867 label __label189
    868 set a 2
@@ -1294,7 +1294,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    884 print ", but was "
    885 print __fn48_actual
    886 print "\n"
--    * set __tmp150 "\n"
+-    * set __tmp150 null
    887 label __label195
    888 label __label193
    889 set a 2
@@ -1310,7 +1310,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    905 print ", but was "
    906 print __fn49_actual
    907 print "\n"
--    * set __tmp154 "\n"
+-    * set __tmp154 null
    908 label __label199
    909 label __label197
    910 set a 6
@@ -1326,7 +1326,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    926 print ", but was "
    927 print __fn50_actual
    928 print "\n"
--    * set __tmp158 "\n"
+-    * set __tmp158 null
    929 label __label203
    930 label __label201
    931 set a 6
@@ -1342,7 +1342,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    947 print ", but was "
    948 print __fn51_actual
    949 print "\n"
--    * set __tmp162 "\n"
+-    * set __tmp162 null
    950 label __label207
    951 label __label205
    952 set a 6
@@ -1358,7 +1358,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    968 print ", but was "
    969 print __fn52_actual
    970 print "\n"
--    * set __tmp166 "\n"
+-    * set __tmp166 null
    971 label __label211
    972 label __label209
    973 set a 4
@@ -1374,7 +1374,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
    989 print ", but was "
    990 print __fn53_actual
    991 print "\n"
--    * set __tmp170 "\n"
+-    * set __tmp170 null
    992 label __label215
    993 label __label213
    994 set a 4
@@ -1390,7 +1390,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1010 print ", but was "
   1011 print __fn54_actual
   1012 print "\n"
--    * set __tmp174 "\n"
+-    * set __tmp174 null
   1013 label __label219
   1014 label __label217
   1015 set a 1
@@ -1406,7 +1406,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1031 print ", but was "
   1032 print __fn55_actual
   1033 print "\n"
--    * set __tmp178 "\n"
+-    * set __tmp178 null
   1034 label __label223
   1035 label __label221
   1036 set a 9
@@ -1422,7 +1422,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1052 print ", but was "
   1053 print __fn56_actual
   1054 print "\n"
--    * set __tmp182 "\n"
+-    * set __tmp182 null
   1055 label __label227
   1056 label __label225
   1057 set a 1
@@ -1438,7 +1438,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1073 print ", but was "
   1074 print __fn57_actual
   1075 print "\n"
--    * set __tmp186 "\n"
+-    * set __tmp186 null
   1076 label __label231
   1077 label __label229
   1078 set a 3
@@ -1454,7 +1454,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1094 print ", but was "
   1095 print __fn58_actual
   1096 print "\n"
--    * set __tmp190 "\n"
+-    * set __tmp190 null
   1097 label __label235
   1098 label __label233
   1099 set a 3
@@ -1470,7 +1470,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1115 print ", but was "
   1116 print __fn59_actual
   1117 print "\n"
--    * set __tmp194 "\n"
+-    * set __tmp194 null
   1118 label __label239
   1119 label __label237
   1120 set a 1
@@ -1486,7 +1486,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1135 print ", but was "
   1136 print __fn60_actual
   1137 print "\n"
--    * set __tmp197 "\n"
+-    * set __tmp197 null
   1138 label __label243
   1139 label __label241
   1140 set a 1
@@ -1502,7 +1502,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1156 print ", but was "
   1157 print __fn61_actual
   1158 print "\n"
--    * set __tmp201 "\n"
+-    * set __tmp201 null
   1159 label __label247
   1160 label __label245
   1161 set a 0
@@ -1518,7 +1518,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instruc
   1176 print ", but was "
   1177 print __fn62_actual
   1178 print "\n"
--    * set __tmp204 "\n"
+-    * set __tmp204 null
   1179 label __label251
   1180 label __label249
   1181 end

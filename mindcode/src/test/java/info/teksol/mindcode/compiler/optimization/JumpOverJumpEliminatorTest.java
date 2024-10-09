@@ -31,13 +31,13 @@ class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpElimi
                         .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, ADVANCED)
                 ),
                 """
-                        while true
-                            print("In loop")
-                            if @unit.dead === 0
-                                break
-                            end
-                        end
-                        print("Out of loop")
+                        while true do
+                            print("In loop");
+                            if @unit.dead === 0 then
+                                break;
+                            end;
+                        end;
+                        print("Out of loop");
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "equal", "true", "false"),
@@ -54,13 +54,13 @@ class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpElimi
     void optimizesFunctionReturn() {
         assertCompilesTo(createTestCompiler(createCompilerProfile().setAllOptimizationLevels(ADVANCED)),
                 """
-                        displayItem()
+                        displayItem();
                         
                         def displayItem()
-                            amount = vault1.coal
-                            if amount == 0 return end
-                            print(amount % 10)
-                        end
+                            amount = vault1.coal;
+                            if amount == 0 then return; end;
+                            print(amount % 10);
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SENSOR, "__fn0_amount", "vault1", "@coal"),

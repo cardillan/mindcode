@@ -28,11 +28,11 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
     void optimizesCaseWithVariable() {
         assertCompilesTo("""
                         x = case UNIT
-                            when @poly 1
-                            when @mega 2
-                            else 3
-                        end
-                        print(x)
+                            when @poly then 1;
+                            when @mega then 2;
+                            else 3;
+                        end;
+                        print(x);
                         """,
                 createInstruction(JUMP, var(1001), "notEqual", "UNIT", "@poly"),
                 createInstruction(SET, var(0), "1"),
@@ -54,11 +54,11 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
     void optimizesCaseWithExpression() {
         assertCompilesTo("""
                         x = case vault1.firstItem
-                            when @lead 1
-                            when @coal 2
-                            else 3
-                        end
-                        print(x)
+                            when @lead then 1;
+                            when @coal then 2;
+                            else 3;
+                        end;
+                        print(x);
                         """,
                 createInstruction(SENSOR, var(0), "vault1", "@firstItem"),
                 createInstruction(JUMP, var(1001), "notEqual", var(0), "@lead"),

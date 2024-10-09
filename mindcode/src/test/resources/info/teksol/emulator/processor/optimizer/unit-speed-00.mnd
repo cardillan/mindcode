@@ -8,31 +8,31 @@ DY = @maph - 10;
 distance = floor(100 * len(DX - SX, DY - SY) + 0.5) / 100 - 2;
 
 ubind(UNIT);
-while @unit == null
-	print(UNIT, ": no active unit found.");
-	printflush(message1);
-	ubind(UNIT);
+while @unit == null do
+    print(UNIT, ": no active unit found.");
+    printflush(message1);
+    ubind(UNIT);
 end;
 
-while switch1.enabled == false
-	print("Press button to start measuring ", UNIT, " speed.");
-	printflush(message1);
+while switch1.enabled == false do
+    print("Press button to start measuring ", UNIT, " speed.");
+    printflush(message1);
 end;
 
 switch1.enabled = false;
 
-while @unit.controlled != 0
-	print("Searching free ", UNIT);
-	printflush(message1);
-	ubind(UNIT);
+while @unit.controlled != 0 do
+    print("Searching free ", UNIT);
+    printflush(message1);
+    ubind(UNIT);
 end;
 
 flag(1);
 
-while within(SX, SY, 1) == false
-	print("Moving to start");
-	printflush(message1);
-	move(SX, SY);
+while within(SX, SY, 1) == false do
+    print("Moving to start");
+    printflush(message1);
+    move(SX, SY);
 end;
 
 // We're at start location
@@ -42,8 +42,8 @@ printflush(message1);
 start = @time;
 move(DX, DY);
 
-while within(DX, DY, 1) == false
-	move(DX, DY);
+while within(DX, DY, 1) == false do
+    move(DX, DY);
 end;
 
 finish = @time;
@@ -55,12 +55,12 @@ flag(0);
 elapsed = finish - start;
 speed = floor((distance / elapsed) * 100000) / 100;
 
-while switch1.enabled == false
-	print("Measurement results (", UNIT, "):");
-	print("\nMap dimensions: ", @mapw, "x", @maph);
-	print("\nElapsed time: ", elapsed, "ms");
-	print("\nDistance travelled: ", distance);
-	print("\nSpeed: ", speed, "tiles/s");
-	print("\nPress button to repeat");
-	printflush(message1);
+while switch1.enabled == false do
+    print("Measurement results (", UNIT, "):");
+    print("\nMap dimensions: ", @mapw, "x", @maph);
+    print("\nElapsed time: ", elapsed, "ms");
+    print("\nDistance travelled: ", distance);
+    print("\nSpeed: ", speed, "tiles/s");
+    print("\nPress button to repeat");
+    printflush(message1);
 end;

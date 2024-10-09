@@ -1,10 +1,10 @@
-breakout-00.mnd:                        : parse:          0 ms, compile:          0 ms, optimize:        200 ms
+breakout-00.mnd:                        : parse:        200 ms, compile:          0 ms, optimize:        200 ms
 detector-00.mnd:                        : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-factory-monitor-00.mnd:                 : parse:          0 ms, compile:          0 ms, optimize:        200 ms
+factory-monitor-00.mnd:                 : parse:        200 ms, compile:          0 ms, optimize:        200 ms
 factory-monitor-silicon-00.mnd:         : parse:          0 ms, compile:          0 ms, optimize:        200 ms
 factory-monitor-surge-alloy-00.mnd:     : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 impact-reactor-logic-00.mnd:            : parse:          0 ms, compile:          0 ms, optimize:        800 ms
-instant-overdrive-dome-00.mnd:          : parse:          0 ms, compile:          0 ms, optimize:        600 ms
+instant-overdrive-dome-00.mnd:          : parse:          0 ms, compile:          0 ms, optimize:        800 ms
 item-counter-00.mnd:                    : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 item-counter-micro-00.mnd:              : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 item-rate-display-00.mnd:               : parse:          0 ms, compile:          0 ms, optimize:        200 ms

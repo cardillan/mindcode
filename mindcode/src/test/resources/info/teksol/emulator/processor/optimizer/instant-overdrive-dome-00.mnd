@@ -133,17 +133,17 @@ while switch1.enabled do
     // Note: processUnit rebinds a unit if it is lost. Store it back
     printDomeStatus(@silicon, "\n[green]Silicon[] status:\n");
     UNIT_S1 = processUnit(UNIT_S1, @silicon, GROUP1, SUPPLY_S_FIRST);
-    if FOUR_UNITS
+    if FOUR_UNITS then
         UNIT_S2 = processUnit(UNIT_S2, @silicon, GROUP2, not SUPPLY_S_FIRST);
         SUPPLY_S_FIRST = SUPPLY_S_FIRST ? UNIT_S1.totalItems > 0 : UNIT_S2.totalItems == 0;
-    end
+    end;
 
     printDomeStatus(@phase-fabric, "\n[green]Phase fabric[] status:\n");
     UNIT_P1 = processUnit(UNIT_P1, @phase-fabric, GROUP1, SUPPLY_P_FIRST);
-    if FOUR_UNITS
+    if FOUR_UNITS then
         UNIT_P2 = processUnit(UNIT_P2, @phase-fabric, GROUP2, not SUPPLY_P_FIRST);
         SUPPLY_P_FIRST = SUPPLY_P_FIRST ? UNIT_P1.totalItems > 0 : UNIT_P2.totalItems == 0;
-    end
+    end;
 
     print($"\n[lightgray]Loop time: $ ms", floor(@time - start));
     printflush(message1);
@@ -214,7 +214,7 @@ inline def areUnitsAvailable(type, output)
     end;
 
     return false;
-end
+end;
 
 // Tries to bind again units which have been controlled by this processor recently
 // If the switch is turned off and then on again quickly, we might find our last
@@ -253,7 +253,7 @@ end;
 inline def rebindUnit(currentUnit)
     if currentUnit != null then
         ubind(currentUnit);
-        if @unit.dead === 0 && @unit.controller == @this
+        if @unit.dead === 0 && @unit.controller == @this then
             // Current unit is valid, no need to rebind
             return currentUnit;
         end;
@@ -272,7 +272,7 @@ inline def rebindUnit(currentUnit)
 
     // No additional unit of this type is available - reinitialize
     end();
-end
+end;
 
 inline def acquireUnit(currentUnit)
     rebindUnit(currentUnit);
@@ -358,7 +358,7 @@ inline def processUnit(unit, item, group, supply)
     end;
 
     return @unit;
-end
+end;
 
 inline def printDomeStatus(item, text)
     print(text);

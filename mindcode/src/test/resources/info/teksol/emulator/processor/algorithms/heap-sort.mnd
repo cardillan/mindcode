@@ -2,19 +2,19 @@ allocate stack in bank1[0...512];
 param ARRAY = bank2;
 
 inline def output(size)
-    for i in 0 .. size
+    for i in 0 .. size do
         print(ARRAY[i], " ");
     end;
     print("\n");
 end;
 
 def up(index)
-    while index > 0
+    while index > 0 do
         parent = (index - 1) \ 2;
         iv = ARRAY[index];
         pv = ARRAY[parent];
         //print("Parent: ", parent, ", index: ", index, ", pv: ", pv, ", iv: ", iv, "\n");
-        if pv < iv
+        if pv < iv then
             ARRAY[index] = pv;
             ARRAY[parent] = iv;
             index = parent;
@@ -26,16 +26,16 @@ end;
 
 def down(index)
     parent = 0;
-    while (child = parent * 2 + 1) <= index
+    while (child = parent * 2 + 1) <= index do
         cv = ARRAY[child];
-        if child < index
-            if cv < ARRAY[child + 1]
+        if child < index then
+            if cv < ARRAY[child + 1] then
                 child += 1;
                 cv = ARRAY[child];
             end;
         end;
         pv = ARRAY[parent];
-        if pv < cv
+        if pv < cv then
             ARRAY[parent] = cv;
             ARRAY[child] = pv;
             parent = child;
@@ -46,14 +46,14 @@ def down(index)
 end;
 
 // Build a heap
-for i in 1 ... SIZE
+for i in 1 ... SIZE do
     up(i);
     //output(i);
 end;
 
 // Repeatedly use the heap's greatest value to sort the array
 index = SIZE - 1;
-while index > 0
+while index > 0 do
     x = ARRAY[0];
     ARRAY[0] = ARRAY[index];
     ARRAY[index] = x;
@@ -61,6 +61,6 @@ while index > 0
     down(index);
 end;
 
-for i in 0 ... SIZE
+for i in 0 ... SIZE do
     print(ARRAY[i]);
 end;

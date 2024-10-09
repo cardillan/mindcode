@@ -23,11 +23,11 @@ end
 mindcode_source = """
     page = 1;
     const NUM_PAGES = 7;
-    while true
+    while true do
         block = getlink(2);  // First two links are a switch and a message
         println($"Property detector - page $page/$NUM_PAGES");
 
-        if block.dead === 0
+        if block.dead == 0 then
             print(block.type, " - ");
             case page
                 when 1 then

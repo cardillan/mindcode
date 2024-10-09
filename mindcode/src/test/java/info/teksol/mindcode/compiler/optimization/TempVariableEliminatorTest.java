@@ -139,7 +139,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void optimizesGetlinkFollowedBySet() {
         assertCompilesTo("""
-                        target = getlink(0)
+                        target = getlink(0);
                         """,
                 createInstruction(GETLINK, "target", "0"),
                 createInstruction(END)
@@ -175,7 +175,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void optimizesOpThenSet() {
         assertCompilesTo("""
-                        r = rand(100)
+                        r = rand(100);
                         """,
                 createInstruction(OP, "rand", "r", "100"),
                 createInstruction(END)
@@ -185,7 +185,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void optimizesOpOpThenSet() {
         assertCompilesTo("""
-                        state = min(max(state, MIN), MAX)
+                        state = min(max(state, MIN), MAX);
                         """,
                 createInstruction(OP, "max", var(0), "state", "MIN"),
                 createInstruction(OP, "min", "state", var(0), "MAX"),
@@ -196,7 +196,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void optimizesOpThenSetFromBinaryOp() {
         assertCompilesTo("""
-                        remaining = capacity - current
+                        remaining = capacity - current;
                         """,
                 createInstruction(OP, "sub", "remaining", "capacity", "current"),
                 createInstruction(END)
@@ -208,7 +208,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void improvesReadThenSet() {
         assertCompilesTo("""
-                        boo = cell1[0]
+                        boo = cell1[0];
                         """,
                 createInstruction(READ, "boo", "cell1", "0"),
                 createInstruction(END)
@@ -229,7 +229,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void optimizesSensorThenSet() {
         assertCompilesTo("""
-                        numsilicon = STORAGE.silicon
+                        numsilicon = STORAGE.silicon;
                         """,
                 createInstruction(SENSOR, "numsilicon", "STORAGE", "@silicon"),
                 createInstruction(END)
@@ -239,8 +239,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void supportsConsecutiveSensors() {
         assertCompilesTo("""
-                        numgraphite = container1.graphite
-                        numcoal = container1.coal
+                        numgraphite = container1.graphite;
+                        numcoal = container1.coal;
                         """,
                 createInstruction(SENSOR, "numgraphite", "container1", "@graphite"),
                 createInstruction(SENSOR, "numcoal", "container1", "@coal"),

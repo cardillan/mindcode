@@ -26,12 +26,12 @@ class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTarget
     @Test
     void propagatesThroughUnconditionalTargets() {
         assertCompilesTo("""
-                        if a
-                            if b
-                                print(b)
-                            end
-                            print(a)
-                        end
+                        if a then
+                            if b then
+                                print(b);
+                            end;
+                            print(a);
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(JUMP, "__start__", "equal", "a", "false"),
@@ -49,13 +49,13 @@ class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTarget
     @Test
     void propagatesThroughConditionalTargets() {
         assertCompilesTo("""
-                        while c == null
-                            c = getlink(1)
-                            if c == null
-                                print("Not found")
-                            end
-                        end
-                        print("Done")
+                        while c == null do
+                            c = getlink(1);
+                            if c == null then
+                                print("Not found");
+                            end;
+                        end;
+                        print("Done");
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "notEqual", "c", "null"),
@@ -73,13 +73,13 @@ class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTarget
     @Test
     void ignoresVolatileVariables() {
         assertCompilesTo("""
-                        while @time < wait
-                            n += 1
-                            if @time < wait
-                                print("Waiting")
-                            end
-                        end
-                        print("Done")
+                        while @time < wait do
+                            n += 1;
+                            if @time < wait then
+                                print("Waiting");
+                            end;
+                        end;
+                        print("Done");
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "greaterThanEq", "@time", "wait"),
@@ -98,14 +98,14 @@ class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTarget
     void propagatesGoto() {
         assertCompilesTo("""
                         def foo(n)
-                            if n > 10
-                                return 2
+                            if n > 10 then
+                                return 2;
                             else
-                                return 0
-                            end
-                        end
-                        print(foo(2))
-                        print(foo(3))
+                                return 0;
+                            end;
+                        end;
+                        print(foo(2));
+                        print(foo(3));
                         """,
                 createInstruction(SET, "__fn0_n", "2"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),

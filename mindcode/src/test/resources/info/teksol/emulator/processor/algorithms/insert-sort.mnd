@@ -1,11 +1,11 @@
 allocate stack in bank1[0...512];
 param ARRAY = bank2;
 
-for i in 1 ... SIZE
+for i in 1 ... SIZE do
     item = ARRAY[i];
     j = i - 1;
-    while j >= 0
-        if (a = ARRAY[j]) <= item
+    while j >= 0 do
+        if (a = ARRAY[j]) <= item then
             break;
         end;
         ARRAY[j + 1] = a;
@@ -14,6 +14,6 @@ for i in 1 ... SIZE
     ARRAY[j + 1] = item;
 end;
 
-for i in 0 ... SIZE
+for i in 0 ... SIZE do
     print(ARRAY[i]);
 end;

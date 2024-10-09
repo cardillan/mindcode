@@ -1,7 +1,7 @@
 def foo(n)
     sum = 0;
     r = rand(10);        // Prevents compile-time evaluation
-    for i in 0 ... 50
+    for i in 0 ... 50 do
         sum += n + r;
     end;
     print(floor(sum - 50 * r + 0.5));

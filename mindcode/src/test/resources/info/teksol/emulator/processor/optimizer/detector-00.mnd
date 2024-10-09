@@ -1,17 +1,17 @@
 page = 0;
-while true
+while true do
     BLOCK = getlink(2);  // First two links are a switch and a message
     const NUM_PAGES = 7;
     page = max(page, 1);
 
-    if switch1.enabled
+    if switch1.enabled then
         page = (page % NUM_PAGES) + 1;
         switch1.enabled = false;
     end;
 
     print($"Property detector - page $page/$NUM_PAGES\n");
 
-    if BLOCK.dead === 0
+    if BLOCK.dead === 0 then
         print(BLOCK.type, " - ");
         case page
             when 1 then

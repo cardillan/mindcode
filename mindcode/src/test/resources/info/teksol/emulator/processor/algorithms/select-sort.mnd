@@ -1,12 +1,12 @@
 allocate stack in bank1[0...512];
 param ARRAY = bank2;
 
-for i in 0 ... SIZE - 1
+for i in 0 ... SIZE - 1 do
     min = ARRAY[i];
     min_index = i;
-    for j in i + 1 ... SIZE
+    for j in i + 1 ... SIZE do
         curr = ARRAY[j];
-        if curr < min 
+        if curr < min then
             min = curr;
             min_index = j;
         end;
@@ -15,6 +15,6 @@ for i in 0 ... SIZE - 1
     ARRAY[i] = min;
 end;
 
-for i in 0 ... SIZE
+for i in 0 ... SIZE do
     print(ARRAY[i]);
 end;

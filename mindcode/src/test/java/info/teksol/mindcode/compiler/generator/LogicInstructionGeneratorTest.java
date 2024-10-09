@@ -14,10 +14,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void canIndirectlyReferenceHeap() {
         assertCompilesTo("""
-                        set HEAPPTR = cell1
-                        allocate heap in HEAPPTR[0...4]
-                        $dx = 0
-                        $dy += $dx
+                        HEAPPTR = cell1;
+                        allocate heap in HEAPPTR[0...4];
+                        $dx = 0;
+                        $dy += $dx;
                         """,
                 createInstruction(SET, "HEAPPTR", "cell1"),
                 createInstruction(WRITE, "0", "HEAPPTR", "0"),
@@ -32,7 +32,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesAssigningAssignmentResults() {
         assertCompilesTo(
-                "a = b = 42",
+                "a = b = 42;",
                 createInstruction(SET, "b", "42"),
                 createInstruction(SET, "a", "b"),
                 createInstruction(END)
@@ -42,7 +42,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesBitwiseAndOrXorAndShiftLeftOrRight() {
         assertCompilesTo(
-                "(9842 & x) ^ (z << 4) | y >> 1\n",
+                "(9842 & x) ^ (z << 4) | y >> 1;\n",
                 createInstruction(OP, "and", var(0), "9842", "x"),
                 createInstruction(OP, "shl", var(1), "z", "4"),
                 createInstruction(OP, "xor", var(2), var(0), var(1)),
@@ -55,10 +55,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesBitwiseOpPriority() {
         assertCompilesTo("""
-                        a = b | c & d
-                        e = ~f & g
-                        g = h & 31 == 15
-                        x = y & 15 and z & 7
+                        a = b | c & d;
+                        e = ~f & g;
+                        g = h & 31 == 15;
+                        x = y & 15 and z & 7;
                         """,
                 createInstruction(OP, "and", var(0), "c", "d"),
                 createInstruction(OP, "or", var(1), "b", var(0)),
@@ -80,10 +80,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesBooleanOperations() {
         assertCompilesTo("""
-                        while z != true
-                            print("infinite loop!")
-                        end
-                        printflush(message1)
+                        while z != true do
+                            print("infinite loop!");
+                        end;
+                        printflush(message1);
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(OP, "notEqual", var(0), "z", "true"),
@@ -102,17 +102,17 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertCompilesTo("""
                         Outer:
                         while a do
-                            print("In outer")
+                            print("In outer");
                             Inner:
-                            while b
-                                print("In inner")
-                                break Outer
-                                print("After break")
-                                continue Inner
-                            end
-                            print("After inner")
-                        end
-                        print("After outer")
+                            while b do
+                                print("In inner");
+                                break Outer;
+                                print("After break");
+                                continue Inner;
+                            end;
+                            print("After inner");
+                        end;
+                        print("After outer");
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "equal", "a", "false"),
@@ -139,13 +139,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesBreakContinue() {
         assertCompilesTo("""
                         while a do
-                            if b
-                                continue
-                            elsif c
-                                break
-                            end
-                        end
-                        print("End")
+                            if b then
+                                continue;
+                            elsif c then
+                                break;
+                            end;
+                        end;
+                        print("End");
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "equal", "a", "false"),
@@ -174,9 +174,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesCStyleComplexForLoop() {
         assertCompilesTo("""
-                        for i = 0, j = -5; i < 5; j -= 1, i += 1
-                            print(n)
-                        end
+                        for i = 0, j = -5; i < 5; j -= 1, i += 1 do
+                            print(n);
+                        end;
                         """,
                 createInstruction(SET, "i", "0"),
                 createInstruction(SET, "j", "-5"),
@@ -198,11 +198,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesCaseWhen() {
         assertCompilesTo("""
-                        allocate heap in cell1[0..10]
+                        allocate heap in cell1[0..10];
                         case $state
-                            when ST_EMPTY           $state = ST_INITIALIZED
-                            when ST_INITIALIZED     $state = ST_DONE
-                        end
+                            when ST_EMPTY       then $state = ST_INITIALIZED;
+                            when ST_INITIALIZED then $state = ST_DONE;
+                        end;
                         """,
                 createInstruction(READ, var(0), "cell1", "0"),
                 createInstruction(SET, "__ast0", var(0)),
@@ -230,10 +230,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesCaseWhenMultiple() {
         assertCompilesTo("""
                         case n
-                            when 1, 2, 3 then "Few"
-                            when 4, 5, 6      "Several"
-                            else              "Many"
-                        end
+                            when 1, 2, 3 then "Few";
+                            when 4, 5, 6 then "Several";
+                            else              "Many";
+                        end;
                         """,
                 createInstruction(SET, "__ast0", "n"),
 
@@ -268,9 +268,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesCaseWhenMultipleWithRanges() {
         assertCompilesTo("""
                         case n
-                            when 0 .. 4, 6 .. 8, 10, 12
-                                "A number I like"
-                        end
+                            when 0 .. 4, 6 .. 8, 10, 12 then
+                                "A number I like";
+                        end;
                         """,
                 createInstruction(SET, "__ast0", "n"),
                 createInstruction(JUMP, var(1003), "lessThan", "__ast0", "0"),
@@ -296,10 +296,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesCaseWhenThenElse() {
         assertCompilesTo("""
                         case n
-                            when 1 then "1"
-                            when 2 then "two"
-                            else        "otherwise"
-                        end
+                            when 1 then "1";
+                            when 2 then "two";
+                            else        "otherwise";
+                        end;
                         """,
                 createInstruction(SET, "__ast0", "n"),
                 createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
@@ -323,7 +323,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesComplexAssignment() {
         assertCompilesTo(
-                "foo = (bar - 2) * 3",
+                "foo = (bar - 2) * 3;",
                 createInstruction(OP, "sub", var(0), "bar", "2"),
                 createInstruction(OP, "mul", var(1), var(0), "3"),
                 createInstruction(SET, "foo", var(1)),
@@ -334,7 +334,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesComplexMathExpression() {
         assertCompilesTo(
-                "x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))))",
+                "x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))));",
                 createInstruction(OP, "rand", var(0), "1"),
                 createInstruction(OP, "tan", var(1), var(0)),
                 createInstruction(OP, "abs", var(2), var(1)),
@@ -360,7 +360,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesControlStatements() {
         assertCompilesTo(
-                "conveyor1.enabled = foundation1.copper === tank1.water",
+                "conveyor1.enabled = foundation1.copper === tank1.water;",
                 createInstruction(SENSOR, var(1), "foundation1", "@copper"),
                 createInstruction(SENSOR, var(2), "tank1", "@water"),
                 createInstruction(OP, "strictEqual", var(3), var(1), var(2)),
@@ -373,10 +373,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesCorrectCodeWhenCaseBranchIsCommentedOut() {
         assertCompilesTo("""
                         case n
-                            // when 1
-                            when 2
-                                print(n)
-                        end
+                            // when 1 then
+                            when 2 then
+                                print(n);
+                        end;
                         """,
                 createInstruction(SET, "__ast0", "n"),
                 createInstruction(JUMP, var(1002), "equal", "__ast0", "2"),
@@ -395,16 +395,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesCorrectCodeWhenIfExpressionHasCommentedOutSections() {
         assertCompilesTo("""
-                        if n
+                        if n then
                             // no op
                         else
-                            1
-                        end
-                        if m
-                            1
+                            1;
+                        end;
+                        if m then
+                            1;
                         else
                             // 2
-                        end
+                        end;
                         """,
                 createInstruction(JUMP, var(1000), "equal", "n", "false"),
                 createInstruction(SET, var(0), "null"),
@@ -425,7 +425,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesDirectIndirectPropertyReference() {
         assertCompilesTo(
-                "conveyor1.enabled = vault1.sensor(@graphite) < vault1.sensor(@itemCapacity)",
+                "conveyor1.enabled = vault1.sensor(@graphite) < vault1.sensor(@itemCapacity);",
                 createInstruction(SENSOR, var(0), "vault1", "@graphite"),
                 createInstruction(SENSOR, var(1), "vault1", "@itemCapacity"),
                 createInstruction(OP, "lessThan", var(2), var(0), var(1)),
@@ -437,14 +437,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesDoWhileLoop() {
         assertCompilesTo("""
-                        print("Blocks:")
-                        n = @links
+                        print("Blocks:");
+                        n = @links;
                         do
-                          n -= 1
-                          block = getlink(n)
-                          print(block)
-                        loop while n > 0
-                        printflush(message1)
+                          n -= 1;
+                          block = getlink(n);
+                          print(block);
+                        loop while n > 0;
+                        printflush(message1);
                         """,
                 createInstruction(PRINT, q("Blocks:")),
                 createInstruction(SET, var(0), "@links"),
@@ -467,7 +467,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesEndFromFunctionCall() {
         assertCompilesTo(
-                "if some_cond == false end() end",
+                "if some_cond == false then end(); end;",
                 createInstruction(OP, "equal", var(0), "some_cond", "false"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
                 createInstruction(END),
@@ -483,7 +483,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesExclusiveIteratorStyleLoop() {
         assertCompilesTo(
-                "for n in 1 ... 17 print(n) end",
+                "for n in 1 ... 17 do print(n); end;",
                 createInstruction(SET, "n", "1"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "greaterThanEq", "n", "17"),
@@ -499,9 +499,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesForEachAndPrintFunctionCall() {
         assertCompilesTo("""
-                        for a in (@mono, @poly, @mega)
-                            print(a)
-                        end
+                        for a in @mono, @poly, @mega do
+                            print(a);
+                        end;
                         """,
                 createInstruction(SETADDR, var(0), var(1003)),
                 createInstruction(SET, "a", "@mono"),
@@ -526,7 +526,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesFunctionsReturningValues() {
         assertCompilesTo(
-                "z = 9; cell1[0] = rand(z**9)",
+                "z = 9; cell1[0] = rand(z**9);",
                 createInstruction(SET, "z", "9"),
                 createInstruction(OP, "pow", var(0), "z", "9"),
                 createInstruction(OP, "rand", var(1), var(0)),
@@ -538,7 +538,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesHeapAccesses() {
         assertCompilesTo(
-                "cell1[3] = cell2[4] + conveyor1.enabled",
+                "cell1[3] = cell2[4] + conveyor1.enabled;",
                 createInstruction(READ, var(0), "cell2", "4"),
                 createInstruction(SENSOR, var(1), "conveyor1", "@enabled"),
                 createInstruction(OP, "add", var(2), var(0), var(1)),
@@ -548,40 +548,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void compilesIfExpression() {
-        assertCompilesTo("""
-                        value = if cell1[4] == 0
-                            false
-                        else
-                            cell1[4] = true
-                            n += 1
-                        end
-                        """,
-                createInstruction(READ, var(0), "cell1", "4"),
-                createInstruction(OP, "equal", var(1), var(0), "0"),
-                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                createInstruction(SET, var(2), "false"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(WRITE, "true", "cell1", "4"),
-                createInstruction(OP, "add", var(3), "n", "1"),
-                createInstruction(SET, "n", var(3)),
-                createInstruction(SET, var(2), "n"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(SET, "value", var(2)),
-                createInstruction(END)
-        );
-    }
-
-    @Test
     void compilesIfThenExpression() {
         assertCompilesTo("""
                         value = if cell1[4] == 0 then
-                            false
+                            false;
                         else
-                            cell1[4] = true
-                            n += 1
-                        end
+                            cell1[4] = true;
+                            n += 1;
+                        end;
                         """,
                 createInstruction(READ, var(0), "cell1", "4"),
                 createInstruction(OP, "equal", var(1), var(0), "0"),
@@ -602,7 +576,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesInclusiveIteratorStyleLoop() {
         assertCompilesTo(
-                "for n in 1 .. 17 print(n) end",
+                "for n in 1 .. 17 do print(n); end;",
                 createInstruction(SET, "n", "1"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "greaterThan", "n", "17"),
@@ -618,10 +592,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesIndirectPropertyReference() {
         assertCompilesTo("""
-                        resource = @silicon
-                        if vault1.sensor(resource) < vault1.itemCapacity
-                            foo = true
-                        end
+                        resource = @silicon;
+                        if vault1.sensor(resource) < vault1.itemCapacity then
+                            foo = true;
+                        end;
                         """,
                 createInstruction(SET, "resource", "@silicon"),
                 createInstruction(SENSOR, var(0), "vault1", "resource"),
@@ -641,7 +615,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesIntegerDivision() {
         assertCompilesTo(
-                "n = 4 \\ z",
+                "n = 4 \\ z;",
                 createInstruction(OP, "idiv", var(0), "4", "z"),
                 createInstruction(SET, "n", var(0)),
                 createInstruction(END)
@@ -651,7 +625,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesLog10Call() {
         assertCompilesTo(
-                "l = log10(x)",
+                "l = log10(x);",
                 createInstruction(OP, "log10", var(0), "x"),
                 createInstruction(SET, "l", var(0)),
                 createInstruction(END)
@@ -739,7 +713,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesMinMaxFunctions() {
         assertCompilesTo(
-                "r = min(x, max(y, 2))",
+                "r = min(x, max(y, 2));",
                 createInstruction(OP, "max", var(0), "y", "2"),
                 createInstruction(OP, "min", var(1), "x", var(0)),
                 createInstruction(SET, "r", var(1)),
@@ -750,7 +724,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesModuloOperator() {
         assertCompilesTo(
-                "running = @tick % 2 == 0",
+                "running = @tick % 2 == 0;",
                 createInstruction(OP, "mod", var(0), "@tick", "2"),
                 createInstruction(OP, "equal", var(1), var(0), "0"),
                 createInstruction(SET, "running", var(1)),
@@ -761,8 +735,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesMultiParameterControlInstruction() {
         assertCompilesTo("""
-                        turret.shoot(leader.shootX, leader.shootY, leader.shooting)
-                        turret.color(14, 15, 16)
+                        turret.shoot(leader.shootX, leader.shootY, leader.shooting);
+                        turret.color(14, 15, 16);
                         """,
                 createInstruction(SENSOR, var(0), "leader", "@shootX"),
                 createInstruction(SENSOR, var(1), "leader", "@shootY"),
@@ -776,21 +750,21 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesNestedLoopBreaks() {
         assertCompilesTo("""
-                        while a
-                            print(a)
-                            while b
-                                print(b)
-                                if c
-                                    print(c)
-                                    break
-                                end
-                                print(d)
-                                break
-                            end
-                            print(e)
-                            break
-                        end
-                        print(f)
+                        while a do
+                            print(a);
+                            while b do
+                                print(b);
+                                if c then
+                                    print(c);
+                                    break;
+                                end;
+                                print(d);
+                                break;
+                            end;
+                            print(e);
+                            break;
+                        end;
+                        print(f);
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "equal", "a", "false"),
@@ -824,7 +798,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesNestedTernaryOperators() {
         assertCompilesTo(
-                "a = (b > c) ? 1 : (d > e) ? 2 : 3",
+                "a = (b > c) ? 1 : (d > e) ? 2 : 3;",
                 createInstruction(OP, "greaterThan", var(0), "b", "c"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
                 createInstruction(SET, var(1), "1"),
@@ -848,11 +822,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesNoOpCaseWhen() {
         assertCompilesTo("""
                         case floor(rand(2))
-                            when 0
-                                1000
-                            when 1
+                            when 0 then
+                                1000;
+                            when 1 then
                                 // no op
-                            end
+                            end;
                         """,
                 createInstruction(OP, "rand", var(0), "2"),
                 createInstruction(OP, "floor", var(1), var(0)),
@@ -878,7 +852,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesNoiseCall() {
         assertCompilesTo(
-                "n = noise(4, 8)",
+                "n = noise(4, 8);",
                 createInstruction(OP, "noise", var(0), "4", "8"),
                 createInstruction(SET, "n", var(0)),
                 createInstruction(END)
@@ -888,10 +862,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesNullAndUnaryOp() {
         assertCompilesTo("""
-                        a = ~a
-                        b = !b
-                        c = not c
-                        x = null
+                        a = ~a;
+                        b = !b;
+                        c = not c;
+                        x = null;
                         """,
                 createInstruction(OP, "not", var(0), "a"),
                 createInstruction(SET, "a", var(0)),
@@ -935,24 +909,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesRangeExpressionLoop() {
         assertCompilesTo(
-                "for n in a ... b print(n) end",
-                createInstruction(SET, var(0), "b"),
-                createInstruction(SET, "n", "a"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "n", var(0)),
-                createInstruction(PRINT, "n"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(OP, "add", "n", "n", "1"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(END)
-        );
-    }
-
-    @Test
-    void compilesRangeExpressionLoopWithDo() {
-        assertCompilesTo(
-                "for n in a ... b do print(n) end",
+                "for n in a ... b do print(n); end;",
                 createInstruction(SET, var(0), "b"),
                 createInstruction(SET, "n", "a"),
                 createInstruction(LABEL, var(1000)),
@@ -969,14 +926,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesRealLifeTest1() {
         assertCompilesTo("""
-                        n = 0
-                        while (reactor = getlink(n)) != null
-                            if reactor.liquidCapacity > 0
-                                pct_avail = reactor.cryofluid / reactor.liquidCapacity
-                                reactor.enabled = pct_avail >= 0.25
-                            end
-                            n += 1
-                        end
+                        n = 0;
+                        while (reactor = getlink(n)) != null do
+                            if reactor.liquidCapacity > 0 then
+                                pct_avail = reactor.cryofluid / reactor.liquidCapacity;
+                                reactor.enabled = pct_avail >= 0.25;
+                            end;
+                            n += 1;
+                        end;
                         """,
                 createInstruction(SET, "n", "0"),
                 createInstruction(LABEL, var(1000)),
@@ -1010,11 +967,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesRefsWithDashInThem() {
         assertCompilesTo("""
-                        build(x, y, @titanium-conveyor, 1, 0)
-                        b_building = getBlock(x, y, b_type, b_floor)
-                        if b_type == @titanium-conveyor
-                            n += 1
-                        end
+                        build(x, y, @titanium-conveyor, 1, 0);
+                        b_building = getBlock(x, y, b_type, b_floor);
+                        if b_type == @titanium-conveyor then
+                            n += 1;
+                        end;
                         """,
                 createInstruction(UCONTROL, "build", "x", "y", "@titanium-conveyor", "1", "0"),
                 createInstruction(UCONTROL, "getBlock", "x", "y", "b_type", var(0), "b_floor"),
@@ -1035,7 +992,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesSensorReadings() {
         assertCompilesTo(
-                "foundation1.copper < foundation1.itemCapacity",
+                "foundation1.copper < foundation1.itemCapacity;",
                 createInstruction(SENSOR, var(0), "foundation1", "@copper"),
                 createInstruction(SENSOR, var(1), "foundation1", "@itemCapacity"),
                 createInstruction(OP, "lessThan", var(2), var(0), var(1)),
@@ -1046,7 +1003,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesStrictNotEqual() {
         assertCompilesTo(
-                "a = @unit.dead !== null; print(a)",
+                "a = @unit.dead !== null; print(a);",
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
                 createInstruction(OP, "strictEqual", var(1), var(0), "null"),
                 createInstruction(OP, "equal", var(2), var(1), "false"),
@@ -1059,8 +1016,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesTernaryOpPriority() {
         assertCompilesTo("""
-                        a = b > c ? b : c
-                        d += -e *= f
+                        a = b > c ? b : c;
+                        d += -e *= f;
                         """,
                 createInstruction(OP, "greaterThan", var(0), "b", "c"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
@@ -1082,7 +1039,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesTernaryOperatorLogic() {
         assertCompilesTo("""
-                        print("sm.enabled: ", smelter1.enabled ? "true" : "false")
+                        print("sm.enabled: ", smelter1.enabled ? "true" : "false");
                         """,
                 createInstruction(SENSOR, var(0), "smelter1", "@enabled"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
@@ -1100,7 +1057,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesTheSqrtFunction() {
         assertCompilesTo(
-                "sqrt(z)",
+                "sqrt(z);",
                 createInstruction(OP, "sqrt", var(0), "z"),
                 createInstruction(END)
         );
@@ -1109,10 +1066,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesUbindAndControl() {
         assertCompilesTo("""
-                        while @unit === null
-                            ubind(@poly)
-                            move(10, 10)
-                        end
+                        while @unit === null do
+                            ubind(@poly);
+                            move(10, 10);
+                        end;
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(OP, "strictEqual", var(0), "@unit", "null"),
@@ -1129,11 +1086,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesUnaryLiteralMinusExpressions() {
         assertCompilesTo("""
-                        a = -7
-                        b = -a
-                        c = -5 * b
-                        d = 2 * -c
-                        e = -d ** 2
+                        a = -7;
+                        b = -a;
+                        c = -5 * b;
+                        d = 2 * -c;
+                        e = -d ** 2;
                         """,
                 createInstruction(SET, "a", "-7"),
                 createInstruction(OP, "mul", var(0), "-1", "a"),
@@ -1153,7 +1110,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesUnaryMinus() {
         assertCompilesTo(
-                "dx *= -1; dy = -1; dz = dy - 1",
+                "dx *= -1; dy = -1; dz = dy - 1;",
                 createInstruction(OP, "mul", var(0), "dx", "-1"),
                 createInstruction(SET, "dx", var(0)),
                 createInstruction(SET, "dy", "-1"),
@@ -1166,7 +1123,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesVectorLengthAndAngleCalls() {
         assertCompilesTo(
-                "length = len(x, y)\nangle = angle(x, y)\n",
+                "length = len(x, y);\nangle = angle(x, y);\n",
                 createInstruction(OP, "len", var(0), "x", "y"),
                 createInstruction(SET, "length", var(0)),
                 createInstruction(OP, "angle", var(1), "x", "y"),
@@ -1178,11 +1135,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesWhileLoopAndPrintFunctionCall() {
         assertCompilesTo("""
-                        n = 0
-                        while n < 5
-                            n += 1
-                        end
-                        print("n: ", n)
+                        n = 0;
+                        while n < 5 do
+                            n += 1;
+                        end;
+                        print("n: ", n);
                         """,
                 createInstruction(SET, "n", "0"),
                 createInstruction(LABEL, var(1000)),
@@ -1213,9 +1170,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void recognizesTurretAsBLockName() {
         assertCompilesTo("""
                         def foo()
-                            turret1.health
-                        end
-                        print(foo())
+                            turret1.health;
+                        end;
+                        print(foo());
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SENSOR, var(1), "turret1", "@health"),
@@ -1229,29 +1186,29 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void refusesAssignmentsToBlockNames() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("switch1 = 5"));
+                () -> generateInstructions("switch1 = 5;"));
     }
 
     @Test
     void refusesBlockNamesAsFunctionParameters() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("def foo(switch1) false end foo(5)"));
+                () -> generateInstructions("def foo(switch1) false; end; foo(5);"));
     }
 
     @Test
     void refusesBlockNamesAsOutputArguments() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("getBlock(10, 20, switch1)"));
+                () -> generateInstructions("getBlock(10, 20, switch1);"));
     }
 
     @Test
     void refusesBreaksOutsideLoop() {
         assertThrows(MindcodeException.class, () ->
                 generateInstructions("""
-                        while a
-                            print(a)
-                        end
-                        break
+                        while a do
+                            print(a);
+                        end;
+                        break;
                         """
                 )
         );
@@ -1322,18 +1279,18 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void refusesMisplacedFormattableLiterals() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("i = $\"Formattable\""));
+                () -> generateInstructions("i = $\"Formattable\";"));
         assertDoesNotThrow(
-                () -> generateInstructions("inline def foo(x) print(x); end; foo(\"Formattable\")"));
+                () -> generateInstructions("inline def foo(x) print(x); end; foo(\"Formattable\");"));
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("inline def foo(x) print(x); end; foo($\"Formattable\")"));
+                () -> generateInstructions("inline def foo(x) print(x); end; foo($\"Formattable\");"));
     }
 
     @Test
     void removesCommentsFromLogicInstructions() {
         assertCompilesTo("""
                         // Remember that we initialized ourselves
-                        a = 1
+                        a = 1;
                         """,
                 createInstruction(SET, "a", "1"),
                 createInstruction(END)
@@ -1343,15 +1300,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void resolvesConstantExpressions() {
         assertCompilesTo("""
-                        a = 1 + 2
-                        b = 1 / 0
-                        c = min(3, 4)
-                        d = 1 < 2 ? b : c
-                        e = abs(-3)
-                        f = ~1
-                        g = not false
-                        h = -(2 + 3)
-                        i = 1 / 10000
+                        a = 1 + 2;
+                        b = 1 / 0;
+                        c = min(3, 4);
+                        d = 1 < 2 ? b : c;
+                        e = abs(-3);
+                        f = ~1;
+                        g = not false;
+                        h = -(2 + 3);
+                        i = 1 / 10000;
                         """,
                 createInstruction(SET, "a", "3"),
                 createInstruction(SET, "b", "null"),
@@ -1369,7 +1326,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void resolvesConstantStrictEqual() {
         assertCompilesTo(
-                "a = 0 === null ",
+                "a = 0 === null;",
                 createInstruction(SET, "a", "false"),
                 createInstruction(END)
         );
@@ -1378,7 +1335,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
         assertThrows(MindcodeException.class,
-                () -> generateInstructions("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
+                () -> generateInstructions("allocate heap in cell1[0 .. 1];\n$dx = $dy = $dz;"));
     }
 
     @Test

@@ -28,11 +28,11 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
     @Test
     void removesOrphanedJump() {
         assertCompilesTo("""
-                        while a
-                            while b
-                                print(b)
-                            end
-                        end
+                        while a do
+                            while b do
+                                print(b);
+                            end;
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(LABEL, var(1000)),
@@ -47,11 +47,11 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
     @Test
     void eliminateDeadBranch() {
         assertCompilesTo("""
-                        print(a)
-                        while false
-                            print(b)
-                        end
-                        print(c)
+                        print(a);
+                        while false do
+                            print(b);
+                        end;
+                        print(c);
                         """,
                 createInstruction(PRINT, "a"),
                 createInstruction(PRINT, "c")
@@ -61,14 +61,14 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
     @Test
     void eliminateUnusedFunction() {
         assertCompilesTo("""
-                        def a
-                            print("here")
-                        end
-                        while false
-                            a()
-                            a()
-                        end
-                        print("Done")
+                        def a()
+                            print("here");
+                        end;
+                        while false do
+                            a();
+                            a();
+                        end;
+                        print("Done");
                         """,
                 createInstruction(PRINT, q("Done"))
         );
@@ -78,25 +78,25 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
     void keepsUsedFunctions() {
         assertCompilesToWithMessages(ignore("List of unused variables: testa.n, testb.n, testc.n."),
                 """
-                        allocate stack in cell1[0 .. 63]
+                        allocate stack in cell1[0 .. 63];
                         def testa(n)
-                            print("Start")
-                        end
+                            print("Start");
+                        end;
                         def testb(n)
-                            print("Middle")
-                        end
+                            print("Middle");
+                        end;
                         def testc(n)
-                            print("End")
-                        end
-                        testa(0)
-                        testa(0)
-                        while false
-                            testb(1)
-                            testb(1)
-                        end
-                        testc(2)
-                        testc(2)
-                        printflush(message1)
+                            print("End");
+                        end;
+                        testa(0);
+                        testa(0);
+                        while false do
+                            testb(1);
+                            testb(1);
+                        end;
+                        testc(2);
+                        testc(2);
+                        printflush(message1);
                         """,
                 // call testa (2x)
                 createInstruction(SETADDR, "__fn2retaddr", var(1003)),
@@ -130,11 +130,11 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
     @Test
     void eliminatesSelfReferencedJumps() {
         assertCompilesTo("""
-                        while true
-                           print("foo")
-                           printflush(message1)
-                        end
-                        print("WooHoo!")
+                        while true do
+                           print("foo");
+                           printflush(message1);
+                        end;
+                        print("WooHoo!");
                         """,
                 createInstruction(PRINT, q("foo")),
                 createInstruction(PRINTFLUSH, "message1")

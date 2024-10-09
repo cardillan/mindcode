@@ -2,14 +2,20 @@ grammar Mindcode;
 
 @parser::members {
 // This variable will control if semicolons are mandatory or optional
-public boolean strictSyntax = false;
+public boolean strictSyntax = true;
 }
 
 program : expression_list? EOF;
 
-expression_list : expression optional_semicolon
-                | expression_list expression optional_semicolon
+expression_list : single_expression
+                | expression_list single_expression
                 ;
+
+// The REM_COMMENT isn't followed by a semicolon, needs to be handled separately
+single_expression
+    : expression optional_semicolon     # single_exp
+    | REM_COMMENT                       # rem_comment
+    ;
 
 optional_semicolon
     : {strictSyntax}? SEMICOLON
@@ -69,7 +75,6 @@ expression : directive                                                          
            | break_st                                                                           # break_exp
            | continue_st                                                                        # continue_exp
            | return_st                                                                          # return_exp
-           | REM_COMMENT                                                                        # rem_comment
            ;
 
 directive : HASHSET option=ID ASSIGN value=INT                  # numeric_directive

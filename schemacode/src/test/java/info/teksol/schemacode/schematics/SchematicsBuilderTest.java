@@ -773,7 +773,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 schematic
                     dimensions = (1, 1)
                     @micro-processor at (0, 0) processor
-                        mindcode = "print(@this)"
+                        mindcode = "print(@this);"
                     end
                 end
                 """);

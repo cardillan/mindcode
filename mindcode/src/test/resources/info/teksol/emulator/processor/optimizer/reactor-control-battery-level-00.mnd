@@ -5,13 +5,13 @@ printflush(message1);
 print("Initializing...");
 printflush(message1);
 
-for addr in 0 ... 512
+for addr in 0 ... 512 do
     bank1[addr] = 0;
 end;
 
-CONSUMPTION_INDEX	= 508;
-PRODUCTION_INDEX	= 509;
-NET_POWER_INDEX		= 510;
+CONSUMPTION_INDEX    = 508;
+PRODUCTION_INDEX    = 509;
+NET_POWER_INDEX        = 510;
 BATTERY_CHANGE_INDEX= 511;
 
 ACCU_CONS = 0;
@@ -26,55 +26,55 @@ SECONDS = DELAY * SAMPLES / 1000;
 index = 0;
 loops = 0;
 wait = @time;
-while true
-	if loops == 0
-		// Falling behind (possibly paused)
-		wait = @time;
-	end;
+while true do
+    if loops == 0 then
+        // Falling behind (possibly paused)
+        wait = @time;
+    end;
     wait += DELAY;
 
-	powerNetIn = battery1.powerNetIn;
-	powerNetOut = battery1.powerNetOut;
-	powerNetStored = battery1.powerNetStored;
+    powerNetIn = battery1.powerNetIn;
+    powerNetOut = battery1.powerNetOut;
+    powerNetStored = battery1.powerNetStored;
 
-	tmp = index;
-	ACCU_CONS -= bank1[tmp];
-	ACCU_CONS += powerNetOut;
-	bank1[tmp] = powerNetOut;
-	consumption = floor(ACCU_CONS / SAMPLES + HALF);
-	bank1[CONSUMPTION_INDEX] = consumption;
-	
-	tmp = tmp + SPACING;
-	ACCU_PROD -= bank1[tmp];
-	ACCU_PROD += powerNetIn;
-	bank1[tmp] = powerNetIn;
-	production = floor(ACCU_PROD / SAMPLES + HALF);
-	bank1[PRODUCTION_INDEX] = production;
+    tmp = index;
+    ACCU_CONS -= bank1[tmp];
+    ACCU_CONS += powerNetOut;
+    bank1[tmp] = powerNetOut;
+    consumption = floor(ACCU_CONS / SAMPLES + HALF);
+    bank1[CONSUMPTION_INDEX] = consumption;
 
-	net_power = floor((ACCU_PROD - ACCU_CONS) / SAMPLES + HALF);
-	bank1[NET_POWER_INDEX] = net_power;
-	
-	tmp = tmp + SPACING;
-	last = bank1[tmp];
-	bank1[tmp] = powerNetStored;
-	diff = powerNetStored - last;
-	battery_change = floor(diff / SECONDS + HALF);
-	bank1[BATTERY_CHANGE_INDEX] = battery_change;
+    tmp = tmp + SPACING;
+    ACCU_PROD -= bank1[tmp];
+    ACCU_PROD += powerNetIn;
+    bank1[tmp] = powerNetIn;
+    production = floor(ACCU_PROD / SAMPLES + HALF);
+    bank1[PRODUCTION_INDEX] = production;
 
-	index = (index + 1) % SAMPLES;
-	
-	print($"Measured interval: [green]$SECONDS[] seconds\n");
-	print($"Consumption: [green]$consumption[]\n");
-	print($"Production: [green]$production[]\n");
-	print($"Net power: [green]$net_power[]\n");
-	print($"Battery change: [green]$battery_change[]");
+    net_power = floor((ACCU_PROD - ACCU_CONS) / SAMPLES + HALF);
+    bank1[NET_POWER_INDEX] = net_power;
 
-	loops = 0;
+    tmp = tmp + SPACING;
+    last = bank1[tmp];
+    bank1[tmp] = powerNetStored;
+    diff = powerNetStored - last;
+    battery_change = floor(diff / SECONDS + HALF);
+    bank1[BATTERY_CHANGE_INDEX] = battery_change;
+
+    index = (index + 1) % SAMPLES;
+
+    print($"Measured interval: [green]$SECONDS[] seconds\n");
+    print($"Consumption: [green]$consumption[]\n");
+    print($"Production: [green]$production[]\n");
+    print($"Net power: [green]$net_power[]\n");
+    print($"Battery change: [green]$battery_change[]");
+
+    loops = 0;
     start = @time;
-	while @time >= start and @time < wait
-		loops += 1;
-	end;
+    while @time >= start and @time < wait do
+        loops += 1;
+    end;
 
-	print($"\n[lightgray]Loops: $loops");
-	printflush(message1);
+    print($"\n[lightgray]Loops: $loops");
+    printflush(message1);
 end;

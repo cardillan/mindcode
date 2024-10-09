@@ -1,13 +1,13 @@
 inline def sum(n)
     c = 0;
-    for i in 0 ... n
+    for i in 0 ... n do
         c += i;
     end;
     print(c);
     return c;
 end;
 
-result = if sum(4) < sum(8)
+result = if sum(4) < sum(8) then
     print("Less");
     0;
 else

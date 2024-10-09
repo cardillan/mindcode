@@ -33,7 +33,7 @@ fuel_5 = false;
 
 surplus = floor(node1.powerNetIn - node1.powerNetOut); // Watts of excess generation
 
-start_time = if surplus > 10000
+start_time = if surplus > 10000 then
     // assume generators running OK
     @tick - 3600;
 else
@@ -50,7 +50,7 @@ RET_T_STARTUP = t_startup1;
 REACTORS_DESIRED = 5; // Updates based on power fluctuations
 AVG_SURPLUS = 500;
 
-while true
+while true do
     // Feed (IN) or empty (OUT) various reactors
     ULD_IN_1 = unloader1;
     ULD_OUT_1 = unloader2;
@@ -101,14 +101,14 @@ while true
     diff_generators();
     surplus = kilo(AVG_SURPLUS);
     charge = kilo(NODE.powerNetStored);
-    if START_POWER_REQ > 0
+    if START_POWER_REQ > 0 then
         req = kilo(START_POWER_REQ);
         print($"Req ${req}kJ / ${charge}kJ. ${surplus}kW flow.\n");
     else
         print($"Power ${surplus}kW, ${charge}kJ\n");
         update_reactors_desired();
     end;
-    if REACTORS_DESIRED != 5
+    if REACTORS_DESIRED != 5 then
         print($"Require only ${REACTORS_DESIRED}/5 reactors.\n");
     end;
     printflush(message1);
@@ -125,7 +125,7 @@ end;
 
 def calc_charge_req(reactor, time)
     secs = (@tick - time) \ 60;
-    if secs > 30 or !reactor.enabled
+    if secs > 30 or !reactor.enabled then
         return 0;
     end;
 
@@ -150,29 +150,29 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
     enabled = reactor.enabled;
 
     print($"#$reactor_num - ");
-    if emerg_shutdown
+    if emerg_shutdown then
         reactor.enabled = false;
         print($"emergency mode\n");
         supply_fuel = false;
-    elsif enabled
-        if REACTORS_DESIRED < reactor_num
+    elsif enabled then
+        if REACTORS_DESIRED < reactor_num then
             reactor.enabled = false;
             print($"STOP unwanted\n");
-        elsif reactor_num > 1 and fuel_stored < FUEL_TOT_ABORT * reactor_num
+        elsif reactor_num > 1 and fuel_stored < FUEL_TOT_ABORT * reactor_num then
             reactor.enabled = false;
             print($"STOP system fuel low\n");
-        elsif fuel <= 1
+        elsif fuel <= 1 then
             // Not enough fuel to run
             reactor.enabled = false;
             print($"STOP fuel low\n");
-        elsif cryo <= CRYO_ABORT
+        elsif cryo <= CRYO_ABORT then
             reactor.enabled = false;
             print($"STOP out of cryo\n");
-        elsif secs < 30
+        elsif secs < 30 then
             // Reactor still in startup
             charge_req = calc_charge_req(reactor, t_startup);
 
-            if charge - charge_req < PWR_ABORT and surplus < FLOW_ABORT
+            if charge - charge_req < PWR_ABORT and surplus < FLOW_ABORT then
                 reactor.enabled = false;
                 print($"START FAIL battery\n");
                 supply_fuel = false;
@@ -180,7 +180,7 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
                 time_left = 30 - secs;
                 print($"Starting $time_left secs, req ${charge_req}J\n");
             end;
-        elsif charge < PWR_ABANDON and surplus < FLOW_ABORT
+        elsif charge < PWR_ABANDON and surplus < FLOW_ABORT then
             reactor.enabled = false;
             print($"ABANDON - battery crit\n");
             supply_fuel = false;
@@ -198,25 +198,25 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
         flow_units = max(-0.1, surplus / FLOW_REQ);
         cryo_req = CRYO_REQ + CRYO_REQ_EA * reactor_num;
 
-        if REACTORS_DESIRED < reactor_num
+        if REACTORS_DESIRED < reactor_num then
             print($"IDLE\n");
             supply_fuel = false;
-        elsif flow_units + charge_units < 1
+        elsif flow_units + charge_units < 1 then
             flow = floor(flow_units * 1000) / 10;
             charge = floor(charge_units * 1000) / 10;
             print($"WAIT power. (%${charge}J + %${flow}W)\n");
             supply_fuel = false;
-        elsif fuel_on and fuel < FUEL_REQ
-            if fuel + fuel_stored > FUEL_REQ
+        elsif fuel_on and fuel < FUEL_REQ then
+            if fuel + fuel_stored > FUEL_REQ then
                 // Start or continue fueling (note fuel on conveyor is not counted)
                 print($"WAIT fuel\n");
             else
                 print($"WAIT system fuel\n");
             end;
-        elsif fuel_stored < FUEL_TOT_REQ * reactor_num
+        elsif fuel_stored < FUEL_TOT_REQ * reactor_num then
             // Keep waiting until enough fuel accumulates
             print($"WAIT buffer fuel\n");
-        elsif cryo < cryo_req
+        elsif cryo < cryo_req then
             // Keep waiting for cryo to be made
             print($"WAIT cryo\n");
         else
@@ -226,7 +226,7 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
             reactor.enabled = true;
         end;
     end;
-    if enabled != reactor.enabled
+    if enabled != reactor.enabled then
         // Reactor changed state.
         RET_T_STARTUP = @tick;
     end;
@@ -237,15 +237,15 @@ def throttle_blast(reactors_fueled, emerg_shutdown)
     charge = floor(NODE.powerNetStored);
     surplus = floor(NODE.powerNetIn - NODE.powerNetOut); // Watts of excess generation
     fuel_stored = CONTAINER.blast-compound;
-    if (charge < PWR_ABORT and surplus < FLOW_ABORT) or emerg_shutdown
+    if (charge < PWR_ABORT and surplus < FLOW_ABORT) or emerg_shutdown then
         limit = 0; // Don't produce any
         print($"Central Fuel at $fuel_stored / $limit - ");
-        if emerg_shutdown
+        if emerg_shutdown then
             print($" Enemies detected.\n");
         else
             print($" Critical power.\n");
         end;
-    elsif !reactors_fueled
+    elsif !reactors_fueled then
         limit = FUEL_LIMIT_LOW;
         print($"Fuel $fuel_stored / $limit (due to emergency)\n");
     else
@@ -258,7 +258,7 @@ end;
 
 def check_radar(unit)
     enemy_found = unit.radar(enemy, any, any, health, 1);
-    if enemy_found != null
+    if enemy_found != null then
         projector1.enabled = true;
         projector2.enabled = true;
 
@@ -287,7 +287,7 @@ def check_radar(unit)
 end;
 
 def check_manual_shutdown()
-    if switch1 != null and !switch1.enabled
+    if switch1 != null and !switch1.enabled then
         println("User has disabled emergency switch");
         return true; // user can force a shutdown
     end;
@@ -296,7 +296,7 @@ end;
 
 def diff_generators()
     stored_pc = NODE.powerNetStored / NODE.powerNetCapacity;
-    if stored_pc > 0.90 and START_POWER_REQ < 10
+    if stored_pc > 0.90 and START_POWER_REQ < 10 then
         // We don't need the differential reactors now
         print($"Differential now idle.\n");
         generator1.enabled = false;
@@ -309,14 +309,14 @@ end;
 
 def update_reactors_desired()
     stored = NODE.powerNetStored / NODE.powerNetCapacity;
-    if stored > 0.98 and AVG_SURPLUS > GENERATOR_OUTPUT + GOAL_BUFFER
-        if REACTORS_DESIRED > 2
+    if stored > 0.98 and AVG_SURPLUS > GENERATOR_OUTPUT + GOAL_BUFFER then
+        if REACTORS_DESIRED > 2 then
             REACTORS_DESIRED -= 1;
             AVG_SURPLUS -= GENERATOR_OUTPUT;
         end;
     end;
 
-    if stored < 0.80 and AVG_SURPLUS < GOAL_BUFFER * 0.8
+    if stored < 0.80 and AVG_SURPLUS < GOAL_BUFFER * 0.8 then
         needed = max(1, (AVG_SURPLUS - GOAL_BUFFER) \ GENERATOR_OUTPUT);
 
         REACTORS_DESIRED = min(5, needed + REACTORS_DESIRED);

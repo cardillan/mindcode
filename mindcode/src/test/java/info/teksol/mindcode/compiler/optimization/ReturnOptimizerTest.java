@@ -28,15 +28,15 @@ class ReturnOptimizerTest extends AbstractOptimizerTest<ReturnOptimizer> {
     @Test
     void optimizesRecursiveReturn() {
         assertCompilesTo("""
-                        allocate stack in cell1
+                        allocate stack in cell1;
                         def fib(n)
-                            if n < 2
-                                return n
-                            end
+                            if n < 2 then
+                                return n;
+                            end;
                         
-                            fib(n - 1) + fib(n - 2)
-                        end
-                        print(fib(10))
+                            fib(n - 1) + fib(n - 2);
+                        end;
+                        print(fib(10));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_n", "10"),

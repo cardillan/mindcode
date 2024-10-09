@@ -10,17 +10,17 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesDrawings() {
         assertCompilesTo("""
-                        clear(r, g, b)
-                        color(r, g, b, alpha)
-                        stroke(width)
-                        line(x1, y1, x2, y2)
-                        rect(x, y, w, h)
-                        lineRect(x, y, w, h)
-                        poly(x, y, sides, radius, rotation)
-                        linePoly(x, y, sides, radius, rotation)
-                        triangle(x1, y1, x2, y2, x3, y3)
-                        image(x, y, @copper, size, rotation)
-                        drawflush(display1)
+                        clear(r, g, b);
+                        color(r, g, b, alpha);
+                        stroke(width);
+                        line(x1, y1, x2, y2);
+                        rect(x, y, w, h);
+                        lineRect(x, y, w, h);
+                        poly(x, y, sides, radius, rotation);
+                        linePoly(x, y, sides, radius, rotation);
+                        triangle(x1, y1, x2, y2, x3, y3);
+                        image(x, y, @copper, size, rotation);
+                        drawflush(display1);
                         """,
                 createInstruction(DRAW, "clear", "r", "g", "b"),
                 createInstruction(DRAW, "color", "r", "g", "b", "alpha"),
@@ -40,13 +40,13 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesURadar() {
         assertCompilesTo("""
-                        target = uradar(enemy, ground, any, health, MIN_TO_MAX)
-                        if target != null
-                            approach(target.x, target.y, 10)
-                            if within(target.x, target.y, 10)
-                                target(target.x, target.y, SHOOT)
-                            end
-                        end
+                        target = uradar(enemy, ground, any, health, MIN_TO_MAX);
+                        if target != null then
+                            approach(target.x, target.y, 10);
+                            if within(target.x, target.y, 10) then
+                                target(target.x, target.y, SHOOT);
+                            end;
+                        end;
                         """,
                 createInstruction(URADAR, "enemy", "ground", "any", "health", "0", "MIN_TO_MAX", var(0)),
                 createInstruction(SET, "target", var(0)),
@@ -79,10 +79,10 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesULocate() {
         assertCompilesTo("""
-                        ulocate(ore, @surge-alloy, outx, outy)
-                        outbuilding = ulocate(building, core, ENEMY, outx, outy)
-                        outbuilding = ulocate(spawn, outx, outy)
-                        outbuilding = ulocate(damaged, outx, outy)
+                        ulocate(ore, @surge-alloy, outx, outy);
+                        outbuilding = ulocate(building, core, ENEMY, outx, outy);
+                        outbuilding = ulocate(spawn, outx, outy);
+                        outbuilding = ulocate(damaged, outx, outy);
                         """,
                 createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
                 createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(3), var(2)),
@@ -117,9 +117,9 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesWait() {
         assertCompilesTo("""
-                        wait(1)
-                        wait(0.001)
-                        wait(1000)
+                        wait(1);
+                        wait(0.001);
+                        wait(1000);
                         """,
                 createInstruction(WAIT, "1"),
                 createInstruction(WAIT, "0.001"),
@@ -131,17 +131,17 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesNewVersion7Instructions() {
         assertCompilesTo("""
-                        col(color)
-                        result = asin(a)
-                        result = acos(a)
-                        result = atan(a)
-                        result = lookup(block, index)
-                        result = packcolor(r, g, b, a)
-                        wait(sec)
-                        payEnter()
-                        unbind()
-                        building = getBlock(x, y)
-                        print(building, result)
+                        col(color);
+                        result = asin(a);
+                        result = acos(a);
+                        result = atan(a);
+                        result = lookup(block, index);
+                        result = packcolor(r, g, b, a);
+                        wait(sec);
+                        payEnter();
+                        unbind();
+                        building = getBlock(x, y);
+                        print(building, result);
                         """,
                 createInstruction(DRAW, "col", "color"),
                 createInstruction(OP, "asin", var(0), "a"),
@@ -168,7 +168,7 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesNewPathfind() {
         assertCompilesTo("""
-                        pathfind(50, 50)
+                        pathfind(50, 50);
                         """,
                 createInstruction(UCONTROL, "pathfind", "50", "50"),
                 createInstruction(END)
@@ -178,7 +178,7 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesNewAutoPathfind() {
         assertCompilesTo("""
-                        autoPathfind()
+                        autoPathfind();
                         """,
                 createInstruction(UCONTROL, "autoPathfind"),
                 createInstruction(END)

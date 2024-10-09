@@ -5,32 +5,32 @@ MEMORY = null;
 MESSAGE = null;
 DISPLAY = null;
 do
-	println("Configuring storage display...");
+    println("Configuring storage display...");
     LINKS = @links;
-	n = LINKS;
-	while n > 0
-		n = n - 1;
-		block = getlink(n);
-		println("Found: ", block);
-		case block.type
-			when @message then
-				MESSAGE = block;
-			when @memory-bank, @memory-cell then
-				MEMORY = block;
-			when @vault, @container, @core-shard, @core-foundation, @core-nucleus then
-				CONTAINER = block;
+    n = LINKS;
+    while n > 0 do
+        n = n - 1;
+        block = getlink(n);
+        println("Found: ", block);
+        case block.type
+            when @message then
+                MESSAGE = block;
+            when @memory-bank, @memory-cell then
+                MEMORY = block;
+            when @vault, @container, @core-shard, @core-foundation, @core-nucleus then
+                CONTAINER = block;
             when @large-logic-display then
                 DISPLAY = block;
-		end;
-	end;
+        end;
+    end;
 
-	println("Message: ", MESSAGE);
-	println("Memory: ", MEMORY);
-	println("Container: ", CONTAINER);
-	println("Display: ", DISPLAY);
-	if CONTAINER == null or DISPLAY == null
-		println("No container or display.");
-	end;
+    println("Message: ", MESSAGE);
+    println("Memory: ", MEMORY);
+    println("Container: ", CONTAINER);
+    println("Display: ", DISPLAY);
+    if CONTAINER == null or DISPLAY == null then
+        println("No container or display.");
+    end;
     printflush(MESSAGE);
 loop while CONTAINER == null;
 
@@ -53,7 +53,7 @@ const LEFT1     = 7;
 const LEFT2     = LEFT1 + COLUMN;
 const STROKE    = 2;
 
-while CONTAINER.dead === 0 and DISPLAY.dead === 0 and LINKS == @links
+while CONTAINER.dead == 0 and DISPLAY.dead == 0 and LINKS == @links do
     start = @time;
     CAPACITY = CONTAINER.itemCapacity;
     LIMIT = CAPACITY / 5;
@@ -66,12 +66,12 @@ while CONTAINER.dead === 0 and DISPLAY.dead === 0 and LINKS == @links
     color(255,255,255,255);
     index = 0;
 
-    for item in (@sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
-              @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod)
+    for item in @sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
+              @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod do
         image(x + IMAGE \ 2, y + IMAGE \ 2 - STROKE + 1, item, IMAGE, 0);
         index += 1;
         y -= SPACE_Y;
-        if index == 8
+        if index == 8 then
             y = TOP;
             x = LEFT2;
             color(255,255,255,255);
@@ -84,13 +84,13 @@ while CONTAINER.dead === 0 and DISPLAY.dead === 0 and LINKS == @links
     eraseNumbers(true);
     index = 0;
 
-    for item in (@sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
-              @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod)
+    for item in @sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
+              @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod do
         displayItem(index, item, x, y);
         index += 1;
         y -= SPACE_Y;
-        if index == 8
-            if not SLANTED
+        if index == 8 then
+            if not SLANTED then
                 drawflush(display1);
             end;
             y = TOP;
@@ -108,7 +108,7 @@ end;
 
 inline def eraseImages(first_column)
     color(0, 0, 80, 255);
-    if first_column
+    if first_column then
         rect(0, 0, LEFT1 + IMAGE, 176);
     else
         rect(LEFT2, 0, IMAGE, 176);
@@ -117,7 +117,7 @@ end;
 
 inline def eraseNumbers(first_column)
     color(0, 0, 80, 255);
-    if first_column
+    if first_column then
         rect(LEFT1 + IMAGE, 0, COLUMN - IMAGE, 176);
     else
         rect(LEFT2 + IMAGE, 0, 176, 176);
@@ -127,10 +127,10 @@ end;
 inline def displayItem(index, item, x, y)
     amount = CONTAINER.sensor(item);
 
-    if MEMORY === null
-        if amount == CAPACITY
+    if MEMORY === null then
+        if amount == CAPACITY then
             color(0,255,0,255);
-        elsif amount > LIMIT
+        elsif amount > LIMIT then
             color(255,255,0,255);
         else
             color(255,80,80,255);
@@ -138,26 +138,26 @@ inline def displayItem(index, item, x, y)
     else
         last = MEMORY[index];
         MEMORY[index] = amount;
-        if amount == last
+        if amount == last then
             color(255,255,0,255);
-        elsif amount < last
+        elsif amount < last then
             color(255,80,80,255);
         else
             color(0,255,0,255);
         end;
     end;
 
-    for i in 0 ... 5
-        if SLANTED
+    for i in 0 ... 5 do
+        if SLANTED then
             drawDigitSlanted(x, y, amount % 10);
         else
             drawDigit(x, y, amount % 10);
-        end
+        end;
         x -= SPACE_X;
         amount \= 10;
-        if amount == 0 break; end;
-    end
-end
+        if amount == 0 then break; end;
+    end;
+end;
 
 inline def drawDigit(x, y, digit)
     case digit

@@ -133,7 +133,7 @@ def findFreeUnit(unit_type, initial_flag, wait_for_units)
         elsif @unit.controlled != 0 then
             if SYS_MESSAGE then print($"Looking for a free $unit_type..."); end;
         else
-            flag(initial_flag);		// Mark unit as active
+            flag(initial_flag);        // Mark unit as active
             return @unit;
         end;
         if SYS_MESSAGE then printflush(SYS_MESSAGE); end;

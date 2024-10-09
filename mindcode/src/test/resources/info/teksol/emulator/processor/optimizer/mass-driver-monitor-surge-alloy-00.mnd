@@ -3,46 +3,46 @@ flow_str = null;
 MESSAGE = DISPLAY = SWITCH = null;
 
 do
-	TITANIUM = null;
-	SILICON = null;
-	COPPER = null;
-	LEAD = null;
+    TITANIUM = null;
+    SILICON = null;
+    COPPER = null;
+    LEAD = null;
 
-	println("Surge Alloy Factory Driver Monitor");
-	println("Configuring...");
-	n = @links;
-	while n > 0
-		n = n - 1;
-		block = getlink(n);
-		case block.type
-			when @message then
-				MESSAGE = block;
-			when @switch then
-				SWITCH = block;
-			when @mass-driver then
-				case block.firstItem
-					when @titanium then TITANIUM = block;
-					when @silicon  then SILICON = block;
-					when @copper   then COPPER = block;
-					when @lead     then LEAD = block;
-				end;
-			when @logic-display then
-				DISPLAY = block;
-			else
-				print("\n", block, " is not supported.");
-		end;
-		print($"\nNominal production: $EXPECTED_FLOW_STR/min");
-		print($"\nActual production: $flow_str/min");
-	end;
-	
-	println("Message: ", MESSAGE);
-	println("Switch: ", SWITCH);
-	println("Display: ", DISPLAY);
-	println("Titanium: ", TITANIUM);
-	println("Silicon: ", SILICON);
-	println("Copper: ", COPPER);
-	println("Lead: ", LEAD);
-	printflush(MESSAGE);
+    println("Surge Alloy Factory Driver Monitor");
+    println("Configuring...");
+    n = @links;
+    while n > 0 do
+        n = n - 1;
+        block = getlink(n);
+        case block.type
+            when @message then
+                MESSAGE = block;
+            when @switch then
+                SWITCH = block;
+            when @mass-driver then
+                case block.firstItem
+                    when @titanium then TITANIUM = block;
+                    when @silicon  then SILICON = block;
+                    when @copper   then COPPER = block;
+                    when @lead     then LEAD = block;
+                end;
+            when @logic-display then
+                DISPLAY = block;
+            else
+                print("\n", block, " is not supported.");
+        end;
+        print($"\nNominal production: $EXPECTED_FLOW_STR/min");
+        print($"\nActual production: $flow_str/min");
+    end;
+
+    println("Message: ", MESSAGE);
+    println("Switch: ", SWITCH);
+    println("Display: ", DISPLAY);
+    println("Titanium: ", TITANIUM);
+    println("Silicon: ", SILICON);
+    println("Copper: ", COPPER);
+    println("Lead: ", LEAD);
+    printflush(MESSAGE);
 loop while TITANIUM == null || SILICON == null || COPPER == null || LEAD == null;
 
 ROW_HEIGHT = 19;
@@ -65,30 +65,30 @@ BAR_LENGTH = 56;
 MULTIPLICATOR = BAR_LENGTH / 200;
 
 SWITCH.enabled = 0;
-while SWITCH.enabled == 0
-	start = @time;
-	clear(0, 0, 80);
-	color(255, 255, 255, 255);
-	image(ICON_X, ICON_Y4, @titanium, ICON_SIZE, 0);
-	image(ICON_X, ICON_Y3, @silicon,  ICON_SIZE, 0);
-	image(ICON_X, ICON_Y2, @copper,   ICON_SIZE, 0);
-	image(ICON_X, ICON_Y1, @lead,     ICON_SIZE, 0);
-	
-	color(0,128,0,255);
-	rect(BAR_X, BAR_Y4, TITANIUM.totalItems * MULTIPLICATOR, BAR_HEIGHT);
-	rect(BAR_X, BAR_Y3, SILICON.totalItems  * MULTIPLICATOR, BAR_HEIGHT);
-	rect(BAR_X, BAR_Y2, COPPER.totalItems   * MULTIPLICATOR, BAR_HEIGHT);
-	rect(BAR_X, BAR_Y1, LEAD.totalItems     * MULTIPLICATOR, BAR_HEIGHT);
+while SWITCH.enabled == 0 do
+    start = @time;
+    clear(0, 0, 80);
+    color(255, 255, 255, 255);
+    image(ICON_X, ICON_Y4, @titanium, ICON_SIZE, 0);
+    image(ICON_X, ICON_Y3, @silicon,  ICON_SIZE, 0);
+    image(ICON_X, ICON_Y2, @copper,   ICON_SIZE, 0);
+    image(ICON_X, ICON_Y1, @lead,     ICON_SIZE, 0);
 
-	color(0,255,0,255);
-	lineRect(BAR_X, BAR_Y4, BAR_LENGTH, BAR_HEIGHT);
-	lineRect(BAR_X, BAR_Y3, BAR_LENGTH, BAR_HEIGHT);
-	lineRect(BAR_X, BAR_Y2, BAR_LENGTH, BAR_HEIGHT);
-	lineRect(BAR_X, BAR_Y1, BAR_LENGTH, BAR_HEIGHT);
+    color(0,128,0,255);
+    rect(BAR_X, BAR_Y4, TITANIUM.totalItems * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y3, SILICON.totalItems  * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y2, COPPER.totalItems   * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y1, LEAD.totalItems     * MULTIPLICATOR, BAR_HEIGHT);
 
-	drawflush(DISPLAY);
+    color(0,255,0,255);
+    lineRect(BAR_X, BAR_Y4, BAR_LENGTH, BAR_HEIGHT);
+    lineRect(BAR_X, BAR_Y3, BAR_LENGTH, BAR_HEIGHT);
+    lineRect(BAR_X, BAR_Y2, BAR_LENGTH, BAR_HEIGHT);
+    lineRect(BAR_X, BAR_Y1, BAR_LENGTH, BAR_HEIGHT);
 
-	print("Surge Alloy Factory Driver Monitor\nElapsed (ms): ");
-	print(floor(@time - start));
-	printflush(MESSAGE);
+    drawflush(DISPLAY);
+
+    print("Surge Alloy Factory Driver Monitor\nElapsed (ms): ");
+    print(floor(@time - start));
+    printflush(MESSAGE);
 end;

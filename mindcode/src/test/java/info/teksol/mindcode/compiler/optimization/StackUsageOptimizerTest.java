@@ -25,11 +25,11 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     @Test
     void removesUnusedParameter() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(x)
-                            foo(x - 1)
-                        end
-                        print(foo(5))
+                            foo(x - 1);
+                        end;
+                        print(foo(5));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -53,12 +53,12 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     @Test
     void keepsUsedParameter() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(x)
-                            foo(x - 1)
-                            x
-                        end
-                        print(foo(5))
+                            foo(x - 1);
+                            x;
+                        end;
+                        print(foo(5));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -85,17 +85,17 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
         // The loop prevents elimination of y from stack due it not being read after function call.
         // z isn't read in the loop and can be eliminated
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(x)
-                            z = x
-                            print(z)
-                            while true
-                                y = x
-                                print(y)
-                                foo(x)
-                            end
-                        end
-                        foo(5)
+                            z = x;
+                            print(z);
+                            while true do
+                                y = x;
+                                print(y);
+                                foo(x);
+                            end;
+                        end;
+                        foo(5);
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -124,16 +124,16 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     void removesVariablesNotInLoop() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(x)
-                            while true
-                                y = x - 1
-                                foo(2)
-                            end
-                            print(y)
-                            foo(1)
-                        end
-                        foo(5)
+                            while true do
+                                y = x - 1;
+                                foo(2);
+                            end;
+                            print(y);
+                            foo(1);
+                        end;
+                        foo(5);
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -169,16 +169,16 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     void removesUnreadVariables() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(x)
-                            y = x
-                            print(y)
-                            while true
-                                y = x - 1
-                                foo(2)
-                            end
-                        end
-                        foo(5)
+                            y = x;
+                            print(y);
+                            while true do
+                                y = x - 1;
+                                foo(2);
+                            end;
+                        end;
+                        foo(5);
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_x", "5"),
@@ -208,15 +208,15 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     void removesUnmodifiedVariables() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(m, n)
-                            for i in 1 .. n
-                                print(n)
-                                printflush(m)
-                                foo(m, n - 1)
-                            end
-                        end
-                        foo(message1, 10)
+                            for i in 1 .. n do
+                                print(n);
+                                printflush(m);
+                                foo(m, n - 1);
+                            end;
+                        end;
+                        foo(message1, 10);
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_m", "message1"),
@@ -258,22 +258,22 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                         "List of uninitialized variables: SIZE."
                 ),
                 """
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
 
                         def quicksort(left, right)
-                            if right > left
-                                pivot_index = left + floor(rand(right - left + 1))
-                                new_pivot_index = partition(left, right, pivot_index)
-                                quicksort(left, new_pivot_index - 1)
-                                quicksort(new_pivot_index + 1, right)
-                            end
-                        end
+                            if right > left then
+                                pivot_index = left + floor(rand(right - left + 1));
+                                new_pivot_index = partition(left, right, pivot_index);
+                                quicksort(left, new_pivot_index - 1);
+                                quicksort(new_pivot_index + 1, right);
+                            end;
+                        end;
 
                         inline def partition(left, right, pivot_index)
-                            pivot_index
-                        end
+                            pivot_index;
+                        end;
 
-                        quicksort(0, SIZE - 1)
+                        quicksort(0, SIZE - 1);
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(OP, "sub", var(0), "SIZE", "1"),

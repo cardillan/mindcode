@@ -29,11 +29,11 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void inlinesFunction() {
         assertCompilesTo("""
                         def foo(n)
-                            print(2 * n)
-                        end
-                                                
-                        foo(1)
-                        foo(2)
+                            print(2 * n);
+                        end;
+
+                        foo(1);
+                        foo(2);
                         """,
                 createInstruction(PRINT, q("24"))
         );
@@ -43,16 +43,16 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void inlinesTwoFunction() {
         assertCompilesTo("""
                         def foo(n)
-                            print(2 * n)
-                        end
-                                                
+                            print(2 * n);
+                        end;
+
                         def bar(n)
-                            foo(n)
-                            foo(n + 1)
-                        end
-                                                
-                        bar(1)
-                        bar(3)
+                            foo(n);
+                            foo(n + 1);
+                        end;
+
+                        bar(1);
+                        bar(3);
                         """,
                 createInstruction(PRINT, q("2468"))
         );
@@ -62,18 +62,18 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void inlinesFunctionInsideLoop() {
         assertCompilesTo("""
                         def foo(n)
-                            print(n / 2)
-                            sum = 0
-                            for i in 0 .. n
-                                sum += i
-                            end
-                            return sum
-                        end
-                                                
-                        for i in 0 ... 10
-                            foo(2 * i)
-                        end
-                        foo(0)
+                            print(n / 2);
+                            sum = 0;
+                            for i in 0 .. n do
+                                sum += i;
+                            end;
+                            return sum;
+                        end;
+
+                        for i in 0 ... 10 do
+                            foo(2 * i);
+                        end;
+                        foo(0);
                         """,
                 createInstruction(PRINT, q("01234567890"))
         );
@@ -85,15 +85,15 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
         TestCompiler compiler = createTestCompiler(compilerProfile);
         assertCompilesTo(compiler,
                         """
-                        while true
-                            a = foo()
-                            b = foo()
-                            print(a, b)
-                        end
+                        while true do
+                            a = foo();
+                            b = foo();
+                            print(a, b);
+                        end;
                         
                         def foo()
-                            rand(10)
-                        end
+                            rand(10);
+                        end;
                         """,
                 createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "rand", "__fn0retval", "10"),
@@ -111,10 +111,10 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void inlinesNestedFunctionCalls() {
         assertCompilesTo("""
                         def foo(n)
-                            print(n + 1)
-                        end
-                                                
-                        foo(foo(1))
+                            print(n + 1);
+                        end;
+
+                        foo(foo(1));
                         """,
                 createInstruction(PRINT, q("23"))
         );
@@ -124,9 +124,9 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void inlinesFunctionCallsInExpressions() {
         assertCompilesTo("""
                         def foo()
-                            rand(10)
-                        end
-                        print(foo() + foo())
+                            rand(10);
+                        end;
+                        print(foo() + foo());
                         """,
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(SET, var(0), "__fn0retval"),
@@ -141,10 +141,10 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void inlinesFunctionCallsWithParametersInExpressions() {
         assertCompilesTo("""
                         def foo(n)
-                            t = rand(n)
-                            return t
-                        end
-                        print(foo(10) + foo(20))
+                            t = rand(n);
+                            return t;
+                        end;
+                        print(foo(10) + foo(20));
                         """,
                 createInstruction(OP, "rand", "__fn0_t", "10"),
                 createInstruction(SET, var(0), "__fn0_t"),
@@ -158,11 +158,11 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void handlesReturnsCorrectly() {
         assertCompilesTo("""
                         def foo()
-                            t = rand(10)
-                            return t
-                        end
-                        print(foo())
-                        print(foo())
+                            t = rand(10);
+                            return t;
+                        end;
+                        print(foo());
+                        print(foo());
                         """,
                 createInstruction(OP, "rand", "__fn0_t", "10"),
                 createInstruction(PRINT, "__fn0_t"),
@@ -175,11 +175,11 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     void respectsNoinlineFunctions() {
         assertCompilesTo("""
                         noinline def foo(n)
-                            print(2 * n)
-                        end
-                                                
-                        foo(1)
-                        foo(2)
+                            print(2 * n);
+                        end;
+
+                        foo(1);
+                        foo(2);
                         """,
                 createInstruction(SET, "__fn0_n", "1"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),

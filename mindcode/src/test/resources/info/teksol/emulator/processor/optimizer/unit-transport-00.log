@@ -3466,7 +3466,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 
 Modifications by Loop Optimization: replicate condition at line 177 (+4 instructions):
  
-   165 op strictEqual __tmp61 __tmp60 0
+   165 op equal __tmp61 __tmp60 0
    166 op land __tmp62 __tmp59 __tmp61
    167 jump __label38 equal __tmp62 false
 +  168 label __label227
@@ -3476,7 +3476,7 @@ Modifications by Loop Optimization: replicate condition at line 177 (+4 instruct
 -    * jump __label36 always
 +  172 op equal __tmp59 flag QUERY_FLAG
 +  173 sensor __tmp60 @unit @dead
-+  174 op strictEqual __tmp61 __tmp60 0
++  174 op equal __tmp61 __tmp60 0
 +  175 op land __tmp62 __tmp59 __tmp61
 +  176 jump __label227 notEqual __tmp62 false
    177 label __label38
@@ -3491,7 +3491,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op equal __tmp59 flag QUERY_FLAG
 +  163 op equal __tmp59 QUERY_FLAG QUERY_FLAG
    164 sensor __tmp60 @unit @dead
-   165 op strictEqual __tmp61 __tmp60 0
+   165 op equal __tmp61 __tmp60 0
    166 op land __tmp62 __tmp59 __tmp61
 
 Modifications by Loop Optimization: replicate condition at line 186 (+5 instructions):
@@ -3924,7 +3924,7 @@ label __label35
 ucontrol flag QUERY_FLAG 0 0 0 0
 op equal __tmp59 QUERY_FLAG QUERY_FLAG
 sensor __tmp60 @unit @dead
-op strictEqual __tmp61 __tmp60 0
+op equal __tmp61 __tmp60 0
 op land __tmp62 __tmp59 __tmp61
 jump __label38 equal __tmp62 false
 label __label227
@@ -3932,7 +3932,7 @@ ucontrol stop 0 0 0 0 0
 sensor flag @unit @flag
 op equal __tmp59 flag QUERY_FLAG
 sensor __tmp60 @unit @dead
-op strictEqual __tmp61 __tmp60 0
+op equal __tmp61 __tmp60 0
 op land __tmp62 __tmp59 __tmp61
 jump __label227 notEqual __tmp62 false
 label __label38

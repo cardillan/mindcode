@@ -1,9 +1,9 @@
 // There's no 1000 instruction limit on processor emulator
 inline def eval(actual, expected, operation)
-    if actual == expected
+    if actual == expected then
         print("ok");
     else 
-        print("Wrong operation ", operation, ": expected ", expected, ", but was ", actual, "\n");
+        println($"Wrong operation $operation: expected $expected, but was $actual");
     end;
 end;
 

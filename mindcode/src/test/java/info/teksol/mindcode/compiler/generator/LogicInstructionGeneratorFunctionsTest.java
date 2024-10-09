@@ -21,9 +21,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesImplicitInlineFunctions() {
         assertCompilesTo("""
                         def foo(n)
-                            n
-                        end
-                        print(foo(3))
+                            n;
+                        end;
+                        print(foo(3));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "3"),
@@ -38,9 +38,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void respectsNoinlineFunctions() {
         assertCompilesTo("""
                         noinline def foo(n)
-                            n
-                        end
-                        print(foo(3))
+                            n;
+                        end;
+                        print(foo(3));
                         """,
                 createInstruction(SET, "__fn0_n", "3"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
@@ -60,10 +60,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesStacklessFunctions() {
         assertCompilesTo("""
                         def foo(n)
-                          n
-                        end
-                        print(foo(3))
-                        print(foo(4))
+                          n;
+                        end;
+                        print(foo(3));
+                        print(foo(4));
                         """,
                 createInstruction(SET, "__fn0_n", "3"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
@@ -90,10 +90,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesExplicitInlineFunctions() {
         assertCompilesTo("""
                         inline def foo(n)
-                          n
-                        end
-                        print(foo(3))
-                        print(foo(4))
+                          n;
+                        end;
+                        print(foo(3));
+                        print(foo(4));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "3"),
@@ -112,11 +112,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void generatesRecursiveFunctions() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(n)
-                          foo(n)
-                        end
-                        print(foo(3))
+                          foo(n);
+                        end;
+                        print(foo(3));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_n", "3"),
@@ -142,10 +142,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void generatesIndirectRecursion() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
-                        def foo(n) 1 + bar(n) end
-                        def bar(n) 1 - foo(n) end
-                        print(foo(4))
+                        allocate stack in bank1[0...512];
+                        def foo(n) 1 + bar(n); end;
+                        def bar(n) 1 - foo(n); end;
+                        print(foo(4));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 // call foo
@@ -190,13 +190,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void passesParametersToInlineFunction() {
         assertCompilesTo("""
                         def foo(n, r)
-                            2 * (n ** r)
-                        end
-                         
-                        boo = 4
-                        x = foo(3, boo)
-                        print(x)
-                        printflush(message1)
+                            2 * (n ** r);
+                        end;
+
+                        boo = 4;
+                        x = foo(3, boo);
+                        print(x);
+                        printflush(message1);
                         """,
                 createInstruction(SET, "boo", "4"),
                 createInstruction(LABEL, var(1000)),
@@ -216,10 +216,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void functionsCanCallOtherFunctionsInline() {
         assertCompilesTo("""
-                        def foo(n) 1 + bar(n) end
-                        def bar(n) 2 * baz(n) end
-                        def baz(n) 3 ** n end
-                        print(foo(4))
+                        def foo(n) 1 + bar(n); end;
+                        def bar(n) 2 * baz(n); end;
+                        def baz(n) 3 ** n; end;
+                        print(foo(4));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "4"),
@@ -244,13 +244,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void functionsCanCallOtherFunctionsStackless() {
         assertCompilesTo("""
-                        def foo(n) 1 + bar(n) end
-                        def bar(n) 2 * baz(n) end
-                        def baz(n) 3 ** n end
-                        foo(0)
-                        bar(0)
-                        baz(0)
-                        print(foo(4))
+                        def foo(n) 1 + bar(n); end;
+                        def bar(n) 2 * baz(n); end;
+                        def baz(n) 3 ** n; end;
+                        foo(0);
+                        bar(0);
+                        baz(0);
+                        print(foo(4));
                         """,
                 // call foo
                 createInstruction(SET, "__fn1_n", "0"),
@@ -315,14 +315,14 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void canIndirectlyReferenceStack() {
         assertCompilesTo("""
-                        set STACKPTR = cell1
-                        set HEAPPTR = cell2
-                        allocate heap in HEAPPTR[0...16], stack in STACKPTR
+                        STACKPTR = cell1;
+                        HEAPPTR = cell2;
+                        allocate heap in HEAPPTR[0...16], stack in STACKPTR;
                         def delay
-                            0
-                            delay()
-                        end
-                        $dx = delay()
+                            0;
+                            delay();
+                        end;
+                        $dx = delay();
                         """,
                 // Setting up stack
                 createInstruction(SET, "STACKPTR", "cell1"),
@@ -349,8 +349,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void handlesNestedFunctionCallsInline() {
         assertCompilesTo("""
-                        inline def a(n) n + 1 end
-                        print(a(a(a(4))))
+                        inline def a(n) n + 1; end;
+                        print(a(a(a(4))));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "4"),
@@ -376,9 +376,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void handlesNestedFunctionCallsStackless() {
         assertCompilesTo("""
                         def a(n)
-                            n + 1
-                        end
-                        print(a(a(a(4))))
+                            n + 1;
+                        end;
+                        print(a(a(a(4))));
                         """,
                 createInstruction(SET, "__fn0_n", "4"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
@@ -410,9 +410,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void handlesNestedFunctionCallsRecursive() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
-                        def a(n) a(n + 1) end
-                        print(a(a(a(4))))
+                        allocate stack in bank1[0...512];
+                        def a(n) a(n + 1); end;
+                        print(a(a(a(4))));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_n", "4"),
@@ -449,11 +449,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void generatesRecursiveFibonacci() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def fib(n)
-                            n < 2 ? n : fib(n - 1) + fib(n - 2)
-                        end
-                        print(fib(10))
+                            n < 2 ? n : fib(n - 1) + fib(n - 2);
+                        end;
+                        print(fib(10));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_n", "10"),
@@ -501,15 +501,15 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         // aren't pushed to the stack in recursive functions
         assertCompilesTo(PushOrPopInstruction.class::isInstance,
                 """
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def foo(r)
-                            bar(r)
-                            foo(r - 1)
-                        end
+                            bar(r);
+                            foo(r - 1);
+                        end;
                         inline def bar(n)
-                            print(n)
-                        end
-                        foo(1)
+                            print(n);
+                        end;
+                        foo(1);
                         """,
                 createInstruction(PUSH, "bank1", "__fn0_r"),
                 createInstruction(POP, "bank1", "__fn0_r")
@@ -520,11 +520,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void preservesBlocksAndConstantsInUserFunctions() {
         assertCompilesTo("""
                         def foo(block)
-                          print(radar(enemy, any, any, distance, block, 1))
-                          print(block.radar(ally, flying, any, health, 1))
-                          print(radar(enemy, boss, any, distance, lancer1, 1))
-                        end
-                        foo(lancer1)
+                          print(radar(enemy, any, any, distance, block, 1));
+                          print(block.radar(ally, flying, any, health, 1));
+                          print(radar(enemy, boss, any, distance, lancer1, 1));
+                        end;
+                        foo(lancer1);
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_block", "lancer1"),
@@ -544,13 +544,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void handlesInlineReturn() {
         assertCompilesTo("""
                         def a(n)
-                            if n % 2 == 1
-                                return "odd"
+                            if n % 2 == 1 then
+                                return "odd";
                             else
-                                return "even"
-                            end
-                        end
-                        print(a(0))
+                                return "even";
+                            end;
+                        end;
+                        print(a(0));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "0"),
@@ -577,14 +577,14 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void handlesStacklessReturn() {
         assertCompilesTo("""
                         def a(n)
-                            if n % 2 == 1
-                                return "odd"
+                            if n % 2 == 1 then
+                                return "odd";
                             else
-                                return "even"
-                            end
-                        end
-                        print(a(0))
-                        print(a(1))
+                                return "even";
+                            end;
+                        end;
+                        print(a(0));
+                        print(a(1));
                         """,
                 createInstruction(SET, "__fn0_n", "0"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
@@ -625,11 +625,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertCompilesTo(
                 ix -> ix instanceof PushOrPopInstruction p && p.getVariable().getName().equals("n"),
                 """
-                        allocate stack in bank1
+                        allocate stack in bank1;
                         def foo(n)
-                            foo(n - 1)
-                        end
-                        foo(5)
+                            foo(n - 1);
+                        end;
+                        foo(5);
                         """,
                 createInstruction(PUSH, "bank1", "__fn0_n"),
                 createInstruction(POP, "bank1", "__fn0_n")
@@ -641,12 +641,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertCompilesTo(
                 ix -> ix instanceof PushOrPopInstruction p && p.getVariable().getName().equals("a"),
                 """
-                        allocate stack in bank1
+                        allocate stack in bank1;
                         def foo(n)
-                            a = n - 1
-                            foo(a)
-                        end
-                        foo(5)
+                            a = n - 1;
+                            foo(a);
+                        end;
+                        foo(5);
                         """,
                 createInstruction(PUSH, "bank1", "__fn0_a"),
                 createInstruction(POP, "bank1", "__fn0_a")
@@ -656,15 +656,15 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void handlesRecursiveReturn() {
         assertCompilesTo("""
-                        allocate stack in bank1[0...512]
+                        allocate stack in bank1[0...512];
                         def gdc(a,b)
-                            if b == 0
-                                return a
+                            if b == 0 then
+                                return a;
                             else
-                                return gdc(b, a % b)
-                            end
-                        end
-                        print(gdc(115, 78))
+                                return gdc(b, a % b);
+                            end;
+                        end;
+                        print(gdc(115, 78));
                         """,
                 createInstruction(SET, "__sp", "0"),
                 // call gdc
@@ -711,10 +711,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void handlesNestedInlineReturn() {
         assertCompilesTo("""
-                        def foo(n) return 1 + bar(n) end
-                        def bar(n) return 2 * baz(n) end
-                        def baz(n) return 3 ** n end
-                        print(foo(4))
+                        def foo(n) return 1 + bar(n); end;
+                        def bar(n) return 2 * baz(n); end;
+                        def baz(n) return 3 ** n; end;
+                        print(foo(4));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "4"),
@@ -745,8 +745,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void handlesNestedFunctionCallsInlineWithReturn() {
         assertCompilesTo("""
-                        inline def a(n) return n + 1 end
-                        print(a(a(a(4))))
+                        inline def a(n) return n + 1; end;
+                        print(a(a(a(4))));
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_n", "4"),
@@ -780,9 +780,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 ix -> ix instanceof SetInstruction set && set.getResult().getName().equals("X"),
                 """
                         def setx(x)
-                            X = x
-                        end
-                        setx(7)
+                            X = x;
+                        end;
+                        setx(7);
                         """,
                 createInstruction(SET, "X", "__fn0_x")
         );
@@ -799,13 +799,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(WRITE, "99", "cell3", "41")
                 ),
                 generateInstructions("""
-                        allocate stack in cell3[20..40], heap in cell3[41...64]
+                        allocate stack in cell3[20..40], heap in cell3[41...64];
                         def foo(n)
-                          foo(n-1)
-                        end
-                                                        
-                        $x = 99
-                        print(foo(1) + foo(2))
+                          foo(n-1);
+                        end;
+
+                        $x = 99;
+                        print(foo(1) + foo(2));
                         """
                 ).instructions().subList(0, 2)
         );
@@ -816,9 +816,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo
-                            foo()
-                        end
-                        foo()
+                            foo();
+                        end;
+                        foo();
                         """
                 )
         );
@@ -828,9 +828,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesMisplacedStackAllocation() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        while true
-                          allocate stack in cell1
-                        end
+                        while true do
+                          allocate stack in cell1;
+                        end;
                         """
                 )
         );
@@ -840,11 +840,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesRecursiveInlineFunctions() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        allocate stack in cell1
+                        allocate stack in cell1;
                         inline def foo(n)
-                            foo(n - 1)
-                        end
-                        print(foo(1) + foo(2))
+                            foo(n - 1);
+                        end;
+                        print(foo(1) + foo(2));
                         """
                 )
         );
@@ -855,9 +855,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo(N)
-                            N
-                        end
-                        print(foo(1) + foo(2))
+                            N;
+                        end;
+                        print(foo(1) + foo(2));
                         """
                 )
         );
@@ -868,9 +868,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo(switch1)
-                            switch1
-                        end
-                        print(foo(1) + foo(2))
+                            switch1;
+                        end;
+                        print(foo(1) + foo(2));
                         """
                 )
         );

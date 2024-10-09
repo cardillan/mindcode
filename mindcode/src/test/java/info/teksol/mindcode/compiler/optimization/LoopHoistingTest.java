@@ -29,12 +29,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void movesInvariantCodeOutOfLoop() {
         assertCompilesTo("""
-                        param A = 10
-                        i = 0
-                        while i < 1000
-                            i = i + 1
-                            print(2 * A)
-                        end
+                        param A = 10;
+                        i = 0;
+                        while i < 1000 do
+                            i = i + 1;
+                            print(2 * A);
+                        end;
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(SET, "i", "0"),
@@ -49,12 +49,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void movesInvariantCodeOutOfCondition() {
         assertCompilesTo("""
-                        param A = 10
-                        i = 0
-                        while i < A + 10
-                            i = i + 1
-                            print(i)
-                        end
+                        param A = 10;
+                        i = 0;
+                        while i < A + 10 do
+                            i = i + 1;
+                            print(i);
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "A", "10"),
@@ -71,15 +71,15 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void recognizesAllLoopVariables() {
         assertCompilesTo("""
-                        param A = 10
-                        i = 0
-                        while i < A
-                            j = i + 1
-                            print(j)
-                            i = j + 1
-                            k = j + 20
-                            print(i, A + 10, k)
-                        end
+                        param A = 10;
+                        i = 0;
+                        while i < A do
+                            j = i + 1;
+                            print(j);
+                            i = j + 1;
+                            k = j + 20;
+                            print(i, A + 10, k);
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "A", "10"),
@@ -101,11 +101,11 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void recognizesIteratorVariables() {
         assertCompilesTo("""
-                        a = 1
-                        for i in (a, a = 2)
-                            k = 2 * a
-                            print(i, k)
-                        end
+                        a = 1;
+                        for i in a, a = 2 do
+                            k = 2 * a;
+                            print(i, k);
+                        end;
                         """,
                 createInstruction(SET, "a", "1"),
                 createInstruction(SETADDR, var(0), var(1003)),
@@ -139,7 +139,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         noinline def foo(n)
                             print(n);
                             bar(n);
-                        end
+                        end;
                         
                         noinline def bar(x)
                             A = x - B;
@@ -178,12 +178,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesAssignmentsInConditions() {
         assertCompilesTo("""
-                        param A = 100
-                        i = 0
-                        while (k = i + 10) < A
-                            i += 1
-                            print(i, k)
-                        end
+                        param A = 100;
+                        i = 0;
+                        while (k = i + 10) < A do
+                            i += 1;
+                            print(i, k);
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "A", "100"),
@@ -202,15 +202,15 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void recognizesFunctionReturnVariables() {
         assertCompilesTo("""
-                        while true
-                            a = foo()
-                            b = foo()
-                            print(a, b)
-                        end
+                        while true do
+                            a = foo();
+                            b = foo();
+                            print(a, b);
+                        end;
 
                         def foo()
-                            rand(10)
-                        end
+                            rand(10);
+                        end;
                         """,
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(SET, "a", "__fn0retval"),
@@ -223,14 +223,14 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesNestedLoops() {
         assertCompilesTo("""
-                        param A = 10
-                        for j in 0 ... A
-                            i = 0
-                            while i < A + 10
-                                i = i + 1
-                                print(i)
-                            end
-                        end
+                        param A = 10;
+                        for j in 0 ... A do
+                            i = 0;
+                            while i < A + 10 do
+                                i = i + 1;
+                                print(i);
+                            end;
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "A", "10"),
@@ -307,12 +307,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     void handlesIfInsideLoop() {
         // At this moment, invariant ifs aren't handled. Special handling of an entire IF context needs to be added.
         assertCompilesTo("""
-                        param A = 10
-                        i = 0
-                        while i < 1000
-                            i = i + 1
-                            print(A ? "1" : "2")
-                        end
+                        param A = 10;
+                        i = 0;
+                        while i < 1000 do
+                            i = i + 1;
+                            print(A ? "1" : "2");
+                        end;
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(SET, "i", "0"),
@@ -332,13 +332,13 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     void handlesExpressions() {
         // At this moment, invariant ifs aren't handled. Special handling of an entire IF context needs to be added.
         assertCompilesTo("""
-                        for i in 1 ... 1000
-                            for j in 1 ... 1000
-                                for k in 1 ... 1000
-                                    print(sqrt(i * i + j * j) / (k * k))
-                                end
-                            end
-                        end
+                        for i in 1 ... 1000 do
+                            for j in 1 ... 1000 do
+                                for k in 1 ... 1000 do
+                                    print(sqrt(i * i + j * j) / (k * k));
+                                end;
+                            end;
+                        end;
                         """,
                 createInstruction(SET, "i", "1"),
                 createInstruction(LABEL, var(1009)),
@@ -365,12 +365,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesInvariantIf() {
         assertCompilesTo("""
-                        param A = 10
-                        for i in 1 ... A
-                            a = A < 0 ? 3 : 4
-                            print(a)
-                        end
-                        print("finish")
+                        param A = 10;
+                        for i in 1 ... A do
+                            a = A < 0 ? 3 : 4;
+                            print(a);
+                        end;
+                        print("finish");
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(SET, "i", "1"),
@@ -391,12 +391,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesInvariantIfInExpression() {
         assertCompilesTo("""
-                        param A = 10
-                        for i in 1 ... A
-                            a = 10 * (A < 0 ? 3 : 4)
-                            print(a)
-                        end
-                        print("finish")
+                        param A = 10;
+                        for i in 1 ... A do
+                            a = 10 * (A < 0 ? 3 : 4);
+                            print(a);
+                        end;
+                        print("finish");
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(SET, "i", "1"),
@@ -420,7 +420,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         noinline def foo(n)
                             sum = 0;
                             r = rand(10);        // Prevents compile-time evaluation
-                            for i in 0 ... 50
+                            for i in 0 ... 50 do
                                 sum += n + r;
                             end;
                             print(floor(sum - 50 * r + 0.5));

@@ -4,12 +4,12 @@ noinline def d(n) n; end;
 
 // There's no 1000 instruction limit on processor emulator
 inline def eval(actual, expected, operation)
-    if actual == expected
+    if actual == expected then
         print("ok");
     else 
-        print("Wrong operation ", operation, ": expected ", expected, ", but was ", actual, "\n");
-    end
-end
+        println($"Wrong operation $operation: expected $expected, but was $actual");
+    end;
+end;
 
 eval(2 +  d(3), 5,          "add");
 eval(7 -  d(6), 1,          "sub");
@@ -57,7 +57,7 @@ eval(3 ^  d(2), 1,          "xor");
 eval(~d(0),     -1,         "not1");
 eval(~d(65535), -65536,     "not2");
 
-a = 0xabcdefabcdefabc
+a = 0xabcdefabcdefabc;
 eval(~d(a), -(a + 1),       "not3");
 
 eval(max(2, d(4)), 4,       "max");

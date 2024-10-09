@@ -102,7 +102,10 @@ public class CompileMindcodeAction extends ActionHandler {
     }
 
     private SourceFile readFile(File file, boolean multiple) {
-        return new SourceFile(isStdInOut(file) || !multiple ? "" : file.getPath(), readInput(file));
+        return new SourceFile(
+                isStdInOut(file) || !multiple ? "" : file.getPath(),
+                isStdInOut(file) ? "" : file.getAbsolutePath(),
+                readInput(file));
     }
 
     @Override

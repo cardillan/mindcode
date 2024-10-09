@@ -29,8 +29,8 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesBasicCase() {
         assertCompilesTo("""
-                        str = x > 0 ? "positive" : "negative"
-                        print(str)
+                        str = x > 0 ? "positive" : "negative";
+                        print(str);
                         """,
                 createInstruction(SET, "str", q("negative")),
                 createInstruction(JUMP, var(1001), "lessThanEq", "x", "0"),
@@ -43,8 +43,8 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesTrueBranchCompoundCondition() {
         assertCompilesTo("""
-                        str = @unit.dead === 0 ? "alive" : "dead"
-                        print(str)
+                        str = @unit.dead === 0 ? "alive" : "dead";
+                        print(str);
                         """,
                 createInstruction(SET, "str", q("alive")),
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
@@ -58,13 +58,13 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesTrueBranchInvertible() {
         assertCompilesTo("""
-                        str = if x >= 0
-                            "positive"
+                        str = if x >= 0 then
+                            "positive";
                         else
-                            x = -x
-                            "negative"
-                        end
-                        print(str)
+                            x = -x;
+                            "negative";
+                        end;
+                        print(str);
                         """,
                 createInstruction(SET, "str", q("positive")),
                 createInstruction(JUMP, var(1001), "greaterThanEq", "x", "0"),
@@ -78,11 +78,11 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void ignoresUnprocessableStatements() {
         assertCompilesTo("""
-                        if x >= 0
-                            print("positive")
+                        if x >= 0 then
+                            print("positive");
                         else
-                            print("negative")
-                        end
+                            print("negative");
+                        end;
                         """,
                 createInstruction(JUMP, var(1000), "lessThan", "x", "0"),
                 createInstruction(PRINT, q("positive")),
@@ -144,9 +144,9 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void mergesMemoryReads() {
         assertCompilesTo("""
-                        allocate heap in cell1[0 ... 64]
-                        value = $setting == 1 ? $low : $high
-                        print(value)
+                        allocate heap in cell1[0 ... 64];
+                        value = $setting == 1 ? $low : $high;
+                        print(value);
                         """,
                 createInstruction(READ, "value", "cell1", "2"),
                 createInstruction(READ, var(0), "cell1", "0"),
@@ -160,11 +160,11 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void swapsBranchesForCompoundConditions() {
         assertCompilesTo("""
-                        if @unit.dead === 0
-                            print("alive")
+                        if @unit.dead === 0 then
+                            print("alive");
                         else
-                            print("dead")
-                        end
+                            print("dead");
+                        end;
                         """,
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
                 createInstruction(JUMP, var(1000), "strictEqual", var(0), "0"),
@@ -179,14 +179,14 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void detectsLeakingBlocks() {
         assertCompilesTo("""
-                        while y > 0
-                            y = if x > 0
-                                if z == 0 break end
-                                2
+                        while y > 0 do
+                            y = if x > 0 then
+                                if z == 0 then break; end;
+                                2;
                             else
-                                -2
-                            end
-                        end
+                                -2;
+                            end;
+                        end;
                         """,
                 createInstruction(JUMP, var(1002), "lessThanEq", "y", "0"),
                 createInstruction(JUMP, var(1003), "lessThanEq", "x", "0"),
@@ -204,14 +204,14 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesChainedStatements() {
         assertCompilesTo("""
-                        y = if x < 0
-                            "negative"
-                        elsif x > 0
-                            "positive"
+                        y = if x < 0 then
+                            "negative";
+                        elsif x > 0 then
+                            "positive";
                         else
-                            "zero"
-                        end
-                        print(y)
+                            "zero";
+                        end;
+                        print(y);
                         """,
                 createInstruction(SET, "y", q("negative")),
                 createInstruction(JUMP, var(1001), "lessThan", "x", "0"),
@@ -227,8 +227,8 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesChainedAssignments() {
         assertCompilesTo("""
-                        a = b = rand(10) > 5 ? 1 : 2
-                        print(a, b)
+                        a = b = rand(10) > 5 ? 1 : 2;
+                        print(a, b);
                         """,
                 createInstruction(SET, "b", "2"),
                 createInstruction(OP, "rand", var(0), "10"),
@@ -244,8 +244,8 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesChainedAssignments2() {
         assertCompilesTo("""
-                        a = print(b = rand(10) > 5 ? 1 : 2)
-                        print(a, b)
+                        a = print(b = rand(10) > 5 ? 1 : 2);
+                        print(a, b);
                         """,
                 createInstruction(SET, "b", "2"),
                 createInstruction(OP, "rand", var(0), "10"),
@@ -262,9 +262,9 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void preservesDecisionVarialbe() {
         assertCompilesTo("""
-                        i = rand(10)
-                        i = i % 2 ? 5 : 6
-                        print(i)
+                        i = rand(10);
+                        i = i % 2 ? 5 : 6;
+                        print(i);
                         """,
                 createInstruction(OP, "rand", "i", "10"),
                 createInstruction(OP, "mod", var(1), "i", "2"),
@@ -282,7 +282,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     void pullsInstructionsIntoBranches() {
         assertCompilesTo("""
                         param a = 5;
-                        print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands"); 
+                        print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands");
                         """,
                 createInstruction(SET, "a", "5"),
                 createInstruction(JUMP, var(1000), "greaterThanEq", "a", "10"),

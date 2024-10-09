@@ -86,7 +86,7 @@ class SamplesTest {
         parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
-        final Seq program = AstNodeBuilder.generate(new SourceFile(file.getPath(), source),context);
+        final Seq program = AstNodeBuilder.generate(new SourceFile(file.getPath(), file.getAbsolutePath(), source),context);
         List<LogicInstruction> unoptimized = generateUnoptimized(program);
         List<LogicInstruction> optimized = generateAndOptimize(program);
 

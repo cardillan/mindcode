@@ -58,8 +58,8 @@ class MindcodeCompilerTest {
 
     @Test
     public void handlesMultipleFiles() {
-        SourceFile file1 = new SourceFile("file1.mnd", "print(\"File1\")");
-        SourceFile file2 = new SourceFile("file2.mnd", "print(\"File2\")");
+        SourceFile file1 = new SourceFile("file1.mnd", "file1.mnd", "print(\"File1\");");
+        SourceFile file2 = new SourceFile("file2.mnd", "file2.mnd", "print(\"File2\");");
 
         CompilerOutput<String> result = compiler.compile(List.of(file1, file2));
 
@@ -101,7 +101,7 @@ class MindcodeCompilerTest {
 
         String functionCalls = source.code().lines()
                 .filter(line -> line.startsWith("def "))
-                .map(line -> line.substring(4))
+                .map(line -> line.substring(4) + ";")
                 .collect(Collectors.joining("\n"));
 
         // We know there must be a variable names display

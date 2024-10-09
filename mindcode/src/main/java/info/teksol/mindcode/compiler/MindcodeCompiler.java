@@ -147,7 +147,7 @@ public class MindcodeCompiler implements Compiler<String> {
                 new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + filename + ".mnd")))) {
             final StringWriter out = new StringWriter();
             reader.transferTo(out);
-            return new SourceFile("*" + filename, out.toString());
+            return new SourceFile("*" + filename, filename + ".mnd", out.toString());
         } catch (IOException e) {
             throw new MindcodeInternalError(e, "Error loading library: " + filename);
         }
@@ -173,7 +173,7 @@ public class MindcodeCompiler implements Compiler<String> {
      * Parses the source code using ANTLR generated parser.
      */
     private Seq parse(SourceFile sourceFile) {
-        errorListener.setFileName(sourceFile.fileName());
+        errorListener.setFileName(sourceFile.absolutePath());
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceFile.code()));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
@@ -265,7 +265,7 @@ public class MindcodeCompiler implements Compiler<String> {
         }
 
         public void setFileName(String fileName) {
-            this.fileNameText = fileName.isEmpty() ? "" : " in file " + fileName;
+            this.fileNameText = fileName.isEmpty() ? "" : fileName + ":";
         }
 
         @Override
@@ -273,9 +273,9 @@ public class MindcodeCompiler implements Compiler<String> {
                 String msg, RecognitionException exception) {
             String offendingTokenText = getOffendingTokenText(exception);
             if (offendingTokenText == null) {
-                errors.add(MindcodeMessage.error("Error %sat line %d, column %d: %s", fileNameText, line, charPositionInLine, msg));
+                errors.add(MindcodeMessage.error("%s%d:%d ERROR: %s", fileNameText, line, charPositionInLine + 1, msg));
             } else {
-                errors.add(MindcodeMessage.error("Error %sat line %d, column %d, symbol '%s': %s", fileNameText, line, charPositionInLine, offendingTokenText, msg));
+                errors.add(MindcodeMessage.error("%s%d:%d ERROR: '%s': %s", fileNameText, line, charPositionInLine + 1, offendingTokenText, msg));
             }
         }
 

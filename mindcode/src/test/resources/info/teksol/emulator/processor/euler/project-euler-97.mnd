@@ -6,7 +6,7 @@ const SHIFT = 20;
 // TODO Compute with better modular arithmetics
 result = START;
 count = LIMIT;
-while count > SHIFT
+while count > SHIFT do
     result = (result << SHIFT) % DIGITS;
     count -= SHIFT;
 end;

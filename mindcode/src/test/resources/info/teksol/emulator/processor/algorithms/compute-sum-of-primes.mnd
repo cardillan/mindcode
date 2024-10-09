@@ -12,9 +12,9 @@ def getBit(bitIndex)
 end;
 
 def testAndSetMultiples(n, maximum)
-    if result = !getBit(n \ 2)
+    if result = !getBit(n \ 2) then
         max = maximum \ 2;
-        for i = n * n \ 2 ; i <= max ; i += n
+        for i = n * n \ 2 ; i <= max ; i += n do
             setBit(i);
         end;
     end;
@@ -26,24 +26,24 @@ def sumPrimesUpTo(maximum)
     i = 5;
     sqrtMax = ceil(sqrt(maximum));
     
-    while i <= sqrtMax
-        if testAndSetMultiples(i, maximum)
+    while i <= sqrtMax do
+        if testAndSetMultiples(i, maximum) then
             sum += i;
         end;
         i += 2;
-        if testAndSetMultiples(i, maximum)
+        if testAndSetMultiples(i, maximum) then
             sum += i;
         end;
         i += 4;
     end;
     
-    while i <= maximum
-        if !getBit(i \ 2)
+    while i <= maximum do
+        if !getBit(i \ 2) then
             sum += i;
         end;
         i += 2;
-        if !getBit(i \ 2)
-            if i <= maximum
+        if !getBit(i \ 2) then
+            if i <= maximum then
                 sum += i;
             end;
         end;

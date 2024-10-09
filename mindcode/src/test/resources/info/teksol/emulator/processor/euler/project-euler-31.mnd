@@ -1,7 +1,7 @@
 allocate stack in bank1[16 ... 512];
 const COINS = 8;
-int index = 0;
-for value in (200, 100, 50, 20, 10, 5, 2, 1)
+index = 0;
+for value in 200, 100, 50, 20, 10, 5, 2, 1 do
     bank1[index] = value;
     index += 1;
 end;
@@ -10,15 +10,15 @@ expect(41);
 actual(ways(20, 1));
 
 def ways(amount, index)
-    if amount == 0
+    if amount == 0 then
         return 1;
     end;
 
     result = 0;
     // TODO The optimizer should recognize it can use index instead of i in the loop, saving one variable
-    for i in index ... COINS
+    for i in index ... COINS do
         p = bank1[i];
-        if p <= amount
+        if p <= amount then
             result += ways(amount - p, i);
         end;
     end;

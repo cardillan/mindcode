@@ -24,7 +24,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null, null, 
                         new NumericLiteral(null, null, "156")
                 ),
-                translateToAst("156")
+                translateToAst("156;")
 
         );
     }
@@ -35,7 +35,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null, null, 
                         new NumericLiteral(null, null, "156.156")
                 ),
-                translateToAst("156.156")
+                translateToAst("156.156;")
 
         );
     }
@@ -46,7 +46,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null, null, 
                         new StringLiteral(null, null, "156")
                 ),
-                translateToAst("\"156\"")
+                translateToAst("\"156\";")
 
         );
     }
@@ -57,7 +57,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null, null, 
                         new VarRef(null, null, "a")
                 ),
-                translateToAst("a")
+                translateToAst("a;")
 
         );
     }
@@ -71,7 +71,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "1")
                         )
                 ),
-                translateToAst("a = 1")
+                translateToAst("a = 1;")
 
         );
     }
@@ -90,7 +90,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "3")
                         )
                 ),
-                translateToAst("1 + 2 - 3")
+                translateToAst("1 + 2 - 3;")
 
         );
     }
@@ -105,7 +105,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "2")
                         )
                 ),
-                translateToAst("3.1415 ** 2")
+                translateToAst("3.1415 ** 2;")
 
         );
     }
@@ -124,7 +124,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "3")
                         )
                 ),
-                translateToAst("1 * 2 / 3")
+                translateToAst("1 * 2 / 3;")
 
         );
     }
@@ -135,7 +135,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null, null, 
                         new BinaryOp(null, null, new VarRef(null, null, "ready"), "==", new BooleanLiteral(null, null, false))
                 ),
-                translateToAst("not ready")
+                translateToAst("not ready;")
         );
     }
 
@@ -153,7 +153,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("1 + 2 * 3")
+                translateToAst("1 + 2 * 3;")
         );
     }
 
@@ -171,7 +171,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "3")
                         )
                 ),
-                translateToAst("(1 + 2) * 3")
+                translateToAst("(1 + 2) * 3;")
         );
     }
 
@@ -205,7 +205,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new BooleanLiteral(null, null, false)
                         )
                 ),
-                translateToAst("not (a < b and c > (4 * r > 5))")
+                translateToAst("not (a < b and c > (4 * r > 5));")
         );
     }
 
@@ -219,7 +219,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 new FunctionCall(null, null, 
                                                         "print",
                                                         List.of(
-                                                                new StringLiteral(null, null, "\"a\": "),
+                                                                new StringLiteral(null, null, "'a': "),
                                                                 new VarRef(null, null, "a")
                                                         )
                                                 )
@@ -241,7 +241,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
 
                 ),
-                translateToAst("print(\"\\\"a\\\": \", a)\nrandom()\nprint(r)\nprint(\"\\nb: \", b / 3.1415)")
+                translateToAst("""
+                        print("'a': ", a);
+                        random();
+                        print(r);
+                        print("\\nb: ", b / 3.1415);""")
 
 
         );
@@ -273,7 +277,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("dx *= -1\ndy = -1\ndz = 2 - 1")
+                translateToAst("dx *= -1;\ndy = -1;\ndz = 2 - 1;")
         );
     }
 
@@ -286,7 +290,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new HeapAccess(null, null, "cell3", new NumericLiteral(null, null, "0"))
                         )
                 ),
-                translateToAst("cell2[1] = cell3[0]")
+                translateToAst("cell2[1] = cell3[0];")
         );
     }
 
@@ -310,7 +314,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("allocate heap in cell2[4..5]\n$dx = 1\n$dy = $dx + 42")
+                translateToAst("allocate heap in cell2[4..5];\n$dx = 1;\n$dy = $dx + 42;")
         );
     }
 
@@ -333,7 +337,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("cell1[0] = rand(9**9)")
+                translateToAst("cell1[0] = rand(9**9);")
         );
     }
 
@@ -346,7 +350,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "1")
                         )
                 ),
-                translateToAst("cell1[dx] = 1")
+                translateToAst("cell1[dx] = 1;")
         );
     }
 
@@ -357,7 +361,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new Assignment(null, null, new VarRef(null, null, "wasInitialized"), new NumericLiteral(null, null, "1"))
                 ),
                 translateToAst(
-                        "// Remember that we initialized ourselves\n// This is required otherwise we'll repeat ourselves\nwasInitialized = 1\n"
+                        """
+                                // Remember that we initialized ourselves
+                                // This is required otherwise we'll repeat ourselves
+                                wasInitialized = 1;
+                                """
                 )
         );
     }
@@ -394,7 +402,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))))")
+                translateToAst("x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))));")
         );
     }
 
@@ -413,7 +421,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("build(x, y, @titanium-conveyor, 0, 0)")
+                translateToAst("build(x, y, @titanium-conveyor, 0, 0);")
         );
     }
 
@@ -427,7 +435,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 List.of(new VarRef(null, null, "FLAG"))
                         )
                 ),
-                translateToAst("flag(FLAG)")
+                translateToAst("flag(FLAG);")
         );
     }
 
@@ -459,7 +467,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("cell1[ptr] = cell1[ptr - 1] + cell1[ptr - 2]")
+                translateToAst("cell1[ptr] = cell1[ptr - 1] + cell1[ptr - 2];")
         );
     }
 
@@ -470,7 +478,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new HeapAllocation(null, null, "cell2", new ExclusiveRange(null, null, new NumericLiteral(null, null, 0), new NumericLiteral(null, null, 64))),
                         new NoOp()
                 ),
-                translateToAst("allocate heap in cell2[ 0 ... 64 ]")
+                translateToAst("allocate heap in cell2[ 0 ... 64 ];")
         );
     }
 
@@ -481,13 +489,13 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new HeapAllocation(null, null, "cell2", 0, 30),
                         new NoOp()
                 ),
-                translateToAst("allocate heap in cell2[0 .. 30]")
+                translateToAst("allocate heap in cell2[0 .. 30];")
         );
     }
 
     @Test
     void rejectsHeapUsageWhenUnallocated() {
-        assertThrows(MindcodeException.class, () -> translateToAst("$dx = 1"));
+        assertThrows(MindcodeException.class, () -> translateToAst("$dx = 1;"));
     }
 
     @Test
@@ -507,7 +515,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NumericLiteral(null, null, "10")
                         )
                 ),
-                translateToAst("foundation1.copper < foundation1.itemCapacity\nreactor1.cryofluid < 10")
+                translateToAst("""
+                        foundation1.copper < foundation1.itemCapacity;
+                        reactor1.cryofluid < 10;
+                        """)
         );
     }
 
@@ -524,7 +535,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity")
+                translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity;")
         );
     }
 
@@ -551,7 +562,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("n = 5\nwhile n > 0\nn -= 1\nend\n")
+                translateToAst("""
+                        n = 5;
+                        while n > 0 do
+                            n -= 1;
+                        end;
+                        """)
         );
     }
 
@@ -567,7 +583,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new Seq(null, null, new FunctionCall(null, null, "print", new VarRef(null, null, "n")))
                         )
                 ),
-                translateToAst("for n in 1 .. 17\nprint(n)\nend\n")
+                translateToAst("""
+                        for n in 1 .. 17 do
+                            print(n);
+                        end;
+                        """)
         );
     }
 
@@ -582,7 +602,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new Seq(null, null, new FunctionCall(null, null, "print", new VarRef(null, null, "n")))
                         )
                 ),
-                translateToAst("for n in 1 ... 17\nprint(n)\nend\n")
+                translateToAst("""
+                        for n in 1 ... 17 do
+                            print(n);
+                        end;
+                        """)
         );
     }
 
@@ -608,7 +632,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("for a in (@mono, @poly, @mega)\nprint(a)\nend")
+                translateToAst("""
+                        for a in @mono, @poly, @mega do
+                            print(a);
+                        end;
+                        """)
         );
     }
 
@@ -648,7 +676,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1\nprint(n)\nend\n")
+                translateToAst("""
+                        for i = 0, j = -5; i < 5; j -= 1, i += 1 do
+                            print(n);
+                        end;
+                        """)
         );
     }
 
@@ -673,7 +705,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("while @unit === null\nubind(poly)\nend")
+                translateToAst("""
+                        while @unit === null do
+                            ubind(poly);
+                        end;
+                        """)
         );
     }
 
@@ -701,7 +737,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("if n > 4 cell1[2] += 1 end")
+                translateToAst("if n > 4 then cell1[2] += 1; end;")
         );
     }
 
@@ -737,7 +773,14 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("value = if cell1[4] == 0\nfalse\nelse\ncell1[4] = true\nn += 1\nend\n")
+                translateToAst("""
+                        value = if cell1[4] == 0 then
+                            false;
+                        else
+                            cell1[4] = true;
+                            n += 1;
+                        end;
+                        """)
         );
     }
 
@@ -762,7 +805,15 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 "print",
                                                 List.of(new VarRef(null, null, "n")))),
                                         new NoOp())))),
-                translateToAst("if state == 1\nprint(m)\nelse\nif state == 2\nprint(n)\nend\nend\n")
+                translateToAst("""
+                        if state == 1 then
+                            print(m);
+                        else
+                            if state == 2 then
+                                print(n);
+                            end;
+                        end;
+                        """)
         );
     }
 
@@ -780,7 +831,16 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new Seq(null, null, new StringLiteral(null, null, "otherwise"))
                         )
                 ),
-                translateToAst("case n\nwhen 1\n\"1\"\nwhen 2\n\"two\"\nelse\n\"otherwise\"end\n")
+                translateToAst("""
+                        case n
+                            when 1 then
+                                "1";
+                            when 2 then
+                                "two";
+                            else
+                                "otherwise";
+                        end;
+                        """)
         );
     }
 
@@ -805,7 +865,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("case n when 0 .. 4, 6 .. 8, 10, 12 \"A number I like\" end")
+                translateToAst("case n when 0 .. 4, 6 .. 8, 10, 12 then \"A number I like\"; end;")
         );
     }
 
@@ -818,7 +878,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         ),
                         new Assignment(null, null, new VarRef(null, null, "b"), new NumericLiteral(null, null, "1"))
                 ),
-                translateToAst("a=0;b=1")
+                translateToAst("a=0;b=1;")
         );
     }
 
@@ -838,7 +898,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("if some_cond == false\nend()\nend")
+                translateToAst("""
+                        if some_cond == false then
+                            end();
+                        end;
+                        """)
         );
     }
 
@@ -859,7 +923,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("running = @tick % 2 == 0")
+                translateToAst("running = @tick % 2 == 0;")
         );
     }
 
@@ -867,14 +931,14 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void supportsDeclaringAStack() {
         assertEquals(
                 new Seq(null, null, new StackAllocation(null, null, "cell1", 0, 63)),
-                translateToAst("allocate stack in cell1[0..63]")
+                translateToAst("allocate stack in cell1[0..63];")
         );
     }
 
     @Test
     void rejectsDualStackAllocation() {
         assertThrows(MindcodeException.class, () ->
-                translateToAst("allocate stack in cell1[0...64], stack in cell2[0...512]")
+                translateToAst("allocate stack in cell1[0...64], stack in cell2[0...512];")
         );
     }
 
@@ -927,12 +991,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         translateToAst("""
                                 def delay
-                                  n = 0
-                                  deadline = @tick + 60
-                                  while @tick < deadline
-                                    n += 1
-                                  end
-                                end
+                                  n = 0;
+                                  deadline = @tick + 60;
+                                  while @tick < deadline do
+                                    n += 1;
+                                  end;
+                                end;
                                 """)
                 )
         );
@@ -960,9 +1024,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         translateToAst("""
                                 def foo
-                                n=n+1
-                                end
-                                foo()
+                                    n=n+1;
+                                end;
+                                foo();
                                 """
                         )
                 )
@@ -989,9 +1053,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         translateToAst("""
                                 def foo(s)
-                                  s + 1
-                                end
-                                foo(1)
+                                  s + 1;
+                                end;
+                                foo(1);
                                 """
                         )
                 )
@@ -1022,9 +1086,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         translateToAst("""
                                 def foo(s, r)
-                                  s + 1 + r
-                                end
-                                foo(1, 6)
+                                  s + 1 + r;
+                                end;
+                                foo(1, 6);
                                 """
                         )
                 )
@@ -1048,7 +1112,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 prettyPrint(
-                        translateToAst("turret.shoot(leader.shootX, leader.shootY, leader.shooting)\n")
+                        translateToAst("turret.shoot(leader.shootX, leader.shootY, leader.shooting);\n")
                 )
         );
     }
@@ -1082,7 +1146,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 prettyPrint(
-                        translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
+                        translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1;\n")
                 )
         );
     }
@@ -1102,7 +1166,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst(
-                        "if false 1 elsif true 2 else 3 end"
+                        "if false then 1; elsif true then 2; else 3; end;"
                 )
         );
     }
@@ -1127,10 +1191,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("""
-                                resource = @silicon
-                                if vault1.sensor(resource) < vault1.itemCapacity
-                                  harvest(vault1, resource)
-                                end
+                                resource = @silicon;
+                                if vault1.sensor(resource) < vault1.itemCapacity then
+                                    harvest(vault1, resource);
+                                end;
                                 """
                 )
         );
@@ -1153,7 +1217,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\")")
+                translateToAst("print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\");")
         );
     }
 
@@ -1174,7 +1238,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("a = @unit !== null")
+                translateToAst("a = @unit !== null;")
         );
     }
 
@@ -1204,14 +1268,14 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
 
                 translateToAst("""
-                        while a
-                          if b
-                            continue
-                          elsif c
-                            break
-                          end
-                        end
-                        print("End")
+                        while a do
+                          if b then
+                            continue;
+                          elsif c then
+                            break;
+                          end;
+                        end;
+                        print("End");
                         """
                 )
         );

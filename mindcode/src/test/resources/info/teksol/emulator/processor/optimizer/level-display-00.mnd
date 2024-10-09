@@ -12,35 +12,35 @@ const M_R1 = M_B0 + 1;
 const M_G1 = M_R1 + 1;
 const M_B1 = M_G1 + 1;
 
-while MEMORY == null || DISPLAY == null
-	print("Item/Liquid/Energy Level Display");
-	n = @links;
-	while n > 0
-		n = n - 1;
-		block = getlink(n);
-		print("\nFound: ", block);
-		case block.type
-			when @large-logic-display then
-				DISPLAY = block;
-			when @message then
-				MESSAGE = block;
-			when @switch then
-				SWITCH = block;
-			when @memory-bank then
-				MEMORY = block;
-			when @memory-cell then
-				MEMORY = block;
-		end;
-	end;
-	
-	print("\nMessage: ", MESSAGE);
-	print("\nSwitch: ", SWITCH);
-	print("\nMemory: ", MEMORY);
-	print("\nDisplay: ", DISPLAY);
-	if MEMORY == null || DISPLAY == null
-		print("\nNo memory or display.");
-	end;
-	printflush(MESSAGE);
+while MEMORY == null || DISPLAY == null do
+    print("Item/Liquid/Energy Level Display");
+    n = @links;
+    while n > 0 do
+        n = n - 1;
+        block = getlink(n);
+        print("\nFound: ", block);
+        case block.type
+            when @large-logic-display then
+                DISPLAY = block;
+            when @message then
+                MESSAGE = block;
+            when @switch then
+                SWITCH = block;
+            when @memory-bank then
+                MEMORY = block;
+            when @memory-cell then
+                MEMORY = block;
+        end;
+    end;
+
+    print("\nMessage: ", MESSAGE);
+    print("\nSwitch: ", SWITCH);
+    print("\nMemory: ", MEMORY);
+    print("\nDisplay: ", DISPLAY);
+    if MEMORY == null || DISPLAY == null then
+        print("\nNo memory or display.");
+    end;
+    printflush(MESSAGE);
 end;
 
 CURRENT_INDEX = MEMORY[M_CURRENT_INDEX];
@@ -53,46 +53,46 @@ B1 = MEMORY[M_B1];
 
 stroke(1);
 
-while SWITCH.enabled == 0
-	start = @time;
-	print("Item/Liquid/Energy Level Display");
+while SWITCH.enabled == 0 do
+    start = @time;
+    print("Item/Liquid/Energy Level Display");
 
-	clear(0,0,80);
-	color(R0,G0,B0,255);
-	rect(10,10,156,156);
+    clear(0,0,80);
+    color(R0,G0,B0,255);
+    rect(10,10,156,156);
 
-	head = MEMORY[CURRENT_INDEX];
-	last = MEMORY[head];
-	
-	print("\nIndex: ", head);
-	print("\nValue: ", last);
-	
-	color(R1,G1,B1,255);
-	x = 159;
-	while x > 10
-		head -= 1;
-		value = MEMORY[head];
-		x1 = x - 5;
-		line(x, last, x1, value);
-		x = x1;
-		last = value;
-	end;
-	
-	color(255,255,255,255);
-	lineRect(10,10,156,156);
-	
-	print("\nTime: ", @time - start);
+    head = MEMORY[CURRENT_INDEX];
+    last = MEMORY[head];
 
-	wait = FREQ * ceil(@time / FREQ);
-	loops = 0;
-	while @time < wait
-		loops += 1;
-	end;
-	
-	drawflush(DISPLAY);
-	
-	print("\nWait loops: ", loops);
-	printflush(MESSAGE);
+    print("\nIndex: ", head);
+    print("\nValue: ", last);
+
+    color(R1,G1,B1,255);
+    x = 159;
+    while x > 10 do
+        head -= 1;
+        value = MEMORY[head];
+        x1 = x - 5;
+        line(x, last, x1, value);
+        x = x1;
+        last = value;
+    end;
+
+    color(255,255,255,255);
+    lineRect(10,10,156,156);
+
+    print("\nTime: ", @time - start);
+
+    wait = FREQ * ceil(@time / FREQ);
+    loops = 0;
+    while @time < wait do
+        loops += 1;
+    end;
+
+    drawflush(DISPLAY);
+
+    print("\nWait loops: ", loops);
+    printflush(MESSAGE);
 end;
 
 switch1.enabled = 0;

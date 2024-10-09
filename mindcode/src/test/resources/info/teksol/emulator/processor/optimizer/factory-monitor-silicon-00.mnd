@@ -13,7 +13,7 @@ const RATE_INDEX = 511;
 
 clear(0, 0, 80);
 
-if bank1 != null
+if bank1 != null then
     BAR_LENGTH = 53;
     BAR_SPACE = 74;
 else
@@ -30,227 +30,227 @@ clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly;
 icon = expected_flow_str = flow_str = lastRate = showa = null;
 
 switch1.enabled = 0;
-while switch1.enabled == 0
-	start = @time;
-	print("Silicon Factory Monitor");
+while switch1.enabled == 0 do
+    start = @time;
+    print("Silicon Factory Monitor");
 
-	factories = 0;
+    factories = 0;
 
     color(0, 0, 80, 255);
     rect(clx, cly, clw, clh);
 
-	stroke(2);
+    stroke(2);
 
-	index = FROM_INDEX;
-	for n = 0; n < @links; n = n + 1
-		smelter = getlink(n);
-		if smelter.type == @silicon-crucible
-			minimum = CAPACITY1 + 1;
-			s = smelter.sand;
-			c = smelter.coal;
-			p = smelter.pyratite;
-			a = min(smelter.silicon, CAPACITY1);
-			e = smelter.enabled;
-			power = smelter.totalPower;
-			boost = smelter.timescale;
-			if s < minimum minimum = s icon = @sand; end;
-			if c < minimum minimum = c icon = @coal; end;
-			if p < minimum minimum = p icon = @pyratite; end;
-			showa = a > 10 && 31 - a < minimum;
-			if showa icon = @silicon; end;
+    index = FROM_INDEX;
+    for n = 0; n < @links; n = n + 1 do
+        smelter = getlink(n);
+        if smelter.type == @silicon-crucible then
+            minimum = CAPACITY1 + 1;
+            s = smelter.sand;
+            c = smelter.coal;
+            p = smelter.pyratite;
+            a = min(smelter.silicon, CAPACITY1);
+            e = smelter.enabled;
+            power = smelter.totalPower;
+            boost = smelter.timescale;
+            if s < minimum then minimum = s; icon = @sand; end;
+            if c < minimum then minimum = c; icon = @coal; end;
+            if p < minimum then minimum = p; icon = @pyratite; end;
+            showa = a > 10 && 31 - a < minimum;
+            if showa then icon = @silicon; end;
 
-			// Compute bar position
-			column = 0;
-			row = index;
+            // Compute bar position
+            column = 0;
+            row = index;
 
-			x = OFFSET_X + column * BAR_SPACE;
-			y = OFFSET_Y + row * BAR_GAP;
-			color(0, 0, 80, 255);
-			rect(x - 1, y - 1, BAR_SPACE, 16);
+            x = OFFSET_X + column * BAR_SPACE;
+            y = OFFSET_Y + row * BAR_GAP;
+            color(0, 0, 80, 255);
+            rect(x - 1, y - 1, BAR_SPACE, 16);
 
-			if minimum > 26 && showa == 0
-				icon = @silicon-crucible;
-			end;
-			
-			color(255, 255, 255, 255);
-			if e
-				if power > 0
-					image(x + 7, y + 7, icon, 16, 0);
-				else
-					color(255,80,80,255);
-					rect(x, y + 3, 14, 8);
-					color(0,0,0,255);
-					rect(x + 2, y + 5, 8, 4);
-					rect(x + 12, y + 3, 2, 2);
-					rect(x + 12, y + 9, 2, 2);
-					color(255,80,80,255);
-					rect(x + 4, y + 6, 2, 2);
-				end;
-			else
-				color(255,80,80,255);
-				stroke(3);
-				line(x + 2, y + 12, x + 12, y + 2);
-				line(x + 2, y + 2, x + 12, y + 12);
-				color(0,0,0,255);
-				lineRect(x - 1, y - 1, 16, 16);
-				stroke(2);
-			end;
+            if minimum > 26 && showa == 0 then
+                icon = @silicon-crucible;
+            end;
 
-			x = x + 16;
+            color(255, 255, 255, 255);
+            if e then
+                if power > 0 then
+                    image(x + 7, y + 7, icon, 16, 0);
+                else
+                    color(255,80,80,255);
+                    rect(x, y + 3, 14, 8);
+                    color(0,0,0,255);
+                    rect(x + 2, y + 5, 8, 4);
+                    rect(x + 12, y + 3, 2, 2);
+                    rect(x + 12, y + 9, 2, 2);
+                    color(255,80,80,255);
+                    rect(x + 4, y + 6, 2, 2);
+                end;
+            else
+                color(255,80,80,255);
+                stroke(3);
+                line(x + 2, y + 12, x + 12, y + 2);
+                line(x + 2, y + 2, x + 12, y + 12);
+                color(0,0,0,255);
+                lineRect(x - 1, y - 1, 16, 16);
+                stroke(2);
+            end;
 
-			if power * e == 0
-				red = 255;
-				green = 0;
-				blue = 0;
-			elsif showa 
-				red = 255;
-				green = 0;
-				blue = 255;
-				minimum = a;
-			else
-				red = (minimum > 20 && boost >= EXPECTED_BOOST) ? 0 : 255;
-				green = (minimum > 10) ? 255 : 0;
-				blue = 0;
-			end;
-			
-			if boost > EXPECTED_BOOST
-				red = max(192, red);
-				green = max(192, green);
-				blue = max(192, blue);
-				boost = EXPECTED_BOOST;
-			end;
-			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
+            x = x + 16;
 
-			color(red,green,blue,128);
-			rect(x, y, (minimum * length) \ CAPACITY1, BAR_WIDTH);
-			color(red,green,blue,255);
-			lineRect(x, y, length, BAR_WIDTH);
-			index = index + 1;
-			factories = factories + 1;
-		end;
-	end;
+            if power * e == 0 then
+                red = 255;
+                green = 0;
+                blue = 0;
+            elsif showa then
+                red = 255;
+                green = 0;
+                blue = 255;
+                minimum = a;
+            else
+                red = (minimum > 20 && boost >= EXPECTED_BOOST) ? 0 : 255;
+                green = (minimum > 10) ? 255 : 0;
+                blue = 0;
+            end;
 
-	index = FROM_INDEX;
-	for n = 0; n < @links; n = n + 1
-		smelter = getlink(n);
-		if smelter.type == @pyratite-mixer
-			minimum = CAPACITY2 + 1;
-			s = smelter.sand;
-			c = smelter.coal;
-			l = smelter.lead;
-			a = smelter.pyratite;
-			e = smelter.enabled;
-			power = smelter.totalPower;
-			boost = smelter.timescale;
-			if s < minimum minimum = s icon = @sand; end;
-			if c < minimum minimum = c icon = @coal; end;
-			if l < minimum minimum = l icon = @lead; end;
+            if boost > EXPECTED_BOOST then
+                red = max(192, red);
+                green = max(192, green);
+                blue = max(192, blue);
+                boost = EXPECTED_BOOST;
+            end;
+            length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
 
-			// Compute bar position
-			column = 1;
-			row = index;
+            color(red,green,blue,128);
+            rect(x, y, (minimum * length) \ CAPACITY1, BAR_WIDTH);
+            color(red,green,blue,255);
+            lineRect(x, y, length, BAR_WIDTH);
+            index = index + 1;
+            factories = factories + 1;
+        end;
+    end;
 
-			x = OFFSET_X + column * BAR_SPACE;
-			y = OFFSET_Y + row * BAR_GAP;
-			color(0, 0, 80, 255);
-			rect(x - 1, y - 1, BAR_SPACE, 16);
+    index = FROM_INDEX;
+    for n = 0; n < @links; n = n + 1 do
+        smelter = getlink(n);
+        if smelter.type == @pyratite-mixer then
+            minimum = CAPACITY2 + 1;
+            s = smelter.sand;
+            c = smelter.coal;
+            l = smelter.lead;
+            a = smelter.pyratite;
+            e = smelter.enabled;
+            power = smelter.totalPower;
+            boost = smelter.timescale;
+            if s < minimum then minimum = s; icon = @sand; end;
+            if c < minimum then minimum = c; icon = @coal; end;
+            if l < minimum then minimum = l; icon = @lead; end;
 
-			if minimum > 6 && showa == 0
-				icon = @pyratite-mixer;
-			end;
-			
-			color(255, 255, 255, 255);
-			if e
-				if power > 0
-					image(x + 7, y + 7, icon, 16, 0);
-				else
-					color(255,80,80,255);
-					rect(x, y + 3, 14, 8);
-					color(0,0,0,255);
-					rect(x + 2, y + 5, 8, 4);
-					rect(x + 12, y + 3, 2, 2);
-					rect(x + 12, y + 9, 2, 2);
-					color(255,80,80,255);
-					rect(x + 4, y + 6, 2, 2);
-				end;
-			else
-				color(255,80,80,255);
-				stroke(3);
-				line(x + 2, y + 12, x + 12, y + 2);
-				line(x + 2, y + 2, x + 12, y + 12);
-				color(0,0,0,255);
-				lineRect(x - 1, y - 1, 16, 16);
-				stroke(2);
-			end;
+            // Compute bar position
+            column = 1;
+            row = index;
 
-			x = x + 16;
+            x = OFFSET_X + column * BAR_SPACE;
+            y = OFFSET_Y + row * BAR_GAP;
+            color(0, 0, 80, 255);
+            rect(x - 1, y - 1, BAR_SPACE, 16);
 
-			if power * e == 0
-				red = 255;
-				green = 0;
-				blue = 0;
-			else
-				red = (minimum > 6 && boost >= EXPECTED_BOOST) ? 0 : 255;
-				green = (minimum > 3) ? 255 : 0;
-				blue = 0;
-			end;
-			
-			if boost > EXPECTED_BOOST
-				red = max(192, red);
-				green = max(192, green);
-				blue = max(192, blue);
-				boost = EXPECTED_BOOST;
-			end;
-			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
+            if minimum > 6 && showa == 0 then
+                icon = @pyratite-mixer;
+            end;
 
-			color(red,green,blue,128);
-			rect(x, y, (minimum * length) \ CAPACITY2, BAR_WIDTH);
-			color(red,green,blue,255);
-			lineRect(x, y, length, BAR_WIDTH);
-			index = index + 1;
-		end;
-	end;
+            color(255, 255, 255, 255);
+            if e then
+                if power > 0 then
+                    image(x + 7, y + 7, icon, 16, 0);
+                else
+                    color(255,80,80,255);
+                    rect(x, y + 3, 14, 8);
+                    color(0,0,0,255);
+                    rect(x + 2, y + 5, 8, 4);
+                    rect(x + 12, y + 3, 2, 2);
+                    rect(x + 12, y + 9, 2, 2);
+                    color(255,80,80,255);
+                    rect(x + 4, y + 6, 2, 2);
+                end;
+            else
+                color(255,80,80,255);
+                stroke(3);
+                line(x + 2, y + 12, x + 12, y + 2);
+                line(x + 2, y + 2, x + 12, y + 12);
+                color(0,0,0,255);
+                lineRect(x - 1, y - 1, 16, 16);
+                stroke(2);
+            end;
 
-	if bank1 != null 
-		if FROM_INDEX == 0
-			rate = bank1[RATE_INDEX];
-			if lastRate != rate
-				expected_flow = EXPECTED_BOOST * factories / 11.25;
-				expected_flow_str = floor(expected_flow * 3600);
+            x = x + 16;
 
-				lastRate = rate;
-				color(0, 0, 80, 255);
-				rect(156, 0, 16, 176);
-				
-				color(255,128,128,255);
-				rect(164,4,8,84);
-				color(128,255,128,255);
-				rect(164,89,8,84);
+            if power * e == 0 then
+                red = 255;
+                green = 0;
+                blue = 0;
+            else
+                red = (minimum > 6 && boost >= EXPECTED_BOOST) ? 0 : 255;
+                green = (minimum > 3) ? 255 : 0;
+                blue = 0;
+            end;
 
-				stroke(1);
-				color(255,0,0,255);
-				lineRect(164,4,8,84);
-				color(0,255,0,255);
-				lineRect(164,89,8,84);
+            if boost > EXPECTED_BOOST then
+                red = max(192, red);
+                green = max(192, green);
+                blue = max(192, blue);
+                boost = EXPECTED_BOOST;
+            end;
+            length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
 
-				color(0,0,80,255);
-				rect(164,4,2,170);
+            color(red,green,blue,128);
+            rect(x, y, (minimum * length) \ CAPACITY2, BAR_WIDTH);
+            color(red,green,blue,255);
+            lineRect(x, y, length, BAR_WIDTH);
+            index = index + 1;
+        end;
+    end;
 
-				pos = 88 + 84 * (rate - expected_flow) / expected_flow;
-				pos = min(max(pos, 4), 170);
-				pos1 = pos + 7;
-				pos2 = pos - 7;
-				color(255,255,16,255);
-				triangle(156, pos1, 164, pos, 156, pos2);
-				flow_str = floor(3600 * rate);
-			end;
-		end;
-		print("\nNominal production: ", expected_flow_str, "/min");
-		print("\nActual production: ", flow_str, "/min");
-	end;
+    if bank1 != null then
+        if FROM_INDEX == 0 then
+            rate = bank1[RATE_INDEX];
+            if lastRate != rate then
+                expected_flow = EXPECTED_BOOST * factories / 11.25;
+                expected_flow_str = floor(expected_flow * 3600);
 
-	drawflush(display1);
+                lastRate = rate;
+                color(0, 0, 80, 255);
+                rect(156, 0, 16, 176);
 
-	print("\nUpdate time: ", floor(@time - start), " ms");
-	printflush(message1);
+                color(255,128,128,255);
+                rect(164,4,8,84);
+                color(128,255,128,255);
+                rect(164,89,8,84);
+
+                stroke(1);
+                color(255,0,0,255);
+                lineRect(164,4,8,84);
+                color(0,255,0,255);
+                lineRect(164,89,8,84);
+
+                color(0,0,80,255);
+                rect(164,4,2,170);
+
+                pos = 88 + 84 * (rate - expected_flow) / expected_flow;
+                pos = min(max(pos, 4), 170);
+                pos1 = pos + 7;
+                pos2 = pos - 7;
+                color(255,255,16,255);
+                triangle(156, pos1, 164, pos, 156, pos2);
+                flow_str = floor(3600 * rate);
+            end;
+        end;
+        print("\nNominal production: ", expected_flow_str, "/min");
+        print("\nActual production: ", flow_str, "/min");
+    end;
+
+    drawflush(display1);
+
+    print("\nUpdate time: ", floor(@time - start), " ms");
+    printflush(message1);
 end;

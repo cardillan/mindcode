@@ -12,7 +12,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesGetBlock() {
         assertCompilesTo("""
-                        result = getblock(floor, x, y)
+                        result = getblock(floor, x, y);
                         """,
                 createInstruction(GETBLOCK, "floor", var(0), "x", "y"),
                 createInstruction(SET, "result", var(0)),
@@ -23,9 +23,9 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSetBlock() {
         assertCompilesTo("""
-                        setblock(floor, to, x, y)
-                        setblock(ore, to, x, y)
-                        setblock(block, to, x, y, team, rotation)
+                        setblock(floor, to, x, y);
+                        setblock(ore, to, x, y);
+                        setblock(block, to, x, y, team, rotation);
                         """,
                 createInstruction(SETBLOCK, "floor", "to", "x", "y"),
                 createInstruction(SETBLOCK, "ore", "to", "x", "y"),
@@ -37,7 +37,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSpawn() {
         assertCompilesTo("""
-                        result = spawn(unit, x, y, rotation, team)
+                        result = spawn(unit, x, y, rotation, team);
                         """,
                 createInstruction(SPAWN, "unit", "x", "y", "rotation", "team", var(0)),
                 createInstruction(SET, "result", var(0)),
@@ -48,8 +48,8 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesStatus() {
         assertCompilesTo("""
-                        applyStatus(burning, unit, duration)
-                        clearStatus(freezing, unit)
+                        applyStatus(burning, unit, duration);
+                        clearStatus(freezing, unit);
                         """,
                 createInstruction(STATUS, "false", "burning", "unit", "duration"),
                 createInstruction(STATUS, "true", "freezing", "unit"),
@@ -60,7 +60,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSpawnWave() {
         assertCompilesTo("""
-                        spawnwave(x, y, natural)
+                        spawnwave(x, y, natural);
                         """,
                 createInstruction(SPAWNWAVE, "x", "y", "natural"),
                 createInstruction(END)
@@ -70,28 +70,28 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSetRule() {
         assertCompilesTo("""
-                        setrule(currentWaveTime, value)
-                        setrule(waveTimer, value)
-                        setrule(waves, value)
-                        setrule(wave, value)
-                        setrule(waveSpacing, value)
-                        setrule(waveSending, value)
-                        setrule(attackMode, value)
-                        setrule(enemyCoreBuildRadius, value)
-                        setrule(dropZoneRadius, value)
-                        setrule(unitCap, value)
-                        setrule(mapArea, x, y, width, height)
-                        setrule(lighting, value)
-                        setrule(ambientLight, value)
-                        setrule(solarMultiplier, value)
-                        setrule(buildSpeed, value, team)
-                        setrule(unitBuildSpeed, value, team)
-                        setrule(unitCost, value, team)
-                        setrule(unitDamage, value, team)
-                        setrule(blockHealth, value, team)
-                        setrule(blockDamage, value, team)
-                        setrule(rtsMinWeight, value, team)
-                        setrule(rtsMinSquad, value, team)
+                        setrule(currentWaveTime, value);
+                        setrule(waveTimer, value);
+                        setrule(waves, value);
+                        setrule(wave, value);
+                        setrule(waveSpacing, value);
+                        setrule(waveSending, value);
+                        setrule(attackMode, value);
+                        setrule(enemyCoreBuildRadius, value);
+                        setrule(dropZoneRadius, value);
+                        setrule(unitCap, value);
+                        setrule(mapArea, x, y, width, height);
+                        setrule(lighting, value);
+                        setrule(ambientLight, value);
+                        setrule(solarMultiplier, value);
+                        setrule(buildSpeed, value, team);
+                        setrule(unitBuildSpeed, value, team);
+                        setrule(unitCost, value, team);
+                        setrule(unitDamage, value, team);
+                        setrule(blockHealth, value, team);
+                        setrule(blockDamage, value, team);
+                        setrule(rtsMinWeight, value, team);
+                        setrule(rtsMinSquad, value, team);
                         """,
                 createInstruction(SETRULE, "currentWaveTime", "value"),
                 createInstruction(SETRULE, "waveTimer", "value"),
@@ -122,10 +122,10 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesMessage() {
         assertCompilesTo("""
-                        message(notify, @wait)
-                        message(mission, @wait)
-                        message(announce, duration, result)
-                        message(toast, duration, result)
+                        message(notify, @wait);
+                        message(mission, @wait);
+                        message(announce, duration, result);
+                        message(toast, duration, result);
                         """,
                 createInstruction(MESSAGE, "notify", "0", "@wait"),
                 createInstruction(MESSAGE, "mission", "0", "@wait"),
@@ -138,9 +138,9 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesCutscene() {
         assertCompilesTo("""
-                        cutscene(pan, x, y, speed)
-                        cutscene(zoom, level)
-                        cutscene(stop)
+                        cutscene(pan, x, y, speed);
+                        cutscene(zoom, level);
+                        cutscene(stop);
                         """,
                 createInstruction(CUTSCENE, "pan", "x", "y", "speed"),
                 createInstruction(CUTSCENE, "zoom", "level"),
@@ -152,7 +152,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesExplosion() {
         assertCompilesTo("""
-                        explosion(team, x, y, radius, damage, air, ground, pierce, true)
+                        explosion(team, x, y, radius, damage, air, ground, pierce, true);
                         """,
                 createInstruction(EXPLOSION, "team", "x", "y", "radius", "damage", "air", "ground", "pierce", "true"),
                 createInstruction(END)
@@ -162,7 +162,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSetrate() {
         assertCompilesTo("""
-                        setrate(ipt)
+                        setrate(ipt);
                         """,
                 createInstruction(SETRATE, "ipt"),
                 createInstruction(END)
@@ -172,14 +172,14 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesFetch() {
         assertCompilesTo("""
-                        result = fetch(unitCount, team)
-                        result = fetch(playerCount, team)
-                        result = fetch(coreCount, team)
-                        result = fetch(buildCount, team, type)
-                        result = fetch(unit, team, index)
-                        result = fetch(player, team, index)
-                        result = fetch(core, team, index)
-                        result = fetch(build, team, index, type)
+                        result = fetch(unitCount, team);
+                        result = fetch(playerCount, team);
+                        result = fetch(coreCount, team);
+                        result = fetch(buildCount, team, type);
+                        result = fetch(unit, team, index);
+                        result = fetch(player, team, index);
+                        result = fetch(core, team, index);
+                        result = fetch(build, team, index, type);
                         """,
                 createInstruction(FETCH, "unitCount", var(0), "team"),
                 createInstruction(SET, "result", var(0)),
@@ -204,7 +204,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesGetflag() {
         assertCompilesTo("""
-                        result = getflag(flag)
+                        result = getflag(flag);
                         """,
                 createInstruction(GETFLAG, var(0), "flag"),
                 createInstruction(SET, "result", var(0)),
@@ -215,7 +215,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSetflag() {
         assertCompilesTo("""
-                        setflag(flag, value)
+                        setflag(flag, value);
                         """,
                 createInstruction(SETFLAG, "flag", "value"),
                 createInstruction(END)
@@ -225,7 +225,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSetProp() {
         assertCompilesTo("""
-                        object.setprop(property, value)
+                        object.setprop(property, value);
                         """,
                 createInstruction(SETPROP, "property", "object", "value"),
                 createInstruction(END)
@@ -235,7 +235,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesSync() {
         assertCompilesTo("""
-                        sync(GLOBAL)
+                        sync(GLOBAL);
                         """,
                 createInstruction(SYNC, "GLOBAL"),
                 createInstruction(END)
@@ -246,7 +246,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     void refusesLocalVariableForSync() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        sync(local)
+                        sync(local);
                         """
                 )
         );
@@ -256,7 +256,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     void refusesLiteralForSync() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
-                        sync(10)
+                        sync(10);
                         """
                 )
         );
@@ -265,39 +265,39 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesEffects() {
         assertCompilesTo("""
-                        effect(warn, x, y)
-                        effect(cross, x, y)
-                        effect(blockFall, x, y, @vault)
-                        effect(placeBlock, x, y, size)
-                        effect(placeBlockSpark, x, y, size)
-                        effect(breakBlock, x, y, size)
-                        effect(spawn, x, y)
-                        effect(trail, x, y, size, color)
-                        effect(breakProp, x, y, size, color)
-                        effect(smokeCloud, x, y, color)
-                        effect(vapor, x, y, color)
-                        effect(hit, x, y, color)
-                        effect(hitSquare, x, y, color)
-                        effect(shootSmall, x, y, rotation, color)
-                        effect(shootBig, x, y, rotation, color)
-                        effect(smokeSmall, x, y, color)
-                        effect(smokeBig, x, y, color)
-                        effect(smokeColor, x, y, rotation, color)
-                        effect(smokeSquare, x, y, rotation, color)
-                        effect(smokeSquareBig, x, y, rotation, color)
-                        effect(spark, x, y, color)
-                        effect(sparkBig, x, y, color)
-                        effect(sparkShoot, x, y, rotation, color)
-                        effect(sparkShootBig, x, y, rotation, color)
-                        effect(drill, x, y, color)
-                        effect(drillBig, x, y, color)
-                        effect(lightBlock, x, y, size, color)
-                        effect(explosion, x, y, size)
-                        effect(smokePuff, x, y, color)
-                        effect(sparkExplosion, x, y, color)
-                        effect(crossExplosion, x, y, size, color)
-                        effect(wave, x, y, size, color)
-                        effect(bubble, x, y)
+                        effect(warn, x, y);
+                        effect(cross, x, y);
+                        effect(blockFall, x, y, @vault);
+                        effect(placeBlock, x, y, size);
+                        effect(placeBlockSpark, x, y, size);
+                        effect(breakBlock, x, y, size);
+                        effect(spawn, x, y);
+                        effect(trail, x, y, size, color);
+                        effect(breakProp, x, y, size, color);
+                        effect(smokeCloud, x, y, color);
+                        effect(vapor, x, y, color);
+                        effect(hit, x, y, color);
+                        effect(hitSquare, x, y, color);
+                        effect(shootSmall, x, y, rotation, color);
+                        effect(shootBig, x, y, rotation, color);
+                        effect(smokeSmall, x, y, color);
+                        effect(smokeBig, x, y, color);
+                        effect(smokeColor, x, y, rotation, color);
+                        effect(smokeSquare, x, y, rotation, color);
+                        effect(smokeSquareBig, x, y, rotation, color);
+                        effect(spark, x, y, color);
+                        effect(sparkBig, x, y, color);
+                        effect(sparkShoot, x, y, rotation, color);
+                        effect(sparkShootBig, x, y, rotation, color);
+                        effect(drill, x, y, color);
+                        effect(drillBig, x, y, color);
+                        effect(lightBlock, x, y, size, color);
+                        effect(explosion, x, y, size);
+                        effect(smokePuff, x, y, color);
+                        effect(sparkExplosion, x, y, color);
+                        effect(crossExplosion, x, y, size, color);
+                        effect(wave, x, y, size, color);
+                        effect(bubble, x, y);
                         """,
                 createInstruction(EFFECT, "warn", "x", "y"),
                 createInstruction(EFFECT, "cross", "x", "y"),

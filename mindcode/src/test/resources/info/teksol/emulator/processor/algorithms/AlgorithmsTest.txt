@@ -1,11 +1,11 @@
-bitmap-get-set.mnd:                       191 instructions,    167 steps,  87.4% coverage, source CRC 1E40FD351C3D9B31, compiled CRC DB212DB77945BD36
-bitmap-get.mnd:                            16 instructions,     16 steps, 100.0% coverage, source CRC AF965F25966D53AE, compiled CRC 0502EBCFC8D0832C
+bitmap-get-set.mnd:                       191 instructions,    167 steps,  87.4% coverage, source CRC F7CDD0AAA95E1FA9, compiled CRC DB212DB77945BD36
+bitmap-get.mnd:                            16 instructions,     16 steps, 100.0% coverage, source CRC 7A614E3E9C3B12F5, compiled CRC 0502EBCFC8D0832C
 compute-recursive-fibonacci.mnd:           30 instructions,   2476 steps, 100.0% coverage, source CRC CF5C94E489C7D400, compiled CRC 18694E69719941C2
-compute-sum-of-primes.mnd:                439 instructions,   1889 steps,  99.7% coverage, source CRC 77AA6C797F5F08FC, compiled CRC EC8302E2CDEB18D7
+compute-sum-of-primes.mnd:                439 instructions,   1889 steps,  99.7% coverage, source CRC C92A5FEC4377D2A4, compiled CRC EC8302E2CDEB18D7
 memory-read-write.mnd:                      3 instructions,      3 steps, 100.0% coverage, source CRC 375767A6AB4A20B9, compiled CRC 4CA7F7B7EBBD2D04
-sorting with bubble-sort.mnd:              25 instructions,  19370 steps, 100.0% coverage, source CRC A16441D3344932FE, compiled CRC 17266A8F06D65A21
-sorting with heap-sort.mnd:                49 instructions,  63533 steps, 100.0% coverage, source CRC E4E28179B6243D9C, compiled CRC 803DD19BC94D5317
-sorting with insert-sort.mnd:              23 instructions,  25933 steps, 100.0% coverage, source CRC 8F04405D8BA95462, compiled CRC A5D967B2263DC0A6
-sorting with quick-sort.mnd:               63 instructions,  47943 steps, 100.0% coverage, source CRC CECCC8729A388A1D, compiled CRC D89D4D8479DC6895
-sorting with select-sort.mnd:              27 instructions,  35149 steps, 100.0% coverage, source CRC B7D316E9436D1D82, compiled CRC 6A08E73049036484
-storage-display.mnd:                      653 instructions,    824 steps,  25.5% coverage, source CRC B5645C876402D728, compiled CRC 60DF6DBE97F5CA6C
+sorting with bubble-sort.mnd:              25 instructions,  19370 steps, 100.0% coverage, source CRC 534D523FC7E1BCF3, compiled CRC 17266A8F06D65A21
+sorting with heap-sort.mnd:                49 instructions,  63533 steps, 100.0% coverage, source CRC 5FD8AEC1AEC63854, compiled CRC 803DD19BC94D5317
+sorting with insert-sort.mnd:              23 instructions,  25933 steps, 100.0% coverage, source CRC 110AA9138813CE30, compiled CRC A5D967B2263DC0A6
+sorting with quick-sort.mnd:               63 instructions,  47943 steps, 100.0% coverage, source CRC 1E934E1BCA20ABE9, compiled CRC D89D4D8479DC6895
+sorting with select-sort.mnd:              27 instructions,  35149 steps, 100.0% coverage, source CRC 74DF156C43CDD10F, compiled CRC 6A08E73049036484
+storage-display.mnd:                      653 instructions,    824 steps,  25.5% coverage, source CRC A987FC4CE94E41D4, compiled CRC 60DF6DBE97F5CA6C

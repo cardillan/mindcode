@@ -1,8 +1,8 @@
 allocate stack in bank1[16 ... 512];
 const AMOUNT = 200;
 bank2[0] = 1;
-for i in (1, 2, 5, 10, 20, 50, 100, 200)
-    for j in i .. AMOUNT
+for i in 1, 2, 5, 10, 20, 50, 100, 200 do
+    for j in i .. AMOUNT do
         bank2[j] += bank2[j - i];
     end;
 end;

@@ -11,25 +11,25 @@ EXPECTED_FLOW_STR = floor(EXPECTED_FLOW * 3600);
 
 const RATE_INDEX = 511;
 
-if bank1 != null
+if bank1 != null then
     BAR_LENGTH = 53;
     BAR_SPACE = 74;
 else
     BAR_LENGTH = 61;
     BAR_SPACE = 88;
-end
+end;
 
 flow_str = icon = lastRate = null;
 
 switch1.enabled = 0;
 
-while switch1.enabled == 0
+while switch1.enabled == 0 do
     print("Surge Alloy Factory Monitor");
     
-    if bank1 != null
-        if FROM_INDEX == 0
+    if bank1 != null then
+        if FROM_INDEX == 0 then
             rate = bank1[RATE_INDEX];
-            if lastRate != rate
+            if lastRate != rate then
                 clear(0, 0, 80);
                 lastRate = rate;
                 color(0, 0, 80, 255);
@@ -59,8 +59,8 @@ while switch1.enabled == 0
             else
                 color(0, 0, 80, 255);
                 rect(0, 0, 156, 176);
-            end
-        end
+            end;
+        end;
         print($"\nNominal production: $EXPECTED_FLOW_STR/min");
         print($"\nActual production: $flow_str/min");
     end;
@@ -69,9 +69,9 @@ while switch1.enabled == 0
     stroke(2);
 
     index = FROM_INDEX;
-    for n = 0; n < @links; n = n + 1
+    for n = 0; n < @links; n = n + 1 do
         smelter = getlink(n);
-        if smelter.type == @surge-smelter
+        if smelter.type == @surge-smelter then
             minimum = CAPACITY + 1;
             t = smelter.titanium;
             c = smelter.copper;
@@ -81,12 +81,12 @@ while switch1.enabled == 0
             e = smelter.enabled;
             power = smelter.totalPower;
             boost = smelter.timescale;
-            if l < minimum minimum = l icon = @lead; end;
-            if s < minimum minimum = s icon = @silicon; end;
-            if c < minimum minimum = c icon = @copper; end;
-            if t < minimum minimum = t icon = @titanium; end;
+            if l < minimum then minimum = l; icon = @lead; end;
+            if s < minimum then minimum = s; icon = @silicon; end;
+            if c < minimum then minimum = c; icon = @copper; end;
+            if t < minimum then minimum = t; icon = @titanium; end;
             showa = a > 5 && 21 - a < minimum;
-            if showa icon = @surge-alloy; end;
+            if showa then icon = @surge-alloy; end;
 
             // Compute bar position
             column = index % 2;
@@ -99,13 +99,13 @@ while switch1.enabled == 0
             color(0, 0, 80, 255);
             rect(xm1, ym1, BAR_SPACE, 16);
 
-            if minimum > 16 && showa == 0
+            if minimum > 16 && showa == 0 then
                 icon = @surge-smelter;
             end;
             
             color(255, 255, 255, 255);
-            if e
-                if power > 0
+            if e then
+                if power > 0 then
                     image(x + 7, y + 7, icon, 16, 0);
                 else
                     x12 = x + 12;
@@ -135,11 +135,11 @@ while switch1.enabled == 0
 
             x = x + 16;
 
-            if power * e == 0
+            if power * e == 0 then
                 red = 255;
                 green = 0;
                 blue = 0;
-            elsif showa 
+            elsif showa then
                 red = 255;
                 green = 0;
                 blue = 255;
@@ -150,7 +150,7 @@ while switch1.enabled == 0
                 blue = 0;
             end;
             
-            if boost > EXPECTED_BOOST
+            if boost > EXPECTED_BOOST then
                 red = max(192, red);
                 green = max(192, green);
                 blue = max(192, blue);

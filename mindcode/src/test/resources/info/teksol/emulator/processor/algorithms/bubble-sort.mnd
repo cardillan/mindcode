@@ -2,7 +2,7 @@ allocate stack in bank1[0...512];
 param ARRAY = bank2;
 
 inline def testAndSwap(i, j, sorted)
-    if (a = ARRAY[i]) > (b = ARRAY[j])
+    if (a = ARRAY[i]) > (b = ARRAY[j]) then
         ARRAY[i] = b;
         ARRAY[j] = a;
         false;
@@ -15,11 +15,11 @@ n = SIZE;
 do
     n -= 1;
     sorted = true;
-    for i in 0 ... n
+    for i in 0 ... n do
         sorted = testAndSwap(i, i + 1, sorted);
     end;
 loop while !sorted;
 
-for i in 0 ... SIZE
+for i in 0 ... SIZE do
     print(ARRAY[i]);
 end;
