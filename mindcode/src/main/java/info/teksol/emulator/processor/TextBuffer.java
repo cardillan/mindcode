@@ -1,11 +1,14 @@
 package info.teksol.emulator.processor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TextBuffer {
     private final int sizeLimit;
     private final List<String> output = new ArrayList<>();
+    private final Map<String, String> cache = new HashMap<>();
 
     private final StringBuilder buffer = new StringBuilder();
     private int flushIndex = 0;
@@ -16,12 +19,18 @@ public class TextBuffer {
 
     public void print(String text) {
         if (buffer.length() <= sizeLimit) {
-            output.add(text);
+            output.add(cache(text));
             buffer.append(text);
             if (buffer.length() > sizeLimit) {
                 buffer.append("\nText buffer size limit exceeded.");
             }
         }
+    }
+
+    // String deduplication
+    private String cache(String text) {
+        String result = cache.putIfAbsent(text, text);
+        return result == null ? text : result;
     }
 
     /**
@@ -70,8 +79,25 @@ public class TextBuffer {
         return index;
     }
 
+    public static final String REPETITIONS_INT = "\n[--- Previous segment repeated %,d times ---]\n";
+    public static final String REPETITIONS_DEC = "\n[--- Previous segment repeated %,.2f times ---]\n";
+    private int repetitions = 0;
+    private String last = null;
+
     public void printflush() {
-        flushIndex = buffer.length();
+        if (flushIndex != buffer.length()) {
+            if (last != null && last.equals(buffer.substring(flushIndex))) {
+                repetitions++;
+                buffer.setLength(flushIndex);
+            } else {
+                last = buffer.substring(flushIndex);
+                if (repetitions > 0) {
+                    buffer.insert(flushIndex, String.format(REPETITIONS_INT, repetitions));
+                }
+                flushIndex = buffer.length();
+                repetitions = 0;
+            }
+        }
     }
 
     /**
@@ -88,6 +114,18 @@ public class TextBuffer {
      * @return the joined and possible formatted output of print and format instructions.
      */
     public String getTextBuffer() {
+        if (repetitions > 0) {
+            if (last.startsWith(buffer.substring(flushIndex))) {
+                double ratio = (double) (buffer.length() - flushIndex) / last.length();
+                buffer.setLength(flushIndex);
+                buffer.append(String.format(REPETITIONS_DEC, repetitions + ratio));
+            } else {
+                buffer.insert(flushIndex, String.format(REPETITIONS_INT, repetitions));
+            }
+            flushIndex = buffer.length();
+        }
+        repetitions = 0;
+        last = null;
         return buffer.toString();
     }
 }

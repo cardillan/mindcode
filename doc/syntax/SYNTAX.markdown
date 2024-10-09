@@ -34,9 +34,9 @@ Schemacode, a schematic definition language, is covered here:
 
 Supporting tools: 
 
-* [Command line tool](TOOLS-CMDLINE.markdown): a command line tool containing Mindcode Compiler, Schematics Builder and Schematics Decompiler
-* [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown): a Mindustry mod by Sharlottes which allows automatic injecting of compiled code into processors inside a running Mindustry world. 
-* [Schematics Refresher](TOOLS-REFRESHER.markdown): a Mindustry mod providing automatic or manual refreshing of schematics created by Schematics Builder (or any other tool)
+* [Command line tool](TOOLS-CMDLINE.markdown)
+* [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
+* [Schematics Refresher](TOOLS-REFRESHER.markdown)
 
 Additional information on Mindcode and Mindustry Logic:
 

@@ -4,16 +4,16 @@ Mindustry version 8 will hopefully be released in November 2024. The expected ne
 
 The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown).
 
-To run the code produced by Mindcode for language target `ML8A`, you need to use one of the latest, unreleased version of Mindustry (a "bleeding-edge" version).
+To run the code produced by Mindcode for language target `ML8A`, you need to use one of the development versions of Mindustry (a "bleeding-edge" version).
 
 ## Running development versions of Mindustry
-
-Instructions for running a development version of Mindustry on a PC:
 
 > [!CAUTION]
 > If you save a game or a campaign in a development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game, particularly in the official Mindustry 7 version. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using, meaning there would be no official release which would be able to read your game state.
 > 
 > It is strongly recommended to back up the state of your current game (Settings/Game Data/Export data) before running any development version of Mindustry.
+
+How to run a development versions of Mindustry:
 
 1. Download a Java installation package from https://github.com/Anuken/MindustryJreBuilds/releases/tag/v1.
 2. Extract the package into a directory on your computer.
