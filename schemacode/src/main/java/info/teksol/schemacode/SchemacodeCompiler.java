@@ -37,7 +37,7 @@ public class SchemacodeCompiler {
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
 
-        final SchemacodeParser parser = new SchemacodeParser(new BufferedTokenStream(lexer));
+        final SchemacodeParser parser = new SchemacodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
 

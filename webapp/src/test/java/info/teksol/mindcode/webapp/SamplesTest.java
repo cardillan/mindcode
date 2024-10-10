@@ -81,7 +81,7 @@ class SamplesTest {
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
 
-        final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        final MindcodeParser parser = new MindcodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
 

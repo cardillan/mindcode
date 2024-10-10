@@ -24,24 +24,36 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	T visitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code single_exp}
-	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * labeled alternative in {@link MindcodeParser#expression_or_rem_comment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSingle_exp(MindcodeParser.Single_expContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code rem_comment}
-	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * labeled alternative in {@link MindcodeParser#expression_or_rem_comment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitRem_comment(MindcodeParser.Rem_commentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#optional_semicolon}.
+	 * Visit a parse tree produced by {@link MindcodeParser#exp_strict_or_relaxed}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx);
+	T visitExp_strict_or_relaxed(MindcodeParser.Exp_strict_or_relaxedContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#expression_strict}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression_strict(MindcodeParser.Expression_strictContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#expression_relaxed}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression_relaxed(MindcodeParser.Expression_relaxedContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#optional_do}.
 	 * @param ctx the parse tree

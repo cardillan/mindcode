@@ -65,13 +65,37 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx) { }
+	@Override public void enterExp_strict_or_relaxed(MindcodeParser.Exp_strict_or_relaxedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx) { }
+	@Override public void exitExp_strict_or_relaxed(MindcodeParser.Exp_strict_or_relaxedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpression_strict(MindcodeParser.Expression_strictContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpression_strict(MindcodeParser.Expression_strictContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpression_relaxed(MindcodeParser.Expression_relaxedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpression_relaxed(MindcodeParser.Expression_relaxedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

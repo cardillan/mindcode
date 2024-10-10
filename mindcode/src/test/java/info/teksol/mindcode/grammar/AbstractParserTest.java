@@ -1,7 +1,6 @@
 package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.Tuple2;
 import org.antlr.v4.runtime.*;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public abstract class AbstractParserTest {
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
 
-        final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        final MindcodeParser parser = new MindcodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
 
@@ -27,7 +26,7 @@ public abstract class AbstractParserTest {
         return context;
     }
 
-    Tuple2<MindcodeParser.ProgramContext, List<String>> parseWithErrors(String program) {
+    List<String> parseWithErrors(String program) {
         final List<String> errors = new ArrayList<>();
         ErrorListener errorListener = new ErrorListener(errors);
 
@@ -35,12 +34,12 @@ public abstract class AbstractParserTest {
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
 
-        final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        final MindcodeParser parser = new MindcodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
 
-        final MindcodeParser.ProgramContext context = parser.program();
-        return new Tuple2<>(context, errors);
+        parser.program();
+        return errors;
     }
 
     private static class ErrorListener extends BaseErrorListener {

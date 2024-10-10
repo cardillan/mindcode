@@ -371,10 +371,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public AstNode visitExpression_list(MindcodeParser.Expression_listContext ctx) {
         if (ctx.expression_list() != null) {
             final AstNode rest = visit(ctx.expression_list());
-            final AstNode expr = visit(ctx.single_expression());
+            final AstNode expr = visit(ctx.expression_or_rem_comment());
             return new Seq(ctx.getStart(), sourceFile, rest, expr);
-        } else if (ctx.single_expression() != null) {
-            final AstNode expr = visit(ctx.single_expression());
+        } else if (ctx.expression_or_rem_comment() != null) {
+            final AstNode expr = visit(ctx.expression_or_rem_comment());
             if (expr instanceof Seq) return expr;
             return new Seq(ctx.getStart(), sourceFile, expr);
         } else {

@@ -21,6 +21,20 @@ class PrintMergerML8Test extends AbstractOptimizerTest<PrintMerger> {
     }
 
     @Test
+    void skipsDrawPrint() {
+        assertCompilesTo("""
+                        print("a");
+                        drawPrint(0, 0, center);
+                        print("b");
+                        """,
+                createInstruction(PRINT, q("a")),
+                createInstruction(DRAW, "print", "0", "0", "center"),
+                createInstruction(PRINT, q("b")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void handlesInterleavedPrints() {
         assertCompilesTo("""
                          print("a", x, "c", "d");

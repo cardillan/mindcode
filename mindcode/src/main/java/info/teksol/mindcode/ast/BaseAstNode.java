@@ -23,13 +23,13 @@ public abstract class BaseAstNode implements AstNode {
     protected BaseAstNode(Token startToken, SourceFile sourceFile, AstNode... children) {
         this.startToken = startToken;
         this.sourceFile = sourceFile;
-        this.children = List.of(children);
+        this.children = safeCopy(children);
     }
 
     protected BaseAstNode(Token startToken, SourceFile sourceFile, List<? extends AstNode> children) {
         this.startToken = startToken;
         this.sourceFile = sourceFile;
-        this.children = List.copyOf(children);
+        this.children = safeCopy(children);
     }
 
     protected BaseAstNode(Token startToken, SourceFile sourceFile, List<? extends AstNode> children1, List<? extends AstNode> children2, AstNode... other) {
@@ -38,7 +38,7 @@ public abstract class BaseAstNode implements AstNode {
         List<AstNode> tmp = new ArrayList<>(children1);
         tmp.addAll(children2);
         tmp.addAll(Arrays.asList(other));
-        this.children = List.copyOf(tmp);
+        this.children = safeCopy(tmp);
     }
 
     protected BaseAstNode(Token startToken, SourceFile sourceFile, List<? extends AstNode> children, AstNode... other) {
@@ -46,7 +46,7 @@ public abstract class BaseAstNode implements AstNode {
         this.sourceFile = sourceFile;
         List<AstNode> tmp = new ArrayList<>(children);
         tmp.addAll(Arrays.asList(other));
-        this.children = List.copyOf(tmp);
+        this.children = safeCopy(tmp);
     }
 
     @Override
@@ -71,5 +71,14 @@ public abstract class BaseAstNode implements AstNode {
     @Override
     public AstSubcontextType getSubcontextType() {
         return AstSubcontextType.BASIC;
+    }
+
+    private static <E> List<E> safeCopy(List<? extends E> list) {
+        return new ArrayList<>(list);
+    }
+
+    @SafeVarargs
+    private static <E> List<E> safeCopy(E... values) {
+        return new ArrayList<>(Arrays.asList(values));
     }
 }

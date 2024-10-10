@@ -7,20 +7,27 @@ public boolean strictSyntax = true;
 
 program : expression_list? EOF;
 
-expression_list : single_expression
-                | expression_list single_expression
+expression_list : expression_or_rem_comment
+                | expression_list expression_or_rem_comment
                 ;
 
 // The REM_COMMENT isn't followed by a semicolon, needs to be handled separately
-single_expression
-    : expression optional_semicolon     # single_exp
+expression_or_rem_comment
+    : exp_strict_or_relaxed             # single_exp
     | REM_COMMENT                       # rem_comment
     ;
 
-optional_semicolon
-    : {strictSyntax}? SEMICOLON
-    | {strictSyntax == false}? SEMICOLON?
+exp_strict_or_relaxed
+    : {strictSyntax}? expression_strict
+    | {strictSyntax == false}? expression_relaxed
     ;
+
+expression_strict
+    : expression SEMICOLON
+    | expression { notifyErrorListeners(_input.LT(-1), "missing ';'", new MissingSemicolonException(_input.LT(1))); }
+    ;
+
+expression_relaxed : expression SEMICOLON? ;
 
 optional_do
     : {strictSyntax}? DO

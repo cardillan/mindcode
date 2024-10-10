@@ -1,9 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.PrintInstruction;
-import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicNull;
 import info.teksol.mindcode.logic.LogicString;
@@ -67,6 +64,12 @@ class PrintMerger extends BaseOptimizer {
 
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
+                    case DRAW -> {
+                        if (((DrawInstruction) current).getType().getKeyword().equals("print")) {
+                            // draw print flushes the text buffer
+                            reset();
+                        }
+                    }
                     case LABEL  -> {
                         if (isActive((LabelInstruction) current)) {
                             reset();

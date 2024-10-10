@@ -22,17 +22,16 @@ import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import info.teksol.mindcode.grammar.MissingSemicolonException;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.antlr.v4.runtime.*;
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -177,7 +176,7 @@ public class MindcodeCompiler implements Compiler<String> {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceFile.code()));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
-        final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        final MindcodeParser parser = new MindcodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
@@ -268,14 +267,42 @@ public class MindcodeCompiler implements Compiler<String> {
             this.fileNameText = fileName.isEmpty() ? "" : fileName + ":";
         }
 
+        private final Set<String> reportedMessages = new HashSet<>();
+
+        private void reportError(@PrintFormat String format, Object... args) {
+            String message = String.format(format, args);
+            if (reportedMessages.add(message)) {
+                errors.add(MindcodeMessage.error(message));
+            }
+        }
+
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException exception) {
-            String offendingTokenText = getOffendingTokenText(exception);
-            if (offendingTokenText == null) {
-                errors.add(MindcodeMessage.error("%s%d:%d ERROR: %s", fileNameText, line, charPositionInLine + 1, msg));
+            if (exception instanceof MissingSemicolonException ex && offendingSymbol instanceof Token token) {
+                String nextToken = ex.getNextToken().getText();
+                // Reporting missing semicolon before "do" and "then" is probably a consequence of do/then being
+                // driven by syntactic predicate. In any case it doesn't make any sense.
+                if (!"do".equals(nextToken) && !"then".equals(nextToken)) {
+                    int length = token.getStopIndex() - token.getStartIndex();
+                    reportError("%s%d:%d Parse error: %s%s", fileNameText, line, charPositionInLine + length + 2,
+                            msg, ex.getNextToken() != null ? " before '" + nextToken + "'": "");
+
+                }
+            } else if (exception instanceof NoViableAltException) {
+                String offendingTokenText = getOffendingTokenText(exception);
+                if (offendingTokenText == null) {
+                    reportError("%s%d:%d Parse error: unrecoverable parse error", fileNameText, line, charPositionInLine + 1);
+                } else {
+                    reportError("%s%d:%d Parse error: unexpected '%s'", fileNameText, line, charPositionInLine + 1, offendingTokenText);
+                }
             } else {
-                errors.add(MindcodeMessage.error("%s%d:%d ERROR: '%s': %s", fileNameText, line, charPositionInLine + 1, offendingTokenText, msg));
+                String offendingTokenText = getOffendingTokenText(exception);
+                if (offendingTokenText == null) {
+                    reportError("%s%d:%d Parse error: %s", fileNameText, line, charPositionInLine + 1, msg);
+                } else {
+                    reportError("%s%d:%d Parse error: '%s': %s", fileNameText, line, charPositionInLine + 1, offendingTokenText, msg);
+                }
             }
         }
 

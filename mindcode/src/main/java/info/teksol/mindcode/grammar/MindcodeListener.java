@@ -29,38 +29,58 @@ public interface MindcodeListener extends ParseTreeListener {
 	void exitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code single_exp}
-	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * labeled alternative in {@link MindcodeParser#expression_or_rem_comment}.
 	 * @param ctx the parse tree
 	 */
 	void enterSingle_exp(MindcodeParser.Single_expContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code single_exp}
-	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * labeled alternative in {@link MindcodeParser#expression_or_rem_comment}.
 	 * @param ctx the parse tree
 	 */
 	void exitSingle_exp(MindcodeParser.Single_expContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code rem_comment}
-	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * labeled alternative in {@link MindcodeParser#expression_or_rem_comment}.
 	 * @param ctx the parse tree
 	 */
 	void enterRem_comment(MindcodeParser.Rem_commentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code rem_comment}
-	 * labeled alternative in {@link MindcodeParser#single_expression}.
+	 * labeled alternative in {@link MindcodeParser#expression_or_rem_comment}.
 	 * @param ctx the parse tree
 	 */
 	void exitRem_comment(MindcodeParser.Rem_commentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#optional_semicolon}.
+	 * Enter a parse tree produced by {@link MindcodeParser#exp_strict_or_relaxed}.
 	 * @param ctx the parse tree
 	 */
-	void enterOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx);
+	void enterExp_strict_or_relaxed(MindcodeParser.Exp_strict_or_relaxedContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#optional_semicolon}.
+	 * Exit a parse tree produced by {@link MindcodeParser#exp_strict_or_relaxed}.
 	 * @param ctx the parse tree
 	 */
-	void exitOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx);
+	void exitExp_strict_or_relaxed(MindcodeParser.Exp_strict_or_relaxedContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#expression_strict}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression_strict(MindcodeParser.Expression_strictContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#expression_strict}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression_strict(MindcodeParser.Expression_strictContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#expression_relaxed}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression_relaxed(MindcodeParser.Expression_relaxedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#expression_relaxed}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression_relaxed(MindcodeParser.Expression_relaxedContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#optional_do}.
 	 * @param ctx the parse tree

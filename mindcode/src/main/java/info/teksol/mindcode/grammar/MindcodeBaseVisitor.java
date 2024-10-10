@@ -46,7 +46,21 @@ public class MindcodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitOptional_semicolon(MindcodeParser.Optional_semicolonContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExp_strict_or_relaxed(MindcodeParser.Exp_strict_or_relaxedContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpression_strict(MindcodeParser.Expression_strictContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpression_relaxed(MindcodeParser.Expression_relaxedContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
