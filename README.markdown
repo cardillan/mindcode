@@ -4,7 +4,7 @@
 
 Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
-The perils of using a high-level language for Mindustry code are inefficient code generation and the possibility of compiler bugs. Mindcode strives to address both of these issues:
+Among the perils of using a high-level language for producing your mlog code are inefficient code generation and the possibility of compiler bugs. Mindcode strives to address both of these issues:
 
 * Efficiency: while there's still a lot of room for improvement, the mlog code produced by Mindcode is quite efficient today. Mindcode is capable of simplifying expressions, removing unnecessary or unreachable code and using available instruction space to produce faster code by unrolling loops or inlining functions automatically. 
 * Reliability: this project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they usually get resolved quickly.
@@ -25,7 +25,7 @@ complete with the code (specified in Mindcode or Mindustry Logic language) and l
 The most important recent changes to Mindcode include:
 
 * Significant improvement in reporting error messages generated during compilation, including navigating from the message to the position in the source code in both the web application and a properly set up offline development environment. 
-* The compiled code can be injected from the web app or the command-line compiler right into a processor in a running Mindustry game thanks to the [Mlog Watcher mod](https://github.com/Sharlottes/MlogWatcher). [Instructions on use](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).  
+* The compiled code can be injected from the web app or the command-line compiler right into a processor in a running Mindustry game thanks to the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).  
 * Program parametrization should now be done using [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) instead of global variables.
 * [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) can now use more than one loop variable to iterate over the values in the list, and if the list consist of Mindcode variables, these variables can be modified by assigning a new value to the loop variable inside the loop.   
 * [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks) can be now included in the compiled code.

@@ -52,8 +52,7 @@ public class MlogWatcherClient extends WebSocketClient {
     private void waitForMessage(long timeout) throws InterruptedException {
         boolean gotMessage = semaphore.tryAcquire(timeout, TimeUnit.MILLISECONDS);
         if (!gotMessage) {
-            // TODO Uncomment if MlogWatcher gets updated
-            //output.addMessage(ToolMessage.info("  No response from Mlog Watcher - maybe an old version is installed?"));
+            output.addMessage(ToolMessage.info("  No response from Mlog Watcher - maybe an old version is installed?"));
         }
     }
 

@@ -66,11 +66,6 @@
         icon.classList.add("fa-cog", "fa-spin");
     }
 
-    function sent() {
-        // Delete when MlogWatcher is updated to send back status messages.
-        success();
-    }
-
     function success() {
         var icon = document.getElementById("mlogIcon");
         icon.classList.remove("fa-cog", "fa-spin", "fa-microchip", "fa-xmark", "fa-plug-circle-xmark");
@@ -119,7 +114,6 @@
                 socket.onopen = function (event) {
                     console.log("Connection opened:", event.data);
                     socket.send(message.textContent);
-                    sent();
                 };
 
                 // Message received from the WebSocket server
@@ -147,7 +141,6 @@
                 busy();
                 console.log("Sending new message.");
                 socket.send(message.textContent);
-                sent();
             }
         }
     };
