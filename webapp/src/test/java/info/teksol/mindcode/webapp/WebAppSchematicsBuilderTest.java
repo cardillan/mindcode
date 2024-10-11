@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.SchemacodeCompiler;
@@ -29,8 +29,8 @@ public class WebAppSchematicsBuilderTest {
                 output.messages());
     }
 
-    private void assertRegex(String expectedRegex, List<CompilerMessage> messages) {
-        List<String> list = messages.stream().filter(CompilerMessage::isError).map(CompilerMessage::message).toList();
+    private void assertRegex(String expectedRegex, List<MindcodeMessage> messages) {
+        List<String> list = messages.stream().filter(MindcodeMessage::isError).map(MindcodeMessage::message).toList();
         if (list.stream().anyMatch(s -> s.matches(expectedRegex))) {
             assertTrue(true);
         } else {

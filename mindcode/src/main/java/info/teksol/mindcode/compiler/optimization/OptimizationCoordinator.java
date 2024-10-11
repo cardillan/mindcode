@@ -1,9 +1,8 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -17,13 +16,13 @@ import static info.teksol.mindcode.compiler.optimization.OptimizationPhase.*;
 public class OptimizationCoordinator {
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
-    private final Consumer<CompilerMessage> messageRecipient;
+    private final Consumer<MindcodeMessage> messageRecipient;
     private final CompilerProfile profile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
-            Consumer<CompilerMessage> messageRecipient) {
+            Consumer<MindcodeMessage> messageRecipient) {
         this.instructionProcessor = instructionProcessor;
         this.messageRecipient = messageRecipient;
         this.profile = profile;
@@ -53,7 +52,7 @@ public class OptimizationCoordinator {
         return result;
     }
 
-    private final List<CompilerMessage> optimizationStatistics = new ArrayList<>();
+    private final List<MindcodeMessage> optimizationStatistics = new ArrayList<>();
 
     public List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         program.addAll(generatorOutput.instructions());
@@ -62,7 +61,7 @@ public class OptimizationCoordinator {
                 generatorOutput.callGraph(), generatorOutput.rootAstContext());
 
         int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        messageRecipient.accept(MindcodeMessage.info("%6d instructions before optimizations.", count));
+        messageRecipient.accept(MindcodeOptimizerMessage.info("%6d instructions before optimizations.", count));
 
         debugPrinter.registerIteration(null, "", List.copyOf(program));
 
@@ -74,16 +73,16 @@ public class OptimizationCoordinator {
             modified = optimizePhase(ITERATED, optimizers, pass, generatorOutput);
         }
         if (modified) {
-            messageRecipient.accept(MindcodeMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
+            messageRecipient.accept(MindcodeOptimizerMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
         }
         optimizePhase(FINAL, optimizers, 0, generatorOutput);
 
         optimizers.values().forEach(Optimizer::generateFinalMessages);
         int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        messageRecipient.accept(MindcodeMessage.info("%6d instructions after optimizations.", newCount));
+        messageRecipient.accept(MindcodeOptimizerMessage.info("%6d instructions after optimizations.", newCount));
 
         if (modified) {
-            messageRecipient.accept(MindcodeMessage.warn("\nOptimization passes limited at %d.",
+            messageRecipient.accept(MindcodeOptimizerMessage.warn("\nOptimization passes limited at %d.",
                     profile.getOptimizationPasses()));
         }
 
@@ -156,7 +155,7 @@ public class OptimizationCoordinator {
 
             if (profile.getGoal() != GenerationGoal.SIZE) {
                 int difference = codeSize() - initialSize;
-                optimizationStatistics.add(MindcodeMessage.debug(
+                optimizationStatistics.add(MindcodeOptimizerMessage.debug(
                         "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
                 possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference));
             }
@@ -178,14 +177,14 @@ public class OptimizationCoordinator {
                     .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
 
     private void outputPossibleOptimization(OptimizationAction opt, int costLimit, OptimizationAction selected, int difference) {
-        String message;
+        MindcodeOptimizerMessage message;
         if (opt == selected) {
-            message = String.format("  * %-60s cost %5d, benefit %10.1f, efficiency %10.1f (%+d instructions)",
+            message = MindcodeOptimizerMessage.debug("  * %-60s cost %5d, benefit %10.1f, efficiency %10.1f (%+d instructions)",
                     opt, opt.cost(), opt.benefit(), opt.efficiency(), difference);
         } else {
-            message = String.format("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.1f",
+            message = MindcodeOptimizerMessage.debug("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.1f",
                     opt.cost() > costLimit ? "!" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency());
         }
-        optimizationStatistics.add(MindcodeMessage.debug(message));
+        optimizationStatistics.add(message);
     }
 }

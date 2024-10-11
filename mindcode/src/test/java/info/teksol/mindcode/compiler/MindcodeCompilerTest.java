@@ -1,5 +1,7 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.util.CollectionUtils;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,7 @@ class MindcodeCompilerTest {
 
     @Test
     public void producesAllOutputs() {
-        CompilerOutput<String> result = compiler.compile(SourceFile.createSourceFiles("""
+        CompilerOutput<String> result = compiler.compile(InputFile.createSourceFiles("""
                 remark("This is a parameter");
                 param value = true;
                 if value then
@@ -44,7 +46,7 @@ class MindcodeCompilerTest {
                 m -> m.message().contains("Final code before resolving virtual instructions"));
         assertTrue(index >= 0, "Failed to locate code output in the log.");
 
-        CompilerMessage message = result.messages().get(index + 1);
+        MindcodeMessage message = result.messages().get(index + 1);
 
         // Indenting is crucial here
         assertEquals("""
@@ -58,8 +60,8 @@ class MindcodeCompilerTest {
 
     @Test
     public void handlesMultipleFiles() {
-        SourceFile file1 = new SourceFile("file1.mnd", "file1.mnd", "print(\"File1\");");
-        SourceFile file2 = new SourceFile("file2.mnd", "file2.mnd", "print(\"File2\");");
+        InputFile file1 = new InputFile("file1.mnd", "file1.mnd", "print(\"File1\");");
+        InputFile file2 = new InputFile("file2.mnd", "file2.mnd", "print(\"File2\");");
 
         CompilerOutput<String> result = compiler.compile(List.of(file1, file2));
 
@@ -74,7 +76,7 @@ class MindcodeCompilerTest {
                 m -> m.message().contains("Final code before resolving virtual instructions"));
         assertTrue(index >= 0, "Failed to locate code output in the log.");
 
-        CompilerMessage message = result.messages().get(index + 1);
+        MindcodeMessage message = result.messages().get(index + 1);
 
         // Indenting is crucial here
         assertEquals("""
@@ -84,7 +86,7 @@ class MindcodeCompilerTest {
 
     @Test
     public void compilesAllSysFunctions() {
-        SourceFile source = MindcodeCompiler.loadLibraryFromResource("sys");
+        InputFile source = MindcodeCompiler.loadLibraryFromResource("sys");
 
         String initializations = """
                 #set target = ML8A;
@@ -107,11 +109,11 @@ class MindcodeCompilerTest {
         // We know there must be a variable names display
         String code = initializations + "\n" + variables + "\n" + functionCalls;
 
-        CompilerOutput<String> result = compiler.compile(SourceFile.createSourceFiles(code));
+        CompilerOutput<String> result = compiler.compile(InputFile.createSourceFiles(code));
 
         String messages = result.messages().stream()
-                .filter(CompilerMessage::isErrorOrWarning)
-                .map(CompilerMessage::message)
+                .filter(MindcodeMessage::isErrorOrWarning)
+                .map(MindcodeMessage::message)
                 .collect(Collectors.joining("\n"));
 
         if (!messages.isEmpty()) {

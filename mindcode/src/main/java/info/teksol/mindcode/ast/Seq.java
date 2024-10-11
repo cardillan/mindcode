@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
@@ -9,14 +9,14 @@ public class Seq extends BaseAstNode {
     private final AstNode rest;
     private final AstNode last;
 
-    public Seq(Token startToken, SourceFile sourceFile, AstNode last) {
-        super(startToken, sourceFile, last);
+    public Seq(Token startToken, InputFile inputFile, AstNode last) {
+        super(startToken, inputFile, last);
         this.rest = new NoOp();
         this.last = last;
     }
 
-    public Seq(Token startToken, SourceFile sourceFile, AstNode rest, AstNode last) {
-        super(startToken, sourceFile, rest, last);
+    public Seq(Token startToken, InputFile inputFile, AstNode rest, AstNode last) {
+        super(startToken, inputFile, rest, last);
         this.rest = rest;
         this.last = last;
     }

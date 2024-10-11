@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.mimex.BlockType;
-import info.teksol.schemacode.SchemacodeMessage;
+import info.teksol.schemacode.SchemacodeCompilerMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.mindustry.Position;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public class BlockPositionResolver {
 
-    private final Consumer<CompilerMessage> messageListener;
+    private final Consumer<MindcodeMessage> messageListener;
 
     private final Set<String> circularBlocks = new HashSet<>();
 
-    public BlockPositionResolver(Consumer<CompilerMessage> messageListener) {
+    public BlockPositionResolver(Consumer<MindcodeMessage> messageListener) {
         this.messageListener = messageListener;
     }
 
@@ -37,7 +37,7 @@ public class BlockPositionResolver {
     }
 
     private void error(@PrintFormat String format, Object... args) {
-        messageListener.accept(SchemacodeMessage.error(String.format(format, args)));
+        messageListener.accept(SchemacodeCompilerMessage.error(String.format(format, args)));
     }
 
     private BlockPosition resolve(Map<String, RelativeBlockPosition> blocks, RelativeBlockPosition block) {

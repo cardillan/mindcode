@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -10,8 +10,8 @@ public class UnaryOp extends BaseAstNode {
     private final String op;
     private final AstNode expression;
 
-    UnaryOp(Token startToken, SourceFile sourceFile, String op, AstNode expression) {
-        super(startToken, sourceFile, expression);
+    UnaryOp(Token startToken, InputFile inputFile, String op, AstNode expression) {
+        super(startToken, inputFile, expression);
         this.op = op;
         this.expression = expression;
     }

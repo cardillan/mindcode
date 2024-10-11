@@ -2,7 +2,11 @@ package info.teksol.emulator.processor;
 
 import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
-import info.teksol.mindcode.compiler.*;
+import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.TimingMessage;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +64,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     /** Nearest multiple of millisecond to round timing to */
     private static final int PRECISION = 200;
 
-    private void logTiming(String title, List<CompilerMessage> messages) {
+    private void logTiming(String title, List<MindcodeMessage> messages) {
         String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
         String timings = messages.stream()
                 .filter(TimingMessage.class::isInstance)
@@ -145,7 +149,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
         List<String> data = compiler.getMessages().stream()
                 .filter(m -> !(m instanceof TimingMessage))
-                .map(CompilerMessage::message)
+                .map(MindcodeMessage::message)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         data.add("\nFinal code before resolving virtual instructions:\n");
@@ -200,7 +204,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
             boolean matches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput,
-                        () -> compiler.getMessages().stream().map(CompilerMessage::message)
+                        () -> compiler.getMessages().stream().map(MindcodeMessage::message)
                                 .collect(Collectors.joining("\n", "\n", "\n")));
             }
             return matches;

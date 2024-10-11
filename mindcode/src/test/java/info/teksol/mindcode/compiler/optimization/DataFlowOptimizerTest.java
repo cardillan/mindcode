@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.logic.ProcessorVersion;
@@ -1591,7 +1591,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         );
 
         String message = compiler.getMessages().stream()
-                .map(CompilerMessage::message)
+                .map(MindcodeMessage::message)
                 .filter(m -> m.contains("instructions eliminated by Data Flow Optimization"))
                 .findFirst().orElse("No Data Flow Optimization message found.");
 

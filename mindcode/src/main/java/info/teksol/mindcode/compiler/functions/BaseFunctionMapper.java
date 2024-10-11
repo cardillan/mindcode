@@ -2,8 +2,8 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.MindcodeMessage;
+import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -22,7 +22,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final AstContext staticAstContext = AstContext.createStaticRootNode();
     private final Supplier<AstContext> astContextSupplier;
     private final InstructionProcessor instructionProcessor;
-    private final Consumer<CompilerMessage> messageConsumer;
+    private final Consumer<MindcodeMessage> messageConsumer;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final Map<String, PropertyHandler> propertyMap;
@@ -30,7 +30,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final List<SampleGenerator> sampleGenerators;
 
     BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
-            Consumer<CompilerMessage> messageConsumer) {
+            Consumer<MindcodeMessage> messageConsumer) {
         this.astContextSupplier = astContextSupplier;
         this.instructionProcessor = InstructionProcessor;
         this.messageConsumer = messageConsumer;
@@ -395,9 +395,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public LogicValue handleProperty(Token token, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments) {
             if (!warningEmitted) {
-                messageConsumer.accept(MindcodeMessage.warn(
-                        "Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
-                        processorVersion + "; using '" + replacement.getName() + "' instead."));
+                messageConsumer.accept(MindcodeCompilerMessage.warn(
+                        "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
+                        deprecated, processorVersion, replacement.getName()));
                 warningEmitted = true;
             }
             return replacement.handleProperty(token, program, target, arguments);

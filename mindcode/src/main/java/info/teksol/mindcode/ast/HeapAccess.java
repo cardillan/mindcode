@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ast;
 
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -12,19 +12,19 @@ public class HeapAccess extends BaseAstNode {
     private final AstNode address;
     private final boolean absolute;
 
-    private HeapAccess(Token startToken, SourceFile sourceFile, String cellName, AstNode address, boolean absolute) {
-        super(startToken, sourceFile, address);
+    private HeapAccess(Token startToken, InputFile inputFile, String cellName, AstNode address, boolean absolute) {
+        super(startToken, inputFile, address);
         this.cellName = cellName;
         this.address = address;
         this.absolute = absolute;
     }
 
-    public HeapAccess(Token startToken, SourceFile sourceFile, String cellName, AstNode address) {
-        this(startToken, sourceFile, cellName, address, true);
+    public HeapAccess(Token startToken, InputFile inputFile, String cellName, AstNode address) {
+        this(startToken, inputFile, cellName, address, true);
     }
 
-    public HeapAccess(Token startToken, SourceFile sourceFile, String cellName, int index) {
-        this(startToken, sourceFile, cellName, new NumericLiteral(startToken, sourceFile, index), false);
+    public HeapAccess(Token startToken, InputFile inputFile, String cellName, int index) {
+        this(startToken, inputFile, cellName, new NumericLiteral(startToken, inputFile, index), false);
     }
 
     public String getCellName() {

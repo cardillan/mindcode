@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import org.antlr.v4.runtime.Token;
@@ -14,8 +14,8 @@ import java.util.Objects;
 public class NumericValue extends ConstantAstNode {
     private final double value;
 
-    public NumericValue(Token startToken, SourceFile sourceFile, double value) {
-        super(startToken, sourceFile);
+    public NumericValue(Token startToken, InputFile inputFile, double value) {
+        super(startToken, inputFile);
         this.value = value;
     }
 

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import org.antlr.v4.runtime.Token;
@@ -12,7 +12,7 @@ public interface AstNode {
 
     Token startToken();
 
-    SourceFile sourceFile();
+    InputFile sourceFile();
 
     AstContextType getContextType();
 

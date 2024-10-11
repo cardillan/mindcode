@@ -2,7 +2,6 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.TimingMessage;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
@@ -75,7 +74,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         final OptimizationCoordinator optimizer = createMindcodeOptimizer(compiler);
         optimizer.setDebugPrinter(debugPrinter);
         result = optimizer.optimize(generatorOutput);
-        debugPrinter.print(s -> compiler.addMessage(MindcodeMessage.debug(s)));
+        debugPrinter.print(MindcodeOptimizerMessage::debug);
         return result;
     }
 

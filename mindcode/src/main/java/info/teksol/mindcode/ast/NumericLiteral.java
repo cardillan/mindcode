@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeException;
-import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
@@ -12,13 +12,13 @@ import java.util.Objects;
 public class NumericLiteral extends ConstantAstNode {
     private final String literal;
 
-    public NumericLiteral(Token startToken, SourceFile sourceFile, String literal) {
-        super(startToken, sourceFile);
+    public NumericLiteral(Token startToken, InputFile inputFile, String literal) {
+        super(startToken, inputFile);
         this.literal = literal;
     }
 
-    public NumericLiteral(Token startToken, SourceFile sourceFile, int value) {
-        super(startToken, sourceFile);
+    public NumericLiteral(Token startToken, InputFile inputFile, int value) {
+        super(startToken, inputFile);
         this.literal = String.valueOf(value);
     }
 

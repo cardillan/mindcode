@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;
@@ -16,13 +16,13 @@ import java.util.function.Consumer;
 
 public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
-    private final Consumer<CompilerMessage> messageListener;
+    private final Consumer<MindcodeMessage> messageListener;
 
-    public AstSchematicsBuilder(Consumer<CompilerMessage> messageListener) {
+    public AstSchematicsBuilder(Consumer<MindcodeMessage> messageListener) {
         this.messageListener = messageListener;
     }
 
-    public static AstDefinitions generate(DefinitionsContext parseTree, Consumer<CompilerMessage> messageListener) {
+    public static AstDefinitions generate(DefinitionsContext parseTree, Consumer<MindcodeMessage> messageListener) {
         final AstSchematicsBuilder builder = new AstSchematicsBuilder(messageListener);
         final AstSchemaItem item = builder.visit(parseTree);
         return (AstDefinitions) item;

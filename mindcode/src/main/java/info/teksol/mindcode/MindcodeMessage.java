@@ -1,8 +1,8 @@
-package info.teksol.mindcode.compiler;
+package info.teksol.mindcode;
 
-public interface CompilerMessage {
+import java.util.function.Function;
 
-    String source();
+public interface MindcodeMessage {
 
     MessageLevel level();
 
@@ -26,5 +26,9 @@ public interface CompilerMessage {
 
     default boolean isDebug() {
         return level() == MessageLevel.DEBUG;
+    }
+
+    default String formatMessage(Function<InputPosition, String> positionFormatter) {
+        return message();
     }
 }

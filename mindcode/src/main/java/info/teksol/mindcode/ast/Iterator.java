@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
@@ -10,8 +10,8 @@ public class Iterator extends BaseAstNode {
     private final boolean outModifier;
     private final VarRef varRef;
 
-    public Iterator(Token startToken, SourceFile sourceFile, boolean inModifier, boolean outModifier, VarRef varRef) {
-        super(startToken, sourceFile);
+    public Iterator(Token startToken, InputFile inputFile, boolean inModifier, boolean outModifier, VarRef varRef) {
+        super(startToken, inputFile);
         this.inModifier = inModifier;
         this.outModifier = outModifier;
         this.varRef = varRef;

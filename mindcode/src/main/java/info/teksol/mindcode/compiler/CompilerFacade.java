@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 
 import java.util.List;
@@ -14,11 +15,11 @@ public class CompilerFacade {
 
     public static CompilerOutput<String> compile(String sourceCode, CompilerProfile profile) {
         MindcodeCompiler compiler = new MindcodeCompiler(profile);
-        return compiler.compile(SourceFile.createSourceFiles(sourceCode));
+        return compiler.compile(InputFile.createSourceFiles(sourceCode));
     }
 
-    public static CompilerOutput<String> compile(List<SourceFile> sourceFiles, CompilerProfile profile) {
+    public static CompilerOutput<String> compile(List<InputFile> inputFiles, CompilerProfile profile) {
         MindcodeCompiler compiler = new MindcodeCompiler(profile);
-        return compiler.compile(sourceFiles);
+        return compiler.compile(inputFiles);
     }
 }

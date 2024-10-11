@@ -5,9 +5,7 @@ import info.teksol.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.emulator.processor.ExecutionException;
 import info.teksol.emulator.processor.Processor;
 import info.teksol.emulator.processor.ProcessorFlag;
-import info.teksol.mindcode.MindcodeException;
-import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.ParserAbort;
+import info.teksol.mindcode.*;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -16,10 +14,7 @@ import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.optimization.DebugPrinter;
-import info.teksol.mindcode.compiler.optimization.DiffDebugPrinter;
-import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
-import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
+import info.teksol.mindcode.compiler.optimization.*;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.grammar.MissingSemicolonException;
@@ -38,13 +33,13 @@ import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
     // Global cache
-    private static final Map<String, SourceFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
+    private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
     private static final Map<String, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
 
     private final CompilerProfile profile;
     private InstructionProcessor instructionProcessor;
 
-    private final List<CompilerMessage> messages = new ArrayList<>();
+    private final List<MindcodeMessage> messages = new ArrayList<>();
     private final ErrorListener errorListener = new ErrorListener(messages);
 
     public MindcodeCompiler(CompilerProfile profile) {
@@ -52,18 +47,18 @@ public class MindcodeCompiler implements Compiler<String> {
     }
 
     @Override
-    public CompilerOutput<String> compile(List<SourceFile> sourceFiles) {
+    public CompilerOutput<String> compile(List<InputFile> inputFiles) {
         String instructions = "";
         RunResults runResults = new RunResults(null,0);
 
         try {
             long parseStart = System.nanoTime();
             Seq program = null;
-            for (SourceFile sourceFile : sourceFiles) {
+            for (InputFile inputFile : inputFiles) {
                 // Additional source files are put in front of the others
-                final Seq other = parse(sourceFile);
+                final Seq other = parse(inputFile);
                 program = Seq.append(other, program);
-                if (messages.stream().anyMatch(CompilerMessage::isError)) {
+                if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                     return new CompilerOutput<>("", messages, null, 0);
                 }
             }
@@ -127,26 +122,26 @@ public class MindcodeCompiler implements Compiler<String> {
             }
             if (e instanceof MindcodeException ex) {
                 if (!ex.isReported()) {
-                    messages.add(MindcodeMessage.error("Error while compiling source code: " + e.getMessage()));
+                    messages.add(MindcodeCompilerMessage.error("Error while compiling source code: %s", e.getMessage()));
                 }
             } else {
-                messages.add(MindcodeMessage.error("Internal error: " + e.getMessage()));
+                messages.add(MindcodeCompilerMessage.error("Internal error: %s", e.getMessage()));
             }
         }
 
         return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
     }
 
-    private static SourceFile loadLibrary(String filename) {
+    private static InputFile loadLibrary(String filename) {
         return LIBRARY_SOURCES.computeIfAbsent(filename, MindcodeCompiler::loadLibraryFromResource);
     }
 
-    static SourceFile loadLibraryFromResource(String filename) {
+    static InputFile loadLibraryFromResource(String filename) {
         try (final BufferedReader reader = new BufferedReader(
                 new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + filename + ".mnd")))) {
             final StringWriter out = new StringWriter();
             reader.transferTo(out);
-            return new SourceFile("*" + filename, filename + ".mnd", out.toString());
+            return new InputFile("*" + filename, filename + ".mnd", out.toString());
         } catch (IOException e) {
             throw new MindcodeInternalError(e, "Error loading library: " + filename);
         }
@@ -157,9 +152,9 @@ public class MindcodeCompiler implements Compiler<String> {
             return LIBRARY_PARSES.get(filename);
         }
 
-        long before = messages.stream().filter(CompilerMessage::isErrorOrWarning).count();
+        long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
         Seq parsed = parse(loadLibrary(filename));
-        long after = messages.stream().filter(CompilerMessage::isErrorOrWarning).count();
+        long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
 
         if (before == after) {
             LIBRARY_PARSES.put(filename, parsed);
@@ -171,16 +166,16 @@ public class MindcodeCompiler implements Compiler<String> {
     /**
      * Parses the source code using ANTLR generated parser.
      */
-    private Seq parse(SourceFile sourceFile) {
-        errorListener.setFileName(sourceFile.absolutePath());
-        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceFile.code()));
+    private Seq parse(InputFile inputFile) {
+        errorListener.setInputFile(inputFile);
+        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.code()));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
         final MindcodeParser parser = new MindcodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
-        return AstNodeBuilder.generate(sourceFile, context);
+        return AstNodeBuilder.generate(inputFile, context);
     }
 
     /** Prints the parse tree according to level */
@@ -209,7 +204,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         messages.add(
-                MindcodeMessage.debug(profile.getOptimizationLevels().entrySet().stream()
+                MindcodeOptimizerMessage.debug("%s", profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
                         .map(e -> e.getKey().getOptionName() + " = " + e.getValue().name().toLowerCase())
                         .collect(Collectors.joining(",\n    ", "Active optimizations:\n    ", "\n"))
@@ -248,31 +243,32 @@ public class MindcodeCompiler implements Compiler<String> {
     }
 
     private void info(String message) {
-        messages.add(MindcodeMessage.info(message));
+        messages.add(ToolMessage.info(message));
     }
 
     private void debug(String message) {
-        messages.add(MindcodeMessage.debug(message));
+        messages.add(ToolMessage.debug(message));
     }
 
     private static class ErrorListener extends BaseErrorListener {
-        private final List<CompilerMessage> errors;
-        private String fileNameText;
+        private final List<MindcodeMessage> errors;
+        private InputFile inputFile;
 
-        public ErrorListener(List<CompilerMessage> errors) {
+        public ErrorListener(List<MindcodeMessage> errors) {
             this.errors = errors;
         }
 
-        public void setFileName(String fileName) {
-            this.fileNameText = fileName.isEmpty() ? "" : fileName + ":";
+        public void setInputFile(InputFile inputFile) {
+            this.inputFile = inputFile;
         }
 
-        private final Set<String> reportedMessages = new HashSet<>();
+        private final Set<MindcodeCompilerMessage> reportedMessages = new HashSet<>();
 
-        private void reportError(@PrintFormat String format, Object... args) {
-            String message = String.format(format, args);
+        private void reportError(int line, int charPositionInLine, @PrintFormat String format, Object... args) {
+            MindcodeCompilerMessage message = MindcodeCompilerMessage.error(
+                    new InputPosition(inputFile, line, charPositionInLine + 1), format, args);
             if (reportedMessages.add(message)) {
-                errors.add(MindcodeMessage.error(message));
+                errors.add(message);
             }
         }
 
@@ -285,23 +281,23 @@ public class MindcodeCompiler implements Compiler<String> {
                 // driven by syntactic predicate. In any case it doesn't make any sense.
                 if (!"do".equals(nextToken) && !"then".equals(nextToken)) {
                     int length = token.getStopIndex() - token.getStartIndex();
-                    reportError("%s%d:%d Parse error: %s%s", fileNameText, line, charPositionInLine + length + 2,
+                    reportError(line, charPositionInLine + length + 1, "Parse error: %s%s",
                             msg, ex.getNextToken() != null ? " before '" + nextToken + "'": "");
 
                 }
             } else if (exception instanceof NoViableAltException) {
                 String offendingTokenText = getOffendingTokenText(exception);
                 if (offendingTokenText == null) {
-                    reportError("%s%d:%d Parse error: unrecoverable parse error", fileNameText, line, charPositionInLine + 1);
+                    reportError(line, charPositionInLine, "Parse error: unrecoverable parse error");
                 } else {
-                    reportError("%s%d:%d Parse error: unexpected '%s'", fileNameText, line, charPositionInLine + 1, offendingTokenText);
+                    reportError(line, charPositionInLine, "Parse error: unexpected '%s'", offendingTokenText);
                 }
             } else {
                 String offendingTokenText = getOffendingTokenText(exception);
                 if (offendingTokenText == null) {
-                    reportError("%s%d:%d Parse error: %s", fileNameText, line, charPositionInLine + 1, msg);
+                    reportError(line, charPositionInLine, "Parse error: %s", msg);
                 } else {
-                    reportError("%s%d:%d Parse error: '%s': %s", fileNameText, line, charPositionInLine + 1, offendingTokenText, msg);
+                    reportError(line, charPositionInLine, "Parse error: '%s': %s", offendingTokenText, msg);
                 }
             }
         }

@@ -1,10 +1,9 @@
 package info.teksol.mindcode.compiler;
 
-public record TimingMessage(String phase, long milliseconds) implements CompilerMessage {
-    @Override
-    public String source() {
-        return "Timing";
-    }
+import info.teksol.mindcode.MessageLevel;
+import info.teksol.mindcode.MindcodeMessage;
+
+public record TimingMessage(String phase, long milliseconds) implements MindcodeMessage {
 
     @Override
     public MessageLevel level() {
@@ -14,5 +13,13 @@ public record TimingMessage(String phase, long milliseconds) implements Compiler
     @Override
     public String message() {
         return String.format("%s: %,d ms", phase, milliseconds);
+    }
+
+    @Override
+    public String toString() {
+        return "TimingMessage{" +
+                "phase='" + phase + '\'' +
+                ", milliseconds=" + milliseconds +
+                '}';
     }
 }

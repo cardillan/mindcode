@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNull;
@@ -8,8 +8,8 @@ import org.antlr.v4.runtime.Token;
 
 public class NullLiteral extends ConstantAstNode {
 
-    public NullLiteral(Token startToken, SourceFile sourceFile) {
-        super(startToken, sourceFile);
+    public NullLiteral(Token startToken, InputFile inputFile) {
+        super(startToken, inputFile);
     }
 
     @Override

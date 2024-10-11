@@ -28,7 +28,7 @@ public class SchematicsDecompiler {
             String schemaDefinition = decompiler.buildCode();
             return new CompilerOutput<>(schemaDefinition, List.of());
         } catch (Exception e) {
-            return new CompilerOutput<>("", List.of(SchemacodeMessage.error(e.toString())));
+            return new CompilerOutput<>("", List.of(SchemacodeCompilerMessage.error(e.toString())));
         }
     }
 }

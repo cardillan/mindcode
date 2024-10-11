@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
@@ -256,7 +256,7 @@ class AstContextTest {
         }
 
         @Override
-        public SourceFile sourceFile() {
+        public InputFile sourceFile() {
             return null;
         }
 

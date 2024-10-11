@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
@@ -9,8 +9,8 @@ public class Directive extends BaseAstNode {
     private final String option;
     private final String value;
 
-    public Directive(Token startToken, SourceFile sourceFile, String option, String value) {
-        super(startToken, sourceFile);
+    public Directive(Token startToken, InputFile inputFile, String option, String value) {
+        super(startToken, inputFile);
         this.option = option;
         this.value = value;
     }

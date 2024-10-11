@@ -1,13 +1,11 @@
-package info.teksol.mindcode.cmdline;
+package info.teksol.mindcode;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.MessageLevel;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.Locale;
 import java.util.Objects;
 
-public record ToolMessage(MessageLevel level, String message) implements CompilerMessage {
+public record ToolMessage(MessageLevel level, String message) implements MindcodeMessage {
 
     public ToolMessage {
         Objects.requireNonNull(level);
@@ -44,11 +42,6 @@ public record ToolMessage(MessageLevel level, String message) implements Compile
 
     public static ToolMessage debug(@PrintFormat String format, Object... args) {
         return new ToolMessage(MessageLevel.DEBUG, String.format(Locale.US, format, args));
-    }
-
-    @Override
-    public String source() {
-        return "Tool";
     }
 
     @Override

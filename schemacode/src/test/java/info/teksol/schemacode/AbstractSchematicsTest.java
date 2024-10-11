@@ -1,8 +1,8 @@
 package info.teksol.schemacode;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MessageLevel;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.config.Configuration;
@@ -53,7 +53,7 @@ public abstract class AbstractSchematicsTest {
      * @param methodName name of the method being tested
      * @return message listener which throws on errors
      */
-    private Consumer<CompilerMessage> messageListener(String methodName) {
+    private Consumer<MindcodeMessage> messageListener(String methodName) {
         return message -> {
             if (message.isError() || message.isWarning()) {
                 throw new RuntimeException("Unexpected error returned from " + methodName + ": " + message.message());
@@ -66,7 +66,7 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected void parseSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
-        List<CompilerMessage> messages = new ArrayList<>();
+        List<MindcodeMessage> messages = new ArrayList<>();
         SchemacodeCompiler.parseSchematics(definition, messages::add);
         assertRegex(MessageLevel.ERROR, regex, messages);
     }
@@ -83,7 +83,7 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected void buildSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
-        List<CompilerMessage> messages = new ArrayList<>();
+        List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
         SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, null);
@@ -91,15 +91,15 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected void buildSchematicsExpectingWarning(String definition, @Language("RegExp") String regex) {
-        List<CompilerMessage> messages = new ArrayList<>();
+        List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
         SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, null);
         assertRegex(MessageLevel.WARNING, regex, messages);
     }
 
-    private void assertRegex(MessageLevel expectedLevel, String expectedRegex, List<CompilerMessage> messages) {
-        List<String> list = messages.stream().filter(m -> m.level() == expectedLevel).map(CompilerMessage::message).toList();
+    private void assertRegex(MessageLevel expectedLevel, String expectedRegex, List<MindcodeMessage> messages) {
+        List<String> list = messages.stream().filter(m -> m.level() == expectedLevel).map(MindcodeMessage::message).toList();
         if (list.stream().anyMatch(s -> s.matches(expectedRegex))) {
             assertTrue(true);
         } else {

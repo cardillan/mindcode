@@ -1,8 +1,12 @@
 package info.teksol.mindcode.webapp;
 
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.*;
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -28,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SamplesTest {
     private static final boolean onWindowsPlatform = System.getProperty("os.name").toLowerCase().contains("win");
 
-    private static final List<CompilerMessage> messages = new ArrayList<>();
+    private static final List<MindcodeMessage> messages = new ArrayList<>();
 
     private final InstructionProcessor instructionProcessor =
             InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
@@ -86,7 +90,7 @@ class SamplesTest {
         parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
-        final Seq program = AstNodeBuilder.generate(new SourceFile(file.getPath(), file.getAbsolutePath(), source),context);
+        final Seq program = AstNodeBuilder.generate(new InputFile(file.getPath(), file.getAbsolutePath(), source),context);
         List<LogicInstruction> unoptimized = generateUnoptimized(program);
         List<LogicInstruction> optimized = generateAndOptimize(program);
 
@@ -120,12 +124,12 @@ class SamplesTest {
         assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + source);
         assertTrue(errors.isEmpty(), errors.toString());
 
-        assertTrue(messages.stream().noneMatch(CompilerMessage::isError),
-                "Unexpected error messages:\n" + messages.stream().filter(CompilerMessage::isError).map(CompilerMessage::message)
+        assertTrue(messages.stream().noneMatch(MindcodeMessage::isError),
+                "Unexpected error messages:\n" + messages.stream().filter(MindcodeMessage::isError).map(MindcodeMessage::message)
                         .collect(Collectors.joining("\n")));
 
-        assertTrue(messages.stream().noneMatch(CompilerMessage::isWarning),
-                "Unexpected warning messages:\n" + messages.stream().filter(CompilerMessage::isWarning).map(CompilerMessage::message)
+        assertTrue(messages.stream().noneMatch(MindcodeMessage::isWarning),
+                "Unexpected warning messages:\n" + messages.stream().filter(MindcodeMessage::isWarning).map(MindcodeMessage::message)
                         .collect(Collectors.joining("\n")));
     }
 

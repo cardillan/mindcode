@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;

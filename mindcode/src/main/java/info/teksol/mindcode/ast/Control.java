@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -12,8 +12,8 @@ public class Control extends BaseAstNode {
     private final String property;
     private final List<AstNode> params;
 
-    Control(Token startToken, SourceFile sourceFile, AstNode target, String property, List<AstNode> params) {
-        super(startToken, sourceFile, params, target);
+    Control(Token startToken, InputFile inputFile, AstNode target, String property, List<AstNode> params) {
+        super(startToken, inputFile, params, target);
         this.target = target;
         this.property = property;
         this.params = params;

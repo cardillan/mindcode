@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -113,7 +114,7 @@ public class LogicInstructionPrinter {
 
     public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         AtomicInteger lineNumber = new AtomicInteger(0);
-        final Map<SourceFile, List<String>> allLines = new HashMap<>();
+        final Map<InputFile, List<String>> allLines = new HashMap<>();
         int prevLine = -1;
 
         final StringBuilder buffer = new StringBuilder();
@@ -128,7 +129,7 @@ public class LogicInstructionPrinter {
 
             AstContext astContext = instruction.getAstContext();
             if (astContext.node() != null && astContext.node().startToken() != null && astContext.node().sourceFile() != null) {
-                SourceFile file = astContext.node().sourceFile();
+                InputFile file = astContext.node().sourceFile();
                 String srcLine = "** Corresponding source code line not found! **";
                 List<String> lines = allLines.get(file);
                 if (lines == null) {

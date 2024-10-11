@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.schemacode.SchemacodeMessage;
+import info.teksol.schemacode.SchemacodeCompilerMessage;
 import info.teksol.schemacode.mindustry.Position;
 
 import java.util.*;
@@ -19,7 +19,7 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         return positionMap.getOrDefault(position.pack(), position);
     }
 
-    private static <T extends BlockPosition> BlockPositionMap<T> build(Consumer<CompilerMessage> messageListener,
+    private static <T extends BlockPosition> BlockPositionMap<T> build(Consumer<MindcodeMessage> messageListener,
             List<T> blocks, Function<T, Position> lowerLeft, Function<T, Position> upperRight, Function<T, Position> anchor) {
         Set<Tuple2<T, T>> collisions = new HashSet<>();
         Map<Integer, T> blockMap = new HashMap<>();
@@ -47,7 +47,7 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         }
 
         if (!collisions.isEmpty()) {
-            collisions.forEach(t -> messageListener.accept(SchemacodeMessage.error(
+            collisions.forEach(t -> messageListener.accept(SchemacodeCompilerMessage.error(
                     "Overlapping blocks: #%d '%s' at %s and #%d '%s' at %s.".formatted(
                             t.getT1().index(), t.getT1().name(), t.getT1().area(),
                             t.getT2().index(), t.getT2().name(), t.getT2().area()))));
@@ -62,7 +62,7 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         }
     }
 
-    public static <T extends BlockPosition> BlockPositionMap<T> forBuilder(Consumer<CompilerMessage> messageListener, List<T> blocks) {
+    public static <T extends BlockPosition> BlockPositionMap<T> forBuilder(Consumer<MindcodeMessage> messageListener, List<T> blocks) {
         return build(messageListener, blocks,
                 BlockPosition::position,
                 b -> b.position().add(b.size() - 1),
@@ -70,7 +70,7 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         );
     }
 
-    public static BlockPositionMap<Block> mindustryToBuilder(Consumer<CompilerMessage> messageListener, List<Block> blocks) {
+    public static BlockPositionMap<Block> mindustryToBuilder(Consumer<MindcodeMessage> messageListener, List<Block> blocks) {
         return build(messageListener, blocks,
                 b -> b.position().sub((b.size() - 1) / 2),
                 b -> b.position().add(b.size() / 2),
@@ -78,7 +78,7 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         );
     }
 
-    public static BlockPositionMap<Block> builderToMindustry(Consumer<CompilerMessage> messageListener, List<Block> blocks) {
+    public static BlockPositionMap<Block> builderToMindustry(Consumer<MindcodeMessage> messageListener, List<Block> blocks) {
         return build(messageListener, blocks,
                 Block::position,
                 b -> b.position().add(b.size() - 1),

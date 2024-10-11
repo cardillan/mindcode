@@ -1,10 +1,10 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.mindcode.mimex.Icons;
-import info.teksol.schemacode.SchemacodeMessage;
+import info.teksol.schemacode.SchemacodeCompilerMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 public class SchematicsBuilder {
     private final CompilerProfile compilerProfile;
-    private final Consumer<CompilerMessage> messageListener;
+    private final Consumer<MindcodeMessage> messageListener;
     private final AstDefinitions astDefinitions;
     private final Path basePath;
 
@@ -31,7 +31,7 @@ public class SchematicsBuilder {
     private BlockPositionMap<BlockPosition> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
-    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<CompilerMessage> messageListener, AstDefinitions astDefinitions, Path basePath) {
+    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<MindcodeMessage> messageListener, AstDefinitions astDefinitions, Path basePath) {
         this.compilerProfile = compilerProfile;
         this.messageListener = messageListener;
         this.astDefinitions = astDefinitions;
@@ -39,24 +39,24 @@ public class SchematicsBuilder {
     }
 
     public static SchematicsBuilder create(CompilerProfile compilerProfile, AstDefinitions definitions,
-            Consumer<CompilerMessage> messageListener, Path basePath) {
+            Consumer<MindcodeMessage> messageListener, Path basePath) {
         return new SchematicsBuilder(compilerProfile, messageListener, definitions, basePath);
     }
 
-    public void addMessage(CompilerMessage message) {
+    public void addMessage(MindcodeMessage message) {
         messageListener.accept(message);
     }
 
     public void error(@PrintFormat String message, Object... args) {
-        messageListener.accept(SchemacodeMessage.error(args.length == 0 ? message : message.formatted(args)));
+        messageListener.accept(SchemacodeCompilerMessage.error(args.length == 0 ? message : message.formatted(args)));
     }
 
     public void warn(@PrintFormat String message, Object... args) {
-        messageListener.accept(SchemacodeMessage.warn(args.length == 0 ? message : message.formatted(args)));
+        messageListener.accept(SchemacodeCompilerMessage.warn(args.length == 0 ? message : message.formatted(args)));
     }
 
     public void info(@PrintFormat String message, Object... args) {
-        messageListener.accept(SchemacodeMessage.info(args.length == 0 ? message : message.formatted(args)));
+        messageListener.accept(SchemacodeCompilerMessage.info(args.length == 0 ? message : message.formatted(args)));
     }
 
     public CompilerProfile getCompilerProfile() {

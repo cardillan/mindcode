@@ -1,4 +1,4 @@
-package info.teksol.mindcode.compiler;
+package info.teksol.mindcode;
 
 public enum MessageLevel {
     ERROR,

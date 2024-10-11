@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import org.antlr.v4.runtime.Token;
@@ -11,39 +11,39 @@ import java.util.List;
 
 public abstract class BaseAstNode implements AstNode {
     private final Token startToken;
-    private final SourceFile sourceFile;
+    private final InputFile inputFile;
     private final List<AstNode> children;
 
-    protected BaseAstNode(Token startToken, SourceFile sourceFile) {
+    protected BaseAstNode(Token startToken, InputFile inputFile) {
         this.startToken = startToken;
-        this.sourceFile = sourceFile;
+        this.inputFile = inputFile;
         this.children = List.of();
     }
 
-    protected BaseAstNode(Token startToken, SourceFile sourceFile, AstNode... children) {
+    protected BaseAstNode(Token startToken, InputFile inputFile, AstNode... children) {
         this.startToken = startToken;
-        this.sourceFile = sourceFile;
+        this.inputFile = inputFile;
         this.children = safeCopy(children);
     }
 
-    protected BaseAstNode(Token startToken, SourceFile sourceFile, List<? extends AstNode> children) {
+    protected BaseAstNode(Token startToken, InputFile inputFile, List<? extends AstNode> children) {
         this.startToken = startToken;
-        this.sourceFile = sourceFile;
+        this.inputFile = inputFile;
         this.children = safeCopy(children);
     }
 
-    protected BaseAstNode(Token startToken, SourceFile sourceFile, List<? extends AstNode> children1, List<? extends AstNode> children2, AstNode... other) {
+    protected BaseAstNode(Token startToken, InputFile inputFile, List<? extends AstNode> children1, List<? extends AstNode> children2, AstNode... other) {
         this.startToken = startToken;
-        this.sourceFile = sourceFile;
+        this.inputFile = inputFile;
         List<AstNode> tmp = new ArrayList<>(children1);
         tmp.addAll(children2);
         tmp.addAll(Arrays.asList(other));
         this.children = safeCopy(tmp);
     }
 
-    protected BaseAstNode(Token startToken, SourceFile sourceFile, List<? extends AstNode> children, AstNode... other) {
+    protected BaseAstNode(Token startToken, InputFile inputFile, List<? extends AstNode> children, AstNode... other) {
         this.startToken = startToken;
-        this.sourceFile = sourceFile;
+        this.inputFile = inputFile;
         List<AstNode> tmp = new ArrayList<>(children);
         tmp.addAll(Arrays.asList(other));
         this.children = safeCopy(tmp);
@@ -54,8 +54,8 @@ public abstract class BaseAstNode implements AstNode {
         return startToken;
     }
 
-    public SourceFile sourceFile() {
-        return sourceFile;
+    public InputFile sourceFile() {
+        return inputFile;
     }
 
     @Override

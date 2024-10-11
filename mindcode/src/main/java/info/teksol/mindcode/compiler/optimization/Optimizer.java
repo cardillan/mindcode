@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.MemoryModel;
 
@@ -19,7 +19,7 @@ public interface Optimizer {
 
     void setMemoryModel(MemoryModel memoryModel);
 
-    void setMessageRecipient(Consumer<CompilerMessage> messageRecipient);
+    void setMessageRecipient(Consumer<MindcodeMessage> messageRecipient);
 
     void setDebugPrinter(DebugPrinter debugPrinter);
 

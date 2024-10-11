@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.Directive;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
@@ -78,17 +79,17 @@ class DirectiveProcessorTest {
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, null, new Directive(null, null, "fluffyBunny", "basic"));
-        List<CompilerMessage> messages = new ArrayList<>();
+        List<MindcodeMessage> messages = new ArrayList<>();
         DirectiveProcessor.processDirectives(seq, profile, messages::add);
-        assertEquals(List.of(MindcodeMessage.error("Unknown compiler directive 'fluffyBunny'.")), messages);
+        assertEquals(List.of(MindcodeCompilerMessage.error("Unknown compiler directive 'fluffyBunny'.")), messages);
     }
 
     @Test
     void refusesInvalidValue() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, null, new Directive(null, null, "target", "fluffyBunny"));
-        List<CompilerMessage> messages = new ArrayList<>();
+        List<MindcodeMessage> messages = new ArrayList<>();
         DirectiveProcessor.processDirectives(seq, profile, messages::add);
-        assertEquals(List.of(MindcodeMessage.error("Invalid value 'fluffyBunny' of compiler directive 'target'.")), messages);
+        assertEquals(List.of(MindcodeCompilerMessage.error("Invalid value 'fluffyBunny' of compiler directive 'target'.")), messages);
     }
 }

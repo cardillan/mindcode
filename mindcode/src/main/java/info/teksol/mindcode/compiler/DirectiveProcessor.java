@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.Directive;
 import info.teksol.mindcode.ast.Seq;
@@ -21,20 +22,20 @@ import java.util.function.Consumer;
  */
 public class DirectiveProcessor {
     private final CompilerProfile profile;
-    private final Consumer<CompilerMessage> messageConsumer;
+    private final Consumer<MindcodeMessage> messageConsumer;
 
-    private DirectiveProcessor(CompilerProfile profile, Consumer<CompilerMessage> messageConsumer) {
+    private DirectiveProcessor(CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {
         this.profile = profile;
         this.messageConsumer = messageConsumer;
     }
 
-    public static void processDirectives(Seq program, CompilerProfile profile, Consumer<CompilerMessage> messageConsumer) {
+    public static void processDirectives(Seq program, CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {
         DirectiveProcessor processor = new DirectiveProcessor(profile, messageConsumer);
         processor.visitNode(program);
     }
 
     private void error(@PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeMessage.error(format.formatted(args)));
+        messageConsumer.accept(MindcodeCompilerMessage.error(format, args));
     }
 
     private void visitNode(AstNode node) {

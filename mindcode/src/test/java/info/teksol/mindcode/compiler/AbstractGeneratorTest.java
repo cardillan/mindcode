@@ -1,6 +1,8 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.AbstractAstTest;
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.generator.AstContext;
@@ -23,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected class TestCompiler {
-        private final List<CompilerMessage> messages = new ArrayList<>();
-        private final List<CompilerMessage> readOnlyMessages = Collections.unmodifiableList(messages);
+        private final List<MindcodeMessage> messages = new ArrayList<>();
+        private final List<MindcodeMessage> readOnlyMessages = Collections.unmodifiableList(messages);
         public final CompilerProfile profile;
         public final InstructionProcessor processor;
         public final LogicInstructionGenerator generator;
@@ -36,11 +38,11 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             generator = new LogicInstructionGenerator(profile, processor, this::addMessage);
         }
 
-        public void addMessage(CompilerMessage message) {
+        public void addMessage(MindcodeMessage message) {
             messages.add(message);
         }
 
-        public List<CompilerMessage> getMessages() {
+        public List<MindcodeMessage> getMessages() {
             return readOnlyMessages;
         }
 
@@ -148,10 +150,10 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return arguments.stream().map(LogicArgument::toMlog).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    protected String extractWarnings(List<CompilerMessage> messages) {
+    protected String extractWarnings(List<MindcodeMessage> messages) {
         return messages.stream()
-                .filter(CompilerMessage::isWarning)
-                .map(CompilerMessage::message)
+                .filter(MindcodeMessage::isWarning)
+                .map(MindcodeMessage::message)
                 .map(String::trim)
                 .collect(Collectors.joining("\n"));
     }
@@ -173,14 +175,14 @@ public class AbstractGeneratorTest extends AbstractAstTest {
                 .setDebugLevel(3);
     }
 
-    protected InstructionProcessor createInstructionProcessor(CompilerProfile profile, Consumer<CompilerMessage> messageConsumer) {
+    protected InstructionProcessor createInstructionProcessor(CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {
         return InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
     }
 
     // Code generation
 
     protected Seq generateAstTree(String code) {
-        return AstNodeBuilder.generate(SourceFile.createSourceFile(code),parse(code));
+        return AstNodeBuilder.generate(InputFile.createSourceFile(code),parse(code));
     }
 
     // This class always creates unoptimized code.
@@ -244,7 +246,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected String formatMessages(TestCompiler compiler) {
         return compiler.getMessages().isEmpty() ? "" : "\nGenerated messages:\n"
-                + compiler.getMessages().stream().map(CompilerMessage::message).collect(Collectors.joining("\n")) ;
+                + compiler.getMessages().stream().map(MindcodeMessage::message).collect(Collectors.joining("\n")) ;
     }
 
     protected String createDifferentCodeSizeMessage(TestCompiler compiler, List<LogicInstruction> actual) {
@@ -311,8 +313,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected void assertNoUnexpectedMessages(TestCompiler compiler, Predicate<String> ignoredMessagesFilter) {
         String messages = compiler.getMessages().stream()
-                .filter(CompilerMessage::isErrorOrWarning)
-                .map(CompilerMessage::message)
+                .filter(MindcodeMessage::isErrorOrWarning)
+                .map(MindcodeMessage::message)
                 .filter(ignoredMessagesFilter.negate())
                 .collect(Collectors.joining("\n"));
 

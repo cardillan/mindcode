@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.LogicVariable;
 import org.antlr.v4.runtime.Token;
@@ -11,21 +11,21 @@ public class StackAllocation extends BaseAstNode {
     private final LogicVariable stack;
     private final Range range;
 
-    StackAllocation(Token startToken, SourceFile sourceFile, String stack, Range range) {
-        super(startToken, sourceFile);
+    StackAllocation(Token startToken, InputFile inputFile, String stack, Range range) {
+        super(startToken, inputFile);
         // TODO This might not be a block variable actually. Review during refactoring
         this.stack = LogicVariable.block(stack);
         this.range = range;
     }
 
-    StackAllocation(Token startToken, SourceFile sourceFile, String stack, int first, int last) {
-        this(startToken, sourceFile, stack, new InclusiveRange(startToken, sourceFile,
-                new NumericLiteral(startToken, sourceFile, first),
-                new NumericLiteral(startToken, sourceFile, last)));
+    StackAllocation(Token startToken, InputFile inputFile, String stack, int first, int last) {
+        this(startToken, inputFile, stack, new InclusiveRange(startToken, inputFile,
+                new NumericLiteral(startToken, inputFile, first),
+                new NumericLiteral(startToken, inputFile, last)));
     }
 
-    StackAllocation(Token startToken, SourceFile sourceFile, String stack) {
-        super(startToken, sourceFile);
+    StackAllocation(Token startToken, InputFile inputFile, String stack) {
+        super(startToken, inputFile);
         // TODO This might not be a block variable actually. Review during refactoring
         this.stack = LogicVariable.block(stack);
         this.range = null;

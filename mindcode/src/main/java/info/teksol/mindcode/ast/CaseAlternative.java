@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.SourceFile;
+import info.teksol.mindcode.InputFile;
 import org.antlr.v4.runtime.Token;
 
 import java.util.List;
@@ -10,14 +10,14 @@ public class CaseAlternative extends ControlBlockAstNode {
     private final List<AstNode> values;
     private final AstNode body;
 
-    CaseAlternative(Token startToken, SourceFile sourceFile, AstNode value, AstNode body) {
-        super(startToken, sourceFile, value, body);
+    CaseAlternative(Token startToken, InputFile inputFile, AstNode value, AstNode body) {
+        super(startToken, inputFile, value, body);
         this.values = List.of(value);
         this.body = body;
     }
 
-    CaseAlternative(Token startToken, SourceFile sourceFile, List<AstNode> values, AstNode body) {
-        super(startToken, sourceFile, values, body);
+    CaseAlternative(Token startToken, InputFile inputFile, List<AstNode> values, AstNode body) {
+        super(startToken, inputFile, values, body);
         this.values = values;
         this.body = body;
     }

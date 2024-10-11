@@ -2,9 +2,9 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.Iterator;
 import info.teksol.mindcode.ast.*;
-import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
@@ -35,7 +35,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
 
     private final CompilerProfile profile;
-    private final Consumer<CompilerMessage> messageConsumer;
+    private final Consumer<MindcodeMessage> messageConsumer;
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
     private final ReturnStack returnStack = new ReturnStack();
@@ -85,7 +85,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private AstContext astContext;
 
     public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
-            Consumer<CompilerMessage> messageConsumer) {
+            Consumer<MindcodeMessage> messageConsumer) {
         this.messageConsumer = messageConsumer;
         this.instructionProcessor = instructionProcessor;
         this.functionMapper = FunctionMapperFactory.getFunctionMapper( instructionProcessor,

@@ -1,9 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.SourceFile;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -14,6 +17,7 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
@@ -101,8 +105,8 @@ public class CompileMindcodeAction extends ActionHandler {
                 .setDefault(defaults.getStepLimit());
     }
 
-    private SourceFile readFile(File file, boolean multiple) {
-        return new SourceFile(
+    private InputFile readFile(File file, boolean multiple) {
+        return new InputFile(
                 isStdInOut(file) || !multiple ? "" : file.getPath(),
                 isStdInOut(file) ? "" : file.getAbsolutePath(),
                 readInput(file));
@@ -118,13 +122,14 @@ public class CompileMindcodeAction extends ActionHandler {
             inputs.addAll(others);
         }
 
-        List<SourceFile> sourceFiles = inputs.stream().map(f -> readFile(f, inputs.size() >1)).toList();
+        List<InputFile> inputFiles = inputs.stream().map(f -> readFile(f, inputs.size() >1)).toList();
 
-        final CompilerOutput<String> result = compile(sourceFiles, compilerProfile);
+        final CompilerOutput<String> result = compile(inputFiles, compilerProfile);
 
         File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
         File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
         boolean mlogToStdErr = isStdInOut(output);
+        Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output(), false);
@@ -155,19 +160,24 @@ public class CompileMindcodeAction extends ActionHandler {
             // If mlog gets written to stdout, write log to stderr
             if (isStdInOut(logFile)) {
                 boolean alwaysErr = isStdInOut(output);
-                result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.message()));
+                result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
             } else {
                 writeOutput(logFile, result.texts(), mlogToStdErr);
                 // Print errors and warnings to stderr anyway
                 result.messages().stream()
                         .filter(m -> m.isErrorOrWarning() || m.isInfo())
-                        .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.message()));
+                        .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
             }
         } else {
             // Errors: print just them into stderr
-            result.errors().forEach(System.err::println);
+            List<String> errors = result.messages().stream()
+                    .filter(MindcodeMessage::isError)
+                    .map(m -> m.formatMessage(positionFormatter))
+                    .toList();
+
+            errors.forEach(System.err::println);
             if (!isStdInOut(logFile)) {
-                writeOutput(logFile, result.errors(), true);
+                writeOutput(logFile, errors, true);
             }
             System.exit(1);
         }

@@ -2,9 +2,9 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.MindcodeMessage;
+import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.logic.*;
@@ -25,7 +25,7 @@ import static info.teksol.mindcode.logic.Operation.ADD;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
-    private final Consumer<CompilerMessage> messageConsumer;
+    private final Consumer<MindcodeMessage> messageConsumer;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final List<OpcodeVariant> opcodeVariants;
@@ -39,7 +39,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private int functionIndex = 0;
 
     // Protected to allow a subclass to use this constructor in unit tests
-    protected BaseInstructionProcessor(Consumer<CompilerMessage> messageConsumer, ProcessorVersion processorVersion,
+    protected BaseInstructionProcessor(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion processorVersion,
             ProcessorEdition processorEdition, List<OpcodeVariant> opcodeVariants) {
         this.messageConsumer = messageConsumer;
         this.processorVersion = processorVersion;
@@ -644,7 +644,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 double absDiff = Math.abs(reFloat - value);
                 double relDiff = absDiff / value;
                 if (relDiff > 1e-9) {
-                    messageConsumer.accept(MindcodeMessage.warn("Loss of precision while creating mlog literals (original value "+ literal + ", encoded value " + mlog + ")"));
+                    messageConsumer.accept(MindcodeCompilerMessage.warn(
+                            "Loss of precision while creating mlog literals (original value %s, encoded value %s)",
+                            literal, mlog));
                 }
 
                 return Optional.of(mlog);

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.SchemacodeCompiler;
@@ -93,7 +93,7 @@ public class CompileSchemacodeAction extends ActionHandler {
             if (!isStdInOut(logFile)) {
                 result.messages().stream()
                         .filter(m -> m.isError() || m.isWarning())
-                        .map(CompilerMessage::message)
+                        .map(MindcodeMessage::message)
                         .forEach(System.out::println);
             }
         } else {
