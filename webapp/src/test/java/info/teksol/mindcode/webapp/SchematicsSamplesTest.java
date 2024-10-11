@@ -1,5 +1,6 @@
 package info.teksol.mindcode.webapp;
 
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.SchemacodeCompiler;
@@ -41,7 +42,7 @@ class SchematicsSamplesTest {
 
     private void buildSchematic(String sample, File file) {
         CompilerOutput<byte[]> output = SchemacodeCompiler.compile(sample, CompilerProfile.fullOptimizations(true), null);
-        output.errors().forEach(Assertions::fail);
+        output.errors(MindcodeMessage::message).forEach(Assertions::fail);
         assertFalse(output.hasErrors(), "Failed to compile sample " + file.getPath());
     }
 }

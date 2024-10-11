@@ -79,9 +79,9 @@ public class DecompilerController {
                         (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
                         compiledCode,
                         (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
-                        result.errors(),
-                        result.warnings(),
-                        result.infos(),
+                        result.errors(WebappMessage::transform),
+                        result.warnings(WebappMessage::transform),
+                        result.infos(WebappMessage::transform),
                         OptimizationLevel.BASIC.name(),
                         null,
                         0)

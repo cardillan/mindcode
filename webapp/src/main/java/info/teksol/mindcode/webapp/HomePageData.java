@@ -12,15 +12,15 @@ public class HomePageData {
     private final int sourceLoc;
     private final String compiled;
     private final int compiledLoc;
-    private final List<String> errors;
-    private final List<String> warnings;
-    private final List<String> messages;
+    private final List<WebappMessage> errors;
+    private final List<WebappMessage> warnings;
+    private final List<WebappMessage> messages;
     private final String optimizationLevel;
     private final String runOutput;
     private final int runSteps;
 
     HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc,
-                 List<String> errors, List<String> warnings, List<String> messages,
+                 List<WebappMessage> errors, List<WebappMessage> warnings, List<WebappMessage> messages,
                  String optimizationLevel, String runOutput, int runSteps) {
         this.id = id;
         this.sample = sample;
@@ -64,15 +64,15 @@ public class HomePageData {
         return compiledLoc;
     }
 
-    public List<String> getErrors() {
+    public List<WebappMessage> getErrors() {
         return errors;
     }
 
-    public List<String> getWarnings() {
+    public List<WebappMessage> getWarnings() {
         return warnings;
     }
 
-    public List<String> getMessages() {
+    public List<WebappMessage> getMessages() {
         return messages;
     }
 

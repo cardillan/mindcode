@@ -1,5 +1,5 @@
 project-euler-04.mnd:                   : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-project-euler-18.mnd:                   : parse:          0 ms, compile:          0 ms, optimize:        200 ms
+project-euler-18.mnd:                   : parse:          0 ms, compile:          0 ms, optimize:        400 ms
 project-euler-26.mnd:                   : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 project-euler-28.mnd:                   : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 project-euler-31.mnd:                   : parse:          0 ms, compile:          0 ms, optimize:          0 ms

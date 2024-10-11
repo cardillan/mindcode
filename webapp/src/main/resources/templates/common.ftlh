@@ -127,8 +127,13 @@
         <#list model.errors>
             <label class="mt-4 block font-bold">Syntax Errors:</label>
             <ul class="list-disc list-inside">
-                <#items as message>
-                    <li class="text-red-700">${message}</li>
+                <#items as msg>
+                    <li class="text-red-700">
+                        <#if msg.hasPosition()>
+                            <a class="underline" href="#" onclick="jumpToPosition(${msg.line}, ${msg.charPositionInLine}); return false;">${msg.position}</a>:
+                        </#if>
+                        ${msg.message}
+                    </li>
                 </#items>
             </ul>
         </#list>
@@ -136,15 +141,20 @@
         <label class="mt-4 block font-bold">${messageTitle}</label>
         <#list model.warnings>
             <ul class="list-disc list-inside">
-                <#items as message>
-                    <li class="text-red-700">${message}</li>
+                <#items as msg>
+                    <li class="text-red-700">
+                        <#if msg.hasPosition()>
+                            <a class="underline" href="#" onclick="jumpToPosition(${msg.line}, ${msg.charPositionInLine}); return false;">${msg.position}</a>
+                        </#if>
+                        ${msg.message}
+                    </li>
                 </#items>
             </ul>
         </#list>
         <#list model.messages>
             <ul class="list-disc list-inside">
-                <#items as message>
-                    <li>${message}</li>
+                <#items as msg>
+                    <li>${msg.message}</li>
                 </#items>
             </ul>
         </#list>
@@ -201,6 +211,50 @@
         });
     }
 </script>
+
+<script>
+    function jumpToPosition(line, char) {
+        const textarea = document.getElementById('source');
+        const lines = textarea.value.split('\n');
+
+        // Ensure the specified line exists
+        if (line > lines.length || line < 1) {
+            alert('Line number out of range');
+            return;
+        }
+
+        // Calculate the position by summing up the lengths of all preceding lines + chars in the target line
+        let position = 0;
+        for (let i = 0; i < line - 1; i++) {
+            position += lines[i].length + 1; // +1 for the newline character
+        }
+
+        // Move the cursor to the calculated position
+        textarea.setSelectionRange(0, 0);
+        textarea.setSelectionRange(position, position + lines[line - 1].length);
+
+        position += char - 1; // Char position within the line
+
+        // Set focus on the textarea
+        textarea.focus();
+
+
+        // Now scroll the textarea to bring the cursor into view
+        // Scroll to ensure the cursor is vertically centered
+        const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight);
+        const cursorY = (line / lines.length) * textarea.scrollHeight;
+        const textareaHeight = textarea.clientHeight;
+
+        // Scroll so that the cursor is in the middle
+        textarea.scrollTop = cursorY - textareaHeight / 2 + lineHeight / 2;
+
+        setTimeout(() => {
+            // Deselect text after highlight (optional)
+            textarea.setSelectionRange(position, position);
+        }, 250);
+    }
+</script>
+
 
 </body>
 </html>

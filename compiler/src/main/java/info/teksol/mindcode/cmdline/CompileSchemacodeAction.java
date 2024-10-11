@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerOutput;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
+import java.util.function.Function;
 
 public class CompileSchemacodeAction extends ActionHandler {
 
@@ -74,12 +76,15 @@ public class CompileSchemacodeAction extends ActionHandler {
 
         CompilerOutput<byte[]> result = SchemacodeCompiler.compile(sourceText , compilerProfile, basePath);
 
+        // TODO Implement input file position translation somehow
+        Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
+
         File output = resolveOutputFile(inputFile, arguments.get("output"), ".msch");
         File logFile = resolveOutputFile(inputFile, arguments.get("log"), ".log");
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output());
-            List<String> allTexts = result.texts();
+            List<String> allTexts = result.texts(m -> m.formatMessage(positionFormatter));
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(Base64.getEncoder().encodeToString(result.output()));
@@ -98,9 +103,9 @@ public class CompileSchemacodeAction extends ActionHandler {
             }
         } else {
             // Errors: print just them into stderr
-            result.errors().forEach(System.err::println);
+            result.errors(m -> m.formatMessage(positionFormatter)).forEach(System.err::println);
             if (!isStdInOut(logFile)) {
-                writeOutput(logFile, result.errors(), true);
+                writeOutput(logFile, result.errors(m -> m.formatMessage(positionFormatter)), true);
             }
             System.exit(1);
         }

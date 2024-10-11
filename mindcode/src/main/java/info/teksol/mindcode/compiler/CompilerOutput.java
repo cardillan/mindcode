@@ -3,7 +3,8 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.MindcodeMessage;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String textBuffer, int steps) {
 
@@ -19,20 +20,26 @@ public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String
         messages.add(message);
     }
 
-    public List<String> texts() {
-        return messages.stream().map(MindcodeMessage::message).collect(Collectors.toList());
+    public <M> List<M> texts(Function<MindcodeMessage, M> messageTransformer) {
+        return formatMessages(m -> true, messageTransformer);
     }
 
-    public List<String> errors() {
-        return messages.stream().filter(MindcodeMessage::isError).map(MindcodeMessage::message).map(String::trim).collect(Collectors.toList());
+    public  <M> List<M> errors(Function<MindcodeMessage, M> messageTransformer) {
+        return formatMessages(MindcodeMessage::isError, messageTransformer);
     }
 
-    public List<String> warnings() {
-        return messages.stream().filter(MindcodeMessage::isWarning).map(MindcodeMessage::message).map(String::trim).collect(Collectors.toList());
+    public  <M> List<M> warnings(Function<MindcodeMessage, M> messageTransformer) {
+        return formatMessages(MindcodeMessage::isWarning, messageTransformer);
     }
 
-    public List<String> infos() {
-        return messages.stream().filter(MindcodeMessage::isInfo).map(MindcodeMessage::message).map(String::trim).collect(Collectors.toList());
+    public  <M> List<M> infos(Function<MindcodeMessage, M> messageTransformer) {
+        return formatMessages(MindcodeMessage::isInfo, messageTransformer);
+    }
+
+    private <M> List<M> formatMessages(Predicate<MindcodeMessage> filter, Function<MindcodeMessage, M> messageTransformer) {
+        return messages.stream().filter(filter)
+                .map(messageTransformer)
+                .toList();
     }
 
     public boolean hasErrors() {

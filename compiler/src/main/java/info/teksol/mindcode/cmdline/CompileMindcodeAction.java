@@ -2,7 +2,6 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerOutput;
@@ -162,7 +161,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 boolean alwaysErr = isStdInOut(output);
                 result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
             } else {
-                writeOutput(logFile, result.texts(), mlogToStdErr);
+                writeOutput(logFile, result.texts(m -> m.formatMessage(positionFormatter)), mlogToStdErr);
                 // Print errors and warnings to stderr anyway
                 result.messages().stream()
                         .filter(m -> m.isErrorOrWarning() || m.isInfo())
@@ -170,10 +169,7 @@ public class CompileMindcodeAction extends ActionHandler {
             }
         } else {
             // Errors: print just them into stderr
-            List<String> errors = result.messages().stream()
-                    .filter(MindcodeMessage::isError)
-                    .map(m -> m.formatMessage(positionFormatter))
-                    .toList();
+            List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));
 
             errors.forEach(System.err::println);
             if (!isStdInOut(logFile)) {
