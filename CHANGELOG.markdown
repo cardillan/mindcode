@@ -12,7 +12,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Added support for the [Mlog Watcher](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.
-* **Breaking:** Added support for syntax variants (`strict` and `relaxed`) to Mindcode. The `strict` syntax is the default now; to be able to compile existing Mindcode the `relaxed` syntax needs to be activated using the `#relaxed;` directive.     
+* **Breaking:** Added support for syntax variants ([`strict` and `relaxed`](doc/syntax/SYNTAX-STRICT-RELAXED.markdown)) to Mindcode. The `strict` syntax is the default now; to be able to compile existing Mindcode the `relaxed` syntax needs to be activated using the `#relaxed;` directive.   
+* Added navigable compiler error messages to the web app. Clicking on a message with known position in the source code selects the corresponding position in the editor.
+* Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
 * Added an optimization of the `lookup` instruction to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). When possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
 * Added support for creating constants with a formattable string literals as a value.   
 

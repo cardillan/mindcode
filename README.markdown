@@ -10,7 +10,7 @@ The perils of using a high-level language for Mindustry code are inefficient cod
 * Reliability: this project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they usually get resolved quickly.
 
 > [!IMPORTANT]
-> Since the [2.3.0 release](CHANGELOG.markdown#230), Mindcode supports two variants of the syntax: `strict` and `relaxed`. In the `strict` syntax, which is now the default, semicolons and the `do` and `then` keywords are no longer optional. This change breaks a lot of existing code and fixing all the errors can be a bit time-consuming. To make adapting to the change easier, it is possible to switch to the original syntax by putting the `#relaxed;` directive (including the semicolon) at the beginning of the source file. The relaxed syntactic rules will take place for code following the directive.
+> Since the [2.3.0 release](CHANGELOG.markdown#230), Mindcode supports two variants of the syntax: [`strict` and `relaxed`](doc/syntax/SYNTAX-STRICT-RELAXED.markdown). In the `strict` syntax, which is now the default, semicolons and the `do` and `then` keywords are no longer optional. This change breaks a lot of existing code and fixing all the errors can be a bit time-consuming. To make adapting to the change easier, it is possible to switch to the original syntax by including the `#relaxed;` directive (including the semicolon) at the beginning of the source file. The relaxed syntactic rules will take place for code following the directive.
 > 
 > The relaxed variant of syntax is deprecated and will eventually be removed.    
 
@@ -24,6 +24,7 @@ complete with the code (specified in Mindcode or Mindustry Logic language) and l
 
 The most important recent changes to Mindcode include:
 
+* Significant improvement in reporting error messages generated during compilation, including navigating from the message to the position in the source code in both the web application and a properly set up offline development environment. 
 * The compiled code can be injected from the web app or the command-line compiler right into a processor in a running Mindustry game thanks to the [Mlog Watcher mod](https://github.com/Sharlottes/MlogWatcher). [Instructions on use](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).  
 * Program parametrization should now be done using [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) instead of global variables.
 * [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) can now use more than one loop variable to iterate over the values in the list, and if the list consist of Mindcode variables, these variables can be modified by assigning a new value to the loop variable inside the loop.   
