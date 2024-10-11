@@ -2,12 +2,40 @@
 
 ## Dealing with syntax errors
 
-Dealing with syntax errors in Mindcode isn't always easy. There are various reasons for this, some of them might be
-amenable and some probably not. Many other compilers for Mindustry Logic probably provide better means to handle syntax
-errors. Making the syntax errors easier to handle isn't an easy task for various reasons; to make up for this
-deficiency, we'll try to describe some possible approaches to diagnosing and fixing syntax errors in Mindcode.
+In earlier versions of Mindcode, syntax errors were reported very poorly. As of version 2.3.0, the error reporting got much better. In most cases, the position of the error in source code is correctly identified and displayed. In the web application, clicking on the position given with the error message places the cursor at the occurrence of the error in the source panel. Of course, if the source code gets edited (especially when lines are added or deleted), the positions will no longer be valid. When using an IDE to edit and compile the code offline, it should be possible to set up the IDE to provide navigation from the error messages to the occurrence of the error in the source code as well.  
 
-**To be expanded.**
+When encountering more complicated situations, one of these tips might help.
+
+### Not all reported errors are necessarily accurate
+
+When an error is encountered in the source code, the parser tries to recover and continue with the analysis to be able to report more errors at once during a single compilation. Therefore, when several errors are reported, some of them may be a byproduct of unsuccessful recovery from previous errors.
+- In most cases, the first reported error is accurate. Your best course of action often is to fix the first error and from the rest those that are obvious, and compile the source code again.
+- Mindcode is particularly prone to report missing semicolons at strange places when another error affecting the overall program structure (such as a missing keyword) is present.
+
+### Always look at the preceding code
+
+Quite often the error is caused by some problem in the statement immediately preceding the position on which it is reported. It's always a good idea to inspect the previous statement. Remember the true source of error might be separated from the reported error by a lengthy comment.
+- Special handling has been implemented for missing semicolons to be reported at the end of the previous statements, which is typically the correct place. If your code doesn't contain any other error but missing semicolons, they should all be reported accurately.
+
+### Unexpected input
+
+When Mindcode encounters an input which disallows further analysis, it may report `unexpected 'token`, for example `unexpected 'out'`. This error typically has one of two causes:
+- A keyword is omitted or mistyped: in `while a < 10 print(a); end;` the `do` keyword is missing. Mindcode will announce the `print` is unexpected at the place where the `do` keyword should be present.
+- A keyword is used as a name for a variable or function. This may suddenly appear in an existing code when a new keyword is introduced into the language, such as `out` or `param` in the recent versions of Mindcode. In this case Mindcode will typically announce the keyword is unexpected.
+
+### Missing `end` keyword
+
+A particularly challenging error is a missing `end` keyword. As it is not possible to uniquely match `end` keywords with corresponding opening statements (such as `while`, `for` or `if` statements), Mindcode will typically report the missing `end` keyword at the end of the file. In most cases, the true cause of the error is buried somewhere deep down in a structure of several nested statements.
+- The best way to prevent these errors from happening is to meticulously indent code inside control structures. This should make the error more apparent while editing the code.
+- Mindcode currently doesn't have a good one-line conditional statement. When putting the entire if statement on one line, the `end` keyword still needs to be there (as in `if condition then statement; end;`), but is easily left out. Pay particular attention to not forget the `end` keyword in these cases.
+- Due to limited support for functions with output variables, larger programs tend to include lengthy loops with many levels of nested statements. This makes spotting the missing `end` particularly challenging. If this happens to you, try to move some of the inner structures to standalone functions (at least temporarily), or comment them out. Once you establish the outer structure(s) are compiling well, you may start returning the inner ones one by one until the source of the error becomes apparent.
+- Even when the support for functions is still limited, try to extract as much code into functions as possible. Mindcode is pretty good at optimizing functions and in most cases the functions will be inlined and optimized just as well as if the code was nested.
+
+### Ask for help
+
+There's always a possibility that Mindcode contains some bug that is causing the error you're encountering. When in trouble, don't hesitate to ask for help by [creating an issue](https://github.com/cardillan/mindcode/issues/new).
+
+You can ask for help here even if you don't suspect there's an error in Mindcode. All questions are welcome.  
 
 ## Debugging the compiled code
 
@@ -54,8 +82,8 @@ end;
 is compiled to
 
 ```
-packcolor null MAX MIN A B
-packcolor null i __fn0_n null null
+packcolor 0 MAX MIN A B
+packcolor 0 i __fn0_n null null
 set MIN 10
 set MAX 50
 set B "not first"
@@ -78,7 +106,7 @@ print "\n"
 end
 ```
 
-The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
+The number of variables being sorted is limited by the [instruction limit](SYNTAX-5-OTHER.markdown#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
 
 ---
 

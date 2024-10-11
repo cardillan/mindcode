@@ -58,7 +58,7 @@ public class LogicInstructionLabelResolver {
         List<LogicInstruction> result = new ArrayList<>();
         AstContext astContext = program.get(0).getAstContext();
         for (int index = 0, i = 0; i++ < instructions; index += 5) {
-            order.add(index, LogicNull.NULL);
+            order.add(index, LogicNumber.ZERO);
             result.add(instructionProcessor.createInstruction(astContext,  PACKCOLOR, order.subList(index, index + 5)));
         }
 

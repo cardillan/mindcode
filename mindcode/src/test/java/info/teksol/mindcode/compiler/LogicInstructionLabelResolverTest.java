@@ -143,7 +143,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
         compiler.profile.setSortVariables(List.of(SortCategory.PARAMS, SortCategory.GLOBALS));
         assertLogicInstructionsMatch(compiler,
                 List.of(
-                        createInstruction(PACKCOLOR, "null", "MAX", "A", "null", "null"),
+                        createInstruction(PACKCOLOR, "0", "MAX", "A", "null", "null"),
                         createInstruction(SET, "MAX", "10"),
                         createInstruction(SET, "A", "20"),
                         createInstruction(SET, "i", "3"),

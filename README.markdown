@@ -12,6 +12,8 @@ Among the perils of using a high-level language for producing your mlog code are
 > [!IMPORTANT]
 > Since the [2.3.0 release](CHANGELOG.markdown#230), Mindcode supports two variants of the syntax: [`strict` and `relaxed`](doc/syntax/SYNTAX-STRICT-RELAXED.markdown). In the `strict` syntax, which is now the default, semicolons and the `do` and `then` keywords are no longer optional. This change breaks a lot of existing code and fixing all the errors can be a bit time-consuming. To make adapting to the change easier, it is possible to switch to the original syntax by including the `#relaxed;` directive (including the semicolon) at the beginning of the source file. The relaxed syntactic rules will take place for code following the directive.
 > 
+> Error reporting has been significantly improved in recent Mindcode versions. Even so, if you run into trouble adapting to the new syntax, you can look into the [troubleshooting tips](/doc/syntax/TROUBLESHOOTING.markdown), or ask for help [here on GitHub](https://github.com/cardillan/mindcode/issues/new).  
+> 
 > The relaxed variant of syntax is deprecated and will eventually be removed.    
 
 > [!TIP]
