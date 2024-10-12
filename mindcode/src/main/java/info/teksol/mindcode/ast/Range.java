@@ -1,8 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Condition;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
@@ -10,8 +9,8 @@ public abstract class Range extends BaseAstNode {
     private final AstNode firstValue;
     private final AstNode lastValue;
 
-    Range(Token startToken, InputFile inputFile, AstNode firstValue, AstNode lastValue) {
-        super(startToken, inputFile, firstValue, lastValue);
+    Range(InputPosition inputPosition, AstNode firstValue, AstNode lastValue) {
+        super(inputPosition, firstValue, lastValue);
         this.firstValue = firstValue;
         this.lastValue = lastValue;
     }

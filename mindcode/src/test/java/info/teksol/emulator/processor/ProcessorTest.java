@@ -1,6 +1,7 @@
 package info.teksol.emulator.processor;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.AfterAll;
@@ -40,6 +41,23 @@ public class ProcessorTest extends AbstractProcessorTest {
     protected CompilerProfile createCompilerProfile() {
         return super.createCompilerProfile()
                 .setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.NONE);
+    }
+
+    @Test
+    void testSuiteRecognizesUnexpectedWarnings() {
+        TestCompiler testCompiler = createTestCompiler();
+        testAndEvaluateCode(
+                testCompiler,
+                null,
+                """
+                        a = 10;
+                        print("hi");
+                        """,
+                Map.of(),
+                ExpectedMessages.create().add("List of unused variables: a."),
+                createEvaluator(testCompiler, List.of("hi")),
+                null
+        );
     }
 
     @Test

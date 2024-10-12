@@ -174,7 +174,7 @@ class LoopOptimizer extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": replicate condition at line " + astContext.node().startToken().getLine();
+            return getName() + ": replicate condition at line " + astContext.node().getInputPosition().line();
         }
     }
 }

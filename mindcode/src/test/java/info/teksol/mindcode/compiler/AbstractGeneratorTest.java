@@ -20,10 +20,12 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
 
+    // TODO Separate compiler messages from emulator messages
     protected class TestCompiler {
         private final List<MindcodeMessage> messages = new ArrayList<>();
         private final List<MindcodeMessage> readOnlyMessages = Collections.unmodifiableList(messages);
@@ -44,6 +46,10 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
         public List<MindcodeMessage> getMessages() {
             return readOnlyMessages;
+        }
+
+        public List<MindcodeMessage> getErrorsAndWarnings() {
+            return messages.stream().filter(MindcodeMessage::isErrorOrWarning).toList();
         }
 
         public AstContext getRootContext() {
@@ -77,55 +83,53 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return s -> pattern.matcher(s.trim()).matches();
     }
 
-    protected void assertCompilesToWithMessages(TestCompiler compiler, Predicate<LogicInstruction> filter,
-            Predicate<String> ignoredMessagesFilter, String code, LogicInstruction... instructions) {
+    protected void assertCompilesToWithMessages(TestCompiler compiler, Predicate<LogicInstruction> filter, String code,
+            ExpectedMessages expectedMessages, LogicInstruction... instructions) {
         List<LogicInstruction> expected = List.of(instructions);
-        List<LogicInstruction> actual = generateInstructions(compiler, code).instructions();
+        List<LogicInstruction> actual = generateInstructionsNoMsgValidation(compiler, code).instructions();
         if (filter != null) {
             actual = actual.stream().filter(filter).toList();
         }
-        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, ignoredMessagesFilter);
+        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, expectedMessages);
     }
 
+    protected void assertCompilesTo(TestCompiler compiler, String code,
+            ExpectedMessages expectedMessages, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(compiler, null, code, expectedMessages, instructions);
+    }
 
-    protected void assertCompilesToWithMessages(TestCompiler compiler, Predicate<String> ignoredMessagesFilter,
+    protected void assertCompilesTo(Predicate<LogicInstruction> filter, ExpectedMessages expectedMessages,
             String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(compiler, null, ignoredMessagesFilter, code, instructions);
+        assertCompilesToWithMessages(createTestCompiler(), filter, code, expectedMessages, instructions);
     }
 
-    protected void assertCompilesToWithMessages(Predicate<LogicInstruction> filter, Predicate<String> ignoredMessagesFilter,
-            String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), filter, ignoredMessagesFilter, code, instructions);
-    }
-
-    protected void assertCompilesToWithMessages(Predicate<String> ignoredMessagesFilter, String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), null, ignoredMessagesFilter, code, instructions);
+    protected void assertCompilesTo(ExpectedMessages expectedMessages, String code, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(createTestCompiler(), null, code, expectedMessages, instructions);
     }
 
     protected void assertCompilesTo(TestCompiler compiler, Predicate<LogicInstruction> filter,
             String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(compiler, filter, s -> false, code, instructions);
+        assertCompilesToWithMessages(compiler, filter, code, ExpectedMessages.none(), instructions);
     }
 
     protected void assertCompilesTo(TestCompiler compiler, String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(compiler, null, s -> false, code, instructions);
+        assertCompilesToWithMessages(compiler, null, code, ExpectedMessages.none(), instructions);
     }
 
     protected void assertCompilesTo(Predicate<LogicInstruction> filter, String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), filter, s -> false, code, instructions);
+        assertCompilesToWithMessages(createTestCompiler(), filter, code, ExpectedMessages.none(), instructions);
     }
 
     protected void assertCompilesTo(String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), null, s -> false, code, instructions);
+        assertCompilesToWithMessages(createTestCompiler(), null, code, ExpectedMessages.none(), instructions);
     }
 
-    protected void assertGeneratesWarnings(TestCompiler compiler, String code, String expectedWarnings) {
-        assertCompilesToWithMessages(compiler, ix ->false, s -> true, code);
-        assertEquals(expectedWarnings, extractWarnings(compiler.getMessages()));
+    protected void assertGeneratesMessages(TestCompiler compiler, ExpectedMessages expectedMessages, String code) {
+        assertCompilesToWithMessages(compiler, ix -> false, code, expectedMessages);
     }
 
-    protected void assertGeneratesWarnings(String code, String expectedWarnings) {
-        assertGeneratesWarnings(createTestCompiler(), code, expectedWarnings);
+    protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String code) {
+        assertGeneratesMessages(createTestCompiler(), expectedMessages, code);
     }
 
     // General utility
@@ -182,12 +186,15 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     // Code generation
 
     protected Seq generateAstTree(String code) {
-        return AstNodeBuilder.generate(InputFile.createSourceFile(code),parse(code));
+        return AstNodeBuilder.generate(InputFile.createSourceFile(code),
+                ExpectedMessages.refuseAll(),
+                parse(code));
     }
 
     // This class always creates unoptimized code.
     // To test functions of optimizers, use AbstractOptimizerTest subclass.
-    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
+    // DOES NOT VALIDATE MESSAGES
+    protected GeneratorOutput generateInstructionsNoMsgValidation(TestCompiler compiler, String code) {
         long parse = System.nanoTime();
         Seq program = generateAstTree(code);
         compiler.addMessage(new TimingMessage("Parse", ((System.nanoTime() - parse) / 1_000_000L)));
@@ -200,6 +207,12 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return output;
     }
 
+    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
+        GeneratorOutput generatorOutput = generateInstructionsNoMsgValidation(compiler, code);
+        ExpectedMessages.none(true).validate(compiler.getErrorsAndWarnings());
+        return generatorOutput;
+    }
+
     protected GeneratorOutput generateInstructions(String code) {
         return generateInstructions(createTestCompiler(), code);
     }
@@ -207,7 +220,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     // Instruction creation
 
     protected final CompilerProfile profile = createCompilerProfile();
-    protected final InstructionProcessor ip = createInstructionProcessor(profile, s ->{});
+    protected final InstructionProcessor ip = createInstructionProcessor(profile, ExpectedMessages.none(true));
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
     protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
@@ -311,29 +324,21 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         }
     }
 
-    protected void assertNoUnexpectedMessages(TestCompiler compiler, Predicate<String> ignoredMessagesFilter) {
-        String messages = compiler.getMessages().stream()
-                .filter(MindcodeMessage::isErrorOrWarning)
-                .map(MindcodeMessage::message)
-                .filter(ignoredMessagesFilter.negate())
-                .collect(Collectors.joining("\n"));
-
-        if (!messages.isEmpty()) {
-            fail("Unexpected error or warning messages were generated:\n" + messages);
-        }
+    protected void assertNoUnexpectedMessages(TestCompiler compiler, ExpectedMessages expectedMessages) {
+        expectedMessages.validate(compiler.getErrorsAndWarnings());
     }
 
     protected void assertMessagesAndLogicInstructionsMatch(TestCompiler compiler, List<LogicInstruction> expected,
-            List<LogicInstruction> actual, Predicate<String> ignoredMessagesFilter) {
+            List<LogicInstruction> actual, ExpectedMessages expectedMessages) {
         assertAll(
                 () -> assertLogicInstructionsMatch0(compiler, expected, actual),
-                () -> assertNoUnexpectedMessages(compiler, ignoredMessagesFilter)
+                () -> expectedMessages.validate(compiler.getErrorsAndWarnings())
         );
     }
 
     protected void assertLogicInstructionsMatch(TestCompiler compiler, List<LogicInstruction> expected,
             List<LogicInstruction> actual) {
-        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, s -> false);
+        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, ExpectedMessages.none());
     }
 
     private List<LogicInstruction> makeVarsIn(List<LogicInstruction> expected) {

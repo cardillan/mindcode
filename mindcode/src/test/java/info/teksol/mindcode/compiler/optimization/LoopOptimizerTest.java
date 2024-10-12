@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import org.junit.jupiter.api.Test;
 
@@ -78,7 +79,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
 
     @Test
     void optimizesWhileLoopStrictEqual() {
-        assertCompilesToWithMessages(ignore("List of uninitialized variables: i, state."),
+        assertCompilesTo(ExpectedMessages.create().add("List of uninitialized variables: i, state."),
                 """
                         while state === 0 do
                             print(i);

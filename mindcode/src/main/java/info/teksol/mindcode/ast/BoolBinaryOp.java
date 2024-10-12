@@ -1,12 +1,11 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
-import org.antlr.v4.runtime.Token;
+import info.teksol.mindcode.InputPosition;
 
 public class BoolBinaryOp extends BinaryOp {
 
-    public BoolBinaryOp(Token startToken, InputFile inputFile, AstNode left, String op, AstNode right) {
-        super(startToken, inputFile, left,op, right);
+    public BoolBinaryOp(InputPosition inputPosition, AstNode left, String op, AstNode right) {
+        super(inputPosition, left,op, right);
     }
 
     public String toString() {

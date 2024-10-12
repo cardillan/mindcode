@@ -1,12 +1,11 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Condition;
-import org.antlr.v4.runtime.Token;
 
 public class InclusiveRange extends Range {
-    InclusiveRange(Token startToken, InputFile inputFile, AstNode firstValue, AstNode lastValue) {
-        super(startToken, inputFile, firstValue, lastValue);
+    InclusiveRange(InputPosition inputPosition, AstNode firstValue, AstNode lastValue) {
+        super(inputPosition, firstValue, lastValue);
     }
 
     @Override

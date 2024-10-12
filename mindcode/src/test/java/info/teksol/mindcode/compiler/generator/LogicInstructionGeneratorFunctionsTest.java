@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import org.junit.jupiter.api.Test;
@@ -813,7 +813,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesToDeclareRecursiveFunctionsWhenNoStackAround() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         def foo
                             foo();
@@ -826,7 +826,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesMisplacedStackAllocation() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         while true do
                           allocate stack in cell1;
@@ -838,7 +838,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesRecursiveInlineFunctions() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         allocate stack in cell1;
                         inline def foo(n)
@@ -852,7 +852,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesUppercaseFunctionParameter() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         def foo(N)
                             N;
@@ -865,7 +865,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesBlockNameAsFunctionParameter() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         def foo(switch1)
                             switch1;

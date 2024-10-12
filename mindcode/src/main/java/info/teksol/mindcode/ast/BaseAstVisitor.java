@@ -1,6 +1,15 @@
 package info.teksol.mindcode.ast;
 
-public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
+import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.compiler.generator.MessageEmitter;
+
+import java.util.function.Consumer;
+
+public abstract class BaseAstVisitor<T> extends MessageEmitter implements AstVisitor<T> {
+    public BaseAstVisitor(Consumer<MindcodeMessage> messageConsumer) {
+        super(messageConsumer);
+    }
+
     @Override
     public T visit(AstNode node) {
         if (node instanceof Assignment n)               return visitAssignment(n);

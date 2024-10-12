@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
-import org.antlr.v4.runtime.Token;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,7 +26,7 @@ public final class CallGraph {
         this.allocatedStack = allocatedStack;
 
         // Create mock function declaration representing main program body.
-        addFunction(new FunctionDeclaration(null, null,true, false, MAIN, List.of(), new NoOp()));
+        addFunction(new FunctionDeclaration(null,true, false, MAIN, List.of(), new NoOp()));
     }
 
     public static CallGraph createEmpty() {
@@ -220,7 +220,7 @@ public final class CallGraph {
         /** @return true if this function should be inlined */
         public boolean isInline() {
             // Automatically inline all non-recursive functions called just once
-            return !declaration.isNoinline() && (inlined || declaration.isInline() || !isRecursive() && getUseCount() == 1);
+            return !isRecursive() && !declaration.isNoinline() && (inlined || declaration.isInline() || getUseCount() == 1);
         }
 
         public boolean isNoinline() {
@@ -361,8 +361,8 @@ public final class CallGraph {
             return Integer.hashCode(id);
         }
 
-        public Token getToken() {
-            return declaration != null ? declaration.startToken() : null;
+        public InputPosition getInputPosition() {
+            return declaration != null ? declaration.getInputPosition() : null;
         }
     }
 }

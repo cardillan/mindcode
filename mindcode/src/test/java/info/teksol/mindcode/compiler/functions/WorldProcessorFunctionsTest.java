@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
@@ -244,7 +244,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void refusesLocalVariableForSync() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         sync(local);
                         """
@@ -254,7 +254,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void refusesLiteralForSync() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         sync(10);
                         """

@@ -10,6 +10,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     private final StringBuilder buffer = new StringBuilder();
 
     public AstPrettyPrinter(InstructionProcessor instructionProcessor) {
+        super(m -> {});
         this.instructionProcessor = instructionProcessor;
     }
 
@@ -199,7 +200,12 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
-        buffer.append(node.toLogicLiteral(instructionProcessor).toMlog());
+        try {
+            buffer.append(node.toLogicLiteral(instructionProcessor).toMlog());
+        } catch (NumericLiteral.NoValidMlogRepresentationException e) {
+            buffer.append(e.getLiteral());
+            buffer.append(" <no valid mlog representation>");
+        }
         return null;
     }
 

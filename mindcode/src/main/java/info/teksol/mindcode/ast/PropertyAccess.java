@@ -1,8 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
@@ -10,8 +9,8 @@ public class PropertyAccess extends BaseAstNode {
     private final AstNode target;
     private final AstNode property;
 
-    PropertyAccess(Token startToken, InputFile inputFile, AstNode target, AstNode property) {
-        super(startToken, inputFile, target, property);
+    PropertyAccess(InputPosition inputPosition, AstNode target, AstNode property) {
+        super(inputPosition, target, property);
         this.target = target;
         this.property = property;
     }

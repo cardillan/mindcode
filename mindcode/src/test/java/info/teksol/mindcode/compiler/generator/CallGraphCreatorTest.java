@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
         Assertions.assertDoesNotThrow(() ->
                 CallGraphCreator.createFunctionGraph(
                         (Seq) translateToAst("a = 10;"),
+                        ExpectedMessages.refuseAll(),
                         createTestCompiler().processor
                 )
         );
@@ -22,6 +24,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
         Assertions.assertDoesNotThrow(() ->
                 CallGraphCreator.createFunctionGraph(
                         (Seq) translateToAst("print(a);"),
+                        ExpectedMessages.refuseAll(),
                         createTestCompiler().processor
                 )
         );
@@ -35,6 +38,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         a();
                         """
                 ),
+                ExpectedMessages.refuseAll(),
                 createTestCompiler().processor
         );
 
@@ -54,6 +58,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         a();
                         """
                 ),
+                ExpectedMessages.refuseAll(),
                 createTestCompiler().processor
         );
 
@@ -78,6 +83,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         a();
                         """
                 ),
+                ExpectedMessages.refuseAll(),
                 createTestCompiler().processor
         );
 
@@ -101,6 +107,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         print(c(1));
                         """
                 ),
+                ExpectedMessages.refuseAll(),
                 createTestCompiler().processor
         );
 

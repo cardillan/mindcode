@@ -1,29 +1,27 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
-import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class NumericLiteral extends ConstantAstNode {
     private final String literal;
 
-    public NumericLiteral(Token startToken, InputFile inputFile, String literal) {
-        super(startToken, inputFile);
+    public NumericLiteral(InputPosition inputPosition, String literal) {
+        super(inputPosition);
         this.literal = literal;
     }
 
-    public NumericLiteral(Token startToken, InputFile inputFile, int value) {
-        super(startToken, inputFile);
+    public NumericLiteral(InputPosition inputPosition, int value) {
+        super(inputPosition);
         this.literal = String.valueOf(value);
     }
 
     @Override
-    public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) {
+    public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) throws NoValidMlogRepresentationException {
         try {
             if (literal.startsWith("0x")) {
                 return LogicNumber.get(literal, Long.decode(literal));
@@ -32,16 +30,16 @@ public class NumericLiteral extends ConstantAstNode {
             } else {
                 return instructionProcessor.mlogRewrite(literal)
                         .map(str -> LogicNumber.get(str, Double.parseDouble(str)))
-                        .orElseThrow(NumberFormatException::new);
+                        .orElseThrow(() -> new NoValidMlogRepresentationException(literal));
             }
         } catch (NumberFormatException ex) {
-            throw new MindcodeException(startToken(), "Numeric literal '%s' does not have a valid mlog representation.", literal);
+            throw new NoValidMlogRepresentationException(literal);
         }
     }
 
     @Override
-    public NumericLiteral withToken(Token startToken) {
-        return new NumericLiteral(startToken, sourceFile(), literal);
+    public NumericLiteral withInputPosition(InputPosition inputPosition) {
+        return new NumericLiteral(inputPosition, literal);
     }
 
     @Override
@@ -79,5 +77,22 @@ public class NumericLiteral extends ConstantAstNode {
 
     public int getAsInteger() {
         return (int)getAsDouble();
+    }
+
+    public static class NoValidMlogRepresentationException extends Exception {
+        private final String literal;
+        public NoValidMlogRepresentationException(String literal) {
+            super();
+            this.literal = literal;
+        }
+
+        public String getLiteral() {
+            return literal;
+        }
+
+        @Override
+        public String getMessage() {
+            return "Numeric literal '" + literal  + "' does not have a valid mlog representation.";
+        }
     }
 }

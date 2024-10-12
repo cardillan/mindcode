@@ -1,16 +1,15 @@
 package info.teksol.mindcode.ast;
 
 
-import info.teksol.mindcode.InputFile;
-import org.antlr.v4.runtime.Token;
+import info.teksol.mindcode.InputPosition;
 
 import java.util.Objects;
 
 public class VarRef extends BaseAstNode {
     private final String name;
 
-    public VarRef(Token startToken, InputFile inputFile, String name) {
-        super(startToken, inputFile);
+    public VarRef(InputPosition inputPosition, String name) {
+        super(inputPosition);
         this.name = name;
     }
 

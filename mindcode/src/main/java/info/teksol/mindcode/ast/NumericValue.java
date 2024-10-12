@@ -1,9 +1,8 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
@@ -14,8 +13,8 @@ import java.util.Objects;
 public class NumericValue extends ConstantAstNode {
     private final double value;
 
-    public NumericValue(Token startToken, InputFile inputFile, double value) {
-        super(startToken, inputFile);
+    public NumericValue(InputPosition inputPosition, double value) {
+        super(inputPosition);
         this.value = value;
     }
 
@@ -25,7 +24,7 @@ public class NumericValue extends ConstantAstNode {
      * @return numeric literal representation of the value, or null if literal representation doesn't exist
      */
     public NumericLiteral toNumericLiteral(InstructionProcessor instructionProcessor) {
-        return instructionProcessor.mlogFormat(value).map(str -> new NumericLiteral(startToken(), sourceFile(), str)).orElse(null);
+        return instructionProcessor.mlogFormat(value).map(str -> new NumericLiteral(getInputPosition(), str)).orElse(null);
     }
 
     @Override
@@ -34,8 +33,8 @@ public class NumericValue extends ConstantAstNode {
     }
 
     @Override
-    public NumericValue withToken(Token startToken) {
-        return new NumericValue(startToken, sourceFile(), value);
+    public NumericValue withInputPosition(InputPosition inputPosition) {
+        return new NumericValue(inputPosition, value);
     }
 
     @Override

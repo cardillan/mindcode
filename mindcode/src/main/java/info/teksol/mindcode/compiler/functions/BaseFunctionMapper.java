@@ -1,15 +1,15 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.util.CollectionUtils;
-import org.antlr.v4.runtime.Token;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,11 +18,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BaseFunctionMapper implements FunctionMapper {
+import static info.teksol.mindcode.logic.LogicNull.NULL;
+
+public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper {
     private final AstContext staticAstContext = AstContext.createStaticRootNode();
     private final Supplier<AstContext> astContextSupplier;
     private final InstructionProcessor instructionProcessor;
-    private final Consumer<MindcodeMessage> messageConsumer;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final Map<String, PropertyHandler> propertyMap;
@@ -31,9 +32,9 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
             Consumer<MindcodeMessage> messageConsumer) {
+        super(messageConsumer);
         this.astContextSupplier = astContextSupplier;
         this.instructionProcessor = InstructionProcessor;
-        this.messageConsumer = messageConsumer;
 
         processorVersion = instructionProcessor.getProcessorVersion();
         processorEdition = instructionProcessor.getProcessorEdition();
@@ -47,16 +48,16 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     @Override
-    public LogicValue handleProperty(Token token, Consumer<LogicInstruction> program, String propertyName, LogicValue target,
+    public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, String propertyName, LogicValue target,
             List<LogicValue> arguments) {
         PropertyHandler handler = propertyMap.get(propertyName);
-        return handler == null ? null : handler.handleProperty(token, program, target, arguments);
+        return handler == null ? null : handler.handleProperty(node, program, target, arguments);
     }
 
     @Override
-    public LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
+    public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
-        return handler == null ? null : handler.handleFunction(token, program, arguments);
+        return handler == null ? null : handler.handleFunction(node, program, arguments);
     }
 
     @Override
@@ -137,7 +138,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
     
     private interface PropertyHandler extends SampleGenerator {
-        LogicValue handleProperty(Token token, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments);
+        LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
             return getOpcodeVariant().opcode();
@@ -145,7 +146,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private interface FunctionHandler extends SampleGenerator {
-        LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, List<LogicValue> arguments);
+        LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
             return getOpcodeVariant().opcode();
@@ -217,10 +218,12 @@ public class BaseFunctionMapper implements FunctionMapper {
             return opcodeVariant;
         }
 
-        protected void checkArguments(Token token, List<LogicValue> arguments) {
+        protected boolean checkArguments(AstNode node, List<LogicValue> arguments) {
             if (arguments.size() != numArgs) {
-                throw new MindcodeException(token,
-                        "Function '%s': wrong number of arguments (expected %d, found %d)", name, numArgs, arguments.size());
+                error(node, "Function '%s': wrong number of arguments (expected %d, found %d)", name, numArgs, arguments.size());
+                return false;
+            } else {
+                return true;
             }
         }
 
@@ -244,18 +247,20 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleProperty(Token token, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> fnArgs) {
-            checkArguments(token, fnArgs);
+        public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> fnArgs) {
+            if (!checkArguments(node, fnArgs)) {
+                return NULL;
+            }
 
-            LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : LogicNull.NULL;
+            LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : NULL;
             List<LogicArgument> ixArgs = new ArrayList<>();
             int argIndex = 0;
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    throw new MindcodeException(token,
-                            "Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
+                    error(node,"Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
                             fnArgs.get(argIndex).toMlog(), name);
+                    return NULL;
                 }
 
                 if (a.type() == InstructionParameterType.RESULT) {
@@ -283,8 +288,8 @@ public class BaseFunctionMapper implements FunctionMapper {
                         // Block name cannot be used as output argument
                         LogicArgument argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            throw new MindcodeException(token,
-                                    "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)", argument.toMlog(), name);
+                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)", argument.toMlog(), name);
+                            return NULL;
                         }
                         ixArgs.add(argument);
                     }
@@ -393,14 +398,14 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleProperty(Token token, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments) {
+        public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments) {
             if (!warningEmitted) {
                 messageConsumer.accept(MindcodeCompilerMessage.warn(
                         "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
                         deprecated, processorVersion, replacement.getName()));
                 warningEmitted = true;
             }
-            return replacement.handleProperty(token, program, target, arguments);
+            return replacement.handleProperty(node, program, target, arguments);
         }
     }
 
@@ -531,11 +536,13 @@ public class BaseFunctionMapper implements FunctionMapper {
             return opcodeVariant;
         }
 
-        protected void checkArguments(Token token, List<LogicValue> arguments) {
+        protected boolean checkArguments(AstNode node, List<LogicValue> arguments) {
             if (arguments.size() < minArgs || arguments.size() > numArgs) {
                 String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
-                throw new MindcodeException(token,
-                        "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());
+                error(node, "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());
+                return false;
+            } else {
+                return true;
             }
         }
 
@@ -570,19 +577,19 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
-            checkArguments(token, fnArgs);
+        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
+            if (!checkArguments(node, fnArgs)) return NULL;
 
-            LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : LogicNull.NULL;
+            LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : NULL;
             // Need to support all kinds of arguments here, including keywords
             List<LogicArgument> ixArgs = new ArrayList<>();
             int argIndex = 0;
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    throw new MindcodeException(token,
-                            "Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
+                    error(node, "Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
                             fnArgs.get(argIndex).toMlog(), name);
+                    return NULL;
                 }
 
                 if (a.type() == InstructionParameterType.RESULT) {
@@ -609,9 +616,9 @@ public class BaseFunctionMapper implements FunctionMapper {
                         // Block name cannot be used as output argument
                         LogicValue argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            throw new MindcodeException(token,
-                                    "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)",
+                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)",
                                     argument.toMlog(), name);
+                            return NULL;
                         }
                         ixArgs.add(argument);
                     }
@@ -666,13 +673,13 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
             // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
             FunctionHandler handler = functions.get(toKeywordOptional(arguments.get(0)).getKeyword());
             if (handler == null) {
                 throw new MindcodeInternalError("Unhandled type of " + getOpcode() + " in " + arguments);
             }
-            return handler.handleFunction(token, program, arguments);
+            return handler.handleFunction(node, program, arguments);
         }
 
         @Override
@@ -693,7 +700,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
             arguments.forEach(arg -> program.accept(createInstruction(Opcode.PRINT, arg)));
             return arguments.get(arguments.size() - 1);
         }
@@ -711,7 +718,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
             arguments.forEach(arg -> program.accept(createInstruction(Opcode.FORMAT, arg)));
             return arguments.get(arguments.size() - 1);
         }
@@ -728,8 +735,8 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(Token token, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-            checkArguments(token, arguments);
+        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+            checkArguments(node, arguments);
             program.accept(createInstruction(Opcode.UBIND, arguments.get(0)));
             return LogicBuiltIn.UNIT;
         }

@@ -1,17 +1,16 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicBoolean;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class BooleanLiteral extends ConstantAstNode {
     private final boolean value;
 
-    public BooleanLiteral(Token startToken, InputFile inputFile, boolean value) {
-        super(startToken, inputFile);
+    public BooleanLiteral(InputPosition inputPosition, boolean value) {
+        super(inputPosition);
         this.value = value;
     }
 
@@ -25,8 +24,8 @@ public class BooleanLiteral extends ConstantAstNode {
     }
 
     @Override
-    public BooleanLiteral withToken(Token startToken) {
-        return new BooleanLiteral(startToken, sourceFile(), value);
+    public BooleanLiteral withInputPosition(InputPosition inputPosition) {
+        return new BooleanLiteral(inputPosition, value);
     }
 
     @Override

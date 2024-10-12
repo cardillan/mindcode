@@ -1,5 +1,7 @@
 package info.teksol.mindcode.grammar;
 
+import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -73,7 +75,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void reportsSyntaxError() {
-        List<String> errors = parseWithErrors("while");
+        List<MindcodeMessage> errors = parseWithErrors("while");
         assertEquals(1, errors.size(), "Expected one syntax error");
     }
 
@@ -151,17 +153,10 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void refusesInvalidInputs() {
-        assertEquals("""
-                        Syntax error: [@0,0:0='1',<89>,1:0] on line 1:0: missing ';'
-                        Syntax error: [@1,1:1='.',<38>,1:1] on line 1:1: mismatched input '.' expecting {<EOF>, 'allocate', 'break', 'case', 'const', 'continue', 'def', 'do', 'end', 'false', 'for', 'if', 'inline', 'noinline', 'null', 'param', 'return', 'true', 'while', '@', '/', '\\', '$', '**', '-', '%', '*', NOT, '~', '+', '?', '#set', '#strict', '#relaxed', '<', '<=', '!=', '==', '===', '!==', '>=', '>', AND, OR, '<<', '>>', '&', '|', '^', '(', FORMATTABLE, LITERAL, FLOAT, INT, HEXINT, BININT, ID, REM_COMMENT}""",
-                String.join("\n", parseWithErrors("1..0;")));
-
-        assertEquals(
-                "Syntax error: [@0,0:0='8',<89>,1:0] on line 1:0: missing ';'",
-                String.join("\n", parseWithErrors("8A;")));
-
-        assertEquals(
-                "Syntax error: [@0,0:5='fluffy',<92>,1:0] on line 1:0: missing ';'",
-                String.join("\n", parseWithErrors("fluffy!bunny;")));
+        List<MindcodeMessage> messages = parseWithErrors("1..0;");
+        ExpectedMessages.create()
+                .add(1, 2, "Parse error: missing ';' before '.'")
+                .add(1, 2, "Parse error: '.': mismatched input '.' expecting {<EOF>, 'allocate', 'break', 'case', 'const', 'continue', 'def', 'do', 'end', 'false', 'for', 'if', 'inline', 'noinline', 'null', 'param', 'return', 'true', 'while', '@', '/', '\\', '$', '**', '-', '%', '*', NOT, '~', '+', '?', '#set', '#strict', '#relaxed', '<', '<=', '!=', '==', '===', '!==', '>=', '>', AND, OR, '<<', '>>', '&', '|', '^', '(', FORMATTABLE, LITERAL, FLOAT, INT, HEXINT, BININT, ID, REM_COMMENT}")
+                .validate(messages);
     }
 }

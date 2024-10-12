@@ -1,15 +1,19 @@
 package info.teksol.mindcode.grammar;
 
+import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeInternalError;
-import org.antlr.v4.runtime.*;
+import info.teksol.mindcode.MindcodeMessage;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractParserTest {
+
     protected MindcodeParser.ProgramContext parse(String code) {
-        final List<String> errors = new ArrayList<>();
-        ErrorListener errorListener = new ErrorListener(errors);
+        final List<MindcodeMessage> errors = new ArrayList<>();
+        MindcodeErrorListener errorListener = new MindcodeErrorListener(errors);
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(code));
         lexer.removeErrorListeners();
@@ -26,9 +30,9 @@ public abstract class AbstractParserTest {
         return context;
     }
 
-    List<String> parseWithErrors(String program) {
-        final List<String> errors = new ArrayList<>();
-        ErrorListener errorListener = new ErrorListener(errors);
+    List<MindcodeMessage> parseWithErrors(String program) {
+        final List<MindcodeMessage> errors = new ArrayList<>();
+        MindcodeErrorListener errorListener = new MindcodeErrorListener(errors);
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         lexer.removeErrorListeners();
@@ -40,23 +44,5 @@ public abstract class AbstractParserTest {
 
         parser.program();
         return errors;
-    }
-
-    private static class ErrorListener extends BaseErrorListener {
-        private final List<String> errors;
-
-        public ErrorListener(List<String> errors) {
-            this.errors = errors;
-        }
-
-        @Override
-        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-                String msg, RecognitionException e) {
-            if (offendingSymbol == null) {
-                errors.add("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg);
-            } else {
-                errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
-            }
-        }
     }
 }

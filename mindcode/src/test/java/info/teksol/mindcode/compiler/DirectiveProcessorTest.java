@@ -1,33 +1,45 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.Directive;
+import info.teksol.mindcode.ast.DirectiveText;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static info.teksol.mindcode.InputPosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DirectiveProcessorTest {
 
+    private Directive directive(String option, String value) {
+        return new Directive(EMPTY,
+                new DirectiveText(EMPTY, option),
+                new DirectiveText(EMPTY, value));
+    }
+
+    private Directive directive(String option, List<String> values) {
+        return new Directive(EMPTY,
+                new DirectiveText(EMPTY, option),
+                values.stream().map(v -> new DirectiveText(EMPTY, v)).toList());
+    }
+
     @Test
     void processesDirectiveTarget() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, null, new Directive(null, null, "target", "ML6"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("target", "ML6"));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertEquals(ProcessorVersion.V6, profile.getProcessorVersion());
     }
 
     @Test
     void processesDirectiveOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, null, new Directive(null, null, "optimization", "basic"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("optimization", "basic"));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertTrue(profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
     }
 
@@ -35,8 +47,8 @@ class DirectiveProcessorTest {
     void processesDirectiveInstructionLimit() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setInstructionLimit(1);
-        Seq seq = new Seq(null, null, new Directive(null, null, "instruction-limit", "900"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("instruction-limit", "900"));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertEquals(900, profile.getInstructionLimit());
     }
 
@@ -44,8 +56,8 @@ class DirectiveProcessorTest {
     void processesDirectivePasses() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setOptimizationPasses(1);
-        Seq seq = new Seq(null, null, new Directive(null, null, "passes", "10"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("passes", "10"));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertEquals(10, profile.getOptimizationPasses());
     }
 
@@ -53,8 +65,8 @@ class DirectiveProcessorTest {
     void processesDirectiveGoal() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setGoal(GenerationGoal.SIZE);
-        Seq seq = new Seq(null, null, new Directive(null, null, "goal", "speed"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("goal", "speed"));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertEquals(GenerationGoal.SPEED, profile.getGoal());
     }
 
@@ -62,34 +74,34 @@ class DirectiveProcessorTest {
     void processesDirectiveRemarks() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setRemarks(Remarks.NONE);
-        Seq seq = new Seq(null, null, new Directive(null, null, "remarks", "active"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("remarks", "active"));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertEquals(Remarks.ACTIVE, profile.getRemarks());
     }
 
     @Test
     void processesDirectiveSortVariables() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, null, new Directive(null, null, "sort-variables", "params,globals"));
-        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        Seq seq = new Seq(null, directive("sort-variables", List.of("params","globals")));
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
         assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), profile.getSortVariables());
     }
 
     @Test
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, null, new Directive(null, null, "fluffyBunny", "basic"));
-        List<MindcodeMessage> messages = new ArrayList<>();
-        DirectiveProcessor.processDirectives(seq, profile, messages::add);
-        assertEquals(List.of(MindcodeCompilerMessage.error("Unknown compiler directive 'fluffyBunny'.")), messages);
+        Seq seq = new Seq(null, directive("fluffyBunny", "basic"));
+        ExpectedMessages.create()
+                .add("Unknown compiler directive 'fluffyBunny'.")
+                .validate(consumer -> DirectiveProcessor.processDirectives(seq, profile, consumer));
     }
 
     @Test
     void refusesInvalidValue() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, null, new Directive(null, null, "target", "fluffyBunny"));
-        List<MindcodeMessage> messages = new ArrayList<>();
-        DirectiveProcessor.processDirectives(seq, profile, messages::add);
-        assertEquals(List.of(MindcodeCompilerMessage.error("Invalid value 'fluffyBunny' of compiler directive 'target'.")), messages);
+        Seq seq = new Seq(null, directive("target", "fluffyBunny"));
+        ExpectedMessages.create()
+                .add("Invalid value 'fluffyBunny' of compiler directive 'target'.")
+                .validate(consumer -> DirectiveProcessor.processDirectives(seq, profile, consumer));
     }
 }

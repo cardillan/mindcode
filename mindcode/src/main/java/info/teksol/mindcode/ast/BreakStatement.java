@@ -1,16 +1,15 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class BreakStatement extends ControlBlockAstNode {
     private final String label;
 
-    BreakStatement(Token startToken, InputFile inputFile, String label) {
-        super(startToken, inputFile);
+    BreakStatement(InputPosition inputPosition, String label) {
+        super(inputPosition);
         this.label = label;
     }
 

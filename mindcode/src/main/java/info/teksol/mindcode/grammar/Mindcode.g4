@@ -84,15 +84,15 @@ expression : directive                                                          
            | return_st                                                                          # return_exp
            ;
 
-directive : HASHSET option=ID ASSIGN value=INT                  # numeric_directive
-          | HASHSET option=ID ASSIGN value=ID                   # string_directive
-          | HASHSET option=ID ( ASSIGN value=directive_list )?  # list_directive
-          | HASHSTRICT   {strictSyntax = true;}                 # strict_directive
-          | HASHRELAXED  {strictSyntax = false;}                # relaxed_directive
+directive : HASHSET option=ID ASSIGN value=INT                      # numeric_directive
+          | HASHSET option=ID ASSIGN value=ID                       # string_directive
+          | HASHSET option=ID ( ASSIGN values=directive_list )?     # list_directive
+          | HASHSTRICT   {strictSyntax = true;}                     # strict_directive
+          | HASHRELAXED  {strictSyntax = false;}                    # relaxed_directive
           ;
 
 directive_list
-    : ID ( COMMA ID )*
+    : id ( COMMA id )*
     ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;

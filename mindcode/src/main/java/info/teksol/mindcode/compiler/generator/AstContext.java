@@ -1,10 +1,11 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import org.antlr.v4.runtime.Token;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,7 +45,7 @@ public final class AstContext {
     }
 
     public static AstContext createRootNode(CompilerProfile profile) {
-        return new AstContext(profile, null, 0, null, AstContextType.ROOT,
+        return new AstContext(profile, null, 0, NoOp.NO_OP, AstContextType.ROOT,
                 AstSubcontextType.BASIC, null, 1.0);
     }
 
@@ -284,8 +285,8 @@ public final class AstContext {
         return node;
     }
 
-    public Token startToken() {
-        return node != null ? node.startToken() : null;
+    public InputPosition inputPosition() {
+        return node != null ? node.getInputPosition() : null;
     }
 
     public String functionPrefix() {

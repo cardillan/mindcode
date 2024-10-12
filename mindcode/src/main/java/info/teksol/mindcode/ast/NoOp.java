@@ -1,9 +1,11 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.InputPosition;
+
 public class NoOp extends BaseAstNode {
 
     public NoOp() {
-        super(null, null);
+        super(InputPosition.EMPTY);
     }
 
     @Override
@@ -20,4 +22,6 @@ public class NoOp extends BaseAstNode {
     public String toString() {
         return "NoOp{}";
     }
+
+    public static NoOp NO_OP = new NoOp();
 }

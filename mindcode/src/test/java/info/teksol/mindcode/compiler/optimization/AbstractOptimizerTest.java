@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.TimingMessage;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
@@ -9,7 +10,6 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public abstract class AbstractOptimizerTest<T extends Optimizer> extends AbstractGeneratorTest {
     protected abstract Class<T> getTestedClass();
@@ -21,18 +21,17 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions,
-            List<LogicInstruction> expected, Predicate<String> ignoredMessageFilter) {
-        // rootAstContext is intentionally null
+            List<LogicInstruction> expected, ExpectedMessages expectedMessages) {
         // This method cannot be used to test optimizers that rely on AST context structure, because
         // at this moment the AST context is not built for manually created instructions
         TestCompiler compiler = createTestCompiler();
         GeneratorOutput generatorOutput = new GeneratorOutput(CallGraph.createEmpty(), instructions, mockAstRootContext);
         List<LogicInstruction> actual = optimizeInstructions(compiler, generatorOutput);
-        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, ignoredMessageFilter);
+        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, expectedMessages);
     }
 
     protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions, List<LogicInstruction> expected) {
-        assertOptimizesTo(profile, instructions, expected, s -> false);
+        assertOptimizesTo(profile, instructions, expected, ExpectedMessages.none());
     }
 
     protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected) {
@@ -40,8 +39,8 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected,
-            Predicate<String> ignoredMessageFilter) {
-        assertOptimizesTo(createCompilerProfile(), instructions, expected, ignoredMessageFilter);
+            ExpectedMessages expectedMessages) {
+        assertOptimizesTo(createCompilerProfile(), instructions, expected, expectedMessages);
     }
 
     protected void assertDoesNotOptimize(CompilerProfile profile, LogicInstruction... instructions) {
@@ -79,8 +78,8 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     @Override
-    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
-        GeneratorOutput generatorOutput = super.generateInstructions(compiler, code);
+    protected GeneratorOutput generateInstructionsNoMsgValidation(TestCompiler compiler, String code) {
+        GeneratorOutput generatorOutput = super.generateInstructionsNoMsgValidation(compiler, code);
         long optimize = System.nanoTime();
         List<LogicInstruction> instructions = optimizeInstructions(compiler, generatorOutput);
         compiler.addMessage(new TimingMessage("Optimize", ((System.nanoTime() - optimize) / 1_000_000L)));

@@ -1,17 +1,16 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class FormattableLiteral extends StringLiteral {
 
-    public FormattableLiteral(Token startToken, InputFile inputFile, String text) {
-        super(startToken, inputFile, text);
+    public FormattableLiteral(InputPosition inputPosition, String text) {
+        super(inputPosition, text);
     }
 
     @Override
@@ -20,8 +19,8 @@ public class FormattableLiteral extends StringLiteral {
     }
 
     @Override
-    public FormattableLiteral withToken(Token startToken) {
-        return new FormattableLiteral(startToken, sourceFile(), text);
+    public FormattableLiteral withInputPosition(InputPosition inputPosition) {
+        return new FormattableLiteral(inputPosition, text);
     }
 
     @Override

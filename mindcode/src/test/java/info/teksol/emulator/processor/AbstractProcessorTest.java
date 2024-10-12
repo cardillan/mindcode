@@ -3,10 +3,7 @@ package info.teksol.emulator.processor;
 import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
-import info.teksol.mindcode.compiler.LogicInstructionPrinter;
-import info.teksol.mindcode.compiler.TimingMessage;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -111,7 +108,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     }
 
     // Prevent unit tests hanging due to possible endless loops in generated code
-    protected final int MAX_STEPS = 1000000;
+    protected final int MAX_STEPS = 1_000_000;
 
     private TestInfo testInfo;
 
@@ -164,9 +161,10 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         }
     }
 
+    // IGNORES WARNINGS!
     protected void compileAndOutputCode(TestCompiler compiler, String title, String code, Path logFile) {
-        List<LogicInstruction> unresolved = generateInstructions(compiler, code).instructions();
-        assertNoUnexpectedMessages(compiler, s -> false);
+        List<LogicInstruction> unresolved = generateInstructionsNoMsgValidation(compiler, code).instructions();
+        assertNoUnexpectedMessages(compiler, ExpectedMessages.none());
         List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
         logTiming(title, compiler.getMessages());
@@ -174,18 +172,19 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         writeLogFile(logFile, compiler, unresolved);
     }
 
+    // IGNORES WARNINGS!
     protected void compileAndOutputFile(String fileName) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         compileAndOutputCode(createTestCompiler(), fileName, readFile(fileName), logFile);
     }
 
     protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, Map<String, MindustryBlock> blocks,
-            OutputEvaluator evaluator, Path logFile) {
+            ExpectedMessages expectedMessages, OutputEvaluator evaluator, Path logFile) {
         Processor processor = new Processor();
         processor.addBlock("bank1", Memory.createMemoryBank());
         processor.addBlock("bank2", Memory.createMemoryBank());
         blocks.forEach(processor::addBlock);
-        List<LogicInstruction> unresolved = generateInstructions(compiler, code).instructions();
+        List<LogicInstruction> unresolved = generateInstructionsNoMsgValidation(compiler, code).instructions();
         List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         writeLogFile(logFile, compiler, unresolved);
         processor.run(instructions, MAX_STEPS);
@@ -195,7 +194,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
         assertAll(
                 () -> evaluator.compare(true, processor.getPrintOutput()),
-                () -> assertNoUnexpectedMessages(compiler, s -> false)
+                () -> assertNoUnexpectedMessages(compiler, expectedMessages)
         );
     }
 
@@ -214,28 +213,29 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     protected void testAndEvaluateFile(TestCompiler compiler, String fileName, Function<String, String> codeDecorator,
             Map<String, MindustryBlock> blocks, OutputEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
-        testAndEvaluateCode(compiler, fileName, codeDecorator.apply(readFile(fileName)),
-                blocks, evaluator, logFile);
+        testAndEvaluateCode(compiler, fileName, codeDecorator.apply(readFile(fileName)), blocks,
+                ExpectedMessages.none(), evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
             Map<String, MindustryBlock> blocks, List<String> expectedOutputs) throws IOException {
         TestCompiler compiler = createTestCompiler();
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
-        testAndEvaluateCode(createTestCompiler(), fileName, codeDecorator.apply(readFile(fileName)),
-                blocks, createEvaluator(compiler, expectedOutputs), logFile);
+        testAndEvaluateCode(createTestCompiler(), fileName, codeDecorator.apply(readFile(fileName)), blocks,
+                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, List<String> expectedOutputs) throws IOException {
         TestCompiler compiler = createTestCompiler();
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         testAndEvaluateCode(createTestCompiler(), fileName, readFile(fileName), Map.of(),
-                createEvaluator(compiler, expectedOutputs), logFile);
+                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), logFile);
     }
 
     protected void testCode(String code, Map<String, MindustryBlock> blocks, List<String> expectedOutputs) {
         TestCompiler compiler = createTestCompiler();
-        testAndEvaluateCode(compiler, null, code, blocks, createEvaluator(compiler, expectedOutputs), null);
+        testAndEvaluateCode(compiler, null, code, blocks,
+                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), null);
     }
 
     protected void testCode(String code, String... expectedOutputs) {

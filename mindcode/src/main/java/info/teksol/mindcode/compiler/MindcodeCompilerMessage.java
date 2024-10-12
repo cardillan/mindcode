@@ -59,6 +59,7 @@ public record MindcodeCompilerMessage(MessageLevel level, InputPosition inputPos
     public String toString() {
         return "MindcodeCompilerMessage{" +
                 "level=" + level +
+                ", inputPosition=" + inputPosition +
                 ", message='" + message + '\'' +
                 '}';
     }

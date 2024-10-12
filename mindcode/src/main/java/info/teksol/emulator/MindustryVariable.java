@@ -12,6 +12,7 @@ import static info.teksol.emulator.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIX
 import static info.teksol.emulator.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;
 
 public class MindustryVariable implements LogicWritable, LogicReadable {
+    // TODO Use different implementation for the compiler and remove the type from this class
     enum ValueType { NULL, BOOLEAN, LONG, DOUBLE, OBJECT }
 
     private final String name;
@@ -221,13 +222,13 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     // TODO track original token/source file for constants
     public AstNode toAstNode() {
         return switch (valueType) {
-            case NULL    -> new NullLiteral(null, null);
-            case BOOLEAN -> new BooleanLiteral(null, null, getIntValue() != 0);
-            case LONG    -> new NumericLiteral(null, null, String.valueOf(getLongValue()));
+            case NULL    -> new NullLiteral( null);
+            case BOOLEAN -> new BooleanLiteral( null, getIntValue() != 0);
+            case LONG    -> new NumericLiteral( null, String.valueOf(getLongValue()));
             case DOUBLE  -> invalid(numericValue)
-                    ? new NullLiteral(null, null)
-                    : new NumericValue(null, null, numericValue);
-            case OBJECT  -> new StringLiteral(null, null, print(object));
+                    ? new NullLiteral( null)
+                    : new NumericValue( null, numericValue);
+            case OBJECT  -> new StringLiteral( null, print(object));
         };
     }
 }

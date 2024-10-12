@@ -9,6 +9,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     private String newLine = "\n";
 
     private AstIndentedPrinter(int level) {
+        super(m -> {});
         this.level = level;
     }
 

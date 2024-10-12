@@ -5,7 +5,7 @@ import info.teksol.emulator.MindustryString;
 import info.teksol.emulator.MindustryVariable;
 import info.teksol.evaluator.ExpressionEvaluator;
 import info.teksol.evaluator.LogicOperation;
-import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.Operation;
@@ -14,14 +14,16 @@ import info.teksol.mindcode.mimex.Icons;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-public class ConstantExpressionEvaluator {
+public class ConstantExpressionEvaluator extends MessageEmitter {
 
     private final InstructionProcessor instructionProcessor;
 
     private final Map<String, ConstantAstNode> constants = new HashMap<>();
 
-    public ConstantExpressionEvaluator(InstructionProcessor instructionProcessor) {
+    public ConstantExpressionEvaluator(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer) {
+        super(messageConsumer);
         this.instructionProcessor = instructionProcessor;
     }
 
@@ -65,9 +67,10 @@ public class ConstantExpressionEvaluator {
                 if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
                     // Only addition a string and a non-null value is supported
                     if (operation == Operation.ADD && a != null && b != null) {
-                        return new StringLiteral(node.startToken(), node.sourceFile(), a.print() + b.print());
+                        return new StringLiteral(node.getInputPosition(), a.print() + b.print());
                     } else {
-                        throw new MindcodeException(node.startToken(), "Unsupported string expression.");
+                        error(node, "Unsupported string expression.");
+                        return node;
                     }
                 } else if (a != null && b != null) {
                     MindustryVariable result = MindustryVariable.createVar("result");
@@ -75,7 +78,8 @@ public class ConstantExpressionEvaluator {
                     return result.toAstNode();
                 } else if (a != null || b != null) {
                     if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
-                        throw new MindcodeException(node.startToken(), "Unsupported string expression.");
+                        error(node, "Unsupported string expression.");
+                        return node;
                     }
                     // One of them is not null
                     return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
@@ -97,15 +101,15 @@ public class ConstantExpressionEvaluator {
             case "|" -> fixed.getDoubleValue() == 0 ? exp : node;
 
             // If the fixed value is zero, evaluates to zero
-            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral(node.startToken(), node.sourceFile(), "0") : node;
+            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral(node.getInputPosition(), "0") : node;
 
             // If the fixed value is zero (= false), evaluates to false
             // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(node.startToken(), node.sourceFile(), true) : node;
+            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(node.getInputPosition(), true) : node;
 
             // If the fixed value is zero (= false), evaluates to false
             // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(node.startToken(), node.sourceFile(), false) : node;
+            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(node.getInputPosition(), false) : node;
             default -> node;
         };
     }
@@ -115,17 +119,18 @@ public class ConstantExpressionEvaluator {
         if (evaluated instanceof ConstantAstNode constant) {
             ConstantAstNode result = constant instanceof NumericValue value ? ensureMlog(node, value) : constant;
             constants.put(node.getName(), constant);
-            return node;
         } else {
-            throw new MindcodeException(node.startToken(), "Value assigned to constant '%s' is not a constant expression.", node.getName());
+            error(node, "Value assigned to constant '%s' is not a constant expression.", node.getName());
         }
+        return node;
     }
 
     private NumericLiteral ensureMlog(Constant node, NumericValue value) {
         NumericLiteral numericLiteral = value.toNumericLiteral(instructionProcessor);
         if (numericLiteral == null) {
-            throw new MindcodeException(node.startToken(), "Value assigned to constant '%s' (%s) doesn't have a valid mlog representation.",
+            error(node, "Value assigned to constant '%s' (%s) doesn't have a valid mlog representation.",
                     node.getName(), value.getAsDouble());
+            return new NumericLiteral(node.getInputPosition(), "0");
         }
         return numericLiteral;
     }
@@ -147,7 +152,8 @@ public class ConstantExpressionEvaluator {
                 MindustryVariable a = variableFromNode("a", evaluated.get(0));
                 MindustryVariable b = variableFromNode("b", evaluated.get(numArgs - 1));
                 if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
-                    throw new MindcodeException(node.startToken(), "Unsupported string expression.");
+                    error(node, "Unsupported string expression.");
+                    return node;
                 }
                 MindustryVariable result = MindustryVariable.createVar("result");
                 eval.execute(result, a, b);
@@ -174,7 +180,8 @@ public class ConstantExpressionEvaluator {
             MindustryVariable a = variableFromNode("a", evaluateInner(node.getExpression()));
             if (a != null) {
                 if (a.getObject() instanceof MindustryString) {
-                    throw new MindcodeException(node.startToken(), "Unsupported string expression.");
+                    error(node, "Unsupported string expression.");
+                    return node;
                 }
                 MindustryVariable b = MindustryVariable.createVar("temp");
                 MindustryVariable result = MindustryVariable.createVar("result");
@@ -188,7 +195,7 @@ public class ConstantExpressionEvaluator {
 
     private AstNode evaluateVarRef(VarRef node) {
         if (constants.containsKey(node.getName())) {
-            return constants.get(node.getName()).withToken(node.startToken());
+            return constants.get(node.getName()).withInputPosition(node.getInputPosition());
         } else {
             return node;
         }

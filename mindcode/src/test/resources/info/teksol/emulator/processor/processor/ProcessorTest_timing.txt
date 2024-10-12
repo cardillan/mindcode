@@ -17,4 +17,5 @@ printsNumbersStringsObjects:            : parse:          0 ms, compile:        
 ranged-for-loop-break-continue.mnd:     : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 recursive-function-condition.mnd:       : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 switched-case-expression.mnd:           : parse:          0 ms, compile:          0 ms, optimize:          0 ms
+testSuiteRecognizesUnexpectedWarnings:  : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 while-loop.mnd:                         : parse:          0 ms, compile:          0 ms, optimize:          0 ms

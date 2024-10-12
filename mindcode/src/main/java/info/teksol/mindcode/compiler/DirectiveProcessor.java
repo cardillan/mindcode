@@ -3,12 +3,13 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.Directive;
+import info.teksol.mindcode.ast.DirectiveText;
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,22 +21,17 @@ import java.util.function.Consumer;
 /**
  * Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
  */
-public class DirectiveProcessor {
+public class DirectiveProcessor extends MessageEmitter {
     private final CompilerProfile profile;
-    private final Consumer<MindcodeMessage> messageConsumer;
 
     private DirectiveProcessor(CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {
+        super(messageConsumer);
         this.profile = profile;
-        this.messageConsumer = messageConsumer;
     }
 
     public static void processDirectives(Seq program, CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {
         DirectiveProcessor processor = new DirectiveProcessor(profile, messageConsumer);
         processor.visitNode(program);
-    }
-
-    private void error(@PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.error(format, args));
     }
 
     private void visitNode(AstNode node) {
@@ -47,20 +43,20 @@ public class DirectiveProcessor {
     }
 
     private void processDirective(Directive node) {
-        BiConsumer<CompilerProfile, String> handler = OPTION_HANDLERS.get(node.getOption());
+        BiConsumer<CompilerProfile, Directive> handler = OPTION_HANDLERS.get(node.getOption().getText());
         if (handler == null) {
-            error("Unknown compiler directive '%s'.", node.getOption());
+            error(node.getOption(), "Unknown compiler directive '%s'.", node.getOption().getText());
         } else {
-            handler.accept(profile, node.getValue());
+            handler.accept(profile, node);
         }
     }
 
-    private void setTarget(CompilerProfile profile, String target) {
-        String value = target.toUpperCase();
+    private void setTarget(CompilerProfile profile, Directive node) {
+        String target = node.getValue().getText().toUpperCase();
 
-        if (value.startsWith("ML")) {
-            ProcessorEdition edition = ProcessorEdition.byCode(value.charAt(value.length() - 1));
-            ProcessorVersion version = ProcessorVersion.byCode(value.substring(2, value.length() - (edition == null ? 0 : 1)));
+        if (target.startsWith("ML")) {
+            ProcessorEdition edition = ProcessorEdition.byCode(target.charAt(target.length() - 1));
+            ProcessorVersion version = ProcessorVersion.byCode(target.substring(2, target.length() - (edition == null ? 0 : 1)));
 
             if (version != null) {
                 profile.setProcessorVersionEdition(version, edition != null ? edition : ProcessorEdition.S);
@@ -68,38 +64,38 @@ public class DirectiveProcessor {
             }
         }
 
-        error("Invalid value '%s' of compiler directive 'target'.", target);
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'target'.", node.getValue().getText());
     }
 
-    private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, String level) {
-        OptimizationLevel optLevel = OptimizationLevel.byName(level);
+    private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, Directive node) {
+        OptimizationLevel optLevel = OptimizationLevel.byName(node.getValue().getText());
         if (optLevel == null) {
-            error("Invalid value '%s' of compiler directive '%s'.", level, optimization.getOptionName());
+            error(node.getValue(), "Invalid value '%s' of compiler directive '%s'.", node.getValue().getText(), optimization.getOptionName());
         } else {
             profile.setOptimizationLevel(optimization, optLevel);
         }
     }
 
-    private void setAllOptimizationsLevel(CompilerProfile profile, String level) {
-        OptimizationLevel optLevel = OptimizationLevel.byName(level);
+    private void setAllOptimizationsLevel(CompilerProfile profile, Directive node) {
+        OptimizationLevel optLevel = OptimizationLevel.byName(node.getValue().getText());
         if (optLevel == null) {
-            error("Invalid value '%s' of compiler directive 'optimization'.", level);
+            error(node.getValue(), "Invalid value '%s' of compiler directive 'optimization'.", node.getValue().getText());
         } else {
             profile.setAllOptimizationLevels(optLevel);
         }
     }
 
-    private void setShortCircuitEval(CompilerProfile compilerProfile, String booleanEval) {
-        switch (booleanEval) {
+    private void setShortCircuitEval(CompilerProfile compilerProfile, Directive node) {
+        switch (node.getValue().getText()) {
             case "short"    -> compilerProfile.setShortCircuitEval(true);
             case "full"     -> compilerProfile.setShortCircuitEval(false);
-            default         ->  error("Invalid value '%s' of compiler directive 'booleanEval'.", booleanEval);
+            default         ->  error(node.getValue(), "Invalid value '%s' of compiler directive 'booleanEval'.", node.getValue().getText());
         }
     }
 
-    private void setInstructionLimit(CompilerProfile compilerProfile, String strLimit) {
+    private void setInstructionLimit(CompilerProfile compilerProfile, Directive node) {
         try {
-            int limit = Integer.parseInt(strLimit);
+            int limit = Integer.parseInt(node.getValue().getText());
             if (limit >= 1 && limit <= CompilerProfile.MAX_INSTRUCTIONS) {
                 compilerProfile.setInstructionLimit(limit);
                 return;
@@ -107,13 +103,14 @@ public class DirectiveProcessor {
         } catch (NumberFormatException ex) {
             // Do nothing
         }
-        error("Invalid value '%s' of compiler directive 'instruction-limit' (expected integer between 1 and  "
-                + CompilerProfile.MAX_INSTRUCTIONS + ").", strLimit);
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'instruction-limit' (expected integer between 1 and  %d).",
+                node.getValue().getText(), CompilerProfile.MAX_INSTRUCTIONS);
     }
 
-    private void setOptimizationPasses(CompilerProfile compilerProfile, String strPasses) {
+    private void setOptimizationPasses(CompilerProfile compilerProfile, Directive node) {
+        String strPasses = node.getValue().getText();
         try {
-            int passes = Integer.parseInt(strPasses);
+            int passes = Integer.parseInt(node.getValue().getText());
             if (passes >= 1 && passes <= CompilerProfile.MAX_PASSES) {
                 compilerProfile.setOptimizationPasses(passes);
                 return;
@@ -121,52 +118,48 @@ public class DirectiveProcessor {
         } catch (NumberFormatException ex) {
             // Do nothing
         }
-        error("Invalid value '%s' of compiler directive 'passes' (expected integer between 1 and  "
-                + CompilerProfile.MAX_PASSES + ").", strPasses);
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'passes' (expected integer between 1 and  %d).",
+                node.getValue().getText(), CompilerProfile.MAX_PASSES);
     }
 
-    private void setGenerationGoal(CompilerProfile compilerProfile, String strGoal) {
+    private void setGenerationGoal(CompilerProfile compilerProfile, Directive node) {
         for (GenerationGoal goal : GenerationGoal.values()) {
-            if (goal.name().equalsIgnoreCase(strGoal)) {
+            if (goal.name().equalsIgnoreCase(node.getValue().getText())) {
                 compilerProfile.setGoal(goal);
                 return;
             }
         }
-        error("Invalid value '%s' of compiler directive 'goal'.", strGoal);
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'goal'.", node.getValue().getText());
     }
 
-    private void setRemarks(CompilerProfile compilerProfile, String strRemarks) {
+    private void setRemarks(CompilerProfile compilerProfile, Directive node) {
         for (Remarks value : Remarks.values()) {
-            if (value.name().equalsIgnoreCase(strRemarks)) {
+            if (value.name().equalsIgnoreCase(node.getValue().getText())) {
                 compilerProfile.setRemarks(value);
                 return;
             }
         }
-        error("Invalid value '%s' of compiler directive 'remarks'.", strRemarks);
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'remarks'.", node.getValue().getText());
     }
 
-    private void setMemoryModel(CompilerProfile compilerProfile, String strModel) {
+    private void setMemoryModel(CompilerProfile compilerProfile, Directive node) {
         for (MemoryModel memoryModel : MemoryModel.values()) {
-            if (memoryModel.name().equalsIgnoreCase(strModel)) {
+            if (memoryModel.name().equalsIgnoreCase(node.getValue().getText())) {
                 compilerProfile.setMemoryModel(memoryModel);
                 return;
             }
         }
-        error("Invalid value '%s' of compiler directive 'memory-model'.", strModel);
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'memory-model'.", node.getValue().getText());
     }
 
-    private void setSortVariables(CompilerProfile compilerProfile, String strModel) {
+    private void setSortVariables(CompilerProfile compilerProfile, Directive node) {
         List<SortCategory> sortCategories = new ArrayList<>();
-        if (!strModel.isEmpty()) {
-            String[] values = strModel.split(",");
-
-            for (String value : values) {
-                SortCategory sortCategory = SortCategory.byName(value);
-                if (sortCategory == null) {
-                    error("Invalid value '%s' of compiler directive 'sort-variables'.", value);
-                } else {
-                    sortCategories.add(sortCategory);
-                }
+        for (DirectiveText value : node.getValues()) {
+            SortCategory sortCategory = SortCategory.byName(value.getText());
+            if (sortCategory == null) {
+                error(value, "Invalid value '%s' of compiler directive 'sort-variables'.", value.getText());
+            } else {
+                sortCategories.add(sortCategory);
             }
         }
 
@@ -179,10 +172,10 @@ public class DirectiveProcessor {
         }
     }
 
-    private final Map<String, BiConsumer<CompilerProfile, String>> OPTION_HANDLERS = createOptionHandlers();
+    private final Map<String, BiConsumer<CompilerProfile, Directive>> OPTION_HANDLERS = createOptionHandlers();
 
-    private Map<String, BiConsumer<CompilerProfile,String>> createOptionHandlers() {
-        Map<String,BiConsumer<CompilerProfile,String>> map = new HashMap<>();
+    private Map<String, BiConsumer<CompilerProfile,Directive>> createOptionHandlers() {
+        Map<String,BiConsumer<CompilerProfile,Directive>> map = new HashMap<>();
         map.put("target", this::setTarget);
         map.put("optimization", this::setAllOptimizationsLevel);
         map.put("boolean-eval", this::setShortCircuitEval);

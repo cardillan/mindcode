@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
@@ -64,7 +64,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void printFmtCatchesTooFewArguments() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         print($"Text: $");
                         """
@@ -74,7 +74,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void printFmtCatchesTooManyArguments() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("""
                         print($"Text: $", 10, 20);
                         """

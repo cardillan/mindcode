@@ -1,8 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import org.antlr.v4.runtime.Token;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,8 +11,8 @@ public class BinaryOp extends BaseAstNode {
     protected final String op;
     protected final AstNode right;
 
-    public BinaryOp(Token startToken, InputFile inputFile, AstNode left, String op, AstNode right) {
-        super(startToken, inputFile, left, right);
+    public BinaryOp(InputPosition inputPosition, AstNode left, String op, AstNode right) {
+        super(inputPosition, left, right);
         this.left = left;
         this.op = op;
         this.right = right;

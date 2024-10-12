@@ -179,7 +179,7 @@ class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": convert case at line " + astContext.node().startToken().getLine();
+            return getName() + ": convert case at line " + astContext.node().getInputPosition().line();
         }
     }
 }

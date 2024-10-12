@@ -17,18 +17,21 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.*;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import info.teksol.mindcode.grammar.MissingSemicolonException;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import org.antlr.v4.runtime.*;
-import org.intellij.lang.annotations.PrintFormat;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
@@ -40,7 +43,7 @@ public class MindcodeCompiler implements Compiler<String> {
     private InstructionProcessor instructionProcessor;
 
     private final List<MindcodeMessage> messages = new ArrayList<>();
-    private final ErrorListener errorListener = new ErrorListener(messages);
+    private final MindcodeErrorListener errorListener = new MindcodeErrorListener(messages);
 
     public MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
@@ -56,7 +59,7 @@ public class MindcodeCompiler implements Compiler<String> {
             Seq program = null;
             for (InputFile inputFile : inputFiles) {
                 // Additional source files are put in front of the others
-                final Seq other = parse(inputFile);
+                final Seq other = parse(inputFile, messages::add);
                 program = Seq.append(other, program);
                 if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                     return new CompilerOutput<>("", messages, null, 0);
@@ -76,6 +79,9 @@ public class MindcodeCompiler implements Compiler<String> {
             long compileStart = System.nanoTime();
             instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
             GeneratorOutput generated = generateCode(program);
+            if (messages.stream().anyMatch(MindcodeMessage::isError)) {
+                return new CompilerOutput<>("", messages, null, 0);
+            }
             long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
 
             long optimizeStart = System.nanoTime();
@@ -118,15 +124,11 @@ public class MindcodeCompiler implements Compiler<String> {
             // Do nothing
         } catch (Exception e) {
             if (profile.isPrintStackTrace()) {
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
-            if (e instanceof MindcodeException ex) {
-                if (!ex.isReported()) {
-                    messages.add(MindcodeCompilerMessage.error("Error while compiling source code: %s", e.getMessage()));
-                }
-            } else {
-                messages.add(MindcodeCompilerMessage.error("Internal error: %s", e.getMessage()));
-            }
+
+            messages.add(ToolMessage.error("Internal error: %s", e.getMessage()));
         }
 
         return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
@@ -153,7 +155,7 @@ public class MindcodeCompiler implements Compiler<String> {
         }
 
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
-        Seq parsed = parse(loadLibrary(filename));
+        Seq parsed = parse(loadLibrary(filename), messages::add);
         long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
 
         if (before == after) {
@@ -166,7 +168,7 @@ public class MindcodeCompiler implements Compiler<String> {
     /**
      * Parses the source code using ANTLR generated parser.
      */
-    private Seq parse(InputFile inputFile) {
+    private Seq parse(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
         errorListener.setInputFile(inputFile);
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.code()));
         lexer.removeErrorListeners();
@@ -175,7 +177,7 @@ public class MindcodeCompiler implements Compiler<String> {
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
-        return AstNodeBuilder.generate(inputFile, context);
+        return AstNodeBuilder.generate(inputFile, messageConsumer, context);
     }
 
     /** Prints the parse tree according to level */
@@ -190,16 +192,7 @@ public class MindcodeCompiler implements Compiler<String> {
     private GeneratorOutput generateCode(Seq program) {
         final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
                 messages::add);
-        try {
-            return generator.generate(program);
-        } catch (MindcodeException ex) {
-            if (ex.getToken() != null) {
-                errorListener.syntaxError(null, null,
-                        ex.getToken().getLine(), ex.getToken().getCharPositionInLine(), ex.getMessage(), null);
-                ex.setReported(true);
-            }
-            throw ex;
-        }
+        return generator.generate(program);
     }
 
     private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
@@ -250,60 +243,4 @@ public class MindcodeCompiler implements Compiler<String> {
         messages.add(ToolMessage.debug(message));
     }
 
-    private static class ErrorListener extends BaseErrorListener {
-        private final List<MindcodeMessage> errors;
-        private InputFile inputFile;
-
-        public ErrorListener(List<MindcodeMessage> errors) {
-            this.errors = errors;
-        }
-
-        public void setInputFile(InputFile inputFile) {
-            this.inputFile = inputFile;
-        }
-
-        private final Set<MindcodeCompilerMessage> reportedMessages = new HashSet<>();
-
-        private void reportError(int line, int charPositionInLine, @PrintFormat String format, Object... args) {
-            MindcodeCompilerMessage message = MindcodeCompilerMessage.error(
-                    new InputPosition(inputFile, line, charPositionInLine + 1), format, args);
-            if (reportedMessages.add(message)) {
-                errors.add(message);
-            }
-        }
-
-        @Override
-        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-                String msg, RecognitionException exception) {
-            if (exception instanceof MissingSemicolonException ex && offendingSymbol instanceof Token token) {
-                String nextToken = ex.getNextToken().getText();
-                // Reporting missing semicolon before "do" and "then" is probably a consequence of do/then being
-                // driven by syntactic predicate. In any case it doesn't make any sense.
-                if (!"do".equals(nextToken) && !"then".equals(nextToken)) {
-                    int length = token.getStopIndex() - token.getStartIndex();
-                    reportError(line, charPositionInLine + length + 1, "Parse error: %s%s",
-                            msg, ex.getNextToken() != null ? " before '" + nextToken + "'": "");
-
-                }
-            } else if (exception instanceof NoViableAltException) {
-                String offendingTokenText = getOffendingTokenText(exception);
-                if (offendingTokenText == null) {
-                    reportError(line, charPositionInLine, "Parse error: unrecoverable parse error");
-                } else {
-                    reportError(line, charPositionInLine, "Parse error: unexpected '%s'", offendingTokenText);
-                }
-            } else {
-                String offendingTokenText = getOffendingTokenText(exception);
-                if (offendingTokenText == null) {
-                    reportError(line, charPositionInLine, "Parse error: %s", msg);
-                } else {
-                    reportError(line, charPositionInLine, "Parse error: '%s': %s", offendingTokenText, msg);
-                }
-            }
-        }
-
-        private String getOffendingTokenText(RecognitionException ex) {
-            return ex != null && ex.getOffendingToken() != null ? ex.getOffendingToken().getText() : null;
-        }
-    }
 }

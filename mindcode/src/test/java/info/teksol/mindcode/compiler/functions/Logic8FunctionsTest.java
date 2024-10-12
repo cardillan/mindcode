@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ public class Logic8FunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void refusesWrongAlignment() {
-        assertThrows(MindcodeException.class, () -> generateInstructions("drawPrint(10, 10, fluffyBunny);"));
+        assertThrows(UnexpectedMessageException.class, () -> generateInstructions("drawPrint(10, 10, fluffyBunny);"));
     }
 
     @Test

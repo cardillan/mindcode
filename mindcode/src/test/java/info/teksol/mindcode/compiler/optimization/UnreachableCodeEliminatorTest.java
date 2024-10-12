@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -76,7 +77,7 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
 
     @Test
     void keepsUsedFunctions() {
-        assertCompilesToWithMessages(ignore("List of unused variables: testa.n, testb.n, testc.n."),
+        assertCompilesTo(ExpectedMessages.create().add("List of unused variables: testa.n, testb.n, testc.n."),
                 """
                         allocate stack in cell1[0 .. 63];
                         def testa(n)

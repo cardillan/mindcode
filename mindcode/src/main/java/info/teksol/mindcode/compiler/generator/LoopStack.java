@@ -1,46 +1,53 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.logic.LogicLabel;
-import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Class maintaining the stack of active loops and their break and continue labels.
  */
-public class LoopStack {
+public class LoopStack extends MessageEmitter {
     private final Deque<LogicLabel> breakStack = new ArrayDeque<>();
     private final Deque<LogicLabel> continueStack = new ArrayDeque<>();
     private final Map<String, LogicLabel> breakMap = new HashMap<>();
     private final Map<String, LogicLabel> continueMap = new HashMap<>();
 
-    void enterLoop(Token token, String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
+    public LoopStack(Consumer<MindcodeMessage> messageConsumer) {
+        super(messageConsumer);
+    }
+
+    void enterLoop(InputPosition position, String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
         if (loopLabel != null) {
             if (continueMap.containsKey(loopLabel)) {
-                throw new MindcodeException(token, "Loop label '%s' already in use.", loopLabel);
+                error(position, "Loop label '%s' already in use.", loopLabel);
+            } else {
+                continueMap.put(loopLabel, continueLabel);
+                breakMap.put(loopLabel, breakLabel);
             }
-            continueMap.put(loopLabel, continueLabel);
-            breakMap.put(loopLabel, breakLabel);
         }
         continueStack.push(continueLabel);
         breakStack.push(breakLabel);
     }
 
-    LogicLabel getBreakLabel(Token token, String loopLabel) {
-        return getLabel(token, loopLabel, breakStack, breakMap, "break");
+    LogicLabel getBreakLabel(InputPosition position, String loopLabel) {
+        return getLabel(position, loopLabel, breakStack, breakMap, "break");
     }
 
-    LogicLabel getContinueLabel(Token token, String loopLabel) {
-        return getLabel(token, loopLabel, continueStack, continueMap, "continue");
+    LogicLabel getContinueLabel(InputPosition position, String loopLabel) {
+        return getLabel(position, loopLabel, continueStack, continueMap, "continue");
     }
 
-    private LogicLabel getLabel(Token token, String loopLabel, Deque<LogicLabel> stack, Map<String, LogicLabel> map, String statement) {
+    private LogicLabel getLabel(InputPosition position, String loopLabel, Deque<LogicLabel> stack, Map<String, LogicLabel> map, String statement) {
         if (stack.isEmpty()) {
-            throw new MindcodeException(token, "'%s' statement outside of a do/while/for loop.", statement);
+            error(position, "'%s' statement outside of a do/while/for loop.", statement);
+            return LogicLabel.INVALID;
         }
 
         if (loopLabel == null) {
@@ -48,7 +55,8 @@ public class LoopStack {
         } else {
             LogicLabel label = map.get(loopLabel);
             if (label == null) {
-                throw new MindcodeException(token, "Undefined label '%s'.", loopLabel);
+                error(position, "Undefined label '%s'.", loopLabel);
+                return LogicLabel.INVALID;
             }
             return label;
         }

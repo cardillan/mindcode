@@ -1,12 +1,12 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.BlockType;
 
@@ -24,8 +24,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 import static info.teksol.mindcode.logic.Operation.ADD;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
-public class BaseInstructionProcessor implements InstructionProcessor {
-    private final Consumer<MindcodeMessage> messageConsumer;
+public class BaseInstructionProcessor extends MessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final List<OpcodeVariant> opcodeVariants;
@@ -41,7 +40,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     // Protected to allow a subclass to use this constructor in unit tests
     protected BaseInstructionProcessor(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion processorVersion,
             ProcessorEdition processorEdition, List<OpcodeVariant> opcodeVariants) {
-        this.messageConsumer = messageConsumer;
+        super(messageConsumer);
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
         this.opcodeVariants = opcodeVariants;
@@ -478,7 +477,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             LogicArgument argument = instruction.getArgs().get(i);
             InstructionParameterType type = namedParameter.type();
             if (!isValid(type, argument)) {
-                throw new MindcodeException(instruction.startToken(),
+                error(instruction.getAstContext().node(),
                         "Invalid value '%s' for parameter '%s': allowed values are '%s'.", argument.toMlog(),
                         namedParameter.name(), String.join("', ", validArgumentValues.get(type)));
             }

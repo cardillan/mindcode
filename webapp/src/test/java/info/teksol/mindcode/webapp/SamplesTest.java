@@ -90,7 +90,8 @@ class SamplesTest {
         parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
-        final Seq program = AstNodeBuilder.generate(new InputFile(file.getPath(), file.getAbsolutePath(), source),context);
+        final Seq program = AstNodeBuilder.generate(new InputFile(file.getPath(), file.getAbsolutePath(), source),
+                message -> fail("Unexpected message: " + message), context);
         List<LogicInstruction> unoptimized = generateUnoptimized(program);
         List<LogicInstruction> optimized = generateAndOptimize(program);
 

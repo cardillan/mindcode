@@ -1,8 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
@@ -10,8 +9,8 @@ public class Assignment extends BaseAstNode {
     private final AstNode var;
     private final AstNode value;
 
-    public Assignment(Token startToken, InputFile inputFile, AstNode var, AstNode value) {
-        super(startToken, inputFile, var, value);
+    public Assignment(InputPosition inputPosition, AstNode var, AstNode value) {
+        super(inputPosition, var, value);
         this.var = var;
         this.value = value;
     }

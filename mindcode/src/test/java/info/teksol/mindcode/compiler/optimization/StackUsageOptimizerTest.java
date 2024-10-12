@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -252,11 +253,10 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     @Test
     void correctlyOptimizesQuicksort() {
         // For the first call, y isn't read in the loop, but is read after the loop
-        assertCompilesToWithMessages(
-                ignore(
-                        "List of unused variables: partition.left, partition.right.",
-                        "List of uninitialized variables: SIZE."
-                ),
+        assertCompilesTo(
+                ExpectedMessages.create()
+                        .add("List of unused variables: partition.left, partition.right.")
+                        .add("List of uninitialized variables: SIZE."),
                 """
                         allocate stack in bank1[0...512];
 

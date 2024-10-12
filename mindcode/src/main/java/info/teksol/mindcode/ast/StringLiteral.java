@@ -1,18 +1,17 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
-import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class StringLiteral extends ConstantAstNode {
     protected final String text;
 
-    public StringLiteral(Token startToken, InputFile inputFile, String text) {
-        super(startToken, inputFile);
+    public StringLiteral(InputPosition inputPosition, String text) {
+        super(inputPosition);
         this.text = text;
     }
 
@@ -26,8 +25,8 @@ public class StringLiteral extends ConstantAstNode {
     }
 
     @Override
-    public StringLiteral withToken(Token startToken) {
-        return new StringLiteral(startToken, sourceFile(), text);
+    public StringLiteral withInputPosition(InputPosition inputPosition) {
+        return new StringLiteral(inputPosition, text);
     }
 
     @Override

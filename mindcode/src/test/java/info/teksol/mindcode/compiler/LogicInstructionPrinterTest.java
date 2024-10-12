@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.MindcodeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,7 +50,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void realLifeScripts1() {
         TestCompiler compiler = createTestCompiler();
-        assertThrows(MindcodeException.class, () ->
+        assertThrows(UnexpectedMessageException.class, () ->
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,

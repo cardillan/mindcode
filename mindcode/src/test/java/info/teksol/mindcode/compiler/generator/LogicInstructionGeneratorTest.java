@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
@@ -1185,25 +1185,25 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesAssignmentsToBlockNames() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("switch1 = 5;"));
     }
 
     @Test
     void refusesBlockNamesAsFunctionParameters() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("def foo(switch1) false; end; foo(5);"));
     }
 
     @Test
     void refusesBlockNamesAsOutputArguments() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("getBlock(10, 20, switch1);"));
     }
 
     @Test
     void refusesBreaksOutsideLoop() {
-        assertThrows(MindcodeException.class, () ->
+        assertThrows(UnexpectedMessageException.class, () ->
                 generateInstructions("""
                         while a do
                             print(a);
@@ -1216,15 +1216,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesConflictingConstantAndVariable() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("const a = 10; a = 20;"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("a = 10; const a = 20;"));
     }
 
     @Test
     void refusesConflictingConstants() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("const a = 10; const a = 20;"));
     }
 
@@ -1232,57 +1232,57 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void refusesConflictingFunctionParameter() {
         assertDoesNotThrow(
                 () -> generateInstructions("a = 10; def foo(a) print(a); end; foo(5);"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("const a = 10; def foo(a) print(a); end; foo(5);"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = 10; def foo(a) print(a); end; foo(5);"));
     }
 
     @Test
     void refusesConflictingParameterAndConstant() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = 10; const a = 20;"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("const a = 10; param a = 20;"));
     }
 
     @Test
     void refusesConflictingParameterAndVariable() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = 10; a = 20;"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("a = 10; param a = 20;"));
     }
 
     @Test
     void refusesConflictingParameters() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = 10; param a = 20;"));
     }
 
     @Test
     void refusesNonConstantParameters() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = 2 * 4;"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = @unit;"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("param a = rand(5);"));
     }
 
     @Test
     void refusesIterationListsWithWrongSize() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("for i, j in 1, 2, 3 do print(i, j); end;"));
     }
 
     @Test
     void refusesMisplacedFormattableLiterals() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("i = $\"Formattable\";"));
         assertDoesNotThrow(
                 () -> generateInstructions("inline def foo(x) print(x); end; foo(\"Formattable\");"));
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("inline def foo(x) print(x); end; foo($\"Formattable\");"));
     }
 
@@ -1334,7 +1334,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
-        assertThrows(MindcodeException.class,
+        assertThrows(UnexpectedMessageException.class,
                 () -> generateInstructions("allocate heap in cell1[0 .. 1];\n$dx = $dy = $dz;"));
     }
 

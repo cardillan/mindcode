@@ -33,6 +33,7 @@ public class OptimizerTest extends AbstractProcessorTest {
     }
 
     @TestFactory
+    // IGNORES WARNINGS!
     List<DynamicTest> runScripts() {
         final List<DynamicTest> result = new ArrayList<>();
         final File[] files = new File(getScriptsDirectory()).listFiles((dir, name) -> name.endsWith(".mnd"));

@@ -128,8 +128,8 @@ public class LogicInstructionPrinter {
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
 
             AstContext astContext = instruction.getAstContext();
-            if (astContext.node() != null && astContext.node().startToken() != null && astContext.node().sourceFile() != null) {
-                InputFile file = astContext.node().sourceFile();
+            if (astContext.node() != null && astContext.node().getInputPosition() != null) {
+                InputFile file = astContext.node().getInputPosition().inputFile();
                 String srcLine = "** Corresponding source code line not found! **";
                 List<String> lines = allLines.get(file);
                 if (lines == null) {
@@ -137,7 +137,7 @@ public class LogicInstructionPrinter {
                     allLines.put(file, lines);
                 }
 
-                int line = astContext.node().startToken().getLine() - 1;
+                int line = astContext.node().getInputPosition().line() - 1;
                 if (line == prevLine) {
                     srcLine = "...";
                 } else if (line >= 0 && line < lines.size()) {

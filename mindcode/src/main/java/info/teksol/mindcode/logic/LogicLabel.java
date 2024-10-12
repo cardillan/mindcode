@@ -33,4 +33,6 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
     public static LogicLabel absolute(int address) {
         return new LogicLabel(String.valueOf(address), address);
     }
+
+    public static final LogicLabel INVALID = symbolic("invalid");
 }

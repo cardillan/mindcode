@@ -3,6 +3,7 @@ package info.teksol.emulator.processor;
 import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.*;
@@ -67,6 +68,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 "sorting with " + fileName,
                 "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
                 Map.of("bank2", Memory.createMemoryBank(array)),
+                ExpectedMessages.none(),
                 createEvaluator(compiler, expectedOutput),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")
         );
@@ -166,6 +168,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 number + ", " + name,
                 "AMOUNT = " + number + "\n" + code,
                 Map.of(),
+                ExpectedMessages.none(),
                 (useAsserts, expectedOutput) -> true,
                 Path.of(getScriptsDirectory(), "storage-display.log")
         )));

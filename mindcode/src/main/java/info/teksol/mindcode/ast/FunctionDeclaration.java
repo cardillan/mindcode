@@ -1,9 +1,8 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import org.antlr.v4.runtime.Token;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,8 +15,8 @@ public class FunctionDeclaration extends BaseAstNode {
     private final List<VarRef> params;
     private final AstNode body;
 
-    public FunctionDeclaration(Token startToken, InputFile inputFile, boolean inline, boolean noinline, String name, List<VarRef> params, AstNode body) {
-        super(startToken, inputFile, body);
+    public FunctionDeclaration(InputPosition inputPosition, boolean inline, boolean noinline, String name, List<VarRef> params, AstNode body) {
+        super(inputPosition, body);
         if (inline && noinline) {
             throw new IllegalArgumentException("Both inline and noinline specified.");
         }
