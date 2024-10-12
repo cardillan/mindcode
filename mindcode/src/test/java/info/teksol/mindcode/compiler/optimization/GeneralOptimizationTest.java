@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
@@ -229,40 +229,42 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
         // Fix "Unvisited opcode: draw" and "drawflush"
         // We don't actually care about the generated code, only that it doesn't raise
         // Otherwise, this spec would be at the mercy of any improvements in the peephole optimizer
-        assertDoesNotThrow(() -> generateInstructions("""
-                // move previous values left
-                for n in 0 ... 40 do
-                    cell1[n] = cell1[n + 1];
-                end;
-
-                // delay by 1/2 a sec (0.5 s)
-                // this depends on your framerate -- if less than 60 fps,
-                // the delay will be longer than 0.5s
-                deadline = @tick + 30;
-                while @tick < deadline do
-                    n += 1;
-                end;
-
-                // calculate the new value -- the rightmost one
-                // change this line to graph another level
-                cell1[39] = tank1.cryofluid / tank1.liquidCapacity;
-
-                // draw the graph
-
-                // clear the display
-                clear(0, 0, 0);
-             
-                // set the foreground color to cryofluid
-                color(62, 207, 240, 255);
-   
-                // draw the bar graph
-                for n in 0 ... 40 do
-                    rect(2 * n, 0, 2, 80 * cell1[n]);
-                end;
-
-                drawflush(display1);
+        assertGeneratesMessages(
+                ExpectedMessages.none(),
                 """
-        ));
+                        // move previous values left
+                        for n in 0 ... 40 do
+                            cell1[n] = cell1[n + 1];
+                        end;
+                        
+                        // delay by 1/2 a sec (0.5 s)
+                        // this depends on your framerate -- if less than 60 fps,
+                        // the delay will be longer than 0.5s
+                        deadline = @tick + 30;
+                        while @tick < deadline do
+                            n += 1;
+                        end;
+                        
+                        // calculate the new value -- the rightmost one
+                        // change this line to graph another level
+                        cell1[39] = tank1.cryofluid / tank1.liquidCapacity;
+                        
+                        // draw the graph
+                        
+                        // clear the display
+                        clear(0, 0, 0);
+                        
+                        // set the foreground color to cryofluid
+                        color(62, 207, 240, 255);
+                        
+                        // draw the bar graph
+                        for n in 0 ... 40 do
+                            rect(2 * n, 0, 2, 80 * cell1[n]);
+                        end;
+                        
+                        drawflush(display1);
+                        """
+        );
     }
 
     @Test

@@ -1,12 +1,11 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
@@ -70,21 +69,21 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfCatchesTooFewArguments() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Not enough arguments for 'printf' format string."),
+                """
                         printf("Text: $");
                         """
-                )
         );
     }
 
     @Test
     void printfCatchesTooManyArguments() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Too many arguments for 'printf' format string."),
+                """
                         printf("Text: $", 10, 20);
                         """
-                )
         );
     }
 

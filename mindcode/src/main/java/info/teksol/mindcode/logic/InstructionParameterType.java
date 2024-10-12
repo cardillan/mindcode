@@ -273,22 +273,22 @@ public enum InstructionParameterType {
     }
 
     private static ParameterValues allVersions(String... keywords) {
-        return new ParameterValues(Set.copyOf(EnumSet.allOf(ProcessorVersion.class)), Set.of(keywords));
+        return new ParameterValues(Set.copyOf(EnumSet.allOf(ProcessorVersion.class)), List.of(keywords));
     }
 
     private static ParameterValues specificVersion(ProcessorVersion version, String... keywords) {
-        return new ParameterValues(Set.of(version), Set.of(keywords));
+        return new ParameterValues(Set.of(version), List.of(keywords));
     }
 
     private static ParameterValues specificVersions(ProcessorVersion minVersion, ProcessorVersion maxVersion, String... keywords) {
-        return new ParameterValues(ProcessorVersion.matching(minVersion, maxVersion), Set.of(keywords));
+        return new ParameterValues(ProcessorVersion.matching(minVersion, maxVersion), List.of(keywords));
     }
 
     public static class ParameterValues {
         public final Set<ProcessorVersion> versions;
-        public final Set<String> values;
+        public final List<String> values;
 
-        private ParameterValues(Set<ProcessorVersion> versions, Set<String> keywords) {
+        private ParameterValues(Set<ProcessorVersion> versions, List<String> keywords) {
             this.versions = versions;
             this.values = keywords;
         }

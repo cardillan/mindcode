@@ -1,12 +1,11 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Logic8FunctionsTest extends AbstractGeneratorTest {
 
@@ -35,7 +34,10 @@ public class Logic8FunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void refusesWrongAlignment() {
-        assertThrows(UnexpectedMessageException.class, () -> generateInstructions("drawPrint(10, 10, fluffyBunny);"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Invalid value 'fluffyBunny' for parameter 'align': allowed values are 'center', 'top', 'bottom', 'left', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'."),
+                "drawPrint(10, 10, fluffyBunny);"
+        );
     }
 
     @Test

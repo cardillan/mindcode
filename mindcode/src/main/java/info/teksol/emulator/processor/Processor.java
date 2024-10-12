@@ -55,7 +55,7 @@ public class Processor {
     }
 
     public String getTextBuffer() {
-        return textBuffer.getTextBuffer();
+        return textBuffer == null ? null : textBuffer.getTextBuffer();
     }
 
     public int getSteps() {

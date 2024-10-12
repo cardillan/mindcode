@@ -311,7 +311,21 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private final Set<String> checked = new HashSet<>();
+
+    private void generateDeprecationWarnings(AstNode node, String name) {
+        if ("configure".equals(name)) {
+            error(node, "'%s' is not allowed as a variable name.", name);
+        } else if (checked.add(name)) {
+            if (name.contains("-")) {
+                warn(node, "Identifier '%s': kebab-case identifiers are deprecated.", name);
+            }
+        }
+    }
+
     private LogicValue queryConstantName(AstNode node, String name) {
+        generateDeprecationWarnings(node, name);
+
         if (formattables.containsKey(name)) {
             error(node, "Constant '%s' represents a formattable string literal. It can only be used with print() functions.", name);
             return null;
@@ -343,6 +357,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private LogicParameter registerParameter(Parameter parameter, LogicValue logicValue) {
         final String name = parameter.getName();
+        generateDeprecationWarnings(parameter, name);
         if (identifiers.get(name) != null || formattables.containsKey(name)) {
             error(parameter, "Multiple declarations of '%s'.", name);
         } else if (identifiers.containsKey(name)) {
@@ -728,7 +743,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return LogicVariable.block(r.getName());
         }
 
-        error(node,"Parameter declaration of '%s' does not use a constant expression, linked block name or constant mlog variable.",
+        error(node,"Parameter declaration of '%s' does not use a literal value, linked block name or constant built-in variable.",
                 node.getName());
         return NULL;
     }
@@ -777,12 +792,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     emit(createSet(variable, rvalue));
                     return target;
                 } else {
-                    error(node, "Assignment to variable '%s' not allowed (name reserved for linked blocks).", target);
+                    error(node, "Assignment to variable '%s' not allowed (name reserved for linked blocks).", variable.getName());
                     return NULL;
                 }
             } else {
-                throw new MindcodeInternalError("Unsupported assignment target '%s'.", target);
+                throw new MindcodeInternalError("Unsupported assignment target '%s'.", name);
             }
+        } else if (node.getVar() instanceof Ref r) {
+            error(node, "Assignment to built-in variable '@%s' not allowed.", r.getName());
         } else {
             throw new MindcodeInternalError("Unhandled assignment target in %s.", node);
         }
@@ -857,8 +874,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     if (element instanceof LogicVariable var && var.isUserWritable()) {
                         outValues.add(var);
                     } else {
-                        error(values.get(index), "Element assigned to '%s' ('%s') is not writable.",
-                                iterator.var.getFullName(), values.get(index));
+                        error(values.get(index), "Element assigned to '%s' is not writable.",
+                                iterator.var.getFullName());
                         outValues.add(LogicVariable.special("invalid"));
                     }
                 }

@@ -22,4 +22,12 @@ public abstract class MessageEmitter {
     protected void error(InputPosition position, @PrintFormat String format, Object... args) {
         messageConsumer.accept(MindcodeCompilerMessage.error(position, format, args));
     }
+
+    protected void warn(AstNode node, @PrintFormat String format, Object... args) {
+        messageConsumer.accept(MindcodeCompilerMessage.warn(node.getInputPosition(), format, args));
+    }
+
+    protected void warn(InputPosition position, @PrintFormat String format, Object... args) {
+        messageConsumer.accept(MindcodeCompilerMessage.warn(position, format, args));
+    }
 }

@@ -231,7 +231,8 @@ public class MindcodeCompiler implements Compiler<String> {
             return new RunResults(processor.getTextBuffer(), processor.getSteps());
         } catch (ExecutionException e) {
             String textBuffer = processor.getTextBuffer();
-            return new RunResults(textBuffer.isEmpty() ? e.getMessage() : textBuffer + "\n" + e.getMessage(), processor.getSteps());
+            return new RunResults(textBuffer == null || textBuffer.isEmpty() ? e.getMessage()
+                    : textBuffer + "\n" + e.getMessage(), processor.getSteps());
         }
     }
 

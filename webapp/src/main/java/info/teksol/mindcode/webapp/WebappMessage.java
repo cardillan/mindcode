@@ -4,12 +4,14 @@ import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.MindcodeMessage;
 
 public final class WebappMessage {
+    private final String prefix;
     private final boolean position;
     private final int line;
     private final int charPositionInLine;
     private final String message;
 
-    public WebappMessage(boolean position, int line, int charPositionInLine, String message) {
+    public WebappMessage(String prefix, boolean position, int line, int charPositionInLine, String message) {
+        this.prefix = prefix;
         this.position = position;
         this.line = line;
         this.charPositionInLine = charPositionInLine;
@@ -28,17 +30,21 @@ public final class WebappMessage {
         return charPositionInLine;
     }
 
+    public String getPrefix() {
+        return prefix;
+    }
+
     public String getMessage() {
         return message;
     }
 
     public String getPosition() {
-        return position ? "Line " + line + ", column " + charPositionInLine : "";
+        return position ? prefix + " at line " + line + ", column " + charPositionInLine : "";
     }
 
     public static WebappMessage transform(MindcodeMessage message) {
         return message instanceof CompilerMessage msg && msg.inputPosition() != null
-                ? new WebappMessage(true, msg.inputPosition().line(), msg.inputPosition().charPositionInLine(), msg.message())
-                : new WebappMessage(false, -1, -1, message.message());
+                ? new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().charPositionInLine(), msg.message())
+                : new WebappMessage("", false, -1, -1, message.message());
     }
 }

@@ -1,13 +1,11 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
@@ -1185,105 +1183,140 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesAssignmentsToBlockNames() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("switch1 = 5;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Assignment to variable 'switch1' not allowed (name reserved for linked blocks)."),
+                "switch1 = 5;"
+        );
     }
 
     @Test
     void refusesBlockNamesAsFunctionParameters() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("def foo(switch1) false; end; foo(5);"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'switch1' of function 'foo' uses name reserved for linked blocks."),
+                "def foo(switch1) false; end; foo(5);"
+        );
     }
 
     @Test
     void refusesBlockNamesAsOutputArguments() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("getBlock(10, 20, switch1);"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Using argument 'switch1' in a call to 'getBlock' not allowed (name reserved for linked blocks)."),
+                "getBlock(10, 20, switch1);"
+        );
     }
 
     @Test
     void refusesBreaksOutsideLoop() {
-        assertThrows(UnexpectedMessageException.class, () ->
-                generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("'break' statement outside of a do/while/for loop."),
+                """
                         while a do
                             print(a);
                         end;
                         break;
                         """
-                )
         );
     }
 
     @Test
     void refusesConflictingConstantAndVariable() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("const a = 10; a = 20;"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("a = 10; const a = 20;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Assignment to constant or parameter 'a' not allowed."),
+                "const a = 10; a = 20;"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Cannot redefine variable or function parameter 'a' as a constant."),
+                "a = 10; const a = 20;"
+        );
     }
 
     @Test
     void refusesConflictingConstants() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("const a = 10; const a = 20;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Multiple declarations of 'a'."),
+                "const a = 10; const a = 20;"
+        );
     }
 
     @Test
     void refusesConflictingFunctionParameter() {
-        assertDoesNotThrow(
-                () -> generateInstructions("a = 10; def foo(a) print(a); end; foo(5);"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("const a = 10; def foo(a) print(a); end; foo(5);"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = 10; def foo(a) print(a); end; foo(5);"));
+        assertGeneratesMessages(
+                ExpectedMessages.none(),
+                "a = 10; def foo(a) print(a); end; foo(5);"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Function 'foo': parameter name 'a' conflicts with existing constant or global parameter."),
+                "const a = 10; def foo(a) print(a); end; foo(5);"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Function 'foo': parameter name 'a' conflicts with existing constant or global parameter."),
+                "param a = 10; def foo(a) print(a); end; foo(5);"
+        );
     }
 
     @Test
     void refusesConflictingParameterAndConstant() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = 10; const a = 20;"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("const a = 10; param a = 20;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Multiple declarations of 'a'."),
+                "param a = 10; const a = 20;"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Multiple declarations of 'a'."),
+                "const a = 10; param a = 20;"
+        );
     }
 
     @Test
     void refusesConflictingParameterAndVariable() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = 10; a = 20;"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("a = 10; param a = 20;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Assignment to constant or parameter 'a' not allowed."),
+                "param a = 10; a = 20;"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Cannot redefine variable or function parameter 'a' as a program parameter."),
+                "a = 10; param a = 20;"
+        );
     }
 
     @Test
     void refusesConflictingParameters() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = 10; param a = 20;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Multiple declarations of 'a'."),
+                "param a = 10; param a = 20;"
+        );
     }
 
     @Test
     void refusesNonConstantParameters() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = 2 * 4;"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = @unit;"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("param a = rand(5);"));
+        final String message = "Parameter declaration of 'a' does not use a literal value, linked block name or constant built-in variable.";
+        assertGeneratesMessages(ExpectedMessages.create().add(message), "param a = 2 * 4;");
+        assertGeneratesMessages(ExpectedMessages.create().add(message), "param a = @unit;");
+        assertGeneratesMessages(ExpectedMessages.create().add(message), "param a = rand(5);");
+        assertGeneratesMessages(ExpectedMessages.create().add(message), "param a = B;");
     }
 
     @Test
     void refusesIterationListsWithWrongSize() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("for i, j in 1, 2, 3 do print(i, j); end;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("The number of values in the list must be an integer multiple of the number of iterators."),
+                "for i, j in 1, 2, 3 do print(i, j); end;"
+        );
     }
 
     @Test
     void refusesMisplacedFormattableLiterals() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("i = $\"Formattable\";"));
-        assertDoesNotThrow(
-                () -> generateInstructions("inline def foo(x) print(x); end; foo(\"Formattable\");"));
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("inline def foo(x) print(x); end; foo($\"Formattable\");"));
+        assertGeneratesMessages(
+                ExpectedMessages.none(),
+                "inline def foo(x) print(x); end; foo(\"Non-formattable\");"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Formattable string not allowed here. It can only be used with printing functions."),
+                "i = $\"Formattable\";"
+        );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Formattable string not allowed here. It can only be used with printing functions."),
+                "inline def foo(x) print(x); end; foo($\"Formattable\");"
+        );
     }
 
     @Test
@@ -1334,8 +1367,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("allocate heap in cell1[0 .. 1];\n$dx = $dy = $dz;"));
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Allocated heap is too small! Increase the size of the allocation, or switch to a Memory Bank to give the heap even more space."),
+                "allocate heap in cell1[0 .. 1];\n$dx = $dy = $dz;"
+        );
     }
 
     @Test
@@ -1352,7 +1387,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesPrintfML8() {
         assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
-                        """
+                """
                         printf("{1}", "a");
                         """,
                 createInstruction(PRINT, q("{1}")),
@@ -1360,4 +1395,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void refusesAssignmentsToBuiltIns() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Assignment to built-in variable '@counter' not allowed."),
+                "@counter = 1;"
+        );
+    }
+
 }

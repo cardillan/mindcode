@@ -1,11 +1,10 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
@@ -64,21 +63,21 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void printFmtCatchesTooFewArguments() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Not enough arguments for 'print' format string."),
+                """
                         print($"Text: $");
                         """
-                )
         );
     }
 
     @Test
     void printFmtCatchesTooManyArguments() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Too many arguments for 'print' format string."),
+                """
                         print($"Text: $", 10, 20);
                         """
-                )
         );
     }
 

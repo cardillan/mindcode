@@ -1,13 +1,12 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.mimex.Icons;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
@@ -57,34 +56,55 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesVariableBasedConstant() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("a = 10;  const A = a;"));
-    }
-
-    @Test
-    void refusesNondeterministicConstant() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("const A = rand(10);"));
-    }
-
-    @Test
-    void refusesFunctionBasedConstant() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
-                        def foo() 5; end;
-                        const A = foo();
-                        """
-                )
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add("Value assigned to constant 'A' is not a constant expression.")
+                        .add("Constant declaration of 'A' does not use a constant expression."),
+                "a = 10; const A = a;"
         );
     }
 
     @Test
-    void refusesMlogIncompatibleConstants() {
-        // TODO Should work in 8A
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions(
-                        createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
-                        "const A = 10**40;"));
+    void refusesNondeterministicConstant() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add("Value assigned to constant 'A' is not a constant expression.")
+                        .add("Constant declaration of 'A' does not use a constant expression."),
+                "const A = rand(10);"
+        );
+    }
+
+    @Test
+    void refusesFunctionBasedConstant() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add("Value assigned to constant 'A' is not a constant expression.")
+                        .add("Constant declaration of 'A' does not use a constant expression."),
+                """
+                        def foo() 5; end;
+                        const A = foo();
+                        """
+        );
+    }
+
+    @Test
+    void refusesMlog7IncompatibleConstants() {
+        assertGeneratesMessages(
+                createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
+                ExpectedMessages.create()
+                        .add("Value assigned to constant 'A' (1.0E40) doesn't have a valid mlog representation.")
+                        .add("Constant declaration of 'A' does not use a constant expression."),
+                "const A = 10**40;"
+        );
+    }
+
+    @Test
+    void supportsLargeConstantsInMlog8() {
+        assertGeneratesMessages(
+                createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
+                ExpectedMessages.none(),
+                "const A = 10**40;"
+        );
     }
 
     @Test
@@ -152,56 +172,56 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesInvalidStringOperation() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Unsupported string expression."),
+                """
                         a = "A" - "B";
                         print(a);
                         """
-                )
         );
     }
 
     @Test
     void refusesPartialStringConcatenation() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Unsupported string expression."),
+                """
                         a = "A" + B;
                         print(a);
                         """
-                )
         );
     }
 
     @Test
     void refusesStringFunction() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
-                        a = max("A", "B");
-                        print(a);
-                        """
-                )
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Unsupported string expression."),
+                """
+                       a = max("A", "B");
+                       print(a);
+                       """
         );
     }
 
     @Test
     void refusesPartialStringFunction() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
-                        a = max("A", 0);
-                        print(a);
-                        """
-                )
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Unsupported string expression."),
+                """
+                       a = max("A", 0);
+                       print(a);
+                       """
         );
     }
 
     @Test
     void refusesUnaryStringFunction() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
-                        a = not "A";
-                        print(a);
-                        """
-                )
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Unsupported string expression."),
+                """
+                       a = not "A";
+                       print(a);
+                       """
         );
     }
 }

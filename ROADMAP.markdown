@@ -19,7 +19,6 @@ None planned.
 
 # Other small or internal improvements
 
-* Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion.
 * Handling syntax errors - web & command line apps:
   * Display message and link to the discussion, prompt users to ask for help if stuck
 * Handling internal errors:
@@ -27,8 +26,6 @@ None planned.
     * Store the source file in a separate table for errors  
     * Display message "The error has been logged and will be investigated."
   * Command line app: display message "An internal error occurred. Please report the error at ..."
-* When an uninitialized temporary variable is found by Data Flow Optimization, generate compilation error -- if it
-  happens, it is an optimization bug.
 * Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization.
 * Refactor stackless function calls
   * UnreachableCodeEliminator now tracks code paths and recognizes CALL instruction; it is no longer necessary to
@@ -48,7 +45,6 @@ None planned.
 * Compatibility warnings:
   * warn when `configure` main variable is used in V7 -- ML changes it to `config`,
   * warn about alloy-smelter --> surge-smelter V6 --> V7 name change.
-* Improve compiler error messages.
 * Warn when the generated code goes over 1000 Mindustry instructions.
 * Warn when potentially non-numeric value is being pushed on the stack.
 

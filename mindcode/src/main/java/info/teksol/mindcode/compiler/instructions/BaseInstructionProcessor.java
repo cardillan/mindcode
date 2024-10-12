@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -31,7 +32,7 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
-    private final Map<InstructionParameterType, Set<String>> validArgumentValues;
+    private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
     protected final boolean mlog8;
     private int tmpIndex = 0;
     private int labelIndex = 0;
@@ -426,7 +427,7 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
      */
     private boolean isValid(InstructionParameterType type, LogicArgument value) {
         if (type.restrictValues()) {
-            Set<String> values = validArgumentValues.get(type);
+            Collection<String> values = validArgumentValues.get(type);
             return values.contains(value.toMlog());
         } else {
             return true;
@@ -477,9 +478,10 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
             LogicArgument argument = instruction.getArgs().get(i);
             InstructionParameterType type = namedParameter.type();
             if (!isValid(type, argument)) {
+                validArgumentValues.get(type).stream().sorted().toList();
                 error(instruction.getAstContext().node(),
                         "Invalid value '%s' for parameter '%s': allowed values are '%s'.", argument.toMlog(),
-                        namedParameter.name(), String.join("', ", validArgumentValues.get(type)));
+                        namedParameter.name(), String.join("', '", validArgumentValues.get(type)));
             }
         }
 
@@ -516,10 +518,10 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
         }
     }
 
-    private Map<InstructionParameterType, Set<String>> createAllowedArgumentValuesMap() {
-        Map<InstructionParameterType, Set<String>> map = new HashMap<>();
+    private Map<InstructionParameterType, Collection<String>> createAllowedArgumentValuesMap() {
+        Map<InstructionParameterType, Collection<String>> map = new HashMap<>();
         for (InstructionParameterType type : InstructionParameterType.values()) {
-            Set<String> allowedValues = createAllowedValues(type);
+            Collection<String> allowedValues = createAllowedValues(type);
             if (!allowedValues.isEmpty()) {
                 map.put(type, allowedValues);
             }
@@ -528,19 +530,19 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
         return Map.copyOf(map);
     }
 
-    private Set<String> createAllowedValues(InstructionParameterType type) {
+    private Collection<String> createAllowedValues(InstructionParameterType type) {
         if (type.isSelector()) {
             return opcodeVariants.stream()
                     .flatMap(v -> v.namedParameters().stream())
                     .filter(v -> v.type() == type)
                     .map(NamedParameter::name)
-                    .collect(Collectors.toUnmodifiableSet());
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
         } else {
             // Select only compatible keywords and put them into a set
             return type.getAllowedValues().stream()
                     .filter(v -> v.versions.contains(processorVersion))
                     .flatMap(v -> v.values.stream())
-                    .collect(Collectors.toUnmodifiableSet());
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
         }
     }
 
@@ -643,7 +645,9 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
                 double absDiff = Math.abs(reFloat - value);
                 double relDiff = absDiff / value;
                 if (relDiff > 1e-9) {
-                    messageConsumer.accept(MindcodeCompilerMessage.warn(
+                    // This warning doesn't come with an input position
+                    // This will no longer happen in ML8 - won't fix.
+                    messageConsumer.accept(MindcodeCompilerMessage.warn(InputPosition.EMPTY,
                             "Loss of precision while creating mlog literals (original value %s, encoded value %s)",
                             literal, mlog));
                 }

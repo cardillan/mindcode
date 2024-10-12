@@ -1,11 +1,10 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
@@ -244,21 +243,17 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void refusesLocalVariableForSync() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
-                        sync(local);
-                        """
-                )
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Using argument 'local' in a call to 'sync' not allowed (a global variable is required)."),
+                "sync(local);"
         );
     }
 
     @Test
     void refusesLiteralForSync() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
-                        sync(10);
-                        """
-                )
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Using argument '10' in a call to 'sync' not allowed (a global variable is required)."),
+                "sync(10);"
         );
     }
 

@@ -38,6 +38,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         messageConsumer.accept(MindcodeCompilerMessage.error(position, format, args));
     }
 
+    private void warn(InputPosition position, @PrintFormat String format, Object... args) {
+        messageConsumer.accept(MindcodeCompilerMessage.warn(position, format, args));
+    }
+
     @Override
     public AstNode visit(ParseTree tree) {
         if (tree instanceof ParserRuleContext ctx && ctx.exception != null) {
@@ -616,7 +620,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitLiteral_string(MindcodeParser.Literal_stringContext ctx) {
         final String str = ctx.getText();
-        return new StringLiteral(pos(ctx.getStart()), str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
+        String value = str.substring(1, str.length() - 1);
+        if (value.contains("\\\"")) {
+            warn(pos(ctx.getStart()), "Usage of double quotes in string literals is deprecated.");
+            value = value.replace("\\\"", "'");
+
+        }
+        return new StringLiteral(pos(ctx.getStart()), value.replaceAll("\\\\\"", "\""));
     }
 
     @Override

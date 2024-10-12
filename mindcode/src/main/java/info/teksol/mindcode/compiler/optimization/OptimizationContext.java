@@ -1217,7 +1217,7 @@ class OptimizationContext {
 
         private LogicIterator(int cursor) {
             this.cursor = cursor;
-            if (cursor < 0 || cursor >= program.size()) {
+            if (cursor < 0 || cursor > program.size()) {
                 throw new NoSuchElementException();
             }
         }

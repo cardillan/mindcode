@@ -258,7 +258,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    error(node,"Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
+                    error(node,"Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
                             fnArgs.get(argIndex).toMlog(), name);
                     return NULL;
                 }
@@ -288,7 +288,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
                         // Block name cannot be used as output argument
                         LogicArgument argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)", argument.toMlog(), name);
+                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).", argument.toMlog(), name);
                             return NULL;
                         }
                         ixArgs.add(argument);
@@ -400,7 +400,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         @Override
         public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments) {
             if (!warningEmitted) {
-                messageConsumer.accept(MindcodeCompilerMessage.warn(
+                messageConsumer.accept(MindcodeCompilerMessage.warn(node.getInputPosition(),
                         "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
                         deprecated, processorVersion, replacement.getName()));
                 warningEmitted = true;
@@ -587,7 +587,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    error(node, "Using argument '%s' in a call to '%s' not allowed (a global variable is required)",
+                    error(node, "Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
                             fnArgs.get(argIndex).toMlog(), name);
                     return NULL;
                 }
@@ -616,7 +616,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
                         // Block name cannot be used as output argument
                         LogicValue argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks)",
+                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).",
                                     argument.toMlog(), name);
                             return NULL;
                         }

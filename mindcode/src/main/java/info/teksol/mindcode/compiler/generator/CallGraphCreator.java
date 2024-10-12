@@ -46,7 +46,11 @@ public class CallGraphCreator extends MessageEmitter {
 
     private void validateFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
         if (function.getDeclaration().isInline() && function.isRecursive()) {
-            error(function.getInputPosition(), "Recursive function '%s' declared inline.", function.getName());
+            error(function.getInputPosition(), "Recursive function '%s' declared 'inline'.", function.getName());
+        }
+
+        if (function.getName().contains("-")) {
+            warn(function.getInputPosition(), "Function '%s': kebab-case identifiers are deprecated.", function.getName());
         }
 
         function.getParams().stream()

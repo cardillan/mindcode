@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // This class tests generation of user-defined function and function calls.
 // Original tests from LogicInstructionGeneratorTest class were moved here, although with the new function
@@ -801,7 +800,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 generateInstructions("""
                         allocate stack in cell3[20..40], heap in cell3[41...64];
                         def foo(n)
-                          foo(n-1);
+                          foo(n - 1);
                         end;
 
                         $x = 99;
@@ -813,66 +812,66 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesToDeclareRecursiveFunctionsWhenNoStackAround() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Function 'foo' is recursive and no stack was allocated."),
+                """
                         def foo
                             foo();
                         end;
                         foo();
                         """
-                )
         );
     }
 
     @Test
     void refusesMisplacedStackAllocation() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Stack allocation must not be preceded by a control statement or a function call."),
+                """
                         while true do
                           allocate stack in cell1;
                         end;
                         """
-                )
         );
     }
 
     @Test
     void refusesRecursiveInlineFunctions() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Recursive function 'foo' declared 'inline'."),
+                """
                         allocate stack in cell1;
                         inline def foo(n)
                             foo(n - 1);
                         end;
                         print(foo(1) + foo(2));
                         """
-                )
         );
     }
 
     @Test
     void refusesUppercaseFunctionParameter() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'N' of function 'foo' uses name reserved for global variables."),
+                """
                         def foo(N)
                             N;
                         end;
                         print(foo(1) + foo(2));
                         """
-                )
         );
     }
 
     @Test
     void refusesBlockNameAsFunctionParameter() {
-        assertThrows(UnexpectedMessageException.class,
-                () -> generateInstructions("""
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'switch1' of function 'foo' uses name reserved for linked blocks."),
+                """
                         def foo(switch1)
                             switch1;
                         end;
                         print(foo(1) + foo(2));
                         """
-                )
         );
     }
 }

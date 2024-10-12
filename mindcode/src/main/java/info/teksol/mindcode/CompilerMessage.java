@@ -7,6 +7,8 @@ public interface CompilerMessage extends MindcodeMessage {
     InputPosition inputPosition();
 
     default String formatMessage(Function<InputPosition, String> positionFormatter) {
-        return inputPosition() != null ? positionFormatter.apply(inputPosition()) + " " + message() : message();
+        return inputPosition() != null && inputPosition() != InputPosition.EMPTY
+                ? positionFormatter.apply(inputPosition()) + " " + message()
+                : message();
     }
 }
