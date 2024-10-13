@@ -337,10 +337,10 @@ RIGHT_RBRACKET : ')';
 LEFT_CBRACKET : '{';
 RIGHT_CBRACKET : '}';
 
-FORMATTABLE : '$"' ~[\n\r]* '"' ;
+FORMATTABLE : '$"' ~[\n\r"]* '"' ;
 
 fragment ESCAPED_QUOTE : '\\"';
-LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
+LITERAL : '"' ( ESCAPED_QUOTE | ~[\n\r"] )*? '"';
 
 // fragments
 fragment DecimalExponent : ( 'e' | 'E' | 'e+' | 'E+' | 'e-' | 'E-' ) DecimalDigits;
@@ -369,4 +369,3 @@ REM_COMMENT: '///' ~[/\r\n] ~[\r\n]*;
 COMMENT: '/*' .*? '*/' -> skip;
 SL_COMMENT : '//' ~[\r\n]* -> skip;
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;
-

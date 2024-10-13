@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 * Fixed wrong compilation order of appended files ([#155](https://github.com/cardillan/mindcode/issues/155)).
 * Fixed inadequate reporting of syntax error ([#156](https://github.com/cardillan/mindcode/issues/156)).
+* Fixed wrong parsing of formattable string literals.
+* Fixed inadequate handling of unsupported expressions embedded in formattable string literals.  
 
 ### Added
 

@@ -62,11 +62,22 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void printFmtHandlesEscapedEscapes() {
+        assertCompilesTo("""
+                        print($"Amount: \\$\\\\$", 100);
+                        """,
+                createInstruction(PRINT, q("Amount: $\\")),
+                createInstruction(PRINT, "100"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void printFmtCatchesTooFewArguments() {
         assertGeneratesMessages(
                 ExpectedMessages.create().add("Not enough arguments for 'print' format string."),
                 """
-                        print($"Text: $");
+                        print($"Text: $ $ $");
                         """
         );
     }
@@ -77,6 +88,26 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                 ExpectedMessages.create().add("Too many arguments for 'print' format string."),
                 """
                         print($"Text: $", 10, 20);
+                        """
+        );
+    }
+
+    @Test
+    void printFmtRefusesInterpolatedExpressions() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Unsupported expression 'rand(10)' inside format string - only variable names are allowed."),
+                """
+                        print($"Text: ${rand(10)}");
+                        """
+        );
+    }
+
+    @Test
+    void printFmtRefusesUnclosedExpressions() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Invalid format string (missing '}' after '${')."),
+                """
+                        print($"Text: ${x$y");
                         """
         );
     }
@@ -180,6 +211,19 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
         );
     }
 
+
+    @Test
+    void printFmtAcceptsSpacesInsideBrackets() {
+        assertCompilesTo("""
+                        print($"Text: ${ }${ y }", x);
+                        """,
+                createInstruction(PRINT, q("Text: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, "y"),
+                createInstruction(END)
+        );
+    }
+
     @Test
     void generatesRemarks() {
         assertCompilesTo("""
@@ -246,7 +290,6 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
-
 
     @Test
     void remarkHandlesFormattableStringLiterals() {

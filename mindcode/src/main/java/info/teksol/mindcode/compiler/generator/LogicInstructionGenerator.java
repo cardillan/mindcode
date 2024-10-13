@@ -1490,9 +1490,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
         int position = 0;
+        boolean notEnoughArguments = false;
 
         // Skip leading and trailing quotes
-        loop:
         for (int i = 0; i < format.length(); i++) {
             char ch = format.charAt(i);
             switch (ch) {
@@ -1510,33 +1510,48 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         accumulator.setLength(0);
                     }
 
-                    String variable = extractVariable(format.substring(i + 1));
+                    final String variable;
+                    if (i + 1 < format.length() && format.charAt(i + 1) == '{') {
+                        int closeBracket = format.indexOf('}', i + 2);
+                        if (closeBracket == -1) {
+                            error(node, "Invalid format string (missing '}' after '${').");
+                            break;
+                        }
+
+                        variable = format.substring(i + 2, closeBracket).trim();
+                        i = closeBracket;
+                        if (!variable.isEmpty() && !Pattern.matches("^[@_a-zA-Z][-a-zA-Z_0-9]*$", variable)) {
+                            error(node, "Unsupported expression '%s' inside format string - only variable names are allowed.", variable);
+                            break;
+                        }
+                    } else {
+                        variable = extractVariable(format.substring(i + 1));
+                        i += variable.length();
+                    }
+
                     if (variable.isEmpty()) {
                         // No variable, emit next argument
                         if (position < params.size()) {
-                            emit(formatter.createInstruction(this,params.get(position++)));
-                        } else {
+                            emit(formatter.createInstruction(this, params.get(position++)));
+                        } else if (!notEnoughArguments) {
                             error(node, "Not enough arguments for '%s' format string.", formatter.function);
-                            break loop;
+                            notEnoughArguments = true;
                         }
                     } else {
                         // Going through createValue ensures proper handling and registering of local variables
                         LogicValue eval = variable.startsWith("@")
                                 ? LogicBuiltIn.create(variable.substring(1))
                                 : createValue(node, variable);
-                        emit(formatter.createInstruction(this,eval));
-                    }
-
-                    if (i + 1 < format.length() && format.charAt(i + 1) == '{') {
-                        i = format.indexOf('}', i + 2);
-                    } else {
-                        i += variable.length();
+                        emit(formatter.createInstruction(this, eval));
                     }
 
                     break;
 
                 case '\\':
-                    escape = true;
+                    if (escape) {
+                        accumulator.append('\\');
+                    }
+                    escape = !escape;
                     break;
 
                 default:
@@ -1561,13 +1576,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private static final Pattern REGEX_VARIABLE = Pattern.compile("^([@_a-zA-Z][-a-zA-Z_0-9]*)");
-    private static final Pattern REGEX_BRACKETS = Pattern.compile("^\\{\\s*([@_a-zA-Z][-a-zA-Z_0-9]*)?\\s*}");
 
     private String extractVariable(String string) {
-        Matcher matcher = REGEX_BRACKETS.matcher(string);
-        if (matcher.find()) return matcher.group(1) == null ? "" : matcher.group(1);
-
-        matcher = REGEX_VARIABLE.matcher(string);
+        Matcher matcher = REGEX_VARIABLE.matcher(string);
         return matcher.find() ? matcher.group(1) : "";
     }
 
