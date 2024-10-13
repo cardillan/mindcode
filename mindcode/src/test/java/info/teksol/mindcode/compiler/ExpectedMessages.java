@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler;
 
 import com.ibm.icu.impl.Assert;
-import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.MindcodeMessage;
 
 import java.util.ArrayList;
@@ -249,11 +248,11 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
 
     private record PositionalMessageMatcher(int line, int column, String message) implements MessageMatcher {
         @Override
-        public boolean matches(MindcodeMessage msg) {
-            if (msg instanceof CompilerMessage m) {
-                return line == m.inputPosition().line() && column == m.inputPosition().charPositionInLine() && message.equals(m.message());
-            } else {
+        public boolean matches(MindcodeMessage m) {
+            if (m.inputPosition().isEmpty()) {
                 return false;
+            } else {
+                return line == m.inputPosition().line() && column == m.inputPosition().charPositionInLine() && message.equals(m.message());
             }
         }
 

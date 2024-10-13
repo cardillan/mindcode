@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Order(1)
 public class OptimizerTest extends AbstractProcessorTest {
 
     public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/emulator/processor/optimizer";

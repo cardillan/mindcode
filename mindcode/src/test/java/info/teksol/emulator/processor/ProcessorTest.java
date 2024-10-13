@@ -6,6 +6,7 @@ import info.teksol.mindcode.compiler.SortCategory;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Some Mindcode code tested in this class can be quite complex and hard to maintain as a string constant.
 // Such code can be saved as a file in the src/test/resources/scripts directory.
+@Order(4)
 public class ProcessorTest extends AbstractProcessorTest {
 
     public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/emulator/processor/processor";

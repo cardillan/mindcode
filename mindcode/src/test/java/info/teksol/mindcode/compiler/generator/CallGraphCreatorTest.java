@@ -4,8 +4,10 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+@Order(99)
 public class CallGraphCreatorTest extends AbstractGeneratorTest {
 
     @Test

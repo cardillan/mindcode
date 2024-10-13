@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.logic.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
+@Order(99)
 class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
     @Test
     void resolvesAbsoluteAddressesOfLabels() {

@@ -1,9 +1,11 @@
 package info.teksol.mindcode.compiler;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Order(99)
 class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void printsURadarAndUControl() {

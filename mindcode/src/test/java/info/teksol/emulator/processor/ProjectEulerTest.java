@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Order(6)
 public class ProjectEulerTest extends AbstractProcessorTest {
 
     public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/emulator/processor/euler";

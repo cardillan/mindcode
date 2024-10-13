@@ -5,12 +5,14 @@ import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Order(99)
 class BlockPositionMapTest extends AbstractSchematicsTest {
 
     @Test

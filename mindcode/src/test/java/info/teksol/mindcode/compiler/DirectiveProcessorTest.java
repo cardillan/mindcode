@@ -5,6 +5,7 @@ import info.teksol.mindcode.ast.DirectiveText;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import static info.teksol.mindcode.InputPosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Order(99)
 class DirectiveProcessorTest {
 
     private Directive directive(String option, String value) {

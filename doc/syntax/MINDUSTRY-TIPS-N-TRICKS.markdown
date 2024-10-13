@@ -151,7 +151,7 @@ println(ITEM-COAL, ": ", vault1.coal);
 println(ITEM-LEAD, ": ", vault1.lead);
 println(ITEM-SAND, ": ", vault1.sand);
 
-printf("Using $UNIT-MEGA to transport items...\n"); 
+print($"Using $UNIT-MEGA to transport items...\n"); 
 ```
 
 Supported Mindustry icons are available through built-in String constants containing them. For a complete list of
@@ -176,6 +176,11 @@ to output such a small value directly. It is necessary to be aware that a number
 necessarily equal to zero.
 
 ## Using units
+
+> [!TIP]
+> When compiling code for [Mindustry Logic 8](MINDUSTRY-8.markdown), a system library is available. The system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown) or the [library source file](/mindcode/src/main/resources/library/sys.mnd).
+> 
+> The unit functions in the system library are based on the principles described here. 
 
 Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack,
 build, heal or move things around. Using units isn't that complicated, but it isn't always immediately apparent 
@@ -211,7 +216,7 @@ else
     count = 0;
 end;
 
-printf("There are $count active poly(s).");
+print($"There are $count active poly(s).");
 printflush(message1);
 ```
 
@@ -228,7 +233,7 @@ poly = ubind(@poly);     // We just assume the units exist
 mega = ubind(@mega);
 
 ANGLE = 0;
-while true
+while true do
     controlUnit(poly);
     controlUnit(mega);
 end;
@@ -236,7 +241,7 @@ end;
 def controlUnit(my_unit)
     ubind(my_unit);
     move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
-    printf("Currently bound unit is ${@unit}.");
+    print($"Currently bound unit is ${@unit}.");
     printflush(message1);
     wait(0.8);
     ANGLE += 45;
@@ -250,7 +255,7 @@ flag. A lot of code that can be seen on the internet uses flags to mark units th
 processors know to avoid them. Typical code might look like this:
 
 ```
-def findFreeUnit(unit_type, mark_flag)
+def myFindFreeUnit(unit_type, mark_flag)
     do
         ubind(unit_type);
     loop while @unit.flag !== 0;      
@@ -263,7 +268,7 @@ def findFreeUnit(unit_type, mark_flag)
 end;
 
 flag = rand(10**10);
-my_unit = findFreeUnit(@mono, flag);
+my_unit = myFindFreeUnit(@mono, flag);
 ```
 
 Later on, you might loop through all units and use the particular value of the flag to recognize those you acquired.
@@ -284,17 +289,17 @@ free, the `@unit.controlled` property returns `0`. When the value is nonzero, th
 a processor, or directly by a player, or by being part of the units commanded indirectly by player (different values 
 are assigned to each of these possibilities).
 
-A wee bit enhanced `findFreeUnit()` function using the `controlled` property might look like this:
+A wee bit enhanced `myFindFreeUnit()` function using the `controlled` property might look like this:
 
 ```
-def findFreeUnit(unit_type, initial_flag)
+def myFindFreeUnit(unit_type, initial_flag)
     // Keep looking for unit until one is found
     while true do
         ubind(unit_type);
         if @unit == null then
-            printf("No unit of type $unit_type found.");
+            print($"No unit of type $unit_type found.");
         elsif @unit.controlled != 0 then
-            printf("Looking for a free $unit_type...");
+            print($"Looking for a free $unit_type...");
         else
             flag(initial_flag);		// Mark unit as active
             return @unit;
@@ -313,7 +318,7 @@ The other property is `@unit.controller`. This returns the processor that is act
 ```
 if @unit.controller != @this then
     // We lost our unit. Immediatelly get a new one.
-    findFreeUnit(@mega, STATE_INIT);
+    myFindFreeUnit(@mega, STATE_INIT);
 end;
 ```
 
@@ -335,7 +340,7 @@ flag(10);
 while @unit.controller == @this do
     loops += 1;      // while loop doesn't allow empty body as of now 
 end;
-printf("Unit was controlled for $ ms", floor(@time - start));
+print($"Unit was controlled for $ ms", floor(@time - start));
 printflush(message1);
 ```
 
@@ -345,14 +350,13 @@ When a unit is destroyed, the variable that pointed to it keeps its original val
 destroyed unit (as well as a destroyed building, actually) by querying the `dead` property. A value of `0` (or 
 `false`) means the unit is alive, a value of `1` (or `true`) means it is, well, dead as a parrot.
 
-When querying the `@unit.dead` property, you can possibly obtain three values
-* `0` when a unit is bound and alive,
-* `1` when a unit is not bound, or is dead.
+> [!TIP]
+> The `dead` property always returns either `0` or `1`. Specifically, invoking `var.dead` returns 1 when `var` happens to be `null`.
 
 ```
 if @unit.controller != @this or @unit.dead == 1 then
     // We lost our unit. Immediatelly get a new one.
-    findFreeUnit(@mega, STATE_INIT);
+    myFindFreeUnit(@mega, STATE_INIT);
 end;
 ```
 
@@ -442,15 +446,15 @@ while @unit.controlled == 1 do      // If the unit still controlled by this proc
     if inNear == 1 then
         getBlock(outx, outy, 0, block, 0);       // We don't need a block type or floor type, only a building
         if block === null then
-            printf("Enemy turrer at ${outx}, ${outy} has been destroyed!\n");
+            print($"Enemy turrer at ${outx}, ${outy} has been destroyed!\n");
             printflush(message1);
             wait(3);
             enTurr = ulocate(building, turret, true, outx, outy);        // Finding the next enemy turret
         else
-            printf("Enemy turrer at ${outx}, ${outy} still exists\n");
+            print($"Enemy turret at ${outx}, ${outy} still exists\n");
         end;
     else
-        printf("Searching for enemy turrer at ${outx}, ${outy}...\n");
+        print($"Searching for enemy turrer at ${outx}, ${outy}...\n");
     end;
     printflush(message1);
 end;

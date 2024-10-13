@@ -15,6 +15,7 @@ When an error is encountered in the source code, the parser tries to recover and
 ### Always look at the preceding code
 
 Quite often the error is caused by some problem in the statement immediately preceding the position on which it is reported. It's always a good idea to inspect the previous statement. Remember the true source of error might be separated from the reported error by a lengthy comment.
+- Sometimes the cause for the error lies within the same expression, just earlier: `print[rand(i));`. The error is caused by typing a left square bracket instead of opening parenthesis, but is reported at the closing parenthesis.   
 - Special handling has been implemented for missing semicolons to be reported at the end of the previous statements, which is typically the correct place. If your code doesn't contain any other error but missing semicolons, they should all be reported accurately.
 
 ### Unexpected input
@@ -103,7 +104,6 @@ print B
 print ": "
 print A
 print "\n"
-end
 ```
 
 The number of variables being sorted is limited by the [instruction limit](SYNTAX-5-OTHER.markdown#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.

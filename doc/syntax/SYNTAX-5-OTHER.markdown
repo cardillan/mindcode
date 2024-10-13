@@ -183,6 +183,8 @@ and availability of the advanced optimization level is:
 | [Stack Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                           | stack-optimization           |    N     |
 | [Print Merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                                     | print-merging                |    Y     |
 
+This table doesn't track which optimizations provide some functionality on the `experimental` level. This information is available in the individual optimizations documentation. 
+
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available.
 

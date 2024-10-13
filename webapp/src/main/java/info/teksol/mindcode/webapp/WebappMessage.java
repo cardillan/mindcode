@@ -1,6 +1,5 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.MindcodeMessage;
 
 public final class WebappMessage {
@@ -42,9 +41,9 @@ public final class WebappMessage {
         return position ? prefix + " at line " + line + ", column " + charPositionInLine : "";
     }
 
-    public static WebappMessage transform(MindcodeMessage message) {
-        return message instanceof CompilerMessage msg && msg.inputPosition() != null
-                ? new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().charPositionInLine(), msg.message())
-                : new WebappMessage("", false, -1, -1, message.message());
+    public static WebappMessage transform(MindcodeMessage msg) {
+        return msg.inputPosition().isEmpty()
+                ? new WebappMessage("", false, -1, -1, msg.message())
+                : new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().charPositionInLine(), msg.message());
     }
 }

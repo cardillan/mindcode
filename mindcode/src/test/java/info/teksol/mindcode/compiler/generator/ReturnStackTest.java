@@ -4,11 +4,13 @@ import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.InputPosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Order(99)
 public class ReturnStackTest {
     private final ReturnStack returnStack = new ReturnStack(ExpectedMessages.none());
 

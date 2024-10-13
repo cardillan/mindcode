@@ -14,6 +14,7 @@ import info.teksol.mindcode.compiler.optimization.BaseOptimizerTest.DummyOptimiz
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.Opcode;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Order(99)
 class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
     @Override
     protected Class<DummyOptimizer> getTestedClass() {

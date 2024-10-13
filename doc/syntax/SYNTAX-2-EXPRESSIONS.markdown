@@ -135,7 +135,7 @@ printflush(message1);
 
 </details>
 
-# Expressions without valid evaluation
+# Expressions without a valid evaluation
 
 When an expression cannot be mathematically evaluated (e.g. `1 / 0`, `sqrt(-1)`, `log(0)`, ...), the resulting value 
 of the expression is `null`. Additionally, `null` values are treated as zero (`0`). Therefore, `15 + 6 / 0` 
@@ -148,7 +148,13 @@ if a unit is bound, `0` otherwise.
 
 Expressions or parts of expressions that are constant are evaluated at compile time. For example, `print(60 / 1000)` 
 compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime. Most of Mindcode 
-operators and deterministic built-in functions can be used in constant expressions. 
+operators and deterministic built-in functions can be used in constant expressions.
+
+Constant expressions are evaluated during code generation. Furthermore, expressions that contain some constant
+subexpressions (e.g. `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated
+by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
+
+## Constant expressions in Mindustry Logic 7 and lower
 
 If the result of a constant expression is a value which
 [cannot be encoded into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), the expression isn't 
@@ -166,17 +172,12 @@ produces
 ```
 op pow __tmp0 10 50
 print __tmp0
-op pow __tmp1 10 50
-print __tmp1
+print __tmp0
 print 1E25
 end
 ```
 
 If the value of the constant expression can be only encoded to mlog with loss of precision, a warning is issued.
-
-Constant expressions are evaluated during code generation. Furthermore, expressions that contain some constant 
-subexpressions (e.g. `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated 
-by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
 
 # String expressions
 
@@ -208,11 +209,11 @@ The only supported operation is concatenation of string constants and literals u
 
 ```
 const NAME = "John";
-message = formalGreeting ? "Hey " + NAME + "!" : "Good day, " + NAME;
+message = formalGreeting ? "Good day, " + NAME : "Hey " + NAME + "!";
 print(message);
 ```
 
-It is most useful to embed icon string constants into larger strings, which would otherwise be impossible:
+It is especially useful to embed icon string constants into larger strings, which would otherwise be impossible:
 
 ```
 def displayLevel(container, title, item)
@@ -230,7 +231,7 @@ constant:
 ```
 const TOTAL = 10;
 const MESSAGE = " out of " + TOTAL;
-for i 1 .. TOTAL do
+for i in 1 .. TOTAL do
     println("Step ", i, MESSAGE);
 end;
 ```

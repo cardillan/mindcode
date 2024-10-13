@@ -66,7 +66,7 @@ The `format` instruction searches the text buffer, looking for a placeholder wit
 
 // Formats a number into the text buffer, without external memory.
 // The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
-def formatNumber(n)
+def myFormatNumber(n)
     n = floor(n);
     if n < 0 then
         format("-{2}");     // Prepend the minus sign
@@ -86,16 +86,18 @@ end;
 
 // Prints the number straight away
 // The text buffer must not contain any placeholders lower than {3}.
-def printNumber(n)
+def myPrintNumber(n)
     print("{2}");
     formatNumber(n);
 end;
 
 println("The numbers are {2} and {3}.");
-formatNumber(floor(rand(1000000000)));
-formatNumber(-floor(rand(1000000000)));
-printNumber(floor(rand(100000)));
+myFormatNumber(floor(rand(1000000000)));
+myFormatNumber(-floor(rand(1000000000)));
+myPrintNumber(floor(rand(100000)));
 ```
+
+Note: `formatNumber` and `printNumber` functions, identical to those above, are part of the [system library](SYSTEM-LIBRARY.markdown).
 
 Existing print merger is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target lower than ML8A compiles into
 

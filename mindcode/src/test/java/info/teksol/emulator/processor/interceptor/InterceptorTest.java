@@ -1,7 +1,9 @@
 package info.teksol.emulator.processor.interceptor;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+@Order(99)
 public class InterceptorTest extends AbstractInterceptorTest {
 
     @Override

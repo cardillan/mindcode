@@ -2,10 +2,7 @@
 
 Control flow statements are statements that alter the flow of code.
 They either branch, i.e. execute one of several possible alternatives,
-or they loop, i.e. repeat part of the code (zero,) one or more times.
-
-The `do` and `then` keywords in control statements are optional. It is recommended to always use them, as it may 
-help reveal some errors in the structure of the program.   
+or they loop, i.e. repeat part of the code (zero, ) one or more times.
 
 # Loops
 
@@ -18,8 +15,7 @@ There are several types of loops:
 
 ## While Loops
 
-The `while` loop gets repeated as long as the condition remains `true` (the `do` keyword separating the condition 
-from the loop body is optional):
+The `while` loop gets repeated as long as the condition remains true:
 
 ```
 while @unit == null do
@@ -121,7 +117,7 @@ for unit, count in
     @poly, 4,
     @mega, 2
 do
-    print("$unit: $count\n");
+    print($"$unit: $count\n");
 end;
 printflush(message1);
 ```
@@ -133,7 +129,7 @@ The values in the list aren't organized into tuples. You can put them on separat
 If you use expressions based on the values of the loop control variables in the list, the results are generally undefined. Example:
 
 ```
-a = 1
+a = 1;
 b = 2;
 for a, b in b, a do
     print(a, b);
@@ -188,7 +184,7 @@ print(a, b, c, d);
 
 This code initializes values `a`, `b`, `c` and `d` to `1`, `2`, `3` and `4` respectively. No warning about these variables not being initialized is made, because their initial values aren't used inside the loop body.
 
-If at least one element in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
+If some of the elements in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
 
 ```
 for out i in a, b, c + 1, d do
@@ -196,21 +192,9 @@ for out i in a, b, c + 1, d do
 end;
 ```
 
-The `do` keyword is, as always, optional. Furthermore, it is possible to enclose the list of elements in parentheses, either with the `do` keyword, or without:
-
-```
-for i in (1, 2, 3) 
-    print(i);
-end;
-
-for j in (11, 22, 33) do
-    print(j);
-end;
-```
-
 ## C-Style Loops
 
-The syntax is similar to C's, except for the absence of parenthesis and the optional `do` keyword:
+The syntax is similar to C's, except for the absence of parenthesis and the `do` keyword:
 
 ```
 // Visit every block in a given region, one at a time, starting from the bottom
@@ -227,8 +211,7 @@ end;
 
 ## Break and continue
 
-You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop,
-`continue` skips the rest of the current iteration):
+You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
 
 ```
 while not within(x, y, 6) do
@@ -253,11 +236,12 @@ for i in 1 .. 10 do
         if i > j then
             break MainLoop;
         end;
+        print(j);
     end;
 end;
 ```
 
-Similarly, `continue MainLoop` skips the rest of the current iteration of both the inner loop and the main loop.
+Similarly, `continue MainLoop;` skips the rest of the current iteration of both the inner loop and the main loop.
 Every loop in Mindcode can be marked with a label,
 and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
 
@@ -266,36 +250,13 @@ and the break or continue statements can use those labels to specify which of th
 > `case` statement). It doesn't make sense to put additional statements or expressions after a `break` or `continue`,
 > since that code would never get executed and will be removed by the optimizer.
 
-If you do put additional statements after a `break` or `continue` without a semicolon, the compiler will mistake them for a label:
-
-```
-while true do
-    break
-    print("This never gets printed")
-end
-```
-
-The compiler will say:
-
-> Error while compiling source code: Undefined label 'print'.
-
-If you insist on putting additional statement after a `break` or `continue`, use semicolon to separate the two statements:
-
-```
-while true
-    break;
-    print("This never gets printed")
-end
-```
-
 # Conditionals
 
 Mindcode offers 3 types of conditionals: if/else expressions, the ternary operator and case/when expressions.
 
 ## If/Else Expressions
 
-In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For
-example (the `then` keyword after both `if` and `elsif` is optional):
+In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For example:
 
 ```
 result = if n == 0 then
@@ -372,48 +333,6 @@ text = case number
         "A very big number";
     else
         "An ugly number";
-end;
-```
-
-**Then keyword**
-
-The `then` keyword at the end of the list of when expressions is optional.
-Using it helps to avoid a bug that can happen when you put a superfluous comma at the end of the `when` expression list:
-
-```
-case block.type
-    when @conduit, @pulse-conduit, @plated-conduit,
-        block.enabled = intake;
-    when @overdrive-projector, @overdrive-dome
-        block.enabled = boost;
-end;
-```
-
-The comma after the `@plated-conduit` is not meant to be there.
-Because of it, the compiler treats the next expression as if it was another of the `when` values.
-Rearranging the code might help to understand the meaning of this code snippet:
-
-```
-case block.type
-    when @conduit, @pulse-conduit, @plated-conduit, block.enabled = intake
-        // Do nothing
-    when @overdrive-projector, @overdrive-dome
-        block.enabled = boost;
-end;
-```
-
-The resulting effect is that when the block is some kind of conduit, nothing happens.
-When it is something different, the `block.enabled = intake` expression is evaluated,
-changing wrong block's state.
-
-If the keyword `then` is used, the compiler will complain about the superfluous comma:
-
-```
-case block.type
-    when @conduit, @pulse-conduit, @plated-conduit, then
-        block.enabled = intake;
-    when @overdrive-projector, @overdrive-dome then
-        block.enabled = boost;
 end;
 ```
 

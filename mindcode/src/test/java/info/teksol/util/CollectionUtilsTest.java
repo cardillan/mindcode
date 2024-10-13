@@ -1,5 +1,6 @@
 package info.teksol.util;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import static info.teksol.util.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Order(99)
 public class CollectionUtilsTest {
 
     private static final List<String> list = List.of("a", "b", "c", "d", "a", "b", "c");

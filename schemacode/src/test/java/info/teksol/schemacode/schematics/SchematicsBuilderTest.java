@@ -8,12 +8,14 @@ import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Order(99)
 class SchematicsBuilderTest extends AbstractSchematicsTest {
     @Test
     void unwrapsStringBlock() {
@@ -24,7 +26,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
         String original = """
                 This is
                 first line.
-                                
+                
                 This is
                 second line.""";
 
@@ -39,14 +41,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 This is second line.""";
 
         String original = """
-                                
+                
                 This is
                 first line.
-                                
-                                
+                
+                
                 This is
                 second line.
-                                
+                
                 """;
 
         String actual = SchematicsBuilder.unwrap(original);
@@ -67,7 +69,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         schematic
                             name = "First"
                         end
-                                        
+                        
                         schematic
                             name = "Second"
                         end
@@ -81,7 +83,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         schematic
                             name = "Schematics"
                         end
-                                        
+                        
                         constant = "foo"
                         constant = "bar"
                         """,
@@ -156,7 +158,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 schematic
                     name = my_name
                 end
-                                
+                
                 my_name = "Name"
                 """);
 

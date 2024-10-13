@@ -56,6 +56,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitRelaxed_directive(MindcodeParser.Relaxed_directiveContext ctx) {
+        warn(pos(ctx.getStart()), "The relaxed syntax is deprecated.");
         return new NoOp();
     }
 
@@ -411,6 +412,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFor_each_1(MindcodeParser.For_each_1Context ctx) {
+        warn(pos(ctx.values.getStart()), "Using parentheses around value list in list iteration loops is deprecated.");
         String label = ctx.label == null ? null : ctx.label.getText();
         return new ForEachExpression(pos(ctx.getStart()), label,
                 createListOfIterators(ctx.iterators),

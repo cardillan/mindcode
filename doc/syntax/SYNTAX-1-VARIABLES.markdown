@@ -1,25 +1,13 @@
 # Variables and constants
 
-Mindcode uses Mindustry Logic processor variables for its own variables. These variables can contain a number 
-(integer or real), an object or a `null` value. An object can be a Mindustry object, such as a block or a unit, a 
-Mindustry constant such as `@coal`, or a string such as `"Text"`.
+Mindcode uses Mindustry Logic processor variables for its own variables. These variables can contain a number (integer or real), an object, or a `null` value. An object can be a Mindustry object, such as a block or a unit, a Mindustry constant such as `@coal`, or a string such as `"Text"`.
 
-Variables aren't declared in Mindcode, they're created with first use. `count = 10` creates a variable named 
-`count` and assigns a value of `10` to it. Variables that weren't previously written to have a value of `null` in 
-Mindustry Logic. Once set, processor variables are preserved (even across game saves/loads) until the processor code 
-is modified or the processor is destroyed.
+Variables aren't declared in Mindcode, they're created with first use. `count = 10` creates a variable named `count` and assigns a value of `10` to it. Variables that weren't previously written to have a value of `null` in Mindustry Logic. Once set, processor variables are preserved (even across game saves/loads) until the processor code is modified or the processor is destroyed.
 
 > [!IMPORTANT]
-> Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations, such as 
-> `&` or `<<`, the value is converted to a 64-bit integer (a Java `long`), the operation is performed and the result 
-> is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold only 
-> about 52 bits or so.
+> Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations, such as `&` or `<<`, the value is converted to a 64-bit integer (a Java `long`), the operation is performed and the result is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold only about 52 bits or so.
 
-Mindcode is aware of the actual values you assign to variables. In some cases, knowing the actual value allows 
-specific code optimizations to be performed, which are only valid for the value you've assigned to the variable in
-the source code (see [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)). Therefore, 
-changing a value assigned to a variable in the compiled code might not produce the same results as changing the 
-assigned value in the source code. For example, the following code:
+Mindcode is aware of the actual values you assign to variables. In some cases, knowing the actual value allows specific code optimizations to be performed, which are only valid for the value you've assigned to the variable in the source code (see [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)). Therefore, changing a value assigned to a variable in the compiled code might not produce the same results as changing the assigned value in the source code. For example, the following code:
 
 ```
 min = 0;
@@ -52,18 +40,13 @@ jump 3 lessThan min max
 end
 ```
 
-Setting min to 10 in the source code would cause the function to output "Low" instead of "High". However, as is obvious 
-from the compiled code, the function has been optimized in such a way that it always prints "High", based on the 
-values of the `min` and `max` variables present in the source code.    
+Setting `min` to `10` in the source code would cause the function to output `Low` instead of `High`. However, as is obvious from the compiled code, the function has been optimized in such a way that it always prints `High`, based on the values of the `min` and `max` variables present in the source code.    
 
-Mindcode has a specific mechanism for allowing _program parametrization_, that is changing some values assigned to 
-variables in the compiled code. Such values must be declared as [program parameters](#program-parameters), as 
-described below.
+Mindcode has a specific mechanism for allowing _program parametrization_, that is changing some values assigned to variables in the compiled code. Such values must be declared as [program parameters](#program-parameters), as described below.
 
 # Main variables
 
-Main variables are variables used in the main body of the program. The name of the variable in Mindcode is used as-is 
-in the compiled mlog code.
+Main variables are variables used in the main body of the program. The name of the variable in Mindcode is used as-is in the compiled mlog code.
 
 # Local variables
 
@@ -77,14 +60,11 @@ end;
 
 both `x` and `y` are local variables, not accessible outside the function `foo`.
 
-In compiled code, names of these variables are appended to a unique function prefix. Recognizing names of local 
-variables in compiled code might be a bit cumbersome.  
+In compiled code, names of these variables are appended to a unique function prefix. Recognizing names of local variables in compiled code might be a bit cumbersome.  
 
 # Global variables
 
-Global variables are common to all user functions and the main program body. Use names that don't contain any
-lowercase letters, such as `MAIN` or `_9` (this is actually not a particularly good name for a variable), to create 
-global variables. Variables whose name contains at least one lowercase letter are not global.
+Global variables are common to all user functions and the main program body. Use names that don't contain any lowercase letters, such as `MAIN` or `_9` (this is actually not a particularly good name for a variable), to create global variables. Variables whose name contains at least one lowercase letter are not global.
 
 For example, the following code
 
@@ -101,22 +81,16 @@ print(MAIN, ", ", local);
 printflush(message1);
 ```
 
-displays `20, 5` on the `message1` block in Mindustry world (from now on, we'll omit the `printflush(message1)` in 
-examples), since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and 
-`local` in the main program body.
+displays `20, 5` on the `message1` block in Mindustry world, since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and `local` in the main program body.
 
 Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
 
 > [!IMPORTANT]
-> In previous versions of Mindcode, global variables also served as program parameters described below. This usage 
-> of global variables will cease to be supported be removed in a future release. Please modify your programs to use 
-> program parameters instead.
+> In previous versions of Mindcode, global variables also served as program parameters described below. This usage of global variables will cease to be supported be removed in a future release. Please modify your programs to use program parameters instead.
 
 # Program parameters
 
-One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change crucial 
-parameters without having to recompile entire program. To this end, it is possible to declare _program parameters_,
-a special type of variable, using the `param` keyword: 
+One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change crucial parameters without having to recompile entire program. To this end, it is possible to declare _program parameters_, a special type of variable, using the `param` keyword: 
 
 ```
 param UNIT_TYPE = @flare;
@@ -134,10 +108,7 @@ set MEMORY cell1
 set USER_NAME "Pete"
 ```
 
-Names of the mlog variables representing the program parameters are always the same as the names used in the source 
-code. Values assigned through these instructions can be changed in the compiled code. When modifying values assigned 
-to program parameters in the compiled code, the program behaves as if these values were specified in the source code 
-itself. This is not guaranteed when changing values assigned to any other variables in the compiled mlog code.
+Names of the mlog variables representing the program parameters are always the same as the names used in the source code. Values assigned through these instructions can be changed in the compiled code. When modifying values assigned to program parameters in the compiled code, the program behaves as if these values were specified in the source code itself. This is not guaranteed when changing values assigned to any other variables in the compiled mlog code.
 
 The following values may be used when declaring program parameters:
 
@@ -145,25 +116,21 @@ The following values may be used when declaring program parameters:
 * Names of linked blocks, such as `message1` or `switch5`.
 * Mindustry logic values and constant (or effectively constant) variables, such as `@flare`, `@coal` or `@mapw`.
 
-Other values, including compile-time constant expressions (e.g. `5 * 3`) and non-constant mlog values (e.g. `@links`)
-are not allowed.
+Other values, including compile-time constant expressions (e.g. `5 * 3`) and built-in variables known not to be constant (e.g. `@links`) are not allowed.
 
-In Mindcode, program parameters are global (can be accessed from main code and all functions) even when their names 
-contain lower case letters, and once declared, are read-only. It is not allowed to assign a new value to them:
+In Mindcode, program parameters are global (can be accessed from the main program body and all functions) even when their names contain lower case letters, and once declared, are read-only. It is not allowed to assign a new value to them:
 
 ```
 param parameter = 10; // lower-case names are ok
 parameter = 20;       // error, cannot assign another value to parameter.
 ```
 
-This means there's always exactly one `set` instruction assigning a value to the program parameter, making the 
-purpose of the mlog variable in the compiled code clearer.
+This means there's always exactly one `set` instruction assigning a value to the program parameter, making the purpose of the mlog variable in the compiled code clearer.
 
-Unlike other types of variables, program parameters are never optimized away from the code. Only when the program
-parameter is not used at all in the program, it may be removed by the Dead Code optimization.
+Unlike other types of variables, program parameters are never optimized away from the code. Only when the program parameter is not used at all in the program, it may be removed by the Dead Code optimization.
 
 > [!IMPORTANT]
-> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When assigning a non-constant value (for example `@links`) to a program parameter, or when the value of the parameter may be read before being initialized, the behavior of the resulting code is generally undefined.
+> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When modifying the compiled code to assign a non-constant value (for example `@links`) to a program parameter, or when the value of the parameter may be read before being initialized, the behavior of the resulting code is generally undefined.
 
 # External memory
 
@@ -208,13 +175,10 @@ heap is simply a region of external memory. The heap is allocated using the foll
 allocate heap in cell4[50 ... 64];
 ```
 
-This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 (note the
-exclusive range). If you declare more external variables than you have allocated space for, compilation will fail 
-with an `OutOfHeapSpaceException`. In that case, allocate more space for the heap in your cell, or switch to a 
+This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 (note the exclusive range). If you declare more external variables than you have allocated space for, a compilation error will occur. In that case, allocate more space for the heap in your cell, or switch to a 
 Memory Bank and allocate more space to your heap.
 
-Once the heap is allocated, you can use external variables. External variables are identified by the `$` 
-(dollar-sign) prefix: 
+Once the heap is allocated, you can use external variables. External variables are identified by the `$` (dollar-sign) prefix: 
 
 ```
 allocate heap in cell4[32 ... 64];
@@ -261,7 +225,7 @@ $targety = 80;
 $flag = rand(10000);
 ```
 
-then all addresses in the heap would be reallocated. `$targetx` would be stored in memory cell 61, rather than `$flag`.
+then all addresses in the heap would be reallocated. `$targetx` would be stored in memory cell 61, rather than `$flag`. 
 To fix this issue, you can either reset your heap to all zeroes on startup, or destroy and re-create your memory
 cell/memory bank.
 
@@ -315,8 +279,7 @@ allocate stack in MEMORY[0 ... 480], heap in MEMORY[480 ... 512];
 
 # Built-in variables
 
-Mindustry Logic processors have several built-in variables.
-Their names start with the `@` sign. The most common ones are:
+Mindustry Logic processors have several built-in variables. Their names start with the `@` sign. The most common ones are:
 * `@counter`: address of the next instruction to be executed
 * `@this`, `@thisx`, `@thisy`: processor executing current code and its coordinates
 * `@mapw`, `@maph`: dimensions of the map
@@ -324,8 +287,7 @@ Their names start with the `@` sign. The most common ones are:
 * `@links`: number of blocks linked to the processor
 * `@ipt`: instructions per tick executed by this processor
 * `@unit`: currently bound unit
-* `@unitCount`, `@itemCount`, `@liquidCount`, `@blockCount`: counts of elements of given type, can be used with 
-  `lookup` function.
+* `@unitCount`, `@itemCount`, `@liquidCount`, `@blockCount`: counts of elements of given type, can be used with the `lookup` function.
 
 Mindcode allows you to read these variables, but it is not possible to assign a value to them.
 Some of them are constant during the lifetime of the processor, but others do - or at least may - change (`@time`, 
@@ -335,22 +297,17 @@ Some of them are constant during the lifetime of the processor, but others do - 
 to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this
 unit. See also [Using units](/doc/syntax/MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
 
-My experience shows that the value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a 
-game from a save file. Take it into account especially when programming loops that should terminate at some 
-predetermined time.   
+> [!TIP]
+> The value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a game from a save file. Take it into account especially when programming loops that should terminate at some predetermined time.   
 
 # Linked blocks
 
-When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor, an object representing
-the linked blocks is created. This object is named using the short name of the linked block and an integer index,
-e.g. `cell1`, `switch3` or `smelter16`. These objects allow the code to directly control or query linked blocks.
-Names of linked blocks are reserved and cannot be used by any variable. If a variable with the same name existed
-earlier, it is removed from the processor. Assignments to a variable named after a linked block are silently ignored
-by the processor.
+When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor, an object representing the linked blocks is created. This object is named using the short name of the linked block and an integer index, e.g. `cell1`, `switch3` or `smelter16`. These objects allow the code to directly control or query linked blocks. 
 
-The compiler doesn't know which blocks will be linked to the processor when compiling the code. To avoid generating 
-code that might stop working when blocks are linked to the processor, all possible names of linked blocks are 
-specially handled: 
+> [!IMPORTANT]
+> If a variable with the same name as a newly linked block exists in a processor when the block is linked, it is removed from the processor. Assignments to a variable named after a linked block are silently ignored by the processor. 
+
+When compiling the code, the compiler doesn't know which blocks might be linked to the processor in Mindustry World. To avoid generating code that might stop working when blocks are linked to the processor, all possible names of linked blocks are specially handled: 
 
 * it is not possible to assign values to variables with these names,
 * these variables are implicitly global.
@@ -361,12 +318,12 @@ The second point means that in the following code
 def foo()
     print("In function foo");
     printflush(message1);
-end
+end;
 ```
 
 the `message1` variable represents a message block linked to the processor, even when used inside a function.
 
-The list of possible block names is quite exhaustive.
+The list of possible block names is quite extensive.
 
 <details><summary>Show full list of Mindustry block names.</summary>
 
@@ -490,8 +447,8 @@ The list of possible block names is quite exhaustive.
 
 Any variable name consisting of one of these prefixes and a positive integer is a reserved for linked blocks.
 * These are block names: `point3`, `arc7`, `tank999999`.
-* These aren't: `switch` (no numeric index at all), `cell05` (leading zero), `Router15` (upper-case letter), 
-  `wave_1` or `reactor-5` (the index doesn't immediately follow the block name).
+* These aren't: `switch` (no numeric index at all), `cell05` (leading zero), `Router15` (upper-case letter) or 
+  `wave_1` (the index doesn't immediately follow the block name).
 
 # Constants
 
@@ -511,19 +468,16 @@ numeric, boolean or text literal, or an expression whose value can be computed a
 evaluation uses the same rules as Mindustry Logic, i.e. `const ERROR = 1 / 0` is a valid constant declaration which 
 creates a constant `ERROR` with a value of `null`.
 
-If a numeric value is assigned to a constant, and it isn't possible to
-[encode the value into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), a compilation error 
-occurs.  
+If a numeric value is assigned to a constant, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), a compilation error occurs.  
 
 A name used for a constant cannot be used for a main, global or local variable.
 
-Unlike variables, constants aren't kept in processor variables, and their values therefore cannot be changed in 
-compiled code. It also means that in the following code
+Unlike program parameters, constants aren't kept in processor variables, and their values therefore cannot be changed in compiled code. It also means that in the following code
 
 ```
 const DEBUG = false;
 ...
-if DEBUG
+if DEBUG then
     println("State: ", state);
     println("Item count: ", @unit.totalItems);
 end;

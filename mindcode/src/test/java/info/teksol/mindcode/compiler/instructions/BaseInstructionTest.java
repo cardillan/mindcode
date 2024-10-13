@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.ULOCATE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Order(99)
 class BaseInstructionTest extends AbstractGeneratorTest {
 
     @Test

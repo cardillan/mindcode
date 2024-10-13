@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AbstractGeneratorTest extends AbstractAstTest {
+public abstract class AbstractGeneratorTest extends AbstractAstTest {
 
     // TODO Separate compiler messages from emulator messages
     protected class TestCompiler {

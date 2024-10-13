@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class MindcodeErrorListener extends BaseErrorListener {
     private final List<MindcodeMessage> errors;
-    private InputFile inputFile;
+    private InputFile inputFile = InputFile.EMPTY;
 
     public MindcodeErrorListener(List<MindcodeMessage> errors) {
         this.errors = errors;

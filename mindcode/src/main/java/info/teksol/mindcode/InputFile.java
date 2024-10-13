@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public record InputFile(String fileName, String absolutePath, String code) {
 
+    public static InputFile EMPTY = new InputFile("", "", "");
+
     public static InputFile createSourceFile(String code) {
         return new InputFile("", "", code);
     }
@@ -25,5 +27,9 @@ public record InputFile(String fileName, String absolutePath, String code) {
     @Override
     public int hashCode() {
         return Objects.hashCode(absolutePath);
+    }
+
+    public boolean isEmpty() {
+        return fileName.isEmpty() && absolutePath.isEmpty() &&code.isEmpty();
     }
 }

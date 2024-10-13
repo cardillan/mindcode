@@ -143,7 +143,7 @@ final value to the user variable directly in the true/false branches:
 
 ```
 abs = if x < 0 then
-    negative += 1;  // The semicolon cannot be omitted here as it to separates the two statements
+    negative += 1;
     -x;
 else
     positive += 1;
@@ -216,6 +216,7 @@ This optimization is currently available on the `experimental` level.
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
 ```
+param x = 5;
 text = x < 0 ? "negative" : "positive";
 ```
 
@@ -386,14 +387,7 @@ x1 = x0 * x0 + y0 * y0;
 y1 = 2 * x0 * y0;
 ```
 
-produces
-
-```
-end
-```
-
-All the assignment were removed as they wouldn't have any effect on the Mindustry world when run in actual logic
-processor.
+produces an empty program. All the assignment were removed as they wouldn't have any effect on the Mindustry world when run in actual logic processor.
 
 ### Handling of uninitialized variables
 
@@ -658,7 +652,7 @@ Loop hoisting is an optimization which tries to identify loop invariant code (i.
 executes identically in each loop iteration) and moves it in front of the loop. This way the code is executed only
 once, instead of on each loop iteration.
 
-Fo example, in the following code
+For example, in the following code
 
 ```
 A = 10;
@@ -667,19 +661,17 @@ for i = 0; i < A; i += 1 do
 end;
 ```
 
-the evaluation of `2 * A` is moved in front of the loop in the compiled code (changes highlighted):
+the evaluation of `2 * A` is moved in front of the loop in the compiled code:
 
-```diff
-    0  set A 10
-    1  set i 0
-+   2  op mul __tmp1 2 A
-    3  jump 0 greaterThanEq 0 A
--      op mul __tmp1 2 A
-    4  print __tmp1
-    5  op add i i 1
--      jump 3 lessThan i A
-+   6  jump 4 lessThan i A
-    7  end
+```
+set A 10
+set i 0
+op mul __tmp1 2 A
+jump 7 greaterThanEq 0 A
+print __tmp1
+op add i i 1
+jump 4 lessThan i A
+end
 ```
 
 A loop condition is processed as well as a loop body, and invariant code in nested loops is hoisted all the way to 
@@ -698,23 +690,19 @@ end;
 
 compiles into
 
-```diff
-    0  set A 10
-    1  set j 0
-+   2  op add __tmp1 A 10
-    3  jump 0 greaterThanEq 0 A
-    4  set i 0
--      op add __tmp1 A 10
--      jump 10 greaterThanEq 0 __tmp1
-+   5  jump 9 greaterThanEq 0 __tmp1
-    6  op add i i 1
-    7  print i
--      op add __tmp1 A 10
-    8  jump 6 lessThan i __tmp1
-    9  op add j j 1
--      jump 3 lessThan j A
-+  10  jump 4 lessThan j A
-   11  end
+```
+set A 10
+set j 0
+op add __tmp1 A 10
+jump 11 greaterThanEq 0 A
+set i 0
+jump 9 greaterThanEq 0 __tmp1
+op add i i 1
+print i
+jump 6 lessThan i __tmp1
+op add j j 1
+jump 4 lessThan j A
+end
 ```
 
 On `advanced` optimization level, Loop Hoisting is capable of handling some `if` expressions as well:
@@ -722,7 +710,7 @@ On `advanced` optimization level, Loop Hoisting is capable of handling some `if`
 ```
 #set loop-hoisting = advanced;
 A = 10;
-for i in 1 ... A do;
+for i in 1 ... A do
     k = (A % 2 == 0) ? "Even" : "Odd";
     print(i, k);
 end;
@@ -731,32 +719,26 @@ print("end");
 
 produces
 
-```diff
-    0  set A 10
-    1  set i 1
--      jump 11 greaterThanEq 1 A
-    2  set k "Odd"
-    3  op mod __tmp1 A 2
--      jump 7 notEqual __tmp1 0
-+   4  jump 6 notEqual __tmp1 0
-    5  set k "Even"
-+   6  jump 11 greaterThanEq 1 A
-    7  print i
-    8  print k
-    9  op add i i 1
--      jump 3 lessThan i A
-+  10  jump 7 lessThan i A
-   11  print "end"
-   12  end
+```
+set A 10
+set i 1
+set __tmp3 "Odd"
+op mod __tmp1 A 2
+jump 6 notEqual __tmp1 0
+set __tmp3 "Even"
+jump 11 greaterThanEq 1 A
+print i
+print __tmp3
+op add i i 1
+jump 7 lessThan i A
+print "end"
 ```
 
 At this moment, the following limitations apply:
 
-* If the loop contains a stackless or recursive function call, all global variables are marked as loop dependent and 
-  expressions based on them aren't hoisted, since the compiler must assume the value of the global variable could be 
-  changed inside a function.
-* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested 
-  in a function call (such as `print(A < 0 ? "positive" : "negative")`), it won't be optimized.   
+* If the loop contains a stackless or recursive function call, global variables that might be modified by that function call are marked as loop dependent and 
+  expressions based on them aren't hoisted, since the compiler must assume the value of the global variable would potentially change inside these functions.
+* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(A < 0 ? "positive" : "negative")`), it won't be optimized.   
 
 ## Loop Optimization
 
@@ -774,7 +756,7 @@ The loop optimization improves loops with the condition at the beginning by perf
 * Loop conditions that are complex expressions spanning several instructions can still be replicated at the 
   end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). As a result, 
   the code size might actually increase after performing this kind of optimization. See [optimization for 
-  speed](#optimization-for-speed) for details on performing this kind of optimizations.
+  speed](#optimization-for-speed) for details on performing these optimizations.
 
 The result of the first two optimizations in the list can be seen here:
 
@@ -887,8 +869,9 @@ A not particularly practical, but nonetheless striking example is this program w
 0 to 100:
 
 ```
+#set optimization = advanced;
 sum = 0;
-for i in 0 .. 100;
+for i in 0 .. 100 do
     sum += i;
 end;
 print(sum);
@@ -994,9 +977,9 @@ copy(cell1, cell2, SIZE);
 // Some loops containing expressions in the condition can still be unrolled,
 // but it strongly depends on the structure of the expression
 i = 0;
-while i += 1 < 10 do
+while (i += 1) < 10 do
     print(i);
-end ;
+end;
 ```
 
 Examples of loops that can be unrolled on `advanced` optimization level:
@@ -1028,9 +1011,8 @@ end;
 Examples of loops that **cannot** be unrolled:
 
 ```
-// LIMIT is a global variable and as such the value assigned to it isn't considered constant
-// (see Data Flow Optimization)
-LIMIT = 10;
+// LIMIT is a program parameter and as such the value assigned to it isn't considered constant
+param LIMIT = 10;
 for i in 0 ... LIMIT do
     cell1[i] = 0;
 end;
@@ -1062,7 +1044,7 @@ end;
 // This loop won't be unrolled. We know it ends after 5 iterations due to the break statement,
 // but Mindcode assumes 2000 iterations, always reaching the instruction limit.  
 for i in 0 ... 2000 do
-    if i > 5 break; end;
+    if i > 5 then break; end;
     print(i);
 end;
 ```
@@ -1237,33 +1219,32 @@ The above case expression is transformed to this:
 ```
 op rand __tmp0 20 0
 op floor value __tmp0 0
-op min __tmp3 value 11
-op max __tmp3 __tmp3 -1
-op add @counter __tmp3 6
-jump 28 always 0 0
+jump 26 lessThan value 0
+jump 26 greaterThan value 10
+op add @counter value 5
+jump 16 always 0 0
 jump 18 always 0 0
+jump 20 always 0 0
+jump 20 always 0 0
 jump 20 always 0 0
 jump 22 always 0 0
 jump 22 always 0 0
 jump 22 always 0 0
-jump 24 always 0 0
-jump 24 always 0 0
-jump 24 always 0 0
-jump 24 always 0 0
-jump 28 always 0 0
+jump 22 always 0 0
 jump 26 always 0 0
-jump 28 always 0 0
+jump 24 always 0 0
 set __tmp2 "None"
-jump 29 always 0 0
+jump 27 always 0 0
 set __tmp2 "One"
-jump 29 always 0 0
+jump 27 always 0 0
 set __tmp2 "A few"
-jump 29 always 0 0
-set __tmp2 "Several"
-jump 29 always 0 0
+jump 27 always 0 0
+set __tmp2 "Many"
+jump 27 always 0 0
 set __tmp2 "Ten"
-jump 29 always 0 0
+jump 27 always 0 0
 set __tmp2 "I don't known this number!"
+set text __tmp2
 print __tmp2
 end
 ```
@@ -1364,7 +1345,7 @@ Effectively, this optimization eliminates a `print` instruction by turning this
 
 ```
 println("Items: ", items);
-println("Time: " @time);
+println("Time: ", @time);
 ```
 into this:
 
@@ -1378,7 +1359,7 @@ On `advanced` level, all constant values - not just string constants - are merge
 ```
 #set optimization = advanced;
 const MAX_VALUE = 10;
-printf("Step $i of $MAX_VALUE\n");
+print($"Step $i of $MAX_VALUE\n");
 ```
 
 produces

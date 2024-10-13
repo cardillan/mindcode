@@ -1,14 +1,14 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MessageLevel;
+import info.teksol.mindcode.MindcodeMessage;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.Locale;
 import java.util.Objects;
 
-public record MindcodeCompilerMessage(MessageLevel level, InputPosition inputPosition, String message) implements CompilerMessage {
+public record MindcodeCompilerMessage(MessageLevel level, InputPosition inputPosition, String message) implements MindcodeMessage {
 
     public MindcodeCompilerMessage {
         Objects.requireNonNull(level);

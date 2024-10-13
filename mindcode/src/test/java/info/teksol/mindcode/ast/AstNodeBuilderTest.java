@@ -2,6 +2,7 @@ package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Order(99)
 class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesTheEmptyProgram() {

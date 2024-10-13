@@ -4,6 +4,10 @@ import java.util.function.Function;
 
 public interface MindcodeMessage {
 
+    default InputPosition inputPosition() {
+        return InputPosition.EMPTY;
+    }
+
     MessageLevel level();
 
     String message();
@@ -28,7 +32,11 @@ public interface MindcodeMessage {
         return level() == MessageLevel.DEBUG;
     }
 
+    default String formatMessage() {
+        return isErrorOrWarning() ? level().getTitle() + ": " + message() : message();
+    }
+
     default String formatMessage(Function<InputPosition, String> positionFormatter) {
-        return message();
+        return inputPosition().isEmpty() ? formatMessage() : positionFormatter.apply(inputPosition()) + " " + formatMessage();
     }
 }

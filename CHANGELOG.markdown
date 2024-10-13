@@ -14,11 +14,12 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Added support for the [Mlog Watcher](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.
-* **Breaking:** Added support for syntax variants ([`strict` and `relaxed`](doc/syntax/SYNTAX-STRICT-RELAXED.markdown)) to Mindcode. The `strict` syntax is the default now; to be able to compile existing Mindcode the `relaxed` syntax needs to be activated using the `#relaxed;` directive.   
+* **Breaking:** Added support for syntax variants ([`strict` and `relaxed`](doc/syntax/SYNTAX-STRICT-RELAXED.markdown)) to Mindcode. The Strict syntax is the default now; to be able to compile existing Mindcode the Relaxed syntax needs to be activated using the `#relaxed;` directive.
+* Added variable name validation: in mlog, variable named `configure` is silently renamed to `config`. For this reason, using `configure` as a name for any variable in Mindcode causes an error. 
 * Added navigable compiler error messages to the web app. Clicking on a message with known position in the source code selects the corresponding position in the editor.
 * Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
 * Added an optimization of the `lookup` instruction to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). When possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
-* Added warning messages when deprecated features (kebab-case identifiers pr `printf` function in ML7A) are detected in the source code. 
+* Added warning messages when [deprecated features](/doc/syntax/SYNTAX-STRICT-RELAXED.markdown#deprecated-features) are detected in the source code. 
 * Added support for creating constants from formattable string literals.   
 
 #### Experimental features
@@ -35,6 +36,15 @@ All notable changes to this project will be documented in this file.
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
 * Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.    
+
+### Deprecated
+
+- Deprecated the original Mindcode syntax.
+- Deprecated the usage of parentheses around the list of values in list iteration loops.
+- Deprecated escaped double quotes in string literals.
+- Deprecated kebab-case identifiers (note that built-in mlog variables, such as `@blast-compound`, will continue to be supported).
+- Deprecated the `printf` function in language target `ML7A` and earlier.
+- Deprecated the `configure` property. This name from Mindustry Logic 6 was replaced by `config` in Mindustry Logic 7.
 
 ### Miscellaneous
 

@@ -60,11 +60,10 @@ Generally, functions are mapped to instructions using these rules:
 The disparity between those two kinds of functions is a consequence of keeping Mindcode nomenclature as close to Mindustry Logic as possible.
 
 There are a few issues with these rules:
+* In Mindustry Logic 8, both `print` and `draw print` would map to the `print()` function. The `draw print` instruction is instead mapped to the `drawPrint()` function. 
 * Both `ucontrol stop` and `stop` would map to the `stop()` function. The `stop` instruction is instead mapped to the `stopProcessor()` function.
 * `ucontrol getBlock` is similar to the new `getblock` World Processor instruction. The resulting functions only differ in case.
-* The `status` World Processor instruction distinguishes clearing and applying the status by an enumerated parameter 
-  (`true` or `false`), which is not very readable. Mindcode instead creates separate functions,
-  `applyStatus()` and `clearStatus()`.
+* The `status` World Processor instruction distinguishes clearing and applying the status by an enumerated parameter (`true` or `false`), which is not very readable. Mindcode instead creates separate functions, `applyStatus()` and `clearStatus()`.
 
 ## Methods
 
@@ -258,18 +257,18 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 > Since the `format` instruction allows to decouple the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction, even when their arguments get resolved to constant values during optimizations. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
 
 > [!TIP]
-> Print merging optimizations can utilize the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the user code. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
+> Print merging optimizations can utilize the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the code itself. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
 
 > [!WARNING]
 > The `printf()` function has two forms depending on the language target:
-> - For ML7A and lower, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument.
+> - For ML7A and lower, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument. The `printf()` function is deprecated under ML7A and lower.
 > - For ML8A and higher, the `printf()` function performs the run-time formatting described in this chapter.
 > 
 > When migrating from Mindustry Logic 7 to Mindustry Logic 8, replace all occurrences of `printf("` with `print($"` in your codebase.
 
 ## Remarks
 
-The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just lke the `print()` function does. It also produces `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
+The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just like the `print()` function does. It also produces `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
 
 * `none`: remarks are suppressed in the compiled code - they do not appear there at all.
 * `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statement themselves aren't executed. This is the default value.
@@ -283,9 +282,9 @@ MIN = 10;
 MAX = 100;
 
 remark("Don't modify anything below this line.");
-for i in MIN .. MAX
+for i in MIN .. MAX do
     print("Here is some actual code");
-end
+end;
 ```
 
 produces
@@ -308,7 +307,7 @@ end
 Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get fully evaluated when possible:
 
 ```
-for i in 1 .. 3
+for i in 1 .. 3 do
     remark("Iteration $i:");
     remark("Setting cell1[$i] to $", i * i);
     cell1[i] = i * i;
@@ -471,17 +470,17 @@ allocate stack in bank1;
 
 def fib(n)
     return n < 2 ? max(n, 0) : fib(n - 1) + fib(n - 2);
-end
+end;
 
-fib(0); // 0
-fib(1); // 0
-fib(2); // 1
-fib(3); // 1
-fib(4); // 2
-fib(5); // 3
-fib(6); // 5
-fib(7); // 8
-fib(8); // 13
+println(fib(0)); // 0
+println(fib(1)); // 1
+println(fib(2)); // 1
+println(fib(3)); // 2
+println(fib(4)); // 3
+println(fib(5)); // 5
+println(fib(6)); // 8
+println(fib(7)); // 13
+println(fib(8)); // 21
 // and so on...
 ```
 

@@ -3,10 +3,12 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
+@Order(99)
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test

@@ -2,10 +2,12 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.ExpectedMessages;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
+@Order(99)
 public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
     @Test

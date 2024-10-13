@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Order(5)
 public class AlgorithmsTest extends AbstractProcessorTest {
 
     public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/emulator/processor/algorithms";

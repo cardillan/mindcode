@@ -3,12 +3,14 @@ package info.teksol.schemacode.schematics;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Order(99)
 class BridgeSolverTest extends AbstractSchematicsTest {
 
     @TestFactory
