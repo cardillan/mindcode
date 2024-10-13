@@ -14,8 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,13 +30,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     protected abstract String getScriptsDirectory();
 
-    private static final List<String> performance = new ArrayList<>();
-    private static final List<String> timing = new ArrayList<>();
-
-    static void init() {
-        performance.clear();
-        timing.clear();
-    }
+    private static final Map<String, Queue<String>> results = new ConcurrentHashMap<>();
 
     // Lambda interface
     // Handles evaluating of expected vs. actual program output
@@ -50,28 +47,9 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     static void done(String scriptsDirectory, String className) throws IOException {
         Path path = Path.of(scriptsDirectory, className + ".txt");
-        Collections.sort(performance);
-        Files.write(path, performance);
-
-        Path path2 = Path.of(scriptsDirectory, className + "_timing.txt");
-        Collections.sort(timing);
-        Files.write(path2, timing);
-    }
-
-    /** Nearest multiple of millisecond to round timing to */
-    private static final int PRECISION = 200;
-
-    private void logTiming(String title, List<MindcodeMessage> messages) {
-        String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
-        String timings = messages.stream()
-                .filter(TimingMessage.class::isInstance)
-                .map(TimingMessage.class::cast)
-                .map(m -> String.format(Locale.US, "%s: %,10d ms", m.phase(),
-                        PRECISION * ((PRECISION / 2 + m.milliseconds()) / PRECISION)))
-                .collect(Collectors.joining(", "));
-
-        String text = String.format("%-40s: %s", name + ":", timings.toLowerCase());
-        timing.add(text);
+        String[] array = results.get(className).toArray(new String[0]);
+        List<String> texts = Stream.of(array).sorted().toList();
+        Files.write(path, texts);
     }
 
     private void logCompilation(String title, String code, String compiled, int instructions) {
@@ -82,7 +60,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);
-        performance.add(info);
+        results.computeIfAbsent(getClass().getSimpleName(), k -> new ConcurrentLinkedDeque<>()).add(info);
     }
 
     private void logPerformance(String title, String code, String compiled, Processor processor) {
@@ -94,7 +72,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);
-        performance.add(info);
+        results.computeIfAbsent(getClass().getSimpleName(), k -> new ConcurrentLinkedDeque<>()).add(info);
     }
 
     @Override
@@ -161,18 +139,15 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         }
     }
 
-    // IGNORES WARNINGS!
     protected void compileAndOutputCode(TestCompiler compiler, String title, String code, Path logFile) {
         List<LogicInstruction> unresolved = generateInstructionsNoMsgValidation(compiler, code).instructions();
         assertNoUnexpectedMessages(compiler, ExpectedMessages.none());
         List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
-        logTiming(title, compiler.getMessages());
         logCompilation(title, code, compiled, instructions.size());
         writeLogFile(logFile, compiler, unresolved);
     }
 
-    // IGNORES WARNINGS!
     protected void compileAndOutputFile(String fileName) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         compileAndOutputCode(createTestCompiler(), fileName, readFile(fileName), logFile);
@@ -189,7 +164,6 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         writeLogFile(logFile, compiler, unresolved);
         processor.run(instructions, MAX_STEPS);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
-        logTiming(title, compiler.getMessages());
         logPerformance(title, code, compiled, processor);
 
         assertAll(

@@ -5,7 +5,6 @@ import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,11 +24,6 @@ public class ProcessorTest extends AbstractProcessorTest {
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;
-    }
-
-    @BeforeAll
-    static void init() {
-        AbstractProcessorTest.init();
     }
 
     @AfterAll

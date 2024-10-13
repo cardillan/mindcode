@@ -4,35 +4,32 @@ import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.SchemacodeCompiler;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SchematicsSamplesTest {
 
     @TestFactory
-    List<DynamicTest> validateSamples() {
-        final List<DynamicTest> result = new ArrayList<>();
+    @Execution(ExecutionMode.CONCURRENT)
+    DynamicNode validateSamples() {
         final String dirname = "src/main/resources/samples/schematics";
         final File[] files = new File(dirname).listFiles((d, f) -> f.toLowerCase().endsWith(".sdf"));
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one sample; found none");
-        Arrays.sort(files);
 
-        for (final File sample : files) {
-            result.add(DynamicTest.dynamicTest(sample.getName(), null, () -> evaluateSample(sample)));
-        }
-
-        return result;
+        return DynamicContainer.dynamicContainer("Optimization tests",
+                Stream.of(files)
+                        .map(file -> DynamicTest.dynamicTest(file.getName(), null,
+                                () -> evaluateSample(file)))
+        );
     }
 
     private void evaluateSample(File file) throws IOException {

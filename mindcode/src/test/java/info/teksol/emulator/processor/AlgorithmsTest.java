@@ -7,6 +7,8 @@ import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,11 +22,6 @@ public class AlgorithmsTest extends AbstractProcessorTest {
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;
-    }
-
-    @BeforeAll
-    static void init() {
-        AbstractProcessorTest.init();
     }
 
     @AfterAll
@@ -75,8 +72,8 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     }
 
     @TestFactory
-    public List<DynamicTest> sortsArrays() {
-        final List<DynamicTest> result = new ArrayList<>();
+    @Execution(ExecutionMode.CONCURRENT)
+    DynamicNode sortsArrays() {
         Map<String, Integer> definitions = Map.of(
                 "bubble-sort.mnd", 64,
                 "heap-sort.mnd", 512,
@@ -85,37 +82,30 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 "select-sort.mnd", 128
         );
 
-        for (final String script : definitions.keySet()) {
-            result.add(DynamicTest.dynamicTest(script, null,
-                    () -> executeSortingAlgorithmTest(script, definitions.get(script))));
-        }
-
-        return result;
+        return DynamicContainer.dynamicContainer("Array sorting tests",
+                definitions.keySet().stream().map(name -> DynamicTest.dynamicTest(name, null,
+                        () -> executeSortingAlgorithmTest(name, definitions.get(name))))
+        );
     }
 
+
     @TestFactory
-    public List<DynamicTest> computesScriptTests() {
+    @Execution(ExecutionMode.CONCURRENT)
+    DynamicNode computesScriptTests() {
         final List<DynamicTest> result = new ArrayList<>();
-        final List<String> definitions = List.of(
+        final Map<String, String> definitions = Map.of(
                 "memory-read-write.mnd", "10",
                 "compute-recursive-fibonacci.mnd", "55",
                 "compute-sum-of-primes.mnd", "21536"
         );
 
-        for (int i = 0; i < definitions.size(); i += 2) {
-            processFile(result, definitions.get(i), definitions.get(i + 1));
-        }
-
-        return result;
-    }
-
-    private void processFile(List<DynamicTest> result, String fileName, String expectedOutput) {
-        result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
-                fileName,
-                s -> s,
-                Map.of("bank2", Memory.createMemoryBank()),
-                List.of(expectedOutput)
-        )));
+        return DynamicContainer.dynamicContainer("Script tests",
+                definitions.keySet().stream().map(name -> DynamicTest.dynamicTest(name, null,
+                        () -> testAndEvaluateFile(name, s -> s,
+                                Map.of("bank2", Memory.createMemoryBank()),
+                                List.of(definitions.get(name))))
+                )
+        );
     }
 
     //@TestFactory
