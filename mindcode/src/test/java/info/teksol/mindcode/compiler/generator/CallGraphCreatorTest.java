@@ -13,7 +13,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
         Assertions.assertDoesNotThrow(() ->
                 CallGraphCreator.createFunctionGraph(
                         (Seq) translateToAst("a = 10;"),
-                        ExpectedMessages.refuseAll(),
+                        ExpectedMessages.none(),
                         createTestCompiler().processor
                 )
         );
@@ -24,7 +24,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
         Assertions.assertDoesNotThrow(() ->
                 CallGraphCreator.createFunctionGraph(
                         (Seq) translateToAst("print(a);"),
-                        ExpectedMessages.refuseAll(),
+                        ExpectedMessages.none(),
                         createTestCompiler().processor
                 )
         );
@@ -38,7 +38,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         a();
                         """
                 ),
-                ExpectedMessages.refuseAll(),
+                ExpectedMessages.none(),
                 createTestCompiler().processor
         );
 
@@ -58,7 +58,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         a();
                         """
                 ),
-                ExpectedMessages.refuseAll(),
+                ExpectedMessages.none(),
                 createTestCompiler().processor
         );
 
@@ -83,7 +83,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         a();
                         """
                 ),
-                ExpectedMessages.refuseAll(),
+                ExpectedMessages.none(),
                 createTestCompiler().processor
         );
 
@@ -107,7 +107,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         print(c(1));
                         """
                 ),
-                ExpectedMessages.refuseAll(),
+                ExpectedMessages.none(),
                 createTestCompiler().processor
         );
 

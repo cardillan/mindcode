@@ -83,8 +83,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return s -> pattern.matcher(s.trim()).matches();
     }
 
-    protected void assertCompilesToWithMessages(TestCompiler compiler, Predicate<LogicInstruction> filter, String code,
-            ExpectedMessages expectedMessages, LogicInstruction... instructions) {
+    protected void assertCompilesTo(TestCompiler compiler, Predicate<LogicInstruction> filter,
+            ExpectedMessages expectedMessages, String code, LogicInstruction... instructions) {
         List<LogicInstruction> expected = List.of(instructions);
         List<LogicInstruction> actual = generateInstructionsNoMsgValidation(compiler, code).instructions();
         if (filter != null) {
@@ -93,39 +93,44 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, expectedMessages);
     }
 
+    protected void assertCompilesTo(TestCompiler compiler, ExpectedMessages expectedMessages, String code,
+            LogicInstruction... instructions) {
+        assertCompilesTo(compiler, null, expectedMessages, code, instructions);
+    }
+
     protected void assertCompilesTo(TestCompiler compiler, String code,
             ExpectedMessages expectedMessages, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(compiler, null, code, expectedMessages, instructions);
+        assertCompilesTo(compiler, null, expectedMessages, code, instructions);
     }
 
     protected void assertCompilesTo(Predicate<LogicInstruction> filter, ExpectedMessages expectedMessages,
             String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), filter, code, expectedMessages, instructions);
+        assertCompilesTo(createTestCompiler(), filter, expectedMessages, code, instructions);
     }
 
     protected void assertCompilesTo(ExpectedMessages expectedMessages, String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), null, code, expectedMessages, instructions);
+        assertCompilesTo(createTestCompiler(), null, expectedMessages, code, instructions);
     }
 
     protected void assertCompilesTo(TestCompiler compiler, Predicate<LogicInstruction> filter,
             String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(compiler, filter, code, ExpectedMessages.none(), instructions);
+        assertCompilesTo(compiler, filter, ExpectedMessages.none(), code, instructions);
     }
 
     protected void assertCompilesTo(TestCompiler compiler, String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(compiler, null, code, ExpectedMessages.none(), instructions);
+        assertCompilesTo(compiler, null, ExpectedMessages.none(), code, instructions);
     }
 
     protected void assertCompilesTo(Predicate<LogicInstruction> filter, String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), filter, code, ExpectedMessages.none(), instructions);
+        assertCompilesTo(createTestCompiler(), filter, ExpectedMessages.none(), code, instructions);
     }
 
     protected void assertCompilesTo(String code, LogicInstruction... instructions) {
-        assertCompilesToWithMessages(createTestCompiler(), null, code, ExpectedMessages.none(), instructions);
+        assertCompilesTo(createTestCompiler(), null, ExpectedMessages.none(), code, instructions);
     }
 
     protected void assertGeneratesMessages(TestCompiler compiler, ExpectedMessages expectedMessages, String code) {
-        assertCompilesToWithMessages(compiler, ix -> false, code, expectedMessages);
+        assertCompilesTo(compiler, ix -> false, expectedMessages, code);
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String code) {
@@ -187,7 +192,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected Seq generateAstTree(String code) {
         return AstNodeBuilder.generate(InputFile.createSourceFile(code),
-                ExpectedMessages.refuseAll(),
+                ExpectedMessages.none(),
                 parse(code));
     }
 

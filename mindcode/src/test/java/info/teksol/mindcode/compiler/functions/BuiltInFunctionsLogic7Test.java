@@ -32,7 +32,10 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void handlesEmptyPrintf() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create()
+                        .add("The 'printf' function is deprecated.").repeat(2),
+                """
                         printf("");
                         printf("foo");
                         """,
@@ -43,7 +46,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesPositionalParameters() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         printf("x: $, y: $, z: $", x, y, 10);
                         """,
                 createInstruction(PRINT, q("x: ")),
@@ -58,7 +63,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesEscapedDollarSign() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         printf("Amount: \\$$", 100);
                         """,
                 createInstruction(PRINT, q("Amount: $")),
@@ -70,7 +77,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfCatchesTooFewArguments() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Not enough arguments for 'printf' format string."),
+                ExpectedMessages.create()
+                        .add("The 'printf' function is deprecated.")
+                        .add("Not enough arguments for 'printf' format string."),
                 """
                         printf("Text: $");
                         """
@@ -80,7 +89,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
     @Test
     void printfCatchesTooManyArguments() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Too many arguments for 'printf' format string."),
+                ExpectedMessages.create()
+                        .add("The 'printf' function is deprecated.")
+                        .add("Too many arguments for 'printf' format string."),
                 """
                         printf("Text: $", 10, 20);
                         """
@@ -89,7 +100,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesVariableReference() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         x = 10;
                         printf("x=$x");
                         """,
@@ -103,7 +116,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesLocalVariableReference() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         def foo(x)
                             printf("x=$x");
                         end;
@@ -121,7 +136,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesGlobalVariableReference() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         def foo()
                             printf("X=$X");
                         end;
@@ -140,7 +157,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesEnclosedVariableReference() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         printf("Time: ${time}sec");
                         """,
                 createInstruction(PRINT, q("Time: ")),
@@ -152,7 +171,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesSequentialVariableReference() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         printf("Text: ${x}$y");
                         """,
                 createInstruction(PRINT, q("Text: ")),
@@ -164,7 +185,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesVariableReferenceThenPositionalArgument() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         printf("Text: ${x}$", y);
                         """,
                 createInstruction(PRINT, q("Text: ")),
@@ -176,7 +199,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesAdjacentPositionalArguments() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         printf("Text: ${}${}", x, y);
                         """,
                 createInstruction(PRINT, q("Text: ")),
@@ -213,6 +238,7 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
+
     @Test
     void printHandlesFormattableStringLiterals() {
         assertCompilesTo("""
@@ -242,7 +268,9 @@ class BuiltInFunctionsLogic7Test extends AbstractGeneratorTest {
 
     @Test
     void printfHandlesFormattableStringLiterals() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("The 'printf' function is deprecated."),
+                """
                         x = 10;
                         printf($"Position: $x");
                         """,

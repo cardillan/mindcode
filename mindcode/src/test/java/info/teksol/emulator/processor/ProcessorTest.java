@@ -2,6 +2,7 @@ package info.teksol.emulator.processor;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.ExpectedMessages;
+import info.teksol.mindcode.compiler.SortCategory;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.AfterAll;
@@ -122,7 +123,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void expressionEvaluationRuntime() throws IOException {
         executeMindcodeUnitTests(createTestCompiler(
-                createCompilerProfile().setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.NONE)),
+                        createCompilerProfile().setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.NONE)),
                 "expression-evaluation-runtime.mnd");
     }
 
@@ -150,16 +151,41 @@ public class ProcessorTest extends AbstractProcessorTest {
     }
 
     @Test
+    void supportsSortVariables() {
+        TestCompiler testCompiler = createTestCompiler(createCompilerProfile()
+                .setAllOptimizationLevels(OptimizationLevel.BASIC)
+                .setSortVariables(List.of(SortCategory.ALL))
+        );
+        testAndEvaluateCode(testCompiler,
+                null,
+                """
+                        #set sort-variables;
+                        param p = 1;
+                        step = p;
+                        for out i in a, b, c, d do
+                            i = step;
+                            step *= 2;
+                        end;
+                        print(a, b, c, d);
+                        """,
+                Map.of(),
+                ExpectedMessages.none(),
+                createEvaluator(testCompiler, List.of("1", "2", "4", "8")),
+                null
+        );
+    }
+
+    @Test
     void compilesProperComparison() {
         testCode("""
                         inline def eval(b)
                             b ? "T" : "F";
                         end;
-
+                        
                         inline def compare(n, a, b)
                             print(n, eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
                         end;
-
+                        
                         compare( 1, null, 0);
                         compare( 2, null, 1);
                         compare( 3, null, 2);

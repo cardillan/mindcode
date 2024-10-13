@@ -6,7 +6,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-class PrintMergerML8Test extends AbstractOptimizerTest<PrintMerger> {
+class PrintMergerLogic8Test extends AbstractOptimizerTest<PrintMerger> {
 
     @Override
     protected Class<PrintMerger> getTestedClass() {

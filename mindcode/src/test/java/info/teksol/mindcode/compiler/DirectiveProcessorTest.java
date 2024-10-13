@@ -31,7 +31,7 @@ class DirectiveProcessorTest {
     void processesDirectiveTarget() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, directive("target", "ML6"));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertEquals(ProcessorVersion.V6, profile.getProcessorVersion());
     }
 
@@ -39,7 +39,7 @@ class DirectiveProcessorTest {
     void processesDirectiveOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, directive("optimization", "basic"));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertTrue(profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
     }
 
@@ -48,7 +48,7 @@ class DirectiveProcessorTest {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setInstructionLimit(1);
         Seq seq = new Seq(null, directive("instruction-limit", "900"));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertEquals(900, profile.getInstructionLimit());
     }
 
@@ -57,7 +57,7 @@ class DirectiveProcessorTest {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setOptimizationPasses(1);
         Seq seq = new Seq(null, directive("passes", "10"));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertEquals(10, profile.getOptimizationPasses());
     }
 
@@ -66,7 +66,7 @@ class DirectiveProcessorTest {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setGoal(GenerationGoal.SIZE);
         Seq seq = new Seq(null, directive("goal", "speed"));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertEquals(GenerationGoal.SPEED, profile.getGoal());
     }
 
@@ -75,7 +75,7 @@ class DirectiveProcessorTest {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setRemarks(Remarks.NONE);
         Seq seq = new Seq(null, directive("remarks", "active"));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertEquals(Remarks.ACTIVE, profile.getRemarks());
     }
 
@@ -83,7 +83,7 @@ class DirectiveProcessorTest {
     void processesDirectiveSortVariables() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, directive("sort-variables", List.of("params","globals")));
-        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.refuseAll());
+        DirectiveProcessor.processDirectives(seq, profile, ExpectedMessages.none());
         assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), profile.getSortVariables());
     }
 

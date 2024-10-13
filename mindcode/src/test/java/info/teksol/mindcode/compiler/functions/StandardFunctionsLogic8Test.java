@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class Logic8FunctionsTest extends AbstractGeneratorTest {
+public class StandardFunctionsLogic8Test extends AbstractGeneratorTest {
 
     @Override
     protected ProcessorVersion getProcessorVersion() {

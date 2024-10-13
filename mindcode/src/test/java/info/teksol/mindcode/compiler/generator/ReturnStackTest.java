@@ -10,7 +10,7 @@ import static info.teksol.mindcode.InputPosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReturnStackTest {
-    private final ReturnStack returnStack = new ReturnStack(ExpectedMessages.refuseAll());
+    private final ReturnStack returnStack = new ReturnStack(ExpectedMessages.none());
 
     private static final LogicLabel label1 = LogicLabel.symbolic("label1");
     private static final LogicLabel label2 = LogicLabel.symbolic("label2");

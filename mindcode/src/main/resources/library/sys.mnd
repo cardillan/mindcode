@@ -118,25 +118,107 @@ end;
 
 // UNITS
 
-// Searches for and binds a free unit of given type.
+// Searches for and binds a free unit of given type. If no free unit of given type can be found
+// (either because none exists, or because all existing units are occupied), returns immediately.
+//
 // unit_type: type of the unit, @flare, @mono, @poly etc.
 // initial_flag: initial flag to set to he freshly bound unit.
-// wait_for_units: if no unit of the given type exists, returns immediately with a value of null
+// returns the freshly bound unit, or null if no unit can be bound
+def findFreeUnit(unit_type, initial_flag)
+    ubind(unit_type);
+    // No unit of this type exists
+    if @unit == null then return null; end;
+
+    first_unit = @unit;
+    do
+        if @unit.controlled == 0 then
+            flag(initial_flag);        // Mark unit as active
+            return @unit;
+        elsif first_unit.dead == 1 then
+            // first_unit got killed. It won't be served by ubind anymore
+            // Replace with the current one
+            first_unit = @unit;
+        end;
+
+        // Try the next one. If it is the same as the first one, we've seen them all
+        ubind(unit_type);
+    loop while first_unit != @unit;
+
+    return null;
+end;
+
+// Searches for and binds a free unit of given type closest to the coordinates on the map given.
+// If no free unit of given type can be found (either because none exists, or because all existing
+// units are occupied), returns immediately.
+//
+// x, y: coordinates of the position to look around
+// unit_type: type of the unit, @flare, @mono, @poly etc.
+// initial_flag: initial flag to set to he freshly bound unit.
+// returns the freshly bound unit closest to given coordinates, or null if no free unit of given type exists
+def findClosestUnit(x, y, unit_type, initial_flag)
+    while true do
+        ubind(unit_type);
+        // No unit of this type exists
+        if @unit == null then return null; end;
+
+        first_unit = @unit;
+        best_unit = null;
+        best_distance = 1e10;
+        do
+            if @unit.controlled == 0 then
+                distance = len(@unit.x - x, @unit.y - y);
+                if distance < best_distance then
+                    best_distance = distance;
+                    best_unit = @unit;
+                end;
+            elsif first_unit.dead == 1 then
+                // first_unit got killed. It won't be served by ubind anymore
+                // Replace with the current one
+                first_unit = @unit;
+            end;
+
+            // Try the next one. If it is the same as the first one, we've seen them all
+            ubind(unit_type);
+        loop while first_unit != @unit;
+
+        // No free unit at all
+        if best_unit == null then
+            return null;
+        end;
+
+        // If the best unit is still not controlled, flag it and return
+        if best_unit.controlled == 0 then
+            ubind(best_unit);
+            flag(initial_flag);
+            return best_unit;
+        end;
+    end;
+end;
+
+// Searches for and binds a free unit of given type. Waits until the unit of requested type is available.
+// Updates search status in SYS_MESSAGE.
+//
+// unit_type: type of the unit, @flare, @mono, @poly etc.
+// initial_flag: initial flag to set to he freshly bound unit.
 // returns the freshly bound unit
-def findFreeUnit(unit_type, initial_flag, wait_for_units)
+def waitForFreeUnit(unit_type, initial_flag)
     // Keep looking for unit until one is found
     while true do
         ubind(unit_type);
         if @unit == null then
-            if SYS_MESSAGE then print($"No unit of type $unit_type found."); end;
-            if !wait_for_units then return; end;
+            if SYS_MESSAGE then
+                print($"No unit of type $unit_type found.");
+                printflush(SYS_MESSAGE);
+             end;
         elsif @unit.controlled != 0 then
-            if SYS_MESSAGE then print($"Looking for a free $unit_type..."); end;
+            if SYS_MESSAGE then
+                print($"Looking for a free $unit_type...");
+                printflush(SYS_MESSAGE);
+             end;
         else
             flag(initial_flag);        // Mark unit as active
             return @unit;
         end;
-        if SYS_MESSAGE then printflush(SYS_MESSAGE); end;
     end;
 end;
 

@@ -124,9 +124,9 @@
 <#macro compilerMessages messageTitle>
 <div>
     <#if model.hasErrors>
-        <#list model.errors>
-            <label class="mt-4 block font-bold">Syntax Errors:</label>
-            <ul class="list-disc list-inside">
+        <label class="mt-4 block font-bold">Syntax Errors:</label>
+        <ul class="list-disc list-inside">
+            <#list model.errors>
                 <#items as msg>
                     <li class="text-red-700">
                         <#if msg.hasPosition()>
@@ -135,8 +135,12 @@
                         ${msg.message}
                     </li>
                 </#items>
-            </ul>
-        </#list>
+            </#list>
+        </ul>
+        <div class="my-2">Errors were encountered. See
+            <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/TROUBLESHOOTING.markdown">Mindcode Troubleshooting</a>
+            for some tips, or <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/discussions/157">ask for help</a>.
+        </div>
     <#elseif model.hasMessages>
         <label class="mt-4 block font-bold">${messageTitle}</label>
         <#list model.warnings>

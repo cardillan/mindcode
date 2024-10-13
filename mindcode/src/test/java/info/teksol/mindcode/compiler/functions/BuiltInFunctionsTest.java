@@ -25,7 +25,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void handlesEmptyPrintf() {
+    void handlesEmptyPrint() {
         assertCompilesTo("""
                         print($"");
                         print($"foo");

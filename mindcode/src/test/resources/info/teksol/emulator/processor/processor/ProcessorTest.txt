@@ -16,6 +16,7 @@ printsItemIds:                              3 instructions,      3 steps, 100.0%
 printsNumbersStringsObjects:                9 instructions,      9 steps, 100.0% coverage, source CRC DAF470E4A2DCE492, compiled CRC 4E444C2D72E01D86
 ranged-for-loop-break-continue.mnd:        21 instructions,     56 steps, 100.0% coverage, source CRC CF3F4A3DA0459039, compiled CRC B24C43C335BBAF68
 recursive-function-condition.mnd:          16 instructions,     21 steps, 100.0% coverage, source CRC D6CF009A758305C2, compiled CRC 5864DBE2693BE92C
+supportsSortVariables:                     19 instructions,     19 steps, 100.0% coverage, source CRC 830E25010AB82CC2, compiled CRC 06A760ACCEF18A67
 switched-case-expression.mnd:              60 instructions,   2129 steps, 100.0% coverage, source CRC 94678BDD55B51CFE, compiled CRC EA1F15B02F0F6E1F
 testSuiteRecognizesUnexpectedWarnings:      1 instructions,      1 steps, 100.0% coverage, source CRC 002B7E6873B65270, compiled CRC 4A3761D7B5564792
 while-loop.mnd:                            16 instructions,     54 steps, 100.0% coverage, source CRC 23EFAC66EEB50211, compiled CRC 4047D876902E8CE9

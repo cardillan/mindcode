@@ -232,6 +232,20 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
     }
 
     @Test
+    void unrollsLoopWithExpressionInCondition() {
+        assertCompilesTo(createTestCompiler(basicProfile),
+                ix -> !(ix instanceof LabelInstruction),
+                """
+                        i = 0;
+                        while (i += 1) < 10 do
+                            print(i);
+                        end;
+                        """,
+                createInstruction(PRINT, q("123456789"))
+        );
+    }
+
+    @Test
     void unrollsExclusiveRangeIterationLoopBasic() {
         assertCompilesTo(createTestCompiler(basicProfile),
                 ix -> !(ix instanceof LabelInstruction),

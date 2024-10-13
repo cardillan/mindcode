@@ -1172,7 +1172,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitFormattableLiteral(FormattableLiteral node) {
-        error(node, "Formattable string not allowed here. It can only be used with printing functions.");
+        error(node, "Formattable string not allowed here. It can only be used with 'print', 'println' and 'format' functions.");
         return NULL;
     }
 
@@ -1415,11 +1415,27 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
+
     private LogicValue handlePrintf(FunctionCall node) {
+        String functionName = node.getFunctionName();
         if (instructionProcessor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))) {
-            String functionName = node.getFunctionName();
             setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
             final List<LogicValue> arguments = processArguments(node.getParams());
+            if (!arguments.isEmpty() && arguments.get(0) instanceof LogicString str) {
+                long placeholders = PLACEHOLDER_MATCHER.matcher(str.format()).results().count();
+                if (placeholders == 0) {
+                    warn(node, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
+                }
+                if (placeholders > arguments.size() - 1) {
+                    warn(node, "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).",
+                            placeholders, arguments.size() - 1);
+                } else if (placeholders < arguments.size() - 1) {
+                    warn(node, "The 'printf' function has more arguments than placeholders: %d placeholder(s), %d argument(s).",
+                            placeholders, arguments.size() - 1);
+                }
+                warn(node, "The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.");
+            }
             setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
             for (int i = 0; i < arguments.size(); i++) {
                 emit(i == 0 ? createPrint(arguments.get(i)) : createFormat(arguments.get(i)));
@@ -1427,6 +1443,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             clearSubcontextType();
             return arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1);
         } else {
+            warn(node, "The '%s' function is deprecated.", functionName);
             return handleFormattedOutput(node, Formatter.PRINTF);
         }
     }

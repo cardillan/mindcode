@@ -9,7 +9,7 @@ import static info.teksol.mindcode.InputPosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LoopStackTest {
-    private final LoopStack loopStack = new LoopStack(ExpectedMessages.refuseAll());
+    private final LoopStack loopStack = new LoopStack(ExpectedMessages.none());
     private final LogicLabel break1 = LogicLabel.symbolic("break1");
     private final LogicLabel break2 = LogicLabel.symbolic("break2");
     private final LogicLabel continue1 = LogicLabel.symbolic("continue1");

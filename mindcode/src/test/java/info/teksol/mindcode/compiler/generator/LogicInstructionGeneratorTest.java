@@ -1228,6 +1228,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 ExpectedMessages.create().add("Cannot redefine variable or function parameter 'a' as a constant."),
                 "a = 10; const a = 20;"
         );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Assignment to constant or parameter 'a' not allowed."),
+                "const a = 10; a *= 2;"
+        );
     }
 
     @Test
@@ -1276,6 +1280,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 ExpectedMessages.create().add("Cannot redefine variable or function parameter 'a' as a program parameter."),
                 "a = 10; param a = 20;"
         );
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Assignment to constant or parameter 'a' not allowed."),
+                "param a = 10; a *= 2;"
+        );
     }
 
     @Test
@@ -1310,11 +1318,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 "inline def foo(x) print(x); end; foo(\"Non-formattable\");"
         );
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Formattable string not allowed here. It can only be used with printing functions."),
+                ExpectedMessages.create().add("Formattable string not allowed here. It can only be used with 'print', 'println' and 'format' functions."),
                 "i = $\"Formattable\";"
         );
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Formattable string not allowed here. It can only be used with printing functions."),
+                ExpectedMessages.create().add("Formattable string not allowed here. It can only be used with 'print', 'println' and 'format' functions."),
                 "inline def foo(x) print(x); end; foo($\"Formattable\");"
         );
     }
@@ -1385,13 +1393,46 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void compilesPrintfML8() {
+    void compilesPrintfLogic8() {
         assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
+                ExpectedMessages.create().add(
+                        "The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code."),
                 """
                         printf("{1}", "a");
                         """,
                 createInstruction(PRINT, q("{1}")),
                 createInstruction(FORMAT, q("a")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void warnsNotEnoughArgumentsPrintfLogic8() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
+                ExpectedMessages.create()
+                        .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.")
+                        .add("The 'printf' function doesn't have enough arguments for placeholders: 2 placeholder(s), 1 argument(s)."),
+                """
+                        printf("{1}{2}", "a");
+                        """,
+                createInstruction(PRINT, q("{1}{2}")),
+                createInstruction(FORMAT, q("a")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void warnsTooManyArgumentsPrintfLogic8() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
+                ExpectedMessages.create()
+                        .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.")
+                        .add("The 'printf' function has more arguments than placeholders: 1 placeholder(s), 2 argument(s)."),
+                """
+                        printf("{1}", "a", "b");
+                        """,
+                createInstruction(PRINT, q("{1}")),
+                createInstruction(FORMAT, q("a")),
+                createInstruction(FORMAT, q("b")),
                 createInstruction(END)
         );
     }
