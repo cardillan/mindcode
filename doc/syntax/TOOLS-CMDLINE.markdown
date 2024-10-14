@@ -1,11 +1,11 @@
 # Command line tool
 
 After building the project, an executable jar file is created at `compiler\target\mindcode.jar`. In the bin 
-directory, there's a Linux script file `mcc` and a Windows batch file `mcc.bat`, which can be used to run the 
+directory, there's a Linux script file `mindcode` and a Windows batch file `mindcode.bat`, which can be used to run the 
 command line tool.
 
-* Linux `mcc` file requires Java 16 or Java 17 executable to be on the path.
-* Windows `mcc.bat` file requires the `JAVA_HOME` variable to point to Java 16 or Java 17 installation.
+* Linux `mindcode` file requires Java 16 or Java 17 executable to be on the path.
+* Windows `mindcode.bat` file requires the `JAVA_HOME` variable to point to Java 16 or Java 17 installation.
 
 # Using the command line tool
 

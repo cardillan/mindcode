@@ -261,7 +261,7 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 
 > [!WARNING]
 > The `printf()` function has two forms depending on the language target:
-> - For ML7A and lower, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument. The `printf()` function is deprecated under ML7A and lower.
+> - For ML7A and lower, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument. This version of the function is deprecated.
 > - For ML8A and higher, the `printf()` function performs the run-time formatting described in this chapter.
 > 
 > When migrating from Mindustry Logic 7 to Mindustry Logic 8, replace all occurrences of `printf("` with `print($"` in your codebase.

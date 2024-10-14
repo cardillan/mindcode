@@ -165,7 +165,7 @@ end
 
 As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
 
-### Value backpropagation
+### Instruction propagation
 
 If the instruction immediately following the `if` expression isn't a `set` instruction, but another instruction taking the resulting value of the `if` expression, and the resulting value is stored using a `set` instruction, the `set` instruction will be replaced by the instruction actually consuming the value. The optimization targets these conditional expressions passed as a parameter into a function, for example `print(a > 0 ? "positive" : "negative")`, which produces:
 
