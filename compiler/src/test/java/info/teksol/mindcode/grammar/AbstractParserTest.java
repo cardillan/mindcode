@@ -11,6 +11,8 @@ import java.util.List;
 
 public abstract class AbstractParserTest {
 
+    protected ThreadLocal<Integer> parseAmbiguities = ThreadLocal.withInitial(() -> 0);
+
     protected MindcodeParser.ProgramContext parse(String code) {
         final List<MindcodeMessage> errors = new ArrayList<>();
         MindcodeErrorListener errorListener = new MindcodeErrorListener(errors);
@@ -27,6 +29,9 @@ public abstract class AbstractParserTest {
         if (!errors.isEmpty()) {
             throw new MindcodeInternalError(errors.toString());
         }
+
+        // Ugly hack
+        parseAmbiguities.set(errorListener.getAmbiguities());
         return context;
     }
 

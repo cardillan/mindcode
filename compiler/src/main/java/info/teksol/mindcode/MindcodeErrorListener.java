@@ -3,8 +3,11 @@ package info.teksol.mindcode;
 import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.grammar.MissingSemicolonException;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
 import org.intellij.lang.annotations.PrintFormat;
 
+import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +15,7 @@ import java.util.Set;
 public class MindcodeErrorListener extends BaseErrorListener {
     private final List<MindcodeMessage> errors;
     private InputFile inputFile = InputFile.EMPTY;
+    private int ambiguities = 0;
 
     public MindcodeErrorListener(List<MindcodeMessage> errors) {
         this.errors = errors;
@@ -19,6 +23,10 @@ public class MindcodeErrorListener extends BaseErrorListener {
 
     public void setInputFile(InputFile inputFile) {
         this.inputFile = inputFile;
+    }
+
+    public int getAmbiguities() {
+        return ambiguities;
     }
 
     private final Set<MindcodeCompilerMessage> reportedMessages = new HashSet<>();
@@ -29,6 +37,11 @@ public class MindcodeErrorListener extends BaseErrorListener {
         if (reportedMessages.add(message)) {
             errors.add(message);
         }
+    }
+
+    @Override
+    public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
+        ambiguities++;
     }
 
     @Override

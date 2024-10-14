@@ -30,6 +30,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     protected abstract String getScriptsDirectory();
 
+    private static final Map<String, String> headers = new ConcurrentHashMap<>();
     private static final Map<String, Queue<String>> results = new ConcurrentHashMap<>();
 
     // Lambda interface
@@ -48,15 +49,18 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     static void done(String scriptsDirectory, String className) throws IOException {
         Path path = Path.of(scriptsDirectory, className + ".txt");
         String[] array = results.get(className).toArray(new String[0]);
-        List<String> texts = Stream.of(array).sorted().toList();
+        List<String> texts = Stream.of(array).sorted().collect(Collectors.toCollection(ArrayList::new));
+        texts.add(0, headers.get(className));
         Files.write(path, texts);
     }
 
     private void logCompilation(String title, String code, String compiled, int instructions) {
         String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
+        headers.computeIfAbsent(getClass().getSimpleName(), k ->
+                String.format("%-40s %11s   %12s   %-16s   %-16s", "Name", "Ambiguities", "Instructions", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
-                "%-40s %4d instructions, source CRC %016X, compiled CRC %016X",
-                name + ":", instructions,
+                "%-40s %11d   %12d   %016X   %016X",
+                name + ":", parseAmbiguities.get(), instructions,
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);
@@ -66,9 +70,11 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     private void logPerformance(String title, String code, String compiled, Processor processor) {
         int coverage = 1000 * processor.getCoverage().cardinality() / processor.getInstructions();
         String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
+        headers.computeIfAbsent(getClass().getSimpleName(), k ->
+                String.format("%-40s %11s   %12s   %6s   %8s   %-16s   %-16s", "Name", "Ambiguities", "Instructions", "Steps", "Coverage", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
-                "%-40s %4d instructions, %6d steps, %3d.%01d%% coverage, source CRC %016X, compiled CRC %016X",
-                name + ":", processor.getInstructions(), processor.getSteps(), coverage / 10, coverage % 10,
+                "%-40s %11d   %12d   %6d   %5d.%01d%%   %016X   %016X",
+                name + ":", parseAmbiguities.get(), processor.getInstructions(), processor.getSteps(), coverage / 10, coverage % 10,
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);

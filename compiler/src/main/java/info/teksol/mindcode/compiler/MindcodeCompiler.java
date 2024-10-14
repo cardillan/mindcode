@@ -74,6 +74,7 @@ public class MindcodeCompiler implements Compiler<String> {
             }
 
             printParseTree(program);
+            messages.add(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
             long compileStart = System.nanoTime();
