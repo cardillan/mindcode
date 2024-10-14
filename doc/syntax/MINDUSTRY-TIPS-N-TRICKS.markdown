@@ -178,7 +178,7 @@ necessarily equal to zero.
 ## Using units
 
 > [!TIP]
-> When compiling code for [Mindustry Logic 8](MINDUSTRY-8.markdown), a system library is available. The system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown) or the [library source file](/mindcode/src/main/resources/library/sys.mnd).
+> When compiling code for [Mindustry Logic 8](MINDUSTRY-8.markdown), a system library is available. The system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown) or the [library source file](/compiler/src/main/resources/library/sys.mnd).
 > 
 > The unit functions in the system library are based on the principles described here. 
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 
-enum OptimizationPhase {
+public enum OptimizationPhase {
     /**
      * Optimizers in this phase are run only once in the initial pass. Here should be optimizers completely independent
      * of other optimizers (i.e. they won't benefit from multiple passes).

@@ -87,7 +87,6 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void specificOptimizationArguments() throws ArgumentParserException {
-        @SuppressWarnings("unchecked")
         List<String> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.NONE.name());
         List<String> actual = new ArrayList<>();
         for (Optimization optimization : Optimization.LIST) {

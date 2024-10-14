@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 #### Experimental features
  
 * Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](/doc/syntax/MINDUSTRY-8.markdown).
-* Added a system library [sys.mnd](/mindcode/src/main/resources/library/sys.mnd). Library is automatically included when the language target is `8A` or higher. 
+* Added a system library [sys.mnd](/compiler/src/main/resources/library/sys.mnd). Library is automatically included when the language target is `8A` or higher. 
 * Added support to the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
 
 ### Changed
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 * Added parallel execution of unit tests.
+* The command-line tool module renamed from `compiler` to `cmdline`, and the Mindcode compiler module renamed from `mindcode` to `compiler`.  
 
 ## 2.2.1 - 2024-09-30
 

@@ -37,6 +37,7 @@ public class CollectionUtils {
         };
     }
 
+    @SafeVarargs
     public static <T, R> Predicate<T> resultIn(Function<T, R> mapping,  R... values) {
         return t -> in(values).test(mapping.apply(t));
     }

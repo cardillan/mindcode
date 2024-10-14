@@ -2,8 +2,8 @@
   <artifact type="jar" build-on-make="true" name="mindcode-compiler:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/mindcode_compiler_jar</output-path>
     <root id="archive" name="mindcode-compiler.jar">
+      <element id="module-output" name="mindcode-toolapp" />
       <element id="module-output" name="mindcode-compiler" />
-      <element id="module-output" name="mindcode-mindcode" />
       <element id="module-output" name="mindcode-schemacode" />
     </root>
   </artifact>

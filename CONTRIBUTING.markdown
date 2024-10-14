@@ -5,11 +5,11 @@
 Mindcode uses JDK17, Maven and Spring Boot. 
 
 The project consists of four modules:
-* `mindcode-compiler`: contains the command-line frontend for Mindcode and Schemacode.
-* `mindcode-mindcode`: contains several independent modules
+* `mindcode-compiler` contains several independent parts:
   * Mindcode compiler, itself consisting of the grammar definition, parser, code generator and optimiser. Work is currently under way to make these parts better separated.
-  * Processor emulator, capable of running mlog code in an emulated environment with limited support for Mindustry World interaction
+  * Processor emulator, capable of running mlog code in an emulated environment with limited support for Mindustry World interaction.
 * `mindcode-schemacode`: contains the grammar definition, compiler and decompiler for Schemacode.
+* `mindcode-toolapp`: contains the command-line interface.
 * `mindcode-webapp`: contains the web application frontend.
 
 Unit tests are used extensively to verify that source code get compiled, optimized and executed as expected. 

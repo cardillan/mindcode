@@ -29,7 +29,7 @@ public class GraphicsBuffer {
         }
 
         return true;
-    };
+    }
 
     public List<DrawInstruction> getDrawInstructions() {
         return drawInstructions;

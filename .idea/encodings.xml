@@ -2,9 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/compiler" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/compiler/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/compiler/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mindcode" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mindcode/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mindcode/src/main/resources" charset="UTF-8" />
@@ -13,6 +11,9 @@
     <file url="file://$PROJECT_DIR$/schemacode/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/toolapp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/toolapp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/toolapp/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/webapp" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/webapp/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/webapp/src/main/resources" charset="UTF-8" />

@@ -95,7 +95,7 @@
     <dependencies>
         <dependency>
             <groupId>info.teksol.mindcode</groupId>
-            <artifactId>mindcode-mindcode</artifactId>
+            <artifactId>mindcode-compiler</artifactId>
             <version>${revision}</version>
         </dependency>
 
