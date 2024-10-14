@@ -235,7 +235,9 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void generatesSync() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create().add("Variable 'GLOBAL' is used as argument in the 'sync()' function, will be considered volatile."),
+                """
                         sync(GLOBAL);
                         """,
                 createInstruction(SYNC, "GLOBAL"),

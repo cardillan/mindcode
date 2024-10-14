@@ -185,6 +185,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         );
     }
 
+    //</editor-fold>
+
+
+    //<editor-fold desc="Volatile variables">
     // TODO Activate after adding support for volatile declaration for blocks
     /*
     @Test
@@ -217,6 +221,27 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         );
     }
     */
+
+    @Test
+    void respectsVolatileVariables() {
+        assertCompilesTo(
+                ExpectedMessages.create()
+                        .add("Variable 'A' is used as argument in the 'sync()' function, will be considered volatile."),
+                """
+                        sync(A);
+                        before = A;
+                        wait(1000);
+                        after = A;
+                        print(after - before);
+                        """,
+                createInstruction(SYNC, "A"),
+                createInstruction(SET, "before", "A"),
+                createInstruction(WAIT, "1000"),
+                createInstruction(SET, "after", "A"),
+                createInstruction(OP, "sub", var(2), "after", "before"),
+                createInstruction(PRINT, var(2))
+        );
+    }
     //</editor-fold>
 
 

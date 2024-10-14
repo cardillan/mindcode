@@ -1,6 +1,7 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 assignments-in-expressions.mnd:                    2              5        5     100.0%   90D4C6A6823E16B5   B28E7894BDB75ADF
-compilesProperComparison:                          1            204      186      91.1%   DE32E1F0B3E8AB1E   BA8241A70FA52F0B
+compilesProperComparison2:                         1              4        4     100.0%   C506D563D0AADCE4   188342307620BB82
+compilesProperComparison:                          1            188      172      91.4%   DE32E1F0B3E8AB1E   7B428A425537C1D9
 complex-case-expression.mnd:                       2             49      297     100.0%   D7EEC80CFC87E87E   BD5DB148425EE646
 computesPackColor:                                 1              2        2     100.0%   704495CD1C7F1B5D   ABF615458C567DDA
 expression-evaluation-compile-time.mnd:            7             63       63     100.0%   D86193306BD7D9AA   A9D303F9DE894A59
@@ -9,7 +10,7 @@ fixed-bounds-ranged-for.mnd:                       3              1        1    
 for-each-loop-break-continue.mnd:                  2             77       90      83.1%   C89A2268B1269F77   435A11054CEBD1DA
 function-inlining.mnd:                            14            896      896     100.0%   3BDE9A9CFE981E76   C6331905A06E7492
 handlesAssignmentsInConditions:                    3              6        6     100.0%   DBEEFD3E7BD8DEDF   3417000EFE87AB52
-handlesChainedAssignments:                         1              3        3     100.0%   29C4FE6B66C5AB39   FCCEFE1CF6512E46
+handlesChainedAssignments:                         1              1        1     100.0%   29C4FE6B66C5AB39   4A5F618227F64792
 iterated-for-loop-break-continue.mnd:              1             33      161     100.0%   1B7F53CD50B81EE8   EC9420AB556C74F1
 loops-in-conditions.mnd:                           5              4        4     100.0%   783C846B3DE999A3   9B6B54C54ECA7EB0
 printsInvalidValueAsNull:                          1              4        4     100.0%   85C7E4680E6B63DD   2B3FA40C960C9819

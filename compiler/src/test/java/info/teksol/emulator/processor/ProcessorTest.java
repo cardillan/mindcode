@@ -217,6 +217,23 @@ public class ProcessorTest extends AbstractProcessorTest {
     }
 
     @Test
+    void compilesProperComparison2() {
+        testCode("""
+                        inline def eval(b)
+                            b ? "T" : "F";
+                        end;
+                        
+                        inline def compare(a, b)
+                            print(eval(a >= b), eval(a <= b), eval(a > b), eval(a < b));
+                        end;
+                        
+                        compare(A, A);
+                        """,
+                "T", "T", "F", "F"
+        );
+    }
+
+    @Test
     void executesWhileLoop() throws IOException {
         List<String> expected = new ArrayList<>();
         for (int i = 0, j = 0; i < 10; ) {

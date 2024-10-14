@@ -449,6 +449,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<LogicValue> arguments = processArguments(params);
 
+        if (functionName.equals("sync") && arguments.size() == 1 &&arguments.get(0) instanceof LogicVariable var
+                && var.isGlobalVariable()) {
+            warn(call, "Variable '%s' is used as argument in the 'sync()' function, will be considered volatile.",
+                    var.getName());
+        }
+
         setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         LogicValue output = functionMapper.handleFunction(call, instructions::add, functionName, arguments);
 
@@ -1130,7 +1136,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return LogicVariable.block(identifier);
         } else if (instructionProcessor.isGlobalName(identifier)) {
             // Global variables aren't registered locally -- they must not be pushed onto stack!
-            return LogicVariable.global(identifier);
+            return LogicVariable.global(identifier, callGraph.getSyncedVariables().contains(identifier));
         } else if (functionPrefix.isEmpty()) {
             // Main variable - again not pushed onto stack
             return LogicVariable.main(identifier);

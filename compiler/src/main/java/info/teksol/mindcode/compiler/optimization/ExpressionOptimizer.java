@@ -92,6 +92,34 @@ class ExpressionOptimizer extends BaseOptimizer {
                         }
                     }
                 }
+            } else  {
+                DataFlowVariableStates.VariableStates variableStates = optimizationContext.getVariableStates(ix);
+                LogicValue x = optimizationContext.resolveValue(variableStates, ix.getX());
+                LogicValue y = optimizationContext.resolveValue(variableStates, ix.getY());
+                if (x.equals(y)) {
+                    // Both operands are the same variable
+                    switch (ix.getOperation()) {
+                        case EQUAL, LESS_THAN_EQ, GREATER_THAN_EQ, STRICT_EQUAL -> {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.TRUE));
+                            return;
+                        }
+                        case NOT_EQUAL, LESS_THAN, GREATER_THAN -> {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
+                            return;
+                        }
+                        /*
+                        Cannot do these: null & null produces 0, not null
+                        case AND, OR, MIN, MAX -> {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), ix.getX()));
+                            return;
+                        }
+                        */
+                        case SUB, XOR -> {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
+                            return;
+                        }
+                    }
+                }
             }
         }
 
@@ -116,6 +144,13 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
     }
 
+    /**
+     * Returns the operands in a tuple. If one of the operands is a numeric literal, it will be returned
+     * in _1 (the operands may get swapped).
+
+     * @param ix instruction to inspect
+     * @return a tuple containing a constant operand and the other operand.
+     */
     private Tuple2<LogicValue, LogicValue> extractConstantOperand(OpInstruction ix) {
         return ix.getX().isNumericLiteral()
                 ? new Tuple2<>(ix.getX(), ix.getY())

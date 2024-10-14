@@ -106,23 +106,9 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 
 ## The `sync()` function
 
-A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. 
-The function has one parameter - a variable to be synchronized across the network (namely, from the server to all 
-clients). A [global variable](SYNTAX-1-VARIABLES.markdown#global-variables) must be passed as an argument to this 
-function, otherwise a compilation error occurs. The reason is that global variables are more restrained in 
-optimizations and therefore their dataflow is less altered. If local variables were used, they might not contain the 
-expected value, as some (or all) assignments to them can be eliminated by the Data Flow Optimization.
+A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#global-variables) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function becomes volatile - Mindcode assumes the value of the variable may change by an external operation.
 
-This constraint makes sense semantically as well: a scope of a global variable is the entire program. When a 
-variable is synced, its scope becomes even broader and is shared between multiple processors; using a local variable 
-in this place doesn't therefore make sense.
-
-> [!IMPORTANT]
-> By using a variable in a sync function, the variable effectively becomes volatile - its value can change 
-> externally, and it needs to be read from that variable on every access. Mindustry at the moment doesn't have a 
-> mechanism for correctly handling volatile variables, although such mechanism is planned.
- 
-Currently, a value of a  global variable might not be re-read on every access, for example:
+As a result, Mindcode makes sure the variable is reread on every access and disable optimizations that would allow to reuse the value of the variable:
 
 ```
 sync(A);
@@ -132,56 +118,18 @@ after = A;
 print(after - before);
 ```
 
-This snippet of code is meant to compute a difference in the value of `A` caused by external synchronization. 
-However, due to the Data Flow Optimization, the resulting code is:
+This snippet of code is meant to compute a difference in the value of `A` caused by external synchronization, and produces this mlog code: 
 
 ```
-op rand A 10 0
 sync A
+set before A
 wait 1000
-op sub __tmp1 A A
-print __tmp1
-end
+set after A
+op sub __tmp2 after before
+print __tmp2
 ```
 
-Storing the initial value of `A` into the `before` variable is eliminated, as the optimizer doesn't know the value 
-of `A` might have changed in the meantime.
-
-At this moment, a possible workaround is to encapsulate reading of `A` into a function declared `noinline`, to 
-prevent its inlining:
-
-```
-noinline def readA()
-    A;
-end;
-
-A = rand(10);
-sync(A);
-before = readA();
-wait(1000);
-after = readA();
-print(after - before);
-```
-
-The resulting code now is 
-
-```
-op rand A 10 0
-sync A
-set __fn0retaddr 4
-jump 11 always 0 0
-set first __fn0retval
-wait 1000
-set __fn0retaddr 8
-jump 11 always 0 0
-op sub __tmp3 __fn0retval first
-print __tmp3
-end
-set __fn0retval A
-set @counter __fn0retaddr
-```
-
-This is a viable workaround if you run into the described problem, until a better solution is implemented. 
+As can be seen, the code actually does compute the difference between the value of the variable from two different points in time.
 
 # Built-in functions
 

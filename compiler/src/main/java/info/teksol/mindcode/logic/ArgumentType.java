@@ -1,6 +1,12 @@
 package info.teksol.mindcode.logic;
 
 public enum ArgumentType {
+    // Literals
+    NULL_LITERAL,
+    BOOLEAN_LITERAL,
+    NUMERIC_LITERAL,
+    STRING_LITERAL,
+
     // Instruction keyword
     KEYWORD,
 
@@ -10,23 +16,25 @@ public enum ArgumentType {
     // Labels
     LABEL,
 
-    // Variables
+    // User variables
     BLOCK,
     PARAMETER,
     GLOBAL_VARIABLE,
     LOCAL_VARIABLE,
+
+    // Compiler generated variables
+    COMPILER,                       // Compiler support, e.g. stack pointer(s)
+
     TMP_VARIABLE,
     AST_VARIABLE,
     FUNCTION_RETVAL,
     FUNCTION_RETADDR,
-    COMPILER,                // Compiler variables, e.g. stack pointer(s)
-
-    // Literals
-    NULL_LITERAL,
-    BOOLEAN_LITERAL,
-    NUMERIC_LITERAL,
-    STRING_LITERAL,
 
     // No information about type - for creating instructions without metadata
     UNSPECIFIED,
+    ;
+
+    public boolean isCompiler() {
+        return ordinal() >= COMPILER.ordinal();
+    }
 }

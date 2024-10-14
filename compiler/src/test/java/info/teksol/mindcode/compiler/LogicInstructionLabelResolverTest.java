@@ -171,10 +171,10 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
 
     @Test
     void sortsCategories() {
-        LogicArgument global1 = LogicVariable.global("b1");
-        LogicArgument global2 = LogicVariable.global("b2");
-        LogicArgument main1 = LogicVariable.global("a1");
-        LogicArgument main2 = LogicVariable.global("a2");
+        LogicArgument global1 = LogicVariable.global("b1", false);
+        LogicArgument global2 = LogicVariable.global("b2", false);
+        LogicArgument main1 = LogicVariable.global("a1", false);
+        LogicArgument main2 = LogicVariable.global("a2", false);
         LogicArgument param = LogicParameter.parameter("p", LogicString.create("x"));
         Set<LogicArgument> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
 

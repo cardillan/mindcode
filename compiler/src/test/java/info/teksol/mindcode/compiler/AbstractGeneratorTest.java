@@ -445,11 +445,11 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final Operation     floor     = Operation.FLOOR;
     protected static final Operation     idiv      = Operation.IDIV;                          
     protected static final Operation     mul       = Operation.MUL;                           
-    protected static final LogicNumber   K1000     = LogicNumber.get(1000);                   
+    protected static final LogicNumber   K1000     = LogicNumber.get(1000);
     protected static final LogicNumber   K0001     = LogicNumber.get("0.001", 0.001);
-    protected static final LogicNumber   P0        = LogicNumber.get(0);
+    protected static final LogicNumber   P0        = LogicNumber.ZERO;
     protected static final LogicNumber   P0_5      = LogicNumber.create("0.5", 0.5);
-    protected static final LogicNumber   P1        = LogicNumber.get(1);
+    protected static final LogicNumber   P1        = LogicNumber.ONE;
     protected static final LogicNumber   P2        = LogicNumber.get(2);
     protected static final LogicNumber   P4        = LogicNumber.get(4);
     protected static final LogicNumber   P8        = LogicNumber.get(8);
@@ -484,7 +484,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicBuiltIn  id        = LogicBuiltIn.create("id");
     protected static final LogicKeyword  color     = LogicKeyword.create("color");
     protected static final LogicKeyword  item      = LogicKeyword.create("item");
-    protected static final LogicVariable C         = LogicVariable.global("C");
+    protected static final LogicVariable C         = LogicVariable.global("C", false);
     protected static final LogicVariable a         = LogicVariable.main("a");
     protected static final LogicVariable b         = LogicVariable.main("b");           
     protected static final LogicVariable c         = LogicVariable.main("c");           
@@ -498,5 +498,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicVariable ast0      = LogicVariable.ast("__ast0");      
     protected static final LogicVariable tmp0      = LogicVariable.temporary("__tmp0");      
     protected static final LogicVariable tmp1      = LogicVariable.temporary("__tmp1");      
+    protected static final LogicVariable tmp2      = LogicVariable.temporary("__tmp2");
+    protected static final LogicVariable tmp3      = LogicVariable.temporary("__tmp3");
     protected static final LogicVariable fn0retval = LogicVariable.fnRetVal("__fn0retval");
 }

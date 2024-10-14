@@ -21,6 +21,7 @@ public final class CallGraph {
 
     private final Map<String, LogicFunction> functions = new HashMap<>();
     private final StackAllocation allocatedStack;
+    private final Set<String> syncedVariables = new HashSet<>();
 
     CallGraph(StackAllocation allocatedStack) {
         this.allocatedStack = allocatedStack;
@@ -98,6 +99,14 @@ public final class CallGraph {
      */
     public Stream<LogicFunction> recursiveFunctions() {
         return functions.values().stream().filter(LogicFunction::isRecursive).filter(LogicFunction::isUsed);
+    }
+
+    void addSyncedVariables(Set<String> syncedVariables) {
+        this.syncedVariables.addAll(syncedVariables);
+    }
+
+    public Set<String> getSyncedVariables() {
+        return syncedVariables;
     }
 
     /**

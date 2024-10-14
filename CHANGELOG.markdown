@@ -18,9 +18,11 @@ All notable changes to this project will be documented in this file.
 * Added variable name validation: when inserting mlog into Mindustry processor, variables named `configure` are silently renamed to `config`. For this reason, using `configure` as a name for any variable in Mindcode causes an error. 
 * Added navigable compiler error messages to the web app. Clicking on a message with known position in the source code selects the corresponding position in the editor.
 * Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
+* Added an optimization of the `op` instruction of two identical operands to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization): equality comparisons are replaced by an instruction setting the target variable to `1`, while inequality comparisons, `sub` and `xor` by an instruction setting the target variable to `0`. 
 * Added an optimization of the `lookup` instruction to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). When possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
 * Added warning messages when [deprecated features](/doc/syntax/SYNTAX-STRICT-RELAXED.markdown#deprecated-features) are detected in the source code. 
-* Added support for creating constants from formattable string literals.   
+* Added support for creating constants from formattable string literals.
+* Added full support for the `sync()` function: a variable passed as an argument to this function becomes automatically volatile.
 
 #### Experimental features
  
@@ -34,7 +36,8 @@ All notable changes to this project will be documented in this file.
 * Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
-* Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.    
+* Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.
+* When a compiler-generated variable is evaluated as uninitialized, an internal error is thrown. This situation always means there's an error in the compiler or the optimizer, it is better to not produce anything instead of 
 
 ### Deprecated
 

@@ -42,7 +42,7 @@ public class InterceptorTest extends AbstractInterceptorTest {
     }
 
     @Test
-    void preservesLastGlobalInFunctionOnExperimental() {
+    void preservesLastGlobalInFuncOnExperimental() {
         testCode("""
                         #set optimization = experimental;
                         A = 0;

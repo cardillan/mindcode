@@ -14,6 +14,7 @@ public class CallGraphCreator extends MessageEmitter {
     private final Deque<String> declarationStack = new ArrayDeque<>();
     private final Map<String, FunctionDeclaration> functions = new HashMap<>();
     private final Map<String, List<String>> callMap = new HashMap<>();
+    private final Set<String> syncedVariables = new HashSet<>();
     private final List<AstNode> encounteredNodes = new ArrayList<>();
     private String activeFunction = MAIN;
     private StackAllocation allocatedStack;
@@ -36,6 +37,7 @@ public class CallGraphCreator extends MessageEmitter {
         CallGraph graph = new CallGraph(allocatedStack);
         functions.values().forEach(graph::addFunction);
         callMap.forEach(graph::addFunctionCalls);
+        graph.addSyncedVariables(syncedVariables);
 
         graph.buildCallGraph(instructionProcessor);
 
@@ -82,6 +84,14 @@ public class CallGraphCreator extends MessageEmitter {
 
     private void visitFunctionCall(FunctionCall functionCall) {
         callMap.get(activeFunction).add(functionCall.getFunctionName());
+
+        if (functionCall.getFunctionName().equals("sync")
+                && functionCall.getParams().size() == 1
+                && functionCall.getParams().get(0) instanceof VarRef var
+                && var.getName().equals(var.getName().toUpperCase())) {
+            syncedVariables.add(var.getName());
+        }
+
         functionCall.getParams().forEach(this::visitNode);
     }
 

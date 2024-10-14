@@ -5,9 +5,9 @@
      2 instructions eliminated by Jump Normalization (5 iterations).
     62 instructions eliminated by Jump Optimization (5 iterations).
     52 instructions eliminated by Single Step Elimination (4 passes, 9 iterations).
-     2 instructions eliminated by Expression Optimization (4 iterations).
+     2 instructions eliminated by Expression Optimization (2 passes, 4 iterations).
      5 instructions eliminated by If Expression Optimization (2 passes, 4 iterations).
-    21 instructions eliminated by Data Flow Optimization (4 passes, 18 iterations).
+    22 instructions eliminated by Data Flow Optimization (5 passes, 20 iterations).
      1 loops improved by Loop Hoisting.
     15 instructions added by Loop Optimization (4 iterations).
     13 loops improved by Loop Optimization.
@@ -15,7 +15,7 @@
      7 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Print Merging.
-   726 instructions after optimizations.
+   725 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 276):
   * Loop Optimization: replicate condition at line 173           cost     1, benefit      312.5, efficiency      312.5 (+0 instructions)
@@ -192,10 +192,9 @@ sensor __tmp57 @unit @controlled
 jump __label226 notEqual __tmp57 0
 label __label35
 ucontrol flag QUERY_FLAG 0 0 0 0
-op equal __tmp59 QUERY_FLAG QUERY_FLAG
 sensor __tmp60 @unit @dead
 op equal __tmp61 __tmp60 0
-op land __tmp62 __tmp59 __tmp61
+op land __tmp62 true __tmp61
 jump __label38 equal __tmp62 false
 label __label227
 ucontrol stop 0 0 0 0 0

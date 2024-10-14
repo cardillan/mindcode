@@ -105,6 +105,9 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         if (matchers.isEmpty()) {
             throw new IllegalStateException("No matchers found");
         }
+        if (minimumCount > maximumCount) {
+            throw new IllegalArgumentException("Minimum count cannot be greater than maximum count");
+        }
         matchers.get(matchers.size() - 1).setLimits(minimumCount, maximumCount);
         return this;
     }
@@ -113,10 +116,13 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * Sets the minimum repeat count for the last added message.  The message must appear at least
      * the given number of times, but may appear more times.
      *
-     * @param minimumCount minimum expected number of repetitions
+     * @param minimumCount minimum expected number of repetitions, must be at least 1.
      * @return this instance
      */
     public ExpectedMessages atLeast(int minimumCount) {
+        if (minimumCount < 1) {
+            throw new IllegalArgumentException("Minimum count must be at least 1");
+        }
         return between(minimumCount, Integer.MAX_VALUE);
     }
 
@@ -128,6 +134,9 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @return this instance
      */
     public ExpectedMessages atMost(int maximumCount) {
+        if (maximumCount < 1) {
+            throw new IllegalArgumentException("Maximum count must be at least 1");
+        }
         return between(0, maximumCount);
     }
 
@@ -140,6 +149,29 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      */
     public ExpectedMessages repeat(int times) {
         return between(times, times);
+    }
+
+    /**
+     * Marks the message as ignored. The message may appear arbitrary number of times,
+     * or it might not appear at all.
+     * <p>
+     * Marking messages as ignored isn't optimal. Tests should always specify which messages
+     * may and which may not appear.
+     *
+     * @return this instance
+     */
+    public ExpectedMessages ignored() {
+        return between(0, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Marks the message as forbidden. Not configuring the message at all would have the same effect.
+     * Use this method to explicitly express certain message must not appear.
+     *
+     * @return this instance
+     */
+    public ExpectedMessages forbidden() {
+        return between(0, 0);
     }
 
     @Override

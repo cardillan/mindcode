@@ -1,1 +1,1 @@
-@"%JAVA_HOME%\bin\java.exe" -jar %~dp0..\compiler\target\mindcode.jar %*
+@"%JAVA_HOME%\bin\java.exe" -jar %~dp0..\toolapp\target\mindcode.jar %*

@@ -123,8 +123,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(ArgumentType.BLOCK, name);
     }
 
-    public static LogicVariable global(String name) {
-        return new LogicVariable(ArgumentType.GLOBAL_VARIABLE, name);
+    public static LogicVariable global(String name, boolean volatileVar) {
+        return new LogicVariable(ArgumentType.GLOBAL_VARIABLE, name, volatileVar);
     }
 
     @SuppressWarnings("ConfusingMainMethod")

@@ -321,7 +321,8 @@ class DataFlowVariableStates {
                 }
 
                 if (instruction instanceof SetInstruction set) {
-                    if (reuseValue && set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
+                    if (reuseValue && set.getResult() == variable && set.getValue() instanceof LogicVariable variable2
+                            && !variable.isVolatile() && !variable2.isVolatile()) {
                         trace(() -> "    Adding direct equivalence " + variable.toMlog() + " == " + variable2.toMlog());
                         equivalences.put(variable, variable2);
                     }
@@ -424,7 +425,7 @@ class DataFlowVariableStates {
             if (reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
                 trace(() -> "*** Detected uninitialized read of " + variable.toMlog());
                 print("Current context:");
-                optimizer.uninitialized.add(variable);
+                optimizer.addUninitialized(variable);
             }
 
             if (definitions.containsKey(variable)) {
@@ -723,7 +724,7 @@ class DataFlowVariableStates {
          * of the instructions has a deterministic operation. The obvious case is when the two instructions have
          * equivalent operations and inputs. Additionally, commutative and inverse operations are handled.
          *
-         * @param first first instruction to compare
+         * @param first  first instruction to compare
          * @param second second instruction to compare
          * @return true if the two instructions produce the same expression
          */
@@ -742,9 +743,9 @@ class DataFlowVariableStates {
             }
 
             // For commutative operations, swapped arguments are equal
-            // For inequality operators, swapped arguments are also equal
+            // For inequality operators, swapped operation and arguments are also equal
             if (first.getOperation() == second.getOperation() && first.getOperation().isCommutative()
-                    || first.getOperation().isInequalityOperator() && first.getOperation().inverse() == second.getOperation()) {
+                    || first.getOperation().swapped() == second.getOperation()) {
                 return Objects.equals(x1, y2) && Objects.equals(y1, x2);
             }
 

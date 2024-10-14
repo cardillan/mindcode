@@ -121,7 +121,11 @@ optimizations are available:
 * Multiplication/division by one and addition/subtraction of zero are replaced by a `set` instruction setting the 
   target variable to the other operand.  
 * All set instructions assigning a variable to itself (e.g. `set x x`) are removed.
-
+* When both operands of the instruction are the same (or effectively the same), some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
+  * `equal`, `lessThanEq`, `greaterThanEq`, `strictEqual`: sets the result to `1` (true) 
+  * `notEqual`, `lessThan`, `greaterThan`: sets the result to `0` (false) 
+  * `sub`, `xor`: sets the result to `0` 
+  
 If the optimization level is `advanced`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.

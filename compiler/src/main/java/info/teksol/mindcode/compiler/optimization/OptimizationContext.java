@@ -502,11 +502,14 @@ class OptimizationContext {
     }
 
     public void addUninitializedVariable(LogicVariable variable) {
+        if (variable.getType().isCompiler()) {
+            throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
+        }
         uninitializedVariables.add(variable);
     }
 
     public void addUninitializedVariables(Collection<LogicVariable> variables) {
-        uninitializedVariables.addAll(variables);
+        variables.forEach(this::addUninitializedVariable);
     }
 
     //</editor-fold>

@@ -56,7 +56,7 @@ class DataFlowOptimizer extends BaseOptimizer {
      * Set of potentially uninitialized variables. In at least one branch the variable can be read without
      * being assigned a value first.
      */
-    final Set<LogicVariable> uninitialized = new HashSet<>();
+    private final Set<LogicVariable> uninitialized = new HashSet<>();
 
     /**
      * Instructions referencing each variable. References are accumulated (not cleared during single pass).
@@ -830,6 +830,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
+    public void addUninitialized(LogicVariable variable) {
+        if (variable.getType().isCompiler()) {
+            throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
+        }
+        uninitialized.add(variable);
+    }
+
     /**
      * Determines whether it is possible to eliminate an assignment to a variable by given instruction. Elimination
      * is generally allowed except cases requiring special protection.
@@ -839,6 +846,8 @@ class DataFlowOptimizer extends BaseOptimizer {
      * @return true if this assignment can be safely eliminated
      */
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
+        if (variable.isVolatile()) return false;
+
         return switch (variable.getType()) {
             case COMPILER, FUNCTION_RETADDR, PARAMETER -> false;
             case GLOBAL_VARIABLE -> experimental();

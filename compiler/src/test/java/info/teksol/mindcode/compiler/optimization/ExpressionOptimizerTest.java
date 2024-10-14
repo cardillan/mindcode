@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.Operation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -262,6 +263,63 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                 List.of(
                         createInstruction(SET, tmp0, a),
                         createInstruction(SET, tmp1, b),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesEqualitiesOnIdentity() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.EQUAL, tmp0, a, a),
+                        createInstruction(OP, Operation.LESS_THAN_EQ, tmp1, a, a),
+                        createInstruction(OP, Operation.GREATER_THAN_EQ, tmp2, a, a),
+                        createInstruction(OP, Operation.STRICT_EQUAL, tmp3, a, a),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, LogicBoolean.TRUE),
+                        createInstruction(SET, tmp1, LogicBoolean.TRUE),
+                        createInstruction(SET, tmp2, LogicBoolean.TRUE),
+                        createInstruction(SET, tmp3, LogicBoolean.TRUE),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesInequalitiesOnIdentity() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.NOT_EQUAL, tmp0, a, a),
+                        createInstruction(OP, Operation.LESS_THAN, tmp1, a, a),
+                        createInstruction(OP, Operation.GREATER_THAN, tmp2, a, a),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, LogicBoolean.FALSE),
+                        createInstruction(SET, tmp1, LogicBoolean.FALSE),
+                        createInstruction(SET, tmp2, LogicBoolean.FALSE),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizessubXorOnIdentity() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.SUB, tmp0, a, a),
+                        createInstruction(OP, Operation.XOR, tmp1, a, a),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, P0),
+                        createInstruction(SET, tmp1, P0),
                         createInstruction(END)
                 )
         );
