@@ -196,7 +196,7 @@ inline def areUnitsAvailable(type, output)
     if firstUnit != null then
         needed = needsFourUnits(@unit) ? 4 : 2;
         do
-            if @unit.controlled == 0 || @unit.controller == @this then
+            if @unit.controlled == 0 or @unit.controller == @this then
                 if (free += 1) >= needed then
                     return true;
                 end;

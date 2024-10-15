@@ -97,7 +97,7 @@ while true do
     print("\nSwitch: ", SWITCH);
     print("\nMemory: ", MEMORY);
     print("\nContainer: ", CONTAINER);
-    if CONTAINER == null || MEMORY == null then
+    if CONTAINER == null or MEMORY == null then
         print("\nNo memory or container.");
         printflush(MESSAGE);
     else

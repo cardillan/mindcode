@@ -72,7 +72,7 @@ SWITCH.enabled = 0;
 while SWITCH.enabled == 0 do
     start = @time;
     item = SORTER.config;
-    if item == null || SENSOR != @totalItems then
+    if item == null or SENSOR != @totalItems then
         item = SENSOR;
         print($"Measuring [gold]total[] in $CONTAINER");
     else

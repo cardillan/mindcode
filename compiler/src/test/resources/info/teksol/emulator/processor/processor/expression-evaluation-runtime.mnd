@@ -28,8 +28,8 @@ eval(5 != d(5), false,      "notEqual");
 eval(5 != d(6), true,       "notEqual");
 eval(0 != d(null), false,   "notEqual null");
 
-eval(1 and d(0), false,     "land");
-eval(1 and d(2), true,      "land");
+eval(1 && d(0), false,      "land");
+eval(1 && d(2), true,       "land");
  
 eval(0 <  d(1), true,       "lessThan");
 eval(1 <  d(0), false,      "lessThan");
@@ -95,6 +95,6 @@ a = 3; eval(a &= d(2),       2, "&=");
 a = 3; eval(a ^= d(2),       1, "^=");
 a = 1; eval(a &&= d(0),  false, "&&=");
 a = 1; eval(a &&= d(2),   true, "&&=");
-a = 0; eval(a ||= d(2),      2, "||=");
+a = 0; eval(a ||= d(2),   true, "||=");
 
 // TODO: add angle, len, trig functions. Rand??

@@ -79,14 +79,14 @@ while !switch1.enabled do
 
     // Move to next position
     x += dx;
-    if x > NE_X || x < SW_X then
+    if x > NE_X or x < SW_X then
         // Reached end, reverse the direction and move to the next strip
         dx = -dx;
         y += dy;
         x = limit(x, SW_X, NE_X);
         $DX = dx;
 
-        if y > NE_Y || y < SW_Y then
+        if y > NE_Y or y < SW_Y then
             dy = -dy;
             y = limit(y, SW_Y, NE_Y);
             $DY = dy;

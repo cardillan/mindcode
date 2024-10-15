@@ -242,7 +242,7 @@ while true do
             OUTPUT_1 = 0;
             OUTPUT_2 = 0;
             OUTPUT_3 = 0;
-            GENERATOR = (net_power >= -150) and (total_battery < BATTERY_SAT);
+            GENERATOR = (net_power >= -150) && (total_battery < BATTERY_SAT);
             print("\nShutdown reason: [gold]", REASON, "[]");
 
             if switch1.enabled then

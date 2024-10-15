@@ -12,7 +12,7 @@ const M_R1 = M_B0 + 1;
 const M_G1 = M_R1 + 1;
 const M_B1 = M_G1 + 1;
 
-while MEMORY == null || DISPLAY == null do
+while MEMORY == null or DISPLAY == null do
     print("Item/Liquid/Energy Level Display");
     n = @links;
     while n > 0 do
@@ -37,7 +37,7 @@ while MEMORY == null || DISPLAY == null do
     print("\nSwitch: ", SWITCH);
     print("\nMemory: ", MEMORY);
     print("\nDisplay: ", DISPLAY);
-    if MEMORY == null || DISPLAY == null then
+    if MEMORY == null or DISPLAY == null then
         print("\nNo memory or display.");
     end;
     printflush(MESSAGE);

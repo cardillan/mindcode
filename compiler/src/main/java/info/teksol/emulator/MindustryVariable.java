@@ -198,8 +198,8 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return isObject ? print(object) : print(numericValue);
     }
 
-    public boolean isValidNumber() {
-        return !isObject && !invalid(numericValue);
+    public boolean invalidNumber() {
+        return isObject || invalid(numericValue);
     }
 
     // TODO: compiler/optimizer will need to use this eventually

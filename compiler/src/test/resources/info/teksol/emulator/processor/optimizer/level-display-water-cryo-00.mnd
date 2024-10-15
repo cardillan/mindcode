@@ -4,7 +4,7 @@ MESSAGE = null;
 SWITCH = null;
 DISPLAY = null;
 
-while TANK_CRYO == null || TANK_WATER == null || DISPLAY == null do
+while TANK_CRYO == null or TANK_WATER == null or DISPLAY == null do
     print("Water and Cryofluid Level Meter");
     n = @links;
     while n > 0 do

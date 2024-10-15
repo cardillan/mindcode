@@ -43,7 +43,7 @@ do
     println("Copper: ", COPPER);
     println("Lead: ", LEAD);
     printflush(MESSAGE);
-loop while TITANIUM == null || SILICON == null || COPPER == null || LEAD == null;
+loop while TITANIUM == null or SILICON == null or COPPER == null or LEAD == null;
 
 ROW_HEIGHT = 19;
 BAR_HEIGHT = 14;

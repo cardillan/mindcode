@@ -4,8 +4,8 @@ compilesProperComparison2:                         1              4        4    
 compilesProperComparison:                          1            188      172      91.4%   DE32E1F0B3E8AB1E   7B428A425537C1D9
 complex-case-expression.mnd:                       2             49      297     100.0%   D7EEC80CFC87E87E   BD5DB148425EE646
 computesPackColor:                                 1              2        2     100.0%   704495CD1C7F1B5D   ABF615458C567DDA
-expression-evaluation-compile-time.mnd:            7             63       63     100.0%   D86193306BD7D9AA   A9D303F9DE894A59
-expression-evaluation-runtime.mnd:                 7            865      548      49.0%   FAA2C65EDA5AA776   34078AA6C70AA9DB
+expression-evaluation-compile-time.mnd:            7             63       63     100.0%   E83FAFF33970D0AB   A9D303F9DE894A59
+expression-evaluation-runtime.mnd:                 7            866      549      49.0%   CCEE0A0EBAB82168   A07EDB470E79A88D
 fixed-bounds-ranged-for.mnd:                       3              1        1     100.0%   1B09ADF573C470CB   397D2C8647927672
 for-each-loop-break-continue.mnd:                  2             77       90      83.1%   C89A2268B1269F77   435A11054CEBD1DA
 function-inlining.mnd:                            14            896      896     100.0%   3BDE9A9CFE981E76   C6331905A06E7492

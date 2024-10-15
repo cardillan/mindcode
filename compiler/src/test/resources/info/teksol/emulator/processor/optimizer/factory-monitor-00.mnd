@@ -11,7 +11,7 @@ MUL1 = MUL2 = MUL3 = RES1 = RES2 = RES3 = OUTPUT = CAPACITY = null;
 // TODO: Prevents uninitialized variable warning; improve detection and remove
 icon = null;
 
-while DISPLAY == null || TYPE == null do
+while DISPLAY == null or TYPE == null do
     println("Universal Factory Monitor");
     n = @links;
     while n > 0 do
@@ -95,7 +95,7 @@ while DISPLAY == null || TYPE == null do
     println("Resource 2: ", RES2);
     println("Resource 3: ", RES3);
     println("Output: ", OUTPUT);
-    if DISPLAY == null || TYPE == null then
+    if DISPLAY == null or TYPE == null then
         print("No block to monitor or display.");
     end;
     printflush(MESSAGE);

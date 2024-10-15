@@ -1,14 +1,15 @@
-package info.teksol.mindcode.compiler.optimization;
+package info.teksol.evaluator;
 
-import info.teksol.evaluator.LogicWritable;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLiteral;
+import info.teksol.mindcode.logic.LogicNull;
 import info.teksol.mindcode.logic.LogicNumber;
 
 import java.util.Optional;
 
-class ExpressionValue implements LogicWritable {
+// TODO add support for conversion to AST literals
+public class ExpressionValue implements LogicWritable {
     private final InstructionProcessor instructionProcessor;
 
     private LogicLiteral literal;
@@ -19,8 +20,12 @@ class ExpressionValue implements LogicWritable {
 
     @Override
     public void setDoubleValue(double value) {
-        Optional<String> strValue = instructionProcessor.mlogFormat(value);
-        literal = strValue.map(s -> LogicNumber.create(s, value)).orElse(null);
+        if (invalid(value)) {
+            literal = LogicNull.NULL;
+        } else {
+            Optional<String> strValue = instructionProcessor.mlogFormat(value);
+            literal = strValue.map(s -> LogicNumber.get(s, value)).orElse(null);
+        }
     }
 
     @Override
@@ -39,5 +44,9 @@ class ExpressionValue implements LogicWritable {
 
     public LogicLiteral getLiteral() {
         return literal;
+    }
+
+    public static boolean invalid(double d) {
+        return Double.isNaN(d) || Double.isInfinite(d);
     }
 }

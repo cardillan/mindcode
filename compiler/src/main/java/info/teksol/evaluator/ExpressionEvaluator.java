@@ -69,7 +69,6 @@ public class ExpressionEvaluator {
 
         map.put(Operation.EQUAL,            (r, a, b) -> r.setBooleanValue(equals(a, b)));
         map.put(Operation.NOT_EQUAL,        (r, a, b) -> r.setBooleanValue(!equals(a, b)));
-        map.put(Operation.LAND,             (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
         map.put(Operation.LESS_THAN,        (r, a, b) -> r.setBooleanValue(a.getDoubleValue() < b.getDoubleValue()));
         map.put(Operation.LESS_THAN_EQ,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() <= b.getDoubleValue()));
         map.put(Operation.GREATER_THAN,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
@@ -78,10 +77,16 @@ public class ExpressionEvaluator {
 
         map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
-        map.put(Operation.OR,               (r, a, b) -> r.setLongValue(a.getLongValue() |  b.getLongValue()));
-        map.put(Operation.AND,              (r, a, b) -> r.setLongValue(a.getLongValue() &  b.getLongValue()));
         map.put(Operation.XOR,              (r, a, b) -> r.setLongValue(a.getLongValue() ^  b.getLongValue()));
         map.put(Operation.NOT,              (r, a, b) -> r.setLongValue(~a.getLongValue()));
+
+        map.put(Operation.BINARY_AND,       (r, a, b) -> r.setLongValue(a.getLongValue() & b.getLongValue()));
+        map.put(Operation.BOOL_AND,         (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
+        map.put(Operation.LOGICAL_AND,      (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
+
+        map.put(Operation.BINARY_OR,        (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
+        map.put(Operation.BOOL_OR,          (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
+        map.put(Operation.LOGICAL_OR,       (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
 
         map.put(Operation.MAX,              (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.MIN,              (r, a, b) -> r.setDoubleValue(Math.min(a.getDoubleValue(), b.getDoubleValue())));

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.evaluator.ExpressionEvaluator;
+import info.teksol.evaluator.ExpressionValue;
 import info.teksol.evaluator.LogicReadable;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;

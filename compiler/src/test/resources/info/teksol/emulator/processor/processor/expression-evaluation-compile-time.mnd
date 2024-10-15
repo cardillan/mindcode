@@ -24,8 +24,8 @@ eval(5 != 5, false,         "notEqual");
 eval(5 != 6, true,          "notEqual");
 eval(0 != null, false,      "notEqual null");
 
-eval(1 and 0, false,        "land");
-eval(1 and 2, true,         "land");
+eval(1 && 0, false,         "land");
+eval(1 && 2, true,          "land");
  
 eval(0 <  1, true,          "lessThan");
 eval(1 <  0, false,         "lessThan");

@@ -1,10 +1,10 @@
-  1423 instructions before optimizations.
+  1424 instructions before optimizations.
     15 instructions eliminated by Temp Variables Elimination.
    189 instructions eliminated by Dead Code Elimination (4 iterations).
     63 instructions eliminated by Jump Optimization (3 iterations).
    290 instructions eliminated by Data Flow Optimization (22 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
-   865 instructions after optimizations.
+   866 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
@@ -1046,15 +1046,16 @@ label __label310
 setaddr __fn0retaddr __label311
 call __label0 __fn0retval
 gotolabel __label311 __fn0
-op or a 0 __fn0retval
-jump __label314 notEqual a 2
+op or __tmp313 0 __fn0retval
+op notEqual a __tmp313 false
+jump __label314 notEqual a true
 print "ok"
 jump __label315 always 0 0
 label __label314
 print "Wrong operation "
 print "||="
 print ": expected "
-print 2
+print true
 print ", but was "
 print a
 print "\n"

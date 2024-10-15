@@ -127,7 +127,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         print "\\n"
                         set n 0
                         op lessThan __tmp1 n @links
-                        jump 43 equal __tmp1 false
+                        jump 44 equal __tmp1 false
                         getlink __tmp2 n
                         set building __tmp2
                         sensor __tmp3 building @type
@@ -137,29 +137,30 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         op or __tmp6 __tmp4 __tmp5
                         op equal __tmp7 type @plastanium-conveyor
                         op or __tmp8 __tmp6 __tmp7
-                        jump 39 equal __tmp8 false
-                        sensor __tmp10 building @firstItem
-                        set resource __tmp10
-                        op notEqual __tmp11 resource null
-                        jump 36 equal __tmp11 false
-                        sensor __tmp13 nucleus1 @resource
-                        set level __tmp13
-                        op lessThan __tmp14 level capacity
-                        control enabled building __tmp14 0 0 0
+                        op notEqual __tmp9 __tmp8 false
+                        jump 40 equal __tmp9 false
+                        sensor __tmp11 building @firstItem
+                        set resource __tmp11
+                        op notEqual __tmp12 resource null
+                        jump 37 equal __tmp12 false
+                        sensor __tmp14 nucleus1 @resource
+                        set level __tmp14
+                        op lessThan __tmp15 level capacity
+                        control enabled building __tmp15 0 0 0
                         print "\\n"
                         print n
                         print ": "
                         print resource
                         print " @ "
                         print level
-                        set __tmp12 level
-                        jump 37 always 0 0
-                        set __tmp12 null
-                        set __tmp9 __tmp12
-                        jump 40 always 0 0
-                        set __tmp9 null
-                        op add __tmp15 n 1
-                        set n __tmp15
+                        set __tmp13 level
+                        jump 38 always 0 0
+                        set __tmp13 null
+                        set __tmp10 __tmp13
+                        jump 41 always 0 0
+                        set __tmp10 null
+                        op add __tmp16 n 1
+                        set n __tmp16
                         jump 8 always 0 0
                         printflush MSG
                         end

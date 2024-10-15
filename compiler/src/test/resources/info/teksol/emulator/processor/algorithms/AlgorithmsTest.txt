@@ -1,5 +1,5 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-bitmap-get-set.mnd:                                4            191      167      87.4%   F7CDD0AAA95E1FA9   DB212DB77945BD36
+bitmap-get-set.mnd:                                4            185      161      87.0%   F7CDD0AAA95E1FA9   8EBB3318A97C8C72
 bitmap-get.mnd:                                    2             16       16     100.0%   7A614E3E9C3B12F5   0502EBCFC8D0832C
 compute-recursive-fibonacci.mnd:                   4             30     2476     100.0%   CF5C94E489C7D400   18694E69719941C2
 compute-sum-of-primes.mnd:                        10            439     1889      99.7%   C92A5FEC4377D2A4   EC8302E2CDEB18D7

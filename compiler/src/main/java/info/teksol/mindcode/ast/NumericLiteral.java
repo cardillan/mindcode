@@ -20,6 +20,10 @@ public class NumericLiteral extends ConstantAstNode {
         this.literal = String.valueOf(value);
     }
 
+    public String getLiteral() {
+        return literal;
+    }
+
     @Override
     public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) throws NoValidMlogRepresentationException {
         try {

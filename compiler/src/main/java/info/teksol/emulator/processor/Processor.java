@@ -204,11 +204,11 @@ public class Processor {
     private boolean executeGetlink(GetlinkInstruction ix) {
         MindustryVariable index = getExistingVariable(ix.getIndex());
         MindustryVariable result = getOrCreateVariable(ix.getResult());
-        if (!index.isValidNumber()) {
+        if (index.invalidNumber()) {
             result.setNull();
             throw new ExecutionException(ERR_NOT_A_NUMBER, "Invalid numeric value in getlink index '%s'.", ix.getIndex().toMlog());
         }
-        if (!index.isValidNumber() || index.getIntValue() < 0 || index.getIntValue() >= blockMap.size()) {
+        if (index.invalidNumber() || index.getIntValue() < 0 || index.getIntValue() >= blockMap.size()) {
             result.setNull();
             throw new ExecutionException(ERR_INVALID_LINK, "Invalid link index %d.", index.getIntValue());
         }
@@ -253,10 +253,10 @@ public class Processor {
         MindustryContent object = lookupMap.get(index.getIntValue());
         MindustryVariable result = getOrCreateVariable(ix.getResult());
         result.setObject(object);
-        if (!index.isValidNumber()) {
+        if (index.invalidNumber()) {
             throw new ExecutionException(ERR_NOT_A_NUMBER, "Invalid numeric value in lookup index '%s'.", ix.getIndex().toMlog());
         }
-        if (object == null || !index.isValidNumber()) {
+        if (object == null || index.invalidNumber()) {
             throw new ExecutionException(ERR_INVALID_CONTENT, "Invalid lookup index %d for type '%s'.", index.getIntValue(), type.getKeyword());
         }
         return true;

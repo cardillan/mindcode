@@ -110,7 +110,7 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
         return new LogicNumber(String.valueOf(value), value);
     }
 
-    public static LogicNumber create(String literal, double value) {
+    private static LogicNumber create(String literal, double value) {
         return new LogicNumber(literal, value);
     }
 }

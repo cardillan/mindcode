@@ -129,7 +129,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         silicon = reconstructor1.silicon;
                         graphite = reconstructor1.graphite;
                         capacity = reconstructor1.itemCapacity;
-                        conveyor1.enabled = !( silicon < capacity || graphite < capacity );
+                        conveyor1.enabled = !( silicon < capacity or graphite < capacity );
                         """,
                 createInstruction(SENSOR, "silicon", "reconstructor1", "@silicon"),
                 createInstruction(SENSOR, "graphite", "reconstructor1", "@graphite"),

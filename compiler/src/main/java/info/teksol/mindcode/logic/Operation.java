@@ -26,14 +26,22 @@ public enum Operation implements LogicArgument {
     MOD("mod", "%"),
     POW("pow", "**"),
 
-    LAND("land", "and", "&&"),
-
     SHL("shl", "<<"),
     SHR("shr", ">>"),
-    OR("or",  "or", "|", "||"),
-    AND("and", "&"),
     XOR("xor", "^"),
     NOT("not", "~"),
+
+    // Binary operations
+    BINARY_AND("and", "&"),
+    BINARY_OR("or",  "|"),
+
+    // Boolean operations: guaranteed to produce 0 or 1
+    BOOL_AND("land", "&&"),
+    BOOL_OR("or", "||"),
+
+    // Logical operation: produce null/zero or nonzero, can be short-circuited,
+    LOGICAL_AND("land", "and"),
+    LOGICAL_OR("or", "or"),
 
     MAX("max"),
     MIN("min"),
@@ -61,23 +69,27 @@ public enum Operation implements LogicArgument {
     private final String mlog;
     private final List<String> mindcode;
     private final boolean deterministic;
+    private final boolean function;
 
     Operation(String mlog, String... mindcode) {
         this.mlog = mlog;
         this.mindcode = List.of(mindcode);
         this.deterministic = true;
+        this.function = false;
     }
     
     Operation(String mlog) {
         this.mlog = mlog;
         this.mindcode = List.of(mlog);
         this.deterministic = true;
+        this.function = true;
     }
 
     Operation(boolean deterministic, String mlog) {
         this.mlog = mlog;
         this.mindcode = List.of(mlog);
         this.deterministic = deterministic;
+        this.function = true;
     }
 
     public static Operation fromMindcode(String code) {
@@ -108,14 +120,14 @@ public enum Operation implements LogicArgument {
 
     public boolean isAssociative() {
         return switch(this) {
-            case ADD, MUL, LAND, OR, AND, XOR, MIN, MAX -> true;
+            case BINARY_AND, BINARY_OR, BOOL_AND, BOOL_OR, LOGICAL_AND, LOGICAL_OR, ADD, MUL, XOR, MIN, MAX -> true;
             default -> false;
         };
     }
 
     public boolean isCommutative() {
         return switch(this) {
-            case EQUAL, NOT_EQUAL, STRICT_EQUAL, ADD, MUL, LAND, OR, AND, XOR, MIN, MAX -> true;
+            case EQUAL, NOT_EQUAL, STRICT_EQUAL, BINARY_AND, BINARY_OR, BOOL_AND, BOOL_OR, LOGICAL_AND, LOGICAL_OR, ADD, MUL, XOR, MIN, MAX -> true;
             default -> false;
         };
     }
@@ -162,5 +174,7 @@ public enum Operation implements LogicArgument {
     private static final Map<String, Operation> MINDCODE_MAP = Stream.of(values())
             .flatMap(op -> op.mindcode.stream().map(mindcode -> new Tuple2<>(op, mindcode)))
             .collect(Collectors.toMap(Tuple2::getT2, Tuple2::getT1));
-    private static final Map<String, Operation> MLOG_MAP = Stream.of(values()).collect(Collectors.toMap(Operation::toMlog, o -> o));
+    private static final Map<String, Operation> MLOG_MAP = Stream.of(values())
+            .filter(v -> v.function)
+            .collect(Collectors.toMap(Operation::toMlog, o -> o));
 }

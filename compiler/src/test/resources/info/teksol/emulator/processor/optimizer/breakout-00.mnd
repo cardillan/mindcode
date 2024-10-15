@@ -63,7 +63,7 @@ while true do
         ballYEnd = ballY + ballSize;
 
         // handle ball-wall collision
-        if ballX < 0 || ballXEnd > size then
+        if ballX < 0 or ballXEnd > size then
             ballVX *= -1;
         end;
         if ballYEnd > size then
@@ -111,7 +111,7 @@ while true do
         end;
 
         // check game over
-        if ballY < 0 || brickCount == 0 then
+        if ballY < 0 or brickCount == 0 then
             break;
         end;
 

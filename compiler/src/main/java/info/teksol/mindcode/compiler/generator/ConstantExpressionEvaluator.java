@@ -65,7 +65,7 @@ public class ConstantExpressionEvaluator extends MessageEmitter {
                 MindustryVariable a = variableFromNode("a", evaluateInner(node.getLeft()));
                 MindustryVariable b = variableFromNode("b", evaluateInner(node.getRight()));
                 if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
-                    // Only addition a string and a non-null value is supported
+                    // Only addition of a string and a non-null value is supported
                     if (operation == Operation.ADD && a != null && b != null) {
                         return new StringLiteral(node.getInputPosition(), a.print() + b.print());
                     } else {
@@ -77,11 +77,6 @@ public class ConstantExpressionEvaluator extends MessageEmitter {
                     eval.execute(result, a, b);
                     return result.toAstNode();
                 } else if (a != null || b != null) {
-                    if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
-                        error(node, "Unsupported string expression.");
-                        return node;
-                    }
-                    // One of them is not null
                     return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
                 }
 
@@ -95,22 +90,30 @@ public class ConstantExpressionEvaluator extends MessageEmitter {
         return variable == null ? null : variable.getObject();
     }
 
-    private AstNode evaluatePartially(BinaryOp node, MindustryVariable fixed, AstNode exp) {
-        return switch (node.getOp()) {
+    private AstNode evaluatePartially(BinaryOp original, MindustryVariable fixed, AstNode other) {
+        // Note: fixed.getDoubleValue() is 0 when fixed represents null
+
+        return switch (original.getOp()) {
             // If the fixed value is zero, evaluates to the other node
-            case "|" -> fixed.getDoubleValue() == 0 ? exp : node;
+            // Nonzero values cannot be resolved
+            case "|" -> fixed.getDoubleValue() == 0 ? other : original;
 
-            // If the fixed value is zero, evaluates to zero
-            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral(node.getInputPosition(), "0") : node;
+            // Cannot be partially evaluated at all
+            case "||" -> original;
+
+            // If the fixed value is nonzero, collapses to true
+            // If the fixed value is zero, evaluates to the other node
+            case "or" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(original.getInputPosition(), true) : other;
+
+            // If the fixed value is zero, evaluates to false
+            // Nonzero values cannot be resolved
+            case "&", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(original.getInputPosition(), false) : original;
 
             // If the fixed value is zero (= false), evaluates to false
-            // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(node.getInputPosition(), true) : node;
+            // If the fixed value is nonzero, evaluates to the other node
+            case "and" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(original.getInputPosition(), false) : other;
 
-            // If the fixed value is zero (= false), evaluates to false
-            // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(node.getInputPosition(), false) : node;
-            default -> node;
+            default -> original;
         };
     }
 

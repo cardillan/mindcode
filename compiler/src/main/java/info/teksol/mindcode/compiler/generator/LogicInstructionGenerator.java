@@ -57,12 +57,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private LocalContext functionContext = new LocalContext();
 
     // Tracks variables whose scope is limited to the node being processed and have no meaning outside the node.
-    private NodeContext nodeContext = new NodeContext();
+    private NodeContext nodeContext = new NodeContext(null);
 
     // Tracks variables whose scope is limited to the parent node. These are variables that transfer the return value
     // of a node to its parent. When a new node is visited, nodeContext becomes parentContext and a new node context
     // is created.
-    private NodeContext parentContext = new NodeContext();
+    private NodeContext parentContext = new NodeContext(null);
 
     // Function definition being presently compiled (including inlined functions)
     private LogicFunction currentFunction;
@@ -155,7 +155,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visit(AstNode node) {
         NodeContext previousParent = parentContext;
         parentContext = nodeContext;
-        nodeContext = new NodeContext(parentContext);  // inherit variables from parent context
+        nodeContext = new NodeContext(node, parentContext);  // inherit variables from parent context
         enterAstNode(node);
 
         // Perform constant expression evaluation
@@ -463,7 +463,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 output = handleUserFunctionCall(call, arguments);
             } else {
                 error(call, "Undefined function '%s'", functionName);
-                return NULL;
+                output = NULL;
             }
         }
 
@@ -1083,13 +1083,27 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return logicalAnd;
     }
 
+    // Code generation optimization:
+    // If the BOOL_OR is reused in one of these operations, LOGICAL_OR can be used instead
+    // - the exact numerical value of the result isn't important.
+    private static final Set<String> LOGICAL_OPERATIONS = Set.of("and", "or", "||", "&&");
+
     @Override
     public LogicValue visitBinaryOp(BinaryOp node) {
+        String op = node.getOp().equals("||") && parentContext.node instanceof BinaryOp opNode && LOGICAL_OPERATIONS.contains(opNode.getOp())
+                ? "or" : node.getOp();
+
         final LogicValue left = visit(node.getLeft());
         final LogicValue right = visit(node.getRight());
         final LogicVariable tmp = nextNodeResult();
-        emit(createOp(Operation.fromMindcode(node.getOp()), tmp, left, right));
-        return tmp;
+        emit(createOp(Operation.fromMindcode(op), tmp, left, right));
+        if (op.equals("||")) {
+            final LogicVariable tmp2 = nextNodeResult();
+            emit(createOp(Operation.NOT_EQUAL, tmp2, tmp, FALSE));
+            return tmp2;
+        } else {
+            return tmp;
+        }
     }
 
     @Override
@@ -1621,10 +1635,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private static class NodeContext extends LocalContext {
-        public NodeContext() {
+        final AstNode node;
+
+        public NodeContext(AstNode node) {
+            this.node = node;
         }
 
-        public NodeContext(LocalContext parent) {
+        public NodeContext(AstNode node, LocalContext parent) {
+            this.node = node;
             variables.addAll(parent.variables);
         }
 

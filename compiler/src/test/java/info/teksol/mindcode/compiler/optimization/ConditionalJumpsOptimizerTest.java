@@ -186,4 +186,26 @@ class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJum
                 createInstruction(END)
         );
     }
+
+    @Test
+    void processesLogicalOr() {
+        assertCompilesTo("""
+                        param a = 0;
+                        param b = 1;
+                        if a || b then print("yes"); end;
+                        """,
+                createInstruction(SET, "a", "0"),
+                createInstruction(SET, "b", "1"),
+                createInstruction(OP, "or", var(0), "a", "b"),
+                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                createInstruction(PRINT, q("yes")),
+                createInstruction(SET, var(2), q("yes")),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, var(2), "null"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+
+        );
+    }
 }

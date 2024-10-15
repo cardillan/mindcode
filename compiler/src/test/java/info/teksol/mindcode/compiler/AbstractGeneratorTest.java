@@ -448,7 +448,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicNumber   K1000     = LogicNumber.get(1000);
     protected static final LogicNumber   K0001     = LogicNumber.get("0.001", 0.001);
     protected static final LogicNumber   P0        = LogicNumber.ZERO;
-    protected static final LogicNumber   P0_5      = LogicNumber.create("0.5", 0.5);
+    protected static final LogicNumber   P0_5      = LogicNumber.get("0.5", 0.5);
     protected static final LogicNumber   P1        = LogicNumber.ONE;
     protected static final LogicNumber   P2        = LogicNumber.get(2);
     protected static final LogicNumber   P4        = LogicNumber.get(4);

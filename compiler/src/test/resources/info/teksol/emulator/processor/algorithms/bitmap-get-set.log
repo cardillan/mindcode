@@ -1,14 +1,15 @@
     33 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Single Step Elimination (4 iterations).
-     1 instructions eliminated by If Expression Optimization (2 iterations).
-    40 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
-     2 instructions eliminated by Loop Optimization (2 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
+     4 instructions modified by Expression Optimization (3 iterations).
+     1 instructions eliminated by If Expression Optimization (3 iterations).
+    46 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
+     2 instructions eliminated by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
-   204 instructions added by Loop Unrolling (4 iterations).
+   204 instructions added by Loop Unrolling (5 iterations).
      2 loops unrolled by Loop Unrolling.
-   191 instructions after optimizations.
+   185 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 975):
   * Loop Unrolling: unroll loop at line 13                       cost    46, benefit      400.0, efficiency        8.7 (+38 instructions)
@@ -21,12 +22,9 @@ Final code before resolving virtual instructions:
 
 set BITS 32
 set BITMAP bank1
-op idiv __tmp3 0 BITS
-read __tmp2 BITMAP __tmp3
-op mod __tmp4 0 BITS
-op shl __tmp5 1 __tmp4
-op or __tmp6 __tmp2 __tmp5
-write __tmp6 BITMAP __tmp3
+read __tmp2 BITMAP 0
+op or __tmp6 __tmp2 1
+write __tmp6 BITMAP 0
 op idiv __tmp3 2 BITS
 read __tmp2 BITMAP __tmp3
 op mod __tmp4 2 BITS
@@ -69,11 +67,8 @@ op mod __tmp4 14 BITS
 op shl __tmp5 1 __tmp4
 op or __tmp6 __tmp2 __tmp5
 write __tmp6 BITMAP __tmp3
-op idiv __tmp10 0 BITS
-read __tmp9 BITMAP __tmp10
-op mod __tmp11 0 BITS
-op shl __tmp12 1 __tmp11
-op and __tmp8 __tmp9 __tmp12
+read __tmp9 BITMAP 0
+op and __tmp8 __tmp9 1
 jump __label51 equal __tmp8 false
 print 1
 jump __label52 always 0 0

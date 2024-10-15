@@ -72,7 +72,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                 switch (ix.getOperation()) {
                     case MUL -> {
                         if (value == 0) {
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.get(0)));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
                         } else if (value == 1) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
@@ -80,19 +80,46 @@ class ExpressionOptimizer extends BaseOptimizer {
                         }
                     }
                     case DIV -> {
-                        if (value == 1 && opers.getT1() == ix.getY()) {
+                        if (value == 0 && opers.getT1() == ix.getY()) {
+                            // Division by zero
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
+                            return;
+                        } else if (value == 0 && opers.getT1() == ix.getX()) {
+                            // Zero divided by something
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
+                            return;
+                        } else if (value == 1 && opers.getT1() == ix.getY()) {
+                            // Division by one
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
                             return;
                         }
                     }
-                    case ADD, SUB -> {
+                    case IDIV, MOD -> {
+                        if (value == 0 && opers.getT1() == ix.getY()) {
+                            // Division by zero
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
+                            return;
+                        } else if (value == 0 && opers.getT1() == ix.getX()) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
+                            return;
+                        }
+                    }
+                    case ADD, SUB, BINARY_OR, LOGICAL_OR, XOR, SHL, SHR -> {
                         if (value == 0) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
                             return;
                         }
                     }
+                    case BINARY_AND, BOOL_AND, LOGICAL_AND -> {
+                        if (value == 0) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
+                            return;
+                        } else if (ix.getOperation() == Operation.LOGICAL_AND) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                        }
+                    }
                 }
-            } else  {
+            } else {
                 DataFlowVariableStates.VariableStates variableStates = optimizationContext.getVariableStates(ix);
                 LogicValue x = optimizationContext.resolveValue(variableStates, ix.getX());
                 LogicValue y = optimizationContext.resolveValue(variableStates, ix.getY());
@@ -107,13 +134,10 @@ class ExpressionOptimizer extends BaseOptimizer {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
                         }
-                        /*
-                        Cannot do these: null & null produces 0, not null
-                        case AND, OR, MIN, MAX -> {
+                        case BINARY_AND, BINARY_OR, LOGICAL_AND, LOGICAL_OR, MIN, MAX -> {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), ix.getX()));
                             return;
                         }
-                        */
                         case SUB, XOR -> {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
