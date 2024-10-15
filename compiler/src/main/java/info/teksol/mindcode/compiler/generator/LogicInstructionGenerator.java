@@ -430,11 +430,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitFunctionCall(FunctionCall node) {
         // Solve special cases
         return switch (node.getFunctionName()) {
-            case "printf"   -> handlePrintf(node);
-            case "print"    -> handleFormattedOutput(node, Formatter.PRINT);
-            case "println"  -> handleFormattedOutput(node, Formatter.PRINTLN);
-            case "remark"   -> handleFormattedOutput(node, Formatter.REMARK);
-            default         -> handleFunctionCall(node, node.getParams());
+            case "min", "max"   -> handleMinMax(node);
+            case "printf"       -> handlePrintf(node);
+            case "print"        -> handleFormattedOutput(node, Formatter.PRINT);
+            case "println"      -> handleFormattedOutput(node, Formatter.PRINTLN);
+            case "remark"       -> handleFormattedOutput(node, Formatter.REMARK);
+            default             -> handleFunctionCall(node, node.getParams());
         };
     }
 
@@ -1436,6 +1437,33 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
+
+    private LogicValue handleMinMax(FunctionCall node) {
+        if (node.getParams().size() < 2) {
+            error(node, "Not enough arguments to the '%s' function (expected 2 or more, found %d).",
+                    node.getFunctionName(), node.getParams().size());
+        }
+
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<LogicValue> arguments = processArguments(node.getParams());
+
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+        LogicValue result;
+        if (arguments.size() >= 2) {
+            Operation op = Operation.fromMlog(node.getFunctionName());
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            emit(createOp(op, tmp, arguments.get(0), arguments.get(1)));
+            for (int i = 2; i < arguments.size(); i++) {
+                emit(createOp(op, tmp, tmp, arguments.get(i)));
+            }
+            result = tmp;
+        } else {
+            result = NULL;
+        }
+
+        clearSubcontextType();
+        return result;
+    }
 
     private LogicValue handlePrintf(FunctionCall node) {
         String functionName = node.getFunctionName();

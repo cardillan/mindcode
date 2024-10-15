@@ -104,6 +104,17 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 > In the case of property access, the `@` character at the beginning of the property name is omitted - 
 > `storage.thorium` is the right syntax, `storage.@thorium` is wrong.
 
+## The `min` and `max` functions
+
+The `min()` and `max()` functions in Mindcode can take two or more arguments:
+
+```
+print(min(a, b, c));
+total = max(i, j, k, l);
+```
+
+Unlike the Mindustry `op min`/`op max` operations, the `min()` and `max()` functions may return `null` if all of their arguments are `null` as well. Otherwise, `null` is converted to zero as is usual in Mindustry Logic. 
+
 ## The `sync()` function
 
 A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#global-variables) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function becomes volatile - Mindcode assumes the value of the variable may change by an external operation.

@@ -722,6 +722,42 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void compilesMultiMinMaxFunctions() {
+        assertCompilesTo("""
+                        x = min(a, b, c, d);
+                        y = max(a, b, c, d);
+                        """,
+                createInstruction(OP, "min", var(0), "a", "b"),
+                createInstruction(OP, "min", var(0), var(0), "c"),
+                createInstruction(OP, "min", var(0), var(0), "d"),
+                createInstruction(SET, "x", var(0)),
+                createInstruction(OP, "max", var(1), "a", "b"),
+                createInstruction(OP, "max", var(1), var(1), "c"),
+                createInstruction(OP, "max", var(1), var(1), "d"),
+                createInstruction(SET, "y", var(1)),
+                createInstruction(END)
+        );
+    }
+
+
+    @Test
+    void reportsWrongNumberOfMinMxParameters() {
+        assertGeneratesMessages(ExpectedMessages.create()
+                        .add("Not enough arguments to the 'min' function (expected 2 or more, found 0).")
+                        .add("Not enough arguments to the 'max' function (expected 2 or more, found 0).")
+                        .add("Not enough arguments to the 'min' function (expected 2 or more, found 1).")
+                        .add("Not enough arguments to the 'max' function (expected 2 or more, found 1)."),
+                """
+                        a = min();
+                        b = max();
+                        c = min(a);
+                        d = max(b); 
+                        """
+        );
+    }
+
+
+    @Test
     void compilesModuloOperator() {
         assertCompilesTo(
                 "running = @tick % 2 == 0;",
@@ -1446,5 +1482,4 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 "@counter = 1;"
         );
     }
-
 }

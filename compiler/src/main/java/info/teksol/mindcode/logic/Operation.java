@@ -96,7 +96,7 @@ public enum Operation implements LogicArgument {
         return MINDCODE_MAP.get(code);
     }
 
-    public static LogicArgument fromMlog(String name) {
+    public static Operation fromMlog(String name) {
         return Objects.requireNonNull(MLOG_MAP.get(name), "Unknown or invalid mlog operation " + name);
     }
 
