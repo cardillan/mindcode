@@ -30,6 +30,7 @@ Schemacode, a schematic definition language, is covered here:
 
 Supporting tools: 
 
+* [IDE Integration](TOOLS-IDE-INTEGRATION.markdown)
 * [Command line tool](TOOLS-CMDLINE.markdown)
 * [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
 * [Schematics Refresher](TOOLS-REFRESHER.markdown)

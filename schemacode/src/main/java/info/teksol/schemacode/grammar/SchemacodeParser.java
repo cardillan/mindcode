@@ -27,7 +27,7 @@ public class SchemacodeParser extends Parser {
 		Schematic=23, Tag=24, Text=25, To=26, Unit=27, Virtual=28, Assign=29, 
 		Colon=30, Comma=31, Dot=32, Minus=33, Plus=34, North=35, South=36, East=37, 
 		West=38, LeftParen=39, RightParen=40, TextBlock1=41, TextBlock2=42, TextLine=43, 
-		Int=44, Id=45, Ref=46, Pattern=47, SLComment=48, Ws=49, Any=50;
+		Int=44, Id=45, Ref=46, Pattern=47, Comment=48, SLComment=49, Ws=50, Any=51;
 	public static final int
 		RULE_definitions = 0, RULE_definition = 1, RULE_schematic = 2, RULE_schematicItem = 3, 
 		RULE_attribute = 4, RULE_block = 5, RULE_labelList = 6, RULE_position = 7, 
@@ -66,7 +66,7 @@ public class SchemacodeParser extends Parser {
 			"Rgba", "Schematic", "Tag", "Text", "To", "Unit", "Virtual", "Assign", 
 			"Colon", "Comma", "Dot", "Minus", "Plus", "North", "South", "East", "West", 
 			"LeftParen", "RightParen", "TextBlock1", "TextBlock2", "TextLine", "Int", 
-			"Id", "Ref", "Pattern", "SLComment", "Ws", "Any"
+			"Id", "Ref", "Pattern", "Comment", "SLComment", "Ws", "Any"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2371,7 +2371,7 @@ public class SchemacodeParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u00012\u00ed\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u00013\u00ed\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+

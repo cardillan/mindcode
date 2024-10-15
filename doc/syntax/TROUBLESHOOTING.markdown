@@ -110,5 +110,4 @@ The number of variables being sorted is limited by the [instruction limit](SYNTA
 
 ---
 
-[« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown) &nbsp; | &nbsp;
-[Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)
+[« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)

@@ -22,7 +22,7 @@ while DOME == null
 end
 ```
 
-[Try it](http://mindcode.herokuapp.com/?mindcode=%23relaxed%3B%0A%0Aconst%20RADIUS_WITHIN%20%20%20%20%20%3D%208%0Aconst%20RADIUS_APPROACH%20%20%20%3D%206%0A%0Aconst%20SUPPLY_INTERVAL%20%20%20%3D%2050%20-%203%0A%0Aconst%20UNIT_CHECK_TIME%20%20%20%3D%205000%0A%0ADOME%20%3D%20dome1%0Awhile%20DOME%20%3D%3D%20null%0A%20%20%20%20print(%22%5Bgold%5DWaiting%20for%20an%20overdrive%20dome%20to%20be%20connected...%22)%0A%20%20%20%20printflush(message1)%0A%20%20%20%20DOME%20%3D%20dome1%0Aend)
+<small>([Try it](http://mindcode.herokuapp.com/?mindcode=%23relaxed%3B%0A%0Aconst%20RADIUS_WITHIN%20%20%20%20%20%3D%208%0Aconst%20RADIUS_APPROACH%20%20%20%3D%206%0A%0Aconst%20SUPPLY_INTERVAL%20%20%20%3D%2050%20-%203%0A%0Aconst%20UNIT_CHECK_TIME%20%20%20%3D%205000%0A%0ADOME%20%3D%20dome1%0Awhile%20DOME%20%3D%3D%20null%0A%20%20%20%20print(%22%5Bgold%5DWaiting%20for%20an%20overdrive%20dome%20to%20be%20connected...%22)%0A%20%20%20%20printflush(message1)%0A%20%20%20%20DOME%20%3D%20dome1%0Aend))</small>
 
 Different, more prominent means for switching to the relaxed syntax were intentionally not provided, to encourage adoption of the new syntax by both new and existing users.
 
@@ -51,7 +51,7 @@ The following features are deprecated:
 
 The compiler produces a warning when it encounters a deprecated feature in the source code.
 
-## Shortcoming of the Relaxed syntax
+## Shortcomings of the Relaxed syntax
 
 The most impactful problem of the original syntax stem from the decision to make semicolons separating individual statements and expressions optional. That, coupled with the fact the basic element of the language is an expression, and not a statement, leads to situation where a code entered by a user compiles witout any error or warning, but produces vastly different result from what was intended. For example, the following code
 

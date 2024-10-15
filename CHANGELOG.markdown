@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 * Fixed wrong compilation order of appended files ([#155](https://github.com/cardillan/mindcode/issues/155)).
 * Fixed inadequate reporting of syntax error ([#156](https://github.com/cardillan/mindcode/issues/156)).
+* Fixed Wrong handling of comparison operators by Data Flow Optimization ([#158](https://github.com/cardillan/mindcode/issues/158)).
 * Fixed wrong parsing of formattable string literals.
 * Fixed inadequate handling of unsupported expressions embedded in formattable string literals.  
 
@@ -25,6 +26,10 @@ All notable changes to this project will be documented in this file.
 * Added support for creating constants from formattable string literals.
 * Added full support for the `sync()` function: a variable passed as an argument to this function becomes automatically volatile.
 
+**Schemacode**
+
+* Added support for block comments, delimited by `/*` and `*/`. These comments can span multiple lines.
+
 #### Experimental features
  
 * Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
@@ -35,12 +40,12 @@ All notable changes to this project will be documented in this file.
 
 * **Breaking:** Changed the implementation of the `printf()` function under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting).
 * Changed the definition of the `&&` and `||` operators: they are guaranteed to [always evaluate to either `0` or `1`](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#operators).
-* Changed the `min()` and `max()` functions to accept two or more arguments.
+* Changed the `min()` and `max()` functions to accept more than just two arguments.
 * Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
 * Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.
-* When a compiler-generated variable is evaluated as uninitialized, an internal error is thrown. This situation always means there's an error in the compiler or the optimizer, it is better to not produce anything instead of 
+* When a compiler-generated variable is evaluated as uninitialized (this situation indicates a bug in some of the optimizers), an internal error is thrown.
 
 ### Deprecated
 
@@ -54,7 +59,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 * Added parallel execution of unit tests.
-* Renamed the command-line tool module from `compiler` to `cmdline`, and the Mindcode compiler module from `mindcode` to `compiler`.  
+* Renamed the command-line tool module from `compiler` to `toolapp`, and the Mindcode compiler module from `mindcode` to `compiler`.  
 * Renamed the files in `bin` directory from `mcc`/`mcc.bat` to `mindcode`/`mindcode.bat`.
 
 ## 2.2.1 - 2024-09-30

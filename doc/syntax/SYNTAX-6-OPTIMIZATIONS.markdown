@@ -128,18 +128,18 @@ optimizations are available:
 
 | Operation      | First operand | Second operand | Result | Note                                  |
 |----------------|:-------------:|:--------------:|:------:|---------------------------------------|
-| MUL            |      var      |       1        |  var   | Commutative                           |
-| MUL            |      var      |       0        |   0    | Commutative                           |
-| DIV            |      var      |       1        |  var   |                                       |
-| DIV, IDIV, MOD |      var      |       0        |  null  |                                       |
-| DIV, IDIV, MOD |       0       |      var       |   0    | On `advanced` level                   |
-| ADD, SUB, XOR  |      var      |       0        |  var   | Commutative                           |
-| SHL, SHR       |      var      |       0        |  var   |                                       |
-| SHL, SHR       |       0       |      var       |   0    |                                       |
-| OR             |      var      |       0        |  var   | Commutative, only for `\|` and `or`   |
-| OR             |      var      |    nonzero     |   1    | Commutative, only for `\|\|` and `or` |
-| AND, LAND      |      var      |       0        |   0    | Commutative                           |
-| LAND           |      var      |    nonzero     |  var   | Commutative, only for `and`           |
+| mul            |      var      |       1        |  var   | Commutative                           |
+| mul            |      var      |       0        |   0    | Commutative                           |
+| div            |      var      |       1        |  var   |                                       |
+| div, idiv, mod |      var      |       0        |  null  |                                       |
+| div, idiv, mod |       0       |      var       |   0    | On `advanced` level                   |
+| add, sub, xor  |      var      |       0        |  var   | Commutative                           |
+| shl, shr       |      var      |       0        |  var   |                                       |
+| shl, shr       |       0       |      var       |   0    |                                       |
+| or             |      var      |       0        |  var   | Commutative, only for `\|` and `or`   |
+| or             |      var      |    nonzero     |   1    | Commutative, only for `\|\|` and `or` |
+| and, land      |      var      |       0        |   0    | Commutative                           |
+| land           |      var      |    nonzero     |  var   | Commutative, only for `and`           |
 
 `var` represents a variable with an arbitrary, unknown value. For commutative operations, the result is the same if the first and second operands are swapped.
 

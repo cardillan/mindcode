@@ -4,7 +4,7 @@ Mlog Watcher is a Mindustry mod by [Sharlottes](https://github.com/Sharlottes) w
 
 Both the web app and the command-line tool can interact with the Mlog Watcher.
 
-## Installing MLog Watcher
+## Installing Mlog Watcher
 
 You can install the mod directly from Mindustry using the mod browser:
 
@@ -14,7 +14,7 @@ You can install the mod directly from Mindustry using the mod browser:
 - Click on the **MlogWatcher** mod in the list.
 - Click on the **Install** button at the bottom of the screen.
 
-After installing the mod, the~~~~ game will exit so that the newly installed mod can be loaded on the next start. Just start the game again. 
+After installing the mod, the game will exit so that the newly installed mod can be loaded on the next start. Just start the game again. 
 
 ## Binding a processor
 

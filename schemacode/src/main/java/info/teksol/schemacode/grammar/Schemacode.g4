@@ -170,6 +170,7 @@ Id              : [_a-zA-Z] [-a-zA-Z_0-9]*;
 Ref             : '@' [_a-zA-Z] [-a-zA-Z_0-9]*;
 Pattern         : [_a-zA-Z*] [-a-zA-Z_0-9*]*;
 
+Comment         : '/*' .*? '*/' -> skip;
 SLComment       : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
 
 Ws              : (' ' | '\t' | '\r' | '\n')+ -> skip;

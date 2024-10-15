@@ -104,7 +104,7 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 > In the case of property access, the `@` character at the beginning of the property name is omitted - 
 > `storage.thorium` is the right syntax, `storage.@thorium` is wrong.
 
-## The `min` and `max` functions
+## The `min()` and `max()` functions
 
 The `min()` and `max()` functions in Mindcode can take two or more arguments:
 

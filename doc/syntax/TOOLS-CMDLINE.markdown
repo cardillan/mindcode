@@ -379,5 +379,4 @@ named arguments:
 
 ---
 
-[« Previous: Schemacode](SCHEMACODE.markdown) &nbsp; | &nbsp;
-[Next: Schematics Refresher »](TOOLS-REFRESHER.markdown)
+[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
