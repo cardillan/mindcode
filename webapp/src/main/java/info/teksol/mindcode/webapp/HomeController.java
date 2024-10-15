@@ -97,6 +97,7 @@ public class HomeController {
     @GetMapping
     public ModelAndView getHomePage(
         @RequestParam(name = "s", defaultValue = "") String id,
+        @RequestParam(name = "mindcode", defaultValue = "") String src,
         @RequestParam(name = "optimizationLevel", defaultValue = "BASIC") String optimizationLevel,
         @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
@@ -118,6 +119,9 @@ public class HomeController {
             } else {
                 sourceCode = "// 404 Not Found";
             }
+        } else if (!src.isEmpty()) {
+            sourceCode = src;
+            sampleName = "";
         } else {
             final int skipCount = random.nextInt(samples.size());
             sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();

@@ -22,6 +22,8 @@ while DOME == null
 end
 ```
 
+[Try it](http://mindcode.herokuapp.com/?mindcode=%23relaxed%3B%0A%0Aconst%20RADIUS_WITHIN%20%20%20%20%20%3D%208%0Aconst%20RADIUS_APPROACH%20%20%20%3D%206%0A%0Aconst%20SUPPLY_INTERVAL%20%20%20%3D%2050%20-%203%0A%0Aconst%20UNIT_CHECK_TIME%20%20%20%3D%205000%0A%0ADOME%20%3D%20dome1%0Awhile%20DOME%20%3D%3D%20null%0A%20%20%20%20print(%22%5Bgold%5DWaiting%20for%20an%20overdrive%20dome%20to%20be%20connected...%22)%0A%20%20%20%20printflush(message1)%0A%20%20%20%20DOME%20%3D%20dome1%0Aend)
+
 Different, more prominent means for switching to the relaxed syntax were intentionally not provided, to encourage adoption of the new syntax by both new and existing users.
 
 Additionally, some features are deprecate and support for them will be removed in future versions. Using deprecated features generates a warning. Deprecated features occurring in the source code should be removed or replaced before they're removed.  
