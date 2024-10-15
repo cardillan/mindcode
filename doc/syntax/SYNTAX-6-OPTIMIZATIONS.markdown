@@ -117,15 +117,32 @@ optimizations are available:
 * `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively.
   Data Flow Optimization can then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` 
   built-in constants.
-* Multiplication by literal zero is replaced by a `set` instruction setting the target variable to a zero.
-* Multiplication/division by one and addition/subtraction of zero are replaced by a `set` instruction setting the 
-  target variable to the other operand.  
 * All set instructions assigning a variable to itself (e.g. `set x x`) are removed.
-* When both operands of the instruction are the same (or effectively the same), some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
+* When both operands of the instruction are known to have the same unspecified value, some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
   * `equal`, `lessThanEq`, `greaterThanEq`, `strictEqual`: sets the result to `1` (true) 
-  * `notEqual`, `lessThan`, `greaterThan`: sets the result to `0` (false) 
-  * `sub`, `xor`: sets the result to `0` 
-  
+  * `notEqual`, `lessThan`, `greaterThan`: sets the result to `0` (false)
+  * `sub`, `xor`: sets the result to `0`
+  * `or`, `land`: sets the result directly to the first operand, if the instruction doesn't represent the boolean version of the operation (`||` or `&&`),
+  * `and`, `min` and `max`: sets the result directly to the first operand.
+* The result of some operations may be determined by a known value of one of its operands. In some cases, the result doesn't depend on the other operand (a multiplication by zero is always zero regardless of the other operand), while in other cases the result is equal to the other operand (a multiplication by one or a subtraction of zero). All the performed replacements are listed in this table:
+
+| Operation      | First operand | Second operand | Result | Note                                  |
+|----------------|:-------------:|:--------------:|:------:|---------------------------------------|
+| MUL            |      var      |       1        |  var   | Commutative                           |
+| MUL            |      var      |       0        |   0    | Commutative                           |
+| DIV            |      var      |       1        |  var   |                                       |
+| DIV, IDIV, MOD |      var      |       0        |  null  |                                       |
+| DIV, IDIV, MOD |       0       |      var       |   0    | On `advanced` level                   |
+| ADD, SUB, XOR  |      var      |       0        |  var   | Commutative                           |
+| SHL, SHR       |      var      |       0        |  var   |                                       |
+| SHL, SHR       |       0       |      var       |   0    |                                       |
+| OR             |      var      |       0        |  var   | Commutative, only for `\|` and `or`   |
+| OR             |      var      |    nonzero     |   1    | Commutative, only for `\|\|` and `or` |
+| AND, LAND      |      var      |       0        |   0    | Commutative                           |
+| LAND           |      var      |    nonzero     |  var   | Commutative, only for `and`           |
+
+`var` represents a variable with an arbitrary, unknown value. For commutative operations, the result is the same if the first and second operands are swapped.
+
 If the optimization level is `advanced`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.

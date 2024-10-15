@@ -10,17 +10,17 @@ Those will be discussed later on.
 
 # Operators
 
-Most operators do the expected: `+`, `-`, `*`, `/`, and they respect precedence of operation, meaning we multiply and
-divide, then add and subtract. Add to this operator `\`, which stands for integer division. For example:
+Most operators do the expected: `+`, `-`, `*`, `/`, and they respect precedence of operation, meaning we multiply and divide, then add and subtract. Add to this operator `\`, which stands for integer division. For example:
 
 ```
 3 / 2; // returns 1.5
 3 \ 2; // returns 1
 ```
 
-Almost every operator maps directly to Mindustry Logic ones, but several are Mindcode-specific enhancements. These 
-enhancements include boolean negation (`!` and `not`) operators, unary minus (`-`), the strict inequality (`!==`) 
-operator, or compound assignment operators.
+Almost every operator maps directly to Mindustry Logic ones, but several are Mindcode-specific enhancements. These enhancements include boolean negation (`!` and `not`) operators, unary minus (`-`), the strict inequality (`!==`) operator, or compound assignment operators.
+
+Non-alphanumeric operators generally don't require spaces around them -- `a+b` is a valid expression, for example.
+Only the `-` sign needs to be separated by spaces, as `a-b` is an identifier and would be interpreted as variable name instead of an expression.
 
 The full list of Mindcode operators in the order of precedence is as follows:
 
@@ -34,13 +34,35 @@ The full list of Mindcode operators in the order of precedence is as follows:
 8. `|`: binary or (useful for flags),  `^`: binary [xor (exclusive-or)](https://en.wikipedia.org/wiki/Exclusive_or)
 9. `<`: less than, `<=`: less than or equal,  `>=`: greater than or equal,  `>`:  greater than
 10. `==`: equality, `!=`: inequality (does not equal), `===`, `!==`: strict equality and non-equality -- see below
-11. `&&`, `and`: boolean and (`reactor1.thorium > 0 and reactor1.cryofluid <= 10`)
-12. `||`, `or`: boolean or
+11. `&&`, `and`: boolean/logical and (`reactor1.thorium > 0 and reactor1.cryofluid <= 10`)
+12. `||`, `or`: boolean/logical or
 13. `? :`: ternary operator (`value <= limit ? "ok" : "too high"`)
 14. `=`, `**=`, `*=`, `/=`, `\=`, `%=`, `+=`, `-=`, `<<=`, `>>=`, `&=`, `|=`, `^=`, `&&=`, `||=`: assignments
 
-Non-alphanumeric operators generally don't require spaces around them -- `a+b` is a valid expression, for example.
-Only the `-` sign needs to be separated by spaces, as `a-b` is a valid identifier and would be interpreted as variable name instead of an expression.
+For the following operators, their resulting value is guaranteed to be either `false` or `true` (`0` or `1` respectively) for all possible values of their operands, including `null` values:
+- equality operators: `==`, `!=`, `===`, `!==`
+- relational operators: `<`, `<=`, `>`, `>=`
+- boolean operators: `&&`, `||`
+
+Handling `null` values by all other operators is governed by these rules:
+
+1. When an invalid operation is attempted, such as division by zero, the resulting value is `null`.
+2. When one of the operands to the operation is `null`, the result may also be `null`, if the result of a corresponding operation in Mindustry Logic would be zero.
+
+> [!NOTE]
+> Please note that the logical operators (`and`, `or`) behave slightly differently than boolean operators (`&&`, `||`) - specifically, they may produce a `null` value (equivalent to `false`) or a non-zero value (equivalent to `true`).
+> 
+> Always use the logical operators, unless you're interested in the numerical value of the expression, e.g. `count += is_active && reactor.heat > 0.5`. Using boolean operators where logical would be adequate, for example in if conditions, may result in less optimal mlog code.
+
+> [!IMPORTANT]
+> Please be aware that in the second case, Mindcode may handle operators differently from Mindustry Logic.
+ 
+The distinction in handling nulls allows Mindcode to omit an instruction when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b`. (These expressions typically aren't present in your code right away, but they may arise as a result of optimizations Mindcode performs, be it constant propagation, loop unrolling or others.)
+
+The impact of the difference in `null` handling by Mindcode is minimal. When a `null` value enters any operation where a number is required, it is silently converted to zero. The difference between `null` and `0` is meaningful only in these operations:
+
+- `strictEqual` comparison, represented by `===` and `!==` in Mindcode.
+- Printing the value using the `print` or `format` instructions: `null` is output for nulls and `0` for zero values. 
 
 ## Compound assignment operators
 

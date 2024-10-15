@@ -8,7 +8,7 @@ I'm sorry, but I was unsatisfied with having to delimit block start and end. To 
 
 ## Improvements:
 
-* Added [syntax documentation](https://github.com/francois/mindcode/blob/main/doc/syntax/SYNTAX.markdown)
+* Added [syntax documentation](../syntax/SYNTAX.markdown)
 * Added full support for drawing, `uradar` and `ulocate`
 * Added support for heaps, meaning auto-allocated global variables
 * Added case / when expressions

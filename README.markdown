@@ -1,6 +1,6 @@
 # Mindcode
 
-**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](/doc/syntax/IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself. The project uses lots of automated tests to make sure the produced code is correct.   
+**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself. The project uses lots of automated tests to make sure the produced code is correct.   
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
@@ -24,7 +24,7 @@ The most important recent changes to Mindcode include:
   * Full support for the Mindustry Logic in the upcoming Mindustry version 8.
 * User interface
   * Significant improvement in reporting error messages generated during compilation.
-  * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).
+  * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
   * Options for running the compiled mlog code in an emulated processor.
 * Mindcode syntax
   * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
@@ -39,7 +39,7 @@ Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in 
 
 You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with the Mindustry World is supported.
 
-Alternatively, you can download the command-line compiler and use Mindcode [from within your favourite IDE](/doc/syntax/IDE-INTEGRATION.markdown).
+Alternatively, you can download the command-line compiler and use Mindcode [from within your favourite IDE](doc/syntax/IDE-INTEGRATION.markdown).
 
 ## Mindustry Logic References
 

@@ -14,25 +14,27 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * **Breaking:** Added support for syntax variants ([`strict` and `relaxed`](doc/syntax/SYNTAX-STRICT-RELAXED.markdown)) to Mindcode. The Strict syntax is the default now; to be able to compile existing Mindcode the Relaxed syntax needs to be activated using the `#relaxed;` directive.
-* Added support for the [Mlog Watcher](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.
+* Added support for the [Mlog Watcher](doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.
 * Added variable name validation: when inserting mlog into Mindustry processor, variables named `configure` are silently renamed to `config`. For this reason, using `configure` as a name for any variable in Mindcode causes an error. 
 * Added navigable compiler error messages to the web app. Clicking on a message with known position in the source code selects the corresponding position in the editor.
 * Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
-* Added an optimization of the `op` instruction of two identical operands to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization): equality comparisons are replaced by an instruction setting the target variable to `1`, while inequality comparisons, `sub` and `xor` by an instruction setting the target variable to `0`. 
-* Added an optimization of the `lookup` instruction to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). When possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
-* Added warning messages when [deprecated features](/doc/syntax/SYNTAX-STRICT-RELAXED.markdown#deprecated-features) are detected in the source code. 
+* Added a variety of new optimizations to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). 
+  * `op` instruction: many new optimizations when one of the two operands is known.
+  * `lookup` instruction: when possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
+* Added warning messages when [deprecated features](doc/syntax/SYNTAX-STRICT-RELAXED.markdown#deprecated-features) are detected in the source code. 
 * Added support for creating constants from formattable string literals.
 * Added full support for the `sync()` function: a variable passed as an argument to this function becomes automatically volatile.
 
 #### Experimental features
  
-* Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](/doc/syntax/MINDUSTRY-8.markdown).
-* Added a [system library](/doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or higher. 
+* Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
+* Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or higher. 
 * Added support to the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#instruction-propagation) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
 
 ### Changed
 
 * **Breaking:** Changed the implementation of the `printf()` function under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting).
+* Changed the definition of the `&&` and `||` operators: they are guaranteed to [always evaluate to either `0` or `1`](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#operators).
 * Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
@@ -89,9 +91,9 @@ All notable changes to this project will be documented in this file.
 Experimental features may contain bugs, break existing code or produce suboptimal code, and are subject to change.
 
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
-* Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
+* Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
 * Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
-* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](/doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool.
+* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool.
 * Added a capability to the command line tool to compile several source files at once using the [`--append` command line argument](doc/syntax/TOOLS-CMDLINE.markdown#additional-input-files).
 * Added new optimization level, `experimental`. On this setting, the [Data Flow optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing to perform more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.  
 * Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does. 
@@ -675,7 +677,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Added
 
 * Added Schematics Builder tool with a new [Schemacode language](doc/syntax/SCHEMACODE.markdown).
-* Added new [command-line interface](/doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematics 
+* Added new [command-line interface](doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematics 
   Builder and Schematics Decompiler.
 * Added [Schematics Builder](http://mindcode.herokuapp.com/schematics) and
   [Schematics Decompiler](http://mindcode.herokuapp.com/decompiler) interface to the web application. 
@@ -754,7 +756,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Changed
 
-* Changed [`ubind` function](/doc/syntax/FUNCTIONS_V7.markdown#instruction-ubind) to return the freshly bound unit.
+* Changed [`ubind` function](doc/syntax/FUNCTIONS_V7.markdown#instruction-ubind) to return the freshly bound unit.
 * Changed [encoding of numerical values to mlog](doc/syntax/SYNTAX.markdown#numeric-literals-in-mindustry-logic).
 
 ### Fixed

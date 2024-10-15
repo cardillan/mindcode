@@ -84,7 +84,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             // Division by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
                             return;
-                        } else if (value == 0 && opers.getT1() == ix.getX()) {
+                        } else if (advanced() && value == 0 && opers.getT1() == ix.getX()) {
                             // Zero divided by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
@@ -99,20 +99,41 @@ class ExpressionOptimizer extends BaseOptimizer {
                             // Division by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
                             return;
-                        } else if (value == 0 && opers.getT1() == ix.getX()) {
+                        } else if (advanced() && value == 0 && opers.getT1() == ix.getX()) {
+                            // Zero divided by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
                         }
                     }
-                    case ADD, SUB, BINARY_OR, LOGICAL_OR, XOR, SHL, SHR -> {
+                    case ADD, SUB, XOR -> {
                         if (value == 0) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
                             return;
                         }
                     }
+                    case SHL, SHR -> {
+                        if (value == 0 && opers.getT1() == ix.getY()) {
+                            // Shift by zero
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), ix.getX()));
+                            return;
+                        } else if (value == 0 && opers.getT1() == ix.getX()) {
+                            // Shifting zero by something
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
+                            return;
+                        }
+                    }
+                    case BINARY_OR, BOOL_OR, LOGICAL_OR -> {
+                        if (value == 0 && ix.getOperation() != Operation.BOOL_OR) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            return;
+                        } else if (value != 0 && ix.getOperation() != Operation.BINARY_OR) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.TRUE));
+                            return;
+                        }
+                    }
                     case BINARY_AND, BOOL_AND, LOGICAL_AND -> {
                         if (value == 0) {
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
                         } else if (ix.getOperation() == Operation.LOGICAL_AND) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));

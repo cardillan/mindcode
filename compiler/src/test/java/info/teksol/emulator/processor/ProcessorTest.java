@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 // Some Mindcode code tested in this class can be quite complex and hard to maintain as a string constant.
 // Such code can be saved as a file in the src/test/resources/scripts directory.
@@ -144,8 +144,9 @@ public class ProcessorTest extends AbstractProcessorTest {
 
                     if (useAsserts) {
                         assertFalse(actualOutput.isEmpty(), "Test didn't produce any output values.");
-                        System.out.print(messages);
-                        assertTrue(messages.isEmpty(), "Some of the tests have failed. See output for details.");
+                        if (!messages.isEmpty()) {
+                            fail("Some of the tests have failed:\n" + messages);
+                        }
                     }
                     return !actualOutput.isEmpty() && messages.isEmpty();
                 }
