@@ -50,8 +50,6 @@
     </form>
 </div>
 
-<@com.footer/>
-
 <script>
     let socket = null;
     let nextIcon = "fa-microchip";
@@ -145,3 +143,5 @@
         }
     };
 </script>
+
+<@com.footer/>

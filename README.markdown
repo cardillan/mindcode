@@ -25,7 +25,7 @@ The most important recent changes to Mindcode include:
 * User interface
   * Significant improvement in reporting error messages generated during compilation.
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
-  * Options for running the compiled mlog code in an emulated processor.
+  * Support for running the compiled mlog code in an emulated processor.
 * Mindcode syntax
   * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
   * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements.   
@@ -35,11 +35,15 @@ See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
 ## Using Mindcode 
 
+### Online
+
 Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mindustry Logic_ text area will contain the mlog version of your Mindcode. Copy the mlog code into the clipboard. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. Select **Import from Clipboard**. Mindustry is now ready to execute your code.
 
 You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with the Mindustry World is supported.
 
-Alternatively, you can download the command-line compiler and use Mindcode [from within your favourite IDE](doc/syntax/TOOLS-IDE-INTEGRATION.markdown).
+### Offline
+
+Alternatively, you can download the command-line compiler and use Mindcode [from within an IDE](doc/syntax/TOOLS-IDE-INTEGRATION.markdown).
 
 ## Mindustry Logic References
 

@@ -2,25 +2,28 @@
 
 This documents servers as a scratch pad to track ideas and possible enhancements to Mindcode.
 
-A significant update is planned. Planned changes are described 
-[here](https://github.com/cardillan/mindcode/discussions/142). Comments and suggestions are welcome.
+Mindcode currently undergoes significant changes to the syntax, which are being discussed [here](https://github.com/cardillan/mindcode/discussions/142). Comments and suggestions are welcome.
 
-# Current priorities
+## Next release
 
-* Bug fixes and [incremental improvements](#incremental-improvements)
+* Rudimentary decompiler from mlog (see [#141](https://github.com/cardillan/mindcode/issues/141)).
+* Varargs for inline functions. Only list iteration loops, and probably passing them into another inline function, could be used on them. The motivation is the system library, where it would make sense.
+* `out` keywords for output arguments in function calls (required in strict syntax, optional in relaxed syntax)
+* Input/output and output only function parameters.
+
+## Near horizon
+
+* Rewriting the grammar, parser and code generator from scratch.
+
+After that
+
+* [Internal arrays](#internal-arrays)
 * [Inferring invariants of variables](#inferring-invariants-of-variables)
-* [Speculative optimization for speed](#speculative-optimization-for-speed)
-* [External variable optimizations](#external-variable-optimizations)
-* [Function pointers](#function-pointers)
 
-# Incremental improvements
+# Mindcode
 
-None planned.
+## Small or internal improvements
 
-# Other small or internal improvements
-
-* Handling syntax errors - web & command line apps:
-  * Display message and link to the discussion, prompt users to ask for help if stuck
 * Handling internal errors:
   * Web app:
     * Store the source file in a separate table for errors  
@@ -40,25 +43,12 @@ None planned.
     inbound instance is equal to the cached one, use the cached outbound instance and avoid new processing.
   * Only recreate OptimizationActions of the action whose context(s) are affected by previous optimizations.
 
-# Improving error/warning messages
+### Improving error/warning messages
 
-* Compatibility warnings:
-  * warn when `configure` main variable is used in V7 -- ML changes it to `config`,
-  * warn about alloy-smelter --> surge-smelter V6 --> V7 name change.
 * Warn when the generated code goes over 1000 Mindustry instructions.
 * Warn when potentially non-numeric value is being pushed on the stack.
 
-  
-# Additional syntax enhancements
-
-* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
-* Varargs inline functions (??)
-  * Function needs to be explicitly declared inline
-  * `inline def foo(a, b, c, x...) ... end`
-  * The vararg can be processed using list iteration loop, or maybe passed to another vararg function:
-    `def foo(arg...) for a in arg print(a) end end def bar(arg...) foo(arg) end`
-    
-## #set local compiler directive/statement
+### #set local compiler directive/statement
 
 ```
 #set local compiler-option = value, compiler-option = value, ...;
@@ -70,58 +60,29 @@ provide means to compile different parts of code for size or speed.
 
 The specific options would probably have to be stored in AST contexts.
 
-## Typed variables
+## Syntax extensions
 
-Typed variables, parameters and function return values.
-* This would allow better optimization and some special features, such as function pointers.
-* Typed variables would have to be declared and could exist alongside untyped ones.
-* Compiler directive could be created to require all variables to be declared and typed.
-* Problems:
-  * Types of some expressions might not be possible to determine statically, e.g. the type of `block.sensor(property)` 
-    value depends on the property being sensed.   
+### Internal arrays
 
-## Records/structures
+Individual elements of internal arrays will be stored in processor variables. Accessing the elements via a dynamic
+index will be realized through compiler-defined functions. When used together with loop
+unrolling or data flow optimization, they might be very useful - and as fast as regular variables.
 
-* Requires typed variables.
-* Just a way to bind several variables together. Only static allocation.
-* Allows returning multiple values from functions.
-* Will compile down to individual variables, which will then be optimized by Data Flow Optimization.
-* Possible support for arrays of records
+* Array name is not a variable - neither an l-value nor an r-value.
+  * No pointers to arrays
+* Arrays, not lists - no add/remove, no inherent size
+* Random access will be realized using out-of-line functions
+  * Read and write function for each array
+    * Switched case, `goto` instructions at each branch end
+  * Immediate benefit from existing optimizations (automatic inlining, loop unrolling etc.)
+  * Needs to update function inliner to estimate the cost of inlining constant index calls as zero.
+    * Accessing an array item at constant index will be identical to accessing a normal variable
+* Alternative: virtual instructions. Might allow better loop optimization without inlining.
+* Maybe array assignments, esp. for same sized arrays
+* Out-of-bound access checks: compiler directive
+* For each syntax over arrays - support modification of the underlying array through `out` control loop variables
 
-# Speculative optimization for speed
-
-* `instruction-overload` compiler option: a numerical value. Nonzero value allows performing speed optimizations that
-  would exceed instruction space by at most the given quota, followed by other optimization passes specified by the
-  optimizer. If the code size after the additional optimizations fits instruction space, the optimization is
-  committed; if it doesn't, the optimization is rolled back and rejected forever. Limited to 200 in the web
-  application. Needs the following:
-  * way for the speed optimizers to specify which other optimizations to run,
-  * mechanism for rolling back rejected optimizations,
-  * mechanism for keeping track of rejected optimizations.
-
-# External variable optimizations
-
-* External variable value reuse
-  * When a value is read or written to a memory cell, store it in a shadow variable and don't reread it if not 
-    necessary, unless the memory cell was declared `volatile`.
-  * Needs to reset stored values on possible overwrites.
-    * Tracking of possible memory block aliases (will be done globally) - all memory blocks obtained via instructions
-      (`getlink`, `getBlock`, `ulocate`) are considered aliased (the optimizer cannot exclude the possibility
-      they're the same block). Can be overridden by setting the memory model or individual variable to `restricted`.
-    * Tracking of possible index aliases - don't know how to do in general case, probably will just reset
-      everything whenever any write to a memory occurs. Possible tracking of rewrites for specific constant indexes
-      (will cover external variables).
-      * If it was possible to establish that two expression values are distinct, we might utilize this knowledge and
-        not reset the value represented by a known-to-be-distinct expression when a memory write occurs at the other
-        expression index. We might consider expressions that differ by an integer constant distinct.
-    * Do not write the same value if it is known to be unchanged.
-* Volatile values: always reread, never reuse last value.
-  * Specific built-in ones (already done).
-  * All sensed properties (already done - the entire `sensor` instruction is deemed volatile).
-  * New compiler directive will allow to declare memory model for a memory block, a linked block, a built-in variable
-    or a global variable (because of the `sync` instruction), e.g. `#declare variable [volatile | aliased | restriced]`.
-
-# Function pointers
+## Function pointers
 
 * Assign a function address to a variable:
   * `fptr = function` (note: no brackets)
@@ -163,52 +124,31 @@ Typed variables, parameters and function return values.
   * Null function pointer corresponds to a special function that indicates an error and stops the program
     execution. The same prerequisites as above. Ask Anuken for an extension to the stop instruction.
     
-# Internal arrays
 
-Individual elements of internal arrays will be stored in processor variables. Accessing the elements via a dynamic 
-index will be realized through compiler-defined functions. When used together with loop 
-unrolling or data flow optimization, they might be very useful - and as fast as regular variables.
-
-* Array name is not a variable - neither an l-value nor an r-value.
-  * No pointers to arrays
-* Arrays, not lists - no add/remove, no inherent size
-* Random access will be realized using out-of-line functions
-  * Read and write function for each array
-    * Switched case, `goto` instructions at each branch end
-  * Immediate benefit from existing optimizations (automatic inlining, loop unrolling etc.)
-  * Needs to update function inliner to estimate the cost of inlining constant index calls as zero.
-    * Accessing an array item at constant index will be identical to accessing a normal variable
-* Alternative: virtual instructions. Might allow better loop optimization without inlining.
-* Maybe array assignments, esp. for same sized arrays
-* Out-of-bound access checks: compiler directive
-* For each syntax over arrays - support modification of the underlying array through `out` control loop variables
-
-## Further developments
+### Further developments
 
 * Pointers to internal arrays:
   * Might require typed variables.
   * Would allow passing arrays to out-of-line functions.
 
-# Internal stack
+## Internal stack
 
 Stack stored in processor variables, similar to internal arrays.
 
-# Code generation improvements
+## Code generation improvements
 
 * `math-model` compiler option: `strict` or `relaxed`. Under the `strict` model, the following will apply:
-  * Loss of precision during numeric literal conversion is disallowed. If such a literal is found in the source code,
-    the compilation will fail. Optimizations that would cause precision loss will be blocked.
+  * In ML8 no longer relevant: loss of precision during numeric literal conversion is disallowed. If such a literal is found in the source code, the compilation will fail. Optimizations that would cause precision loss will be blocked.
   * Restoring variable value by inverting the operation performed on it will be disallowed.
-  * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might
-    not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
+  * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
 
-## Short-circuit boolean evaluation
+### Short-circuit boolean evaluation
 
 Two basic approaches
 * Implemented in compiler; can use different operators for short-cirćuit and full evaluation syntax like Ruby  
 * Implemented as a postprocessing/optimization; cannot be specified in code. 
 
-### Compiler approach
+#### Compiler approach
 
 * The `and` and `or` operators will be subject to short-circuiting. All other, including `&&` and `||`, will always
   be evaluated fully.
@@ -219,14 +159,59 @@ Two basic approaches
     which opcodes do affect the world.)
   * Useful (as determined by data flow analysis) assignments to variables.
 
-### Optimizer approach
+#### Optimizer approach
 
 * Use short-circuiting where it produces shortest code.
 * Code without side effects can be short-circuited/rearranged at will.
 
-# Optimization improvements
+### Other
 
-## Data Flow Optimization
+* Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
+  variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
+  variables will make inspecting variables inside processors in Mindustry way easier.
+* Improve [Mindustry Metadata Extractor](https://github.com/cardillan/mimex) to extract more metadata and
+  automatically put them at the right place in Mindcode.
+
+## Optimization improvements
+
+* More advanced optimizations:
+  * Better jump threading / cross-jumping.
+  * Tail recursion optimization.
+
+### Speculative optimization for speed
+
+* `instruction-overload` compiler option: a numerical value. Nonzero value allows performing speed optimizations that
+  would exceed instruction space by at most the given quota, followed by other optimization passes specified by the
+  optimizer. If the code size after the additional optimizations fits instruction space, the optimization is
+  committed; if it doesn't, the optimization is rolled back and rejected forever. Limited to 200 in the web
+  application. Needs the following:
+  * way for the speed optimizers to specify which other optimizations to run,
+  * mechanism for rolling back rejected optimizations,
+  * mechanism for keeping track of rejected optimizations.
+
+### External variable optimizations
+
+* External variable value reuse
+  * When a value is read or written to a memory cell, store it in a shadow variable and don't reread it if not
+    necessary, unless the memory cell was declared `volatile`.
+  * Needs to reset stored values on possible overwrites.
+    * Tracking of possible memory block aliases (will be done globally) - all memory blocks obtained via instructions
+      (`getlink`, `getBlock`, `ulocate`) are considered aliased (the optimizer cannot exclude the possibility
+      they're the same block). Can be overridden by setting the memory model or individual variable to `restricted`.
+    * Tracking of possible index aliases - don't know how to do in general case, probably will just reset
+      everything whenever any write to a memory occurs. Possible tracking of rewrites for specific constant indexes
+      (will cover external variables).
+      * If it was possible to establish that two expression values are distinct, we might utilize this knowledge and
+        not reset the value represented by a known-to-be-distinct expression when a memory write occurs at the other
+        expression index. We might consider expressions that differ by an integer constant distinct.
+    * Do not write the same value if it is known to be unchanged.
+* Volatile values: always reread, never reuse last value.
+  * Specific built-in ones (already done).
+  * All sensed properties (already done - the entire `sensor` instruction is deemed volatile).
+  * New compiler directive will allow to declare memory model for a memory block, a linked block, a built-in variable
+    or a global variable (because of the `sync` instruction), e.g. `#declare variable [volatile | aliased | restriced]`.
+
+### Data Flow Optimization
 
 * Expand handling of expressions by the Data Flow Optimization:
   * handle multiplication by zero, multiplication/division by one, and addition/subtraction of zero directly (i.e.
@@ -261,7 +246,7 @@ Two basic approaches
   * Example: `bar = foo ? 5 : 10; for i in 1 ... bar cell1[i] = 0 end` - after the code path splitting optimization,
     there could be two unrolled loops.
 
-### Inferring invariants of variables
+#### Inferring invariants of variables
 
 * Constraints on variable values inferred from instruction producing the value
   * e.g. `op max result input 10` limits the value of `result` to `10`
@@ -279,10 +264,8 @@ Two basic approaches
 * Boolean expression optimizations: encode `a and not b` as `a > b`, `a or not b` as `a >= b`, if both values are
   known to be boolean.
 
-## Function inlining / call optimization
+### Function inlining / call optimization
 
-* `noinline` keyword to prevent function from being ever inlined. Useful when I want the function to be called from 
-  an unrolled loop; inlining it might prevent the loop from unrolling.
 * When just one of the parameters passed to the function is variable with a few discrete values and the others are
   fixed, create a switched expression and inline the function separately for each value (???)
   * Code path splitting handles this in a general manner 
@@ -294,14 +277,14 @@ Two basic approaches
 * When a function always returns the same value, replace the return value variable with that value. Handle specific
   case of function always returning one of its input arguments.
 
-## Recursive function optimization
+### Recursive function optimization
 
 * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
 * When an argument to a recursive function call is modified in a reversible way (such as `foo(n - 1)`), instead of
   push/pop protection, revert the operation after the function call returns. Implement strict/relaxed math model to
   let the user block this in case the reversed operation produces result not equal to the original one.
 
-## Case Switching
+### Case Switching
 
 * Only perform the optimization when the input value is a known integer
 * Support ranges in when branches
@@ -310,7 +293,7 @@ Two basic approaches
   higher than 0.5, leave other values to conditional jumps
 * On `advanced` level, convert switches that have overlapping values.
 
-### Case switching over built-in constants
+#### Case switching over built-in constants
 
 Process case expressions based on item/liquid/unit/block etc. Applies when all when branches contain a built-in 
 constant of the same type. Example:
@@ -341,7 +324,7 @@ branch for id 0:
 
 The `op min` instructions perhaps might be avoided under some circumstances.
 
-## Loop unrolling
+### Loop unrolling
 
 * Loop peeling - unroll first n iterations (possibly with conditions in between), followed by the loop. Especially
   useful if the loop is known to iterate at least n times.
@@ -354,21 +337,21 @@ The `op min` instructions perhaps might be avoided under some circumstances.
 * Loop unswitching (if in loop --> loops in if)
 * Loop fusion???
 
-## Loop hoisting
+### Loop hoisting
 
 * Generalized method of identifying finding loop invariant code.
 
-## Unreachable code elimination improvements
+### Unreachable code elimination improvements
 
 * Detect `end` instructions which are **always** executed in a user defined function and terminate the code path
   when such a function is called.
 
-## Optimization for speed
+### Optimization for speed
 
 * Currently, the optimizer realizes speed optimizations one by one, always choosing the highest benefit. Better
   utilization of instruction space _might_ be achieved by searching for a solution of the knapsack problem.
 
-## Optimization for size
+### Optimization for size
 
 * Case expressions: if each branch of a case expression provides just the expression value, rearrange each branch
   to setting the expression value to the output variable and jump out if the branch was selected. Saves one jump
@@ -406,24 +389,10 @@ The `op min` instructions perhaps might be avoided under some circumstances.
 # User interface
 
 * Webapp: after decompiling a schematic, redirect to Schematic Builder page using the decompiled source code.
-* When the compiled program only contains basic instructions (including print and printflush), run it after 
-  compilation and show the output on the web page. The same might be done for command-line compiler.
 * Render an image of built schematic to show it in the web application.
-
-# Other
-
-* Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
-  variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
-  variables will make inspecting variables inside processors in Mindustry way easier.
-* Propagate constant string evaluation into inline functions (?).
-* More advanced optimizations:
-  * Better jump threading / cross-jumping.
-  * Tail recursion optimization.
-* Improve [Mindustry Metadata Extractor](https://github.com/cardillan/mimex) to extract more metadata and 
-  automatically put them at the right place in Mindcode.
 * Add links to examples in documentation to open them in web app.
 
-## Musings
+# Musings
 
 Things that would be cool, that might be doable in some way given existing constraints, but where the exact way of 
 doing them isn't clear yet.
@@ -435,7 +404,25 @@ doing them isn't clear yet.
   provide high-level support for inter-processor communication using either memory cells/banks,
   or even unit flags. Schemacode would be used to produce a schematic with several processors.
 
-### Parallel comparison
+## Typed variables
+
+Typed variables, parameters and function return values.
+* This would allow better optimization and some special features, such as function pointers.
+* Typed variables would have to be declared and could exist alongside untyped ones.
+* Compiler directive could be created to require all variables to be declared and typed.
+* Problems:
+  * Types of some expressions might not be possible to determine statically, e.g. the type of `block.sensor(property)`
+    value depends on the property being sensed.
+
+## Records/structures
+
+* Requires typed variables.
+* Just a way to bind several variables together. Only static allocation.
+* Allows returning multiple values from functions.
+* Will compile down to individual variables, which will then be optimized by Data Flow Optimization.
+* Possible support for arrays of records
+
+## Parallel comparison
 
 Most useful for (or perhaps only supported in) case expressions, where similar functionality cannot be easily achieved 
 right now:
@@ -464,6 +451,7 @@ There are no plans to do any of these. We keep them around just in case.
 * Loop unrolling: generate new names for temporary variables inside the loop. Probably not needed at the moment.
 * Support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * Integrate a better code editor in the webapp, rather than a plain old `<textarea>`
+* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
 
 # Refused
 

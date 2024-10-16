@@ -182,17 +182,6 @@
 </#macro>
 
 <#macro footer>
-<footer class="mt-8 text-xs text-center border border-t-2 border-l-0 border-r-0 border-b-0 border-gray-700">
-    <div class="mt-4 flex justify-between">
-        <div><strong>${model.version}</strong></div>
-        <div><strong>PRIVACY POLICY</strong>: This website does not track its users. The Mindcode and schematics you submit for compilation/decompilation is kept for later analysis.
-            No other information is kept about you or your actions on the site.</div>
-        <div>Created by François (<a class="underline text-blue-500" href="https://github.com/francois">GitHub</a>,
-                <a class="underline text-blue-500" href="https://twitter.com/fbeausoleil">Twitter</a>).<br />
-                 Maintained by <a class="underline text-blue-500" href="https://github.com/cardillan">Cardillan</a>.</div>
-    </div>
-</footer>
-
 <script>
     function copyToClipboard() {
         var textarea = document.getElementById("compiled");
@@ -259,6 +248,16 @@
     }
 </script>
 
+<footer class="mt-8 text-xs text-center border border-t-2 border-l-0 border-r-0 border-b-0 border-gray-700">
+    <div class="mt-4 flex justify-between">
+        <div><strong>${model.version}</strong></div>
+        <div><strong>PRIVACY POLICY</strong>: This website does not track its users. The Mindcode and schematics you submit for compilation/decompilation is kept for later analysis.
+            No other information is kept about you or your actions on the site.</div>
+        <div>Created by François (<a class="underline text-blue-500" href="https://github.com/francois">GitHub</a>,
+                <a class="underline text-blue-500" href="https://twitter.com/fbeausoleil">Twitter</a>).<br />
+                 Maintained by <a class="underline text-blue-500" href="https://github.com/cardillan">Cardillan</a>.</div>
+    </div>
+</footer>
 
 </body>
 </html>
