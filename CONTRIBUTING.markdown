@@ -1,5 +1,7 @@
 # Contributing
 
+There's currently a bunch of issues marked with the `help wanted` label. You can also have a look [here](https://github.com/cardillan/mindcode/discussions/167). 
+
 ## Guidelines
 
 Mindcode uses JDK17, Maven and Spring Boot. 

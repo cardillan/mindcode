@@ -90,8 +90,7 @@ public class CompileMindcodeAction extends ActionHandler {
                         Options to specify if and how to run the compiled code on an emulated processor. The emulated \
                         processor is much faster than Mindustry processors, but can't run instructions which obtain information \
                         from the Mindustry World. Sole exceptions are memory cells (cell1 to cell9) and memory banks \
-                        (bank1 to bank9), which can be read and written.
-                        """);
+                        (bank1 to bank9), which can be read and written.""");
 
         runOptions.addArgument("--run")
                 .help("run the compiled code on an emulated processor.")

@@ -7,7 +7,8 @@
         be directly compiled by Mindcode.</strong> Jump instructions in the original mlog are transcribed as <strong>if</strong>
         and <strong>goto</strong> statements which aren't supported by Mindcode and must be rewritten using conditional
         statements, loops and other high-level constructs. The decompiler is mainly useful to produce expressions and
-        function calls in the correct Mindcode syntax.
+        function calls in the correct Mindcode syntax, saving some time and possibly helping to avoid some mistakes
+        compared to a manual rewrite of the entire mlog code from scratch.
 </p>
 
 <div class="w-full">
