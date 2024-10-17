@@ -21,7 +21,7 @@ Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete des
 The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
-  * Full support for the Mindustry Logic in the upcoming Mindustry version 8.
+  * Full support for the Mindustry Logic in the upcoming [Mindustry version 8](/doc/syntax/MINDUSTRY-8.markdown).
 * User interface
   * Significant improvement in reporting error messages generated during compilation.
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
