@@ -27,11 +27,11 @@ public class SetInstruction extends BaseResultInstruction {
 
     @Override
     public SetInstruction withResult(LogicVariable result) {
-        return new SetInstruction(astContext, List.of(result, getValue()), getParams());
+        return new SetInstruction(astContext, List.of(result, getValue()), getArgumentTypes());
     }
 
     public SetInstruction withValue(LogicValue value) {
-        return new SetInstruction(astContext, List.of(getResult(), value), getParams());
+        return new SetInstruction(astContext, List.of(getResult(), value), getArgumentTypes());
     }
 
     public final LogicValue getValue() {

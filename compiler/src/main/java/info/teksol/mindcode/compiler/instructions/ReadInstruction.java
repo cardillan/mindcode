@@ -27,7 +27,7 @@ public class ReadInstruction extends BaseResultInstruction {
 
     @Override
     public ReadInstruction withResult(LogicVariable result) {
-        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getParams());
+        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getArgumentTypes());
     }
 
     public final LogicVariable getMemory() {

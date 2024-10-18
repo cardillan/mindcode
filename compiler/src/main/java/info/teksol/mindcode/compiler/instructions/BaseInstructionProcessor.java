@@ -5,9 +5,9 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
+import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.BlockType;
 
@@ -25,7 +25,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 import static info.teksol.mindcode.logic.Operation.ADD;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
-public class BaseInstructionProcessor extends MessageEmitter implements InstructionProcessor {
+public class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final List<OpcodeVariant> opcodeVariants;
@@ -434,7 +434,7 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
         }
     }
 
-    protected OpcodeVariant getOpcodeVariant(Opcode opcode, List<LogicArgument> arguments) {
+    protected OpcodeVariant getOpcodeVariant(Opcode opcode, List<? extends LogicArgument> arguments) {
         List<OpcodeVariant> variants = variantsByOpcode.get(opcode);
         if (variants == null) {
             return null;
@@ -457,7 +457,7 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
      * @param arguments arguments to the instruction
      * @return list of types of given arguments
      */
-    protected List<InstructionParameterType> getParameters(Opcode opcode, List<LogicArgument> arguments) {
+    public List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, arguments);
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
@@ -478,14 +478,13 @@ public class BaseInstructionProcessor extends MessageEmitter implements Instruct
             LogicArgument argument = instruction.getArgs().get(i);
             InstructionParameterType type = namedParameter.type();
             if (!isValid(type, argument)) {
-                validArgumentValues.get(type).stream().sorted().toList();
                 error(instruction.getAstContext().node(),
                         "Invalid value '%s' for parameter '%s': allowed values are '%s'.", argument.toMlog(),
                         namedParameter.name(), String.join("', '", validArgumentValues.get(type)));
             }
         }
 
-        if (instruction.getParams() == null) {
+        if (instruction.getArgumentTypes() == null) {
             throw new MindcodeInternalError("Instruction created without valid parameters: " + instruction);
         }
 

@@ -29,18 +29,18 @@ public class OpInstruction extends BaseResultInstruction {
     @Override
     public OpInstruction withResult(LogicVariable result) {
         return hasSecondOperand()
-                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getParams())
-                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getParams());
+                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getArgumentTypes())
+                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getArgumentTypes());
     }
 
     public OpInstruction withX(LogicValue x) {
         return hasSecondOperand()
-                ? new OpInstruction(astContext, List.of(getArg(0), getArg(1), x, getArg(3)), getParams())
-                : new OpInstruction(astContext, List.of(getArg(0), getArg(1), x), getParams());
+                ? new OpInstruction(astContext, List.of(getArg(0), getArg(1), x, getArg(3)), getArgumentTypes())
+                : new OpInstruction(astContext, List.of(getArg(0), getArg(1), x), getArgumentTypes());
     }
 
     public OpInstruction withY(LogicValue y) {
-        return new OpInstruction(astContext, List.of(getArg(0), getArg(1), getArg(2), y), getParams());
+        return new OpInstruction(astContext, List.of(getArg(0), getArg(1), getArg(2), y), getArgumentTypes());
     }
 
     public boolean hasSecondOperand() {

@@ -5,18 +5,17 @@ import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.ParameterAssignment;
+import info.teksol.mindcode.logic.TypedArgument;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class BaseInstruction implements LogicInstruction {
     private final Opcode opcode;
     private final List<LogicArgument> args;
     private final List<InstructionParameterType> params;
-    private final List<ParameterAssignment> assignments;
+    private final List<TypedArgument> typedArguments;
     private final int inputs;
     private final int outputs;
 
@@ -30,12 +29,12 @@ public class BaseInstruction implements LogicInstruction {
         this.args = List.copyOf(args);
         this.params = params;
         if (params == null) {
-            assignments = null;
+            typedArguments = null;
             inputs = -1;
             outputs = -1;
         } else {
             int count = Math.min(params.size(), args.size());
-            assignments = IntStream.range(0, count).mapToObj(i -> new ParameterAssignment(params.get(i), args.get(i))).toList();
+            typedArguments = IntStream.range(0, count).mapToObj(i -> new TypedArgument(params.get(i), args.get(i))).toList();
             inputs = (int) params.stream().filter(InstructionParameterType::isInput).count();
             outputs = (int) params.stream().filter(InstructionParameterType::isOutput).count();
         }
@@ -46,7 +45,7 @@ public class BaseInstruction implements LogicInstruction {
         this.opcode = other.opcode;
         this.args = other.args;
         this.params = other.params;
-        this.assignments = other.assignments;
+        this.typedArguments = other.typedArguments;
         this.inputs = other.inputs;
         this.outputs = other.outputs;
     }
@@ -81,37 +80,17 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     @Override
-    public List<InstructionParameterType> getParams() {
+    public List<InstructionParameterType> getArgumentTypes() {
         return params;
     }
 
     @Override
-    public InstructionParameterType getParam(int index) {
+    public InstructionParameterType getArgumentType(int index) {
         return params.get(index);
     }
 
-    public List<ParameterAssignment> getAssignments() {
-        return assignments;
-    }
-
-    @Override
-    public Stream<ParameterAssignment> assignmentsStream() {
-        return assignments.stream();
-    }
-
-    @Override
-    public Stream<LogicArgument> inputArgumentsStream() {
-        return assignments.stream().filter(ParameterAssignment::isInput).map(ParameterAssignment::argument);
-    }
-
-    @Override
-    public Stream<LogicArgument> outputArgumentsStream() {
-        return assignments.stream().filter(ParameterAssignment::isOutput).map(ParameterAssignment::argument);
-    }
-
-    @Override
-    public Stream<LogicArgument> inputOutputArgumentsStream() {
-        return assignments.stream().filter(ParameterAssignment::isInputOrOutput).map(ParameterAssignment::argument);
+    public List<TypedArgument> getTypedArguments() {
+        return typedArguments;
     }
 
     @Override

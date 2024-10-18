@@ -26,7 +26,7 @@ public class PackColorInstruction extends BaseResultInstruction {
 
     @Override
     public PackColorInstruction withResult(LogicVariable result) {
-        return new PackColorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getParams());
+        return new PackColorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getArgumentTypes());
     }
 
     public final LogicValue getR() {

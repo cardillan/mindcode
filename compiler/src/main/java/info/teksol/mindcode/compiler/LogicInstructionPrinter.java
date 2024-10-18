@@ -5,6 +5,7 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
 
 import java.text.DecimalFormat;
@@ -161,13 +162,6 @@ public class LogicInstructionPrinter {
         return buffer.toString();
     }
 
-    public static String toStringSimple(LogicInstruction instruction) {
-        final StringBuilder buffer = new StringBuilder();
-        buffer.append(instruction.getOpcode().getOpcode());
-        addArgs(instruction.getArgs().size(), buffer, instruction);
-        return buffer.toString();
-    }
-
     public static String toString(InstructionProcessor instructionProcessor, LogicInstruction instruction) {
         final StringBuilder buffer = new StringBuilder();
         buffer.append(instruction.getOpcode().getOpcode());
@@ -175,7 +169,14 @@ public class LogicInstructionPrinter {
         return buffer.toString();
     }
 
-    private static void addArgs(int count, StringBuilder buffer, LogicInstruction instruction) {
+    public static String toStringSimple(MlogInstruction instruction) {
+        final StringBuilder buffer = new StringBuilder();
+        buffer.append(instruction.getOpcode().getOpcode());
+        addArgs(instruction.getArgs().size(), buffer, instruction);
+        return buffer.toString();
+    }
+
+    private static void addArgs(int count, StringBuilder buffer, MlogInstruction instruction) {
         for (int i = 0; i < count; i++) {
             buffer.append(" ");
             if (instruction.getArgs().size() > i) {

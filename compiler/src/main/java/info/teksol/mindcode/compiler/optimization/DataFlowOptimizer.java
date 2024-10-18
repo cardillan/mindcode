@@ -138,7 +138,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             List<LogicArgument> arguments = new ArrayList<>(instruction.getArgs());
             for (int i = 0; i < arguments.size(); i++) {
                 LogicValue replacement;
-                if (instruction.getParam(i).isInput() && arguments.get(i) instanceof LogicVariable variable
+                if (instruction.getArgumentType(i).isInput() && arguments.get(i) instanceof LogicVariable variable
                         && (replacement = valueReplacements.get(variable)) != null) {
                     arguments.set(i, replacement);
                     updated = true;

@@ -27,7 +27,7 @@ public class GetlinkInstruction extends BaseResultInstruction {
 
     @Override
     public GetlinkInstruction withResult(LogicVariable result) {
-        return new GetlinkInstruction(astContext, List.of(result, getIndex()), getParams());
+        return new GetlinkInstruction(astContext, List.of(result, getIndex()), getArgumentTypes());
     }
 
     public final LogicValue getIndex() {

@@ -708,7 +708,7 @@ class DataFlowVariableStates {
             }
 
             for (int i = 0; i < args1.size(); i++) {
-                if (!first.getParam(i).isOutput() && !Objects.equals(
+                if (!first.getArgumentType(i).isOutput() && !Objects.equals(
                         remap(variableStates, args1.get(i)),
                         remap(variableStates, args2.get(i))
                 )) {

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public interface InstructionProcessor {
+public interface InstructionProcessor extends MessageEmitter {
 
     ProcessorVersion getProcessorVersion();
 
@@ -22,6 +23,8 @@ public interface InstructionProcessor {
     String nextFunctionPrefix();
     LogicVariable unusedVariable();
 
+    List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
+
     /**
      * Creates a sample logic instruction from given opcode variant.
      *
@@ -29,7 +32,6 @@ public interface InstructionProcessor {
      * @return instruction having all arguments set to opcode variant defaults
      */
     LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
-
 
     CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue);
     CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue);

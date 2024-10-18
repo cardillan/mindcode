@@ -5,7 +5,7 @@ import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.ParameterAssignment;
+import info.teksol.mindcode.logic.TypedArgument;
 
 import java.util.List;
 import java.util.Set;
@@ -54,9 +54,9 @@ class TempVariableEliminator extends BaseOptimizer {
                     // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
                     if (list.size() == 2 && list.get(0) == previous) {
                         // Make sure all arg1 arguments of the other instruction are output
-                        boolean replacesOutputArg = previous.assignmentsStream()
+                        boolean replacesOutputArg = previous.typedArgumentsStream()
                                 .filter(t -> t.argument().equals(value))
-                                .allMatch(ParameterAssignment::isOutput);
+                                .allMatch(TypedArgument::isOutput);
 
                         if (replacesOutputArg) {
                             // The current instruction merely transfers a value from the output argument of the previous instruction

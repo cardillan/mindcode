@@ -11,7 +11,7 @@ public class FunctionMapperFactory {
 
     public static FunctionMapper getFunctionMapper(InstructionProcessor instructionProcessor, Supplier<AstContext> astContextSupplier,
             Consumer<MindcodeMessage> messageConsumer) {
-        return new BaseFunctionMapper( instructionProcessor, astContextSupplier, messageConsumer);
+        return new BaseFunctionMapper(instructionProcessor, astContextSupplier, messageConsumer);
     }
 
     private FunctionMapperFactory() { }

@@ -1,5 +1,9 @@
 package info.teksol.mindcode.logic;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum Opcode {
     READ            ("read",            "Read a number from a linked memory cell."),
     WRITE           ("write",           "Write a number to a linked memory cell."),
@@ -120,5 +124,12 @@ public enum Opcode {
     @Override
     public String toString() {
         return opcode;
+    }
+
+    private static final Map<String, Opcode> MAP = Stream.of(values())
+            .collect(Collectors.toMap(Opcode::getOpcode, o -> o));
+
+    public static Opcode fromOpcode(String opcode) {
+        return MAP.get(opcode);
     }
 }

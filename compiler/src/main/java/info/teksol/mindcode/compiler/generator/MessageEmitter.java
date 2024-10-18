@@ -3,31 +3,18 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.function.Consumer;
 
-public abstract class MessageEmitter {
-    protected final Consumer<MindcodeMessage> messageConsumer;
+public interface MessageEmitter {
+    void error(AstNode node, @PrintFormat String format, Object... args);
 
-    public MessageEmitter(Consumer<MindcodeMessage> messageConsumer) {
-        this.messageConsumer = messageConsumer;
-    }
+    void error(InputPosition position, @PrintFormat String format, Object... args);
 
-    protected void error(AstNode node, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.error(node.getInputPosition(), format, args));
-    }
+    Consumer<MindcodeMessage> getMessageConsumer();
 
-    protected void error(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.error(position, format, args));
-    }
+    void warn(AstNode node, @PrintFormat String format, Object... args);
 
-    protected void warn(AstNode node, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.warn(node.getInputPosition(), format, args));
-    }
-
-    protected void warn(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.warn(position, format, args));
-    }
+    void warn(InputPosition position, @PrintFormat String format, Object... args);
 }

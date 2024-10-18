@@ -3,32 +3,30 @@ package info.teksol.mindcode.compiler.functions;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
+import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContext;
-import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.logic.*;
-import info.teksol.util.CollectionUtils;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static info.teksol.mindcode.logic.LogicNull.NULL;
-
-public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper {
+public class BaseFunctionMapper extends AbstractMessageEmitter implements FunctionMapper {
     private final AstContext staticAstContext = AstContext.createStaticRootNode();
-    private final Supplier<AstContext> astContextSupplier;
-    private final InstructionProcessor instructionProcessor;
-    private final ProcessorVersion processorVersion;
-    private final ProcessorEdition processorEdition;
+    final Supplier<AstContext> astContextSupplier;
+    final InstructionProcessor instructionProcessor;
+    final ProcessorVersion processorVersion;
+    final ProcessorEdition processorEdition;
     private final Map<String, PropertyHandler> propertyMap;
     private final Map<String, FunctionHandler> functionMap;
     private final List<SampleGenerator> sampleGenerators;
+
+    private final Map<Opcode, List<SampleGenerator>> opcodeSampleGenerators;
 
     BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
             Consumer<MindcodeMessage> messageConsumer) {
@@ -45,6 +43,9 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         propertyMap.values().forEach(p -> p.register(sampleGenerators::add));
         functionMap.values().forEach(f -> f.register(sampleGenerators::add));
         sampleGenerators.sort(Comparator.comparing(SampleGenerator::getName));
+
+        opcodeSampleGenerators = sampleGenerators.stream()
+                .collect(Collectors.groupingBy(s -> s.getOpcodeVariant().opcode()));
     }
 
     @Override
@@ -58,6 +59,18 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
     public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
         return handler == null ? null : handler.handleFunction(node, program, arguments);
+    }
+
+    public String decompile(MlogInstruction instruction) {
+        List<SampleGenerator> generators = opcodeSampleGenerators.getOrDefault(instruction.getOpcode(), List.of());
+        for (SampleGenerator generator : generators) {
+            String code = generator.decompile(instruction);
+            if (code != null) {
+                return code;
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -86,11 +99,15 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         ).collect(Collectors.toList());
     }
 
-    private LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
+    LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
         return instructionProcessor.createInstruction(astContextSupplier.get(), opcode, args);
     }
 
-    private LogicKeyword toKeyword(LogicValue arg) {
+    LogicInstruction createSampleInstruction(Opcode opcode, List<LogicArgument> args) {
+        return instructionProcessor.createInstructionUnchecked(staticAstContext, opcode, args);
+    }
+
+    static LogicKeyword toKeyword(LogicValue arg) {
         // Syntactically, instruction keywords are just identifiers.
         // To convert it to keyword, we use the plain variable name.
         if (arg instanceof LogicVariable lv) {
@@ -103,7 +120,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         }
     }
 
-    private LogicKeyword toKeywordOptional(LogicValue arg) {
+    static LogicKeyword toKeywordOptional(LogicValue arg) {
         if (arg instanceof LogicVariable lv) {
             return LogicKeyword.create(lv.getName());
         } else if (arg instanceof LogicBoolean lb) {
@@ -114,47 +131,8 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         }
     }
 
-    private static String joinNamedArguments(List<NamedParameter> arguments) {
+    static String joinNamedArguments(List<NamedParameter> arguments) {
         return arguments.stream().map(NamedParameter::name).collect(Collectors.joining(", "));
-    }
-
-    private interface SampleGenerator {
-        String getName();
-        OpcodeVariant getOpcodeVariant();
-        String generateSampleCall();
-        LogicInstruction generateSampleInstruction();
-
-        default String getNote() {
-            return "";
-        }
-
-        default String generateSecondarySampleCall() {
-            return null;
-        }
-
-        default void register(Consumer<SampleGenerator> registry) {
-            registry.accept(this);
-        }
-    }
-    
-    private interface PropertyHandler extends SampleGenerator {
-        LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments);
-
-        default Opcode getOpcode() {
-            return getOpcodeVariant().opcode();
-        }
-    }
-
-    private interface FunctionHandler extends SampleGenerator {
-        LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments);
-
-        default Opcode getOpcode() {
-            return getOpcodeVariant().opcode();
-        }
-    }
-
-    private interface SelectorFunction extends FunctionHandler {
-        String getKeyword();
     }
 
     //
@@ -171,7 +149,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
 
         // V6 backwards compatibility
         if (map.containsKey("config")) {
-            map.put("configure", new DeprecatedPropertyHandler("configure", map.get("config")));
+            map.put("configure", new DeprecatedPropertyHandler(this, "configure", map.get("config")));
         }
 
         return map;
@@ -194,219 +172,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         // Subtract one more for target
         int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused - 1;
         String name = selector.isPresent() ? selector.get().name() : opcodeVariant.opcode().toString();
-        return new StandardPropertyHandler(name, opcodeVariant, numArgs, results > 0);
-    }
-
-    private abstract class AbstractPropertyHandler implements PropertyHandler {
-        protected final OpcodeVariant opcodeVariant;
-        protected final String name;
-        protected final int numArgs;
-
-        AbstractPropertyHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
-            this.name = name;
-            this.opcodeVariant = opcodeVariant;
-            this.numArgs = numArgs;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public OpcodeVariant getOpcodeVariant() {
-            return opcodeVariant;
-        }
-
-        protected boolean checkArguments(AstNode node, List<LogicValue> arguments) {
-            if (arguments.size() != numArgs) {
-                error(node, "Function '%s': wrong number of arguments (expected %d, found %d)", name, numArgs, arguments.size());
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public LogicInstruction generateSampleInstruction() {
-            return instructionProcessor.fromOpcodeVariant(getOpcodeVariant());
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + "{" + "opcodeVariant=" + opcodeVariant + ", name=" + name + ", numArgs=" + numArgs + '}';
-        }
-    }
-
-    private class StandardPropertyHandler extends AbstractPropertyHandler  {
-        private final boolean hasResult;
-
-        StandardPropertyHandler(String name, OpcodeVariant opcodeVariant, int numArgs, boolean hasResult) {
-            super(name, opcodeVariant, numArgs);
-            this.hasResult = hasResult;
-        }
-
-        @Override
-        public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> fnArgs) {
-            if (!checkArguments(node, fnArgs)) {
-                return NULL;
-            }
-
-            LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : NULL;
-            List<LogicArgument> ixArgs = new ArrayList<>();
-            int argIndex = 0;
-
-            for (NamedParameter a : opcodeVariant.namedParameters()) {
-                if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    error(node,"Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
-                            fnArgs.get(argIndex).toMlog(), name);
-                    return NULL;
-                }
-
-                if (a.type() == InstructionParameterType.RESULT) {
-                    ixArgs.add(tmp);
-                } else if (a.type() == InstructionParameterType.BLOCK) {
-                    ixArgs.add(target);
-                } else if (a.type().isSelector()  && !a.type().isFunctionName()) {
-                    // Selector that IS NOT a function name is taken from the argument list
-                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
-                } else if (a.type().isSelector()) {
-                    // Selector that IS a function name isn't in an argument list and must be filled in
-                    ixArgs.add(LogicKeyword.create(a.name()));
-                } else if (a.type().isUnused()) {
-                    // Unused inputs must be filled with defaults
-                    // Generate new temporary variable for unused outputs (will be replaced by the temp optimizer)
-                    ixArgs.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
-                } else if (a.type().isInput()) {
-                    // Input argument - take it as it is
-                    ixArgs.add(fnArgs.get(argIndex++));
-                } else if (a.type().isOutput()) {
-                    if (argIndex >= fnArgs.size()) {
-                        // Optional arguments are always output; generate temporary variable for them
-                        ixArgs.add(instructionProcessor.nextTemp());
-                    } else {
-                        // Block name cannot be used as output argument
-                        LogicArgument argument = fnArgs.get(argIndex++);
-                        if (argument.getType() == ArgumentType.BLOCK) {
-                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).", argument.toMlog(), name);
-                            return NULL;
-                        }
-                        ixArgs.add(argument);
-                    }
-                } else {
-                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
-                }
-            }
-
-            program.accept(instructionProcessor.createInstruction(astContextSupplier.get(), getOpcode(), ixArgs));
-            return tmp;
-        }
-
-        @Override
-        public String generateSampleCall() {
-            StringBuilder str = new StringBuilder();
-            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
-            if (result != null) {
-                str.append(result.name()).append(" = ");
-            }
-
-            NamedParameter block = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.BLOCK);
-            str.append(block.name()).append('.');
-
-            List<String> strArguments = arguments.stream()
-                    .filter(a -> !a.type().isUnused() && !a.type().isFunctionName())
-                    .map(NamedParameter::name)
-                    .collect(Collectors.toList());
-
-            str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
-            return str.toString();
-        }
-
-        @Override
-        public String generateSecondarySampleCall() {
-            List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
-            CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
-            if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
-                return blockArgument.name() + "." + getName() + " = " + args.get(0).name();
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public LogicInstruction generateSampleInstruction() {
-            AtomicInteger counter = new AtomicInteger();
-            String tmpPrefix = instructionProcessor.getTempPrefix();
-            List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
-                    .map(a -> a.type() == InstructionParameterType.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
-                    .map(BaseArgument::new)
-                    .collect(Collectors.toList());
-            return instructionProcessor.createInstructionUnchecked(staticAstContext, getOpcode(), arguments);
-        }
-    }
-
-    private class DeprecatedPropertyHandler implements PropertyHandler {
-        private final PropertyHandler replacement;
-        private final String deprecated;
-        private boolean warningEmitted = false;
-
-        DeprecatedPropertyHandler(String deprecated, PropertyHandler replacement) {
-            this.deprecated = deprecated;
-            this.replacement = replacement;
-        }
-
-        @Override
-        public String getName() {
-            return replacement.getName();
-        }
-
-        @Override
-        public OpcodeVariant getOpcodeVariant() {
-            return replacement.getOpcodeVariant();
-        }
-
-        @Override
-        public String generateSampleCall() {
-            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.BLOCK);
-            CollectionUtils.removeFirstMatching(arguments, a -> a.type().isSelector());
-            return blockArgument.name() + "." + deprecated + "(" + joinNamedArguments(arguments) + ")";
-        }
-
-        @Override
-        public String generateSecondarySampleCall() {
-            List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
-            CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
-            if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
-                return blockArgument.name() + "." + deprecated + " = " + args.get(0).name();
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public LogicInstruction generateSampleInstruction() {
-            return replacement.generateSampleInstruction();
-        }
-
-        @Override
-        public String getNote() {
-            return "Deprecated. Use '" + replacement.getName() + "' instead.";
-        }
-
-        @Override
-        public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments) {
-            if (!warningEmitted) {
-                messageConsumer.accept(MindcodeCompilerMessage.warn(node.getInputPosition(),
-                        "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
-                        deprecated, processorVersion, replacement.getName()));
-                warningEmitted = true;
-            }
-            return replacement.handleProperty(node, program, target, arguments);
-        }
+        return new StandardPropertyHandler(this, name, opcodeVariant, numArgs, results > 0);
     }
 
     //
@@ -432,9 +198,9 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
 
         // Handle special cases
         switch(opcode) {
-            case FORMAT:    return new FormatFunctionHandler(opcode.toString(), opcodeVariant);
-            case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcodeVariant);
-            case UBIND:     return new UbindFunctionHandler(opcode.toString(), opcodeVariant);
+            case FORMAT:    return new FormatFunctionHandler(this, opcode.toString(), opcodeVariant);
+            case PRINT:     return new PrintFunctionHandler(this, opcode.toString(), opcodeVariant);
+            case UBIND:     return new UbindFunctionHandler(this, opcode.toString(), opcodeVariant);
         }
 
         List<NamedParameter> arguments = opcodeVariant.namedParameters();
@@ -468,7 +234,7 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
         }
 
         int minArgs = numArgs - optional;
-        return new StandardFunctionHandler(name, opcodeVariant, minArgs, numArgs, results > 0);
+        return new StandardFunctionHandler(this, name, opcodeVariant, minArgs, numArgs, results > 0);
     }
 
     private String functionName(OpcodeVariant opcodeVariant, NamedParameter selector) {
@@ -502,248 +268,8 @@ public class BaseFunctionMapper extends MessageEmitter implements FunctionMapper
 
             String name = functions.get(0).getName();
             OpcodeVariant opcodeVariant = functions.get(0).getOpcodeVariant();
-            return new MultiplexedFunctionHandler(keywordMap, name, opcodeVariant);
+            return new MultiplexedFunctionHandler(this, keywordMap, name, opcodeVariant);
         }
     }
 
-    private abstract class AbstractFunctionHandler implements FunctionHandler {
-        protected final OpcodeVariant opcodeVariant;
-        protected final String name;
-        protected final int minArgs;
-        protected final int numArgs;
-
-        AbstractFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
-            this(name, opcodeVariant, numArgs, numArgs);
-        }
-
-        AbstractFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs) {
-            if (minArgs > numArgs) {
-                throw new InvalidMetadataException("Minimum number of arguments greater than total.");
-            }
-            this.name = name;
-            this.opcodeVariant = opcodeVariant;
-            this.minArgs = minArgs;
-            this.numArgs = numArgs;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public OpcodeVariant getOpcodeVariant() {
-            return opcodeVariant;
-        }
-
-        protected boolean checkArguments(AstNode node, List<LogicValue> arguments) {
-            if (arguments.size() < minArgs || arguments.size() > numArgs) {
-                String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
-                error(node, "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public LogicInstruction generateSampleInstruction() {
-            return instructionProcessor.fromOpcodeVariant(getOpcodeVariant());
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + "{" + "opcodeVariant=" + opcodeVariant + ", name=" + name + ", numArgs=" + numArgs + '}';
-        }
-    }
-
-    private class StandardFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
-        private final String keyword;
-        private final boolean hasResult;
-
-        StandardFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs, boolean hasResult) {
-            super(name, opcodeVariant, minArgs, numArgs);
-            this.keyword = opcodeVariant.namedParameters().stream().filter(a -> a.type().isSelector())
-                    .map(NamedParameter::name).findFirst().orElse(null);
-            this.hasResult = hasResult;
-        }
-
-        @Override
-        public String getKeyword() {
-            if (keyword == null) {
-                throw new InvalidMetadataException("No keyword selector for function " + getName());
-            }
-            return keyword;
-        }
-
-        @Override
-        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
-            if (!checkArguments(node, fnArgs)) return NULL;
-
-            LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : NULL;
-            // Need to support all kinds of arguments here, including keywords
-            List<LogicArgument> ixArgs = new ArrayList<>();
-            int argIndex = 0;
-
-            for (NamedParameter a : opcodeVariant.namedParameters()) {
-                if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                    error(node, "Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
-                            fnArgs.get(argIndex).toMlog(), name);
-                    return NULL;
-                }
-
-                if (a.type() == InstructionParameterType.RESULT) {
-                    ixArgs.add(tmp);
-                } else if (a.type().isSelector() && !a.type().isFunctionName()) {
-                    // Selector that IS NOT a function name is taken from the argument list
-                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
-                } else if (a.type().isSelector()) {
-                    // Selector that IS a function name isn't in an argument list and must be filled in
-                    // Perhaps we might store the Operation into the NamedParameter directly to avoid lookup
-                    ixArgs.add(getOpcode() == Opcode.OP ? Operation.fromMlog(a.name()) : LogicKeyword.create(a.name()));
-                } else if (a.type().isUnused()) {
-                    // Unused inputs must be filled with defaults
-                    // Generate new temporary variable for unused outputs (will be replaced by the temp optimizer)
-                    ixArgs.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
-                } else if (a.type().isInput()) {
-                    // Input argument - take it as it is
-                    ixArgs.add(fnArgs.get(argIndex++));
-                } else if (a.type().isOutput()) {
-                    if (argIndex >= fnArgs.size()) {
-                        // Optional arguments are always output; generate temporary variable for them
-                        ixArgs.add(instructionProcessor.nextTemp());
-                    } else {
-                        // Block name cannot be used as output argument
-                        LogicValue argument = fnArgs.get(argIndex++);
-                        if (argument.getType() == ArgumentType.BLOCK) {
-                            error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).",
-                                    argument.toMlog(), name);
-                            return NULL;
-                        }
-                        ixArgs.add(argument);
-                    }
-                } else {
-                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
-                }
-            }
-
-            program.accept(instructionProcessor.createInstruction(astContextSupplier.get(), getOpcode(), ixArgs));
-            return tmp;
-        }
-
-        @Override
-        public String generateSampleCall() {
-            StringBuilder str = new StringBuilder();
-            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
-            if (result != null) {
-                str.append(result.name()).append(" = ");
-            }
-
-            List<String> strArguments = arguments.stream()
-                    .filter(a -> !a.type().isUnused() && !a.type().isFunctionName())
-                    .map(NamedParameter::name)
-                    .collect(Collectors.toList());
-
-            // Mark optional arguments
-            strArguments.subList(minArgs, numArgs).replaceAll(s -> s + "?");
-            str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
-            return str.toString();
-        }
-
-        @Override
-        public LogicInstruction generateSampleInstruction() {
-            AtomicInteger counter = new AtomicInteger();
-            String tmpPrefix = instructionProcessor.getTempPrefix();
-            List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
-                    .map(a -> a.type() == InstructionParameterType.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
-                    .map(BaseArgument::new)
-                    .collect(Collectors.toList());
-            return instructionProcessor.createInstructionUnchecked(staticAstContext, getOpcode(), arguments);
-        }
-    }
-
-    // Chooses a function handler based on the first argument value
-    private class MultiplexedFunctionHandler extends AbstractFunctionHandler {
-        private final Map<String, FunctionHandler> functions;
-
-        MultiplexedFunctionHandler(Map<String, FunctionHandler> functions, String name, OpcodeVariant opcodeVariant) {
-            super(name, opcodeVariant, 0);
-            this.functions = functions;
-        }
-
-        @Override
-        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-            // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
-            FunctionHandler handler = functions.get(toKeywordOptional(arguments.get(0)).getKeyword());
-            if (handler == null) {
-                throw new MindcodeInternalError("Unhandled type of " + getOpcode() + " in " + arguments);
-            }
-            return handler.handleFunction(node, program, arguments);
-        }
-
-        @Override
-        public void register(Consumer<SampleGenerator> registry) {
-            functions.values().forEach(f -> f.register(registry));
-        }
-
-        @Override
-        public String generateSampleCall() {
-            throw new UnsupportedOperationException("Not supported for MultiplexedFunctionHandler");
-        }
-    }
-
-    // Handles the print function
-    private class PrintFunctionHandler extends AbstractFunctionHandler {
-        PrintFunctionHandler(String name, OpcodeVariant opcodeVariant) {
-            super(name, opcodeVariant, 1);
-        }
-
-        @Override
-        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-            arguments.forEach(arg -> program.accept(createInstruction(Opcode.PRINT, arg)));
-            return arguments.get(arguments.size() - 1);
-        }
-
-        @Override
-        public String generateSampleCall() {
-            return getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
-        }
-    }
-
-    // Handles the format function
-    private class FormatFunctionHandler extends AbstractFunctionHandler {
-        FormatFunctionHandler(String name, OpcodeVariant opcodeVariant) {
-            super(name, opcodeVariant, 1);
-        }
-
-        @Override
-        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-            arguments.forEach(arg -> program.accept(createInstruction(Opcode.FORMAT, arg)));
-            return arguments.get(arguments.size() - 1);
-        }
-
-        @Override
-        public String generateSampleCall() {
-            return getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
-        }
-    }
-    
-    private class UbindFunctionHandler extends AbstractFunctionHandler {
-        UbindFunctionHandler(String name, OpcodeVariant opcodeVariant) {
-            super(name, opcodeVariant, 1);
-        }
-
-        @Override
-        public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-            checkArguments(node, arguments);
-            program.accept(createInstruction(Opcode.UBIND, arguments.get(0)));
-            return LogicBuiltIn.UNIT;
-        }
-
-        @Override
-        public String generateSampleCall() {
-            return "unit = " + getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
-        }
-    }
 }

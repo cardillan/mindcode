@@ -44,7 +44,7 @@ The following features are deprecated:
 
 - The Relaxed syntax as a whole.
 - Using parentheses around the list of values in list iteration loops: `for i in (1, 2, 3) do ... end;`.
-- Using escaped double quotes in string literals: `"The \"escaped double quotes\"""`. String literals shouldn't contain any double quotes at all, as this is not supported in the mlog itself.
+- Using escaped double quotes in string literals: `"The \"escaped double quotes\""`. String literals shouldn't contain any double quotes at all, as this is not supported by mlog itself.
 - Kebab-case identifiers: `kebab-case-name`. Note that built-in mlog variables, such as `@blast-compound`, will continue to be supported.
 - The `printf` function in language target `ML7A` and earlier. (This function is repurposed in the upcoming language target `ML8A`).
 - The `configure` property. This name from Mindustry Logic 6 was replaced by `config` in Mindustry Logic 7.
@@ -70,7 +70,7 @@ set count 10
 end
 ```
 
-That doesn't inspire much confidence in Mindcode. Apart from large chunks of the code being apparently completely ignored, it also encourages the idea that the proper syntax for the assignment statement features a `set` keyword.
+That doesn't inspire much confidence in Mindcode. Apart from large chunks of the code being apparently completely ignored, it also promulgates the (mistaken) idea that the proper syntax for the assignment statement features a `set` keyword.
 
 The problem here is that, in the absence of semicolons unequivocally delimiting individual expressions, the compiler may break code into expressions at places that weren't intended by the user. In the short example above the compiler splits the code into these individual expressions and statements:
 

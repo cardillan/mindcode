@@ -27,7 +27,7 @@ public class SensorInstruction extends BaseResultInstruction {
 
     @Override
     public SensorInstruction withResult(LogicVariable result) {
-        return new SensorInstruction(astContext, List.of(result, getObject(), getProperty()), getParams());
+        return new SensorInstruction(astContext, List.of(result, getObject(), getProperty()), getArgumentTypes());
     }
 
     public final LogicValue getObject() {

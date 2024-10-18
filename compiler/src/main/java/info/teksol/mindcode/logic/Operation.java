@@ -1,9 +1,7 @@
 package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.Tuple2;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -29,7 +27,7 @@ public enum Operation implements LogicArgument {
     SHL("shl", "<<"),
     SHR("shr", ">>"),
     XOR("xor", "^"),
-    NOT("not", "~"),
+    NOT(1, "not", "~"),
 
     // Binary operations
     BINARY_AND("and", "&"),
@@ -49,45 +47,73 @@ public enum Operation implements LogicArgument {
     ANGLEDIFF("angleDiff"),
     LEN("len"),
     NOISE(false, "noise"),
-    ABS("abs"),
-    LOG("log"),
-    LOG10("log10"),
-    FLOOR("floor"),
-    CEIL("ceil"),
-    SQRT("sqrt"),
-    RAND(false, "rand"),
+    ABS(1, "abs"),
+    LOG(1, "log"),
+    LOG10(1, "log10"),
+    FLOOR(1, "floor"),
+    CEIL(1, "ceil"),
+    SQRT(1, "sqrt"),
+    RAND(1, false, "rand"),
 
-    SIN("sin"),
-    COS("cos"),
-    TAN("tan"),
+    SIN(1, "sin"),
+    COS(1, "cos"),
+    TAN(1, "tan"),
 
-    ASIN("asin"),
-    ACOS("acos"),
-    ATAN("atan"),
+    ASIN(1, "asin"),
+    ACOS(1, "acos"),
+    ATAN(1, "atan"),
     ;
 
     private final String mlog;
-    private final List<String> mindcode;
+    private final String mindcode;
+    private final int operands;
     private final boolean deterministic;
     private final boolean function;
 
-    Operation(String mlog, String... mindcode) {
+    Operation(String mlog, String mindcode) {
         this.mlog = mlog;
-        this.mindcode = List.of(mindcode);
+        this.mindcode = mindcode;
+        this.operands = 2;
         this.deterministic = true;
         this.function = false;
     }
-    
+
+    Operation(int operands, String mlog, String mindcode) {
+        this.mlog = mlog;
+        this.mindcode = mindcode;
+        this.operands = operands;
+        this.deterministic = true;
+        this.function = false;
+    }
+
     Operation(String mlog) {
         this.mlog = mlog;
-        this.mindcode = List.of(mlog);
+        this.mindcode = mlog;
+        this.operands = 2;
         this.deterministic = true;
         this.function = true;
     }
 
     Operation(boolean deterministic, String mlog) {
         this.mlog = mlog;
-        this.mindcode = List.of(mlog);
+        this.mindcode = mlog;
+        this.operands = 2;
+        this.deterministic = deterministic;
+        this.function = true;
+    }
+
+    Operation(int operands, String mlog) {
+        this.mlog = mlog;
+        this.mindcode = mlog;
+        this.operands = operands;
+        this.deterministic = true;
+        this.function = true;
+    }
+
+    Operation(int operands, boolean deterministic, String mlog) {
+        this.mlog = mlog;
+        this.mindcode = mlog;
+        this.operands = operands;
         this.deterministic = deterministic;
         this.function = true;
     }
@@ -105,9 +131,21 @@ public enum Operation implements LogicArgument {
         return ArgumentType.KEYWORD;
     }
 
+    public int getOperands() {
+        return operands;
+    }
+
     @Override
     public String toMlog() {
         return mlog;
+    }
+
+    public String getMindcode() {
+        return mindcode;
+    }
+
+    public boolean isFunction() {
+        return function;
     }
 
     public boolean isCondition() {
@@ -172,9 +210,7 @@ public enum Operation implements LogicArgument {
     }
     
     private static final Map<String, Operation> MINDCODE_MAP = Stream.of(values())
-            .flatMap(op -> op.mindcode.stream().map(mindcode -> new Tuple2<>(op, mindcode)))
-            .collect(Collectors.toMap(Tuple2::getT2, Tuple2::getT1));
+            .collect(Collectors.toMap(Operation::getMindcode, o -> o));
     private static final Map<String, Operation> MLOG_MAP = Stream.of(values())
-            .filter(v -> v.function)
-            .collect(Collectors.toMap(Operation::toMlog, o -> o));
+            .collect(Collectors.toMap(Operation::toMlog, o -> o, (o1, o2) -> o1));
 }

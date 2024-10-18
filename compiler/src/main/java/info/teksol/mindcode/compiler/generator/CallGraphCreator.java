@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 import static info.teksol.mindcode.compiler.generator.CallGraph.MAIN;
 
-public class CallGraphCreator extends MessageEmitter {
+public class CallGraphCreator extends AbstractMessageEmitter {
     private final Deque<String> declarationStack = new ArrayDeque<>();
     private final Map<String, FunctionDeclaration> functions = new HashMap<>();
     private final Map<String, List<String>> callMap = new HashMap<>();

@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 /**
  * Class maintaining the stack of active loops and their break and continue labels.
  */
-public class LoopStack extends MessageEmitter {
+public class LoopStack extends AbstractMessageEmitter {
     private final Deque<LogicLabel> breakStack = new ArrayDeque<>();
     private final Deque<LogicLabel> continueStack = new ArrayDeque<>();
     private final Map<String, LogicLabel> breakMap = new HashMap<>();

@@ -5,8 +5,8 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import info.teksol.mindcode.logic.BaseArgument;
 import info.teksol.mindcode.logic.InstructionParameterType;
-import info.teksol.mindcode.logic.ParameterAssignment;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.logic.TypedArgument;
 import info.teksol.mindcode.mimex.BlockType;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -82,16 +82,16 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
         LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
         assertEquals(
                 List.of(
-                        new ParameterAssignment(InstructionParameterType.LOCATE, new BaseArgument("ore")),
-                        new ParameterAssignment(InstructionParameterType.UNUSED, new BaseArgument("core")),
-                        new ParameterAssignment(InstructionParameterType.UNUSED, new BaseArgument("true")),
-                        new ParameterAssignment(InstructionParameterType.ORE, new BaseArgument("@lead")),
-                        new ParameterAssignment(InstructionParameterType.OUTPUT, new BaseArgument("outx")),
-                        new ParameterAssignment(InstructionParameterType.OUTPUT, new BaseArgument("outy")),
-                        new ParameterAssignment(InstructionParameterType.RESULT, new BaseArgument("found")),
-                        new ParameterAssignment(InstructionParameterType.UNUSED_OUTPUT, new BaseArgument("building"))
+                        new TypedArgument(InstructionParameterType.LOCATE, new BaseArgument("ore")),
+                        new TypedArgument(InstructionParameterType.UNUSED, new BaseArgument("core")),
+                        new TypedArgument(InstructionParameterType.UNUSED, new BaseArgument("true")),
+                        new TypedArgument(InstructionParameterType.ORE, new BaseArgument("@lead")),
+                        new TypedArgument(InstructionParameterType.OUTPUT, new BaseArgument("outx")),
+                        new TypedArgument(InstructionParameterType.OUTPUT, new BaseArgument("outy")),
+                        new TypedArgument(InstructionParameterType.RESULT, new BaseArgument("found")),
+                        new TypedArgument(InstructionParameterType.UNUSED_OUTPUT, new BaseArgument("building"))
                 ),
-                ix.getAssignments()
+                ix.getTypedArguments()
         );
     }
 

@@ -20,7 +20,7 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
 
     public BaseResultInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
-        resultIndex = other.getParams().indexOf(InstructionParameterType.RESULT);
+        resultIndex = other.getArgumentTypes().indexOf(InstructionParameterType.RESULT);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
     public LogicResultInstruction withResult(LogicVariable result) {
         List<LogicArgument> args = new ArrayList<>(getArgs());
         args.set(resultIndex, result);
-        return new BaseResultInstruction(astContext, getOpcode(), args, getParams());
+        return new BaseResultInstruction(astContext, getOpcode(), args, getArgumentTypes());
     }
 }

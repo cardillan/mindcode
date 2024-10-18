@@ -5,7 +5,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.Directive;
 import info.teksol.mindcode.ast.DirectiveText;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.generator.MessageEmitter;
+import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 /**
  * Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
  */
-public class DirectiveProcessor extends MessageEmitter {
+public class DirectiveProcessor extends AbstractMessageEmitter {
     private final CompilerProfile profile;
 
     private DirectiveProcessor(CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {

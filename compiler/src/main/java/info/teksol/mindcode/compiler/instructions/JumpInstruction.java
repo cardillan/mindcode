@@ -28,8 +28,8 @@ public class JumpInstruction extends BaseInstruction {
 
     public JumpInstruction withTarget(LogicLabel target) {
         return isUnconditional()
-                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getParams())
-                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getParams());
+                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getArgumentTypes())
+                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getArgumentTypes());
     }
 
     public JumpInstruction invert() {
@@ -37,7 +37,7 @@ public class JumpInstruction extends BaseInstruction {
             throw new MindcodeInternalError("Jump is not invertible. " + this);
         }
         return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams());
+                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getArgumentTypes());
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  * Class maintaining the stack of active functions and their return variables. Used to resolve return
  * statements inside inline functions, which can be nested.
  */
-public class ReturnStack extends MessageEmitter {
+public class ReturnStack extends AbstractMessageEmitter {
     private final Deque<Return> stack = new ArrayDeque<>();
 
     public ReturnStack(Consumer<MindcodeMessage> messageConsumer) {
