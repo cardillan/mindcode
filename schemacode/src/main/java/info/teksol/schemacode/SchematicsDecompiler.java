@@ -17,7 +17,12 @@ public class SchematicsDecompiler {
             return new CompilerOutput<>("", List.of());
         }
 
-        byte[] binary = Base64.getDecoder().decode(encodedSchematics);
+        final byte[] binary;
+        try {
+            binary = Base64.getDecoder().decode(encodedSchematics);
+        } catch (IllegalArgumentException e) {
+            return new CompilerOutput<>("", List.of(SchemacodeCompilerMessage.error("Error decoding schematics string: " + e.getMessage())));
+        }
 
         try (InputStream is = new ByteArrayInputStream(binary)) {
             Schematic schematic = SchematicsIO.read(is);

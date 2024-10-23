@@ -26,8 +26,8 @@ public class CompileMindcodeAction extends ActionHandler {
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Subparser subparser = subparsers.addParser(Action.COMPILE_MINDCODE.getShortcut())
                 .aliases("compile-mindcode")
-                .description("Compile a mindcode source file into text mlog file.")
-                .help("Compile a mindcode source file into text mlog file.");
+                .description("Compile a Mindcode source file into text mlog file.")
+                .help("Compile a Mindcode source file into text mlog file.");
 
         subparser.addArgument("-c", "--clipboard")
                 .help("copy compiled mlog code to clipboard")

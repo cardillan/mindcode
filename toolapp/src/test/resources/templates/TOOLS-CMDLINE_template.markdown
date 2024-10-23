@@ -13,6 +13,7 @@ The command line tool supports three different actions. The action is specified 
 which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
+* `dm` or `decompile-mlog`: partially decompiles an mlog code into Mindcode. The resulting code needs to be manually edited to create loops and conditions present in the original mlog.
 * `cs` or `compile-schematic`: builds a schematic from Schemacode source into a binary `.msch` file.
 * `ds` or `decompile-schematic`: decompiles a binary `.msch` file to Schemacode source.
 
@@ -45,7 +46,7 @@ action was successful, the output is copied to the clipboard and can be pasted d
 
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the 
   processor configuration screen, by using **Edit/Import from clipboard** command.
-* _Compile schema_ action: clipboard contains schematic encoded into mindustry compatible string, which can be pasted 
+* _Compile Schematic_ action: clipboard contains schematic encoded into Mindustry Schematic string, which can be pasted 
   as new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
 ## Running the compiled code
@@ -83,6 +84,12 @@ the command line help is included here.
 #generate:COMPILE_MINDCODE
 ```
 
+## Decompile Mlog action help
+
+```
+#generate:DECOMPILE_MLOG
+```
+
 ## Compile Schematic action help
 
 ```
@@ -97,4 +104,4 @@ the command line help is included here.
 
 ---
 
-[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
+[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher »](TOOLS-MLOG-WATCHER.markdown)

@@ -23,7 +23,7 @@ public class MlogParser {
         this.mlog = mlog;
     }
 
-    public ParsedMlog decompile() {
+    public ParsedMlog parse() {
         while (pos < mlog.length()) {
             switch (mlog.charAt(pos)) {
                 case '\n', '\r', ';', '\t', ' ' -> pos++;
@@ -45,7 +45,7 @@ public class MlogParser {
     }
 
     private boolean endOfLine() {
-        return pos >= mlog.length() || mlog.charAt(pos) == '\n' || mlog.charAt(pos) == ';';
+        return pos >= mlog.length() || mlog.charAt(pos) == '\n' || mlog.charAt(pos) == '\r' || mlog.charAt(pos) == ';';
     }
 
     private void skipLine() {
@@ -118,7 +118,7 @@ public class MlogParser {
 
         while (++pos < mlog.length()) {
             var c = mlog.charAt(pos);
-            if (c == '\n' || c == '"') {
+            if (c == '\n' || c == '\r' || c == '"') {
                 break;
             }
         }
@@ -135,7 +135,7 @@ public class MlogParser {
 
         while (pos < mlog.length()) {
             char c = mlog.charAt(pos);
-            if (c == '\n' || c == ' ' || c == '#' || c == '\t' || c == ';') break;
+            if (c == '\n' || c == '\r' || c == ' ' || c == '#' || c == '\t' || c == ';') break;
             pos++;
         }
 

@@ -29,17 +29,17 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     }
 
     public String generateSampleCall() {
-        return generateCall(new ArrayList<>(opcodeVariant.namedParameters()));
+        return generateCall(new ArrayList<>(opcodeVariant.namedParameters()), true);
     }
 
     @Override
     public String generateSecondarySampleCall() {
-        return generateSecondaryCall(new ArrayList<>(opcodeVariant.namedParameters()));
+        return generateSecondaryCall(new ArrayList<>(opcodeVariant.namedParameters()), true);
     }
 
-    protected abstract String generateCall(List<NamedParameter> arguments);
+    protected abstract String generateCall(List<NamedParameter> arguments, boolean markOptional);
 
-    protected String generateSecondaryCall(List<NamedParameter> arguments) {
+    protected String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
         return null;
     }
 
@@ -56,8 +56,8 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
             }
 
             // Prefer secondary version  when available
-            String secondary = generateSecondaryCall(arguments);
-            return secondary == null ? generateCall(arguments) : secondary;
+            String secondary = generateSecondaryCall(arguments, false);
+            return secondary == null ? generateCall(arguments, false) : secondary;
         }
         return null;
     }

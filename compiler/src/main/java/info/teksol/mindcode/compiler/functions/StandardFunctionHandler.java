@@ -89,7 +89,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
     }
 
     @Override
-    public String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean markOptional) {
         StringBuilder str = new StringBuilder();
         NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
         if (result != null) {
@@ -102,7 +102,9 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
                 .collect(Collectors.toList());
 
         // Mark optional arguments
-        strArguments.subList(minArgs, numArgs).replaceAll(s -> s + "?");
+        if (markOptional) {
+            strArguments.subList(minArgs, numArgs).replaceAll(s -> s + "?");
+        }
         str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
         return str.toString();
     }

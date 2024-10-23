@@ -12,7 +12,7 @@
 Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
 > [!IMPORTANT]
-> In the [2.3.0 release](CHANGELOG.markdown#230), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown).
+> In the [2.3.0 release](CHANGELOG.markdown#230---2024-10-16), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown).
 > 
 > The relaxed variant of the syntax will be eventually removed.    
 
@@ -22,10 +22,11 @@ The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
   * Full support for the Mindustry Logic in the upcoming [Mindustry version 8](/doc/syntax/MINDUSTRY-8.markdown).
-* User interface
+* Basic functionality
   * Significant improvement in reporting error messages generated during compilation.
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
   * Support for running the compiled mlog code in an emulated processor.
+  * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
 * Mindcode syntax
   * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
   * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements.   

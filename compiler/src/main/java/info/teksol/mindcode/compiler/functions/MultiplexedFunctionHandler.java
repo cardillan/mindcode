@@ -37,7 +37,7 @@ class MultiplexedFunctionHandler extends AbstractFunctionHandler {
     }
 
     @Override
-    public String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean markOptional) {
         throw new UnsupportedOperationException("Not supported for MultiplexedFunctionHandler");
     }
 }

@@ -1,0 +1,35 @@
+schematic
+    name = "Payload Source"
+    description = """
+        Controls the Payload source block so that the units or blocks are created only when a switch is clicked, one at a time.
+
+        Usage: configure the Payload source to produce the desired output, and click the button to generate one instance.
+        """
+
+switch1:
+    @switch              at ( 0,  1) disabled
+    @micro-processor     at ( 0,  2) processor
+        links * end
+        mindcode = mindcode-0
+    end
+message1:
+    @message             at ( 0,  3) text ""
+source1:
+    @payload-source      at ( 1,  0) facing north
+end
+
+mindcode-0 = """
+    source1.enabled = false;
+    print("Selected item: ", source1.config);
+    printflush(message1);
+    if switch1.enabled then
+        switch1.enabled = false;
+        timescale = source1.timescale;
+        source1.enabled = true;
+        wait(0.5 / timescale);
+        source1.enabled = false;
+        cfg = source1.config;
+        source1.config = null;
+        source1.config = cfg;
+    end;
+    """

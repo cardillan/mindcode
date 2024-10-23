@@ -18,6 +18,10 @@ Please do not make large changes before discussing them first. Especially do not
 
 Changes to the Mindcode compiler are more complicated. The grammar, parser and code generator will be completely rewritten in near horizon. The optimizers, on the other hand, do not adhere to usual CS compiler standards, are not well documented and appear to be somewhat fragile. A comprehensive refactoring of the optimizers is not currently planned.         
 
+### System library
+
+Mindcode now provides a [system library](doc/syntax/SYNTAX.markdown), currently as an experimental feature. Contributions to the system library are welcome: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
+
 ## Running Mindcode locally
 
 There are two options for getting Mindcode up and running on your own machine. Using Docker, or running it natively.

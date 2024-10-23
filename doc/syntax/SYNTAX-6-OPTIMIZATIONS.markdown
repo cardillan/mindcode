@@ -1563,5 +1563,4 @@ optimizations inside the branches of `if` and `case` statements.
 
 ---
 
-[« Previous: Compiler directives](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp;
-[Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_V6.markdown)
+[« Previous: Compiler directives](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_V6.markdown)

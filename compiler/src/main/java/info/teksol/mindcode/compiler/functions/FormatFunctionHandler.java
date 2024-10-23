@@ -26,7 +26,7 @@ class FormatFunctionHandler extends AbstractFunctionHandler {
     }
 
     @Override
-    public String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean markOptional) {
         return getName() + "(" + BaseFunctionMapper.joinNamedArguments(arguments) + ")";
     }
 }

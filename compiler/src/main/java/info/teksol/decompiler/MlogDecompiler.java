@@ -4,10 +4,9 @@ import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.logic.*;
 
 import java.util.*;
 
@@ -15,6 +14,7 @@ public class MlogDecompiler {
     private final FunctionMapper functionMapper;
     private final Map<Integer, String> labels;
     private final List<Object> content;
+    private final boolean preamble;
 
     private final Set<String> usedLabels;
     private int labelIndex;
@@ -23,7 +23,20 @@ public class MlogDecompiler {
 
     private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();
 
-    public MlogDecompiler(InstructionProcessor instructionProcessor, ParsedMlog input) {
+    public static String decompile(String mlog) {
+        return decompile(mlog, true);
+    }
+
+    public static String decompile(String mlog, boolean preamble) {
+        InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(
+                ProcessorVersion.MAX, ProcessorEdition.W);
+        MlogParser mlogParser = new MlogParser(processor, mlog);
+        ParsedMlog parsedMlog = mlogParser.parse();
+        return new MlogDecompiler(processor, parsedMlog, preamble).decompile();
+    }
+
+    public MlogDecompiler(InstructionProcessor instructionProcessor, ParsedMlog input, boolean preamble) {
+        this.preamble = preamble;
         functionMapper = FunctionMapperFactory.getFunctionMapper(instructionProcessor,
                 () -> STATIC_AST_CONTEXT, instructionProcessor.getMessageConsumer());
         labels = input.labels();
@@ -32,15 +45,25 @@ public class MlogDecompiler {
     }
 
     public String decompile() {
-        extractJumpLabels();
-        insertTextLabels();
-        collapseExpressions();
+        if (!content.isEmpty()) {
+            extractJumpLabels();
+            insertTextLabels();
+            collapseExpressions();
 
-        for (Object o : content) {
-            if (o instanceof MlogInstruction ix) {
-                decompile(ix);
-            } else {
-                output.append("// ").append(o).append('\n');
+            if (preamble) {
+                output.append("// This is an mlog code partially decompiled into Mindcode.\n");
+                output.append("// NOTE: This code cannot be directly compiled by Mindcode as is!\n");
+                output.append("// All the labels, if and goto statements need to be manually revised\n");
+                output.append("// and rewritten into loops, conditional statements and functions.\n");
+                output.append("\n");
+            }
+
+            for (Object o : content) {
+                if (o instanceof MlogInstruction ix) {
+                    decompile(ix);
+                } else {
+                    output.append("// ").append(o).append('\n');
+                }
             }
         }
 
@@ -81,9 +104,11 @@ public class MlogDecompiler {
             if (content.get(ixIndex) instanceof InstructionExpression ix) {
                 final List<MlogVariable> variables = new ArrayList<>();
                 ix.gatherInputVariables(variables);
-                List<LogicArgument> results = ix.outputArgumentsStream().toList();
+                // Needs more checks
+                // Self-actualizing assignments must not be collapsed over instructions reading the value.
+                //List<LogicArgument> results = ix.outputArgumentsStream().toList();
                 for (MlogVariable variable : variables) {
-                    if ((results.contains(variable) || !nonlinearVariables.contains(variable)) && definitions.containsKey(variable.toMlog())) {
+                    if ((/*results.contains(variable) ||*/ !nonlinearVariables.contains(variable)) && definitions.containsKey(variable.toMlog())) {
                         Integer sourceIndex = definitions.get(variable.toMlog());
                         InstructionExpression definition = (InstructionExpression) content.get(sourceIndex);
                         if (definition != null && definition.getOpcode() == Opcode.OP) {

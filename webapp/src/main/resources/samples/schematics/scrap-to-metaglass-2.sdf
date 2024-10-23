@@ -75,8 +75,8 @@ program = """
     elsif items > 8 then
         separator1.enabled = false;
     end;
-    println($"$LIQUID-SLAG $liquid");
-    println($"$ITEM-SAND $sand");
-    print  ($"$BLOCK-BRIDGE-CONVEYOR $items");
+    println($"$LIQUID_SLAG $liquid");
+    println($"$ITEM_SAND $sand");
+    print  ($"$BLOCK_BRIDGE_CONVEYOR $items");
     printflush(message1);
     """

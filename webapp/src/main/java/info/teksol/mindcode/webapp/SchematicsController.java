@@ -39,6 +39,7 @@ public class SchematicsController {
                 "slow:overdrive-dome-supply",
                 "worker-recall-station",
                 "scrap-to-metaglass-2",
+                "payload-source",
                 "slow:mandelbrot-generator"
         );
 

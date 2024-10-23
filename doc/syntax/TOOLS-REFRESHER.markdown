@@ -18,4 +18,4 @@ installing the mod - or ask a question here on GitHub.
 
 ---
 
-[« Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Next: Troubleshooting Mindcode »](TROUBLESHOOTING.markdown)
+[« Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Next: Mlog Decompiler »](TOOLS-MLOG-DECOMPILER.markdown)

@@ -1,22 +1,13 @@
 package info.teksol.decompiler;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MlogDecompilerTest {
 
-    private final InstructionProcessor processor = InstructionProcessorFactory
-            .getInstructionProcessor(ProcessorVersion.MAX, ProcessorEdition.W);
-
     private String decompile(String mlog) {
-        MlogParser mlogParser = new MlogParser(processor, mlog);
-        ParsedMlog parsedMlog = mlogParser.decompile();
-        return new MlogDecompiler(processor, parsedMlog).decompile();
+        return MlogDecompiler.decompile(mlog, false);
     }
 
     @Test
@@ -81,6 +72,33 @@ class MlogDecompilerTest {
                         op add c a b
                         label1:
                         op add e c d
+                        """));
+    }
+
+    @Test
+    void collapsesExpressionTwice() {
+        assertEquals("""
+                            print((((a + b) * (a + b)) + ((a + b) * (a + b))));
+                        """,
+                decompile("""
+                        op add c a b
+                        op mul d c c
+                        op add f d d
+                        print f
+                        """));
+    }
+
+    @Test
+    void propagatesExpressionTwice() {
+        assertEquals("""
+                            print((a + b));
+                            print(((a + b) * (a + b)));
+                        """,
+                decompile("""
+                        op add c a b
+                        op mul d c c
+                        print c
+                        print d
                         """));
     }
 
@@ -182,12 +200,12 @@ class MlogDecompilerTest {
                             yrep = y;
                         if y > min(NE_Y, ((y + WIDTH) - 1)) then goto label16;
                         // label19:
-                            __fn2_building = getBlock(x, yrep, __fn2_type?, 0?);
+                            __fn2_building = getBlock(x, yrep, __fn2_type, 0);
                         if __fn2_type != __tmp14 then goto label17;
                             __tmp46 = __fn2_building.sensor(@rotation);
                             build(x, yrep, __tmp15, __tmp46, 0);
                         // label18:
-                            0 = getBlock(x, yrep, __fn2_type?, 0?);
+                            0 = getBlock(x, yrep, __fn2_type, 0);
                         if __fn2_type != __tmp15 then goto label18;
                             TOTAL = TOTAL + 1;
                         // label17:

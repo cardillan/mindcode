@@ -34,6 +34,7 @@ Supporting tools:
 * [Command line tool](TOOLS-CMDLINE.markdown)
 * [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
 * [Schematics Refresher](TOOLS-REFRESHER.markdown)
+* [Mlog Decompiler](TOOLS-REFRESHER.markdown)
 
 Additional information on Mindcode and Mindustry Logic:
 

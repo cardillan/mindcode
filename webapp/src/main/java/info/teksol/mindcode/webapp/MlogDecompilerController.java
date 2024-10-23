@@ -1,8 +1,7 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.compiler.CompilerOutput;
+import info.teksol.decompiler.MlogDecompiler;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.schemacode.SchematicsDecompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,70 +13,70 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Controller
-@RequestMapping(value = "/decompiler")
-public class DecompilerController {
-    private static final Logger logger = LoggerFactory.getLogger(DecompilerController.class);
+@RequestMapping(value = "/mlog-decompiler")
+public class MlogDecompilerController {
+    private static final Logger logger = LoggerFactory.getLogger(MlogDecompilerController.class);
 
     @Autowired
     private SourceRepository sourceRepository;
 
-    @PostMapping("/decompile")
+    @PostMapping("/decompile-mlog")
     public String postCompile(@RequestParam(required = false) String id,
                               @RequestParam String source) {
-        Source schematicDto;
+        Source textDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
             final Source newSource = dto
                     .map(sdto -> sdto.withSource(source))
                     .orElseGet(() -> new Source(source, Instant.now()));
-            schematicDto = sourceRepository.save(newSource);
+            textDto = sourceRepository.save(newSource);
         } else {
-            schematicDto = sourceRepository.save(new Source(source, Instant.now()));
+            textDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/decompiler?s=" + schematicDto.getId().toString();
+        return "redirect:/mlog-decompiler?s=" + textDto.getId().toString();
     }
 
     @GetMapping
     public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id) {
-        final String sourceCode;
+        final String mlog;
         if (id != null && id.equals("clean")) {
-            sourceCode = "";
+            mlog = "";
         } else if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> source = sourceRepository.findById(UUID.fromString(id));
             if (source.isPresent()) {
-                sourceCode = source.get().getSource();
+                mlog = source.get().getSource();
             } else {
-                sourceCode = "// 404 Not Found";
+                mlog = "// 404 Not Found";
             }
         } else {
-            sourceCode = "";
+            mlog = "";
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = SchematicsDecompiler.decompile(sourceCode);
+        final String result = MlogDecompiler.decompile(mlog);
         final long end = System.nanoTime();
-        logger.info("performance decompiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
+        logger.info("performance mlog_decompiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = result.output();
         return new ModelAndView(
-                "decompiler",
+                "mlog-decompiler",
                 "model",
                 new HomePageData(
                         id,
                         "",
-                        sourceCode,
-                        (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
-                        compiledCode,
-                        (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
-                        result.errors(WebappMessage::transform),
-                        result.warnings(WebappMessage::transform),
-                        result.infos(WebappMessage::transform),
+                        mlog,
+                        (int) mlog.chars().filter(ch -> ch == '\n').count(),
+                        result,
+                        (int) result.chars().filter(ch -> ch == '\n').count(),
+                        List.of(),
+                        List.of(),
+                        List.of(),
                         OptimizationLevel.BASIC.name(),
                         null,
                         0)

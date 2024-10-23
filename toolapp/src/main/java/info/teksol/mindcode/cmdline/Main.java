@@ -63,6 +63,7 @@ public class Main {
 
     public enum Action {
         COMPILE_MINDCODE("cm", new CompileMindcodeAction()),
+        DECOMPILE_MLOG("dm", new DecompileMlogAction()),
         COMPILE_SCHEMA("cs", new CompileSchemacodeAction()),
         DECOMPILE_SCHEMA("ds", new DecompileSchemacodeAction()),
         ;

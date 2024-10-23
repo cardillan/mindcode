@@ -79,7 +79,7 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
     }
 
     @Override
-    public String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean markOptional) {
         StringBuilder str = new StringBuilder();
         NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
         if (result != null) {
@@ -100,7 +100,7 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
     }
 
     @Override
-    public String generateSecondaryCall(List<NamedParameter> arguments) {
+    public String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
         List<NamedParameter> args = new ArrayList<>(arguments);
         NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
         CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());

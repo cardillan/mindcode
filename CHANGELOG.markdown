@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.4.0 - 2024-10-23
+
+### Fixed
+
+* Fixed Copy to clipboard button not working  ([#168](https://github.com/cardillan/mindcode/issues/168)).
+* Fixed unhandled error when decoding a malformed Schematic file string by the web app.
+* Fixed Schemacode samples to not use deprecated syntax.
+
+### Added
+
+* Added support for [partially decompiling](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) existing mlog code into Mindcode.
+
 ## 2.3.0 - 2024-10-16
 
 ### Fixed
@@ -871,6 +883,4 @@ Full changelog wasn't kept for earlier releases. What we know is documented sepa
 
 ### [2021-03-16](/doc/announcements/2021-03-16.markdown)
 
-The first release.  
-
- 
+The first release.

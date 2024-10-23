@@ -69,9 +69,10 @@
 <h1 class="my-4 text-2xl font-bold">
     <nav class="my-2">
         <ul class="flex space-around">
-            <li><a href="/"            class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mindcode"  >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Mindcode compiler</a>
-            <li><a href="/schematics"  class="block text-center py-2 px-4 mx-2 rounded <#if selection == "schematics">font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Schematics Builder</a>
-            <li><a href="/decompiler"  class="block text-center py-2 px-4 mx-2 rounded <#if selection == "decompiler">font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Schematics Decompiler</a>
+            <li><a href="/"                 class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mindcode"        >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Mindcode Compiler</a>
+            <li><a href="/mlog-decompiler"  class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mlog-decompiler" >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Mlog Decompiler</a>
+            <li><a href="/schematics"       class="block text-center py-2 px-4 mx-2 rounded <#if selection == "schematics"      >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Schematics Builder</a>
+            <li><a href="/decompiler"       class="block text-center py-2 px-4 mx-2 rounded <#if selection == "decompiler"      >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Schematics Decompiler</a>
         </ul>
     </nav>
 </h1>

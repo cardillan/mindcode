@@ -13,6 +13,7 @@ The command line tool supports three different actions. The action is specified 
 which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
+* `dm` or `decompile-mlog`: partially decompiles an mlog code into Mindcode. The resulting code needs to be manually edited to create loops and conditions present in the original mlog.
 * `cs` or `compile-schematic`: builds a schematic from Schemacode source into a binary `.msch` file.
 * `ds` or `decompile-schematic`: decompiles a binary `.msch` file to Schemacode source.
 
@@ -45,7 +46,7 @@ action was successful, the output is copied to the clipboard and can be pasted d
 
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the 
   processor configuration screen, by using **Edit/Import from clipboard** command.
-* _Compile schema_ action: clipboard contains schematic encoded into mindustry compatible string, which can be pasted 
+* _Compile Schematic_ action: clipboard contains schematic encoded into Mindustry Schematic string, which can be pasted 
   as new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
 ## Running the compiled code
@@ -87,7 +88,9 @@ Actions:
 
   ACTION                 Type of processing
     cm (compile-mindcode)
-                         Compile a mindcode source file into text mlog file.
+                         Compile a Mindcode source file into text mlog file.
+    dm (decompile-mlog)  Decompile a text  mlog  file  into  Mindcode  source,  leaving  jumps  and unknown instructions
+                         unresolved.
     cs (compile-schema,compile-schematic)
                          Compile a schematic definition file into binary msch file.
     ds (decompile-schema,decompile-schematic)
@@ -111,7 +114,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input]
                 [output]
 
-Compile a mindcode source file into text mlog file.
+Compile a Mindcode source file into text mlog file.
 
 named arguments:
   -h, --help             show this help message and exit
@@ -227,6 +230,22 @@ debug output options:
                          activates output of the unresolved code (before  virtual instructions resolution) of given type
                          (instruction numbers are included in the output)
   -s, --stacktrace       prints stack trace into stderr when an exception occurs
+```
+
+## Decompile Mlog action help
+
+```
+usage: mindcode dm [-h] input [output]
+
+Partially decompile a text mlog file into Mindcode source file.
+
+positional arguments:
+  input                  Mlog text file to be decompiled into Mindcode source file.
+  output                 Output file to receive decompiled Mindcode; uses  input  file  name with .dmnd extension if not
+                         specified.
+
+named arguments:
+  -h, --help             show this help message and exit
 ```
 
 ## Compile Schematic action help
@@ -379,4 +398,4 @@ named arguments:
 
 ---
 
-[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
+[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher »](TOOLS-MLOG-WATCHER.markdown)
