@@ -184,10 +184,13 @@
 <#macro footer>
 <script>
     function copyToClipboard() {
-        var textarea = document.getElementById("compiled");
-        var text = textarea.value;
+        try {
+            var textarea = document.getElementById("compiled");
+            textarea.focus();
+            textarea.select();
+            document.execCommand('copy');
+            textarea.setSelectionRange(0, 0);
 
-        navigator.clipboard.writeText(text).then(function() {
             // Change icon to checkmark
             var icon = document.getElementById("copyIcon");
             icon.classList.remove("fa-copy");
@@ -198,10 +201,9 @@
                 icon.classList.remove("fa-check");
                 icon.classList.add("fa-copy");
             }, 2000);
-
-        }).catch(function(err) {
+        } catch(err) {
             alert("Failed to copy text: " + err);
-        });
+        }
     }
 </script>
 
