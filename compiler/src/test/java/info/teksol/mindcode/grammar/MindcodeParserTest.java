@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Order(99)
 class MindcodeParserTest extends AbstractParserTest {
@@ -44,15 +43,22 @@ class MindcodeParserTest extends AbstractParserTest {
     }
 
     @Test
+    void parsesFunctionDeclaration() {
+        assertDoesNotThrow(() -> parse("def foo(a, in b, in out c, out d) print(a); end;"));
+    }
+
+    @Test
     void parsesTheEmptyProgram() {
         assertDoesNotThrow(() -> parse(""));
     }
 
     @Test
     void parsesSensorAccess() {
-        assertDoesNotThrow(() -> parse("foundation1.copper < 1000;"));
-        assertDoesNotThrow(() -> parse("foundation1.copper < foundation1.itemCapacity;"));
-        assertDoesNotThrow(() -> parse("tank1.water < tank1.liquidCapacity;"));
+        assertAll(
+                () -> parse("foundation1.copper < 1000;"),
+                () -> parse("foundation1.copper < foundation1.itemCapacity;"),
+                () -> parse("tank1.water < tank1.liquidCapacity;")
+        );
     }
 
     @Test
@@ -88,8 +94,10 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void parsesIfExpression() {
-        assertDoesNotThrow(() -> parse("value = HEAP[4] == 0 ? false : true;"));
-        assertDoesNotThrow(() -> parse("if false then\nn += 1;\nend;"));
+        assertAll(
+                () -> parse("value = HEAP[4] == 0 ? false : true;"),
+                () -> parse("if false then\nn += 1;\nend;")
+        );
     }
 
     @Test

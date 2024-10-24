@@ -35,6 +35,8 @@ public interface AstVisitor<T> {
 
     T visitFunctionDeclaration(FunctionDeclaration node);
 
+    T visitFunctionParameter(FunctionParameter node);
+
     T visitHeapAccess(HeapAccess node);
 
     T visitHeapAllocation(HeapAllocation node);
@@ -51,7 +53,7 @@ public interface AstVisitor<T> {
 
     T visitNumericValue(NumericValue node);
 
-    T visitParameter(Parameter node);
+    T visitParameter(ProgramParameter node);
 
     T visitPropertyAccess(PropertyAccess node);
 

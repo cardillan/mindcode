@@ -137,7 +137,8 @@ class StackUsageOptimizer extends BaseOptimizer {
             throw new MindcodeInternalError("Expected RECURSIVE_CALL subcontext, found " + subcontext);
         }
 
-        Set<LogicVariable> result = new HashSet<>(subcontext.function().getLogicParameters());
+        // TODO Include input parameters only?
+        Set<LogicVariable> result = new HashSet<>(subcontext.function().getParameters());
 
         contextStream(subcontext)
                 .filter(SetInstruction.class::isInstance)

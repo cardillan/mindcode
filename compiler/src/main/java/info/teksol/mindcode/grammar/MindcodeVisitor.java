@@ -435,6 +435,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFundecl(MindcodeParser.FundeclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#arg_decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArg_decl(MindcodeParser.Arg_declContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#arg_decl_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

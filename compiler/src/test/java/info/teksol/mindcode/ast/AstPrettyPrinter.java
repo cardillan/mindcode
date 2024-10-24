@@ -90,7 +90,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitParameter(Parameter node) {
+    public String visitParameter(ProgramParameter node) {
         buffer.append("param ").append(node.getName()).append(" = ");
         visit(node.getValue());
         return null;
@@ -330,6 +330,14 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         buffer.append("\n");
         visit(node.getBody());
         buffer.append("end\n");
+        return null;
+    }
+
+    @Override
+    public String visitFunctionParameter(FunctionParameter node) {
+        buffer.append(node.isInModifier() ? "in " : "")
+                .append(node.isOutModifier() ? "out " : "")
+                .append(node.getName());
         return null;
     }
 

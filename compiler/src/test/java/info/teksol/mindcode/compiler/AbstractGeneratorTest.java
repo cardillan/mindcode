@@ -500,5 +500,5 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicVariable tmp1      = LogicVariable.temporary("__tmp1");      
     protected static final LogicVariable tmp2      = LogicVariable.temporary("__tmp2");
     protected static final LogicVariable tmp3      = LogicVariable.temporary("__tmp3");
-    protected static final LogicVariable fn0retval = LogicVariable.fnRetVal("__fn0retval");
+    protected static final LogicVariable fn0retval = LogicVariable.fnRetVal("foo", "__fn0retval");
 }

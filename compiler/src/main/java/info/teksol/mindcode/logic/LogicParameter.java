@@ -6,7 +6,7 @@ public class LogicParameter extends LogicVariable {
     private final LogicValue value;
 
     private LogicParameter(String name, LogicValue value) {
-        super(ArgumentType.PARAMETER, name, false);
+        super(ArgumentType.PARAMETER, name, false, false, false);
         this.value = Objects.requireNonNull(value);
     }
 

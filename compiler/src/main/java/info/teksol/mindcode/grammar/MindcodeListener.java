@@ -730,6 +730,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitFundecl(MindcodeParser.FundeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#arg_decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterArg_decl(MindcodeParser.Arg_declContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#arg_decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitArg_decl(MindcodeParser.Arg_declContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#arg_decl_list}.
 	 * @param ctx the parse tree
 	 */

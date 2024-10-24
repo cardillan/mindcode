@@ -27,7 +27,7 @@ public final class CallGraph {
         this.allocatedStack = allocatedStack;
 
         // Create mock function declaration representing main program body.
-        addFunction(new FunctionDeclaration(null,true, false, MAIN, List.of(), new NoOp()));
+        addFunction(new FunctionDeclaration(null, true, false, false, MAIN, List.of(), new NoOp()));
     }
 
     public static CallGraph createEmpty() {
@@ -45,7 +45,7 @@ public final class CallGraph {
      * Confirms a user-defined function exists.
      *
      * @param name name of the function
-     * @return  true if such a function is defined
+     * @return true if such a function is defined
      */
     public boolean containsFunction(String name) {
         return functions.containsKey(name);
@@ -123,7 +123,7 @@ public final class CallGraph {
      * a function can appear more than once in the functionCalls list. Information about call cardinality
      * is preserved.
      *
-     * @param caller function that calls other functions
+     * @param caller        function that calls other functions
      * @param functionCalls list of names of called functions
      */
     void addFunctionCalls(String caller, List<String> functionCalls) {
@@ -157,6 +157,12 @@ public final class CallGraph {
                 .forEach(f -> setupOutOfLineFunction(instructionProcessor, f));
     }
 
+    private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
+        function.setLabel(instructionProcessor.nextLabel());
+        function.setPrefix(instructionProcessor.nextFunctionPrefix());
+        function.createParameters();
+    }
+
     private boolean propagateIndirectCalls() {
         // Returns true if at least one function was modified
         return functions.values().stream()
@@ -166,12 +172,6 @@ public final class CallGraph {
                                 .filter(Objects::nonNull)
                                 .mapToInt(inner -> outer.addIndirectCalls(inner.indirectCalls) ? 1 : 0)
                 ).sum() > 0;    // sum to force visiting all items in the stream
-    }
-
-    private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
-        function.setLabel(instructionProcessor.nextLabel());
-        function.setPrefix(instructionProcessor.nextFunctionPrefix());
-        function.createParameters();
     }
 
     private final List<String> callStack = new ArrayList<>();
@@ -214,7 +214,8 @@ public final class CallGraph {
         private LogicLabel label;
         private String prefix;
         private int useCount = 0;
-        private List<LogicVariable> parameters;
+        private Map<String, FunctionParameter> parameterMap = Map.of();
+        private List<LogicVariable> parameters = List.of();
         private boolean inlined = false;
 
         private LogicFunction(FunctionDeclaration declaration) {
@@ -251,17 +252,21 @@ public final class CallGraph {
         }
 
         /** @return list of parameters of the function */
-        public List<VarRef> getParams() {
+        List<FunctionParameter> getDeclaredParameters() {
             return declaration.getParams();
         }
 
+        public FunctionParameter getDeclaredParameter(String name) {
+            return parameterMap.get(name);
+        }
+
         /** @return list of parameters of the function as LogicVariable */
-        public List<LogicVariable> getLogicParameters() {
+        public List<LogicVariable> getParameters() {
             return parameters;
         }
 
         /** @return number of function parameters */
-        public int getParamCount() {
+        public int getParameterCount() {
             return declaration.getParams().size();
         }
 
@@ -352,9 +357,11 @@ public final class CallGraph {
         }
 
         private void createParameters() {
-            parameters = getParams().stream()
-                    .map(p -> LogicVariable.local(getName(), prefix, p.getName()))
-                    .toList();
+            parameterMap = getDeclaredParameters().stream().collect(
+                    Collectors.toMap(FunctionParameter::getName, v -> v));
+
+            parameters = getDeclaredParameters().stream()
+                    .map(p -> LogicVariable.local(getName(), prefix, p)).toList();
         }
 
         @Override

@@ -55,14 +55,14 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             warn(function.getInputPosition(), "Function '%s': kebab-case identifiers are deprecated.", function.getName());
         }
 
-        function.getParams().stream()
-                .map(VarRef::getName)
+        function.getDeclaredParameters().stream()
+                .map(FunctionParameter::getName)
                 .filter(instructionProcessor::isBlockName)
                 .forEach(name -> error(function.getInputPosition(),
                         "Parameter '%s' of function '%s' uses name reserved for linked blocks.", name, function.getName()));
 
-        function.getParams().stream()
-                .map(VarRef::getName)
+        function.getDeclaredParameters().stream()
+                .map(FunctionParameter::getName)
                 .filter(instructionProcessor::isGlobalName)
                 .forEach(name -> error(function.getInputPosition(),
                         "Parameter '%s' of function '%s' uses name reserved for global variables.", name, function.getName()));

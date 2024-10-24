@@ -1,5 +1,8 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.ast.FunctionParameter;
+import info.teksol.mindcode.compiler.generator.CallGraph;
+
 import java.util.Objects;
 
 public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress {
@@ -14,28 +17,25 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     protected final String name;
     protected final String fullName;
     protected final boolean volatileVar;
+    protected final boolean input;
+    protected final boolean output;
 
-    protected LogicVariable(ArgumentType argumentType, String name, boolean volatileVar) {
+    protected LogicVariable(ArgumentType argumentType, String name, boolean volatileVar, boolean input, boolean output) {
         super(argumentType);
         this.functionPrefix = null;
         this.name = Objects.requireNonNull(name);
         this.fullName = name;
         this.volatileVar = volatileVar;
+        this.input = input;
+        this.output = output;
     }
 
     private LogicVariable(ArgumentType argumentType, String name) {
-        this(argumentType, name, false);
+        this(argumentType, name, false, false, false);
     }
 
-    private LogicVariable(ArgumentType argumentType, String functionPrefix, String name) {
-        super(argumentType);
-        this.functionPrefix = Objects.requireNonNull(functionPrefix);
-        this.name = Objects.requireNonNull(name);
-        this.fullName = name;
-        this.volatileVar = false;
-    }
-
-    private LogicVariable(ArgumentType argumentType, String functionName, String functionPrefix, String name) {
+    private LogicVariable(ArgumentType argumentType, String functionName, String functionPrefix, String name,
+            boolean input, boolean output) {
         super(argumentType);
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
         if (functionPrefix.isEmpty()) {
@@ -47,6 +47,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.name = Objects.requireNonNull(name);
         this.fullName = functionName + "." + name;
         this.volatileVar = false;
+        this.input = input;
+        this.output = output;
     }
 
     @Override
@@ -64,6 +66,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return getType() == ArgumentType.PARAMETER || getType() == ArgumentType.GLOBAL_VARIABLE || getType() == ArgumentType.LOCAL_VARIABLE;
     }
 
+    @Override
     public boolean isUserWritable() {
         return getType() == ArgumentType.GLOBAL_VARIABLE || getType() == ArgumentType.LOCAL_VARIABLE;
     }
@@ -104,6 +107,14 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return fullName;
     }
 
+    public boolean isInput() {
+        return input;
+    }
+
+    public boolean isOutput() {
+        return output;
+    }
+
     @Override
     public String toMlog() {
         return functionPrefix != null && argumentType != ArgumentType.FUNCTION_RETVAL ? functionPrefix + "_" + name : name;
@@ -124,7 +135,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable global(String name, boolean volatileVar) {
-        return new LogicVariable(ArgumentType.GLOBAL_VARIABLE, name, volatileVar);
+        return new LogicVariable(ArgumentType.GLOBAL_VARIABLE, name, volatileVar, false, false);
     }
 
     @SuppressWarnings("ConfusingMainMethod")
@@ -133,7 +144,17 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable local(String functionName, String functionPrefix, String name) {
-        return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, name);
+        return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, name, false, false);
+    }
+
+    public static LogicVariable local(String functionName, String functionPrefix, String name, boolean input, boolean output) {
+        return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, name, input, output);
+    }
+
+    public static LogicVariable local(String functionName, String functionPrefix, FunctionParameter parameter) {
+        // A variable without an out modifier is input by default
+        return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, parameter.getName(),
+                parameter.isInModifier() || !parameter.isOutModifier(), parameter.isOutModifier());
     }
 
     public static LogicVariable temporary(String name) {
@@ -144,8 +165,14 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(ArgumentType.AST_VARIABLE, name);
     }
 
-    public static LogicVariable fnRetVal(String functionPrefix) {
-        return new LogicVariable(ArgumentType.FUNCTION_RETVAL, functionPrefix, functionPrefix + RETURN_VALUE);
+    public static LogicVariable fnRetVal(CallGraph.LogicFunction function) {
+        return new LogicVariable(ArgumentType.FUNCTION_RETVAL, function.getName(),
+                function.getPrefix(), function.getPrefix() + RETURN_VALUE, false, true);
+    }
+
+    public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
+        return new LogicVariable(ArgumentType.FUNCTION_RETVAL, functionName, functionPrefix,
+                functionPrefix + RETURN_VALUE, false, true);
     }
 
     public static LogicVariable fnRetAddr(String functionPrefix) {

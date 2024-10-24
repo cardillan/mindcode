@@ -355,13 +355,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private LogicParameter registerParameter(Parameter parameter, LogicValue logicValue) {
-        final String name = parameter.getName();
-        generateDeprecationWarnings(parameter, name);
+    private LogicParameter registerParameter(ProgramParameter programParameter, LogicValue logicValue) {
+        final String name = programParameter.getName();
+        generateDeprecationWarnings(programParameter, name);
         if (identifiers.get(name) != null || formattables.containsKey(name)) {
-            error(parameter, "Multiple declarations of '%s'.", name);
+            error(programParameter, "Multiple declarations of '%s'.", name);
         } else if (identifiers.containsKey(name)) {
-            error(parameter, "Cannot redefine variable or function parameter '%s' as a program parameter.", name);
+            error(programParameter, "Cannot redefine variable or function parameter '%s' as a program parameter.", name);
         }
         LogicParameter logicParameter = LogicParameter.parameter(name, logicValue);
         identifiers.put(name, logicParameter);
@@ -387,7 +387,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             functionPrefix = function.getPrefix();
             functionContext = new LocalContext();
             emit(createLabel(function.getLabel()));
-            returnStack.enterFunction(nextLabel(), LogicVariable.fnRetVal(functionPrefix));
+            returnStack.enterFunction(nextLabel(), LogicVariable.fnRetVal(function));
 
             if (function.isRecursive()) {
                 appendRecursiveFunctionDeclaration(function);
@@ -407,11 +407,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private void appendRecursiveFunctionDeclaration(LogicFunction function) {
         // Register all parameters for stack storage
-        function.getParams().stream().map(this::visitVariableVarRef).forEach(functionContext::registerVariable);
+        function.getParameters().forEach(functionContext::registerVariable);
 
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
-        emit(createSet(LogicVariable.fnRetVal(functionPrefix), body));
+        emit(createSet(LogicVariable.fnRetVal(function), body));
         emit(createLabel(returnStack.getReturnLabel(function.getInputPosition())));
         emit(createReturn(stackName()));
     }
@@ -419,7 +419,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private void appendStacklessFunctionDeclaration(LogicFunction function) {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
-        emit(createSet(LogicVariable.fnRetVal(functionPrefix), body));
+        emit(createSet(LogicVariable.fnRetVal(function), body));
         emit(createLabel(returnStack.getReturnLabel(function.getInputPosition())));
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
@@ -475,9 +475,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private LogicValue handleUserFunctionCall(FunctionCall call, List<LogicValue> arguments) {
         String functionName = call.getFunctionName();
         LogicFunction function = callGraph.getFunction(functionName);
-        if (arguments.size() != function.getParamCount()) {
+        if (arguments.size() != function.getParameterCount()) {
             error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
-                    functionName, function.getParamCount(), arguments.size());
+                    functionName, function.getParameterCount(), arguments.size());
             return NULL;
         }
 
@@ -537,7 +537,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
         final LogicLabel returnLabel = nextLabel();
         emit(createSetAddress(LogicVariable.fnRetAddr(functionPrefix), returnLabel));
-        emit(createCallStackless(function.getLabel(), LogicVariable.fnRetVal(functionPrefix)));
+        emit(createCallStackless(function.getLabel(), LogicVariable.fnRetVal(function)));
         // Mark position where the function must return
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
@@ -566,8 +566,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
          // Recursive function call
         final LogicLabel returnLabel = nextLabel();
-        emit(createCallRecursive(stackName(), function.getLabel(), returnLabel,
-                LogicVariable.fnRetVal(functionPrefix)));
+        emit(createCallRecursive(stackName(), function.getLabel(), returnLabel, LogicVariable.fnRetVal(function)));
         emit(createLabel(returnLabel)); // where the function must return
 
         if (useStack) {
@@ -585,13 +584,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         currentFunction = function;
 
         // Setup variables representing function parameters with values from this call
-        List<VarRef> paramsRefs = function.getParams();
+        List<FunctionParameter> parameters = function.getDeclaredParameters();
         for (int i = 0; i < arguments.size(); i++) {
             // Visiting paramRefs (which are VarRefs) creates local variables from them
             // paramValues were visited in caller's context
-            VarRef varRef = paramsRefs.get(i);
-            LogicVariable argument = visitVariableVarRef(varRef, "Function '" + function.getName() +
-                    "': parameter name '" + varRef.getName() + "' conflicts with existing constant or global parameter.");
+            FunctionParameter parameter = parameters.get(i);
+            LogicVariable argument = convertFunctionParameter(parameter, "Function '" + function.getName() +
+                    "': parameter name '" + parameter.getName() + "' conflicts with existing constant or global parameter.");
 
             emit(createSet(argument, arguments.get(i)));
         }
@@ -607,14 +606,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // Allocate 'return value' type temp variable for it, so that it won't be eliminated;
             // this is easier than ensuring optimizers do not eliminate normal temporary variables
             // that received return values from functions.
+            // TODO try using normal temp to see what happens
             final LogicVariable resultVariable = nextReturnValue();
             setSubcontextType(function, AstSubcontextType.RETURN_VALUE);
-            emit(createSet(resultVariable, LogicVariable.fnRetVal(functionPrefix)));
+            emit(createSet(resultVariable, LogicVariable.fnRetVal(function)));
             return resultVariable;
         } else {
             // Use the function return value directly - there's only one place where it is produced
             // within this function's call tree
-            return LogicVariable.fnRetVal(functionPrefix);
+            return LogicVariable.fnRetVal(function);
         }
     }
 
@@ -725,7 +725,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
-    public LogicParameter visitParameter(Parameter node) {
+    public LogicParameter visitParameter(ProgramParameter node) {
         if (!functionPrefix.isEmpty()) {
             error(node, "Parameter declaration not allowed in user function '%s'.", node.getName());
         }
@@ -735,7 +735,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return parameter;
     }
 
-    public LogicValue extractParameterValue(Parameter node) {
+    public LogicValue extractParameterValue(ProgramParameter node) {
         if (node.getValue() instanceof ConstantAstNode v){
             try {
                 return v.toLogicLiteral(instructionProcessor);
@@ -1119,11 +1119,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicVariable visitVariableVarRef(VarRef node) {
-        return (LogicVariable) createVariableOrConstant(node,node.getName(), true, null);
+        return (LogicVariable) createVariableOrConstant(node, node.getName(), true, null);
     }
 
     private LogicVariable visitVariableVarRef(VarRef node, String errorMessage) {
-        return (LogicVariable) createVariableOrConstant(node,node.getName(), true, errorMessage);
+        return (LogicVariable) createVariableOrConstant(node, node.getName(), true, errorMessage);
+    }
+
+    private LogicVariable convertFunctionParameter(FunctionParameter node) {
+        return (LogicVariable) createVariableOrConstant(node, node.getName(), true, null);
+    }
+
+    private LogicVariable convertFunctionParameter(FunctionParameter node, String errorMessage) {
+        return (LogicVariable) createVariableOrConstant(node, node.getName(), true, errorMessage);
     }
 
     private LogicValue createValue(AstNode node, String identifier) {
@@ -1156,9 +1164,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // Main variable - again not pushed onto stack
             return LogicVariable.main(identifier);
         } else {
-            // A truly local variable
-            return functionContext.registerVariable(
-                    LogicVariable.local(currentFunction.getName(), functionPrefix, identifier));
+            // Either a local variable, or a function parameter
+            FunctionParameter parameter = currentFunction.getDeclaredParameter(identifier);
+            return functionContext.registerVariable(parameter == null
+                    ? LogicVariable.local(currentFunction.getName(), functionPrefix, identifier)
+                    : LogicVariable.local(currentFunction.getName(), functionPrefix, parameter));
         }
     }
 
@@ -1299,6 +1309,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitFunctionDeclaration(FunctionDeclaration node) {
+        // Do nothing - function declarations are processed by CallGraphCreator
+        return NULL;
+    }
+
+    @Override
+    public LogicValue visitFunctionParameter(FunctionParameter node) {
         // Do nothing - function declarations are processed by CallGraphCreator
         return NULL;
     }

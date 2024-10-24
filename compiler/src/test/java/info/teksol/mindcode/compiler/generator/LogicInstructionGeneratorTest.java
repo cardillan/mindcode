@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @Order(99)
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
@@ -1282,17 +1283,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesConflictingFunctionParameter() {
-        assertGeneratesMessages(
-                ExpectedMessages.none(),
-                "a = 10; def foo(a) print(a); end; foo(5);"
-        );
-        assertGeneratesMessages(
-                ExpectedMessages.create().add("Function 'foo': parameter name 'a' conflicts with existing constant or global parameter."),
-                "const a = 10; def foo(a) print(a); end; foo(5);"
-        );
-        assertGeneratesMessages(
-                ExpectedMessages.create().add("Function 'foo': parameter name 'a' conflicts with existing constant or global parameter."),
-                "param a = 10; def foo(a) print(a); end; foo(5);"
+        assertAll(
+                () -> assertGeneratesMessages(
+                        ExpectedMessages.none(),
+                        "a = 10; def foo(a) print(a); end; foo(5);"),
+                () -> assertGeneratesMessages(
+                        ExpectedMessages.create().add("Function 'foo': parameter name 'a' conflicts with existing constant or global parameter."),
+                        "const a = 10; def foo(a) print(a); end; foo(5);"),
+                () -> assertGeneratesMessages(
+                        ExpectedMessages.create().add("Function 'foo': parameter name 'a' conflicts with existing constant or global parameter."),
+                        "param a = 10; def foo(a) print(a); end; foo(5);")
         );
     }
 

@@ -28,6 +28,7 @@ public abstract class BaseAstVisitor<T> extends AbstractMessageEmitter implement
         if (node instanceof FormattableLiteral n)       return visitFormattableLiteral(n);
         if (node instanceof FunctionCall n)             return visitFunctionCall(n);
         if (node instanceof FunctionDeclaration n)      return visitFunctionDeclaration(n);
+        if (node instanceof FunctionParameter n)        return visitFunctionParameter(n);
         if (node instanceof HeapAccess n)               return visitHeapAccess(n);
         if (node instanceof HeapAllocation n)           return visitHeapAllocation(n);
         if (node instanceof IfExpression n)             return visitIfExpression(n);
@@ -36,7 +37,7 @@ public abstract class BaseAstVisitor<T> extends AbstractMessageEmitter implement
         if (node instanceof NullLiteral n)              return visitNullLiteral(n);
         if (node instanceof NumericLiteral n)           return visitNumericLiteral(n);
         if (node instanceof NumericValue n)             return visitNumericValue(n);
-        if (node instanceof Parameter n)                return visitParameter(n);
+        if (node instanceof ProgramParameter n)         return visitParameter(n);
         if (node instanceof PropertyAccess n)           return visitPropertyAccess(n);
         if (node instanceof Range n)                    return visitRange(n);
         if (node instanceof RangedForExpression n)      return visitRangedForExpression(n);

@@ -70,7 +70,7 @@ class FunctionInliner extends BaseOptimizer {
                 c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
         // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
-        double benefit = calls.stream().mapToDouble(AstContext::totalWeight).sum() * (3d + function.getParamCount() / 2d);
+        double benefit = calls.stream().mapToDouble(AstContext::totalWeight).sum() * (3d + function.getParameterCount() / 2d);
 
         // Cost: body size minus one (return) times number of calls minus body size (we'll remove the original)
         LogicList body = stripReturnInstructions(contextInstructions(context));
@@ -166,7 +166,7 @@ class FunctionInliner extends BaseOptimizer {
         }
 
         // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
-        double benefit = call.totalWeight() * (3d + function.getParamCount() / 2d);
+        double benefit = call.totalWeight() * (3d + function.getParameterCount() / 2d);
 
         // Need to find the function body
         LogicList body = stripReturnInstructions(

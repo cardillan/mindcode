@@ -192,7 +192,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             },
                             FunctionDeclaration{
                                 name='fib',
-                                params=[VarRef{name='n'}],
+                                params=[FunctionParameter{name='n', inModifier=false, outModifier=false}],
                                 body=Seq{rest=NoOp{}, last=IfExpression{
                                     condition=BinaryOp{
                                         left=VarRef{name='n'},

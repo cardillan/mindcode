@@ -122,9 +122,13 @@ fundecl : ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET args=arg_de
         | ( inline = (INLINE | NOINLINE))? DEF name=id body=expression_list END
         ;
 
-arg_decl_list : var_ref
-              | arg_decl_list COMMA var_ref
-              ;
+arg_decl
+    : ( modifier_in = IN )? ( modifier_out = OUT )? name = var_ref
+    ;
+
+arg_decl_list
+    : arg_decl ( COMMA arg_decl )* ( ellipsis = DOT DOT DOT )?
+    ;
 
 while_expression : ( label=loop_label COLON )? WHILE cond=expression optional_do loop_body END;
 

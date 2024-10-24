@@ -949,7 +949,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         new Seq(null,
-                                new FunctionDeclaration(null, false, false,
+                                new FunctionDeclaration(null, false, false, false,
                                         "delay",
                                         List.of(),
                                         new Seq(null,
@@ -1010,7 +1010,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false, false,
+                                        new FunctionDeclaration(null, false, false, false,
                                                 "foo",
                                                 List.of(),
                                                 new Seq(null,
@@ -1041,9 +1041,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false, false,
+                                        new FunctionDeclaration(null, false, false, false,
                                                 "foo",
-                                                List.of(new VarRef(null, "s")),
+                                                List.of(new FunctionParameter(null, "s", false, false)),
                                                 new Seq(null,
                                                         new BinaryOp(null, new VarRef(null, "s"), "+", new NumericLiteral(null, "1"))
                                                 )
@@ -1070,9 +1070,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false, false,
+                                        new FunctionDeclaration(null, false, false, false,
                                                 "foo",
-                                                List.of(new VarRef(null, "s"), new VarRef(null, "r")),
+                                                List.of(
+                                                        new FunctionParameter(null, "s", false, false),
+                                                        new FunctionParameter(null, "r", false, false)
+                                                ),
                                                 new Seq(null,
                                                         new BinaryOp(null,
                                                                 new BinaryOp(null, new VarRef(null, "s"), "+", new NumericLiteral(null, "1")),

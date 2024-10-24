@@ -200,19 +200,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitArg_decl_list(MindcodeParser.Arg_decl_listContext ctx) {
-        final AstNode rest;
-        if (ctx.arg_decl_list() != null) {
-            rest = visit(ctx.arg_decl_list());
-        } else {
-            rest = new NoOp();
-        }
-
-        final AstNode last = visit(ctx.var_ref());
-        return new Seq(pos(ctx.getStart()), rest, last);
-    }
-
-    @Override
     public AstNode visitArg_list(MindcodeParser.Arg_listContext ctx) {
         if (ctx.arg_list() != null) {
             return new Seq(pos(ctx.getStart()), visit(ctx.arg_list()), visit(ctx.arg()));
@@ -471,25 +458,30 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunction_declaration(MindcodeParser.Function_declarationContext ctx) {
-        final AstNode args;
-        if (ctx.fundecl().args == null) {
-            args = new NoOp();
-        } else {
-            args = visit(ctx.fundecl().args);
-        }
+        final List<FunctionParameter> parameters = ctx.fundecl().args != null
+                ? ctx.fundecl().args.arg_decl().stream().map(this::visitArg_decl).toList()
+                : List.of();
 
-        final List<AstNode> params = new ArrayList<>();
-        gatherArgs(args, params);
         String strInline = ctx.fundecl().inline == null ? null : ctx.fundecl().inline.getText();
 
         return new FunctionDeclaration(pos(ctx.getStart()),
                 "inline".equals(strInline),
                 "noinline".equals(strInline),
+                ctx.fundecl().args != null && ctx.fundecl().args.ellipsis != null,
                 ctx.fundecl().name.getText(),
-                params.stream().map(VarRef.class::cast).toList(),
+                parameters,
                 visit(ctx.fundecl().body)
         );
     }
+
+    @Override
+    public FunctionParameter visitArg_decl(MindcodeParser.Arg_declContext ctx) {
+        return new FunctionParameter(pos(ctx.getStart()),
+                ctx.name.getText(),
+                ctx.modifier_in != null,
+                ctx.modifier_out != null);
+    }
+
 
     @Override
     public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
@@ -673,7 +665,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public AstNode visitParam_decl(MindcodeParser.Param_declContext ctx) {
         final String name = ctx.name.getText();
         final AstNode value = visit(ctx.value);
-        return new Parameter(pos(ctx.getStart()), name, value);
+        return new ProgramParameter(pos(ctx.getStart()), name, value);
     }
 
     @Override

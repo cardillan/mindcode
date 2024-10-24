@@ -17,8 +17,8 @@ public class ReturnStackTest {
     private static final LogicLabel label1 = LogicLabel.symbolic("label1");
     private static final LogicLabel label2 = LogicLabel.symbolic("label2");
 
-    private static final LogicVariable fnRetVal1 = LogicVariable.fnRetVal("fnRetVal1");
-    private static final LogicVariable fnRetVal2 = LogicVariable.fnRetVal("fnRetVal2");
+    private static final LogicVariable fnRetVal1 = LogicVariable.fnRetVal("foo", "fnRetVal1");
+    private static final LogicVariable fnRetVal2 = LogicVariable.fnRetVal("foo", "fnRetVal2");
 
     @Test
     void remembersLabels() {

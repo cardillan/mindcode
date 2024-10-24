@@ -4,11 +4,11 @@ import info.teksol.mindcode.InputPosition;
 
 import java.util.Objects;
 
-public class Parameter extends BaseAstNode {
+public class ProgramParameter extends BaseAstNode {
     private final String name;
     private final AstNode value;
 
-    public Parameter(InputPosition inputPosition, String name, AstNode value) {
+    public ProgramParameter(InputPosition inputPosition, String name, AstNode value) {
         super(inputPosition);
         this.name = name;
         this.value = value;
@@ -26,7 +26,7 @@ public class Parameter extends BaseAstNode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Parameter that = (Parameter) o;
+        ProgramParameter that = (ProgramParameter) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(value, that.value);
     }

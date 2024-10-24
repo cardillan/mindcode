@@ -185,6 +185,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitFunctionParameter(FunctionParameter node) {
+        print(node);
+        return null;
+    }
+
+    @Override
     public String visitHeapAccess(HeapAccess node) {
         open("HeapAccess{");
         print("cellName="); visit(node.getCellName()); newLine(",");
@@ -258,7 +264,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitParameter(Parameter node) {
+    public String visitParameter(ProgramParameter node) {
         open("Parameter{");
         print("name="); visit(node.getName()); newLine(",");
         print("value="); visit(node.getValue());

@@ -371,7 +371,7 @@ class DataFlowVariableStates {
         public void updateAfterFunctionCall(CallGraph.LogicFunction function, LogicInstruction instruction) {
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false));
             optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
-            initialized.add(LogicVariable.fnRetVal(function.getPrefix()));
+            initialized.add(LogicVariable.fnRetVal(function));
         }
 
         /**

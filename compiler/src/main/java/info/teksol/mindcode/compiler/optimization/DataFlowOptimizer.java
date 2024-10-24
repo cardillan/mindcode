@@ -236,11 +236,11 @@ class DataFlowOptimizer extends BaseOptimizer {
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.isFunction()) {
-            // All global variables and all parameters of a function are initialized when the function is called.
-            context.function().getLogicParameters().forEach(variableStates::markInitialized);
+            // All global variables and all input parameters of a function are initialized when the function is called.
             optimizationContext.getFunctionReads(context.function()).stream()
                     .filter(LogicVariable::isGlobalVariable)
                     .forEach(variableStates::markInitialized);
+            context.function().getParameters().stream().filter(LogicVariable::isInput).forEach(variableStates::markInitialized);
         }
 
         iterator = createIteratorAtContext(context);
@@ -851,13 +851,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         return switch (variable.getType()) {
             case COMPILER, FUNCTION_RETADDR, PARAMETER -> false;
             case GLOBAL_VARIABLE -> experimental();
-            case FUNCTION_RETVAL -> {
-                // Function return values cannot be eliminated inside their functions - at this point we have no
+            case LOCAL_VARIABLE, FUNCTION_RETVAL -> {
+                // Function output variables cannot be eliminated inside their functions - at this point we have no
                 // information whether they're read somewhere. Outside their functions they're processed normally
                 // (can be optimized freely).
                 // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
                 AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
-                yield functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix());
+                yield !variable.isOutput() || functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix());
             }
             default -> true;
         };
