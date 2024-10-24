@@ -500,7 +500,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private LogicValue handleInlineFunctionCall(LogicFunction function, List<LogicValue> paramValues) {
+    private LogicValue handleInlineFunctionCall(LogicFunction function, List<LogicValue> arguments) {
         // Switching to inline function context -- save/restore old one
         final LogicFunction previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
@@ -512,7 +512,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         loopStack = new LoopStack(messageConsumer);
 
         emit(createLabel(nextLabel()));
-        setupFunctionParameters(function, paramValues);
+        setupFunctionParameters(function, arguments);
 
         // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
         final LogicVariable returnValue = nextReturnValue();
@@ -524,15 +524,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(returnLabel));
         returnStack.exitFunction();
 
+        retrieveFunctionParameters(function, arguments);
         loopStack = previousLoopStack;
         functionContext = previousContext;
         currentFunction = previousFunction;
         return returnValue;
     }
 
-    private LogicValue handleStacklessFunctionCall(LogicFunction function, List<LogicValue> paramValues) {
+    private LogicValue handleStacklessFunctionCall(LogicFunction function, List<LogicValue> arguments) {
         setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        setupFunctionParameters(function, paramValues);
+        setupFunctionParameters(function, arguments);
 
         setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
         final LogicLabel returnLabel = nextLabel();
@@ -543,16 +544,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         emit(createGotoLabel(returnLabel, LogicLabel.symbolic(functionPrefix)));
 
+        retrieveFunctionParameters(function, arguments);
         return passReturnValue(function);
     }
 
-    private List<LogicVariable> getContextVariables() {
-        Set<LogicVariable> result = new LinkedHashSet<>(functionContext.getVariables());
-        result.addAll(nodeContext.getVariables());
-        return new ArrayList<>(result);
-    }
-
-    private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicValue> paramValues) {
+    private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicValue> arguments) {
         setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
         boolean useStack = currentFunction.isRecursiveCall(function.getName());
         List<LogicVariable> variables = useStack ? getContextVariables() : List.of();
@@ -562,12 +558,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             variables.forEach(v -> emit(createPush(stackName(), v)));
         }
 
-        setupFunctionParameters(function, paramValues);
+        setupFunctionParameters(function, arguments);
 
          // Recursive function call
         final LogicLabel returnLabel = nextLabel();
         emit(createCallRecursive(stackName(), function.getLabel(), returnLabel, LogicVariable.fnRetVal(function)));
         emit(createLabel(returnLabel)); // where the function must return
+
+        retrieveFunctionParameters(function, arguments);
 
         if (useStack) {
             // Restore all local variables (both user defined and temporary) from the stack
@@ -576,6 +574,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         return passReturnValue(function);
+    }
+
+    private List<LogicVariable> getContextVariables() {
+        Set<LogicVariable> result = new LinkedHashSet<>(functionContext.getVariables());
+        result.addAll(nodeContext.getVariables());
+        return new ArrayList<>(result);
     }
 
     private void setupFunctionParameters(LogicFunction function, List<LogicValue> arguments) {
@@ -588,11 +592,43 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         for (int i = 0; i < arguments.size(); i++) {
             // Visiting paramRefs (which are VarRefs) creates local variables from them
             // paramValues were visited in caller's context
-            FunctionParameter parameter = parameters.get(i);
-            LogicVariable argument = convertFunctionParameter(parameter, "Function '" + function.getName() +
-                    "': parameter name '" + parameter.getName() + "' conflicts with existing constant or global parameter.");
+            FunctionParameter declaredParameter = parameters.get(i);
+            LogicVariable parameter = convertFunctionParameter(declaredParameter, "Function '" + function.getName() +
+                    "': parameter name '" + declaredParameter.getName() + "' conflicts with existing constant or global parameter.");
 
-            emit(createSet(argument, arguments.get(i)));
+            // Note: parameters of inlined functions are treated as local variables,
+            // therefore input/output properties are tested on the declared parameters
+            if (declaredParameter.isOutput() && !arguments.get(i).isUserWritable()) {
+                error(declaredParameter, "Argument assigned to output parameter '%s' is not writable.", declaredParameter.getName());
+            }
+
+            if (declaredParameter.isInput()) {
+                emit(createSet(parameter, arguments.get(i)));
+            }
+        }
+
+        currentFunction = previousFunction;
+    }
+
+    private void retrieveFunctionParameters(LogicFunction function, List<LogicValue> arguments) {
+        // Make sure parameter names are formed using function name
+        LogicFunction previousFunction = currentFunction;
+        currentFunction = function;
+
+        // Setup variables representing function parameters with values from this call
+        List<FunctionParameter> parameters = function.getDeclaredParameters();
+        for (int i = 0; i < arguments.size(); i++) {
+            // Visiting paramRefs (which are VarRefs) creates local variables from them
+            // paramValues were visited in caller's context
+            FunctionParameter declaredParameter = parameters.get(i);
+            if (declaredParameter.isOutput()) {
+                LogicVariable parameter = convertFunctionParameter(declaredParameter, "Function '" + function.getName() +
+                        "': parameter name '" + declaredParameter.getName() + "' conflicts with existing constant or global parameter.");
+
+                if (arguments.get(i) instanceof LogicVariable target) {
+                    emit(createSet(target, parameter));
+                }
+            }
         }
 
         currentFunction = previousFunction;
@@ -1165,6 +1201,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return LogicVariable.main(identifier);
         } else {
             // Either a local variable, or a function parameter
+            // Note: parameters of inlined functions are treated as local variables
             FunctionParameter parameter = currentFunction.getDeclaredParameter(identifier);
             return functionContext.registerVariable(parameter == null
                     ? LogicVariable.local(currentFunction.getName(), functionPrefix, identifier)

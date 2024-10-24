@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.NamedParameter;
@@ -20,7 +20,7 @@ class FormatFunctionHandler extends AbstractFunctionHandler {
     }
 
     @Override
-    public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
         arguments.forEach(arg -> program.accept(functionMapper.createInstruction(Opcode.FORMAT, arg)));
         return arguments.get(arguments.size() - 1);
     }

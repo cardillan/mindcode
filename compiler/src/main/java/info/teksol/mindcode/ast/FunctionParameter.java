@@ -20,11 +20,19 @@ public class FunctionParameter extends BaseAstNode {
         return name;
     }
 
-    public boolean isInModifier() {
+    public boolean hasInModifier() {
         return inModifier;
     }
 
-    public boolean isOutModifier() {
+    public boolean hasOutModifier() {
+        return outModifier;
+    }
+
+    public boolean isInput() {
+        return inModifier || !outModifier;
+    }
+
+    public boolean isOutput() {
         return outModifier;
     }
 

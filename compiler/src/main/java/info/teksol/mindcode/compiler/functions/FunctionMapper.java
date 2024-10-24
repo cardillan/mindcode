@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
@@ -12,7 +13,7 @@ import java.util.function.Consumer;
 
 public interface FunctionMapper extends MessageEmitter {
 
-    LogicValue handleFunction(AstNode astNode, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments);
+    LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments);
 
     LogicValue handleProperty(AstNode astNode, Consumer<LogicInstruction> program, String propertyName, LogicValue target, List<LogicValue> arguments);
 

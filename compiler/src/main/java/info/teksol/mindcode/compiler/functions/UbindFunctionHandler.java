@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 
@@ -16,8 +16,8 @@ class UbindFunctionHandler extends AbstractFunctionHandler {
     }
 
     @Override
-    public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-        checkArguments(node, arguments);
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+        checkArguments(call, arguments);
         program.accept(functionMapper.createInstruction(Opcode.UBIND, arguments.get(0)));
         return LogicBuiltIn.UNIT;
     }

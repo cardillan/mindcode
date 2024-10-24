@@ -335,8 +335,8 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitFunctionParameter(FunctionParameter node) {
-        buffer.append(node.isInModifier() ? "in " : "")
-                .append(node.isOutModifier() ? "out " : "")
+        buffer.append(node.hasInModifier() ? "in " : "")
+                .append(node.hasOutModifier() ? "out " : "")
                 .append(node.getName());
         return null;
     }

@@ -126,7 +126,9 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 "argumentType=" + argumentType +
                 ", fullName='" + fullName + '\'' +
                 ", functionPrefix='" + functionPrefix + '\'' +
-                ", volatileVar='" + volatileVar + '\'' +
+                ", volatileVar=" + volatileVar +
+                ", input=" + input +
+                ", output=" + output +
                 '}';
     }
 
@@ -154,7 +156,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable local(String functionName, String functionPrefix, FunctionParameter parameter) {
         // A variable without an out modifier is input by default
         return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, parameter.getName(),
-                parameter.isInModifier() || !parameter.isOutModifier(), parameter.isOutModifier());
+                parameter.isInput(), parameter.isOutput());
     }
 
     public static LogicVariable temporary(String name) {

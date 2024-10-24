@@ -228,12 +228,14 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 ExpectedMessages.create()
                         .add("Variable 'A' is used as argument in the 'sync()' function, will be considered volatile."),
                 """
+                        A = 10;
                         sync(A);
                         before = A;
                         wait(1000);
                         after = A;
                         print(after - before);
                         """,
+                createInstruction(SET, "A", "10"),
                 createInstruction(SYNC, "A"),
                 createInstruction(SET, "before", "A"),
                 createInstruction(WAIT, "1000"),

@@ -5,7 +5,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.CallGraph;
+import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
@@ -236,11 +236,13 @@ class DataFlowOptimizer extends BaseOptimizer {
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.isFunction()) {
+            LogicFunction function = context.function();
             // All global variables and all input parameters of a function are initialized when the function is called.
-            optimizationContext.getFunctionReads(context.function()).stream()
+            optimizationContext.getFunctionReads(function).stream()
                     .filter(LogicVariable::isGlobalVariable)
                     .forEach(variableStates::markInitialized);
-            context.function().getParameters().stream().filter(LogicVariable::isInput).forEach(variableStates::markInitialized);
+            function.getParameters().stream().filter(LogicVariable::isInput).forEach(variableStates::markInitialized);
+            variableStates.markInitialized(LogicVariable.fnRetAddr(function.getPrefix()));
         }
 
         iterator = createIteratorAtContext(context);
@@ -749,18 +751,19 @@ class DataFlowOptimizer extends BaseOptimizer {
         List<LogicVariable> inputs = instruction.inputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
-                .filter(variable -> canEliminate(instruction, variable))
                 .toList();
 
         Map<LogicVariable, LogicValue> valueReplacements = new HashMap<>();
         for (LogicVariable variable : inputs) {
             LogicValue constantValue = variableStates.valueRead(variable, instruction);
-            if (constantValue != null) {
-                valueReplacements.put(variable, constantValue);
-            } else {
-                LogicVariable equivalent = variableStates.findEquivalent(variable);
-                if (equivalent != null && !equivalent.equals(variable)) {
-                    valueReplacements.put(variable, equivalent);
+            if (canEliminate(instruction, variable)) {
+                if (constantValue != null) {
+                    valueReplacements.put(variable, constantValue);
+                } else {
+                    LogicVariable equivalent = variableStates.findEquivalent(variable);
+                    if (equivalent != null && !equivalent.equals(variable)) {
+                        valueReplacements.put(variable, equivalent);
+                    }
                 }
             }
         }
@@ -788,7 +791,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
-                CallGraph.LogicFunction function = instruction.getAstContext().function();
+                LogicFunction function = instruction.getAstContext().function();
                 variableStates.updateAfterFunctionCall(function, instruction);
                 if (modifyInstructions && optimizationContext.getEndingFunctions().contains(function)) {
                     functionEndStates.add(variableStates.copy("function end handling"));

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.util.CollectionUtils;
@@ -34,8 +34,8 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
     }
 
     @Override
-    public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
-        if (!checkArguments(node, fnArgs)) return NULL;
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
+        if (!checkArguments(call, fnArgs)) return NULL;
 
         LogicValue tmp = hasResult ? functionMapper.instructionProcessor.nextTemp() : NULL;
         // Need to support all kinds of arguments here, including keywords
@@ -44,7 +44,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
 
         for (NamedParameter a : opcodeVariant.namedParameters()) {
             if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
-                error(node, "Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
+                error(call, "Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
                         fnArgs.get(argIndex).toMlog(), name);
                 return NULL;
             }
@@ -73,7 +73,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
                     // Block name cannot be used as output argument
                     LogicValue argument = fnArgs.get(argIndex++);
                     if (argument.getType() == ArgumentType.BLOCK) {
-                        error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).",
+                        error(call, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).",
                                 argument.toMlog(), name);
                         return NULL;
                     }

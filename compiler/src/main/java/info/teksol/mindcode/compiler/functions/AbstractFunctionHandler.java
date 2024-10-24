@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.OpcodeVariant;
 
@@ -35,10 +35,10 @@ abstract class AbstractFunctionHandler extends AbstractHandler implements Functi
         return opcodeVariant;
     }
 
-    protected boolean checkArguments(AstNode node, List<LogicValue> arguments) {
+    protected boolean checkArguments(FunctionCall call, List<LogicValue> arguments) {
         if (arguments.size() < minArgs || arguments.size() > numArgs) {
             String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
-            error(node, "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());
+            error(call, "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());
             return false;
         } else {
             return true;

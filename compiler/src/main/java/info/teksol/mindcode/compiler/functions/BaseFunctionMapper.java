@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.functions;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -56,9 +57,9 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     }
 
     @Override
-    public LogicValue handleFunction(AstNode node, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
-        return handler == null ? null : handler.handleFunction(node, program, arguments);
+        return handler == null ? null : handler.handleFunction(call, program, arguments);
     }
 
     public String decompile(MlogInstruction instruction) {
