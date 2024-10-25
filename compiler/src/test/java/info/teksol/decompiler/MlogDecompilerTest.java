@@ -200,12 +200,12 @@ class MlogDecompilerTest {
                             yrep = y;
                         if y > min(NE_Y, ((y + WIDTH) - 1)) then goto label16;
                         // label19:
-                            __fn2_building = getBlock(x, yrep, __fn2_type, 0);
+                            __fn2_building = getBlock(x, yrep, out __fn2_type, out 0);
                         if __fn2_type != __tmp14 then goto label17;
                             __tmp46 = __fn2_building.sensor(@rotation);
                             build(x, yrep, __tmp15, __tmp46, 0);
                         // label18:
-                            0 = getBlock(x, yrep, __fn2_type, 0);
+                            0 = getBlock(x, yrep, out __fn2_type, out 0);
                         if __fn2_type != __tmp15 then goto label18;
                             TOTAL = TOTAL + 1;
                         // label17:

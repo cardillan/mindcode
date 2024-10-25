@@ -1005,7 +1005,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesRefsWithDashInThem() {
         assertCompilesTo("""
                         build(x, y, @titanium-conveyor, 1, 0);
-                        b_building = getBlock(x, y, b_type, b_floor);
+                        b_building = getBlock(x, y, out b_type, out b_floor);
                         if b_type == @titanium-conveyor then
                             n += 1;
                         end;

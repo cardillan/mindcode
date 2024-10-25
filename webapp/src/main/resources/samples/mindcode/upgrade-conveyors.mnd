@@ -127,14 +127,14 @@ end;
 // If a block of type oldType is found at position,
 // replaces it with newType
 def replace(x, y, oldType, newType)
-    building = getBlock(x, y, type);
+    building = getBlock(x, y, out type);
 
     if type == oldType then
         build(x, y, newType, building.rotation, 0);
         // If the processor is too fast, we need to wait
         // for the unit to finish building the block
         do
-            getBlock(x, y, type);
+            getBlock(x, y, out type);
         loop while type != newType;
         TOTAL += 1;
     end;

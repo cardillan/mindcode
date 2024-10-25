@@ -16,7 +16,7 @@ if @unit.dead !== 0 or @unit.controller != @this then
     findUnit();
 end;
 
-if ulocate(damaged, dmgx, dmgy) then
+if ulocate(damaged, out dmgx, out dmgy) then
     println($"Found damaged block at $dmgx, $dmgy");
     approach(dmgx, dmgy, 5);
     target(dmgx, dmgy, true);

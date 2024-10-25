@@ -35,7 +35,7 @@ abstract class AbstractFunctionHandler extends AbstractHandler implements Functi
         return opcodeVariant;
     }
 
-    protected boolean checkArguments(FunctionCall call, List<LogicFunctionArgument> arguments) {
+    protected boolean validateArguments(FunctionCall call, List<LogicFunctionArgument> arguments) {
         if (arguments.size() < minArgs || arguments.size() > numArgs) {
             String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
             error(call, "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());

@@ -934,7 +934,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesWrongInModifier() {
         assertGeneratesMessages(
                 ExpectedMessages.create()
-                        .add("Parameter 'a' isn't input, 'in' modifier cannot be used."),
+                        .add("Parameter 'a' isn't input, 'in' modifier not allowed."),
                 """
                         def foo(out a)
                             a = 10;
@@ -947,7 +947,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void refusesWrongOutModifier() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Parameter 'a' isn't output, 'out' modifier cannot be used."),
+                ExpectedMessages.create().add("Parameter 'a' isn't output, 'out' modifier not allowed."),
                 """
                         def foo(a)
                             a + 1;

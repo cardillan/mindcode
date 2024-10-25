@@ -198,7 +198,7 @@ Control the currently bound unit.
 |`mine(x, y)`|`ucontrol mine x y 0 0 0`|
 |`flag(value)`|`ucontrol flag value 0 0 0 0`|
 |`build(x, y, block, rotation, config)`|`ucontrol build x y block rotation config`|
-|`getBlock(x, y, type?, building?, floor?)`|`ucontrol getBlock x y type building floor`|
+|`getBlock(x, y, out type, out building, out floor)`|`ucontrol getBlock x y type building floor`|
 |`result = within(x, y, radius)`|`ucontrol within x y radius result 0`|
 |`unbind()`|`ucontrol unbind 0 0 0 0 0`|
 
@@ -216,10 +216,10 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`found = ulocate(ore, oreType, outx?, outy?)`|`ulocate ore core true oreType outx outy found 0`|
-|`found = ulocate(building, group, enemy, outx?, outy?, building?)`|`ulocate building group enemy @copper outx outy found building`|
-|`found = ulocate(spawn, outx?, outy?, building?)`|`ulocate spawn core true @copper outx outy found building`|
-|`found = ulocate(damaged, outx?, outy?, building?)`|`ulocate damaged core true @copper outx outy found building`|
+|`found = ulocate(ore, oreType, out outx, out outy)`|`ulocate ore core true oreType outx outy found 0`|
+|`found = ulocate(building, group, enemy, out outx, out outy, out building)`|`ulocate building group enemy @copper outx outy found building`|
+|`found = ulocate(spawn, out outx, out outy, out building)`|`ulocate spawn core true @copper outx outy found building`|
+|`found = ulocate(damaged, out outx, out outy, out building)`|`ulocate damaged core true @copper outx outy found building`|
 # World processor
 
 These instructions are only available to the World Processor,
@@ -397,7 +397,7 @@ Sync a variable across the network. Limited to 20 times a second per variable.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`sync(var?)`|`sync var`|
+|`sync(out var)`|`sync var`|
 
 ## Instruction `getflag`
 

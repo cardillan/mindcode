@@ -37,10 +37,10 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 ip,
                                 profile,
                                 generateInstructions("""
-                                        ulocate(ore, @surge-alloy, outx, outy);
-                                        ulocate(building, core, ENEMY, outx, outy, outbuilding);
-                                        ulocate(spawn, outx, outy, outbuilding);
-                                        ulocate(damaged, outx, outy, outbuilding);
+                                        ulocate(ore, @surge-alloy, out x, out y);
+                                        ulocate(building, core, ENEMY, out x, out y, out building);
+                                        ulocate(spawn, out x, out y, out building);
+                                        ulocate(damaged, out x, out y, out building);
                                         """
                                 ).instructions()
                         )

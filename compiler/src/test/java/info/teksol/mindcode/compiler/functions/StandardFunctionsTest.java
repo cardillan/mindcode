@@ -81,18 +81,18 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesULocate() {
         assertCompilesTo("""
-                        ulocate(ore, @surge-alloy, outx, outy);
-                        outbuilding = ulocate(building, core, ENEMY, outx, outy);
-                        outbuilding = ulocate(spawn, outx, outy);
-                        outbuilding = ulocate(damaged, outx, outy);
+                        ulocate(ore, @surge-alloy, out x, out y);
+                        building = ulocate(building, core, ENEMY, out x, out y);
+                        building = ulocate(spawn, out x, out y);
+                        building = ulocate(damaged, out x, out y);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(3), var(2)),
-                createInstruction(SET, "outbuilding", var(2)),
-                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", var(5), var(4)),
-                createInstruction(SET, "outbuilding", var(4)),
-                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", var(7), var(6)),
-                createInstruction(SET, "outbuilding", var(6)),
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
+                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", var(3), var(2)),
+                createInstruction(SET, "building", var(2)),
+                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "x", "y", var(5), var(4)),
+                createInstruction(SET, "building", var(4)),
+                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "x", "y", var(7), var(6)),
+                createInstruction(SET, "building", var(6)),
                 createInstruction(END)
         );
     }

@@ -157,7 +157,7 @@ if LINK_ID == 0 then
         printflush(message1);
         ubind(UNIT);
         if @unit.controlled == 0 then
-            CORE = ulocate(building, core, false, CORE_X, CORE_Y);
+            CORE = ulocate(building, core, false, out CORE_X, out CORE_Y);
             flag(S_UNUSED);
         end;
     end;
@@ -182,11 +182,10 @@ else
             position = flag \ 100;
             CORE_X = position % @mapw;
             CORE_Y = position \ @mapw;
-            // §§§ B and not A --> B > A
             while @unit.dead == 0 and !within(CORE_X, CORE_Y, RADIUS_WITHIN) do
                 approach(CORE_X, CORE_Y, RADIUS_APPROACH);
             end;
-            CORE = getBlock(CORE_X, CORE_Y, b_type);
+            CORE = getBlock(CORE_X, CORE_Y, out b_type);
             if b_type != @vault then
                 print($"[salmon]Building at $CORE_X, $CORE_Y is not a vault!");
                 printflush(message2);

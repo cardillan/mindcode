@@ -459,8 +459,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private LogicFunctionArgument process(FunctionArgument argument) {
         return argument.hasExpression()
-                ? new LogicFunctionArgument(visit(argument.getExpression()), argument.hasInModifier(), argument.hasOutModifier())
-                : new LogicFunctionArgument(null, argument.hasInModifier(), argument.hasOutModifier());
+                ? new LogicFunctionArgument(argument, visit(argument.getExpression()))
+                : new LogicFunctionArgument(argument);
     }
 
     private List<LogicFunctionArgument> processArguments(List<FunctionArgument> declaredArguments) {
@@ -513,7 +513,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 } else {
                     // Output parameter: the 'in' modifier is forbidden
                     if (argument.hasInModifier()) {
-                        error(argument, "Parameter '%s' isn't input, 'in' modifier cannot be used.", parameter.getName());
+                        error(argument, "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.getName());
                     } else if (argument.hasExpression() && !argument.hasOutModifier()) {
                         // Out modifier needs to be used
                         warn(argument, "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'.", parameter.getName());
@@ -522,7 +522,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             } else {
                 // Input parameter: the 'out' modifier is forbidden
                 if (argument.hasOutModifier()) {
-                    error(argument, "Parameter '%s' isn't output, 'out' modifier cannot be used.", parameter.getName());
+                    error(argument, "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.getName());
                 }
             }
         }
@@ -537,7 +537,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         List<LogicFunctionArgument> result = new ArrayList<>(arguments);
         while (result.size() < parameters.size()) {
             if (parameters.get(result.size()).isOptional()) {
-                result.add(new LogicFunctionArgument(null, false, false));
+                result.add(new LogicFunctionArgument(null, null, false, false));
             } else {
                 break;
             }
@@ -643,7 +643,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 if (predicate.test(argument) && !function.getParameters().get(i).equals(argument.value())) {
                     LogicVariable temp = nextTemp();
                     emit(createSet(temp, argument.value()));
-                    result.set(i, new LogicFunctionArgument(temp, false, false));
+                    result.set(i, new LogicFunctionArgument(null, temp, false, false));
                 }
             }
             return result;
@@ -748,7 +748,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                             emit(createSet(target, parameter));
                         }
                     } else {
-                        error(function.getDeclaredParameters().get(i),
+                        error(argument.pos(),
                                 "Argument assigned to output parameter '%s' is not writable.", declaredParameter.getName());
                     }
                 }
@@ -945,7 +945,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             LogicArgument prop = visit(propertyAccess.getProperty());
             String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
             // Implicit out modifier as this is an assignment
-            LogicFunctionArgument argument = new LogicFunctionArgument(rvalue, false, true);
+            LogicFunctionArgument argument = new LogicFunctionArgument(node.getValue().getInputPosition(), rvalue, false, false);
             if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(argument)) == null) {
                 error(node, "Undefined property '%s.%s'.", propTarget, prop);
                 return NULL;

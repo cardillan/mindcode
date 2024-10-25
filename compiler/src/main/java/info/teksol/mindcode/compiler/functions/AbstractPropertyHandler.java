@@ -26,7 +26,7 @@ abstract class AbstractPropertyHandler extends AbstractHandler implements Proper
         return opcodeVariant;
     }
 
-    protected boolean checkArguments(AstNode node, List<LogicFunctionArgument> arguments) {
+    protected boolean validateArguments(AstNode node, List<LogicFunctionArgument> arguments) {
         if (arguments.size() != numArgs) {
             error(node, "Function '%s': wrong number of arguments (expected %d, found %d)", name, numArgs, arguments.size());
             return false;

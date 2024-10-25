@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.LogicNull.NULL;
 
@@ -24,7 +23,7 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
 
     @Override
     public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicFunctionArgument> fnArgs) {
-        if (!checkArguments(node, fnArgs)) {
+        if (!validateArguments(node, fnArgs)) {
             return NULL;
         }
 
@@ -45,7 +44,7 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
                 ixArgs.add(target);
             } else if (a.type().isSelector() && !a.type().isFunctionName()) {
                 // Selector that IS NOT a function name is taken from the argument list
-                ixArgs.add(BaseFunctionMapper.toKeyword(fnArgs.get(argIndex++).value()));
+                ixArgs.add(BaseFunctionMapper.toKeyword(requireNoModifiers(a, fnArgs.get(argIndex++))));
             } else if (a.type().isSelector()) {
                 // Selector that IS a function name isn't in an argument list and must be filled in
                 ixArgs.add(LogicKeyword.create(a.name()));
@@ -55,57 +54,51 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
                 ixArgs.add(a.type().isOutput() ? functionMapper.instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
             } else if (a.type().isInput()) {
                 // Input argument - take it as it is
-                ixArgs.add(fnArgs.get(argIndex++).value());
+                ixArgs.add(requireNoOutModifier(a, fnArgs.get(argIndex++)));
             } else if (a.type().isOutput()) {
                 if (argIndex >= fnArgs.size()) {
                     // Optional arguments are always output; generate temporary variable for them
                     ixArgs.add(functionMapper.instructionProcessor.nextTemp());
                 } else {
                     // Block name cannot be used as output argument
-                    LogicArgument argument = fnArgs.get(argIndex++).value();
-                    if (argument.getType() == ArgumentType.BLOCK) {
-                        error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).", argument.toMlog(), name);
+                    LogicFunctionArgument argument = fnArgs.get(argIndex++);
+                    if (argument.value().getType() == ArgumentType.BLOCK) {
+                        error(node, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).",
+                                argument.value().toMlog(), name);
                         return NULL;
                     }
-                    ixArgs.add(argument);
+                    ixArgs.add(requireOutModifier(a, argument));
                 }
             } else {
-                ixArgs.add(BaseFunctionMapper.toKeyword(fnArgs.get(argIndex++).value()));
+                // Nether input nor output???
+                ixArgs.add(BaseFunctionMapper.toKeyword(requireNoModifiers(a, fnArgs.get(argIndex++))));
             }
         }
 
-        program.accept(functionMapper.instructionProcessor.createInstruction(functionMapper.astContextSupplier.get(), getOpcode(), ixArgs));
+        program.accept(functionMapper.instructionProcessor.createInstruction(
+                functionMapper.astContextSupplier.get(), getOpcode(), ixArgs));
+
         return tmp;
     }
 
     @Override
-    protected String generateCall(List<NamedParameter> arguments, boolean markOptional) {
-        StringBuilder str = new StringBuilder();
-        NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
-        if (result != null) {
-            str.append(result.name()).append(" = ");
-        }
-
+    protected String generateCall(List<NamedParameter> arguments) {
         NamedParameter block = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.BLOCK);
         Objects.requireNonNull(block);
-        str.append(block.name()).append('.');
-
-        List<String> strArguments = arguments.stream()
-                .filter(a -> !a.type().isUnused() && !a.type().isFunctionName())
-                .map(NamedParameter::name)
-                .collect(Collectors.toList());
-
-        str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
-        return str.toString();
+        String methodCall = super.generateCall(arguments);
+        return methodCall.contains(" = ")
+                ? methodCall.replace(" = ", " = " + block.name() + '.')
+                : block.name() + '.' + methodCall;
     }
 
     @Override
     public String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
         List<NamedParameter> args = new ArrayList<>(arguments);
-        NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
+        NamedParameter block = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
+        Objects.requireNonNull(block);
         CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
         if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
-            return blockArgument.name() + "." + getName() + " = " + args.get(0).name();
+            return block.name() + "." + getName() + " = " + args.get(0).name();
         } else {
             return null;
         }

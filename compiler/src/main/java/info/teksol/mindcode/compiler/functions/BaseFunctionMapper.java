@@ -198,10 +198,12 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         final Opcode opcode = opcodeVariant.opcode();
 
         // Handle special cases
+        // Note: the print() function is handled by the compiler to cover the formating variant,
+        // but it is included here to handl documentation and decompilation.
         switch(opcode) {
-            case FORMAT:    return new FormatFunctionHandler(this, opcode.toString(), opcodeVariant);
-            case PRINT:     return new PrintFunctionHandler(this, opcode.toString(), opcodeVariant);
-            case UBIND:     return new UbindFunctionHandler(this, opcode.toString(), opcodeVariant);
+            case FORMAT, PRINT: return new VariableArityFunctionHandler(this, opcode.toString(), opcodeVariant);
+            case MESSAGE:       return new MessageFunctionHandler(this, opcode.toString(), opcodeVariant);
+            case UBIND:         return new UbindFunctionHandler(this, opcode.toString(), opcodeVariant);
         }
 
         List<NamedParameter> arguments = opcodeVariant.namedParameters();
@@ -213,7 +215,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
         if (results > 1) {
             throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
-        } else if (outputs == 1 && results == 0 && opcodeVariant.opcode() != Opcode.SYNC && opcodeVariant.opcode() != Opcode.MESSAGE) {
+        } else if (outputs == 1 && results == 0 && opcodeVariant.opcode() != Opcode.SYNC) {
             // If there is exactly one output, it must be marked as a result
             throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }

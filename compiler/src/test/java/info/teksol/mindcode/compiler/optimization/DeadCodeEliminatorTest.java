@@ -106,23 +106,23 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         .add("List of unused variables: found, outbuilding.")
                         .add("List of uninitialized variables: ENEMY."),
                 """
-                        ulocate(ore, @surge-alloy, outx, outy);
-                        approach(outx, outy, 4);
-                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found);
-                        approach(outx, outy, 4);
-                        outbuilding = ulocate(spawn, outx, outy, found);
-                        approach(outx, outy, 4);
-                        outbuilding = ulocate(damaged, outx, outy, found);
-                        approach(outx, outy, 4);
+                        ulocate(ore, @surge-alloy, out x, out y);
+                        approach(x, y, 4);
+                        outbuilding = ulocate(building, core, ENEMY, out x, out y, out found);
+                        approach(x, y, 4);
+                        outbuilding = ulocate(spawn, out x, out y, out found);
+                        approach(x, y, 4);
+                        outbuilding = ulocate(damaged, out x, out y, out found);
+                        approach(x, y, 4);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(2)),
-                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", "found", var(3)),
-                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", "found", var(4)),
-                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4"),
+                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", var(2)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4"),
+                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "x", "y", "found", var(3)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4"),
+                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "x", "y", "found", var(4)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4"),
                 createInstruction(END)
         );
     }
@@ -140,14 +140,14 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
     @Test
     void removesUnusedUlocate() {
-        assertCompilesTo(ExpectedMessages.create().add("List of unused variables: x, y."),
+        assertCompilesTo(ExpectedMessages.create().add("List of unused variables: a, b."),
                 """
-                        ulocate(ore, @surge-alloy, outx, outy);
-                        ulocate(ore, @surge-alloy, x, y);
-                        approach(outx, outy, 4);
+                        ulocate(ore, @surge-alloy, out x, out y);
+                        ulocate(ore, @surge-alloy, out a, out b);
+                        approach(x, y, 4);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4"),
                 createInstruction(END)
         );
     }
@@ -156,13 +156,13 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     void preventsEliminationOfPartiallyUsedUlocate() {
         assertCompilesTo(
                 ExpectedMessages.create()
-                        .add("List of unused variables: found, outx, outy.")
+                        .add("List of unused variables: found, x, y.")
                         .add("List of uninitialized variables: ENEMY."),
                 """
-                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found);
+                        outbuilding = ulocate(building, core, ENEMY, out x, out y, out found);
                         print(outbuilding);
                         """,
-                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(0)),
+                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", var(0)),
                 createInstruction(SET, "outbuilding", var(0)),
                 createInstruction(PRINT, "outbuilding"),
                 createInstruction(END)

@@ -125,8 +125,8 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
         assertCompilesTo("""
                         message(notify, @wait);
                         message(mission, @wait);
-                        message(announce, duration, result);
-                        message(toast, duration, result);
+                        message(announce, duration, out result);
+                        message(toast, duration, out result);
                         """,
                 createInstruction(MESSAGE, "notify", "0", "@wait"),
                 createInstruction(MESSAGE, "mission", "0", "@wait"),

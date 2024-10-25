@@ -2,34 +2,34 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.LogicFunctionArgument;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.NamedParameter;
+import info.teksol.mindcode.logic.OpcodeVariant;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-class UbindFunctionHandler extends AbstractFunctionHandler {
+/**
+ * Handles multiple arguments to the function, creating one instruction per passed argument.
+ */
+class VariableArityFunctionHandler extends AbstractFunctionHandler {
     private final BaseFunctionMapper functionMapper;
 
-    UbindFunctionHandler(BaseFunctionMapper functionMapper, String name, OpcodeVariant opcodeVariant) {
+    VariableArityFunctionHandler(BaseFunctionMapper functionMapper, String name, OpcodeVariant opcodeVariant) {
         super(functionMapper, name, opcodeVariant, 1);
         this.functionMapper = functionMapper;
     }
 
     @Override
     public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
-        validateArguments(call, arguments);
-        program.accept(functionMapper.createInstruction(Opcode.UBIND, arguments.get(0).value()));
-        return LogicBuiltIn.UNIT;
+        arguments.forEach(arg -> program.accept(functionMapper.createInstruction(opcodeVariant.opcode(), arg.value())));
+        return arguments.get(arguments.size() - 1).value();
     }
 
     @Override
     protected boolean validateArguments(FunctionCall call, List<LogicFunctionArgument> arguments) {
         return super.validateArguments(call, arguments) && validateStandardArgumentModifiers(arguments);
-    }
-
-    @Override
-    public String generateSampleCall() {
-        return "unit = " + super.generateSampleCall();
     }
 
     @Override
