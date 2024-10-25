@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.functions;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.LogicFunctionArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.NamedParameter;
 import info.teksol.mindcode.logic.OpcodeVariant;
@@ -22,9 +23,9 @@ class MultiplexedFunctionHandler extends AbstractFunctionHandler {
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
         // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
-        FunctionHandler handler = functions.get(BaseFunctionMapper.toKeywordOptional(arguments.get(0)).getKeyword());
+        FunctionHandler handler = functions.get(BaseFunctionMapper.toKeywordOptional(arguments.get(0).value()).getKeyword());
         if (handler == null) {
             throw new MindcodeInternalError("Unhandled type of " + getOpcode() + " in " + arguments);
         }

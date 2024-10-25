@@ -1013,18 +1013,6 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArg_list(MindcodeParser.Arg_listContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArg_list(MindcodeParser.Arg_listContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterArg(MindcodeParser.ArgContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1032,6 +1020,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArg(MindcodeParser.ArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArg_list(MindcodeParser.Arg_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArg_list(MindcodeParser.Arg_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

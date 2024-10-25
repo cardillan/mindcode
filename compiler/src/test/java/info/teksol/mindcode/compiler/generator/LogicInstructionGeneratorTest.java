@@ -752,7 +752,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         a = min();
                         b = max();
                         c = min(a);
-                        d = max(b); 
+                        d = max(b);
                         """
         );
     }

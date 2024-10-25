@@ -61,20 +61,20 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         visit(node.getTarget());
         buffer.append(".");
         buffer.append(node.getProperty());
-        switch (node.getParams().size()) {
+        switch (node.getArguments().size()) {
             case 0:
                 throw new MindcodeInternalError("Unexpected Control AST node with no parameters");
 
             case 1:
                 buffer.append(" = ");
-                visit(node.getParams().get(0));
+                visit(node.getArguments().get(0));
                 break;
 
             default:
                 buffer.append("(");
-                for (int i = 0; i < node.getParams().size(); i++) {
+                for (int i = 0; i < node.getArguments().size(); i++) {
                     if (i > 0) buffer.append(", ");
-                    visit(node.getParams().get(i));
+                    visit(node.getArguments().get(i));
                 }
                 buffer.append(")");
                 break;
@@ -227,15 +227,27 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitFunctionArgument(FunctionArgument node) {
+        if (node.hasExpression()) {
+            if (node.hasInModifier()) buffer.append("in ");
+            if (node.hasOutModifier()) buffer.append("out ");
+            visit(node.getExpression());
+        } else {
+            buffer.append(" ");
+        }
+        return null;
+    }
+
+    @Override
     public String visitFunctionCall(FunctionCall node) {
         buffer.append(node.getFunctionName());
         buffer.append("(");
-        for (int i = 0; i < node.getParams().size() - 1; i++) {
-            visit(node.getParams().get(i));
+        for (int i = 0; i < node.getArguments().size() - 1; i++) {
+            visit(node.getArguments().get(i));
             buffer.append(", ");
         }
-        if (!node.getParams().isEmpty()) {
-            visit(node.getParams().get(node.getParams().size() - 1));
+        if (!node.getArguments().isEmpty()) {
+            visit(node.getArguments().get(node.getArguments().size() - 1));
         }
         buffer.append(")");
         return null;

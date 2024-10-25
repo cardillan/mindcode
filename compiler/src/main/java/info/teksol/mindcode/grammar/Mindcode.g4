@@ -181,11 +181,12 @@ funcall : END LEFT_RBRACKET RIGHT_RBRACKET
         | obj=propaccess LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
         ;
 
-arg_list : arg
-         | arg_list COMMA arg
-         ;
+arg : ( modifier_in = IN )? ( modifier_out = OUT )? ( argument = expression )?
+    ;
 
-arg : expression;
+arg_list
+    : arg ( COMMA arg )*
+    ;
 
 if_expr : IF cond=expression optional_then true_branch=expression_list? if_trailer? END;
 

@@ -26,6 +26,7 @@ public abstract class BaseAstVisitor<T> extends AbstractMessageEmitter implement
         if (node instanceof DoWhileExpression n)        return visitDoWhileStatement(n);
         if (node instanceof ForEachExpression n)        return visitForEachStatement(n);
         if (node instanceof FormattableLiteral n)       return visitFormattableLiteral(n);
+        if (node instanceof FunctionArgument n)         return visitFunctionArgument(n);
         if (node instanceof FunctionCall n)             return visitFunctionCall(n);
         if (node instanceof FunctionDeclaration n)      return visitFunctionDeclaration(n);
         if (node instanceof FunctionParameter n)        return visitFunctionParameter(n);

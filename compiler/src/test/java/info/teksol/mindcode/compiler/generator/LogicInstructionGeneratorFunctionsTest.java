@@ -876,4 +876,139 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         """
         );
     }
+
+    @Test
+    void refusesMissingArguments() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Function 'foo': wrong number of arguments (expected 1, found 0)."),
+                """
+                        def foo(a)
+                            a;
+                        end;
+                        foo();
+                        """
+        );
+    }
+
+    @Test
+    void refusesTooManyArguments() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Function 'foo': wrong number of arguments (expected 1, found 2)."),
+                """
+                        def foo(a)
+                            a;
+                        end;
+                        foo(1, 2);
+                        """
+        );
+    }
+
+    @Test
+    void refusesMissingArgument() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'a' isn't optional, a value must be provided."),
+                """
+                        def foo(a, b)
+                            a + b;
+                        end;
+                        foo(, 1);
+                        """
+        );
+    }
+
+    @Test
+    void reportsMissingModifiers() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'a' is declared 'in out' and no 'in' or 'out' argument modifier was used, assuming 'in out'."),
+                """
+                        def foo(in out a)
+                            a = a + 1;
+                        end;
+                        x = 0;
+                        foo(x);
+                        """
+        );
+    }
+
+    @Test
+    void refusesWrongInModifier() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add("Parameter 'a' isn't input, 'in' modifier cannot be used."),
+                """
+                        def foo(out a)
+                            a = 10;
+                        end;
+                        foo(in 1);
+                        """
+        );
+    }
+
+    @Test
+    void refusesWrongOutModifier() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'a' isn't output, 'out' modifier cannot be used."),
+                """
+                        def foo(a)
+                            a + 1;
+                        end;
+                        foo(out x);
+                        """
+        );
+    }
+
+    @Test
+    void reportsMissingOutModifier() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add("Parameter 'a' is output and 'out' modifier was not used, assuming 'out'."),
+                """
+                        def foo(out a)
+                            a = 10;
+                        end;
+                        foo(x);
+                        """
+        );
+    }
+
+    @Test
+    void handlesOptionalArguments() {
+        assertCompilesTo("""
+                        inline def foo(out a)
+                            a = 10;
+                            20;
+                        end;
+                        print(foo());
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_a", "10"),
+                createInstruction(SET, var(0), "20"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(0)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesOptionalArguments2() {
+        assertCompilesTo("""
+                        inline def foo(out a)
+                            a = 10;
+                            20;
+                        end;
+                        foo(out x);
+                        print(foo());
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_a", "10"),
+                createInstruction(SET, var(0), "20"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, "x", "__fn0_a"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, "__fn1_a", "10"),
+                createInstruction(SET, var(1), "20"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
 }

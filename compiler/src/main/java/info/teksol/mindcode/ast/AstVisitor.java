@@ -31,6 +31,8 @@ public interface AstVisitor<T> {
 
     T visitFormattableLiteral(FormattableLiteral node);
 
+    T visitFunctionArgument(FunctionArgument node);
+
     T visitFunctionCall(FunctionCall node);
 
     T visitFunctionDeclaration(FunctionDeclaration node);

@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -263,6 +264,22 @@ public final class CallGraph {
         /** @return list of parameters of the function as LogicVariable */
         public List<LogicVariable> getParameters() {
             return parameters;
+        }
+
+        public boolean isInputFunctionParameter(LogicVariable variable) {
+            return variable.getType() == ArgumentType.LOCAL_VARIABLE
+                    && prefix.equals(variable.getFunctionPrefix())
+                    && parameterMap.containsKey(variable.getName())
+                    && parameterMap.get(variable.getName()).isInput();
+        }
+
+        public boolean isNotOutput(LogicVariable variable) {
+            if (variable.getType() == ArgumentType.LOCAL_VARIABLE && prefix.equals(variable.getFunctionPrefix())) {
+                FunctionParameter declaredParameter = getDeclaredParameter(variable.getName());
+                return declaredParameter == null || !declaredParameter.isOutput();
+            } else {
+                return true;
+            }
         }
 
         /** @return number of function parameters */

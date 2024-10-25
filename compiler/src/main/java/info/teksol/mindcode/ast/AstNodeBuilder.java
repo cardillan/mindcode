@@ -200,12 +200,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitArg_list(MindcodeParser.Arg_listContext ctx) {
-        if (ctx.arg_list() != null) {
-            return new Seq(pos(ctx.getStart()), visit(ctx.arg_list()), visit(ctx.arg()));
+    public FunctionArgument visitArg(MindcodeParser.ArgContext ctx) {
+        if (ctx.argument != null) {
+            return new FunctionArgument(pos(ctx.getStart()),
+                    visit(ctx.argument),
+                    ctx.modifier_in != null,
+                    ctx.modifier_out != null);
         } else {
-            final AstNode last = visit(ctx.arg());
-            return new Seq(pos(ctx.getStart()), last);
+            return new FunctionArgument(pos(ctx.getStart()),
+                    ctx.modifier_in != null,
+                    ctx.modifier_out != null);
         }
     }
 
@@ -417,42 +421,29 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitFunction_call(MindcodeParser.Function_callContext ctx) {
-        final List<AstNode> params = new ArrayList<>();
+    public AstNode visitFuncall(MindcodeParser.FuncallContext ctx) {
+        final List<FunctionArgument> arguments = ctx.params != null
+                ? ctx.params.arg().stream().map(this::visitArg).toList()
+                : List.of();
 
-        if (ctx.funcall().params != null) {
-            final AstNode nodes;
-            if (ctx.funcall().params.arg_list() != null) {
-                nodes = visit(ctx.funcall().params.arg_list());
-            } else {
-                nodes = new NoOp();
-            }
-
-            gatherArgs(new Seq(pos(ctx.getStart()), nodes, visit(ctx.funcall().params.arg())), params);
-        }
-
-        if (ctx.funcall().END() != null) {
+        if (ctx.END() != null) {
             // The end function is a bit special: because the keyword "end" is also used to
             // close blocks, the grammar needed to special-case the end function directly.
             return new FunctionCall(pos(ctx.getStart()), "end");
-        } else if (ctx.funcall().obj != null) {
+        } else if (ctx.obj != null) {
             final AstNode target;
-            if (ctx.funcall().obj.unit_ref() != null) {
-                target = visit(ctx.funcall().obj.unit_ref());
-            } else if (ctx.funcall().obj.var_ref() != null) {
-                target = visit(ctx.funcall().obj.var_ref());
+            if (ctx.obj.unit_ref() != null) {
+                target = visit(ctx.obj.unit_ref());
+            } else if (ctx.obj.var_ref() != null) {
+                target = visit(ctx.obj.var_ref());
             } else {
                 throw new MindcodeInternalError("Failed to parse function call on a property access at " + ctx.getText());
             }
 
-            return new Control(pos(ctx.getStart()),
-                    target,
-                    ctx.funcall().obj.prop.getText(),
-                    params
-            );
+            return new Control(pos(ctx.getStart()), target, ctx.obj.prop.getText(), arguments);
         } else {
-            final String name = ctx.funcall().name.getText();
-            return new FunctionCall(pos(ctx.getStart()), name, params);
+            final String name = ctx.name.getText();
+            return new FunctionCall(pos(ctx.getStart()), name, arguments);
         }
     }
 
@@ -481,7 +472,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 ctx.modifier_in != null,
                 ctx.modifier_out != null);
     }
-
 
     @Override
     public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
@@ -772,7 +762,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public AstNode visitRem_comment(MindcodeParser.Rem_commentContext ctx) {
         String str = ctx.getText().substring(3).strip();
         StringLiteral text = new StringLiteral(pos(ctx.getStart()), str);
-        List<AstNode> params = List.of(text);
-        return new FunctionCall(pos(ctx.getStart()), "remark", params);
+        FunctionArgument argument = new FunctionArgument(pos(ctx.getStart()), text, false, false);
+        return new FunctionCall(pos(ctx.getStart()), "remark", argument);
     }
 }

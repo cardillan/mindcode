@@ -124,7 +124,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
         open("Control{");
         print("target="); visit(node.getTarget()); newLine(",");
         print("property="); visit(node.getProperty()); newLine(",");
-        print("params="); visitList(node.getParams());
+        print("arguments="); visitList(node.getArguments());
         close("}");
         return null;
     }
@@ -166,10 +166,25 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitFunctionArgument(FunctionArgument node) {
+        open("FunctionArgument{");
+        print("expression=");
+        if (node.hasExpression()) {
+            visit(node.getExpression());
+        } else {
+            print("<none>");
+        }
+        newLine(","); print("inModifier="); print(node.hasInModifier());
+        newLine(","); print("outModifier="); print(node.hasOutModifier());
+        close("}");
+        return null;
+    }
+
+    @Override
     public String visitFunctionCall(FunctionCall node) {
         open("FunctionCall{");
         print("functionName="); visit(node.getFunctionName()); newLine(",");
-        print("params="); visitList(node.getParams());
+        print("arguments="); visitList(node.getArguments());
         close("}");
         return null;
     }

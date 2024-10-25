@@ -115,6 +115,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return output;
     }
 
+    public boolean isOptional() {
+        return output && !input;
+    }
+
     @Override
     public String toMlog() {
         return functionPrefix != null && argumentType != ArgumentType.FUNCTION_RETVAL ? functionPrefix + "_" + name : name;

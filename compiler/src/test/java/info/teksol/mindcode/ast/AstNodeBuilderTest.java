@@ -6,12 +6,22 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Order(99)
 class AstNodeBuilderTest extends AbstractAstTest {
+
+    private static FunctionArgument fa(AstNode expression) {
+        return new FunctionArgument(null, expression, false, false);
+    }
+
+    private static List<FunctionArgument> fa(AstNode... expressions) {
+        return Stream.of(expressions).map(AstNodeBuilderTest::fa).toList();
+    }
+
     @Test
     void parsesTheEmptyProgram() {
         assertEquals(
@@ -23,7 +33,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesLiteralInt() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new NumericLiteral(null, "156")
                 ),
                 translateToAst("156;")
@@ -34,7 +44,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesLiteralFloat() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new NumericLiteral(null, "156.156")
                 ),
                 translateToAst("156.156;")
@@ -45,7 +55,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesLiteralString() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new StringLiteral(null, "156")
                 ),
                 translateToAst("\"156\";")
@@ -56,7 +66,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesVarRef() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new VarRef(null, "a")
                 ),
                 translateToAst("a;")
@@ -67,8 +77,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesSimpleAssignment() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
+                new Seq(null,
+                        new Assignment(null,
                                 new VarRef(null, "a"),
                                 new NumericLiteral(null, "1")
                         )
@@ -81,9 +91,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesSimpleBinOpPlusMinus() {
         assertEquals(
-                new Seq(null, 
-                        new BinaryOp(null, 
-                                new BinaryOp(null, 
+                new Seq(null,
+                        new BinaryOp(null,
+                                new BinaryOp(null,
                                         new NumericLiteral(null, "1"),
                                         "+",
                                         new NumericLiteral(null, "2")
@@ -100,8 +110,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesSimpleBinOpExp() {
         assertEquals(
-                new Seq(null, 
-                        new BinaryOp(null, 
+                new Seq(null,
+                        new BinaryOp(null,
                                 new NumericLiteral(null, "3.1415"),
                                 "**",
                                 new NumericLiteral(null, "2")
@@ -115,9 +125,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesSimpleBinOpMulDiv() {
         assertEquals(
-                new Seq(null, 
-                        new BinaryOp(null, 
-                                new BinaryOp(null, 
+                new Seq(null,
+                        new BinaryOp(null,
+                                new BinaryOp(null,
                                         new NumericLiteral(null, "1"),
                                         "*",
                                         new NumericLiteral(null, "2")
@@ -134,7 +144,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesUnaryOperation() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new BinaryOp(null, new VarRef(null, "ready"), "==", new BooleanLiteral(null, false))
                 ),
                 translateToAst("not ready;")
@@ -144,11 +154,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void respectsArithmeticOrderOfOperations() {
         assertEquals(
-                new Seq(null, 
-                        new BinaryOp(null, 
+                new Seq(null,
+                        new BinaryOp(null,
                                 new NumericLiteral(null, "1"),
                                 "+",
-                                new BinaryOp(null, 
+                                new BinaryOp(null,
                                         new NumericLiteral(null, "2"),
                                         "*",
                                         new NumericLiteral(null, "3")
@@ -162,9 +172,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesParenthesis() {
         assertEquals(
-                new Seq(null, 
-                        new BinaryOp(null, 
-                                new BinaryOp(null, 
+                new Seq(null,
+                        new BinaryOp(null,
+                                new BinaryOp(null,
                                         new NumericLiteral(null, "1"),
                                         "+",
                                         new NumericLiteral(null, "2")
@@ -180,20 +190,20 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesComplexConditionalExpression() {
         assertEquals(
-                new Seq(null, 
-                        new BinaryOp(null, 
-                                new BoolBinaryOp(null, 
-                                        new BinaryOp(null, 
+                new Seq(null,
+                        new BinaryOp(null,
+                                new BoolBinaryOp(null,
+                                        new BinaryOp(null,
                                                 new VarRef(null, "a"),
                                                 "<",
                                                 new VarRef(null, "b")
                                         ),
                                         "and",
-                                        new BinaryOp(null, 
+                                        new BinaryOp(null,
                                                 new VarRef(null, "c"),
                                                 ">",
-                                                new BinaryOp(null, 
-                                                        new BinaryOp(null, 
+                                                new BinaryOp(null,
+                                                        new BinaryOp(null,
                                                                 new NumericLiteral(null, "4"),
                                                                 "*",
                                                                 new VarRef(null, "r")
@@ -214,27 +224,24 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesFunctionCalls() {
         assertEquals(
-                new Seq(null, 
-                        new Seq(null, 
-                                new Seq(null, 
-                                        new Seq(null, 
-                                                new FunctionCall(null, 
+                new Seq(null,
+                        new Seq(null,
+                                new Seq(null,
+                                        new Seq(null,
+                                                new FunctionCall(null,
                                                         "print",
-                                                        List.of(
-                                                                new StringLiteral(null, "'a': "),
-                                                                new VarRef(null, "a")
-                                                        )
+                                                        fa(new StringLiteral(null, "'a': ")),
+                                                        fa(new VarRef(null, "a"))
                                                 )
                                         ),
-                                        new FunctionCall(null, "random", List.of())
+                                        new FunctionCall(null, "random")
                                 ),
-                                new FunctionCall(null, "print", List.of(new VarRef(null, "r")))
+                                new FunctionCall(null, "print", fa(new VarRef(null, "r")))
                         ),
-                        new FunctionCall(null, 
+                        new FunctionCall(null,
                                 "print",
-                                List.of(
-                                        new StringLiteral(null, "\\nb: "),
-                                        new BinaryOp(null, 
+                                fa(new StringLiteral(null, "\\nb: ")),
+                                fa(new BinaryOp(null,
                                                 new VarRef(null, "b"),
                                                 "/",
                                                 new NumericLiteral(null, "3.1415")
@@ -256,12 +263,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesUnaryMinus() {
         assertEquals(
-                new Seq(null, 
-                        new Seq(null, 
-                                new Seq(null, 
-                                        new Assignment(null, 
+                new Seq(null,
+                        new Seq(null,
+                                new Seq(null,
+                                        new Assignment(null,
                                                 new VarRef(null, "dx"),
-                                                new BinaryOp(null, 
+                                                new BinaryOp(null,
                                                         new VarRef(null, "dx"),
                                                         "*",
                                                         new NumericLiteral(null, "-1")
@@ -270,9 +277,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 ),
                                 new Assignment(null, new VarRef(null, "dy"), new NumericLiteral(null, "-1"))
                         ),
-                        new Assignment(null, 
+                        new Assignment(null,
                                 new VarRef(null, "dz"),
-                                new BinaryOp(null, 
+                                new BinaryOp(null,
                                         new NumericLiteral(null, "2"),
                                         "-",
                                         new NumericLiteral(null, "1")
@@ -286,8 +293,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesHeapAccesses() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
+                new Seq(null,
+                        new Assignment(null,
                                 new HeapAccess(null, "cell2", new NumericLiteral(null, "1")),
                                 new HeapAccess(null, "cell3", new NumericLiteral(null, "0"))
                         )
@@ -299,17 +306,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesGlobalReferences() {
         assertEquals(
-                new Seq(null, 
-                        new Seq(null, 
+                new Seq(null,
+                        new Seq(null,
                                 new Seq(null, new HeapAllocation(null, "cell2", 4, 5), new NoOp()),
-                                new Assignment(null, 
+                                new Assignment(null,
                                         new HeapAccess(null, "cell2", 0),
                                         new NumericLiteral(null, "1")
                                 )
                         ),
-                        new Assignment(null, 
+                        new Assignment(null,
                                 new HeapAccess(null, "cell2", 1),
-                                new BinaryOp(null, 
+                                new BinaryOp(null,
                                         new HeapAccess(null, "cell2", 0),
                                         "+",
                                         new NumericLiteral(null, "42")
@@ -324,13 +331,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesExponentiationAssignment() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
-                                new HeapAccess(null, "cell1" ,new NumericLiteral(null, "0")),
-                                new FunctionCall(null, 
+                new Seq(null,
+                        new Assignment(null,
+                                new HeapAccess(null, "cell1", new NumericLiteral(null, "0")),
+                                new FunctionCall(null,
                                         "rand",
-                                        List.of(
-                                                new BinaryOp(null, 
+                                        fa(new BinaryOp(null,
                                                         new NumericLiteral(null, "9"),
                                                         "**",
                                                         new NumericLiteral(null, "9")
@@ -346,8 +352,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesHeapReferencesWithRvalues() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
+                new Seq(null,
+                        new Assignment(null,
                                 new HeapAccess(null, "cell1", new VarRef(null, "dx")),
                                 new NumericLiteral(null, "1")
                         )
@@ -359,7 +365,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesComments() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new Assignment(null, new VarRef(null, "wasInitialized"), new NumericLiteral(null, "1"))
                 ),
                 translateToAst(
@@ -375,32 +381,32 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesMathFunctions() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
+                new Seq(null,
+                        new Assignment(null,
                                 new VarRef(null, "x"),
-                                new FunctionCall(null, 
+                                new FunctionCall(null,
                                         "ceil",
-                                        new FunctionCall(null, 
+                                        fa(new FunctionCall(null,
                                                 "floor",
-                                                new FunctionCall(null, 
+                                                fa(new FunctionCall(null,
                                                         "sin",
-                                                        new FunctionCall(null, 
+                                                        fa(new FunctionCall(null,
                                                                 "log",
-                                                                new FunctionCall(null, 
+                                                                fa(new FunctionCall(null,
                                                                         "cos",
-                                                                        new FunctionCall(null, 
+                                                                        fa(new FunctionCall(null,
                                                                                 "abs",
-                                                                                new FunctionCall(null, 
+                                                                                fa(new FunctionCall(null,
                                                                                         "tan",
-                                                                                        new FunctionCall(null, "rand",
-                                                                                                new NumericLiteral(null, "1")
-                                                                                        )
-                                                                                )
-                                                                        )
-                                                                )
-                                                        )
-                                                )
-                                        )
+                                                                                        fa(new FunctionCall(null, "rand",
+                                                                                                fa(new NumericLiteral(null, "1"))
+                                                                                        ))
+                                                                                ))
+                                                                        ))
+                                                                ))
+                                                        ))
+                                                ))
+                                        ))
                                 )
                         )
                 ),
@@ -411,10 +417,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesRefsWithDashInThem() {
         assertEquals(
-                new Seq(null, 
-                        new FunctionCall(null, 
+                new Seq(null,
+                        new FunctionCall(null,
                                 "build",
-                                List.of(
+                                fa(
                                         new VarRef(null, "x"),
                                         new VarRef(null, "y"),
                                         new Ref(null, "titanium-conveyor"),
@@ -430,11 +436,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesFlagAssignment() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new NoOp(),
-                        new FunctionCall(null, 
+                        new FunctionCall(null,
                                 "flag",
-                                List.of(new VarRef(null, "FLAG"))
+                                fa(new VarRef(null, "FLAG"))
                         )
                 ),
                 translateToAst("flag(FLAG);")
@@ -444,22 +450,22 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesAddressCalculationReferences() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
+                new Seq(null,
+                        new Assignment(null,
                                 new HeapAccess(null, "cell1", new VarRef(null, "ptr")),
-                                new BinaryOp(null, 
-                                        new HeapAccess(null, 
+                                new BinaryOp(null,
+                                        new HeapAccess(null,
                                                 "cell1",
-                                                new BinaryOp(null, 
+                                                new BinaryOp(null,
                                                         new VarRef(null, "ptr"),
                                                         "-",
                                                         new NumericLiteral(null, "1")
                                                 )
                                         ),
                                         "+",
-                                        new HeapAccess(null, 
+                                        new HeapAccess(null,
                                                 "cell1",
-                                                new BinaryOp(null, 
+                                                new BinaryOp(null,
                                                         new VarRef(null, "ptr"),
                                                         "-",
                                                         new NumericLiteral(null, "2")
@@ -476,7 +482,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesHeapAllocationWithExclusiveRange() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new HeapAllocation(null, "cell2", new ExclusiveRange(null, new NumericLiteral(null, 0), new NumericLiteral(null, 64))),
                         new NoOp()
                 ),
@@ -487,7 +493,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesHeapAllocationWithInclusiveRange() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new HeapAllocation(null, "cell2", 0, 30),
                         new NoOp()
                 ),
@@ -503,15 +509,15 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesPropertyAccesses() {
         assertEquals(
-                new Seq(null, 
-                        new Seq(null, 
-                                new BinaryOp(null, 
+                new Seq(null,
+                        new Seq(null,
+                                new BinaryOp(null,
                                         new PropertyAccess(null, new VarRef(null, "foundation1"), new Ref(null, "copper")),
                                         "<",
                                         new PropertyAccess(null, new VarRef(null, "foundation1"), new Ref(null, "itemCapacity"))
                                 )
                         ),
-                        new BinaryOp(null, 
+                        new BinaryOp(null,
                                 new PropertyAccess(null, new VarRef(null, "reactor1"), new Ref(null, "cryofluid")),
                                 "<",
                                 new NumericLiteral(null, "10")
@@ -527,10 +533,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesWriteToPropertyAccess() {
         assertEquals(
-                new Seq(null, 
-                        new Assignment(null, 
+                new Seq(null,
+                        new Assignment(null,
                                 new PropertyAccess(null, new VarRef(null, "conveyor1"), new Ref(null, "enabled")),
-                                new BinaryOp(null, 
+                                new BinaryOp(null,
                                         new PropertyAccess(null, new VarRef(null, "CORE"), new Ref(null, "copper")),
                                         "<",
                                         new PropertyAccess(null, new VarRef(null, "CORE"), new Ref(null, "itemCapacity"))
@@ -544,17 +550,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesUsefulWhileLoop() {
         assertEquals(
-                new Seq(null, 
-                        new Seq(null, 
+                new Seq(null,
+                        new Seq(null,
                                 new Assignment(null, new VarRef(null, "n"), new NumericLiteral(null, "5"))
                         ),
                         new WhileExpression(null, null,
                                 new NoOp(),
                                 new BinaryOp(null, new VarRef(null, "n"), ">", new NumericLiteral(null, "0")),
-                                new Seq(null, 
-                                        new Assignment(null, 
+                                new Seq(null,
+                                        new Assignment(null,
                                                 new VarRef(null, "n"),
-                                                new BinaryOp(null, 
+                                                new BinaryOp(null,
                                                         new VarRef(null, "n"),
                                                         "-",
                                                         new NumericLiteral(null, "1")
@@ -577,12 +583,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesInclusiveIteratorStyleLoop() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new RangedForExpression(null,
                                 null,
                                 new VarRef(null, "n"),
                                 new InclusiveRange(null, new NumericLiteral(null, 1), new NumericLiteral(null, 17)),
-                                new Seq(null, new FunctionCall(null, "print", new VarRef(null, "n")))
+                                new Seq(null, new FunctionCall(null, "print", fa(new VarRef(null, "n"))))
                         )
                 ),
                 translateToAst("""
@@ -596,12 +602,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesExclusiveIteratorStyleLoop() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new RangedForExpression(null,
                                 null,
                                 new VarRef(null, "n"),
                                 new ExclusiveRange(null, new NumericLiteral(null, 1), new NumericLiteral(null, 17)),
-                                new Seq(null, new FunctionCall(null, "print", new VarRef(null, "n")))
+                                new Seq(null, new FunctionCall(null, "print", fa(new VarRef(null, "n"))))
                         )
                 ),
                 translateToAst("""
@@ -615,7 +621,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesForEachLoop() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new ForEachExpression(null,
                                 null,
                                 List.of(
@@ -626,10 +632,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new Ref(null, "poly"),
                                         new Ref(null, "mega")
                                 ),
-                                new Seq(null, 
-                                        new FunctionCall(null, 
+                                new Seq(null,
+                                        new FunctionCall(null,
                                                 "print",
-                                                List.of(new VarRef(null, "a"))
+                                                fa(new VarRef(null, "a"))
                                         )
                                 )
                         )
@@ -656,7 +662,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral(null, "5")
                                 ),
                                 new Seq(null,
-                                        new FunctionCall(null, "print", new VarRef(null, "n"))
+                                        new FunctionCall(null, "print", fa(new VarRef(null, "n")))
                                 ),
                                 new Seq(null,
                                         new Assignment(null,
@@ -689,7 +695,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesRefs() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new NoOp(),
                         new WhileExpression(null, null,
                                 new NoOp(),
@@ -698,10 +704,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         "===",
                                         new NullLiteral(null)
                                 ),
-                                new Seq(null, 
-                                        new FunctionCall(null, 
+                                new Seq(null,
+                                        new FunctionCall(null,
                                                 "ubind",
-                                                List.of(new VarRef(null, "poly"))
+                                                fa(new VarRef(null, "poly"))
                                         )
                                 ),
                                 new NoOp()
@@ -719,7 +725,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesIfExpression() {
         assertEquals(
-                new Seq(null, 
+                new Seq(null,
                         new IfExpression(null,
                                 new BinaryOp(null,
                                         new VarRef(null, "n"),
@@ -727,7 +733,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral(null, "4")
                                 ),
                                 new Seq(null,
-                                        new Assignment(null, 
+                                        new Assignment(null,
                                                 new HeapAccess(null, "cell1", new NumericLiteral(null, "2")),
                                                 new BinaryOp(null,
                                                         new HeapAccess(null, "cell1", new NumericLiteral(null, "2")),
@@ -747,7 +753,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesIfElseExpression() {
         assertEquals(
                 new Seq(null,
-                        new Assignment(null, 
+                        new Assignment(null,
                                 new VarRef(null, "value"),
                                 new IfExpression(null,
                                         new BinaryOp(null,
@@ -758,12 +764,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new Seq(null, new BooleanLiteral(null, false)),
                                         new Seq(null,
                                                 new Seq(null,
-                                                        new Assignment(null, 
+                                                        new Assignment(null,
                                                                 new HeapAccess(null, "cell1", new NumericLiteral(null, "4")),
                                                                 new BooleanLiteral(null, true)
                                                         )
                                                 ),
-                                                new Assignment(null, 
+                                                new Assignment(null,
                                                         new VarRef(null, "n"),
                                                         new BinaryOp(null,
                                                                 new VarRef(null, "n"),
@@ -795,17 +801,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new VarRef(null, "state"),
                                         "==",
                                         new NumericLiteral(null, "1")),
-                                new Seq(null, new FunctionCall(null, 
+                                new Seq(null, new FunctionCall(null,
                                         "print",
-                                        List.of(new VarRef(null, "m")))),
+                                        fa(new VarRef(null, "m")))),
                                 new Seq(null, new IfExpression(null,
                                         new BinaryOp(null,
                                                 new VarRef(null, "state"),
                                                 "==",
                                                 new NumericLiteral(null, "2")),
-                                        new Seq(null, new FunctionCall(null, 
+                                        new Seq(null, new FunctionCall(null,
                                                 "print",
-                                                List.of(new VarRef(null, "n")))),
+                                                fa(new VarRef(null, "n")))),
                                         new NoOp())))),
                 translateToAst("""
                         if state == 1 then
@@ -912,7 +918,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void supportsModuloOperator() {
         assertEquals(
                 new Seq(null,
-                        new Assignment(null, 
+                        new Assignment(null,
                                 new VarRef(null, "running"),
                                 new BinaryOp(null,
                                         new BinaryOp(null,
@@ -955,11 +961,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new Seq(null,
                                                 new Seq(null,
                                                         new Seq(null,
-                                                                new Assignment(null, 
+                                                                new Assignment(null,
                                                                         new VarRef(null, "n"), new NumericLiteral(null, "0")
                                                                 )
                                                         ),
-                                                        new Assignment(null, 
+                                                        new Assignment(null,
                                                                 new VarRef(null, "deadline"),
                                                                 new BinaryOp(null,
                                                                         new Ref(null, "tick"),
@@ -976,7 +982,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                                 new VarRef(null, "deadline")
                                                         ),
                                                         new Seq(null,
-                                                                new Assignment(null, 
+                                                                new Assignment(null,
                                                                         new VarRef(null, "n"),
                                                                         new BinaryOp(null, new VarRef(null, "n"),
                                                                                 "+",
@@ -1049,7 +1055,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 )
                                         )
                                 ),
-                                new FunctionCall(null, "foo", new NumericLiteral(null, "1"))
+                                new FunctionCall(null, "foo", fa(new NumericLiteral(null, "1")))
                         )
                 ),
                 prettyPrint(
@@ -1085,7 +1091,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 )
                                         )
                                 ),
-                                new FunctionCall(null, "foo", new NumericLiteral(null, "1"), new NumericLiteral(null, "6"))
+                                new FunctionCall(null, "foo",
+                                        fa(new NumericLiteral(null, "1")),
+                                        fa(new NumericLiteral(null, "6"))
+                                )
                         )
                 ),
                 prettyPrint(
@@ -1108,7 +1117,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new Control(null,
                                         new VarRef(null, "turret"),
                                         "shoot",
-                                        List.of(
+                                        fa(
                                                 new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "shootX")),
                                                 new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "shootY")),
                                                 new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "shooting"))
@@ -1190,17 +1199,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new PropertyAccess(null, new VarRef(null, "vault1"), new Ref(null, "itemCapacity"))
                                 ),
                                 new Seq(null,
-                                        new FunctionCall(null, "harvest", new VarRef(null, "vault1"), new VarRef(null, "resource"))
+                                        new FunctionCall(null, "harvest", fa(new VarRef(null, "vault1"), new VarRef(null, "resource")))
                                 ),
                                 new NoOp()
                         )
                 ),
                 translateToAst("""
-                                resource = @silicon;
-                                if vault1.sensor(resource) < vault1.itemCapacity then
-                                    harvest(vault1, resource);
-                                end;
-                                """
+                        resource = @silicon;
+                        if vault1.sensor(resource) < vault1.itemCapacity then
+                            harvest(vault1, resource);
+                        end;
+                        """
                 )
         );
     }
@@ -1209,16 +1218,18 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void correctlyReadsTernaryOperator() {
         assertEquals(
                 new Seq(null,
-                        new FunctionCall(null, 
+                        new FunctionCall(null,
                                 "print",
-                                new StringLiteral(null, "\\nsm.enabled: "),
-                                new IfExpression(null,
-                                        new PropertyAccess(null,
-                                                new VarRef(null, "smelter1"),
-                                                new Ref(null, "enabled")
-                                        ),
-                                        new StringLiteral(null, "true"),
-                                        new StringLiteral(null, "false")
+                                fa(
+                                        new StringLiteral(null, "\\nsm.enabled: "),
+                                        new IfExpression(null,
+                                                new PropertyAccess(null,
+                                                        new VarRef(null, "smelter1"),
+                                                        new Ref(null, "enabled")
+                                                ),
+                                                new StringLiteral(null, "true"),
+                                                new StringLiteral(null, "false")
+                                        )
                                 )
                         )
                 ),
@@ -1230,7 +1241,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void correctlyParsesStrictNotEqual() {
         assertEquals(
                 new Seq(null,
-                        new Assignment(null, 
+                        new Assignment(null,
                                 new VarRef(null, "a"),
                                 new BinaryOp(null,
                                         new BinaryOp(null,
@@ -1269,7 +1280,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NoOp()
                                 )
                         ),
-                        new FunctionCall(null, "print", new StringLiteral(null, "End"))
+                        new FunctionCall(null, "print", fa(new StringLiteral(null, "End")))
                 ),
 
                 translateToAst("""

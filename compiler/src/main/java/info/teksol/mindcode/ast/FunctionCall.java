@@ -8,24 +8,24 @@ import java.util.Objects;
 
 public class FunctionCall extends ControlBlockAstNode {
     private final String functionName;
-    private final List<AstNode> params;
+    private final List<FunctionArgument> arguments;
 
-    FunctionCall(InputPosition inputPosition, String functionName, AstNode... params) {
-        this(inputPosition, functionName, List.of(params));
+    FunctionCall(InputPosition inputPosition, String functionName, FunctionArgument... arguments) {
+        this(inputPosition, functionName, List.of(arguments));
     }
 
-    FunctionCall(InputPosition inputPosition, String functionName, List<AstNode> params) {
-        super(inputPosition, params);
+    FunctionCall(InputPosition inputPosition, String functionName, List<FunctionArgument> arguments) {
+        super(inputPosition, arguments);
         this.functionName = functionName;
-        this.params = params;
+        this.arguments = arguments;
     }
 
     public String getFunctionName() {
         return functionName;
     }
 
-    public List<AstNode> getParams() {
-        return params;
+    public List<FunctionArgument> getArguments() {
+        return arguments;
     }
 
     @Override
@@ -34,19 +34,19 @@ public class FunctionCall extends ControlBlockAstNode {
         if (o == null || getClass() != o.getClass()) return false;
         FunctionCall functionCall = (FunctionCall) o;
         return Objects.equals(functionName, functionCall.functionName) &&
-                Objects.equals(params, functionCall.params);
+                Objects.equals(arguments, functionCall.arguments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(functionName, params);
+        return Objects.hash(functionName, arguments);
     }
 
     @Override
     public String toString() {
         return "FunctionCall{" +
                 "functionName='" + functionName + '\'' +
-                ", params=" + params +
+                ", arguments=" + arguments +
                 '}';
     }
 

@@ -15,10 +15,12 @@ import info.teksol.mindcode.mimex.Icons;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 import static info.teksol.mindcode.logic.LogicBoolean.TRUE;
@@ -406,7 +408,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private void appendRecursiveFunctionDeclaration(LogicFunction function) {
-        // Register all parameters for stack storage
+        // Register all input parameters for stack storage
         function.getParameters().forEach(functionContext::registerVariable);
 
         // Function parameters and return address are set up at the call site
@@ -427,34 +429,50 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
-    public LogicValue visitFunctionCall(FunctionCall node) {
+    public LogicValue visitFunctionArgument(FunctionArgument node) {
+        return NULL;
+    }
+
+    @Override
+    public LogicValue visitFunctionCall(FunctionCall call) {
         // Solve special cases
-        return switch (node.getFunctionName()) {
-            case "min", "max"   -> handleMinMax(node);
-            case "printf"       -> handlePrintf(node);
-            case "print"        -> handleFormattedOutput(node, Formatter.PRINT);
-            case "println"      -> handleFormattedOutput(node, Formatter.PRINTLN);
-            case "remark"       -> handleFormattedOutput(node, Formatter.REMARK);
-            default             -> handleFunctionCall(node, node.getParams());
+        return switch (call.getFunctionName()) {
+            case "min", "max"   -> handleMinMax(call);
+            case "printf"       -> handlePrintf(call);
+            case "print"        -> handleFormattedOutput(call, Formatter.PRINT);
+            case "println"      -> handleFormattedOutput(call, Formatter.PRINTLN);
+            case "remark"       -> handleFormattedOutput(call, Formatter.REMARK);
+            default             -> handleFunctionCall(call);
         };
     }
 
-    private List<LogicValue> processArguments(List<AstNode> params) {
-        // Do not track temporary variables created by evaluating function parameter expressions.
-        // They'll be used solely to pass values to actual function parameters and won't be used subsequently
-        return nodeContext.encapsulate(() -> params.stream().map(this::visit).collect(Collectors.toList()));
+    private void validateStandardFunctionArguments(List<FunctionArgument> declaredArguments) {
+        for (FunctionArgument argument : declaredArguments) {
+            if (!argument.hasExpression()) {
+                error(argument, "Parameter corresponding to this argument isn't optional, a value must be provided.");
+            }
+            if (argument.hasOutModifier()) {
+                error(argument, "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.");
+            }
+        }
     }
 
-    private LogicValue handleFunctionCall(FunctionCall call, List<AstNode> params) {
+    private LogicFunctionArgument process(FunctionArgument argument) {
+        return argument.hasExpression()
+                ? new LogicFunctionArgument(visit(argument.getExpression()), argument.hasInModifier(), argument.hasOutModifier())
+                : new LogicFunctionArgument(null, argument.hasInModifier(), argument.hasOutModifier());
+    }
+
+    private List<LogicFunctionArgument> processArguments(List<FunctionArgument> declaredArguments) {
+        // Do not track temporary variables created by evaluating function parameter expressions.
+        // They'll be used solely to pass values to actual function parameters and won't be used subsequently
+        return nodeContext.encapsulate(() -> declaredArguments.stream().map(this::process).toList());
+    }
+
+    private LogicValue handleFunctionCall(FunctionCall call) {
         String functionName = call.getFunctionName();
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        final List<LogicValue> arguments = processArguments(params);
-
-        if (functionName.equals("sync") && arguments.size() == 1 &&arguments.get(0) instanceof LogicVariable var
-                && var.isGlobalVariable()) {
-            warn(call, "Variable '%s' is used as argument in the 'sync()' function, will be considered volatile.",
-                    var.getName());
-        }
+        final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
 
         setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         LogicValue output = functionMapper.handleFunction(call, instructions::add, functionName, arguments);
@@ -472,14 +490,74 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return output;
     }
 
-    private LogicValue handleUserFunctionCall(FunctionCall call, List<LogicValue> arguments) {
+    private void validateUserFunctionArguments(LogicFunction function, List<FunctionArgument> arguments) {
+        if (function.getDeclaredParameters().size() < arguments.size()) {
+            // This needs to be checked beforehand
+            throw new MindcodeInternalError("Argument size mismatch.");
+        }
+
+        for (int i = 0; i < arguments.size(); i++) {
+            FunctionParameter parameter = function.getDeclaredParameters().get(i);
+            FunctionArgument argument = arguments.get(i);
+
+            if (!parameter.isOptional() && !argument.hasExpression()) {
+                error(argument, "Parameter '%s' isn't optional, a value must be provided.", parameter.getName());
+            }
+
+            if (parameter.isOutput()) {
+                if (parameter.isInput()) {
+                    // In or out modifier needs to be used
+                    if (!argument.hasModifier()) {
+                        warn(argument, "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used, assuming 'in out'.", parameter.getName());
+                    }
+                } else {
+                    // Output parameter: the 'in' modifier is forbidden
+                    if (argument.hasInModifier()) {
+                        error(argument, "Parameter '%s' isn't input, 'in' modifier cannot be used.", parameter.getName());
+                    } else if (argument.hasExpression() && !argument.hasOutModifier()) {
+                        // Out modifier needs to be used
+                        warn(argument, "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'.", parameter.getName());
+                    }
+                }
+            } else {
+                // Input parameter: the 'out' modifier is forbidden
+                if (argument.hasOutModifier()) {
+                    error(argument, "Parameter '%s' isn't output, 'out' modifier cannot be used.", parameter.getName());
+                }
+            }
+        }
+    }
+
+    private List<LogicFunctionArgument> addOptionalArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {
+        List<FunctionParameter> parameters = function.getDeclaredParameters();
+        if (arguments.size() >= parameters.size()) {
+            return arguments;
+        }
+
+        List<LogicFunctionArgument> result = new ArrayList<>(arguments);
+        while (result.size() < parameters.size()) {
+            if (parameters.get(result.size()).isOptional()) {
+                result.add(new LogicFunctionArgument(null, false, false));
+            } else {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    private LogicValue handleUserFunctionCall(FunctionCall call, List<LogicFunctionArgument> callArguments) {
         String functionName = call.getFunctionName();
         LogicFunction function = callGraph.getFunction(functionName);
+
+        List<LogicFunctionArgument> arguments = addOptionalArguments(function, callArguments);
         if (arguments.size() != function.getParameterCount()) {
             error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
                     functionName, function.getParameterCount(), arguments.size());
             return NULL;
         }
+
+        validateUserFunctionArguments(function, call.getArguments());
 
         // Switching to new function prefix -- save/restore old one
         String previousPrefix = functionPrefix;
@@ -500,7 +578,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private LogicValue handleInlineFunctionCall(LogicFunction function, List<LogicValue> arguments) {
+    private LogicValue handleInlineFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         // Switching to inline function context -- save/restore old one
         final LogicFunction previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
@@ -531,7 +609,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return returnValue;
     }
 
-    private LogicValue handleStacklessFunctionCall(LogicFunction function, List<LogicValue> arguments) {
+    private LogicValue handleStacklessFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, arguments);
 
@@ -548,17 +626,45 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return passReturnValue(function);
     }
 
-    private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicValue> arguments) {
+    private List<LogicFunctionArgument> substituteArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {
+        // Filter variables representing input parameters
+        Predicate<LogicFunctionArgument> predicate = a -> a.value() instanceof LogicVariable variable && function.isInputFunctionParameter(variable);
+
+        long count = IntStream.range(0, arguments.size())
+                .filter(i -> predicate.test(arguments.get(i)) && !function.getParameters().get(i).equals(arguments.get(i).value()))
+                .count();
+
+        // One reassignment is ok
+        if (count > 1) {
+            List<LogicFunctionArgument> result = new ArrayList<>(arguments);
+            for (int i = 0; i < result.size(); i++) {
+                // Handle arguments if assigned to a different argument
+                LogicFunctionArgument argument = result.get(i);
+                if (predicate.test(argument) && !function.getParameters().get(i).equals(argument.value())) {
+                    LogicVariable temp = nextTemp();
+                    emit(createSet(temp, argument.value()));
+                    result.set(i, new LogicFunctionArgument(temp, false, false));
+                }
+            }
+            return result;
+        } else {
+            return arguments;
+        }
+    }
+
+    private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
         boolean useStack = currentFunction.isRecursiveCall(function.getName());
-        List<LogicVariable> variables = useStack ? getContextVariables() : List.of();
+        List<LogicVariable> variables = useStack
+                ? getContextVariables().stream().filter(function::isNotOutput).collect(Collectors.toCollection(ArrayList::new))
+                : List.of();
 
         if (useStack) {
             // Store all local variables (both user defined and temporary) on the stack
             variables.forEach(v -> emit(createPush(stackName(), v)));
         }
 
-        setupFunctionParameters(function, arguments);
+        setupFunctionParameters(function, substituteArguments(function, arguments));
 
          // Recursive function call
         final LogicLabel returnLabel = nextLabel();
@@ -582,7 +688,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return new ArrayList<>(result);
     }
 
-    private void setupFunctionParameters(LogicFunction function, List<LogicValue> arguments) {
+    private void setupFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments) {
         // Make sure parameter names are formed using function name
         LogicFunction previousFunction = currentFunction;
         currentFunction = function;
@@ -596,21 +702,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             LogicVariable parameter = convertFunctionParameter(declaredParameter, "Function '" + function.getName() +
                     "': parameter name '" + declaredParameter.getName() + "' conflicts with existing constant or global parameter.");
 
-            // Note: parameters of inlined functions are treated as local variables,
-            // therefore input/output properties are tested on the declared parameters
-            if (declaredParameter.isOutput() && !arguments.get(i).isUserWritable()) {
-                error(declaredParameter, "Argument assigned to output parameter '%s' is not writable.", declaredParameter.getName());
-            }
-
             if (declaredParameter.isInput()) {
-                emit(createSet(parameter, arguments.get(i)));
+                emit(createSet(parameter, arguments.get(i).value()));
             }
         }
 
         currentFunction = previousFunction;
     }
 
-    private void retrieveFunctionParameters(LogicFunction function, List<LogicValue> arguments) {
+    private void retrieveFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments) {
         // Make sure parameter names are formed using function name
         LogicFunction previousFunction = currentFunction;
         currentFunction = function;
@@ -624,9 +724,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             if (declaredParameter.isOutput()) {
                 LogicVariable parameter = convertFunctionParameter(declaredParameter, "Function '" + function.getName() +
                         "': parameter name '" + declaredParameter.getName() + "' conflicts with existing constant or global parameter.");
+                LogicFunctionArgument argument = arguments.get(i);
 
-                if (arguments.get(i) instanceof LogicVariable target) {
-                    emit(createSet(target, parameter));
+                if (argument.hasValue() && !argument.hasInModifierOnly()) {
+                    if (argument.value() instanceof LogicVariable target && target.isUserWritable()) {
+                        emit(createSet(target, parameter));
+                    } else {
+                        error(function.getDeclaredParameters().get(i),
+                                "Argument assigned to output parameter '%s' is not writable.", declaredParameter.getName());
+                    }
                 }
             }
         }
@@ -818,7 +924,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             LogicValue propTarget = visit(propertyAccess.getTarget());
             LogicArgument prop = visit(propertyAccess.getProperty());
             String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
-            if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
+            // Implicit out modifier as this is an assignment
+            LogicFunctionArgument argument = new LogicFunctionArgument(rvalue, false, true);
+            if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(argument)) == null) {
                 error(node, "Undefined property '%s.%s'.", propTarget, prop);
                 return NULL;
             }
@@ -1449,8 +1557,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitControl(Control node) {
         final LogicValue target = visit(node.getTarget());
-        final List<LogicValue> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
-        LogicValue value = functionMapper.handleProperty(node, instructions::add, node.getProperty(), target, args);
+        List<LogicFunctionArgument> arguments = processArguments(node.getArguments());
+        LogicValue value = functionMapper.handleProperty(node, instructions::add, node.getProperty(), target, arguments);
         if (value == null) {
             error(node, "Undefined property '%s.%s'.", target, node.getProperty());
             return NULL;
@@ -1491,23 +1599,24 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
 
-    private LogicValue handleMinMax(FunctionCall node) {
-        if (node.getParams().size() < 2) {
-            error(node, "Not enough arguments to the '%s' function (expected 2 or more, found %d).",
-                    node.getFunctionName(), node.getParams().size());
+    private LogicValue handleMinMax(FunctionCall call) {
+        if (call.getArguments().size() < 2) {
+            error(call, "Not enough arguments to the '%s' function (expected 2 or more, found %d).",
+                    call.getFunctionName(), call.getArguments().size());
         }
+        validateStandardFunctionArguments(call.getArguments());
 
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        final List<LogicValue> arguments = processArguments(node.getParams());
+        final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
 
         setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         LogicValue result;
         if (arguments.size() >= 2) {
-            Operation op = Operation.fromMlog(node.getFunctionName());
+            Operation op = Operation.fromMlog(call.getFunctionName());
             LogicVariable tmp = instructionProcessor.nextTemp();
-            emit(createOp(op, tmp, arguments.get(0), arguments.get(1)));
+            emit(createOp(op, tmp, arguments.get(0).value(), arguments.get(1).value()));
             for (int i = 2; i < arguments.size(); i++) {
-                emit(createOp(op, tmp, tmp, arguments.get(i)));
+                emit(createOp(op, tmp, tmp, arguments.get(i).value()));
             }
             result = tmp;
         } else {
@@ -1518,83 +1627,87 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return result;
     }
 
-    private LogicValue handlePrintf(FunctionCall node) {
-        String functionName = node.getFunctionName();
+    private LogicValue handlePrintf(FunctionCall call) {
+        validateStandardFunctionArguments(call.getArguments());
+        String functionName = call.getFunctionName();
         if (instructionProcessor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))) {
             setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-            final List<LogicValue> arguments = processArguments(node.getParams());
-            if (!arguments.isEmpty() && arguments.get(0) instanceof LogicString str) {
+            final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
+
+            if (!arguments.isEmpty() && arguments.get(0).value() instanceof LogicString str) {
                 long placeholders = PLACEHOLDER_MATCHER.matcher(str.format()).results().count();
                 if (placeholders == 0) {
-                    warn(node, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
+                    warn(call, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
                 }
                 if (placeholders > arguments.size() - 1) {
-                    warn(node, "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).",
+                    warn(call, "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).",
                             placeholders, arguments.size() - 1);
                 } else if (placeholders < arguments.size() - 1) {
-                    warn(node, "The 'printf' function has more arguments than placeholders: %d placeholder(s), %d argument(s).",
+                    warn(call, "The 'printf' function has more arguments than placeholders: %d placeholder(s), %d argument(s).",
                             placeholders, arguments.size() - 1);
                 }
-                warn(node, "The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.");
+                warn(call, "The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.");
             }
             setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
             for (int i = 0; i < arguments.size(); i++) {
-                emit(i == 0 ? createPrint(arguments.get(i)) : createFormat(arguments.get(i)));
+                emit(i == 0 ? createPrint(arguments.get(i).value()) : createFormat(arguments.get(i).value()));
             }
             clearSubcontextType();
-            return arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1);
+            return arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1).value();
         } else {
-            warn(node, "The '%s' function is deprecated.", functionName);
-            return handleFormattedOutput(node, Formatter.PRINTF);
+            warn(call, "The '%s' function is deprecated.", functionName);
+            return handleFormattedOutput(call, Formatter.PRINTF);
         }
     }
 
-    private String evaluateFormattableNode(AstNode node) {
-        if (node instanceof FormattableLiteral fmt) {
+    private String evaluateFormattableNode(FunctionArgument node) {
+        if (node.getExpression() instanceof FormattableLiteral fmt) {
             return fmt.getText();
-        } else if (node instanceof VarRef var && formattables.containsKey(var.getName())) {
+        } else if (node.getExpression() instanceof VarRef var && formattables.containsKey(var.getName())) {
             return formattables.get(var.getName()).getText();
         } else {
             return null;
         }
     }
 
-    private LogicValue handleFormattedOutput(FunctionCall node, Formatter formatter) {
-        if (node.getParams().isEmpty()) {
+    private LogicValue handleFormattedOutput(FunctionCall call, Formatter formatter) {
+        validateStandardFunctionArguments(call.getArguments());
+
+        if (call.getArguments().isEmpty()) {
             if (formatter.requiresParameter()) {
-                error(node, "First parameter of the '%s' function must be a formattable string or constant string value.", formatter.function);
+                error(call, "First parameter of the '%s' function must be a formattable string or constant string value.", formatter.function);
             } else if (formatter.createsNewLine()) {
                 emit(formatter.createInstruction(this,LogicString.NEW_LINE));
             }
             return NULL;
         }
 
-        String pattern = evaluateFormattableNode(node.getParams().get(0));
+        String pattern = evaluateFormattableNode(call.getArguments().get(0));
         boolean formatting = pattern != null || formatter.formatVariantOnly();
         if (formatting && pattern == null) {
             // Use normal string constant/literal as pattern
-            AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
+            AstNode astFormat = expressionEvaluator.evaluate(call.getArguments().get(0).getExpression());
             if (astFormat instanceof StringLiteral format) {
                 pattern = format.getText();
             } else {
-                error(node, "First parameter of the '%s' function must be a formattable string or constant string value.", formatter.function);
+                error(call, "First parameter of the '%s' function must be a formattable string or constant string value.", formatter.function);
                 pattern = "";
             }
         }
 
         // Process arguments except the format string, if any
-        List<AstNode> params = node.getParams().subList(formatting ? 1 : 0, node.getParams().size());
+        List<FunctionArgument> params = call.getArguments().subList(formatting ? 1 : 0, call.getArguments().size());
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        final List<LogicValue> inputs = processArguments(params);
+        final List<LogicFunctionArgument> arguments = processArguments(params);
         setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
 
         LogicValue returnValue;
         if (formatting) {
-            returnValue = handleFormattedOutput(formatter, node, pattern, inputs);
+            returnValue = handleFormattedOutput(formatter, call, pattern, arguments);
         } else {
             // Only create instruction for each argument
-            inputs.forEach(value -> emit(formatter.createInstruction(this, value)));
-            returnValue = inputs.get(inputs.size() - 1);
+            arguments.forEach(argument -> emit(formatter.createInstruction(this, argument.value())));
+            returnValue = arguments.get(arguments.size() - 1).value();
         }
 
         if (formatter.createsNewLine()) {
@@ -1604,7 +1717,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return returnValue;
     }
 
-    private LogicValue handleFormattedOutput(Formatter formatter, FunctionCall node, String format, List<LogicValue> params) {
+    private LogicValue handleFormattedOutput(Formatter formatter, FunctionCall node, String format, List<LogicFunctionArgument> arguments) {
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
         int position = 0;
@@ -1649,8 +1762,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
                     if (variable.isEmpty()) {
                         // No variable, emit next argument
-                        if (position < params.size()) {
-                            emit(formatter.createInstruction(this, params.get(position++)));
+                        if (position < arguments.size()) {
+                            emit(formatter.createInstruction(this, arguments.get(position++).value()));
                         } else if (!notEnoughArguments) {
                             error(node, "Not enough arguments for '%s' format string.", formatter.function);
                             notEnoughArguments = true;
@@ -1686,7 +1799,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(formatter.createInstruction(this,LogicString.create(accumulator.toString())));
         }
 
-        if (position < params.size()) {
+        if (position < arguments.size()) {
             error(node, "Too many arguments for '%s' format string.", formatter.function);
         }
 

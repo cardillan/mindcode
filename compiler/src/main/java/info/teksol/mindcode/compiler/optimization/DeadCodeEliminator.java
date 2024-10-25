@@ -58,9 +58,10 @@ class DeadCodeEliminator extends BaseOptimizer {
 
         optimizationContext.addUninitializedVariables(uninitialized);
         
-        if (!unused.isEmpty()) {
+        if (unused.stream().anyMatch(v -> !v.isOptional())) {
             emitMessage(MessageLevel.WARNING, "       List of unused variables: %s.",
-                    unused.stream().map(LogicVariable::getFullName).sorted().distinct().collect(Collectors.joining(", ")));
+                    unused.stream().filter(v -> !v.isOptional())
+                            .map(LogicVariable::getFullName).sorted().distinct().collect(Collectors.joining(", ")));
         }
         
         if (!uninitialized.isEmpty()) {

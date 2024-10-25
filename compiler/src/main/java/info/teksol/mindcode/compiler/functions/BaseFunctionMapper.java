@@ -51,13 +51,13 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
     @Override
     public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, String propertyName, LogicValue target,
-            List<LogicValue> arguments) {
+            List<LogicFunctionArgument> arguments) {
         PropertyHandler handler = propertyMap.get(propertyName);
         return handler == null ? null : handler.handleProperty(node, program, target, arguments);
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, String functionName, List<LogicFunctionArgument> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
         return handler == null ? null : handler.handleFunction(call, program, arguments);
     }

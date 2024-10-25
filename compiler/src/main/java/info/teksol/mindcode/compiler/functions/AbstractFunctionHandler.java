@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.ast.FunctionCall;
-import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicFunctionArgument;
 import info.teksol.mindcode.logic.OpcodeVariant;
 
 import java.util.List;
@@ -35,7 +35,7 @@ abstract class AbstractFunctionHandler extends AbstractHandler implements Functi
         return opcodeVariant;
     }
 
-    protected boolean checkArguments(FunctionCall call, List<LogicValue> arguments) {
+    protected boolean checkArguments(FunctionCall call, List<LogicFunctionArgument> arguments) {
         if (arguments.size() < minArgs || arguments.size() > numArgs) {
             String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
             error(call, "Function '%s': wrong number of arguments (expected %s, found %d)", name, args, arguments.size());

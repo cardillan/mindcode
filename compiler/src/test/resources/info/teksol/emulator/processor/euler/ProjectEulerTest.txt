@@ -1,6 +1,6 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 project-euler-04.mnd:                             11             22    42899     100.0%   CEC14380EBFC0B29   630E0BF887619982
-project-euler-18.mnd:                              8            837      837     100.0%   4332C52FDD196BB8   32DA31F7C0EE7404
+project-euler-18.mnd:                             10            837      837     100.0%   4332C52FDD196BB8   32DA31F7C0EE7404
 project-euler-26.mnd:                             13            520     4923      68.6%   537D553DA2362FF0   8960CDCF7EFF862A
 project-euler-28.mnd:                              7             13    11006     100.0%   9A12C7F88DBEA5D3   665106BC3DC01A3A
 project-euler-31.mnd:                              7             59    11018     100.0%   CE47852C068E4B23   7BE3264895148219

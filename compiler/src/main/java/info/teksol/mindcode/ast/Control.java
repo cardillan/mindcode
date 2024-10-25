@@ -9,13 +9,13 @@ import java.util.Objects;
 public class Control extends BaseAstNode {
     private final AstNode target;
     private final String property;
-    private final List<AstNode> params;
+    private final List<FunctionArgument> arguments;
 
-    Control(InputPosition inputPosition, AstNode target, String property, List<AstNode> params) {
-        super(inputPosition, params, target);
+    Control(InputPosition inputPosition, AstNode target, String property, List<FunctionArgument> arguments) {
+        super(inputPosition, arguments, target);
         this.target = target;
         this.property = property;
-        this.params = params;
+        this.arguments = arguments;
     }
 
     public AstNode getTarget() {
@@ -26,8 +26,8 @@ public class Control extends BaseAstNode {
         return property;
     }
 
-    public List<AstNode> getParams() {
-        return params;
+    public List<FunctionArgument> getArguments() {
+        return arguments;
     }
 
     @Override
@@ -37,12 +37,12 @@ public class Control extends BaseAstNode {
         Control control = (Control) o;
         return Objects.equals(target, control.target) &&
                 Objects.equals(property, control.property) &&
-                Objects.equals(params, control.params);
+                Objects.equals(arguments, control.arguments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(target, property, params);
+        return Objects.hash(target, property, arguments);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Control extends BaseAstNode {
         return "Control{" +
                 "target=" + target +
                 ", property='" + property + '\'' +
-                ", params=" + params +
+                ", arguments=" + arguments +
                 '}';
     }
 

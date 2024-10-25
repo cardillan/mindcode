@@ -86,13 +86,14 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         callMap.get(activeFunction).add(functionCall.getFunctionName());
 
         if (functionCall.getFunctionName().equals("sync")
-                && functionCall.getParams().size() == 1
-                && functionCall.getParams().get(0) instanceof VarRef var
+                && functionCall.getArguments().size() == 1
+                && functionCall.getArguments().get(0).getExpression() instanceof VarRef var
                 && var.getName().equals(var.getName().toUpperCase())) {
             syncedVariables.add(var.getName());
+            warn(functionCall, "Variable '%s' is used as argument in the 'sync()' function, will be considered volatile.", var.getName());
         }
 
-        functionCall.getParams().forEach(this::visitNode);
+        functionCall.getArguments().forEach(this::visitNode);
     }
 
     private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {

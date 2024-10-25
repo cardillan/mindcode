@@ -2,10 +2,7 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.NamedParameter;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.OpcodeVariant;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -20,9 +17,9 @@ class PrintFunctionHandler extends AbstractFunctionHandler {
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-        arguments.forEach(arg -> program.accept(functionMapper.createInstruction(Opcode.PRINT, arg)));
-        return arguments.get(arguments.size() - 1);
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
+        arguments.forEach(arg -> program.accept(functionMapper.createInstruction(Opcode.PRINT, arg.value())));
+        return arguments.get(arguments.size() - 1).value();
     }
 
     @Override

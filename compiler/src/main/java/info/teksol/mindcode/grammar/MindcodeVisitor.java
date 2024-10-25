@@ -561,17 +561,17 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncall(MindcodeParser.FuncallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#arg_list}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArg_list(MindcodeParser.Arg_listContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#arg}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArg(MindcodeParser.ArgContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#arg_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArg_list(MindcodeParser.Arg_listContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#if_expr}.
 	 * @param ctx the parse tree

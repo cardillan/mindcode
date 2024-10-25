@@ -142,8 +142,9 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
         Operation operation = Operation.fromMindcode(node.getFunctionName());
         LogicOperation eval = ExpressionEvaluator.getOperation(operation);
         int numArgs = ExpressionEvaluator.getNumberOfArguments(operation);
-        if (eval != null && numArgs == node.getParams().size()) {
-            List<ConstantAstNode> evaluated = node.getParams().stream()
+        if (eval != null && numArgs == node.getArguments().size()) {
+            List<ConstantAstNode> evaluated = node.getArguments().stream()
+                    .map(FunctionArgument::getExpression)
                     .map(this::evaluateInner)
                     .filter(ConstantAstNode.class::isInstance)
                     .map(ConstantAstNode.class::cast)

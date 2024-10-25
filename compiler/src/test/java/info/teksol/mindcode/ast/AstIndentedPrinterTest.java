@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Order(99)
 public class AstIndentedPrinterTest extends AbstractAstTest {
-    
+
     private String printLinearized(String program) {
         return AstIndentedPrinter.printIndented(translateToAst(program), 1);
     }
@@ -23,15 +23,27 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                         Seq[
                             FunctionCall{
                                 functionName='print',
-                                params=[VarRef{name='a'}]
+                                arguments=[FunctionArgument{
+                                    expression=VarRef{name='a'},
+                                    inModifier=false,
+                                    outModifier=false
+                                }]
                             },
                             FunctionCall{
                                 functionName='print',
-                                params=[VarRef{name='b'}]
+                                arguments=[FunctionArgument{
+                                    expression=VarRef{name='b'},
+                                    inModifier=false,
+                                    outModifier=false
+                                }]
                             },
                             FunctionCall{
                                 functionName='print',
-                                params=[VarRef{name='c'}]
+                                arguments=[FunctionArgument{
+                                    expression=VarRef{name='c'},
+                                    inModifier=false,
+                                    outModifier=false
+                                }]
                             }
                         ]""",
                 printLinearized("""
@@ -50,16 +62,28 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             rest=Seq{
                                 rest=Seq{rest=NoOp{}, last=FunctionCall{
                                     functionName='print',
-                                    params=[VarRef{name='a'}]
+                                    arguments=[FunctionArgument{
+                                        expression=VarRef{name='a'},
+                                        inModifier=false,
+                                        outModifier=false
+                                    }]
                                 }},
                                 last=FunctionCall{
                                     functionName='print',
-                                    params=[VarRef{name='b'}]
+                                    arguments=[FunctionArgument{
+                                        expression=VarRef{name='b'},
+                                        inModifier=false,
+                                        outModifier=false
+                                    }]
                                 }
                             },
                             last=FunctionCall{
                                 functionName='print',
-                                params=[VarRef{name='c'}]
+                                arguments=[FunctionArgument{
+                                    expression=VarRef{name='c'},
+                                    inModifier=false,
+                                    outModifier=false
+                                }]
                             }
                         }""",
                 printNested("""
@@ -148,7 +172,11 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 body=Seq[
                                     FunctionCall{
                                         functionName='print',
-                                        params=[StringLiteral{text='In loop'}]
+                                        arguments=[FunctionArgument{
+                                            expression=StringLiteral{text='In loop'},
+                                            inModifier=false,
+                                            outModifier=false
+                                        }]
                                     },
                                     IfExpression{
                                         condition=BinaryOp{
@@ -166,7 +194,11 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             },
                             FunctionCall{
                                 functionName='print',
-                                params=[StringLiteral{text='Out of loop'}]
+                                arguments=[FunctionArgument{
+                                    expression=StringLiteral{text='Out of loop'},
+                                    inModifier=false,
+                                    outModifier=false
+                                }]
                             }
                         ]""",
                 printLinearized("""
@@ -214,19 +246,27 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                             elseBranch=Seq{rest=NoOp{}, last=BinaryOp{
                                                 left=FunctionCall{
                                                     functionName='fib',
-                                                    params=[BinaryOp{
-                                                        left=VarRef{name='n'},
-                                                        op='-',
-                                                        right=NumericLiteral{literal='1'}
+                                                    arguments=[FunctionArgument{
+                                                        expression=BinaryOp{
+                                                            left=VarRef{name='n'},
+                                                            op='-',
+                                                            right=NumericLiteral{literal='1'}
+                                                        },
+                                                        inModifier=false,
+                                                        outModifier=false
                                                     }]
                                                 },
                                                 op='+',
                                                 right=FunctionCall{
                                                     functionName='fib',
-                                                    params=[BinaryOp{
-                                                        left=VarRef{name='n'},
-                                                        op='-',
-                                                        right=NumericLiteral{literal='2'}
+                                                    arguments=[FunctionArgument{
+                                                        expression=BinaryOp{
+                                                            left=VarRef{name='n'},
+                                                            op='-',
+                                                            right=NumericLiteral{literal='2'}
+                                                        },
+                                                        inModifier=false,
+                                                        outModifier=false
                                                     }]
                                                 }
                                             }}
@@ -236,15 +276,23 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             },
                             FunctionCall{
                                 functionName='print',
-                                params=[FunctionCall{
-                                    functionName='fib',
-                                    params=[NumericLiteral{literal='5'}]
+                                arguments=[FunctionArgument{
+                                    expression=FunctionCall{
+                                        functionName='fib',
+                                        arguments=[FunctionArgument{
+                                            expression=NumericLiteral{literal='5'},
+                                            inModifier=false,
+                                            outModifier=false
+                                        }]
+                                    },
+                                    inModifier=false,
+                                    outModifier=false
                                 }]
                             }
                         ]""",
                 printLinearized("""
                         allocate stack in bank1[0...512];
-
+                        
                         def fib(n)
                           if n <= 0 then
                             0;
@@ -257,7 +305,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                             end;
                           end;
                         end;
-
+                        
                         print(fib(5));
                         """
                 )

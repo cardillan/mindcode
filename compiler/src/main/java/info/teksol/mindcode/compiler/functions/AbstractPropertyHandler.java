@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicFunctionArgument;
 import info.teksol.mindcode.logic.OpcodeVariant;
 
 import java.util.List;
@@ -26,7 +26,7 @@ abstract class AbstractPropertyHandler extends AbstractHandler implements Proper
         return opcodeVariant;
     }
 
-    protected boolean checkArguments(AstNode node, List<LogicValue> arguments) {
+    protected boolean checkArguments(AstNode node, List<LogicFunctionArgument> arguments) {
         if (arguments.size() != numArgs) {
             error(node, "Function '%s': wrong number of arguments (expected %d, found %d)", name, numArgs, arguments.size());
             return false;

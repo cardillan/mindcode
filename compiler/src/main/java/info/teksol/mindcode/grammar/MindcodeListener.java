@@ -942,16 +942,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitFuncall(MindcodeParser.FuncallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#arg_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterArg_list(MindcodeParser.Arg_listContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#arg_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitArg_list(MindcodeParser.Arg_listContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#arg}.
 	 * @param ctx the parse tree
 	 */
@@ -961,6 +951,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArg(MindcodeParser.ArgContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#arg_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterArg_list(MindcodeParser.Arg_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#arg_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitArg_list(MindcodeParser.Arg_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#if_expr}.
 	 * @param ctx the parse tree

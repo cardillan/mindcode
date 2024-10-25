@@ -34,7 +34,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
+    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> fnArgs) {
         if (!checkArguments(call, fnArgs)) return NULL;
 
         LogicValue tmp = hasResult ? functionMapper.instructionProcessor.nextTemp() : NULL;
@@ -43,9 +43,9 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
         int argIndex = 0;
 
         for (NamedParameter a : opcodeVariant.namedParameters()) {
-            if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
+            if (a.type().isGlobal() && !fnArgs.get(argIndex).value().isGlobalVariable()) {
                 error(call, "Using argument '%s' in a call to '%s' not allowed (a global variable is required).",
-                        fnArgs.get(argIndex).toMlog(), name);
+                        fnArgs.get(argIndex).value().toMlog(), name);
                 return NULL;
             }
 
@@ -53,7 +53,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
                 ixArgs.add(tmp);
             } else if (a.type().isSelector() && !a.type().isFunctionName()) {
                 // Selector that IS NOT a function name is taken from the argument list
-                ixArgs.add(BaseFunctionMapper.toKeyword(fnArgs.get(argIndex++)));
+                ixArgs.add(BaseFunctionMapper.toKeyword(fnArgs.get(argIndex++).value()));
             } else if (a.type().isSelector()) {
                 // Selector that IS a function name isn't in an argument list and must be filled in
                 // Perhaps we might store the Operation into the NamedParameter directly to avoid lookup
@@ -64,14 +64,14 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
                 ixArgs.add(a.type().isOutput() ? functionMapper.instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
             } else if (a.type().isInput()) {
                 // Input argument - take it as it is
-                ixArgs.add(fnArgs.get(argIndex++));
+                ixArgs.add(fnArgs.get(argIndex++).value());
             } else if (a.type().isOutput()) {
                 if (argIndex >= fnArgs.size()) {
                     // Optional arguments are always output; generate temporary variable for them
                     ixArgs.add(functionMapper.instructionProcessor.nextTemp());
                 } else {
                     // Block name cannot be used as output argument
-                    LogicValue argument = fnArgs.get(argIndex++);
+                    LogicValue argument = fnArgs.get(argIndex++).value();
                     if (argument.getType() == ArgumentType.BLOCK) {
                         error(call, "Using argument '%s' in a call to '%s' not allowed (name reserved for linked blocks).",
                                 argument.toMlog(), name);
@@ -80,7 +80,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
                     ixArgs.add(argument);
                 }
             } else {
-                ixArgs.add(BaseFunctionMapper.toKeyword(fnArgs.get(argIndex++)));
+                ixArgs.add(BaseFunctionMapper.toKeyword(fnArgs.get(argIndex++).value()));
             }
         }
 
