@@ -602,7 +602,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(returnLabel));
         returnStack.exitFunction();
 
-        retrieveFunctionParameters(function, arguments);
+        retrieveFunctionParameters(function, arguments, false);
         loopStack = previousLoopStack;
         functionContext = previousContext;
         currentFunction = previousFunction;
@@ -622,7 +622,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         emit(createGotoLabel(returnLabel, LogicLabel.symbolic(functionPrefix)));
 
-        retrieveFunctionParameters(function, arguments);
+        retrieveFunctionParameters(function, arguments, false);
         return passReturnValue(function);
     }
 
@@ -654,12 +654,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
-        boolean useStack = currentFunction.isRecursiveCall(function.getName());
-        List<LogicVariable> variables = useStack
-                ? getContextVariables().stream().filter(function::isNotOutput).collect(Collectors.toCollection(ArrayList::new))
+        boolean recursiveCall = currentFunction.isRecursiveCall(function.getName());
+        List<LogicVariable> variables = recursiveCall
+                ? getContextVariables().stream().filter(function::isNotOutputFunctionParameter)
+                        .collect(Collectors.toCollection(ArrayList::new))
                 : List.of();
 
-        if (useStack) {
+        if (recursiveCall) {
             // Store all local variables (both user defined and temporary) on the stack
             variables.forEach(v -> emit(createPush(stackName(), v)));
         }
@@ -671,9 +672,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createCallRecursive(stackName(), function.getLabel(), returnLabel, LogicVariable.fnRetVal(function)));
         emit(createLabel(returnLabel)); // where the function must return
 
-        retrieveFunctionParameters(function, arguments);
+        retrieveFunctionParameters(function, arguments, recursiveCall);
 
-        if (useStack) {
+        if (recursiveCall) {
             // Restore all local variables (both user defined and temporary) from the stack
             Collections.reverse(variables);
             variables.forEach(v -> emit(createPop(stackName(), v)));
@@ -710,10 +711,21 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         currentFunction = previousFunction;
     }
 
-    private void retrieveFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private void retrieveFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments, boolean recursiveCall) {
+        // Filter variables representing input parameters
+        Predicate<LogicFunctionArgument> predicate = a -> a.value() instanceof LogicVariable variable && function.isOutputFunctionParameter(variable);
+
+        long count = recursiveCall
+                ? IntStream.range(0, arguments.size())
+                .filter(i -> predicate.test(arguments.get(i)) && !function.getParameters().get(i).equals(arguments.get(i).value()))
+                .count()
+                : 0;
+
         // Make sure parameter names are formed using function name
         LogicFunction previousFunction = currentFunction;
         currentFunction = function;
+
+        List<LogicInstruction> finalizers = new ArrayList<>();
 
         // Setup variables representing function parameters with values from this call
         List<FunctionParameter> parameters = function.getDeclaredParameters();
@@ -728,7 +740,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
                 if (argument.hasValue() && !argument.hasInModifierOnly()) {
                     if (argument.value() instanceof LogicVariable target && target.isUserWritable()) {
-                        emit(createSet(target, parameter));
+                        if (count > 1 && predicate.test(argument) && !function.getParameters().get(i).equals(argument.value())) {
+                            LogicVariable temp = nextTemp();
+                            emit(createSet(temp, parameter));
+                            finalizers.add(createSet(target, temp));
+                        } else {
+                            emit(createSet(target, parameter));
+                        }
                     } else {
                         error(function.getDeclaredParameters().get(i),
                                 "Argument assigned to output parameter '%s' is not writable.", declaredParameter.getName());
@@ -736,6 +754,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 }
             }
         }
+
+        finalizers.forEach(this::emit);
 
         currentFunction = previousFunction;
     }

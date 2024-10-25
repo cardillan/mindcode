@@ -261,7 +261,7 @@ draw color 0 0 0 255 0 0
 draw lineRect __tmp119 __tmp120 16 16 0 0
 draw stroke 2 0 0 0 0 0
 label __label54
-op add x x 16
+op add x BAR_SPACE 21
 op mul __tmp150 power e
 jump __label57 notEqual __tmp150 0
 set red 255

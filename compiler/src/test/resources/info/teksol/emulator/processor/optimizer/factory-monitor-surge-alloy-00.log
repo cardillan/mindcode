@@ -173,7 +173,7 @@ draw color 0 0 0 255 0 0
 draw lineRect xm1 ym1 16 16 0 0
 draw stroke 2 0 0 0 0 0
 label __label29
-op add x x 16
+op add x __tmp54 21
 op mul __tmp81 power e
 jump __label32 notEqual __tmp81 0
 set red 255

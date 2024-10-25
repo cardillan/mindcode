@@ -273,13 +273,21 @@ public final class CallGraph {
                     && parameterMap.get(variable.getName()).isInput();
         }
 
-        public boolean isNotOutput(LogicVariable variable) {
-            if (variable.getType() == ArgumentType.LOCAL_VARIABLE && prefix.equals(variable.getFunctionPrefix())) {
-                FunctionParameter declaredParameter = getDeclaredParameter(variable.getName());
-                return declaredParameter == null || !declaredParameter.isOutput();
-            } else {
-                return true;
-            }
+        public boolean isOutputFunctionParameter(LogicVariable variable) {
+            return variable.getType() == ArgumentType.LOCAL_VARIABLE
+                    && prefix.equals(variable.getFunctionPrefix())
+                    && parameterMap.containsKey(variable.getName())
+                    && parameterMap.get(variable.getName()).isOutput();
+        }
+
+        public boolean isNotOutputFunctionParameter(LogicVariable variable) {
+            return !isOutputFunctionParameter(variable);
+//            if (variable.getType() == ArgumentType.LOCAL_VARIABLE && prefix.equals(variable.getFunctionPrefix())) {
+//                FunctionParameter declaredParameter = getDeclaredParameter(variable.getName());
+//                return declaredParameter == null || !declaredParameter.isOutput();
+//            } else {
+//                return true;
+//            }
         }
 
         /** @return number of function parameters */

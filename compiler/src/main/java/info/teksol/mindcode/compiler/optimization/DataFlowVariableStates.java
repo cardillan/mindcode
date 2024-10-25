@@ -203,31 +203,27 @@ class DataFlowVariableStates {
          */
         // Called when a variable value changes to purge all dependent expressions
         private void invalidateVariable(LogicVariable variable) {
-            if (stored.contains(variable)) {
-                trace(() -> "    Not invalidating variable " + variable.toMlog() + ", because it is stored on stack.");
-            } else {
-                Set<LogicVariable> invalids = new HashSet<>();
-                invalids.add(variable);
+            Set<LogicVariable> invalids = new HashSet<>();
+            invalids.add(variable);
 
-                while (true) {
-                    Set<LogicVariable> dependants = values.values().stream()
-                            .filter(exp -> exp.dependsOn(invalids))
-                            .map(VariableValue::getVariable)
-                            .collect(Collectors.toSet());
-                    if (!invalids.addAll(dependants)) break;
-                }
-
-                if (BaseOptimizer.TRACE) {
-                    values.values().stream().filter(exp -> exp.dependsOn(invalids))
-                            .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
-                    equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
-                            .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
-                }
-
-                values.values().removeIf(exp -> exp.dependsOn(invalids));
-                equivalences.keySet().removeIf(invalids::contains);
-                equivalences.values().removeIf(invalids::contains);
+            while (true) {
+                Set<LogicVariable> dependants = values.values().stream()
+                        .filter(exp -> exp.dependsOn(invalids))
+                        .map(VariableValue::getVariable)
+                        .collect(Collectors.toSet());
+                if (!invalids.addAll(dependants)) break;
             }
+
+            if (BaseOptimizer.TRACE) {
+                values.values().stream().filter(exp -> exp.dependsOn(invalids))
+                        .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
+                equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
+                        .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
+            }
+
+            values.values().removeIf(exp -> exp.dependsOn(invalids));
+            equivalences.keySet().removeIf(invalids::contains);
+            equivalences.values().removeIf(invalids::contains);
         }
 
         /**
@@ -270,6 +266,7 @@ class DataFlowVariableStates {
          */
         public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value, boolean reuseValue) {
             if (stored.contains(variable)) {
+                invalidateVariable(variable);
                 trace(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
                 return;
             }

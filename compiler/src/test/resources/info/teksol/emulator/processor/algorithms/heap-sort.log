@@ -3,16 +3,16 @@
     10 instructions eliminated by Dead Code Elimination (4 iterations).
      7 instructions eliminated by Jump Optimization (4 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions modified by Expression Optimization (3 iterations).
-     4 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     2 instructions modified by Expression Optimization (3 iterations).
+     3 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      2 instructions added by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      2 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
-    49 instructions after optimizations.
+    50 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 947):
-  * Loop Optimization: replicate condition at line 30            cost     2, benefit      625.0, efficiency      312.5 (+1 instructions)
+  * Loop Optimization: replicate condition at line 30            cost     2, benefit      625.0, efficiency      312.5 (+2 instructions)
 
 Final code before resolving virtual instructions:
 
@@ -46,6 +46,7 @@ write __tmp12 ARRAY 0
 write x ARRAY index
 op sub index index 1
 set __fn1_parent 0
+set __tmp15 0
 set __fn1_child 1
 jump __label17 greaterThan 1 index
 label __label31
@@ -54,7 +55,7 @@ jump __label18 greaterThanEq __fn1_child index
 op add __tmp22 __fn1_child 1
 read __tmp21 ARRAY __tmp22
 jump __label20 greaterThanEq __fn1_cv __tmp21
-op add __fn1_child __fn1_child 1
+op add __fn1_child __tmp15 2
 read __fn1_cv ARRAY __fn1_child
 label __label20
 label __label18

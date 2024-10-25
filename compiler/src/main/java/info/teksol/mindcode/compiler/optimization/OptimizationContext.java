@@ -33,8 +33,7 @@ class OptimizationContext {
     private BitSet unreachableInstructions;
 
     /**
-     * Maps instructions to variable states at the moment of finishing the execution of the instruction.
-     * TODO perhaps the states should correspond to the before execution state?
+     * Maps instructions to input variable states (i.e. states before the instruction is executed)
      */
     private final Map<LogicInstruction, DataFlowVariableStates.VariableStates> variableStates = new IdentityHashMap<>();
 

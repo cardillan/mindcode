@@ -572,7 +572,7 @@ op div __tmp25 __tmp24 40
 op add __tmp26 __tmp25 0.5
 op floor net_power __tmp26 0
 write net_power bank1 510
-op add tmp tmp 100
+op add tmp index 200
 read last bank1 tmp
 write powerNetStored bank1 tmp
 op sub diff powerNetStored last

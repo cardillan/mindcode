@@ -2,8 +2,8 @@ Name                                     Ambiguities   Instructions   Source CRC
 breakout-00.mnd:                                  50            184   9F9C3C87D4F9FA21   DC846E05178DF416
 detector-00.mnd:                                  57            173   8EDA71E34539DBC0   966A0E6E27A86341
 factory-monitor-00.mnd:                          102            356   FD2FB48B66155AF6   0DF56D6282E67F55
-factory-monitor-silicon-00.mnd:                   79            290   0096810FAC5480CA   30BA2659D3560193
-factory-monitor-surge-alloy-00.mnd:               60            187   4F504ECEE8C6C392   364934BFDF4624E9
+factory-monitor-silicon-00.mnd:                   79            290   0096810FAC5480CA   7540A0CAF5743A7E
+factory-monitor-surge-alloy-00.mnd:               60            187   4F504ECEE8C6C392   E138455B15A570C6
 impact-reactor-logic-00.mnd:                     118            864   02F94AF96A4DE416   239ACA5E7FA647DD
 instant-overdrive-dome-00.mnd:                   143            783   B20EBBAB048678BE   362FFFA884195A16
 item-counter-00.mnd:                              24             88   7FF151ABE5044810   89842C1103346EEE
@@ -16,10 +16,10 @@ level-meter-00.mnd:                               27            163   8C0E469587
 mass-driver-monitor-00.mnd:                       71            191   6353E9ADB49F1F80   A94532861C5C5B8C
 mass-driver-monitor-surge-alloy-00.mnd:           33            106   54974215C7DAE171   49060DC90455D0C0
 reactor-control-00.mnd:                           89            383   CAB72B714B675F3A   6E6FF00DE298FEB5
-reactor-control-battery-level-00.mnd:             25            584   0937C979445BF486   3781EC6225919115
+reactor-control-battery-level-00.mnd:             25            584   0937C979445BF486   E86475C63B5AC3C1
 regulator-00.mnd:                                 35            155   6F21695F543041F6   D1DB761A8D3C0D21
 remote-vault-00.mnd:                              23             71   431327C3C485EBB1   7B9ECE94AC6B2916
-storage-display-00.mnd:                           48            609   39862B3CDB7C9A5E   0F13B9E3EDAF6C12
+storage-display-00.mnd:                           48            609   39862B3CDB7C9A5E   F42ACDE002541DDD
 unit-housekeeping-00.mnd:                         27            103   C652CAB4CBBED198   096035BB51B9706A
 unit-speed-00.mnd:                                26             78   61A6E8C68FFD3802   2E5410585576B84C
 unit-transport-00.mnd:                           209            725   ABDFCEE995A8434B   AB903973F8FD3C50

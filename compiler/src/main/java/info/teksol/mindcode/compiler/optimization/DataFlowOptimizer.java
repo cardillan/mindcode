@@ -744,6 +744,10 @@ class DataFlowOptimizer extends BaseOptimizer {
             System.out.println("UNREACHABLE");
         }
 
+        if (modifyInstructions) {
+            putVariableStates(instruction, variableStates.isolatedCopy());
+        }
+
         // Process inputs first, to handle instructions reading and writing the same variable
         // This needs to be done even when not modifying instructions, because it keeps track of read variables.
 
@@ -797,10 +801,6 @@ class DataFlowOptimizer extends BaseOptimizer {
                     functionEndStates.add(variableStates.copy("function end handling"));
                 }
             }
-        }
-
-        if (modifyInstructions) {
-            putVariableStates(instruction, variableStates.isolatedCopy());
         }
 
         return variableStates;

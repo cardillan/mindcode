@@ -124,6 +124,7 @@ fundecl : ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET args=arg_de
 
 arg_decl
     : ( modifier_in = IN )? ( modifier_out = OUT )? name = var_ref
+    |   modifier_out = OUT    modifier_in = IN      name = var_ref
     ;
 
 arg_decl_list
@@ -181,7 +182,9 @@ funcall : END LEFT_RBRACKET RIGHT_RBRACKET
         | obj=propaccess LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
         ;
 
-arg : ( modifier_in = IN )? ( modifier_out = OUT )? ( argument = expression )?
+arg
+    : ( modifier_in = IN )? ( modifier_out = OUT )? ( argument = expression )?
+    |   modifier_out = OUT    modifier_in = IN        argument = expression
     ;
 
 arg_list
