@@ -44,20 +44,20 @@ For the following operators, their resulting value is guaranteed to be either `f
 - relational operators: `<`, `<=`, `>`, `>=`
 - boolean operators: `&&`, `||`
 
+> [!NOTE]
+> Please note that the logical operators (`and`, `or`) behave slightly differently than boolean operators (`&&`, `||`) - specifically, they may produce a `null` value (equivalent to `false`) or any non-zero value (equivalent to `true`).
+>
+> Always use the logical operators, unless you're interested in the numerical value of the expression, e.g. `count += is_active && reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal mlog code.
+
 Handling `null` values by all other operators is governed by these rules:
 
 1. When an invalid operation is attempted, such as division by zero, the resulting value is `null`.
 2. When one of the operands to the operation is `null`, the result may also be `null`, if the result of a corresponding operation in Mindustry Logic would be zero.
 
-> [!NOTE]
-> Please note that the logical operators (`and`, `or`) behave slightly differently than boolean operators (`&&`, `||`) - specifically, they may produce a `null` value (equivalent to `false`) or any non-zero value (equivalent to `true`).
-> 
-> Always use the logical operators, unless you're interested in the numerical value of the expression, e.g. `count += is_active && reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal mlog code.
-
 > [!IMPORTANT]
-> Please be aware that regarding `null` handling, Mindcode may handle operators differently from Mindustry Logic.
+> Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`.
  
-The distinction in handling nulls allows Mindcode to omit an instruction when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b`. (These expressions typically aren't present in your code right away, but they may arise as a result of optimizations Mindcode performs, be it constant propagation, loop unrolling or others.)
+The difference in handling `null` values allows Mindcode to omit an instruction when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b`. (Such expressions typically aren't present in your code right away, but they may arise as a result of optimizations Mindcode performs, be it constant propagation, loop unrolling or others.)
 
 The impact of the difference in `null` handling by Mindcode is minimal. When a `null` value enters any operation where a number is required, it is silently converted to zero. The difference between `null` and `0` is meaningful only in these operations:
 

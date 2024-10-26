@@ -30,6 +30,6 @@ public record InputFile(String fileName, String absolutePath, String code) {
     }
 
     public boolean isEmpty() {
-        return fileName.isEmpty() && absolutePath.isEmpty() &&code.isEmpty();
+        return fileName.isEmpty() && absolutePath.isEmpty() && code.isEmpty();
     }
 }

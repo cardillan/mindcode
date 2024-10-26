@@ -400,6 +400,25 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
     }
 
     @Test
+    void unrollsLoopWithFunctionCalls() {
+        assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
+                """
+                        def foo(in out a, in out b)
+                            a += 2;
+                            b -= 1;
+                        end;
+
+                        x = y = 0;
+                        for i in 1 ... 10 do
+                            foo(out x, out y);
+                            print(x + y);
+                        end;
+                        """,
+                createInstruction(PRINT, q("123456789"))
+        );
+    }
+
+    @Test
     void unrollsNegativeLoop() {
         assertCompilesTo(createTestCompiler(basicProfile),
                 ix -> !(ix instanceof LabelInstruction),

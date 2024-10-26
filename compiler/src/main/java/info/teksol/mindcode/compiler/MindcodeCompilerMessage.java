@@ -7,6 +7,7 @@ import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Function;
 
 public record MindcodeCompilerMessage(MessageLevel level, InputPosition inputPosition, String message) implements MindcodeMessage {
 
@@ -34,6 +35,10 @@ public record MindcodeCompilerMessage(MessageLevel level, InputPosition inputPos
     public static MindcodeCompilerMessage debug(InputPosition inputPosition, @PrintFormat String format, Object... args) {
         Objects.requireNonNull(inputPosition);
         return new MindcodeCompilerMessage(MessageLevel.DEBUG, inputPosition, String.format(Locale.US, format, args));
+    }
+
+    public String formatMessage(Function<InputPosition, String> positionFormatter) {
+        return positionFormatter.apply(inputPosition()) + " " + (isErrorOrWarning() ? level().getTitle() + ": " : "") + formatMessage();
     }
 
     @Override

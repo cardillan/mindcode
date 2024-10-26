@@ -223,6 +223,78 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     }
 
     @Test
+    void recognizesInlineFunctionOutputParameters() {
+        assertCompilesTo("""
+                        param count = 10;
+                        
+                        for i in 1 .. count do
+                            foo(out a, out b);
+                            print(a + b);
+                        end;
+
+                        def foo(out x, out y)
+                            x = rand(10);
+                            y = rand(10);
+                        end;
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SET, "count", "10"),
+                createInstruction(SET, "i", "1"),
+                createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(OP, "rand", "__fn0_x", "10"),
+                createInstruction(OP, "rand", "__fn0_y", "10"),
+                createInstruction(OP, "add", var(4), "__fn0_x", "__fn0_y"),
+                createInstruction(PRINT, var(4)),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1005), "lessThanEq", "i", "count")
+        );
+    }
+
+    @Test
+    void recognizesFunctionOutputParameters() {
+        assertCompilesTo("""
+                        param count = 10;
+
+                        foo(out a, out b);
+                        print(a + b);
+                        
+                        for i in 1 .. count do
+                            foo(out a, out b);
+                            print(a + b);
+                        end;
+
+                        noinline def foo(out x, out y)
+                            x = rand(10);
+                            y = rand(10);
+                        end;
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SET, "count", "10"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(OP, "add", var(1), "__fn0_x", "__fn0_y"),
+                createInstruction(PRINT, var(1)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(SETADDR, "__fn0retaddr", var(1005)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1005), "__fn0"),
+                createInstruction(OP, "add", var(4), "__fn0_x", "__fn0_y"),
+                createInstruction(PRINT, var(4)),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1007), "lessThanEq", "i", "count"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "rand", "__fn0_x", "10"),
+                createInstruction(OP, "rand", "__fn0_y", "10"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0")
+        );
+    }
+
+    @Test
     void handlesNestedLoops() {
         assertCompilesTo("""
                         param A = 10;

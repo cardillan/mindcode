@@ -46,6 +46,14 @@ public class AlgorithmsTest extends AbstractProcessorTest {
 
 
     @Test
+    void recursiveCallsTest() throws IOException {
+        testAndEvaluateFile("recursive-calls.mnd",
+                "A0001111223221211B0001111223333444C0001111223221211".chars()
+                        .mapToObj(i -> Character.toString((char) i)).toList()
+        );
+    }
+
+    @Test
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
                 s -> "AMOUNT = 12345;\n" + s,

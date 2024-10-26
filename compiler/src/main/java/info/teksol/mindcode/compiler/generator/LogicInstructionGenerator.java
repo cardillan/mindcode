@@ -652,13 +652,26 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private List<LogicVariable> getStackVariables(LogicFunction function, List<LogicFunctionArgument> arguments) {
+        LinkedHashSet<LogicVariable> variables = getContextVariables().stream().filter(function::isNotOutputFunctionParameter)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        // Add output function parameters passed in as input only arguments
+        arguments.stream()
+                .filter(LogicFunctionArgument::hasInModifierOnly)
+                .map(LogicFunctionArgument::value)
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .filter(function::isOutputFunctionParameter)
+                .forEach(variables::add);
+
+        return new ArrayList<>(variables);
+    }
+
     private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
         boolean recursiveCall = currentFunction.isRecursiveCall(function.getName());
-        List<LogicVariable> variables = recursiveCall
-                ? getContextVariables().stream().filter(function::isNotOutputFunctionParameter)
-                        .collect(Collectors.toCollection(ArrayList::new))
-                : List.of();
+        List<LogicVariable> variables = recursiveCall ? getStackVariables(function, arguments) : List.of();
 
         if (recursiveCall) {
             // Store all local variables (both user defined and temporary) on the stack

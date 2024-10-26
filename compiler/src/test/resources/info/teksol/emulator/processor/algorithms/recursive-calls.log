@@ -1,0 +1,91 @@
+   142 instructions before optimizations.
+     6 instructions eliminated by Temp Variables Elimination.
+    15 instructions eliminated by Dead Code Elimination (5 iterations).
+     3 instructions eliminated by Jump Optimization (3 iterations).
+     3 instructions eliminated by Single Step Elimination (4 iterations).
+     7 instructions eliminated by Data Flow Optimization (4 iterations).
+     3 instructions eliminated by Unreachable Code Elimination.
+    12 instructions eliminated by Stack Optimization.
+    93 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+set __sp 0
+print "A"
+set __fn1_n 3
+set __fn1_a 0
+set __fn1_b 0
+callrec bank1 __label1 __label3 __fn1retval
+label __label3
+print "B"
+set __fn0_n 3
+set __fn0_a 0
+set __fn0_b 0
+callrec bank1 __label0 __label4 __fn0retval
+label __label4
+print "C"
+set __fn2_n 3
+set __fn2_a 0
+set __fn2_b 0
+callrec bank1 __label2 __label5 __fn2retval
+label __label5
+end
+label __label0
+print __fn0_a
+print __fn0_b
+op add __fn0_a __fn0_a 1
+jump __label7 lessThanEq __fn0_n 0
+set __tmp8 __fn0_a
+op sub __fn0_n __fn0_n 1
+set __fn0_a __fn0_b
+set __fn0_b __tmp8
+callrec bank1 __label0 __label9 __fn0retval
+label __label9
+set __tmp10 __fn0_b
+set __fn0_b __fn0_a
+set __fn0_a __tmp10
+label __label7
+op add __fn0_b __fn0_b 1
+print __fn0_a
+print __fn0_b
+return bank1
+label __label1
+print __fn1_a
+print __fn1_b
+op add __fn1_a __fn1_a 1
+jump __label11 lessThanEq __fn1_n 0
+push bank1 __fn1_a
+push bank1 __fn1_b
+set __tmp18 __fn1_a
+op sub __fn1_n __fn1_n 1
+set __fn1_a __fn1_b
+set __fn1_b __tmp18
+callrec bank1 __label1 __label13 __fn1retval
+label __label13
+pop bank1 __fn1_b
+pop bank1 __fn1_a
+label __label11
+op add __fn1_b __fn1_b 1
+print __fn1_a
+print __fn1_b
+return bank1
+label __label2
+print __fn2_a
+print __fn2_b
+op add __fn2_a __fn2_a 1
+jump __label15 lessThanEq __fn2_n 0
+push bank1 __fn2_b
+push bank1 __fn2_a
+set __tmp26 __fn2_a
+op sub __fn2_n __fn2_n 1
+set __fn2_a __fn2_b
+set __fn2_b __tmp26
+callrec bank1 __label2 __label17 __fn2retval
+label __label17
+pop bank1 __fn2_a
+pop bank1 __fn2_b
+label __label15
+op add __fn2_b __fn2_b 1
+print __fn2_a
+print __fn2_b
+return bank1

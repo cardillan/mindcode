@@ -1,0 +1,35 @@
+allocate stack in bank1;
+
+def foo(n, a, b)
+    print(a, b);
+    a = a + 1;
+    if n > 0 then
+        foo(n - 1, b, a);
+    end;
+    b = b + 1;
+    print(a, b);
+end;
+
+def bar(n, in out a, in out b)
+    print(a, b);
+    a = a + 1;
+    if n > 0 then
+        bar(n - 1, out b, out a);
+    end;
+    b = b + 1;
+    print(a, b);
+end;
+
+def baz(n, in out a, in out b)
+    print(a, b);
+    a = a + 1;
+    if n > 0 then
+        baz(n - 1, in b, in a);
+    end;
+    b = b + 1;
+    print(a, b);
+end;
+
+print("A"); foo(3, in 0, in 0);
+print("B"); bar(3, in 0, in 0);
+print("C"); baz(3, in 0, in 0);

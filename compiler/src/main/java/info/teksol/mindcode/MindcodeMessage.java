@@ -33,7 +33,7 @@ public interface MindcodeMessage {
     }
 
     default String formatMessage() {
-        return isErrorOrWarning() && !inputPosition().isEmpty() ? level().getTitle() + ": " + message() : message();
+        return message();
     }
 
     default String formatMessage(Function<InputPosition, String> positionFormatter) {

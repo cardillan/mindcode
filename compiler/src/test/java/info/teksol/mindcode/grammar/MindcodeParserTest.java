@@ -169,4 +169,44 @@ class MindcodeParserTest extends AbstractParserTest {
                 .add(1, 2, "Parse error: '.': mismatched input '.' expecting {<EOF>, 'allocate', 'break', 'case', 'const', 'continue', 'def', 'do', 'end', 'false', 'for', 'if', 'inline', 'noinline', 'null', 'param', 'return', 'true', 'while', '@', '/', '\\', '$', '**', '-', '%', '*', NOT, '~', '+', '?', '#set', '#strict', '#relaxed', '<', '<=', '!=', '==', '===', '!==', '>=', '>', AND, OR, '<<', '>>', '&', '|', '^', '(', FORMATTABLE, LITERAL, FLOAT, INT, HEXINT, BININT, ID, REM_COMMENT}")
                 .validate(messages);
     }
+
+    @Test
+    void refusesDoubleInModifiers() {
+        List<MindcodeMessage> messages = parseWithErrors("def f1(in in a) print(a); end;");
+        ExpectedMessages.create()
+                .add(1, 11, "Parse error: unexpected 'in'")
+                .add(1, 15, "Parse error: missing ';' before ')'")
+                .addRegex(1, 15, "Parse error: '\\)': mismatched input '\\)' expecting.*")
+                .validate(messages);
+    }
+
+    @Test
+    void refusesInOutInModifiers() {
+        List<MindcodeMessage> messages = parseWithErrors("def f1(in out in a) print(a); end;");
+        ExpectedMessages.create()
+                .add(1, 15, "Parse error: unexpected 'in'")
+                .add(1, 19, "Parse error: missing ';' before ')'")
+                .addRegex(1, 19, "Parse error: '\\)': mismatched input '\\)' expecting.*")
+                .validate(messages);
+    }
+
+    @Test
+    void refusesDoubleOutModifiers() {
+        List<MindcodeMessage> messages = parseWithErrors("def f1(out out a) print(a); end;");
+        ExpectedMessages.create()
+                .add(1, 12, "Parse error: unexpected 'out'")
+                .add(1, 17, "Parse error: missing ';' before ')'")
+                .addRegex(1, 17, "Parse error: '\\)': mismatched input '\\)' expecting.*")
+                .validate(messages);
+    }
+
+    @Test
+    void refusesOutInOutModifiers() {
+        List<MindcodeMessage> messages = parseWithErrors("def f1(out in out a) print(a); end;");
+        ExpectedMessages.create()
+                .add(1, 15, "Parse error: unexpected 'out'")
+                .add(1, 20, "Parse error: missing ';' before ')'")
+                .addRegex(1, 20, "Parse error: '\\)': mismatched input '\\)' expecting.*")
+                .validate(messages);
+    }
 }

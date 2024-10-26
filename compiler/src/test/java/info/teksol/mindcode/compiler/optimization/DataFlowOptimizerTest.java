@@ -1270,6 +1270,94 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(RETURN, "bank1")
         );
     }
+
+    @Test
+    public void handlesInputRecursiveFunctionParameters() {
+        // When passing arguments into recursive calls, the compiler generates temporary variables
+        // in situations where arguments in recursive calls are swapped. This test ensures all the unnecessary
+        // variables are properly eliminated.
+        assertCompilesTo("""
+                        allocate stack in bank1;
+                        def foo(n, a, b, c, d)
+                            if n == 0 then
+                                print(a, b, c, d);
+                            else
+                                foo(n - 1, b, c, d, a);
+                            end;
+                        end;
+                        foo(10, 1, 2, 3, 4);
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(SET, "__fn0_a", "1"),
+                createInstruction(SET, "__fn0_b", "2"),
+                createInstruction(SET, "__fn0_c", "3"),
+                createInstruction(SET, "__fn0_d", "4"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001), "__fn0retval"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1003), "notEqual", "__fn0_n", "0"),
+                createInstruction(PRINT, "__fn0_a"),
+                createInstruction(PRINT, "__fn0_b"),
+                createInstruction(PRINT, "__fn0_c"),
+                createInstruction(PRINT, "__fn0_d"),
+                createInstruction(RETURN, "bank1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, var(7), "__fn0_a"),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
+                createInstruction(SET, "__fn0_a", "__fn0_b"),
+                createInstruction(SET, "__fn0_b", "__fn0_c"),
+                createInstruction(SET, "__fn0_c", "__fn0_d"),
+                createInstruction(SET, "__fn0_d", var(7)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1005), "__fn0retval"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(RETURN, "bank1")
+        );
+    }
+
+    @Test
+    public void handlesInputOutputRecursiveFunctionParameters() {
+        // When passing/retrieving arguments into/out of recursive calls, the compiler generates temporary variables
+        // in situations where arguments in recursive calls are swapped. This test ensures all the unnecessary
+        // variables are properly eliminated.
+        assertCompilesTo("""
+                        allocate stack in bank1;
+                        def foo(n, in out a, in out b)
+                            if n == 0 then
+                                a = 5;
+                                b = 10;
+                            else
+                                foo(n - 1, out b, out a);
+                            end;
+                        end;
+                        foo(10, in 1, in 2);
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(SET, "__fn0_a", "1"),
+                createInstruction(SET, "__fn0_b", "2"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001), "__fn0retval"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1003), "notEqual", "__fn0_n", "0"),
+                createInstruction(SET, "__fn0_a", "5"),
+                createInstruction(SET, "__fn0_b", "10"),
+                createInstruction(RETURN, "bank1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, var(5), "__fn0_a"),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
+                createInstruction(SET, "__fn0_a", "__fn0_b"),
+                createInstruction(SET, "__fn0_b", var(5)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1005), "__fn0retval"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(SET, var(7), "__fn0_b"),
+                createInstruction(SET, "__fn0_b", "__fn0_a"),
+                createInstruction(SET, "__fn0_a", var(7)),
+                createInstruction(RETURN, "bank1")
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Subexpressions">

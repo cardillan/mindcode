@@ -282,12 +282,6 @@ public final class CallGraph {
 
         public boolean isNotOutputFunctionParameter(LogicVariable variable) {
             return !isOutputFunctionParameter(variable);
-//            if (variable.getType() == ArgumentType.LOCAL_VARIABLE && prefix.equals(variable.getFunctionPrefix())) {
-//                FunctionParameter declaredParameter = getDeclaredParameter(variable.getName());
-//                return declaredParameter == null || !declaredParameter.isOutput();
-//            } else {
-//                return true;
-//            }
         }
 
         /** @return number of function parameters */
