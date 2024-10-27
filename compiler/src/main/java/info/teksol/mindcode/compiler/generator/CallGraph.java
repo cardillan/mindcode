@@ -28,7 +28,8 @@ public final class CallGraph {
         this.allocatedStack = allocatedStack;
 
         // Create mock function declaration representing main program body.
-        addFunction(new FunctionDeclaration(null, true, false, false, MAIN, List.of(), new NoOp()));
+        addFunction(new FunctionDeclaration(null, true, false, true, false,
+                MAIN, List.of(), new NoOp()));
     }
 
     public static CallGraph createEmpty() {
@@ -236,6 +237,10 @@ public final class CallGraph {
 
         public boolean isNoinline() {
             return declaration.isNoinline();
+        }
+
+        public boolean isVoid() {
+            return declaration.isProcedure();
         }
 
         public FunctionDeclaration getDeclaration() {

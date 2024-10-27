@@ -49,6 +49,7 @@ public abstract class BaseAstVisitor<T> extends AbstractMessageEmitter implement
         if (node instanceof StringLiteral n)            return visitStringLiteral(n);
         if (node instanceof UnaryOp n)                  return visitUnaryOp(n);
         if (node instanceof VarRef n)                   return visitVarRef(n);
+        if (node instanceof VoidLiteral n)              return visitVoidLiteral(n);
         if (node instanceof WhileExpression n)          return visitWhileStatement(n);
         throw new AstWalkerException("Unrecognized node type " + node.getClass() + ": " + node);
     }

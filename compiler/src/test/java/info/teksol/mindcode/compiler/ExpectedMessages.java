@@ -23,9 +23,6 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
     private final List<String> messages = new ArrayList<>();
     private boolean accumulateErrors = false;
 
-    private static final ExpectedMessages NONE_FAIL = new ExpectedMessages(List.of(), false);
-    private static final ExpectedMessages NONE_THROW = new ExpectedMessages(List.of(), true);
-
     private ExpectedMessages(boolean throwOnError) {
         this.throwOnError = throwOnError;
         matchers = new ArrayList<>();
@@ -40,7 +37,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @return an instance which doesn't accept any message and generates Assert.fail()
      */
     public static ExpectedMessages none() {
-        return NONE_FAIL;
+        return new ExpectedMessages(List.of(), false);
     }
 
     /**
@@ -48,7 +45,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @return an instance which doesn't accept any message.
      */
     public static ExpectedMessages none(boolean throwOnError) {
-        return throwOnError ? NONE_THROW : NONE_FAIL;
+        return new ExpectedMessages(List.of(), throwOnError);
     }
 
     /**
@@ -222,6 +219,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         try {
             accumulateErrors = true;
             operation.run();
+            accumulateErrors = false;
             if (!messages.isEmpty()) {
                 Assert.fail(String.join("\n", messages));
             }

@@ -1,13 +1,13 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-bitmap-get-set.mnd:                                4            185      161      87.0%   F7CDD0AAA95E1FA9   8EBB3318A97C8C72
-bitmap-get.mnd:                                    2             16       16     100.0%   7A614E3E9C3B12F5   0502EBCFC8D0832C
-compute-recursive-fibonacci.mnd:                   4             30     2476     100.0%   CF5C94E489C7D400   18694E69719941C2
-compute-sum-of-primes.mnd:                        10            439     1889      99.7%   C92A5FEC4377D2A4   EC8302E2CDEB18D7
+bitmap-get-set.mnd:                                2            185      161      87.0%   F7CDD0AAA95E1FA9   8EBB3318A97C8C72
+bitmap-get.mnd:                                    1             16       16     100.0%   7A614E3E9C3B12F5   0502EBCFC8D0832C
+compute-recursive-fibonacci.mnd:                   3             30     2476     100.0%   CF5C94E489C7D400   18694E69719941C2
+compute-sum-of-primes.mnd:                         7            439     1889      99.7%   C92A5FEC4377D2A4   EC8302E2CDEB18D7
 memory-read-write.mnd:                             1              3        3     100.0%   375767A6AB4A20B9   4CA7F7B7EBBD2D04
 recursive-calls.mnd:                               9             93      263     100.0%   53EE445F6955D959   4CD24C118DD6DB24
 sorting with bubble-sort.mnd:                      1             25    19370     100.0%   534D523FC7E1BCF3   17266A8F06D65A21
-sorting with heap-sort.mnd:                       12             50    64044     100.0%   5FD8AEC1AEC63854   1609842A0CF0F652
+sorting with heap-sort.mnd:                        9             50    64044     100.0%   5FD8AEC1AEC63854   1609842A0CF0F652
 sorting with insert-sort.mnd:                      3             23    25933     100.0%   110AA9138813CE30   A5D967B2263DC0A6
 sorting with quick-sort.mnd:                       4             63    47943     100.0%   1E934E1BCA20ABE9   D89D4D8479DC6895
 sorting with select-sort.mnd:                      1             27    35149     100.0%   74DF156C43CDD10F   6A08E73049036484
-storage-display.mnd:                              27            653      824      25.5%   A987FC4CE94E41D4   60DF6DBE97F5CA6C
+storage-display.mnd:                              25            653      824      25.5%   F7D56DB08E60751D   30FF1E42DDF66445

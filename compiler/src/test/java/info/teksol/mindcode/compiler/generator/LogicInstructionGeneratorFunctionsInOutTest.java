@@ -346,4 +346,66 @@ public class LogicInstructionGeneratorFunctionsInOutTest extends AbstractGenerat
                 createInstruction(END)
         );
     }
+
+    @Test
+    void compilesInlineVoidFunction() {
+        // Note: the function doesn't set a function return variable
+        assertCompilesTo("""
+                        inline void foo()
+                            print("foo");
+                        end;
+                        foo();
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("foo")),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesStacklessVoidFunction() {
+        // Note: the function doesn't set a function return variable
+        assertCompilesTo("""
+                        noinline void foo()
+                            print("foo");
+                        end;
+                        foo();
+                        """,
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("foo")),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesRecursiveVoidFunction() {
+        // Note: the function doesn't set a function return variable
+        assertCompilesTo("""
+                        allocate stack in bank1;
+                        void foo()
+                            foo();
+                            print("foo");
+                        end;
+                        foo();
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001), "__fn0retval"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1003), "__fn0retval"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(PRINT, q("foo")),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(RETURN, "bank1"),
+                createInstruction(END)
+        );
+    }
 }

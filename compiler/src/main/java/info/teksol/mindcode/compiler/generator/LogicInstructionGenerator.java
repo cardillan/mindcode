@@ -25,6 +25,7 @@ import java.util.stream.IntStream;
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 import static info.teksol.mindcode.logic.LogicBoolean.TRUE;
 import static info.teksol.mindcode.logic.LogicNull.NULL;
+import static info.teksol.mindcode.logic.LogicVoid.VOID;
 
 /**
  * Converts from the Mindcode AST into a list of Logic instructions.
@@ -389,7 +390,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             functionPrefix = function.getPrefix();
             functionContext = new LocalContext();
             emit(createLabel(function.getLabel()));
-            returnStack.enterFunction(nextLabel(), LogicVariable.fnRetVal(function));
+            final LogicValue returnValue = function.isVoid() ? VOID : LogicVariable.fnRetVal(function);
+            returnStack.enterFunction(nextLabel(), returnValue);
 
             if (function.isRecursive()) {
                 appendRecursiveFunctionDeclaration(function);
@@ -413,7 +415,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
-        emit(createSet(LogicVariable.fnRetVal(function), body));
+        if (!function.isVoid()) {
+            emit(createSet(LogicVariable.fnRetVal(function), body));
+        }
         emit(createLabel(returnStack.getReturnLabel(function.getInputPosition())));
         emit(createReturn(stackName()));
     }
@@ -421,7 +425,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private void appendStacklessFunctionDeclaration(LogicFunction function) {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
-        emit(createSet(LogicVariable.fnRetVal(function), body));
+        if (!function.isVoid()) {
+            emit(createSet(LogicVariable.fnRetVal(function), body));
+        }
         emit(createLabel(returnStack.getReturnLabel(function.getInputPosition())));
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
@@ -458,9 +464,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicFunctionArgument process(FunctionArgument argument) {
-        return argument.hasExpression()
-                ? new LogicFunctionArgument(argument, visit(argument.getExpression()))
-                : new LogicFunctionArgument(argument);
+        if (argument.hasExpression()) {
+            final LogicValue value = visit(argument.getExpression());
+            if (value == VOID) {
+                warn(argument, "Expression doesn't have any value. Using no-value expressions in function calls is deprecated.");
+            }
+            return new LogicFunctionArgument(argument, value);
+        } else {
+            return new LogicFunctionArgument(argument);
+        }
     }
 
     private List<LogicFunctionArgument> processArguments(List<FunctionArgument> declaredArguments) {
@@ -516,7 +528,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         error(argument, "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.getName());
                     } else if (argument.hasExpression() && !argument.hasOutModifier()) {
                         // Out modifier needs to be used
-                        warn(argument, "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'.", parameter.getName());
+                        warn(argument, "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'. " +
+                                "Omitting 'out' modifiers is deprecated.", parameter.getName());
                     }
                 }
             } else {
@@ -554,7 +567,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         if (arguments.size() != function.getParameterCount()) {
             error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
                     functionName, function.getParameterCount(), arguments.size());
-            return NULL;
+            return function.isVoid() ? VOID : NULL;
         }
 
         validateUserFunctionArguments(function, call.getArguments());
@@ -583,6 +596,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicFunction previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
         final LoopStack previousLoopStack = loopStack;
+        final boolean isVoid = function.isVoid();
 
         setSubcontextType(AstSubcontextType.INLINE_CALL, 1.0);
         currentFunction = function;
@@ -593,11 +607,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setupFunctionParameters(function, arguments);
 
         // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
-        final LogicVariable returnValue = nextReturnValue();
+        final LogicValue returnValue = isVoid ? VOID : nextReturnValue();
         final LogicLabel returnLabel = nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
         LogicValue result = visit(function.getBody());
-        emit(createSet(returnValue, result));
+        if (!isVoid) {
+            emit(createSet((LogicVariable) returnValue, result));
+        }
         setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
         emit(createLabel(returnLabel));
         returnStack.exitFunction();
@@ -612,6 +628,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private LogicValue handleStacklessFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, arguments);
+        final boolean isVoid = function.isVoid();
 
         setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
         final LogicLabel returnLabel = nextLabel();
@@ -774,7 +791,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue passReturnValue(LogicFunction function) {
-        if (currentFunction.isRepeatedCall(function.getName())) {
+        if (function.isVoid()) {
+            return VOID;
+        } else if (currentFunction.isRepeatedCall(function.getName())) {
             // Copy default return variable to new temp, for the function is called multiple times,
             // and we must not overwrite result of previous call(s) with this one
             //
@@ -896,7 +915,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             }
         }
 
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -942,7 +961,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicValue rvalue;
 
         // Reusing volatile variables might assign different values to each variable in chain
-        if (eval.isVolatile()) {
+        if (eval == VOID) {
+            warn(node.getValue(), "Expression doesn't have any value. Using no-value expressions in assignments is deprecated.");
+            rvalue = NULL;
+        } else if (eval.isVolatile()) {
             LogicVariable tmp = nextTemp();
             emit(createSet(tmp, eval));
             rvalue = tmp;
@@ -1022,7 +1044,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         List<AstNode> values = node.getValues();
         if (values.isEmpty()) {
             // Empty list -- nothing to do
-            return NULL;
+            return VOID;
         }
 
         final List<ForEachIterator> iterators = node.getIterators().stream().map(this::processIterator).toList();
@@ -1035,7 +1057,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         if (values.size() % iterators.size() != 0) {
             error(node, "The number of values in the list must be an integer multiple of the number of iterators.");
-            return NULL;
+            return VOID;
         }
 
         loopStack.enterLoop(node.getInputPosition(), node.getLabel(), exitLabel, contLabel);
@@ -1123,7 +1145,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         clearSubcontextType();
         loopStack.exitLoop(node.getLabel());
 
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -1170,7 +1192,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(doneLabel));
         clearSubcontextType();
         loopStack.exitLoop(node.getLabel());
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -1197,7 +1219,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(doneLabel));
         loopStack.exitLoop(node.getLabel());
         clearSubcontextType();
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -1218,7 +1240,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(doneLabel));
         clearSubcontextType();
         loopStack.exitLoop(node.getLabel());
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -1293,6 +1315,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitVarRef(VarRef node) {
         return createVariableOrConstant(node,node.getName(), false, null);
+    }
+
+    @Override
+    public LogicValue visitVoidLiteral(VoidLiteral node) {
+        return VOID;
     }
 
     private LogicVariable visitVariableVarRef(VarRef node) {
@@ -1488,13 +1515,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitFunctionDeclaration(FunctionDeclaration node) {
         // Do nothing - function declarations are processed by CallGraphCreator
-        return NULL;
+        return VOID;
     }
 
     @Override
     public LogicValue visitFunctionParameter(FunctionParameter node) {
         // Do nothing - function declarations are processed by CallGraphCreator
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -1524,7 +1551,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             heapBaseAddress = 0;
             heapSize = 64;
         }
-        return NULL;
+        return VOID;
     }
 
     @Override
@@ -1560,31 +1587,49 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(createSet(LogicVariable.STACK_POINTER, LogicNumber.get(start)));
         }
 
-        return NULL;
+        return VOID;
     }
 
     @Override
     public LogicValue visitBreakStatement(BreakStatement node) {
         final LogicLabel label = loopStack.getBreakLabel(node.getInputPosition(), node.getLabel());
         emit(createJumpUnconditional(label));
-        return NULL;
+        return VOID;
     }
 
     @Override
     public LogicValue visitContinueStatement(ContinueStatement node) {
         final LogicLabel label = loopStack.getContinueLabel(node.getInputPosition(), node.getLabel());
         emit(createJumpUnconditional(label));
-        return NULL;
+        return VOID;
     }
 
     @Override
     public LogicValue visitReturnStatement(ReturnStatement node) {
-        final LogicVariable retval = returnStack.getReturnValue(node.getInputPosition());
+        final LogicValue retval = returnStack.getReturnValue(node.getInputPosition());
         final LogicLabel label = returnStack.getReturnLabel(node.getInputPosition());
-        final LogicValue expression = visit(node.getRetval());
-        emit(createSet(retval, expression));
-        emit(createJumpUnconditional(label));
-        return NULL;
+        if (retval instanceof LogicVariable target) {
+            if (node.getRetval() instanceof VoidLiteral) {
+                error(node, "Missing return value in 'return' statement.");
+            } else {
+                final LogicValue expression = visit(node.getRetval());
+                if (expression == VOID) {
+                    warn(node.getRetval(), "Expression doesn't have any value. Using no-value expressions in return statements is deprecated.");
+                }
+                emit(createSet(target, expression));
+            }
+            emit(createJumpUnconditional(label));
+        } else if (retval instanceof LogicVoid) {
+            if (!(node.getRetval() instanceof VoidLiteral)) {
+                error(node, "Cannot return a value from a 'void' function.");
+                // Process the expression anyway to locate errors in it
+                visit(node.getRetval());
+            }
+            emit(createJumpUnconditional(label));
+        } else {
+            throw new MindcodeInternalError("Unexpected function return value holder " + retval);
+        }
+        return VOID;
     }
 
     @Override
@@ -1712,7 +1757,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             } else if (formatter.createsNewLine()) {
                 emit(formatter.createInstruction(this,LogicString.NEW_LINE));
             }
-            return NULL;
+            return VOID;
         }
 
         String pattern = evaluateFormattableNode(call.getArguments().get(0));
@@ -1836,7 +1881,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             error(node, "Too many arguments for '%s' format string.", formatter.function);
         }
 
-        return NULL;
+        return VOID;
     }
 
     private static final Pattern REGEX_VARIABLE = Pattern.compile("^([@_a-zA-Z][-a-zA-Z_0-9]*)");

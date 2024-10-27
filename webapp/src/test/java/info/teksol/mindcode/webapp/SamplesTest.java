@@ -1,5 +1,6 @@
 package info.teksol.mindcode.webapp;
 
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.DynamicContainer;
@@ -39,6 +40,10 @@ class SamplesTest {
         final CompilerOutput<String> result = compile(true, sourceCode,
                 OptimizationLevel.BASIC, false);
 
-        assertFalse(result.hasErrors() || result.hasWarnings());
+        result.messages().stream().filter(MindcodeMessage::isErrorOrWarning)
+                .map(MindcodeMessage::formatMessage)
+                .forEach(System.out::println);
+
+        assertFalse(result.hasErrors() || result.hasWarnings(), "Script produced errors or warnings.");
     }
 }

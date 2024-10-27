@@ -401,4 +401,10 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         visit(node.getRetval());
         return null;
     }
+
+    @Override
+    public String visitVoidLiteral(VoidLiteral node) {
+        buffer.append("void");
+        return null;
+    }
 }

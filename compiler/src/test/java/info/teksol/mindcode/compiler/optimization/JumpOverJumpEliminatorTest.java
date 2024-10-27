@@ -58,7 +58,7 @@ class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpElimi
                 """
                         displayItem();
                         
-                        def displayItem()
+                        void displayItem()
                             amount = vault1.coal;
                             if amount == 0 then return; end;
                             print(amount % 10);

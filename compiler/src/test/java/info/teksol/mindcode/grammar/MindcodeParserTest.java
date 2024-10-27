@@ -166,7 +166,7 @@ class MindcodeParserTest extends AbstractParserTest {
         List<MindcodeMessage> messages = parseWithErrors("1..0;");
         ExpectedMessages.create()
                 .add(1, 2, "Parse error: missing ';' before '.'")
-                .add(1, 2, "Parse error: '.': mismatched input '.' expecting {<EOF>, 'allocate', 'break', 'case', 'const', 'continue', 'def', 'do', 'end', 'false', 'for', 'if', 'inline', 'noinline', 'null', 'param', 'return', 'true', 'while', '@', '/', '\\', '$', '**', '-', '%', '*', NOT, '~', '+', '?', '#set', '#strict', '#relaxed', '<', '<=', '!=', '==', '===', '!==', '>=', '>', AND, OR, '<<', '>>', '&', '|', '^', '(', FORMATTABLE, LITERAL, FLOAT, INT, HEXINT, BININT, ID, REM_COMMENT}")
+                .addRegex(1, 2, "Parse error: '\\.': mismatched input '\\.' expecting \\{.*\\}")
                 .validate(messages);
     }
 

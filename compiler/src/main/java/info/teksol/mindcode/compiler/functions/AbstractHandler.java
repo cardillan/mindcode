@@ -120,12 +120,15 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         }
         if (argument.hasValue()) {
             if (!argument.outModifier()) {
-                warn(argument.pos(), "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'.", parameter.name());
+                warn(argument.pos(), "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'. " +
+                        "Omitting 'out' modifiers is deprecated.", parameter.name());
             }
             if (!argument.value().isUserVariable()) {
                 error(argument.pos(), "Argument assigned to output parameter '%s' is not writable.", parameter.name());
             }
+            return argument.value();
+        } else {
+            return functionMapper.instructionProcessor.nextTemp();
         }
-        return argument.value();
     }
 }

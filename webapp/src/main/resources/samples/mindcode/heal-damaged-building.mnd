@@ -28,7 +28,7 @@ end;
 printflush(message1);
 
 // A separate function which will find an unused unit we can use
-def findUnit()
+void findUnit()
     // Keep looking for unit until one is found
     while true do
         ubind(UNIT);

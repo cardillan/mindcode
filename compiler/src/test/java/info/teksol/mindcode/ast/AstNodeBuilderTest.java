@@ -955,7 +955,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         new Seq(null,
-                                new FunctionDeclaration(null, false, false, false,
+                                new FunctionDeclaration(null, false, false, false, false,
                                         "delay",
                                         List.of(),
                                         new Seq(null,
@@ -998,7 +998,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 prettyPrint(
                         translateToAst("""
-                                def delay
+                                def delay()
                                   n = 0;
                                   deadline = @tick + 60;
                                   while @tick < deadline do
@@ -1016,7 +1016,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false, false, false,
+                                        new FunctionDeclaration(null, false, false, false,false,
                                                 "foo",
                                                 List.of(),
                                                 new Seq(null,
@@ -1031,7 +1031,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 prettyPrint(
                         translateToAst("""
-                                def foo
+                                def foo()
                                     n=n+1;
                                 end;
                                 foo();
@@ -1047,7 +1047,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false, false, false,
+                                        new FunctionDeclaration(null, false, false, false, false,
                                                 "foo",
                                                 List.of(new FunctionParameter(null, "s", false, false)),
                                                 new Seq(null,
@@ -1076,7 +1076,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false, false, false,
+                                        new FunctionDeclaration(null, false, false, false, false,
                                                 "foo",
                                                 List.of(
                                                         new FunctionParameter(null, "s", false, false),

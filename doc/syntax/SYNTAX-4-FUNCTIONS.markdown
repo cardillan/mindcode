@@ -1,61 +1,77 @@
 # Functions
 
-Mindcode allows you to call existing functions or create new ones.
-Functions are called by specifying a function name and placing parameters in parentheses.
-The parenthesis must be used even if the function has no parameters.
+Mindcode allows you to call existing functions or create new ones. Functions are called by specifying a function name and placing arguments in parentheses. The parenthesis must be used even if the function has no parameters. Functions may or may not return a value (user functions not returning a value are declared using the `void` keyword). Trying to assign a function not returning a value to a variable, or to pass the result of the function as an argument to another function call, causes an error. 
+
+## Function parameters
+
+There are several types of parameters a function can have:
+
+1. _Input parameters_: serve to pass an argument to the function by the caller.
+2. _Output parameters_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output argument are specified, they need to correspond to a global, main or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized - they're initialized by the function call.  
+3. _Input/output parameters_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
+4. _Enumerated parameters_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined constants as an argument. For example the `uradar` functions requires one of the following values for each of its first three arguments: `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without any escaping or double quotes. It is not possible to store the value in a variable and pass the variable instead. Passing a value different to one of the supported values causes an error.
+
+Examples of function definitions and function calls:
 
 ```
-foo(x);    // Calling function with a single argument
-bar();     // Calling function with no arguments
+void foo(a, out b, in out c)
+    b = a + c;
+    c = c + 1;
+    println(c);
+end;
+
+void bar()
+    println("No parameters");
+end;
+
+y = 10;
+foo(20, out x, out y);    // Obtaining return values from b and c
+foo(20, , in y * 2);      // Not obtaining the value of b and c, but passing y * 2 as an input value for c   
+bar();                    // Calling a function with no arguments
 ```
+
+All argument are passed by value, not by reference:
+
+```
+void foo(in out x)
+    x = 20;
+    println(x);
+    println(GLOBAL);
+end;
+
+GLOBAL = 10;
+foo(in out GLOBAL);     // The ame as just foo(out GLOBAL); 
+println(GLOBAL);
+```
+
+outputs `20`, `10` and `20`. The change to the global variable will only happen when the function call is finished. This behavior is consistent for all types of user functions (inline, stackless and recursive).
 
 # Mindustry Logic functions
 
-Interactions with the Mindustry world take place through functions mapped to Mindustry Logic instructions.
+Interactions with the Mindustry world take place through functions mapped to Mindustry Logic instructions. Some functions return a value representing the most significant output of the instruction. Additional output values are provided through output function parameters. Many of the instruction do not have any output value.
 
-Mindcode currently supports targeting Mindustry versions 6 and 7. Web application always targets version 7 processors,
-while command-line version of the compiler allows to select version 6 for better backwards compatibility.
-The differences are minuscule, though, most of the code generated for version 7 will run on version 6 as well.
+There are no instructions having an input/output parameter, except the `sync` instruction.
 
-A specific `7A` target was added to Mindcode, where the `getBlock` and `ulocate` functions return the building that 
-was found at given coordinates or located using the criteria. This update makes the most occurring use case, where the 
-located building is the only used output of the function, a natural way to use the function.
+Mindcode currently supports targeting Mindustry versions 6, 7 and 8. It is possible to choose the target Mindustry version using the [`#set target` directive](SYNTAX-5-OTHER.markdown#option-target), or a [command-line argument](TOOLS-CMDLINE.markdown). 
 
-At this point, `7` is still the default target for both command line tool and web application. `7A` will become the 
-default in the future, or in higher Mindcode versions.  
+A specific `7A` target was added to Mindcode, where the `getBlock` and `ulocate` functions return the building that was found at given coordinates or located using the criteria. This update makes the most occurring use case, where the located building is the only used output of the function, a natural way to use the function.
 
-All supported functions and their respective Mindustry instruction counterparts can be found in the function reference.
-Please note that the reference serves just to document all existing functions and the way they are compiled to Mindustry Logic,
-but it does not aim to describe the behavior of the functions/instructions.
+The `8A` target represents the upcoming [Mindustry 8 version](MINDUSTRY-8.markdown).
+
+At this point, `7` is still the default target for both command line tool and web application. `8A` will become the default when Mindustry 8 is released.
+
+All supported functions and their respective Mindustry instruction counterparts can be found in the function reference. Please note that the reference serves just to document all existing functions and the way they are compiled to Mindustry Logic, but it does not aim to describe the behavior of the functions/instructions.
 
 * [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
 * [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
 * [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
 * [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown)
 
-## Instruction parameters
-
-There are several types of parameters a function can have:
-* _Input parameters_: these parameters will accept any expression, including variables, as arguments.
-* _Output parameters_: one of output parameters of the instruction is always mapped to the return value of the function,
-  e.g. `block = getlink(linkNum)` translates to instruction `getlink block linkNum`.
-  If the instruction provides more than one output parameters, the remaining ones become parameters of the function.
-  Output parameters are typically optional, if you aren't interested in a particular value returned by the instruction,
-  you can omit the argument (only arguments at the end of the argument list can be omitted.)
-  When not omitted, the argument passed in should be a variable.
-* _Enumerated parameters_: these parameters will only accept one of predefined constants as an argument.
-  For example the `uradar` functions requires one of the following values for each of its first three arguments:
-  `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without
-  any escaping or double quotes. It is not possible to store the value in a variable and pass the variable instead.
-  Passing a value different to one of the supported values results in compilation error.
-
 ## Instruction mapping rules
 
 Generally, functions are mapped to instructions using these rules:
-* If the instruction has just one form (such as `getlink`), the function name corresponds to the instruction name. 
-  All instruction names are lowercase.
-* If the instruction takes several forms depending on the exact operation the instruction performs (such as `draw` or `ucontrol`),
-  the function name corresponds to the operation. In this case, the function name can be camelCase (such as `itemTake`).
+* If the instruction has just one form (such as `getlink`), the function name corresponds to the instruction name. All instruction names are lowercase.
+* If the instruction takes several forms depending on the exact operation the instruction performs (such as `draw` or `ucontrol`), the function name corresponds to the operation. In this case, the function name can be camelCase (such as `itemTake`).
 
 The disparity between those two kinds of functions is a consequence of keeping Mindcode nomenclature as close to Mindustry Logic as possible.
 
@@ -67,24 +83,20 @@ There are a few issues with these rules:
 
 ## Methods
 
-Some instructions perform an operation on an object (a linked block), which is passed as an argument to one
-of instruction parameters. In these cases, the instruction can be mapped to a method called on the given block,
-e.g. `block.shoot(x, y, doShoot)` translates to `control shoot block x y doShoot 0`.
+Some instructions perform an operation on an object (a linked block), which is passed as an argument to one of instruction parameters. In these cases, the instruction can be mapped to a method called on the given block, e.g. `block.shoot(x, y, doShoot)` translates to `control shoot block x y doShoot 0`.
 
-In some cases, the instruction can be invoked as a function or as a method (`printflush(message1)` or `message1.printflush()`).
-All existing mappings are shown in the function reference above.
+In some cases, the instruction can be invoked either as a function or as a method (`printflush(message1)` or `message1.printflush()`). All existing mappings are shown in the function reference above.
 
 ## Alternative `control` syntax
 
-There is a special case for `control` instruction setting a single value on a linked block, for whose Mindcode accepts
-the following syntax:
-* `block.enabled = boolean`, which is equivalent to `block.enabled(boolean)`
-* `block.config = value`, which is equivalent to `block.config(value)`
+There is a special case for `control` instruction setting a single value on a linked block, for whose Mindcode accepts the following syntax:
+
+- `block.enabled = boolean`, which is equivalent to `block.enabled(boolean)`
+- `block.config = value`, which is equivalent to `block.config(value)`
 
 The `block` in the examples can be a variable or a linked block object.
 
-Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS_V7.markdown#instruction-setprop)
-instruction. Looking for ways to support this syntax in the future.
+Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS_V7.markdown#instruction-setprop) instruction. Looking for ways to support this syntax in the future.
 
 ## Alternative `sensor` syntax
 
@@ -94,9 +106,7 @@ The `sensor` method accepts an expression, not just constant property name, as a
 amount = vault1.sensor(use_titanium ? @titanium : @copper);
 ```
 
-If the property you're trying to obtain is hard-coded, you can again use an alternate syntax:
-`amount = storage.thorium` instead of the longer equivalent `amount = storage.sensor(@thorium)`.
-You can use this for any property, not just item types, such as `@unit.dead` instead of `@unit.sensor(@dead)`.
+If the property you're trying to obtain is hard-coded, you can again use an alternate syntax: `amount = storage.thorium` instead of the longer equivalent `amount = storage.sensor(@thorium)`. You can use this for any property, not just item types, such as `@unit.dead` instead of `@unit.sensor(@dead)`.
 
 Again, the `vault1` or `storage` in the examples can be a variable or a linked block object.
 
@@ -141,6 +151,12 @@ print __tmp2
 ```
 
 As can be seen, the code actually does compute the difference between the value of the variable from two different points in time.
+
+## The `message()` function
+
+The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success` which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (this is for backwards compatibility with earlier Mindustry versions).
+
+Mindcode therefore allows to pass in the `@wait` built-in value as an argument to this function, even though the parameters is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
 
 # Built-in functions
 
@@ -335,60 +351,73 @@ The system function discussed so far are supported directly by the compiler. Add
 You may declare your own functions using the `def` keyword:
 
 ```
-def update(message, status)
+def sum(x, y)
+    x + y;
+end;    
+```
+
+Functions not returning any value must be declared using the `void` keyword:
+
+```
+void update(message, status)
     println("Status: ", status);
     printf("Game time: $ sec", floor(@time) / 1000);
     printflush(message);
 end;
 ```
 
-This function will print the status and flush it to given message block.
-Calling your own functions is done in the same way as any other function:
+As has been described above, function parameters in user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
 
 ```
-update(message1, "The core is on fire!!!");
+def function(in x, out y, in out z)
+    ...
+end; 
 ```
 
-You can pass any variable or value assignable to a variable as an argument to the function. A function may call other functions.
+The `in` modifier to mark input parameters is optional - function parameters are input by default. 
 
 ## Function parameters and local variables
 
-Function parameters and variables used in functions are local to the function.
-See also [local variables](SYNTAX-1-VARIABLES.markdown#local-variables)
-and [global variables](SYNTAX-1-VARIABLES.markdown#global-variables).
+Function parameters and variables used in functions are local to the function. See also [local variables](SYNTAX-1-VARIABLES.markdown#local-variables) and [global variables](SYNTAX-1-VARIABLES.markdown#global-variables).
 
 ## Return values
 
-Function ends (returns to the caller) when the end of function definition is reached, or when a `return` statement is executed.
-In the first case, the return value of a function is given by the last expression evaluated by the function;
-in the second case, the return value is equal to the expression following the `return` keyword, or `null` if the return
-statement doesn't specify a return value:
+Unless a function is declared as `void`, it has an output value. The output value is determined when the function ends (returns to the caller). This happens either when the end of function definition is reached, or when a `return` statement is executed. In the first case, the return value of a function is equal to the last expression evaluated by the function; in the second case, the return value is equal to the expression following the `return` keyword:
 
 ```
 def foo(n)
     case n
-        when 1 then return;
+        when 1 then return "One";
         when 2 then return "Two";
     end;
     n;
 end;
 
-printf("$:$:$", foo(1), foo(2), foo(3));
+print($"$:$:$", foo(1), foo(2), foo(3));
 printflush(message1);
 ```
 
-The output of this program is `null:Two:3`.
+The output of this program is `One:Two:3`.
+
+Void functions are declared using the `void` keyword instead of `def` keyword. Void functions do not return any value. The `return` statement in a `void` function therefore must not specify a value:
+
+```
+void foo(n)
+    if n > 10 then
+        return;
+    else
+        print(n);
+    end;
+end;
+```
 
 ## Inline functions
 
-Normal function are compiled once and called from other places in the program.
-Inline functions are compiled into every place they're called from,
-so there can be several copies of them in the compiled code.
-This leads to shorter code per call and faster execution.
-To create an inline function, use `inline` keyword:
+Normal function are compiled once and called from other places in the program. Inline functions are compiled into every place they're called from,
+so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
 
 ```
-inline def printtext(name, value, min, max)
+inline void printtext(name, value, min, max)
     if value < min then
         println(name, " too low");
     elsif value > max then
@@ -411,7 +440,7 @@ To prevent inlining of a particular function, either directly by the compiler or
 `noinline` keyword:
 
 ```
-noinline def foo()
+noinline void foo()
     print("This function is not inlined.");
 end;
 
@@ -420,9 +449,7 @@ foo();
 
 ## Recursive functions
 
-Functions calling themselves, or two (or more) functions calling each other are _recursive_.
-Recursive functions require a stack to keep track of the calls in progress
-and for storing local variables from different invocations of the function.
+Functions calling themselves, or two (or more) functions calling each other are _recursive_. Recursive functions require a stack to keep track of the calls in progress and for storing local variables from different invocations of the function.
 
 ```
 allocate stack in bank1;

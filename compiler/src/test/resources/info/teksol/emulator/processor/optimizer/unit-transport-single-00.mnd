@@ -339,7 +339,7 @@ inline def rebindUnit()
     // We have some unit. Try to find unit owned by us
     do
         if @unit.controller == @this then
-            return;
+            return null;
         end;
         ubind(UNIT);
         print($"[gold]Looking for old unit...");
@@ -359,7 +359,7 @@ inline def findUnit()
         elsif @unit.controlled != 0 then
             print($"[salmon]Looking for a free $UNIT...");
         else
-            return;
+            return null;
         end;
         printflush(message1);
     end;

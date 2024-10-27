@@ -1,7 +1,7 @@
-   410 instructions before optimizations.
+   406 instructions before optimizations.
      7 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    37 instructions eliminated by Dead Code Elimination (7 iterations).
+    33 instructions eliminated by Dead Code Elimination (6 iterations).
     21 instructions eliminated by Jump Normalization (4 iterations).
      5 instructions eliminated by Jump Optimization (4 iterations).
     33 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -202,74 +202,74 @@ jump __label405 always 0 0
 gotolabel __label388 __label535
 jump __label407 always 0 0
 label __label389
-op sub __tmp31 y 1
-draw lineRect 70 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 70 __tmp29 9 14 0 0
 jump __label412 always 0 0
 label __label391
-op add __tmp36 y 12
-draw line 77 y 77 __tmp36 0 0
+op add __tmp34 y 12
+draw line 77 y 77 __tmp34 0 0
 jump __label412 always 0 0
 label __label393
 draw line 71 y 78 y 0 0
-op add __tmp38 y 6
-draw line 71 y 71 __tmp38 0 0
-draw line 71 __tmp38 78 __tmp38 0 0
-op add __tmp45 y 12
-draw line 78 __tmp38 78 __tmp45 0 0
-draw line 71 __tmp45 78 __tmp45 0 0
+op add __tmp36 y 6
+draw line 71 y 71 __tmp36 0 0
+draw line 71 __tmp36 78 __tmp36 0 0
+op add __tmp43 y 12
+draw line 78 __tmp36 78 __tmp43 0 0
+draw line 71 __tmp43 78 __tmp43 0 0
 jump __label412 always 0 0
 label __label395
-op add __tmp51 y 12
-draw line 78 y 78 __tmp51 0 0
+op add __tmp49 y 12
+draw line 78 y 78 __tmp49 0 0
 draw line 71 y 78 y 0 0
-op add __tmp53 y 6
-draw line 71 __tmp53 78 __tmp53 0 0
+op add __tmp51 y 6
 draw line 71 __tmp51 78 __tmp51 0 0
+draw line 71 __tmp49 78 __tmp49 0 0
 jump __label412 always 0 0
 label __label397
-op add __tmp61 y 12
-draw line 78 y 78 __tmp61 0 0
-op add __tmp62 y 6
-draw line 71 __tmp62 78 __tmp62 0 0
-draw line 71 __tmp62 71 __tmp61 0 0
+op add __tmp59 y 12
+draw line 78 y 78 __tmp59 0 0
+op add __tmp60 y 6
+draw line 71 __tmp60 78 __tmp60 0 0
+draw line 71 __tmp60 71 __tmp59 0 0
 jump __label412 always 0 0
 label __label399
 draw line 71 y 78 y 0 0
-op add __tmp70 y 6
-draw line 78 y 78 __tmp70 0 0
-draw line 71 __tmp70 78 __tmp70 0 0
-op add __tmp75 y 12
-draw line 71 __tmp70 71 __tmp75 0 0
-draw line 71 __tmp75 78 __tmp75 0 0
+op add __tmp68 y 6
+draw line 78 y 78 __tmp68 0 0
+draw line 71 __tmp68 78 __tmp68 0 0
+op add __tmp73 y 12
+draw line 71 __tmp68 71 __tmp73 0 0
+draw line 71 __tmp73 78 __tmp73 0 0
 jump __label412 always 0 0
 label __label401
-op add __tmp79 y 12
-draw line 71 y 71 __tmp79 0 0
+op add __tmp77 y 12
+draw line 71 y 71 __tmp77 0 0
 draw line 71 y 78 y 0 0
-op add __tmp83 y 6
-draw line 78 y 78 __tmp83 0 0
-draw line 71 __tmp83 78 __tmp83 0 0
-draw line 71 __tmp79 78 __tmp79 0 0
+op add __tmp81 y 6
+draw line 78 y 78 __tmp81 0 0
+draw line 71 __tmp81 78 __tmp81 0 0
+draw line 71 __tmp77 78 __tmp77 0 0
 jump __label412 always 0 0
 label __label403
-op add __tmp94 y 12
-draw line 77 y 77 __tmp94 0 0
-draw line 71 __tmp94 77 __tmp94 0 0
+op add __tmp92 y 12
+draw line 77 y 77 __tmp92 0 0
+draw line 71 __tmp92 77 __tmp92 0 0
 jump __label412 always 0 0
 label __label405
-op sub __tmp102 y 1
-draw lineRect 70 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 71 __tmp103 78 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 70 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 71 __tmp101 78 __tmp101 0 0
 jump __label412 always 0 0
 label __label407
 draw line 71 y 78 y 0 0
-op add __tmp109 y 12
-draw line 78 y 78 __tmp109 0 0
-op add __tmp110 y 6
-draw line 71 __tmp110 78 __tmp110 0 0
-draw line 71 __tmp110 71 __tmp109 0 0
-draw line 71 __tmp109 78 __tmp109 0 0
+op add __tmp107 y 12
+draw line 78 y 78 __tmp107 0 0
+op add __tmp108 y 6
+draw line 71 __tmp108 78 __tmp108 0 0
+draw line 71 __tmp108 71 __tmp107 0 0
+draw line 71 __tmp107 78 __tmp107 0 0
 label __label412
 gotooffset __label417 4 0 __label536
 gotolabel __label417 __label536
@@ -293,74 +293,74 @@ jump __label443 always 0 0
 gotolabel __label426 __label536
 jump __label445 always 0 0
 label __label427
-op sub __tmp31 y 1
-draw lineRect 59 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 59 __tmp29 9 14 0 0
 jump __label450 always 0 0
 label __label429
-op add __tmp36 y 12
-draw line 66 y 66 __tmp36 0 0
+op add __tmp34 y 12
+draw line 66 y 66 __tmp34 0 0
 jump __label450 always 0 0
 label __label431
 draw line 60 y 67 y 0 0
-op add __tmp38 y 6
-draw line 60 y 60 __tmp38 0 0
-draw line 60 __tmp38 67 __tmp38 0 0
-op add __tmp45 y 12
-draw line 67 __tmp38 67 __tmp45 0 0
-draw line 60 __tmp45 67 __tmp45 0 0
+op add __tmp36 y 6
+draw line 60 y 60 __tmp36 0 0
+draw line 60 __tmp36 67 __tmp36 0 0
+op add __tmp43 y 12
+draw line 67 __tmp36 67 __tmp43 0 0
+draw line 60 __tmp43 67 __tmp43 0 0
 jump __label450 always 0 0
 label __label433
-op add __tmp51 y 12
-draw line 67 y 67 __tmp51 0 0
+op add __tmp49 y 12
+draw line 67 y 67 __tmp49 0 0
 draw line 60 y 67 y 0 0
-op add __tmp53 y 6
-draw line 60 __tmp53 67 __tmp53 0 0
+op add __tmp51 y 6
 draw line 60 __tmp51 67 __tmp51 0 0
+draw line 60 __tmp49 67 __tmp49 0 0
 jump __label450 always 0 0
 label __label435
-op add __tmp61 y 12
-draw line 67 y 67 __tmp61 0 0
-op add __tmp62 y 6
-draw line 60 __tmp62 67 __tmp62 0 0
-draw line 60 __tmp62 60 __tmp61 0 0
+op add __tmp59 y 12
+draw line 67 y 67 __tmp59 0 0
+op add __tmp60 y 6
+draw line 60 __tmp60 67 __tmp60 0 0
+draw line 60 __tmp60 60 __tmp59 0 0
 jump __label450 always 0 0
 label __label437
 draw line 60 y 67 y 0 0
-op add __tmp70 y 6
-draw line 67 y 67 __tmp70 0 0
-draw line 60 __tmp70 67 __tmp70 0 0
-op add __tmp75 y 12
-draw line 60 __tmp70 60 __tmp75 0 0
-draw line 60 __tmp75 67 __tmp75 0 0
+op add __tmp68 y 6
+draw line 67 y 67 __tmp68 0 0
+draw line 60 __tmp68 67 __tmp68 0 0
+op add __tmp73 y 12
+draw line 60 __tmp68 60 __tmp73 0 0
+draw line 60 __tmp73 67 __tmp73 0 0
 jump __label450 always 0 0
 label __label439
-op add __tmp79 y 12
-draw line 60 y 60 __tmp79 0 0
+op add __tmp77 y 12
+draw line 60 y 60 __tmp77 0 0
 draw line 60 y 67 y 0 0
-op add __tmp83 y 6
-draw line 67 y 67 __tmp83 0 0
-draw line 60 __tmp83 67 __tmp83 0 0
-draw line 60 __tmp79 67 __tmp79 0 0
+op add __tmp81 y 6
+draw line 67 y 67 __tmp81 0 0
+draw line 60 __tmp81 67 __tmp81 0 0
+draw line 60 __tmp77 67 __tmp77 0 0
 jump __label450 always 0 0
 label __label441
-op add __tmp94 y 12
-draw line 66 y 66 __tmp94 0 0
-draw line 60 __tmp94 66 __tmp94 0 0
+op add __tmp92 y 12
+draw line 66 y 66 __tmp92 0 0
+draw line 60 __tmp92 66 __tmp92 0 0
 jump __label450 always 0 0
 label __label443
-op sub __tmp102 y 1
-draw lineRect 59 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 60 __tmp103 67 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 59 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 60 __tmp101 67 __tmp101 0 0
 jump __label450 always 0 0
 label __label445
 draw line 60 y 67 y 0 0
-op add __tmp109 y 12
-draw line 67 y 67 __tmp109 0 0
-op add __tmp110 y 6
-draw line 60 __tmp110 67 __tmp110 0 0
-draw line 60 __tmp110 60 __tmp109 0 0
-draw line 60 __tmp109 67 __tmp109 0 0
+op add __tmp107 y 12
+draw line 67 y 67 __tmp107 0 0
+op add __tmp108 y 6
+draw line 60 __tmp108 67 __tmp108 0 0
+draw line 60 __tmp108 60 __tmp107 0 0
+draw line 60 __tmp107 67 __tmp107 0 0
 label __label450
 gotooffset __label455 3 0 __label537
 gotolabel __label455 __label537
@@ -384,74 +384,74 @@ jump __label481 always 0 0
 gotolabel __label464 __label537
 jump __label483 always 0 0
 label __label465
-op sub __tmp31 y 1
-draw lineRect 48 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 48 __tmp29 9 14 0 0
 jump __label488 always 0 0
 label __label467
-op add __tmp36 y 12
-draw line 55 y 55 __tmp36 0 0
+op add __tmp34 y 12
+draw line 55 y 55 __tmp34 0 0
 jump __label488 always 0 0
 label __label469
 draw line 49 y 56 y 0 0
-op add __tmp38 y 6
-draw line 49 y 49 __tmp38 0 0
-draw line 49 __tmp38 56 __tmp38 0 0
-op add __tmp45 y 12
-draw line 56 __tmp38 56 __tmp45 0 0
-draw line 49 __tmp45 56 __tmp45 0 0
+op add __tmp36 y 6
+draw line 49 y 49 __tmp36 0 0
+draw line 49 __tmp36 56 __tmp36 0 0
+op add __tmp43 y 12
+draw line 56 __tmp36 56 __tmp43 0 0
+draw line 49 __tmp43 56 __tmp43 0 0
 jump __label488 always 0 0
 label __label471
-op add __tmp51 y 12
-draw line 56 y 56 __tmp51 0 0
+op add __tmp49 y 12
+draw line 56 y 56 __tmp49 0 0
 draw line 49 y 56 y 0 0
-op add __tmp53 y 6
-draw line 49 __tmp53 56 __tmp53 0 0
+op add __tmp51 y 6
 draw line 49 __tmp51 56 __tmp51 0 0
+draw line 49 __tmp49 56 __tmp49 0 0
 jump __label488 always 0 0
 label __label473
-op add __tmp61 y 12
-draw line 56 y 56 __tmp61 0 0
-op add __tmp62 y 6
-draw line 49 __tmp62 56 __tmp62 0 0
-draw line 49 __tmp62 49 __tmp61 0 0
+op add __tmp59 y 12
+draw line 56 y 56 __tmp59 0 0
+op add __tmp60 y 6
+draw line 49 __tmp60 56 __tmp60 0 0
+draw line 49 __tmp60 49 __tmp59 0 0
 jump __label488 always 0 0
 label __label475
 draw line 49 y 56 y 0 0
-op add __tmp70 y 6
-draw line 56 y 56 __tmp70 0 0
-draw line 49 __tmp70 56 __tmp70 0 0
-op add __tmp75 y 12
-draw line 49 __tmp70 49 __tmp75 0 0
-draw line 49 __tmp75 56 __tmp75 0 0
+op add __tmp68 y 6
+draw line 56 y 56 __tmp68 0 0
+draw line 49 __tmp68 56 __tmp68 0 0
+op add __tmp73 y 12
+draw line 49 __tmp68 49 __tmp73 0 0
+draw line 49 __tmp73 56 __tmp73 0 0
 jump __label488 always 0 0
 label __label477
-op add __tmp79 y 12
-draw line 49 y 49 __tmp79 0 0
+op add __tmp77 y 12
+draw line 49 y 49 __tmp77 0 0
 draw line 49 y 56 y 0 0
-op add __tmp83 y 6
-draw line 56 y 56 __tmp83 0 0
-draw line 49 __tmp83 56 __tmp83 0 0
-draw line 49 __tmp79 56 __tmp79 0 0
+op add __tmp81 y 6
+draw line 56 y 56 __tmp81 0 0
+draw line 49 __tmp81 56 __tmp81 0 0
+draw line 49 __tmp77 56 __tmp77 0 0
 jump __label488 always 0 0
 label __label479
-op add __tmp94 y 12
-draw line 55 y 55 __tmp94 0 0
-draw line 49 __tmp94 55 __tmp94 0 0
+op add __tmp92 y 12
+draw line 55 y 55 __tmp92 0 0
+draw line 49 __tmp92 55 __tmp92 0 0
 jump __label488 always 0 0
 label __label481
-op sub __tmp102 y 1
-draw lineRect 48 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 49 __tmp103 56 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 48 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 49 __tmp101 56 __tmp101 0 0
 jump __label488 always 0 0
 label __label483
 draw line 49 y 56 y 0 0
-op add __tmp109 y 12
-draw line 56 y 56 __tmp109 0 0
-op add __tmp110 y 6
-draw line 49 __tmp110 56 __tmp110 0 0
-draw line 49 __tmp110 49 __tmp109 0 0
-draw line 49 __tmp109 56 __tmp109 0 0
+op add __tmp107 y 12
+draw line 56 y 56 __tmp107 0 0
+op add __tmp108 y 6
+draw line 49 __tmp108 56 __tmp108 0 0
+draw line 49 __tmp108 49 __tmp107 0 0
+draw line 49 __tmp107 56 __tmp107 0 0
 label __label488
 gotooffset __label493 2 0 __label538
 gotolabel __label493 __label538
@@ -475,77 +475,77 @@ jump __label519 always 0 0
 gotolabel __label502 __label538
 jump __label521 always 0 0
 label __label503
-op sub __tmp31 y 1
-draw lineRect 37 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 37 __tmp29 9 14 0 0
 jump __label526 always 0 0
 label __label505
-op add __tmp36 y 12
-draw line 44 y 44 __tmp36 0 0
+op add __tmp34 y 12
+draw line 44 y 44 __tmp34 0 0
 jump __label526 always 0 0
 label __label507
 draw line 38 y 45 y 0 0
-op add __tmp38 y 6
-draw line 38 y 38 __tmp38 0 0
-draw line 38 __tmp38 45 __tmp38 0 0
-op add __tmp45 y 12
-draw line 45 __tmp38 45 __tmp45 0 0
-draw line 38 __tmp45 45 __tmp45 0 0
+op add __tmp36 y 6
+draw line 38 y 38 __tmp36 0 0
+draw line 38 __tmp36 45 __tmp36 0 0
+op add __tmp43 y 12
+draw line 45 __tmp36 45 __tmp43 0 0
+draw line 38 __tmp43 45 __tmp43 0 0
 jump __label526 always 0 0
 label __label509
-op add __tmp51 y 12
-draw line 45 y 45 __tmp51 0 0
+op add __tmp49 y 12
+draw line 45 y 45 __tmp49 0 0
 draw line 38 y 45 y 0 0
-op add __tmp53 y 6
-draw line 38 __tmp53 45 __tmp53 0 0
+op add __tmp51 y 6
 draw line 38 __tmp51 45 __tmp51 0 0
+draw line 38 __tmp49 45 __tmp49 0 0
 jump __label526 always 0 0
 label __label511
-op add __tmp61 y 12
-draw line 45 y 45 __tmp61 0 0
-op add __tmp62 y 6
-draw line 38 __tmp62 45 __tmp62 0 0
-draw line 38 __tmp62 38 __tmp61 0 0
+op add __tmp59 y 12
+draw line 45 y 45 __tmp59 0 0
+op add __tmp60 y 6
+draw line 38 __tmp60 45 __tmp60 0 0
+draw line 38 __tmp60 38 __tmp59 0 0
 jump __label526 always 0 0
 label __label513
 draw line 38 y 45 y 0 0
-op add __tmp70 y 6
-draw line 45 y 45 __tmp70 0 0
-draw line 38 __tmp70 45 __tmp70 0 0
-op add __tmp75 y 12
-draw line 38 __tmp70 38 __tmp75 0 0
-draw line 38 __tmp75 45 __tmp75 0 0
+op add __tmp68 y 6
+draw line 45 y 45 __tmp68 0 0
+draw line 38 __tmp68 45 __tmp68 0 0
+op add __tmp73 y 12
+draw line 38 __tmp68 38 __tmp73 0 0
+draw line 38 __tmp73 45 __tmp73 0 0
 jump __label526 always 0 0
 label __label515
-op add __tmp79 y 12
-draw line 38 y 38 __tmp79 0 0
+op add __tmp77 y 12
+draw line 38 y 38 __tmp77 0 0
 draw line 38 y 45 y 0 0
-op add __tmp83 y 6
-draw line 45 y 45 __tmp83 0 0
-draw line 38 __tmp83 45 __tmp83 0 0
-draw line 38 __tmp79 45 __tmp79 0 0
+op add __tmp81 y 6
+draw line 45 y 45 __tmp81 0 0
+draw line 38 __tmp81 45 __tmp81 0 0
+draw line 38 __tmp77 45 __tmp77 0 0
 jump __label526 always 0 0
 label __label517
-op add __tmp94 y 12
-draw line 44 y 44 __tmp94 0 0
-draw line 38 __tmp94 44 __tmp94 0 0
+op add __tmp92 y 12
+draw line 44 y 44 __tmp92 0 0
+draw line 38 __tmp92 44 __tmp92 0 0
 jump __label526 always 0 0
 label __label519
-op sub __tmp102 y 1
-draw lineRect 37 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 38 __tmp103 45 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 37 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 38 __tmp101 45 __tmp101 0 0
 jump __label526 always 0 0
 label __label521
 draw line 38 y 45 y 0 0
-op add __tmp109 y 12
-draw line 45 y 45 __tmp109 0 0
-op add __tmp110 y 6
-draw line 38 __tmp110 45 __tmp110 0 0
-draw line 38 __tmp110 38 __tmp109 0 0
-draw line 38 __tmp109 45 __tmp109 0 0
+op add __tmp107 y 12
+draw line 45 y 45 __tmp107 0 0
+op add __tmp108 y 6
+draw line 38 __tmp108 45 __tmp108 0 0
+draw line 38 __tmp108 38 __tmp107 0 0
+draw line 38 __tmp107 45 __tmp107 0 0
 label __label526
-op add __tmp129 y 12
-draw line 33 y 33 __tmp129 0 0
+op add __tmp127 y 12
+draw line 33 y 33 __tmp127 0 0
 jump __label47 always 0 0
 label __label46
 draw color 0 255 0 255 0 0
@@ -571,74 +571,74 @@ jump __label569 always 0 0
 gotolabel __label552 __label699
 jump __label571 always 0 0
 label __label553
-op sub __tmp31 y 1
-draw lineRect 156 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 156 __tmp29 9 14 0 0
 jump __label576 always 0 0
 label __label555
-op add __tmp36 y 12
-draw line 163 y 163 __tmp36 0 0
+op add __tmp34 y 12
+draw line 163 y 163 __tmp34 0 0
 jump __label576 always 0 0
 label __label557
 draw line 157 y 164 y 0 0
-op add __tmp38 y 6
-draw line 157 y 157 __tmp38 0 0
-draw line 157 __tmp38 164 __tmp38 0 0
-op add __tmp45 y 12
-draw line 164 __tmp38 164 __tmp45 0 0
-draw line 157 __tmp45 164 __tmp45 0 0
+op add __tmp36 y 6
+draw line 157 y 157 __tmp36 0 0
+draw line 157 __tmp36 164 __tmp36 0 0
+op add __tmp43 y 12
+draw line 164 __tmp36 164 __tmp43 0 0
+draw line 157 __tmp43 164 __tmp43 0 0
 jump __label576 always 0 0
 label __label559
-op add __tmp51 y 12
-draw line 164 y 164 __tmp51 0 0
+op add __tmp49 y 12
+draw line 164 y 164 __tmp49 0 0
 draw line 157 y 164 y 0 0
-op add __tmp53 y 6
-draw line 157 __tmp53 164 __tmp53 0 0
+op add __tmp51 y 6
 draw line 157 __tmp51 164 __tmp51 0 0
+draw line 157 __tmp49 164 __tmp49 0 0
 jump __label576 always 0 0
 label __label561
-op add __tmp61 y 12
-draw line 164 y 164 __tmp61 0 0
-op add __tmp62 y 6
-draw line 157 __tmp62 164 __tmp62 0 0
-draw line 157 __tmp62 157 __tmp61 0 0
+op add __tmp59 y 12
+draw line 164 y 164 __tmp59 0 0
+op add __tmp60 y 6
+draw line 157 __tmp60 164 __tmp60 0 0
+draw line 157 __tmp60 157 __tmp59 0 0
 jump __label576 always 0 0
 label __label563
 draw line 157 y 164 y 0 0
-op add __tmp70 y 6
-draw line 164 y 164 __tmp70 0 0
-draw line 157 __tmp70 164 __tmp70 0 0
-op add __tmp75 y 12
-draw line 157 __tmp70 157 __tmp75 0 0
-draw line 157 __tmp75 164 __tmp75 0 0
+op add __tmp68 y 6
+draw line 164 y 164 __tmp68 0 0
+draw line 157 __tmp68 164 __tmp68 0 0
+op add __tmp73 y 12
+draw line 157 __tmp68 157 __tmp73 0 0
+draw line 157 __tmp73 164 __tmp73 0 0
 jump __label576 always 0 0
 label __label565
-op add __tmp79 y 12
-draw line 157 y 157 __tmp79 0 0
+op add __tmp77 y 12
+draw line 157 y 157 __tmp77 0 0
 draw line 157 y 164 y 0 0
-op add __tmp83 y 6
-draw line 164 y 164 __tmp83 0 0
-draw line 157 __tmp83 164 __tmp83 0 0
-draw line 157 __tmp79 164 __tmp79 0 0
+op add __tmp81 y 6
+draw line 164 y 164 __tmp81 0 0
+draw line 157 __tmp81 164 __tmp81 0 0
+draw line 157 __tmp77 164 __tmp77 0 0
 jump __label576 always 0 0
 label __label567
-op add __tmp94 y 12
-draw line 163 y 163 __tmp94 0 0
-draw line 157 __tmp94 163 __tmp94 0 0
+op add __tmp92 y 12
+draw line 163 y 163 __tmp92 0 0
+draw line 157 __tmp92 163 __tmp92 0 0
 jump __label576 always 0 0
 label __label569
-op sub __tmp102 y 1
-draw lineRect 156 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 157 __tmp103 164 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 156 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 157 __tmp101 164 __tmp101 0 0
 jump __label576 always 0 0
 label __label571
 draw line 157 y 164 y 0 0
-op add __tmp109 y 12
-draw line 164 y 164 __tmp109 0 0
-op add __tmp110 y 6
-draw line 157 __tmp110 164 __tmp110 0 0
-draw line 157 __tmp110 157 __tmp109 0 0
-draw line 157 __tmp109 164 __tmp109 0 0
+op add __tmp107 y 12
+draw line 164 y 164 __tmp107 0 0
+op add __tmp108 y 6
+draw line 157 __tmp108 164 __tmp108 0 0
+draw line 157 __tmp108 157 __tmp107 0 0
+draw line 157 __tmp107 164 __tmp107 0 0
 label __label576
 gotooffset __label581 4 0 __label700
 gotolabel __label581 __label700
@@ -662,74 +662,74 @@ jump __label607 always 0 0
 gotolabel __label590 __label700
 jump __label609 always 0 0
 label __label591
-op sub __tmp31 y 1
-draw lineRect 145 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 145 __tmp29 9 14 0 0
 jump __label614 always 0 0
 label __label593
-op add __tmp36 y 12
-draw line 152 y 152 __tmp36 0 0
+op add __tmp34 y 12
+draw line 152 y 152 __tmp34 0 0
 jump __label614 always 0 0
 label __label595
 draw line 146 y 153 y 0 0
-op add __tmp38 y 6
-draw line 146 y 146 __tmp38 0 0
-draw line 146 __tmp38 153 __tmp38 0 0
-op add __tmp45 y 12
-draw line 153 __tmp38 153 __tmp45 0 0
-draw line 146 __tmp45 153 __tmp45 0 0
+op add __tmp36 y 6
+draw line 146 y 146 __tmp36 0 0
+draw line 146 __tmp36 153 __tmp36 0 0
+op add __tmp43 y 12
+draw line 153 __tmp36 153 __tmp43 0 0
+draw line 146 __tmp43 153 __tmp43 0 0
 jump __label614 always 0 0
 label __label597
-op add __tmp51 y 12
-draw line 153 y 153 __tmp51 0 0
+op add __tmp49 y 12
+draw line 153 y 153 __tmp49 0 0
 draw line 146 y 153 y 0 0
-op add __tmp53 y 6
-draw line 146 __tmp53 153 __tmp53 0 0
+op add __tmp51 y 6
 draw line 146 __tmp51 153 __tmp51 0 0
+draw line 146 __tmp49 153 __tmp49 0 0
 jump __label614 always 0 0
 label __label599
-op add __tmp61 y 12
-draw line 153 y 153 __tmp61 0 0
-op add __tmp62 y 6
-draw line 146 __tmp62 153 __tmp62 0 0
-draw line 146 __tmp62 146 __tmp61 0 0
+op add __tmp59 y 12
+draw line 153 y 153 __tmp59 0 0
+op add __tmp60 y 6
+draw line 146 __tmp60 153 __tmp60 0 0
+draw line 146 __tmp60 146 __tmp59 0 0
 jump __label614 always 0 0
 label __label601
 draw line 146 y 153 y 0 0
-op add __tmp70 y 6
-draw line 153 y 153 __tmp70 0 0
-draw line 146 __tmp70 153 __tmp70 0 0
-op add __tmp75 y 12
-draw line 146 __tmp70 146 __tmp75 0 0
-draw line 146 __tmp75 153 __tmp75 0 0
+op add __tmp68 y 6
+draw line 153 y 153 __tmp68 0 0
+draw line 146 __tmp68 153 __tmp68 0 0
+op add __tmp73 y 12
+draw line 146 __tmp68 146 __tmp73 0 0
+draw line 146 __tmp73 153 __tmp73 0 0
 jump __label614 always 0 0
 label __label603
-op add __tmp79 y 12
-draw line 146 y 146 __tmp79 0 0
+op add __tmp77 y 12
+draw line 146 y 146 __tmp77 0 0
 draw line 146 y 153 y 0 0
-op add __tmp83 y 6
-draw line 153 y 153 __tmp83 0 0
-draw line 146 __tmp83 153 __tmp83 0 0
-draw line 146 __tmp79 153 __tmp79 0 0
+op add __tmp81 y 6
+draw line 153 y 153 __tmp81 0 0
+draw line 146 __tmp81 153 __tmp81 0 0
+draw line 146 __tmp77 153 __tmp77 0 0
 jump __label614 always 0 0
 label __label605
-op add __tmp94 y 12
-draw line 152 y 152 __tmp94 0 0
-draw line 146 __tmp94 152 __tmp94 0 0
+op add __tmp92 y 12
+draw line 152 y 152 __tmp92 0 0
+draw line 146 __tmp92 152 __tmp92 0 0
 jump __label614 always 0 0
 label __label607
-op sub __tmp102 y 1
-draw lineRect 145 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 146 __tmp103 153 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 145 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 146 __tmp101 153 __tmp101 0 0
 jump __label614 always 0 0
 label __label609
 draw line 146 y 153 y 0 0
-op add __tmp109 y 12
-draw line 153 y 153 __tmp109 0 0
-op add __tmp110 y 6
-draw line 146 __tmp110 153 __tmp110 0 0
-draw line 146 __tmp110 146 __tmp109 0 0
-draw line 146 __tmp109 153 __tmp109 0 0
+op add __tmp107 y 12
+draw line 153 y 153 __tmp107 0 0
+op add __tmp108 y 6
+draw line 146 __tmp108 153 __tmp108 0 0
+draw line 146 __tmp108 146 __tmp107 0 0
+draw line 146 __tmp107 153 __tmp107 0 0
 label __label614
 gotooffset __label619 3 0 __label701
 gotolabel __label619 __label701
@@ -753,74 +753,74 @@ jump __label645 always 0 0
 gotolabel __label628 __label701
 jump __label647 always 0 0
 label __label629
-op sub __tmp31 y 1
-draw lineRect 134 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 134 __tmp29 9 14 0 0
 jump __label652 always 0 0
 label __label631
-op add __tmp36 y 12
-draw line 141 y 141 __tmp36 0 0
+op add __tmp34 y 12
+draw line 141 y 141 __tmp34 0 0
 jump __label652 always 0 0
 label __label633
 draw line 135 y 142 y 0 0
-op add __tmp38 y 6
-draw line 135 y 135 __tmp38 0 0
-draw line 135 __tmp38 142 __tmp38 0 0
-op add __tmp45 y 12
-draw line 142 __tmp38 142 __tmp45 0 0
-draw line 135 __tmp45 142 __tmp45 0 0
+op add __tmp36 y 6
+draw line 135 y 135 __tmp36 0 0
+draw line 135 __tmp36 142 __tmp36 0 0
+op add __tmp43 y 12
+draw line 142 __tmp36 142 __tmp43 0 0
+draw line 135 __tmp43 142 __tmp43 0 0
 jump __label652 always 0 0
 label __label635
-op add __tmp51 y 12
-draw line 142 y 142 __tmp51 0 0
+op add __tmp49 y 12
+draw line 142 y 142 __tmp49 0 0
 draw line 135 y 142 y 0 0
-op add __tmp53 y 6
-draw line 135 __tmp53 142 __tmp53 0 0
+op add __tmp51 y 6
 draw line 135 __tmp51 142 __tmp51 0 0
+draw line 135 __tmp49 142 __tmp49 0 0
 jump __label652 always 0 0
 label __label637
-op add __tmp61 y 12
-draw line 142 y 142 __tmp61 0 0
-op add __tmp62 y 6
-draw line 135 __tmp62 142 __tmp62 0 0
-draw line 135 __tmp62 135 __tmp61 0 0
+op add __tmp59 y 12
+draw line 142 y 142 __tmp59 0 0
+op add __tmp60 y 6
+draw line 135 __tmp60 142 __tmp60 0 0
+draw line 135 __tmp60 135 __tmp59 0 0
 jump __label652 always 0 0
 label __label639
 draw line 135 y 142 y 0 0
-op add __tmp70 y 6
-draw line 142 y 142 __tmp70 0 0
-draw line 135 __tmp70 142 __tmp70 0 0
-op add __tmp75 y 12
-draw line 135 __tmp70 135 __tmp75 0 0
-draw line 135 __tmp75 142 __tmp75 0 0
+op add __tmp68 y 6
+draw line 142 y 142 __tmp68 0 0
+draw line 135 __tmp68 142 __tmp68 0 0
+op add __tmp73 y 12
+draw line 135 __tmp68 135 __tmp73 0 0
+draw line 135 __tmp73 142 __tmp73 0 0
 jump __label652 always 0 0
 label __label641
-op add __tmp79 y 12
-draw line 135 y 135 __tmp79 0 0
+op add __tmp77 y 12
+draw line 135 y 135 __tmp77 0 0
 draw line 135 y 142 y 0 0
-op add __tmp83 y 6
-draw line 142 y 142 __tmp83 0 0
-draw line 135 __tmp83 142 __tmp83 0 0
-draw line 135 __tmp79 142 __tmp79 0 0
+op add __tmp81 y 6
+draw line 142 y 142 __tmp81 0 0
+draw line 135 __tmp81 142 __tmp81 0 0
+draw line 135 __tmp77 142 __tmp77 0 0
 jump __label652 always 0 0
 label __label643
-op add __tmp94 y 12
-draw line 141 y 141 __tmp94 0 0
-draw line 135 __tmp94 141 __tmp94 0 0
+op add __tmp92 y 12
+draw line 141 y 141 __tmp92 0 0
+draw line 135 __tmp92 141 __tmp92 0 0
 jump __label652 always 0 0
 label __label645
-op sub __tmp102 y 1
-draw lineRect 134 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 135 __tmp103 142 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 134 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 135 __tmp101 142 __tmp101 0 0
 jump __label652 always 0 0
 label __label647
 draw line 135 y 142 y 0 0
-op add __tmp109 y 12
-draw line 142 y 142 __tmp109 0 0
-op add __tmp110 y 6
-draw line 135 __tmp110 142 __tmp110 0 0
-draw line 135 __tmp110 135 __tmp109 0 0
-draw line 135 __tmp109 142 __tmp109 0 0
+op add __tmp107 y 12
+draw line 142 y 142 __tmp107 0 0
+op add __tmp108 y 6
+draw line 135 __tmp108 142 __tmp108 0 0
+draw line 135 __tmp108 135 __tmp107 0 0
+draw line 135 __tmp107 142 __tmp107 0 0
 label __label652
 gotooffset __label657 2 0 __label702
 gotolabel __label657 __label702
@@ -844,77 +844,77 @@ jump __label683 always 0 0
 gotolabel __label666 __label702
 jump __label685 always 0 0
 label __label667
-op sub __tmp31 y 1
-draw lineRect 123 __tmp31 9 14 0 0
+op sub __tmp29 y 1
+draw lineRect 123 __tmp29 9 14 0 0
 jump __label690 always 0 0
 label __label669
-op add __tmp36 y 12
-draw line 130 y 130 __tmp36 0 0
+op add __tmp34 y 12
+draw line 130 y 130 __tmp34 0 0
 jump __label690 always 0 0
 label __label671
 draw line 124 y 131 y 0 0
-op add __tmp38 y 6
-draw line 124 y 124 __tmp38 0 0
-draw line 124 __tmp38 131 __tmp38 0 0
-op add __tmp45 y 12
-draw line 131 __tmp38 131 __tmp45 0 0
-draw line 124 __tmp45 131 __tmp45 0 0
+op add __tmp36 y 6
+draw line 124 y 124 __tmp36 0 0
+draw line 124 __tmp36 131 __tmp36 0 0
+op add __tmp43 y 12
+draw line 131 __tmp36 131 __tmp43 0 0
+draw line 124 __tmp43 131 __tmp43 0 0
 jump __label690 always 0 0
 label __label673
-op add __tmp51 y 12
-draw line 131 y 131 __tmp51 0 0
+op add __tmp49 y 12
+draw line 131 y 131 __tmp49 0 0
 draw line 124 y 131 y 0 0
-op add __tmp53 y 6
-draw line 124 __tmp53 131 __tmp53 0 0
+op add __tmp51 y 6
 draw line 124 __tmp51 131 __tmp51 0 0
+draw line 124 __tmp49 131 __tmp49 0 0
 jump __label690 always 0 0
 label __label675
-op add __tmp61 y 12
-draw line 131 y 131 __tmp61 0 0
-op add __tmp62 y 6
-draw line 124 __tmp62 131 __tmp62 0 0
-draw line 124 __tmp62 124 __tmp61 0 0
+op add __tmp59 y 12
+draw line 131 y 131 __tmp59 0 0
+op add __tmp60 y 6
+draw line 124 __tmp60 131 __tmp60 0 0
+draw line 124 __tmp60 124 __tmp59 0 0
 jump __label690 always 0 0
 label __label677
 draw line 124 y 131 y 0 0
-op add __tmp70 y 6
-draw line 131 y 131 __tmp70 0 0
-draw line 124 __tmp70 131 __tmp70 0 0
-op add __tmp75 y 12
-draw line 124 __tmp70 124 __tmp75 0 0
-draw line 124 __tmp75 131 __tmp75 0 0
+op add __tmp68 y 6
+draw line 131 y 131 __tmp68 0 0
+draw line 124 __tmp68 131 __tmp68 0 0
+op add __tmp73 y 12
+draw line 124 __tmp68 124 __tmp73 0 0
+draw line 124 __tmp73 131 __tmp73 0 0
 jump __label690 always 0 0
 label __label679
-op add __tmp79 y 12
-draw line 124 y 124 __tmp79 0 0
+op add __tmp77 y 12
+draw line 124 y 124 __tmp77 0 0
 draw line 124 y 131 y 0 0
-op add __tmp83 y 6
-draw line 131 y 131 __tmp83 0 0
-draw line 124 __tmp83 131 __tmp83 0 0
-draw line 124 __tmp79 131 __tmp79 0 0
+op add __tmp81 y 6
+draw line 131 y 131 __tmp81 0 0
+draw line 124 __tmp81 131 __tmp81 0 0
+draw line 124 __tmp77 131 __tmp77 0 0
 jump __label690 always 0 0
 label __label681
-op add __tmp94 y 12
-draw line 130 y 130 __tmp94 0 0
-draw line 124 __tmp94 130 __tmp94 0 0
+op add __tmp92 y 12
+draw line 130 y 130 __tmp92 0 0
+draw line 124 __tmp92 130 __tmp92 0 0
 jump __label690 always 0 0
 label __label683
-op sub __tmp102 y 1
-draw lineRect 123 __tmp102 9 14 0 0
-op add __tmp103 y 6
-draw line 124 __tmp103 131 __tmp103 0 0
+op sub __tmp100 y 1
+draw lineRect 123 __tmp100 9 14 0 0
+op add __tmp101 y 6
+draw line 124 __tmp101 131 __tmp101 0 0
 jump __label690 always 0 0
 label __label685
 draw line 124 y 131 y 0 0
-op add __tmp109 y 12
-draw line 131 y 131 __tmp109 0 0
-op add __tmp110 y 6
-draw line 124 __tmp110 131 __tmp110 0 0
-draw line 124 __tmp110 124 __tmp109 0 0
-draw line 124 __tmp109 131 __tmp109 0 0
+op add __tmp107 y 12
+draw line 131 y 131 __tmp107 0 0
+op add __tmp108 y 6
+draw line 124 __tmp108 131 __tmp108 0 0
+draw line 124 __tmp108 124 __tmp107 0 0
+draw line 124 __tmp107 131 __tmp107 0 0
 label __label690
-op add __tmp129 y 12
-draw line 119 y 119 __tmp129 0 0
+op add __tmp127 y 12
+draw line 119 y 119 __tmp127 0 0
 label __label47
 op add index index 1
 op sub y y 20

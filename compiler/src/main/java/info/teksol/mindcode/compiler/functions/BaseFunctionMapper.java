@@ -199,11 +199,14 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
         // Handle special cases
         // Note: the print() function is handled by the compiler to cover the formating variant,
-        // but it is included here to handl documentation and decompilation.
+        // but it is included here to handle documentation and decompilation.
         switch(opcode) {
             case FORMAT, PRINT: return new VariableArityFunctionHandler(this, opcode.toString(), opcodeVariant);
-            case MESSAGE:       return new MessageFunctionHandler(this, opcode.toString(), opcodeVariant);
             case UBIND:         return new UbindFunctionHandler(this, opcode.toString(), opcodeVariant);
+            case MESSAGE:
+                if (processorVersion.ordinal() >= ProcessorVersion.V8A.ordinal()) {
+                    return new MessageFunctionHandler(this, opcode.toString(), opcodeVariant);
+                }
         }
 
         List<NamedParameter> arguments = opcodeVariant.namedParameters();

@@ -1,9 +1,9 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-project-euler-04.mnd:                             11             22    42899     100.0%   CEC14380EBFC0B29   630E0BF887619982
-project-euler-18.mnd:                             10            837      837     100.0%   4332C52FDD196BB8   32DA31F7C0EE7404
-project-euler-26.mnd:                             13            520     4923      68.6%   537D553DA2362FF0   8960CDCF7EFF862A
-project-euler-28.mnd:                              7             13    11006     100.0%   9A12C7F88DBEA5D3   665106BC3DC01A3A
-project-euler-31.mnd:                              7             59    11018     100.0%   CE47852C068E4B23   7BE3264895148219
-project-euler-31b.mnd:                             6            460     8244     100.0%   937A833F43FBC8B5   D05266242D806E4C
-project-euler-45.mnd:                             13             14   265002     100.0%   C46DC2C7CBABAD08   000FFEAC3B2D596C
-project-euler-97.mnd:                             11             11    11579     100.0%   1110B10B89D96C49   50907E3651C4E5B1
+project-euler-04.mnd:                              8             22    42899     100.0%   CEC14380EBFC0B29   630E0BF887619982
+project-euler-18.mnd:                              8            837      837     100.0%   4332C52FDD196BB8   32DA31F7C0EE7404
+project-euler-26.mnd:                             10            520     4923      68.6%   537D553DA2362FF0   8960CDCF7EFF862A
+project-euler-28.mnd:                              5             13    11006     100.0%   9A12C7F88DBEA5D3   665106BC3DC01A3A
+project-euler-31.mnd:                              5             59    11018     100.0%   CE47852C068E4B23   7BE3264895148219
+project-euler-31b.mnd:                             4            460     8244     100.0%   937A833F43FBC8B5   D05266242D806E4C
+project-euler-45.mnd:                             11             14   265002     100.0%   C46DC2C7CBABAD08   000FFEAC3B2D596C
+project-euler-97.mnd:                              9             11    11579     100.0%   1110B10B89D96C49   50907E3651C4E5B1

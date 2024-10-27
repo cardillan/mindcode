@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayDeque;
@@ -21,7 +22,7 @@ public class ReturnStack extends AbstractMessageEmitter {
         super(messageConsumer);
     }
 
-    void enterFunction(LogicLabel returnLabel, LogicVariable returnValue) {
+    void enterFunction(LogicLabel returnLabel, LogicValue returnValue) {
         stack.push(new Return(returnLabel, returnValue));
     }
 
@@ -42,7 +43,7 @@ public class ReturnStack extends AbstractMessageEmitter {
         }
     }
 
-    LogicVariable getReturnValue(InputPosition inputPosition) {
+    LogicValue getReturnValue(InputPosition inputPosition) {
         if (stack.isEmpty()) {
             error(inputPosition, "Return statement outside of a function.");
             return LogicVariable.special("invalid");
@@ -51,7 +52,7 @@ public class ReturnStack extends AbstractMessageEmitter {
         }
     }
 
-    private record Return(LogicLabel label, LogicVariable retval) {
+    private record Return(LogicLabel label, LogicValue retval) {
         private Return {
             Objects.requireNonNull(label);
             Objects.requireNonNull(retval);

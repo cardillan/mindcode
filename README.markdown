@@ -28,6 +28,7 @@ The most important recent changes to Mindcode include:
   * Support for running the compiled mlog code in an emulated processor.
   * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
 * Mindcode syntax
+  * User-defined functions may provide additional return values through [output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). 
   * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
   * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements.   
   * [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks) can be now included in the compiled code.

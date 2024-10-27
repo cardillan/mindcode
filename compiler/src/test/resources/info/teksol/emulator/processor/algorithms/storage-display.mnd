@@ -79,7 +79,7 @@ def eraseNumbers(first_column)
     end;
 end;
 
-def displayItem(x, y)
+void displayItem(x, y)
     amount = max(AMOUNT, 0);
     color(0,255,0,255);
 

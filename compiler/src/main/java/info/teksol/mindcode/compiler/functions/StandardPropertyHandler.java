@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import static info.teksol.mindcode.logic.LogicNull.NULL;
+import static info.teksol.mindcode.logic.LogicVoid.VOID;
 
 class StandardPropertyHandler extends AbstractPropertyHandler {
     private final boolean hasResult;
@@ -27,7 +28,7 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
             return NULL;
         }
 
-        LogicValue tmp = hasResult ? functionMapper.instructionProcessor.nextTemp() : NULL;
+        LogicValue tmp = hasResult ? functionMapper.instructionProcessor.nextTemp() : VOID;
         List<LogicArgument> ixArgs = new ArrayList<>();
         int argIndex = 0;
 

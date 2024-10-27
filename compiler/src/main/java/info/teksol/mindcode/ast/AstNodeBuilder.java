@@ -454,10 +454,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 : List.of();
 
         String strInline = ctx.fundecl().inline == null ? null : ctx.fundecl().inline.getText();
+        String strType = ctx.fundecl().def.getText();
 
         return new FunctionDeclaration(pos(ctx.getStart()),
                 "inline".equals(strInline),
                 "noinline".equals(strInline),
+                "void".equals(strType),
                 ctx.fundecl().args != null && ctx.fundecl().args.ellipsis != null,
                 ctx.fundecl().name.getText(),
                 parameters,
@@ -690,7 +692,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitReturn_exp(MindcodeParser.Return_expContext ctx) {
-        AstNode retval = ctx.return_st().retval == null ? new NullLiteral(pos(ctx.getStart())) : visit(ctx.return_st().retval);
+        AstNode retval = ctx.return_st().retval == null ? new VoidLiteral(pos(ctx.getStart())) : visit(ctx.return_st().retval);
         return new ReturnStatement(pos(ctx.getStart()), retval);
     }
 

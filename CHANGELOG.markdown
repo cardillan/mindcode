@@ -2,11 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.5.0 - ????-??-??
+
+**Breaking:** This release comes with new keywords in Mindcode syntax (`begin`, `var` and `void`), which break existing code where those new keywords were used as a variable or function name.
+
+### Fixed
+
+* Fixes arguments sometimes incorrectly passed to recursive calls ([#169](https://github.com/cardillan/mindcode/issues/169)).
+
+### Added
+
+* Added a new `void` keyword for declaring functions not returning any value.
+* Added a new `begin` and `var` keywords reserved for future use. 
+
+#### Experimental features
+
+* Added [output and input/output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters) of user defined functions.
+* Added support for omitting optional arguments in the argument list.
+* Added support for the special `@wait` argument of the [`message()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-message-function).
+* Added `void` functions not returning any value.
+
 ## 2.4.0 - 2024-10-23
 
 ### Fixed
 
-* Fixed Copy to clipboard button not working  ([#168](https://github.com/cardillan/mindcode/issues/168)).
+* Fixed Copy to clipboard button not working ([#168](https://github.com/cardillan/mindcode/issues/168)).
 * Fixed unhandled error when decoding a malformed Schematic file string by the web app.
 * Fixed Schemacode samples to not use deprecated syntax.
 

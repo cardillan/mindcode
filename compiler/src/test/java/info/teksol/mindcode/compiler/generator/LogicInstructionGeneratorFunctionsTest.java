@@ -319,7 +319,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         STACKPTR = cell1;
                         HEAPPTR = cell2;
                         allocate heap in HEAPPTR[0...16], stack in STACKPTR;
-                        def delay
+                        def delay()
                             0;
                             delay();
                         end;
@@ -817,7 +817,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertGeneratesMessages(
                 ExpectedMessages.create().add("Function 'foo' is recursive and no stack was allocated."),
                 """
-                        def foo
+                        def foo()
                             foo();
                         end;
                         foo();
@@ -904,6 +904,53 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     }
 
     @Test
+    void refusesVoidVarRefAssignments() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().addRegex("Expression doesn't have any value\\..*"),
+                """
+                        void foo()
+                            null;
+                        end;
+                        a = foo();
+                        """
+        );
+    }
+
+    @Test
+    void refusesVoidVarRefAssignments2() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().addRegex("Expression doesn't have any value\\..*"),
+                """
+                        a = printflush(message1);
+                        """
+        );
+    }
+
+    @Test
+    void refusesVoidArgument() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().addRegex("Expression doesn't have any value\\..*").repeat(2),
+                """
+                        print(printflush(message1));
+                        printflush(printflush(message1));
+                        """
+        );
+    }
+
+    @Test
+    void refusesVoidInReturns() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().addRegex("Expression doesn't have any value\\..*"),
+                """
+                        def foo()
+                            return printflush(message1);
+                        end;
+                        foo();
+                        """
+        );
+    }
+
+    @Test
     void refusesMissingArgument() {
         assertGeneratesMessages(
                 ExpectedMessages.create().add("Parameter 'a' isn't optional, a value must be provided."),
@@ -960,7 +1007,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void reportsMissingOutModifier() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Parameter 'a' is output and 'out' modifier was not used, assuming 'out'."),
+                ExpectedMessages.create().add("Parameter 'a' is output and 'out' modifier was not used, assuming 'out'. Omitting 'out' modifiers is deprecated."),
                 """
                         def foo(out a)
                             a = 10;

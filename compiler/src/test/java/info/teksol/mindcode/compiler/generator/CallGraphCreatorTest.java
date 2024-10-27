@@ -36,7 +36,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void detectsRecursion() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
-                        def a  a(); end;
+                        def a()  a(); end;
                         a();
                         """
                 ),
@@ -79,9 +79,9 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void detectsNonRecursiveCalls() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
-                        def a  a(); b(); c(); end;
-                        def b  b(); end;
-                        def c  x=10; end;
+                        def a()  a(); b(); c(); end;
+                        def b()  b(); end;
+                        def c()  x=10; end;
                         a();
                         """
                 ),

@@ -10,13 +10,14 @@ import java.util.Objects;
 public class FunctionDeclaration extends BaseAstNode {
     private final boolean inline;
     private final boolean noinline;
+    private final boolean procedure;
     private final boolean varArgs;
     private final String name;
 
     private final List<FunctionParameter> params;
     private final AstNode body;
 
-    public FunctionDeclaration(InputPosition inputPosition, boolean inline, boolean noinline, boolean varArgs,
+    public FunctionDeclaration(InputPosition inputPosition, boolean inline, boolean noinline, boolean procedure, boolean varArgs,
             String name, List<FunctionParameter> params, AstNode body) {
         super(inputPosition, body);
         if (inline && noinline) {
@@ -24,6 +25,7 @@ public class FunctionDeclaration extends BaseAstNode {
         }
         this.inline = inline;
         this.noinline = noinline;
+        this.procedure = procedure;
         this.varArgs = varArgs;
         this.name = Objects.requireNonNull(name);
         this.params = Objects.requireNonNull(params);
@@ -36,6 +38,10 @@ public class FunctionDeclaration extends BaseAstNode {
 
     public boolean isNoinline() {
         return noinline;
+    }
+
+    public boolean isProcedure() {
+        return procedure;
     }
 
     public boolean isVarArgs() {
@@ -81,6 +87,7 @@ public class FunctionDeclaration extends BaseAstNode {
                 "inline=" + inline +
                 ", noinline=" + noinline +
                 ", varArgs=" + varArgs +
+                ", procedure=" + procedure +
                 ", name='" + name + '\'' +
                 ", params=" + params +
                 ", body=" + body +

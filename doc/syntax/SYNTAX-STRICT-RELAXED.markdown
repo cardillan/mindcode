@@ -35,6 +35,7 @@ Under the Strict syntax, the following additional rules apply:
 - Semicolons at the end of each statement or expression are compulsory.
 - `then` keywords are compulsory in `if` statements and in the `when` branches of `case` expressions.
 - `do` keywords are compulsory in all `for` and `while` loops.
+- In function declarations, parentheses are compulsory even when the function doesn't have any parameters (`def foo print("no parameters"); end;` is not allowed in strict syntax).
 
 If adapting to the new syntax brings unexpected challenges, you can try to have a look at some [troubleshooting tips](TROUBLESHOOTING.markdown).
 
@@ -42,12 +43,14 @@ If adapting to the new syntax brings unexpected challenges, you can try to have 
 
 The following features are deprecated:
 
-- The Relaxed syntax as a whole.
+- The **Relaxed** syntax as a whole.
 - Using parentheses around the list of values in list iteration loops: `for i in (1, 2, 3) do ... end;`.
 - Using escaped double quotes in string literals: `"The \"escaped double quotes\""`. String literals shouldn't contain any double quotes at all, as this is not supported by mlog itself.
 - Kebab-case identifiers: `kebab-case-name`. Note that built-in mlog variables, such as `@blast-compound`, will continue to be supported.
 - The `printf` function in language target `ML7A` and earlier. (This function is repurposed in the upcoming language target `ML8A`).
 - The `configure` property. This name from Mindustry Logic 6 was replaced by `config` in Mindustry Logic 7.
+- Not using `out` modifiers when passing arguments to output function parameters.
+- Using void functions in assignments, as function parameters or in `return` statements.
 
 The compiler produces a warning when it encounters a deprecated feature in the source code.
 

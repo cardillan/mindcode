@@ -35,7 +35,7 @@ class StandardFunctionHandler extends AbstractFunctionHandler implements Selecto
     public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> fnArgs) {
         if (!validateArguments(call, fnArgs)) return NULL;
 
-        LogicValue tmp = hasResult ? functionMapper.instructionProcessor.nextTemp() : NULL;
+        LogicValue tmp = hasResult ? functionMapper.instructionProcessor.nextTemp() : LogicVoid.VOID;
         // Need to support all kinds of arguments here, including keywords
         List<LogicArgument> ixArgs = new ArrayList<>();
         int argIndex = 0;

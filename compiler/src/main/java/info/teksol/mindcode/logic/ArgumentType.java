@@ -1,6 +1,9 @@
 package info.teksol.mindcode.logic;
 
 public enum ArgumentType {
+    // Represents a nonexistent value (value of a void function or a loop)
+    VOID,
+
     // Literals
     NULL_LITERAL,
     BOOLEAN_LITERAL,

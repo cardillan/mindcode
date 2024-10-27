@@ -137,7 +137,7 @@ inline def eval(b)
 end;
 
 inline def compare(a, b)
-    printf("|$a|$b|$|$|$|$|\n", eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
+    println($"|$a|$b|$|$|$|$|", eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
 end;
 
 compare(null, 0);
@@ -154,6 +154,8 @@ compare("A", "B");
 compare("A", "A");
 printflush(message1);
 ```
+
+[Run it](https://mindcode.herokuapp.com/?run=true&mindcode=inline%20def%20eval%28b%29%0A%20%20%20%20b%20%3F%20%22true%22%20%3A%20%22false%22%3B%0Aend%3B%0A%0Ainline%20def%20compare%28a%2C%20b%29%0A%20%20%20%20println%28%24%22%7C%24a%7C%24b%7C%24%7C%24%7C%24%7C%24%7C%22%2C%20eval%28a%20%3D%3D%20b%29%2C%20eval%28a%20%21%3D%20b%29%2C%20eval%28a%20%3D%3D%3D%20b%29%2C%20eval%28a%20%21%3D%3D%20b%29%29%3B%0Aend%3B%0A%0Acompare%28null%2C%200%29%3B%0Acompare%28null%2C%201%29%3B%0Acompare%28null%2C%202%29%3B%0Acompare%28%40coal%2C%200%29%3B%0Acompare%28%40coal%2C%201%29%3B%0Acompare%28%40coal%2C%202%29%3B%0Acompare%28%40coal%2C%20%40lead%29%3B%0Acompare%28%22A%22%2C%200%29%3B%0Acompare%28%22A%22%2C%201%29%3B%0Acompare%28%22A%22%2C%202%29%3B%0Acompare%28%22A%22%2C%20%22B%22%29%3B%0Acompare%28%22A%22%2C%20%22A%22%29%3B%0Aprintflush%28message1%29%3B%0A)
 
 </details>
 

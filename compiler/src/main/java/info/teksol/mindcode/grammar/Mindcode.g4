@@ -117,9 +117,9 @@ const_decl : CONST name=id ASSIGN value=expression;
 
 param_decl : PARAM name=id ASSIGN value=expression;
 
-fundecl : ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
-        | ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
-        | ( inline = (INLINE | NOINLINE))? DEF name=id body=expression_list END
+fundecl : (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
+        | (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
+        | {strictSyntax == false}? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id body=expression_list END
         ;
 
 arg_decl
@@ -281,6 +281,7 @@ SENSOR : 'sensor';
 STACK : 'stack';
 THEN : 'then';
 TRUE : 'true';
+VOID : 'void';
 WHEN : 'when';
 WHILE : 'while';
 

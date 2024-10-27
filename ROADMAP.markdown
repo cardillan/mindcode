@@ -6,10 +6,7 @@ Mindcode currently undergoes significant changes to the syntax, which are being 
 
 ## Next release
 
-* Rudimentary decompiler from mlog (see [#141](https://github.com/cardillan/mindcode/issues/141)).
 * Varargs for inline functions. Only list iteration loops, and probably passing them into another inline function, could be used on them. The motivation is the system library, where it would make sense.
-* `out` keywords for output arguments in function calls (required in strict syntax, optional in relaxed syntax)
-* Input/output and output only function parameters.
 
 ## Near horizon
 

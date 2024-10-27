@@ -193,6 +193,10 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     public String visitFunctionDeclaration(FunctionDeclaration node) {
         open("FunctionDeclaration{");
         print("name="); visit(node.getName()); newLine(",");
+        print("inline=" + node.isInline()); newLine(",");
+        print("noinline=" + node.isNoinline()); newLine(",");
+        print("varArgs=" + node.isVarArgs()); newLine(",");
+        print("procedure=" + node.isProcedure()); newLine(",");
         print("params="); visitList(node.getParams()); newLine(",");
         print("body="); visit(node.getBody());
         close("}");
@@ -381,6 +385,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitVarRef(VarRef node) {
+        print(node);
+        return null;
+    }
+
+    @Override
+    public String visitVoidLiteral(VoidLiteral node) {
         print(node);
         return null;
     }

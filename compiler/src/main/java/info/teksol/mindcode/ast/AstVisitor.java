@@ -77,5 +77,7 @@ public interface AstVisitor<T> {
 
     T visitVarRef(VarRef node);
 
+    T visitVoidLiteral(VoidLiteral node);
+
     T visitWhileStatement(WhileExpression node);
 }
