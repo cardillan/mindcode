@@ -8,12 +8,14 @@ public class FunctionParameter extends BaseAstNode {
     private final String name;
     private final boolean inModifier;
     private final boolean outModifier;
+    private final boolean varArgs;
 
-    public FunctionParameter(InputPosition inputPosition, String name, boolean inModifier, boolean outModifier) {
+    public FunctionParameter(InputPosition inputPosition, String name, boolean inModifier, boolean outModifier, boolean varArgs) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.inModifier = inModifier;
         this.outModifier = outModifier;
+        this.varArgs = varArgs;
     }
 
     public String getName() {
@@ -40,6 +42,10 @@ public class FunctionParameter extends BaseAstNode {
         return !isInput();
     }
 
+    public boolean isVarArgs() {
+        return varArgs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,6 +69,7 @@ public class FunctionParameter extends BaseAstNode {
                 "name='" + name + '\'' +
                 ", inModifier=" + inModifier +
                 ", outModifier=" + outModifier +
+                ", varArgs=" + varArgs +
                 '}';
     }
 }

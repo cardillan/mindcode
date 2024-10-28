@@ -11,13 +11,12 @@ public class FunctionDeclaration extends BaseAstNode {
     private final boolean inline;
     private final boolean noinline;
     private final boolean procedure;
-    private final boolean varArgs;
     private final String name;
 
     private final List<FunctionParameter> params;
     private final AstNode body;
 
-    public FunctionDeclaration(InputPosition inputPosition, boolean inline, boolean noinline, boolean procedure, boolean varArgs,
+    public FunctionDeclaration(InputPosition inputPosition, boolean inline, boolean noinline, boolean procedure,
             String name, List<FunctionParameter> params, AstNode body) {
         super(inputPosition, body);
         if (inline && noinline) {
@@ -26,7 +25,6 @@ public class FunctionDeclaration extends BaseAstNode {
         this.inline = inline;
         this.noinline = noinline;
         this.procedure = procedure;
-        this.varArgs = varArgs;
         this.name = Objects.requireNonNull(name);
         this.params = Objects.requireNonNull(params);
         this.body = Objects.requireNonNull(body);
@@ -42,10 +40,6 @@ public class FunctionDeclaration extends BaseAstNode {
 
     public boolean isProcedure() {
         return procedure;
-    }
-
-    public boolean isVarArgs() {
-        return varArgs;
     }
 
     public String getName() {
@@ -66,7 +60,7 @@ public class FunctionDeclaration extends BaseAstNode {
         if (o == null || getClass() != o.getClass()) return false;
 
         FunctionDeclaration that = (FunctionDeclaration) o;
-        return inline == that.inline && noinline == that.noinline && varArgs == that.varArgs
+        return inline == that.inline && noinline == that.noinline
                 && name.equals(that.name) && params.equals(that.params) && body.equals(that.body);
     }
 
@@ -74,7 +68,6 @@ public class FunctionDeclaration extends BaseAstNode {
     public int hashCode() {
         int result = Boolean.hashCode(inline);
         result = 31 * result + Boolean.hashCode(noinline);
-        result = 31 * result + Boolean.hashCode(varArgs);
         result = 31 * result + name.hashCode();
         result = 31 * result + params.hashCode();
         result = 31 * result + body.hashCode();
@@ -86,7 +79,6 @@ public class FunctionDeclaration extends BaseAstNode {
         return "FunctionDeclaration{" +
                 "inline=" + inline +
                 ", noinline=" + noinline +
-                ", varArgs=" + varArgs +
                 ", procedure=" + procedure +
                 ", name='" + name + '\'' +
                 ", params=" + params +

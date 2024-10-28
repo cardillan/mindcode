@@ -13,8 +13,10 @@ package info.teksol.mindcode.logic;
  *
  */
 public interface LogicArgument {
+    /** @return type of the argument */
     ArgumentType getType();
 
+    /** @return the mlog representation fo the variable */
     String toMlog();
 
     static boolean isEqual(LogicArgument a1, LogicArgument a2) {
@@ -24,46 +26,62 @@ public interface LogicArgument {
                 && a1.toMlog().equals(a2.toMlog());
     }
 
+    /** @return true if this is a literal. */
     default boolean isLiteral() {
         return false;
     }
 
+    /** @return true if this is a numeric literal. */
     default boolean isNumericLiteral() {
         return false;
     }
 
+    /** @return true if this is an input function parameter */
+    default boolean isInput() {
+        return false;
+    }
+
+    /** @return true if this is an output function parameter */
+    default boolean isOutput() {
+        return false;
+    }
+
+    /** @return true if this is a user-declared variable */
     default boolean isUserVariable() {
         return false;
     }
 
+    /** @return true if this is a writable user-declared variable */
     default boolean isUserWritable() {
         return false;
     }
 
+    /** @return true if this is a global variable (implies user-declared) */
     default boolean isGlobalVariable() {
         return false;
     }
 
+    /** @return true if this is a main variable (implies user-declared) */
     default boolean isMainVariable() {
         return false;
     }
 
+    /** @return true if this is a function parameter or variable (implies user-declared) */
+    default boolean isLocalVariable() {
+        return false;
+    }
+
+    /** @return true if this is a temporary variable */
     default boolean isTemporaryVariable() {
         return false;
     }
 
-    default boolean isProtectedVariable() {
-        return false;
-    }
-
-    default boolean isFunctionVariable() {
-        return false;
-    }
-
+    /** @return true if this is a special compiler-generated variable */
     default boolean isCompilerVariable() {
         return false;
     }
 
+    /** @return true if this is variable is volatile */
     default boolean isVolatile() {
         return false;
     }

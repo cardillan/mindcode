@@ -102,7 +102,7 @@ public class LogicInstructionLabelResolver {
             case PARAMS -> logicVariable.getType() == ArgumentType.PARAMETER;
             case GLOBALS    -> logicVariable.getType() == ArgumentType.GLOBAL_VARIABLE;
             case MAIN       -> logicVariable.isMainVariable();
-            case LOCALS     -> logicVariable.isFunctionVariable();
+            case LOCALS     -> logicVariable.isLocalVariable();
             case NONE       -> false;
             case ALL        -> true;
         };

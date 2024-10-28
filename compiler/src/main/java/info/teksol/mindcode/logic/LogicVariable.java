@@ -87,10 +87,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public boolean isFunctionVariable() {
+    public boolean isLocalVariable() {
         return getType() == ArgumentType.LOCAL_VARIABLE && functionPrefix != null;
     }
 
+    @Override
     public boolean isCompilerVariable() {
         return getType() == ArgumentType.COMPILER;
     }
@@ -107,10 +108,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return fullName;
     }
 
+    @Override
     public boolean isInput() {
         return input;
     }
 
+    @Override
     public boolean isOutput() {
         return output;
     }

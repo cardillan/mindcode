@@ -98,7 +98,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
         if (functions.containsKey(functionDeclaration.getName())) {
-            error(functionDeclaration.getInputPosition(),
+            error(functionDeclaration,
                     "Multiple declarations of function '%s'.", functionDeclaration.getName());
         }
         functions.put(functionDeclaration.getName(), functionDeclaration);

@@ -195,7 +195,6 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
         print("name="); visit(node.getName()); newLine(",");
         print("inline=" + node.isInline()); newLine(",");
         print("noinline=" + node.isNoinline()); newLine(",");
-        print("varArgs=" + node.isVarArgs()); newLine(",");
         print("procedure=" + node.isProcedure()); newLine(",");
         print("params="); visitList(node.getParams()); newLine(",");
         print("body="); visit(node.getBody());

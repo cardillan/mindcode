@@ -449,20 +449,26 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunction_declaration(MindcodeParser.Function_declarationContext ctx) {
+        final String strInline = ctx.fundecl().inline == null ? null : ctx.fundecl().inline.getText();
+        final String strType = ctx.fundecl().def.getText();
+        final boolean inline = "inline".equals(strInline);
+        final boolean noinline = "noinline".equals(strInline);
+        final boolean procedure = "void".equals(strType);
         final List<FunctionParameter> parameters = ctx.fundecl().args != null
                 ? ctx.fundecl().args.arg_decl().stream().map(this::visitArg_decl).toList()
                 : List.of();
 
-        String strInline = ctx.fundecl().inline == null ? null : ctx.fundecl().inline.getText();
-        String strType = ctx.fundecl().def.getText();
 
-        return new FunctionDeclaration(pos(ctx.getStart()),
-                "inline".equals(strInline),
-                "noinline".equals(strInline),
-                "void".equals(strType),
-                ctx.fundecl().args != null && ctx.fundecl().args.ellipsis != null,
-                ctx.fundecl().name.getText(),
-                parameters,
+        int offset = inline ? 1 : 0;
+        if (parameters.size() > offset) {
+            parameters.subList(0, parameters.size() - offset).stream()
+                    .filter(FunctionParameter::isVarArgs)
+                    .forEach(p -> error(p.getInputPosition(),
+                            "Only the last parameter of an inline function can be declared as varargs."));
+        }
+
+        return new FunctionDeclaration(pos(ctx.getStart()), inline, noinline, procedure,
+                ctx.fundecl().name.getText(), parameters,
                 visit(ctx.fundecl().body)
         );
     }
@@ -472,7 +478,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         return new FunctionParameter(pos(ctx.getStart()),
                 ctx.name.getText(),
                 ctx.modifier_in != null,
-                ctx.modifier_out != null);
+                ctx.modifier_out != null,
+                ctx.ellipsis != null);
     }
 
     @Override

@@ -226,9 +226,8 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 name='fib',
                                 inline=false,
                                 noinline=false,
-                                varArgs=false,
                                 procedure=false,
-                                params=[FunctionParameter{name='n', inModifier=false, outModifier=false}],
+                                params=[FunctionParameter{name='n', inModifier=false, outModifier=false, varArgs=false}],
                                 body=Seq{rest=NoOp{}, last=IfExpression{
                                     condition=BinaryOp{
                                         left=VarRef{name='n'},

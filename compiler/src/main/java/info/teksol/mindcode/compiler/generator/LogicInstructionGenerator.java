@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.Iterator;
@@ -82,6 +83,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private final List<LogicInstruction> instructions = new ArrayList<>();
 
     private AstContext astContext;
+
+    // VarArgs
+    private String varArgName = null;
+    private List<LogicFunctionArgument> varArgValues = null;
 
     public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
             Consumer<MindcodeMessage> messageConsumer) {
@@ -511,7 +516,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         for (int i = 0; i < arguments.size(); i++) {
-            FunctionParameter parameter = function.getDeclaredParameters().get(i);
+            FunctionParameter parameter = function.getDeclaredParameter(i);
             FunctionArgument argument = arguments.get(i);
 
             if (!parameter.isOptional() && !argument.hasExpression()) {
@@ -566,13 +571,21 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         LogicFunction function = callGraph.getFunction(functionName);
 
         List<LogicFunctionArgument> arguments = addOptionalArguments(function, callArguments);
-        if (arguments.size() != function.getParameterCount()) {
-            error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
-                    functionName, function.getParameterCount(), arguments.size());
-            return function.isVoid() ? VOID : NULL;
+        if (function.isVarArgs()) {
+            if (arguments.size() < function.getParameterCount() - 1) {
+                error(call, "Function '%s': wrong number of arguments (expected at least %d, found %d).",
+                        functionName, function.getParameterCount() - 1, arguments.size());
+                return function.isVoid() ? VOID : NULL;
+            }
+            validateUserFunctionArguments(function, call.getArguments().subList(0, function.getParameterCount() - 1));
+        } else {
+            if (arguments.size() != function.getParameterCount()) {
+                error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
+                        functionName, function.getParameterCount(), arguments.size());
+                return function.isVoid() ? VOID : NULL;
+            }
+            validateUserFunctionArguments(function, call.getArguments());
         }
-
-        validateUserFunctionArguments(function, call.getArguments());
 
         // Switching to new function prefix -- save/restore old one
         String previousPrefix = functionPrefix;
@@ -598,7 +611,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicFunction previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
         final LoopStack previousLoopStack = loopStack;
+        final String previousVarArgName = varArgName;
+        final List<LogicFunctionArgument> previousVarArgValues = varArgValues;
         final boolean isVoid = function.isVoid();
+        final int standardArgumentCount = function.getParameterCount() - (function.isVarArgs() ? 1 : 0);
 
         setSubcontextType(AstSubcontextType.INLINE_CALL, 1.0);
         currentFunction = function;
@@ -606,7 +622,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         loopStack = new LoopStack(messageConsumer);
 
         emit(createLabel(nextLabel()));
-        setupFunctionParameters(function, arguments);
+        setupFunctionParameters(function, arguments.subList(0, standardArgumentCount));
+
+        if (function.isVarArgs()) {
+            varArgName = function.getDeclaredParameter(standardArgumentCount).getName();
+            varArgValues = arguments.subList(standardArgumentCount, arguments.size());
+            // Validations
+            varArgValues.stream().filter(v -> !v.hasValue()).forEach(v -> error(v.pos(), "Missing value"));
+            varArgValues.stream().filter(v -> v.hasValue() && v.outModifier() && !v.value().isUserWritable()).forEach(v -> error(v.pos(),
+                    "Argument marked with 'out' modifier is not writable."));
+        } else {
+            varArgName = null;
+            varArgValues = null;
+        }
 
         // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
         final LogicValue returnValue = isVoid ? VOID : nextReturnValue();
@@ -620,7 +648,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(returnLabel));
         returnStack.exitFunction();
 
-        retrieveFunctionParameters(function, arguments, false);
+        retrieveFunctionParameters(function, arguments.subList(0, standardArgumentCount), false);
+        varArgValues = previousVarArgValues;
+        varArgName = previousVarArgName;
         loopStack = previousLoopStack;
         functionContext = previousContext;
         currentFunction = previousFunction;
@@ -650,7 +680,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         Predicate<LogicFunctionArgument> predicate = a -> a.value() instanceof LogicVariable variable && function.isInputFunctionParameter(variable);
 
         long count = IntStream.range(0, arguments.size())
-                .filter(i -> predicate.test(arguments.get(i)) && !function.getParameters().get(i).equals(arguments.get(i).value()))
+                .filter(i -> predicate.test(arguments.get(i)) && !function.getParameter(i).equals(arguments.get(i).value()))
                 .count();
 
         // One reassignment is ok
@@ -659,7 +689,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             for (int i = 0; i < result.size(); i++) {
                 // Handle arguments if assigned to a different argument
                 LogicFunctionArgument argument = result.get(i);
-                if (predicate.test(argument) && !function.getParameters().get(i).equals(argument.value())) {
+                if (predicate.test(argument) && !function.getParameter(i).equals(argument.value())) {
                     LogicVariable temp = nextTemp();
                     emit(createSet(temp, argument.value()));
                     result.set(i, new LogicFunctionArgument(null, temp, false, false));
@@ -749,7 +779,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         long count = recursiveCall
                 ? IntStream.range(0, arguments.size())
-                .filter(i -> predicate.test(arguments.get(i)) && !function.getParameters().get(i).equals(arguments.get(i).value()))
+                .filter(i -> predicate.test(arguments.get(i)) && !function.getParameter(i).equals(arguments.get(i).value()))
                 .count()
                 : 0;
 
@@ -772,7 +802,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
                 if (argument.hasValue() && !argument.hasInModifierOnly()) {
                     if (argument.value() instanceof LogicVariable target && target.isUserWritable()) {
-                        if (count > 1 && predicate.test(argument) && !function.getParameters().get(i).equals(argument.value())) {
+                        if (count > 1 && predicate.test(argument) && !function.getParameter(i).equals(argument.value())) {
                             LogicVariable temp = nextTemp();
                             emit(createSet(temp, parameter));
                             finalizers.add(createSet(target, temp));
@@ -1041,12 +1071,71 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private interface ListElement {
+        InputPosition getInputPosition();
+        LogicValue getArgument();
+        boolean isWriteAllowed();
+    }
+
+    private record VarArgListElement(LogicFunctionArgument argument) implements ListElement {
+        @Override
+        public InputPosition getInputPosition() {
+            return argument.pos();
+        }
+
+        @Override
+        public LogicValue getArgument() {
+            return argument.value();
+        }
+
+        @Override
+        public boolean isWriteAllowed() {
+            return argument.outModifier();
+        }
+    }
+
+    private class AstNodeListElement implements ListElement {
+        private final AstNode node;
+        private LogicValue value;
+
+        public AstNodeListElement(AstNode node) {
+            this.node = node;
+        }
+
+        @Override
+        public InputPosition getInputPosition() {
+            return node.getInputPosition();
+        }
+
+        @Override
+        public LogicValue getArgument() {
+            if (value == null) {
+                value = visit(node);
+            }
+            return value;
+        }
+
+        @Override
+        public boolean isWriteAllowed() {
+            return true;
+        }
+    }
+
     @Override
     public LogicValue visitForEachStatement(ForEachExpression node) {
-        List<AstNode> values = node.getValues();
-        if (values.isEmpty()) {
+        List<AstNode> declaredValues = node.getValues();
+        if (declaredValues.isEmpty()) {
             // Empty list -- nothing to do
             return VOID;
+        }
+
+        List<ListElement> values = new ArrayList<>(declaredValues.size());
+        for (AstNode value : declaredValues) {
+            if (value instanceof VarRef varRef && varRef.getName().equals(varArgName)) {
+                varArgValues.stream().map(VarArgListElement::new).forEach(values::add);
+            } else {
+                values.add(new AstNodeListElement(value));
+            }
         }
 
         final List<ForEachIterator> iterators = node.getIterators().stream().map(this::processIterator).toList();
@@ -1077,18 +1166,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(createSetAddress(nextAddr, nextValueLabel));
             outValues.clear();
             for (ForEachIterator iterator : iterators) {
-                LogicValue element = visit(values.get(index));
+                ListElement element = values.get(index);
                 if (iterator.out) {
-                    if (element instanceof LogicVariable var && var.isUserWritable()) {
+                    if (!element.isWriteAllowed()) {
+                        error(element.getInputPosition(), "Function requires 'out' argument at this position.");
+                        outValues.add(LogicVariable.special("invalid"));
+                    } else if (element.getArgument() instanceof LogicVariable var && var.isUserWritable()) {
                         outValues.add(var);
                     } else {
-                        error(values.get(index), "Element assigned to '%s' is not writable.",
-                                iterator.var.getFullName());
+                        if (!(element instanceof VarArgListElement)) {
+                            error(element.getInputPosition(), "Element assigned to '%s' is not writable.",
+                                    iterator.var.getFullName());
+                        }
                         outValues.add(LogicVariable.special("invalid"));
                     }
                 }
                 if (iterator.in) {
-                    emit(createSet(iterator.var, element));
+                    emit(createSet(iterator.var, element.getArgument()));
                 }
                 index++;
             }
@@ -1109,17 +1203,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createSetAddress(nextAddr, lastValueLabel));
         outValues.clear();
         for (ForEachIterator iterator : iterators) {
-            LogicValue element = visit(values.get(index));
+            ListElement element = values.get(index);
             if (iterator.out) {
-                if (element instanceof LogicVariable var && var.isUserWritable()) {
+                if (!element.isWriteAllowed()) {
+                    error(element.getInputPosition(), "Function requires 'out' argument at this position.");
+                    outValues.add(LogicVariable.special("invalid"));
+                } else if (element.getArgument() instanceof LogicVariable var && var.isUserWritable()) {
                     outValues.add(var);
                 } else {
-                    error(values.get(index), "Element assigned to '%s' is not writable.", iterator.var.getFullName());
+                    if (!(element instanceof VarArgListElement)) {
+                        error(element.getInputPosition(), "Element assigned to '%s' is not writable.",
+                                iterator.var.getFullName());
+                    }
                     outValues.add(LogicVariable.special("invalid"));
                 }
             }
             if (iterator.in) {
-                emit(createSet(iterator.var, element));
+                emit(createSet(iterator.var, element.getArgument()));
             }
             index++;
         }
@@ -1358,7 +1458,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return constant;
         }
 
-        if (identifier.startsWith(AstNodeBuilder.AST_PREFIX)) {
+        if (identifier.equals(varArgName)) {
+            error(node, "Using vararg parameter '%s' is not allowed here.", identifier);
+            return LogicVariable.special("invalid");
+        } if (identifier.startsWith(AstNodeBuilder.AST_PREFIX)) {
             // Encoded into a VarRef in AstNodeBuilder
             return LogicVariable.ast(identifier);
         } else if (instructionProcessor.isBlockName(identifier)) {

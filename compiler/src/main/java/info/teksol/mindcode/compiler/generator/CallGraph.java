@@ -28,7 +28,7 @@ public final class CallGraph {
         this.allocatedStack = allocatedStack;
 
         // Create mock function declaration representing main program body.
-        addFunction(new FunctionDeclaration(null, true, false, true, false,
+        addFunction(new FunctionDeclaration(null, true, false, true,
                 MAIN, List.of(), new NoOp()));
     }
 
@@ -239,6 +239,11 @@ public final class CallGraph {
             return declaration.isNoinline();
         }
 
+        public boolean isVarArgs() {
+            List<FunctionParameter> parameters = getDeclaredParameters();
+            return !parameters.isEmpty() && parameters.get(parameters.size() - 1).isVarArgs();
+        }
+
         public boolean isVoid() {
             return declaration.isProcedure();
         }
@@ -262,6 +267,10 @@ public final class CallGraph {
             return declaration.getParams();
         }
 
+        public FunctionParameter getDeclaredParameter(int index) {
+            return declaration.getParams().get(index);
+        }
+
         public FunctionParameter getDeclaredParameter(String name) {
             return parameterMap.get(name);
         }
@@ -269,6 +278,11 @@ public final class CallGraph {
         /** @return list of parameters of the function as LogicVariable */
         public List<LogicVariable> getParameters() {
             return parameters;
+        }
+
+        /** @return function parameter at given index */
+        public LogicVariable getParameter(int index) {
+            return parameters.get(index);
         }
 
         public boolean isInputFunctionParameter(LogicVariable variable) {

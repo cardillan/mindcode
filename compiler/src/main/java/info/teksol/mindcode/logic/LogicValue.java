@@ -1,6 +1,5 @@
 package info.teksol.mindcode.logic;
 
-// TODO add isInput() and isOutput() methods
 public interface LogicValue extends LogicArgument {
 
     boolean isConstant();
