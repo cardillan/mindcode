@@ -28,6 +28,10 @@ public class FunctionCall extends ControlBlockAstNode {
         return arguments;
     }
 
+    public FunctionArgument getArgument(int index) {
+        return arguments.get(index);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

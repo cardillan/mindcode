@@ -2,11 +2,12 @@
      3 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Jump Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions modified by If Expression Optimization (3 iterations).
+     1 instructions eliminated by Expression Optimization (3 iterations).
+     1 instructions eliminated by If Expression Optimization (3 iterations).
      6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      2 instructions modified by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
-    25 instructions after optimizations.
+    23 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
@@ -20,15 +21,13 @@ set i 0
 jump __label5 greaterThanEq 0 n
 label __label13
 op add __tmp2 i 1
-set __tmp7 sorted
 read __fn0_a ARRAY i
 read __fn0_b ARRAY __tmp2
 jump __label9 lessThanEq __fn0_a __fn0_b
 write __fn0_b ARRAY i
 write __fn0_a ARRAY __tmp2
-set __tmp7 false
+set sorted false
 label __label9
-set sorted __tmp7
 op add i i 1
 jump __label13 lessThan i n
 label __label5

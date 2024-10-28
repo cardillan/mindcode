@@ -42,7 +42,7 @@ public enum Opcode {
     WEATHERSET      ("weatherset",      "Set the current state of a type of weather."),
     SPAWNWAVE       ("spawnwave",       "Spawn a wave."),
     SETRULE         ("setrule",         "Set a game rule."),
-    MESSAGE         ("message",         "Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded."),
+    MESSAGE         (false, "message", "Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded."),
     CUTSCENE        ("cutscene",        "Manipulate the player camera.", 1),
     EFFECT          ("effect",          "Create a particle effect."),
     EXPLOSION       ("explosion",       "Create an explosion at a location."),
@@ -69,8 +69,17 @@ public enum Opcode {
     GOTOOFFSET      ("gotooffset",      1),
     SETADDR         ("setaddr",         1),
     REMARK          ("remark",          2),
+
+    // For custom-made instructions - size is always 1
+    CUSTOM          ("",1),
     ;
-    
+
+    /**
+     * Safe instructions are instructions which do not have any output parameters (and therefore are assumed
+     * to interact with the outside world), or have output parameters and do not interact with the outside world.
+     * Instructions which do have output variables, but do interact with the outside world, are unsafe.
+     */
+    private final boolean safe;
     private final String opcode;
     private final String description;
     private final int additionalPrintArguments;
@@ -78,6 +87,7 @@ public enum Opcode {
     private final int size;
 
     Opcode(String opcode, String description) {
+        this.safe = true;
         this.opcode = opcode;
         this.description = description;
         this.additionalPrintArguments = 0;
@@ -85,7 +95,17 @@ public enum Opcode {
         this.size = 1;
     }
     
+    Opcode(boolean safe, String opcode, String description) {
+        this.safe = safe;
+        this.opcode = opcode;
+        this.description = description;
+        this.additionalPrintArguments = 0;
+        this.virtual = false;
+        this.size = 1;
+    }
+
     Opcode(String opcode, String description, int additionalPrintArguments) {
+        this.safe = true;
         this.opcode = opcode;
         this.description = description;
         this.additionalPrintArguments = additionalPrintArguments;
@@ -94,6 +114,7 @@ public enum Opcode {
     }
 
     Opcode(String opcode, int size) {
+        this.safe = true;
         this.opcode = opcode;
         this.description = "Virtual instruction.";
         this.additionalPrintArguments = 0;
@@ -115,6 +136,10 @@ public enum Opcode {
 
     public int getSize() {
         return size;
+    }
+
+    public boolean isSafe() {
+        return safe;
     }
 
     public boolean isVirtual() {

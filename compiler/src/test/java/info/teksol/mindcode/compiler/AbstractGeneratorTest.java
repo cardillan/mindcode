@@ -9,6 +9,7 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.compiler.instructions.CustomInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -250,6 +251,11 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
         return ip.createInstruction(mockAstContext, opcode, args);
     }
 
+    protected final LogicInstruction customInstruction(String opcode, String... args) {
+        return new CustomInstruction(mockAstContext, false, opcode, _logic(args),null);
+    }
+
+
     // Test evaluation
 
     private final Set<String> registered = new HashSet<>();
@@ -312,7 +318,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
         for (int index = 0; index < actual.size(); index++) {
             final LogicInstruction left = expected.get(index);
             final LogicInstruction right = actual.get(index);
-            if (left.getOpcode().equals(right.getOpcode())) {
+            if (left.getMlogOpcode().equals(right.getMlogOpcode())) {
                 if (!matchArgs(left, right)) {
                     assertFailed(makeVarsIn(expected), actual, createUnmatchedArgumentsMessage(compiler, actual, index, left, right));
                     return;
@@ -428,7 +434,11 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
         StringBuilder str = new StringBuilder();
         str.append("\nInstructions:");
         for (LogicInstruction ix : program) {
-            str.append("\n                createInstruction(").append(ix.getOpcode().name());
+            if (ix.getOpcode() == Opcode.CUSTOM) {
+                str.append("\n                customInstruction(\"").append(ix.getMlogOpcode()).append('"');
+            } else {
+                str.append("\n                createInstruction(").append(ix.getOpcode().name());
+            }
             ix.getArgs().forEach(a -> str.append(", ").append(escape(a.toMlog())));
             str.append("),");
         }

@@ -499,7 +499,7 @@ end
 end
 ```
 
-See also [`end()` function](SYNTAX-3-STATEMENTS.markdown#end-function).
+See also [`end()` function](SYNTAX-3-STATEMENTS.markdown#the-end-function).
 
 ### Unnecessary assignment elimination
 
@@ -1563,4 +1563,4 @@ optimizations inside the branches of `if` and `case` statements.
 
 ---
 
-[« Previous: Compiler directives](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_V6.markdown)
+[« Previous: Advanced features](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_V6.markdown)

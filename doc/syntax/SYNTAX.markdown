@@ -9,7 +9,7 @@ This document covers the basics of Mindcode syntax:
 * [Expressions](SYNTAX-2-EXPRESSIONS.markdown)
 * [Control flow statements](SYNTAX-3-STATEMENTS.markdown)
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
-* [Compiler directives](SYNTAX-5-OTHER.markdown)
+* [Advanced features](SYNTAX-5-OTHER.markdown)
 * [Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
 
 Function reference for individual compiler versions:
@@ -98,6 +98,8 @@ This is a list of Mindcode keywords:
 * `stack`
 * `then`
 * `true`
+* `var`
+* `void`
 * `when`
 * `while`
 

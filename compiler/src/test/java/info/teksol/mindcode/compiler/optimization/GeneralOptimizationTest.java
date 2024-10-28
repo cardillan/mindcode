@@ -363,4 +363,110 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 .map(AstContext::weight).toList();
         assertEquals(List.of(2d, 50d, 100d), weights, "Computed function weights differ from expected.");
     }
+
+    @Test
+    void optimizesCustomInstructionInputs() {
+        assertCompilesTo("""
+                        inline void foo(in x, out y)
+                            mlog("foo", in x, out y);
+                        end;
+                        
+                        param a = 10;
+                        foo(a, out b);
+                        print(b);
+                        """,
+                createInstruction(SET, "a", "10"),
+                customInstruction("foo", "a", "__fn0_y"),
+                createInstruction(PRINT, "__fn0_y")
+        );
+    }
+
+    @Test
+    void optimizesCustomInstructionInputs2() {
+        assertCompilesTo("""
+                        inline void foo(in x)
+                            mlog("foo", in x);
+                        end;
+                        
+                        foo(rand(10) > 5 ? 10 : 5);
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(JUMP, var(1000), "lessThanEq", var(0), "5"),
+                customInstruction("foo", "10"),
+                createInstruction(JUMP, "__start__", "always"),
+                createInstruction(LABEL, var(1000)),
+                customInstruction("foo", "5")
+        );
+    }
+
+    @Test
+    void optimizesCustomInstructionOutputs() {
+        assertCompilesTo("""
+                        inline def foo(in x)
+                            mlog("foo", in x, out y);
+                            y;
+                        end;
+                        
+                        print(foo(10));
+                        """,
+                customInstruction("foo", "10", "__fn0_y"),
+                createInstruction(PRINT, "__fn0_y")
+        );
+    }
+
+    @Test
+    void removesSafeCustomInstructions() {
+        assertCompilesTo(
+                ExpectedMessages.create().add("List of unused variables: y."),
+                """
+                        inline def foo()
+                            mlogSafe("foo", out x);
+                            x;
+                        end;
+                        
+                        x = foo();
+                        y = foo();
+                        print(x);
+                        """,
+                customInstruction("foo", "__fn0_x"),
+                createInstruction(PRINT, "__fn0_x")
+        );
+    }
+
+    @Test
+    void keepsUnsafeCustomInstructions() {
+        assertCompilesTo(
+                ExpectedMessages.create().add("List of unused variables: y."),
+                """
+                        inline def foo()
+                            mlog("foo", out x);
+                            x;
+                        end;
+                        
+                        x = foo();
+                        y = foo();
+                        print(x);
+                        """,
+                customInstruction("foo", "__fn0_x"),
+                customInstruction("foo", "__fn1_x"),
+                createInstruction(PRINT, "__fn0_x")
+        );
+    }
+
+    @Test
+    void keepsInteractingCustomInstructions() {
+        assertCompilesTo("""
+                        inline void foo(x)
+                            mlog("foo", in x);
+                            x;
+                        end;
+                        
+                        foo(1);
+                        foo(2);
+                        """,
+                customInstruction("foo", "1"),
+                customInstruction("foo", "2")
+        );
+    }
 }

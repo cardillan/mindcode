@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-public class BaseInstruction implements LogicInstruction {
-    private final Opcode opcode;
+public class CustomInstruction implements LogicInstruction {
+    private final boolean safe;
+    private final String opcode;
     private final List<LogicArgument> args;
     private final List<InstructionParameterType> params;
     private final List<TypedArgument> typedArguments;
@@ -23,8 +24,9 @@ public class BaseInstruction implements LogicInstruction {
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
 
-    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+    public CustomInstruction(AstContext astContext, boolean safe, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
         this.astContext = Objects.requireNonNull(astContext);
+        this.safe = safe;
         this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
         this.params = params;
@@ -40,8 +42,9 @@ public class BaseInstruction implements LogicInstruction {
         }
     }
 
-    protected BaseInstruction(BaseInstruction other, AstContext astContext) {
+    protected CustomInstruction(CustomInstruction other, AstContext astContext) {
         this.astContext = Objects.requireNonNull(astContext);
+        this.safe = other.safe;
         this.opcode = other.opcode;
         this.args = other.args;
         this.params = other.params;
@@ -55,18 +58,28 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     @Override
-    public BaseInstruction copy() {
-        return new BaseInstruction(this, astContext);
+    public CustomInstruction copy() {
+        return new CustomInstruction(this, astContext);
     }
 
     @Override
-    public BaseInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new BaseInstruction(this, astContext);
+    public CustomInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new CustomInstruction(this, astContext);
     }
 
     @Override
     public Opcode getOpcode() {
+        return Opcode.CUSTOM;
+    }
+
+    @Override
+    public String getMlogOpcode() {
         return opcode;
+    }
+
+    @Override
+    public boolean isSafe() {
+        return safe;
     }
 
     @Override
@@ -120,7 +133,7 @@ public class BaseInstruction implements LogicInstruction {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BaseInstruction that = (BaseInstruction) o;
+        CustomInstruction that = (CustomInstruction) o;
         return Objects.equals(opcode, that.opcode) &&
                 Objects.equals(args, that.args);
     }
@@ -132,7 +145,7 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public String toString() {
-        return "BaseInstruction{" +
+        return "CustomInstruction{" +
                 "astContext.id: " + astContext.id +
                 ", opcode='" + opcode + '\'' +
                 ", args=" + args +

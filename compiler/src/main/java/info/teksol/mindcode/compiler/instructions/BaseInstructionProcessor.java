@@ -345,17 +345,21 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
+        if (instruction instanceof CustomInstruction ix) {
+            return (T) new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
+        } else {
+            return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
+        }
+    }
+
+    @Override
     public <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg) {
         List<LogicArgument> args = instruction.getArgs().stream()
                 .map(arg -> arg.equals(oldArg) ? newArg : arg)
                 .toList();
         return replaceArgs(instruction, args);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
-        return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
     }
 
     @Override
@@ -367,11 +371,15 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
 
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {
-        // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
-        // TODO precompute and cache per opcode
-        return variantsByOpcode.get(instruction.getOpcode()).stream()
-                .mapToInt(v -> v.namedParameters().size()).max().orElse(0)
-                + instruction.getOpcode().getAdditionalPrintArguments();
+        if (instruction instanceof CustomInstruction ix) {
+            return ix.getArgs().size();
+        } else {
+            // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
+            // TODO precompute and cache per opcode
+            return variantsByOpcode.get(instruction.getOpcode()).stream()
+                    .mapToInt(v -> v.namedParameters().size()).max().orElse(0)
+                    + instruction.getOpcode().getAdditionalPrintArguments();
+        }
     }
 
     @Override
@@ -469,7 +477,7 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
         }
 
         if (instruction.getArgs().size() != opcodeVariant.namedParameters().size()) {
-            throw new MindcodeInternalError("Wrong number of arguments of instruction " + instruction.getOpcode()
+            throw new MindcodeInternalError("Wrong number of arguments of instruction " + instruction.getMlogOpcode()
                     + " (expected " + opcodeVariant.namedParameters().size() + "). " + instruction);
         }
 

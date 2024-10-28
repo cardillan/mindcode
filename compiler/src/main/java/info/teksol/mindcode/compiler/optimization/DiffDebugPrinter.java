@@ -183,7 +183,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         } else {
             str.append("    * ");       // Deleted line -- no number
         }
-        str.append(instruction.getOpcode());
+        str.append(instruction.getMlogOpcode());
         instruction.getArgs().forEach(arg -> str.append(" ").append(arg.toMlog()));
         return str.toString();
     }

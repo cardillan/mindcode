@@ -444,6 +444,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Solve special cases
         return switch (call.getFunctionName()) {
             case "min", "max"   -> handleMinMax(call);
+            case "mlog"         -> handleMlog(call, false);
+            case "mlogSafe"     -> handleMlog(call, true);
             case "printf"       -> handlePrintf(call);
             case "print"        -> handleFormattedOutput(call, Formatter.PRINT);
             case "println"      -> handleFormattedOutput(call, Formatter.PRINTLN);
@@ -1705,6 +1707,64 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return result;
     }
 
+    private LogicValue handleMlog(FunctionCall call, boolean safe) {
+        if (call.getArguments().isEmpty()) {
+            error(call, "Not enough arguments to the '%s' function (expected 1 or more, found %d).",
+                    call.getFunctionName(), call.getArguments().size());
+            return NULL;
+        }
+
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<LogicFunctionArgument> args = processArguments(call.getArguments());
+
+        final String opcode;
+        if (args.get(0).hasValue() && args.get(0).value() instanceof LogicString str) {
+            opcode = str.format();
+        } else {
+            error(args.get(0).pos(), "First argument to the '%s' function must be a string literal.",
+                    call.getFunctionName());
+            opcode = "noop";
+        }
+
+        List<LogicArgument> arguments = new ArrayList<>();
+        List<InstructionParameterType> parameters = new ArrayList<>();
+        for (LogicFunctionArgument arg : args.subList(1, args.size())) {
+            if (!arg.hasValue()) {
+                error(arg.pos(), "All arguments to the '%s' function need to be specified.", call.getFunctionName());
+            } else if (arg.value() instanceof LogicString str) {
+                if (arg.outModifier() || arg.inModifier()) {
+                    error(arg.pos(), "A string literal passed to the '%s' function must not use an 'out' modifier.", call.getFunctionName());
+                }
+                arguments.add(arg.inModifier() ? str : LogicKeyword.create(str.format()));
+                parameters.add(arg.inModifier() ? InstructionParameterType.INPUT : InstructionParameterType.UNSPECIFIED);
+            } else if (arg.value() instanceof LogicLiteral lit) {
+                if (arg.outModifier() || arg.inModifier()) {
+                    error(arg.pos(), "A numeric literal passed to the '%s' function must not use any modifier.", call.getFunctionName());
+                }
+                arguments.add(arg.value());
+                parameters.add(InstructionParameterType.INPUT);
+            } else if (!arg.value().isUserVariable()) {
+                error(arg.pos(), "All arguments to the '%s' function must be literals or user variables.", call.getFunctionName());
+            } else {
+                if (!arg.inModifier() && !arg.outModifier()) {
+                    error(arg.pos(), "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.", call.getFunctionName());
+                }
+                arguments.add(arg.value());
+                if (arg.outModifier()) {
+                    parameters.add(arg.inModifier() ? InstructionParameterType.INPUT_OUTPUT : InstructionParameterType.OUTPUT);
+                } else {
+                    parameters.add(InstructionParameterType.INPUT);
+                }
+            }
+        }
+
+        emit(new CustomInstruction(astContext, safe, opcode, arguments, parameters));
+
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+        clearSubcontextType();
+        return NULL;
+    }
+
     private LogicValue handlePrintf(FunctionCall call) {
         validateStandardFunctionArguments(call.getArguments());
         String functionName = call.getFunctionName();
@@ -1760,11 +1820,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return VOID;
         }
 
-        String pattern = evaluateFormattableNode(call.getArguments().get(0));
+        String pattern = evaluateFormattableNode(call.getArgument(0));
         boolean formatting = pattern != null || formatter.formatVariantOnly();
         if (formatting && pattern == null) {
             // Use normal string constant/literal as pattern
-            AstNode astFormat = expressionEvaluator.evaluate(call.getArguments().get(0).getExpression());
+            AstNode astFormat = expressionEvaluator.evaluate(call.getArgument(0).getExpression());
             if (astFormat instanceof StringLiteral format) {
                 pattern = format.getText();
             } else {

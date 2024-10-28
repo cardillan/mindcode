@@ -4,16 +4,19 @@ Mindcode allows you to call existing functions or create new ones. Functions are
 
 ## Function parameters
 
-There are several types of parameters a function can have:
+There are several kinds of parameters a function can have:
 
 1. _Input parameters_: serve to pass an argument to the function by the caller.
 2. _Output parameters_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output argument are specified, they need to correspond to a global, main or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized - they're initialized by the function call.  
 3. _Input/output parameters_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
-4. _Enumerated parameters_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined constants as an argument. For example the `uradar` functions requires one of the following values for each of its first three arguments: `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without any escaping or double quotes. It is not possible to store the value in a variable and pass the variable instead. Passing a value different to one of the supported values causes an error.
+4. _Keyword parameters_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example the `uradar` functions requires one of the following keywords for each of its first three arguments: `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without any escaping or double quotes. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values causes an error.
 
 Examples of function definitions and function calls:
 
 ```
+// a: input parameter
+// b: output parameter
+// c: input/output parameter
 void foo(a, out b, in out c)
     b = a + c;
     c = c + 1;
@@ -479,4 +482,4 @@ For more information, see discussion of [stack](SYNTAX-1-VARIABLES.markdown#stac
 
 ---
 
-[« Previous: Control flow statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Next: Compiler directives »](SYNTAX-5-OTHER.markdown)
+[« Previous: Control flow statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Next: Advanced features »](SYNTAX-5-OTHER.markdown)

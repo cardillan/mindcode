@@ -18,7 +18,7 @@ public class LogicInstructionPrinter {
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
-            buffer.append(instruction.getOpcode().getOpcode());
+            buffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
         });
@@ -57,7 +57,7 @@ public class LogicInstructionPrinter {
         LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
         instructions.forEach(instruction -> {
             lineNumberGenerator.printLineNumber(instruction);
-            buffer.append(instruction.getOpcode().getOpcode());
+            buffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
         });
@@ -84,7 +84,7 @@ public class LogicInstructionPrinter {
             String hierarchy = unroll.stream().limit(10).map(c -> c.contextType().text).collect(Collectors.joining(" "));
             AstContext ctx = instruction.getAstContext();
             buffer.append("%-50s  %s (%3d)  %10s  ".formatted(hierarchy, ctx.subcontextType().text, ctx.id, format.format(ctx.totalWeight())));
-            buffer.append(instruction.getOpcode().getOpcode());
+            buffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
         });
@@ -105,7 +105,7 @@ public class LogicInstructionPrinter {
             AstContext ctx = instruction.getAstContext();
             buffer.append("%3d:%s  %s %8s ".formatted(ctx.level(), ctx.contextType().text,
                     ctx.subcontextType().text, format.format(ctx.totalWeight())));
-            buffer.append(instruction.getOpcode().getOpcode());
+            buffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
         });
@@ -125,7 +125,7 @@ public class LogicInstructionPrinter {
         for (LogicInstruction instruction : instructions) {
             lineNumberGenerator.printLineNumber(instruction);
             lineBuffer.setLength(0);
-            lineBuffer.append(instruction.getOpcode().getOpcode());
+            lineBuffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
 
             AstContext astContext = instruction.getAstContext();
@@ -164,14 +164,14 @@ public class LogicInstructionPrinter {
 
     public static String toString(InstructionProcessor instructionProcessor, LogicInstruction instruction) {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(instruction.getOpcode().getOpcode());
+        buffer.append(instruction.getMlogOpcode());
         addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
         return buffer.toString();
     }
 
     public static String toStringSimple(MlogInstruction instruction) {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(instruction.getOpcode().getOpcode());
+        buffer.append(instruction.getMlogOpcode());
         addArgs(instruction.getArgs().size(), buffer, instruction);
         return buffer.toString();
     }

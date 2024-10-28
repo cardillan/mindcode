@@ -1534,7 +1534,12 @@ class OptimizationContext {
     }
 
     protected LogicInstruction instructionAfter(AstContext astContext) {
-        return instructionAt(lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1);
+        int index = lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1;
+        while (index < program.size() && instructionAt(index) instanceof LabelInstruction ix &&
+            !isActive(ix.getLabel())) {
+            index++;
+        }
+        return index < program.size() ? instructionAt(index) : null;
     }
     //</editor-fold>
 

@@ -1,3 +1,7 @@
+# Advanced features
+
+This document describes the more advanced features of Mindcode.
+
 # Compiler directives
 
 Mindcode allows you to alter some compiler options in the source code using special `#set` commands.
@@ -183,13 +187,160 @@ and availability of the advanced optimization level is:
 | [Stack Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                           | stack-optimization           |    N     |
 | [Print Merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                                     | print-merging                |    Y     |
 
-This table doesn't track which optimizations provide some functionality on the `experimental` level. This information is available in the individual optimizations documentation. 
+This table doesn't track which optimizations provide some functionality on the `experimental` level. This information is available in the individual optimization documentation. 
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available.
 
 In particular, some optimizers expect to work on code that was already processed by different optimizations,
 so turning off some optimizations might render other optimizations ineffective. **This is not a bug.**  
+
+# Creating custom mlog instructions
+
+Mindcode provides a mechanism of encoding a custom instruction not known to Mindcode. Using custom instructions is useful in only a few distinct cases:
+
+1. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
+2. An instruction was not implemented correctly in Mindcode and a fix is not available.
+3. Mindustry was expanded to allow new instructions created by mods.
+
+Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism. In addition, some custom instructions might break existing optimizations through their side effects. 
+
+Custom instructions are created using the `mlog()` function:
+
+* The first argument to the `mlog` function needs to be a string literal. This literal is the instruction code.
+* All other arguments must be either literals, or user variables.
+  * String literal: the text represented by the string literal is used as an instruction argument. If the `in` modifier is used, the string literal will be used as an argument including the enclosing double quotes.
+  * Numeric literal: all other literals must not be marked with either modifier. The primary use for numeric literals is to provide fill-in values (typically zeroes) for unused instruction parameters.
+  * User variable: the variable is used as an instruction argument. The argument must use the `in` and `out` modifier to inform Mindcode how the corresponding instruction argument behaves:
+    * `in`: the argument represents an input value - the instruction reads and uses the value of the variable.
+    * `out`: the argument represents an output value - the instruction produces a value and stores it in the variable.
+    * `in out`: the argument represents an input/output value - the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
+
+Mindcode assumes that a custom instruction interacts with the Mindustry World and cannot be safely removed from the program. This is not true for instructions which only return information about the Mindustry World, but do not modify or interact with it in any way. If you want to encode such an instruction, you can use the `mlogSafe()` function instead of `mlog()`.
+
+> [!TIP]
+> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` function always uses user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function. See the examples below.  
+     
+For better understanding, the creating of custom instructions will be demonstrated on existing instructions. 
+
+## The `format` instruction
+
+The `format` instruction was introduced in Mindustry Logic 8. When compiling for target ML7A, the instruction isn't available. We can create it using this code:
+
+```
+#set target = ML7A;
+inline void format(value)
+    mlog("format", in value);
+end;
+
+param a = 10;
+println("The value is: {0}");
+format(a * 20);
+```
+
+Compiling this code produces the following output:
+
+```
+set a 10
+print "The value is: {0}\n"
+op mul __tmp0 a 20
+format __tmp0
+```
+
+Considerations:
+
+* The Print Merging optimization under ML8A target knows and properly handles the `format` instruction. When replaced by a custom instruction, the Print Merger won't be aware of it and might produce incorrect code. It would be necessary to turn off Print Merging optimization, if the `format` instruction was introduced in this way.
+* THe processor emulator doesn't recognize custom instructions and won't handle them. The output produced by running the above code using the processor emulator would therefore be incorrect.
+
+## The `draw print` instruction
+
+Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the ML8A target, this instruction is mapped to the `drawPrint()` function. Unfortunately, this instruction takes an additional keyword argument - alignment, which needs special treatment when defining a custom instruction. Each possible value of alignment needs to be handled separately.
+
+```
+#set target = ML7A;
+inline void drawPrintCenter(x, y)
+    mlog("draw", "print", in x, in y, "center", 0, 0, 0);
+end;
+
+inline void drawPrintBottomLeft(x, y)
+    mlog("draw", "print", in x, in y, "bottomLeft", 0, 0, 0);
+end;
+
+drawPrintCenter(0, 10);
+drawPrintBottomLeft(0, 20);
+```
+
+Result:
+
+```
+draw print 0 10 center 0 0 0
+draw print 0 20 bottomLeft 0 0 0
+```
+
+Considerations:
+
+* The `draw print` instruction manipulates the text buffer and therefore interferes with the Print Merging optimization again. This optimization would need to be switched off.
+* A separate function for each possible alignment is required. Unused functions aren't compiled, so there isn't any penalty with defining a function for each existing alignment, but it is tedious and cumbersome. Defining all possible variants for instructions that have several keyword arguments might become unfeasible.   
+
+## The `ucontrol getblock` instruction
+
+The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. If not known by Mindcode, it could be defined like this:
+
+```
+// the ML7A target uses a bit different syntax for getBlock from the ML7 target.
+#set target = ML7A;
+
+// Using 'getBlock2' as a namoe to avoid clashing with the existing function name
+inline def getBlock2(x, y, out type, out floor)
+    mlog("ucontrol", "getBlock", in x, in y, out type, out building, out floor);
+    return building;
+end;
+
+x = floor(rand(100));
+y = floor(rand(200));
+// These two instruction generate the same mlog code:
+building = getBlock(x, y, out type, out floor);
+print(building, type, floor);
+
+building = getBlock2(x, y, out type, out floor);
+print(building, type, floor);
+```
+
+compiles to
+
+```
+op rand __tmp0 100 0
+op floor x __tmp0 0
+op rand __tmp2 200 0
+op floor y __tmp2 0
+ucontrol getBlock x y type building floor
+print building
+print type
+print floor
+ucontrol getBlock x y __fn0_type __fn0_building __fn0_floor
+print __fn0_building
+print __fn0_type
+print __fn0_floor
+```
+
+## The `jump` instruction
+
+The `jump` instruction is a control flow instruction, an as such producing it through the `mlog()` function is strongly discouraged. Anyhow, Mindcode will allow the following code to be compiled:
+
+```
+mlog("jump", 50, "always");
+```
+
+producing 
+
+```
+jump 50 always
+```
+
+Considerations:
+
+* There aren't direct ways to obtain the targets for the `jump` instruction. Forcing the instruction to target the intended code might be very difficult (albeit not outright impossible when modifying the instruction to target labels instead).
+* Introducing jumps unrecognized by Mindcode would render most of the compiled code unsafe. Mindcode uses the knowledge of the program control flow to generate the code and make various optimizations. Introducing unrecognized control flow instructions would mean the knowledge is incorrect and the generated code possibly flawed.  
 
 ---
 

@@ -1,8 +1,6 @@
 # Control flow statements
 
-Control flow statements are statements that alter the flow of code.
-They either branch, i.e. execute one of several possible alternatives,
-or they loop, i.e. repeat part of the code (zero, ) one or more times.
+Control flow statements are statements that alter the flow of code. They either branch, i.e. execute one of several possible alternatives, or they loop, i.e. repeat part of the code one or more times.
 
 # Loops
 
@@ -295,8 +293,7 @@ end;
 
 ## Ternary Operator
 
-The ternary operator (`?:`) is exactly like an if/else expression, except it is more succinct.
-Use it when you need a conditional but want to save some space:
+The ternary operator (`?:`) is exactly like an if/else expression, except it is more succinct. Use it when you need a conditional but want to save some space:
 
 ```
 result = n == 0 ? "ready" : "pending";
@@ -336,14 +333,14 @@ text = case number
 end;
 ```
 
-**Additional considerations:**
+### Additional considerations
 
 * Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case 
   expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
 * Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, 
   but the behavior might change in the future.
 
-# `end()` function
+# The `end()` function
 
 The `end()` function maps to the `end` instruction, and as such has a special meaning - it resets the execution of 
 the program and starts it from the beginning again. In this sense, the `end()` function is one of control flow 

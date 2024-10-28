@@ -254,6 +254,7 @@ hex_int : HEXINT;
 binary_int : BININT;
 
 ALLOCATE : 'allocate';
+BEGIN : 'begin';
 BREAK : 'break';
 CASE : 'case';
 CONST : 'const';
@@ -281,6 +282,7 @@ SENSOR : 'sensor';
 STACK : 'stack';
 THEN : 'then';
 TRUE : 'true';
+VAR : 'var';
 VOID : 'void';
 WHEN : 'when';
 WHILE : 'while';

@@ -15,6 +15,14 @@ public interface MlogInstruction {
      */
     Opcode getOpcode();
 
+    default String getMlogOpcode() {
+        return getOpcode().getOpcode();
+    }
+
+    default boolean isSafe() {
+        return getOpcode().isSafe();
+    }
+
     /**
      * @return number of input parameters
      */

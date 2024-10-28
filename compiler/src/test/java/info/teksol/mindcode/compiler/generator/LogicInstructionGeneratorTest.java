@@ -1482,4 +1482,40 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 "@counter = 1;"
         );
     }
+
+
+    @Test
+    void compilesMlogFunction() {
+        assertCompilesTo("""
+                        a = 10;
+                        mlog("foo", in a, out b);
+                        print(b);
+                        """,
+                createInstruction(SET, "a", "10"),
+                customInstruction("foo", "a", "b"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void refusesInvalidMlogArguments() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(1,  6, "First argument to the 'mlog' function must be a string literal.")
+                        .add(2, 13, "All arguments to the 'mlog' function need to be specified.")
+                        .add(2, 15, "All arguments to the 'mlog' function must be literals or user variables.")
+                        .add(3, 13, "A variable passed to the 'mlog' function must use the 'in' and/or 'out' modifiers.")
+                        .add(4, 13, "A string literal passed to the 'mlog' function must not use an 'out' modifier.")
+                        .add(4, 24, "A numeric literal passed to the 'mlog' function must not use any modifier.")
+                        .add(4, 30, "A numeric literal passed to the 'mlog' function must not use any modifier.")
+                ,
+                """
+                        mlog(foo);
+                        mlog("foo", , x * y);
+                        mlog("foo", x);
+                        mlog("foo", out "bar", in 0, out 1);
+                        """
+        );
+    }
 }

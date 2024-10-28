@@ -86,6 +86,7 @@ class DeadCodeEliminator extends BaseOptimizer {
             // Instruction with at most one output argument are removed immediately
             // Other instructions are inspected further to find out they're fully unused
             writes.get(key).stream()
+                    .filter(LogicInstruction::isSafe)
                     .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
                     .mapToInt(ix -> firstInstructionIndex(ixx -> ixx == ix))
                     .filter(i -> i >= 0)

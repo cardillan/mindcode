@@ -52,6 +52,9 @@ public enum InstructionParameterType {
     /** Non-specific input parameter. Accepts literals and variables */
     INPUT           (Flags.INPUT),
 
+    /** Non-specific input/output parameter for custom-made instructions. Accepts literals and variables */
+    INPUT_OUTPUT    (Flags.INPUT | Flags.OUTPUT),
+
     /** A label pseudo-parameter. */
     LABEL           (Flags.INPUT),
 
