@@ -2,47 +2,40 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.*;
-import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
-import static info.teksol.mindcode.compiler.generator.CallGraph.MAIN;
-
 public class CallGraphCreator extends AbstractMessageEmitter {
-    private final Deque<String> declarationStack = new ArrayDeque<>();
-    private final Map<String, FunctionDeclaration> functions = new HashMap<>();
-    private final Map<String, List<String>> callMap = new HashMap<>();
+    private final FunctionDefinitions functions;
     private final Set<String> syncedVariables = new HashSet<>();
-    private final List<AstNode> encounteredNodes = new ArrayList<>();
-    private String activeFunction = MAIN;
+    private boolean foundControlBlock = false;
+    private LogicFunction activeFunction;
     private StackAllocation allocatedStack;
 
-    private CallGraphCreator(Consumer<MindcodeMessage> messageConsumer) {
-        super(messageConsumer);
-        callMap.put(MAIN, new ArrayList<>());
-    }
-
-    public static CallGraph createFunctionGraph(Seq program, Consumer<MindcodeMessage> messageConsumer,
+    public static CallGraph createCallGraph(Seq program, Consumer<MindcodeMessage> messageConsumer,
             InstructionProcessor instructionProcessor) {
         return new CallGraphCreator(messageConsumer).buildFunctionGraph(program, instructionProcessor);
     }
 
+    private CallGraphCreator(Consumer<MindcodeMessage> messageConsumer) {
+        super(messageConsumer);
+        functions = new FunctionDefinitions(messageConsumer);
+        activeFunction = functions.getMain();
+    }
+
     private CallGraph buildFunctionGraph(Seq program, InstructionProcessor instructionProcessor) {
         visitNode(program);
-        encounteredNodes.clear();
+
+        functions.getFunctions().forEach(f -> f.initializeCalls(functions));
 
         // Creating function structure
-        CallGraph graph = new CallGraph(allocatedStack);
-        functions.values().forEach(graph::addFunction);
-        callMap.forEach(graph::addFunctionCalls);
+        CallGraph graph = new CallGraph(functions, allocatedStack);
         graph.addSyncedVariables(syncedVariables);
-
         graph.buildCallGraph(instructionProcessor);
-
         graph.getFunctions().forEach(f -> validateFunction(instructionProcessor, f));
-
         return graph;
     }
 
@@ -69,21 +62,43 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
     
     private void visitNode(AstNode nodeToVisit) {
-        encounteredNodes.add(nodeToVisit);
+        if (nodeToVisit instanceof ControlBlockAstNode) {
+            foundControlBlock = true;
+        }
 
-        if (nodeToVisit instanceof FunctionCall n) {
-            visitFunctionCall(n);
+        if (nodeToVisit instanceof StackAllocation n) {
+            visitStackAllocation(n);
         } else if (nodeToVisit instanceof FunctionDeclaration n) {
             visitFunctionDeclaration(n);
-        } else if (nodeToVisit instanceof StackAllocation n) {
-            visitStackAllocation(n);
+        } else if (nodeToVisit instanceof FunctionCall n) {
+            visitFunctionCall(n);
         } else {
             nodeToVisit.getChildren().forEach(this::visitNode);
         }
     }
 
+    private void visitStackAllocation(StackAllocation node) {
+        if (allocatedStack != null) {
+            error(node.getInputPosition(), "Multiple stack allocations.");
+        }
+
+        if (foundControlBlock) {
+            error(node.getInputPosition(),
+                    "Stack allocation must not be preceded by a control statement or a function call.");
+        }
+
+        allocatedStack = node;
+    }
+
+    private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
+        LogicFunction previousFunction = activeFunction;
+        activeFunction = functions.addFunctionDeclaration(functionDeclaration);
+        visitNode(functionDeclaration.getBody());
+        activeFunction = previousFunction;
+    }
+
     private void visitFunctionCall(FunctionCall functionCall) {
-        callMap.get(activeFunction).add(functionCall.getFunctionName());
+        activeFunction.addCall(functionCall);
 
         if (functionCall.getFunctionName().equals("sync")
                 && functionCall.getArguments().size() == 1
@@ -94,31 +109,5 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         }
 
         functionCall.getArguments().forEach(this::visitNode);
-    }
-
-    private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
-        if (functions.containsKey(functionDeclaration.getName())) {
-            error(functionDeclaration,
-                    "Multiple declarations of function '%s'.", functionDeclaration.getName());
-        }
-        functions.put(functionDeclaration.getName(), functionDeclaration);
-        callMap.put(functionDeclaration.getName(), new ArrayList<>());
-        declarationStack.push(activeFunction);
-        activeFunction = functionDeclaration.getName();
-        visitNode(functionDeclaration.getBody());
-        activeFunction = declarationStack.pop();
-    }
-
-    private void visitStackAllocation(StackAllocation node) {
-        if (allocatedStack != null) {
-            error(node.getInputPosition(), "Multiple stack allocations.");
-        }
-
-        if (encounteredNodes.stream().anyMatch(ControlBlockAstNode.class::isInstance)) {
-            error(node.getInputPosition(),
-                    "Stack allocation must not be preceded by a control statement or a function call.");
-        }
-
-        allocatedStack = node;
     }
 }

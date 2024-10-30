@@ -1,7 +1,7 @@
 package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.ast.FunctionParameter;
-import info.teksol.mindcode.compiler.generator.CallGraph;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 
 import java.util.Objects;
 
@@ -174,7 +174,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(ArgumentType.AST_VARIABLE, name);
     }
 
-    public static LogicVariable fnRetVal(CallGraph.LogicFunction function) {
+    public static LogicVariable fnRetVal(LogicFunction function) {
         return new LogicVariable(ArgumentType.FUNCTION_RETVAL, function.getName(),
                 function.getPrefix(), function.getPrefix() + RETURN_VALUE, false, true);
     }

@@ -144,8 +144,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesIndirectRecursion() {
         assertCompilesTo("""
                         allocate stack in bank1[0...512];
-                        def foo(n) 1 + bar(n); end;
                         def bar(n) 1 - foo(n); end;
+                        def foo(n) 1 + bar(n); end;
                         print(foo(4));
                         """,
                 createInstruction(SET, "__sp", "0"),
@@ -245,8 +245,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void functionsCanCallOtherFunctionsStackless() {
         assertCompilesTo("""
-                        def foo(n) 1 + bar(n); end;
                         def bar(n) 2 * baz(n); end;
+                        def foo(n) 1 + bar(n); end;
                         def baz(n) 3 ** n; end;
                         foo(0);
                         bar(0);
@@ -966,7 +966,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void reportsMissingModifiers() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Parameter 'a' is declared 'in out' and no 'in' or 'out' argument modifier was used, assuming 'in out'."),
+                ExpectedMessages.create().add("Parameter 'a' is declared 'in out' and no 'in' or 'out' argument modifier was used."),
                 """
                         def foo(in out a)
                             a = a + 1;
@@ -1007,7 +1007,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void reportsMissingOutModifier() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Parameter 'a' is output and 'out' modifier was not used, assuming 'out'. Omitting 'out' modifiers is deprecated."),
+                ExpectedMessages.create().add("Parameter 'a' is output and 'out' modifier was not used."),
                 """
                         def foo(out a)
                             a = 10;
@@ -1056,6 +1056,78 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, var(1)),
                 createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesOverloadedFunctions() {
+        assertCompilesTo("""
+                        void foo() print(0); end;
+                        void foo(a) print(1); end;
+                        void foo(a, b) print(2); end;
+                        foo();
+                        foo(1);
+                        foo(1,1);
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "0"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, "__fn1_a", "1"),
+                createInstruction(PRINT, "1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, "__fn2_a", "1"),
+                createInstruction(SET, "__fn2_b", "1"),
+                createInstruction(PRINT, "2"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void reportsFunctionConflicts() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(2, 1, "Function 'foo(a, out b)' clashes with function 'foo(a)'.")
+                        .add(3, 1, "Function 'foo(a, b)' clashes with function 'foo(a, out b)'."),
+                """
+                        inline void foo(a) print(a); end;
+                        inline void foo(a, out b) print(a); b = a; end;
+                        inline void foo(a, b) print(a, b); end;
+                        """
+        );
+    }
+
+    @Test
+    void reportsVarargFunctionConflict() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(2, 1, "Function 'foo(a, b, c, d...)' clashes with function 'foo(a, b, c)'."),
+                """
+                        inline void foo(a, b, c) print(a, b, c); end;
+                        inline void foo(a, b, c, d...) print(a, b, c); end;
+                        """
+        );
+    }
+
+    @Test
+    void reportsFunctionCallMismatch() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(5, 1, "Function 'foo': wrong number of arguments (expected at least 3, found 2).")
+                        .add(6, 12, "Parameter 'b' isn't output, 'out' modifier not allowed.")
+                        .add(7, 11, "Parameter 'c' isn't output, 'out' modifier not allowed.")
+                ,
+                """
+                        inline void foo(a) print(a); end;
+                        inline void foo(out a, b) print(b); a = b; end;
+                        inline void foo(a, b, c, d...) print(a, b); end;
+                        
+                        foo(1, 2);
+                        foo(out a, out b);
+                        foo(a, b, out c);
+                        """
         );
     }
 }

@@ -10,7 +10,7 @@ public class FunctionCall extends ControlBlockAstNode {
     private final String functionName;
     private final List<FunctionArgument> arguments;
 
-    FunctionCall(InputPosition inputPosition, String functionName, FunctionArgument... arguments) {
+    public FunctionCall(InputPosition inputPosition, String functionName, FunctionArgument... arguments) {
         this(inputPosition, functionName, List.of(arguments));
     }
 

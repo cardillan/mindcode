@@ -38,12 +38,31 @@ public class FunctionParameter extends BaseAstNode {
         return outModifier;
     }
 
+    public boolean isInputOutput() {
+        return inModifier && outModifier;
+    }
+
+    public boolean isCompulsory() {
+        return isInput();
+    }
+
     public boolean isOptional() {
         return !isInput();
     }
 
     public boolean isVarArgs() {
         return varArgs;
+    }
+
+    public boolean matches(FunctionArgument argument) {
+        if (!argument.hasExpression()) {
+            return isOptional();
+        } else if (argument.hasOutModifier()) {
+            return argument.hasInModifier() ? isInputOutput() : isOutput();
+        } else {
+            // No out modifier: must be input
+            return isInput();
+        }
     }
 
     @Override

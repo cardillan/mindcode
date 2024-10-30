@@ -464,7 +464,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             parameters.subList(0, parameters.size() - offset).stream()
                     .filter(FunctionParameter::isVarArgs)
                     .forEach(p -> error(p.getInputPosition(),
-                            "Only the last parameter of an inline function can be declared as varargs."));
+                            "Only the last parameter of an inline function can be declared as vararg."));
         }
 
         return new FunctionDeclaration(pos(ctx.getStart()), inline, noinline, procedure,

@@ -14,13 +14,18 @@ All notable changes to this project will be documented in this file.
 
 * Added a new `void` keyword for declaring functions not returning any value.
 * Added a new `begin` and `var` keywords reserved for future use. 
+* Added support for omitting optional arguments in the argument list.
+* Added support for the special `@wait` argument of the [`message()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-message-function).
 
 #### Experimental features
 
 * Added [output and input/output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters) of user defined functions.
-* Added support for omitting optional arguments in the argument list.
-* Added support for the special `@wait` argument of the [`message()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-message-function).
-* Added `void` functions not returning any value.
+* Added [vararg (variable arity) functions](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions).
+* Added [function overloading](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
+
+### Changed
+
+* Changed Mindustry Logic functions to require the `out` modifier when passing in an output argument, in the same way as the user-defined functions. For backward compatibility, omitting the `out` modifier from a Mindustry Logic function calls generates only a warning, not an error.  
 
 ## 2.4.0 - 2024-10-23
 

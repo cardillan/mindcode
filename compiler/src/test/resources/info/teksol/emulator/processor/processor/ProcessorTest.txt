@@ -8,7 +8,7 @@ expression-evaluation-compile-time.mnd:            7             63       63    
 expression-evaluation-runtime.mnd:                 6            866      549      49.0%   CCEE0A0EBAB82168   A07EDB470E79A88D
 fixed-bounds-ranged-for.mnd:                       3              1        1     100.0%   1B09ADF573C470CB   397D2C8647927672
 for-each-loop-break-continue.mnd:                  1             77       90      83.1%   C89A2268B1269F77   435A11054CEBD1DA
-function-inlining.mnd:                            12            896      896     100.0%   3BDE9A9CFE981E76   C6331905A06E7492
+function-inlining.mnd:                            12            896      896     100.0%   3BDE9A9CFE981E76   BB137811CDA36FD7
 handlesAssignmentsInConditions:                    3              6        6     100.0%   DBEEFD3E7BD8DEDF   3417000EFE87AB52
 handlesChainedAssignments:                         1              1        1     100.0%   29C4FE6B66C5AB39   4A5F618227F64792
 iterated-for-loop-break-continue.mnd:              0             33      161     100.0%   1B7F53CD50B81EE8   EC9420AB556C74F1

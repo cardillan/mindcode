@@ -24,6 +24,10 @@ public record LogicFunctionArgument(InputPosition pos, LogicValue value, boolean
         return value == null ? LogicNull.NULL : value;
     }
 
+    public boolean hasModifier() {
+        return inModifier || outModifier;
+    }
+
     public boolean hasInModifierOnly() {
         return inModifier && !outModifier;
     }

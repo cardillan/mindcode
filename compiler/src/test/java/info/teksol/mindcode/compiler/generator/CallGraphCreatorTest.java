@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.ExpectedMessages;
@@ -7,13 +8,20 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @Order(99)
 public class CallGraphCreatorTest extends AbstractGeneratorTest {
+    private static final InputPosition POS = InputPosition.EMPTY;
+
+    private static LogicFunction find(CallGraph graph, String name) {
+        return graph.getFunctions().stream().filter(f -> f.getName().equals(name)).findFirst().orElseThrow();
+    }
 
     @Test
     void handlesFunctionlessProgram() {
         Assertions.assertDoesNotThrow(() ->
-                CallGraphCreator.createFunctionGraph(
+                CallGraphCreator.createCallGraph(
                         (Seq) translateToAst("a = 10;"),
                         ExpectedMessages.none(),
                         createTestCompiler().processor
@@ -24,7 +32,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     @Test
     void handlesBuiltinFunctions() {
         Assertions.assertDoesNotThrow(() ->
-                CallGraphCreator.createFunctionGraph(
+                CallGraphCreator.createCallGraph(
                         (Seq) translateToAst("print(a);"),
                         ExpectedMessages.none(),
                         createTestCompiler().processor
@@ -34,7 +42,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
 
     @Test
     void detectsRecursion() {
-        CallGraph graph = CallGraphCreator.createFunctionGraph(
+        CallGraph graph = CallGraphCreator.createCallGraph(
                 (Seq) translateToAst("""
                         def a()  a(); end;
                         a();
@@ -44,16 +52,18 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.LogicFunction function = graph.getFunction("a");
+        LogicFunction function = find(graph, "a");
 
-        Assertions.assertTrue(function.isUsed());
-        Assertions.assertTrue(function.isRecursive());
-        Assertions.assertTrue(function.isRecursiveCall("a"));
+        assertAll(
+                () -> assertTrue(function.isUsed()),
+                () -> assertTrue(function.isRecursive()),
+                () -> assertTrue(function.isRecursiveCall(function))
+        );
     }
 
     @Test
     void detectsDoubleRecursion() {
-        CallGraph graph = CallGraphCreator.createFunctionGraph(
+        CallGraph graph = CallGraphCreator.createCallGraph(
                 (Seq) translateToAst("""
                         def a()  b(); end;
                         def b()  a(); end;
@@ -64,20 +74,23 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.LogicFunction funA = graph.getFunction("a");
-        Assertions.assertTrue(funA.isUsed());
-        Assertions.assertTrue(funA.isRecursive());
-        Assertions.assertTrue(funA.isRecursiveCall("b"));
+        LogicFunction funA = find(graph, "a");
+        LogicFunction funB = find(graph, "b");
 
-        CallGraph.LogicFunction funB = graph.getFunction("b");
-        Assertions.assertTrue(funB.isUsed());
-        Assertions.assertTrue(funB.isRecursive());
-        Assertions.assertTrue(funB.isRecursiveCall("a"));
+        assertAll(
+                () -> assertTrue(funA.isUsed()),
+                () -> assertTrue(funA.isRecursive()),
+                () -> assertTrue(funA.isRecursiveCall(funB)),
+
+                () -> assertTrue(funB.isUsed()),
+                () -> assertTrue(funB.isRecursive()),
+                () -> assertTrue(funB.isRecursiveCall(funA))
+        );
     }
 
     @Test
     void detectsNonRecursiveCalls() {
-        CallGraph graph = CallGraphCreator.createFunctionGraph(
+        CallGraph graph = CallGraphCreator.createCallGraph(
                 (Seq) translateToAst("""
                         def a()  a(); b(); c(); end;
                         def b()  b(); end;
@@ -89,19 +102,22 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.LogicFunction funA = graph.getFunction("a");
-        Assertions.assertTrue(funA.isRecursive());
-        Assertions.assertFalse(funA.isRecursiveCall("b"));
-        Assertions.assertFalse(funA.isRecursiveCall("c"));
+        LogicFunction funA = find(graph, "a");
+        LogicFunction funB = find(graph, "b");
+        LogicFunction funC = find(graph, "c");
 
-        CallGraph.LogicFunction funB = graph.getFunction("b");
-        Assertions.assertTrue(funB.isUsed());
-        Assertions.assertTrue(funB.isRecursive());
+        assertAll(
+                () -> assertTrue(funA.isRecursive()),
+                () -> assertFalse(funA.isRecursiveCall(funB)),
+                () -> assertFalse(funA.isRecursiveCall(funC)),
+                () -> assertTrue(funB.isUsed()),
+                () -> assertTrue(funB.isRecursive())
+        );
     }
 
     @Test
     void detectsIndirectCalls() {
-        CallGraph graph = CallGraphCreator.createFunctionGraph(
+        CallGraph graph = CallGraphCreator.createCallGraph(
                 (Seq) translateToAst("""
                         def a(n) n + 1;       end;
                         def b(n) a(n) + 1;    end;
@@ -113,9 +129,14 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.LogicFunction funC = graph.getFunction("c");
-        Assertions.assertFalse(funC.isRecursive());
-        Assertions.assertTrue(funC.isRepeatedCall("a"));
-        Assertions.assertFalse(funC.isRepeatedCall("b"));
+        LogicFunction funA = find(graph, "a");
+        LogicFunction funB = find(graph, "b");
+        LogicFunction funC = find(graph, "c");
+
+        assertAll(
+                () -> assertFalse(funC.isRecursive()),
+                () -> assertTrue(funC.isRepeatedCall(funA)),
+                () -> assertFalse(funC.isRepeatedCall(funB))
+        );
     }
 }

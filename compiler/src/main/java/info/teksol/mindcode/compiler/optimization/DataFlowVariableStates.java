@@ -3,7 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.CallGraph;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
@@ -365,7 +365,7 @@ class DataFlowVariableStates {
          * @param function    function to process
          * @param instruction instruction that caused the call
          */
-        public void updateAfterFunctionCall(CallGraph.LogicFunction function, LogicInstruction instruction) {
+        public void updateAfterFunctionCall(LogicFunction function, LogicInstruction instruction) {
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false));
             optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
             function.getParameters().stream().filter(LogicVariable::isOutput).forEach(initialized::add);

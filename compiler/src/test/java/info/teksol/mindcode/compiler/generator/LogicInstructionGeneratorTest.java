@@ -1204,7 +1204,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void recognizesTurretAsBLockName() {
+    void recognizesTurretAsBlockName() {
         assertCompilesTo("""
                         def foo()
                             turret1.health;
@@ -1344,7 +1344,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void refusesIterationListsWithWrongSize() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("The number of values in the list must be an integer multiple of the number of iterators."),
+                ExpectedMessages.create().add("The number of values in the list (3) must be an integer multiple of the number of iterators (2)."),
                 "for i, j in 1, 2, 3 do print(i, j); end;"
         );
     }

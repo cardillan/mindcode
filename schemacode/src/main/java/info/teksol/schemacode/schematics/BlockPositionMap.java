@@ -49,8 +49,8 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         if (!collisions.isEmpty()) {
             collisions.forEach(t -> messageListener.accept(SchemacodeCompilerMessage.error(
                     "Overlapping blocks: #%d '%s' at %s and #%d '%s' at %s.".formatted(
-                            t.getT1().index(), t.getT1().name(), t.getT1().area(),
-                            t.getT2().index(), t.getT2().name(), t.getT2().area()))));
+                            t.e1().index(), t.e1().name(), t.e1().area(),
+                            t.e2().index(), t.e2().name(), t.e2().area()))));
         }
 
         return new BlockPositionMap<>(blockMap, positionMap);

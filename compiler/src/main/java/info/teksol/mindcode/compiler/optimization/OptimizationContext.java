@@ -3,11 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.evaluator.LogicReadable;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
-import info.teksol.mindcode.compiler.generator.AstContext;
-import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
+import info.teksol.mindcode.compiler.generator.*;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import org.jetbrains.annotations.NotNull;
@@ -330,9 +326,7 @@ class OptimizationContext {
                 Set<LogicVariable> reads = functionDataFlow.functionReads.computeIfAbsent(function, f -> new HashSet<>());
                 Set<LogicVariable> writes = functionDataFlow.functionWrites.computeIfAbsent(function, f -> new HashSet<>());
                 int size = reads.size() + writes.size() + functionDataFlow.endingFunctions.size();
-                function.getCalls().keySet().stream()
-                        .filter(callGraph::containsFunction)            // Filter out built-in functions
-                        .map(callGraph::getFunction)
+                function.getDirectCalls().stream()
                         .filter(f -> !f.isInline() && !f.isMain())
                         .forEachOrdered(callee -> {
                             reads.addAll(functionDataFlow.functionReads.get(callee));

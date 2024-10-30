@@ -17,6 +17,448 @@ Pass 1: speed optimization selection (cost limit 916):
 Pass 1: speed optimization selection (cost limit 911):
   * Loop Optimization: replicate condition at line 38            cost     8, benefit       25.0, efficiency        3.1 (+8 instructions)
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+ 
+    57 print "Wait reset\n"
+    58 op add __tmp22 start DELAY
+    59 set wait __tmp22
+-    * set __tmp21 wait
+    60 jump __label7 always
+    61 label __label6
+-    * set __tmp21 null
+    62 label __label7
+    63 read __tmp23 BANK IND_SHIPPED
+    64 set shipped __tmp23
+ 
+    72 set MILLIS __tmp28
+    73 op mul __tmp29 MULTIPLIER MILLIS
+    74 set SIGN_MILLIS __tmp29
+-    * set __tmp27 SIGN_MILLIS
+    75 jump __label9 always
+    76 label __label8
+    77 read __tmp30 BANK index
+    78 set last_total __tmp30
+-    * set __tmp27 last_total
+    79 label __label9
+    80 write total BANK index
+    81 op sub __tmp31 total last_total
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
+ 
+     4 set IND_SESSION_KEY 509
+     5 set IND_TIME 508
+     6 set IND_FLOW_RATE 507
+-    * op mul __tmp0 DELAY SAMPLES
+-    * set TOTAL_MILLIS __tmp0
++    7 op mul TOTAL_MILLIS DELAY SAMPLES
+     8 set SIGN_MILLIS null
+     9 set SORTER sorter1
+    10 set VAULT vault1
+ 
+    24 label __label1
+    25 jump __label0 always
+    26 label __label2
+-    * read __tmp6 BANK IND_SHIPPED
+-    * set shipped __tmp6
+-    * read __tmp7 BANK IND_MULTIPLIER
+-    * set MULTIPLIER __tmp7
+-    * read __tmp8 BANK IND_SESSION_KEY
+-    * set SESSION_KEY __tmp8
+-    * sensor __tmp9 SORTER @config
+-    * set item __tmp9
++   27 read shipped BANK IND_SHIPPED
++   28 read MULTIPLIER BANK IND_MULTIPLIER
++   29 read SESSION_KEY BANK IND_SESSION_KEY
++   30 sensor item SORTER @config
+    31 set last_total shipped
+    32 set index 0
+    33 set MILLIS 0
+ 
+    43 op strictEqual __tmp16 SESSION_KEY __tmp15
+    44 op land __tmp17 __tmp14 __tmp16
+    45 jump __label5 equal __tmp17 false
+-    * set __tmp18 @time
+-    * set start __tmp18
+-    * op add __tmp19 wait DELAY
+-    * set wait __tmp19
++   46 set start @time
++   47 op add wait wait DELAY
+    48 op greaterThan __tmp20 start wait
+    49 jump __label6 equal __tmp20 false
+    50 print "Wait reset\n"
+-    * op add __tmp22 start DELAY
+-    * set wait __tmp22
++   51 op add wait start DELAY
+    52 jump __label7 always
+    53 label __label6
+    54 label __label7
+-    * read __tmp23 BANK IND_SHIPPED
+-    * set shipped __tmp23
+-    * sensor __tmp24 SORTER @config
+-    * set item __tmp24
+-    * op add __tmp25 level shipped
+-    * set total __tmp25
++   55 read shipped BANK IND_SHIPPED
++   56 sensor item SORTER @config
++   57 op add total level shipped
+    58 op lessThan __tmp26 MILLIS TOTAL_MILLIS
+    59 jump __label8 equal __tmp26 false
+-    * op add __tmp28 MILLIS DELAY
+-    * set MILLIS __tmp28
+-    * op mul __tmp29 MULTIPLIER MILLIS
+-    * set SIGN_MILLIS __tmp29
++   60 op add MILLIS MILLIS DELAY
++   61 op mul SIGN_MILLIS MULTIPLIER MILLIS
+    62 jump __label9 always
+    63 label __label8
+-    * read __tmp30 BANK index
+-    * set last_total __tmp30
++   64 read last_total BANK index
+    65 label __label9
+    66 write total BANK index
+    67 op sub __tmp31 total last_total
+-    * op div __tmp32 __tmp31 SIGN_MILLIS
+-    * set flow_rate __tmp32
++   68 op div flow_rate __tmp31 SIGN_MILLIS
+    69 write flow_rate BANK IND_FLOW_RATE
+    70 set __tmp33 @time
+    71 write __tmp33 BANK IND_TIME
+    72 op add __tmp34 index 1
+-    * op mod __tmp35 __tmp34 SAMPLES
+-    * set index __tmp35
++   73 op mod index __tmp34 SAMPLES
+    74 op mul __tmp36 60000 flow_rate
+-    * op floor __tmp37 __tmp36
+-    * set flow_rate_str __tmp37
+-    * op div __tmp38 MILLIS 1000
+-    * set seconds __tmp38
+-    * op sub __tmp39 @time start
+-    * set elapsed __tmp39
++   75 op floor flow_rate_str __tmp36
++   76 op div seconds MILLIS 1000
++   77 op sub elapsed @time start
+    78 print "Measured interval: "
+    79 print seconds
+    80 print " sec"
+ 
+   100 label __label10
+   101 op lessThan __tmp40 @time wait
+   102 jump __label12 equal __tmp40 false
+-    * op add __tmp41 loops 1
+-    * set loops __tmp41
++  103 op add loops loops 1
+   104 label __label11
+   105 jump __label10 always
+   106 label __label12
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 instructions):
+ 
+    45 jump __label5 equal __tmp17 false
+    46 set start @time
+    47 op add wait wait DELAY
+-    * op greaterThan __tmp20 start wait
+-    * jump __label6 equal __tmp20 false
++   48 jump __label6 lessThanEq start wait
+    49 print "Wait reset\n"
+    50 op add wait start DELAY
+    51 jump __label7 always
+ 
+    54 read shipped BANK IND_SHIPPED
+    55 sensor item SORTER @config
+    56 op add total level shipped
+-    * op lessThan __tmp26 MILLIS TOTAL_MILLIS
+-    * jump __label8 equal __tmp26 false
++   57 jump __label8 greaterThanEq MILLIS TOTAL_MILLIS
+    58 op add MILLIS MILLIS DELAY
+    59 op mul SIGN_MILLIS MULTIPLIER MILLIS
+    60 jump __label9 always
+ 
+    96 printflush message1
+    97 set loops 0
+    98 label __label10
+-    * op lessThan __tmp40 @time wait
+-    * jump __label12 equal __tmp40 false
++   99 jump __label12 greaterThanEq @time wait
+   100 op add loops loops 1
+   101 label __label11
+   102 jump __label10 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    48 jump __label6 lessThanEq start wait
+    49 print "Wait reset\n"
+    50 op add wait start DELAY
+-    * jump __label7 always
+    51 label __label6
+    52 label __label7
+    53 read shipped BANK IND_SHIPPED
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    68 write __tmp33 BANK IND_TIME
+    69 op add __tmp34 index 1
+    70 op mod index __tmp34 SAMPLES
+-    * op mul __tmp36 60000 flow_rate
+-    * op floor flow_rate_str __tmp36
++   71 op idiv flow_rate_str flow_rate 0.000016666666666666667
+    72 op div seconds MILLIS 1000
+    73 op sub elapsed @time start
+    74 print "Measured interval: "
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     4 set IND_SESSION_KEY 509
+     5 set IND_TIME 508
+     6 set IND_FLOW_RATE 507
+-    * op mul TOTAL_MILLIS DELAY SAMPLES
++    7 op mul TOTAL_MILLIS 1000 10
+     8 set SIGN_MILLIS null
+     9 set SORTER sorter1
+    10 set VAULT vault1
+ 
+    24 label __label1
+    25 jump __label0 always
+    26 label __label2
+-    * read shipped BANK IND_SHIPPED
+-    * read MULTIPLIER BANK IND_MULTIPLIER
+-    * read SESSION_KEY BANK IND_SESSION_KEY
++   27 read shipped BANK 511
++   28 read MULTIPLIER BANK 510
++   29 read SESSION_KEY BANK 509
+    30 sensor item SORTER @config
+    31 set last_total shipped
+    32 set index 0
+ 
+    39 sensor __tmp12 VAULT @dead
+    40 op strictEqual __tmp13 __tmp12 0
+    41 op land __tmp14 __tmp11 __tmp13
+-    * read __tmp15 BANK IND_SESSION_KEY
++   42 read __tmp15 BANK 509
+    43 op strictEqual __tmp16 SESSION_KEY __tmp15
+    44 op land __tmp17 __tmp14 __tmp16
+    45 jump __label5 equal __tmp17 false
+    46 set start @time
+-    * op add wait wait DELAY
++   47 op add wait wait 1000
+    48 jump __label6 lessThanEq start wait
+    49 print "Wait reset\n"
+-    * op add wait start DELAY
++   50 op add wait start 1000
+    51 label __label6
+    52 label __label7
+-    * read shipped BANK IND_SHIPPED
++   53 read shipped BANK 511
+    54 sensor item SORTER @config
+-    * op add total level shipped
+-    * jump __label8 greaterThanEq MILLIS TOTAL_MILLIS
+-    * op add MILLIS MILLIS DELAY
++   55 op add total 0 shipped
++   56 jump __label8 greaterThanEq MILLIS 10000
++   57 op add MILLIS MILLIS 1000
+    58 op mul SIGN_MILLIS MULTIPLIER MILLIS
+    59 jump __label9 always
+    60 label __label8
+ 
+    63 write total BANK index
+    64 op sub __tmp31 total last_total
+    65 op div flow_rate __tmp31 SIGN_MILLIS
+-    * write flow_rate BANK IND_FLOW_RATE
++   66 write flow_rate BANK 507
+    67 set __tmp33 @time
+-    * write __tmp33 BANK IND_TIME
++   68 write __tmp33 BANK 508
+    69 op add __tmp34 index 1
+-    * op mod index __tmp34 SAMPLES
++   70 op mod index __tmp34 10
+    71 op idiv flow_rate_str flow_rate 0.000016666666666666667
+    72 op div seconds MILLIS 1000
+    73 op sub elapsed @time start
+ 
+    79 print "\nItems shipped: "
+    80 print shipped
+    81 print "\nContainer level: "
+-    * print level
++   82 print 0
+    83 print "\nFlow rate: "
+    84 print flow_rate_str
+    85 print "\nTotal: "
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9 instructions):
+-    * set DELAY 1000
+-    * set SAMPLES 10
+-    * set IND_SHIPPED 511
+-    * set IND_MULTIPLIER 510
+-    * set IND_SESSION_KEY 509
+-    * set IND_TIME 508
+-    * set IND_FLOW_RATE 507
+-    * op mul TOTAL_MILLIS 1000 10
+     0 set SIGN_MILLIS null
+     1 set SORTER sorter1
+     2 set VAULT vault1
+ 
+    23 set last_total shipped
+    24 set index 0
+    25 set MILLIS 0
+-    * set level 0
+    26 set wait 0
+    27 label __label3
+    28 sensor __tmp10 SORTER @dead
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    86 set loops 0
+    87 label __label10
+    88 jump __label12 greaterThanEq @time wait
++   89 label __label13
+    90 op add loops loops 1
+    91 label __label11
+-    * jump __label10 always
++   92 jump __label13 lessThan @time wait
+    93 label __label12
+    94 label __label4
+    95 jump __label3 always
+
+Modifications by Loop Optimization: replicate condition at line 17 (+5 instructions):
+ 
+     8 op equal __tmp4 BANK null
+     9 op or __tmp5 __tmp3 __tmp4
+    10 jump __label2 equal __tmp5 false
++   11 label __label14
+    12 print "Missing sorter, vault or memory bank."
+    13 printflush message1
+    14 set SORTER sorter1
+    15 set VAULT vault1
+    16 set BANK bank1
+    17 label __label1
+-    * jump __label0 always
++   18 op equal __tmp1 SORTER null
++   19 op equal __tmp2 VAULT null
++   20 op or __tmp3 __tmp1 __tmp2
++   21 op equal __tmp4 BANK null
++   22 op or __tmp5 __tmp3 __tmp4
++   23 jump __label14 notEqual __tmp5 false
+    24 label __label2
+    25 read shipped BANK 511
+    26 read MULTIPLIER BANK 510
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     2 set VAULT vault1
+     3 set BANK bank1
+     4 label __label0
+-    * op equal __tmp1 SORTER null
+-    * op equal __tmp2 VAULT null
++    5 op equal __tmp1 sorter1 null
++    6 op equal __tmp2 vault1 null
+     7 op or __tmp3 __tmp1 __tmp2
+-    * op equal __tmp4 BANK null
++    8 op equal __tmp4 bank1 null
+     9 op or __tmp5 __tmp3 __tmp4
+    10 jump __label2 equal __tmp5 false
+    11 label __label14
+ 
+    15 set VAULT vault1
+    16 set BANK bank1
+    17 label __label1
+-    * op equal __tmp1 SORTER null
+-    * op equal __tmp2 VAULT null
++   18 op equal __tmp1 sorter1 null
++   19 op equal __tmp2 vault1 null
+    20 op or __tmp3 __tmp1 __tmp2
+-    * op equal __tmp4 BANK null
++   21 op equal __tmp4 bank1 null
+    22 op or __tmp5 __tmp3 __tmp4
+    23 jump __label14 notEqual __tmp5 false
+    24 label __label2
+
+Modifications by Loop Optimization: replicate condition at line 38 (+8 instructions):
+ 
+    40 op strictEqual __tmp16 SESSION_KEY __tmp15
+    41 op land __tmp17 __tmp14 __tmp16
+    42 jump __label5 equal __tmp17 false
++   43 label __label15
+    44 set start @time
+    45 op add wait wait 1000
+    46 jump __label6 lessThanEq start wait
+ 
+    99 jump __label13 lessThan @time wait
+   100 label __label12
+   101 label __label4
+-    * jump __label3 always
++  102 sensor __tmp10 SORTER @dead
++  103 op strictEqual __tmp11 __tmp10 0
++  104 sensor __tmp12 VAULT @dead
++  105 op strictEqual __tmp13 __tmp12 0
++  106 op land __tmp14 __tmp11 __tmp13
++  107 read __tmp15 BANK 509
++  108 op strictEqual __tmp16 SESSION_KEY __tmp15
++  109 op land __tmp17 __tmp14 __tmp16
++  110 jump __label15 notEqual __tmp17 false
+   111 label __label5
+   112 end
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+    50 label __label7
+    51 read shipped BANK 511
+    52 sensor item SORTER @config
+-    * op add total 0 shipped
++   53 set total shipped
+    54 jump __label8 greaterThanEq MILLIS 10000
+    55 op add MILLIS MILLIS 1000
+    56 op mul SIGN_MILLIS MULTIPLIER MILLIS
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+    58 label __label8
+    59 read last_total BANK index
+    60 label __label9
+-    * write total BANK index
+-    * op sub __tmp31 total last_total
++   61 write shipped BANK index
++   62 op sub __tmp31 shipped last_total
+    63 op div flow_rate __tmp31 SIGN_MILLIS
+    64 write flow_rate BANK 507
+    65 set __tmp33 @time
+ 
+    81 print "\nFlow rate: "
+    82 print flow_rate_str
+    83 print "\nTotal: "
+-    * print total
++   84 print shipped
+    85 print "\nLast total: "
+    86 print last_total
+    87 print "\nIndex: "
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
+ 
+    50 label __label7
+    51 read shipped BANK 511
+    52 sensor item SORTER @config
+-    * set total shipped
+    53 jump __label8 greaterThanEq MILLIS 10000
+    54 op add MILLIS MILLIS 1000
+    55 op mul SIGN_MILLIS MULTIPLIER MILLIS
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   108 op land __tmp17 __tmp14 __tmp16
+   109 jump __label15 notEqual __tmp17 false
+   110 label __label5
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
+ 
+    70 op sub elapsed @time start
+    71 print "Measured interval: "
+    72 print seconds
+-    * print " sec"
+-    * print "\nItem: "
++   73 print " sec\nItem: "
+    74 print item
+    75 print "\nItems shipped: "
+    76 print shipped
+
 Final code before resolving virtual instructions:
 
 set SIGN_MILLIS null

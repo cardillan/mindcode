@@ -82,14 +82,14 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
         assertCompilesTo(ExpectedMessages.create().add("List of unused variables: testa.n, testb.n, testc.n."),
                 """
                         allocate stack in cell1[0 .. 63];
-                        def testa(n)
-                            print("Start");
-                        end;
                         def testb(n)
                             print("Middle");
                         end;
                         def testc(n)
                             print("End");
+                        end;
+                        def testa(n)
+                            print("Start");
                         end;
                         testa(0);
                         testa(0);

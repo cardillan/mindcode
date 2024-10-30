@@ -138,13 +138,13 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                             print(x, y);
                         end;
 
+                        noinline def bar(x)
+                            A = x - B;
+                        end;
+
                         noinline def foo(n)
                             print(n);
                             bar(n);
-                        end;
-                        
-                        noinline def bar(x)
-                            A = x - B;
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
@@ -491,6 +491,10 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void doesNotBlockVariablesModifiedByOwnFunction() {
         assertCompilesTo("""
+                        noinline def bar(s)
+                            foo(10 + s);
+                        end;
+
                         noinline def foo(n)
                             sum = 0;
                             r = rand(10);        // Prevents compile-time evaluation
@@ -498,10 +502,6 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                                 sum += n + r;
                             end;
                             print(floor(sum - 50 * r + 0.5));
-                        end;
-                        
-                        noinline def bar(s)
-                            foo(10 + s);
                         end;
                         
                         bar(1);

@@ -5,7 +5,6 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -29,10 +28,9 @@ class AstContextTest {
 
     @BeforeEach
     void setUp() {
-        callGraph.addFunction(functionDeclaration1);
-        callGraph.addFunction(functionDeclaration2);
-        function1 = callGraph.getFunction(functionDeclaration1.getName());
-        function2 = callGraph.getFunction(functionDeclaration2.getName());
+        FunctionDefinitions functions = new FunctionDefinitions(m -> {});
+        function1 = functions.addFunctionDeclaration(functionDeclaration1);
+        function2 = functions.addFunctionDeclaration(functionDeclaration2);
 
         AstNode node = new TestNode(AstContextType.FUNCTION, AstSubcontextType.BODY);
         context = root.createFunctionDeclaration(profile, function1, node, node.getContextType(),1.0);

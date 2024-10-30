@@ -78,14 +78,14 @@ public class SchematicsIO {
         }
 
         int ver = input.read();
-        return new Tuple2<>(new DataInputStream(new InflaterInputStream(input)), ver);
+        return Tuple2.of(new DataInputStream(new InflaterInputStream(input)), ver);
     }
 
     public static Schematic readMsch(InputStream input) throws IOException {
         Tuple2<DataInputStream, Integer> inputs = skipHeader(input);
-        int ver = inputs.getT2();
+        int ver = inputs.e2();
 
-        try (DataInputStream stream = inputs.getT1()) {
+        try (DataInputStream stream = inputs.e1()) {
             short width = stream.readShort();
             short height = stream.readShort();
 

@@ -67,7 +67,7 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processOpInstruction(LogicIterator logicIterator, OpInstruction ix) {
         if (ix.hasSecondOperand()) {
             final Tuple2<LogicValue, LogicValue> opers = extractConstantOperand(ix);
-            if (opers.getT1() instanceof LogicNumber num && num.isInteger()) {
+            if (opers.e1() instanceof LogicNumber num && num.isInteger()) {
                 int value = num.getIntValue();
                 switch (ix.getOperation()) {
                     case MUL -> {
@@ -75,31 +75,31 @@ class ExpressionOptimizer extends BaseOptimizer {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
                         } else if (value == 1) {
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         }
                     }
                     case DIV -> {
-                        if (value == 0 && opers.getT1() == ix.getY()) {
+                        if (value == 0 && opers.e1() == ix.getY()) {
                             // Division by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
                             return;
-                        } else if (advanced() && value == 0 && opers.getT1() == ix.getX()) {
+                        } else if (advanced() && value == 0 && opers.e1() == ix.getX()) {
                             // Zero divided by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
-                        } else if (value == 1 && opers.getT1() == ix.getY()) {
+                        } else if (value == 1 && opers.e1() == ix.getY()) {
                             // Division by one
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         }
                     }
                     case IDIV, MOD -> {
-                        if (value == 0 && opers.getT1() == ix.getY()) {
+                        if (value == 0 && opers.e1() == ix.getY()) {
                             // Division by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
                             return;
-                        } else if (advanced() && value == 0 && opers.getT1() == ix.getX()) {
+                        } else if (advanced() && value == 0 && opers.e1() == ix.getX()) {
                             // Zero divided by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
@@ -107,16 +107,16 @@ class ExpressionOptimizer extends BaseOptimizer {
                     }
                     case ADD, SUB, XOR -> {
                         if (value == 0) {
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         }
                     }
                     case SHL, SHR -> {
-                        if (value == 0 && opers.getT1() == ix.getY()) {
+                        if (value == 0 && opers.e1() == ix.getY()) {
                             // Shift by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), ix.getX()));
                             return;
-                        } else if (value == 0 && opers.getT1() == ix.getX()) {
+                        } else if (value == 0 && opers.e1() == ix.getX()) {
                             // Shifting zero by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
@@ -124,7 +124,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                     }
                     case BINARY_OR, BOOL_OR, LOGICAL_OR -> {
                         if (value == 0 && ix.getOperation() != Operation.BOOL_OR) {
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         } else if (value != 0 && ix.getOperation() != Operation.BINARY_OR) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.TRUE));
@@ -136,7 +136,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
                         } else if (ix.getOperation() == Operation.LOGICAL_AND) {
-                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                         }
                     }
                 }
@@ -182,7 +182,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                     && ox.getOperation() == Operation.FLOOR && ox.getX().equals(ix.getResult())) {
 
                 replaceInstruction(ox, createOp(ox.getAstContext(),
-                        Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
+                        Operation.IDIV, ox.getResult(), ops.e1(), ops.e2()));
                 logicIterator.set(createNoOp(ix.getAstContext()));
                 logicIterator.next();
             }
@@ -198,8 +198,8 @@ class ExpressionOptimizer extends BaseOptimizer {
      */
     private Tuple2<LogicValue, LogicValue> extractConstantOperand(OpInstruction ix) {
         return ix.getX().isNumericLiteral()
-                ? new Tuple2<>(ix.getX(), ix.getY())
-                : new Tuple2<>(ix.getY(), ix.getX());
+                ? Tuple2.ofSame(ix.getX(), ix.getY())
+                : Tuple2.ofSame(ix.getY(), ix.getX());
     }
 
     private Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
@@ -207,7 +207,7 @@ class ExpressionOptimizer extends BaseOptimizer {
             return null;
         } else {
             return switch (ix.getOperation()) {
-                case DIV, IDIV -> new Tuple2<>(ix.getX(), ix.getY());
+                case DIV, IDIV -> Tuple2.ofSame(ix.getX(), ix.getY());
 
                 case MUL ->
                         ix.getX().isNumericLiteral() ? invertMultiplicand(ix.getY(), ix.getX()) :

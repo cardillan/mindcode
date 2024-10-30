@@ -94,8 +94,8 @@ class SchematicsIOTest {
             return output.toByteArray();
         });
 
-        String expected = streamToString(SchematicsIO.skipHeader(new ByteArrayInputStream(contents)).getT1());
-        String actual = streamToString(SchematicsIO.skipHeader(new ByteArrayInputStream(rewritten)).getT1());
+        String expected = streamToString(SchematicsIO.skipHeader(new ByteArrayInputStream(contents)).e1());
+        String actual = streamToString(SchematicsIO.skipHeader(new ByteArrayInputStream(rewritten)).e1());
 
         assertEquals(expected, actual);
     }

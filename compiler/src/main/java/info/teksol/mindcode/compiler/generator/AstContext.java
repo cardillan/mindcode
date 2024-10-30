@@ -4,7 +4,6 @@ import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.*;

@@ -15,6 +15,821 @@
 Pass 1: speed optimization selection (cost limit 810):
   * Loop Optimization: replicate condition at line 26            cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
 
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-26 instructions):
+ 
+     9 jump __label0 equal __tmp4 false
+    10 set BAR_LENGTH 53
+    11 set BAR_SPACE 74
+-    * set __tmp5 BAR_SPACE
+    12 jump __label1 always
+    13 label __label0
+    14 set BAR_LENGTH 61
+    15 set BAR_SPACE 88
+-    * set __tmp5 BAR_SPACE
+    16 label __label1
+    17 set lastRate null
+    18 set icon lastRate
+ 
+    70 draw rect 0 0 156 176
+    71 set __tmp14 null
+    72 label __label10
+-    * set __tmp11 __tmp14
+    73 jump __label8 always
+    74 label __label7
+-    * set __tmp11 null
+    75 label __label8
+    76 print "\nNominal production: "
+    77 print EXPECTED_FLOW_STR
+ 
+    79 print "\nActual production: "
+    80 print flow_str
+    81 print "/min"
+-    * set __tmp9 null
+    82 jump __label6 always
+    83 label __label5
+-    * set __tmp9 null
+    84 label __label6
+    85 set __tmp25 @time
+    86 set start __tmp25
+ 
+   116 jump __label16 equal __tmp39 false
+   117 set minimum l
+   118 set icon @lead
+-    * set __tmp40 icon
+   119 jump __label17 always
+   120 label __label16
+-    * set __tmp40 null
+   121 label __label17
+   122 op lessThan __tmp41 s minimum
+   123 jump __label18 equal __tmp41 false
+   124 set minimum s
+   125 set icon @silicon
+-    * set __tmp42 icon
+   126 jump __label19 always
+   127 label __label18
+-    * set __tmp42 null
+   128 label __label19
+   129 op lessThan __tmp43 c minimum
+   130 jump __label20 equal __tmp43 false
+   131 set minimum c
+   132 set icon @copper
+-    * set __tmp44 icon
+   133 jump __label21 always
+   134 label __label20
+-    * set __tmp44 null
+   135 label __label21
+   136 op lessThan __tmp45 t minimum
+   137 jump __label22 equal __tmp45 false
+   138 set minimum t
+   139 set icon @titanium
+-    * set __tmp46 icon
+   140 jump __label23 always
+   141 label __label22
+-    * set __tmp46 null
+   142 label __label23
+   143 op greaterThan __tmp47 a 5
+   144 op sub __tmp48 21 a
+ 
+   147 set showa __tmp50
+   148 jump __label24 equal showa false
+   149 set icon @surge-alloy
+-    * set __tmp51 icon
+   150 jump __label25 always
+   151 label __label24
+-    * set __tmp51 null
+   152 label __label25
+   153 op mod __tmp52 index 2
+   154 set column __tmp52
+ 
+   171 op land __tmp62 __tmp60 __tmp61
+   172 jump __label26 equal __tmp62 false
+   173 set icon @surge-smelter
+-    * set __tmp63 icon
+   174 jump __label27 always
+   175 label __label26
+-    * set __tmp63 null
+   176 label __label27
+   177 draw color 255 255 255 255
+   178 jump __label28 equal e false
+ 
+   203 draw rect __tmp74 __tmp75 2 2
+   204 set __tmp66 null
+   205 label __label31
+-    * set __tmp64 __tmp66
+   206 jump __label29 always
+   207 label __label28
+   208 op add __tmp76 x 2
+ 
+   220 draw color 0 0 0 255
+   221 draw lineRect xm1 ym1 16 16
+   222 draw stroke 2
+-    * set __tmp64 null
+   223 label __label29
+   224 op add __tmp80 x 16
+   225 set x __tmp80
+ 
+   229 set red 255
+   230 set green 0
+   231 set blue 0
+-    * set __tmp83 blue
+   232 jump __label33 always
+   233 label __label32
+   234 jump __label34 equal showa false
+ 
+   260 set blue 0
+   261 set __tmp84 blue
+   262 label __label35
+-    * set __tmp83 __tmp84
+   263 label __label33
+   264 op greaterThan __tmp91 boost EXPECTED_BOOST
+   265 jump __label40 equal __tmp91 false
+ 
+   270 op max __tmp95 192 blue
+   271 set blue __tmp95
+   272 set boost EXPECTED_BOOST
+-    * set __tmp92 boost
+   273 jump __label41 always
+   274 label __label40
+-    * set __tmp92 null
+   275 label __label41
+   276 op mul __tmp96 BAR_LENGTH boost
+   277 op idiv __tmp97 __tmp96 EXPECTED_BOOST
+ 
+   284 draw lineRect x y length 14
+   285 op add __tmp100 index 1
+   286 set index __tmp100
+-    * set __tmp30 index
+   287 jump __label15 always
+   288 label __label14
+-    * set __tmp30 null
+   289 label __label15
+   290 label __label12
+   291 op add __tmp101 n 1
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructions):
+ 
+    63 op mul __tmp23 3600 rate
+    64 op floor __tmp24 __tmp23
+    65 set flow_str __tmp24
+-    * set __tmp14 flow_str
+    66 jump __label10 always
+    67 label __label9
+    68 draw color 0 0 80 255
+    69 draw rect 0 0 156 176
+-    * set __tmp14 null
+    70 label __label10
+    71 jump __label8 always
+    72 label __label7
+ 
+   179 op add __tmp67 x 7
+   180 op add __tmp68 y 7
+   181 draw image __tmp67 __tmp68 icon 16 0
+-    * set __tmp66 null
+   182 jump __label31 always
+   183 label __label30
+   184 op add __tmp69 x 12
+ 
+   198 op add __tmp74 x 4
+   199 op add __tmp75 y 6
+   200 draw rect __tmp74 __tmp75 2 2
+-    * set __tmp66 null
+   201 label __label31
+   202 jump __label29 always
+   203 label __label28
+ 
+   232 set green 0
+   233 set blue 255
+   234 set minimum a
+-    * set __tmp84 minimum
+   235 jump __label35 always
+   236 label __label34
+   237 op greaterThan __tmp85 minimum 14
+ 
+   253 label __label39
+   254 set green __tmp90
+   255 set blue 0
+-    * set __tmp84 blue
+   256 label __label35
+   257 label __label33
+   258 op greaterThan __tmp91 boost EXPECTED_BOOST
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 instructions):
+     0 set FROM_INDEX 0
+     1 set EXPECTED_BOOST 1.5
+     2 op mul __tmp0 EXPECTED_BOOST 16
+-    * op div __tmp1 __tmp0 75
+-    * set EXPECTED_FLOW __tmp1
++    3 op div EXPECTED_FLOW __tmp0 75
+     4 op mul __tmp2 EXPECTED_FLOW 3600
+-    * op floor __tmp3 __tmp2
+-    * set EXPECTED_FLOW_STR __tmp3
++    5 op floor EXPECTED_FLOW_STR __tmp2
+     6 op notEqual __tmp4 bank1 null
+     7 jump __label0 equal __tmp4 false
+     8 set BAR_LENGTH 53
+ 
+    25 jump __label5 equal __tmp8 false
+    26 op equal __tmp10 FROM_INDEX 0
+    27 jump __label7 equal __tmp10 false
+-    * read __tmp12 bank1 511
+-    * set rate __tmp12
++   28 read rate bank1 511
+    29 op notEqual __tmp13 lastRate rate
+    30 jump __label9 equal __tmp13 false
+    31 draw clear 0 0 80
+ 
+    46 op sub __tmp15 rate EXPECTED_FLOW
+    47 op mul __tmp16 84 __tmp15
+    48 op div __tmp17 __tmp16 EXPECTED_FLOW
+-    * op add __tmp18 88 __tmp17
+-    * set pos __tmp18
++   49 op add pos 88 __tmp17
+    50 op max __tmp19 pos 4
+-    * op min __tmp20 __tmp19 170
+-    * set pos __tmp20
+-    * op add __tmp21 pos 7
+-    * set pos1 __tmp21
+-    * op sub __tmp22 pos 7
+-    * set pos2 __tmp22
++   51 op min pos __tmp19 170
++   52 op add pos1 pos 7
++   53 op sub pos2 pos 7
+    54 draw color 255 255 16 255
+    55 draw triangle 156 pos1 164 pos 156 pos2
+    56 op mul __tmp23 3600 rate
+-    * op floor __tmp24 __tmp23
+-    * set flow_str __tmp24
++   57 op floor flow_str __tmp23
+    58 jump __label10 always
+    59 label __label9
+    60 draw color 0 0 80 255
+ 
+    72 jump __label6 always
+    73 label __label5
+    74 label __label6
+-    * set __tmp25 @time
+-    * set start __tmp25
++   75 set start @time
+    76 draw stroke 2
+    77 set index FROM_INDEX
+    78 set n 0
+    79 label __label11
+    80 op lessThan __tmp26 n @links
+    81 jump __label13 equal __tmp26 false
+-    * getlink __tmp27 n
+-    * set smelter __tmp27
++   82 getlink smelter n
+    83 sensor __tmp28 smelter @type
+    84 op equal __tmp29 __tmp28 @surge-smelter
+    85 jump __label14 equal __tmp29 false
+    86 set minimum 21
+-    * sensor __tmp31 smelter @titanium
+-    * set t __tmp31
+-    * sensor __tmp32 smelter @copper
+-    * set c __tmp32
+-    * sensor __tmp33 smelter @lead
+-    * set l __tmp33
+-    * sensor __tmp34 smelter @silicon
+-    * set s __tmp34
+-    * sensor __tmp35 smelter @surge-alloy
+-    * set a __tmp35
+-    * sensor __tmp36 smelter @enabled
+-    * set e __tmp36
+-    * sensor __tmp37 smelter @totalPower
+-    * set power __tmp37
+-    * sensor __tmp38 smelter @timescale
+-    * set boost __tmp38
++   87 sensor t smelter @titanium
++   88 sensor c smelter @copper
++   89 sensor l smelter @lead
++   90 sensor s smelter @silicon
++   91 sensor a smelter @surge-alloy
++   92 sensor e smelter @enabled
++   93 sensor power smelter @totalPower
++   94 sensor boost smelter @timescale
+    95 op lessThan __tmp39 l minimum
+    96 jump __label16 equal __tmp39 false
+    97 set minimum l
+ 
+   123 op greaterThan __tmp47 a 5
+   124 op sub __tmp48 21 a
+   125 op lessThan __tmp49 __tmp48 minimum
+-    * op land __tmp50 __tmp47 __tmp49
+-    * set showa __tmp50
++  126 op land showa __tmp47 __tmp49
+   127 jump __label24 equal showa false
+   128 set icon @surge-alloy
+   129 jump __label25 always
+   130 label __label24
+   131 label __label25
+-    * op mod __tmp52 index 2
+-    * set column __tmp52
+-    * op idiv __tmp53 index 2
+-    * set row __tmp53
++  132 op mod column index 2
++  133 op idiv row index 2
+   134 op mul __tmp54 column BAR_SPACE
+-    * op add __tmp55 5 __tmp54
+-    * set x __tmp55
++  135 op add x 5 __tmp54
+   136 op mul __tmp56 row 22
+-    * op add __tmp57 4 __tmp56
+-    * set y __tmp57
+-    * op sub __tmp58 x 1
+-    * set xm1 __tmp58
+-    * op sub __tmp59 y 1
+-    * set ym1 __tmp59
++  137 op add y 4 __tmp56
++  138 op sub xm1 x 1
++  139 op sub ym1 y 1
+   140 draw color 0 0 80 255
+   141 draw rect xm1 ym1 BAR_SPACE 16
+   142 op greaterThan __tmp60 minimum 16
+ 
+   156 draw image __tmp67 __tmp68 icon 16 0
+   157 jump __label31 always
+   158 label __label30
+-    * op add __tmp69 x 12
+-    * set x12 __tmp69
+-    * op add __tmp70 y 3
+-    * set y3 __tmp70
++  159 op add x12 x 12
++  160 op add y3 y 3
+   161 draw color 255 80 80 255
+   162 draw rect x y3 14 8
+   163 draw color 0 0 0 255
+ 
+   174 label __label31
+   175 jump __label29 always
+   176 label __label28
+-    * op add __tmp76 x 2
+-    * set x2 __tmp76
+-    * op add __tmp77 y 2
+-    * set y2 __tmp77
+-    * op add __tmp78 x 12
+-    * set x12 __tmp78
+-    * op add __tmp79 y 12
+-    * set y12 __tmp79
++  177 op add x2 x 2
++  178 op add y2 y 2
++  179 op add x12 x 12
++  180 op add y12 y 12
+   181 draw color 255 80 80 255
+   182 draw stroke 3
+   183 draw line x2 y12 x12 y2
+ 
+   186 draw lineRect xm1 ym1 16 16
+   187 draw stroke 2
+   188 label __label29
+-    * op add __tmp80 x 16
+-    * set x __tmp80
++  189 op add x x 16
+   190 op mul __tmp81 power e
+   191 op equal __tmp82 __tmp81 0
+   192 jump __label32 equal __tmp82 false
+ 
+   225 label __label33
+   226 op greaterThan __tmp91 boost EXPECTED_BOOST
+   227 jump __label40 equal __tmp91 false
+-    * op max __tmp93 192 red
+-    * set red __tmp93
+-    * op max __tmp94 192 green
+-    * set green __tmp94
+-    * op max __tmp95 192 blue
+-    * set blue __tmp95
++  228 op max red 192 red
++  229 op max green 192 green
++  230 op max blue 192 blue
+   231 set boost EXPECTED_BOOST
+   232 jump __label41 always
+   233 label __label40
+   234 label __label41
+   235 op mul __tmp96 BAR_LENGTH boost
+-    * op idiv __tmp97 __tmp96 EXPECTED_BOOST
+-    * set length __tmp97
++  236 op idiv length __tmp96 EXPECTED_BOOST
+   237 draw color red green blue 128
+   238 op mul __tmp98 minimum length
+   239 op idiv __tmp99 __tmp98 20
+   240 draw rect x y __tmp99 14
+   241 draw color red green blue 255
+   242 draw lineRect x y length 14
+-    * op add __tmp100 index 1
+-    * set index __tmp100
++  243 op add index index 1
+   244 jump __label15 always
+   245 label __label14
+   246 label __label15
+   247 label __label12
+-    * op add __tmp101 n 1
+-    * set n __tmp101
++  248 op add n n 1
+   249 jump __label11 always
+   250 label __label13
+   251 drawflush display1
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-15 instructions):
+ 
+     3 op div EXPECTED_FLOW __tmp0 75
+     4 op mul __tmp2 EXPECTED_FLOW 3600
+     5 op floor EXPECTED_FLOW_STR __tmp2
+-    * op notEqual __tmp4 bank1 null
+-    * jump __label0 equal __tmp4 false
++    6 jump __label0 equal bank1 null
+     7 set BAR_LENGTH 53
+     8 set BAR_SPACE 74
+     9 jump __label1 always
+ 
+    17 control enabled switch1 0
+    18 label __label2
+    19 sensor __tmp6 switch1 @enabled
+-    * op equal __tmp7 __tmp6 0
+-    * jump __label4 equal __tmp7 false
++   20 jump __label4 notEqual __tmp6 0
+    21 print "Surge Alloy Factory Monitor"
+-    * op notEqual __tmp8 bank1 null
+-    * jump __label5 equal __tmp8 false
+-    * op equal __tmp10 FROM_INDEX 0
+-    * jump __label7 equal __tmp10 false
++   22 jump __label5 equal bank1 null
++   23 jump __label7 notEqual FROM_INDEX 0
+    24 read rate bank1 511
+-    * op notEqual __tmp13 lastRate rate
+-    * jump __label9 equal __tmp13 false
++   25 jump __label9 equal lastRate rate
+    26 draw clear 0 0 80
+    27 set lastRate rate
+    28 draw color 0 0 80 255
+ 
+    72 set index FROM_INDEX
+    73 set n 0
+    74 label __label11
+-    * op lessThan __tmp26 n @links
+-    * jump __label13 equal __tmp26 false
++   75 jump __label13 greaterThanEq n @links
+    76 getlink smelter n
+    77 sensor __tmp28 smelter @type
+-    * op equal __tmp29 __tmp28 @surge-smelter
+-    * jump __label14 equal __tmp29 false
++   78 jump __label14 notEqual __tmp28 @surge-smelter
+    79 set minimum 21
+    80 sensor t smelter @titanium
+    81 sensor c smelter @copper
+ 
+    85 sensor e smelter @enabled
+    86 sensor power smelter @totalPower
+    87 sensor boost smelter @timescale
+-    * op lessThan __tmp39 l minimum
+-    * jump __label16 equal __tmp39 false
++   88 jump __label16 greaterThanEq l minimum
+    89 set minimum l
+    90 set icon @lead
+    91 jump __label17 always
+    92 label __label16
+    93 label __label17
+-    * op lessThan __tmp41 s minimum
+-    * jump __label18 equal __tmp41 false
++   94 jump __label18 greaterThanEq s minimum
+    95 set minimum s
+    96 set icon @silicon
+    97 jump __label19 always
+    98 label __label18
+    99 label __label19
+-    * op lessThan __tmp43 c minimum
+-    * jump __label20 equal __tmp43 false
++  100 jump __label20 greaterThanEq c minimum
+   101 set minimum c
+   102 set icon @copper
+   103 jump __label21 always
+   104 label __label20
+   105 label __label21
+-    * op lessThan __tmp45 t minimum
+-    * jump __label22 equal __tmp45 false
++  106 jump __label22 greaterThanEq t minimum
+   107 set minimum t
+   108 set icon @titanium
+   109 jump __label23 always
+ 
+   138 label __label27
+   139 draw color 255 255 255 255
+   140 jump __label28 equal e false
+-    * op greaterThan __tmp65 power 0
+-    * jump __label30 equal __tmp65 false
++  141 jump __label30 lessThanEq power 0
+   142 op add __tmp67 x 7
+   143 op add __tmp68 y 7
+   144 draw image __tmp67 __tmp68 icon 16 0
+ 
+   176 label __label29
+   177 op add x x 16
+   178 op mul __tmp81 power e
+-    * op equal __tmp82 __tmp81 0
+-    * jump __label32 equal __tmp82 false
++  179 jump __label32 notEqual __tmp81 0
+   180 set red 255
+   181 set green 0
+   182 set blue 0
+ 
+   199 set __tmp88 255
+   200 label __label37
+   201 set red __tmp88
+-    * op greaterThan __tmp89 minimum 7
+-    * jump __label38 equal __tmp89 false
++  202 jump __label38 lessThanEq minimum 7
+   203 set __tmp90 255
+   204 jump __label39 always
+   205 label __label38
+ 
+   209 set blue 0
+   210 label __label35
+   211 label __label33
+-    * op greaterThan __tmp91 boost EXPECTED_BOOST
+-    * jump __label40 equal __tmp91 false
++  212 jump __label40 lessThanEq boost EXPECTED_BOOST
+   213 op max red 192 red
+   214 op max green 192 green
+   215 op max blue 192 blue
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-10 instructions):
+ 
+    55 draw color 0 0 80 255
+    56 draw rect 0 0 156 176
+    57 label __label10
+-    * jump __label8 always
+    58 label __label7
+    59 label __label8
+    60 print "\nNominal production: "
+ 
+    63 print "\nActual production: "
+    64 print flow_str
+    65 print "/min"
+-    * jump __label6 always
+    66 label __label5
+    67 label __label6
+    68 set start @time
+ 
+    86 jump __label16 greaterThanEq l minimum
+    87 set minimum l
+    88 set icon @lead
+-    * jump __label17 always
+    89 label __label16
+    90 label __label17
+    91 jump __label18 greaterThanEq s minimum
+    92 set minimum s
+    93 set icon @silicon
+-    * jump __label19 always
+    94 label __label18
+    95 label __label19
+    96 jump __label20 greaterThanEq c minimum
+    97 set minimum c
+    98 set icon @copper
+-    * jump __label21 always
+    99 label __label20
+   100 label __label21
+   101 jump __label22 greaterThanEq t minimum
+   102 set minimum t
+   103 set icon @titanium
+-    * jump __label23 always
+   104 label __label22
+   105 label __label23
+   106 op greaterThan __tmp47 a 5
+ 
+   109 op land showa __tmp47 __tmp49
+   110 jump __label24 equal showa false
+   111 set icon @surge-alloy
+-    * jump __label25 always
+   112 label __label24
+   113 label __label25
+   114 op mod column index 2
+ 
+   126 op land __tmp62 __tmp60 __tmp61
+   127 jump __label26 equal __tmp62 false
+   128 set icon @surge-smelter
+-    * jump __label27 always
+   129 label __label26
+   130 label __label27
+   131 draw color 255 255 255 255
+ 
+   206 op max green 192 green
+   207 op max blue 192 blue
+   208 set boost EXPECTED_BOOST
+-    * jump __label41 always
+   209 label __label40
+   210 label __label41
+   211 op mul __tmp96 BAR_LENGTH boost
+ 
+   217 draw color red green blue 255
+   218 draw lineRect x y length 14
+   219 op add index index 1
+-    * jump __label15 always
+   220 label __label14
+   221 label __label15
+   222 label __label12
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+     1 set EXPECTED_BOOST 1.5
+     2 op mul __tmp0 EXPECTED_BOOST 16
+     3 op div EXPECTED_FLOW __tmp0 75
+-    * op mul __tmp2 EXPECTED_FLOW 3600
+-    * op floor EXPECTED_FLOW_STR __tmp2
++    4 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
+     5 jump __label0 equal bank1 null
+     6 set BAR_LENGTH 53
+     7 set BAR_SPACE 74
+ 
+    47 op sub pos2 pos 7
+    48 draw color 255 255 16 255
+    49 draw triangle 156 pos1 164 pos 156 pos2
+-    * op mul __tmp23 3600 rate
+-    * op floor flow_str __tmp23
++   50 op idiv flow_str rate 0.0002777777777777778
+    51 jump __label10 always
+    52 label __label9
+    53 draw color 0 0 80 255
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set FROM_INDEX 0
+     1 set EXPECTED_BOOST 1.5
+     2 op mul __tmp0 EXPECTED_BOOST 16
+-    * op div EXPECTED_FLOW __tmp0 75
++    3 op div EXPECTED_FLOW EXPECTED_BOOST 4.6875
+     4 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
+     5 jump __label0 equal bank1 null
+     6 set BAR_LENGTH 53
+ 
+    11 set BAR_SPACE 88
+    12 label __label1
+    13 set lastRate null
+-    * set icon lastRate
+-    * set flow_str icon
++   14 set icon null
++   15 set flow_str lastRate
+    16 control enabled switch1 0
+    17 label __label2
+    18 sensor __tmp6 switch1 @enabled
+ 
+    81 sensor e smelter @enabled
+    82 sensor power smelter @totalPower
+    83 sensor boost smelter @timescale
+-    * jump __label16 greaterThanEq l minimum
++   84 jump __label16 greaterThanEq l 21
+    85 set minimum l
+    86 set icon @lead
+    87 label __label16
+ 
+   164 draw lineRect xm1 ym1 16 16
+   165 draw stroke 2
+   166 label __label29
+-    * op add x x 16
++  167 op add x __tmp54 21
+   168 op mul __tmp81 power e
+   169 jump __label32 notEqual __tmp81 0
+   170 set red 255
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+     0 set FROM_INDEX 0
+     1 set EXPECTED_BOOST 1.5
+-    * op mul __tmp0 EXPECTED_BOOST 16
+     2 op div EXPECTED_FLOW EXPECTED_BOOST 4.6875
+     3 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
+     4 jump __label0 equal bank1 null
+ 
+    11 label __label1
+    12 set lastRate null
+    13 set icon null
+-    * set flow_str lastRate
++   14 set flow_str null
+    15 control enabled switch1 0
+    16 label __label2
+    17 sensor __tmp6 switch1 @enabled
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    68 set n 0
+    69 label __label11
+    70 jump __label13 greaterThanEq n @links
++   71 label __label42
+    72 getlink smelter n
+    73 sensor __tmp28 smelter @type
+    74 jump __label14 notEqual __tmp28 @surge-smelter
+ 
+   219 label __label15
+   220 label __label12
+   221 op add n n 1
+-    * jump __label11 always
++  222 jump __label42 lessThan n @links
+   223 label __label13
+   224 drawflush display1
+   225 op sub __tmp102 @time start
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+   179 set minimum a
+   180 jump __label35 always
+   181 label __label34
++  182 set red 255
+   183 op greaterThan __tmp85 minimum 14
+   184 op greaterThanEq __tmp86 boost EXPECTED_BOOST
+   185 op land __tmp87 __tmp85 __tmp86
+-    * jump __label36 equal __tmp87 false
+-    * set __tmp88 0
++  186 jump __label37 equal __tmp87 false
++  187 set red 0
+   188 jump __label37 always
+-    * label __label36
+-    * set __tmp88 255
+   189 label __label37
+-    * set red __tmp88
+-    * jump __label38 lessThanEq minimum 7
+-    * set __tmp90 255
++  190 set green 0
++  191 jump __label39 lessThanEq minimum 7
++  192 set green 255
+   193 jump __label39 always
+-    * label __label38
+-    * set __tmp90 0
+   194 label __label39
+-    * set green __tmp90
+   195 set blue 0
+   196 label __label35
+   197 label __label33
+
+Modifications by Loop Optimization: replicate condition at line 26 (+1 instructions):
+ 
+    16 label __label2
+    17 sensor __tmp6 switch1 @enabled
+    18 jump __label4 notEqual __tmp6 0
++   19 label __label43
+    20 print "Surge Alloy Factory Monitor"
+    21 jump __label5 equal bank1 null
+    22 jump __label7 notEqual FROM_INDEX 0
+ 
+   226 print " ms"
+   227 printflush message1
+   228 label __label3
+-    * jump __label2 always
++  229 sensor __tmp6 switch1 @enabled
++  230 jump __label43 equal __tmp6 0
+   231 label __label4
+   232 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    68 set index FROM_INDEX
+    69 set n 0
+    70 label __label11
+-    * jump __label13 greaterThanEq n @links
++   71 jump __label13 greaterThanEq 0 @links
+    72 label __label42
+    73 getlink smelter n
+    74 sensor __tmp28 smelter @type
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
+ 
+   186 op land __tmp87 __tmp85 __tmp86
+   187 jump __label37 equal __tmp87 false
+   188 set red 0
+-    * jump __label37 always
+   189 label __label37
+   190 set green 0
+   191 jump __label39 lessThanEq minimum 7
+   192 set green 255
+-    * jump __label39 always
+   193 label __label39
+   194 set blue 0
+   195 label __label35
+
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+   133 op add __tmp67 x 7
+   134 op add __tmp68 y 7
+   135 draw image __tmp67 __tmp68 icon 16 0
+-    * jump __label31 always
++  136 jump __label29 always
+   137 label __label30
+   138 op add x12 x 12
+   139 op add y3 y 3
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   227 sensor __tmp6 switch1 @enabled
+   228 jump __label43 equal __tmp6 0
+   229 label __label4
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
+ 
+    57 label __label8
+    58 print "\nNominal production: "
+    59 print EXPECTED_FLOW_STR
+-    * print "/min"
+-    * print "\nActual production: "
++   60 print "/min\nActual production: "
+    61 print flow_str
+    62 print "/min"
+    63 label __label5
+
 Final code before resolving virtual instructions:
 
 set FROM_INDEX 0

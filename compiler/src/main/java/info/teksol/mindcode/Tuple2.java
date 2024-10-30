@@ -1,20 +1,20 @@
 package info.teksol.mindcode;
 
-public record Tuple2<T1, T2>(T1 _1, T2 _2) {
+public record Tuple2<E1, E2>(E1 e1, E2 e2) {
 
-    public T1 getT1() {
-        return _1;
+    public E1 e1() {
+        return e1;
     }
 
-    public T2 getT2() {
-        return _2;
+    public E2 e2() {
+        return e2;
     }
 
-    public static <T1, T2> Tuple2<T1, T2> of(T1 _1, T2 _2) {
-        return new Tuple2<>(_1, _2);
+    public static <E1, E2> Tuple2<E1, E2> of(E1 e1, E2 e2) {
+        return new Tuple2<>(e1, e2);
     }
 
-    public static <T> Tuple2<T, T> ofSame(T _1, T _2) {
-        return new Tuple2<>(_1, _2);
+    public static <E> Tuple2<E, E> ofSame(E e1, E e2) {
+        return new Tuple2<>(e1, e2);
     }
 }

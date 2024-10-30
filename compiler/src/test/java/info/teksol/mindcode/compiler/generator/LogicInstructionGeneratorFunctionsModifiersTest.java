@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 // This class tests generation of user-defined function and function calls
-// with respect to using input/output modifiers
+// with respect to using input/output and vararg modifiers
 @Order(99)
-public class LogicInstructionGeneratorFunctionsInOutTest extends AbstractGeneratorTest {
+public class LogicInstructionGeneratorFunctionsModifiersTest extends AbstractGeneratorTest {
 
     @Test
     void acceptsAllSupportedModifiersInFunctionDeclaration() {

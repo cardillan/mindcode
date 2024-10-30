@@ -6,10 +6,10 @@ Mindcode allows you to call existing functions or create new ones. Functions are
 
 There are several kinds of parameters a function can have:
 
-1. _Input parameters_: serve to pass an argument to the function by the caller.
-2. _Output parameters_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output argument are specified, they need to correspond to a global, main or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized - they're initialized by the function call.  
-3. _Input/output parameters_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
-4. _Keyword parameters_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example the `uradar` functions requires one of the following keywords for each of its first three arguments: `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without any escaping or double quotes. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values causes an error.
+1. _Input parameter_: serve to pass an argument to the function by the caller.
+2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output argument are specified, they need to correspond to a global, main or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized - they're initialized by the function call.  
+3. _Input/output parameter_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
+4. _Keyword parameter_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example the `uradar` functions requires one of the following keywords for each of its first three arguments: `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without any escaping or double quotes. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values causes an error.
 
 Examples of function definitions and function calls:
 
@@ -28,7 +28,7 @@ void bar()
 end;
 
 y = 10;
-foo(20, out x, out y);    // Obtaining return values from b and c
+foo(20, out x, out y);    // Passing y as an input value for c, and obtaining return values from b and c
 foo(20, , in y * 2);      // Not obtaining the value of b and c, but passing y * 2 as an input value for c   
 bar();                    // Calling a function with no arguments
 ```
@@ -128,6 +128,16 @@ total = max(i, j, k, l);
 
 Unlike the Mindustry `op min`/`op max` operations, the `min()` and `max()` functions may return `null` if all of their arguments are `null` as well. Otherwise, `null` is converted to zero as is usual in Mindustry Logic. 
 
+## The `message()` function
+
+The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`,  which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (this is for backwards compatibility with earlier Mindustry versions).
+
+Mindcode therefore allows to pass in the `@wait` built-in value as an argument to this function, even though the parameter is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
+
+## The `print()` function
+
+The print function, which corresponds to the `print` instruction, is described in more detail in the section related to the [text output functions](#text-output).  
+
 ## The `sync()` function
 
 A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#global-variables) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function becomes volatile - Mindcode assumes the value of the variable may change by an external operation.
@@ -154,12 +164,6 @@ print __tmp2
 ```
 
 As can be seen, the code actually does compute the difference between the value of the variable from two different points in time.
-
-## The `message()` function
-
-The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success` which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (this is for backwards compatibility with earlier Mindustry versions).
-
-Mindcode therefore allows to pass in the `@wait` built-in value as an argument to this function, even though the parameters is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
 
 # Built-in functions
 
@@ -479,6 +483,101 @@ Mindcode detects the presence of recursive functions and only requires the stack
 A significant limitation is imposed on recursive functions: parameters and local variables may end up being stored on the stack.
 As the stack itself is stored in a memory bank or memory cell, any non-numeric value of these variables will get lost.
 For more information, see discussion of [stack](SYNTAX-1-VARIABLES.markdown#stack) in the **Variables** section.
+
+## Vararg functions
+
+Vararg functions are also called "variable arity" functions. These functions can take a variable number of arguments.
+
+In Mindcode, only functions declared `inline` may use vararg parameter. The vararg parameter must be always the last one, and is declared by appending `...` after the parameter name. The vararg argument may be used in a list iteration loop within the function, or may be passed to another function.
+
+```
+inline void foo(values...)
+    for i in values do
+        println(i);
+    end;
+    println("The sum is: ", sum(values));
+end;
+
+inline def sum(values...)
+    sum = 0;
+    for i in values do
+        sum += i;
+    end;
+    sum;
+end;
+
+foo(1, 2, 3);
+```
+
+The vararg parameter may be passed to a standard function as well. For example
+
+```
+inline void foo(arg...)
+    bar(arg);
+end;
+
+void bar(a, b, out c)
+    c = a + b;
+end;
+
+foo(1, 2, out result);      // No error, places the sum into result
+foo(1, 2);                  // Also no error, the third argument to bar is optional
+foo(1);                     // Error - bar needs at least two arguments
+foo(1, 2, 3);               // Error - bar needs an out argument at the third position
+```
+
+> [!NOTE]
+> The errors produced when passing the vararg parameter to another function are reported at the call of the inner function, not at the call of the vararg function, and may therefore be a bit misleading. Use with caution. 
+
+## Function overloading
+
+Mindcode supports function overloading. Several functions can have the same name, provided they differ in the number of arguments they take. For example:
+
+```
+void foo(x)
+    println("This is foo(x)");
+end;
+
+void foo(x, y)
+    println("This is foo(x, y)");
+end;
+
+foo(1);     // Calls foo(x)
+foo(1, 1);  // Calls foo(y) 
+```
+
+Functions are primarily distinguished by the number of parameters. Declaring two functions with the same name and the same number of parameters results in an error. Please note that a function with output parameters, as well as a vararg function, takes variable number of arguments and therefore may clash with a function having a different number of parameters:
+
+* `void foo(x, y)`: called with two arguments
+* `foo(x, y, out z)`: may be also called with two arguments when `z` is omitted
+* `void foo(x, y, out z, args...)`: may be also called with two arguments when `z` is omitted and no additional arguments given
+
+Mindcode will report all clashes of function declarations as errors, even if there aren't any ambiguous function calls.
+
+A user defined function may have the same name as a Mindustry Logic function. User defined functions override Mindustry Logic functions of the same name. When a function call matches the user defined function, the user defined function will be called instead of Mindustry Logic function:
+
+```
+def ulocate(ore, oreType)
+    print("Calling user-defined function");
+end;
+
+found = ulocate(ore, @copper);                  // Calls the user-defined function
+found = ulocate(ore, @copper, out x, out y);    // Calls the Mindustry Logic function
+```
+
+If, however, the ulocate function was defined with output variables as well, both calls would call the user-defined function:
+
+```
+def ulocate(ore, oreType, out x, out y)
+    print("Calling user-defined function");
+    x = y = 0;
+end;
+
+found = ulocate(ore, @copper);                  // Calls the user-defined function
+found = ulocate(ore, @copper, out x, out y);    // Also calls the user-defined function
+```
+
+It is not possible to call a Mindustry Logic function if a matching user-defined function exists.
 
 ---
 

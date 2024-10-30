@@ -13,6 +13,411 @@
 Pass 1: speed optimization selection (cost limit 906):
   * Loop Optimization: replicate condition at line 43            cost     1, benefit       25.0, efficiency       25.0 (-4 instructions)
 
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+    22 print "\nFound: "
+    23 print block
+    24 sensor __tmp9 block @type
+-    * set __ast0 __tmp9
+-    * jump __label8 equal __ast0 @message
++   25 jump __label8 equal __tmp9 @message
+    26 jump __label7 always
+    27 label __label8
+    28 set MESSAGE block
+    29 set __tmp10 MESSAGE
+    30 jump __label6 always
+    31 label __label7
+-    * jump __label10 equal __ast0 @switch
++   32 jump __label10 equal __tmp9 @switch
+    33 jump __label9 always
+    34 label __label10
+    35 set SWITCH block
+    36 set __tmp10 SWITCH
+    37 jump __label6 always
+    38 label __label9
+-    * jump __label12 equal __ast0 @liquid-tank
++   39 jump __label12 equal __tmp9 @liquid-tank
+    40 jump __label11 always
+    41 label __label12
+    42 set TANK_CRYO TANK_WATER
+ 
+    44 set __tmp10 TANK_WATER
+    45 jump __label6 always
+    46 label __label11
+-    * jump __label14 equal __ast0 @logic-display
++   47 jump __label14 equal __tmp9 @logic-display
+    48 jump __label13 always
+    49 label __label14
+    50 set DISPLAY block
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructions):
+ 
+    26 jump __label7 always
+    27 label __label8
+    28 set MESSAGE block
+-    * set __tmp10 MESSAGE
+    29 jump __label6 always
+    30 label __label7
+    31 jump __label10 equal __tmp9 @switch
+    32 jump __label9 always
+    33 label __label10
+    34 set SWITCH block
+-    * set __tmp10 SWITCH
+    35 jump __label6 always
+    36 label __label9
+    37 jump __label12 equal __tmp9 @liquid-tank
+ 
+    39 label __label12
+    40 set TANK_CRYO TANK_WATER
+    41 set TANK_WATER block
+-    * set __tmp10 TANK_WATER
+    42 jump __label6 always
+    43 label __label11
+    44 jump __label14 equal __tmp9 @logic-display
+    45 jump __label13 always
+    46 label __label14
+    47 set DISPLAY block
+-    * set __tmp10 DISPLAY
+    48 jump __label6 always
+    49 label __label13
+-    * set __tmp10 null
+    50 label __label6
+    51 label __label4
+    52 jump __label3 always
+ 
+    62 op equal __tmp11 TANK_CRYO null
+    63 jump __label15 equal __tmp11 false
+    64 print "\nNo cryofluid or water tank."
+-    * set __tmp12 "\nNo cryofluid or water tank."
+    65 jump __label16 always
+    66 label __label15
+-    * set __tmp12 null
+    67 label __label16
+    68 op equal __tmp13 DISPLAY null
+    69 jump __label17 equal __tmp13 false
+    70 print "\nNo display."
+-    * set __tmp14 "\nNo display."
+    71 jump __label18 always
+    72 label __label17
+-    * set __tmp14 null
+    73 label __label18
+    74 printflush MESSAGE
+    75 label __label1
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-8 instructions):
+ 
+    10 op or __tmp4 __tmp2 __tmp3
+    11 jump __label2 equal __tmp4 false
+    12 print "Water and Cryofluid Level Meter"
+-    * set __tmp5 @links
+-    * set n __tmp5
++   13 set n @links
+    14 label __label3
+    15 op greaterThan __tmp6 n 0
+    16 jump __label5 equal __tmp6 false
+-    * op sub __tmp7 n 1
+-    * set n __tmp7
+-    * getlink __tmp8 n
+-    * set block __tmp8
++   17 op sub n n 1
++   18 getlink block n
+    19 print "\nFound: "
+    20 print block
+    21 sensor __tmp9 block @type
+ 
+    78 sensor __tmp15 SWITCH @enabled
+    79 op equal __tmp16 __tmp15 0
+    80 jump __label21 equal __tmp16 false
+-    * set __tmp17 @time
+-    * set start_time __tmp17
++   81 set start_time @time
+    82 draw clear 0 0 0
+    83 draw color 255 255 255 255
+    84 draw image 20 10 @water 16 0
+ 
+    86 draw color 90 100 170 255
+    87 draw rect 14 20 12 55
+    88 draw color 255 255 16 255
+-    * sensor __tmp18 TANK_WATER @totalLiquids
+-    * set water __tmp18
++   89 sensor water TANK_WATER @totalLiquids
+    90 op mul __tmp19 water MULTIPLIER
+-    * op add __tmp20 __tmp19 20
+-    * set pos __tmp20
++   91 op add pos __tmp19 20
+    92 op add __tmp21 pos 7
+    93 op sub __tmp22 pos 7
+    94 draw triangle 6 __tmp21 14 pos 6 __tmp22
+ 
+    98 draw color 110 200 230 255
+    99 draw rect 54 20 12 55
+   100 draw color 255 255 16 255
+-    * sensor __tmp25 TANK_CRYO @totalLiquids
+-    * set cryo __tmp25
++  101 sensor cryo TANK_CRYO @totalLiquids
+   102 op mul __tmp26 cryo MULTIPLIER
+-    * op add __tmp27 __tmp26 20
+-    * set pos __tmp27
++  103 op add pos __tmp26 20
+   104 op add __tmp28 pos 7
+   105 op sub __tmp29 pos 7
+   106 draw triangle 46 __tmp28 54 pos 46 __tmp29
+
+Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-4 instructions):
+ 
+    19 print "\nFound: "
+    20 print block
+    21 sensor __tmp9 block @type
+-    * jump __label8 equal __tmp9 @message
+-    * jump __label7 always
++   22 jump __label7 notEqual __tmp9 @message
+    23 label __label8
+    24 set MESSAGE block
+    25 jump __label6 always
+    26 label __label7
+-    * jump __label10 equal __tmp9 @switch
+-    * jump __label9 always
++   27 jump __label9 notEqual __tmp9 @switch
+    28 label __label10
+    29 set SWITCH block
+    30 jump __label6 always
+    31 label __label9
+-    * jump __label12 equal __tmp9 @liquid-tank
+-    * jump __label11 always
++   32 jump __label11 notEqual __tmp9 @liquid-tank
+    33 label __label12
+    34 set TANK_CRYO TANK_WATER
+    35 set TANK_WATER block
+    36 jump __label6 always
+    37 label __label11
+-    * jump __label14 equal __tmp9 @logic-display
+-    * jump __label13 always
++   38 jump __label13 notEqual __tmp9 @logic-display
+    39 label __label14
+    40 set DISPLAY block
+    41 jump __label6 always
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+    12 print "Water and Cryofluid Level Meter"
+    13 set n @links
+    14 label __label3
+-    * op greaterThan __tmp6 n 0
+-    * jump __label5 equal __tmp6 false
++   15 jump __label5 lessThanEq n 0
+    16 op sub n n 1
+    17 getlink block n
+    18 print "\nFound: "
+ 
+    51 print TANK_WATER
+    52 print "\nCryo tank: "
+    53 print TANK_CRYO
+-    * op equal __tmp11 TANK_CRYO null
+-    * jump __label15 equal __tmp11 false
++   54 jump __label15 notEqual TANK_CRYO null
+    55 print "\nNo cryofluid or water tank."
+    56 jump __label16 always
+    57 label __label15
+    58 label __label16
+-    * op equal __tmp13 DISPLAY null
+-    * jump __label17 equal __tmp13 false
++   59 jump __label17 notEqual DISPLAY null
+    60 print "\nNo display."
+    61 jump __label18 always
+    62 label __label17
+ 
+    69 control enabled SWITCH 0
+    70 label __label19
+    71 sensor __tmp15 SWITCH @enabled
+-    * op equal __tmp16 __tmp15 0
+-    * jump __label21 equal __tmp16 false
++   72 jump __label21 notEqual __tmp15 0
+    73 set start_time @time
+    74 draw clear 0 0 0
+    75 draw color 255 255 255 255
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-3 instructions):
+ 
+    37 jump __label13 notEqual __tmp9 @logic-display
+    38 label __label14
+    39 set DISPLAY block
+-    * jump __label6 always
+    40 label __label13
+    41 label __label6
+    42 label __label4
+ 
+    52 print TANK_CRYO
+    53 jump __label15 notEqual TANK_CRYO null
+    54 print "\nNo cryofluid or water tank."
+-    * jump __label16 always
+    55 label __label15
+    56 label __label16
+    57 jump __label17 notEqual DISPLAY null
+    58 print "\nNo display."
+-    * jump __label18 always
+    59 label __label17
+    60 label __label18
+    61 printflush MESSAGE
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    76 draw rect 14 20 12 55
+    77 draw color 255 255 16 255
+    78 sensor water TANK_WATER @totalLiquids
+-    * op mul __tmp19 water MULTIPLIER
++   79 op mul __tmp19 water 0.03666666666666667
+    80 op add pos __tmp19 20
+    81 op add __tmp21 pos 7
+    82 op sub __tmp22 pos 7
+    83 draw triangle 6 __tmp21 14 pos 6 __tmp22
+    84 op add __tmp23 pos 7
+    85 op sub __tmp24 pos 7
+-    * draw triangle 34 __tmp23 26 pos 34 __tmp24
++   86 draw triangle 34 __tmp21 26 pos 34 __tmp22
+    87 draw color 110 200 230 255
+    88 draw rect 54 20 12 55
+    89 draw color 255 255 16 255
+    90 sensor cryo TANK_CRYO @totalLiquids
+-    * op mul __tmp26 cryo MULTIPLIER
++   91 op mul __tmp26 cryo 0.03666666666666667
+    92 op add pos __tmp26 20
+    93 op add __tmp28 pos 7
+    94 op sub __tmp29 pos 7
+    95 draw triangle 46 __tmp28 54 pos 46 __tmp29
+    96 op add __tmp30 pos 7
+    97 op sub __tmp31 pos 7
+-    * draw triangle 74 __tmp30 66 pos 74 __tmp31
++   98 draw triangle 74 __tmp28 66 pos 74 __tmp29
+    99 drawflush DISPLAY
+   100 print "Water and Cryofluid Level Meter"
+   101 op mul __tmp32 100 water
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+ 
+    62 label __label1
+    63 jump __label0 always
+    64 label __label2
+-    * set MULTIPLIER 0.03666666666666667
+    65 control enabled SWITCH 0
+    66 label __label19
+    67 sensor __tmp15 SWITCH @enabled
+ 
+    80 op add __tmp21 pos 7
+    81 op sub __tmp22 pos 7
+    82 draw triangle 6 __tmp21 14 pos 6 __tmp22
+-    * op add __tmp23 pos 7
+-    * op sub __tmp24 pos 7
+    83 draw triangle 34 __tmp21 26 pos 34 __tmp22
+    84 draw color 110 200 230 255
+    85 draw rect 54 20 12 55
+ 
+    90 op add __tmp28 pos 7
+    91 op sub __tmp29 pos 7
+    92 draw triangle 46 __tmp28 54 pos 46 __tmp29
+-    * op add __tmp30 pos 7
+-    * op sub __tmp31 pos 7
+    93 draw triangle 74 __tmp28 66 pos 74 __tmp29
+    94 drawflush DISPLAY
+    95 print "Water and Cryofluid Level Meter"
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (+4 instructions):
+ 
+     8 op or __tmp2 __tmp0 __tmp1
+     9 op equal __tmp3 DISPLAY null
+    10 op or __tmp4 __tmp2 __tmp3
+-    * jump __label2 equal __tmp4 false
++   11 label __label22
+    12 print "Water and Cryofluid Level Meter"
+    13 set n @links
+    14 label __label3
+    15 jump __label5 lessThanEq n 0
++   16 label __label23
+    17 op sub n n 1
+    18 getlink block n
+    19 print "\nFound: "
+ 
+    41 label __label13
+    42 label __label6
+    43 label __label4
+-    * jump __label3 always
++   44 jump __label23 greaterThan n 0
+    45 label __label5
+    46 print "\nMessage: "
+    47 print MESSAGE
+ 
+    61 label __label18
+    62 printflush MESSAGE
+    63 label __label1
+-    * jump __label0 always
++   64 op equal __tmp0 TANK_CRYO null
++   65 op equal __tmp1 TANK_WATER null
++   66 op or __tmp2 __tmp0 __tmp1
++   67 op equal __tmp3 DISPLAY null
++   68 op or __tmp4 __tmp2 __tmp3
++   69 jump __label22 notEqual __tmp4 false
+    70 label __label2
+    71 control enabled SWITCH 0
+    72 label __label19
+
+Modifications by Loop Optimization: replicate condition at line 43 (+1 instructions):
+ 
+    72 label __label19
+    73 sensor __tmp15 SWITCH @enabled
+    74 jump __label21 notEqual __tmp15 0
++   75 label __label24
+    76 set start_time @time
+    77 draw clear 0 0 0
+    78 draw color 255 255 255 255
+ 
+   113 print __tmp36
+   114 printflush MESSAGE
+   115 label __label20
+-    * jump __label19 always
++  116 sensor __tmp15 SWITCH @enabled
++  117 jump __label24 equal __tmp15 0
+   118 label __label21
+   119 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     3 set SWITCH null
+     4 set DISPLAY null
+     5 label __label0
+-    * op equal __tmp0 TANK_CRYO null
+-    * op equal __tmp1 TANK_WATER null
+-    * op or __tmp2 __tmp0 __tmp1
+-    * op equal __tmp3 DISPLAY null
+-    * op or __tmp4 __tmp2 __tmp3
++    6 op equal __tmp0 null null
++    7 op equal __tmp1 null null
++    8 op or __tmp2 true true
++    9 op equal __tmp3 null null
++   10 op or __tmp4 true true
+    11 label __label22
+    12 print "Water and Cryofluid Level Meter"
+    13 set n @links
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+ 
+     3 set SWITCH null
+     4 set DISPLAY null
+     5 label __label0
+-    * op equal __tmp0 null null
+-    * op equal __tmp1 null null
+-    * op or __tmp2 true true
+-    * op equal __tmp3 null null
+-    * op or __tmp4 true true
+     6 label __label22
+     7 print "Water and Cryofluid Level Meter"
+     8 set n @links
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   111 sensor __tmp15 SWITCH @enabled
+   112 jump __label24 equal __tmp15 0
+   113 label __label21
+-    * end
+
 Final code before resolving virtual instructions:
 
 set TANK_WATER null

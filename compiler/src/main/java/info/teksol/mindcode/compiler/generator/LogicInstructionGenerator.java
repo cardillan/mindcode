@@ -8,7 +8,6 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
-import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
@@ -102,7 +101,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     public GeneratorOutput generate(Seq program) {
-        callGraph = CallGraphCreator.createFunctionGraph(program, messageConsumer, instructionProcessor);
+        callGraph = CallGraphCreator.createCallGraph(program, messageConsumer, instructionProcessor);
         currentFunction = callGraph.getMain();
         verifyStackAllocation();
         setSubcontextType(AstSubcontextType.BODY, 1.0);
@@ -485,31 +484,43 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private List<LogicFunctionArgument> processArguments(List<FunctionArgument> declaredArguments) {
         // Do not track temporary variables created by evaluating function parameter expressions.
         // They'll be used solely to pass values to actual function parameters and won't be used subsequently
-        return nodeContext.encapsulate(() -> declaredArguments.stream().map(this::process).toList());
+        return nodeContext.encapsulate(() -> declaredArguments.stream()
+                .<LogicFunctionArgument>mapMulti((argument, consumer) -> {
+                    if (argument.getExpression() instanceof VarRef var && var.getName().equals(varArgName)) {
+                        varArgValues.forEach(consumer);
+                    } else {
+                        consumer.accept(process(argument));
+                    }
+                }).toList());
     }
 
     private LogicValue handleFunctionCall(FunctionCall call) {
-        String functionName = call.getFunctionName();
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
 
-        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-        LogicValue output = functionMapper.handleFunction(call, instructions::add, functionName, arguments);
+        final String functionName = call.getFunctionName();
+        final Optional<LogicFunction> function = callGraph.getFunction(call);
+        LogicValue output = null;
+
+        // Try built-in function if there's not an exact match
+        if (function.isEmpty() || !function.get().exactMatch(call)) {
+            setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            output = functionMapper.handleFunction(call, instructions::add, functionName, arguments);
+        }
+
+        if (output == null && function.isPresent()) {
+            output = handleUserFunctionCall(function.get(), call, arguments);
+        }
 
         if (output == null) {
-            if (callGraph.containsFunction(functionName)) {
-                output = handleUserFunctionCall(call, arguments);
-            } else {
-                error(call, "Undefined function '%s'", functionName);
-                output = NULL;
-            }
+            error(call, "Cannot resolve function '%s'.", functionName);
         }
 
         clearSubcontextType();
-        return output;
+        return output == null ? NULL : output;
     }
 
-    private void validateUserFunctionArguments(LogicFunction function, List<FunctionArgument> arguments) {
+    private void validateUserFunctionArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {
         if (function.getDeclaredParameters().size() < arguments.size()) {
             // This needs to be checked beforehand
             throw new MindcodeInternalError("Argument size mismatch.");
@@ -517,32 +528,31 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         for (int i = 0; i < arguments.size(); i++) {
             FunctionParameter parameter = function.getDeclaredParameter(i);
-            FunctionArgument argument = arguments.get(i);
+            LogicFunctionArgument argument = arguments.get(i);
 
-            if (!parameter.isOptional() && !argument.hasExpression()) {
-                error(argument, "Parameter '%s' isn't optional, a value must be provided.", parameter.getName());
+            if (parameter.isCompulsory() && !argument.hasValue()) {
+                error(argument.pos(), "Parameter '%s' isn't optional, a value must be provided.", parameter.getName());
             }
 
             if (parameter.isOutput()) {
                 if (parameter.isInput()) {
                     // In or out modifier needs to be used
                     if (!argument.hasModifier()) {
-                        warn(argument, "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used, assuming 'in out'.", parameter.getName());
+                        error(argument.pos(), "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used.", parameter.getName());
                     }
                 } else {
                     // Output parameter: the 'in' modifier is forbidden
-                    if (argument.hasInModifier()) {
-                        error(argument, "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.getName());
-                    } else if (argument.hasExpression() && !argument.hasOutModifier()) {
+                    if (argument.inModifier()) {
+                        error(argument.pos(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.getName());
+                    } else if (argument.hasValue() && !argument.outModifier()) {
                         // Out modifier needs to be used
-                        warn(argument, "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'. " +
-                                "Omitting 'out' modifiers is deprecated.", parameter.getName());
+                        error(argument.pos(), "Parameter '%s' is output and 'out' modifier was not used.", parameter.getName());
                     }
                 }
             } else {
                 // Input parameter: the 'out' modifier is forbidden
-                if (argument.hasOutModifier()) {
-                    error(argument, "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.getName());
+                if (argument.outModifier()) {
+                    error(argument.pos(), "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.getName());
                 }
             }
         }
@@ -566,25 +576,24 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return result;
     }
 
-    private LogicValue handleUserFunctionCall(FunctionCall call, List<LogicFunctionArgument> callArguments) {
+    private LogicValue handleUserFunctionCall(LogicFunction function, FunctionCall call, List<LogicFunctionArgument> callArguments) {
         String functionName = call.getFunctionName();
-        LogicFunction function = callGraph.getFunction(functionName);
 
         List<LogicFunctionArgument> arguments = addOptionalArguments(function, callArguments);
         if (function.isVarArgs()) {
-            if (arguments.size() < function.getParameterCount() - 1) {
+            if (arguments.size() < function.getStandardParameterCount()) {
                 error(call, "Function '%s': wrong number of arguments (expected at least %d, found %d).",
-                        functionName, function.getParameterCount() - 1, arguments.size());
+                        functionName, function.getStandardParameterCount(), arguments.size());
                 return function.isVoid() ? VOID : NULL;
             }
-            validateUserFunctionArguments(function, call.getArguments().subList(0, function.getParameterCount() - 1));
+            validateUserFunctionArguments(function, arguments.subList(0, function.getStandardParameterCount()));
         } else {
-            if (arguments.size() != function.getParameterCount()) {
+            if (arguments.size() != function.getParameterCount().max()) {
                 error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
-                        functionName, function.getParameterCount(), arguments.size());
+                        functionName, function.getParameterCount().max(), arguments.size());
                 return function.isVoid() ? VOID : NULL;
             }
-            validateUserFunctionArguments(function, call.getArguments());
+            validateUserFunctionArguments(function, arguments);
         }
 
         // Switching to new function prefix -- save/restore old one
@@ -614,7 +623,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final String previousVarArgName = varArgName;
         final List<LogicFunctionArgument> previousVarArgValues = varArgValues;
         final boolean isVoid = function.isVoid();
-        final int standardArgumentCount = function.getParameterCount() - (function.isVarArgs() ? 1 : 0);
+        final int standardArgumentCount = function.getStandardParameterCount();
 
         setSubcontextType(AstSubcontextType.INLINE_CALL, 1.0);
         currentFunction = function;
@@ -719,7 +728,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
-        boolean recursiveCall = currentFunction.isRecursiveCall(function.getName());
+        boolean recursiveCall = currentFunction.isRecursiveCall(function);
         List<LogicVariable> variables = recursiveCall ? getStackVariables(function, arguments) : List.of();
 
         if (recursiveCall) {
@@ -825,7 +834,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private LogicValue passReturnValue(LogicFunction function) {
         if (function.isVoid()) {
             return VOID;
-        } else if (currentFunction.isRepeatedCall(function.getName())) {
+        } else if (currentFunction.isRepeatedCall(function)) {
             // Copy default return variable to new temp, for the function is called multiple times,
             // and we must not overwrite result of previous call(s) with this one
             //
@@ -1147,7 +1156,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final List<LogicVariable> outValues = new ArrayList<>();
 
         if (values.size() % iterators.size() != 0) {
-            error(node, "The number of values in the list must be an integer multiple of the number of iterators.");
+            error(node, "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).",
+                    values.size(), iterators.size());
             return VOID;
         }
 

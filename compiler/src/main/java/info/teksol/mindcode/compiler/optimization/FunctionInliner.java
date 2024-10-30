@@ -4,7 +4,7 @@ import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.CallGraph;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.GotoInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -61,7 +61,7 @@ class FunctionInliner extends BaseOptimizer {
             // The function is declared, but not used.
             return null;
         }
-        CallGraph.LogicFunction function = context.function();
+        LogicFunction function = context.function();
         if (function.isRecursive() || function.isInline() || function.isNoinline()) {
             return null;
         }
@@ -70,7 +70,8 @@ class FunctionInliner extends BaseOptimizer {
                 c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
         // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
-        double benefit = calls.stream().mapToDouble(AstContext::totalWeight).sum() * (3d + function.getParameterCount() / 2d);
+        // TODO: compute benefits for input and output parameters separately
+        double benefit = calls.stream().mapToDouble(AstContext::totalWeight).sum() * (3d + function.getStandardParameterCount() / 2d);
 
         // Cost: body size minus one (return) times number of calls minus body size (we'll remove the original)
         LogicList body = stripReturnInstructions(contextInstructions(context));
@@ -104,7 +105,7 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunction(AstContext context, int costLimit) {
-        CallGraph.LogicFunction function = context.function();
+        LogicFunction function = context.function();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
@@ -160,13 +161,13 @@ class FunctionInliner extends BaseOptimizer {
             // Shouldn't happen here
             return null;
         }
-        CallGraph.LogicFunction function = call.function();
+        LogicFunction function = call.function();
         if (function.isRecursive() || function.isInline() || function.isNoinline()) {
             return null;
         }
 
         // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
-        double benefit = call.totalWeight() * (3d + function.getParameterCount() / 2d);
+        double benefit = call.totalWeight() * (3d + function.getStandardParameterCount() / 2d);
 
         // Need to find the function body
         LogicList body = stripReturnInstructions(
@@ -185,7 +186,7 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
-        CallGraph.LogicFunction function = call.function();
+        LogicFunction function = call.function();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
