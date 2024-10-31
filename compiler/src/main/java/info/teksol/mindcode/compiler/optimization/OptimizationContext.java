@@ -1668,10 +1668,14 @@ class OptimizationContext {
         }
 
         public LogicList duplicateToContext(AstContext newContext) {
-            return duplicateToContext(newContext, ix -> true);
+            return transformToContext(newContext, ix -> ix);
         }
 
         public LogicList duplicateToContext(AstContext newContext, Predicate<LogicInstruction> matcher) {
+            return transformToContext(newContext, ix -> matcher.test(ix) ? ix : null);
+        }
+
+        public LogicList transformToContext(AstContext newContext, Function<LogicInstruction, LogicInstruction> transformer) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }
@@ -1681,7 +1685,8 @@ class OptimizationContext {
 
             Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext);
             return new LogicList(contextMap.get(astContext), stream()
-                    .filter(matcher)
+                    .map(transformer)
+                    .filter(Objects::nonNull)
                     .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
                     .toList());
         }

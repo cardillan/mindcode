@@ -8,7 +8,10 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-* Fixes arguments sometimes incorrectly passed to recursive calls ([#169](https://github.com/cardillan/mindcode/issues/169)).
+* Fixed arguments sometimes incorrectly passed to recursive calls ([#169](https://github.com/cardillan/mindcode/issues/169)).
+* Fixed output function parameters incorrectly accepting expressions as arguments ([#170](https://github.com/cardillan/mindcode/issues/170)).
+* Fixed optimization not recognizing all interactions with Mindustry World  ([#172](https://github.com/cardillan/mindcode/issues/172)).
+* Fixed wrong optimization of List iteration loops with output iterator variables ([#173](https://github.com/cardillan/mindcode/issues/173)).
 
 ### Added
 
@@ -22,10 +25,12 @@ All notable changes to this project will be documented in this file.
 * Added [output and input/output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters) of user defined functions.
 * Added [vararg (variable arity) functions](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions).
 * Added [function overloading](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
+* Added the possibility to specify custom instructions not known to Mindcode through the [`mlog()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions).
 
 ### Changed
 
-* Changed Mindustry Logic functions to require the `out` modifier when passing in an output argument, in the same way as the user-defined functions. For backward compatibility, omitting the `out` modifier from a Mindustry Logic function calls generates only a warning, not an error.  
+* Changed Mindustry Logic functions to require the `out` modifier when passing in an output argument, in the same way as the user-defined functions. For backward compatibility, omitting the `out` modifier from a Mindustry Logic function calls generates only a warning, not an error.
+* Changed Loop Unrolling to replace output iterator variables with the variable assigned to them.   
 
 ## 2.4.0 - 2024-10-23
 

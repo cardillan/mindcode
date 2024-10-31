@@ -86,6 +86,8 @@ public interface InstructionProcessor extends MessageEmitter {
      */
     <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg);
 
+    <T extends LogicInstruction> T replaceAllArgs(T instruction, Map<LogicArgument, LogicArgument> argumentMap);
+
     <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs);
 
     /**

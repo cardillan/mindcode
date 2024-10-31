@@ -363,6 +363,13 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
     }
 
     @Override
+    public <T extends LogicInstruction> T replaceAllArgs(T instruction, Map<LogicArgument, LogicArgument> argumentMap) {
+        Function<LogicArgument, LogicArgument> mapper = arg -> argumentMap.getOrDefault(arg, arg);
+        return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
+
+    }
+
+    @Override
     public <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap) {
         Function<LogicArgument, LogicArgument> mapper =
                 arg -> arg instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : arg;

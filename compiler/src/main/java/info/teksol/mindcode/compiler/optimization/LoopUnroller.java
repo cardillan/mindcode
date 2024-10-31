@@ -11,9 +11,8 @@ import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
@@ -324,6 +323,7 @@ class LoopUnroller extends BaseOptimizer {
         // Set address
         // Jump to body (except the last iteration)
         // Go to next iteration
+        // TODO: needs better calculation to take account of multiple iterators/output iterators
         int savings = (3 * loops - 1);
 
         int size = body.stream().mapToInt(LogicInstruction::getRealSize).sum();
@@ -358,6 +358,40 @@ class LoopUnroller extends BaseOptimizer {
         return OptimizationResult.REALIZED;
     }
 
+    private Set<LogicVariable> getOutputIteratorVariables(AstContext loop) {
+        Set<LogicVariable> leadingVariables = new HashSet<>();
+        Set<LogicVariable> trailingVariables = new HashSet<>();
+        contextStream(loop)
+                .filter(ix -> ix.getAstContext().matches(ITR_LEADING, ITR_TRAILING))
+                .forEach(ix -> {
+                    if (ix.getAstContext().matches(ITR_LEADING)) {
+                        ix.outputArgumentsStream().filter(LogicArgument::isUserVariable).forEach(e -> leadingVariables.add((LogicVariable) e));
+                    } else {
+                        ix.inputArgumentsStream().filter(LogicArgument::isUserVariable).forEach(e -> trailingVariables.add((LogicVariable) e));
+                    }
+                });
+        trailingVariables.retainAll(leadingVariables);
+        return trailingVariables;
+    }
+
+    private Function<LogicInstruction, LogicInstruction> createInstructionTransformer(LogicList leadingCtx, Set<LogicVariable> outputIterators) {
+        if (outputIterators.isEmpty()) {
+            // No transformation if there aren't output iterators
+            return ix -> ix;
+        } else {
+            // Locate instructions setting up loop iterators and create the loop iterator to the actual variable map
+            Map<LogicArgument, LogicArgument> map = leadingCtx.stream()
+                    .filter(SetInstruction.class::isInstance)
+                    .map(SetInstruction.class::cast)
+                    .filter(ix -> outputIterators.contains(ix.getResult()))
+                    .filter(ix -> ix.getValue().isUserWritable())
+                    .collect(Collectors.toMap(SetInstruction::getResult, SetInstruction::getValue));
+
+            // Replaces all output loop iterator variables with the variable assigned to them
+            return ix -> instructionProcessor.replaceAllArgs(ix, map);
+        }
+    }
+
     private OptimizationResult unrollListLoop(AstContext loop, int costLimit) {
         List<AstContext> leading = loop.findSubcontexts(ITR_LEADING);
         List<AstContext> trailing = loop.findSubcontexts(ITR_TRAILING);
@@ -365,6 +399,7 @@ class LoopUnroller extends BaseOptimizer {
             throw new MindcodeInternalError("Invalid loop structure.");
         }
 
+        Set<LogicVariable> outputIterators = getOutputIteratorVariables(loop);
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
         // Create a new, non-loop context for unrolled instructions
@@ -372,16 +407,20 @@ class LoopUnroller extends BaseOptimizer {
         int insertionPoint = firstInstructionIndex(loop);
         for (int i = 0; i < leading.size(); i++) {
             LogicList leadingCtx = removeLeadingIteratorInstructions(contextInstructions(leading.get(i)));
-            insertInstructions(insertionPoint, leadingCtx.duplicateToContext(newContext));
+            Function<LogicInstruction, LogicInstruction> transformer = createInstructionTransformer(leadingCtx, outputIterators);
+
+            insertInstructions(insertionPoint, leadingCtx.transformToContext(newContext, transformer));
             insertionPoint += leadingCtx.size();
 
-            insertInstructions(insertionPoint, body.duplicateToContext(newContext));
+            insertInstructions(insertionPoint, body.transformToContext(newContext, transformer));
             insertionPoint += body.size();
 
             LogicList trailingCtx = contextInstructions(trailing.get(i));
             if (!trailingCtx.isEmpty()) {
-                LogicList copy = trailingCtx.duplicateToContext(newContext,
-                        ix -> !(ix instanceof LabelInstruction) && !(ix instanceof GotoLabelInstruction) && !(ix instanceof GotoInstruction));
+                // Skips labels/gotolabels, transforms the rest
+                LogicList copy = trailingCtx.transformToContext(newContext,
+                        ix -> ix instanceof LabelInstruction || ix instanceof GotoLabelInstruction || ix instanceof GotoInstruction
+                                ? null : transformer.apply(ix));
                 insertInstructions(insertionPoint, copy);
                 insertionPoint += copy.size();
             }

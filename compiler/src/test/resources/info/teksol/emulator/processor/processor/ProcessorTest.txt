@@ -18,7 +18,7 @@ printsItemIds:                                     2              3        3    
 printsNumbersStringsObjects:                       1              9        9     100.0%   DAF470E4A2DCE492   4E444C2D72E01D86
 ranged-for-loop-break-continue.mnd:                1             21       56     100.0%   CF3F4A3DA0459039   B24C43C335BBAF68
 recursive-function-condition.mnd:                  2             16       21     100.0%   D6CF009A758305C2   5864DBE2693BE92C
-supportsSortVariables:                             0             19       19     100.0%   830E25010AB82CC2   35001D7F37187D7F
+supportsSortVariables:                             0             16       16     100.0%   830E25010AB82CC2   67748BD6413B8D10
 switched-case-expression.mnd:                      2             60     2129     100.0%   94678BDD55B51CFE   EA1F15B02F0F6E1F
 testSuiteRecognizesUnexpectedWarnings:             1              1        1     100.0%   002B7E6873B65270   4A3761D7B5564792
 while-loop.mnd:                                    2             16       54     100.0%   23EFAC66EEB50211   4047D876902E8CE9
