@@ -22,6 +22,8 @@ class SingleStepJumpEliminator extends BaseOptimizer {
             LogicLabel targetLabel = null;
             boolean isJumpToNext = false;
             boolean wasGotoLabel = false;
+            boolean wasLabel = false;
+            boolean wasJump = false;
 
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
@@ -29,20 +31,29 @@ class SingleStepJumpEliminator extends BaseOptimizer {
                 if (ix instanceof LabeledInstruction il) {
                     isJumpToNext |= il.getLabel().equals(targetLabel);
                     wasGotoLabel |= il instanceof GotoLabelInstruction;
+                    if (wasGotoLabel || optimizationContext.isActive(il.getLabel())) wasLabel = true;
                 } else if (!(ix instanceof NoOpInstruction)) {
                     if (isJumpToNext) {
-                        removableJumps.add(lastJump);
+                        if (wasJump) {
+                            removableJumps.add(lastJump);
+                        }
                         isJumpToNext = false;
-                    } else if (ix instanceof JumpInstruction jump && jump.equals(lastJump) && !wasGotoLabel) {
+                    } else if (wasJump && ix instanceof JumpInstruction jump && jump.equals(lastJump) && !wasGotoLabel) {
                         removableJumps.add(lastJump);
                     }
 
                     if (ix instanceof JumpInstruction jump) {
-                        lastJump = jump;
-                        targetLabel = jump.getTarget();
+                        if (experimental() && !wasLabel && jump.equals(lastJump)) {
+                            removableJumps.add(jump);
+                        } else {
+                            lastJump = jump;
+                            targetLabel = jump.getTarget();
+                        }
+                        wasJump = true;
+                        wasLabel = false;
                     } else {
-                        lastJump = null;
                         targetLabel = null;
+                        wasJump = false;
                     }
 
                     wasGotoLabel = false;

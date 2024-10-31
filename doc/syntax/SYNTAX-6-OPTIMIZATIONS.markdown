@@ -104,7 +104,8 @@ This optimizer simplifies the following sequences of jump that are a result of c
 
 * A conditional or unconditional jump targeting the next instruction (such a jump is obviously unnecessary).
 * A conditional or unconditional jump identical to the next instruction (unconditional jumps would be also eliminated by Unreachable Code Elimination, but that isn't true for conditional jumps).
-* On the `advanced` level, the `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving one instruction.  
+* On the `advanced` level, the `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving one instruction.
+* On the `experimental` level, a jump is removed if there is an identical jump preceding it and there are no other jumps or labels between them. Such sequences appear in unrolled loops containing a single `if` statement.  
 
 ## Expression Optimization
 
@@ -837,7 +838,7 @@ Loop unrolling is a [speed optimization](#optimization-for-speed), and as such i
 on the [Data Flow optimization](#data-flow-optimization) and isn't functional when Data Flow Optimization is not 
 active.
 
-### The principle of loop unrolling
+### The fundamentals of loop unrolling
 
 Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler 
 with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction 
@@ -898,7 +899,7 @@ end;
 print(sum);
 ```
 
-which compiles to (drumroll, please):
+which compiles to:
 
 ```
 print 5050
@@ -1113,12 +1114,16 @@ print "11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"
 end
 ```
 
+### List iteration loop with modifications
+
+For [list iteration loops with modifications](SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list), the output loop control variable is completely replaced with the variable assigned to it for the iteration. This helps in some more complicated cases where the Data FLow Optimization alone wasn't able to do the substitution on its own.
+
 ## Function Inlining
 
 Function Inlining is a [speed optimization](#optimization-for-speed), and as such is only active when the
 [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) is set to `speed` or `auto`.
 
-### The principles of function inlining
+### The fundamentals of function inlining
 
 Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few
 instructions: storing the return address, jumping to the function body and jumping back at the original address. 

@@ -16,7 +16,7 @@ public interface LogicArgument {
     /** @return type of the argument */
     ArgumentType getType();
 
-    /** @return the mlog representation fo the variable */
+    /** @return the mlog representation of the variable */
     String toMlog();
 
     static boolean isEqual(LogicArgument a1, LogicArgument a2) {
@@ -26,7 +26,7 @@ public interface LogicArgument {
                 && a1.toMlog().equals(a2.toMlog());
     }
 
-    /** @return true if this is a literal. */
+    /** @return true if this is a literal. Built-ins aren't considered literals. */
     default boolean isLiteral() {
         return false;
     }
@@ -81,7 +81,7 @@ public interface LogicArgument {
         return false;
     }
 
-    /** @return true if this is variable is volatile */
+    /** @return true if this is argument is volatile -- its value may change independently of the program */
     default boolean isVolatile() {
         return false;
     }

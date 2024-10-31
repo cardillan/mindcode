@@ -3,21 +3,24 @@ package info.teksol.mindcode.logic;
 import info.teksol.mindcode.MindcodeInternalError;
 
 public enum Condition implements LogicArgument {
-    EQUAL("equal", "=="),
-    NOT_EQUAL("notEqual", "not"),
-    LESS_THAN("lessThan", "<"),
-    LESS_THAN_EQ("lessThanEq", "<="),
-    GREATER_THAN("greaterThan", ">"),
-    GREATER_THAN_EQ("greaterThanEq", ">="),
-    STRICT_EQUAL("strictEqual", "==="),
-    ALWAYS("always", "always");
+    EQUAL           ( "equal",         "==",     true),
+    NOT_EQUAL       ( "notEqual",      "not",    false),
+    LESS_THAN       ( "lessThan",      "<",      false),
+    LESS_THAN_EQ    ( "lessThanEq",    "<=",     true),
+    GREATER_THAN    ( "greaterThan",   ">",      false),
+    GREATER_THAN_EQ ( "greaterThanEq", ">=",     true),
+    STRICT_EQUAL    ( "strictEqual",   "===",    true),
+    ALWAYS          ( "always",        "always", false);
+
 
     private final String mlog;
     private final String mindcode;
+    private final boolean equality;
 
-    Condition(String mlog, String mindcode) {
+    Condition(String mlog, String mindcode, boolean equality) {
         this.mindcode = mindcode;
         this.mlog = mlog;
+        this.equality = equality;
     }
 
     @Override
@@ -36,6 +39,10 @@ public enum Condition implements LogicArgument {
 
     public boolean hasInverse() {
         return this != ALWAYS && this != STRICT_EQUAL;
+    }
+
+    public boolean isEquality() {
+        return equality;
     }
 
     public Condition inverse() {
