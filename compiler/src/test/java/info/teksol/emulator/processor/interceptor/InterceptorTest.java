@@ -56,4 +56,22 @@ public class InterceptorTest extends AbstractInterceptorTest {
                 "1"
         );
     }
+
+    @Test
+    void optimizesListIterationLoopWithOutputs() {
+        testCode("""
+                        #set optimization = experimental;
+                        param count = 2;
+                        a = b = 2;
+                        for i in 1 .. count do
+                            for out j in a, b do
+                                if i < count then j = 1; end;
+                            end;
+                        end;
+                        
+                        print(a + b);
+                        """,
+                "2"
+        );
+    }
 }

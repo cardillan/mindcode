@@ -363,7 +363,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 AstContext context = leadingContexts.get(index++);
                 iterator.setNextIndex(firstInstructionIndex(context));
                 VariableStates copy = variableStates.copy("leading loop iterator");
-                variableStates = processContext(localContext, context, variableStates, true);
+                variableStates = processContext(localContext, context, variableStates, modifyInstructions);
                 variableStates = variableStates.merge(copy, true, "leading loop iterator");
             }
 
@@ -455,23 +455,10 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
 
             if (!trailingContexts.isEmpty()) {
-                if (false) {
-                    // First context is without merging to the previous one
-                    iterator.setNextIndex(firstInstructionIndex(trailingContexts.get(0)));
-                    variableStates = processContext(localContext, trailingContexts.get(0), variableStates, modifyInstructions);
-                    for (int index = 1; index < trailingContexts.size(); index++) {
-                        AstContext context = trailingContexts.get(index);
-                        iterator.setNextIndex(firstInstructionIndex(context));
-                        VariableStates copy = variableStates.copy("trailing loop iterator");
-                        variableStates = processContext(localContext, context, variableStates, true);
-                        variableStates = variableStates.merge(copy, true, "trailing loop iterator");
-                    }
-                } else {
-                    // First context is without merging to the previous one
-                    for (AstContext context : trailingContexts) {
-                        iterator.setNextIndex(firstInstructionIndex(context));
-                        variableStates = processContext(localContext, context, variableStates, modifyInstructions);
-                    }
+                // First context is without merging to the previous one
+                for (AstContext context : trailingContexts) {
+                    iterator.setNextIndex(firstInstructionIndex(context));
+                    variableStates = processContext(localContext, context, variableStates, modifyInstructions);
                 }
             }
 
