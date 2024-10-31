@@ -35,7 +35,7 @@ public class SchematicsIO {
             List<BlockType> typeList = schematic.blocks().stream().map(Block::blockType).distinct().toList();
             stream.writeByte(typeList.size());
             for (BlockType t : typeList) {
-                stream.writeUTF(t.name());
+                stream.writeUTF(t.contentName());
             }
 
             stream.writeInt(schematic.blocks().size());
@@ -125,7 +125,7 @@ public class SchematicsIO {
                 Position position = Position.unpack(stream.readInt());
                 Configuration raw = ver == 0 ? mapConfig(blockType, stream.readInt(), position) : readObject(stream);
                 Direction direction = Direction.convert(stream.readByte());
-                if (!"air".equals(blockType.name())) {
+                if (!"@air".equals(blockType.name())) {
                     Configuration config = convert(blockType, position, raw);
                     blocks.add(new Block(index++, List.of(), blockType, position, direction, config));
                 }
@@ -174,12 +174,12 @@ public class SchematicsIO {
 
     private static UnitPlan selectUnitPlan(IntConfiguration integer, BlockType blockType) {
         if (ConfigurationType.fromBlockType(blockType) != ConfigurationType.UNIT_PLAN) {
-            throw new SchematicsInternalError("Block '%s' does not support UNIT_PLAN configuration.", blockType.varName());
+            throw new SchematicsInternalError("Block '%s' does not support UNIT_PLAN configuration.", blockType.name());
         }
 
         int index = integer.value();
         if (index < 0 || index >= blockType.unitPlans().size()) {
-            throw new SchematicsInternalError("Invalid plan index %d for unit factory %s.", index, blockType.varName());
+            throw new SchematicsInternalError("Invalid plan index %d for unit factory %s.", index, blockType.name());
         }
 
         return new UnitPlan(blockType.unitPlans().get(index));

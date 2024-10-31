@@ -25,7 +25,7 @@ end;
 shipped = BANK[IND_SHIPPED];
 MULTIPLIER = BANK[IND_MULTIPLIER];
 SESSION_KEY = BANK[IND_SESSION_KEY];
-item = SORTER.config;
+item = SORTER.@config;
 //last_total = VAULT.sensor(item) + shipped;
 last_total = shipped;
 
@@ -35,7 +35,7 @@ MILLIS = 0;
 level = 0;
 wait = 0;
 
-while (SORTER.dead === 0) and (VAULT.dead === 0) and (SESSION_KEY === BANK[IND_SESSION_KEY]) do
+while (SORTER.@dead === 0) and (VAULT.@dead === 0) and (SESSION_KEY === BANK[IND_SESSION_KEY]) do
     start = @time;
     wait = wait + DELAY;
     if start > wait then
@@ -44,7 +44,7 @@ while (SORTER.dead === 0) and (VAULT.dead === 0) and (SESSION_KEY === BANK[IND_S
     end;
 
     shipped = BANK[IND_SHIPPED];
-    item = SORTER.config;
+    item = SORTER.@config;
 //    level = VAULT.sensor(item);
     total = level + shipped;
 

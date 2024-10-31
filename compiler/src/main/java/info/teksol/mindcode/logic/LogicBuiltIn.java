@@ -7,16 +7,16 @@ import java.util.Set;
 
 public class LogicBuiltIn extends AbstractArgument implements LogicValue {
 
-    public static final LogicBuiltIn COUNTER = create("counter");
-    public static final LogicBuiltIn UNIT = create("unit");
+    public static final LogicBuiltIn COUNTER = create("@counter");
+    public static final LogicBuiltIn UNIT = create("@unit");
 
     private final String name;
 
     private LogicBuiltIn(String name) {
         super(ArgumentType.BUILT_IN);
         this.name = Objects.requireNonNull(name);
-        if (name.startsWith("@")) {
-            throw new MindcodeInternalError(String.format("Unexpected '@' at the beginning of property name '%s'", name));
+        if (!name.startsWith("@")) {
+            throw new MindcodeInternalError(String.format("No '@' at the beginning of property name '%s'", name));
         }
     }
 
@@ -32,7 +32,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     @Override
     public String format() {
         if (isConstant()) {
-            return name;
+            return name.substring(1);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -50,7 +50,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
 
     @Override
     public String toMlog() {
-        return "@" + name;
+        return name;
     }
 
     @Override
@@ -65,6 +65,6 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     }
 
     // @unit is volatile. It changes through the ubind instruction, but this is not known to the data flow optimizer.
-    private static final Set<String> VOLATILE_NAMES = Set.of("counter", "time", "tick", "second", "minute",
-            "waveNumber", "waveTime", "unit", "links");
+    private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second", "@minute",
+            "@waveNumber", "@waveTime", "@unit", "@links");
 }

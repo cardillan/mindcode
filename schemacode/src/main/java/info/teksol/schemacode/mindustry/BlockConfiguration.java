@@ -17,7 +17,7 @@ public final class BlockConfiguration implements UnitOrBlockConfiguration {
     }
 
     public String getName() {
-        return blockType.varName();
+        return blockType.name();
     }
 
     private static BlockConfiguration forBlockType(BlockType blockType) {

@@ -35,7 +35,7 @@ class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpElimi
                 """
                         while true do
                             print("In loop");
-                            if @unit.dead === 0 then
+                            if @unit.@dead === 0 then
                                 break;
                             end;
                         end;
@@ -59,7 +59,7 @@ class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpElimi
                         displayItem();
                         
                         void displayItem()
-                            amount = vault1.coal;
+                            amount = vault1.@coal;
                             if amount == 0 then return; end;
                             print(amount % 10);
                         end;

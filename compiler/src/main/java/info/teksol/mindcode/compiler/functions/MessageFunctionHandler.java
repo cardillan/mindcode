@@ -9,7 +9,7 @@ public class MessageFunctionHandler extends StandardFunctionHandler {
     }
 
     protected LogicValue requireOutModifier(NamedParameter parameter, LogicFunctionArgument argument) {
-        if (parameter.type().isOutput() && argument.value() instanceof LogicBuiltIn builtIn && "wait".equals(builtIn.getName())) {
+        if (parameter.type().isOutput() && argument.value() instanceof LogicBuiltIn builtIn && "@wait".equals(builtIn.getName())) {
             if (argument.inModifier()) {
                 error(argument.pos(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.name());
             }

@@ -17,7 +17,7 @@ public final class UnitCommandConfiguration implements Configuration {
     }
 
     public String getName() {
-        return unitCommand.varName();
+        return unitCommand.name();
     }
 
     private static UnitCommandConfiguration forUnitCommand(UnitCommand unitCommand) {

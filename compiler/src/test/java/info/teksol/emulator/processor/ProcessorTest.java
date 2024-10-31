@@ -61,7 +61,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     void printsItemIds() {
         testCode("""
                         param p = @coal;
-                        print(p.id);
+                        print(p.@id);
                         """,
                 "5"
         );
@@ -70,7 +70,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void printsNumbersStringsObjects() {
         testCode("""
-                        print("Hello", 10, 5.5, bank1, bank1.type, null, true, false);
+                        print("Hello", 10, 5.5, bank1, bank1.@type, null, true, false);
                         """,
                 "Hello", "10", "5.5", "bank", "memory-bank", "null", "1", "0"
         );

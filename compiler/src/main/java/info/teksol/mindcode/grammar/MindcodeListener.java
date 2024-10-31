@@ -650,6 +650,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#methodaccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodaccess(MindcodeParser.MethodaccessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#methodaccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodaccess(MindcodeParser.MethodaccessContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#propaccess}.
 	 * @param ctx the parse tree
 	 */
@@ -659,6 +669,30 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPropaccess(MindcodeParser.PropaccessContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code laccess_strict}
+	 * labeled alternative in {@link MindcodeParser#laccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterLaccess_strict(MindcodeParser.Laccess_strictContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code laccess_strict}
+	 * labeled alternative in {@link MindcodeParser#laccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitLaccess_strict(MindcodeParser.Laccess_strictContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code laccess_relaxed}
+	 * labeled alternative in {@link MindcodeParser#laccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterLaccess_relaxed(MindcodeParser.Laccess_relaxedContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code laccess_relaxed}
+	 * labeled alternative in {@link MindcodeParser#laccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitLaccess_relaxed(MindcodeParser.Laccess_relaxedContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#numeric_t}.
 	 * @param ctx the parse tree

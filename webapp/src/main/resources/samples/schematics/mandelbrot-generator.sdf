@@ -215,20 +215,20 @@ control = """
 
     memory[MAX_DEPTH] = packcolor(0, 0, 0, 1);
 
-    bookmark_x = message2.x;
-    bookmark_y = message2.y;
+    bookmark_x = message2.@x;
+    bookmark_y = message2.@y;
     bookmark = 1;
     bookmark_clr = -1;
     position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
 
-    palette_x = message3.x;
+    palette_x = message3.@x;
     PALETTE = 1;
     palette_clr = -1;
 
     // Skip first n blocks that are not on the bookmark/palette bar
     for first_link in 0 ... @links do
         switch = getlink(first_link);
-        if switch.y == bookmark_y then break; end;
+        if switch.@y == bookmark_y then break; end;
     end;
 
     checking = 999;
@@ -263,9 +263,9 @@ control = """
         handle_move(switch5,  0,  0, 2);    // zoom in
         handle_move(switch6,  0,  0, 0.5);  // zoom out
 
-        if switch7.enabled != JULIA then
+        if switch7.@enabled != JULIA then
             CHANGE = true;
-            JULIA = switch7.enabled;
+            JULIA = switch7.@enabled;
             if JULIA then
                 JULIA_X = X;
                 JULIA_Y = Y;
@@ -276,7 +276,7 @@ control = """
             text1 = text2 = "";
         end;
 
-        if switch8.enabled then
+        if switch8.@enabled then
             // Load bookmark
             X = memory[position];
             Y = memory[position + 1];
@@ -291,7 +291,7 @@ control = """
             CHANGE = true;
         end;
 
-        if switch9.enabled then
+        if switch9.@enabled then
             // Store bookmark
             memory[position] = X;
             memory[position + 1] = Y;
@@ -307,8 +307,8 @@ control = """
 
         for n in first_link ... @links do
             switch = getlink(n);
-            if switch.type == @switch and switch.y == bookmark_y then
-                button_x = switch.x;
+            if switch.@type == @switch and switch.@y == bookmark_y then
+                button_x = switch.@x;
                 if button_x >= palette_x then
                     index = button_x - palette_x;
                     if index == PALETTE then
@@ -316,7 +316,7 @@ control = """
                     elsif index == palette_clr then
                         switch.enabled = false;
                         palette_clr = -1;
-                    elsif switch.enabled then
+                    elsif switch.@enabled then
                         palette_clr = PALETTE;
                         PALETTE = index;
                         CHANGE = true;
@@ -328,7 +328,7 @@ control = """
                     elsif index == bookmark_clr then
                         switch.enabled = false;
                         bookmark_clr = -1;
-                    elsif switch.enabled then
+                    elsif switch.@enabled then
                         bookmark_clr = bookmark;
                         bookmark = index;
                         position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
@@ -410,7 +410,7 @@ control = """
     end;
 
     inline def handle_move(switch, x, y, z)
-        if switch.enabled then
+        if switch.@enabled then
             CHANGE = true;
             if x != 0 then
                 X = X + x * SHIFT / ZOOM;
@@ -467,7 +467,7 @@ compute = """
     while display == null || memory == null do
         for n in 0 ... @links do
             block = getlink(n);
-            case block.type
+            case block.@type
                 when @large-logic-display   then display = block;
                 when @memory-bank           then memory = block;
             end;
@@ -476,7 +476,7 @@ compute = """
 
     control = 0;
 
-    ID = @this.x + 10000 * @this.y;
+    ID = @this.@x + 10000 * @this.@y;
 
     PROC_ID = PROCESSORS;
     PROC_STATE = PROCESSORS + 1;

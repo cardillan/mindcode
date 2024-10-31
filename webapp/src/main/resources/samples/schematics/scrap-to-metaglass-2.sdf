@@ -57,19 +57,19 @@ message1:
 end
 
 program = """
-    liquid = floor(router1.totalLiquids);
+    liquid = floor(router1.@totalLiquids);
     if liquid < 12 then
         melter1.enabled = true;
     elsif liquid > 16 then
         melter1.enabled = false;
     end;
-    sand = kiln1.sand;
+    sand = kiln1.@sand;
     if sand < 6 then
         pulverizer1.enabled = true;
     elsif sand >= 10 then
         pulverizer1.enabled = false;
     end;
-    items = conveyor1.totalItems;
+    items = conveyor1.@totalItems;
     if items < 5 then
         separator1.enabled = true;
     elsif items > 8 then

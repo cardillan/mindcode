@@ -29,10 +29,10 @@ end;
 
 maximum = maximum * SMOOTH;
 
-while switch1.enabled == 0 do
+while switch1.@enabled == 0 do
     print("Item Rate Display");
     start = @time;
-    if COORD.dead == 0 then
+    if COORD.@dead == 0 then
         for n = 0; n < TOTAL; n += 1 do
             m = COORD[n];
             print($"\nCoord: [gold]$m[]");

@@ -4,4 +4,4 @@
 // This script then checks that the cryofluid level is at least on 25% of the reactor capacity.
 // If it isn't, the reactor is disabled, preventing a blow up.
 
-reactor1.enabled = reactor1.cryofluid >= 0.25 * reactor1.liquidCapacity;
+reactor1.enabled = reactor1.@cryofluid >= 0.25 * reactor1.@liquidCapacity;

@@ -30,7 +30,7 @@ clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly;
 icon = expected_flow_str = flow_str = lastRate = showa = null;
 
 switch1.enabled = 0;
-while switch1.enabled == 0 do
+while switch1.@enabled == 0 do
     start = @time;
     print("Silicon Factory Monitor");
 
@@ -44,15 +44,15 @@ while switch1.enabled == 0 do
     index = FROM_INDEX;
     for n = 0; n < @links; n = n + 1 do
         smelter = getlink(n);
-        if smelter.type == @silicon-crucible then
+        if smelter.@type == @silicon-crucible then
             minimum = CAPACITY1 + 1;
-            s = smelter.sand;
-            c = smelter.coal;
-            p = smelter.pyratite;
-            a = min(smelter.silicon, CAPACITY1);
-            e = smelter.enabled;
-            power = smelter.totalPower;
-            boost = smelter.timescale;
+            s = smelter.@sand;
+            c = smelter.@coal;
+            p = smelter.@pyratite;
+            a = min(smelter.@silicon, CAPACITY1);
+            e = smelter.@enabled;
+            power = smelter.@totalPower;
+            boost = smelter.@timescale;
             if s < minimum then minimum = s; icon = @sand; end;
             if c < minimum then minimum = c; icon = @coal; end;
             if p < minimum then minimum = p; icon = @pyratite; end;
@@ -133,15 +133,15 @@ while switch1.enabled == 0 do
     index = FROM_INDEX;
     for n = 0; n < @links; n = n + 1 do
         smelter = getlink(n);
-        if smelter.type == @pyratite-mixer then
+        if smelter.@type == @pyratite-mixer then
             minimum = CAPACITY2 + 1;
-            s = smelter.sand;
-            c = smelter.coal;
-            l = smelter.lead;
-            a = smelter.pyratite;
-            e = smelter.enabled;
-            power = smelter.totalPower;
-            boost = smelter.timescale;
+            s = smelter.@sand;
+            c = smelter.@coal;
+            l = smelter.@lead;
+            a = smelter.@pyratite;
+            e = smelter.@enabled;
+            power = smelter.@totalPower;
+            boost = smelter.@timescale;
             if s < minimum then minimum = s; icon = @sand; end;
             if c < minimum then minimum = c; icon = @coal; end;
             if l < minimum then minimum = l; icon = @lead; end;

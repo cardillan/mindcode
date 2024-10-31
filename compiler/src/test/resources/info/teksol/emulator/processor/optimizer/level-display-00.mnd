@@ -19,7 +19,7 @@ while MEMORY == null or DISPLAY == null do
         n = n - 1;
         block = getlink(n);
         print("\nFound: ", block);
-        case block.type
+        case block.@type
             when @large-logic-display then
                 DISPLAY = block;
             when @message then
@@ -53,7 +53,7 @@ B1 = MEMORY[M_B1];
 
 stroke(1);
 
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     start = @time;
     print("Item/Liquid/Energy Level Display");
 

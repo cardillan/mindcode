@@ -1130,4 +1130,29 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         """
         );
     }
+
+    @Test
+    void generatesMissingOutModifierWarning() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(1, 16, "Parameter 'type' is output and 'out' modifier was not used, assuming 'out'. Omitting 'out' modifiers is deprecated.")
+                        .add(1, 22, "Parameter 'floor' is output and 'out' modifier was not used, assuming 'out'. Omitting 'out' modifiers is deprecated."),
+                """
+                        getBlock(x, y, type, floor);
+                        """
+        );
+    }
+
+    @Test
+    void generatesKebabCaseFunctionNameWarning() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(1, 1, "Function 'foo-bar': kebab-case identifiers are deprecated."),
+                """
+                        def foo-bar()
+                            null;
+                        end;
+                        """
+        );
+    }
 }

@@ -10,7 +10,7 @@ while SOURCE_MEMORY == null do
         n = n - 1;
         block = getlink(n);
         print("\nFound: ", block);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
@@ -36,7 +36,7 @@ if TARGET_MEMORY == null then
 end;
 
 startIndex = 0;
-memSize = case TARGET_MEMORY.type
+memSize = case TARGET_MEMORY.@type
     when @memory-cell then 64;
     when @memory-bank  then 512;
     else 0;
@@ -54,7 +54,7 @@ curr = prev;
 index = max(startIndex, TARGET_MEMORY[startIndex]);
 nextTick = prevTick;
 
-while switch1.enabled == 0 do
+while switch1.@enabled == 0 do
     nextTick = nextTick + TICKS;
 
     if @tick > nextTick + TICKS then

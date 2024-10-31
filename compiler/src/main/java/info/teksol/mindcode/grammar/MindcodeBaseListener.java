@@ -677,6 +677,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMethodaccess(MindcodeParser.MethodaccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodaccess(MindcodeParser.MethodaccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPropaccess(MindcodeParser.PropaccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -684,6 +696,30 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPropaccess(MindcodeParser.PropaccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLaccess_strict(MindcodeParser.Laccess_strictContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLaccess_strict(MindcodeParser.Laccess_strictContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLaccess_relaxed(MindcodeParser.Laccess_relaxedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLaccess_relaxed(MindcodeParser.Laccess_relaxedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

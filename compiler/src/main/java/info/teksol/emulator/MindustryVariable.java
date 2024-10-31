@@ -208,7 +208,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     }
 
     public static String print(MindustryObject object) {
-        return object == null ? "null" : object.name();
+        return object == null ? "null" : object.format();
     }
 
     public static String print(double value) {

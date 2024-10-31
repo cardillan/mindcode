@@ -387,11 +387,31 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#methodaccess}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMethodaccess(MindcodeParser.MethodaccessContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#propaccess}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPropaccess(MindcodeParser.PropaccessContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code laccess_strict}
+	 * labeled alternative in {@link MindcodeParser#laccess}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLaccess_strict(MindcodeParser.Laccess_strictContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code laccess_relaxed}
+	 * labeled alternative in {@link MindcodeParser#laccess}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLaccess_relaxed(MindcodeParser.Laccess_relaxedContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#numeric_t}.
 	 * @param ctx the parse tree

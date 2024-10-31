@@ -12,7 +12,7 @@ do
         n = n - 1;
         block = getlink(n);
         println("Found: ", block);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @memory-bank, @memory-cell then
@@ -53,9 +53,9 @@ const LEFT1     = 7;
 const LEFT2     = LEFT1 + COLUMN;
 const STROKE    = 2;
 
-while CONTAINER.dead == 0 and DISPLAY.dead == 0 and LINKS == @links do
+while CONTAINER.@dead == 0 and DISPLAY.@dead == 0 and LINKS == @links do
     start = @time;
-    CAPACITY = CONTAINER.itemCapacity;
+    CAPACITY = CONTAINER.@itemCapacity;
     LIMIT = CAPACITY / 5;
     stroke(STROKE);
 

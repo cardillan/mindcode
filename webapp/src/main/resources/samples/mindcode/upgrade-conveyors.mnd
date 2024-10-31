@@ -54,10 +54,10 @@ newType = DOWNGRADE ? @conveyor : @titanium-conveyor;
 // It is possible to pause/stop the processing by attaching a switch and activating it
 // When the switch is active, the program renitializes and without attached memory,
 // the progress is lost.
-while !switch1.enabled do
+while !switch1.@enabled do
 
     // If we don't have an active unit, summon a new one
-    if @unit.dead !== 0 or @unit.controller != @this then
+    if @unit.@dead !== 0 or @unit.@controller != @this then
         findUnit();
     end;
 
@@ -105,7 +105,7 @@ def findUnit()
         if @unit == null then
             // There's no unit of the requested type
             print($"No unit of type $UNIT found.");
-        elsif @unit.controlled != 0 then
+        elsif @unit.@controlled != 0 then
             // This unit is controlled by another processor or the player
             print($"Looking for a free $UNIT...");
         else
@@ -130,7 +130,7 @@ def replace(x, y, oldType, newType)
     building = getBlock(x, y, out type);
 
     if type == oldType then
-        build(x, y, newType, building.rotation, 0);
+        build(x, y, newType, building.@rotation, 0);
         // If the processor is too fast, we need to wait
         // for the unit to finish building the block
         do

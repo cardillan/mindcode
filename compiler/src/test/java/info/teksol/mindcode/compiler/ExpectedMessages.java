@@ -19,33 +19,34 @@ import java.util.regex.Pattern;
  */
 public class ExpectedMessages implements Consumer<MindcodeMessage> {
     private final List<MatchCounter> matchers;
-    private final boolean throwOnError;
     private final List<String> messages = new ArrayList<>();
     private boolean accumulateErrors = false;
 
-    private ExpectedMessages(boolean throwOnError) {
-        this.throwOnError = throwOnError;
+    private ExpectedMessages() {
         matchers = new ArrayList<>();
     }
 
-    private ExpectedMessages(List<MatchCounter> matchers, boolean throwOnError) {
+    private ExpectedMessages(List<MatchCounter> matchers) {
         this.matchers = matchers;
-        this.throwOnError = throwOnError;
     }
 
     /**
      * @return an instance which doesn't accept any message and generates Assert.fail()
      */
     public static ExpectedMessages none() {
-        return new ExpectedMessages(List.of(), false);
+        return new ExpectedMessages(List.of());
     }
 
     /**
-     * @param throwOnError true to get an instance which throws errors instead of Assert.fail()
-     * @return an instance which doesn't accept any message.
+     * @return an instance which doesn't accept any message and generates Assert.fail()
      */
-    public static ExpectedMessages none(boolean throwOnError) {
-        return new ExpectedMessages(List.of(), throwOnError);
+    public static ExpectedMessages throwOnMessage() {
+        return new ExpectedMessages(List.of()) {
+            @Override
+            public void accept(MindcodeMessage msg) {
+                throw new UnexpectedMessageException("Unexpected message encountered: " + msg);
+            }
+        };
     }
 
     /**
@@ -55,18 +56,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @return an instance which fails on unexpected or missing messages
      */
     public static ExpectedMessages create() {
-        return new ExpectedMessages(false);
-    }
-
-    /**
-     * Creates a new, empty instance. Messages to be recognized need to be added to the instance
-     * using fluent interface.
-     *
-     * @param throwOnError true to get an instance which throws errors instead of Assert.fail()
-     * @return an instance which fails or throws exception on unexpected or missing messages
-     */
-    public static ExpectedMessages create(boolean throwOnError) {
-        return new ExpectedMessages(throwOnError);
+        return new ExpectedMessages();
     }
 
     /**
@@ -259,9 +249,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
     }
 
     private void fail(String errorMessage) {
-        if (throwOnError) {
-            throw new UnexpectedMessageException(errorMessage);
-        } else if (accumulateErrors) {
+        if (accumulateErrors) {
             messages.add(errorMessage);
         } else {
             Assert.fail(errorMessage);

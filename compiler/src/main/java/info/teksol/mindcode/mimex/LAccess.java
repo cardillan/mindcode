@@ -2,7 +2,6 @@ package info.teksol.mindcode.mimex;
 
 public record LAccess(
         String name,
-        String varName,
         boolean senseable,
         boolean controllable,
         boolean settable,

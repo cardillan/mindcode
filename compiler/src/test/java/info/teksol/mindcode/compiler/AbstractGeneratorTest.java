@@ -193,7 +193,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
 
     protected Seq generateAstTree(String code) {
         return AstNodeBuilder.generate(InputFile.createSourceFile(code),
-                ExpectedMessages.none(),
+                ExpectedMessages.throwOnMessage(),
                 parse(code));
     }
 
@@ -215,7 +215,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
 
     protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
         GeneratorOutput generatorOutput = generateInstructionsNoMsgValidation(compiler, code);
-        ExpectedMessages.none(true).validate(compiler.getErrorsAndWarnings());
+        ExpectedMessages.throwOnMessage().validate(compiler.getErrorsAndWarnings());
         return generatorOutput;
     }
 
@@ -226,7 +226,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     // Instruction creation
 
     protected final CompilerProfile profile = createCompilerProfile();
-    protected final InstructionProcessor ip = createInstructionProcessor(profile, ExpectedMessages.none(true));
+    protected final InstructionProcessor ip = createInstructionProcessor(profile, ExpectedMessages.throwOnMessage());
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
     protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
@@ -480,18 +480,18 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicVariable cell1     = LogicVariable.block("cell1");
     protected static final LogicVariable conveyor1 = LogicVariable.block("conveyor1");
     protected static final LogicVariable vault1    = LogicVariable.block("vault1");
-    protected static final LogicBuiltIn  coal      = LogicBuiltIn.create("coal");        
-    protected static final LogicBuiltIn  lead      = LogicBuiltIn.create("lead");        
-    protected static final LogicBuiltIn  firstItem = LogicBuiltIn.create("firstItem");   
-    protected static final LogicBuiltIn  enabled   = LogicBuiltIn.create("enabled");     
-    protected static final LogicBuiltIn  time      = LogicBuiltIn.create("time");        
-    protected static final LogicBuiltIn  unit      = LogicBuiltIn.create("unit");        
-    protected static final LogicBuiltIn  thiz      = LogicBuiltIn.create("this");
-    protected static final LogicBuiltIn  x         = LogicBuiltIn.create("x");
-    protected static final LogicBuiltIn  y         = LogicBuiltIn.create("y");
-    protected static final LogicBuiltIn  thisx     = LogicBuiltIn.create("thisx");
-    protected static final LogicBuiltIn  thisy     = LogicBuiltIn.create("thisy");
-    protected static final LogicBuiltIn  id        = LogicBuiltIn.create("id");
+    protected static final LogicBuiltIn  coal      = LogicBuiltIn.create("@coal");
+    protected static final LogicBuiltIn  lead      = LogicBuiltIn.create("@lead");
+    protected static final LogicBuiltIn  firstItem = LogicBuiltIn.create("@firstItem");
+    protected static final LogicBuiltIn  enabled   = LogicBuiltIn.create("@enabled");
+    protected static final LogicBuiltIn  time      = LogicBuiltIn.create("@time");
+    protected static final LogicBuiltIn  unit      = LogicBuiltIn.create("@unit");
+    protected static final LogicBuiltIn  thiz      = LogicBuiltIn.create("@this");
+    protected static final LogicBuiltIn  x         = LogicBuiltIn.create("@x");
+    protected static final LogicBuiltIn  y         = LogicBuiltIn.create("@y");
+    protected static final LogicBuiltIn  thisx     = LogicBuiltIn.create("@thisx");
+    protected static final LogicBuiltIn  thisy     = LogicBuiltIn.create("@thisy");
+    protected static final LogicBuiltIn  id        = LogicBuiltIn.create("@id");
     protected static final LogicKeyword  color     = LogicKeyword.create("color");
     protected static final LogicKeyword  item      = LogicKeyword.create("item");
     protected static final LogicVariable C         = LogicVariable.global("C", false);

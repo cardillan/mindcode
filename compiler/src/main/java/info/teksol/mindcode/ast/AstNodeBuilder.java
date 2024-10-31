@@ -403,7 +403,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFor_each_1(MindcodeParser.For_each_1Context ctx) {
-        warn(pos(ctx.values.getStart()), "Using parentheses around value list in list iteration loops is deprecated.");
+        warn(pos(ctx.values.getStart()), "Usage of parentheses around value list in list iteration loops is deprecated.");
         String label = ctx.label == null ? null : ctx.label.getText();
         return new ForEachExpression(pos(ctx.getStart()), label,
                 createListOfIterators(ctx.iterators),
@@ -685,7 +685,31 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             throw new MindcodeInternalError("Expected var ref or unit ref in " + ctx.getText());
         }
 
-        return new PropertyAccess(pos(ctx.getStart()), target, new Ref(pos(ctx.getStart()), ctx.prop.getText()));
+        return new PropertyAccess(pos(ctx.getStart()), target, visit(ctx.prop));
+    }
+
+    @Override
+    public AstNode visitLaccess_strict(MindcodeParser.Laccess_strictContext ctx) {
+        return new Ref(pos(ctx.getStart()), ctx.getText(), true);
+    }
+
+    @Override
+    public AstNode visitLaccess_relaxed(MindcodeParser.Laccess_relaxedContext ctx) {
+        return new Ref(pos(ctx.getStart()), "@" + ctx.getText(), false);
+    }
+
+    @Override
+    public AstNode visitMethodaccess(MindcodeParser.MethodaccessContext ctx) {
+        final AstNode target;
+        if (ctx.var_ref() != null) {
+            target = visit(ctx.var_ref());
+        } else if (ctx.unit_ref() != null) {
+            target = visit(ctx.unit_ref());
+        } else {
+            throw new MindcodeInternalError("Expected var ref or unit ref in " + ctx.getText());
+        }
+
+        return new PropertyAccess(pos(ctx.getStart()), target, new Ref(pos(ctx.getStart()), "@" + ctx.prop.getText(), true));
     }
 
     @Override
@@ -741,7 +765,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitUnit_ref(MindcodeParser.Unit_refContext ctx) {
-        return new Ref(pos(ctx.getStart()), ctx.ref().getText());
+        return new Ref(pos(ctx.getStart()), "@" + ctx.ref().getText(), true);
     }
 
     @Override

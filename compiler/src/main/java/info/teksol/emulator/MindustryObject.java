@@ -8,11 +8,18 @@ import info.teksol.mindcode.mimex.MindustryContent;
  */
 public interface MindustryObject {
     /**
+     * Name of the object. Does not include the `@` prefix.
+     *
+     * @return name of the object
+     */
+    String name();
+
+    /**
      * Formats the object for output. Used when printing the object to the text buffer.
      *
      * @return text representation of the object
      */
-    String name();
+    String format();
 
     /**
      * Provides the ID of the object. Used by the sensor @id instruction. -1 means no ID and gets translated to null.
@@ -20,6 +27,7 @@ public interface MindustryObject {
      * @return numerical id of the object
      */
     int id();
+
     /**
      * Provides the type of the object. Used by the sensor @type instruction.
      *

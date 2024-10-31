@@ -172,7 +172,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void optimizesLookup() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(LOOKUP,  item, tmp0, P1),
+                        createInstruction(LOOKUP, item, tmp0, P1),
                         createInstruction(END)
                 ),
 

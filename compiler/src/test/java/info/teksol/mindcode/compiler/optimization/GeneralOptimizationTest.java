@@ -33,11 +33,11 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         do
                             n = n - 1;
                             block = getlink(n);
-                            if block.type == @sorter then
+                            if block.@type == @sorter then
                                 continue MainLoop;
                             end;
                             print("\\n", block);
-                            if block.type == @unloader then
+                            if block.@type == @unloader then
                                 break MainLoop;
                             end;
                         loop while n > 0;
@@ -126,9 +126,9 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     @Test
     void realLifeScripts() {
         assertCompilesTo("""
-                        silicon = reconstructor1.silicon;
-                        graphite = reconstructor1.graphite;
-                        capacity = reconstructor1.itemCapacity;
+                        silicon = reconstructor1.@silicon;
+                        graphite = reconstructor1.@graphite;
+                        capacity = reconstructor1.@itemCapacity;
                         conveyor1.enabled = !( silicon < capacity or graphite < capacity );
                         """,
                 createInstruction(SENSOR, "silicon", "reconstructor1", "@silicon"),
@@ -145,7 +145,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     @Test
     void realLifeScripts2() {
         assertCompilesTo("""
-                        level = nucleus1.resource;
+                        level = nucleus1.@resource;
                         print(level);
                         conveyor1.enabled = level < 10;
                         """,
@@ -249,7 +249,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         
                         // calculate the new value -- the rightmost one
                         // change this line to graph another level
-                        cell1[39] = tank1.cryofluid / tank1.liquidCapacity;
+                        cell1[39] = tank1.@cryofluid / tank1.@liquidCapacity;
                         
                         // draw the graph
                         

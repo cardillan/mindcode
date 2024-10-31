@@ -14,7 +14,12 @@ public class AbstractAstTest extends AbstractParserTest {
 
     public AstNode translateToAst(String code) {
         return AstNodeBuilder.generate(InputFile.createSourceFile(code),
-                ExpectedMessages.none(true), parse(code));
+                ExpectedMessages.throwOnMessage(), parse(code));
+    }
+
+    protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String code) {
+        AstNodeBuilder.generate(InputFile.createSourceFile(code), expectedMessages, parse(code));
+        expectedMessages.validate();
     }
 
     protected String prettyPrint(AstNode node) {

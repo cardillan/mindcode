@@ -17,7 +17,7 @@ public final class LiquidConfiguration implements Configuration {
     }
 
     public String getName() {
-        return liquid.varName();
+        return liquid.name();
     }
 
     private static LiquidConfiguration forLiquid(Liquid liquid) {

@@ -31,7 +31,7 @@ while true do
         n = n - 1;
         block = getlink(n);
         print("\nFound: ", block);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
@@ -119,7 +119,7 @@ index = min(max(START_INDEX, MEMORY[M_CURRENT_INDEX]), END_INDEX);
 nextTick = @tick;
 
 SWITCH.enabled = 0;
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     startTime = @time;
     prevTick = nextTick;
     nextTick = nextTick + TICKS;

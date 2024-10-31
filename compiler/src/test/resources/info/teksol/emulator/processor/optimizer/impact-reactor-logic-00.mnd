@@ -31,7 +31,7 @@ fuel_3 = false;
 fuel_4 = false;
 fuel_5 = false;
 
-surplus = floor(node1.powerNetIn - node1.powerNetOut); // Watts of excess generation
+surplus = floor(node1.@powerNetIn - node1.@powerNetOut); // Watts of excess generation
 
 start_time = if surplus > 10000 then
     // assume generators running OK
@@ -100,7 +100,7 @@ while true do
 
     diff_generators();
     surplus = kilo(AVG_SURPLUS);
-    charge = kilo(NODE.powerNetStored);
+    charge = kilo(NODE.@powerNetStored);
     if START_POWER_REQ > 0 then
         req = kilo(START_POWER_REQ);
         print($"Req ${req}kJ / ${charge}kJ. ${surplus}kW flow.\n");
@@ -125,7 +125,7 @@ end;
 
 def calc_charge_req(reactor, time)
     secs = (@tick - time) \ 60;
-    if secs > 30 or !reactor.enabled then
+    if secs > 30 or !reactor.@enabled then
         return 0;
     end;
 
@@ -140,14 +140,14 @@ end;
 def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
     RET_T_STARTUP = t_startup; // return startup time unchanged by default
     secs = (@tick - t_startup) \ 60;
-    fuel = reactor.blast-compound;
+    fuel = reactor.@blast-compound;
     supply_fuel = true;
-    fuel_stored = CONTAINER.blast-compound;
-    cryo = reactor.cryofluid;
-    charge = floor(NODE.powerNetStored);
-    surplus = floor(NODE.powerNetIn - NODE.powerNetOut); // Watts of excess generation
+    fuel_stored = CONTAINER.@blast-compound;
+    cryo = reactor.@cryofluid;
+    charge = floor(NODE.@powerNetStored);
+    surplus = floor(NODE.@powerNetIn - NODE.@powerNetOut); // Watts of excess generation
     AVG_SURPLUS = AVG_SURPLUS * 0.8 + surplus * 0.2;
-    enabled = reactor.enabled;
+    enabled = reactor.@enabled;
 
     print($"#$reactor_num - ");
     if emerg_shutdown then
@@ -226,7 +226,7 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
             reactor.enabled = true;
         end;
     end;
-    if enabled != reactor.enabled then
+    if enabled != reactor.@enabled then
         // Reactor changed state.
         RET_T_STARTUP = @tick;
     end;
@@ -234,9 +234,9 @@ def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
 end;
 
 def throttle_blast(reactors_fueled, emerg_shutdown)
-    charge = floor(NODE.powerNetStored);
-    surplus = floor(NODE.powerNetIn - NODE.powerNetOut); // Watts of excess generation
-    fuel_stored = CONTAINER.blast-compound;
+    charge = floor(NODE.@powerNetStored);
+    surplus = floor(NODE.@powerNetIn - NODE.@powerNetOut); // Watts of excess generation
+    fuel_stored = CONTAINER.@blast-compound;
     if (charge < PWR_ABORT and surplus < FLOW_ABORT) or emerg_shutdown then
         limit = 0; // Don't produce any
         print($"Central Fuel at $fuel_stored / $limit - ");
@@ -287,7 +287,7 @@ def check_radar(unit)
 end;
 
 def check_manual_shutdown()
-    if switch1 != null and !switch1.enabled then
+    if switch1 != null and !switch1.@enabled then
         println("User has disabled emergency switch");
         return true; // user can force a shutdown
     end;
@@ -295,7 +295,7 @@ def check_manual_shutdown()
 end;
 
 def diff_generators()
-    stored_pc = NODE.powerNetStored / NODE.powerNetCapacity;
+    stored_pc = NODE.@powerNetStored / NODE.@powerNetCapacity;
     if stored_pc > 0.90 and START_POWER_REQ < 10 then
         // We don't need the differential reactors now
         print($"Differential now idle.\n");
@@ -308,7 +308,7 @@ def diff_generators()
 end;
 
 def update_reactors_desired()
-    stored = NODE.powerNetStored / NODE.powerNetCapacity;
+    stored = NODE.@powerNetStored / NODE.@powerNetCapacity;
     if stored > 0.98 and AVG_SURPLUS > GENERATOR_OUTPUT + GOAL_BUFFER then
         if REACTORS_DESIRED > 2 then
             REACTORS_DESIRED -= 1;

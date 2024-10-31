@@ -129,7 +129,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         links.stream()
                 .filter(l -> !compatibleLinkName(builder, l))
                 .forEachOrdered(l -> builder.error("Incompatible link name '%s' for block type '%s'.", l.name,
-                        builder.getBlockPosition(l.position).blockType().varName()));
+                        builder.getBlockPosition(l.position).blockType().name()));
 
         String mlog = convertToMlog(builder, processor);
         return new ProcessorConfiguration(links, mlog);

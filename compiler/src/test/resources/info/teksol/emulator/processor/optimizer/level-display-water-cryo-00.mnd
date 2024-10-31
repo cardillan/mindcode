@@ -11,7 +11,7 @@ while TANK_CRYO == null or TANK_WATER == null or DISPLAY == null do
         n = n - 1;
         block = getlink(n);
         print("\nFound: ", block);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
@@ -40,7 +40,7 @@ end;
 MULTIPLIER = 55 / 1500;
 
 SWITCH.enabled = 0;
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     start_time = @time;
     clear(0,0,0);
     color(255,255,255,255);
@@ -50,7 +50,7 @@ while SWITCH.enabled == 0 do
     color(90, 100, 170, 255);
     rect(14, 20, 12, 55);
     color(255,255,16,255);
-    water = TANK_WATER.totalLiquids;
+    water = TANK_WATER.@totalLiquids;
     pos = water * MULTIPLIER + 20;
     triangle(6, pos + 7, 14, pos, 6, pos - 7);
     triangle(34, pos + 7, 26, pos, 34, pos - 7);
@@ -58,7 +58,7 @@ while SWITCH.enabled == 0 do
     color(110, 200, 230, 255);
     rect(54, 20, 12, 55);
     color(255,255,16,255);
-    cryo = TANK_CRYO.totalLiquids;
+    cryo = TANK_CRYO.@totalLiquids;
     pos = cryo * MULTIPLIER + 20;
     triangle(46, pos + 7, 54, pos, 46, pos - 7);
     triangle(74, pos + 7, 66, pos, 74, pos - 7);

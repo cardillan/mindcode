@@ -119,7 +119,7 @@ while reactors == 0 do
         n -= 1;
         block = getlink(n);
         print("Found: ", block, "\n");
-        case block.type
+        case block.@type
             when @impact-reactor then
                 START = n;
                 reactors += 1;
@@ -165,23 +165,23 @@ nextStart = 0;
 nextDecommit = @time + DECOMMIT_DELAY;
 
 while true do
-    battery_level = floor(battery1.totalPower);
+    battery_level = floor(battery1.@totalPower);
     battery_level_str = battery_level \ 1000;
-    total_battery = floor(battery1.powerNetStored);
+    total_battery = floor(battery1.@powerNetStored);
     total_battery_str = total_battery \ 1000;
-    consumption = battery1.powerNetOut;
+    consumption = battery1.@powerNetOut;
     production = bank1[PRODUCTION_INDEX];
     net_power = bank1[NET_POWER_INDEX];
     battery_change = bank1[BATTERY_CHANGE_INDEX];
 
-    total_capacity = battery1.powerNetCapacity;
+    total_capacity = battery1.@powerNetCapacity;
     total_capacity_str = total_capacity \ 1000;
     required_capacity = BATTERY_PER_REACTOR * reactors;
     enough_battery = total_capacity >= required_capacity;
     missing_battery = ceil((required_capacity - total_capacity) / 1000);
 
     if MODE != SHUTDOWN then
-        if switch1.enabled == false then
+        if switch1.@enabled == false then
             MODE = SHUTDOWN;
             REASON = "Manual power off";
         else
@@ -220,10 +220,10 @@ while true do
         print(" ([gold]", multiplier, "x[])");
     end;
     print("\n==================================");
-    if tank1.totalLiquids < COOLANT_CUTOFF then
+    if tank1.@totalLiquids < COOLANT_CUTOFF then
         print("\n[salmon]Cryofluid level critical![]");
     end;
-    if vault1.blast-compound < FUEL_CUTOFF then
+    if vault1.@blast-compound < FUEL_CUTOFF then
         print("\n[salmon]Blast compound level critical![]");
     end;
     if enough_battery == false then
@@ -245,7 +245,7 @@ while true do
             GENERATOR = (net_power >= -150) && (total_battery < BATTERY_SAT);
             print("\nShutdown reason: [gold]", REASON, "[]");
 
-            if switch1.enabled then
+            if switch1.@enabled then
                 MODE = STARTUP;
                 STARTUPS += 1;
                 // The only place where startup can be activated. Set initial variables.
@@ -258,7 +258,7 @@ while true do
             end;
         when STARTUP then
             nextBattery = OUTPUT_1 ? (OUTPUT_2 ? battery4 : battery3) : battery2;
-            neededPower = max(floor(nextBattery.powerNetOut * POWER_MARGIN), 1000);
+            neededPower = max(floor(nextBattery.@powerNetOut * POWER_MARGIN), 1000);
 
             if REACTORS_ON == 0 then
                 if total_battery >= STARTUP_BAT_ENERGY then
@@ -318,21 +318,21 @@ while true do
                 end;
             end;
         when RUNNING then
-            if COOLANT_FLAG and (tank1.totalLiquids < COOLANT_CUTOFF) then
+            if COOLANT_FLAG and (tank1.@totalLiquids < COOLANT_CUTOFF) then
                 MODE = SHUTDOWN;
                 switch1.enabled = false;
                 REASON = "Cryo level too low";
             end;
-            if FUEL_FLAG and (vault1.blast-compound < FUEL_CUTOFF) then
+            if FUEL_FLAG and (vault1.@blast-compound < FUEL_CUTOFF) then
                 MODE = SHUTDOWN;
                 switch1.enabled = false;
                 REASON = "Blast compound level too low";
             end;
-            COOLANT_FLAG = COOLANT_FLAG or (tank1.totalLiquids > COOLANT_SAT);
-            FUEL_FLAG = FUEL_FLAG or (vault1.blast-compound > FUEL_SAT);
+            COOLANT_FLAG = COOLANT_FLAG or (tank1.@totalLiquids > COOLANT_SAT);
+            FUEL_FLAG = FUEL_FLAG or (vault1.@blast-compound > FUEL_SAT);
 
             // Load adapting is supported and activated
-            if enough_battery and switch2.enabled then
+            if enough_battery and switch2.@enabled then
                 min_level = BATTERY_CRITICAL * required_capacity;
                 commit_level = 0;
                 if CAN_COMMIT and (battery_change < 0) and (REACTORS_ON < reactors) then
@@ -377,7 +377,7 @@ while true do
                     end;
                 end;
             else
-                if switch2.enabled then
+                if switch2.@enabled then
                     print("\n[salmon]Load adapting not possible.[]");
                 else
                     print("\n[gold]Load adapting not active.[]");
@@ -418,13 +418,13 @@ while true do
     enabled = true;
     for n in START ... @links do
         block = getlink(n);
-        case block.type
+        case block.@type
             when @impact-reactor then
                 reactors += 1;
                 enabled = reactors <= REACTORS_ON;
                 block.enabled = enabled;
                 if enabled then
-                    boosts += block.timescale;
+                    boosts += block.@timescale;
                 end;
             when @overdrive-projector, @overdrive-dome then
                 block.enabled = OVERDRIVE;

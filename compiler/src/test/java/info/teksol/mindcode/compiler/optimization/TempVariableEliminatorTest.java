@@ -231,7 +231,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void optimizesSensorThenSet() {
         assertCompilesTo("""
-                        numsilicon = STORAGE.silicon;
+                        numsilicon = STORAGE.@silicon;
                         """,
                 createInstruction(SENSOR, "numsilicon", "STORAGE", "@silicon"),
                 createInstruction(END)
@@ -241,8 +241,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void supportsConsecutiveSensors() {
         assertCompilesTo("""
-                        numgraphite = container1.graphite;
-                        numcoal = container1.coal;
+                        numgraphite = container1.@graphite;
+                        numcoal = container1.@coal;
                         """,
                 createInstruction(SENSOR, "numgraphite", "container1", "@graphite"),
                 createInstruction(SENSOR, "numcoal", "container1", "@coal"),

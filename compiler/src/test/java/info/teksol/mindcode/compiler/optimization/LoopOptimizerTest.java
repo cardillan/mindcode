@@ -85,7 +85,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 """
                         while state === 0 do
                             print(i);
-                            state = @unit.dead;
+                            state = @unit.@dead;
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
@@ -102,7 +102,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     void optimizesWhileLoopWithInitialization() {
         assertCompilesTo("""
                         count = 0;
-                        while switch1.enabled do
+                        while switch1.@enabled do
                             print(count += 1);
                         end;
                         """,
@@ -121,7 +121,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoopWithInitializationAndStrictEqual() {
         assertCompilesTo("""
-                        while @unit.dead === 0 do
+                        while @unit.@dead === 0 do
                             print("Got unit!");
                         end;
                         """,

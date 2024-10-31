@@ -11,7 +11,7 @@ for n in 0 ... @links do
     reactor = getlink(n);
 
     // Only process thorium reactors. If a different block got linked by mistake, it might become disabled
-    if reactor.type == @thorium-reactor then
-        reactor.enabled = reactor.cryofluid >= 0.25 * reactor.liquidCapacity;
+    if reactor.@type == @thorium-reactor then
+        reactor.enabled = reactor.@cryofluid >= 0.25 * reactor.@liquidCapacity;
     end;
 end;

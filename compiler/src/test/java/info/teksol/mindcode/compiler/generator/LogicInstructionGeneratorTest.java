@@ -361,7 +361,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesControlStatements() {
         assertCompilesTo(
-                "conveyor1.enabled = foundation1.copper === tank1.water;",
+                "conveyor1.enabled = foundation1.@copper === tank1.@water;",
                 createInstruction(SENSOR, var(1), "foundation1", "@copper"),
                 createInstruction(SENSOR, var(2), "tank1", "@water"),
                 createInstruction(OP, "strictEqual", var(3), var(1), var(2)),
@@ -539,7 +539,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesHeapAccesses() {
         assertCompilesTo(
-                "cell1[3] = cell2[4] + conveyor1.enabled;",
+                "cell1[3] = cell2[4] + conveyor1.@enabled;",
                 createInstruction(READ, var(0), "cell2", "4"),
                 createInstruction(SENSOR, var(1), "conveyor1", "@enabled"),
                 createInstruction(OP, "add", var(2), var(0), var(1)),
@@ -594,7 +594,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesIndirectPropertyReference() {
         assertCompilesTo("""
                         resource = @silicon;
-                        if vault1.sensor(resource) < vault1.itemCapacity then
+                        if vault1.sensor(resource) < vault1.@itemCapacity then
                             foo = true;
                         end;
                         """,
@@ -772,7 +772,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesMultiParameterControlInstruction() {
         assertCompilesTo("""
-                        turret.shoot(leader.shootX, leader.shootY, leader.shooting);
+                        turret.shoot(leader.@shootX, leader.@shootY, leader.@shooting);
                         turret.color(14, 15, 16);
                         """,
                 createInstruction(SENSOR, var(0), "leader", "@shootX"),
@@ -965,8 +965,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertCompilesTo("""
                         n = 0;
                         while (reactor = getlink(n)) != null do
-                            if reactor.liquidCapacity > 0 then
-                                pct_avail = reactor.cryofluid / reactor.liquidCapacity;
+                            if reactor.@liquidCapacity > 0 then
+                                pct_avail = reactor.@cryofluid / reactor.@liquidCapacity;
                                 reactor.enabled = pct_avail >= 0.25;
                             end;
                             n += 1;
@@ -1029,7 +1029,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesSensorReadings() {
         assertCompilesTo(
-                "foundation1.copper < foundation1.itemCapacity;",
+                "foundation1.@copper < foundation1.@itemCapacity;",
                 createInstruction(SENSOR, var(0), "foundation1", "@copper"),
                 createInstruction(SENSOR, var(1), "foundation1", "@itemCapacity"),
                 createInstruction(OP, "lessThan", var(2), var(0), var(1)),
@@ -1040,7 +1040,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesStrictNotEqual() {
         assertCompilesTo(
-                "a = @unit.dead !== null; print(a);",
+                "a = @unit.@dead !== null; print(a);",
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
                 createInstruction(OP, "strictEqual", var(1), var(0), "null"),
                 createInstruction(OP, "equal", var(2), var(1), "false"),
@@ -1076,7 +1076,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void compilesTernaryOperatorLogic() {
         assertCompilesTo("""
-                        print("sm.enabled: ", smelter1.enabled ? "true" : "false");
+                        print("sm.enabled: ", smelter1.@enabled ? "true" : "false");
                         """,
                 createInstruction(SENSOR, var(0), "smelter1", "@enabled"),
                 createInstruction(JUMP, var(1000), "equal", var(0), "false"),
@@ -1207,7 +1207,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void recognizesTurretAsBlockName() {
         assertCompilesTo("""
                         def foo()
-                            turret1.health;
+                            turret1.@health;
                         end;
                         print(foo());
                         """,
@@ -1515,6 +1515,51 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         mlog("foo", , x * y);
                         mlog("foo", x);
                         mlog("foo", out "bar", in 0, out 1);
+                        """
+        );
+    }
+
+    @Test
+    void generatesKebabCaseVariableNameWarning() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(1, 1, "Identifier 'foo-bar': kebab-case identifiers are deprecated."),
+                """
+                        foo-bar = 1;
+                        """
+        );
+    }
+
+    @Test
+    void generatesNoValueWarnings() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(6, 9, "Expression doesn't have any value. Using no-value expressions in assignments is deprecated.")
+                        .add(7, 11, "Expression doesn't have any value. Using no-value expressions in function calls is deprecated.")
+                        .add(8, 12, "Expression doesn't have any value. Using no-value expressions in return statements is deprecated."),
+                """
+                        void foo()
+                            null;
+                        end;
+                        
+                        def bar()
+                            x = foo();
+                            print(foo());
+                            return foo();
+                        end;
+                        
+                        bar();
+                        """
+        );
+    }
+
+    @Test
+    void generatesMissingBuiltInPrefixWarnings() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(1, 14, "Built-in variable 'coal': omitting the '@' prefix from built-in variable names is deprecated."),
+                """
+                        print(vault1.coal);
                         """
         );
     }

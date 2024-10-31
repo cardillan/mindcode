@@ -61,11 +61,6 @@ public class MindustryContents {
             }
 
             @Override
-            public String varName() {
-                return "@" + name;
-            }
-
-            @Override
             public int id() {
                 return -1;
             }
@@ -113,7 +108,7 @@ public class MindustryContents {
                     String[] columns = lines.get(i).split(";", -1);
                     list.add(create(columns));
                 }
-                return list.stream().collect(Collectors.toMap(T::varName, t -> t));
+                return list.stream().collect(Collectors.toMap(T::name, t -> t));
             } catch (Exception e) {
                 throw new RuntimeException("Error parsing file " + resourceName, e);
             }
@@ -122,7 +117,7 @@ public class MindustryContents {
 
     private static class SimpleReader<T extends MindustryContent> extends AbstractReader<T> {
         private interface ItemConstructor<T extends MindustryContent> {
-            T construct(String name, String varName, int id);
+            T construct(String name, int id);
         }
 
         private final ItemConstructor<T> itemConstructor;
@@ -142,7 +137,6 @@ public class MindustryContents {
         @Override
         protected T create(String[] columns) {
             return itemConstructor.construct(
-                    columns[name],
                     "@" + columns[name],
                     Integer.parseInt(columns[id]));
         }
@@ -174,7 +168,6 @@ public class MindustryContents {
         @Override
         protected BlockType create(String[] columns) {
             return new BlockType(
-                    columns[name],
                     "@" + columns[name],
                     Integer.parseInt(columns[id]),
                     columns[visibility],
@@ -212,8 +205,7 @@ public class MindustryContents {
 
         @Override
         protected LAccess create(String[] columns) {
-            return new LAccess(columns[name],
-                    "@" + columns[name],
+            return new LAccess("@" + columns[name],
                     Boolean.parseBoolean(columns[senseable]),
                     Boolean.parseBoolean(columns[controls]),
                     Boolean.parseBoolean(columns[settable]),

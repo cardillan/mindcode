@@ -12,7 +12,7 @@ param UNIT = @poly;
 /// Don't modify anything below this line.
 
 // Find a unit if we don't have one
-if @unit.dead !== 0 or @unit.controller != @this then
+if @unit.@dead !== 0 or @unit.@controller != @this then
     findUnit();
 end;
 
@@ -22,7 +22,7 @@ if ulocate(damaged, out dmgx, out dmgy) then
     target(dmgx, dmgy, true);
 else
     println("Patrolling");
-    approach(CENTER.x + 10 * sin(@tick), CENTER.y + 10 * cos(@tick), 2);
+    approach(CENTER.@x + 10 * sin(@tick), CENTER.@y + 10 * cos(@tick), 2);
 end;
 
 printflush(message1);
@@ -35,7 +35,7 @@ void findUnit()
         if @unit == null then
             // There's no unit of the requested type
             print($"No unit of type $UNIT found.");
-        elsif @unit.controlled != 0 then
+        elsif @unit.@controlled != 0 then
             // This unit is controlled by another processor or the player
             print($"Looking for a free $UNIT...");
         else

@@ -55,7 +55,7 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
     @Test
     void optimizesCaseWithExpression() {
         assertCompilesTo("""
-                        x = case vault1.firstItem
+                        x = case vault1.@firstItem
                             when @lead then 1;
                             when @coal then 2;
                             else 3;

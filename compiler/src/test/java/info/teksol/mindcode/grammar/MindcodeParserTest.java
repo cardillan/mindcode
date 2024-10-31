@@ -55,15 +55,15 @@ class MindcodeParserTest extends AbstractParserTest {
     @Test
     void parsesSensorAccess() {
         assertAll(
-                () -> parse("foundation1.copper < 1000;"),
-                () -> parse("foundation1.copper < foundation1.itemCapacity;"),
-                () -> parse("tank1.water < tank1.liquidCapacity;")
+                () -> parse("foundation1.@copper < 1000;"),
+                () -> parse("foundation1.@copper < foundation1.@itemCapacity;"),
+                () -> parse("tank1.@water < tank1.@liquidCapacity;")
         );
     }
 
     @Test
     void parsesControlStatements() {
-        assertDoesNotThrow(() -> parse("conveyor1.enabled = foundation1.copper < foundation1.itemCapacity;"));
+        assertDoesNotThrow(() -> parse("conveyor1.enabled = foundation1.@copper < foundation1.@itemCapacity;"));
     }
 
     @Test

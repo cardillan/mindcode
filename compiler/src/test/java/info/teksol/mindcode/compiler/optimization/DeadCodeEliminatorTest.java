@@ -69,9 +69,9 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                 """
                         target = uradar(enemy, ground, any, health, MIN_TO_MAX);
                         if target != null then
-                            approach(target.x, target.y, 10);
-                            if within(target.x, target.y, 10) then
-                                target(target.x, target.y, SHOOT);
+                            approach(target.@x, target.@y, 10);
+                            if within(target.@x, target.@y, 10) then
+                                target(target.@x, target.@y, SHOOT);
                             end;
                         end;
                         """,

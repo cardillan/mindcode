@@ -9,7 +9,7 @@ do
     while n > 0 do
         n -= 1;
         block = getlink(n);
-        case block.type
+        case block.@type
             when @memory-cell then
                 MEMORY = block;
                 lastCell = 63;
@@ -36,15 +36,15 @@ ratePerMin = 0;
 limit = total + batch;
 //totalStart = @time;
 switch1.enabled = 0;
-while switch1.enabled == 0 do
+while switch1.@enabled == 0 do
     start = @time;
     n = FIRST_BLOCK;
     while n < @links do
         block = getlink(n);
         n += 1;
-        if block.type == @plastanium-conveyor then
+        if block.@type == @plastanium-conveyor then
             prev = MEMORY[n];
-            curr = block.totalItems;
+            curr = block.@totalItems;
             MEMORY[n] = curr;
             //print($"$n: $curr\n");
             if curr < prev then

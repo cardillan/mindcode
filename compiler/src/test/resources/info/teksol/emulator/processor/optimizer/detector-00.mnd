@@ -4,78 +4,78 @@ while true do
     const NUM_PAGES = 7;
     page = max(page, 1);
 
-    if switch1.enabled then
+    if switch1.@enabled then
         page = (page % NUM_PAGES) + 1;
         switch1.enabled = false;
     end;
 
     print($"Property detector - page $page/$NUM_PAGES\n");
 
-    if BLOCK.dead === 0 then
-        print(BLOCK.type, " - ");
+    if BLOCK.@dead === 0 then
+        print(BLOCK.@type, " - ");
         case page
             when 1 then
                 println("contents:");
-                println("totalItems: ",         BLOCK.totalItems);
-                println("firstItem: ",          BLOCK.firstItem);
-                println("itemCapacity: ",       BLOCK.itemCapacity);
-                println("totalLiquids: ",       floor(BLOCK.totalLiquids));
-                println("liquidCapacity: ",     BLOCK.liquidCapacity);
+                println("totalItems: ",         BLOCK.@totalItems);
+                println("firstItem: ",          BLOCK.@firstItem);
+                println("itemCapacity: ",       BLOCK.@itemCapacity);
+                println("totalLiquids: ",       floor(BLOCK.@totalLiquids));
+                println("liquidCapacity: ",     BLOCK.@liquidCapacity);
 
             when 2 then
                 println("power:");
-                println("totalPower: ",         floor(BLOCK.totalPower));
-                println("powerCapacity: ",      BLOCK.powerCapacity);
-                println("powerNetStored: ",     floor(BLOCK.powerNetStored));
-                println("powerNetCapacity: ",   BLOCK.powerNetCapacity);
-                println("powerNetIn: ",         floor(BLOCK.powerNetIn));
-                println("powerNetOut: ",        floor(BLOCK.powerNetOut));
+                println("totalPower: ",         floor(BLOCK.@totalPower));
+                println("powerCapacity: ",      BLOCK.@powerCapacity);
+                println("powerNetStored: ",     floor(BLOCK.@powerNetStored));
+                println("powerNetCapacity: ",   BLOCK.@powerNetCapacity);
+                println("powerNetIn: ",         floor(BLOCK.@powerNetIn));
+                println("powerNetOut: ",        floor(BLOCK.@powerNetOut));
 
             when 3 then
                 println("combat:");
-                println("ammo: ",               BLOCK.ammo);
-                println("ammoCapacity: ",       BLOCK.ammoCapacity);
-                println("health: ",             BLOCK.health);
-                println("maxHealth: ",          BLOCK.maxHealth);
+                println("ammo: ",               BLOCK.@ammo);
+                println("ammoCapacity: ",       BLOCK.@ammoCapacity);
+                println("health: ",             BLOCK.@health);
+                println("maxHealth: ",          BLOCK.@maxHealth);
 
             when 4 then
                 println("status:");
-                println("heat: ",               BLOCK.heat);
-                println("efficiency: ",         BLOCK.efficiency);
-                println("timescale: ",          BLOCK.timescale);
-                println("dead: ",               BLOCK.dead);
-                println("range: ",              BLOCK.range);
+                println("heat: ",               BLOCK.@heat);
+                println("efficiency: ",         BLOCK.@efficiency);
+                println("timescale: ",          BLOCK.@timescale);
+                println("dead: ",               BLOCK.@dead);
+                println("range: ",              BLOCK.@range);
 
             when 5 then
                 println("position:");
-                println("rotation: ",           BLOCK.rotation);
-                println("x: ",                  BLOCK.x);
-                println("y: ",                  BLOCK.y);
-                println("size: ",               BLOCK.size);
+                println("rotation: ",           BLOCK.@rotation);
+                println("x: ",                  BLOCK.@x);
+                println("y: ",                  BLOCK.@y);
+                println("size: ",               BLOCK.@size);
 
             when 6 then
                 println("unit:");
-                println("shootX: ",             BLOCK.shootX);
-                println("shootY: ",             BLOCK.shootY);
-                println("shooting: ",           BLOCK.shooting);
-                println("boosting: ",           BLOCK.boosting);
-                println("mineX: ",              BLOCK.mineX);
-                println("mineY: ",              BLOCK.mineY);
-                println("mining: ",             BLOCK.mining);
-                println("payloadCount: ",       BLOCK.payloadCount);
-                println("payloadType: ",        BLOCK.payloadType);
-                println("controlled: ",         BLOCK.controlled);
-                println("controller: ",         BLOCK.controller);
+                println("shootX: ",             BLOCK.@shootX);
+                println("shootY: ",             BLOCK.@shootY);
+                println("shooting: ",           BLOCK.@shooting);
+                println("boosting: ",           BLOCK.@boosting);
+                println("mineX: ",              BLOCK.@mineX);
+                println("mineY: ",              BLOCK.@mineY);
+                println("mining: ",             BLOCK.@mining);
+                println("payloadCount: ",       BLOCK.@payloadCount);
+                println("payloadType: ",        BLOCK.@payloadType);
+                println("controlled: ",         BLOCK.@controlled);
+                println("controller: ",         BLOCK.@controller);
 
             when 7 then
                 println("other:");
-                println("team: ",               BLOCK.team);
-                println("type: ",               BLOCK.type);
-                println("flag: ",               BLOCK.flag);
-                println("name: ",               BLOCK.name);
-                println("config: ",             BLOCK.config);
-                println("enabled: ",            BLOCK.enabled);
-                println("configure: ",          BLOCK.configure);
+                println("team: ",               BLOCK.@team);
+                println("type: ",               BLOCK.@type);
+                println("flag: ",               BLOCK.@flag);
+                println("name: ",               BLOCK.@name);
+                println("config: ",             BLOCK.@config);
+                println("enabled: ",            BLOCK.@enabled);
+                println("configure: ",          BLOCK.@configure);
         end;
     else
         println("No linked block found.");

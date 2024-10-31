@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
+import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -423,7 +424,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 fa(
                                         new VarRef(null, "x"),
                                         new VarRef(null, "y"),
-                                        new Ref(null, "titanium-conveyor"),
+                                        new Ref(null, "@titanium-conveyor", true),
                                         new NumericLiteral(null, "0"),
                                         new NumericLiteral(null, "0")
                                 )
@@ -512,20 +513,20 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null,
                         new Seq(null,
                                 new BinaryOp(null,
-                                        new PropertyAccess(null, new VarRef(null, "foundation1"), new Ref(null, "copper")),
+                                        new PropertyAccess(null, new VarRef(null, "foundation1"), new Ref(null, "@copper", true)),
                                         "<",
-                                        new PropertyAccess(null, new VarRef(null, "foundation1"), new Ref(null, "itemCapacity"))
+                                        new PropertyAccess(null, new VarRef(null, "foundation1"), new Ref(null, "@itemCapacity", true))
                                 )
                         ),
                         new BinaryOp(null,
-                                new PropertyAccess(null, new VarRef(null, "reactor1"), new Ref(null, "cryofluid")),
+                                new PropertyAccess(null, new VarRef(null, "reactor1"), new Ref(null, "@cryofluid", true)),
                                 "<",
                                 new NumericLiteral(null, "10")
                         )
                 ),
                 translateToAst("""
-                        foundation1.copper < foundation1.itemCapacity;
-                        reactor1.cryofluid < 10;
+                        foundation1.@copper < foundation1.@itemCapacity;
+                        reactor1.@cryofluid < 10;
                         """)
         );
     }
@@ -535,15 +536,15 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(null,
                         new Assignment(null,
-                                new PropertyAccess(null, new VarRef(null, "conveyor1"), new Ref(null, "enabled")),
+                                new PropertyAccess(null, new VarRef(null, "conveyor1"), new Ref(null, "@enabled", true)),
                                 new BinaryOp(null,
-                                        new PropertyAccess(null, new VarRef(null, "CORE"), new Ref(null, "copper")),
+                                        new PropertyAccess(null, new VarRef(null, "CORE"), new Ref(null, "@copper", true)),
                                         "<",
-                                        new PropertyAccess(null, new VarRef(null, "CORE"), new Ref(null, "itemCapacity"))
+                                        new PropertyAccess(null, new VarRef(null, "CORE"), new Ref(null, "@itemCapacity", true))
                                 )
                         )
                 ),
-                translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity;")
+                translateToAst("conveyor1.enabled = CORE.@copper < CORE.@itemCapacity;")
         );
     }
 
@@ -628,9 +629,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new Iterator(null, true, false, new VarRef(null, "a"))
                                 ),
                                 List.of(
-                                        new Ref(null, "mono"),
-                                        new Ref(null, "poly"),
-                                        new Ref(null, "mega")
+                                        new Ref(null, "@mono", true),
+                                        new Ref(null, "@poly", true),
+                                        new Ref(null, "@mega", true)
                                 ),
                                 new Seq(null,
                                         new FunctionCall(null,
@@ -700,7 +701,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new WhileExpression(null, null,
                                 new NoOp(),
                                 new BinaryOp(null,
-                                        new Ref(null, "unit"),
+                                        new Ref(null, "@unit", true),
                                         "===",
                                         new NullLiteral(null)
                                 ),
@@ -922,7 +923,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new VarRef(null, "running"),
                                 new BinaryOp(null,
                                         new BinaryOp(null,
-                                                new Ref(null, "tick"),
+                                                new Ref(null, "@tick", true),
                                                 "%",
                                                 new NumericLiteral(null, "2")
                                         ),
@@ -968,7 +969,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                         new Assignment(null,
                                                                 new VarRef(null, "deadline"),
                                                                 new BinaryOp(null,
-                                                                        new Ref(null, "tick"),
+                                                                        new Ref(null, "@tick", true),
                                                                         "+",
                                                                         new NumericLiteral(null, "60")
                                                                 )
@@ -977,7 +978,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 new WhileExpression(null, null,
                                                         new NoOp(),
                                                         new BinaryOp(null,
-                                                                new Ref(null, "tick"),
+                                                                new Ref(null, "@tick", true),
                                                                 "<",
                                                                 new VarRef(null, "deadline")
                                                         ),
@@ -1118,15 +1119,15 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new VarRef(null, "turret"),
                                         "shoot",
                                         fa(
-                                                new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "shootX")),
-                                                new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "shootY")),
-                                                new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "shooting"))
+                                                new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "@shootX", true)),
+                                                new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "@shootY", true)),
+                                                new PropertyAccess(null, new VarRef(null, "leader"), new Ref(null, "@shooting", true))
                                         )
                                 )
                         )
                 ),
                 prettyPrint(
-                        translateToAst("turret.shoot(leader.shootX, leader.shootY, leader.shooting);\n")
+                        translateToAst("turret.shoot(leader.@shootX, leader.@shootY, leader.@shooting);\n")
                 )
         );
     }
@@ -1190,13 +1191,13 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(null,
                         new Seq(null,
-                                new Assignment(null, new VarRef(null, "resource"), new Ref(null, "silicon"))
+                                new Assignment(null, new VarRef(null, "resource"), new Ref(null, "@silicon", true))
                         ),
                         new IfExpression(null,
                                 new BinaryOp(null,
                                         new PropertyAccess(null, new VarRef(null, "vault1"), new VarRef(null, "resource")),
                                         "<",
-                                        new PropertyAccess(null, new VarRef(null, "vault1"), new Ref(null, "itemCapacity"))
+                                        new PropertyAccess(null, new VarRef(null, "vault1"), new Ref(null, "@itemCapacity", true))
                                 ),
                                 new Seq(null,
                                         new FunctionCall(null, "harvest", fa(new VarRef(null, "vault1"), new VarRef(null, "resource")))
@@ -1206,7 +1207,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 translateToAst("""
                         resource = @silicon;
-                        if vault1.sensor(resource) < vault1.itemCapacity then
+                        if vault1.sensor(resource) < vault1.@itemCapacity then
                             harvest(vault1, resource);
                         end;
                         """
@@ -1221,11 +1222,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new FunctionCall(null,
                                 "print",
                                 fa(
-                                        new StringLiteral(null, "\\nsm.enabled: "),
+                                        new StringLiteral(null, "sm.enabled: "),
                                         new IfExpression(null,
                                                 new PropertyAccess(null,
                                                         new VarRef(null, "smelter1"),
-                                                        new Ref(null, "enabled")
+                                                        new Ref(null, "@enabled", true)
                                                 ),
                                                 new StringLiteral(null, "true"),
                                                 new StringLiteral(null, "false")
@@ -1233,7 +1234,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\");")
+                translateToAst("""
+                        print("sm.enabled: ", smelter1.@enabled ? "true" : "false");
+                        """)
         );
     }
 
@@ -1245,7 +1248,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new VarRef(null, "a"),
                                 new BinaryOp(null,
                                         new BinaryOp(null,
-                                                new Ref(null, "unit"),
+                                                new Ref(null, "@unit", true),
                                                 "===",
                                                 new NullLiteral(null)
                                         ),
@@ -1325,6 +1328,39 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 translateToAst("#set sort-variables;")
 
+        );
+    }
+
+    @Test
+    void generatesRelaxedSyntaxWarning() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add(1, 1, "The relaxed syntax is deprecated."),
+                """
+                        #relaxed;
+                        print("Relaxed");
+                        """
+        );
+    }
+
+    @Test
+    void generatesForEachLoopParenthesesWarning() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add(1, 11, "Usage of parentheses around value list in list iteration loops is deprecated."),
+                """
+                        for i in (1, 2, 3) do
+                            print(i);
+                        end;
+                        """
+        );
+    }
+
+    @Test
+    void generatesEscapedQuotesWarning() {
+        assertGeneratesMessages(
+                ExpectedMessages.create().add(1, 7, "Usage of double quotes in string literals is deprecated."),
+                """
+                        print("\\"Hey!\\"");
+                        """
         );
     }
 }

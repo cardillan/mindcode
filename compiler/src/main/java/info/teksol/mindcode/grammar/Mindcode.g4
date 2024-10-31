@@ -97,9 +97,20 @@ directive_list
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
 
-propaccess : var_ref DOT prop=id
-           | unit_ref DOT prop=id
-           ;
+methodaccess
+    : var_ref DOT prop=id
+    | unit_ref DOT prop=id
+    ;
+
+propaccess
+    : var_ref DOT prop=laccess
+    | unit_ref DOT prop=laccess
+    ;
+
+laccess
+    : unit_ref      # laccess_strict
+    | var_ref       # laccess_relaxed
+    ;
 
 numeric_t : float_t
           | int_t
@@ -179,7 +190,7 @@ incr_list : expression
 funcall : END LEFT_RBRACKET RIGHT_RBRACKET
         | name=id LEFT_RBRACKET RIGHT_RBRACKET
         | name=id LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
-        | obj=propaccess LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
+        | obj=methodaccess LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
         ;
 
 arg
@@ -226,7 +237,7 @@ lvalue : unit_ref
        | global_ref
        | heap_ref
        | var_ref
-       | propaccess
+       | methodaccess
        ;
 
 loop_label : ID;

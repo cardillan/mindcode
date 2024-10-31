@@ -17,9 +17,9 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 generateInstructions("""
                                         target = uradar(enemy, ground, any, health, MIN_TO_MAX);
                                         if target != null then
-                                            approach(target.x, target.y, 10);
-                                            if within(target.x, target.y, 10) then
-                                                target(target.x, target.y, SHOOT);
+                                            approach(target.@x, target.@y, 10);
+                                            if within(target.@x, target.@y, 10) then
+                                                target(target.@x, target.@y, SHOOT);
                                             end;
                                         end;
                                         """
@@ -58,7 +58,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 compiler.processor,
                                 compiler.profile,
                                 generateInstructions(compiler,
-                                        "itemDrop(found, @silicon, @unit.totalItems);"
+                                        "itemDrop(found, @silicon, @unit.@totalItems);"
                                 ).instructions()
                         )
                 )
@@ -78,7 +78,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                         count = 1;
                                         while count < @links do
                                             turret = getlink(count);
-                                            turret.shoot(leader.shootX, leader.shootY, leader.shooting);
+                                            turret.shoot(leader.@shootX, leader.@shootY, leader.@shooting);
                                             count = count + 1;
                                         end;
                                         """
@@ -143,7 +143,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         set resource __tmp11
                         op notEqual __tmp12 resource null
                         jump 37 equal __tmp12 false
-                        sensor __tmp14 nucleus1 @resource
+                        sensor __tmp14 nucleus1 resource
                         set level __tmp14
                         op lessThan __tmp15 level capacity
                         control enabled building __tmp15 0 0 0
@@ -173,19 +173,19 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 generateInstructions("""
                                         STORAGE = nucleus1;
                                         MSG = message1;
-                                        capacity = STORAGE.itemCapacity;
+                                        capacity = STORAGE.@itemCapacity;
 
                                         print("capacity: ", capacity, "\\n");
 
                                         for n = 0 ; n < @links ; n += 1 do
                                             building = getlink(n);
-                                            type = building.type;
+                                            type = building.@type;
                                             if type == @conveyor
                                                     || type == @titanium-conveyor
                                                     || type == @plastanium-conveyor then
-                                                resource = building.firstItem;
+                                                resource = building.@firstItem;
                                                 if resource != null then
-                                                    level = nucleus1.resource;
+                                                    level = nucleus1.sensor(resource);
                                                     building.enabled = level < capacity;
                                                     print("\\n", n, ": ", resource, " @ ", level);
                                                 end;

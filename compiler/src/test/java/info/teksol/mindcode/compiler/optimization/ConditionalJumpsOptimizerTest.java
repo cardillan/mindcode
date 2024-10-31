@@ -84,7 +84,7 @@ class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJum
                         .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, ADVANCED)
                 ),
                 """
-                        alive = @unit.dead === 0;
+                        alive = @unit.@dead === 0;
                         if alive then
                             print(alive);
                         end;
@@ -108,7 +108,7 @@ class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJum
                         .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, ADVANCED)
                 ),
                 """
-                        if @unit.dead === 0 then
+                        if @unit.@dead === 0 then
                             print(alive);
                         end;
                         """,

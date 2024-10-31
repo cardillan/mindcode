@@ -78,7 +78,7 @@ class BridgeSolverTest extends AbstractSchematicsTest {
                 BlockType.forName("@phase-conveyor"));
 
         for (final BlockType blockType : blockTypes) {
-            result.add(DynamicTest.dynamicTest(blockType.varName(), null, () -> refusesOutOfRangeConnection(blockType)));
+            result.add(DynamicTest.dynamicTest(blockType.name(), null, () -> refusesOutOfRangeConnection(blockType)));
         }
 
         return result;
@@ -90,8 +90,8 @@ class BridgeSolverTest extends AbstractSchematicsTest {
                     %s at (0, 0)
                     %s at (0, %d) connected to (0, 0)
                 end
-                """.formatted(blockType.varName(), blockType.varName(), (int) (blockType.range() + 1.1)),
-                "Block '%s' at \\(\\s*0,\\s*\\d+\\) has an out-of-range connection to \\(\\s*0,\\s*0\\)\\.".formatted(blockType.varName()));
+                """.formatted(blockType.name(), blockType.name(), (int) (blockType.range() + 1.1)),
+                "Block '%s' at \\(\\s*0,\\s*\\d+\\) has an out-of-range connection to \\(\\s*0,\\s*0\\)\\.".formatted(blockType.name()));
     }
 
     @Test

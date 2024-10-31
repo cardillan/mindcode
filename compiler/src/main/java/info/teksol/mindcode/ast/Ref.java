@@ -6,10 +6,17 @@ import java.util.Objects;
 
 public class Ref extends BaseAstNode {
     protected final String name;
+    protected final boolean strict;
 
-    Ref(InputPosition inputPosition, String name) {
+    Ref(InputPosition inputPosition, String name, boolean strict) {
         super(inputPosition);
         this.name = name;
+        this.strict = strict;
+        if (name.charAt(0) != '@') {
+            throw new IllegalArgumentException("Missing '@' prefix");
+        } else if (name.startsWith("@@")) {
+            throw new IllegalArgumentException("Superfluous '@' prefix");
+        }
     }
 
     public String getName() {
@@ -22,6 +29,10 @@ public class Ref extends BaseAstNode {
         if (o == null || getClass() != o.getClass()) return false;
         Ref ref = (Ref) o;
         return Objects.equals(name, ref.name);
+    }
+
+    public boolean isStrict() {
+        return strict;
     }
 
     @Override

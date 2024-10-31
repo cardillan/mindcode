@@ -45,7 +45,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesTrueBranchCompoundCondition() {
         assertCompilesTo("""
-                        str = @unit.dead === 0 ? "alive" : "dead";
+                        str = @unit.@dead === 0 ? "alive" : "dead";
                         print(str);
                         """,
                 createInstruction(SET, "str", q("alive")),
@@ -162,7 +162,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void swapsBranchesForCompoundConditions() {
         assertCompilesTo("""
-                        if @unit.dead === 0 then
+                        if @unit.@dead === 0 then
                             print("alive");
                         else
                             print("dead");

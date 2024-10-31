@@ -81,7 +81,7 @@ program = """
 
     // ACTIVATION SWITCH
     /////////////////////////////////////////////////////////
-    while not switch1.enabled do
+    while not switch1.@enabled do
         println("[coral]Activate switch to begin supplying overdrive dome...");
         printflush(message1);
     end;
@@ -100,7 +100,7 @@ program = """
     UNIT_S1 = acquireUnit(UNIT_S1);
     UNIT_P1 = acquireUnit(UNIT_P1);
 
-    if UNIT_S1.firstItem == @phase-fabric or UNIT_P1.firstItem == @silicon then
+    if UNIT_S1.@firstItem == @phase-fabric or UNIT_P1.@firstItem == @silicon then
         // At least one of our units holds wrong item. Swapping them fixes at least one
         u = UNIT_S1;
         UNIT_S1 = UNIT_P1;
@@ -109,8 +109,8 @@ program = """
 
     // GATHERING STATISTICS
     /////////////////////////////////////////////////////////
-    UNIT_CAPACITY = UNIT_S1.itemCapacity;
-    SPEED = UNIT_S1.speed;
+    UNIT_CAPACITY = UNIT_S1.@itemCapacity;
+    SPEED = UNIT_S1.@speed;
     SPEED_TENTHS = SPEED / 10;
 
     if SPEED === null then
@@ -123,10 +123,10 @@ program = """
         CORE = ulocate(building, core, false);
     loop while CORE == null;
 
-    CORE_X = CORE.x;
-    CORE_Y = CORE.y;
-    DOME_X = DOME.x;
-    DOME_Y = DOME.y;
+    CORE_X = CORE.@x;
+    CORE_Y = CORE.@y;
+    DOME_X = DOME.@x;
+    DOME_Y = DOME.@y;
 
     FOUR_UNITS = needsFourUnits(UNIT_S1);
 
@@ -134,14 +134,14 @@ program = """
         UNIT_S2 = acquireUnit(UNIT_S2);
         UNIT_P2 = acquireUnit(UNIT_P2);
 
-        if UNIT_S1.firstItem == @phase-fabric and UNIT_P2.firstItem != @phase-fabric then
+        if UNIT_S1.@firstItem == @phase-fabric and UNIT_P2.@firstItem != @phase-fabric then
             // At least one of our units holds wrong item. Swapping them fixes at least one
             u = UNIT_S1;
             UNIT_S1 = UNIT_P2;
             UNIT_P2 = u;
         end;
 
-        if UNIT_S2.firstItem == @phase-fabric or UNIT_P2.firstItem == @silicon then
+        if UNIT_S2.@firstItem == @phase-fabric or UNIT_P2.@firstItem == @silicon then
             // At least one of our units holds wrong item. Swapping them fixes at least one
             u = UNIT_S2;
             UNIT_S2 = UNIT_P2;
@@ -156,14 +156,14 @@ program = """
         GROUP1 = "unit";
     end;
 
-    SUPPLY_S_FIRST = not FOUR_UNITS or UNIT_S1.totalItems < UNIT_S2.totalItems;
-    SUPPLY_P_FIRST = not FOUR_UNITS or UNIT_P1.totalItems < UNIT_P2.totalItems;
+    SUPPLY_S_FIRST = not FOUR_UNITS or UNIT_S1.@totalItems < UNIT_S2.@totalItems;
+    SUPPLY_P_FIRST = not FOUR_UNITS or UNIT_P1.@totalItems < UNIT_P2.@totalItems;
 
     unitCheck = @time + UNIT_CHECK_TIME;
 
     // MAIN LOOP
     /////////////////////////////////////////////////////////
-    while switch1.enabled do
+    while switch1.@enabled do
         start = @time;
         println(" === [gold]Supplying Overdrive Dome[] === ");
         println($"\nUnit type: [green]$TYPE[]");
@@ -173,14 +173,14 @@ program = """
         UNIT_S1 = processUnit(UNIT_S1, @silicon, GROUP1, SUPPLY_S_FIRST);
         if FOUR_UNITS then
             UNIT_S2 = processUnit(UNIT_S2, @silicon, GROUP2, not SUPPLY_S_FIRST);
-            SUPPLY_S_FIRST = SUPPLY_S_FIRST ? UNIT_S1.totalItems > 0 : UNIT_S2.totalItems == 0;
+            SUPPLY_S_FIRST = SUPPLY_S_FIRST ? UNIT_S1.@totalItems > 0 : UNIT_S2.@totalItems == 0;
         end;
 
         printDomeStatus(@phase-fabric, "\n[green]Phase fabric[] status:\n");
         UNIT_P1 = processUnit(UNIT_P1, @phase-fabric, GROUP1, SUPPLY_P_FIRST);
         if FOUR_UNITS then
             UNIT_P2 = processUnit(UNIT_P2, @phase-fabric, GROUP2, not SUPPLY_P_FIRST);
-            SUPPLY_P_FIRST = SUPPLY_P_FIRST ? UNIT_P1.totalItems > 0 : UNIT_P2.totalItems == 0;
+            SUPPLY_P_FIRST = SUPPLY_P_FIRST ? UNIT_P1.@totalItems > 0 : UNIT_P2.@totalItems == 0;
         end;
 
         print($"\n[lightgray]Loop time: $ ms", floor(@time - start));
@@ -197,7 +197,7 @@ program = """
     // Determines how many units of given type are needed to service this dome
     inline def needsFourUnits(unit)
         // Compute the time it takes to travel to the core and back
-        travel_time = 2 * len(DOME_X - CORE_X, DOME_Y - CORE_Y) / unit.speed;
+        travel_time = 2 * len(DOME_X - CORE_X, DOME_Y - CORE_Y) / unit.@speed;
 
         // Do we need a backup set of units?
         return travel_time >= SUPPLY_INTERVAL;
@@ -232,7 +232,7 @@ program = """
         if firstUnit != null then
             needed = needsFourUnits(@unit) ? 4 : 2;
             do
-                if @unit.controlled == 0 || @unit.controller == @this then
+                if @unit.@controlled == 0 || @unit.@controller == @this then
                     if (free += 1) >= needed then
                         return true;
                     end;
@@ -240,7 +240,7 @@ program = """
                     occupied += 1;
                 end;
                 ubind(type);
-            loop while @unit != firstUnit and firstUnit.dead == 0;
+            loop while @unit != firstUnit and firstUnit.@dead == 0;
         end;
 
         if output then
@@ -268,7 +268,7 @@ program = """
 
         // We have a unit as a reference. Try to find unit owned by us
         do
-            if @unit.controller == @this then
+            if @unit.@controller == @this then
                 count += 1;
                 flag(S_INIT);
                 UNIT_S2 = UNIT_P2;
@@ -280,7 +280,7 @@ program = """
                 end;
             end;
             ubind(TYPE);
-        loop while @unit != firstUnit and firstUnit.dead == 0;
+        loop while @unit != firstUnit and firstUnit.@dead == 0;
         return count;
     end;
 
@@ -289,7 +289,7 @@ program = """
     inline def rebindUnit(currentUnit)
         if currentUnit != null then
             ubind(currentUnit);
-            if @unit.dead === 0 && @unit.controller == @this then
+            if @unit.@dead === 0 && @unit.@controller == @this then
                 // Current unit is valid, no need to rebind
                 return currentUnit;
             end;
@@ -299,11 +299,11 @@ program = """
         firstUnit = ubind(TYPE);
         if firstUnit != null then
             do
-                if @unit.controlled == 0 then
+                if @unit.@controlled == 0 then
                     return @unit;
                 end;
                 ubind(TYPE);
-            loop while @unit != firstUnit and firstUnit.dead == 0;
+            loop while @unit != firstUnit and firstUnit.@dead == 0;
         end;
 
         // No additional unit of this type is available - reinitialize
@@ -321,17 +321,17 @@ program = """
         rebindUnit(unit);
 
         // We have a bound, functioning unit
-        state = @unit.flag;
+        state = @unit.@flag;
         distance = -1;
         color = "gold";
 
         // Initializes the unit if not in a known state
         if state < S_APPROACH_SRC or state > S_APPROACH_DST then
-            if @unit.firstItem == item then
+            if @unit.@firstItem == item then
                 // We've got what we need, bring the supplies in!
                 // Jump threading optimization here...
                 state = S_APPROACH_DST;
-            elsif @unit.totalItems == 0 then
+            elsif @unit.@totalItems == 0 then
                 // We're empty, resupply
                 // Jump threading optimization here...
                 state = S_APPROACH_SRC;
@@ -348,7 +348,7 @@ program = """
         if state == S_APPROACH_SRC then
             if within(CORE_X, CORE_Y, RADIUS_WITHIN) then
                 itemTake(CORE, item, UNIT_CAPACITY);
-                if @unit.totalItems >= UNIT_CAPACITY then
+                if @unit.@totalItems >= UNIT_CAPACITY then
                     approach(DOME_X, DOME_Y, RADIUS_APPROACH);
                     // Jump threading optimization here...
                     state = S_APPROACH_DST;
@@ -358,7 +358,7 @@ program = """
             else
                 approach(CORE_X, CORE_Y, RADIUS_APPROACH);
                 MSG = ", fetching in [gold]";
-                distance = len(CORE_X - @unit.x, CORE_Y - @unit.y) \ SPEED_TENTHS / 10;
+                distance = len(CORE_X - @unit.@x, CORE_Y - @unit.@y) \ SPEED_TENTHS / 10;
             end;
         end;
 
@@ -372,20 +372,20 @@ program = """
                     approach(DOME_X, DOME_Y, RADIUS_APPROACH);   // Keep the unit active
                     MSG = ", waiting\n";
                 end;
-                if @unit.totalItems <= 0 then
+                if @unit.@totalItems <= 0 then
                     approach(CORE_X, CORE_Y, RADIUS_APPROACH);
                     state = S_APPROACH_SRC;
                 end;
             else
                 approach(DOME_X, DOME_Y, RADIUS_APPROACH);
                 MSG = ", returning in [gold]";
-                distance = len(DOME_X - @unit.x, DOME_Y - @unit.y) \ SPEED_TENTHS / 10;
+                distance = len(DOME_X - @unit.@x, DOME_Y - @unit.@y) \ SPEED_TENTHS / 10;
             end;
         end;
 
         flag(state);
 
-        print($"  $group: [$color]$[]", @unit.totalItems);
+        print($"  $group: [$color]$[]", @unit.@totalItems);
         if distance >= 0 then
             println($"$MSG$distance[] sec");
         else

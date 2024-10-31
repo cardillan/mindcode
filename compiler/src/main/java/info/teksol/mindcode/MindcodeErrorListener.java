@@ -11,14 +11,19 @@ import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class MindcodeErrorListener extends BaseErrorListener {
-    private final List<MindcodeMessage> errors;
+    private final Consumer<MindcodeMessage> messageConsumer;
     private InputFile inputFile = InputFile.EMPTY;
     private int ambiguities = 0;
 
+    public MindcodeErrorListener(Consumer<MindcodeMessage> messageConsumer) {
+        this.messageConsumer = messageConsumer;
+    }
+
     public MindcodeErrorListener(List<MindcodeMessage> errors) {
-        this.errors = errors;
+        this.messageConsumer = errors::add;
     }
 
     public void setInputFile(InputFile inputFile) {
@@ -35,7 +40,7 @@ public class MindcodeErrorListener extends BaseErrorListener {
         MindcodeCompilerMessage message = MindcodeCompilerMessage.error(
                 new InputPosition(inputFile, line, charPositionInLine + 1), format, args);
         if (reportedMessages.add(message)) {
-            errors.add(message);
+            messageConsumer.accept(message);
         }
     }
 

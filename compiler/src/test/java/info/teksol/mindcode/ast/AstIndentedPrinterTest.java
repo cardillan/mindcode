@@ -181,8 +181,8 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                     IfExpression{
                                         condition=BinaryOp{
                                             left=PropertyAccess{
-                                                target=Ref{name='unit'},
-                                                property=Ref{name='dead'}
+                                                target=Ref{name='@unit'},
+                                                property=Ref{name='@dead'}
                                             },
                                             op='===',
                                             right=NumericLiteral{literal='0'}
@@ -204,7 +204,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                 printLinearized("""
                         while true do
                           print("In loop");
-                          if @unit.dead === 0 then
+                          if @unit.@dead === 0 then
                             break;
                           end;
                         end;

@@ -17,7 +17,7 @@ while DISPLAY == null or TYPE == null do
     while n > 0 do
         n = n - 1;
         block = getlink(n);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
@@ -26,7 +26,7 @@ while DISPLAY == null or TYPE == null do
                 DISPLAY = block;
             when @silicon-factory then
                 TYPE = @silicon-factory;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @sand;
                 RES2 = @coal;
                 RES3 = @itemCapacity;
@@ -34,7 +34,7 @@ while DISPLAY == null or TYPE == null do
                 OUTPUT = @silicon;
             when @silicon-crucible then
                 TYPE = @silicon-crucible;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @sand;
                 RES2 = @coal;
                 RES3 = @pyratite;
@@ -42,7 +42,7 @@ while DISPLAY == null or TYPE == null do
                 OUTPUT = @silicon;
             when @kiln then
                 TYPE = @kiln;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @sand;
                 RES2 = @lead;
                 RES3 = @itemCapacity;
@@ -50,7 +50,7 @@ while DISPLAY == null or TYPE == null do
                 OUTPUT = @metaglass;
             when @phase-weaver then
                 TYPE = @phase-weaver;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @sand;
                 RES2 = @thorium;
                 RES3 = @itemCapacity;
@@ -58,7 +58,7 @@ while DISPLAY == null or TYPE == null do
                 OUTPUT = @phase-fabric;
             when @pyratite-mixer then
                 TYPE = @pyratite-mixer;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @sand;
                 RES2 = @coal;
                 RES3 = @lead;
@@ -66,7 +66,7 @@ while DISPLAY == null or TYPE == null do
                 OUTPUT = @pyratite;
             when @blast-mixer then
                 TYPE = @blast-mixer;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @pyratite;
                 RES2 = @spore-pod;
                 RES3 = @itemCapacity;
@@ -74,12 +74,12 @@ while DISPLAY == null or TYPE == null do
                 OUTPUT = @blast-compound;
             when @plastanium-compressor then
                 TYPE = @plastanium-compressor;
-                CAPACITY = block.itemCapacity;
+                CAPACITY = block.@itemCapacity;
                 RES1 = @titanium;
                 RES2 = @oil;
                 RES3 = @itemCapacity;
                 MUL1 = MUL3 = 100 / CAPACITY;
-                MUL2 = 250 / block.liquidCapacity;
+                MUL2 = 250 / block.@liquidCapacity;
                 OUTPUT = @plastanium;
             else
                 print("\n  ", block, " not supported");
@@ -101,7 +101,7 @@ while DISPLAY == null or TYPE == null do
     printflush(MESSAGE);
 end;
 
-if DISPLAY.type == @logic-display then
+if DISPLAY.@type == @logic-display then
     OFFSET_X = 2;
     OFFSET_Y = 2;
     BAR_WIDTH = 14;
@@ -157,7 +157,7 @@ end;
 
 SWITCH.enabled = 0;
 
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     start = @time;
 
     println("Universal Factory Monitor");
@@ -175,15 +175,15 @@ while SWITCH.enabled == 0 do
     for n in 0 ... @links do
         if index >= TO_INDEX then break; end;
         factory = getlink(n);
-        if factory.type == TYPE then
+        if factory.@type == TYPE then
             minimum = 101;
             r1 = MUL1 * factory.sensor(RES1);
             r2 = MUL2 * factory.sensor(RES2);
             r3 = MUL3 * factory.sensor(RES3);
             output = MUL1 * factory.sensor(OUTPUT);
-            e = factory.enabled;
-            power = factory.totalPower;
-            boost = factory.timescale;
+            e = factory.@enabled;
+            power = factory.@totalPower;
+            boost = factory.@timescale;
             if r1 < minimum then minimum = r1; icon = RES1; end;
             if r2 < minimum then minimum = r2; icon = RES2; end;
             if r3 < minimum then minimum = r3; icon = RES3; end;

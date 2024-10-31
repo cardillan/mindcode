@@ -22,7 +22,7 @@ do
         n = n - 1;
         block = getlink(n);
         println("Found: ", block);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
@@ -64,14 +64,14 @@ do
     printflush(MESSAGE);
 loop while CONTAINER == null;
 
-INVERTED = SORTER.type === @inverted-sorter;
+INVERTED = SORTER.@type === @inverted-sorter;
 setState(true);
 CYCLES = 0;
 
 SWITCH.enabled = 0;
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     start = @time;
-    item = SORTER.config;
+    item = SORTER.@config;
     if item == null or SENSOR != @totalItems then
         item = SENSOR;
         print($"Measuring [gold]total[] in $CONTAINER");

@@ -997,6 +997,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
+    public LogicValue visitDirectiveText(DirectiveText node) {
+        // Do nothing - directives are preprocessed
+        return null;
+    }
+
+    @Override
     public LogicValue visitAssignment(Assignment node) {
         final LogicValue eval = visit(node.getValue());
         final LogicValue rvalue;
@@ -1019,11 +1025,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         } else if (node.getVar() instanceof PropertyAccess propertyAccess) {
             LogicValue propTarget = visit(propertyAccess.getTarget());
             LogicArgument prop = visit(propertyAccess.getProperty());
-            String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
+            String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName().substring(1) : prop.toMlog();
             // Implicit out modifier as this is an assignment
             LogicFunctionArgument argument = new LogicFunctionArgument(node.getValue().getInputPosition(), rvalue, false, false);
             if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(argument)) == null) {
-                error(node, "Undefined property '%s.%s'.", propTarget, prop);
+                error(node, "Undefined property '%s.%s'.", propTarget.toMlog(), prop.toMlog());
                 return NULL;
             }
         } else if (node.getVar() instanceof VarRef varRef) {
@@ -1046,7 +1052,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 throw new MindcodeInternalError("Unsupported assignment target '%s'.", name);
             }
         } else if (node.getVar() instanceof Ref r) {
-            error(node, "Assignment to built-in variable '@%s' not allowed.", r.getName());
+            error(node, "Assignment to built-in variable '%s' not allowed.", r.getName());
         } else {
             throw new MindcodeInternalError("Unhandled assignment target in %s.", node);
         }
@@ -1420,7 +1426,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitRef(Ref node) {
-        // TODO: warn when "configure" is used in V7
+        if (!node.isStrict()) {
+            warn(node, "Built-in variable '%s': omitting the '@' prefix from built-in variable names is deprecated.", node.getName().substring(1));
+        }
         return LogicBuiltIn.create(node.getName());
     }
 
@@ -1753,7 +1761,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         List<LogicFunctionArgument> arguments = processArguments(node.getArguments());
         LogicValue value = functionMapper.handleProperty(node, instructions::add, node.getProperty(), target, arguments);
         if (value == null) {
-            error(node, "Undefined property '%s.%s'.", target, node.getProperty());
+            error(node, "Undefined property '%s.%s'.", target.toMlog(), node.getProperty());
             return NULL;
         }
         return value;
@@ -2021,9 +2029,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         }
                     } else {
                         // Going through createValue ensures proper handling and registering of local variables
-                        LogicValue eval = variable.startsWith("@")
-                                ? LogicBuiltIn.create(variable.substring(1))
-                                : createValue(node, variable);
+                        LogicValue eval = variable.startsWith("@") ? LogicBuiltIn.create(variable) : createValue(node, variable);
                         emit(formatter.createInstruction(this, eval));
                     }
 

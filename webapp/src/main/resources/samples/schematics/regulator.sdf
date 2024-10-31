@@ -28,4 +28,137 @@ switch1:
 end
 
 mindcode_source = """
+    param PCT_LOW = 60;
+    param PCT_HIGH = 80;
+    MESSAGE = container = sorter = maximum = measure = switch = null;
+    CYCLES = 0;
+    STATE = false;
+
+    do
+        repeat = false;
+        println("Configuring regulator...");
+        controlled = 0;
+        links = @links;
+        for n in 0 ... links do
+            block = getlink(n);
+            println("Found: ", block);
+            case block.@type
+                when @message then
+                    MESSAGE = block;
+                when @switch then
+                    switch = block;
+                when @sorter, @inverted-sorter, @unloader then
+                    sorter = block;
+                when @vault, @container, @core-shard, @core-foundation, @core-nucleus then
+                    container = block;
+                    measure = @totalItems;
+                    maximum = @itemCapacity;
+                when @liquid-tank, @liquid-container, @liquid-router then
+                    container = block;
+                    measure = @totalLiquids;
+                    maximum = @liquidCapacity;
+                when @battery, @battery-large then
+                    container = block;
+                    measure = @totalPower;
+                    maximum = @powerCapacity;
+                when @power-node, @power-node-large, @surge-tower then
+                    container = block;
+                    measure = @powerNetStored;
+                    maximum = @powerNetCapacity;
+                else
+                    // This block will be controlled by the regulator
+                    controlled |= (1 << n);
+            end;
+        end;
+
+        println("Message: ", MESSAGE);
+        println("Switch: ", switch);
+        println("Sorter: ", sorter);
+        println("Container: ", container);
+        println("Controlled mask: ", controlled);
+        if MESSAGE == null then println("No message."); repeat = true; end;
+        if switch == null then println("No switch."); repeat = true; end;
+        if container == null then println("No container."); repeat = true; end;
+        printflush(MESSAGE);
+    loop while repeat;
+
+    // Reset text buffer
+    printflush(null);
+
+    validate(PCT_LOW >= 0 and PCT_LOW <= 100 and PCT_LOW == floor(PCT_LOW), "PCT_LOW must be an integer between 0 to 100.");
+    validate(PCT_HIGH >= 0 and PCT_HIGH <= 100 and PCT_HIGH == floor(PCT_HIGH), "PCT_HIGH must be an integer between 0 to 100.");
+    validate(PCT_LOW < PCT_HIGH, "PCT_LOW must be less than PCT_HIGH.");
+
+    max = container.sensor(maximum);
+    INVERTED = sorter.@type === @inverted-sorter;
+    setState(true);
+
+    switch.enabled = 0;
+    while switch.@enabled == 0 do
+        start = @time;
+
+        // Reset when we lose anything
+        if container.@dead != 0   then end(); end;
+        if MESSAGE.@dead != 0     then end(); end;
+        if switch.@dead != 0      then end(); end;
+        if sorter == sorter.@dead then end(); end;
+
+        item = sorter.@config;
+        if item == null || measure != @totalItems then
+            item = measure;
+            print($"Measuring [gold]total[] in $container");
+            amount = container.sensor(measure);
+        else
+            print($"Measuring [gold]$item[] in $container");
+            amount = container.sensor(item);
+        end;
+        pct = (100 * amount) \ max;
+
+        if pct <= PCT_LOW then
+            setState(true);
+        elsif pct >= PCT_HIGH then
+            setState(false);
+        end;
+
+        print($"\nLevel: [gold]$pct%[]");
+        if INVERTED then
+            print($"\nActivate above [green]$PCT_HIGH%[]");
+            print($"\nDeactivate below [salmon]$PCT_LOW%[]");
+        else
+            print($"\nActivate below [green]$PCT_LOW%[]");
+            print($"\nDeactivate above [salmon]$PCT_HIGH%[]");
+        end;
+
+        print(ACTIVE_TEXT);
+
+        if links != @links then end(); end;
+        for n in 0 ... links do
+            block = getlink(n);
+            if controlled & (1 << n) then
+                block.enabled = ON;
+                print("\n    ", block);
+            end;
+        end;
+
+        print($"[]\n# of cycles: $CYCLES");
+        print($"\n[lightgray]Loop: $ ms", floor(@time - start));
+        printflush(MESSAGE);
+    end;
+
+    inline def setState(newState)
+        if STATE != newState then
+            STATE = newState;
+            CYCLES += 1;
+            ON = INVERTED ^ STATE;
+            ACTIVE_TEXT = ON ? "\nCurrently active:[green]" : "\nCurrently inactive:[salmon]";
+        end;
+    end;
+
+    def validate(condition, text)
+        if !condition then
+            print(text);
+            printflush(MESSAGE);
+            stopProcessor();
+        end;
+    end;
     """

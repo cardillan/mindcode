@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 public record BlockType(
         String name,
-        String varName,
         int id,
         String visibility,
         String implementation,
@@ -37,6 +36,7 @@ public record BlockType(
     }
 
     public String getBaseLinkName() {
+        String name = this.name.substring(1);
         if (name.contains("-")) {
             String[] s = name.split("-");
             //filter out 'large' and numbers at the end of block names

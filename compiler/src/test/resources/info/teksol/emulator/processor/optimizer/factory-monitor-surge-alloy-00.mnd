@@ -23,7 +23,7 @@ flow_str = icon = lastRate = null;
 
 switch1.enabled = 0;
 
-while switch1.enabled == 0 do
+while switch1.@enabled == 0 do
     print("Surge Alloy Factory Monitor");
     
     if bank1 != null then
@@ -71,16 +71,16 @@ while switch1.enabled == 0 do
     index = FROM_INDEX;
     for n = 0; n < @links; n = n + 1 do
         smelter = getlink(n);
-        if smelter.type == @surge-smelter then
+        if smelter.@type == @surge-smelter then
             minimum = CAPACITY + 1;
-            t = smelter.titanium;
-            c = smelter.copper;
-            l = smelter.lead;
-            s = smelter.silicon;
-            a = smelter.surge-alloy;
-            e = smelter.enabled;
-            power = smelter.totalPower;
-            boost = smelter.timescale;
+            t = smelter.@titanium;
+            c = smelter.@copper;
+            l = smelter.@lead;
+            s = smelter.@silicon;
+            a = smelter.@surge-alloy;
+            e = smelter.@enabled;
+            power = smelter.@totalPower;
+            boost = smelter.@timescale;
             if l < minimum then minimum = l; icon = @lead; end;
             if s < minimum then minimum = s; icon = @silicon; end;
             if c < minimum then minimum = c; icon = @copper; end;

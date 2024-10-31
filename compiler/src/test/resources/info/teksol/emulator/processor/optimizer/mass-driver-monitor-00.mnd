@@ -14,7 +14,7 @@ while DISPLAY == null do
         n = n - 1;
         block = getlink(n);
         println("Found: ", block);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
@@ -36,7 +36,7 @@ while DISPLAY == null do
     printflush(MESSAGE);
 end;
 
-if DISPLAY.type == @logic-display then
+if DISPLAY.@type == @logic-display then
     OFFSET_X = 2;
     OFFSET_Y = 2;
     BAR_WIDTH = 14;
@@ -88,7 +88,7 @@ end;
 
 SWITCH.enabled = 0;
 
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     start = @time;
 
     color(0, 0, 80, 255);
@@ -100,7 +100,7 @@ while SWITCH.enabled == 0 do
     index = FROM_INDEX;
     for n = 0; n < @links; n = n + 1 do
         driver = getlink(n);
-        if driver.type == @mass-driver then
+        if driver.@type == @mass-driver then
             // Compute bar position
             column = index \ COLUMN_SIZE;
             row = index % COLUMN_SIZE;
@@ -115,7 +115,7 @@ while SWITCH.enabled == 0 do
 
             x = x + 16;
 
-            items = driver.totalItems;
+            items = driver.@totalItems;
 
             maxx = max(MEMORY[n], items);
             MEMORY[n] = maxx;

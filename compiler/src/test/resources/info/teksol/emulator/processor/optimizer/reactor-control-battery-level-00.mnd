@@ -33,9 +33,9 @@ while true do
     end;
     wait += DELAY;
 
-    powerNetIn = battery1.powerNetIn;
-    powerNetOut = battery1.powerNetOut;
-    powerNetStored = battery1.powerNetStored;
+    powerNetIn = battery1.@powerNetIn;
+    powerNetOut = battery1.@powerNetOut;
+    powerNetStored = battery1.@powerNetStored;
 
     tmp = index;
     ACCU_CONS -= bank1[tmp];

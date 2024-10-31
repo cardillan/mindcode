@@ -14,14 +14,14 @@ while @unit == null do
     ubind(UNIT);
 end;
 
-while switch1.enabled == false do
+while switch1.@enabled == false do
     print("Press button to start measuring ", UNIT, " speed.");
     printflush(message1);
 end;
 
 switch1.enabled = false;
 
-while @unit.controlled != 0 do
+while @unit.@controlled != 0 do
     print("Searching free ", UNIT);
     printflush(message1);
     ubind(UNIT);
@@ -55,7 +55,7 @@ flag(0);
 elapsed = finish - start;
 speed = floor((distance / elapsed) * 100000) / 100;
 
-while switch1.enabled == false do
+while switch1.@enabled == false do
     print("Measurement results (", UNIT, "):");
     print("\nMap dimensions: ", @mapw, "x", @maph);
     print("\nElapsed time: ", elapsed, "ms");

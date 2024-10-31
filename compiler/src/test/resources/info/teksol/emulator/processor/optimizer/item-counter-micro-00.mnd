@@ -17,7 +17,7 @@ while true do
     do
         n -= 1;
         block = getlink(n);
-        case block.type
+        case block.@type
             when @memory-cell then
                 MEMORY = block;
                 lastCell = 63;
@@ -66,14 +66,14 @@ a1 = a2 = a3 = a4 = b1 = b2 = b3 = b4 = 0;  // Current and previous states per c
 ratePerMin = 0;                             // Current rate
 startTime = @time;                          // Batch start time
 
-while switch1.enabled == 0 do
+while switch1.@enabled == 0 do
     start = @time;
     // a is current, b is previous
     // Compile-time evaluation will remove instructions where MAX_LINKED is exceeded
-    if MAX_LINKED > 0 then a1 = CONV1.totalItems; if a1 < b1 then batches += 1; end; end;
-    if MAX_LINKED > 1 then a2 = CONV2.totalItems; if a2 < b2 then batches += 1; end; end;
-    if MAX_LINKED > 2 then a3 = CONV3.totalItems; if a3 < b3 then batches += 1; end; end;
-    if MAX_LINKED > 3 then a4 = CONV4.totalItems; if a4 < b4 then batches += 1; end; end;
+    if MAX_LINKED > 0 then a1 = CONV1.@totalItems; if a1 < b1 then batches += 1; end; end;
+    if MAX_LINKED > 1 then a2 = CONV2.@totalItems; if a2 < b2 then batches += 1; end; end;
+    if MAX_LINKED > 2 then a3 = CONV3.@totalItems; if a3 < b3 then batches += 1; end; end;
+    if MAX_LINKED > 3 then a4 = CONV4.@totalItems; if a4 < b4 then batches += 1; end; end;
 
     // Evaluate batches
     if batches > limit then
@@ -98,10 +98,10 @@ while switch1.enabled == 0 do
     print($"Rate: [green]$ratePerMin[] items/min\n");
 
     // b is current, a is previous
-    if MAX_LINKED > 0 then b1 = CONV1.totalItems; if b1 < a1 then batches += 1; end; end;
-    if MAX_LINKED > 1 then b2 = CONV2.totalItems; if b2 < a2 then batches += 1; end; end;
-    if MAX_LINKED > 2 then b3 = CONV3.totalItems; if b3 < a3 then batches += 1; end; end;
-    if MAX_LINKED > 3 then b4 = CONV4.totalItems; if b4 < a4 then batches += 1; end; end;
+    if MAX_LINKED > 0 then b1 = CONV1.@totalItems; if b1 < a1 then batches += 1; end; end;
+    if MAX_LINKED > 1 then b2 = CONV2.@totalItems; if b2 < a2 then batches += 1; end; end;
+    if MAX_LINKED > 2 then b3 = CONV3.@totalItems; if b3 < a3 then batches += 1; end; end;
+    if MAX_LINKED > 3 then b4 = CONV4.@totalItems; if b4 < a4 then batches += 1; end; end;
 
     elapsed = floor(@time - startTime);
     if elapsed >= 10000 then

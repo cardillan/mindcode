@@ -14,13 +14,13 @@ do
     while n > 0 do
         n = n - 1;
         block = getlink(n);
-        case block.type
+        case block.@type
             when @message then
                 MESSAGE = block;
             when @switch then
                 SWITCH = block;
             when @mass-driver then
-                case block.firstItem
+                case block.@firstItem
                     when @titanium then TITANIUM = block;
                     when @silicon  then SILICON = block;
                     when @copper   then COPPER = block;
@@ -65,7 +65,7 @@ BAR_LENGTH = 56;
 MULTIPLICATOR = BAR_LENGTH / 200;
 
 SWITCH.enabled = 0;
-while SWITCH.enabled == 0 do
+while SWITCH.@enabled == 0 do
     start = @time;
     clear(0, 0, 80);
     color(255, 255, 255, 255);
@@ -75,10 +75,10 @@ while SWITCH.enabled == 0 do
     image(ICON_X, ICON_Y1, @lead,     ICON_SIZE, 0);
 
     color(0,128,0,255);
-    rect(BAR_X, BAR_Y4, TITANIUM.totalItems * MULTIPLICATOR, BAR_HEIGHT);
-    rect(BAR_X, BAR_Y3, SILICON.totalItems  * MULTIPLICATOR, BAR_HEIGHT);
-    rect(BAR_X, BAR_Y2, COPPER.totalItems   * MULTIPLICATOR, BAR_HEIGHT);
-    rect(BAR_X, BAR_Y1, LEAD.totalItems     * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y4, TITANIUM.@totalItems * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y3, SILICON.@totalItems  * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y2, COPPER.@totalItems   * MULTIPLICATOR, BAR_HEIGHT);
+    rect(BAR_X, BAR_Y1, LEAD.@totalItems     * MULTIPLICATOR, BAR_HEIGHT);
 
     color(0,255,0,255);
     lineRect(BAR_X, BAR_Y4, BAR_LENGTH, BAR_HEIGHT);

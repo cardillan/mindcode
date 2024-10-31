@@ -69,9 +69,9 @@ public class MindustryVariables {
             String name = value.substring(1, value.length() - 1).replace("\\n", "\n").replace("\\\"", "'").replace("\\\\", "\\");
             return MindustryVariable.createConstString(name);
         } else if (value.startsWith("@")) {
-            MindustryContent content = MindustryContents.get(value.substring(1));
+            MindustryContent content = MindustryContents.get(value);
             return content == null
-                    ? MindustryVariable.createUnregisteredContent(value.substring(1))
+                    ? MindustryVariable.createUnregisteredContent(value)
                     : MindustryVariable.createConstObject(content);
         } else {
             try {

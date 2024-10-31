@@ -139,6 +139,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitDirectiveText(DirectiveText node) {
+        print(node);
+        return null;
+    }
+
+    @Override
     public String visitDoWhileStatement(DoWhileExpression node) {
         open("DoWhileExpression{");
         print("label="); visit(node.getLabel()); newLine(",");

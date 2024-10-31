@@ -1,7 +1,7 @@
 param LINK_ID = 1;
 const QUERY_BASE = 99999900;
 QUERY_FLAG = QUERY_BASE + LINK_ID;
-position = 100 * (vault1.x + @mapw * vault1.y);
+position = 100 * (vault1.@x + @mapw * vault1.@y);
 ANSWER_FLAG = position + LINK_ID;
 SERVICED = 0;
 
@@ -25,7 +25,7 @@ end;
 
 inline def procesUnit(unit)
     ubind(unit);
-    if @unit.flag == QUERY_FLAG then
+    if @unit.@flag == QUERY_FLAG then
         flag(ANSWER_FLAG);
         SERVICED += 1;
     end;

@@ -8,7 +8,15 @@ import info.teksol.emulator.MindustryObject;
  */
 public interface MindustryContent extends MindustryObject {
     /**
-     * @return name of the variable representing the type ("@" + name)
+     * @return name of the content (includes the "@" prefix)
      */
-    String varName();
+    String name();
+
+    default String format() {
+        return name().substring(1);
+    }
+
+    default String contentName() {
+        return name().substring(1);
+    }
 }

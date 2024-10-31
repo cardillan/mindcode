@@ -19,6 +19,11 @@ public class AbstractMindustryObject implements MindustryObject {
     }
 
     @Override
+    public String format() {
+        return name();
+    }
+
+    @Override
     public int id() {
         return id;
     }

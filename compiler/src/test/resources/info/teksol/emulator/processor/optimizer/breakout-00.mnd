@@ -47,7 +47,7 @@ while true do
         rect(paddleX, paddleY, paddleWidth, paddleHeight);
         rect(ballX, ballY, ballSize, ballSize);
 
-        if PADDLECONTROLLER.enabled then
+        if PADDLECONTROLLER.@enabled then
             if paddleX < size - paddleWidth then
                 paddleX += paddleSpeed;
             end;

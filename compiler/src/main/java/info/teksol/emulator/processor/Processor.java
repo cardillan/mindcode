@@ -309,11 +309,11 @@ public class Processor {
         MindustryObject inner = object.getObject();
         MindustryVariable target = getOrCreateVariable(ix.getResult());
         switch (property.getExistingObject().name()) {
-            case "type" -> {
+            case "@type" -> {
                 target.setObject(inner != null ? inner.type() : null);
                 return true;
             }
-            case "id" -> {
+            case "@id" -> {
                 if (inner != null && inner.id() >= 0) {
                     target.setLongValue(inner.id());
                 } else {

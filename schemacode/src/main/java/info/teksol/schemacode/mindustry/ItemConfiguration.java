@@ -17,7 +17,7 @@ public final class ItemConfiguration implements Configuration {
     }
 
     public String getName() {
-        return item.varName();
+        return item.name();
     }
 
     private static ItemConfiguration forItem(Item item) {

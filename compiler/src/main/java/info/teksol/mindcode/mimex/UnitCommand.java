@@ -2,7 +2,6 @@ package info.teksol.mindcode.mimex;
 
 public record UnitCommand(
         String name,
-        String varName,
         int id
 ) implements MindustryContent {
 

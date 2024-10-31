@@ -6,7 +6,7 @@ const DISPLAY_SIZE_LARGE = 176;
 // Display size
 
 def displaySize(display)
-    type = display.type;
+    type = display.@type;
     type == @logic-display ? DISPLAY_SIZE_SMALL : type == @large-logic-display ? DISPLAY_SIZE_LARGE : null;
 end;
 
@@ -67,7 +67,7 @@ end;
 // Generic display transformations
 
 def rotateLeft(display)
-    case display.type
+    case display.@type
         when @logic-display       then rotateLeftSmall();
         when @large-logic-display then rotateLeftLarge();
         else stopProcessor();
@@ -75,7 +75,7 @@ def rotateLeft(display)
 end;
 
 def rotateRight(display)
-    case display.type
+    case display.@type
         when @logic-display       then rotateRightSmall();
         when @large-logic-display then rotateRightLarge();
         else stopProcessor();
@@ -83,7 +83,7 @@ def rotateRight(display)
 end;
 
 def upsideDown(display)
-    case display.type
+    case display.@type
         when @logic-display       then upsideDownSmall();
         when @large-logic-display then upsideDownLarge();
         else stopProcessor();
@@ -91,7 +91,7 @@ def upsideDown(display)
 end;
 
 def flipVertical(display)
-    case display.type
+    case display.@type
         when @logic-display       then flipVerticalSmall();
         when @large-logic-display then flipVerticalLarge();
         else stopProcessor();
@@ -99,7 +99,7 @@ def flipVertical(display)
 end;
 
 def flipHorizontal(display)
-    case display.type
+    case display.@type
         when @logic-display       then flipHorizontalSmall();
         when @large-logic-display then flipHorizontalLarge();
         else stopProcessor();
@@ -131,10 +131,10 @@ def findFreeUnit(unit_type, initial_flag)
 
     first_unit = @unit;
     do
-        if @unit.controlled == 0 then
+        if @unit.@controlled == 0 then
             flag(initial_flag);        // Mark unit as active
             return @unit;
-        elsif first_unit.dead == 1 then
+        elsif first_unit.@dead == 1 then
             // first_unit got killed. It won't be served by ubind anymore
             // Replace with the current one
             first_unit = @unit;
@@ -165,13 +165,13 @@ def findClosestUnit(x, y, unit_type, initial_flag)
         best_unit = null;
         best_distance = 1e10;
         do
-            if @unit.controlled == 0 then
-                distance = len(@unit.x - x, @unit.y - y);
+            if @unit.@controlled == 0 then
+                distance = len(@unit.@x - x, @unit.@y - y);
                 if distance < best_distance then
                     best_distance = distance;
                     best_unit = @unit;
                 end;
-            elsif first_unit.dead == 1 then
+            elsif first_unit.@dead == 1 then
                 // first_unit got killed. It won't be served by ubind anymore
                 // Replace with the current one
                 first_unit = @unit;
@@ -187,7 +187,7 @@ def findClosestUnit(x, y, unit_type, initial_flag)
         end;
 
         // If the best unit is still not controlled, flag it and return
-        if best_unit.controlled == 0 then
+        if best_unit.@controlled == 0 then
             ubind(best_unit);
             flag(initial_flag);
             return best_unit;
@@ -210,7 +210,7 @@ def waitForFreeUnit(unit_type, initial_flag)
                 print($"No unit of type $unit_type found.");
                 printflush(SYS_MESSAGE);
              end;
-        elsif @unit.controlled != 0 then
+        elsif @unit.@controlled != 0 then
             if SYS_MESSAGE then
                 print($"Looking for a free $unit_type...");
                 printflush(SYS_MESSAGE);

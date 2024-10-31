@@ -10,14 +10,14 @@ UNIT    = @mega;
 const RADIUS_WITHIN        = 8;
 const RADIUS_APPROACH   = 4;
 
-THIS_X = @this.x;
-THIS_Y = @this.y;
+THIS_X = @this.@x;
+THIS_Y = @this.@y;
 
 first_unit = null;
 index = 1;
 
 while true do
-    if switch2.enabled then
+    if switch2.@enabled then
         UNIT = case UNIT
             when @flare then @mono;
             when @mono  then @poly;
@@ -41,29 +41,29 @@ while true do
             first_unit = @unit;
             index = 1;
             print(UNIT);
-            if switch1.enabled then
+            if switch1.@enabled then
                 print(" (cleanup active)");
             end;
         end;
 
-        controlled = @unit.controlled;
-        flag = @unit.flag;
-        items = @unit.totalItems;
-        item = @unit.firstItem;
+        controlled = @unit.@controlled;
+        flag = @unit.@flag;
+        items = @unit.@totalItems;
+        item = @unit.@firstItem;
 
         // Do not count being controlled by this as
-        if @unit.controller == @this then
+        if @unit.@controller == @this then
             controlled = 0;
         end;
 
-        if (flag != 0) or (items > 0) or ((controlled != 0) and (@unit.controller != @this)) then
+        if (flag != 0) or (items > 0) or ((controlled != 0) and (@unit.@controller != @this)) then
             print("\n", index);
 
             case controlled
                 when @ctrlProcessor then
-                    controller = @unit.controller;
-                    x = floor(controller.x);
-                    y = floor(controller.y);
+                    controller = @unit.@controller;
+                    x = floor(controller.@x);
+                    y = floor(controller.@y);
                     print(", ", x, ";", y);
                 when @ctrlPlayer then
                     print(", player");
@@ -80,7 +80,7 @@ while true do
             end;
         end;
 
-        if (controlled == 0) and switch1.enabled then
+        if (controlled == 0) and switch1.@enabled then
             if items > 0 then
                 flag(1);
                 CORE = ulocate(building, core, false, out CORE_X, out CORE_Y);

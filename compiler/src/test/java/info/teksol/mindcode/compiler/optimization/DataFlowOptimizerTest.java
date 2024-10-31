@@ -50,7 +50,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         assertGeneratesMessages(
                 ExpectedMessages.none(),
                 """
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             a = rand(10);
                             b = rand(10);
                         else
@@ -67,7 +67,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         assertGeneratesMessages(
                 ExpectedMessages.create().add("List of uninitialized variables: b."),
                 """
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             a = 1;
                             b = a;
                         else
@@ -113,7 +113,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 ExpectedMessages.none(),
                 """
                         for n in 0 ... 1000 do
-                            j = switch1.enabled;
+                            j = switch1.@enabled;
                             print(j);
                         end;
                         """
@@ -126,7 +126,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 ExpectedMessages.none(),
                 """
                         while true do
-                            i = switch1.enabled;
+                            i = switch1.@enabled;
                         end;
                         print(i);
                         """
@@ -302,7 +302,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         assertCompilesTo("""
                         a = 0;
                         b = 0;
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             a = 1;
                             b = 2;
                         else
@@ -353,7 +353,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void removesUnneededAssignmentsInConditions() {
         assertCompilesTo("""
                         a = 0;
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             a = 1;
                             b = a;
                         else
@@ -376,7 +376,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void IdentifiesUninitializedVariables() {
         assertCompilesTo(ExpectedMessages.create().add("List of uninitialized variables: a, b."),
                 """
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             a = 1;
                         else
                             b = 1;
@@ -399,7 +399,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void handlesSingleBranchIfStatements() {
         assertCompilesTo("""
                         a = 1;
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             a = 2;
                         end;
                         print(a);
@@ -428,7 +428,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         assertCompilesTo("""
                         a = rand(10);
                         b = a + 1;
-                        if switch1.enabled then
+                        if switch1.@enabled then
                             c = 2 * (a + 1);
                             print(c);
                         else
@@ -507,7 +507,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void handlesCaseExpressionsWithWhenSideEffects() {
         assertCompilesTo(ExpectedMessages.create().add("List of uninitialized variables: x."),
                 """
-                        case switch1.enabled
+                        case switch1.@enabled
                             when 1, x = 2 then print(x);
                         end;
                         """,
