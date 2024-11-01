@@ -1,5 +1,6 @@
 package info.teksol.schemacode.ast;
 
+import info.teksol.mindcode.InputPositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public record AstProgram(List<AstProgramSnippet> snippets) implements AstSchemaI
         return snippets.stream()
                 .map(s -> s.getProgramId(builder))
                 .collect(Collectors.joining(", "));
+    }
+
+    public InputPositionTranslator createPositionTranslator(SchematicsBuilder builder) {
+        return MultipartPositionTranslator.createTranslator(builder, snippets);
     }
 }

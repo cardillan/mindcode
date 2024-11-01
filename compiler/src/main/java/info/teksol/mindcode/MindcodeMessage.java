@@ -8,6 +8,10 @@ public interface MindcodeMessage {
         return InputPosition.EMPTY;
     }
 
+    default MindcodeMessage translatePosition(InputPositionTranslator translator) {
+        return this;
+    }
+
     MessageLevel level();
 
     String message();

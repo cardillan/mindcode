@@ -1,5 +1,7 @@
 package info.teksol.schemacode.ast;
 
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Language;
@@ -51,10 +53,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 List.of(
                         new AstSchematic(
                                 List.of(
-                                        new AstSchemaAttribute("name", AstStringLiteral.fromText("On/off switch")),
-                                        new AstSchemaAttribute("description", AstStringLiteral.fromText("Description")),
-                                        new AstSchemaAttribute("label", AstStringLiteral.fromText("label1")),
-                                        new AstSchemaAttribute("label", AstStringLiteral.fromText("label2")),
+                                        new AstSchemaAttribute("name", AstStringLiteral.fromText("On/off switch", 2, 13)),
+                                        new AstSchemaAttribute("description", AstStringLiteral.fromText("Description", 3, 20)),
+                                        new AstSchemaAttribute("label", AstStringLiteral.fromText("label1", 4, 12)),
+                                        new AstSchemaAttribute("label", AstStringLiteral.fromText("label2", 5, 12)),
                                         new AstSchemaAttribute("dimensions", new AstCoordinates(2, 1))
                                 ),
                                 List.of(
@@ -83,14 +85,16 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void parsesTextBlock() {
         AstDefinitions actual = createDefinitions("""
                 value = '''
-                text
-                block
-                '''
+                    text
+                    block
+                    '''
                 """);
 
         AstDefinitions expected = new AstDefinitions(
                 List.of(
-                        new AstStringConstant("value", AstStringBlock.fromText("text\nblock\n"))
+                        new AstStringConstant("value", new AstStringBlock("text\nblock\n",
+                                new InputPosition(InputFile.EMPTY, 2, 1), 4)
+                        )
                 )
         );
 
@@ -109,7 +113,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         assertTrue(parsed.definitions().get(0) instanceof AstStringConstant stringConstant
                 && stringConstant.name().equals("value")
                 && stringConstant.value() instanceof AstStringBlock block
-                && block.getValue().equals("text\nblock\n")
+                && block.text().equals("text\nblock\n")
         );
     }
 
@@ -127,7 +131,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         assertTrue(definitions.definitions().get(0) instanceof AstSchematic schematics
                 && schematics.attributes().get(0).attribute().equals("description")
                 && schematics.attributes().get(0).value() instanceof AstStringBlock stringBlock
-                && stringBlock.getValue().equals("Description"));
+                && stringBlock.text().equals("Description"));
     }
 
     @Test
@@ -143,7 +147,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 List.of(
                         new AstSchematic(
                                 List.of(
-                                        new AstSchemaAttribute("name", AstStringLiteral.fromText("Name"))
+                                        new AstSchemaAttribute("name", AstStringLiteral.fromText("Name", 2, 13))
                                 ),
                                 List.of()
                         )
@@ -158,7 +162,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 schematic
                     name = str_Name
                 end
-                                
+                
                 str_Name = "Name"
                 """
         );
@@ -171,7 +175,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                 ),
                                 List.of()
                         ),
-                        new AstStringConstant("str_Name", AstStringLiteral.fromText("Name"))
+                        new AstStringConstant("str_Name", AstStringLiteral.fromText("Name", 5, 13))
                 )
         );
 
@@ -528,7 +532,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@message",
                         new AstCoordinates(0, 0),
                         null,
-                        AstStringLiteral.fromText("message")
+                        AstStringLiteral.fromText("message", 2, 30)
                 )
         );
 
@@ -553,7 +557,8 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@message",
                         new AstCoordinates(0, 0),
                         null,
-                        AstStringBlock.fromText("message1\nmessage2\n")
+                        new AstStringBlock("message1\nmessage2\n",
+                                new InputPosition(InputFile.EMPTY, 3, 1), 0)
                 )
         );
 
@@ -1014,7 +1019,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(List.of(),
                                 new AstProgram(
-                                        new AstProgramSnippetText(AstStringLiteral.fromText("program"))
+                                        new AstProgramSnippetText(AstStringLiteral.fromText("program", 3, 17))
                                 ), Language.MLOG)
                 )
         );
@@ -1066,7 +1071,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(List.of(),
                                 new AstProgram(
-                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file"))
+                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file", 3, 22))
                                 ), Language.MLOG)
                 )
         );
@@ -1118,7 +1123,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(List.of(),
                                 new AstProgram(
-                                        new AstProgramSnippetText(AstStringLiteral.fromText("program"))
+                                        new AstProgramSnippetText(AstStringLiteral.fromText("program", 3, 21))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1170,7 +1175,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(List.of(),
                                 new AstProgram(
-                                    new AstProgramSnippetFile(AstStringLiteral.fromText("file"))
+                                    new AstProgramSnippetFile(AstStringLiteral.fromText("file", 3, 26))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1223,8 +1228,8 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(List.of(),
                                 new AstProgram(
-                                        new AstProgramSnippetText(AstStringLiteral.fromText("program")),
-                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file")),
+                                        new AstProgramSnippetText(AstStringLiteral.fromText("program", 3, 21)),
+                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file", 3, 38)),
                                         new AstProgramSnippetText(new AstStringRef("my_program")),
                                         new AstProgramSnippetFile(new AstStringRef("my_file"))
                                 ), Language.MINDCODE)

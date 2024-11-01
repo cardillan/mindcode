@@ -1,29 +1,42 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.schemacode.SchematicsInternalError;
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
-public record AstStringBlock(String literal) implements AstText {
+public record AstStringBlock(String text, InputPosition inputPosition, int indent) implements AstText {
 
-    public AstStringBlock {
-        if (literal != null && literal.isEmpty()) {
-            throw new SchematicsInternalError("Empty literal.");
-        }
+    @Override
+    public InputPosition getTextPosition(SchematicsBuilder builder) {
+        return inputPosition;
     }
 
-    public String getValue() {
-        String unquoted = literal.substring(3, literal.length() - 3);
-        // Skip first newline, if there isn't a newline (how so?), index + 1 will be equal to 0
-        int index = unquoted.indexOf('\n');
-        return unquoted.substring(index + 1).stripIndent();
+    @Override
+    public int getIndent(SchematicsBuilder builder) {
+        return indent;
     }
 
     @Override
     public String getText(SchematicsBuilder builder) {
-        return getValue();
+        return text;
+    }
+
+    public static AstStringBlock fromTerminalNode(InputFile inputFile, TerminalNode node) {
+        String nodeText = node.getText();
+        String unquoted = nodeText.substring(3, nodeText.length() - 3);
+        // Skip first newline, if there isn't a newline (how so?), index + 1 will be equal to 0
+        int start = unquoted.indexOf('\n');
+
+        String textBlock = unquoted.substring(start + 1);
+        String text = textBlock.stripIndent();
+        int newLine = text.indexOf('\n');
+        int indent = textBlock.indexOf(newLine >= 0 ? text.substring(0, newLine) : text);
+        int line = node.getSymbol().getLine() + 1;
+        return new AstStringBlock(text, new InputPosition(inputFile, line, 1), indent);
     }
 
     public static AstStringBlock fromText(String text) {
-        return new AstStringBlock("'''\n" + text + "'''");
+        return new AstStringBlock(text, InputPosition.EMPTY, 0);
     }
 }

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.webapp;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
@@ -109,7 +110,7 @@ public class SchematicsController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(sourceCode,
+        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(InputFile.createSourceFile(sourceCode),
                 new CompilerProfile(true, level), null);
         final long end = System.nanoTime();
         logger.info("performance built_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));

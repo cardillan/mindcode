@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
@@ -206,6 +207,13 @@ abstract class ActionHandler {
         } else {
             return outputFile;
         }
+    }
+
+    static InputFile readFile(File file, boolean multiple) {
+        return new InputFile(
+                isStdInOut(file) || !multiple ? "" : file.getPath(),
+                isStdInOut(file) ? "" : file.getAbsolutePath(),
+                readInput(file));
     }
 
     static String readInput(File inputFile) {

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.InputPositionTranslator;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
 import org.intellij.lang.annotations.PrintFormat;
@@ -15,6 +16,17 @@ public record MindcodeCompilerMessage(MessageLevel level, InputPosition inputPos
         Objects.requireNonNull(level);
         Objects.requireNonNull(inputPosition);
         Objects.requireNonNull(message);
+    }
+
+    @Override
+    public MindcodeMessage translatePosition(InputPositionTranslator translator) {
+        if (!inputPosition.isEmpty()) {
+            InputPosition translated = translator.apply(inputPosition);
+            if (translated != inputPosition) {
+                return new MindcodeCompilerMessage(level, translated, message);
+            }
+        }
+        return this;
     }
 
     public static MindcodeCompilerMessage error(InputPosition inputPosition, @PrintFormat String format, Object... args) {

@@ -1,5 +1,7 @@
 package info.teksol.schemacode.ast;
 
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.io.IOException;
@@ -26,6 +28,19 @@ public record AstProgramSnippetFile(AstText fileName) implements AstProgramSnipp
         } else {
             builder.error("Loading code from external file not supported in web application.");
             return "";
+        }
+    }
+
+    @Override
+    public InputPosition getInputPosition(SchematicsBuilder builder) {
+        if (builder.externalFilesAllowed()) {
+            Path path = builder.getBasePath().resolve(fileName.getText(builder));
+            return new InputPosition(
+                    new InputFile(path.getFileName().toString(), path.toAbsolutePath().toString(), ""),
+                    1, 1);
+        } else {
+            builder.error("Loading code from external file not supported in web application.");
+            return InputPosition.EMPTY;
         }
     }
 }

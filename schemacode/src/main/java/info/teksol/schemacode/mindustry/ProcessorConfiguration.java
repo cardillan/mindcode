@@ -2,6 +2,7 @@ package info.teksol.schemacode.mindustry;
 
 import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
@@ -154,8 +155,9 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 }
 
                 builder.info("Compiling %s", processor.program().getProgramId(builder));
-                CompilerOutput<String> output = CompilerFacade.compile(mindcode,
-                        builder.getCompilerProfile());
+                CompilerProfile compilerProfile = builder.getCompilerProfile();
+                compilerProfile.setPositionTranslator(processor.program().createPositionTranslator(builder));
+                CompilerOutput<String> output = CompilerFacade.compile(mindcode, compilerProfile);
                 output.messages().forEach(builder::addMessage);
                 if (output.hasErrors()) {
                     builder.error("Compile errors in Mindcode source code.");

@@ -2,9 +2,11 @@ package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.MindcodeMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String textBuffer, int steps) {
 
@@ -39,7 +41,7 @@ public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String
     private <M> List<M> formatMessages(Predicate<MindcodeMessage> filter, Function<MindcodeMessage, M> messageTransformer) {
         return messages.stream().filter(filter)
                 .map(messageTransformer)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public boolean hasErrors() {

@@ -1,5 +1,6 @@
 package info.teksol.schemacode;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -62,31 +63,32 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected DefinitionsContext parseSchematics(String definition) {
-        return SchemacodeCompiler.parseSchematics(definition, messageListener("parseSchematics"));
+        return SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition), messageListener("parseSchematics"));
     }
 
     protected void parseSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
         List<MindcodeMessage> messages = new ArrayList<>();
-        SchemacodeCompiler.parseSchematics(definition, messages::add);
+        SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition), messages::add);
         assertRegex(MessageLevel.ERROR, regex, messages);
     }
 
     protected AstDefinitions createDefinitions(String definition) {
         DefinitionsContext parseTree = parseSchematics(definition);
-        return SchemacodeCompiler.createDefinitions(parseTree, messageListener("createDefinitions"));
+        return SchemacodeCompiler.createDefinitions(InputFile.EMPTY, parseTree, messageListener("createDefinitions"));
     }
 
     protected Schematic buildSchematics(String definition) {
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
-        return SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messageListener("buildSchematics"), null);
+        return SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messageListener("buildSchematics"),
+                InputFile.EMPTY, null);
     }
 
     protected void buildSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
         List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
-        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, null);
+        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, InputFile.EMPTY, null);
         assertRegex(MessageLevel.ERROR, regex, messages);
     }
 
@@ -94,7 +96,7 @@ public abstract class AbstractSchematicsTest {
         List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
-        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, null);
+        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, InputFile.EMPTY, null);
         assertRegex(MessageLevel.WARNING, regex, messages);
     }
 

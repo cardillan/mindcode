@@ -1,5 +1,6 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.mimex.BlockType;
@@ -23,24 +24,27 @@ public class SchematicsBuilder {
     private final CompilerProfile compilerProfile;
     private final Consumer<MindcodeMessage> messageListener;
     private final AstDefinitions astDefinitions;
+    private final InputFile inputFile;
     private final Path basePath;
 
     private AstSchematic astSchematic;
-    private Map<String, String> constants;
+    private Map<String, AstText> constants;
     private Map<String, BlockPosition> astLabelMap;
     private BlockPositionMap<BlockPosition> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
-    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<MindcodeMessage> messageListener, AstDefinitions astDefinitions, Path basePath) {
+    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<MindcodeMessage> messageListener, AstDefinitions astDefinitions,
+            InputFile inputFile, Path basePath) {
         this.compilerProfile = compilerProfile;
         this.messageListener = messageListener;
         this.astDefinitions = astDefinitions;
+        this.inputFile = inputFile;
         this.basePath = basePath;
     }
 
     public static SchematicsBuilder create(CompilerProfile compilerProfile, AstDefinitions definitions,
-            Consumer<MindcodeMessage> messageListener, Path basePath) {
-        return new SchematicsBuilder(compilerProfile, messageListener, definitions, basePath);
+            Consumer<MindcodeMessage> messageListener, InputFile inputFile, Path basePath) {
+        return new SchematicsBuilder(compilerProfile, messageListener, definitions, inputFile, basePath);
     }
 
     public void addMessage(MindcodeMessage message) {
@@ -211,32 +215,27 @@ public class SchematicsBuilder {
                         e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
 
         // Add all icon constants
-        Icons.forEachIcon((k, v) -> constants.put(k, v.format()));
+        Icons.forEachIcon((k, v) -> constants.put(k, AstStringLiteral.fromText(v.format())));
     }
 
-    private String resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {
-        AstText ast = value.value();
-        if (ast == null) {
+    private AstText resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {
+        AstText text = value.value();
+        if (text == null) {
             throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
-        } else if (ast instanceof AstStringRef ref) {
+        } else if (text instanceof AstStringRef ref) {
             if (!visited.add(ref.reference())) {
                 error("Circular definition of identifier '%s'.", ref.reference());
-                return "";
+                return AstStringLiteral.fromText("");
             } else if (!constantLists.containsKey(ref.reference())) {
                 error("Undefined identifier '%s'.", ref.reference());
-                return "";
+                return AstStringLiteral.fromText("");
             }
             return resolveConstant(constantLists, visited, constantLists.get(ref.reference()));
-        } else if (ast instanceof AstStringBlock block) {
-            return block.getValue();
-        } else if (ast instanceof AstStringLiteral lit) {
-            return lit.getValue();
         } else {
-            throw new SchematicsInternalError("Identifier '%s': unexpected class '%s': %s", value.name(), ast.getClass(), ast);
+            return text;
         }
     }
 
-    @SuppressWarnings("DuplicateBranchesInSwitch")
     private Configuration convertAstConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
         Configuration configuration = getConfiguration(blockPos, astConfiguration);
 
@@ -355,7 +354,7 @@ public class SchematicsBuilder {
                 wasEmpty = true;
                 continue;
             }
-            if (sbr.length() > 0) {
+            if (!sbr.isEmpty()) {
                 sbr.append(wasEmpty ? '\n' : ' ');
             }
             wasEmpty = false;
@@ -365,11 +364,11 @@ public class SchematicsBuilder {
         return sbr.toString();
     }
 
-    public String getText(String reference) {
-        String result = constants.get(reference);
+    public AstText getText(String reference) {
+        AstText result = constants.get(reference);
         if (result == null) {
             error("Undefined identifier '%s'.", reference);
-            return "";
+            return AstStringLiteral.fromText("");
         }
         return result;
     }
@@ -413,7 +412,8 @@ public class SchematicsBuilder {
         }
     }
 
-    // Caches result of compiling Mindcode to mlog - avid repeated recompilation of identical mindcode
+    // Caches result of compiling Mindcode to mlog - avoid repeated recompilation of identical mindcode
+    // Maps the entire input string onto the output to avoid obtaining wrong cached version
     private final Map<String, String> compilerCache = new HashMap<>();
 
     public String getMlogFromCache(String mindcode) {

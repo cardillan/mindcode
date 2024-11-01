@@ -43,10 +43,13 @@ public class MindcodeCompiler implements Compiler<String> {
     private InstructionProcessor instructionProcessor;
 
     private final List<MindcodeMessage> messages = new ArrayList<>();
-    private final MindcodeErrorListener errorListener = new MindcodeErrorListener(messages);
+    private final TranslatingMessageConsumer messageConsumer;
+    private final MindcodeErrorListener errorListener;
 
     public MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
+        this.messageConsumer = new TranslatingMessageConsumer(messages::add, profile.getPositionTranslator());
+        this.errorListener = new MindcodeErrorListener(messageConsumer);
     }
 
     @Override
@@ -59,14 +62,14 @@ public class MindcodeCompiler implements Compiler<String> {
             Seq program = null;
             for (InputFile inputFile : inputFiles) {
                 // Additional source files are put in front of the others
-                final Seq other = parse(inputFile, messages::add);
+                final Seq other = parse(inputFile, messageConsumer);
                 program = Seq.append(other, program);
                 if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                     return new CompilerOutput<>("", messages, null, 0);
                 }
             }
 
-            DirectiveProcessor.processDirectives(program, profile, messages::add);
+            DirectiveProcessor.processDirectives(program, profile, messageConsumer);
 
             if (profile.getProcessorVersion().matches(ProcessorVersion.V8A, ProcessorVersion.MAX)) {
                 Seq sys = parseLibrary("sys");
@@ -74,11 +77,11 @@ public class MindcodeCompiler implements Compiler<String> {
             }
 
             printParseTree(program);
-            messages.add(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
+            messageConsumer.accept(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
             long compileStart = System.nanoTime();
-            instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
+            instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
             GeneratorOutput generated = generateCode(program);
             if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                 return new CompilerOutput<>("", messages, null, 0);
@@ -129,7 +132,7 @@ public class MindcodeCompiler implements Compiler<String> {
                 e.printStackTrace();
             }
 
-            messages.add(ToolMessage.error("Internal error: %s", e.getMessage()));
+            messageConsumer.accept(ToolMessage.error("Internal error: %s", e.getMessage()));
         }
 
         return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
@@ -156,7 +159,7 @@ public class MindcodeCompiler implements Compiler<String> {
         }
 
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
-        Seq parsed = parse(loadLibrary(filename), messages::add);
+        Seq parsed = parse(loadLibrary(filename), messageConsumer);
         long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
 
         if (before == after) {
@@ -192,12 +195,12 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private GeneratorOutput generateCode(Seq program) {
         final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
-                messages::add);
+                messageConsumer);
         return generator.generate(program);
     }
 
     private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
-        messages.add(
+        messageConsumer.accept(
                 MindcodeOptimizerMessage.debug("%s", profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
                         .map(e -> e.getKey().getOptionName() + " = " + e.getValue().name().toLowerCase())
@@ -208,7 +211,7 @@ public class MindcodeCompiler implements Compiler<String> {
         final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                 ? new DiffDebugPrinter(profile.getDebugLevel()) : new NullDebugPrinter();
 
-        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messages::add);
+        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer);
         optimizer.setDebugPrinter(debugPrinter);
         List<LogicInstruction> result = optimizer.optimize(generatorOutput);
         debugPrinter.print(this::debug);
@@ -238,11 +241,11 @@ public class MindcodeCompiler implements Compiler<String> {
     }
 
     private void info(String message) {
-        messages.add(ToolMessage.info(message));
+        messageConsumer.accept(ToolMessage.info(message));
     }
 
     private void debug(String message) {
-        messages.add(ToolMessage.debug(message));
+        messageConsumer.accept(ToolMessage.debug(message));
     }
 
 }

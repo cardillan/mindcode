@@ -1,7 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -70,17 +70,16 @@ public class CompileSchemacodeAction extends ActionHandler {
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
         compilerProfile.setAdditionalTags(arguments.get("add_tag"));
-        File inputFile = arguments.get("input");
-        String sourceText = readInput(inputFile);
-        Path basePath = isStdInOut(inputFile) ? Paths.get("") : inputFile.toPath().toAbsolutePath().getParent();
+        File file = arguments.get("input");
+        InputFile inputFile = readFile(file, true);
+        Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().getParent();
 
-        CompilerOutput<byte[]> result = SchemacodeCompiler.compile(sourceText , compilerProfile, basePath);
+        CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFile , compilerProfile, basePath);
 
-        // TODO Implement input file position translation somehow
         Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
 
-        File output = resolveOutputFile(inputFile, arguments.get("output"), ".msch");
-        File logFile = resolveOutputFile(inputFile, arguments.get("log"), ".log");
+        File output = resolveOutputFile(file, arguments.get("output"), ".msch");
+        File logFile = resolveOutputFile(file, arguments.get("log"), ".log");
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output());
@@ -98,7 +97,7 @@ public class CompileSchemacodeAction extends ActionHandler {
             if (!isStdInOut(logFile)) {
                 result.messages().stream()
                         .filter(m -> m.isError() || m.isWarning())
-                        .map(MindcodeMessage::message)
+                        .map(m -> m.formatMessage(positionFormatter))
                         .forEach(System.out::println);
             }
         } else {

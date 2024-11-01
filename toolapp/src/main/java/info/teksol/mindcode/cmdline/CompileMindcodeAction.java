@@ -103,13 +103,6 @@ public class CompileMindcodeAction extends ActionHandler {
                 .setDefault(defaults.getStepLimit());
     }
 
-    private InputFile readFile(File file, boolean multiple) {
-        return new InputFile(
-                isStdInOut(file) || !multiple ? "" : file.getPath(),
-                isStdInOut(file) ? "" : file.getAbsolutePath(),
-                readInput(file));
-    }
-
     @Override
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);

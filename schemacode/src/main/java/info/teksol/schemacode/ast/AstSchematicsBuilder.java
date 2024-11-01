@@ -1,5 +1,7 @@
 package info.teksol.schemacode.ast;
 
+import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
@@ -16,14 +18,17 @@ import java.util.function.Consumer;
 
 public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
+    private final InputFile inputFile;
     private final Consumer<MindcodeMessage> messageListener;
 
-    public AstSchematicsBuilder(Consumer<MindcodeMessage> messageListener) {
+    public AstSchematicsBuilder(InputFile inputFile, Consumer<MindcodeMessage> messageListener) {
+        this.inputFile = inputFile;
         this.messageListener = messageListener;
     }
 
-    public static AstDefinitions generate(DefinitionsContext parseTree, Consumer<MindcodeMessage> messageListener) {
-        final AstSchematicsBuilder builder = new AstSchematicsBuilder(messageListener);
+    public static AstDefinitions generate(InputFile inputFile, DefinitionsContext parseTree,
+            Consumer<MindcodeMessage> messageListener) {
+        final AstSchematicsBuilder builder = new AstSchematicsBuilder(inputFile, messageListener);
         final AstSchemaItem item = builder.visit(parseTree);
         return (AstDefinitions) item;
     }
@@ -41,6 +46,10 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
                 .toList();
 
         return new AstDefinitions(list);
+    }
+
+    private InputPosition pos(Token token) {
+        return InputPosition.create(inputFile, token);
     }
 
     @Override
@@ -301,15 +310,15 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     @Override
     public AstStringLiteral visitTextLine(SchemacodeParser.TextLineContext ctx) {
-        return new AstStringLiteral(ctx.TextLine().getText());
+        return AstStringLiteral.fromTerminalNode(inputFile, ctx.TextLine());
     }
 
     @Override
     public AstStringBlock visitTextBlock(SchemacodeParser.TextBlockContext ctx) {
         if (ctx.TextBlock1() != null) {
-            return new AstStringBlock(ctx.TextBlock1().getText());
+            return AstStringBlock.fromTerminalNode(inputFile, ctx.TextBlock1());
         } else if (ctx.TextBlock2() != null) {
-            return new AstStringBlock(ctx.TextBlock2().getText());
+            return AstStringBlock.fromTerminalNode(inputFile, ctx.TextBlock2());
         } else {
             throw new SchematicsInternalError("No text value in TextBlock");
         }

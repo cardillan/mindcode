@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.InputPositionTranslator;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -51,6 +52,7 @@ public class CompilerProfile {
     // Schematics Builder
 
     private List<String> additionalTags = List.of();
+    private InputPositionTranslator positionTranslator = p -> p;
 
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
@@ -240,6 +242,14 @@ public class CompilerProfile {
     public CompilerProfile setAdditionalTags(List<String> additionalTags) {
         this.additionalTags = Objects.requireNonNull(additionalTags);
         return this;
+    }
+
+    public InputPositionTranslator getPositionTranslator() {
+        return positionTranslator;
+    }
+
+    public void setPositionTranslator(InputPositionTranslator positionTranslator) {
+        this.positionTranslator = positionTranslator;
     }
 
     public boolean isRun() {
