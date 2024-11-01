@@ -33,15 +33,14 @@ class OptimizerExpressionEvaluator {
     }
 
     private LogicLiteral evaluateUnaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicLiteral x && x.isNumericLiteral()) {
+        if (op.getX() instanceof LogicReadable x &&x.canEvaluate()) {
             return evaluate(op.getOperation(), x, LogicNull.NULL);
         }
         return null;
     }
 
     private LogicLiteral evaluateBinaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicLiteral x && x.isNumericLiteral()
-                && op.getY() instanceof LogicLiteral y && y.isNumericLiteral()) {
+        if (op.getX() instanceof LogicReadable x && x.canEvaluate() && op.getY() instanceof LogicReadable y && y.canEvaluate()) {
             return evaluate(op.getOperation(), x, y);
         }
         return null;
@@ -175,7 +174,7 @@ class OptimizerExpressionEvaluator {
     public LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
-        } else if (jump.getX() instanceof LogicLiteral x && jump.getY() instanceof LogicLiteral y) {
+        } else if (jump.getX() instanceof LogicReadable x && x.canEvaluate() && jump.getY() instanceof LogicReadable y && y.canEvaluate()) {
             LogicLiteral literal = evaluate(jump.getCondition().toOperation(), x, y);
             return literal instanceof LogicBoolean b ? b : null;
         }

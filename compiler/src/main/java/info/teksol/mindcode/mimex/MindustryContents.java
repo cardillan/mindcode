@@ -34,12 +34,12 @@ public class MindustryContents {
                 .flatMap(m -> m.values().stream())
                 .collect(Collectors.toMap(MindustryContent::name, t -> t));
 
-    public static MindustryContent get(String baseName) {
-        return ALL_CONSTANTS.get(baseName);
+    public static MindustryContent get(String name) {
+        return ALL_CONSTANTS.get(name);
     }
 
-    public static int getId(String baseName) {
-        MindustryContent content = ALL_CONSTANTS.get(baseName);
+    public static int getId(String name) {
+        MindustryContent content = ALL_CONSTANTS.get(name);
         return content == null ? -1 : content.id();
     }
 
@@ -55,6 +55,11 @@ public class MindustryContents {
 
     public static MindustryContent unregistered(String name) {
         return new MindustryContent() {
+            @Override
+            public String contentName() {
+                return name.substring(1);
+            }
+
             @Override
             public String name() {
                 return name;
@@ -117,7 +122,7 @@ public class MindustryContents {
 
     private static class SimpleReader<T extends MindustryContent> extends AbstractReader<T> {
         private interface ItemConstructor<T extends MindustryContent> {
-            T construct(String name, int id);
+            T construct(String contentName, String name, int id);
         }
 
         private final ItemConstructor<T> itemConstructor;
@@ -137,6 +142,7 @@ public class MindustryContents {
         @Override
         protected T create(String[] columns) {
             return itemConstructor.construct(
+                    columns[name],
                     "@" + columns[name],
                     Integer.parseInt(columns[id]));
         }
@@ -168,6 +174,7 @@ public class MindustryContents {
         @Override
         protected BlockType create(String[] columns) {
             return new BlockType(
+                    columns[name],
                     "@" + columns[name],
                     Integer.parseInt(columns[id]),
                     columns[visibility],
@@ -205,7 +212,9 @@ public class MindustryContents {
 
         @Override
         protected LAccess create(String[] columns) {
-            return new LAccess("@" + columns[name],
+            return new LAccess(
+                    columns[name],
+                    "@" + columns[name],
                     Boolean.parseBoolean(columns[senseable]),
                     Boolean.parseBoolean(columns[controls]),
                     Boolean.parseBoolean(columns[settable]),

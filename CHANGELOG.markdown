@@ -29,9 +29,11 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* Changed Mindustry Logic functions to require the `out` modifier when passing in an output argument, in the same way as the user-defined functions. For backward compatibility, omitting the `out` modifier from a Mindustry Logic function calls generates only a warning, not an error.
+* **Breaking:** Changed the syntax of properties to use the `@` prefix for Mindustry built-in variables (e.g. `vault1.@coal`). 
+* **Breaking:** Changed Mindustry Logic functions to require the `out` modifier when passing in an output argument, in the same way as the user-defined functions. For backward compatibility, omitting the `out` modifier from a Mindustry Logic function calls generates only a warning, not an error.
 * Changed Loop Unrolling to replace output iterator variables with the variable assigned to them.
-* Changed Single Step Eliminator to remove a jump is if there is an identical jump preceding it and there are no other jumps or labels between them. Active on `experimental`.  
+* Changed Single Step Eliminator to remove a jump is if there is an identical jump preceding it and there are no other jumps or labels between them. Active on `experimental`.
+* Changed the expression evaluator to evaluate operations over built-in values. The change enhances the Data Flow and Jump Normalization optimizations.   
 
 ## 2.4.0 - 2024-10-23
 

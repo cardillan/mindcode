@@ -84,6 +84,11 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return constant;
     }
 
+    @Override
+    public boolean canEvaluate() {
+        return true;
+    }
+
     public boolean isObject() {
         return isObject;
     }

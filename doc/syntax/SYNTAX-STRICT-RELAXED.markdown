@@ -50,13 +50,14 @@ The following features are deprecated:
 - The `printf` function in language target `ML7A` and earlier. (This function is repurposed in the upcoming language target `ML8A`).
 - The `configure` property. This name from Mindustry Logic 6 was replaced by `config` in Mindustry Logic 7.
 - Not using `out` modifiers when passing arguments to output function parameters.
+- Not using the `@` prefix for Mindustry built-in variables used as properties (`vault1.coal`). 
 - Using void functions in assignments, as function parameters or in `return` statements.
 
 The compiler produces a warning when it encounters a deprecated feature in the source code.
 
 ## Shortcomings of the Relaxed syntax
 
-The most impactful problem of the original syntax stem from the decision to make semicolons separating individual statements and expressions optional. That, coupled with the fact the basic element of the language is an expression, and not a statement, leads to situation where a code entered by a user compiles witout any error or warning, but produces vastly different result from what was intended. For example, the following code
+The most impactful problem of the original syntax stem from the decision to make semicolons separating individual statements and expressions optional. That, coupled with the fact the basic element of the language is an expression instead of a statement, leads to situation where a code entered by a user compiles without any error or warning, but produces vastly different result from what was intended. For example, the following code
 
 ```
 set count = 10

@@ -63,14 +63,7 @@ public class OpInstruction extends BaseResultInstruction {
         return (LogicValue) getArg(3);
     }
 
-    public final LogicValue getOperand(int index) {
-        if (index < 0 || index > getArgs().size() - 2) {
-            throw new ArrayIndexOutOfBoundsException("Operand index " + index + " out of bounds");
-        }
-        return (LogicValue) getArg(index + 2);
-    }
-
-    public final List<LogicValue> getOperands() {
-        return List.of(getX(), getY());
+    public boolean isDeterministic() {
+        return getOperation().isDeterministic();
     }
 }

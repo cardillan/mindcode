@@ -277,7 +277,7 @@ param MEMORY = bank1;
 allocate stack in MEMORY[0 ... 480], heap in MEMORY[480 ... 512];
 ```
 
-# Built-in variables
+# Built-in variables and constants
 
 Mindustry Logic processors have several built-in variables. Their names start with the `@` sign. The most common ones are:
 * `@counter`: address of the next instruction to be executed
@@ -298,7 +298,9 @@ to assign a new unit to this variable is to use the `ubind()` function. All unit
 unit. See also [Using units](MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
 
 > [!TIP]
-> The value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a game from a save file. Take it into account especially when programming loops that should terminate at some predetermined time.   
+> The value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a game from a save file. Take it into account especially when programming loops that should terminate at some predetermined time.
+
+Built-in constants, such as `@copper`, `@vela` or `@switch`, represent items, liquids, block types, unit types, object properties and so on. They are used as-is in the Mindcode, including the `@` prefix.   
 
 # Linked blocks
 

@@ -979,8 +979,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 return LogicNumber.ZERO;
             }
         } else if (node.getValue() instanceof Ref r) {
-            LogicValue value = visitRef(r);
-            if (value.isConstant()) return value;
+            LogicBuiltIn value = visitRef(r);
+            if (!value.isVolatile()) return value;
         } else if (node.getValue() instanceof VarRef r && instructionProcessor.isBlockName(r.getName())) {
             return LogicVariable.block(r.getName());
         }
@@ -1425,7 +1425,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
-    public LogicValue visitRef(Ref node) {
+    public LogicBuiltIn visitRef(Ref node) {
         if (!node.isStrict()) {
             warn(node, "Built-in variable '%s': omitting the '@' prefix from built-in variable names is deprecated.", node.getName().substring(1));
         }

@@ -48,4 +48,64 @@ class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<ConditionalJu
                 createInstruction(END)
         );
     }
+
+    @Test
+    void evaluatesBuiltInEqualComparison() {
+        assertCompilesTo(
+                createTestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
+                        """
+                        if @coal == @lead then
+                            print("yes");
+                        else
+                            print("no");
+                        end;
+                        """,
+                createInstruction(PRINT, q("no"))
+        );
+    }
+
+    @Test
+    void evaluatesBuiltInNonEqualComparison() {
+        assertCompilesTo(
+                createTestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
+                        """
+                        if @coal != @lead then
+                            print("yes");
+                        else
+                            print("no");
+                        end;
+                        """,
+                createInstruction(PRINT, q("yes"))
+        );
+    }
+
+    @Test
+    void evaluatesBuiltInLessThanOrEqualComparison() {
+        assertCompilesTo(
+                createTestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
+                        """
+                        if @coal <= @lead then
+                            print("yes");
+                        else
+                            print("no");
+                        end;
+                        """,
+                createInstruction(PRINT, q("yes"))
+        );
+    }
+
+    @Test
+    void evaluatesBuiltInLessThanComparison() {
+        assertCompilesTo(
+                createTestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
+                        """
+                        if @coal < @lead then
+                            print("yes");
+                        else
+                            print("no");
+                        end;
+                        """,
+                createInstruction(PRINT, q("no"))
+        );
+    }
 }

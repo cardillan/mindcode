@@ -12,7 +12,7 @@
 Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
 > [!IMPORTANT]
-> In the [2.3.0 release](CHANGELOG.markdown#230---2024-10-16), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown).
+> In the [2.3.0 release](CHANGELOG.markdown#230---2024-10-16), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. Other changes to the syntax include compulsory `out` keywords for output function call arguments and using the `@` prefix for Mindustry built-in variables used as properties. The old syntax is still supported, but generates a warning. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown).
 > 
 > The relaxed variant of the syntax will be eventually removed.    
 

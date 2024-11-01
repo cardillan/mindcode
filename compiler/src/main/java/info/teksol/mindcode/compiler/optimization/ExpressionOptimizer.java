@@ -235,18 +235,14 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processSensorInstruction(LogicIterator logicIterator, SensorInstruction ix) {
-        if (ix.getObject() instanceof LogicBuiltIn object && object.isConstant()
-                && ix.getProperty() instanceof LogicBuiltIn property) {
+        if (ix.getObject() instanceof LogicBuiltIn object && ix.getProperty() instanceof LogicBuiltIn property) {
             if (object.getName().equals("@this")) {
                 if (property.getName().equals("@x") || property.getName().equals("@y")) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(),
                             LogicBuiltIn.create(object.getName() + property.getName().substring(1))));
                 }
-            } else if (advanced() && property.getName().equals("@id")) {
-                int id = MindustryContents.getId(object.getName());
-                if (id != -1) {
-                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.get(id)));
-                }
+            } else if (advanced() && property.getName().equals("@id") &&  object.getObject().id() != -1) {
+                logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.get(object.getObject().id())));
             }
         }
     }

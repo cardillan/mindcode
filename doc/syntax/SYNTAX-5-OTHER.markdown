@@ -201,7 +201,7 @@ Mindcode provides a mechanism of encoding a custom instruction not known to Mind
 
 1. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
 2. An instruction was not implemented correctly in Mindcode and a fix is not available.
-3. Mindustry was expanded to allow new instructions created by mods.
+3. If Mindustry gets updated to allow new instructions created by mods.
 
 Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism. In addition, some custom instructions might break existing optimizations through their side effects. 
 
@@ -250,7 +250,7 @@ format __tmp0
 Considerations:
 
 * The Print Merging optimization under ML8A target knows and properly handles the `format` instruction. When replaced by a custom instruction, the Print Merger won't be aware of it and might produce incorrect code. It would be necessary to turn off Print Merging optimization, if the `format` instruction was introduced in this way.
-* THe processor emulator doesn't recognize custom instructions and won't handle them. The output produced by running the above code using the processor emulator would therefore be incorrect.
+* The processor emulator doesn't recognize custom instructions and won't handle them. The output produced by running the above code using the processor emulator would therefore be incorrect.
 
 ## The `draw print` instruction
 
@@ -280,17 +280,17 @@ draw print 0 20 bottomLeft 0 0 0
 Considerations:
 
 * The `draw print` instruction manipulates the text buffer and therefore interferes with the Print Merging optimization again. This optimization would need to be switched off.
-* A separate function for each possible alignment is required. Unused functions aren't compiled, so there isn't any penalty with defining a function for each existing alignment, but it is tedious and cumbersome. Defining all possible variants for instructions that have several keyword arguments might become unfeasible.   
+* A separate function for each possible alignment is required. Unused functions aren't compiled, so there isn't any cost in terms of instruction space to defining a function for each existing alignment, but it is tedious and cumbersome. Defining all possible variants for instructions that have several keyword arguments might become unfeasible.   
 
-## The `ucontrol getblock` instruction
+## The `ucontrol getBlock` instruction
 
-The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. If not known by Mindcode, it could be defined like this:
+The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. Had it not be known by Mindcode, it could be defined like this:
 
 ```
 // the ML7A target uses a bit different syntax for getBlock from the ML7 target.
 #set target = ML7A;
 
-// Using 'getBlock2' as a namoe to avoid clashing with the existing function name
+// Using 'getBlock2' as a name to avoid clashing with the existing function name
 inline def getBlock2(x, y, out type, out floor)
     mlog("ucontrol", "getBlock", in x, in y, out type, out building, out floor);
     return building;
@@ -325,7 +325,7 @@ print __fn0_floor
 
 ## The `jump` instruction
 
-The `jump` instruction is a control flow instruction, an as such producing it through the `mlog()` function is strongly discouraged. Anyhow, Mindcode will allow the following code to be compiled:
+The `jump` instruction is a control flow instruction, an as such producing it through the `mlog()` function will break the compiled code. Anyhow, Mindcode will allow the following code to be compiled:
 
 ```
 mlog("jump", 50, "always");
@@ -340,7 +340,7 @@ jump 50 always
 Considerations:
 
 * There aren't direct ways to obtain the targets for the `jump` instruction. Forcing the instruction to target the intended code might be very difficult (albeit not outright impossible when modifying the instruction to target labels instead).
-* Introducing jumps unrecognized by Mindcode would render most of the compiled code unsafe. Mindcode uses the knowledge of the program control flow to generate the code and make various optimizations. Introducing unrecognized control flow instructions would mean the knowledge is incorrect and the generated code possibly flawed.  
+* Introducing jumps unrecognized by Mindcode would render most of the compiled code unsafe. Mindcode uses the knowledge of the program control flow to generate the code and make various optimizations. Introducing unrecognized control flow instructions would mean the compiled code and especially the optimizations are not correct.  
 
 ---
 

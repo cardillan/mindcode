@@ -109,13 +109,9 @@ The `sensor` method accepts an expression, not just constant property name, as a
 amount = vault1.sensor(use_titanium ? @titanium : @copper);
 ```
 
-If the property you're trying to obtain is hard-coded, you can again use an alternate syntax: `amount = storage.thorium` instead of the longer equivalent `amount = storage.sensor(@thorium)`. You can use this for any property, not just item types, such as `@unit.dead` instead of `@unit.sensor(@dead)`.
+If the property you're trying to obtain is hard-coded, you can again use an alternate syntax: `amount = storage.@thorium` instead of the longer equivalent `amount = storage.sensor(@thorium)`. You can use this for any property, not just item types, such as `@unit.@dead` instead of `@unit.sensor(@dead)`.
 
 Again, the `vault1` or `storage` in the examples can be a variable or a linked block object.
-
-> [!IMPORTANT]
-> In the case of property access, the `@` character at the beginning of the property name is omitted - 
-> `storage.thorium` is the right syntax, `storage.@thorium` is wrong.
 
 ## The `min()` and `max()` functions
 

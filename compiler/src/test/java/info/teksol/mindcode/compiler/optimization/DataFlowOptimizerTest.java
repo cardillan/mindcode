@@ -1360,7 +1360,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Subexpressions">
+    //<editor-fold desc="Expressions">
     @Test
     void optimizesSubexpressions() {
         assertCompilesTo("""
@@ -1640,6 +1640,58 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         createInstruction(OP, mul, tmp1, a, P2),
                         createInstruction(PRINT, tmp1)
                 )
+        );
+    }
+
+    @Test
+    void optimizesBuiltInExpressions() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
+                """
+                        print(@coal == @lead);
+                        print(@coal != @lead);
+                        print(@coal < @lead);
+                        print(@coal > @lead);
+                        print(@coal <= @lead);
+                        print(@coal >= @lead);
+                        print(@coal === @lead);
+                        """,
+                createInstruction(PRINT, q("0100110"))
+        );
+    }
+
+    @Test
+    void optimizesEqualStringExpressions() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
+                """
+                        a = "A";
+                        b = "A";
+                        print(a == b);
+                        print(a != b);
+                        print(a < b);
+                        print(a > b);
+                        print(a <= b);
+                        print(a >= b);
+                        print(a === b);
+                        """,
+                createInstruction(PRINT, q("1000111"))
+        );
+    }
+
+    @Test
+    void optimizesDifferentStringExpressions() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V7A)),
+                """
+                        a = "A";
+                        b = "B";
+                        print(a == b);
+                        print(a != b);
+                        print(a < b);
+                        print(a > b);
+                        print(a <= b);
+                        print(a >= b);
+                        print(a === b);
+                        """,
+                createInstruction(PRINT, q("0100110"))
         );
     }
     //</editor-fold>

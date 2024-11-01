@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public record BlockType(
+        String contentName,
         String name,
         int id,
         String visibility,

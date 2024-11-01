@@ -309,14 +309,13 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     }
 
     @Test
-    void optimizessubXorOnIdentity() {
+    void optimizesSubXorOnIdentity() {
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.SUB, tmp0, a, a),
                         createInstruction(OP, Operation.XOR, tmp1, a, a),
                         createInstruction(END)
                 ),
-
                 List.of(
                         createInstruction(SET, tmp0, P0),
                         createInstruction(SET, tmp1, P0),

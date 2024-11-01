@@ -1,16 +1,19 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.evaluator.LogicReadable;
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.mimex.MindustryContent;
+import info.teksol.mindcode.mimex.MindustryContents;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class LogicBuiltIn extends AbstractArgument implements LogicValue {
-
+public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicReadable {
     public static final LogicBuiltIn COUNTER = create("@counter");
     public static final LogicBuiltIn UNIT = create("@unit");
 
     private final String name;
+    private final MindustryContent object;
 
     private LogicBuiltIn(String name) {
         super(ArgumentType.BUILT_IN);
@@ -18,6 +21,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         if (!name.startsWith("@")) {
             throw new MindcodeInternalError(String.format("No '@' at the beginning of property name '%s'", name));
         }
+        this.object = MindustryContents.get(name);
     }
 
     public String getName() {
@@ -26,13 +30,38 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
 
     @Override
     public boolean isConstant() {
-        return !isVolatile();
+        return true;
+    }
+
+    @Override
+    public boolean canEvaluate() {
+        return object != null && !isVolatile();
+    }
+
+    @Override
+    public double getDoubleValue() {
+        return 1.0;
+    }
+
+    @Override
+    public long getLongValue() {
+        return 1;
+    }
+
+    @Override
+    public MindustryContent getObject() {
+        return object;
+    }
+
+    @Override
+    public boolean isObject() {
+        return true;
     }
 
     @Override
     public String format() {
-        if (isConstant()) {
-            return name.substring(1);
+        if (object != null) {
+            return object.format();
         } else {
             throw new UnsupportedOperationException();
         }
