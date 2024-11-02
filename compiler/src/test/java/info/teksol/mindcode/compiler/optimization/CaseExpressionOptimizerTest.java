@@ -21,7 +21,7 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
     protected List<Optimization> getAllOptimizations() {
         return List.of(
                 Optimization.TEMP_VARIABLES_ELIMINATION,
-                Optimization.JUMP_OVER_JUMP_ELIMINATION,
+                Optimization.JUMP_STRAIGHTENING,
                 Optimization.CASE_EXPRESSION_OPTIMIZATION
         );
     }

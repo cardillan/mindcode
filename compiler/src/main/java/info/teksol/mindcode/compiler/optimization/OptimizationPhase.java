@@ -20,10 +20,10 @@ public enum OptimizationPhase {
      * until no more changes are done. The AST context structure is kept updated for these optimizers.
      */
     ITERATED("Iterated",
-            CONDITIONAL_JUMPS_NORMALIZATION,
-            JUMP_OVER_JUMP_ELIMINATION,
-            CONDITIONAL_JUMPS_OPTIMIZATION,
-            SINGLE_STEP_JUMP_ELIMINATION,
+            JUMP_NORMALIZATION,
+            JUMP_STRAIGHTENING,
+            JUMP_OPTIMIZATION,
+            SINGLE_STEP_ELIMINATION,
             EXPRESSION_OPTIMIZATION,
             DATA_FLOW_OPTIMIZATION,
             LOOP_HOISTING,
@@ -40,15 +40,15 @@ public enum OptimizationPhase {
      * with the AST context structure, therefore are separated from the previous phase.
      */
     FINAL("Final",
-            CONDITIONAL_JUMPS_NORMALIZATION,
-            JUMP_OVER_JUMP_ELIMINATION,
-            CONDITIONAL_JUMPS_OPTIMIZATION,
-            JUMP_TARGET_PROPAGATION,
+            JUMP_NORMALIZATION,
+            JUMP_STRAIGHTENING,
+            JUMP_OPTIMIZATION,
+            JUMP_THREADING,
             UNREACHABLE_CODE_ELIMINATION,
             DEAD_CODE_ELIMINATION,
-            SINGLE_STEP_JUMP_ELIMINATION,
-            STACK_USAGE_OPTIMIZATION,
-            PRINT_TEXT_MERGING
+            SINGLE_STEP_ELIMINATION,
+            STACK_OPTIMIZATION,
+            PRINT_MERGING
     );
 
     public final String name;

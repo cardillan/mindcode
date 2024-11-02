@@ -19,7 +19,7 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
-                Optimization.PRINT_TEXT_MERGING
+                Optimization.PRINT_MERGING
         );
     }
 

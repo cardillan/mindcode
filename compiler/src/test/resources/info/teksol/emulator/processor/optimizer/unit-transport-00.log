@@ -12,7 +12,7 @@
     15 instructions added by Loop Optimization (4 iterations).
     13 loops improved by Loop Optimization.
     21 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
-     7 instructions updated by PropagateJumpTargets.
+     7 instructions updated by JumpThreading.
      2 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Print Merging.
    725 instructions after optimizations.

@@ -10,7 +10,7 @@
    126 instructions added by Loop Unrolling (5 iterations).
      3 loops unrolled by Loop Unrolling.
      1 instructions eliminated by Jump Straightening (3 iterations).
-     2 instructions updated by PropagateJumpTargets.
+     2 instructions updated by JumpThreading.
      2 instructions eliminated by Unreachable Code Elimination.
    184 instructions after optimizations.
 

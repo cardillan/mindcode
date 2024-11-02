@@ -113,9 +113,9 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         profile.setDebugLevel(3);
         profile.setSignature(false);    // Messes out code coverage otherwise
         // Do not remove end instructions
-        profile.setOptimizationLevel(Optimization.JUMP_TARGET_PROPAGATION, OptimizationLevel.BASIC);
+        profile.setOptimizationLevel(Optimization.JUMP_THREADING, OptimizationLevel.BASIC);
         // Do not merge constants in print statements
-        profile.setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.BASIC);
+        profile.setOptimizationLevel(Optimization.PRINT_MERGING, OptimizationLevel.BASIC);
         return profile;
     }
 

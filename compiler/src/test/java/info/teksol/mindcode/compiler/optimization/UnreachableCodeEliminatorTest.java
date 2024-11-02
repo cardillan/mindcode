@@ -20,10 +20,10 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
-                CONDITIONAL_JUMPS_NORMALIZATION,
+                JUMP_NORMALIZATION,
                 DEAD_CODE_ELIMINATION,
-                SINGLE_STEP_JUMP_ELIMINATION,
-                JUMP_TARGET_PROPAGATION,
+                SINGLE_STEP_ELIMINATION,
+                JUMP_THREADING,
                 UNREACHABLE_CODE_ELIMINATION
         );
     }

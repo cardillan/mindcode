@@ -305,8 +305,8 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
 
     protected static class DummyOptimizer extends BaseOptimizer {
-        public DummyOptimizer(OptimizationContext optimizationContext) {
-            super(Optimization.PRINT_TEXT_MERGING, optimizationContext);
+        DummyOptimizer(OptimizationContext optimizationContext) {
+            super(Optimization.PRINT_MERGING, optimizationContext);
         }
 
         @Override

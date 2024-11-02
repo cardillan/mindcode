@@ -6,83 +6,83 @@ import java.util.function.Function;
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
 public enum Optimization {
-    TEMP_VARIABLES_ELIMINATION          ("Temp Variables Elimination",
+    TEMP_VARIABLES_ELIMINATION("Temp Variables Elimination",
             TempVariableEliminator::new,
             "eliminating temporary variables created to extract values from instructions"),
 
-    CASE_EXPRESSION_OPTIMIZATION        ("Case Expression Optimization",
+    CASE_EXPRESSION_OPTIMIZATION("Case Expression Optimization",
             CaseExpressionOptimizer::new,
             "eliminating temporary variables created to execute case expressions"),
 
-    DEAD_CODE_ELIMINATION               ("Dead Code Elimination",
+    DEAD_CODE_ELIMINATION("Dead Code Elimination",
             DeadCodeEliminator::new,
             "eliminating writes to compiler- or user-defined variables that are not used"),
 
-    CONDITIONAL_JUMPS_NORMALIZATION     ("Jump Normalization",
-            ConditionalJumpsNormalizer::new,
+    JUMP_NORMALIZATION("Jump Normalization",
+            JumpNormalizer::new,
             "replacing always true conditional jumps with unconditional ones, removing always false jumps"),
 
-    CONDITIONAL_JUMPS_OPTIMIZATION      ("Jump Optimization",
-            ConditionalJumpsOptimizer::new,
+    JUMP_OPTIMIZATION("Jump Optimization",
+            JumpOptimizer::new,
             "merging an op instruction producing a boolean expression into the following conditional jump"),
 
-    SINGLE_STEP_JUMP_ELIMINATION        ("Single Step Elimination",
-            SingleStepJumpEliminator::new,
+    SINGLE_STEP_ELIMINATION("Single Step Elimination",
+            SingleStepEliminator::new,
             "eliminating jumps to the next instruction"),
 
-    EXPRESSION_OPTIMIZATION             ("Expression Optimization",
+    EXPRESSION_OPTIMIZATION("Expression Optimization",
             ExpressionOptimizer::new,
             "optimizing some common mathematical expressions"),
 
-    IF_EXPRESSION_OPTIMIZATION          ("If Expression Optimization",
+    IF_EXPRESSION_OPTIMIZATION("If Expression Optimization",
             IfExpressionOptimizer::new,
             "improving ternary/if expressions"),
 
-    DATA_FLOW_OPTIMIZATION              ("Data Flow Optimization",
+    DATA_FLOW_OPTIMIZATION("Data Flow Optimization",
             DataFlowOptimizer::new,
             "improving variable assignments and and expressions"),
 
-    LOOP_HOISTING                   ("Loop Hoisting",
+    LOOP_HOISTING("Loop Hoisting",
             LoopHoisting::new,
             "moving invariant code out of loops"),
 
-    LOOP_OPTIMIZATION                   ("Loop Optimization",
+    LOOP_OPTIMIZATION("Loop Optimization",
             LoopOptimizer::new,
             "improving loops"),
 
-    LOOP_UNROLLING                      ("Loop Unrolling",
+    LOOP_UNROLLING("Loop Unrolling",
             LoopUnroller::new,
             "unrolling loops with constant number of iterations (optimization for speed)"),
 
-    FUNCTION_INLINING                   ("Function Inlining",
+    FUNCTION_INLINING("Function Inlining",
             FunctionInliner::new,
             "inlining stackless function calls (optimization for speed)"),
 
-    CASE_SWITCHING                      ("Case Switching",
+    CASE_SWITCHING("Case Switching",
             CaseSwitcher::new,
             "modifying suitable case expressions to use jump tables"),
 
-    RETURN_OPTIMIZATION                 ("Return Optimization",
+    RETURN_OPTIMIZATION("Return Optimization",
             ReturnOptimizer::new,
             "speeding up return statements in recursive and stackless functions"),
 
-    JUMP_OVER_JUMP_ELIMINATION          ("Jump Straightening",
-            JumpOverJumpEliminator::new,
+    JUMP_STRAIGHTENING("Jump Straightening",
+            JumpStraightening::new,
             "simplifying sequences of intertwined jumps"),
 
-    JUMP_TARGET_PROPAGATION             ("Jump Threading",
-            PropagateJumpTargets::new,
+    JUMP_THREADING("Jump Threading",
+            JumpThreading::new,
             "eliminating chained jumps"),
 
-    UNREACHABLE_CODE_ELIMINATION       ("Unreachable Code Elimination",
+    UNREACHABLE_CODE_ELIMINATION("Unreachable Code Elimination",
             UnreachableCodeEliminator::new,
             "eliminating instructions made unreachable by optimizations or false conditions"),
 
-    STACK_USAGE_OPTIMIZATION            ("Stack Optimization",
-            StackUsageOptimizer::new,
+    STACK_OPTIMIZATION("Stack Optimization",
+            StackOptimizer::new,
             "optimizing variable storage on stack"),
 
-    PRINT_TEXT_MERGING                  ("Print Merging",
+    PRINT_MERGING("Print Merging",
             PrintMerger::new,
             "merging consecutive print statements outputting text literals"),
     ;
@@ -111,7 +111,7 @@ public enum Optimization {
         return description;
     }
 
-    public Function<OptimizationContext, Optimizer> getInstanceCreator() {
+    Function<OptimizationContext, Optimizer> getInstanceCreator() {
         return instanceCreator;
     }
 

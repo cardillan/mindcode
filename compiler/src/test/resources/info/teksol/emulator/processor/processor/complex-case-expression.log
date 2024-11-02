@@ -5,7 +5,7 @@
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (4 iterations).
-     1 instructions updated by PropagateJumpTargets.
+     1 instructions updated by JumpThreading.
      3 instructions eliminated by Unreachable Code Elimination.
     49 instructions after optimizations.
 

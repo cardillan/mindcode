@@ -11,16 +11,16 @@ import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.ADVAN
 import static info.teksol.mindcode.logic.Opcode.*;
 
 @Order(99)
-class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpEliminator> {
+class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
 
     @Override
-    protected Class<JumpOverJumpEliminator> getTestedClass() {
-        return JumpOverJumpEliminator.class;
+    protected Class<JumpStraightening> getTestedClass() {
+        return JumpStraightening.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return List.of(JUMP_OVER_JUMP_ELIMINATION);
+        return List.of(JUMP_STRAIGHTENING);
     }
 
     @Test
@@ -28,9 +28,9 @@ class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpElimi
         assertCompilesTo(createTestCompiler(
                 createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, ADVANCED)
-                        .setOptimizationLevel(SINGLE_STEP_JUMP_ELIMINATION, ADVANCED)
-                        .setOptimizationLevel(CONDITIONAL_JUMPS_OPTIMIZATION, ADVANCED)
-                        .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, ADVANCED)
+                        .setOptimizationLevel(SINGLE_STEP_ELIMINATION, ADVANCED)
+                        .setOptimizationLevel(JUMP_OPTIMIZATION, ADVANCED)
+                        .setOptimizationLevel(JUMP_STRAIGHTENING, ADVANCED)
                 ),
                 """
                         while true do

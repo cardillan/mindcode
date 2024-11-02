@@ -11,13 +11,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class PropagateJumpTargets extends BaseOptimizer {
+class JumpThreading extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     private boolean startLabelUsed = false;
     int count = 0;
     
-    public PropagateJumpTargets(OptimizationContext optimizationContext) {
-        super(Optimization.JUMP_TARGET_PROPAGATION, optimizationContext);
+    public JumpThreading(OptimizationContext optimizationContext) {
+        super(Optimization.JUMP_THREADING, optimizationContext);
     }
     
     @Override

@@ -9,11 +9,11 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 @Order(99)
-class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer> {
+class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
 
     @Override
-    protected Class<StackUsageOptimizer> getTestedClass() {
-        return StackUsageOptimizer.class;
+    protected Class<StackOptimizer> getTestedClass() {
+        return StackOptimizer.class;
     }
 
     @Override
@@ -21,7 +21,7 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
         return List.of(
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.EXPRESSION_OPTIMIZATION,
-                Optimization.STACK_USAGE_OPTIMIZATION
+                Optimization.STACK_OPTIMIZATION
         );
     }
 

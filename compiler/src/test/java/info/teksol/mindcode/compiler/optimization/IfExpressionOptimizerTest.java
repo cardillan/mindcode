@@ -19,9 +19,9 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     protected List<Optimization> getAllOptimizations() {
         return List.of(
                 Optimization.DEAD_CODE_ELIMINATION,
-                Optimization.CONDITIONAL_JUMPS_OPTIMIZATION,
-                Optimization.SINGLE_STEP_JUMP_ELIMINATION,
-                Optimization.JUMP_OVER_JUMP_ELIMINATION,
+                Optimization.JUMP_OPTIMIZATION,
+                Optimization.SINGLE_STEP_ELIMINATION,
+                Optimization.JUMP_STRAIGHTENING,
                 Optimization.TEMP_VARIABLES_ELIMINATION,
                 Optimization.UNREACHABLE_CODE_ELIMINATION,
                 Optimization.IF_EXPRESSION_OPTIMIZATION

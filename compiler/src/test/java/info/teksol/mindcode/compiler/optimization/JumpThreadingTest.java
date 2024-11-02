@@ -8,19 +8,19 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 @Order(99)
-class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJumpTargets> {
+class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
 
     @Override
-    protected Class<PropagateJumpTargets> getTestedClass() {
-        return PropagateJumpTargets.class;
+    protected Class<JumpThreading> getTestedClass() {
+        return JumpThreading.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
                 Optimization.DEAD_CODE_ELIMINATION,
-                Optimization.CONDITIONAL_JUMPS_OPTIMIZATION,
-                Optimization.JUMP_TARGET_PROPAGATION,
+                Optimization.JUMP_OPTIMIZATION,
+                Optimization.JUMP_THREADING,
                 Optimization.TEMP_VARIABLES_ELIMINATION
         );
     }

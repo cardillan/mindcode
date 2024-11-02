@@ -8,16 +8,16 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 @Order(99)
-class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<ConditionalJumpsNormalizer> {
+class JumpNormalizerTest extends AbstractOptimizerTest<JumpNormalizer> {
 
     @Override
-    protected Class<ConditionalJumpsNormalizer> getTestedClass() {
-        return ConditionalJumpsNormalizer.class;
+    protected Class<JumpNormalizer> getTestedClass() {
+        return JumpNormalizer.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return List.of(Optimization.CONDITIONAL_JUMPS_NORMALIZATION);
+        return List.of(Optimization.JUMP_NORMALIZATION);
     }
 
     @Test

@@ -37,7 +37,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Override
     protected CompilerProfile createCompilerProfile() {
         return super.createCompilerProfile()
-                .setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.NONE);
+                .setOptimizationLevel(Optimization.PRINT_MERGING, OptimizationLevel.NONE);
     }
 
     @Test

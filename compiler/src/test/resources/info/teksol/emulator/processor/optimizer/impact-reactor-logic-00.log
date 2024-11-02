@@ -9,7 +9,7 @@
     92 instructions eliminated by Data Flow Optimization (8 passes, 27 iterations).
    505 instructions added by Function Inlining (10 iterations).
     17 function calls inlined by Function Inlining.
-    33 instructions updated by PropagateJumpTargets.
+    33 instructions updated by JumpThreading.
      5 instructions eliminated by Unreachable Code Elimination.
    864 instructions after optimizations.
 

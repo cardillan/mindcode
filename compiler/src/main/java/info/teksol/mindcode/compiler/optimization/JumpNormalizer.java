@@ -11,12 +11,12 @@ import static info.teksol.mindcode.logic.LogicBoolean.TRUE;
  * Replaces conditional jumps whose condition is always true with unconditional jumps
  * and completely removes jumps that are always false.
  */
-class ConditionalJumpsNormalizer extends BaseOptimizer {
+class JumpNormalizer extends BaseOptimizer {
 
     private final OptimizerExpressionEvaluator expressionEvaluator;
 
-    public ConditionalJumpsNormalizer(OptimizationContext optimizationContext) {
-        super(Optimization.CONDITIONAL_JUMPS_NORMALIZATION, optimizationContext);
+    public JumpNormalizer(OptimizationContext optimizationContext) {
+        super(Optimization.JUMP_NORMALIZATION, optimizationContext);
         expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 

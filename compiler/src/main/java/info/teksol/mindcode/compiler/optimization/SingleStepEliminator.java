@@ -7,10 +7,10 @@ import info.teksol.mindcode.logic.LogicLabel;
 import java.util.ArrayList;
 import java.util.List;
 
-class SingleStepJumpEliminator extends BaseOptimizer {
+class SingleStepEliminator extends BaseOptimizer {
 
-    public SingleStepJumpEliminator(OptimizationContext optimizationContext) {
-        super(Optimization.SINGLE_STEP_JUMP_ELIMINATION, optimizationContext);
+    public SingleStepEliminator(OptimizationContext optimizationContext) {
+        super(Optimization.SINGLE_STEP_ELIMINATION, optimizationContext);
     }
 
     @Override

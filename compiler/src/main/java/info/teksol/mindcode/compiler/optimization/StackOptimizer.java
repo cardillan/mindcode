@@ -35,10 +35,10 @@ import java.util.stream.Stream;
  * Eliminates push/pop instruction for variables that are not modified at all by the function.
  * </li></ul>
  */
-class StackUsageOptimizer extends BaseOptimizer {
+class StackOptimizer extends BaseOptimizer {
 
-    StackUsageOptimizer(OptimizationContext optimizationContext) {
-        super(Optimization.STACK_USAGE_OPTIMIZATION, optimizationContext);
+    StackOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.STACK_OPTIMIZATION, optimizationContext);
     }
 
     @Override

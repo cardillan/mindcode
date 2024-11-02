@@ -8,7 +8,7 @@
      1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
-     1 instructions updated by PropagateJumpTargets.
+     1 instructions updated by JumpThreading.
      1 instructions eliminated by Print Merging.
    187 instructions after optimizations.
 

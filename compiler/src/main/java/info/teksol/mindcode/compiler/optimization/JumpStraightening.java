@@ -30,10 +30,10 @@ import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicItera
  * end
  * }</pre>
  */
-class JumpOverJumpEliminator extends BaseOptimizer {
+class JumpStraightening extends BaseOptimizer {
 
-    public JumpOverJumpEliminator(OptimizationContext optimizationContext) {
-        super(Optimization.JUMP_OVER_JUMP_ELIMINATION, optimizationContext);
+    public JumpStraightening(OptimizationContext optimizationContext) {
+        super(Optimization.JUMP_STRAIGHTENING, optimizationContext);
     }
 
     @Override

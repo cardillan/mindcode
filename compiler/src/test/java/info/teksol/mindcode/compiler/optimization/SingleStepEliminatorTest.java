@@ -8,19 +8,19 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 @Order(99)
-class SingleStepJumpEliminatorTest extends AbstractOptimizerTest<SingleStepJumpEliminator> {
+class SingleStepEliminatorTest extends AbstractOptimizerTest<SingleStepEliminator> {
 
     @Override
-    protected Class<SingleStepJumpEliminator> getTestedClass() {
-        return SingleStepJumpEliminator.class;
+    protected Class<SingleStepEliminator> getTestedClass() {
+        return SingleStepEliminator.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
-                Optimization.CONDITIONAL_JUMPS_NORMALIZATION,
+                Optimization.JUMP_NORMALIZATION,
                 Optimization.DEAD_CODE_ELIMINATION,
-                Optimization.SINGLE_STEP_JUMP_ELIMINATION
+                Optimization.SINGLE_STEP_ELIMINATION
         );
     }
 

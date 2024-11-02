@@ -14,7 +14,7 @@
      3 instructions added by Case Switching (7 iterations).
      1 case expressions converted to switched jumps Case Switching.
     18 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
-     2 instructions updated by PropagateJumpTargets.
+     2 instructions updated by JumpThreading.
     49 instructions eliminated by Unreachable Code Elimination.
      5 instructions eliminated by Print Merging.
    609 instructions after optimizations.

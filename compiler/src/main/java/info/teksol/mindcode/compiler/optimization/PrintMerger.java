@@ -39,7 +39,7 @@ import static info.teksol.mindcode.logic.ArgumentType.STRING_LITERAL;
 class PrintMerger extends BaseOptimizer {
 
     public PrintMerger(OptimizationContext optimizationContext) {
-        super(Optimization.PRINT_TEXT_MERGING, optimizationContext);
+        super(Optimization.PRINT_MERGING, optimizationContext);
     }
 
     private final List<PrintInstruction> printVars = new ArrayList<>();
