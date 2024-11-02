@@ -498,26 +498,47 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
 
-        final String functionName = call.getFunctionName();
-        final Optional<LogicFunction> function = callGraph.getFunction(call);
-        LogicValue output = null;
-
-        // Try built-in function if there's not an exact match
-        if (function.isEmpty() || !function.get().exactMatch(call)) {
-            setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-            output = functionMapper.handleFunction(call, instructions::add, functionName, arguments);
-        }
-
-        if (output == null && function.isPresent()) {
-            output = handleUserFunctionCall(function.get(), call, arguments);
-        }
-
-        if (output == null) {
-            error(call, "Cannot resolve function '%s'.", functionName);
-        }
+        LogicValue output = handleFunctionCall(call, arguments);
 
         clearSubcontextType();
-        return output == null ? NULL : output;
+        return output;
+    }
+
+    private LogicValue handleFunctionCall(FunctionCall call, List<LogicFunctionArgument> arguments) {
+        final String functionName = call.getFunctionName();
+        List<LogicFunction> exactMatches = callGraph.getExactMatches(call);
+
+        // Try built-in function if there's not an exact match
+        if (!exactMatches.isEmpty()) {
+            if (exactMatches.size() > 1) {
+                error(call,"Cannot resolve function '%s'.", functionName);
+                return NULL;
+            } else {
+                return handleUserFunctionCall(exactMatches.get(0), call, arguments);
+            }
+        } else {
+            setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicValue output = functionMapper.handleFunction(call, instructions::add, functionName, arguments);
+            if (output != null) {
+                return output;
+            }
+
+            // We know there wasn't an exact match. Try loose matches to obtain better error messages
+            List<LogicFunction> looseMatches = callGraph.getLooseMatches(call);
+            return switch (looseMatches.size()) {
+                case 0  -> {
+                    error(call,"Unknown function '%s'.", functionName);
+                    yield NULL;
+                }
+                case 1  -> {
+                    yield handleUserFunctionCall(looseMatches.get(0), call, arguments);
+                }
+                default -> {
+                    error(call, "Cannot resolve function '%s'.", functionName);
+                    yield NULL;
+                }
+            };
+        }
     }
 
     private void validateUserFunctionArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {

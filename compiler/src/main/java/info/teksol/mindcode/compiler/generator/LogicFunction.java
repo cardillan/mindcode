@@ -47,7 +47,7 @@ public class LogicFunction {
     }
 
     void initializeCalls(FunctionDefinitions functions) {
-        List<LogicFunction> calls = functionCalls.stream().map(functions::getFunction).filter(Optional::isPresent).map(Optional::get).toList();
+        List<LogicFunction> calls = functionCalls.stream().map(functions::getExactMatch).filter(Objects::nonNull).toList();
         directCalls.addAll(calls);
 
         Map<LogicFunction, Long> cardinality = calls.stream().collect(Collectors.groupingBy(f -> f, Collectors.counting()));
@@ -225,6 +225,10 @@ public class LogicFunction {
     }
 
     public boolean exactMatch(FunctionCall call) {
+        if (!parameterCount.contains(call.getArguments().size())) {
+            return false;
+        }
+
         boolean isVarArgs = isVarArgs();
         int size = getStandardParameterCount();
         for (int i = 0; i < call.getArguments().size(); i++) {

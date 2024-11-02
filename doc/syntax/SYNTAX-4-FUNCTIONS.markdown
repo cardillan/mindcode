@@ -525,6 +525,22 @@ foo(1, 2, 3);               // Error - bar needs an out argument at the third po
 > [!NOTE]
 > The errors produced when passing the vararg parameter to another function are reported at the call of the inner function, not at the call of the vararg function, and may therefore be a bit misleading. Use with caution. 
 
+The vararg parameter may be mixed with ordinary variables or expressions, and used more than once, even in the same list iteration or function call:
+
+```
+inline void foo(arg...)
+    bar(10, arg, 20, arg); 
+end;
+
+inline void bar(a, b, c...)
+    for i in a, b, c, c do
+        println(i);
+    end;
+end;
+
+foo(1, 2, 3);
+```
+
 ## Function overloading
 
 Mindcode supports function overloading. Several functions can have the same name, provided they differ in the number of arguments they take. For example:
@@ -542,13 +558,19 @@ foo(1);     // Calls foo(x)
 foo(1, 1);  // Calls foo(y) 
 ```
 
-Functions are primarily distinguished by the number of parameters. Declaring two functions with the same name and the same number of parameters results in an error. Please note that a function with output parameters, as well as a vararg function, takes variable number of arguments and therefore may clash with a function having a different number of parameters:
+To match a function call with function declaration, the number and types (input, output or input/output) of function call arguments must match the number and types of function parameters. Optional and vararg arguments are taken into account when evaluating the match.
 
-* `void foo(x, y)`: called with two arguments
-* `foo(x, y, out z)`: may be also called with two arguments when `z` is omitted
-* `void foo(x, y, out z, args...)`: may be also called with two arguments when `z` is omitted and no additional arguments given
+When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. Please note that a function with output parameters, as well as a vararg function, takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
 
-Mindcode will report all clashes of function declarations as errors, even if there aren't any ambiguous function calls.
+* `void foo(a, b)`: called with two arguments.
+* `void foo(x, y, out z)`: conflict - may be also called with two arguments when `z` is omitted.
+* `void foo(m, n, out o, args...)`: conflict - may be also called with two arguments when `o` is omitted and no additional arguments are given.
+
+* `void bar(x)`: `x` is an input parameter
+* `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
+* `void bar(in out z)`: `z` is an input/output parameter, therefor the function clashes with both `bar(x)` and `bar(out y)`.
+
+Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 
 A user defined function may have the same name as a Mindustry Logic function. User defined functions override Mindustry Logic functions of the same name. When a function call matches the user defined function, the user defined function will be called instead of Mindustry Logic function:
 

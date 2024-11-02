@@ -111,9 +111,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         // Must end eventually, as there's a finite number of functions to add
         while (propagateIndirectCalls()) ;
 
-        functions.stream()
-                .filter(f -> f.isUsed() && !f.isInline())
-                .forEach(this::setupOutOfLineFunction);
+        functions.stream().filter(f -> !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
     private void setupOutOfLineFunction(LogicFunction function) {

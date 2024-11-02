@@ -5,7 +5,6 @@ import info.teksol.mindcode.ast.StackAllocation;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -56,15 +55,12 @@ public final class CallGraph {
         return functions;
     }
 
-    /**
-     * Finds the closes matching function to given function call. The closest matching function is the one
-     * giving the best match score. If a function matching the call exactly exists, it will be chosen.
-     *
-     * @param call function call to match
-     * @return function matching the given call best
-     */
-    public Optional<LogicFunction> getFunction(FunctionCall call) {
-        return functionDefinitions.getFunction(call);
+    public List<LogicFunction> getExactMatches(FunctionCall call) {
+        return functionDefinitions.getExactMatches(call);
+    }
+
+    public List<LogicFunction> getLooseMatches(FunctionCall call) {
+        return functionDefinitions.getLooseMatches(call);
     }
 
     /**

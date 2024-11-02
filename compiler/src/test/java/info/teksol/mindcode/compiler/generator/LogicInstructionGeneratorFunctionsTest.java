@@ -1067,7 +1067,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         void foo(a, b) print(2); end;
                         foo();
                         foo(1);
-                        foo(1,1);
+                        foo(1, 1);
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, "0"),
@@ -1101,12 +1101,14 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void reportsFunctionConflicts() {
         assertGeneratesMessages(
                 ExpectedMessages.create()
-                        .add(2, 1, "Function 'foo(a, out b)' clashes with function 'foo(a)'.")
-                        .add(3, 1, "Function 'foo(a, b)' clashes with function 'foo(a, out b)'."),
+                        .add(3, 1, "Function 'foo(a, out b)' conflicts with function 'foo(a)'.")
+                        .add(4, 1, "Function 'foo(a, in out b)' conflicts with function 'foo(a, b)'.")
+                        .add(4, 1, "Function 'foo(a, in out b)' conflicts with function 'foo(a, out b)'."),
                 """
                         inline void foo(a) print(a); end;
-                        inline void foo(a, out b) print(a); b = a; end;
                         inline void foo(a, b) print(a, b); end;
+                        inline void foo(a, out b) print(a); b = a; end;
+                        inline void foo(a, in out b) print(a, b); b = a; end;
                         """
         );
     }
@@ -1115,7 +1117,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void reportsVarargFunctionConflict() {
         assertGeneratesMessages(
                 ExpectedMessages.create()
-                        .add(2, 1, "Function 'foo(a, b, c, d...)' clashes with function 'foo(a, b, c)'."),
+                        .add(2, 1, "Function 'foo(a, b, c, d...)' conflicts with function 'foo(a, b, c)'."),
                 """
                         inline void foo(a, b, c) print(a, b, c); end;
                         inline void foo(a, b, c, d...) print(a, b, c); end;
@@ -1124,12 +1126,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     }
 
     @Test
-    void reportsFunctionCallMismatch() {
+    void reportsUnresolvedFunctionCalls() {
         assertGeneratesMessages(
                 ExpectedMessages.create()
-                        .add(5, 1, "Function 'foo': wrong number of arguments (expected at least 3, found 2).")
-                        .add(6, 12, "Parameter 'b' isn't output, 'out' modifier not allowed.")
-                        .add(7, 11, "Parameter 'c' isn't output, 'out' modifier not allowed.")
+                        .add(5, 1, "Cannot resolve function 'foo'.")
+                        .add(6, 1, "Cannot resolve function 'foo'.")
+                        .add(7, 1, "Cannot resolve function 'foo'.")
                 ,
                 """
                         inline void foo(a) print(a); end;
@@ -1139,6 +1141,27 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         foo(1, 2);
                         foo(out a, out b);
                         foo(a, b, out c);
+                        """
+        );
+    }
+
+
+    @Test
+    void reportsWrongFunctionArguments() {
+        assertGeneratesMessages(
+                ExpectedMessages.create()
+                        .add(5, 1, "Function 'foo': wrong number of arguments (expected 1, found 2).")
+                        .add(6, 12, "Parameter 'b' isn't output, 'out' modifier not allowed.")
+                        .add(7, 11, "Parameter 'c' isn't output, 'out' modifier not allowed.")
+                ,
+                """
+                        inline void foo(a) print(a); end;
+                        inline void bar(out a, b) print(b); a = b; end;
+                        inline void baz(a, b, c, d...) print(a, b); end;
+                        
+                        foo(1, 2);
+                        bar(out a, out b);
+                        baz(a, b, out c);
                         """
         );
     }
