@@ -1,8 +1,8 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
-import info.teksol.mindcode.compiler.ExpectedMessages;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
+import info.teksol.util.ExpectedMessages;
+import info.teksol.util.UnexpectedMessageException;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

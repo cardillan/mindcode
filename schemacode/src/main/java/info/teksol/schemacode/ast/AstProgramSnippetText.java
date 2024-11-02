@@ -3,7 +3,7 @@ package info.teksol.schemacode.ast;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
-public record AstProgramSnippetText(AstText programText) implements AstProgramSnippet {
+public record AstProgramSnippetText(InputPosition inputPosition, AstText programText) implements AstProgramSnippet {
 
     @Override
     public String getProgramId(SchematicsBuilder builder) {

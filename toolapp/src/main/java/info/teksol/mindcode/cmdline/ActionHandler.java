@@ -1,6 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
@@ -20,6 +21,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 abstract class ActionHandler {
@@ -250,8 +252,8 @@ abstract class ActionHandler {
         }
     }
 
-    static void writeOutput(File outputFile, String data, boolean useErrorOutput) {
-        writeOutput(outputFile, List.of(data), useErrorOutput);
+    static void writeOutput(File outputFile, String data) {
+        writeOutput(outputFile, List.of(data), false);
     }
 
     static void writeOutput(File outputFile, byte[] data) {
@@ -266,5 +268,20 @@ abstract class ActionHandler {
         Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection data = new StringSelection(string);
         c.setContents(data, data);
+    }
+
+    static void outputMessages(CompilerOutput<?> result, File outputFile, File logFile, Function<InputPosition, String> positionFormatter) {
+        // If mlog gets written to stdout, write log to stderr
+        if (isStdInOut(logFile)) {
+            boolean alwaysErr = isStdInOut(outputFile);
+            result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
+        } else {
+            writeOutput(logFile, result.texts(m -> m.formatMessage(positionFormatter)), isStdInOut(outputFile));
+            // Print errors and warnings to stderr anyway
+            result.messages().stream()
+                    .filter(m -> m.isErrorOrWarning() || m.isInfo())
+                    .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
+        }
+
     }
 }

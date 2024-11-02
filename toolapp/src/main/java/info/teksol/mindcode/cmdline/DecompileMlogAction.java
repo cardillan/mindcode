@@ -38,6 +38,6 @@ public class DecompileMlogAction extends ActionHandler {
         File output = resolveOutputFile(input, arguments.get("output"), ".dmnd");
         String mlog = readInput(input);
         String decompiled = MlogDecompiler.decompile(mlog);
-        writeOutput(output, decompiled, false);
+        writeOutput(output, decompiled);
     }
 }

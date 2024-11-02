@@ -201,7 +201,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         messageConsumer.accept(
-                MindcodeOptimizerMessage.debug("%s", profile.getOptimizationLevels().entrySet().stream()
+                OptimizerMessage.debug("%s", profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
                         .map(e -> e.getKey().getOptionName() + " = " + e.getValue().name().toLowerCase())
                         .collect(Collectors.joining(",\n    ", "Active optimizations:\n    ", "\n"))

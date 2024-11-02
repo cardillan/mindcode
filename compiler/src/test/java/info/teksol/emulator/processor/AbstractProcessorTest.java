@@ -3,9 +3,13 @@ package info.teksol.emulator.processor;
 import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.*;
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.TimingMessage;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.*;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 

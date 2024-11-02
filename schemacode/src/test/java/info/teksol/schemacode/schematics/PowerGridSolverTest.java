@@ -3,6 +3,7 @@ package info.teksol.schemacode.schematics;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -18,33 +19,42 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
     @Test
     void warnsAboutNonexistentLinkedBlock() {
-        buildSchematicsExpectingWarning("""
-                schematic
-                    @power-node at (0, 0) connected to (1, 1)
-                end
-                """,
-                "Block '@power-node' at \\(\\s*0,\\s*0\\) has a connection to a nonexistent block at \\(\\s*1,\\s*1\\)\\.");
+        assertGeneratesWarnings(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*0,\\s*0\\) has a connection to a nonexistent block at \\(\\s*1,\\s*1\\)\\."),
+                """
+                        schematic
+                            @power-node at (0, 0) connected to (1, 1)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesLinksToSelf() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @power-node at (0, 0) connected to (0, 0)
-                end
-                """,
-                "Block '@power-node' at \\(\\s*0,\\s*0\\) has a connection to self\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*0,\\s*0\\) has a connection to self\\."),
+                """
+                        schematic
+                            @power-node at (0, 0) connected to (0, 0)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesLinksToNoPoweredBlocks() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @power-node at (0, 0) connected to (1, 1)
-                    @conveyor at (1, 1)
-                end
-                """,
-                "Block '@power-node' at \\(\\s*0,\\s*0\\) has an invalid connection to a non-powered block '@conveyor' at \\(\\s*1,\\s*1\\)\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*0,\\s*0\\) has an invalid connection to a non-powered block '@conveyor' at \\(\\s*1,\\s*1\\)\\."),
+                """
+                        schematic
+                            @power-node at (0, 0) connected to (1, 1)
+                            @conveyor at (1, 1)
+                        end
+                        """
+        );
     }
 
     @Test
@@ -85,7 +95,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         assertEquals(expected, actual);
     }
-    
+
     @Test
     void buildsInRangeLinksLarge() {
         Schematic actual = buildSchematics("""
@@ -111,23 +121,23 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
         Schematic expected = new Schematic("", "", List.of(), 16, 16,
                 List.of(
                         block("@power-node-large", P0_0, Direction.EAST, pa(
-                                p( 1, 15), p( 6, 15), p( 7, 14), p( 8, 14), p( 9, 13), p(10, 12), p(11, 12),
-                                p(12, 11), p(12, 10), p(13,  9), p(14,  8), p(14,  7), p(15,  6), p(15,  1))
+                                p(1, 15), p(6, 15), p(7, 14), p(8, 14), p(9, 13), p(10, 12), p(11, 12),
+                                p(12, 11), p(12, 10), p(13, 9), p(14, 8), p(14, 7), p(15, 6), p(15, 1))
                         ),
-                        block("@power-node", p( 1, 15), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p( 6, 15), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p( 7, 14), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p( 8, 14), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p( 9, 13), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(1, 15), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(6, 15), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(7, 14), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(8, 14), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(9, 13), Direction.EAST, pa(P0_0)),
                         block("@power-node", p(10, 12), Direction.EAST, pa(P0_0)),
                         block("@power-node", p(11, 12), Direction.EAST, pa(P0_0)),
                         block("@power-node", p(12, 11), Direction.EAST, pa(P0_0)),
                         block("@power-node", p(12, 10), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(13,  9), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(14,  8), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(14,  7), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(15,  6), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(15,  1), Direction.EAST, pa(P0_0))
+                        block("@power-node", p(13, 9), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(14, 8), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(14, 7), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(15, 6), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(15, 1), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -186,13 +196,16 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
     }
 
     private void refusesOutOfRangeLink(Position position) {
-        buildSchematicsExpectingError("""
-                schematic
-                    @power-node at (0, 0)
-                    @power-node at %s connected to (0, 0)
-                end
-                """.formatted(position.toStringAbsolute()),
-                "Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to block '@power-node' at \\(\\s*0,\\s*0\\)\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to block '@power-node' at \\(\\s*0,\\s*0\\)\\."),
+                """
+                        schematic
+                            @power-node at (0, 0)
+                            @power-node at %s connected to (0, 0)
+                        end
+                        """.formatted(position.toStringAbsolute())
+        );
     }
 
     @TestFactory
@@ -211,44 +224,53 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
     }
 
     private void refusesOutOfRangeLinkLarge(Position position) {
-        buildSchematicsExpectingError("""
-                schematic
-                    @power-node-large at (0, 0)
-                    @power-node at %s connected to (0, 0)
-                end
-                """.formatted(position.toStringAbsolute()),
-                "Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to block '@power-node-large' at \\(\\s*0,\\s*0\\)\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to block '@power-node-large' at \\(\\s*0,\\s*0\\)\\."),
+                """
+                        schematic
+                            @power-node-large at (0, 0)
+                            @power-node at %s connected to (0, 0)
+                        end
+                        """.formatted(position.toStringAbsolute())
+        );
     }
 
     @Test
     void warnsAboutMultiplyLinkedBlock() {
-        buildSchematicsExpectingWarning("""
-                schematic
-                    @power-node at (0, 0) connected to (1, 1), (1, 1)
-                    @power-node at (1, 1)
-                end
-                """,
-                "Block '@power-node' at \\(\\s*0,\\s*0\\) has multiple connections to block '@power-node' at \\(\\s*1,\\s*1\\)\\.");
+        assertGeneratesWarnings(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*0,\\s*0\\) has multiple connections to block '@power-node' at \\(\\s*1,\\s*1\\)\\."),
+                """
+                        schematic
+                            @power-node at (0, 0) connected to (1, 1), (1, 1)
+                            @power-node at (1, 1)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesTooManyLinks() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @power-node          at ( 0,  0)
-                    @power-node          at ( 0,  6) connected to (0, 0)
-                    @power-node          at ( 1,  6) connected to (0, 0)
-                    @power-node          at ( 2,  6) connected to (0, 0)
-                    @power-node          at ( 3,  5) connected to (0, 0)
-                    @power-node          at ( 4,  5) connected to (0, 0)
-                    @power-node          at ( 5,  3) connected to (0, 0)
-                    @power-node          at ( 5,  4) connected to (0, 0)
-                    @power-node          at ( 6,  0) connected to (0, 0)
-                    @power-node          at ( 6,  1) connected to (0, 0)
-                    @power-node          at ( 6,  2) connected to (0, 0)
-                    @power-node          at ( 1,  1) connected to (0, 0)
-                end
-                """,
-                "Block '@power-node' at \\(\\s*0,\\s*0\\) has more than 10 connection\\(s\\)\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@power-node' at \\(\\s*0,\\s*0\\) has more than 10 connection\\(s\\)\\."),
+                """
+                        schematic
+                            @power-node          at ( 0,  0)
+                            @power-node          at ( 0,  6) connected to (0, 0)
+                            @power-node          at ( 1,  6) connected to (0, 0)
+                            @power-node          at ( 2,  6) connected to (0, 0)
+                            @power-node          at ( 3,  5) connected to (0, 0)
+                            @power-node          at ( 4,  5) connected to (0, 0)
+                            @power-node          at ( 5,  3) connected to (0, 0)
+                            @power-node          at ( 5,  4) connected to (0, 0)
+                            @power-node          at ( 6,  0) connected to (0, 0)
+                            @power-node          at ( 6,  1) connected to (0, 0)
+                            @power-node          at ( 6,  2) connected to (0, 0)
+                            @power-node          at ( 1,  1) connected to (0, 0)
+                        end
+                        """
+        );
     }
 }

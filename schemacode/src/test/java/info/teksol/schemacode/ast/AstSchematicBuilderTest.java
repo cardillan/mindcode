@@ -1,22 +1,22 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputFile;
-import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Language;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static info.teksol.mindcode.InputPosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Order(99)
 class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     protected AstDefinitions definitionWithBlocks(AstBlock... blocks) {
-        return new AstDefinitions(List.of(new AstSchematic(List.of(), List.of(blocks))));
+        return new AstDefinitions(EMPTY, List.of(new AstSchematic(EMPTY, List.of(), List.of(blocks))));
     }
 
     @Test
@@ -49,29 +49,29 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """
         );
 
-        AstDefinitions expected = new AstDefinitions(
+        AstDefinitions expected = new AstDefinitions(EMPTY,
                 List.of(
-                        new AstSchematic(
+                        new AstSchematic(EMPTY,
                                 List.of(
-                                        new AstSchemaAttribute("name", AstStringLiteral.fromText("On/off switch", 2, 13)),
-                                        new AstSchemaAttribute("description", AstStringLiteral.fromText("Description", 3, 20)),
-                                        new AstSchemaAttribute("label", AstStringLiteral.fromText("label1", 4, 12)),
-                                        new AstSchemaAttribute("label", AstStringLiteral.fromText("label2", 5, 12)),
-                                        new AstSchemaAttribute("dimensions", new AstCoordinates(2, 1))
+                                        new AstSchemaAttribute(EMPTY, "name", AstStringLiteral.fromText("On/off switch", 2, 13)),
+                                        new AstSchemaAttribute(EMPTY, "description", AstStringLiteral.fromText("Description", 3, 20)),
+                                        new AstSchemaAttribute(EMPTY, "label", AstStringLiteral.fromText("label1", 4, 12)),
+                                        new AstSchemaAttribute(EMPTY, "label", AstStringLiteral.fromText("label2", 5, 12)),
+                                        new AstSchemaAttribute(EMPTY, "dimensions", new AstCoordinates(EMPTY, 2, 1))
                                 ),
                                 List.of(
-                                        new AstBlock(
+                                        new AstBlock(EMPTY,
                                                 List.of("switch1"),
                                                 "@switch",
-                                                new AstCoordinates(0, 0),
-                                                new AstDirection("south"),
+                                                new AstCoordinates(EMPTY, 0, 0),
+                                                new AstDirection(EMPTY, "south"),
                                                 null
                                         ),
-                                        new AstBlock(
+                                        new AstBlock(EMPTY,
                                                 List.of(),
                                                 "@micro-processor",
-                                                new AstCoordinates(1, 0),
-                                                new AstDirection("south"),
+                                                new AstCoordinates(EMPTY, 1, 0),
+                                                new AstDirection(EMPTY, "south"),
                                                 null
                                         )
                                 )
@@ -90,10 +90,9 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                     '''
                 """);
 
-        AstDefinitions expected = new AstDefinitions(
+        AstDefinitions expected = new AstDefinitions(EMPTY,
                 List.of(
-                        new AstStringConstant("value", new AstStringBlock("text\nblock\n",
-                                new InputPosition(InputFile.EMPTY, 2, 1), 4)
+                        new AstStringConstant(EMPTY, "value", new AstStringBlock(EMPTY, "text\nblock\n", 4)
                         )
                 )
         );
@@ -143,11 +142,11 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """
         );
 
-        AstDefinitions expected = new AstDefinitions(
+        AstDefinitions expected = new AstDefinitions(EMPTY,
                 List.of(
-                        new AstSchematic(
+                        new AstSchematic(EMPTY,
                                 List.of(
-                                        new AstSchemaAttribute("name", AstStringLiteral.fromText("Name", 2, 13))
+                                        new AstSchemaAttribute(EMPTY, "name", AstStringLiteral.fromText("Name", 2, 13))
                                 ),
                                 List.of()
                         )
@@ -167,15 +166,15 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """
         );
 
-        AstDefinitions expected = new AstDefinitions(
+        AstDefinitions expected = new AstDefinitions(EMPTY,
                 List.of(
-                        new AstSchematic(
+                        new AstSchematic(EMPTY,
                                 List.of(
-                                        new AstSchemaAttribute("name", new AstStringRef("str_Name"))
+                                        new AstSchemaAttribute(EMPTY, "name", new AstStringRef(EMPTY, "str_Name"))
                                 ),
                                 List.of()
                         ),
-                        new AstStringConstant("str_Name", AstStringLiteral.fromText("Name", 5, 13))
+                        new AstStringConstant(EMPTY, "str_Name", AstStringLiteral.fromText("Name", 5, 13))
                 )
         );
 
@@ -191,11 +190,11 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """
         );
 
-        AstDefinitions expected = new AstDefinitions(
+        AstDefinitions expected = new AstDefinitions(EMPTY,
                 List.of(
-                        new AstSchematic(
+                        new AstSchematic(EMPTY,
                                 List.of(
-                                        new AstSchemaAttribute("dimensions", new AstCoordinates(4, 5))
+                                        new AstSchemaAttribute(EMPTY, "dimensions", new AstCoordinates(EMPTY, 4, 5))
                                 ),
                                 List.of()
                         )
@@ -207,23 +206,29 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesRelativeDimensions() {
-        parseSchematicsExpectingError("""
-                schematic
-                    name = "Reactor Control"
-                    dimensions = +(16, 11)
-                end
-                """,
-                "Syntax error: .* extraneous input '.+' expecting '\\('");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: extraneous input '+' expecting '('"),
+                """
+                        schematic
+                            name = "Reactor Control"
+                            dimensions = +(16, 11)
+                        end
+                        """
+        );
     }
 
     @Test
     public void refusesNonRefBlock() {
-        parseSchematicsExpectingError("""
-                schematic
-                    conveyor at (0, 0)
-                end
-                """,
-                "Syntax error: .* mismatched input '.+' expecting \\{':', ','}");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: 'at': mismatched input 'at' expecting {':', ','}"),
+                """
+                        schematic
+                            conveyor at (0, 0)
+                        end
+                        """
+        );
     }
 
     @Test
@@ -236,10 +241,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@switch",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
                         null
                 )
@@ -258,10 +263,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@switch",
-                        new AstCoordinates(1, 1, true),
+                        new AstCoordinates(EMPTY, 1, 1, true),
                         null,
                         null
                 )
@@ -280,10 +285,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@switch",
-                        new AstCoordinates(new Position(1, 1), true, "block1"),
+                        new AstCoordinates(EMPTY, new Position(1, 1), true, "block1"),
                         null,
                         null
                 )
@@ -294,12 +299,15 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void requiresPosition() {
-        parseSchematicsExpectingError("""
-                schematic
-                    label1: @switch facing south
-                end
-                """,
-                "Syntax error: .* mismatched input '.+' expecting 'at'");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: 'facing': mismatched input 'facing' expecting 'at'"),
+                """
+                        schematic
+                            label1: @switch facing south
+                        end
+                        """
+        );
     }
 
     @Test
@@ -313,10 +321,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of("label1", "label2", "label3"),
                         "@switch",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
                         null
                 )
@@ -338,10 +346,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(List.of(), "@conveyor", new AstCoordinates(0, 0), new AstDirection("south"),null),
-                new AstBlock(List.of(), "@conveyor", new AstCoordinates(1, 0), new AstDirection("north"),null),
-                new AstBlock(List.of(), "@conveyor", new AstCoordinates(2, 0), new AstDirection("east"),null),
-                new AstBlock(List.of(), "@conveyor", new AstCoordinates(3, 0), new AstDirection("west"),null)
+                new AstBlock(EMPTY, List.of(), "@conveyor", new AstCoordinates(EMPTY, 0, 0), new AstDirection(EMPTY, "south"), null),
+                new AstBlock(EMPTY, List.of(), "@conveyor", new AstCoordinates(EMPTY, 1, 0), new AstDirection(EMPTY, "north"), null),
+                new AstBlock(EMPTY, List.of(), "@conveyor", new AstCoordinates(EMPTY, 2, 0), new AstDirection(EMPTY, "east"), null),
+                new AstBlock(EMPTY, List.of(), "@conveyor", new AstCoordinates(EMPTY, 3, 0), new AstDirection(EMPTY, "west"), null)
         );
 
         assertEquals(expected, actual);
@@ -349,12 +357,16 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesInvalidDirection() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @conveyor at ( 0,  0) facing middle
-                end
-                """,
-                ("Syntax error: .* missing \\{'north', 'south', 'east', 'west'} at 'middle'"));
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: missing {'north', 'south', 'east', 'west'} at 'middle'")
+                        .add("Parse error: 'end': mismatched input 'end' expecting {':', ','}"),
+                """
+                        schematic
+                            @conveyor at ( 0,  0) facing middle
+                        end
+                        """
+        );
     }
 
     @Test
@@ -367,12 +379,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@switch",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        AstVirtual.VIRTUAL
+                        new AstVirtual(EMPTY)
                 )
         );
 
@@ -389,12 +401,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@power-node",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstConnections(new AstConnection(1, 1))
+                        new AstConnections(EMPTY, new AstConnection(EMPTY, 1, 1))
                 )
         );
 
@@ -410,12 +422,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@power-node",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstConnections(new AstConnection(1, 1, true))
+                        new AstConnections(EMPTY, new AstConnection(EMPTY, 1, 1, true))
                 )
         );
 
@@ -431,14 +443,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@power-node",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstConnections(
-                                new AstConnection(1, 1, true),
-                                new AstConnection(2, 2)
+                        new AstConnections(EMPTY,
+                                new AstConnection(EMPTY, 1, 1, true),
+                                new AstConnection(EMPTY, 2, 2)
                         )
                 )
         );
@@ -448,12 +460,15 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesConnectedToRelativeTo() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @power-node at (0, 0) connected to block1 + (1, 1)
-                end
-                """,
-                "Syntax error: .* extraneous input '.+' expecting \\{'description', 'dimensions', 'end', 'name', 'tag', Id, Ref}");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: extraneous input '+' expecting {'description', 'dimensions', 'end', 'name', 'tag', Id, Ref}"),
+                """
+                        schematic
+                            @power-node at (0, 0) connected to block1 + (1, 1)
+                        end
+                        """
+        );
     }
 
     @Test
@@ -465,12 +480,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@sorter",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstItemReference("@coal")
+                        new AstItemReference(EMPTY, "@coal")
                 )
         );
 
@@ -479,12 +494,16 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesItemNonRef() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @sorter at (0, 0) item coal
-                end
-                """,
-                "Syntax error: .* missing Ref at 'coal'");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: missing Ref at 'coal'")
+                        .add("Parse error: 'end': mismatched input 'end' expecting {':', ','}"),
+                """
+                        schematic
+                            @sorter at (0, 0) item coal
+                        end
+                        """
+        );
     }
 
     @Test
@@ -496,12 +515,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@liquid-source",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstLiquidReference("@water")
+                        new AstLiquidReference(EMPTY, "@water")
                 )
         );
 
@@ -510,12 +529,16 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesLiquidNonRef() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @liquid-source at (0, 0) liquid water
-                end
-                """,
-                "Syntax error: .* missing Ref at 'water'");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: missing Ref at 'water'")
+                        .add("Parse error: 'end': mismatched input 'end' expecting {':', ','}"),
+                """
+                        schematic
+                            @liquid-source at (0, 0) liquid water
+                        end
+                        """
+        );
     }
 
     @Test
@@ -527,10 +550,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@message",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
                         AstStringLiteral.fromText("message", 2, 30)
                 )
@@ -552,13 +575,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@message",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstStringBlock("message1\nmessage2\n",
-                                new InputPosition(InputFile.EMPTY, 3, 1), 0)
+                        new AstStringBlock(EMPTY, "message1\nmessage2\n", 0)
                 )
         );
 
@@ -574,12 +596,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@message",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstStringRef("something")
+                        new AstStringRef(EMPTY, "something")
                 )
         );
 
@@ -595,12 +617,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@switch",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstBoolean(true)
+                        new AstBoolean(EMPTY, true)
                 )
         );
 
@@ -616,12 +638,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@switch",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstBoolean(false)
+                        new AstBoolean(EMPTY, false)
                 )
         );
 
@@ -638,12 +660,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(), null, Language.NONE)
                 )
         );
 
@@ -661,12 +683,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(), null, Language.NONE)
                 )
         );
 
@@ -684,12 +706,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPattern("*-p-*")), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPattern(EMPTY, "*-p-*")), null, Language.NONE)
                 )
         );
 
@@ -707,12 +729,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection("cell1"), null, false)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, "cell1"), null, false)), null, Language.NONE)
                 )
         );
 
@@ -721,14 +743,17 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesProcessorVirtualLinkReference() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @micro-processor at (0, 0) processor
-                        links * virtual end
-                    end
-                end
-                """,
-                "Syntax error: .* extraneous input 'virtual' expecting \\{'end', '-', '\\+', '\\(', Id, Pattern}");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: extraneous input 'virtual' expecting {'end', '-', '+', '(', Id, Pattern}"),
+                """
+                        schematic
+                            @micro-processor at (0, 0) processor
+                                links * virtual end
+                            end
+                        end
+                        """
+        );
     }
 
     @Test
@@ -742,12 +767,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection("cell1"), "cell2", false)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, "cell1"), "cell2", false)), null, Language.NONE)
                 )
         );
 
@@ -765,12 +790,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection("cell1"), "cell2", true)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, "cell1"), "cell2", true)), null, Language.NONE)
                 )
         );
 
@@ -788,13 +813,13 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(
-                                List.of(new AstLinkPos(new AstConnection(-1, -1, true), "cell1", true)),
+                        new AstProcessor(EMPTY,
+                                List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, -1, -1, true), "cell1", true)),
                                 null, Language.NONE)
                 )
         );
@@ -813,12 +838,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1), null, false)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1), null, false)), null, Language.NONE)
                 )
         );
 
@@ -836,12 +861,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1, true), null, false)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1, true), null, false)), null, Language.NONE)
                 )
         );
 
@@ -859,12 +884,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1), "switch1", false)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1), "switch1", false)), null, Language.NONE)
                 )
         );
 
@@ -882,12 +907,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1, true), "switch1", false)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1, true), "switch1", false)), null, Language.NONE)
                 )
         );
 
@@ -905,12 +930,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1), "switch1", true)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1), "switch1", true)), null, Language.NONE)
                 )
         );
 
@@ -928,12 +953,12 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1, true), "switch1", true)), null, Language.NONE)
+                        new AstProcessor(EMPTY, List.of(new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1, true), "switch1", true)), null, Language.NONE)
                 )
         );
 
@@ -942,26 +967,32 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesProcessorLinkPositionAbsoluteUnnamedVirtual() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @micro-processor at (0, 0) processor
-                        links (1, 1) virtual end
-                    end
-                end
-                """,
-                "Syntax error: .* extraneous input 'virtual' expecting \\{'end', '-', '\\+', '\\(', Id, Pattern}");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: extraneous input 'virtual' expecting {'end', '-', '+', '(', Id, Pattern}"),
+                """
+                        schematic
+                            @micro-processor at (0, 0) processor
+                                links (1, 1) virtual end
+                            end
+                        end
+                        """
+        );
     }
 
     @Test
     public void refusesProcessorLinkPositionRelativeUnnamedVirtual() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @micro-processor at (0, 0) processor
-                        links +(1, 1) virtual end
-                    end
-                end
-                """,
-                "Syntax error: .* extraneous input 'virtual' expecting \\{'end', '-', '\\+', '\\(', Id, Pattern}");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: extraneous input 'virtual' expecting {'end', '-', '+', '(', Id, Pattern}"),
+                """
+                        schematic
+                            @micro-processor at (0, 0) processor
+                                links +(1, 1) virtual end
+                            end
+                        end
+                        """
+        );
     }
 
     @Test
@@ -982,18 +1013,18 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(
-                                new AstLinkPattern("p1-*"),
-                                new AstLinkPos(new AstConnection("switch1"), null, false),
-                                new AstLinkPos(new AstConnection("cell1"), "cell2", false),
-                                new AstLinkPos(new AstConnection(1, 1), null, false),
-                                new AstLinkPos(new AstConnection(2, 2, true), "message1", false),
-                                new AstLinkPos(new AstConnection(-1, -1, true), "display1", true)
+                        new AstProcessor(EMPTY, List.of(
+                                new AstLinkPattern(EMPTY, "p1-*"),
+                                new AstLinkPos(EMPTY, new AstConnection(EMPTY, "switch1"), null, false),
+                                new AstLinkPos(EMPTY, new AstConnection(EMPTY, "cell1"), "cell2", false),
+                                new AstLinkPos(EMPTY, new AstConnection(EMPTY, 1, 1), null, false),
+                                new AstLinkPos(EMPTY, new AstConnection(EMPTY, 2, 2, true), "message1", false),
+                                new AstLinkPos(EMPTY, new AstConnection(EMPTY, -1, -1, true), "display1", true)
                         ), null, Language.NONE)
                 )
         );
@@ -1012,14 +1043,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                        new AstProgramSnippetText(AstStringLiteral.fromText("program", 3, 17))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetText(EMPTY, AstStringLiteral.fromText("program", 3, 17))
                                 ), Language.MLOG)
                 )
         );
@@ -1038,14 +1069,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                        new AstProgramSnippetText(new AstStringRef("mlog_program"))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetText(EMPTY, new AstStringRef(EMPTY, "mlog_program"))
                                 ), Language.MLOG)
                 )
         );
@@ -1064,14 +1095,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file", 3, 22))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetFile(EMPTY, AstStringLiteral.fromText("file", 3, 22))
                                 ), Language.MLOG)
                 )
         );
@@ -1090,14 +1121,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                        new AstProgramSnippetFile(new AstStringRef("my_file"))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetFile(EMPTY, new AstStringRef(EMPTY, "my_file"))
                                 ), Language.MLOG)
                 )
         );
@@ -1116,14 +1147,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                        new AstProgramSnippetText(AstStringLiteral.fromText("program", 3, 21))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetText(EMPTY, AstStringLiteral.fromText("program", 3, 21))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1142,14 +1173,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                    new AstProgramSnippetText(new AstStringRef("mindcode_program"))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetText(EMPTY, new AstStringRef(EMPTY, "mindcode_program"))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1168,14 +1199,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                    new AstProgramSnippetFile(AstStringLiteral.fromText("file", 3, 26))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetFile(EMPTY, AstStringLiteral.fromText("file", 3, 26))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1194,14 +1225,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                    new AstProgramSnippetFile(new AstStringRef("my_file"))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetFile(EMPTY, new AstStringRef(EMPTY, "my_file"))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1221,17 +1252,17 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """);
 
         AstDefinitions expected = definitionWithBlocks(
-                new AstBlock(
+                new AstBlock(EMPTY,
                         List.of(),
                         "@micro-processor",
-                        new AstCoordinates(0, 0),
+                        new AstCoordinates(EMPTY, 0, 0),
                         null,
-                        new AstProcessor(List.of(),
-                                new AstProgram(
-                                        new AstProgramSnippetText(AstStringLiteral.fromText("program", 3, 21)),
-                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file", 3, 38)),
-                                        new AstProgramSnippetText(new AstStringRef("my_program")),
-                                        new AstProgramSnippetFile(new AstStringRef("my_file"))
+                        new AstProcessor(EMPTY, List.of(),
+                                new AstProgram(EMPTY,
+                                        new AstProgramSnippetText(EMPTY, AstStringLiteral.fromText("program", 3, 21)),
+                                        new AstProgramSnippetFile(EMPTY, AstStringLiteral.fromText("file", 3, 38)),
+                                        new AstProgramSnippetText(EMPTY, new AstStringRef(EMPTY, "my_program")),
+                                        new AstProgramSnippetFile(EMPTY, new AstStringRef(EMPTY, "my_file"))
                                 ), Language.MINDCODE)
                 )
         );
@@ -1241,11 +1272,14 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesUnknownConfiguration() {
-        parseSchematicsExpectingError("""
-                schematic
-                    @switch at (0, 0) fluffyBunny
-                end
-                """,
-                "Syntax error: .* mismatched input 'end' expecting \\{':', ','}");
+        parseSchematicsExpectingMessages(
+                ExpectedMessages.create()
+                        .add("Parse error: 'end': mismatched input 'end' expecting {':', ','}"),
+                """
+                        schematic
+                            @switch at (0, 0) fluffyBunny
+                        end
+                        """
+        );
     }
 }

@@ -2,12 +2,12 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.UnexpectedMessageException;
 import info.teksol.mindcode.logic.BaseArgument;
 import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.logic.TypedArgument;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.util.UnexpectedMessageException;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

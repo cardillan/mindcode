@@ -1048,7 +1048,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             LogicArgument prop = visit(propertyAccess.getProperty());
             String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName().substring(1) : prop.toMlog();
             // Implicit out modifier as this is an assignment
-            LogicFunctionArgument argument = new LogicFunctionArgument(node.getValue().getInputPosition(), rvalue, false, false);
+            LogicFunctionArgument argument = new LogicFunctionArgument(node.getValue().inputPosition(), rvalue, false, false);
             if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(argument)) == null) {
                 error(node, "Undefined property '%s.%s'.", propTarget.toMlog(), prop.toMlog());
                 return NULL;
@@ -1140,7 +1140,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         @Override
         public InputPosition getInputPosition() {
-            return node.getInputPosition();
+            return node.inputPosition();
         }
 
         @Override
@@ -1188,7 +1188,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return VOID;
         }
 
-        loopStack.enterLoop(node.getInputPosition(), node.getLabel(), exitLabel, contLabel);
+        loopStack.enterLoop(node.inputPosition(), node.getLabel(), exitLabel, contLabel);
 
         // All but the last value
         int limit = values.size() - iterators.size();
@@ -1317,7 +1317,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
-        loopStack.enterLoop(node.getInputPosition(), node.getLabel(), doneLabel, continueLabel);
+        loopStack.enterLoop(node.inputPosition(), node.getLabel(), doneLabel, continueLabel);
         setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         emit(createLabel(beginLabel));
         emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, fixedUpperBound));
@@ -1343,7 +1343,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
-        loopStack.enterLoop(node.getInputPosition(), node.getLabel(), doneLabel, continueLabel);
+        loopStack.enterLoop(node.inputPosition(), node.getLabel(), doneLabel, continueLabel);
         setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         emit(createLabel(beginLabel));
         final LogicValue cond = visit(node.getCondition());
@@ -1367,7 +1367,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
-        loopStack.enterLoop(node.getInputPosition(), node.getLabel(), doneLabel, continueLabel);
+        loopStack.enterLoop(node.inputPosition(), node.getLabel(), doneLabel, continueLabel);
         setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         emit(createLabel(beginLabel));
         visit(node.getBody());
@@ -1736,22 +1736,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitBreakStatement(BreakStatement node) {
-        final LogicLabel label = loopStack.getBreakLabel(node.getInputPosition(), node.getLabel());
+        final LogicLabel label = loopStack.getBreakLabel(node.inputPosition(), node.getLabel());
         emit(createJumpUnconditional(label));
         return VOID;
     }
 
     @Override
     public LogicValue visitContinueStatement(ContinueStatement node) {
-        final LogicLabel label = loopStack.getContinueLabel(node.getInputPosition(), node.getLabel());
+        final LogicLabel label = loopStack.getContinueLabel(node.inputPosition(), node.getLabel());
         emit(createJumpUnconditional(label));
         return VOID;
     }
 
     @Override
     public LogicValue visitReturnStatement(ReturnStatement node) {
-        final LogicValue retval = returnStack.getReturnValue(node.getInputPosition());
-        final LogicLabel label = returnStack.getReturnLabel(node.getInputPosition());
+        final LogicValue retval = returnStack.getReturnValue(node.inputPosition());
+        final LogicLabel label = returnStack.getReturnLabel(node.inputPosition());
         if (retval instanceof LogicVariable target) {
             if (node.getRetval() instanceof VoidLiteral) {
                 error(node, "Missing return value in 'return' statement.");

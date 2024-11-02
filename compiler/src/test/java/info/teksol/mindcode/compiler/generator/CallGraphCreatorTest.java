@@ -3,7 +3,7 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.ExpectedMessages;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

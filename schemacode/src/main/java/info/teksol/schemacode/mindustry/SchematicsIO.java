@@ -1,5 +1,6 @@
 package info.teksol.schemacode.mindustry;
 
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.SchematicsInternalError;
@@ -127,7 +128,7 @@ public class SchematicsIO {
                 Direction direction = Direction.convert(stream.readByte());
                 if (!"@air".equals(blockType.name())) {
                     Configuration config = convert(blockType, position, raw);
-                    blocks.add(new Block(index++, List.of(), blockType, position, direction, config));
+                    blocks.add(new Block(InputPosition.EMPTY, index++, List.of(), blockType, position, direction, config));
                 }
             }
 

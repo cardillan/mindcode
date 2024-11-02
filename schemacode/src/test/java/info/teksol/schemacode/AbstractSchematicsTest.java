@@ -1,7 +1,6 @@
 package info.teksol.schemacode;
 
 import info.teksol.mindcode.InputFile;
-import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.mimex.BlockType;
@@ -13,14 +12,13 @@ import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Block;
 import info.teksol.schemacode.schematics.Schematic;
-import org.intellij.lang.annotations.Language;
+import info.teksol.util.ExpectedMessages;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static info.teksol.mindcode.InputPosition.EMPTY;
 
 public abstract class AbstractSchematicsTest {
     public static final Position P0_0 = Position.ORIGIN;
@@ -40,11 +38,11 @@ public abstract class AbstractSchematicsTest {
     private int index = 0;
 
     public Block block(List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(index++, labels, BlockType.forName(blockType), position, direction, configuration);
+        return new Block(EMPTY, index++, labels, BlockType.forName(blockType), position, direction, configuration);
     }
 
     public Block block(String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(index++, List.of(), BlockType.forName(blockType), position, direction, configuration);
+        return new Block(EMPTY, index++, List.of(), BlockType.forName(blockType), position, direction, configuration);
     }
 
     /**
@@ -63,13 +61,15 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected DefinitionsContext parseSchematics(String definition) {
-        return SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition), messageListener("parseSchematics"));
+        return SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition),
+                messageListener("parseSchematics"));
     }
 
-    protected void parseSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
+    protected void parseSchematicsExpectingMessages(ExpectedMessages expectedMessages, String definition) {
+        expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
         SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition), messages::add);
-        assertRegex(MessageLevel.ERROR, regex, messages);
+        expectedMessages.validate(messages);
     }
 
     protected AstDefinitions createDefinitions(String definition) {
@@ -84,29 +84,21 @@ public abstract class AbstractSchematicsTest {
                 InputFile.EMPTY, null);
     }
 
-    protected void buildSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
+    protected void assertGeneratesErrors(ExpectedMessages expectedMessages, String definition) {
+        expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
         SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, InputFile.EMPTY, null);
-        assertRegex(MessageLevel.ERROR, regex, messages);
+        expectedMessages.validate(messages);
     }
 
-    protected void buildSchematicsExpectingWarning(String definition, @Language("RegExp") String regex) {
+    protected void assertGeneratesWarnings(ExpectedMessages expectedMessages, String definition) {
+        expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
         SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, InputFile.EMPTY, null);
-        assertRegex(MessageLevel.WARNING, regex, messages);
-    }
-
-    private void assertRegex(MessageLevel expectedLevel, String expectedRegex, List<MindcodeMessage> messages) {
-        List<String> list = messages.stream().filter(m -> m.level() == expectedLevel).map(MindcodeMessage::message).toList();
-        if (list.stream().anyMatch(s -> s.matches(expectedRegex))) {
-            assertTrue(true);
-        } else {
-            fail("No message matched expected expression.\nExpected expression: %s, found messages: %s"
-                    .formatted(expectedRegex, String.join("\n", list)));
-        }
+        expectedMessages.validate(messages);
     }
 }

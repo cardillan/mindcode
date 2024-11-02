@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.Tuple2;
-import info.teksol.schemacode.SchemacodeCompilerMessage;
 import info.teksol.schemacode.mindustry.Position;
 
 import java.util.*;
@@ -47,10 +47,10 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         }
 
         if (!collisions.isEmpty()) {
-            collisions.forEach(t -> messageListener.accept(SchemacodeCompilerMessage.error(
-                    "Overlapping blocks: #%d '%s' at %s and #%d '%s' at %s.".formatted(
-                            t.e1().index(), t.e1().name(), t.e1().area(),
-                            t.e2().index(), t.e2().name(), t.e2().area()))));
+            collisions.forEach(t -> messageListener.accept(ToolMessage.error(
+                    "Overlapping blocks: #%d '%s' at %s and #%d '%s' at %s.",
+                    t.e1().index(), t.e1().name(), t.e1().area(),
+                    t.e2().index(), t.e2().name(), t.e2().area())));
         }
 
         return new BlockPositionMap<>(blockMap, positionMap);

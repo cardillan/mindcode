@@ -1,7 +1,8 @@
-package info.teksol.mindcode.compiler;
+package info.teksol.util;
 
 import com.ibm.icu.impl.Assert;
 import info.teksol.mindcode.MindcodeMessage;
+import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +91,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @param pattern regex pattern to be expected
      * @return this instance
      */
-    public ExpectedMessages addRegex(String pattern) {
+    public ExpectedMessages addRegex(@Language("RegExp") String pattern) {
         matchers.add(new MatchCounter(new RegexMessageMatcher(pattern)));
         return this;
     }
@@ -104,7 +105,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @param pattern regex pattern to be expected
      * @return this instance
      */
-    public ExpectedMessages addRegex(int line, int column, String pattern) {
+    public ExpectedMessages addRegex(int line, int column,  @Language("RegExp") String pattern) {
         matchers.add(new MatchCounter(new PositionalMessageMatcher(line, column, new RegexMessageMatcher(pattern))));
         return this;
     }

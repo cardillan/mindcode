@@ -101,7 +101,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
             decompiler.setDirectionLevel(arguments.get("direction"));
             String schemaDefinition = decompiler.buildCode();
 
-            writeOutput(output, schemaDefinition, false);
+            writeOutput(output, schemaDefinition);
         } catch (IOException e) {
             throw new info.teksol.mindcode.cmdline.ProcessingException(e, "Error reading file '%s': %s", input.getPath(), e.getMessage());
         }

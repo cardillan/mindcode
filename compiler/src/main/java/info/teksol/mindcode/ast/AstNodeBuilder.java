@@ -1,7 +1,6 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.*;
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -35,11 +34,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     private void error(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.error(position, format, args));
+        messageConsumer.accept(CompilerMessage.error(position, format, args));
     }
 
     private void warn(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.warn(position, format, args));
+        messageConsumer.accept(CompilerMessage.warn(position, format, args));
     }
 
     @Override
@@ -463,7 +462,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         if (parameters.size() > offset) {
             parameters.subList(0, parameters.size() - offset).stream()
                     .filter(FunctionParameter::isVarArgs)
-                    .forEach(p -> error(p.getInputPosition(),
+                    .forEach(p -> error(p.inputPosition(),
                             "Only the last parameter of an inline function can be declared as vararg."));
         }
 

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.ExpectedMessages;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

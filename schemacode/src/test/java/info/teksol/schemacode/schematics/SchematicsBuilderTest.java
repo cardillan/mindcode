@@ -8,6 +8,7 @@ import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -57,15 +58,21 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesMissingSchematics() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("No schematic defined."),
+                """
                         constant = "foo"
-                        """,
-                "No schematic defined.");
+                        """
+        );
     }
 
     @Test
     void refusesMultipleSchematics() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("More than one schematic defined."),
+                """
                         schematic
                             name = "First"
                         end
@@ -73,47 +80,61 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         schematic
                             name = "Second"
                         end
-                        """,
-                "More than one schematic defined.");
+                        """
+        );
     }
 
     @Test
     void refusesConstantRedefinitions() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("Identifier 'constant' already defined."),
+                """
                         schematic
                             name = "Schematics"
                         end
                         
                         constant = "foo"
                         constant = "bar"
-                        """,
-                "Identifier 'constant' defined more than once.");
+                        """
+        );
     }
 
     @Test
     void refusesUndefinedConstants() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Undefined identifier 'foo'."),
+                """
                         schematic
                             name = foo
                         end
-                        """,
-                "Undefined identifier 'foo'.");
+                        """
+        );
     }
 
     @Test
     void refusesReusedBlockLabels() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Multiple definitions of block label 'switch1'."),
+                """
                         schematic
                             switch1: @switch at (0, 0)
                             switch1: @switch at (1, 0)
                         end
-                        """,
-                "Multiple definitions of block label 'switch1'.");
+                        """
+        );
     }
 
     @Test
     void refusesCircularPositionDefinition() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Overlapping blocks: #\\d '@switch' at \\(0, 0\\) and #\\d '@switch' at \\(0, 0\\).").repeat(2)
+                        .addRegex("Circular definition of block 'switch2' position.")
+                        .addRegex("Circular definition of block 'switch3' position."),
+                """
                         schematic
                         switch1:
                             @switch at (0, 0)
@@ -122,21 +143,25 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         switch3:
                             @switch at switch2 - (1, 0)
                         end
-                        """,
-                "Circular definition of block 'switch2' position.");
+                        """
+        );
     }
 
     @Test
     void refusesUnknownBlockReference() {
-        buildSchematicsExpectingError("""
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("Unknown block name 'switch3'.").atLeast(1)
+                        .add("Overlapping blocks: #0 '@switch' at (0, 0) and #1 '@switch' at (0, 0)."),
+                """
                         schematic
                         switch1:
                             @switch at (0, 0)
                         switch2:
                             @switch at switch3 + (1, 0)
                         end
-                        """,
-                "Unknown block name 'switch3'.");
+                        """
+        );
     }
 
     @Test
@@ -170,13 +195,16 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refuseMultipleNames() {
-        buildSchematicsExpectingError("""
-                schematic
-                    name = "Name"
-                    name = "Another"
-                end
-                """,
-                "Multiple definitions of attribute 'name'.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("Attribute 'name' is already defined."),
+                """
+                        schematic
+                            name = "Name"
+                            name = "Another"
+                        end
+                        """
+        );
     }
 
     @Test
@@ -244,7 +272,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 5, 7,
                 List.of(
-                        block("@message", P0_0,    Direction.EAST, TextConfiguration.EMPTY),
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
                         block("@message", p(4, 6), Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
@@ -262,7 +290,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@message", P0_0,    Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -279,7 +307,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@message", P0_0,    Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -617,7 +645,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 2, 1,
                 List.of(
-                        block(List.of(),          "@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0)),
+                        block(List.of(), "@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0)),
                         block(List.of("bridge1"), "@bridge-conveyor", P1_0, Direction.EAST, pa())
                 )
         );
@@ -645,12 +673,15 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesSchematicsWithInvalidItemConfiguration() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @unloader at (0, 0) item @fluffyBunny
-                end
-                """,
-                "Block '@unloader' at \\(\\s*0,\\s*0\\): unknown or unsupported item '@fluffyBunny'\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@unloader' at \\(\\s*0,\\s*0\\): unknown or unsupported item '@fluffyBunny'\\."),
+                """
+                        schematic
+                            @unloader at (0, 0) item @fluffyBunny
+                        end
+                        """
+        );
     }
 
     @Test
@@ -673,12 +704,15 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesSchematicsWithInvalidLiquidConfiguration() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @liquid-source at (0, 0) liquid @fluffyBunny
-                end
-                """,
-                "Block '@liquid-source' at \\(\\s*0,\\s*0\\): unknown or unsupported liquid '@fluffyBunny'\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@liquid-source' at \\(\\s*0,\\s*0\\): unknown or unsupported liquid '@fluffyBunny'\\."),
+                """
+                        schematic
+                            @liquid-source at (0, 0) liquid @fluffyBunny
+                        end
+                        """
+        );
     }
 
     @Test
@@ -725,23 +759,27 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesWrongLinkNames() {
-        buildSchematicsExpectingError("""
-                schematic
-                    dimensions = (1, 1)
-                    @micro-processor at (0, 0) processor
-                    links
-                        switch1 as message1
-                        message1 as switch1
-                    end
-                    mlog = ""
-                end
-                switch1:
-                    @switch at +(1, 0)
-                message1:
-                    @message at +(1, 0)
-                end
-                """,
-                "Incompatible link name 'message1' for block type '@switch'.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("Incompatible link name 'message1' for block type '@switch'.")
+                        .add("Incompatible link name 'switch1' for block type '@message'."),
+                """
+                        schematic
+                            dimensions = (3, 1)
+                            @micro-processor at (0, 0) processor
+                            links
+                                switch1 as message1
+                                message1 as switch1
+                            end
+                            mlog = ""
+                        end
+                        switch1:
+                            @switch at +(1, 0)
+                        message1:
+                            @message at +(1, 0)
+                        end
+                        """
+        );
     }
 
     @Test
@@ -830,12 +868,15 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesUnsupportedUnitConfiguration() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @air-factory at (0, 0) unit @poly
-                end
-                """,
-                "Block '@air-factory' at \\(\\s*0,\\s*0\\): unknown or unsupported unit type '@poly'\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@air-factory' at \\(\\s*0,\\s*0\\): unknown or unsupported unit type '@poly'\\."),
+                """
+                        schematic
+                            @air-factory at (0, 0) unit @poly
+                        end
+                        """
+        );
     }
 
     @Test
@@ -857,64 +898,83 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesWrongColorValueRed() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @illuminator at (0, 0) color rgba(256, 0, 0, 127)
-                end
-                """,
-                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value 256 of color component 'red' outside valid range <0, 255>\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@illuminator' at \\(\\s*0,\\s*0\\): value 256 of color component 'red' outside valid range <0, 255>\\."),
+                """
+                        schematic
+                            @illuminator at (0, 0) color rgba(256, 0, 0, 127)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesWrongColorValueGreen() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @illuminator at (0, 0) color rgba(255, -1, 0, 127)
-                end
-                """,
-                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value -1 of color component 'green' outside valid range <0, 255>\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@illuminator' at \\(\\s*0,\\s*0\\): value -1 of color component 'green' outside valid range <0, 255>\\."),
+                """
+                        schematic
+                            @illuminator at (0, 0) color rgba(255, -1, 0, 127)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesWrongColorValueBlue() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @illuminator at (0, 0) color rgba(255, 0, 99999, 127)
-                end
-                """,
-                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value 99999 of color component 'blue' outside valid range <0, 255>\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@illuminator' at \\(\\s*0,\\s*0\\): value 99999 of color component 'blue' outside valid range <0, 255>\\."),
+                """
+                        schematic
+                            @illuminator at (0, 0) color rgba(255, 0, 99999, 127)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesWrongColorValueAlpha() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @illuminator at (0, 0) color rgba(255, 0, 0, 256)
-                end
-                """,
-                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value 256 of color component 'alpha' outside valid range <0, 255>\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@illuminator' at \\(\\s*0,\\s*0\\): value 256 of color component 'alpha' outside valid range <0, 255>\\."),
+                """
+                        schematic
+                            @illuminator at (0, 0) color rgba(255, 0, 0, 256)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesUnknownBlocks() {
-        buildSchematicsExpectingError("""
-                schematic
-                    dimensions = (1, 1)
-                    @fluffyBunny at (0, 0)
-                end
-                """,
-                "Unknown block type '@fluffyBunny'.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("Unknown block type '@fluffyBunny'.")
+                        .add("Actual schematic dimensions ( 0,  0) are smaller than specified dimensions ( 1,  1)."),
+                """
+                        schematic
+                            dimensions = (1, 1)
+                            @fluffyBunny at (0, 0)
+                        end
+                        """
+        );
     }
 
     @Test
     void refusesWrongConfiguration() {
-        buildSchematicsExpectingError("""
-                schematic
-                    dimensions = (1, 1)
-                    @message at (0, 0) enabled
-                end
-                """,
-                "Unexpected configuration type for block '@message' at \\(\\s*0,\\s*0\\): expected TEXT, found BOOLEAN.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Unexpected configuration type for block '@message' at \\(\\s*0,\\s*0\\): expected TEXT, found BOOLEAN."),
+                """
+                        schematic
+                            dimensions = (1, 1)
+                            @message at (0, 0) enabled
+                        end
+                        """
+        );
     }
 
     @Test

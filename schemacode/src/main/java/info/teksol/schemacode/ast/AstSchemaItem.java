@@ -1,4 +1,10 @@
 package info.teksol.schemacode.ast;
 
-public interface AstSchemaItem {
+import info.teksol.mindcode.AstElement;
+import info.teksol.mindcode.InputPosition;
+
+public interface AstSchemaItem extends AstElement {
+
+    InputPosition inputPosition();
+
 }

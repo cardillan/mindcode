@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public record AstProgramSnippetFile(AstText fileName) implements AstProgramSnippet {
+public record AstProgramSnippetFile(InputPosition inputPosition, AstText fileName) implements AstProgramSnippet {
 
     @Override
     public String getProgramId(SchematicsBuilder builder) {
@@ -22,7 +22,7 @@ public record AstProgramSnippetFile(AstText fileName) implements AstProgramSnipp
             try {
                 return Files.readString(path);
             } catch (IOException ex) {
-                builder.error("Error reading file '%s'.", path.toString());
+                builder.error(this, "Error reading file '%s'.", path.toString());
                 return "";
             }
         } else {

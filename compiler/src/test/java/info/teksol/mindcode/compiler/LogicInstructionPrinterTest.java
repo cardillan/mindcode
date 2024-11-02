@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.util.UnexpectedMessageException;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

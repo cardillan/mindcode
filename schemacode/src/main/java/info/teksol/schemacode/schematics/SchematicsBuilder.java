@@ -1,11 +1,13 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mindcode.AstElement;
 import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.mindcode.mimex.Icons;
-import info.teksol.schemacode.SchemacodeCompilerMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
@@ -20,11 +22,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SchematicsBuilder {
+public class SchematicsBuilder extends AbstractMessageEmitter {
     private final CompilerProfile compilerProfile;
-    private final Consumer<MindcodeMessage> messageListener;
     private final AstDefinitions astDefinitions;
-    private final InputFile inputFile;
     private final Path basePath;
 
     private AstSchematic astSchematic;
@@ -33,12 +33,11 @@ public class SchematicsBuilder {
     private BlockPositionMap<BlockPosition> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
-    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<MindcodeMessage> messageListener, AstDefinitions astDefinitions,
+    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<MindcodeMessage> messageConsumer, AstDefinitions astDefinitions,
             InputFile inputFile, Path basePath) {
+        super(messageConsumer);
         this.compilerProfile = compilerProfile;
-        this.messageListener = messageListener;
         this.astDefinitions = astDefinitions;
-        this.inputFile = inputFile;
         this.basePath = basePath;
     }
 
@@ -47,20 +46,16 @@ public class SchematicsBuilder {
         return new SchematicsBuilder(compilerProfile, messageListener, definitions, inputFile, basePath);
     }
 
-    public void addMessage(MindcodeMessage message) {
-        messageListener.accept(message);
-    }
-
     public void error(@PrintFormat String message, Object... args) {
-        messageListener.accept(SchemacodeCompilerMessage.error(args.length == 0 ? message : message.formatted(args)));
+        addMessage(ToolMessage.error(message, args));
     }
 
     public void warn(@PrintFormat String message, Object... args) {
-        messageListener.accept(SchemacodeCompilerMessage.warn(args.length == 0 ? message : message.formatted(args)));
+        addMessage(ToolMessage.warn(message, args));
     }
 
     public void info(@PrintFormat String message, Object... args) {
-        messageListener.accept(SchemacodeCompilerMessage.info(args.length == 0 ? message : message.formatted(args)));
+        addMessage(ToolMessage.info(message, args));
     }
 
     public CompilerProfile getCompilerProfile() {
@@ -84,10 +79,10 @@ public class SchematicsBuilder {
                 .toList();
 
         if (schematicsList.isEmpty()) {
-            error("No schematic defined.");
+            addMessage(ToolMessage.error("No schematic defined."));
             return null;
         } else if (schematicsList.size() > 1) {
-            error("More than one schematic defined.");
+            addMessage(ToolMessage.error("More than one schematic defined."));
             return null;
         }
 
@@ -100,21 +95,21 @@ public class SchematicsBuilder {
 
         labelCounts.entrySet().stream()
                 .filter(e -> e.getValue() > 1)
-                .forEachOrdered(c -> error("Multiple definitions of block label '%s'.", c.getKey()));
+                .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
         astSchematic.blocks().stream().filter(astBlock -> !BlockType.isNameValid(astBlock.type()))
-                .forEachOrdered(astBlock -> error("Unknown block type '%s'.", astBlock.type()));
+                .forEachOrdered(astBlock -> error(astBlock, "Unknown block type '%s'.", astBlock.type()));
 
         List<AstBlock> astBlocks = astSchematic.blocks().stream()
                 .filter(astBlock -> BlockType.isNameValid(astBlock.type())).toList();
 
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
-        BlockPositionResolver positionResolver = new BlockPositionResolver(messageListener);
+        BlockPositionResolver positionResolver = new BlockPositionResolver(messageConsumer);
         astLabelMap = positionResolver.resolveAllBlocks(astBlocks);
         List<BlockPosition> blockPositions = astLabelMap.values().stream().distinct().toList();
 
-        astPositionMap = BlockPositionMap.forBuilder(messageListener, blockPositions);
+        astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
 
         List<Block> blocks = new ArrayList<>();
         for (int index = 0; index < astBlocks.size(); index++) {
@@ -125,7 +120,7 @@ public class SchematicsBuilder {
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = convertAstConfiguration(blockPos, astBlock.configuration());
-            blocks.add(new Block(index, astBlock.labels(), type, blockPos.position(), direction,
+            blocks.add(new Block(astBlock.inputPosition(), index, astBlock.labels(), type, blockPos.position(), direction,
                     configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass())));
         }
 
@@ -200,11 +195,10 @@ public class SchematicsBuilder {
                 .map(AstStringConstant.class::cast)
                 .collect(Collectors.groupingBy(AstStringConstant::name));
 
-        List<String> redefinition = astConstantLists.entrySet().stream()
-                .filter(e -> e.getValue().size() > 1).map(Map.Entry::getKey).toList();
-        if (!redefinition.isEmpty()) {
-            redefinition.forEach(id -> error("Identifier '%s' defined more than once.", id));
-        }
+        astConstantLists.entrySet().stream()
+                .filter(e -> e.getValue().size() > 1)
+                .flatMap(e -> e.getValue().stream().skip(1))
+                .forEachOrdered(node -> error(node, "Identifier '%s' already defined.", node.name()));
 
         Map<String, AstStringConstant> astConstants = astConstantLists.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0)));
@@ -224,10 +218,10 @@ public class SchematicsBuilder {
             throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
         } else if (text instanceof AstStringRef ref) {
             if (!visited.add(ref.reference())) {
-                error("Circular definition of identifier '%s'.", ref.reference());
+                error(ref, "Circular definition of identifier '%s'.", ref.reference());
                 return AstStringLiteral.fromText("");
             } else if (!constantLists.containsKey(ref.reference())) {
-                error("Undefined identifier '%s'.", ref.reference());
+                error(ref, "Undefined identifier '%s'.", ref.reference());
                 return AstStringLiteral.fromText("");
             }
             return resolveConstant(constantLists, visited, constantLists.get(ref.reference()));
@@ -240,7 +234,7 @@ public class SchematicsBuilder {
         Configuration configuration = getConfiguration(blockPos, astConfiguration);
 
         if (!blockPos.configurationType().isCompatible(configuration)) {
-            error("Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
+            error(astConfiguration, "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
                     blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
                     blockPos.configurationType(), ConfigurationType.fromInstance(configuration));
             return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
@@ -251,32 +245,32 @@ public class SchematicsBuilder {
 
     private Configuration getConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
         if (astConfiguration == null)                                 return  EmptyConfiguration.EMPTY;
-        if (astConfiguration instanceof AstBlockReference r)          return  verifyValue(blockPos, BlockConfiguration.forName(r.item()), r.item(), "block");
+        if (astConfiguration instanceof AstBlockReference r)          return  verifyValue(r, blockPos, BlockConfiguration.forName(r.item()), r.item(), "block");
         if (astConfiguration instanceof AstBoolean b)                 return  BooleanConfiguration.of(b.value());
         if (astConfiguration instanceof AstConnection c)              return  c.evaluate(this, blockPos.position());
         if (astConfiguration instanceof AstConnections c)             return  new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-        if (astConfiguration instanceof AstItemReference r)           return  verifyValue(blockPos, ItemConfiguration.forName(r.item()), r.item(), "item");
-        if (astConfiguration instanceof AstLiquidReference r)         return  verifyValue(blockPos, LiquidConfiguration.forName(r.liquid()), r.liquid(), "liquid");
+        if (astConfiguration instanceof AstItemReference r)           return  verifyValue(r, blockPos, ItemConfiguration.forName(r.item()), r.item(), "item");
+        if (astConfiguration instanceof AstLiquidReference r)         return  verifyValue(r, blockPos, LiquidConfiguration.forName(r.liquid()), r.liquid(), "liquid");
         if (astConfiguration instanceof AstProcessor p)               return  ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
         if (astConfiguration instanceof AstRgbaValue rgb)             return  convertToRgbValue(blockPos, rgb);
         if (astConfiguration instanceof AstText t)                    return  new TextConfiguration(t.getText(this));
-        if (astConfiguration instanceof AstUnitCommandReference r)    return  verifyValue(blockPos, UnitCommandConfiguration.forName(r.item()), r.item(), "command");
+        if (astConfiguration instanceof AstUnitCommandReference r)    return  verifyValue(r, blockPos, UnitCommandConfiguration.forName(r.item()), r.item(), "command");
         if (astConfiguration instanceof AstUnitReference r)           return  decodeUnitConfiguration(blockPos, r);
         return EmptyConfiguration.EMPTY;
     }
 
     private Color convertToRgbValue(BlockPosition blockPos, AstRgbaValue rgb) {
         return new Color(
-                clamp(blockPos, "red", rgb.red()),
-                clamp(blockPos, "green", rgb.green()),
-                clamp(blockPos, "blue", rgb.blue()),
-                clamp(blockPos, "alpha", rgb.alpha())
+                clamp(rgb, blockPos, "red", rgb.red()),
+                clamp(rgb, blockPos, "green", rgb.green()),
+                clamp(rgb, blockPos, "blue", rgb.blue()),
+                clamp(rgb, blockPos, "alpha", rgb.alpha())
         );
     }
 
-    private Configuration verifyValue(BlockPosition blockPos, Configuration value, String strValue, String valueName) {
+    private Configuration verifyValue(AstElement element, BlockPosition blockPos, Configuration value, String strValue, String valueName) {
         if (value == null) {
-            error("Block '%s' at %s: unknown or unsupported %s '%s'.",
+            error(element, "Block '%s' at %s: unknown or unsupported %s '%s'.",
                     blockPos.name(), blockPos.position().toStringAbsolute(), valueName, strValue);
             return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
         } else {
@@ -284,9 +278,9 @@ public class SchematicsBuilder {
         }
     }
 
-    private int clamp(BlockPosition blockPos, String component, int value) {
+    private int clamp(AstElement element, BlockPosition blockPos, String component, int value) {
         if (value < 0 || value > 255) {
-            error("Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
+            error(element, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
                     blockPos.name(), blockPos.position().toStringAbsolute(), value, component);
         }
         return Math.max(Math.min(value, 255), 0);
@@ -294,18 +288,18 @@ public class SchematicsBuilder {
 
     private Configuration decodeUnitConfiguration(BlockPosition blockPos, AstUnitReference ref) {
         return switch (blockPos.configurationType()) {
-            case UNIT_OR_BLOCK -> verifyValue(blockPos, UnitConfiguration.forName(ref.unit()), ref.unit(), "ref");
+            case UNIT_OR_BLOCK -> verifyValue(ref, blockPos, UnitConfiguration.forName(ref.unit()), ref.unit(), "ref");
             case UNIT_PLAN -> {
                 if (blockPos.blockType().unitPlans().contains(ref.unit())) {
                     yield new UnitPlan(ref.unit());
                 } else {
-                    error("Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                    error(ref, "Block '%s' at %s: unknown or unsupported unit type '%s'.",
                             blockPos.name(), blockPos.position().toStringAbsolute(), ref.unit());
                     yield EmptyConfiguration.EMPTY;
                 }
             }
             default -> {
-                error("Block '%s' at %s: unknown or unsupported configuration type '%s'.",
+                error(ref, "Block '%s' at %s: unknown or unsupported configuration type '%s'.",
                         blockPos.name(), blockPos.position().toStringAbsolute(), blockPos.configurationType());
                 yield EmptyConfiguration.EMPTY;
             }
@@ -317,7 +311,7 @@ public class SchematicsBuilder {
         if (list.isEmpty()) {
             return null;
         } else if (list.size() > 1) {
-            error("Multiple definitions of attribute '%s'.", name);
+            list.stream().skip(1).forEach(a -> error(a, "Attribute '%s' is already defined.", name));
         }
 
         if (!expectedType.isInstance(list.get(0).value())) {
@@ -364,10 +358,10 @@ public class SchematicsBuilder {
         return sbr.toString();
     }
 
-    public AstText getText(String reference) {
+    public AstText getText(AstElement element, String reference) {
         AstText result = constants.get(reference);
         if (result == null) {
-            error("Undefined identifier '%s'.", reference);
+            error(element, "Undefined identifier '%s'.", reference);
             return AstStringLiteral.fromText("");
         }
         return result;
@@ -378,12 +372,12 @@ public class SchematicsBuilder {
                 () -> new SchematicsInternalError("Invalid block index %d.", index));
     }
 
-    public BlockPosition getBlockPosition(String name) {
+    public BlockPosition getBlockPosition(AstElement element, String name) {
         BlockPosition blockPosition = astLabelMap.get(name);
         if (blockPosition != null) {
             return blockPosition;
         }
-        error("Unknown block label '%s'", name);
+        error(element, "Unknown block label '%s'", name);
         return new AstBlockPosition(0, BlockType.forName("@air"), Position.INVALID);
     }
     public Map<String, BlockPosition> getAstLabelMap() {

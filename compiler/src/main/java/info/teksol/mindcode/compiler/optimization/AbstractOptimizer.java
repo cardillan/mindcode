@@ -78,7 +78,7 @@ abstract class AbstractOptimizer implements Optimizer {
     }
 
     protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {
-        messageRecipient.accept(new MindcodeOptimizerMessage(level, String.format(format, args)));
+        messageRecipient.accept(new OptimizerMessage(level, String.format(format, args)));
     }
 
     @Override

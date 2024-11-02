@@ -5,6 +5,7 @@ import info.teksol.mindcode.ast.DirectiveText;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

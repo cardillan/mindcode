@@ -67,7 +67,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
                 if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
                     // Only addition of a string and a non-null value is supported
                     if (operation == Operation.ADD && a != null && b != null) {
-                        return new StringLiteral(node.getInputPosition(), a.print() + b.print());
+                        return new StringLiteral(node.inputPosition(), a.print() + b.print());
                     } else {
                         error(node, "Unsupported string expression.");
                         return node;
@@ -103,15 +103,15 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
 
             // If the fixed value is nonzero, collapses to true
             // If the fixed value is zero, evaluates to the other node
-            case "or" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(original.getInputPosition(), true) : other;
+            case "or" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(original.inputPosition(), true) : other;
 
             // If the fixed value is zero, evaluates to false
             // Nonzero values cannot be resolved
-            case "&", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(original.getInputPosition(), false) : original;
+            case "&", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(original.inputPosition(), false) : original;
 
             // If the fixed value is zero (= false), evaluates to false
             // If the fixed value is nonzero, evaluates to the other node
-            case "and" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(original.getInputPosition(), false) : other;
+            case "and" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(original.inputPosition(), false) : other;
 
             default -> original;
         };
@@ -133,7 +133,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
         if (numericLiteral == null) {
             error(node, "Value assigned to constant '%s' (%s) doesn't have a valid mlog representation.",
                     node.getName(), value.getAsDouble());
-            return new NumericLiteral(node.getInputPosition(), "0");
+            return new NumericLiteral(node.inputPosition(), "0");
         }
         return numericLiteral;
     }
@@ -199,7 +199,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
 
     private AstNode evaluateVarRef(VarRef node) {
         if (constants.containsKey(node.getName())) {
-            return constants.get(node.getName()).withInputPosition(node.getInputPosition());
+            return constants.get(node.getName()).withInputPosition(node.inputPosition());
         } else {
             return node;
         }

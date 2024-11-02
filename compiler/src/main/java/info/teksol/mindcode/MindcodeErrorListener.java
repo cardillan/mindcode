@@ -1,6 +1,5 @@
 package info.teksol.mindcode;
 
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.grammar.MissingSemicolonException;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
@@ -34,10 +33,10 @@ public class MindcodeErrorListener extends BaseErrorListener {
         return ambiguities;
     }
 
-    private final Set<MindcodeCompilerMessage> reportedMessages = new HashSet<>();
+    private final Set<CompilerMessage> reportedMessages = new HashSet<>();
 
     private void reportError(int line, int charPositionInLine, @PrintFormat String format, Object... args) {
-        MindcodeCompilerMessage message = MindcodeCompilerMessage.error(
+        CompilerMessage message = CompilerMessage.error(
                 new InputPosition(inputFile, line, charPositionInLine + 1), format, args);
         if (reportedMessages.add(message)) {
             messageConsumer.accept(message);

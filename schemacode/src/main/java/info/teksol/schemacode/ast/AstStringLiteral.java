@@ -5,7 +5,7 @@ import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public record AstStringLiteral(String text, InputPosition inputPosition) implements AstText {
+public record AstStringLiteral(InputPosition inputPosition, String text) implements AstText {
 
     @Override
     public InputPosition getTextPosition(SchematicsBuilder builder) {
@@ -22,14 +22,14 @@ public record AstStringLiteral(String text, InputPosition inputPosition) impleme
         String text = nodeText.substring(1, nodeText.length() - 1);
         int line = node.getSymbol().getLine();
         int column = node.getSymbol().getCharPositionInLine() + 2;
-        return new AstStringLiteral(text, new InputPosition(inputFile, line, column));
+        return new AstStringLiteral(new InputPosition(inputFile, line, column), text);
     }
 
     public static AstStringLiteral fromText(String text) {
-        return new AstStringLiteral(text, InputPosition.EMPTY);
+        return new AstStringLiteral(InputPosition.EMPTY, text);
     }
 
     public static AstStringLiteral fromText(String text, int line, int column) {
-        return new AstStringLiteral(text, new InputPosition(InputFile.EMPTY, line, column));
+        return new AstStringLiteral(new InputPosition(InputFile.EMPTY, line, column), text);
     }
 }

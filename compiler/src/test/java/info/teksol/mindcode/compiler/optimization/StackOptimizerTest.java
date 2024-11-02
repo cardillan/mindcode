@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.ExpectedMessages;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 

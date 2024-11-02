@@ -2,7 +2,7 @@ package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.ExpectedMessages;
+import info.teksol.util.ExpectedMessages;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -33,7 +33,7 @@ public abstract class AbstractParserTest {
     }
 
     protected MindcodeParser.ProgramContext parse(String code) {
-        return parse(ExpectedMessages.throwOnMessage(),code);
+        return parse(ExpectedMessages.throwOnMessage(), code);
     }
 
 

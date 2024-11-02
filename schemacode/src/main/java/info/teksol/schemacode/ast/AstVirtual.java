@@ -1,5 +1,7 @@
 package info.teksol.schemacode.ast;
 
-public enum AstVirtual implements AstConfiguration {
-    VIRTUAL
+import info.teksol.mindcode.InputPosition;
+
+public record AstVirtual(InputPosition inputPosition) implements AstConfiguration {
+
 }

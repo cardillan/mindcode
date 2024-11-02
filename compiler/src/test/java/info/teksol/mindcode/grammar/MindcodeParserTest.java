@@ -1,7 +1,7 @@
 package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.ExpectedMessages;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -166,7 +166,7 @@ class MindcodeParserTest extends AbstractParserTest {
         List<MindcodeMessage> messages = parseWithErrors("1..0;");
         ExpectedMessages.create()
                 .add(1, 2, "Parse error: missing ';' before '.'")
-                .addRegex(1, 2, "Parse error: '\\.': mismatched input '\\.' expecting \\{.*\\}")
+                .addRegex(1, 2, "Parse error: '\\.': mismatched input '\\.' expecting \\{.*}")
                 .validate(messages);
     }
 

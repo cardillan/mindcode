@@ -1,6 +1,7 @@
 package info.teksol.schemacode;
 
 import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -12,7 +13,8 @@ import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schematics.Schematic;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,11 +30,12 @@ public class SchemacodeCompiler {
      * Parses schemacode source into AST tree.
      *
      * @param definition source code
-     * @param messageListener message listener
+     * @param messageConsumer message consumer
      * @return Top node of parsed AST tree
      */
-    static DefinitionsContext parseSchematics(InputFile inputFile, Consumer<MindcodeMessage> messageListener) {
-        ErrorListener errorListener = new ErrorListener(messageListener);
+    static DefinitionsContext parseSchematics(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
+        final MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer);
+        errorListener.setInputFile(inputFile);
 
         final SchemacodeLexer lexer = new SchemacodeLexer(CharStreams.fromString(inputFile.code()));
         lexer.removeErrorListeners();
@@ -89,24 +92,5 @@ public class SchemacodeCompiler {
 
     private static boolean hasErrors(List<MindcodeMessage> messages) {
         return messages.stream().anyMatch(MindcodeMessage::isError);
-    }
-
-
-    private static class ErrorListener extends BaseErrorListener {
-        private final Consumer<MindcodeMessage> messageListener;
-
-        public ErrorListener(Consumer<MindcodeMessage> messageListener) {
-            this.messageListener = messageListener;
-        }
-
-        @Override
-        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-                String msg, RecognitionException e) {
-            if (offendingSymbol == null) {
-                messageListener.accept(SchemacodeCompilerMessage.error("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg));
-            } else {
-                messageListener.accept(SchemacodeCompilerMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
-            }
-        }
     }
 }

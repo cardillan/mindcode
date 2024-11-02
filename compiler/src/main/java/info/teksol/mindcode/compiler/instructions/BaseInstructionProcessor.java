@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
@@ -661,7 +661,7 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
                 if (relDiff > 1e-9) {
                     // This warning doesn't come with an input position
                     // This will no longer happen in ML8 - won't fix.
-                    messageConsumer.accept(MindcodeCompilerMessage.warn(InputPosition.EMPTY,
+                    messageConsumer.accept(CompilerMessage.warn(InputPosition.EMPTY,
                             "Loss of precision while creating mlog literals (original value %s, encoded value %s)",
                             literal, mlog));
                 }

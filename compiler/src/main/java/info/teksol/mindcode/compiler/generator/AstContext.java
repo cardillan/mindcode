@@ -285,7 +285,7 @@ public final class AstContext {
     }
 
     public InputPosition inputPosition() {
-        return node != null ? node.getInputPosition() : null;
+        return node != null ? node.inputPosition() : null;
     }
 
     public String functionPrefix() {

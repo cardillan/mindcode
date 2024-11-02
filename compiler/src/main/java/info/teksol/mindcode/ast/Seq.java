@@ -26,7 +26,7 @@ public class Seq extends BaseAstNode {
         } else if (second == null) {
             return first;
         } else {
-            return new Seq(second.getInputPosition(), first, second);
+            return new Seq(second.inputPosition(), first, second);
         }
     }
 

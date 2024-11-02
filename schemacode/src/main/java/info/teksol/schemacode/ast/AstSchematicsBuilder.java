@@ -19,16 +19,14 @@ import java.util.function.Consumer;
 public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     private final InputFile inputFile;
-    private final Consumer<MindcodeMessage> messageListener;
 
-    public AstSchematicsBuilder(InputFile inputFile, Consumer<MindcodeMessage> messageListener) {
+    public AstSchematicsBuilder(InputFile inputFile) {
         this.inputFile = inputFile;
-        this.messageListener = messageListener;
     }
 
     public static AstDefinitions generate(InputFile inputFile, DefinitionsContext parseTree,
             Consumer<MindcodeMessage> messageListener) {
-        final AstSchematicsBuilder builder = new AstSchematicsBuilder(inputFile, messageListener);
+        final AstSchematicsBuilder builder = new AstSchematicsBuilder(inputFile);
         final AstSchemaItem item = builder.visit(parseTree);
         return (AstDefinitions) item;
     }
@@ -45,11 +43,11 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
                 .map(AstDefinition.class::cast)
                 .toList();
 
-        return new AstDefinitions(list);
+        return new AstDefinitions(pos(ctx.getStart()), list);
     }
 
     private InputPosition pos(Token token) {
-        return InputPosition.create(inputFile, token);
+        return inputFile.isEmpty() ? InputPosition.EMPTY : InputPosition.create(inputFile, token);
     }
 
     @Override
@@ -68,29 +66,29 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
             }
         }
 
-        return new AstSchematic(attributes, blocks);
+        return new AstSchematic(pos(ctx.getStart()), attributes, blocks);
     }
 
     // Attributes
 
     @Override
     public AstSchemaItem visitName(SchemacodeParser.NameContext ctx) {
-        return new AstSchemaAttribute("name", visit(ctx.textDef()));
+        return new AstSchemaAttribute(pos(ctx.getStart()), "name", visit(ctx.textDef()));
     }
 
     @Override
     public AstSchemaItem visitDescription(SchemacodeParser.DescriptionContext ctx) {
-        return new AstSchemaAttribute("description", visit(ctx.textDef()));
+        return new AstSchemaAttribute(pos(ctx.getStart()), "description", visit(ctx.textDef()));
     }
 
     @Override
     public AstSchemaItem visitDimensions(SchemacodeParser.DimensionsContext ctx) {
-        return new AstSchemaAttribute("dimensions", visit(ctx.coordinates()));
+        return new AstSchemaAttribute(pos(ctx.getStart()), "dimensions", visit(ctx.coordinates()));
     }
 
     @Override
     public AstSchemaItem visitSchemaTag(SchemaTagContext ctx) {
-        return new AstSchemaAttribute("label", visit(ctx.tag));
+        return new AstSchemaAttribute(pos(ctx.getStart()), "label", visit(ctx.tag));
     }
 
     // Blocks
@@ -103,7 +101,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
         AstDirection direction = maybeVisit(ctx.direction());
         AstConfiguration configuration = maybeVisit(ctx.configuration());
 
-        return new AstBlock(labels, type, position, direction, configuration);
+        return new AstBlock(pos(ctx.getStart()), labels, type, position, direction, configuration);
     }
 
 
@@ -111,7 +109,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     @Override
     public AstSchemaItem visitBoolean(BooleanContext ctx) {
-        return new AstBoolean(ctx.status.getText().equals("enabled"));
+        return new AstBoolean(pos(ctx.getStart()), ctx.status.getText().equals("enabled"));
     }
 
     @Override
@@ -125,12 +123,12 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
         int green = Integer.parseInt(ctx.green.getText());
         int blue  = Integer.parseInt(ctx.blue.getText());
         int alpha  = Integer.parseInt(ctx.alpha.getText());
-        return new AstRgbaValue(red, green, blue, alpha);
+        return new AstRgbaValue(pos(ctx.getStart()), red, green, blue, alpha);
     }
 
     @Override
     public AstVirtual visitVirtual(SchemacodeParser.VirtualContext ctx) {
-        return AstVirtual.VIRTUAL;
+        return new AstVirtual(pos(ctx.getStart()));
     }
 
     @Override
@@ -140,47 +138,47 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
                 .map(AstConnection.class::cast)
                 .toList();
 
-        return new AstConnections(list);
+        return new AstConnections(pos(ctx.getStart()), list);
     }
 
     @Override
     public AstConnection visitConnAbs(SchemacodeParser.ConnAbsContext ctx) {
-        return new AstConnection(visitCoordinates(ctx.coordinates()));
+        return new AstConnection(pos(ctx.getStart()), visitCoordinates(ctx.coordinates()));
     }
 
     @Override
     public AstConnection visitConnRel(SchemacodeParser.ConnRelContext ctx) {
-        return new AstConnection(visitRelativeCoordinates(ctx.relativeCoordinates()));
+        return new AstConnection(pos(ctx.getStart()), visitRelativeCoordinates(ctx.relativeCoordinates()));
     }
 
     @Override
     public AstConnection visitConnName(SchemacodeParser.ConnNameContext ctx) {
-        return new AstConnection(ctx.Id().getSymbol().getText());
+        return new AstConnection(pos(ctx.getStart()), ctx.Id().getSymbol().getText());
     }
 
     @Override
     public AstSchemaItem visitBlocktype(SchemacodeParser.BlocktypeContext ctx) {
-        return new AstBlockReference(ctx.Ref().getSymbol().getText());
+        return new AstBlockReference(pos(ctx.getStart()), ctx.Ref().getSymbol().getText());
     }
 
     @Override
     public AstSchemaItem visitUnitcommand(UnitcommandContext ctx) {
-        return new AstUnitCommandReference(ctx.Ref().getSymbol().getText());
+        return new AstUnitCommandReference(pos(ctx.getStart()), ctx.Ref().getSymbol().getText());
     }
 
     @Override
     public AstItemReference visitItem(SchemacodeParser.ItemContext ctx) {
-        return new AstItemReference(ctx.Ref().getSymbol().getText());
+        return new AstItemReference(pos(ctx.getStart()), ctx.Ref().getSymbol().getText());
     }
 
     @Override
     public AstSchemaItem visitLiquid(SchemacodeParser.LiquidContext ctx) {
-        return new AstLiquidReference(ctx.Ref().getSymbol().getText());
+        return new AstLiquidReference(pos(ctx.getStart()), ctx.Ref().getSymbol().getText());
     }
 
     @Override
     public AstSchemaItem visitUnit(SchemacodeParser.UnitContext ctx) {
-        return new AstUnitReference(ctx.Ref().getSymbol().getText());
+        return new AstUnitReference(pos(ctx.getStart()), ctx.Ref().getSymbol().getText());
     }
 
     @Override
@@ -216,12 +214,12 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
             language = Language.NONE;
         }
 
-        return new AstProcessor(links, program, language);
+        return new AstProcessor(pos(ctx.getStart()), links, program, language);
     }
 
     @Override
     public AstLinkPattern visitLinkPattern(SchemacodeParser.LinkPatternContext ctx) {
-        return new AstLinkPattern(ctx.linkPattern.getText());
+        return new AstLinkPattern(pos(ctx.getStart()), ctx.linkPattern.getText());
     }
 
     @Override
@@ -229,7 +227,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
         AstConnection connection = (AstConnection) visit(ctx.linkPos);
         String name = ctx.alias == null ? null : ctx.alias.getText();
         boolean virtual = ctx.virtual != null;
-        return new AstLinkPos(connection, name, virtual);
+        return new AstLinkPos(pos(ctx.getStart()), connection, name, virtual);
     }
 
     @Override
@@ -239,17 +237,17 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
                 .map(AstProgramSnippet.class::cast)
                 .toList();
 
-        return new AstProgram(snippets);
+        return new AstProgram(pos(ctx.getStart()), snippets);
     }
 
     @Override
     public AstSchemaItem visitProgramString(SchemacodeParser.ProgramStringContext ctx) {
-        return new AstProgramSnippetText((AstText) visit(ctx.text));
+        return new AstProgramSnippetText(pos(ctx.getStart()), (AstText) visit(ctx.text));
     }
 
     @Override
     public AstSchemaItem visitProgramFile(SchemacodeParser.ProgramFileContext ctx) {
-        return new AstProgramSnippetFile((AstText) visit(ctx.file));
+        return new AstProgramSnippetFile(pos(ctx.getStart()), (AstText) visit(ctx.file));
     }
 
     // Coordinates & direction
@@ -263,7 +261,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     public AstCoordinates visitCoordinates(SchemacodeParser.CoordinatesContext ctx) {
         int x = Integer.parseInt(ctx.x.getText());
         int y = Integer.parseInt(ctx.y.getText());
-        return new AstCoordinates(x, y);
+        return new AstCoordinates(pos(ctx.getStart()), x, y);
     }
 
     @Override
@@ -285,7 +283,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     @Override
     public AstDirection visitDirection(SchemacodeParser.DirectionContext ctx) {
-        return new AstDirection(ctx.dir.getText());
+        return new AstDirection(pos(ctx.getStart()), ctx.dir.getText());
     }
 
     // Labels
@@ -305,7 +303,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     public AstStringConstant visitStringValue(SchemacodeParser.StringValueContext ctx) {
         String name = ctx.name.getText();
         AstText text = (AstText) visit(ctx.string);
-        return new AstStringConstant(name, text) ;
+        return new AstStringConstant(pos(ctx.getStart()), name, text) ;
     }
 
     @Override
@@ -316,9 +314,9 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     @Override
     public AstStringBlock visitTextBlock(SchemacodeParser.TextBlockContext ctx) {
         if (ctx.TextBlock1() != null) {
-            return AstStringBlock.fromTerminalNode(inputFile, ctx.TextBlock1());
+            return AstStringBlock.fromTerminalNode(pos(ctx.TextBlock1().getSymbol()), ctx.TextBlock1().getText());
         } else if (ctx.TextBlock2() != null) {
-            return AstStringBlock.fromTerminalNode(inputFile, ctx.TextBlock2());
+            return AstStringBlock.fromTerminalNode(pos(ctx.TextBlock2().getSymbol()), ctx.TextBlock2().getText());
         } else {
             throw new SchematicsInternalError("No text value in TextBlock");
         }
@@ -326,6 +324,6 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     @Override
     public AstSchemaItem visitTextId(SchemacodeParser.TextIdContext ctx) {
-        return new AstStringRef(ctx.Id().getText());
+        return new AstStringRef(pos(ctx.Id().getSymbol()), ctx.Id().getText());
     }
 }

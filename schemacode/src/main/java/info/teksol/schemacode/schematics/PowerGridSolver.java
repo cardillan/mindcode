@@ -45,7 +45,7 @@ class PowerGridSolver {
         // Report overloaded nodes
         powerNodes.entrySet().stream().filter(e -> e.getKey().blockType().maxNodes() < e.getValue().size())
                 .map(Map.Entry::getKey)
-                .forEachOrdered(b -> builder.error("Block '%s' at %s has more than %d connection(s).",
+                .forEachOrdered(b -> builder.error(b.inputPosition(), "Block '%s' at %s has more than %d connection(s).",
                         b.name(), b.position().toStringAbsolute(), b.blockType().maxNodes()));
 
         // Rebuild block list
@@ -63,22 +63,22 @@ class PowerGridSolver {
             Block linkedBlock = positionMap.at(pos);
 
             if (linkedBlock == null) {
-                builder.warn("Block '%s' at %s has a connection to a nonexistent block at %s.",
+                builder.warn(powerNodeBlock.inputPosition(), "Block '%s' at %s has a connection to a nonexistent block at %s.",
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(), pos.toStringAbsolute());
             } else if (linkedBlock == powerNodeBlock) {
-                builder.error("Block '%s' at %s has a connection to self.",
+                builder.error(powerNodeBlock.inputPosition(), "Block '%s' at %s has a connection to self.",
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute());
             } else if (!linkedBlock.blockType().hasPower()) {
-                builder.error("Block '%s' at %s has an invalid connection to a non-powered block '%s' at %s.",
+                builder.error(powerNodeBlock.inputPosition(), "Block '%s' at %s has an invalid connection to a non-powered block '%s' at %s.",
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(),
                         linkedBlock.name(), pos.toStringAbsolute());
-            } else if (!inRange(powerNodeBlock, linkedBlock) && !inRange(linkedBlock, powerNodeBlock)) {
-                builder.error("Block '%s' at %s has an out-of-range connection to block '%s' at %s.",
+            } else if (outOfRange(powerNodeBlock, linkedBlock) && outOfRange(linkedBlock, powerNodeBlock)) {
+                builder.error(powerNodeBlock.inputPosition(), "Block '%s' at %s has an out-of-range connection to block '%s' at %s.",
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(),
                         linkedBlock.name(), pos.toStringAbsolute());
             } else {
                 if (!linkedBlocks.add(linkedBlock)) {
-                    builder.warn("Block '%s' at %s has multiple connections to block '%s' at %s.",
+                    builder.warn(powerNodeBlock.inputPosition(), "Block '%s' at %s has multiple connections to block '%s' at %s.",
                             powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(),
                             linkedBlock.name(), pos.toStringAbsolute());
                 }
@@ -95,16 +95,16 @@ class PowerGridSolver {
         };
     }
 
-    private boolean inRange(Block from, Block to) {
+    private boolean outOfRange(Block from, Block to) {
         if (!isPowerNode(from)) {
-            return false;
+            return true;
         } else {
             double x = from.position().x() + from.size() / 2d;
             double y = from.position().y() + from.size() / 2d;
             double distX = (x < to.x() ? to.x() : to.x() + to.size()) - x;
             double distY = (y < to.y() ? to.y() : to.y() + to.size()) - y;
 
-            return distX * distX + distY * distY < from.blockType().range() * from.blockType().range();
+            return distX * distX + distY * distY >= from.blockType().range() * from.blockType().range();
         }
     }
 }

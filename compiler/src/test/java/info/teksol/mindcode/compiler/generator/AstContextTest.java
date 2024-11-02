@@ -252,7 +252,7 @@ class AstContextTest {
         }
 
         @Override
-        public InputPosition getInputPosition() {
+        public InputPosition inputPosition() {
             return null;
         }
 

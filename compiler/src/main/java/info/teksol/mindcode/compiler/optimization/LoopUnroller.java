@@ -484,7 +484,7 @@ class LoopUnroller extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": unroll loop at line " + astContext.node().getInputPosition().line();
+            return getName() + ": unroll loop at line " + astContext.node().inputPosition().line();
         }
     }
 
@@ -500,7 +500,7 @@ class LoopUnroller extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": unroll iteration loop at line " + astContext.node().getInputPosition().line();
+            return getName() + ": unroll iteration loop at line " + astContext.node().inputPosition().line();
         }
     }
 }

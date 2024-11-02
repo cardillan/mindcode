@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.AstElement;
+import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.function.Consumer;
@@ -21,22 +21,27 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
     }
 
     @Override
-    public void error(AstNode node, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.error(node.getInputPosition(), format, args));
+    public void addMessage(MindcodeMessage message) {
+        messageConsumer.accept(message);
+    }
+
+    @Override
+    public void error(AstElement element, @PrintFormat String format, Object... args) {
+        messageConsumer.accept(CompilerMessage.error(element.inputPosition(), format, args));
     }
 
     @Override
     public void error(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.error(position, format, args));
+        messageConsumer.accept(CompilerMessage.error(position, format, args));
     }
 
     @Override
-    public void warn(AstNode node, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.warn(node.getInputPosition(), format, args));
+    public void warn(AstElement element, @PrintFormat String format, Object... args) {
+        messageConsumer.accept(CompilerMessage.warn(element.inputPosition(), format, args));
     }
 
     @Override
     public void warn(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(MindcodeCompilerMessage.warn(position, format, args));
+        messageConsumer.accept(CompilerMessage.warn(position, format, args));
     }
 }

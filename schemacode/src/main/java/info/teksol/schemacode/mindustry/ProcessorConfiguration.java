@@ -116,20 +116,20 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         Map<String, List<Link>> linksByName = links.stream().collect(Collectors.groupingBy(Link::name));
         linksByName.values().stream()
                 .filter(v -> v.size() > 1)
-                .forEachOrdered(l -> builder.error("Block link name '%s' used more than once.", l.get(0).name()));
+                .forEachOrdered(l -> builder.error(processor, "Block link name '%s' used more than once.", l.get(0).name()));
 
         // Detect blocks linked more than once
         Map<Position, List<Link>> linksByPosition = links.stream().collect(Collectors.groupingBy(Link::position));
         linksByPosition.entrySet().stream()
                 .filter(e -> e.getValue().size() > 1)
-                .forEachOrdered(l -> builder.error("Multiple links for block at position %s: '%s'.",
+                .forEachOrdered(l -> builder.error(processor, "Multiple links for block at position %s: '%s'.",
                         l.getKey().toStringAbsolute(),
                         l.getValue().stream().map(Link::name).collect(Collectors.joining("', '"))));
 
         // Verify link names
         links.stream()
                 .filter(l -> !compatibleLinkName(builder, l))
-                .forEachOrdered(l -> builder.error("Incompatible link name '%s' for block type '%s'.", l.name,
+                .forEachOrdered(l -> builder.error(processor, "Incompatible link name '%s' for block type '%s'.", l.name,
                         builder.getBlockPosition(l.position).blockType().name()));
 
         String mlog = convertToMlog(builder, processor);
@@ -160,7 +160,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 CompilerOutput<String> output = CompilerFacade.compile(mindcode, compilerProfile);
                 output.messages().forEach(builder::addMessage);
                 if (output.hasErrors()) {
-                    builder.error("Compile errors in Mindcode source code.");
+                    builder.error(processor, "Compile errors in Mindcode source code.");
                     yield "";
                 }
 

@@ -3,11 +3,11 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.TimingMessage;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.util.ExpectedMessages;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -74,7 +74,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         final OptimizationCoordinator optimizer = createMindcodeOptimizer(compiler);
         optimizer.setDebugPrinter(debugPrinter);
         result = optimizer.optimize(generatorOutput);
-        debugPrinter.print(s -> compiler.addMessage(new MindcodeOptimizerMessage(MessageLevel.INFO, s)));
+        debugPrinter.print(s -> compiler.addMessage(new OptimizerMessage(MessageLevel.INFO, s)));
         return result;
     }
 

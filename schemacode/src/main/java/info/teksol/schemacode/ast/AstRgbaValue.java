@@ -1,5 +1,7 @@
 package info.teksol.schemacode.ast;
 
-public record AstRgbaValue(int red, int green, int blue, int alpha) implements AstColor {
+import info.teksol.mindcode.InputPosition;
+
+public record AstRgbaValue(InputPosition inputPosition, int red, int green, int blue, int alpha) implements AstColor {
 
 }

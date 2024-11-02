@@ -1,11 +1,9 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
-public record AstStringBlock(String text, InputPosition inputPosition, int indent) implements AstText {
+public record AstStringBlock(InputPosition inputPosition, String text, int indent) implements AstText {
 
     @Override
     public InputPosition getTextPosition(SchematicsBuilder builder) {
@@ -22,8 +20,7 @@ public record AstStringBlock(String text, InputPosition inputPosition, int inden
         return text;
     }
 
-    public static AstStringBlock fromTerminalNode(InputFile inputFile, TerminalNode node) {
-        String nodeText = node.getText();
+    public static AstStringBlock fromTerminalNode(InputPosition inputPosition, String nodeText) {
         String unquoted = nodeText.substring(3, nodeText.length() - 3);
         // Skip first newline, if there isn't a newline (how so?), index + 1 will be equal to 0
         int start = unquoted.indexOf('\n');
@@ -32,11 +29,10 @@ public record AstStringBlock(String text, InputPosition inputPosition, int inden
         String text = textBlock.stripIndent();
         int newLine = text.indexOf('\n');
         int indent = textBlock.indexOf(newLine >= 0 ? text.substring(0, newLine) : text);
-        int line = node.getSymbol().getLine() + 1;
-        return new AstStringBlock(text, new InputPosition(inputFile, line, 1), indent);
+        return new AstStringBlock(inputPosition, text, indent);
     }
 
     public static AstStringBlock fromText(String text) {
-        return new AstStringBlock(text, InputPosition.EMPTY, 0);
+        return new AstStringBlock(InputPosition.EMPTY, text, 0);
     }
 }

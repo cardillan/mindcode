@@ -14,6 +14,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.util.ExpectedMessages;
 
 import java.util.*;
 import java.util.function.Consumer;

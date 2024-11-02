@@ -42,7 +42,7 @@ public abstract class BaseAstNode implements AstNode {
         this.children = safeCopy(tmp);
     }
 
-    public InputPosition getInputPosition() {
+    public InputPosition inputPosition() {
         return inputPosition;
     }
 

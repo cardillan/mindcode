@@ -1,5 +1,7 @@
 package info.teksol.schemacode.ast;
 
-public record AstBoolean(boolean value) implements AstConfiguration {
+import info.teksol.mindcode.InputPosition;
+
+public record AstBoolean(InputPosition inputPosition, boolean value) implements AstConfiguration {
 
 }

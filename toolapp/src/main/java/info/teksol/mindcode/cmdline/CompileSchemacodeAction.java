@@ -2,6 +2,7 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -70,41 +71,33 @@ public class CompileSchemacodeAction extends ActionHandler {
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
         compilerProfile.setAdditionalTags(arguments.get("add_tag"));
-        File file = arguments.get("input");
-        InputFile inputFile = readFile(file, true);
-        Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().getParent();
+        final File file = arguments.get("input");
+        final InputFile inputFile = readFile(file, true);
+        final Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().getParent();
 
-        CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFile , compilerProfile, basePath);
+        final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFile , compilerProfile, basePath);
 
-        Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
-
-        File output = resolveOutputFile(file, arguments.get("output"), ".msch");
-        File logFile = resolveOutputFile(file, arguments.get("log"), ".log");
+        final File output = resolveOutputFile(file, arguments.get("output"), ".msch");
+        final File logFile = resolveOutputFile(file, arguments.get("log"), ".log");
+        final boolean mlogToStdErr = isStdInOut(output);
+        final Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output());
-            List<String> allTexts = result.texts(m -> m.formatMessage(positionFormatter));
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(Base64.getEncoder().encodeToString(result.output()));
-                allTexts.add("");
-                allTexts.add("Created schematic was copied to the clipboard.");
+                result.addMessage(ToolMessage.info("\nCreated schematic was copied to the clipboard."));
             }
 
-            writeOutput(logFile, allTexts, false);
-
-            // Print errors and warnings to console anyway
-            if (!isStdInOut(logFile)) {
-                result.messages().stream()
-                        .filter(m -> m.isError() || m.isWarning())
-                        .map(m -> m.formatMessage(positionFormatter))
-                        .forEach(System.out::println);
-            }
+            outputMessages(result, output, logFile, positionFormatter);
         } else {
             // Errors: print just them into stderr
-            result.errors(m -> m.formatMessage(positionFormatter)).forEach(System.err::println);
+            List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));
+
+            errors.forEach(System.err::println);
             if (!isStdInOut(logFile)) {
-                writeOutput(logFile, result.errors(m -> m.formatMessage(positionFormatter)), true);
+                writeOutput(logFile, errors, true);
             }
             System.exit(1);
         }

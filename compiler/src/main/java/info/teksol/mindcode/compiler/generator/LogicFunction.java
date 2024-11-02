@@ -320,7 +320,7 @@ public class LogicFunction {
     }
 
     public InputPosition getInputPosition() {
-        return declaration != null ? declaration.getInputPosition() : null;
+        return declaration != null ? declaration.inputPosition() : null;
     }
 
     public String format() {

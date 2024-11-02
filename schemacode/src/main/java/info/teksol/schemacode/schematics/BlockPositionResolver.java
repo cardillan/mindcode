@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.mimex.BlockType;
-import info.teksol.schemacode.SchemacodeCompilerMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.mindustry.Position;
@@ -37,7 +37,7 @@ public class BlockPositionResolver {
     }
 
     private void error(@PrintFormat String format, Object... args) {
-        messageListener.accept(SchemacodeCompilerMessage.error(String.format(format, args)));
+        messageListener.accept(ToolMessage.error(format, args));
     }
 
     private BlockPosition resolve(Map<String, RelativeBlockPosition> blocks, RelativeBlockPosition block) {

@@ -117,13 +117,12 @@ public class CompileMindcodeAction extends ActionHandler {
 
         final CompilerOutput<String> result = compile(inputFiles, compilerProfile);
 
-        File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
-        File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
-        boolean mlogToStdErr = isStdInOut(output);
-        Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
+        final File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
+        final File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+        final Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
 
         if (!result.hasErrors()) {
-            writeOutput(output, result.output(), false);
+            writeOutput(output, result.output());
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(result.output());
@@ -148,17 +147,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 }
             }
 
-            // If mlog gets written to stdout, write log to stderr
-            if (isStdInOut(logFile)) {
-                boolean alwaysErr = isStdInOut(output);
-                result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
-            } else {
-                writeOutput(logFile, result.texts(m -> m.formatMessage(positionFormatter)), mlogToStdErr);
-                // Print errors and warnings to stderr anyway
-                result.messages().stream()
-                        .filter(m -> m.isErrorOrWarning() || m.isInfo())
-                        .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
-            }
+            outputMessages(result, output, logFile, positionFormatter);
         } else {
             // Errors: print just them into stderr
             List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));

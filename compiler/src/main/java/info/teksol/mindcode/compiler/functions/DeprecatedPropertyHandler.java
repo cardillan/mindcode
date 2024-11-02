@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
+import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.compiler.MindcodeCompilerMessage;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
@@ -73,7 +73,7 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     @Override
     public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicFunctionArgument> arguments) {
         if (!warningEmitted) {
-            functionMapper.getMessageConsumer().accept(MindcodeCompilerMessage.warn(node.getInputPosition(),
+            functionMapper.getMessageConsumer().accept(CompilerMessage.warn(node.inputPosition(),
                     "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
                     deprecated, functionMapper.processorVersion, replacement.getName()));
             warningEmitted = true;

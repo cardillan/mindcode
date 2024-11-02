@@ -1,4 +1,6 @@
 package info.teksol.schemacode.ast;
 
-public record AstUnitCommandReference(String item) implements AstConfiguration {
+import info.teksol.mindcode.InputPosition;
+
+public record AstUnitCommandReference(InputPosition inputPosition, String item) implements AstConfiguration {
 }

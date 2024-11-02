@@ -227,7 +227,7 @@ class FunctionInliner extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": inline function call at line " + astContext.node().getInputPosition().line();
+            return getName() + ": inline function call at line " + astContext.node().inputPosition().line();
         }
     }
 }

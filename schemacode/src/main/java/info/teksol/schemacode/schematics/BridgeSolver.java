@@ -42,23 +42,21 @@ class BridgeSolver {
 
         if (orthogonal) {
             if (!block.position().orthogonal(linked.position())) {
-                builder.error("Block '%s' at %s has a connection leading to %s, which is neither horizontal nor vertical.",
+                builder.error(block.inputPosition(), "Block '%s' at %s has a connection leading to %s, which is neither horizontal nor vertical.",
                         block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
-            } else if (!inRange(block, linked)) {
-                builder.error("Block '%s' at %s has an out-of-range connection to %s.",
+            } else if (outOfRange(block, linked)) {
+                builder.error(block.inputPosition(),"Block '%s' at %s has an out-of-range connection to %s.",
                         block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
             } else {
                 Block next = getLinkedBlock(linked, false);
                 if (next == block && linkBacks.add(Tuple2.of(Math.min(block.index(), linked.index()), Math.max(block.index(), linked.index())))) {
-                    builder.error("Two '%s' blocks at %s and %s connect to each other.",
+                    builder.error(block.inputPosition(),"Two '%s' blocks at %s and %s connect to each other.",
                             block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
                 }
             }
-        } else {
-            if (!inRange(block, linked)) {
-                builder.error("Block '%s' at %s has an out-of-range connection to %s.",
-                        block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
-            }
+        } else if (outOfRange(block, linked)) {
+            builder.error(block.inputPosition(),"Block '%s' at %s has an out-of-range connection to %s.",
+                    block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
         }
     }
 
@@ -67,7 +65,7 @@ class BridgeSolver {
         if (links.size() == 0) {
             return null;
         } else if (links.size() > 1 && reportErrors) {
-            builder.error("Block '%s' at %s has more than one connection.", block.name(), block.position().toStringAbsolute());
+            builder.error(block.inputPosition(),"Block '%s' at %s has more than one connection.", block.name(), block.position().toStringAbsolute());
         }
 
         Block linked = positionMap.at(links.get(0));
@@ -77,13 +75,13 @@ class BridgeSolver {
 
         if (!linked.blockType().equals(block.blockType())) {
             if (reportErrors) {
-                builder.error("Block '%s' at %s has a connection leading to a different block type '%s' at %s.",
+                builder.error(block.inputPosition(),"Block '%s' at %s has a connection leading to a different block type '%s' at %s.",
                         block.name(), block.position().toStringAbsolute(), linked.name(), linked.position().toStringAbsolute());
             }
             return null;
         } else if (linked == block) {
             if (reportErrors) {
-                builder.error("Block '%s' at %s has a connection to self.", block.name(), block.position().toStringAbsolute());
+                builder.error(block.inputPosition(),"Block '%s' at %s has a connection to self.", block.name(), block.position().toStringAbsolute());
             }
             return null;
         }
@@ -91,15 +89,15 @@ class BridgeSolver {
         return linked;
     }
 
-    private boolean inRange(Block from, Block to) {
+    private boolean outOfRange(Block from, Block to) {
         if (from.x() == to.x()) {
-            return Math.abs(from.y() - to.y()) < from.blockType().range() + 0.4f;
+            return Math.abs(from.y() - to.y()) >= from.blockType().range() + 0.4f;
         } else if (from.y() == to.y()) {
-            return Math.abs(from.x() - to.x()) < from.blockType().range() + 0.4f;
+            return Math.abs(from.x() - to.x()) >= from.blockType().range() + 0.4f;
         } else {
             double distX = from.x() - to.x();
             double distY = from.y() - to.y();
-            return distX * distX + distY * distY < from.blockType().range() * from.blockType().range();
+            return distX * distX + distY * distY >= from.blockType().range() * from.blockType().range();
         }
     }
 }

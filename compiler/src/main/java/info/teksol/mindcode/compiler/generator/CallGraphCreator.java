@@ -59,11 +59,11 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void visitStackAllocation(StackAllocation node) {
         if (allocatedStack != null) {
-            error(node.getInputPosition(), "Multiple stack allocations.");
+            error(node.inputPosition(), "Multiple stack allocations.");
         }
 
         if (!activeFunction.isMain()) {
-            error(node.getInputPosition(), "Stack allocation must not be declared within a function.");
+            error(node.inputPosition(), "Stack allocation must not be declared within a function.");
         }
 
         allocatedStack = node;

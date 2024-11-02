@@ -1,10 +1,10 @@
 package info.teksol.emulator.processor;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.SortCategory;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

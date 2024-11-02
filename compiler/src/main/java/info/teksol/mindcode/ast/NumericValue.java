@@ -24,7 +24,7 @@ public class NumericValue extends ConstantAstNode {
      * @return numeric literal representation of the value, or null if literal representation doesn't exist
      */
     public NumericLiteral toNumericLiteral(InstructionProcessor instructionProcessor) {
-        return instructionProcessor.mlogFormat(value).map(str -> new NumericLiteral(getInputPosition(), str)).orElse(null);
+        return instructionProcessor.mlogFormat(value).map(str -> new NumericLiteral(inputPosition(), str)).orElse(null);
     }
 
     @Override

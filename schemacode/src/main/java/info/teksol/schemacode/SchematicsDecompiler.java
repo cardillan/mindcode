@@ -1,5 +1,6 @@
 package info.teksol.schemacode;
 
+import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schematics.Decompiler;
@@ -21,7 +22,7 @@ public class SchematicsDecompiler {
         try {
             binary = Base64.getDecoder().decode(encodedSchematics);
         } catch (IllegalArgumentException e) {
-            return new CompilerOutput<>("", List.of(SchemacodeCompilerMessage.error("Error decoding schematics string: " + e.getMessage())));
+            return new CompilerOutput<>("", List.of(ToolMessage.error("Error decoding schematics string: " + e.getMessage())));
         }
 
         try (InputStream is = new ByteArrayInputStream(binary)) {
@@ -33,7 +34,7 @@ public class SchematicsDecompiler {
             String schemaDefinition = decompiler.buildCode();
             return new CompilerOutput<>(schemaDefinition, List.of());
         } catch (Exception e) {
-            return new CompilerOutput<>("", List.of(SchemacodeCompilerMessage.error(e.toString())));
+            return new CompilerOutput<>("", List.of(ToolMessage.error(e.toString())));
         }
     }
 }

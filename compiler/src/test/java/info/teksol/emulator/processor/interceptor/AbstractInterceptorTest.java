@@ -5,12 +5,12 @@ import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.processor.AbstractProcessorTest;
 import info.teksol.emulator.processor.Processor;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.ExpectedMessages;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.Optimizer;
+import info.teksol.util.ExpectedMessages;
 
 import java.nio.file.Path;
 import java.util.List;

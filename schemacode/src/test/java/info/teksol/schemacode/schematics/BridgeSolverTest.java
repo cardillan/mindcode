@@ -2,6 +2,7 @@ package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.AbstractSchematicsTest;
+import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class BridgeSolverTest extends AbstractSchematicsTest {
                 "payload-mass-driver",
                 "phase-conduit",
                 "phase-conveyor");
-        
+
         for (final String blockType : blockTypes) {
             result.add(DynamicTest.dynamicTest(blockType, null, () -> refusesConnectionToSelf(blockType)));
         }
@@ -34,12 +35,15 @@ class BridgeSolverTest extends AbstractSchematicsTest {
     }
 
     private void refusesConnectionToSelf(String blockType) {
-        buildSchematicsExpectingError("""
-                schematic
-                    @%s at (0, 0) connected to (0, 0)
-                end
-                """.formatted(blockType),
-                "Block '@%s' at \\(\\s*0,\\s*0\\) has a connection to self\\.".formatted(blockType));
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@%s' at \\(\\s*0,\\s*0\\) has a connection to self\\.".formatted(blockType)),
+                """
+                        schematic
+                            @%s at (0, 0) connected to (0, 0)
+                        end
+                        """.formatted(blockType)
+        );
     }
 
     @TestFactory
@@ -59,13 +63,16 @@ class BridgeSolverTest extends AbstractSchematicsTest {
     }
 
     private void refusesNonOrthogonalConnection(String blockType) {
-        buildSchematicsExpectingError("""
-                schematic
-                    @%1$s at (0, 0) connected to (5, 5)
-                    @%1$s at (5, 5)
-                end
-                """.formatted(blockType),
-                "Block '@%s' at \\(\\s*0,\\s*0\\) has a connection leading to \\(\\s*5,\\s*5\\), which is neither horizontal nor vertical\\.".formatted(blockType));
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@%s' at \\(\\s*0,\\s*0\\) has a connection leading to \\(\\s*5,\\s*5\\), which is neither horizontal nor vertical\\.".formatted(blockType)),
+                """
+                        schematic
+                            @%1$s at (0, 0) connected to (5, 5)
+                            @%1$s at (5, 5)
+                        end
+                        """.formatted(blockType)
+        );
     }
 
     @TestFactory
@@ -85,57 +92,72 @@ class BridgeSolverTest extends AbstractSchematicsTest {
     }
 
     private void refusesOutOfRangeConnection(BlockType blockType) {
-        buildSchematicsExpectingError("""
-                schematic
-                    %s at (0, 0)
-                    %s at (0, %d) connected to (0, 0)
-                end
-                """.formatted(blockType.name(), blockType.name(), (int) (blockType.range() + 1.1)),
-                "Block '%s' at \\(\\s*0,\\s*\\d+\\) has an out-of-range connection to \\(\\s*0,\\s*0\\)\\.".formatted(blockType.name()));
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '%s' at \\(\\s*0,\\s*\\d+\\) has an out-of-range connection to \\(\\s*0,\\s*0\\)\\.".formatted(blockType.name())),
+                """
+                        schematic
+                            %s at (0, 0)
+                            %s at (0, %d) connected to (0, 0)
+                        end
+                        """.formatted(blockType.name(), blockType.name(), (int) (blockType.range() + 1.1))
+        );
     }
 
     @Test
     public void refusesMassDriverOutOfRangeConnection() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @mass-driver at (0, 0)
-                    @mass-driver at (39, 39) connected to (0, 0)
-                end
-                """,
-                "Block '@mass-driver' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to \\(\\s*0,\\s*0\\)\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@mass-driver' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to \\(\\s*0,\\s*0\\)\\."),
+                """
+                        schematic
+                            @mass-driver at (0, 0)
+                            @mass-driver at (39, 39) connected to (0, 0)
+                        end
+                        """
+        );
     }
 
     @Test
     public void refusesBackConnections() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @bridge-conveyor at (0, 0) connected to (2, 0)
-                    @bridge-conveyor at (2, 0) connected to (0, 0)
-                end
-                """,
-                "Two '@bridge-conveyor' blocks at \\(\\s*0,\\s*0\\) and \\(\\s*2,\\s*0\\) connect to each other\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Two '@bridge-conveyor' blocks at \\(\\s*0,\\s*0\\) and \\(\\s*2,\\s*0\\) connect to each other\\."),
+                """
+                        schematic
+                            @bridge-conveyor at (0, 0) connected to (2, 0)
+                            @bridge-conveyor at (2, 0) connected to (0, 0)
+                        end
+                        """
+        );
     }
 
     @Test
     public void refusesTooManyConnections() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @bridge-conveyor at (0, 0) connected to (1, 0), (2, 0)
-                    @bridge-conveyor at (1, 0)
-                    @bridge-conveyor at (2, 0)
-                end
-                """,
-                "Block '@bridge-conveyor' at \\(\\s*0,\\s*0\\) has more than one connection\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@bridge-conveyor' at \\(\\s*0,\\s*0\\) has more than one connection\\."),
+                """
+                        schematic
+                            @bridge-conveyor at (0, 0) connected to (1, 0), (2, 0)
+                            @bridge-conveyor at (1, 0)
+                            @bridge-conveyor at (2, 0)
+                        end
+                        """
+        );
     }
 
     @Test
     public void refusesConnectionsToDifferentType() {
-        buildSchematicsExpectingError("""
-                schematic
-                    @bridge-conveyor at (0, 0) connected to (1, 0)
-                    @phase-conveyor  at (1, 0)
-                end
-                """,
-                "Block '@bridge-conveyor' at \\(\\s*0,\\s*0\\) has a connection leading to a different block type '@phase-conveyor' at \\(\\s*1,\\s*0\\)\\.");
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .addRegex("Block '@bridge-conveyor' at \\(\\s*0,\\s*0\\) has a connection leading to a different block type '@phase-conveyor' at \\(\\s*1,\\s*0\\)\\."),
+                """
+                        schematic
+                            @bridge-conveyor at (0, 0) connected to (1, 0)
+                            @phase-conveyor  at (1, 0)
+                        end
+                        """
+        );
     }
 }
