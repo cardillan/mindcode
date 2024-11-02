@@ -58,7 +58,7 @@ public class LogicFunction {
      * @return true if this is the main function
      */
     public boolean isMain() {
-        return prefix == null;
+        return declaration.getName().isEmpty();
     }
 
     /**

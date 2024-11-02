@@ -828,10 +828,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void refusesMisplacedStackAllocation() {
         assertGeneratesMessages(
-                ExpectedMessages.create().add("Stack allocation must not be preceded by a control statement or a function call."),
+                ExpectedMessages.create().add("Stack allocation must not be declared within a function."),
                 """
-                        while true do
-                          allocate stack in cell1;
+                        def foo()
+                            allocate stack in cell1;
                         end;
                         """
         );
@@ -1083,6 +1083,18 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(LABEL, var(1005)),
                 createInstruction(END)
         );
+    }
+
+    @Test
+    void handlesCaseExpressionsAsFunctionParameter() {
+        assertGeneratesMessages(
+                ExpectedMessages.none(),
+                """
+                        def foo(n)
+                            print(n);
+                        end;
+                        foo(case 1 when 1 then 2; end);
+                        """);
     }
 
     @Test

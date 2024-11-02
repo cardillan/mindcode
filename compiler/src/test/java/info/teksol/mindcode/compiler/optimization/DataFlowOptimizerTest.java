@@ -244,6 +244,17 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, var(2))
         );
     }
+
+    @Test
+    void respectsNonEvaluableBuiltIns() {
+        assertCompilesTo(
+                """
+                        print(@mapw - 10);
+                        """,
+                createInstruction(OP, "sub", var(0), "@mapw", "10"),
+                createInstruction(PRINT, var(0))
+        );
+    }
     //</editor-fold>
 
 

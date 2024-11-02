@@ -2,9 +2,11 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.ast.StackAllocation;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -15,17 +17,18 @@ import java.util.stream.Stream;
 public final class CallGraph {
     private final FunctionDefinitions functionDefinitions;
     private final List<LogicFunction> functions;
+    private final Set<String> syncedVariables;
     private final StackAllocation allocatedStack;
-    private final Set<String> syncedVariables = new HashSet<>();
 
-    CallGraph(FunctionDefinitions functionDefinitions, StackAllocation allocatedStack) {
+    CallGraph(FunctionDefinitions functionDefinitions, Set<String> syncedVariables, StackAllocation allocatedStack) {
         this.functionDefinitions = Objects.requireNonNull(functionDefinitions);
+        this.functions = List.copyOf(functionDefinitions.getFunctions());
+        this.syncedVariables = Set.copyOf(syncedVariables);
         this.allocatedStack = allocatedStack;
-        functions = List.copyOf(functionDefinitions.getFunctions());
     }
 
     public static CallGraph createEmpty() {
-        return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}),  null);
+        return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}), Set.of(), null);
     }
 
     /**
@@ -84,74 +87,7 @@ public final class CallGraph {
         return functions.stream().filter(LogicFunction::isUsed).filter(LogicFunction::isRecursive);
     }
 
-    void addSyncedVariables(Set<String> syncedVariables) {
-        this.syncedVariables.addAll(syncedVariables);
-    }
-
     public Set<String> getSyncedVariables() {
         return syncedVariables;
     }
-
-    /**
-     * Inspects the structure of function calls and sets function properties accordingly. Assigns a function prefix
-     * and labels to recursive and stackless functions.
-     *
-     * @param instructionProcessor processor used to obtain function prefixes and labels
-     */
-    void buildCallGraph(InstructionProcessor instructionProcessor) {
-        visitFunction(functionDefinitions.getMain(), 0);
-
-        // 1st level of indirect calls
-        // Filtering out null values: call map may contain built-in and unknown functions
-        functions.forEach(outer ->
-                outer.getCallCardinality().keySet().forEach(inner ->
-                        outer.addIndirectCalls(inner.getDirectCalls())
-                )
-        );
-
-        // 2nd and other levels of indirection
-        // Must end eventually, as there's a finite number of functions to add
-        while (propagateIndirectCalls()) ;
-
-        functions.stream()
-                .filter(f -> f.isUsed() && !f.isInline())
-                .forEach(f -> setupOutOfLineFunction(instructionProcessor, f));
-    }
-
-    private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
-        function.setLabel(instructionProcessor.nextLabel());
-        function.setPrefix(instructionProcessor.nextFunctionPrefix());
-        function.createParameters();
-    }
-
-    private boolean propagateIndirectCalls() {
-        // Returns true if at least one function was modified
-        return functions.stream()
-                .flatMapToInt(outer -> outer.getDirectCalls().stream()
-                        .mapToInt(inner -> outer.addIndirectCalls(inner.getIndirectCalls()) ? 1 : 0)
-                ).sum() > 0;    // sum to force visiting all items in the stream
-    }
-
-    private final List<LogicFunction> callStack = new ArrayList<>();
-
-    private void visitFunction(LogicFunction function, int count) {
-        function.markUsage(count);
-
-        int index = callStack.indexOf(function);
-        callStack.add(function);
-        if (index >= 0) {
-            // Detected a cycle in the call graph starting at index. Mark all calls on the cycle as recursive, stop DFS
-            // We know function is now at the beginning and also at the end of the cycle in callStack
-            LogicFunction caller = function;
-            for (LogicFunction nextCallee : callStack.subList(index + 1, callStack.size())) {
-                caller.addRecursiveCall(nextCallee);
-                caller = nextCallee;
-            }
-        } else {
-            // Visit all children
-            function.getCallCardinality().forEach(this::visitFunction);
-        }
-        callStack.remove(callStack.size() - 1);
-    }
-
 }
