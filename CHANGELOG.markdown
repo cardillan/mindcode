@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.5.0 - ????-??-??
+## 2.5.0 - 2024-11-03
 
 **Breaking:** This release comes with new keywords in Mindcode syntax (`begin`, `var` and `void`), which break existing code where those new keywords were used as a variable or function name.
 
