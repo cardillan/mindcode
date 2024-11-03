@@ -2,7 +2,7 @@
 
 Mindcode comes equipped with a system library. At this moment, the library is just a single source file, `sys.mnd`, which is automatically compiled together with each source file, both in the command line compiler and in the web app. The library is only included if the language target is 8A or higher, as it contains functions that build upon some of the instructions that will be added in the upcoming Mindustry 8 version.
 
-To use the functions and constants provided by the system library in your program, you need to compile for Mindustry Logic 8 y including `#set target = ML8A` in your program.
+To use the functions and constants provided by the system library in your program, you need to compile for Mindustry Logic 8 by including `#set target = ML8A` in your program.
 
 The system library is an experimental feature. The functions provided by the library and the mechanism for its inclusion in your program may change in future releases. 
 
@@ -37,9 +37,9 @@ The following functions use graphics transformation to rotate the graphics outpu
 
 Definitions:
 
-* `def rotateRightSmall()`
-* `def rotateRightLarge()`
-* `def rotateRight(display)`
+* `void rotateRightSmall()`
+* `void rotateRightLarge()`
+* `void rotateRight(display)`
 
 Rotates the output to the right (clockwise) by 90 degrees for a small or a large display, or for a display given as an argument.
 
@@ -47,9 +47,9 @@ Rotates the output to the right (clockwise) by 90 degrees for a small or a large
 
 Definitions:
 
-* `def rotateLeftSmall()`
-* `def rotateLeftLarge()`
-* `def rotateLeft(display)`
+* `void rotateLeftSmall()`
+* `void rotateLeftLarge()`
+* `void rotateLeft(display)`
 
 Rotates the output to the left (counterclockwise) by 90 degrees for a small or a large display, or for a display given as an argument.
 
@@ -57,9 +57,9 @@ Rotates the output to the left (counterclockwise) by 90 degrees for a small or a
 
 Definitions:
 
-* `def upsideDownSmall()`
-* `def upsideDownLarge()`
-* `def upsideDown(display)`
+* `void upsideDownSmall()`
+* `void upsideDownLarge()`
+* `void upsideDown(display)`
 
 Rotates the output by 180 degrees (upside down) for a small or a large display, or for a display given as an argument.
 
@@ -69,9 +69,9 @@ Rotates the output by 180 degrees (upside down) for a small or a large display, 
 
 Definitions:
 
-* `def flipVerticalSmall()`
-* `def flipVerticalLarge()`
-* `def flipVertical(display)`
+* `void flipVerticalSmall()`
+* `void flipVerticalLarge()`
+* `void flipVertical(display)`
 
 Flips the output vertically (along the Y axis) for a small or a large display, or for a display given as an argument.
 
@@ -79,9 +79,9 @@ Flips the output vertically (along the Y axis) for a small or a large display, o
 
 Definitions:
 
-* `def flipHorizontalSmall()`
-* `def flipHorizontalLarge()`
-* `def flipHorizontal(display)`
+* `void flipHorizontalSmall()`
+* `void flipHorizontalLarge()`
+* `void flipHorizontal(display)`
 
 Flips the output horizontally (along the X axis) for a small or a large display, or for a display given as an argument.
 
@@ -98,6 +98,44 @@ Scales the graphics output so that an output that targets a small display gets d
 Definition: `def scaleLargeToSmall()`
 
 Scales the graphics output so that an output that targets a large display gets displayed over the entire area of a small display. 
+
+# Blocks
+
+# findLinkedBlocks
+
+Definition: `inline void findLinkedBlocks(title, message, linkMap...)`
+
+Searches blocks linked to the processor for blocks of the required type, and assigns them to given variables if found. Can wait till a block of the required type is linked to the processor.
+
+This function is useful to dynamically locate blocks of given types, instead of using the predefined link name. By locating the blocks dynamically, it is not necessary to link a block to the processor under a particular name, such as `message1` or `switch1`. The function isn't well suited when two blocks of the same type are needed (e.g. two switches), but can handle situations where a single variable can accept multiple block types (e.g. either memory cell or memory bank).
+
+Function outputs status information while it is running.
+
+Inputs and outputs:
+
+* `title`: title to be used as part of the status information.
+* `message`: initial block to use to output status information. Typically `message1`.
+* `linkMap`: definition of the required blocks. Each blocks needs four variables:
+  * `requested`: type of the requested block, e.g. `@switch`.
+  * `name`: name of the block to use as part of the status information.
+  * `out variable`: variable to receive the block
+  * `required`: if `true`, the function will wait until a block of given type is linked to the processor. If false, the function doesn't wait.
+
+Example of a call to this function:
+
+```
+#set target = ML8A;
+
+findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
+    @large-logic-display,   "Display",  out display,    true,
+    @message,               "Message",  out message,    false,
+    @switch,                "Switch",   out switch,     false,
+    @memory-bank,           "Memory",   out memory,     true,
+    @memory-cell,           "Memory",   out memory,     true
+);
+```
+
+When the function call ends, the `display` and `memory` variables are set to a large display or memory cell/memory bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor, otherwise are `null`. 
 
 # Units
 
@@ -148,7 +186,9 @@ The status of the search is output to `SYS_MESSAGE`. Either set the message to a
 
 # Text output
 
-## `formatNumber(n)`
+## formatNumber
+
+Definition: `void formatNumber(n)`
 
 Formats the number passed in as a parameter into the text buffer, using comma as thousands separator. Fractional part of the number to be printed is ignored. 
 
@@ -167,6 +207,16 @@ To use the function, the text buffer must not contain placeholders `{0}`, `{1}` 
 
 > [!TIP]
 > While the functions is optimized for performance, formatting numbers is many times slower than just printing them using the `print()` function.
+
+## printNumber
+
+Definition: `void printNumber(n)`
+
+Prints the number passed in as a parameter into the text buffer, using comma as thousands separator. Fractional part of the number to be printed is ignored.
+
+To use the function, no placeholder lower than `{3}` may be present in the text buffer.
+
+See also [`formatNumber`](#formatnumber)
 
 # Utility functions
 

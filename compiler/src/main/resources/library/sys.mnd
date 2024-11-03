@@ -12,61 +12,61 @@ end;
 
 // Small display transformations
 
-def rotateLeftSmall()
+void rotateLeftSmall()
     rotate(90);
     translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
-def rotateRightSmall()
+void rotateRightSmall()
     rotate(270);
     translate(- DISPLAY_SIZE_SMALL, 0);
 end;
 
-def upsideDownSmall()
+void upsideDownSmall()
     rotate(180);
     translate(- DISPLAY_SIZE_SMALL, - DISPLAY_SIZE_SMALL);
 end;
 
-def flipVerticalSmall() 
+void flipVerticalSmall()
     scale(1, -1);
     translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
-def flipHorizontalSmall()
+void flipHorizontalSmall()
     scale(-1, 1);
     translate(- DISPLAY_SIZE_SMALL, 0);
 end;
 
 // Large display transformations
 
-def rotateLeftLarge()
+void rotateLeftLarge()
     rotate(90);
     translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
-def rotateRightLarge()
+void rotateRightLarge()
     rotate(270);
     translate(- DISPLAY_SIZE_LARGE, 0);
 end;
 
-def upsideDownLarge()
+void upsideDownLarge()
     rotate(180);
     translate(- DISPLAY_SIZE_LARGE, - DISPLAY_SIZE_LARGE);
 end;
 
-def flipVerticalLarge() 
+void flipVerticalLarge()
     scale(1, -1);
     translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
-def flipHorizontalLarge()
+void flipHorizontalLarge()
     scale(-1, 1);
     translate(- DISPLAY_SIZE_LARGE, 0);
 end;
 
 // Generic display transformations
 
-def rotateLeft(display)
+void rotateLeft(display)
     case display.@type
         when @logic-display       then rotateLeftSmall();
         when @large-logic-display then rotateLeftLarge();
@@ -74,7 +74,7 @@ def rotateLeft(display)
     end;
 end;
 
-def rotateRight(display)
+void rotateRight(display)
     case display.@type
         when @logic-display       then rotateRightSmall();
         when @large-logic-display then rotateRightLarge();
@@ -82,7 +82,7 @@ def rotateRight(display)
     end;
 end;
 
-def upsideDown(display)
+void upsideDown(display)
     case display.@type
         when @logic-display       then upsideDownSmall();
         when @large-logic-display then upsideDownLarge();
@@ -90,7 +90,7 @@ def upsideDown(display)
     end;
 end;
 
-def flipVertical(display)
+void flipVertical(display)
     case display.@type
         when @logic-display       then flipVerticalSmall();
         when @large-logic-display then flipVerticalLarge();
@@ -98,7 +98,7 @@ def flipVertical(display)
     end;
 end;
 
-def flipHorizontal(display)
+void flipHorizontal(display)
     case display.@type
         when @logic-display       then flipHorizontalSmall();
         when @large-logic-display then flipHorizontalLarge();
@@ -108,12 +108,40 @@ end;
 
 // Scaling
 
-def scaleSmallToLarge()
+void scaleSmallToLarge()
     scale(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
 end;
 
-def scaleLargeToSmall()
+void scaleLargeToSmall()
     scale(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
+end;
+
+// BLOCKS
+
+inline void findLinkedBlocks(title, message, linkMap...)
+    do
+        print(title);
+        n = @links;
+        while n > 0 do
+            n = n - 1;
+            block = getlink(n);
+            print("\nFound: ", block);
+            type = block.@type;
+            for requested, name, out variable, required in linkMap do
+                if requested == type then
+                    variable = block;
+                    if requested == @message then message = block; end;
+                 end;
+            end;
+        end;
+
+        foundAll = 1;
+        for requested, name, out variable, required in linkMap do
+            print($"\n$name: $variable");
+            if required then foundAll &= variable; end;
+        end;
+        printflush(message);
+    loop while !foundAll;
 end;
 
 // UNITS
@@ -226,7 +254,7 @@ end;
 
 // Formats a number into the text buffer, without external memory.
 // The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
-def formatNumber(n)
+void formatNumber(n)
     n = floor(n);
     if n < 0 then
         format("-{2}");     // Prepend the minus sign
@@ -246,7 +274,7 @@ end;
 
 // Prints the number straight away
 // The text buffer must not contain any placeholders lower than {3}.
-def printNumber(n)
+void printNumber(n)
     print("{2}");
     formatNumber(n);
 end;

@@ -22,7 +22,7 @@ public class CompilerProfile {
     public static final int MAX_INSTRUCTIONS = 100_000;
     public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
     public static final int DEFAULT_INSTRUCTIONS = 1000;
-    public static final int DEFAULT_WEBAPP_PASSES = 3;
+    public static final int DEFAULT_WEBAPP_PASSES = 5;
     public static final int DEFAULT_CMDLINE_PASSES = 25;
     public static final int DEFAULT_STEP_LIMIT_WEBAPP = 1_000_000;
     public static final int DEFAULT_STEP_LIMIT_CMDLINE = 10_000_000;

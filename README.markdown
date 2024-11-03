@@ -12,7 +12,7 @@
 Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
 > [!IMPORTANT]
-> In the [2.3.0 release](CHANGELOG.markdown#230---2024-10-16), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. Other changes to the syntax include compulsory `out` keywords for output function call arguments and using the `@` prefix for Mindustry built-in variables used as properties. The old syntax is still supported, but generates a warning. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown).
+> In the [2.3.0 release](CHANGELOG.markdown#230---2024-10-16), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. Other changes to the syntax include compulsory `out` keywords for output function call arguments and using the `@` prefix for Mindustry built-in variables used as properties. The old syntax is still supported, but generates a warning. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown) for a description of all changes to the syntax.
 > 
 > The relaxed variant of the syntax will be eventually removed.    
 
@@ -22,16 +22,16 @@ The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
   * Full support for the Mindustry Logic in the upcoming [Mindustry version 8](/doc/syntax/MINDUSTRY-8.markdown).
+  * A [system library of useful functions](doc/syntax/SYSTEM-LIBRARY.markdown) is available when compiling for Mindustry Logic 8. 
 * Basic functionality
   * Significant improvement in reporting error messages generated during compilation.
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
   * Support for running the compiled mlog code in an emulated processor.
   * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
 * Mindcode syntax
-  * User-defined functions may provide additional return values through [output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). 
+  * User-defined functions enhancements: user-defined functions may provide additional return values through [output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters), can accept [variable number of arguments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions) and can be [overloaded](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
   * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
-  * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements.   
-  * [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks) can be now included in the compiled code.
+  * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements while iterating.   
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 

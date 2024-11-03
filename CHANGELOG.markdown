@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 * Added [vararg (variable arity) functions](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions).
 * Added [function overloading](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
 * Added the possibility to specify custom instructions not known to Mindcode through the [`mlog()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions).
+* Added the [`findLinkedBlocks` function](doc/syntax/SYSTEM-LIBRARY.markdown#findlinkedblocks) to the system library.
 
 ### Changed
 
