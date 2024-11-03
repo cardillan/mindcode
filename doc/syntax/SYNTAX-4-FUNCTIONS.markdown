@@ -505,7 +505,22 @@ end;
 foo(1, 2, 3);
 ```
 
-The vararg parameter may be passed to a standard function as well. For example
+### Varargs as function arguments
+
+The vararg parameter may be passed to standard functions as well. For example
+
+```
+inline void foo(args...)
+    println(min(args));
+    println(max(args));
+    println($"Values: $, $, $, $", args); 
+end;
+
+foo(1, 2, 3, 4);
+foo(1, 2, 3, 4, 5);         // Causes error in the call to println() function, as it expectsexactly  4 arguments 
+```
+
+An `out` argument may also be passed via vararg to a function that accepts it: 
 
 ```
 inline void foo(arg...)
@@ -540,6 +555,22 @@ end;
 
 foo(1, 2, 3);
 ```
+
+### The `length()` function
+
+A `length()` function determines the number of arguments passed into the vararg parameter. `0` is returned when no argument was passed to the vararg parameter.
+
+```
+inline void foo(args...)
+    println(length(args));
+end;
+
+foo();                      // 0
+foo(10);                    // 1 
+foo(1, 2, 3, 4, 5);         // 5 
+```
+
+The function always takes just one argument. When the argument passed in is not a vararg, the function returns `1`.     
 
 ## Function overloading
 

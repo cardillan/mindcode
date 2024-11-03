@@ -447,6 +447,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitFunctionCall(FunctionCall call) {
         // Solve special cases
         return switch (call.getFunctionName()) {
+            case "length"       -> handleLength(call);
             case "min", "max"   -> handleMinMax(call);
             case "mlog"         -> handleMlog(call, false);
             case "mlogSafe"     -> handleMlog(call, true);
@@ -1821,15 +1822,30 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
 
-    private LogicValue handleMinMax(FunctionCall call) {
-        if (call.getArguments().size() < 2) {
-            error(call, "Not enough arguments to the '%s' function (expected 2 or more, found %d).",
-                    call.getFunctionName(), call.getArguments().size());
+    private LogicValue handleLength(FunctionCall call) {
+        if (call.getArguments().size() != 1) {
+            error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
+                    call.getFunctionName(), 1, call.getArguments().size());
         }
         validateStandardFunctionArguments(call.getArguments());
 
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
+
+        clearSubcontextType();
+        return LogicNumber.get(arguments.size());
+    }
+
+    private LogicValue handleMinMax(FunctionCall call) {
+        validateStandardFunctionArguments(call.getArguments());
+
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
+
+        if (arguments.size() < 2) {
+            error(call, "Not enough arguments to the '%s' function (expected 2 or more, found %d).",
+                    call.getFunctionName(), call.getArguments().size());
+        }
 
         setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         LogicValue result;
@@ -1987,7 +2003,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         } else {
             // Only create instruction for each argument
             arguments.forEach(argument -> emit(formatter.createInstruction(this, argument.value())));
-            returnValue = arguments.get(arguments.size() - 1).value();
+            returnValue = arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1).value();
         }
 
         if (formatter.createsNewLine()) {

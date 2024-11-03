@@ -408,4 +408,69 @@ public class LogicInstructionGeneratorFunctionsModifiersTest extends AbstractGen
                 createInstruction(END)
         );
     }
+
+    @Test
+    void compilesVarargFunction() {
+        assertCompilesTo("""
+                        inline void foo(args...)
+                            print(args);
+                        end;
+                        foo(1, 2, 3);
+                        foo();
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "1"),
+                createInstruction(PRINT, "2"),
+                createInstruction(PRINT, "3"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesVarargFunctionCall() {
+        assertCompilesTo("""
+                        inline void foo(args...)
+                            print(args);
+                        end;
+                        inline void bar(args...)
+                            foo(args, args);
+                        end;
+                        bar(1, 2, 3);
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, "1"),
+                createInstruction(PRINT, "2"),
+                createInstruction(PRINT, "3"),
+                createInstruction(PRINT, "1"),
+                createInstruction(PRINT, "2"),
+                createInstruction(PRINT, "3"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesLengthFunction() {
+        assertCompilesTo("""
+                        inline void foo(args...)
+                            print(length(args));
+                        end;
+                        inline void bar(args...)
+                            foo(args, args);
+                        end;
+                        bar(1, 2, 3);
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, "6"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
 }
