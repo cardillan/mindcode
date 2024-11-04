@@ -256,8 +256,8 @@ Example:
 
 ```
 remark("Configurable options:");
-MIN = 10;
-MAX = 100;
+param MIN = 10;
+param MAX = 100;
 
 remark("Don't modify anything below this line.");
 for i in MIN .. MAX do
@@ -586,7 +586,7 @@ void foo(x, y)
 end;
 
 foo(1);     // Calls foo(x)
-foo(1, 1);  // Calls foo(y) 
+foo(1, 1);  // Calls foo(x, y) 
 ```
 
 To match a function call with function declaration, the number and types (input, output or input/output) of function call arguments must match the number and types of function parameters. Optional and vararg arguments are taken into account when evaluating the match.
@@ -599,7 +599,7 @@ When two or more function declarations could be matched by the same function cal
 
 * `void bar(x)`: `x` is an input parameter
 * `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
-* `void bar(in out z)`: `z` is an input/output parameter, therefor the function clashes with both `bar(x)` and `bar(out y)`.
+* `void bar(in out z)`: `z` is an input/output parameter, therefore the function clashes with both `bar(x)` and `bar(out y)`.
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 

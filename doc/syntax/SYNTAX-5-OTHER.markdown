@@ -197,11 +197,11 @@ so turning off some optimizations might render other optimizations ineffective. 
 
 # Creating custom mlog instructions
 
-Mindcode provides a mechanism of encoding a custom instruction not known to Mindcode. Using custom instructions is useful in only a few distinct cases:
+Mindcode provides a mechanism of encoding a custom instruction not known to Mindcode. Using custom instructions is useful in only a few cases:
 
 1. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
 2. An instruction was not implemented correctly in Mindcode and a fix is not available.
-3. If Mindustry gets updated to allow new instructions created by mods.
+3. Mindustry got updated to allow new instructions created by mods, and there are mods with their own instructions.
 
 Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism. In addition, some custom instructions might break existing optimizations through their side effects. 
 
@@ -292,7 +292,7 @@ The `ucontrol getBlock` instruction is an example of instruction which has outpu
 
 // Using 'getBlock2' as a name to avoid clashing with the existing function name
 inline def getBlock2(x, y, out type, out floor)
-    mlog("ucontrol", "getBlock", in x, in y, out type, out building, out floor);
+    mlogSafe("ucontrol", "getBlock", in x, in y, out type, out building, out floor);
     return building;
 end;
 

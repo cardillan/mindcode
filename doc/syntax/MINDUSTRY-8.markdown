@@ -99,7 +99,7 @@ myPrintNumber(floor(rand(100000)));
 
 Note: `formatNumber` and `printNumber` functions, identical to those above, are part of the [system library](SYSTEM-LIBRARY.markdown).
 
-Existing print merger is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target lower than ML8A compiles into
+Existing Print Merging optimization is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target lower than ML8A compiles into
 
 ```
 print `Minimum: `
@@ -111,7 +111,7 @@ print max
 print `\n`
 ```
 
-The new print merger optimization utilizing `format` saves three instructions by producing
+The new Print Merging optimization utilizing `format` saves three instructions by producing
 
 ```
 print `Minimum: {0}, middle: {0}, maximum: {0}\n`
@@ -120,7 +120,7 @@ format mid
 format max
 ```
 
-To prevent the new print merger optimization interfering with custom uses of the format instruction, it isn't used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, are detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format` with no restrictions:
+To prevent the new Print Merging optimization interfering with custom uses of the format instruction, it isn't used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, are detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format` with no restrictions:
 
 ```
 #set target = ML8A;

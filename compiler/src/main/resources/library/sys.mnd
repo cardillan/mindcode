@@ -120,6 +120,9 @@ end;
 
 inline void findLinkedBlocks(title, message, linkMap...)
     do
+        for requested, name, out variable, required in linkMap do
+            variable = null;
+        end;
         print(title);
         n = @links;
         while n > 0 do

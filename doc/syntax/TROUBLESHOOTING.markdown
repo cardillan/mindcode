@@ -2,7 +2,7 @@
 
 ## Dealing with syntax errors
 
-In earlier versions of Mindcode, syntax errors were reported very poorly. As of version 2.3.0, the error reporting got much better. In most cases, the position of the error in source code is correctly identified and displayed. In the web application, clicking on the position given with the error message places the cursor at the occurrence of the error in the source panel. Of course, if the source code gets edited (especially when lines are added or deleted), the positions will no longer be valid. When using an IDE to edit and compile the code offline, it should be possible to set up the IDE to provide navigation from the error messages to the occurrence of the error in the source code as well.  
+In earlier versions of Mindcode, syntax errors were reported very poorly. As of version 2.3.0, the error reporting got much better. In most cases, the position of the error in source code is correctly identified and displayed. In the web application, clicking on the position given with the error message places the cursor at the occurrence of the error in the source panel. Of course, if the source code gets edited (especially when lines are added or deleted), the positions will no longer be valid, and you need to compile the code again. When using an IDE to edit and compile the code offline, it should be possible to [set up the IDE](TOOLS-IDE-INTEGRATION.markdown) to provide navigation from the error messages to the occurrence of the error in the source code as well.  
 
 When encountering more complicated situations, one of these tips might help.
 
@@ -20,7 +20,7 @@ Quite often the error is caused by some problem in the statement immediately pre
 
 ### Unexpected input
 
-When Mindcode encounters an input which disallows further analysis, it may report `unexpected 'token`, for example `unexpected 'out'`. This error typically has one of two causes:
+When Mindcode encounters an input which disallows further analysis, it may report `unexpected 'token'`, for example `unexpected 'out'`. This error typically has one of two causes:
 - A keyword is omitted or mistyped: in `while a < 10 print(a); end;` the `do` keyword is missing. Mindcode will announce the `print` is unexpected at the place where the `do` keyword should be present.
 - A keyword is used as a name for a variable or function. This may suddenly appear in an existing code when a new keyword is introduced into the language, such as `out` or `param` in the recent versions of Mindcode. In this case Mindcode will typically announce the keyword is unexpected.
 
@@ -29,8 +29,8 @@ When Mindcode encounters an input which disallows further analysis, it may repor
 A particularly challenging error is a missing `end` keyword. As it is not possible to uniquely match `end` keywords with corresponding opening statements (such as `while`, `for` or `if` statements), Mindcode will typically report the missing `end` keyword at the end of the file. In most cases, the true cause of the error is buried somewhere deep down in a structure of several nested statements.
 - The best way to prevent these errors from happening is to meticulously indent code inside control structures. This should make the error more apparent while editing the code.
 - Mindcode currently doesn't have a good one-line conditional statement. When putting the entire if statement on one line, the `end` keyword still needs to be there (as in `if condition then statement; end;`), but is easily left out. Pay particular attention to not forget the `end` keyword in these cases.
-- Due to limited support for functions with output variables, larger programs tend to include lengthy loops with many levels of nested statements. This makes spotting the missing `end` particularly challenging. If this happens to you, try to move some of the inner structures to standalone functions (at least temporarily), or comment them out. Once you establish the outer structure(s) are compiling well, you may start returning the inner ones one by one until the source of the error becomes apparent.
-- Even when the support for functions is still limited, try to extract as much code into functions as possible. Mindcode is pretty good at optimizing functions and in most cases the functions will be inlined and optimized just as well as if the code was nested.
+- Having a large program with many levels of nested statements makes spotting the missing `end` particularly challenging, In this situation, comment out some of the inner structures. Once you establish the outer structure(s) are compiling well, you may start returning the inner ones one by one until the source of the error becomes apparent.
+- Try to extract as much code into functions as possible, utilizing additional output parameters when needed. Mindcode is pretty good at optimizing functions and in most cases the functions will be inlined and optimized just as well as if the code was nested.
 
 ### Ask for help
 

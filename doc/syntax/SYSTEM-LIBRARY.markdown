@@ -25,7 +25,7 @@ Constants are defined for the small and large display sizes:
 
 ### displaySize
 
-Definition: `def displaySize(display)`
+**Definition:** `def displaySize(display)`
 
 Returns the actual display size based on the type of display passed in as an argument. When the passed-in argument is not a display, the processor is stopped.
 
@@ -35,7 +35,7 @@ The following functions use graphics transformation to rotate the graphics outpu
 
 ### rotateRight
 
-Definitions:
+**Definitions:**
 
 * `void rotateRightSmall()`
 * `void rotateRightLarge()`
@@ -45,7 +45,7 @@ Rotates the output to the right (clockwise) by 90 degrees for a small or a large
 
 ### rotateLeft 
 
-Definitions:
+**Definitions:**
 
 * `void rotateLeftSmall()`
 * `void rotateLeftLarge()`
@@ -55,7 +55,7 @@ Rotates the output to the left (counterclockwise) by 90 degrees for a small or a
 
 ### upsideDown
 
-Definitions:
+**Definitions:**
 
 * `void upsideDownSmall()`
 * `void upsideDownLarge()`
@@ -67,7 +67,7 @@ Rotates the output by 180 degrees (upside down) for a small or a large display, 
 
 ### flipVertical
 
-Definitions:
+**Definitions:**
 
 * `void flipVerticalSmall()`
 * `void flipVerticalLarge()`
@@ -77,7 +77,7 @@ Flips the output vertically (along the Y axis) for a small or a large display, o
 
 ### flipHorizontal
 
-Definitions:
+**Definitions:**
 
 * `void flipHorizontalSmall()`
 * `void flipHorizontalLarge()`
@@ -89,27 +89,27 @@ Flips the output horizontally (along the X axis) for a small or a large display,
 
 ### scaleSmallToLarge
 
-Definition: `def scaleSmallToLarge()`
+**Definition:** `def scaleSmallToLarge()`
 
 Scales the graphics output so that an output that targets a small display gets displayed over the entire area of a large display. 
 
 ### scaleLargeToSmall
 
-Definition: `def scaleLargeToSmall()`
+**Definition:** `def scaleLargeToSmall()`
 
 Scales the graphics output so that an output that targets a large display gets displayed over the entire area of a small display. 
 
 # Blocks
 
-# findLinkedBlocks
+## findLinkedBlocks
 
-Definition: `inline void findLinkedBlocks(title, message, linkMap...)`
+**Definition:** `inline void findLinkedBlocks(title, message, linkMap...)`
 
-Searches blocks linked to the processor for blocks of the required type, and assigns them to given variables if found. Can wait till a block of the required type is linked to the processor.
+Searches blocks linked to the processor for blocks of requested types, and assigns them to given variables if found. The function tries to locate blocks repeatedly until all required blocks are found.
 
-This function is useful to dynamically locate blocks of given types, instead of using the predefined link name. By locating the blocks dynamically, it is not necessary to link a block to the processor under a particular name, such as `message1` or `switch1`. The function isn't well suited when two blocks of the same type are needed (e.g. two switches), but can handle situations where a single variable can accept multiple block types (e.g. either memory cell or memory bank).
+This function is useful to dynamically locate blocks of given types, instead of using the predefined link name. By locating the blocks dynamically, it is not necessary to link a block to the processor under a particular name, such as `message1` or `switch1`. The function cannot handle situations when two blocks of the same type are needed (e.g. two switches), but can handle situations where a single variable can accept multiple block types (e.g. either memory cell or memory bank).
 
-Function outputs status information while it is running.
+Function outputs status information while it is running to the block passed in the `message` parameter. When a `@message` block is among the required types and is found, it is used instead of the `message` parameter.
 
 Inputs and outputs:
 
@@ -119,7 +119,7 @@ Inputs and outputs:
   * `requested`: type of the requested block, e.g. `@switch`.
   * `name`: name of the block to use as part of the status information.
   * `out variable`: variable to receive the block
-  * `required`: if `true`, the function will wait until a block of given type is linked to the processor. If false, the function doesn't wait.
+  * `required`: if `true`, the function will wait until a block of given type is linked to the processor. If `false`, the function doesn't wait.
 
 Example of a call to this function:
 
@@ -135,13 +135,13 @@ findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
 );
 ```
 
-When the function call ends, the `display` and `memory` variables are set to a large display or memory cell/memory bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor, otherwise are `null`. 
+When the function call ends, the `display` and `memory` variables are set to a large display or memory cell/memory bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor, otherwise they're `null`. 
 
 # Units
 
 ## findFreeUnit
 
-Definition: `def findFreeUnit(unit_type, initial_flag)`
+**Definition:** `def findFreeUnit(unit_type, initial_flag)`
 
 Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag. If no free unit of given type can be found (either because none exists, or because all existing units are occupied), returns immediately.
 
@@ -155,7 +155,7 @@ The function doesn't use units that are controlled by a player or a different pr
 
 ## findClosestUnit
 
-Definition: `def findClosestUnit(x, y, unit_type, initial_flag)`
+**Definition:** `def findClosestUnit(x, y, unit_type, initial_flag)`
 
 Searches for and binds a free unit of given type closest to the coordinates on the map given. If no free unit of given type can be found (either because none exists, or because all existing units are occupied), returns immediately.
 
@@ -170,7 +170,7 @@ The function doesn't use units that are controlled by a player or a different pr
 
 ## waitForFreeUnit
 
-Definition: `def waitForFreeUnit(unit_type, initial_flag)`
+**Definition:** `def waitForFreeUnit(unit_type, initial_flag)`
 
 Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag. The function doesn't return until a free unit of the given type can be found, 
 
@@ -188,7 +188,7 @@ The status of the search is output to `SYS_MESSAGE`. Either set the message to a
 
 ## formatNumber
 
-Definition: `void formatNumber(n)`
+**Definition:** `void formatNumber(n)`
 
 Formats the number passed in as a parameter into the text buffer, using comma as thousands separator. Fractional part of the number to be printed is ignored. 
 
@@ -199,7 +199,9 @@ The number will be rendered at the place of the lowest formatting placeholder.
 > [!TIP]
 > While the functions is optimized for performance, formatting numbers is many times slower than just printing them using the `print()` function.
 
-## `printNumber(n)`
+## printNumber
+
+**Definition:** `void printNumber(n)`
 
 Prints the number passed in as a parameter, using comma as thousands separator. Fractional parts of the number to be printed is ignored.
 
@@ -208,19 +210,13 @@ To use the function, the text buffer must not contain placeholders `{0}`, `{1}` 
 > [!TIP]
 > While the functions is optimized for performance, formatting numbers is many times slower than just printing them using the `print()` function.
 
-## printNumber
-
-Definition: `void printNumber(n)`
-
-Prints the number passed in as a parameter into the text buffer, using comma as thousands separator. Fractional part of the number to be printed is ignored.
-
-To use the function, no placeholder lower than `{3}` may be present in the text buffer.
-
 See also [`formatNumber`](#formatnumber)
 
 # Utility functions
 
-## `distance(x1, y1, x2, y2)`
+## distance
+
+**Definition:** `def distance(x1, y1, x2, y2)`
 
 Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`). Uses the `len` instruction for efficient hypotenuse calculation.
 
