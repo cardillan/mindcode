@@ -18,7 +18,6 @@ import info.teksol.util.ExpectedMessages;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -72,16 +71,6 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
 
     protected TestCompiler createTestCompiler(CompilerProfile profile) {
         return new TestCompiler(profile);
-    }
-
-    protected Predicate<String> ignore(String... values) {
-        List<String> list = Arrays.stream(values).map(String::trim).toList();
-        return s -> list.contains(s.trim());
-    }
-
-    protected Predicate<String> ignoreRegex(String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        return s -> pattern.matcher(s.trim()).matches();
     }
 
     protected void assertCompilesTo(TestCompiler compiler, Predicate<LogicInstruction> filter,

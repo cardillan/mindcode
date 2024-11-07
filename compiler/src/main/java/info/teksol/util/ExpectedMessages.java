@@ -1,6 +1,7 @@
 package info.teksol.util;
 
 import com.ibm.icu.impl.Assert;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import org.intellij.lang.annotations.Language;
 
@@ -156,6 +157,10 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         return between(0, maximumCount);
     }
 
+    private static String formatPosition(InputPosition pos) {
+        return "line " + pos.line() + ", column " + pos.column() + ", message";
+    }
+
     /**
      * Sets the exact repeat count for the last added message.  The message must appear exactly
      * the given number of times.
@@ -198,8 +203,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
             }
         }
 
-        fail("Unexpected message: " + msg.formatMessage(
-                pos -> "line " + pos.line() + ", column " + pos.column() + ", message"));
+        fail("Unexpected message: " + msg.formatMessage(ExpectedMessages::formatPosition));
     }
 
     /**
@@ -276,6 +280,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         @Override
         public boolean matches(MindcodeMessage msg) {
             if (matchCount < maximumCount && matcher.matches(msg)) {
+                System.out.println("Matched message " + msg.formatMessage(ExpectedMessages::formatPosition));
                 matchCount++;
                 return true;
             } else {

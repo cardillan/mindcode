@@ -24,11 +24,11 @@ public class MindcodeParser extends Parser {
 		Identifier=1, StringLiteral=2, Assign=3, Comma=4, Dot=5, DoubleDot=6, 
 		TripleDot=7, DoubleQuote=8, Semicolon=9, Binary=10, Hexadecimal=11, Decimal=12, 
 		Float=13, HashSet=14, FormattableLiteral=15, RBrace=16, CommentedComment=17, 
-		EnhancedComment=18, Comment=19, EmptyComment=20, LineComment=21, WhiteSpace=22, 
-		DirectiveValue=23, DirectiveAssign=24, DirectiveComma=25, DirectiveComment=26, 
-		DirectiveLineComment=27, DirectiveWhiteSpace=28, Text=29, EscapeSequence=30, 
-		EmptyPlaceholder=31, Interpolation=32, VariablePlaceholder=33, EndOfLine=34, 
-		Variable=35;
+		EnhancedComment=18, Comment=19, EmptyComment=20, LineComment=21, NewLine=22, 
+		WhiteSpace=23, DirectiveValue=24, DirectiveAssign=25, DirectiveComma=26, 
+		DirectiveComment=27, DirectiveLineComment=28, DirectiveWhiteSpace=29, 
+		Text=30, EscapeSequence=31, EmptyPlaceholder=32, Interpolation=33, VariablePlaceholder=34, 
+		EndOfLine=35, Variable=36, FmtEndOfLine=37, InCmtEndOfLine=38;
 	public static final int
 		RULE_program = 0, RULE_expressionList = 1, RULE_expression = 2, RULE_directive = 3, 
 		RULE_directiveDeclaration = 4, RULE_directiveValues = 5, RULE_formattableContents = 6, 
@@ -43,9 +43,10 @@ public class MindcodeParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, null, null, "'.'", "'..'", "'...'", null, null, null, 
-			null, null, null, "'#set'", "'$\"'", "'}'", null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, "'${'", "'$'"
+			null, null, null, null, null, "'.'", "'..'", "'...'", "'\"'", null, null, 
+			null, null, null, "'#set'", null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, null, "'${'", 
+			"'$'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -54,11 +55,11 @@ public class MindcodeParser extends Parser {
 			null, "Identifier", "StringLiteral", "Assign", "Comma", "Dot", "DoubleDot", 
 			"TripleDot", "DoubleQuote", "Semicolon", "Binary", "Hexadecimal", "Decimal", 
 			"Float", "HashSet", "FormattableLiteral", "RBrace", "CommentedComment", 
-			"EnhancedComment", "Comment", "EmptyComment", "LineComment", "WhiteSpace", 
-			"DirectiveValue", "DirectiveAssign", "DirectiveComma", "DirectiveComment", 
-			"DirectiveLineComment", "DirectiveWhiteSpace", "Text", "EscapeSequence", 
-			"EmptyPlaceholder", "Interpolation", "VariablePlaceholder", "EndOfLine", 
-			"Variable"
+			"EnhancedComment", "Comment", "EmptyComment", "LineComment", "NewLine", 
+			"WhiteSpace", "DirectiveValue", "DirectiveAssign", "DirectiveComma", 
+			"DirectiveComment", "DirectiveLineComment", "DirectiveWhiteSpace", "Text", 
+			"EscapeSequence", "EmptyPlaceholder", "Interpolation", "VariablePlaceholder", 
+			"EndOfLine", "Variable", "FmtEndOfLine", "InCmtEndOfLine"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -387,7 +388,7 @@ public class MindcodeParser extends Parser {
 				setState(34);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 16642998272L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 33285996544L) != 0)) {
 					{
 					{
 					setState(31);
@@ -409,7 +410,7 @@ public class MindcodeParser extends Parser {
 				setState(41);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 16642998272L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 33285996544L) != 0)) {
 					{
 					{
 					setState(38);
@@ -847,7 +848,7 @@ public class MindcodeParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001#Q\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
+		"\u0004\u0001&Q\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
 		"\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002\u0005"+
 		"\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0001\u0000"+
 		"\u0003\u0000\u0012\b\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001"+
@@ -882,20 +883,20 @@ public class MindcodeParser extends Parser {
 		"\u0000\u0000.\u001d\u0001\u0000\u0000\u0000.\u001e\u0001\u0000\u0000\u0000"+
 		".%\u0001\u0000\u0000\u0000.-\u0001\u0000\u0000\u0000/\u0005\u0001\u0000"+
 		"\u0000\u000001\u0005\u000e\u0000\u000012\u0003\b\u0004\u00002\u0007\u0001"+
-		"\u0000\u0000\u000036\u0005\u0017\u0000\u000045\u0005\u0018\u0000\u0000"+
+		"\u0000\u0000\u000036\u0005\u0018\u0000\u000045\u0005\u0019\u0000\u0000"+
 		"57\u0003\n\u0005\u000064\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u0000"+
-		"7\t\u0001\u0000\u0000\u00008=\u0005\u0017\u0000\u00009:\u0005\u0019\u0000"+
-		"\u0000:<\u0005\u0017\u0000\u0000;9\u0001\u0000\u0000\u0000<?\u0001\u0000"+
+		"7\t\u0001\u0000\u0000\u00008=\u0005\u0018\u0000\u00009:\u0005\u001a\u0000"+
+		"\u0000:<\u0005\u0018\u0000\u0000;9\u0001\u0000\u0000\u0000<?\u0001\u0000"+
 		"\u0000\u0000=;\u0001\u0000\u0000\u0000=>\u0001\u0000\u0000\u0000>\u000b"+
-		"\u0001\u0000\u0000\u0000?=\u0001\u0000\u0000\u0000@H\u0005\u001d\u0000"+
-		"\u0000AH\u0005\u001e\u0000\u0000BC\u0005 \u0000\u0000CD\u0003\u0004\u0002"+
+		"\u0001\u0000\u0000\u0000?=\u0001\u0000\u0000\u0000@H\u0005\u001e\u0000"+
+		"\u0000AH\u0005\u001f\u0000\u0000BC\u0005!\u0000\u0000CD\u0003\u0004\u0002"+
 		"\u0000DE\u0005\u0010\u0000\u0000EH\u0001\u0000\u0000\u0000FH\u0003\u000e"+
 		"\u0007\u0000G@\u0001\u0000\u0000\u0000GA\u0001\u0000\u0000\u0000GB\u0001"+
 		"\u0000\u0000\u0000GF\u0001\u0000\u0000\u0000H\r\u0001\u0000\u0000\u0000"+
-		"IO\u0005\u001f\u0000\u0000JL\u0005!\u0000\u0000KM\u0005#\u0000\u0000L"+
-		"K\u0001\u0000\u0000\u0000LM\u0001\u0000\u0000\u0000MO\u0001\u0000\u0000"+
-		"\u0000NI\u0001\u0000\u0000\u0000NJ\u0001\u0000\u0000\u0000O\u000f\u0001"+
-		"\u0000\u0000\u0000\n\u0011\u001a\").6=GLN";
+		"IO\u0005 \u0000\u0000JL\u0005\"\u0000\u0000KM\u0005$\u0000\u0000LK\u0001"+
+		"\u0000\u0000\u0000LM\u0001\u0000\u0000\u0000MO\u0001\u0000\u0000\u0000"+
+		"NI\u0001\u0000\u0000\u0000NJ\u0001\u0000\u0000\u0000O\u000f\u0001\u0000"+
+		"\u0000\u0000\n\u0011\u001a\").6=GLN";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

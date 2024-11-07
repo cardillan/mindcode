@@ -24,7 +24,7 @@
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
         <PerGrammarGenerationSettings>
-          <option name="fileName" value="$PROJECT_DIR$/compiler/src/main/java/info/teksol/mindcode/v3/grammar/MindcodeLexer.g4" />
+          <option name="fileName" value="$PROJECT_DIR$/compiler/src/main/java/info/teksol/mindcode/v3/compiler/antlr/MindcodeParser.g4" />
           <option name="outputDir" value="" />
           <option name="libDir" value="" />
           <option name="encoding" value="utf-8" />
@@ -33,7 +33,7 @@
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
         <PerGrammarGenerationSettings>
-          <option name="fileName" value="$PROJECT_DIR$/compiler/src/main/java/info/teksol/mindcode/v3/grammar/MindcodeParser.g4" />
+          <option name="fileName" value="$PROJECT_DIR$/compiler/src/main/java/info/teksol/mindcode/v3/compiler/antlr/MindcodeLexer.g4" />
           <option name="outputDir" value="" />
           <option name="libDir" value="" />
           <option name="encoding" value="utf-8" />
