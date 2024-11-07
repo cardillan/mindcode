@@ -84,8 +84,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstMindcodeNode visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) {
-        String text = ctx.StringLiteral().getText();
-        return new AstLiteralString(pos(ctx.StringLiteral()), text.substring(1, text.length() - 1));
+        String text = ctx.String().getText();
+        return new AstLiteralString(pos(ctx.String()), text.substring(1, text.length() - 1));
     }
     //</editor-fold>
 

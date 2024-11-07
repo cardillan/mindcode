@@ -52,6 +52,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code expMindustryIdentifier}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expMindustryIdentifier}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code expEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -87,6 +99,54 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expBinaryLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expBinaryLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expHexadecimalLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expHexadecimalLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expDecimalLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expDecimalLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expFLoatLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expFLoatLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

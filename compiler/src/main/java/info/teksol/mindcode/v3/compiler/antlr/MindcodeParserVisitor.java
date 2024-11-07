@@ -37,6 +37,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code expMindustryIdentifier}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code expEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -57,6 +64,34 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expBinaryLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expHexadecimalLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expDecimalLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expFLoatLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

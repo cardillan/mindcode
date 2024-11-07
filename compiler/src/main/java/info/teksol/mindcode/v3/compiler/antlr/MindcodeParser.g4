@@ -14,9 +14,14 @@ expressionList
 expression
     : directive                                                             # expDirective
     | Identifier                                                            # expIdentifier
+    | MindustryIdentifier                                                   # expMindustryIdentifier
     | EnhancedComment formattableContents*                                  # expEnhancedComment
     | FormattableLiteral formattableContents* DoubleQuote                   # expFormattableLiteral
-    | StringLiteral                                                         # expStringLiteral
+    | String                                                                # expStringLiteral
+    | Binary                                                                # expBinaryLiteral
+    | Hexadecimal                                                           # expHexadecimalLiteral
+    | Decimal                                                               # expDecimalLiteral
+    | Float                                                                 # expFLoatLiteral
     ;
 
 directive

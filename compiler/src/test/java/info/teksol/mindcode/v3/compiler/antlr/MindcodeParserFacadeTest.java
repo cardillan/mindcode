@@ -149,6 +149,15 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
                             /// "Quotes"
                             """);
         }
+
+        @Test
+        void refusesEnhancedCommentWithDoubleQuotesAfterPlaceholder() {
+            assertGeneratesMessages(
+                    expectedMessages().add("Parse error: token recognition error at: '\"'").repeat(2),
+                    """
+                            /// $foo" foo$" foo
+                            """);
+        }
     }
 
 }

@@ -21,14 +21,14 @@ public class MindcodeParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Identifier=1, StringLiteral=2, Assign=3, Comma=4, Dot=5, DoubleDot=6, 
-		TripleDot=7, DoubleQuote=8, Semicolon=9, Binary=10, Hexadecimal=11, Decimal=12, 
-		Float=13, HashSet=14, FormattableLiteral=15, RBrace=16, CommentedComment=17, 
-		EnhancedComment=18, Comment=19, EmptyComment=20, LineComment=21, NewLine=22, 
-		WhiteSpace=23, DirectiveValue=24, DirectiveAssign=25, DirectiveComma=26, 
-		DirectiveComment=27, DirectiveLineComment=28, DirectiveWhiteSpace=29, 
-		Text=30, EscapeSequence=31, EmptyPlaceholder=32, Interpolation=33, VariablePlaceholder=34, 
-		EndOfLine=35, Variable=36, FmtEndOfLine=37, InCmtEndOfLine=38;
+		Assign=1, At=2, Comma=3, Dot=4, DoubleDot=5, TripleDot=6, DoubleQuote=7, 
+		Semicolon=8, Identifier=9, MindustryIdentifier=10, String=11, Binary=12, 
+		Hexadecimal=13, Decimal=14, Float=15, HashSet=16, FormattableLiteral=17, 
+		RBrace=18, CommentedComment=19, EnhancedComment=20, Comment=21, EmptyComment=22, 
+		LineComment=23, NewLine=24, WhiteSpace=25, DirectiveValue=26, DirectiveAssign=27, 
+		DirectiveComma=28, DirectiveComment=29, DirectiveLineComment=30, DirectiveWhiteSpace=31, 
+		Text=32, EscapeSequence=33, EmptyPlaceholder=34, Interpolation=35, VariablePlaceholder=36, 
+		EndOfLine=37, Variable=38, FmtEndOfLine=39, InCmtEndOfLine=40;
 	public static final int
 		RULE_program = 0, RULE_expressionList = 1, RULE_expression = 2, RULE_directive = 3, 
 		RULE_directiveDeclaration = 4, RULE_directiveValues = 5, RULE_formattableContents = 6, 
@@ -43,20 +43,20 @@ public class MindcodeParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, null, null, "'.'", "'..'", "'...'", "'\"'", null, null, 
-			null, null, null, "'#set'", null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, "'${'", 
-			"'$'"
+			null, null, "'@'", null, "'.'", "'..'", "'...'", "'\"'", null, null, 
+			null, null, null, null, null, null, "'#set'", null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, "'${'", "'$'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "Identifier", "StringLiteral", "Assign", "Comma", "Dot", "DoubleDot", 
-			"TripleDot", "DoubleQuote", "Semicolon", "Binary", "Hexadecimal", "Decimal", 
-			"Float", "HashSet", "FormattableLiteral", "RBrace", "CommentedComment", 
-			"EnhancedComment", "Comment", "EmptyComment", "LineComment", "NewLine", 
-			"WhiteSpace", "DirectiveValue", "DirectiveAssign", "DirectiveComma", 
+			null, "Assign", "At", "Comma", "Dot", "DoubleDot", "TripleDot", "DoubleQuote", 
+			"Semicolon", "Identifier", "MindustryIdentifier", "String", "Binary", 
+			"Hexadecimal", "Decimal", "Float", "HashSet", "FormattableLiteral", "RBrace", 
+			"CommentedComment", "EnhancedComment", "Comment", "EmptyComment", "LineComment", 
+			"NewLine", "WhiteSpace", "DirectiveValue", "DirectiveAssign", "DirectiveComma", 
 			"DirectiveComment", "DirectiveLineComment", "DirectiveWhiteSpace", "Text", 
 			"EscapeSequence", "EmptyPlaceholder", "Interpolation", "VariablePlaceholder", 
 			"EndOfLine", "Variable", "FmtEndOfLine", "InCmtEndOfLine"
@@ -148,7 +148,7 @@ public class MindcodeParser extends Parser {
 			setState(17);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 311302L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1310208L) != 0)) {
 				{
 				setState(16);
 				expressionList();
@@ -223,7 +223,7 @@ public class MindcodeParser extends Parser {
 				setState(26); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 311302L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1310208L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -247,6 +247,42 @@ public class MindcodeParser extends Parser {
 		public ExpressionContext() { }
 		public void copyFrom(ExpressionContext ctx) {
 			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpMindustryIdentifierContext extends ExpressionContext {
+		public TerminalNode MindustryIdentifier() { return getToken(MindcodeParser.MindustryIdentifier, 0); }
+		public ExpMindustryIdentifierContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpMindustryIdentifier(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpMindustryIdentifier(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpMindustryIdentifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpDecimalLiteralContext extends ExpressionContext {
+		public TerminalNode Decimal() { return getToken(MindcodeParser.Decimal, 0); }
+		public ExpDecimalLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpDecimalLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpDecimalLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpDecimalLiteral(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -300,7 +336,7 @@ public class MindcodeParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExpStringLiteralContext extends ExpressionContext {
-		public TerminalNode StringLiteral() { return getToken(MindcodeParser.StringLiteral, 0); }
+		public TerminalNode String() { return getToken(MindcodeParser.String, 0); }
 		public ExpStringLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -335,6 +371,60 @@ public class MindcodeParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class ExpFLoatLiteralContext extends ExpressionContext {
+		public TerminalNode Float() { return getToken(MindcodeParser.Float, 0); }
+		public ExpFLoatLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpFLoatLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpFLoatLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpFLoatLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpBinaryLiteralContext extends ExpressionContext {
+		public TerminalNode Binary() { return getToken(MindcodeParser.Binary, 0); }
+		public ExpBinaryLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpBinaryLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpBinaryLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpBinaryLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpHexadecimalLiteralContext extends ExpressionContext {
+		public TerminalNode Hexadecimal() { return getToken(MindcodeParser.Hexadecimal, 0); }
+		public ExpHexadecimalLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpHexadecimalLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpHexadecimalLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpHexadecimalLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class ExpDirectiveContext extends ExpressionContext {
 		public DirectiveContext directive() {
 			return getRuleContext(DirectiveContext.class,0);
@@ -360,7 +450,7 @@ public class MindcodeParser extends Parser {
 		enterRule(_localctx, 4, RULE_expression);
 		int _la;
 		try {
-			setState(46);
+			setState(51);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case HashSet:
@@ -379,23 +469,31 @@ public class MindcodeParser extends Parser {
 				match(Identifier);
 				}
 				break;
-			case EnhancedComment:
-				_localctx = new ExpEnhancedCommentContext(_localctx);
+			case MindustryIdentifier:
+				_localctx = new ExpMindustryIdentifierContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(30);
+				match(MindustryIdentifier);
+				}
+				break;
+			case EnhancedComment:
+				_localctx = new ExpEnhancedCommentContext(_localctx);
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(31);
 				match(EnhancedComment);
-				setState(34);
+				setState(35);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 33285996544L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 133143986176L) != 0)) {
 					{
 					{
-					setState(31);
+					setState(32);
 					formattableContents();
 					}
 					}
-					setState(36);
+					setState(37);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
@@ -403,34 +501,66 @@ public class MindcodeParser extends Parser {
 				break;
 			case FormattableLiteral:
 				_localctx = new ExpFormattableLiteralContext(_localctx);
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(37);
+				setState(38);
 				match(FormattableLiteral);
-				setState(41);
+				setState(42);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 33285996544L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 133143986176L) != 0)) {
 					{
 					{
-					setState(38);
+					setState(39);
 					formattableContents();
 					}
 					}
-					setState(43);
+					setState(44);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(44);
+				setState(45);
 				match(DoubleQuote);
 				}
 				break;
-			case StringLiteral:
+			case String:
 				_localctx = new ExpStringLiteralContext(_localctx);
-				enterOuterAlt(_localctx, 5);
+				enterOuterAlt(_localctx, 6);
 				{
-				setState(45);
-				match(StringLiteral);
+				setState(46);
+				match(String);
+				}
+				break;
+			case Binary:
+				_localctx = new ExpBinaryLiteralContext(_localctx);
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(47);
+				match(Binary);
+				}
+				break;
+			case Hexadecimal:
+				_localctx = new ExpHexadecimalLiteralContext(_localctx);
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(48);
+				match(Hexadecimal);
+				}
+				break;
+			case Decimal:
+				_localctx = new ExpDecimalLiteralContext(_localctx);
+				enterOuterAlt(_localctx, 9);
+				{
+				setState(49);
+				match(Decimal);
+				}
+				break;
+			case Float:
+				_localctx = new ExpFLoatLiteralContext(_localctx);
+				enterOuterAlt(_localctx, 10);
+				{
+				setState(50);
+				match(Float);
 				}
 				break;
 			default:
@@ -479,9 +609,9 @@ public class MindcodeParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(53);
 			match(HashSet);
-			setState(49);
+			setState(54);
 			directiveDeclaration();
 			}
 		}
@@ -531,16 +661,16 @@ public class MindcodeParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(51);
+			setState(56);
 			((DirectiveDeclarationContext)_localctx).option = match(DirectiveValue);
-			setState(54);
+			setState(59);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DirectiveAssign) {
 				{
-				setState(52);
+				setState(57);
 				match(DirectiveAssign);
-				setState(53);
+				setState(58);
 				((DirectiveDeclarationContext)_localctx).value = directiveValues();
 				}
 			}
@@ -594,21 +724,21 @@ public class MindcodeParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56);
-			match(DirectiveValue);
 			setState(61);
+			match(DirectiveValue);
+			setState(66);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DirectiveComma) {
 				{
 				{
-				setState(57);
+				setState(62);
 				match(DirectiveComma);
-				setState(58);
+				setState(63);
 				match(DirectiveValue);
 				}
 				}
-				setState(63);
+				setState(68);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -720,14 +850,14 @@ public class MindcodeParser extends Parser {
 		FormattableContentsContext _localctx = new FormattableContentsContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_formattableContents);
 		try {
-			setState(71);
+			setState(76);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case Text:
 				_localctx = new FmtTextContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(64);
+				setState(69);
 				match(Text);
 				}
 				break;
@@ -735,7 +865,7 @@ public class MindcodeParser extends Parser {
 				_localctx = new FmtEscapedContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(65);
+				setState(70);
 				match(EscapeSequence);
 				}
 				break;
@@ -743,11 +873,11 @@ public class MindcodeParser extends Parser {
 				_localctx = new FmtInterpolationContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(66);
+				setState(71);
 				match(Interpolation);
-				setState(67);
+				setState(72);
 				expression();
-				setState(68);
+				setState(73);
 				match(RBrace);
 				}
 				break;
@@ -756,7 +886,7 @@ public class MindcodeParser extends Parser {
 				_localctx = new FmtPlaceholderContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(70);
+				setState(75);
 				formattablePlaceholder();
 				}
 				break;
@@ -831,14 +961,14 @@ public class MindcodeParser extends Parser {
 		enterRule(_localctx, 14, RULE_formattablePlaceholder);
 		int _la;
 		try {
-			setState(78);
+			setState(83);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case EmptyPlaceholder:
 				_localctx = new FmtPlaceholderEmptyContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(73);
+				setState(78);
 				match(EmptyPlaceholder);
 				}
 				break;
@@ -846,14 +976,14 @@ public class MindcodeParser extends Parser {
 				_localctx = new FmtPlaceholderVariableContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(74);
+				setState(79);
 				match(VariablePlaceholder);
-				setState(76);
+				setState(81);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==Variable) {
 					{
-					setState(75);
+					setState(80);
 					((FmtPlaceholderVariableContext)_localctx).id = match(Variable);
 					}
 				}
@@ -876,55 +1006,60 @@ public class MindcodeParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001&Q\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
+		"\u0004\u0001(V\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
 		"\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002\u0005"+
 		"\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0001\u0000"+
 		"\u0003\u0000\u0012\b\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0004\u0001\u0019\b\u0001\u000b\u0001\f\u0001\u001a\u0001"+
-		"\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005\u0002!\b\u0002\n\u0002"+
-		"\f\u0002$\t\u0002\u0001\u0002\u0001\u0002\u0005\u0002(\b\u0002\n\u0002"+
-		"\f\u0002+\t\u0002\u0001\u0002\u0001\u0002\u0003\u0002/\b\u0002\u0001\u0003"+
-		"\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0003\u0004"+
-		"7\b\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0005\u0005<\b\u0005\n\u0005"+
-		"\f\u0005?\t\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
-		"\u0006\u0001\u0006\u0001\u0006\u0003\u0006H\b\u0006\u0001\u0007\u0001"+
-		"\u0007\u0001\u0007\u0003\u0007M\b\u0007\u0003\u0007O\b\u0007\u0001\u0007"+
-		"\u0000\u0000\b\u0000\u0002\u0004\u0006\b\n\f\u000e\u0000\u0000W\u0000"+
+		"\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0005\u0002\"\b"+
+		"\u0002\n\u0002\f\u0002%\t\u0002\u0001\u0002\u0001\u0002\u0005\u0002)\b"+
+		"\u0002\n\u0002\f\u0002,\t\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0003\u00024\b\u0002\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0003\u0004<\b"+
+		"\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0005\u0005A\b\u0005\n\u0005"+
+		"\f\u0005D\t\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
+		"\u0006\u0001\u0006\u0001\u0006\u0003\u0006M\b\u0006\u0001\u0007\u0001"+
+		"\u0007\u0001\u0007\u0003\u0007R\b\u0007\u0003\u0007T\b\u0007\u0001\u0007"+
+		"\u0000\u0000\b\u0000\u0002\u0004\u0006\b\n\f\u000e\u0000\u0000a\u0000"+
 		"\u0011\u0001\u0000\u0000\u0000\u0002\u0018\u0001\u0000\u0000\u0000\u0004"+
-		".\u0001\u0000\u0000\u0000\u00060\u0001\u0000\u0000\u0000\b3\u0001\u0000"+
-		"\u0000\u0000\n8\u0001\u0000\u0000\u0000\fG\u0001\u0000\u0000\u0000\u000e"+
-		"N\u0001\u0000\u0000\u0000\u0010\u0012\u0003\u0002\u0001\u0000\u0011\u0010"+
+		"3\u0001\u0000\u0000\u0000\u00065\u0001\u0000\u0000\u0000\b8\u0001\u0000"+
+		"\u0000\u0000\n=\u0001\u0000\u0000\u0000\fL\u0001\u0000\u0000\u0000\u000e"+
+		"S\u0001\u0000\u0000\u0000\u0010\u0012\u0003\u0002\u0001\u0000\u0011\u0010"+
 		"\u0001\u0000\u0000\u0000\u0011\u0012\u0001\u0000\u0000\u0000\u0012\u0013"+
 		"\u0001\u0000\u0000\u0000\u0013\u0014\u0005\u0000\u0000\u0001\u0014\u0001"+
 		"\u0001\u0000\u0000\u0000\u0015\u0016\u0003\u0004\u0002\u0000\u0016\u0017"+
-		"\u0005\t\u0000\u0000\u0017\u0019\u0001\u0000\u0000\u0000\u0018\u0015\u0001"+
+		"\u0005\b\u0000\u0000\u0017\u0019\u0001\u0000\u0000\u0000\u0018\u0015\u0001"+
 		"\u0000\u0000\u0000\u0019\u001a\u0001\u0000\u0000\u0000\u001a\u0018\u0001"+
 		"\u0000\u0000\u0000\u001a\u001b\u0001\u0000\u0000\u0000\u001b\u0003\u0001"+
-		"\u0000\u0000\u0000\u001c/\u0003\u0006\u0003\u0000\u001d/\u0005\u0001\u0000"+
-		"\u0000\u001e\"\u0005\u0012\u0000\u0000\u001f!\u0003\f\u0006\u0000 \u001f"+
-		"\u0001\u0000\u0000\u0000!$\u0001\u0000\u0000\u0000\" \u0001\u0000\u0000"+
-		"\u0000\"#\u0001\u0000\u0000\u0000#/\u0001\u0000\u0000\u0000$\"\u0001\u0000"+
-		"\u0000\u0000%)\u0005\u000f\u0000\u0000&(\u0003\f\u0006\u0000\'&\u0001"+
-		"\u0000\u0000\u0000(+\u0001\u0000\u0000\u0000)\'\u0001\u0000\u0000\u0000"+
-		")*\u0001\u0000\u0000\u0000*,\u0001\u0000\u0000\u0000+)\u0001\u0000\u0000"+
-		"\u0000,/\u0005\b\u0000\u0000-/\u0005\u0002\u0000\u0000.\u001c\u0001\u0000"+
-		"\u0000\u0000.\u001d\u0001\u0000\u0000\u0000.\u001e\u0001\u0000\u0000\u0000"+
-		".%\u0001\u0000\u0000\u0000.-\u0001\u0000\u0000\u0000/\u0005\u0001\u0000"+
-		"\u0000\u000001\u0005\u000e\u0000\u000012\u0003\b\u0004\u00002\u0007\u0001"+
-		"\u0000\u0000\u000036\u0005\u0018\u0000\u000045\u0005\u0019\u0000\u0000"+
-		"57\u0003\n\u0005\u000064\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u0000"+
-		"7\t\u0001\u0000\u0000\u00008=\u0005\u0018\u0000\u00009:\u0005\u001a\u0000"+
-		"\u0000:<\u0005\u0018\u0000\u0000;9\u0001\u0000\u0000\u0000<?\u0001\u0000"+
-		"\u0000\u0000=;\u0001\u0000\u0000\u0000=>\u0001\u0000\u0000\u0000>\u000b"+
-		"\u0001\u0000\u0000\u0000?=\u0001\u0000\u0000\u0000@H\u0005\u001e\u0000"+
-		"\u0000AH\u0005\u001f\u0000\u0000BC\u0005!\u0000\u0000CD\u0003\u0004\u0002"+
-		"\u0000DE\u0005\u0010\u0000\u0000EH\u0001\u0000\u0000\u0000FH\u0003\u000e"+
-		"\u0007\u0000G@\u0001\u0000\u0000\u0000GA\u0001\u0000\u0000\u0000GB\u0001"+
-		"\u0000\u0000\u0000GF\u0001\u0000\u0000\u0000H\r\u0001\u0000\u0000\u0000"+
-		"IO\u0005 \u0000\u0000JL\u0005\"\u0000\u0000KM\u0005$\u0000\u0000LK\u0001"+
-		"\u0000\u0000\u0000LM\u0001\u0000\u0000\u0000MO\u0001\u0000\u0000\u0000"+
-		"NI\u0001\u0000\u0000\u0000NJ\u0001\u0000\u0000\u0000O\u000f\u0001\u0000"+
-		"\u0000\u0000\n\u0011\u001a\").6=GLN";
+		"\u0000\u0000\u0000\u001c4\u0003\u0006\u0003\u0000\u001d4\u0005\t\u0000"+
+		"\u0000\u001e4\u0005\n\u0000\u0000\u001f#\u0005\u0014\u0000\u0000 \"\u0003"+
+		"\f\u0006\u0000! \u0001\u0000\u0000\u0000\"%\u0001\u0000\u0000\u0000#!"+
+		"\u0001\u0000\u0000\u0000#$\u0001\u0000\u0000\u0000$4\u0001\u0000\u0000"+
+		"\u0000%#\u0001\u0000\u0000\u0000&*\u0005\u0011\u0000\u0000\')\u0003\f"+
+		"\u0006\u0000(\'\u0001\u0000\u0000\u0000),\u0001\u0000\u0000\u0000*(\u0001"+
+		"\u0000\u0000\u0000*+\u0001\u0000\u0000\u0000+-\u0001\u0000\u0000\u0000"+
+		",*\u0001\u0000\u0000\u0000-4\u0005\u0007\u0000\u0000.4\u0005\u000b\u0000"+
+		"\u0000/4\u0005\f\u0000\u000004\u0005\r\u0000\u000014\u0005\u000e\u0000"+
+		"\u000024\u0005\u000f\u0000\u00003\u001c\u0001\u0000\u0000\u00003\u001d"+
+		"\u0001\u0000\u0000\u00003\u001e\u0001\u0000\u0000\u00003\u001f\u0001\u0000"+
+		"\u0000\u00003&\u0001\u0000\u0000\u00003.\u0001\u0000\u0000\u00003/\u0001"+
+		"\u0000\u0000\u000030\u0001\u0000\u0000\u000031\u0001\u0000\u0000\u0000"+
+		"32\u0001\u0000\u0000\u00004\u0005\u0001\u0000\u0000\u000056\u0005\u0010"+
+		"\u0000\u000067\u0003\b\u0004\u00007\u0007\u0001\u0000\u0000\u00008;\u0005"+
+		"\u001a\u0000\u00009:\u0005\u001b\u0000\u0000:<\u0003\n\u0005\u0000;9\u0001"+
+		"\u0000\u0000\u0000;<\u0001\u0000\u0000\u0000<\t\u0001\u0000\u0000\u0000"+
+		"=B\u0005\u001a\u0000\u0000>?\u0005\u001c\u0000\u0000?A\u0005\u001a\u0000"+
+		"\u0000@>\u0001\u0000\u0000\u0000AD\u0001\u0000\u0000\u0000B@\u0001\u0000"+
+		"\u0000\u0000BC\u0001\u0000\u0000\u0000C\u000b\u0001\u0000\u0000\u0000"+
+		"DB\u0001\u0000\u0000\u0000EM\u0005 \u0000\u0000FM\u0005!\u0000\u0000G"+
+		"H\u0005#\u0000\u0000HI\u0003\u0004\u0002\u0000IJ\u0005\u0012\u0000\u0000"+
+		"JM\u0001\u0000\u0000\u0000KM\u0003\u000e\u0007\u0000LE\u0001\u0000\u0000"+
+		"\u0000LF\u0001\u0000\u0000\u0000LG\u0001\u0000\u0000\u0000LK\u0001\u0000"+
+		"\u0000\u0000M\r\u0001\u0000\u0000\u0000NT\u0005\"\u0000\u0000OQ\u0005"+
+		"$\u0000\u0000PR\u0005&\u0000\u0000QP\u0001\u0000\u0000\u0000QR\u0001\u0000"+
+		"\u0000\u0000RT\u0001\u0000\u0000\u0000SN\u0001\u0000\u0000\u0000SO\u0001"+
+		"\u0000\u0000\u0000T\u000f\u0001\u0000\u0000\u0000\n\u0011\u001a#*3;BL"+
+		"QS";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

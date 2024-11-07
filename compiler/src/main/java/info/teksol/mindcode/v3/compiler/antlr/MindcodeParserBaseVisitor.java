@@ -46,6 +46,13 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -61,6 +68,34 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

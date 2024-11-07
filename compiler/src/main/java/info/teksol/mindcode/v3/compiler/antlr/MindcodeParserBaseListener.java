@@ -65,6 +65,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -96,6 +108,54 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
