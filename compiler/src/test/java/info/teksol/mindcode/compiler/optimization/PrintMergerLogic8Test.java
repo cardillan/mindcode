@@ -1,13 +1,11 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 class PrintMergerLogic8Test extends AbstractOptimizerTest<PrintMerger> {
 
     @Override

@@ -4,7 +4,6 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.logic.*;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // This class tests the initialization logic of the BaseFunctionMapper
 // Actual mapping of functions to correct instructions is covered by other tests
-@Order(99)
 public class BaseFunctionMapperTest {
 
     private static void createFunctionMapper(List<OpcodeVariant> opcodeVariants) {

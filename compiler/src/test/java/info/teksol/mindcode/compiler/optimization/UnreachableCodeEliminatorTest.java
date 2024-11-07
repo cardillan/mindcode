@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.util.ExpectedMessages;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.List;
 import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCodeEliminator> {
 
     @Override

@@ -5,12 +5,10 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(99)
 public class CallGraphCreatorTest extends AbstractGeneratorTest {
     private static final InputPosition POS = InputPosition.EMPTY;
 

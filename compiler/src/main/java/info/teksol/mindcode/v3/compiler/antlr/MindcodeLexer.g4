@@ -72,7 +72,7 @@ DirectiveWhiteSpace     : [ \t\r\n]+    -> skip;
 mode InFormattable;
 
 Text                    : ~[\r\n\\$"]+ ;
-EscapeSequence          : '\\' ~[\r\n\\$"] ;
+EscapeSequence          : '\\' ~[\r\n"] ;
 EmptyPlaceholder        : '${'   ' '*  '}' ;
 Interpolation           : '${' -> pushMode(DEFAULT_MODE) ;
 VariablePlaceholder     : '$'  -> pushMode(InFmtIdentifier);
@@ -84,7 +84,7 @@ mode InComment;
 // Map Enhanced comment lexer tokens to Formattable lexer tokens
 // Refuse double quotes
 CommentText             : ~[\r\n\\$"]+      -> type(Text);
-CommentEscapeSequence   : '\\' ~[\r\n\\$"]  -> type(EscapeSequence);
+CommentEscapeSequence   : '\\' ~[\r\n"]     -> type(EscapeSequence);
 CommentEmptyPlaceholder : '${'   ' '*  '}'  -> type(EmptyPlaceholder);
 CommentInterpolation    : '${'              -> type(Interpolation), pushMode(DEFAULT_MODE);
 CommentVariablePHolder  : '$'               -> type(VariablePlaceholder), pushMode(InCommentIdentifier);

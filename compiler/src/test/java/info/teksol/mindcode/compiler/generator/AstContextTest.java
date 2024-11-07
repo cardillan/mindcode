@@ -6,14 +6,12 @@ import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(99)
 class AstContextTest {
     private final CompilerProfile profile = CompilerProfile.standardOptimizations(false);
     private final AstContext root = AstContext.createRootNode(profile);

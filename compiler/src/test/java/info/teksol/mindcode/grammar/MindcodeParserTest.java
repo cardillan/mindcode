@@ -2,14 +2,12 @@ package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.util.ExpectedMessages;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(99)
 class MindcodeParserTest extends AbstractParserTest {
 
     @Test

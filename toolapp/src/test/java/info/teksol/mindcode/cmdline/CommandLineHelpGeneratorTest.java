@@ -3,7 +3,6 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,7 +15,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Order(99)
 public class CommandLineHelpGeneratorTest {
     private static final String PREFIX = "#generate:";
     private static final String SOURCE_FILE = "src/test/resources/templates/TOOLS-CMDLINE_template.markdown";

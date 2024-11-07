@@ -4,7 +4,6 @@ import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.CollectionUtils;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -14,7 +13,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(99)
 class MindcodeCompilerTest {
 
     MindcodeCompiler compiler = new MindcodeCompiler(

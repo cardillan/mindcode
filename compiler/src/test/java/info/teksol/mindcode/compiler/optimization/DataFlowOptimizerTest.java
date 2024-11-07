@@ -5,7 +5,6 @@ import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.util.ExpectedMessages;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Order(99)
 class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Override

@@ -777,25 +777,51 @@ public class MindcodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FormattablePlaceholderContext extends ParserRuleContext {
-		public Token id;
-		public TerminalNode EmptyPlaceholder() { return getToken(MindcodeParser.EmptyPlaceholder, 0); }
-		public TerminalNode VariablePlaceholder() { return getToken(MindcodeParser.VariablePlaceholder, 0); }
-		public TerminalNode Variable() { return getToken(MindcodeParser.Variable, 0); }
 		public FormattablePlaceholderContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_formattablePlaceholder; }
+	 
+		public FormattablePlaceholderContext() { }
+		public void copyFrom(FormattablePlaceholderContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FmtPlaceholderVariableContext extends FormattablePlaceholderContext {
+		public Token id;
+		public TerminalNode VariablePlaceholder() { return getToken(MindcodeParser.VariablePlaceholder, 0); }
+		public TerminalNode Variable() { return getToken(MindcodeParser.Variable, 0); }
+		public FmtPlaceholderVariableContext(FormattablePlaceholderContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterFormattablePlaceholder(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterFmtPlaceholderVariable(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitFormattablePlaceholder(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitFmtPlaceholderVariable(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitFormattablePlaceholder(this);
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitFmtPlaceholderVariable(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FmtPlaceholderEmptyContext extends FormattablePlaceholderContext {
+		public TerminalNode EmptyPlaceholder() { return getToken(MindcodeParser.EmptyPlaceholder, 0); }
+		public FmtPlaceholderEmptyContext(FormattablePlaceholderContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterFmtPlaceholderEmpty(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitFmtPlaceholderEmpty(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitFmtPlaceholderEmpty(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -809,6 +835,7 @@ public class MindcodeParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case EmptyPlaceholder:
+				_localctx = new FmtPlaceholderEmptyContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(73);
@@ -816,6 +843,7 @@ public class MindcodeParser extends Parser {
 				}
 				break;
 			case VariablePlaceholder:
+				_localctx = new FmtPlaceholderVariableContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(74);
@@ -826,7 +854,7 @@ public class MindcodeParser extends Parser {
 				if (_la==Variable) {
 					{
 					setState(75);
-					((FormattablePlaceholderContext)_localctx).id = match(Variable);
+					((FmtPlaceholderVariableContext)_localctx).id = match(Variable);
 					}
 				}
 

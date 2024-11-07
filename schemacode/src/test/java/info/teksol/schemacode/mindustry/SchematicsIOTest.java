@@ -2,7 +2,6 @@ package info.teksol.schemacode.mindustry;
 
 import info.teksol.schemacode.schematics.Schematic;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
@@ -14,7 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(99)
 class SchematicsIOTest {
 
     @Test

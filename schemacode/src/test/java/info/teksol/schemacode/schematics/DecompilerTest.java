@@ -1,12 +1,10 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.schemacode.AbstractSchematicsTest;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Order(99)
 class DecompilerTest extends AbstractSchematicsTest {
 
     private String recompile(String definition, boolean relativePositions, boolean relativeConnections, boolean relativeLinks) {

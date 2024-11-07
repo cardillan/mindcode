@@ -8,7 +8,6 @@ import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.logic.TypedArgument;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.util.UnexpectedMessageException;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.stream.IntStream;
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Order(99)
 public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
 
     @Test

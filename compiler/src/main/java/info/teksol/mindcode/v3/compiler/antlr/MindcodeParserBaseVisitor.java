@@ -116,5 +116,12 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFormattablePlaceholder(MindcodeParser.FormattablePlaceholderContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) { return visitChildren(ctx); }
 }

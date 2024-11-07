@@ -1,6 +1,5 @@
 package info.teksol.mindcode.v3.compiler.antlr;
 
-import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +9,8 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
     class BasicStructure {
         @Test
         void refusesMissingSemicolon() {
-            assertParses(
-                    ExpectedMessages.create()
+            assertGeneratesMessages(
+                    expectedMessages()
                             .add(3, 1, "Parse error: missing Semicolon at 'id'")
                             .add(5, 1, "Parse error: missing Semicolon at '<EOF>'"),
                     """
@@ -70,6 +69,13 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
         }
 
         @Test
+        void parsesFormattableWithEscape() {
+            assertParses("""
+                    $"foo\\$bar";
+                    """);
+        }
+
+        @Test
         void parsesMultilineFormattable() {
             assertParses("""
                     $"Formattable with ${
@@ -94,8 +100,8 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
 
         @Test
         void refusesNestedFormattables() {
-            assertParses(
-                    ExpectedMessages.create()
+            assertGeneratesMessages(
+                    expectedMessages()
                             .add("Parse error: token recognition error at: '$'"),
                     """
                     $"Formattable with ${
@@ -116,8 +122,8 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
 
         @Test
         void refusesEnhancedCommentWithMultilineInterpolation() {
-            assertParses(
-                    ExpectedMessages.create()
+            assertGeneratesMessages(
+                    expectedMessages()
                             .add(1, 40, "Parse error: token recognition error at: '\\n'"),
                     """
                             /// This is a comment with multiline ${
@@ -127,8 +133,8 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
 
         @Test
         void refusesNestedEnhancedComments() {
-            assertParses(
-                    ExpectedMessages.create()
+            assertGeneratesMessages(
+                    expectedMessages()
                             .add(1, 15, "Parse error: token recognition error at: '/// '"),
                     """
                             /// Nested ${ /// interpolation }
@@ -137,8 +143,8 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
 
         @Test
         void refusesEnhancedCommentWithDoubleQuotes() {
-            assertParses(
-                    ExpectedMessages.create().add("Parse error: token recognition error at: '\"'").repeat(2),
+            assertGeneratesMessages(
+                    expectedMessages().add("Parse error: token recognition error at: '\"'").repeat(2),
                     """
                             /// "Quotes"
                             """);

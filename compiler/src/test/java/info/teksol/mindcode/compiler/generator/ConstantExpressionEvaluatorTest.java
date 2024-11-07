@@ -4,12 +4,10 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.util.ExpectedMessages;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test

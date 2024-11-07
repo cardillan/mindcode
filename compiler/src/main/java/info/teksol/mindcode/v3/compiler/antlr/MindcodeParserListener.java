@@ -166,13 +166,27 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#formattablePlaceholder}.
+	 * Enter a parse tree produced by the {@code fmtPlaceholderEmpty}
+	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 */
-	void enterFormattablePlaceholder(MindcodeParser.FormattablePlaceholderContext ctx);
+	void enterFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#formattablePlaceholder}.
+	 * Exit a parse tree produced by the {@code fmtPlaceholderEmpty}
+	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 */
-	void exitFormattablePlaceholder(MindcodeParser.FormattablePlaceholderContext ctx);
+	void exitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code fmtPlaceholderVariable}
+	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
+	 * @param ctx the parse tree
+	 */
+	void enterFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code fmtPlaceholderVariable}
+	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
+	 * @param ctx the parse tree
+	 */
+	void exitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
 }

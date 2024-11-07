@@ -3,7 +3,6 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.Operation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.ADVANCED;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
 
     @Override

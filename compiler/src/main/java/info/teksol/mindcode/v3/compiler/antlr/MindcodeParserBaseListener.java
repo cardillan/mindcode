@@ -185,13 +185,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFormattablePlaceholder(MindcodeParser.FormattablePlaceholderContext ctx) { }
+	@Override public void enterFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFormattablePlaceholder(MindcodeParser.FormattablePlaceholderContext ctx) { }
+	@Override public void exitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

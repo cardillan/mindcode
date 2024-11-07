@@ -176,12 +176,12 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * Marks the message as ignored. The message may appear arbitrary number of times,
      * or it might not appear at all.
      * <p>
-     * Marking messages as ignored isn't optimal. Tests should always specify which messages
-     * may and which may not appear.
+     * Marking a message as ignored suppresses outputting detected matches to stdout.
      *
      * @return this instance
      */
     public ExpectedMessages ignored() {
+        matchers.get(matchers.size() - 1).setIgnored();
         return between(0, Integer.MAX_VALUE);
     }
 
@@ -267,6 +267,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         private int minimumCount = 1;
         private int maximumCount = 1;
         private int matchCount = 0;
+        private boolean ignored;
 
         private MatchCounter(MessageMatcher matcher) {
             this.matcher = matcher;
@@ -277,10 +278,16 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
             this.maximumCount = maximumCount;
         }
 
+        private void setIgnored() {
+            ignored = true;
+        }
+
         @Override
         public boolean matches(MindcodeMessage msg) {
             if (matchCount < maximumCount && matcher.matches(msg)) {
-                System.out.println("Matched message " + msg.formatMessage(ExpectedMessages::formatPosition));
+                if (!ignored) {
+                    System.out.println("Matched message " + msg.formatMessage(ExpectedMessages::formatPosition));
+                }
                 matchCount++;
                 return true;
             } else {

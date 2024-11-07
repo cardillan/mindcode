@@ -1,12 +1,10 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Order(99)
 public class AstIndentedPrinterTest extends AbstractAstTest {
 
     private String printLinearized(String program) {

@@ -39,6 +39,6 @@ formattableContents
     ;
 
 formattablePlaceholder
-    : EmptyPlaceholder
-    | VariablePlaceholder ( id=Variable )?
+    : EmptyPlaceholder                                                      # fmtPlaceholderEmpty
+    | VariablePlaceholder ( id=Variable )?                                  # fmtPlaceholderVariable
     ;

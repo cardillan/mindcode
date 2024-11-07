@@ -104,9 +104,17 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#formattablePlaceholder}.
+	 * Visit a parse tree produced by the {@code fmtPlaceholderEmpty}
+	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFormattablePlaceholder(MindcodeParser.FormattablePlaceholderContext ctx);
+	T visitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code fmtPlaceholderVariable}
+	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
 }

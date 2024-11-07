@@ -3,7 +3,6 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Order(99)
 class DiffDebugPrinterTest extends AbstractGeneratorTest {
     private final DiffDebugPrinter printer = new DiffDebugPrinter(1);
     private final List<String> messages = new ArrayList<>();

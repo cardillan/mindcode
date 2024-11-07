@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.logic.Condition;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -10,7 +9,6 @@ import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.ADVANCED;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
 
     @Override

@@ -2,14 +2,12 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
 
     @Override

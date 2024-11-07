@@ -4,7 +4,6 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.util.ExpectedMessages;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import static info.teksol.mindcode.logic.Opcode.*;
 // Original tests from LogicInstructionGeneratorTest class were moved here, although with the new function
 // generation mechanism and automatic inlining the generated code is vastly different now.
 // New tests suited to the new code generation were added.
-@Order(99)
 public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTest {
 
     @Test

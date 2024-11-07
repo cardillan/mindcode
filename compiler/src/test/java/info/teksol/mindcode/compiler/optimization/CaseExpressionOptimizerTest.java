@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +8,6 @@ import static info.teksol.mindcode.logic.Condition.EQUAL;
 import static info.teksol.mindcode.logic.Condition.NOT_EQUAL;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-@Order(99)
 class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOptimizer> {
 
     @Override
