@@ -1,11 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
+import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.v3.InputFiles;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -14,11 +15,11 @@ import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
-import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
 public class CompileMindcodeAction extends ActionHandler {
 
@@ -106,16 +107,19 @@ public class CompileMindcodeAction extends ActionHandler {
     @Override
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
+        File baseFile = arguments.get("input");
         List<File> inputs = new ArrayList<>();
-        inputs.add(arguments.get("input"));
+        inputs.add(baseFile);
         List<File> others = arguments.get("append");
         if (others != null) {
             inputs.addAll(others);
         }
 
-        List<InputFile> inputFiles = inputs.stream().map(f -> readFile(f, inputs.size() >1)).toList();
+        final Path basePath = isStdInOut(baseFile) ? Paths.get("") : baseFile.toPath().toAbsolutePath().normalize().getParent();
+        final InputFiles inputFiles = InputFiles.create(basePath);
+        inputs.forEach(file -> readFile(inputFiles, file));
 
-        final CompilerOutput<String> result = compile(inputFiles, compilerProfile);
+        final CompilerOutput<String> result = CompilerFacade.compile(inputFiles, compilerProfile);
 
         final File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
         final File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");

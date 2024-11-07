@@ -1,12 +1,12 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
+import info.teksol.mindcode.v3.InputFiles;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -115,7 +115,7 @@ public class LogicInstructionPrinter {
 
     public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         AtomicInteger lineNumber = new AtomicInteger(0);
-        final Map<InputFile, List<String>> allLines = new HashMap<>();
+        final Map<Integer, List<String>> allLines = new HashMap<>();
         int prevLine = -1;
 
         final StringBuilder buffer = new StringBuilder();
@@ -129,20 +129,21 @@ public class LogicInstructionPrinter {
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
 
             AstContext astContext = instruction.getAstContext();
-            if (astContext.node() != null && astContext.node().inputPosition() != null) {
-                InputFile file = astContext.node().inputPosition().inputFile();
+            if (astContext.node() != null && astContext.node().inputPosition() != null && !astContext.node().inputPosition().isEmpty()) {
+                InputFiles.InputFile inputFile = astContext.node().inputPosition().inputFile();
                 String srcLine = "** Corresponding source code line not found! **";
-                List<String> lines = allLines.get(file);
+                List<String> lines = allLines.get(inputFile.getId());
                 if (lines == null) {
-                    lines = file.code().lines().toList();
-                    allLines.put(file, lines);
+                    lines = inputFile.getCode().lines().toList();
+                    allLines.put(inputFile.getId(), lines);
                 }
 
                 int line = astContext.node().inputPosition().line() - 1;
                 if (line == prevLine) {
                     srcLine = "...";
                 } else if (line >= 0 && line < lines.size()) {
-                    srcLine = (file.fileName().isEmpty() ? "" : file.fileName() + ": ") + lines.get(line).trim();
+                    String strPath = inputFile.getDistinctPath().toString();
+                    srcLine = (strPath.isEmpty() ? "" : strPath + ": ") + lines.get(line).trim();
                     prevLine = line;
                 }
 

@@ -1,7 +1,7 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.io.IOException;
@@ -20,7 +20,9 @@ public record AstProgramSnippetFile(InputPosition inputPosition, AstText fileNam
         if (builder.externalFilesAllowed()) {
             Path path = builder.getBasePath().resolve(fileName.getText(builder));
             try {
-                return Files.readString(path);
+                String source = Files.readString(path);
+                builder.getInputFiles().registerFile(path, source);
+                return source;
             } catch (IOException ex) {
                 builder.error(this, "Error reading file '%s'.", path.toString());
                 return "";
@@ -35,9 +37,8 @@ public record AstProgramSnippetFile(InputPosition inputPosition, AstText fileNam
     public InputPosition getInputPosition(SchematicsBuilder builder) {
         if (builder.externalFilesAllowed()) {
             Path path = builder.getBasePath().resolve(fileName.getText(builder));
-            return new InputPosition(
-                    new InputFile(path.getFileName().toString(), path.toAbsolutePath().toString(), ""),
-                    1, 1);
+            InputFiles.InputFile inputFile = builder.getInputFiles().getInputFile(path);
+            return new InputPosition(inputFile, 1, 1);
         } else {
             builder.error("Loading code from external file not supported in web application.");
             return InputPosition.EMPTY;

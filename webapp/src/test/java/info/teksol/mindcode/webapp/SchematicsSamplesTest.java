@@ -1,9 +1,9 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -39,8 +39,9 @@ class SchematicsSamplesTest {
     }
 
     private void buildSchematic(String sample, File file) {
-        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(InputFile.createSourceFile(sample),
-                CompilerProfile.fullOptimizations(true), null);
+        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(
+                InputFiles.fromSource(sample),
+                CompilerProfile.fullOptimizations(true));
         output.errors(MindcodeMessage::message).forEach(Assertions::fail);
         assertFalse(output.hasErrors(), "Failed to compile sample " + file.getPath());
     }

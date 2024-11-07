@@ -3,6 +3,7 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.*;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import info.teksol.mindcode.v3.InputFiles;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -15,18 +16,18 @@ import java.util.function.Consumer;
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
     private final Consumer<MindcodeMessage> messageConsumer;
-    private final InputFile inputFile;
+    private final InputFiles.InputFile inputFile;
     private final Map<String, Integer> heapAllocations = new HashMap<>();
     private int temp;
     private HeapAllocation allocatedHeap;
     private StackAllocation allocatedStack;
 
-    public AstNodeBuilder(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
+    public AstNodeBuilder(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
         this.inputFile = inputFile;
         this.messageConsumer = messageConsumer;
     }
 
-    public static Seq generate(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer,
+    public static Seq generate(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer,
             MindcodeParser.ProgramContext program) {
         final AstNodeBuilder builder = new AstNodeBuilder(inputFile, messageConsumer);
         final AstNode node = builder.visit(program);

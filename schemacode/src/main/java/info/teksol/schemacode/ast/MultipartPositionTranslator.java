@@ -1,14 +1,14 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.InputPositionTranslator;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;
 
 class MultipartPositionTranslator implements InputPositionTranslator {
-    record Part(int newLines, int lastLineLength, InputFile inputFile, int lineOffset, int columnOffset) {}
+    record Part(int newLines, int lastLineLength, InputFiles.InputFile inputFile, int lineOffset, int columnOffset) {}
     private final List<Part> parts;
 
     public static InputPositionTranslator createTranslator(SchematicsBuilder builder, List<AstProgramSnippet> snippets) {
@@ -30,7 +30,7 @@ class MultipartPositionTranslator implements InputPositionTranslator {
 
         Position(InputPosition inputPosition) {
             line = inputPosition.line() - 1;
-            column = inputPosition.charPositionInLine() - 1;
+            column = inputPosition.column() - 1;
         }
 
         boolean isAfter(Part part) {
@@ -82,18 +82,19 @@ class MultipartPositionTranslator implements InputPositionTranslator {
         int lastLineLength = text.length() - lastPos;
 
         final InputPosition source = snippet.getInputPosition(builder);
-        final InputFile inputFile = source.inputFile();
+        final InputFiles.InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
-        final int columnOffset = snippet.getIndent(builder) + source.charPositionInLine() - 1;
+        final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
         return new Part(lines, lastLineLength, inputFile, lineOffset, columnOffset);
     }
 
     private static InputPositionTranslator createSimpleTranslator(SchematicsBuilder builder, AstProgramSnippet snippet) {
         final InputPosition source = snippet.getInputPosition(builder);
-        final InputFile inputFile = source.inputFile();
+        final InputFiles.InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
-        final int columnOffset = snippet.getIndent(builder) + source.charPositionInLine() - 1;
-        return p -> new InputPosition(source.inputFile(), p.line() + lineOffset,
-                p.charPositionInLine() + columnOffset);
+        final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
+        return p ->
+                new InputPosition(source.inputFile(), p.line() + lineOffset,
+                p.column() + columnOffset);
     }
 }

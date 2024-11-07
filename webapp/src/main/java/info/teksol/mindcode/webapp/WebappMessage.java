@@ -42,8 +42,13 @@ public final class WebappMessage {
     }
 
     public static WebappMessage transform(MindcodeMessage msg) {
-        return msg.inputPosition().isEmpty()
-                ? new WebappMessage("", false, -1, -1, msg.message())
-                : new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().charPositionInLine(), msg.message());
+        if (msg.inputPosition().isEmpty()) {
+            return new WebappMessage("", false, -1, -1, msg.message());
+        } else if (msg.inputPosition().inputFile().isFileSystem()) {
+            return new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().column(), msg.message());
+        } else {
+            String position = " at " + msg.inputPosition().inputFile().getDistinctPath() + ":" + msg.inputPosition().line() + ":" + msg.inputPosition().column() + ": ";
+            return new WebappMessage("", false, -1, -1, msg.level().getTitle() + position + msg.message());
+        }
     }
 }

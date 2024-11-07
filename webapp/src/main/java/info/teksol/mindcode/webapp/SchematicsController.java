@@ -1,9 +1,9 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,8 +110,9 @@ public class SchematicsController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(InputFile.createSourceFile(sourceCode),
-                new CompilerProfile(true, level), null);
+        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
+                InputFiles.fromSource(sourceCode),
+                new CompilerProfile(true, level));
         final long end = System.nanoTime();
         logger.info("performance built_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

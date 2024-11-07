@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.AbstractAstTest;
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -193,7 +192,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     // Code generation
 
     protected Seq generateAstTree(String code) {
-        return AstNodeBuilder.generate(InputFile.createSourceFile(code),
+        return AstNodeBuilder.generate(inputFiles.registerSource(code),
                 ExpectedMessages.throwOnMessage(),
                 parse(code));
     }

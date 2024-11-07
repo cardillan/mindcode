@@ -1,14 +1,14 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.CollectionUtils;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,7 +25,7 @@ class MindcodeCompilerTest {
 
     @Test
     public void producesAllOutputs() {
-        CompilerOutput<String> result = compiler.compile(InputFile.createSourceFiles("""
+        CompilerOutput<String> result = compiler.compile(InputFiles.fromSource ("""
                 remark("This is a parameter");
                 param value = true;
                 if value then
@@ -62,10 +62,11 @@ class MindcodeCompilerTest {
 
     @Test
     public void handlesMultipleFiles() {
-        InputFile file1 = new InputFile("file1.mnd", "file1.mnd", "print(\"File1\");");
-        InputFile file2 = new InputFile("file2.mnd", "file2.mnd", "print(\"File2\");");
+        InputFiles inputFiles = InputFiles.create();
+        InputFiles.InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "print(\"File1\");");
+        InputFiles.InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "print(\"File2\");");
 
-        CompilerOutput<String> result = compiler.compile(List.of(file1, file2));
+        CompilerOutput<String> result = compiler.compile(inputFiles);
 
         assertEquals("""
                 print "File2File1"
@@ -88,14 +89,15 @@ class MindcodeCompilerTest {
 
     @Test
     public void compilesAllSysFunctions() {
-        InputFile source = MindcodeCompiler.loadLibraryFromResource("sys");
+        InputFiles inputFiles = InputFiles.create();
+        InputFiles.InputFile sys = MindcodeCompiler.loadLibraryFromResource(inputFiles, "sys");
 
         String initializations = """
                 #set target = ML8A;
                 SYS_MESSAGE = null;
                 """;
 
-        String variables = source.code().lines()
+        String variables = sys.getCode().lines()
                 .filter(line -> line.startsWith("def "))
                 .flatMap(MindcodeCompilerTest::extractVariables)
                 .distinct()
@@ -103,15 +105,15 @@ class MindcodeCompilerTest {
                 .map(s -> s + " = null;")
                 .collect(Collectors.joining("\n"));
 
-        String functionCalls = source.code().lines()
+        String functionCalls = sys.getCode().lines()
                 .filter(line -> line.startsWith("def "))
                 .map(line -> line.substring(4) + ";")
                 .collect(Collectors.joining("\n"));
 
         // We know there must be a variable names display
-        String code = initializations + "\n" + variables + "\n" + functionCalls;
+        String source = initializations + "\n" + variables + "\n" + functionCalls;
 
-        CompilerOutput<String> result = compiler.compile(InputFile.createSourceFiles(code));
+        CompilerOutput<String> result = compiler.compile(InputFiles.fromSource(source));
 
         String messages = result.messages().stream()
                 .filter(MindcodeMessage::isErrorOrWarning)

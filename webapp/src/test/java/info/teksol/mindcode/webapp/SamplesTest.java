@@ -1,6 +1,7 @@
 package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.DynamicContainer;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.stream.Stream;
 
-import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SamplesTest {
@@ -37,7 +37,7 @@ class SamplesTest {
 
     private void evaluateSample(File file) throws IOException {
         String sourceCode = Files.readString(file.toPath());
-        final CompilerOutput<String> result = compile(true, sourceCode,
+        final CompilerOutput<String> result = CompilerFacade.compile(true, sourceCode,
                 OptimizationLevel.BASIC, false);
 
         result.messages().stream().filter(MindcodeMessage::isErrorOrWarning)

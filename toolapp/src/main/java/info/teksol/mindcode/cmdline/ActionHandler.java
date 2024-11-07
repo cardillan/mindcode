@@ -1,12 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.v3.InputFiles;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -20,6 +20,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -211,11 +212,10 @@ abstract class ActionHandler {
         }
     }
 
-    static InputFile readFile(File file, boolean multiple) {
-        return new InputFile(
-                isStdInOut(file) || !multiple ? "" : file.getPath(),
-                isStdInOut(file) ? "" : file.getAbsolutePath(),
-                readInput(file));
+    static void readFile(InputFiles inputFiles, File file) {
+        String source = readInput(file);
+        Path path = isStdInOut(file) ? Path.of("") : file.toPath();
+        inputFiles.registerFile(path, source);
     }
 
     static String readInput(File inputFile) {

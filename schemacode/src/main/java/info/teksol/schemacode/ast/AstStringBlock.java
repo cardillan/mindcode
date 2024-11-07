@@ -29,7 +29,7 @@ public record AstStringBlock(InputPosition inputPosition, String text, int inden
         String text = textBlock.stripIndent();
         int newLine = text.indexOf('\n');
         int indent = textBlock.indexOf(newLine >= 0 ? text.substring(0, newLine) : text);
-        return new AstStringBlock(inputPosition, text, indent);
+        return new AstStringBlock(inputPosition.nextLine(), text, indent);
     }
 
     public static AstStringBlock fromText(String text) {

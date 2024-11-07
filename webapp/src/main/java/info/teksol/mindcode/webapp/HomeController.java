@@ -1,5 +1,6 @@
 package info.teksol.mindcode.webapp;
 
+import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.slf4j.Logger;
@@ -20,8 +21,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
 @Controller
 @RequestMapping(value = "/")
@@ -133,7 +132,7 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = compile(true, sourceCode, level, run);
+        final CompilerOutput<String> result = CompilerFacade.compile(true, sourceCode, level, run);
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

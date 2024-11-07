@@ -1,13 +1,13 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.AstElement;
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.mindcode.mimex.Icons;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SchematicsBuilder extends AbstractMessageEmitter {
+    private final InputFiles inputFiles;
     private final CompilerProfile compilerProfile;
     private final AstDefinitions astDefinitions;
-    private final Path basePath;
 
     private AstSchematic astSchematic;
     private Map<String, AstText> constants;
@@ -33,17 +33,17 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     private BlockPositionMap<BlockPosition> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
-    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<MindcodeMessage> messageConsumer, AstDefinitions astDefinitions,
-            InputFile inputFile, Path basePath) {
+    public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
+            Consumer<MindcodeMessage> messageConsumer, AstDefinitions astDefinitions) {
         super(messageConsumer);
+        this.inputFiles = inputFiles;
         this.compilerProfile = compilerProfile;
         this.astDefinitions = astDefinitions;
-        this.basePath = basePath;
     }
 
-    public static SchematicsBuilder create(CompilerProfile compilerProfile, AstDefinitions definitions,
-            Consumer<MindcodeMessage> messageListener, InputFile inputFile, Path basePath) {
-        return new SchematicsBuilder(compilerProfile, messageListener, definitions, inputFile, basePath);
+    public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
+            AstDefinitions definitions, Consumer<MindcodeMessage> messageListener) {
+        return new SchematicsBuilder(inputFiles, compilerProfile, messageListener, definitions);
     }
 
     public void error(@PrintFormat String message, Object... args) {
@@ -63,11 +63,15 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     }
 
     public Path getBasePath() {
-        return basePath;
+        return inputFiles.getBasePath();
+    }
+
+    public InputFiles getInputFiles() {
+        return inputFiles;
     }
 
     public boolean externalFilesAllowed() {
-        return basePath != null;
+        return !getBasePath().toString().isEmpty();
     }
 
     public Schematic buildSchematics() {

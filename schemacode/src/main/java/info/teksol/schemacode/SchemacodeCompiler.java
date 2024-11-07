@@ -1,10 +1,10 @@
 package info.teksol.schemacode;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.ast.AstSchematicsBuilder;
 import info.teksol.schemacode.grammar.SchemacodeLexer;
@@ -18,7 +18,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -33,11 +32,11 @@ public class SchemacodeCompiler {
      * @param messageConsumer message consumer
      * @return Top node of parsed AST tree
      */
-    static DefinitionsContext parseSchematics(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
-        final MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer);
-        errorListener.setInputFile(inputFile);
+    static DefinitionsContext parseSchematics(Consumer<MindcodeMessage> messageConsumer, InputFiles inputFiles) {
+        InputFiles.InputFile inputFile = inputFiles.getMainInputFile();
+        final MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
 
-        final SchemacodeLexer lexer = new SchemacodeLexer(CharStreams.fromString(inputFile.code()));
+        final SchemacodeLexer lexer = new SchemacodeLexer(CharStreams.fromString(inputFile.getCode()));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
 
@@ -48,29 +47,30 @@ public class SchemacodeCompiler {
         return parser.definitions();
     }
 
-    static AstDefinitions createDefinitions(InputFile inputFile, DefinitionsContext parseTree, Consumer<MindcodeMessage> messageListener) {
+    static AstDefinitions createDefinitions(InputFiles.InputFile inputFile, DefinitionsContext parseTree, Consumer<MindcodeMessage> messageListener) {
         return AstSchematicsBuilder.generate(inputFile, parseTree, messageListener);
     }
 
-    static Schematic buildSchematic(AstDefinitions astDefinitions, CompilerProfile compilerProfile,
-            Consumer<MindcodeMessage> messageListener, InputFile inputFile, Path basePath) {
-        SchematicsBuilder builder = SchematicsBuilder.create(compilerProfile, astDefinitions, messageListener, inputFile, basePath);
+    static Schematic buildSchematic(InputFiles inputFiles, AstDefinitions astDefinitions, CompilerProfile compilerProfile,
+            Consumer<MindcodeMessage> messageListener) {
+        SchematicsBuilder builder = SchematicsBuilder.create(inputFiles, compilerProfile, astDefinitions, messageListener);
         return builder.buildSchematics();
     }
 
-    public static CompilerOutput<byte[]> compile(InputFile inputFile, CompilerProfile compilerProfile, Path basePath) {
-        if (inputFile.code().isBlank()) {
+    public static CompilerOutput<byte[]> compile(InputFiles inputFiles, CompilerProfile compilerProfile) {
+        InputFiles.InputFile inputFile = inputFiles.getMainInputFile();
+        if (inputFile.getCode().isBlank()) {
             return new CompilerOutput<>(new byte[0], List.of());
         }
 
         List<MindcodeMessage> messages = new ArrayList<>();
-        DefinitionsContext parseTree = parseSchematics(inputFile, messages::add);
+        DefinitionsContext parseTree = parseSchematics(messages::add, inputFiles);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messages::add);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
-        Schematic schematic = buildSchematic(astDefinitions, compilerProfile, messages::add, inputFile, basePath);
+        Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messages::add);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         try {
@@ -82,8 +82,8 @@ public class SchemacodeCompiler {
         }
     }
 
-    public static CompilerOutput<String> compileAndEncode(InputFile inputFile, CompilerProfile compilerProfile, Path basePath) {
-        CompilerOutput<byte[]> binaryOutput = compile(inputFile, compilerProfile, basePath);
+    public static CompilerOutput<String> compileAndEncode(InputFiles inputFiles, CompilerProfile compilerProfile) {
+        CompilerOutput<byte[]> binaryOutput = compile(inputFiles, compilerProfile);
 
         String encoded = binaryOutput.output() != null
                 ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";

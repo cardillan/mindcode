@@ -1,11 +1,11 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchemacodeCompiler;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -72,10 +72,11 @@ public class CompileSchemacodeAction extends ActionHandler {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
         compilerProfile.setAdditionalTags(arguments.get("add_tag"));
         final File file = arguments.get("input");
-        final InputFile inputFile = readFile(file, true);
-        final Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().getParent();
+        final Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().normalize().getParent();
+        final InputFiles inputFiles = InputFiles.create(basePath);
+        readFile(inputFiles, file);
 
-        final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFile , compilerProfile, basePath);
+        final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFiles, compilerProfile);
 
         final File output = resolveOutputFile(file, arguments.get("output"), ".msch");
         final File logFile = resolveOutputFile(file, arguments.get("log"), ".log");

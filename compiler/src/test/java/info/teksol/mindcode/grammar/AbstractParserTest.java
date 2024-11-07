@@ -2,6 +2,7 @@ package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.ExpectedMessages;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -12,10 +13,12 @@ import java.util.function.Consumer;
 
 public abstract class AbstractParserTest {
 
+    protected final InputFiles inputFiles = InputFiles.create();
+
     protected ThreadLocal<Integer> parseAmbiguities = ThreadLocal.withInitial(() -> 0);
 
     protected MindcodeParser.ProgramContext parse(Consumer<MindcodeMessage> messageConsumer, String code) {
-        MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer);
+        MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFiles.registerSource(code));
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(code));
         lexer.removeErrorListeners();
@@ -37,11 +40,11 @@ public abstract class AbstractParserTest {
     }
 
 
-    List<MindcodeMessage> parseWithErrors(String program) {
+    List<MindcodeMessage> parseWithErrors(String code) {
         final List<MindcodeMessage> errors = new ArrayList<>();
-        MindcodeErrorListener errorListener = new MindcodeErrorListener(errors);
+        MindcodeErrorListener errorListener = new MindcodeErrorListener(errors::add, inputFiles.registerSource(code));
 
-        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
+        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(code));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
 

@@ -13,12 +13,12 @@ import info.teksol.util.ExpectedMessages;
 public class AbstractAstTest extends AbstractParserTest {
 
     public AstNode translateToAst(String code) {
-        return AstNodeBuilder.generate(InputFile.createSourceFile(code),
+        return AstNodeBuilder.generate(inputFiles.registerSource(code),
                 ExpectedMessages.throwOnMessage(), parse(code));
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String code) {
-        AstNodeBuilder.generate(InputFile.createSourceFile(code), expectedMessages, parse(code));
+        AstNodeBuilder.generate(inputFiles.registerSource(code), expectedMessages, parse(code));
         expectedMessages.validate();
     }
 

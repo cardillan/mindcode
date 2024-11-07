@@ -77,19 +77,19 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 7, 7,
                 List.of(
-                        block("@power-source", P0_0, Direction.EAST, pa(
+                        block(pos( 2, 5), "@power-source", P0_0, Direction.EAST, pa(
                                 p(0, 6), p(1, 6), p(2, 6), p(3, 5), p(4, 5), p(5, 3), p(5, 4), p(6, 0), p(6, 1), p(6, 2))
                         ),
-                        block("@power-node", p(0, 6), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(1, 6), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(2, 6), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(3, 5), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(4, 5), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(5, 3), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(5, 4), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(6, 0), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(6, 1), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(6, 2), Direction.EAST, pa(P0_0))
+                        block(pos( 3, 5), "@power-node", p(0, 6), Direction.EAST, pa(P0_0)),
+                        block(pos( 4, 5), "@power-node", p(1, 6), Direction.EAST, pa(P0_0)),
+                        block(pos( 5, 5), "@power-node", p(2, 6), Direction.EAST, pa(P0_0)),
+                        block(pos( 6, 5), "@power-node", p(3, 5), Direction.EAST, pa(P0_0)),
+                        block(pos( 7, 5), "@power-node", p(4, 5), Direction.EAST, pa(P0_0)),
+                        block(pos( 8, 5), "@power-node", p(5, 3), Direction.EAST, pa(P0_0)),
+                        block(pos( 9, 5), "@power-node", p(5, 4), Direction.EAST, pa(P0_0)),
+                        block(pos(10, 5), "@power-node", p(6, 0), Direction.EAST, pa(P0_0)),
+                        block(pos(11, 5), "@power-node", p(6, 1), Direction.EAST, pa(P0_0)),
+                        block(pos(12, 5), "@power-node", p(6, 2), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -120,24 +120,24 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 16, 16,
                 List.of(
-                        block("@power-node-large", P0_0, Direction.EAST, pa(
+                        block(pos( 2, 5), "@power-node-large", P0_0, Direction.EAST, pa(
                                 p(1, 15), p(6, 15), p(7, 14), p(8, 14), p(9, 13), p(10, 12), p(11, 12),
                                 p(12, 11), p(12, 10), p(13, 9), p(14, 8), p(14, 7), p(15, 6), p(15, 1))
                         ),
-                        block("@power-node", p(1, 15), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(6, 15), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(7, 14), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(8, 14), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(9, 13), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(10, 12), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(11, 12), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(12, 11), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(12, 10), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(13, 9), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(14, 8), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(14, 7), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(15, 6), Direction.EAST, pa(P0_0)),
-                        block("@power-node", p(15, 1), Direction.EAST, pa(P0_0))
+                        block(pos( 3, 5), "@power-node", p(1, 15), Direction.EAST, pa(P0_0)),
+                        block(pos( 4, 5), "@power-node", p(6, 15), Direction.EAST, pa(P0_0)),
+                        block(pos( 5, 5), "@power-node", p(7, 14), Direction.EAST, pa(P0_0)),
+                        block(pos( 6, 5), "@power-node", p(8, 14), Direction.EAST, pa(P0_0)),
+                        block(pos( 7, 5), "@power-node", p(9, 13), Direction.EAST, pa(P0_0)),
+                        block(pos( 8, 5), "@power-node", p(10, 12), Direction.EAST, pa(P0_0)),
+                        block(pos( 9, 5), "@power-node", p(11, 12), Direction.EAST, pa(P0_0)),
+                        block(pos(10, 5), "@power-node", p(12, 11), Direction.EAST, pa(P0_0)),
+                        block(pos(11, 5), "@power-node", p(12, 10), Direction.EAST, pa(P0_0)),
+                        block(pos(12, 5), "@power-node", p(13, 9), Direction.EAST, pa(P0_0)),
+                        block(pos(13, 5), "@power-node", p(14, 8), Direction.EAST, pa(P0_0)),
+                        block(pos(14, 5), "@power-node", p(14, 7), Direction.EAST, pa(P0_0)),
+                        block(pos(15, 5), "@power-node", p(15, 6), Direction.EAST, pa(P0_0)),
+                        block(pos(16, 5), "@power-node", p(15, 1), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -155,8 +155,8 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 31, 31,
                 List.of(
-                        block("@surge-tower", P0_0, Direction.EAST, pa(p(29, 29))),
-                        block("@surge-tower", p(29, 29), Direction.EAST, pa(P0_0))
+                        block(pos(2, 5), "@surge-tower", P0_0, Direction.EAST, pa(p(29, 29))),
+                        block(pos(3, 5), "@surge-tower", p(29, 29), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -174,8 +174,8 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 29, 33,
                 List.of(
-                        block("@surge-tower", P0_0, Direction.EAST, pa(p(27, 31))),
-                        block("@surge-tower", p(27, 31), Direction.EAST, pa(P0_0))
+                        block(pos(2, 5), "@surge-tower", P0_0, Direction.EAST, pa(p(27, 31))),
+                        block(pos(3, 5), "@surge-tower", p(27, 31), Direction.EAST, pa(P0_0))
                 )
         );
 

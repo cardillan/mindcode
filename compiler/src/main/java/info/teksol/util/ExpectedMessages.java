@@ -199,7 +199,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         }
 
         fail("Unexpected message: " + msg.formatMessage(
-                pos -> "line " + pos.line() + ", column " + pos.charPositionInLine() + ", message"));
+                pos -> "line " + pos.line() + ", column " + pos.column() + ", message"));
     }
 
     /**
@@ -336,7 +336,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
     private record PositionalMessageMatcher(int line, int column, MessageMatcher matcher) implements MessageMatcher {
         @Override
         public boolean matches(MindcodeMessage msg) {
-            return line == msg.inputPosition().line() && column == msg.inputPosition().charPositionInLine() && matcher.matches(msg);
+            return line == msg.inputPosition().line() && column == msg.inputPosition().column() && matcher.matches(msg);
         }
 
         @Override

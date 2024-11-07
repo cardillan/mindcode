@@ -18,6 +18,7 @@ import info.teksol.mindcode.compiler.optimization.*;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.v3.InputFiles;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -25,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
     // Global cache
-    private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
+    private static final Map<String, InputFiles.InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
     private static final Map<String, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
 
     private final CompilerProfile profile;
@@ -44,25 +46,28 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private final List<MindcodeMessage> messages = new ArrayList<>();
     private final TranslatingMessageConsumer messageConsumer;
-    private final MindcodeErrorListener errorListener;
 
     public MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
         this.messageConsumer = new TranslatingMessageConsumer(messages::add, profile.getPositionTranslator());
-        this.errorListener = new MindcodeErrorListener(messageConsumer);
     }
 
     @Override
-    public CompilerOutput<String> compile(List<InputFile> inputFiles) {
+    public CompilerOutput<String> compile(InputFiles inputFiles) {
+        return compile(inputFiles, inputFiles.getInputFiles());
+    }
+
+    @Override
+    public CompilerOutput<String> compile(InputFiles inputFiles, List<InputFiles.InputFile> filesToCompile) {
         String instructions = "";
         RunResults runResults = new RunResults(null,0);
 
         try {
             long parseStart = System.nanoTime();
             Seq program = null;
-            for (InputFile inputFile : inputFiles) {
+            for (InputFiles.InputFile inputFile : filesToCompile) {
                 // Additional source files are put in front of the others
-                final Seq other = parse(inputFile, messageConsumer);
+                final Seq other = parse(messageConsumer, inputFile);
                 program = Seq.append(other, program);
                 if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                     return new CompilerOutput<>("", messages, null, 0);
@@ -72,12 +77,11 @@ public class MindcodeCompiler implements Compiler<String> {
             DirectiveProcessor.processDirectives(program, profile, messageConsumer);
 
             if (profile.getProcessorVersion().matches(ProcessorVersion.V8A, ProcessorVersion.MAX)) {
-                Seq sys = parseLibrary("sys");
+                Seq sys = parseLibrary(inputFiles, "sys");
                 program = Seq.append(sys, program);
             }
 
             printParseTree(program);
-            messageConsumer.accept(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
             long compileStart = System.nanoTime();
@@ -138,28 +142,30 @@ public class MindcodeCompiler implements Compiler<String> {
         return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
     }
 
-    private static InputFile loadLibrary(String filename) {
-        return LIBRARY_SOURCES.computeIfAbsent(filename, MindcodeCompiler::loadLibraryFromResource);
+    private static InputFiles.InputFile loadLibrary(InputFiles inputFiles, String filename) {
+        return LIBRARY_SOURCES.computeIfAbsent(filename, f -> loadLibraryFromResource(inputFiles, f));
     }
 
-    static InputFile loadLibraryFromResource(String filename) {
+    static InputFiles.InputFile loadLibraryFromResource(InputFiles inputFiles, String filename) {
         try (final BufferedReader reader = new BufferedReader(
                 new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + filename + ".mnd")))) {
             final StringWriter out = new StringWriter();
             reader.transferTo(out);
-            return new InputFile("*" + filename, filename + ".mnd", out.toString());
+            return inputFiles.registerVirtualFile(Path.of(filename), out.toString());
         } catch (IOException e) {
             throw new MindcodeInternalError(e, "Error loading library: " + filename);
         }
     }
 
-    private Seq parseLibrary(String filename) {
+    private Seq parseLibrary(InputFiles inputFiles, String filename) {
         if (LIBRARY_PARSES.containsKey(filename)) {
             return LIBRARY_PARSES.get(filename);
         }
 
+        InputFiles.InputFile inputFile = loadLibrary(inputFiles, filename);
+
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
-        Seq parsed = parse(loadLibrary(filename), messageConsumer);
+        Seq parsed = parse(messageConsumer, inputFile);
         long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
 
         if (before == after) {
@@ -172,15 +178,16 @@ public class MindcodeCompiler implements Compiler<String> {
     /**
      * Parses the source code using ANTLR generated parser.
      */
-    private Seq parse(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
-        errorListener.setInputFile(inputFile);
-        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.code()));
+    private Seq parse(Consumer<MindcodeMessage> messageConsumer, InputFiles.InputFile inputFile) {
+        MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
+        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.getCode()));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
         final MindcodeParser parser = new MindcodeParser(new CommonTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
+        messageConsumer.accept(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
         return AstNodeBuilder.generate(inputFile, messageConsumer, context);
     }
 

@@ -15,7 +15,9 @@ public record AstConnection(InputPosition inputPosition, AstCoordinates position
     }
 
     public AstConnection(InputPosition inputPosition, int x, int y, boolean relative) {
-        this(inputPosition, new AstCoordinates(inputPosition, x, y, relative), null);
+        this(inputPosition, new AstCoordinates(
+                inputPosition.withColumn(inputPosition.column() + 1),
+                x, y, relative), null);
     }
 
     public AstConnection(InputPosition inputPosition, String id) {

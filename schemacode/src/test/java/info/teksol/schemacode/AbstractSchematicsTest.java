@@ -1,9 +1,10 @@
 package info.teksol.schemacode;
 
-import info.teksol.mindcode.InputFile;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static info.teksol.mindcode.InputPosition.EMPTY;
-
 public abstract class AbstractSchematicsTest {
+    protected InputFiles inputFiles = InputFiles.create();
+
     public static final Position P0_0 = Position.ORIGIN;
     public static final Position P1_0 = new Position(1, 0);
     public static final Position P2_0 = new Position(2, 0);
@@ -34,15 +35,19 @@ public abstract class AbstractSchematicsTest {
         return positions.length == 0 ? PositionArray.EMPTY : new PositionArray(positions);
     }
 
+    protected InputPosition pos(int line, int column) {
+        return new InputPosition(inputFiles.getMainInputFile(), line, column);
+    }
+
     // Block index generator. Class is re-instantiated for each test, index always starts from zero.
     private int index = 0;
 
-    public Block block(List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(EMPTY, index++, labels, BlockType.forName(blockType), position, direction, configuration);
+    public Block block(InputPosition pos, List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(pos, index++, labels, BlockType.forName(blockType), position, direction, configuration);
     }
 
-    public Block block(String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(EMPTY, index++, List.of(), BlockType.forName(blockType), position, direction, configuration);
+    public Block block(InputPosition pos, String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(pos, index++, List.of(), BlockType.forName(blockType), position, direction, configuration);
     }
 
     /**
@@ -60,45 +65,51 @@ public abstract class AbstractSchematicsTest {
         };
     }
 
-    protected DefinitionsContext parseSchematics(String definition) {
-        return SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition),
-                messageListener("parseSchematics"));
+    protected DefinitionsContext parseSchematics(InputFiles inputFiles) {
+        return SchemacodeCompiler.parseSchematics(messageListener("parseSchematics"), inputFiles);
     }
 
-    protected void parseSchematicsExpectingMessages(ExpectedMessages expectedMessages, String definition) {
+    protected void parseSchematicsExpectingMessages(ExpectedMessages expectedMessages, String source) {
         expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
-        SchemacodeCompiler.parseSchematics(InputFile.createSourceFile(definition), messages::add);
+        SchemacodeCompiler.parseSchematics(messages::add, InputFiles.fromSource(source));
         expectedMessages.validate(messages);
     }
 
-    protected AstDefinitions createDefinitions(String definition) {
-        DefinitionsContext parseTree = parseSchematics(definition);
-        return SchemacodeCompiler.createDefinitions(InputFile.EMPTY, parseTree, messageListener("createDefinitions"));
+    protected AstDefinitions createDefinitions(InputFiles inputFiles) {
+        DefinitionsContext parseTree = parseSchematics(inputFiles);
+        return SchemacodeCompiler.createDefinitions(inputFiles.getMainInputFile(), parseTree, messageListener("createDefinitions"));
     }
 
-    protected Schematic buildSchematics(String definition) {
-        AstDefinitions definitions = createDefinitions(definition);
+    protected AstDefinitions createDefinitions(String source) {
+        inputFiles.registerSource(source);
+        return createDefinitions(inputFiles);
+    }
+
+    protected Schematic buildSchematics(String source) {
+        inputFiles.registerSource(source);
+        AstDefinitions definitions = createDefinitions(source);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
-        return SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messageListener("buildSchematics"),
-                InputFile.EMPTY, null);
+        return SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messageListener("buildSchematics"));
     }
 
-    protected void assertGeneratesErrors(ExpectedMessages expectedMessages, String definition) {
+    protected void assertGeneratesErrors(ExpectedMessages expectedMessages, String source) {
+        InputFiles inputFiles = InputFiles.fromSource(source);
         expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
-        AstDefinitions definitions = createDefinitions(definition);
+        AstDefinitions definitions = createDefinitions(inputFiles);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
-        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, InputFile.EMPTY, null);
+        SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messages::add);
         expectedMessages.validate(messages);
     }
 
-    protected void assertGeneratesWarnings(ExpectedMessages expectedMessages, String definition) {
+    protected void assertGeneratesWarnings(ExpectedMessages expectedMessages, String source) {
+        InputFiles inputFiles = InputFiles.fromSource(source);
         expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
-        AstDefinitions definitions = createDefinitions(definition);
+        AstDefinitions definitions = createDefinitions(inputFiles);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
-        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, InputFile.EMPTY, null);
+        SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messages::add);
         expectedMessages.validate(messages);
     }
 }

@@ -56,7 +56,7 @@ class FunctionDefinitions extends AbstractMessageEmitter {
 
     private void reportConflict(LogicFunction current, LogicFunction previous) {
         String defined = previous.getInputPosition().inputFile() == current.getInputPosition().inputFile()
-                ? "" :  " defined in " + previous.getInputPosition().inputFile().fileName();
+                ? "" :  " defined in " + previous.getInputPosition().inputFile().getPath();
         error(current.getInputPosition(), "Function '%s' conflicts with function '%s'%s.",
                 current.format(), previous.format(), defined);
     }
