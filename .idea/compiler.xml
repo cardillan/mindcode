@@ -11,6 +11,7 @@
         <module name="mindcode-compiler" />
         <module name="mindcode-schemacode" />
         <module name="mindcode-webapp" />
+        <module name="mindcode-samples" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

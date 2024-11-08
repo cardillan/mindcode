@@ -3,6 +3,8 @@ package info.teksol.mindcode.webapp;
 import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.samples.Sample;
+import info.teksol.mindcode.samples.Samples;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,45 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/")
 public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    private static final Map<String, String> samples;
-
-    static {
-        final List<String> sampleNames = List.of(
-                "control-two-units",
-                "one-thorium",
-                "many-thorium",
-                "heal-damaged-building",
-                "mining-drone",
-                "upgrade-conveyors",
-                "sum-of-primes"
-        );
-
-        samples = sampleNames.stream().collect(Collectors.toMap(s -> s, HomeController::loadSample));
-    }
-
-    private static String loadSample(String sampleName) {
-        try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/mindcode/" + sampleName + ".mnd")))) {
-            final StringWriter out = new StringWriter();
-            reader.transferTo(out);
-            return out.toString();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read sample: " + sampleName);
-        }
-    }
+    private static final Map<String, Sample> samples = Samples.loadMindcodeSamples();
+    private static final List<Sample> quickSamples = samples.values().stream().filter(s -> !s.slow()).toList();
 
     private final Random random = new Random();
     @Autowired
@@ -106,7 +79,7 @@ public class HomeController {
         final String sourceCode;
         if (samples.containsKey(id)) {
             sampleName = id;
-            sourceCode = samples.get(sampleName);
+            sourceCode = samples.get(sampleName).source();
         } else if (id != null && id.equals("clean")) {
             sampleName = "";
             sourceCode = "";
@@ -122,9 +95,9 @@ public class HomeController {
             sourceCode = src;
             sampleName = "";
         } else {
-            final int skipCount = random.nextInt(samples.size());
-            sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();
-            sourceCode = samples.get(sampleName);
+            final int skipCount = random.nextInt(quickSamples.size());
+            sampleName = quickSamples.get(skipCount).name();
+            sourceCode = samples.get(sampleName).source();
         }
 
         if ("sum-of-primes".equals(sampleName)) {

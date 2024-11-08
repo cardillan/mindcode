@@ -50,6 +50,12 @@
         </dependency>
 
         <dependency>
+            <groupId>info.teksol.mindcode</groupId>
+            <artifactId>mindcode-samples</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
             <version>${spring.version}</version>

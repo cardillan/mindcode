@@ -12,6 +12,7 @@
         <module>compiler</module>
         <module>schemacode</module>
         <module>toolapp</module>
+        <module>samples</module>
         <module>webapp</module>
     </modules>
 

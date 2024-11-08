@@ -3,6 +3,8 @@ package info.teksol.mindcode.webapp;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.samples.Sample;
+import info.teksol.mindcode.samples.Samples;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.slf4j.Logger;
@@ -15,51 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/schematics")
 public class SchematicsController {
     private static final Logger logger = LoggerFactory.getLogger(SchematicsController.class);
-    private static final Map<String, String> samples;
-    private static final List<String> quickSamples;
-
-    static {
-        final List<String> sampleNames = List.of(
-                "detector",
-                "healing-center",
-                "on-off-switch",
-                "regulator",
-                "slow:overdrive-dome-supply",
-                "worker-recall-station",
-                "scrap-to-metaglass-2",
-                "payload-source",
-                "slow:mandelbrot-generator"
-        );
-
-        samples = sampleNames.stream()
-                .map(s -> s.replace("slow:", ""))
-                .collect(Collectors.toMap(s -> s, SchematicsController::loadSample));
-        quickSamples = sampleNames.stream().filter(s -> !s.startsWith("slow:")).toList();
-    }
-
-    private static String loadSample(String sampleName) {
-        try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(SchematicsController.class.getClassLoader().getResourceAsStream("samples/schematics/" + sampleName + ".sdf")))) {
-            final StringWriter out = new StringWriter();
-            reader.transferTo(out);
-            return out.toString();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read sample: " + sampleName);
-        }
-    }
+    private static final Map<String, Sample> samples = Samples.loadSchemacodeSamples();
+    private static final List<Sample> quickSamples = samples.values().stream().filter(s -> !s.slow()).toList();
 
     private final Random random = new Random();
     @Autowired
@@ -91,7 +58,7 @@ public class SchematicsController {
         final String sourceCode;
         if (samples.containsKey(id)) {
             sampleName = id;
-            sourceCode = samples.get(sampleName);
+            sourceCode = samples.get(sampleName).source();
         } else if (id != null && id.equals("clean")) {
             sampleName = "";
             sourceCode = "";
@@ -105,8 +72,8 @@ public class SchematicsController {
             }
         } else {
             final int skipCount = random.nextInt(quickSamples.size());
-            sampleName = quickSamples.get(skipCount);
-            sourceCode = samples.get(sampleName);
+            sampleName = quickSamples.get(skipCount).name();
+            sourceCode = samples.get(sampleName).source();
         }
 
         final long start = System.nanoTime();
