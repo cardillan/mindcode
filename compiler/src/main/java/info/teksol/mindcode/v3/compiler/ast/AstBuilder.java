@@ -69,6 +69,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstMindcodeNode visitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx) {
+        return new AstBuiltInIdentifier(pos(ctx.BuiltInIdentifier()), ctx.BuiltInIdentifier().getText());
+    }
+
+    @Override
     public AstMindcodeNode visitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) {
         // Empty placeholders aren't supported in enhanced comment
         // The check will be done in code generator
@@ -82,11 +87,37 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstFormattable(pos(ctx.getStart()), parts);
     }
 
+    //<editor-fold desc="Chapter: Literals">
     @Override
     public AstMindcodeNode visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) {
-        String text = ctx.String().getText();
-        return new AstLiteralString(pos(ctx.String()), text.substring(1, text.length() - 1));
+        String literal = ctx.String().getText();
+        return new AstLiteralString(pos(ctx.String()), literal.substring(1, literal.length() - 1));
     }
+
+    @Override
+    public AstMindcodeNode visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) {
+        String literal = ctx.Binary().getText();
+        return new AstLiteralBinary(pos(ctx.Binary()), literal);
+    }
+
+    @Override
+    public AstMindcodeNode visitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) {
+        String literal = ctx.Hexadecimal().getText();
+        return new AstLiteralHexadecimal(pos(ctx.Hexadecimal()), literal);
+    }
+
+    @Override
+    public AstMindcodeNode visitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) {
+        String literal = ctx.Decimal().getText();
+        return new AstLiteralDecimal(pos(ctx.Decimal()), literal);
+    }
+
+    @Override
+    public AstMindcodeNode visitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx) {
+        String literal = ctx.Float().getText();
+        return new AstLiteralFloat(pos(ctx.Float()), literal);
+    }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold desc="Rule: directives">

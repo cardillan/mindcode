@@ -37,12 +37,12 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expMindustryIdentifier}
+	 * Visit a parse tree produced by the {@code expBuiltInIdentifier}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx);
+	T visitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code expEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#expression}.

@@ -8,10 +8,4 @@ public class AstLiteralEscape extends AstLiteralString {
         super(inputPosition, literal);
     }
 
-    @Override
-    public String toString() {
-        return "AstLiteralEscape{" +
-                "literal='" + literal + '\'' +
-                '}';
-    }
 }

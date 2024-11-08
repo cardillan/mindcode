@@ -52,17 +52,17 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expMindustryIdentifier}
+	 * Enter a parse tree produced by the {@code expBuiltInIdentifier}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx);
+	void enterExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expMindustryIdentifier}
+	 * Exit a parse tree produced by the {@code expBuiltInIdentifier}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpMindustryIdentifier(MindcodeParser.ExpMindustryIdentifierContext ctx);
+	void exitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code expEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#expression}.

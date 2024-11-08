@@ -22,7 +22,7 @@ public class MindcodeParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		Assign=1, At=2, Comma=3, Dot=4, DoubleDot=5, TripleDot=6, DoubleQuote=7, 
-		Semicolon=8, Identifier=9, MindustryIdentifier=10, String=11, Binary=12, 
+		Semicolon=8, Identifier=9, BuiltInIdentifier=10, String=11, Binary=12, 
 		Hexadecimal=13, Decimal=14, Float=15, HashSet=16, FormattableLiteral=17, 
 		RBrace=18, CommentedComment=19, EnhancedComment=20, Comment=21, EmptyComment=22, 
 		LineComment=23, NewLine=24, WhiteSpace=25, DirectiveValue=26, DirectiveAssign=27, 
@@ -53,10 +53,10 @@ public class MindcodeParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "Assign", "At", "Comma", "Dot", "DoubleDot", "TripleDot", "DoubleQuote", 
-			"Semicolon", "Identifier", "MindustryIdentifier", "String", "Binary", 
-			"Hexadecimal", "Decimal", "Float", "HashSet", "FormattableLiteral", "RBrace", 
-			"CommentedComment", "EnhancedComment", "Comment", "EmptyComment", "LineComment", 
-			"NewLine", "WhiteSpace", "DirectiveValue", "DirectiveAssign", "DirectiveComma", 
+			"Semicolon", "Identifier", "BuiltInIdentifier", "String", "Binary", "Hexadecimal", 
+			"Decimal", "Float", "HashSet", "FormattableLiteral", "RBrace", "CommentedComment", 
+			"EnhancedComment", "Comment", "EmptyComment", "LineComment", "NewLine", 
+			"WhiteSpace", "DirectiveValue", "DirectiveAssign", "DirectiveComma", 
 			"DirectiveComment", "DirectiveLineComment", "DirectiveWhiteSpace", "Text", 
 			"EscapeSequence", "EmptyPlaceholder", "Interpolation", "VariablePlaceholder", 
 			"EndOfLine", "Variable", "FmtEndOfLine", "InCmtEndOfLine"
@@ -250,24 +250,6 @@ public class MindcodeParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class ExpMindustryIdentifierContext extends ExpressionContext {
-		public TerminalNode MindustryIdentifier() { return getToken(MindcodeParser.MindustryIdentifier, 0); }
-		public ExpMindustryIdentifierContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpMindustryIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpMindustryIdentifier(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpMindustryIdentifier(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class ExpDecimalLiteralContext extends ExpressionContext {
 		public TerminalNode Decimal() { return getToken(MindcodeParser.Decimal, 0); }
 		public ExpDecimalLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -371,6 +353,24 @@ public class MindcodeParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class ExpBuiltInIdentifierContext extends ExpressionContext {
+		public TerminalNode BuiltInIdentifier() { return getToken(MindcodeParser.BuiltInIdentifier, 0); }
+		public ExpBuiltInIdentifierContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpBuiltInIdentifier(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpBuiltInIdentifier(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpBuiltInIdentifier(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class ExpFLoatLiteralContext extends ExpressionContext {
 		public TerminalNode Float() { return getToken(MindcodeParser.Float, 0); }
 		public ExpFLoatLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -469,12 +469,12 @@ public class MindcodeParser extends Parser {
 				match(Identifier);
 				}
 				break;
-			case MindustryIdentifier:
-				_localctx = new ExpMindustryIdentifierContext(_localctx);
+			case BuiltInIdentifier:
+				_localctx = new ExpBuiltInIdentifierContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(30);
-				match(MindustryIdentifier);
+				match(BuiltInIdentifier);
 				}
 				break;
 			case EnhancedComment:

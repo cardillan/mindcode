@@ -5,20 +5,7 @@ lexer grammar MindcodeLexer;
     boolean inFormat = false;
 }
 
-// fragments
-fragment BinDigit       : ( '0'..'1' ) ;
-fragment HexDigit       : ( '0'..'9' | 'a'..'f' | 'A'..'F' ) ;
-fragment DecDigit       : ( '0'..'9' ) ;
-fragment DecExponent    : ( 'e' | 'E' | 'e+' | 'E+' | 'e-' | 'E-' ) DecDigit+ ;
-
-fragment IdentifierBeg  : [a-zA-Z_] ;
-fragment IdentifierMid  : [a-zA-Z0-9_] ;
-
-fragment MindustryBeg  : [a-zA-Z_] ;
-fragment MindustryMid  : [-a-zA-Z0-9_] ;
-fragment MindustryEnd  : [a-zA-Z0-9_] ;
-
-// Characters
+// Keywords
 
 Assign                  : '=' ;
 At                      : '@' ;
@@ -29,11 +16,21 @@ TripleDot               : '...' ;
 DoubleQuote             : '"' ;
 Semicolon               : ';' ;
 
+// fragments
+fragment BinDigit       : [01] ;
+fragment HexDigit       : [0-9a-fA-F] ;
+fragment DecDigit       : [0-9] ;
+fragment DecExponent    : [eE][+-]? DecDigit+ ;
+
+fragment Letter         : [a-zA-Z_] ;
+fragment LetterOrDigit  : [a-zA-Z0-9_] ;
+fragment LetterDigitDash: [-a-zA-Z0-9_] ;
+
 // Identifiers
 
-Identifier              : IdentifierBeg IdentifierMid* ;
-MindustryIdentifier     : At MindustryBeg
-                        | At MindustryBeg MindustryMid* MindustryEnd ;
+Identifier              : Letter LetterOrDigit* ;
+BuiltInIdentifier       : At Letter
+                        | At Letter LetterDigitDash* LetterOrDigit ;
 
 // Literals
 
@@ -109,7 +106,7 @@ CommentEndOfLine        : [\r\n] {inFormat=false; newLines=true;} -> type(Semico
 
 mode InFmtIdentifier;
 
-Variable                : IdentifierBeg IdentifierMid* ;
+Variable                : Letter LetterOrDigit* ;
 FmtEndOfLine            : [\r\n] {inFormat = false;} -> popMode, popMode;      // Pop out of InFormattable on error
 FmtClosingDoubleQuote   : '"'    {inFormat = false;} -> type(DoubleQuote), popMode, popMode;
 EndOfIdentifier         :  .  -> type(Text), popMode;
@@ -117,6 +114,6 @@ EndOfIdentifier         :  .  -> type(Text), popMode;
 mode InCommentIdentifier;
 
 // Map Enhanced comment lexer tokens to Formattable lexer tokens
-InCmtVariable           : IdentifierBeg IdentifierMid* -> type(Variable);
+InCmtVariable           : Letter LetterOrDigit* -> type(Variable);
 InCmtEndOfLine          : [\r\n] {inFormat=false; newLines=true;} -> popMode, popMode;
 InCmtEndOfIdentifier    : ~["] -> type(Text), popMode;    // Don't allow double quotes in enhanced comments at all

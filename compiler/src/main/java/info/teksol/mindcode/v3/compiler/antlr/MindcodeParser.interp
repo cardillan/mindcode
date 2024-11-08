@@ -52,7 +52,7 @@ TripleDot
 DoubleQuote
 Semicolon
 Identifier
-MindustryIdentifier
+BuiltInIdentifier
 String
 Binary
 Hexadecimal

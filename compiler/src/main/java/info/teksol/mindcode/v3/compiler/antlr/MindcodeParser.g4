@@ -14,7 +14,7 @@ expressionList
 expression
     : directive                                                                         # expDirective
     | Identifier                                                                        # expIdentifier
-    | MindustryIdentifier                                                               # expMindustryIdentifier
+    | BuiltInIdentifier                                                                 # expBuiltInIdentifier
     | EnhancedComment formattableContents*                                              # expEnhancedComment
     | FormattableLiteral formattableContents* DoubleQuote                               # expFormattableLiteral
     | String                                                                            # expStringLiteral

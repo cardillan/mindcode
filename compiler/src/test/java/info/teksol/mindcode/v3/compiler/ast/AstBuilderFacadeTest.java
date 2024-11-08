@@ -10,6 +10,42 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
 
     @Nested
     class BasicStructure {
+        @Test
+        void correctlyProcessesComments1() {
+            assertBuilds("""
+                            /*  A commented out // single-line comment */
+                            identifier;
+                            """,
+                    List.of(
+                            new AstIdentifier(EMPTY, "identifier")
+                    )
+            );
+        }
+
+        @Test
+        void correctlyProcessesComments2() {
+            assertBuilds("""
+                            //  This is not an opening comment /*
+                            identifier;
+                            """,
+                    List.of(
+                            new AstIdentifier(EMPTY, "identifier")
+                    )
+            );
+        }
+
+        @Test
+        void correctlyProcessesComments3() {
+            assertBuilds("""
+                            /*
+                            //  This is a closing */
+                            identifier;
+                            """,
+                    List.of(
+                            new AstIdentifier(EMPTY, "identifier")
+                    )
+            );
+        }
     }
 
     @Nested
@@ -23,7 +59,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
                             new AstDirectiveSet(EMPTY,
                                     new AstDirectiveValue(EMPTY, "option-name"),
                                     List.of()
-                                    )
+                            )
                     )
             );
         }
@@ -71,12 +107,35 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
                     """
                             // A comment
                             identifier;
-                            "string literal";
+                            @built-in-identifier;
                             """,
                     List.of(
                             new AstIdentifier(EMPTY, "identifier"),
-                            new AstLiteralString(EMPTY, "string literal")
-                    ));
+                            new AstBuiltInIdentifier(EMPTY, "@built-in-identifier")
+                    )
+            );
+        }
+
+        @Test
+        void buildsLiterals() {
+            assertBuilds(
+                    """
+                            0b0011;                 // Binary
+                            0xabcdef;               // Hecadecimal
+                            13579;                  // Decimal
+                            1.4e15;                 // Float
+                            "";                     // Empty string
+                            "text";                 // String
+                            """,
+                    List.of(
+                            new AstLiteralBinary(EMPTY, "0b0011"),
+                            new AstLiteralHexadecimal(EMPTY, "0xabcdef"),
+                            new AstLiteralDecimal(EMPTY, "13579"),
+                            new AstLiteralFloat(EMPTY, "1.4e15"),
+                            new AstLiteralString(EMPTY, ""),
+                            new AstLiteralString(EMPTY, "text")
+                    )
+            );
         }
     }
 

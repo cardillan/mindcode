@@ -39,6 +39,52 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
         void parsesBasicElements() {
             assertParses("""
                     identifier;
+                    @built-in-identifier;
+                    """);
+        }
+    }
+
+
+    @Nested
+    class Literals {
+        @Test
+        void parsesStringLiterals() {
+            assertParses("""
+                    "";
+                    "A string literal";
+                    """);
+        }
+
+        @Test
+        void parsesFloatLiterals() {
+            assertParses("""
+                    1.0;
+                    0.0;
+                    .5;
+                    1e5;
+                    1e+5;
+                    1e-5;
+                    1E10;
+                    1E+10;
+                    1E-10;
+                    2.5E10;
+                    2.5E+10;
+                    2.5E-10;
+                    .5E10;
+                    .5E+10;
+                    .5E-10;
+                    """);
+        }
+
+        @Test
+        void parsesNumericLiterals() {
+            assertParses("""
+                    0b0011;
+                    0x0123456789ABCDEF;
+                    0xfedcba9876543210;
+                    0;
+                    01;
+                    123;
                     """);
         }
     }
@@ -54,6 +100,19 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
                     // Comment
                     /// Enhanced comment
                     //// Commented comment
+                    identifier;
+                    """);
+        }
+
+        @Test
+        void refusesNestedComments() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .add("Parse error: token recognition error at: '*'")
+                            .add("Parse error: token recognition error at: '/\\n'")
+                    ,
+                    """
+                    /*  /* Nested comment */ */
                     identifier;
                     """);
         }
@@ -105,7 +164,7 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
                             .add("Parse error: token recognition error at: '$'"),
                     """
                     $"Formattable with ${
-                        $"text ${ nested } text"
+                        $"a nested"
                     } interpolation";
                     """);
         }
