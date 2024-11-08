@@ -1,6 +1,7 @@
 package info.teksol.mindcode.v3.compiler.ast;
 
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.v3.InputFiles;
@@ -63,7 +64,6 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //</editor-fold>
 
     //<editor-fold desc="Rule: expression">
-    @Override
     public AstMindcodeNode visitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx) {
         return new AstIdentifier(pos(ctx.Identifier()), ctx.Identifier().getText());
     }
@@ -86,6 +86,34 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstMindcodeNode visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) {
         String text = ctx.String().getText();
         return new AstLiteralString(pos(ctx.String()), text.substring(1, text.length() - 1));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rule: directives">
+    @Override
+    public AstMindcodeNode visitDirectiveSet(MindcodeParser.DirectiveSetContext ctx) {
+        AstDirectiveValue option = new AstDirectiveValue(pos(ctx.option.DirectiveValue()), ctx.option.getText());
+        if (ctx.directiveValues() == null) {
+            return new AstDirectiveSet(pos(ctx.HashSet()), option, List.of());
+        } else {
+            AstMindcodeNode list = visit(ctx.directiveValues());
+            if (list instanceof AstDirectiveValueList valueList) {
+                return new AstDirectiveSet(pos(ctx.HashSet()), option, valueList.getValues());
+            } else {
+                throw new MindcodeInternalError("Unexpected result of value list evaluation: " + list);
+            }
+        }
+    }
+
+    @Override
+    public AstDirectiveValueList visitDirectiveValueList(MindcodeParser.DirectiveValueListContext ctx) {
+        List<AstDirectiveValue> values = ctx.directiveValue().stream().map(this::visitDirectiveValue).toList();
+        return new AstDirectiveValueList(pos(ctx.getStart()), values);
+    }
+
+    @Override
+    public AstDirectiveValue visitDirectiveValue(MindcodeParser.DirectiveValueContext ctx) {
+        return new AstDirectiveValue(pos(ctx.DirectiveValue()), ctx.DirectiveValue().getText());
     }
     //</editor-fold>
 

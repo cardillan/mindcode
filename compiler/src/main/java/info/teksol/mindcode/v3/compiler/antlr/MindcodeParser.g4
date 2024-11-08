@@ -12,38 +12,38 @@ expressionList
     ;
 
 expression
-    : directive                                                             # expDirective
-    | Identifier                                                            # expIdentifier
-    | MindustryIdentifier                                                   # expMindustryIdentifier
-    | EnhancedComment formattableContents*                                  # expEnhancedComment
-    | FormattableLiteral formattableContents* DoubleQuote                   # expFormattableLiteral
-    | String                                                                # expStringLiteral
-    | Binary                                                                # expBinaryLiteral
-    | Hexadecimal                                                           # expHexadecimalLiteral
-    | Decimal                                                               # expDecimalLiteral
-    | Float                                                                 # expFLoatLiteral
+    : directive                                                                         # expDirective
+    | Identifier                                                                        # expIdentifier
+    | MindustryIdentifier                                                               # expMindustryIdentifier
+    | EnhancedComment formattableContents*                                              # expEnhancedComment
+    | FormattableLiteral formattableContents* DoubleQuote                               # expFormattableLiteral
+    | String                                                                            # expStringLiteral
+    | Binary                                                                            # expBinaryLiteral
+    | Hexadecimal                                                                       # expHexadecimalLiteral
+    | Decimal                                                                           # expDecimalLiteral
+    | Float                                                                             # expFLoatLiteral
     ;
 
 directive
-    : HashSet directiveDeclaration
-    ;
-
-directiveDeclaration
-    : option=DirectiveValue ( DirectiveAssign value=directiveValues )?
+    : HashSet option=directiveValue ( DirectiveAssign value=directiveValues )?          # directiveSet
     ;
 
 directiveValues
-    : DirectiveValue ( DirectiveComma DirectiveValue )*
+    : directiveValue ( DirectiveComma directiveValue )*                                 # directiveValueList
+    ;
+
+directiveValue
+    : DirectiveValue
     ;
 
 formattableContents
-    : Text                                                                  # fmtText
-    | EscapeSequence                                                        # fmtEscaped
-    | Interpolation expression RBrace                                       # fmtInterpolation
-    | formattablePlaceholder                                                # fmtPlaceholder
+    : Text                                                                              # fmtText
+    | EscapeSequence                                                                    # fmtEscaped
+    | Interpolation expression RBrace                                                   # fmtInterpolation
+    | formattablePlaceholder                                                            # fmtPlaceholder
     ;
 
 formattablePlaceholder
-    : EmptyPlaceholder                                                      # fmtPlaceholderEmpty
-    | VariablePlaceholder ( id=Variable )?                                  # fmtPlaceholderVariable
+    : EmptyPlaceholder                                                                  # fmtPlaceholderEmpty
+    | VariablePlaceholder ( id=Variable )?                                              # fmtPlaceholderVariable
     ;

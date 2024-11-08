@@ -15,12 +15,51 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
     @Nested
     class Directives {
         @Test
-        void parsesDirectives() {
-            assertParses("""
-                    #set option;
-                    #set option = value;
-                    #set option = value,value;
-                    """);
+        void buildsValuelessSetDirective() {
+            assertBuilds("""
+                            #set option-name;
+                            """,
+                    List.of(
+                            new AstDirectiveSet(EMPTY,
+                                    new AstDirectiveValue(EMPTY, "option-name"),
+                                    List.of()
+                                    )
+                    )
+            );
+        }
+
+        @Test
+        void buildsSingleValueSetDirective() {
+            assertBuilds("""
+                            #set option-name = some-value;
+                            """,
+                    List.of(
+                            new AstDirectiveSet(EMPTY,
+                                    new AstDirectiveValue(EMPTY, "option-name"),
+                                    List.of(
+                                            new AstDirectiveValue(EMPTY, "some-value")
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsMultipleValuesSetDirective() {
+            assertBuilds("""
+                            #set option-name = 7,7A,8;
+                            """,
+                    List.of(
+                            new AstDirectiveSet(EMPTY,
+                                    new AstDirectiveValue(EMPTY, "option-name"),
+                                    List.of(
+                                            new AstDirectiveValue(EMPTY, "7"),
+                                            new AstDirectiveValue(EMPTY, "7A"),
+                                            new AstDirectiveValue(EMPTY, "8")
+                                    )
+                            )
+                    )
+            );
         }
     }
 
@@ -44,7 +83,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
     @Nested
     class Formattables {
         @Test
-        void parsesBasicFormattable() {
+        void buildsBasicFormattable() {
             assertBuilds("""
                             $"foo";
                             """,
@@ -58,7 +97,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
             );
         }
 
-        void parsesFormattableWithVariablePlaceholder() {
+        void buildsFormattableWithVariablePlaceholder() {
             assertBuilds("""
                             $"$foo";
                             """,
@@ -73,7 +112,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithEmptyPlaceholder() {
+        void buildsFormattableWithEmptyPlaceholder() {
             assertBuilds("""
                             $"foo$";
                             """,
@@ -89,7 +128,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithEmptyPlaceholder2() {
+        void buildsFormattableWithEmptyPlaceholder2() {
             assertBuilds("""
                             $"foo${ }bar";
                             """,
@@ -106,7 +145,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithInterpolation() {
+        void buildsFormattableWithInterpolation() {
             assertBuilds("""
                             $"foo ${ expression } bar";
                             """,
@@ -123,7 +162,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithUnescapableCharacter() {
+        void buildsFormattableWithUnescapableCharacter() {
             assertBuilds("""
                             $"foo\\bar";
                             """,
@@ -140,7 +179,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithEscapedInterpolation() {
+        void buildsFormattableWithEscapedInterpolation() {
             assertBuilds("""
                             $"foo \\${ expression } bar";
                             """,
@@ -157,7 +196,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithEscapedEscape() {
+        void buildsFormattableWithEscapedEscape() {
             assertBuilds("""
                             $"foo \\\\${ expression } bar";
                             """,
@@ -175,7 +214,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesFormattableWithMultilineInterpolation() {
+        void buildsFormattableWithMultilineInterpolation() {
             assertBuilds("""
                             $"foo ${
                                 // A comment
@@ -199,7 +238,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
     @Nested
     class EnhancedComments {
         @Test
-        void parsesBasicEnhancedComment() {
+        void buildsBasicEnhancedComment() {
             assertBuilds("""
                             ///foo///foo
                             """,
@@ -214,7 +253,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithVariablePlaceholder() {
+        void buildsEnhancedCommentWithVariablePlaceholder() {
             assertBuilds("""
                             ///$foo/* comment */
                             """,
@@ -231,7 +270,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithEmptyPlaceholder() {
+        void buildsEnhancedCommentWithEmptyPlaceholder() {
             assertBuilds("""
                             ///foo$/* comment */
                             """,
@@ -249,7 +288,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithEmptyPlaceholder2() {
+        void buildsEnhancedCommentWithEmptyPlaceholder2() {
             assertBuilds("""
                             ///foo${  }bar
                             """,
@@ -266,7 +305,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithInterpolation() {
+        void buildsEnhancedCommentWithInterpolation() {
             assertBuilds("""
                             ///foo ${ expression } bar
                             """,
@@ -283,7 +322,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithUnescapableCharacter() {
+        void buildsEnhancedCommentWithUnescapableCharacter() {
             assertBuilds("""
                             ///foo\\bar
                             """,
@@ -300,7 +339,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithEscapedInterpolation() {
+        void buildsEnhancedCommentWithEscapedInterpolation() {
             assertBuilds("""
                             ///foo \\${ expression } bar
                             """,
@@ -317,7 +356,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithEscapedEscape() {
+        void buildsEnhancedCommentWithEscapedEscape() {
             assertBuilds("""
                             ///foo \\\\${ expression } bar
                             """,
@@ -335,7 +374,7 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void parsesEnhancedCommentWithInterpolationAndComment() {
+        void buildsEnhancedCommentWithInterpolationAndComment() {
             assertBuilds("""
                             ///foo ${ expression /* a comment */ } bar
                             """,

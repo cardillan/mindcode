@@ -93,23 +93,25 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#directive}.
+	 * Visit a parse tree produced by the {@code directiveSet}
+	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDirective(MindcodeParser.DirectiveContext ctx);
+	T visitDirectiveSet(MindcodeParser.DirectiveSetContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#directiveDeclaration}.
+	 * Visit a parse tree produced by the {@code directiveValueList}
+	 * labeled alternative in {@link MindcodeParser#directiveValues}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDirectiveDeclaration(MindcodeParser.DirectiveDeclarationContext ctx);
+	T visitDirectiveValueList(MindcodeParser.DirectiveValueListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#directiveValues}.
+	 * Visit a parse tree produced by {@link MindcodeParser#directiveValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDirectiveValues(MindcodeParser.DirectiveValuesContext ctx);
+	T visitDirectiveValue(MindcodeParser.DirectiveValueContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code fmtText}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.

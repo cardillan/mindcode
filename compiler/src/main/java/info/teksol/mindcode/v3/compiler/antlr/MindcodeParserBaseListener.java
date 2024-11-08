@@ -161,37 +161,37 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirective(MindcodeParser.DirectiveContext ctx) { }
+	@Override public void enterDirectiveSet(MindcodeParser.DirectiveSetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirective(MindcodeParser.DirectiveContext ctx) { }
+	@Override public void exitDirectiveSet(MindcodeParser.DirectiveSetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirectiveDeclaration(MindcodeParser.DirectiveDeclarationContext ctx) { }
+	@Override public void enterDirectiveValueList(MindcodeParser.DirectiveValueListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirectiveDeclaration(MindcodeParser.DirectiveDeclarationContext ctx) { }
+	@Override public void exitDirectiveValueList(MindcodeParser.DirectiveValueListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirectiveValues(MindcodeParser.DirectiveValuesContext ctx) { }
+	@Override public void enterDirectiveValue(MindcodeParser.DirectiveValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirectiveValues(MindcodeParser.DirectiveValuesContext ctx) { }
+	@Override public void exitDirectiveValue(MindcodeParser.DirectiveValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

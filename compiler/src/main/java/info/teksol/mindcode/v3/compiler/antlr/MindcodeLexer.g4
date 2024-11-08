@@ -45,8 +45,6 @@ Float                   : DecDigit+ DecExponent
                         | DecDigit* Dot DecDigit+ DecExponent?
                         ;
 
-// MODES
-
 // Directives
 HashSet                 : '#set' -> pushMode(InDirective) ;
 
@@ -67,8 +65,11 @@ LineComment             : '//' ~'/' ~[\r\n]* -> skip;
 NewLine                 : {newLines}? [\r\n] -> skip;
 WhiteSpace              : [ \t]+             -> skip;
 
+// MODES
+
 mode InDirective;
 
+// Identifiers/values can start with numbers and contain the dash in Directive mode
 DirectiveValue          : [-a-zA-Z0-9_]+ ;
 DirectiveAssign         : '=' ;
 DirectiveComma          : ',' ;

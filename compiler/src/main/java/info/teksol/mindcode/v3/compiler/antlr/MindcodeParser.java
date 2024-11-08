@@ -31,12 +31,12 @@ public class MindcodeParser extends Parser {
 		EndOfLine=37, Variable=38, FmtEndOfLine=39, InCmtEndOfLine=40;
 	public static final int
 		RULE_program = 0, RULE_expressionList = 1, RULE_expression = 2, RULE_directive = 3, 
-		RULE_directiveDeclaration = 4, RULE_directiveValues = 5, RULE_formattableContents = 6, 
+		RULE_directiveValues = 4, RULE_directiveValue = 5, RULE_formattableContents = 6, 
 		RULE_formattablePlaceholder = 7;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "expressionList", "expression", "directive", "directiveDeclaration", 
-			"directiveValues", "formattableContents", "formattablePlaceholder"
+			"program", "expressionList", "expression", "directive", "directiveValues", 
+			"directiveValue", "formattableContents", "formattablePlaceholder"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -580,25 +580,40 @@ public class MindcodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class DirectiveContext extends ParserRuleContext {
-		public TerminalNode HashSet() { return getToken(MindcodeParser.HashSet, 0); }
-		public DirectiveDeclarationContext directiveDeclaration() {
-			return getRuleContext(DirectiveDeclarationContext.class,0);
-		}
 		public DirectiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_directive; }
+	 
+		public DirectiveContext() { }
+		public void copyFrom(DirectiveContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class DirectiveSetContext extends DirectiveContext {
+		public DirectiveValueContext option;
+		public DirectiveValuesContext value;
+		public TerminalNode HashSet() { return getToken(MindcodeParser.HashSet, 0); }
+		public DirectiveValueContext directiveValue() {
+			return getRuleContext(DirectiveValueContext.class,0);
+		}
+		public TerminalNode DirectiveAssign() { return getToken(MindcodeParser.DirectiveAssign, 0); }
+		public DirectiveValuesContext directiveValues() {
+			return getRuleContext(DirectiveValuesContext.class,0);
+		}
+		public DirectiveSetContext(DirectiveContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterDirective(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterDirectiveSet(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitDirective(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitDirectiveSet(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitDirective(this);
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitDirectiveSet(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -606,72 +621,24 @@ public class MindcodeParser extends Parser {
 	public final DirectiveContext directive() throws RecognitionException {
 		DirectiveContext _localctx = new DirectiveContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_directive);
+		int _la;
 		try {
+			_localctx = new DirectiveSetContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(53);
 			match(HashSet);
 			setState(54);
-			directiveDeclaration();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class DirectiveDeclarationContext extends ParserRuleContext {
-		public Token option;
-		public DirectiveValuesContext value;
-		public TerminalNode DirectiveValue() { return getToken(MindcodeParser.DirectiveValue, 0); }
-		public TerminalNode DirectiveAssign() { return getToken(MindcodeParser.DirectiveAssign, 0); }
-		public DirectiveValuesContext directiveValues() {
-			return getRuleContext(DirectiveValuesContext.class,0);
-		}
-		public DirectiveDeclarationContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_directiveDeclaration; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterDirectiveDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitDirectiveDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitDirectiveDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final DirectiveDeclarationContext directiveDeclaration() throws RecognitionException {
-		DirectiveDeclarationContext _localctx = new DirectiveDeclarationContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_directiveDeclaration);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(56);
-			((DirectiveDeclarationContext)_localctx).option = match(DirectiveValue);
-			setState(59);
+			((DirectiveSetContext)_localctx).option = directiveValue();
+			setState(57);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DirectiveAssign) {
 				{
-				setState(57);
+				setState(55);
 				match(DirectiveAssign);
-				setState(58);
-				((DirectiveDeclarationContext)_localctx).value = directiveValues();
+				setState(56);
+				((DirectiveSetContext)_localctx).value = directiveValues();
 				}
 			}
 
@@ -690,58 +657,113 @@ public class MindcodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class DirectiveValuesContext extends ParserRuleContext {
-		public List<TerminalNode> DirectiveValue() { return getTokens(MindcodeParser.DirectiveValue); }
-		public TerminalNode DirectiveValue(int i) {
-			return getToken(MindcodeParser.DirectiveValue, i);
+		public DirectiveValuesContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_directiveValues; }
+	 
+		public DirectiveValuesContext() { }
+		public void copyFrom(DirectiveValuesContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class DirectiveValueListContext extends DirectiveValuesContext {
+		public List<DirectiveValueContext> directiveValue() {
+			return getRuleContexts(DirectiveValueContext.class);
+		}
+		public DirectiveValueContext directiveValue(int i) {
+			return getRuleContext(DirectiveValueContext.class,i);
 		}
 		public List<TerminalNode> DirectiveComma() { return getTokens(MindcodeParser.DirectiveComma); }
 		public TerminalNode DirectiveComma(int i) {
 			return getToken(MindcodeParser.DirectiveComma, i);
 		}
-		public DirectiveValuesContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_directiveValues; }
+		public DirectiveValueListContext(DirectiveValuesContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterDirectiveValues(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterDirectiveValueList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitDirectiveValues(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitDirectiveValueList(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitDirectiveValues(this);
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitDirectiveValueList(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final DirectiveValuesContext directiveValues() throws RecognitionException {
 		DirectiveValuesContext _localctx = new DirectiveValuesContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_directiveValues);
+		enterRule(_localctx, 8, RULE_directiveValues);
 		int _la;
 		try {
+			_localctx = new DirectiveValueListContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(61);
-			match(DirectiveValue);
-			setState(66);
+			setState(59);
+			directiveValue();
+			setState(64);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DirectiveComma) {
 				{
 				{
-				setState(62);
+				setState(60);
 				match(DirectiveComma);
-				setState(63);
-				match(DirectiveValue);
+				setState(61);
+				directiveValue();
 				}
 				}
-				setState(68);
+				setState(66);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class DirectiveValueContext extends ParserRuleContext {
+		public TerminalNode DirectiveValue() { return getToken(MindcodeParser.DirectiveValue, 0); }
+		public DirectiveValueContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_directiveValue; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterDirectiveValue(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitDirectiveValue(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitDirectiveValue(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final DirectiveValueContext directiveValue() throws RecognitionException {
+		DirectiveValueContext _localctx = new DirectiveValueContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_directiveValue);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(67);
+			match(DirectiveValue);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1015,15 +1037,15 @@ public class MindcodeParser extends Parser {
 		"\u0002\n\u0002\f\u0002%\t\u0002\u0001\u0002\u0001\u0002\u0005\u0002)\b"+
 		"\u0002\n\u0002\f\u0002,\t\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001"+
 		"\u0002\u0001\u0002\u0001\u0002\u0003\u00024\b\u0002\u0001\u0003\u0001"+
-		"\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0003\u0004<\b"+
-		"\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0005\u0005A\b\u0005\n\u0005"+
-		"\f\u0005D\t\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
+		"\u0003\u0001\u0003\u0001\u0003\u0003\u0003:\b\u0003\u0001\u0004\u0001"+
+		"\u0004\u0001\u0004\u0005\u0004?\b\u0004\n\u0004\f\u0004B\t\u0004\u0001"+
+		"\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
 		"\u0006\u0001\u0006\u0001\u0006\u0003\u0006M\b\u0006\u0001\u0007\u0001"+
 		"\u0007\u0001\u0007\u0003\u0007R\b\u0007\u0003\u0007T\b\u0007\u0001\u0007"+
 		"\u0000\u0000\b\u0000\u0002\u0004\u0006\b\n\f\u000e\u0000\u0000a\u0000"+
 		"\u0011\u0001\u0000\u0000\u0000\u0002\u0018\u0001\u0000\u0000\u0000\u0004"+
-		"3\u0001\u0000\u0000\u0000\u00065\u0001\u0000\u0000\u0000\b8\u0001\u0000"+
-		"\u0000\u0000\n=\u0001\u0000\u0000\u0000\fL\u0001\u0000\u0000\u0000\u000e"+
+		"3\u0001\u0000\u0000\u0000\u00065\u0001\u0000\u0000\u0000\b;\u0001\u0000"+
+		"\u0000\u0000\nC\u0001\u0000\u0000\u0000\fL\u0001\u0000\u0000\u0000\u000e"+
 		"S\u0001\u0000\u0000\u0000\u0010\u0012\u0003\u0002\u0001\u0000\u0011\u0010"+
 		"\u0001\u0000\u0000\u0000\u0011\u0012\u0001\u0000\u0000\u0000\u0012\u0013"+
 		"\u0001\u0000\u0000\u0000\u0013\u0014\u0005\u0000\u0000\u0001\u0014\u0001"+
@@ -1045,21 +1067,20 @@ public class MindcodeParser extends Parser {
 		"\u0000\u00003&\u0001\u0000\u0000\u00003.\u0001\u0000\u0000\u00003/\u0001"+
 		"\u0000\u0000\u000030\u0001\u0000\u0000\u000031\u0001\u0000\u0000\u0000"+
 		"32\u0001\u0000\u0000\u00004\u0005\u0001\u0000\u0000\u000056\u0005\u0010"+
-		"\u0000\u000067\u0003\b\u0004\u00007\u0007\u0001\u0000\u0000\u00008;\u0005"+
-		"\u001a\u0000\u00009:\u0005\u001b\u0000\u0000:<\u0003\n\u0005\u0000;9\u0001"+
-		"\u0000\u0000\u0000;<\u0001\u0000\u0000\u0000<\t\u0001\u0000\u0000\u0000"+
-		"=B\u0005\u001a\u0000\u0000>?\u0005\u001c\u0000\u0000?A\u0005\u001a\u0000"+
-		"\u0000@>\u0001\u0000\u0000\u0000AD\u0001\u0000\u0000\u0000B@\u0001\u0000"+
-		"\u0000\u0000BC\u0001\u0000\u0000\u0000C\u000b\u0001\u0000\u0000\u0000"+
-		"DB\u0001\u0000\u0000\u0000EM\u0005 \u0000\u0000FM\u0005!\u0000\u0000G"+
-		"H\u0005#\u0000\u0000HI\u0003\u0004\u0002\u0000IJ\u0005\u0012\u0000\u0000"+
-		"JM\u0001\u0000\u0000\u0000KM\u0003\u000e\u0007\u0000LE\u0001\u0000\u0000"+
-		"\u0000LF\u0001\u0000\u0000\u0000LG\u0001\u0000\u0000\u0000LK\u0001\u0000"+
-		"\u0000\u0000M\r\u0001\u0000\u0000\u0000NT\u0005\"\u0000\u0000OQ\u0005"+
-		"$\u0000\u0000PR\u0005&\u0000\u0000QP\u0001\u0000\u0000\u0000QR\u0001\u0000"+
-		"\u0000\u0000RT\u0001\u0000\u0000\u0000SN\u0001\u0000\u0000\u0000SO\u0001"+
-		"\u0000\u0000\u0000T\u000f\u0001\u0000\u0000\u0000\n\u0011\u001a#*3;BL"+
-		"QS";
+		"\u0000\u000069\u0003\n\u0005\u000078\u0005\u001b\u0000\u00008:\u0003\b"+
+		"\u0004\u000097\u0001\u0000\u0000\u00009:\u0001\u0000\u0000\u0000:\u0007"+
+		"\u0001\u0000\u0000\u0000;@\u0003\n\u0005\u0000<=\u0005\u001c\u0000\u0000"+
+		"=?\u0003\n\u0005\u0000><\u0001\u0000\u0000\u0000?B\u0001\u0000\u0000\u0000"+
+		"@>\u0001\u0000\u0000\u0000@A\u0001\u0000\u0000\u0000A\t\u0001\u0000\u0000"+
+		"\u0000B@\u0001\u0000\u0000\u0000CD\u0005\u001a\u0000\u0000D\u000b\u0001"+
+		"\u0000\u0000\u0000EM\u0005 \u0000\u0000FM\u0005!\u0000\u0000GH\u0005#"+
+		"\u0000\u0000HI\u0003\u0004\u0002\u0000IJ\u0005\u0012\u0000\u0000JM\u0001"+
+		"\u0000\u0000\u0000KM\u0003\u000e\u0007\u0000LE\u0001\u0000\u0000\u0000"+
+		"LF\u0001\u0000\u0000\u0000LG\u0001\u0000\u0000\u0000LK\u0001\u0000\u0000"+
+		"\u0000M\r\u0001\u0000\u0000\u0000NT\u0005\"\u0000\u0000OQ\u0005$\u0000"+
+		"\u0000PR\u0005&\u0000\u0000QP\u0001\u0000\u0000\u0000QR\u0001\u0000\u0000"+
+		"\u0000RT\u0001\u0000\u0000\u0000SN\u0001\u0000\u0000\u0000SO\u0001\u0000"+
+		"\u0000\u0000T\u000f\u0001\u0000\u0000\u0000\n\u0011\u001a#*39@LQS";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -148,35 +148,39 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#directive}.
+	 * Enter a parse tree produced by the {@code directiveSet}
+	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree
 	 */
-	void enterDirective(MindcodeParser.DirectiveContext ctx);
+	void enterDirectiveSet(MindcodeParser.DirectiveSetContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#directive}.
+	 * Exit a parse tree produced by the {@code directiveSet}
+	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree
 	 */
-	void exitDirective(MindcodeParser.DirectiveContext ctx);
+	void exitDirectiveSet(MindcodeParser.DirectiveSetContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#directiveDeclaration}.
+	 * Enter a parse tree produced by the {@code directiveValueList}
+	 * labeled alternative in {@link MindcodeParser#directiveValues}.
 	 * @param ctx the parse tree
 	 */
-	void enterDirectiveDeclaration(MindcodeParser.DirectiveDeclarationContext ctx);
+	void enterDirectiveValueList(MindcodeParser.DirectiveValueListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#directiveDeclaration}.
+	 * Exit a parse tree produced by the {@code directiveValueList}
+	 * labeled alternative in {@link MindcodeParser#directiveValues}.
 	 * @param ctx the parse tree
 	 */
-	void exitDirectiveDeclaration(MindcodeParser.DirectiveDeclarationContext ctx);
+	void exitDirectiveValueList(MindcodeParser.DirectiveValueListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#directiveValues}.
+	 * Enter a parse tree produced by {@link MindcodeParser#directiveValue}.
 	 * @param ctx the parse tree
 	 */
-	void enterDirectiveValues(MindcodeParser.DirectiveValuesContext ctx);
+	void enterDirectiveValue(MindcodeParser.DirectiveValueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#directiveValues}.
+	 * Exit a parse tree produced by {@link MindcodeParser#directiveValue}.
 	 * @param ctx the parse tree
 	 */
-	void exitDirectiveValues(MindcodeParser.DirectiveValuesContext ctx);
+	void exitDirectiveValue(MindcodeParser.DirectiveValueContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code fmtText}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
