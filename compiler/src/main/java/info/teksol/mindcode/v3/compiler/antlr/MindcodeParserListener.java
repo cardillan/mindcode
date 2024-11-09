@@ -148,6 +148,42 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code expNullLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expNullLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expBooleanLiteralTrue}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expBooleanLiteralTrue}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expBooleanLiteralFalse}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expBooleanLiteralFalse}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code directiveSet}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

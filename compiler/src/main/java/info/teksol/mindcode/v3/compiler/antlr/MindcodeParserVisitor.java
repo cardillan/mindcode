@@ -93,6 +93,27 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code expNullLiteral}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expBooleanLiteralTrue}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expBooleanLiteralFalse}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code directiveSet}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

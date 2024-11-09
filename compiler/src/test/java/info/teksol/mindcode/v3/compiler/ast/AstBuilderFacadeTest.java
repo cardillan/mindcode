@@ -121,11 +121,14 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
             assertBuilds(
                     """
                             0b0011;                 // Binary
-                            0xabcdef;               // Hecadecimal
+                            0xabcdef;               // Hexadecimal
                             13579;                  // Decimal
                             1.4e15;                 // Float
                             "";                     // Empty string
                             "text";                 // String
+                            null;
+                            true;
+                            false;
                             """,
                     List.of(
                             new AstLiteralBinary(EMPTY, "0b0011"),
@@ -133,7 +136,10 @@ class AstBuilderFacadeTest extends AbstractAstBuilderTest {
                             new AstLiteralDecimal(EMPTY, "13579"),
                             new AstLiteralFloat(EMPTY, "1.4e15"),
                             new AstLiteralString(EMPTY, ""),
-                            new AstLiteralString(EMPTY, "text")
+                            new AstLiteralString(EMPTY, "text"),
+                            new AstLiteralNull(EMPTY, "null"),
+                            new AstLiteralBoolean(EMPTY, "true"),
+                            new AstLiteralBoolean(EMPTY, "false")
                     )
             );
         }

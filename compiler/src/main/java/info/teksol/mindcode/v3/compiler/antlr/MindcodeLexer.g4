@@ -6,15 +6,47 @@ lexer grammar MindcodeLexer;
 }
 
 // Keywords
+ALLOCATE                : 'allocate' ;
+BEGIN                   : 'begin' ;
+BREAK                   : 'break' ;
+CASE                    : 'case' ;
+CONST                   : 'const' ;
+CONTINUE                : 'continue' ;
+DEF                     : 'def' ;
+DO                      : 'do' ;
+ELIF                    : 'elif' ;
+ELSE                    : 'else' ;
+ELSEIF                  : 'elseif' ;
+ELSIF                   : 'elsif' ;
+END                     : 'end' ;
+FALSE                   : 'false' ;
+FOR                     : 'for' ;
+HEAP                    : 'heap' ;
+IF                      : 'if' ;
+IN                      : 'in' ;
+INLINE                  : 'inline' ;
+LOOP                    : 'loop' ;
+NOINLINE                : 'noinline' ;
+NULL                    : 'null' ;
+OUT                     : 'out' ;
+PARAM                   : 'param' ;
+RETURN                  : 'return' ;
+STACK                   : 'stack' ;
+THEN                    : 'then' ;
+TRUE                    : 'true' ;
+VAR                     : 'var' ;
+VOID                    : 'void' ;
+WHEN                    : 'when' ;
+WHILE                   : 'while' ;
 
-Assign                  : '=' ;
-At                      : '@' ;
-Comma                   : ',' ;
-Dot                     : '.' ;
-DoubleDot               : '..' ;
-TripleDot               : '...' ;
-DoubleQuote             : '"' ;
-Semicolon               : ';' ;
+ASSIGN                  : '=' ;
+AT                      : '@' ;
+COMMA                   : ',' ;
+DOT                     : '.' ;
+DOUBLEDOT               : '..' ;
+TRIPLEDOT               : '...' ;
+DOUBLEQUOTE             : '"' ;
+SEMICOLON               : ';' ;
 
 // fragments
 fragment BinDigit       : [01] ;
@@ -28,92 +60,92 @@ fragment LetterDigitDash: [-a-zA-Z0-9_] ;
 
 // Identifiers
 
-Identifier              : Letter LetterOrDigit* ;
-BuiltInIdentifier       : At Letter
-                        | At Letter LetterDigitDash* LetterOrDigit ;
+IDENTIFIER              : Letter LetterOrDigit* ;
+BUILTINIDENTIFIER       : AT Letter
+                        | AT Letter LetterDigitDash* LetterOrDigit ;
 
 // Literals
 
-String                  : '"' ~[\r\n"]* '"' ;
-Binary                  : '0b' BinDigit+ ;
-Hexadecimal             : '0x' HexDigit+ ;
-Decimal                 : DecDigit+ ;
-Float                   : DecDigit+ DecExponent
-                        | DecDigit* Dot DecDigit+ DecExponent?
+STRING                  : '"' ~[\r\n"]* '"' ;
+BINARY                  : '0b' BinDigit+ ;
+HEXADECIMAL             : '0x' HexDigit+ ;
+DECIMAL                 : DecDigit+ ;
+FLOAT                   : DecDigit+ DecExponent
+                        | DecDigit* DOT DecDigit+ DecExponent?
                         ;
 
 // Directives
-HashSet                 : '#set' -> pushMode(InDirective) ;
+HASHSET                 : '#set' -> pushMode(InDirective) ;
 
 // Formattable literals
-FormattableLiteral      : {!inFormat}? '$"' {inFormat = true;}  -> pushMode(InFormattable) ;
-RBrace                  : {inFormat}?  '}'  {inFormat = false;} -> popMode ;
+FORMATTABLELITERAL      : {!inFormat}? '$"' {inFormat = true;}  -> pushMode(InFormattable) ;
+RBRACE                  : {inFormat}?  '}'  {inFormat = false;} -> popMode ;
 
 // Commented line comment, to distinguish from Enhanced comment.
-CommentedComment        : '////' ~[\r\n]* -> skip ;
+COMMENTEDCOMMENT        : '////' ~[\r\n]* -> skip ;
 
 // Enhanced comments
-EnhancedComment         : {!inFormat}? '///' {inFormat = true; newLines=false;} -> pushMode(InComment);
+ENHANCEDCOMMENT         : {!inFormat}? '///' {inFormat = true; newLines=false;} -> pushMode(InComment);
 
 // Whitespace + comments
-Comment                 : '/*' .*? '*/'      -> skip;
-EmptyComment            : '//' [\r\n]        -> skip;
-LineComment             : '//' ~'/' ~[\r\n]* -> skip;
-NewLine                 : {newLines}? [\r\n] -> skip;
-WhiteSpace              : [ \t]+             -> skip;
+COMMENT                 : '/*' .*? '*/'      -> skip;
+EMPTYCOMMENT            : '//' [\r\n]        -> skip;
+LINECOMMENT             : '//' ~'/' ~[\r\n]* -> skip;
+NEWLINE                 : {newLines}? [\r\n] -> skip;
+WHITESPACE              : [ \t]+             -> skip;
 
 // MODES
 
 mode InDirective;
 
 // Identifiers/values can start with numbers and contain the dash in Directive mode
-DirectiveValue          : [-a-zA-Z0-9_]+ ;
-DirectiveAssign         : '=' ;
-DirectiveComma          : ',' ;
+DIRECTIVEVALUE          : [-a-zA-Z0-9_]+ ;
+DIRECTIVEASSIGN         : '=' ;
+DIRECTIVECOMMA          : ',' ;
 
-DirectiveSemicolon      : ';' -> type(Semicolon), popMode;
+DIRECTIVESEMICOLON      : ';' -> type(SEMICOLON), popMode;
 
-DirectiveComment        : '/*' .*? '*/' -> skip;
-DirectiveLineComment    : '//' ~[\r\n]* -> skip;
-DirectiveWhiteSpace     : [ \t\r\n]+    -> skip;
+DIRECTIVECOMMENT        : '/*' .*? '*/' -> skip;
+DIRECTIVELINECOMMENT    : '//' ~[\r\n]* -> skip;
+DIRECTIVEWHITESPACE     : [ \t\r\n]+    -> skip;
 
 mode InFormattable;
 
-Text                    : ~[\r\n\\$"]+ ;
+TEXT                    : ~[\r\n\\$"]+ ;
 
 // We would want to allow escaping only '\' and '$', but can't get it to work. Escapes will be universal and handled later.
-EscapeSequence          : '\\' ~[\r\n"] ;
-EmptyPlaceholder        : '${'   ' '*  '}' ;
-Interpolation           : '${' -> pushMode(DEFAULT_MODE) ;
-VariablePlaceholder     : '$'  -> pushMode(InFmtIdentifier);
-ClosingDoubleQuote      : '"' {inFormat = false;} -> type(DoubleQuote), popMode;
-EndOfLine               : [\r\n] -> popMode;                    // Pop out of InFormattable on error
+ESCAPESEQUENCE          : '\\' ~[\r\n"] ;
+EMPTYPLACEHOLDER        : '${'   ' '*  '}' ;
+INTERPOLATION           : '${' -> pushMode(DEFAULT_MODE) ;
+VARIABLEPLACEHOLDER     : '$'  -> pushMode(InFmtIdentifier);
+CLOSINGDOUBLEQUOTE      : '"' {inFormat = false;} -> type(DOUBLEQUOTE), popMode;
+ENDOFLINE               : [\r\n] -> popMode;                    // Pop out of InFormattable on error
 
 mode InComment;
 
 // Map Enhanced comment lexer tokens to Formattable lexer tokens
 // Refuse double quotes
-CommentText             : ~[\r\n\\$"]+      -> type(Text);
+COMMENTTEXT             : ~[\r\n\\$"]+      -> type(TEXT);
 
 // We would want to allow escaping only '\' and '$', but can't get it to work. Escapes will be universal and handled later.
-CommentEscapeSequence   : '\\' ~[\r\n"]     -> type(EscapeSequence);
+COMMENTESCAPESEQUENCE   : '\\' ~[\r\n"]     -> type(ESCAPESEQUENCE);
 
 // We don't want empty placeholders in enhanced comments, but the check will be done later
-CommentEmptyPlaceholder : '${'   ' '*  '}'  -> type(EmptyPlaceholder);
-CommentInterpolation    : '${'              -> type(Interpolation), pushMode(DEFAULT_MODE);
-CommentVariablePHolder  : '$'               -> type(VariablePlaceholder), pushMode(InCommentIdentifier);
-CommentEndOfLine        : [\r\n] {inFormat=false; newLines=true;} -> type(Semicolon), popMode;
+COMMENTEMPTYPLACEHOLDER : '${'   ' '*  '}'  -> type(EMPTYPLACEHOLDER);
+COMMENTINTERPOLATION    : '${'              -> type(INTERPOLATION), pushMode(DEFAULT_MODE);
+COMMENTVARIABLEPHOLDER  : '$'               -> type(VARIABLEPLACEHOLDER), pushMode(InCommentIdentifier);
+COMMENTENDOFLINE        : [\r\n] {inFormat=false; newLines=true;} -> type(SEMICOLON), popMode;
 
 mode InFmtIdentifier;
 
-Variable                : Letter LetterOrDigit* ;
-FmtEndOfLine            : [\r\n] {inFormat = false;} -> popMode, popMode;      // Pop out of InFormattable on error
-FmtClosingDoubleQuote   : '"'    {inFormat = false;} -> type(DoubleQuote), popMode, popMode;
-EndOfIdentifier         :  .  -> type(Text), popMode;
+VARIABLE                : Letter LetterOrDigit* ;
+FMTENDOFLINE            : [\r\n] {inFormat = false;} -> popMode, popMode;      // Pop out of InFormattable on error
+FMTCLOSINGDOUBLEQUOTE   : '"'    {inFormat = false;} -> type(DOUBLEQUOTE), popMode, popMode;
+ENDOFIDENTIFIER         :  .  -> type(TEXT), popMode;
 
 mode InCommentIdentifier;
 
 // Map Enhanced comment lexer tokens to Formattable lexer tokens
-InCmtVariable           : Letter LetterOrDigit* -> type(Variable);
-InCmtEndOfLine          : [\r\n] {inFormat=false; newLines=true;} -> popMode, popMode;
-InCmtEndOfIdentifier    : ~["] -> type(Text), popMode;    // Don't allow double quotes in enhanced comments at all
+INCMTVARIABLE           : Letter LetterOrDigit* -> type(VARIABLE);
+INCMTENDOFLINE          : [\r\n] {inFormat=false; newLines=true;} -> popMode, popMode;
+INCMTENDOFIDENTIFIER    : ~["] -> type(TEXT), popMode;    // Don't allow double quotes in enhanced comments at all

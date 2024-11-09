@@ -11,8 +11,8 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
         void refusesMissingSemicolon() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .add(3, 1, "Parse error: missing Semicolon at 'id'")
-                            .add(5, 1, "Parse error: missing Semicolon at '<EOF>'"),
+                            .add(3, 1, "Parse error: missing SEMICOLON at 'id'")
+                            .add(5, 1, "Parse error: missing SEMICOLON at '<EOF>'"),
                     """
                             id
                             // This is a comment
@@ -85,6 +85,15 @@ class MindcodeParserFacadeTest extends AbstractParserTest {
                     0;
                     01;
                     123;
+                    """);
+        }
+
+        @Test
+        void parsesOtherLiterals() {
+            assertParses("""
+                    null;
+                    true;
+                    false;
                     """);
         }
     }

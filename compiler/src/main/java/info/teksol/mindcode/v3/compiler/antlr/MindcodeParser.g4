@@ -8,42 +8,45 @@ program
     : expressionList? EOF ;
 
 expressionList
-    : ( expression Semicolon )+
+    : ( expression SEMICOLON )+
     ;
 
 expression
     : directive                                                                         # expDirective
-    | Identifier                                                                        # expIdentifier
-    | BuiltInIdentifier                                                                 # expBuiltInIdentifier
-    | EnhancedComment formattableContents*                                              # expEnhancedComment
-    | FormattableLiteral formattableContents* DoubleQuote                               # expFormattableLiteral
-    | String                                                                            # expStringLiteral
-    | Binary                                                                            # expBinaryLiteral
-    | Hexadecimal                                                                       # expHexadecimalLiteral
-    | Decimal                                                                           # expDecimalLiteral
-    | Float                                                                             # expFLoatLiteral
+    | IDENTIFIER                                                                        # expIdentifier
+    | BUILTINIDENTIFIER                                                                 # expBuiltInIdentifier
+    | ENHANCEDCOMMENT formattableContents*                                              # expEnhancedComment
+    | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # expFormattableLiteral
+    | STRING                                                                            # expStringLiteral
+    | BINARY                                                                            # expBinaryLiteral
+    | HEXADECIMAL                                                                       # expHexadecimalLiteral
+    | DECIMAL                                                                           # expDecimalLiteral
+    | FLOAT                                                                             # expFLoatLiteral
+    | NULL                                                                              # expNullLiteral
+    | TRUE                                                                              # expBooleanLiteralTrue
+    | FALSE                                                                             # expBooleanLiteralFalse
     ;
 
 directive
-    : HashSet option=directiveValue ( DirectiveAssign value=directiveValues )?          # directiveSet
+    : HASHSET option=directiveValue ( DIRECTIVEASSIGN value=directiveValues )?          # directiveSet
     ;
 
 directiveValues
-    : directiveValue ( DirectiveComma directiveValue )*                                 # directiveValueList
+    : directiveValue ( DIRECTIVECOMMA directiveValue )*                                 # directiveValueList
     ;
 
 directiveValue
-    : DirectiveValue
+    : DIRECTIVEVALUE
     ;
 
 formattableContents
-    : Text                                                                              # fmtText
-    | EscapeSequence                                                                    # fmtEscaped
-    | Interpolation expression RBrace                                                   # fmtInterpolation
+    : TEXT                                                                              # fmtText
+    | ESCAPESEQUENCE                                                                    # fmtEscaped
+    | INTERPOLATION expression RBRACE                                                   # fmtInterpolation
     | formattablePlaceholder                                                            # fmtPlaceholder
     ;
 
 formattablePlaceholder
-    : EmptyPlaceholder                                                                  # fmtPlaceholderEmpty
-    | VariablePlaceholder ( id=Variable )?                                              # fmtPlaceholderVariable
+    : EMPTYPLACEHOLDER                                                                  # fmtPlaceholderEmpty
+    | VARIABLEPLACEHOLDER ( id=VARIABLE )?                                              # fmtPlaceholderVariable
     ;

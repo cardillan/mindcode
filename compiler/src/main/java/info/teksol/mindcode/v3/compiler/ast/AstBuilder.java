@@ -65,12 +65,12 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     //<editor-fold desc="Rule: expression">
     public AstMindcodeNode visitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx) {
-        return new AstIdentifier(pos(ctx.Identifier()), ctx.Identifier().getText());
+        return new AstIdentifier(pos(ctx.IDENTIFIER()), ctx.IDENTIFIER().getText());
     }
 
     @Override
     public AstMindcodeNode visitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx) {
-        return new AstBuiltInIdentifier(pos(ctx.BuiltInIdentifier()), ctx.BuiltInIdentifier().getText());
+        return new AstBuiltInIdentifier(pos(ctx.BUILTINIDENTIFIER()), ctx.BUILTINIDENTIFIER().getText());
     }
 
     @Override
@@ -86,50 +86,68 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         List<AstMindcodeNode> parts = ctx.children.stream().map(this::visit).filter(Objects::nonNull).toList();
         return new AstFormattable(pos(ctx.getStart()), parts);
     }
+    //</editor-fold>
 
-    //<editor-fold desc="Chapter: Literals">
+    //<editor-fold desc="Rule: expression/literals">
     @Override
     public AstMindcodeNode visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) {
-        String literal = ctx.String().getText();
-        return new AstLiteralString(pos(ctx.String()), literal.substring(1, literal.length() - 1));
+        String literal = ctx.STRING().getText();
+        return new AstLiteralString(pos(ctx.STRING()), literal.substring(1, literal.length() - 1));
     }
 
     @Override
     public AstMindcodeNode visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) {
-        String literal = ctx.Binary().getText();
-        return new AstLiteralBinary(pos(ctx.Binary()), literal);
+        String literal = ctx.BINARY().getText();
+        return new AstLiteralBinary(pos(ctx.BINARY()), literal);
     }
 
     @Override
     public AstMindcodeNode visitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) {
-        String literal = ctx.Hexadecimal().getText();
-        return new AstLiteralHexadecimal(pos(ctx.Hexadecimal()), literal);
+        String literal = ctx.HEXADECIMAL().getText();
+        return new AstLiteralHexadecimal(pos(ctx.HEXADECIMAL()), literal);
     }
 
     @Override
     public AstMindcodeNode visitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) {
-        String literal = ctx.Decimal().getText();
-        return new AstLiteralDecimal(pos(ctx.Decimal()), literal);
+        String literal = ctx.DECIMAL().getText();
+        return new AstLiteralDecimal(pos(ctx.DECIMAL()), literal);
     }
 
     @Override
     public AstMindcodeNode visitExpFLoatLiteral(MindcodeParser.ExpFLoatLiteralContext ctx) {
-        String literal = ctx.Float().getText();
-        return new AstLiteralFloat(pos(ctx.Float()), literal);
+        String literal = ctx.FLOAT().getText();
+        return new AstLiteralFloat(pos(ctx.FLOAT()), literal);
     }
-    //</editor-fold>
+
+    @Override
+    public AstMindcodeNode visitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx) {
+        String literal = ctx.NULL().getText();
+        return new AstLiteralNull(pos(ctx.NULL()), literal);
+    }
+
+    @Override
+    public AstMindcodeNode visitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx) {
+        String literal = ctx.TRUE().getText();
+        return new AstLiteralBoolean(pos(ctx.TRUE()), literal);
+    }
+
+    @Override
+    public AstMindcodeNode visitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx) {
+        String literal = ctx.FALSE().getText();
+        return new AstLiteralBoolean(pos(ctx.FALSE()), literal);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Rule: directives">
     @Override
     public AstMindcodeNode visitDirectiveSet(MindcodeParser.DirectiveSetContext ctx) {
-        AstDirectiveValue option = new AstDirectiveValue(pos(ctx.option.DirectiveValue()), ctx.option.getText());
+        AstDirectiveValue option = new AstDirectiveValue(pos(ctx.option.DIRECTIVEVALUE()), ctx.option.getText());
         if (ctx.directiveValues() == null) {
-            return new AstDirectiveSet(pos(ctx.HashSet()), option, List.of());
+            return new AstDirectiveSet(pos(ctx.HASHSET()), option, List.of());
         } else {
             AstMindcodeNode list = visit(ctx.directiveValues());
             if (list instanceof AstDirectiveValueList valueList) {
-                return new AstDirectiveSet(pos(ctx.HashSet()), option, valueList.getValues());
+                return new AstDirectiveSet(pos(ctx.HASHSET()), option, valueList.getValues());
             } else {
                 throw new MindcodeInternalError("Unexpected result of value list evaluation: " + list);
             }
@@ -144,23 +162,23 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstDirectiveValue visitDirectiveValue(MindcodeParser.DirectiveValueContext ctx) {
-        return new AstDirectiveValue(pos(ctx.DirectiveValue()), ctx.DirectiveValue().getText());
+        return new AstDirectiveValue(pos(ctx.DIRECTIVEVALUE()), ctx.DIRECTIVEVALUE().getText());
     }
     //</editor-fold>
 
     //<editor-fold desc="Rule: formattableContents">
     @Override
     public AstMindcodeNode visitFmtText(MindcodeParser.FmtTextContext ctx) {
-        return new AstLiteralString(pos(ctx.Text()), ctx.Text().getText());
+        return new AstLiteralString(pos(ctx.TEXT()), ctx.TEXT().getText());
     }
 
     @Override
     public AstMindcodeNode visitFmtEscaped(MindcodeParser.FmtEscapedContext ctx) {
-        String text = ctx.EscapeSequence().getText();
+        String text = ctx.ESCAPESEQUENCE().getText();
         char escaped = text.charAt(1);
         return escaped == '\\' || escaped == '$'
-                ? new AstLiteralEscape(pos(ctx.EscapeSequence()), escaped + "")
-                : new AstLiteralString(pos(ctx.EscapeSequence()), text);
+                ? new AstLiteralEscape(pos(ctx.ESCAPESEQUENCE()), escaped + "")
+                : new AstLiteralString(pos(ctx.ESCAPESEQUENCE()), text);
     }
 
     @Override
@@ -178,8 +196,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstMindcodeNode visitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) {
-        return ctx.Variable() != null
-                ? new AstIdentifier(pos(ctx.Variable()), ctx.Variable().getText())
+        return ctx.VARIABLE() != null
+                ? new AstIdentifier(pos(ctx.VARIABLE()), ctx.VARIABLE().getText())
                 : new AstFormattablePlaceholder(pos(ctx.getStart()));
     }
     //</editor-fold>
