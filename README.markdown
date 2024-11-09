@@ -22,7 +22,6 @@ The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
   * Full support for the Mindustry Logic in the upcoming [Mindustry version 8](/doc/syntax/MINDUSTRY-8.markdown).
-  * A [system library of useful functions](doc/syntax/SYSTEM-LIBRARY.markdown) is available when compiling for Mindustry Logic 8. 
 * Basic functionality
   * Significant improvement in reporting error messages generated during compilation.
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
@@ -30,6 +29,7 @@ The most important recent changes to Mindcode include:
   * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
 * Mindcode syntax
   * User-defined functions enhancements: user-defined functions may provide additional return values through [output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters), can accept [variable number of arguments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions) and can be [overloaded](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
+  * A built-in [library of system functions](doc/syntax/SYSTEM-LIBRARY.markdown).
   * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
   * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements while iterating.   
 

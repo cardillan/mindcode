@@ -10,15 +10,18 @@ import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.util.ExpectedMessages;
 
+import java.util.List;
+
 public class AbstractAstTest extends AbstractParserTest {
 
     public AstNode translateToAst(String code) {
         return AstNodeBuilder.generate(InputFile.createSourceFile(code),
-                ExpectedMessages.throwOnMessage(), parse(code));
+                ExpectedMessages.throwOnMessage(), parse(code), List.of());
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String code) {
-        AstNodeBuilder.generate(InputFile.createSourceFile(code), expectedMessages, parse(code));
+        AstNodeBuilder.generate(InputFile.createSourceFile(code), expectedMessages, parse(code),
+                List.of());
         expectedMessages.validate();
     }
 

@@ -1,0 +1,5 @@
+op floor __fn0__n null 0
+format __fn0__n
+print "{2}"
+op floor __fn0__n null 0
+format __fn0__n

@@ -1455,6 +1455,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
+    public LogicValue visitRequirement(Requirement node) {
+        // Do nothing
+        return null;
+    }
+
+    @Override
     public LogicValue visitVarRef(VarRef node) {
         return createVariableOrConstant(node,node.getName(), false, null);
     }

@@ -27,6 +27,17 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitRequirement(Requirement node) {
+        buffer.append("require ");
+        if (node.isSystem()) {
+            buffer.append('"').append(node.getFile()).append('"');
+        } else {
+            buffer.append(node.getFile());
+        }
+        return null;
+    }
+
+    @Override
     public String visitIfExpression(IfExpression node) {
         buffer.append("if ");
         visit(node.getCondition());

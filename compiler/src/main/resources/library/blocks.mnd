@@ -1,0 +1,32 @@
+// Mindcode system library
+// Blocks
+
+inline void findLinkedBlocks(_title, _message, _linkMap...)
+    do
+        for _requested, _name, out _variable, _required in _linkMap do
+            _variable = null;
+        end;
+        print(_title);
+        _n = @links;
+        while _n > 0 do
+            _n = _n - 1;
+            _block = getlink(_n);
+            print("\nFound: ", _block);
+            _type = _block.@type;
+            for _requested, _name, out _variable, _required in _linkMap do
+                if _requested == _type then
+                    _variable = _block;
+                    if _requested == @message then _message = _block; end;
+                 end;
+            end;
+        end;
+
+        _foundAll = 1;
+        for _requested, _name, out _variable, _required in _linkMap do
+            print($"\n$_name: $_variable");
+            if _required then _foundAll &= _variable; end;
+        end;
+        printflush(_message);
+    loop while !_foundAll;
+end;
+

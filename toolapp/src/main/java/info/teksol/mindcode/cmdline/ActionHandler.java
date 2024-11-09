@@ -213,7 +213,7 @@ abstract class ActionHandler {
 
     static InputFile readFile(File file, boolean multiple) {
         return new InputFile(
-                isStdInOut(file) || !multiple ? "" : file.getPath(),
+                isStdInOut(file) ? "" : file.getPath(),
                 isStdInOut(file) ? "" : file.getAbsolutePath(),
                 readInput(file));
     }

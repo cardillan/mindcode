@@ -4,6 +4,7 @@ import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.cmdline.Main.Action;
+import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -17,8 +18,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
-import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
 public class CompileMindcodeAction extends ActionHandler {
 
@@ -115,7 +114,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
         List<InputFile> inputFiles = inputs.stream().map(f -> readFile(f, inputs.size() >1)).toList();
 
-        final CompilerOutput<String> result = compile(inputFiles, compilerProfile);
+        final CompilerOutput<String> result = CompilerFacade.compile(inputFiles, compilerProfile);
 
         final File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
         final File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");

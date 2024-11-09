@@ -1,0 +1,80 @@
+sensor __fn10_type null @type
+set __tmp3 80
+jump 6 equal __fn10_type @logic-display
+set __tmp3 null
+jump 6 notEqual __fn10_type @large-logic-display
+set __tmp3 176
+print __tmp3
+print "\n"
+draw rotate 0 0 90 0 0 0
+draw translate 0 -80 0 0 0 0
+draw rotate 0 0 270 0 0 0
+draw translate -80 0 0 0 0 0
+draw rotate 0 0 180 0 0 0
+draw translate -80 -80 0 0 0 0
+draw scale 1 -1 0 0 0 0
+draw translate 0 -80 0 0 0 0
+draw scale -1 1 0 0 0 0
+draw translate -80 0 0 0 0 0
+draw rotate 0 0 90 0 0 0
+draw translate 0 -176 0 0 0 0
+draw rotate 0 0 270 0 0 0
+draw translate -176 0 0 0 0 0
+draw rotate 0 0 180 0 0 0
+draw translate -176 -176 0 0 0 0
+draw scale 1 -1 0 0 0 0
+draw translate 0 -176 0 0 0 0
+draw scale -1 1 0 0 0 0
+draw translate -176 0 0 0 0 0
+sensor __tmp6 null @type
+jump 33 notEqual __tmp6 @logic-display
+draw rotate 0 0 90 0 0 0
+draw translate 0 -80 0 0 0 0
+jump 38 always 0 0
+jump 37 notEqual __tmp6 @large-logic-display
+draw rotate 0 0 90 0 0 0
+draw translate 0 -176 0 0 0 0
+jump 38 always 0 0
+stop
+sensor __tmp8 null @type
+jump 43 notEqual __tmp8 @logic-display
+draw rotate 0 0 270 0 0 0
+draw translate -80 0 0 0 0 0
+jump 48 always 0 0
+jump 47 notEqual __tmp8 @large-logic-display
+draw rotate 0 0 270 0 0 0
+draw translate -176 0 0 0 0 0
+jump 48 always 0 0
+stop
+sensor __tmp10 null @type
+jump 53 notEqual __tmp10 @logic-display
+draw rotate 0 0 180 0 0 0
+draw translate -80 -80 0 0 0 0
+jump 58 always 0 0
+jump 57 notEqual __tmp10 @large-logic-display
+draw rotate 0 0 180 0 0 0
+draw translate -176 -176 0 0 0 0
+jump 58 always 0 0
+stop
+sensor __tmp12 null @type
+jump 63 notEqual __tmp12 @logic-display
+draw scale 1 -1 0 0 0 0
+draw translate 0 -80 0 0 0 0
+jump 68 always 0 0
+jump 67 notEqual __tmp12 @large-logic-display
+draw scale 1 -1 0 0 0 0
+draw translate 0 -176 0 0 0 0
+jump 68 always 0 0
+stop
+sensor __tmp14 null @type
+jump 73 notEqual __tmp14 @logic-display
+draw scale -1 1 0 0 0 0
+draw translate -80 0 0 0 0 0
+jump 78 always 0 0
+jump 77 notEqual __tmp14 @large-logic-display
+draw scale -1 1 0 0 0 0
+draw translate -176 0 0 0 0 0
+jump 78 always 0 0
+stop
+draw scale 2.2 2.2 0 0 0 0
+draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0

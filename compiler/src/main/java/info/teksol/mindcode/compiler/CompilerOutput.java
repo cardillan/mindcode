@@ -38,7 +38,7 @@ public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String
         return formatMessages(MindcodeMessage::isInfo, messageTransformer);
     }
 
-    private <M> List<M> formatMessages(Predicate<MindcodeMessage> filter, Function<MindcodeMessage, M> messageTransformer) {
+    public <M> List<M> formatMessages(Predicate<MindcodeMessage> filter, Function<MindcodeMessage, M> messageTransformer) {
         return messages.stream().filter(filter)
                 .map(messageTransformer)
                 .collect(Collectors.toCollection(ArrayList::new));

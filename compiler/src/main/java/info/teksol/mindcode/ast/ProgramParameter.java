@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 
 import java.util.Objects;
 
@@ -34,6 +35,11 @@ public class ProgramParameter extends BaseAstNode {
     @Override
     public int hashCode() {
         return Objects.hash(name, value);
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.ASSIGNMENT;
     }
 
     @Override

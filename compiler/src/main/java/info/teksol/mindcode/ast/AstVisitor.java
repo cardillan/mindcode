@@ -67,6 +67,8 @@ public interface AstVisitor<T> {
 
     T visitRef(Ref node);
 
+    T visitRequirement(Requirement node);
+
     T visitReturnStatement(ReturnStatement node);
 
     T visitSeq(Seq seq);

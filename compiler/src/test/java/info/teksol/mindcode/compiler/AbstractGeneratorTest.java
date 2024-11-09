@@ -195,7 +195,8 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected Seq generateAstTree(String code) {
         return AstNodeBuilder.generate(InputFile.createSourceFile(code),
                 ExpectedMessages.throwOnMessage(),
-                parse(code));
+                parse(code),
+                List.of());
     }
 
     // This class always creates unoptimized code.

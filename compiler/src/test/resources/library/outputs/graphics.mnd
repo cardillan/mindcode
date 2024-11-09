@@ -1,0 +1,24 @@
+#set target = ML8A;
+require graphics;
+SYS_MESSAGE = null;
+
+_display = null;
+
+println(displaySize(_display));
+rotateLeftSmall();
+rotateRightSmall();
+upsideDownSmall();
+flipVerticalSmall();
+flipHorizontalSmall();
+rotateLeftLarge();
+rotateRightLarge();
+upsideDownLarge();
+flipVerticalLarge();
+flipHorizontalLarge();
+rotateLeft(_display);
+rotateRight(_display);
+upsideDown(_display);
+flipVertical(_display);
+flipHorizontal(_display);
+scaleSmallToLarge();
+scaleLargeToSmall();

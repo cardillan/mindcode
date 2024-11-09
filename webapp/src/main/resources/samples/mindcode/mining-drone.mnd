@@ -1,25 +1,29 @@
+// Units is a system library providing functions for easy acquisition of units
+require units;
+
 // These assignments will be compiled into the output code as-is.
 // It is possible to change them in the compiled code.
+
+/// Configurable options:
 param CONTAINER = vault1;
 param PATCH_X = 16;
 param PATCH_Y = 17;
+param SYS_MESSAGE = message1;
 
-// Find a live unit (@unit.dead === 0) that is not controlled
-// by a player or processor (@unit.controlled == 0)
-do
-    print("Searching available unit...");
-    printflush(message1);
-    ubind(@poly);
-loop while (@unit.@dead !== 0) or (@unit.@controlled != 0);
+// Find a unit if we don't have one
+if @unit.@dead != 0 or @unit.@controller != @this then
+    // Some Mindustry code on the internet relies on nonzero flag
+    // marking used units. Assign non-zero flag to protect our unit
+    // from such code run by other processors.
+    waitForFreeUnit(@poly, rand(1000));
+end;
 
-// Some Mindustry code on the internet relies on nonzero flag
-// marking used units. Assign non-zero flag to protect our unit
-// from such code run by other processors.
-flag(rand(1000));
+// Throw away anything the unit might have been carrying
+itemDrop(@air, @unit.@totalItems);
 
 // Mine until the unit is lost or killed
 // Then the program restarts, acquiring another unit
-while (@unit.@controller == @this) and (@unit.@dead === 0) do
+while @unit.@controller == @this and @unit.@dead == 0 do
     if @unit.@totalItems < @unit.@itemCapacity then
         println("State: mining");
         approach(PATCH_X, PATCH_Y, 3);

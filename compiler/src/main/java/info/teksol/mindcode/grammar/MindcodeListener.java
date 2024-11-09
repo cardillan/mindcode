@@ -414,6 +414,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral_numeric(MindcodeParser.Literal_numericContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code require_directive}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRequire_directive(MindcodeParser.Require_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code require_directive}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRequire_directive(MindcodeParser.Require_directiveContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code case_expression}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -639,6 +651,30 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDirective_list(MindcodeParser.Directive_listContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code require_system}
+	 * labeled alternative in {@link MindcodeParser#require}.
+	 * @param ctx the parse tree
+	 */
+	void enterRequire_system(MindcodeParser.Require_systemContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code require_system}
+	 * labeled alternative in {@link MindcodeParser#require}.
+	 * @param ctx the parse tree
+	 */
+	void exitRequire_system(MindcodeParser.Require_systemContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code require_external}
+	 * labeled alternative in {@link MindcodeParser#require}.
+	 * @param ctx the parse tree
+	 */
+	void enterRequire_external(MindcodeParser.Require_externalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code require_external}
+	 * labeled alternative in {@link MindcodeParser#require}.
+	 * @param ctx the parse tree
+	 */
+	void exitRequire_external(MindcodeParser.Require_externalContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#indirectpropaccess}.
 	 * @param ctx the parse tree

@@ -1,0 +1,52 @@
+Number of reported ambiguities: 14
+Active optimizations:
+    case-expression-optimization = advanced,
+    case-switching = advanced,
+    data-flow-optimization = advanced,
+    dead-code-elimination = advanced,
+    expression-optimization = advanced,
+    function-inlining = advanced,
+    if-expression-optimization = advanced,
+    jump-normalization = advanced,
+    jump-optimization = advanced,
+    jump-straightening = advanced,
+    jump-threading = advanced,
+    loop-hoisting = advanced,
+    loop-optimization = advanced,
+    loop-unrolling = advanced,
+    print-merging = advanced,
+    return-optimization = advanced,
+    single-step-elimination = advanced,
+    stack-optimization = advanced,
+    temp-variables-elimination = advanced,
+    unreachable-code-elimination = advanced
+
+    43 instructions before optimizations.
+     4 instructions eliminated by Temp Variables Elimination.
+     3 instructions eliminated by Dead Code Elimination (3 iterations).
+       List of unused variables: SYS_MESSAGE.
+     4 instructions modified by Jump Normalization (4 iterations).
+     4 instructions eliminated by Jump Optimization (4 iterations).
+     6 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+     2 instructions eliminated by If Expression Optimization (3 iterations).
+     4 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     1 instructions modified by Loop Optimization (3 iterations).
+     1 loops improved by Loop Optimization.
+    11 instructions added by Function Inlining (4 iterations).
+     2 function calls inlined by Function Inlining.
+     2 instructions updated by JumpThreading.
+    26 instructions eliminated by Unreachable Code Elimination.
+     5 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 973):
+  * Function Inlining: inline function formatNumber              cost    15, benefit        7.0, efficiency        0.5 (+9 instructions)
+    Function Inlining: inline function call at line 8            cost    16, benefit        3.5, efficiency        0.2
+    Function Inlining: inline function call at line 28           cost    16, benefit        3.5, efficiency        0.2
+
+Final code before resolving virtual instructions:
+
+    0:  op floor __fn0__n null 0
+    1:  format __fn0__n
+    2:  print "{2}"
+    3:  op floor __fn0__n null 0
+    4:  format __fn0__n

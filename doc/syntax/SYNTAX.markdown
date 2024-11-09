@@ -55,6 +55,28 @@ A text enclosed between `/*` and `*/` is a comment that can span several lines. 
 
 You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks) to place comments or notes directly to the compiled code. An enhanced comment is a comment which starts with `///` (three slashes instead of two). This is an [alternative way to enter remarks](SYNTAX-4-FUNCTIONS.markdown#enhanced-comments) into the compiled code. 
 
+### Libraries and included files
+
+Mindcode language contains several [system libraries](SYSTEM-LIBRARY.markdown). To add a system library or an external file to compiled code, use the `require` statement:
+
+```
+require units;
+require "library\drawings.mnd";
+```
+
+The `require` statement can appear anywhere in the compiled code, although it is  recommended to use it at the top of the source code. The code from the required file is compiled separately and combined with the code from the original file. Syntax errors are reported in the file where they occurred.
+
+A file added though a `require` statement can also use a `require` statement. Circular dependencies between files are resolved and each file is compiled only once.
+
+In the web application, the `require` statement can only be used to import system libraries. Using the statement with external files is not supported.
+
+In the command-line tool, using the `require` statement with external files is analogous to the [`--append` command-line argument](TOOLS-CMDLINE.markdown#additional-input-files).
+
+> [!IMPORTANT]
+> At this moment, all included files share the same variable namespace. Declaring a constant or a program parameter in any of the source files taking part in the compilation causes compilation errors in other files, if the constant or program parameter name is used as a variable identifier in another file, including function parameters and local variables.
+> 
+> A recommended approach to avoid this problem until the issue is resolved is to always declare constants and program parameters using upper case names. 
+
 ## Compilation and optimization
 
 Mindcode provides the web application and the command-line compiler for compiling Mindcode into mlog code. There are several [optimization levels](SYNTAX-5-OTHER.markdown#option-optimization) available:
@@ -94,14 +116,21 @@ This is a list of Mindcode keywords:
 * `out`
 * `param`
 * `return`
+* `require`
 * `sensor`
 * `stack`
 * `then`
 * `true`
-* `var`
 * `void`
 * `when`
 * `while`
+
+The following keywords do not have any function in Mindcode, but are reserved for compatibility reason or for future use: 
+
+* `begin`
+* `elif`
+* `elseif`
+* `var`
 
 Keywords cannot be used as function or variable names.
 

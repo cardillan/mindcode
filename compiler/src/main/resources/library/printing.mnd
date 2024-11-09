@@ -1,0 +1,29 @@
+// Mindcode system library for Mindustry Logic version 8
+// Printing - numeric output
+
+// Formats a number into the text buffer, without external memory.
+// The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
+void formatNumber(_n)
+    _n = floor(_n);
+    if _n < 0 then
+        format("-{2}");     // Prepend the minus sign
+        _n = abs(_n);
+    end;
+    while _n > 999 do
+        _mod = _n % 1000;
+        // Insert placeholder for the next group, thousands separator, leading zeroes (if any) and a placeholder for this group.
+        format(_mod < 10 ? "{2},00{1}" : _mod < 100 ? "{2},0{1}" : "{2},{1}");
+        format(_mod);
+        _n \= 1000;
+    end;
+
+    // Put the rest of the number into the remaining placeholder
+    format(_n);
+end;
+
+// Prints the number straight away
+// The text buffer must not contain any placeholders lower than {3}.
+void printNumber(_n)
+    print("{2}");
+    formatNumber(_n);
+end;

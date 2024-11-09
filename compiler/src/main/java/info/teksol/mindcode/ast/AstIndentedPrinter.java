@@ -329,6 +329,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitRequirement(Requirement node) {
+        print(node);
+        return null;
+    }
+
+    @Override
     public String visitReturnStatement(ReturnStatement node) {
         open("ReturnStatement{");
         print("fnRetVal="); visit(node.getRetval());
