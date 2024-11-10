@@ -76,10 +76,12 @@ public class MlogDecompiler {
                 if (ix.getOpcode() == Opcode.JUMP) {
                     String target = ix.getArg(0).toMlog();
                     try {
-                        Integer index = Integer.parseInt(target);
-                        String label = labels.computeIfAbsent(index, ind -> createNewLabel());
-                        labels.put(index, label);
-                        ix.setArgument(0, new MlogVariable(label));
+                        int index = Integer.parseInt(target);
+                        if (index >= 0 && index < content.size()) {
+                            String label = labels.computeIfAbsent(index, ind -> createNewLabel());
+                            labels.put(index, label);
+                            ix.setArgument(0, new MlogVariable(label));
+                        }
                     } catch (NumberFormatException ex) {
                         // Do nothing
                     }

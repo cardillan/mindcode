@@ -19,17 +19,19 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     private final InputFiles.InputFile inputFile;
     private final Map<String, Integer> heapAllocations = new HashMap<>();
     private int temp;
+    private List<Requirement> requirements;
     private HeapAllocation allocatedHeap;
     private StackAllocation allocatedStack;
 
-    public AstNodeBuilder(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer) {
+    public AstNodeBuilder(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer, List<Requirement> requirements) {
         this.inputFile = inputFile;
         this.messageConsumer = messageConsumer;
+        this.requirements = requirements;
     }
 
     public static Seq generate(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer,
-            MindcodeParser.ProgramContext program) {
-        final AstNodeBuilder builder = new AstNodeBuilder(inputFile, messageConsumer);
+            MindcodeParser.ProgramContext program, List<Requirement> requirements) {
+        final AstNodeBuilder builder = new AstNodeBuilder(inputFile, messageConsumer, requirements););
         final AstNode node = builder.visit(program);
         return (Seq) node;
     }
@@ -170,7 +172,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         MindcodeParser.Alloc_listContext alloc_list = ctx.alloc().alloc_list();
         while (alloc_list != null) {
             switch (alloc_list.type.getText()) {
-                case "heap"  -> allocateHeap(alloc_list);
+                case "heap" -> allocateHeap(alloc_list);
                 case "stack" -> allocateStack(alloc_list);
             }
 
@@ -373,7 +375,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitExclusive_range_exp(MindcodeParser.Exclusive_range_expContext ctx) {
-        return new ExclusiveRange(pos(ctx.getStart()),visit(ctx.start), visit(ctx.end));
+        return new ExclusiveRange(pos(ctx.getStart()), visit(ctx.start), visit(ctx.end));
     }
 
     @Override
@@ -547,7 +549,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitInclusive_range_exp(MindcodeParser.Inclusive_range_expContext ctx) {
-        return new InclusiveRange(pos(ctx.getStart()),visit(ctx.start), visit(ctx.end));
+        return new InclusiveRange(pos(ctx.getStart()), visit(ctx.start), visit(ctx.end));
     }
 
     @Override
@@ -619,7 +621,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             value = value.replace("\\\"", "'");
 
         }
-        return new StringLiteral(pos(ctx.getStart()), value.replaceAll("\\\\\"", "\""));
+        return new StringLiteral(pos(ctx.getStart()), value.replace("\\\"", "\""));
     }
 
     @Override
@@ -731,7 +733,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public AstNode visitSimple_assign(MindcodeParser.Simple_assignContext ctx) {
         final AstNode lvalue = visit(ctx.target);
         final AstNode value = visit(ctx.value);
-        return new Assignment(pos(ctx.getStart()),lvalue, value);
+        return new Assignment(pos(ctx.getStart()), lvalue, value);
     }
 
     @Override
@@ -770,12 +772,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitVar_ref(MindcodeParser.Var_refContext ctx) {
-        return new VarRef(pos(ctx.getStart()),  ctx.getText());
+        return new VarRef(pos(ctx.getStart()), ctx.getText());
     }
 
     @Override
     public AstNode visitWhen_value_list(MindcodeParser.When_value_listContext ctx) {
-        if (ctx.when_value_list()!= null) {
+        if (ctx.when_value_list() != null) {
             return new Seq(pos(ctx.getStart()), visit(ctx.when_value_list()), visit(ctx.when_expression()));
         } else {
             final AstNode last = visit(ctx.when_expression());
@@ -786,7 +788,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitWhile_expression(MindcodeParser.While_expressionContext ctx) {
         String label = ctx.label == null ? null : ctx.label.getText();
-        return new WhileExpression(pos(ctx.getStart()),label, new NoOp(),
+        return new WhileExpression(pos(ctx.getStart()), label, new NoOp(),
                 visit(ctx.cond), visit(ctx.loop_body()), new NoOp());
     }
 
@@ -797,5 +799,20 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         StringLiteral text = new StringLiteral(pos(ctx.getStart()), str);
         FunctionArgument argument = new FunctionArgument(pos(ctx.getStart()), text, false, false);
         return new FunctionCall(pos(ctx.getStart()), "remark", argument);
+    }
+
+    @Override
+    public AstNode visitRequire_system(MindcodeParser.Require_systemContext ctx) {
+        Requirement requirement = new Requirement(pos(ctx.getStart()), ctx.file.getText(), true);
+        requirements.add(requirement);
+        return requirement;
+    }
+
+    @Override
+    public AstNode visitRequire_external(MindcodeParser.Require_externalContext ctx) {
+        String file = ctx.file.getText();
+        Requirement requirement = new Requirement(pos(ctx.getStart()), file.substring(1, file.length() - 1), false);
+        requirements.add(requirement);
+        return requirement;
     }
 }

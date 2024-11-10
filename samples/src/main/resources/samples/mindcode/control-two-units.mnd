@@ -1,9 +1,19 @@
 // Binds two different units, stores them in variables and controls
 // both them simultaneously by moving them around in a pattern
 
-// These are local variables
-poly = ubind(@poly);        // We just assume the unit exists
-mega = ubind(@mega);        // dtto
+// Units is a system library providing functions
+// for easy acquisition of units
+require units;
+
+// We'll write messages onto this block
+// It is used by the units system library to output messages as well
+param SYS_MESSAGE = message1;
+
+// Finds a free unit of given type, not returning until such a unit is found
+// Sets the flags of these units to a nonzero value
+// Stores the acquired units in variables
+poly = waitForFreeUnit(@poly, 1);
+mega = waitForFreeUnit(@mega, 1);
 
 // This is a global variable
 ANGLE = 0;
@@ -13,12 +23,12 @@ while true do
     controlUnit(mega);
 end;
 
-def controlUnit(my_unit)
+def controlUnit(unit)
     // Binds the unit stored in a variable
-    ubind(my_unit);
+    ubind(unit);
     move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
     print($"Currently bound unit is ${@unit}.");
-    printflush(message1);
+    printflush(SYS_MESSAGE);
     wait(0.8);
     ANGLE += 45;
 end;

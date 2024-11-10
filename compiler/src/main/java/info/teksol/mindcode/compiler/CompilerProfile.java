@@ -80,6 +80,10 @@ public class CompilerProfile {
         return new CompilerProfile(webApplication, OptimizationLevel.NONE);
     }
 
+    public boolean isWebApplication() {
+        return webApplication;
+    }
+
     public ProcessorVersion getProcessorVersion() {
         return processorVersion;
     }

@@ -1,0 +1,22 @@
+#set target = ML8A;
+require utils;
+SYS_MESSAGE = null;
+
+_a = null;
+_b = null;
+_n = null;
+_precision = null;
+_x = null;
+_x1 = null;
+_x2 = null;
+_y1 = null;
+_y2 = null;
+
+println(distance(_x1, _y1, _x2, _y2));
+println(round(_x));
+println(frac(_x));
+println(sign(_x));
+println(isZero(_x));
+println(isZero(_x, _precision));
+println(isEqual(_a, _b, _precision));
+printExact(_n);

@@ -44,6 +44,7 @@ public abstract class BaseAstVisitor<T> extends AbstractMessageEmitter implement
         if (node instanceof Range n)                    return visitRange(n);
         if (node instanceof RangedForExpression n)      return visitRangedForExpression(n);
         if (node instanceof Ref n)                      return visitRef(n);
+        if (node instanceof Requirement n)              return visitRequirement(n);
         if (node instanceof ReturnStatement n)          return visitReturnStatement(n);
         if (node instanceof Seq n)                      return visitSeq(n);
         if (node instanceof StackAllocation n)          return visitStackAllocation(n);

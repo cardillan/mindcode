@@ -1,0 +1,107 @@
+// Mindcode system library
+// Units
+
+// Searches for and binds a free unit of given type. If no free unit of given type can be found
+// (either because none exists, or because all existing units are occupied), returns immediately.
+//
+// unit_type: type of the unit, @flare, @mono, @poly etc.
+// initial_flag: initial flag to set to he freshly bound unit.
+// returns the freshly bound unit, or null if no unit can be bound
+def findFreeUnit(_unit_type, _initial_flag)
+    ubind(_unit_type);
+    // No unit of this type exists
+    if @unit == null then return null; end;
+
+    _first_unit = @unit;
+    do
+        if @unit.@controlled == 0 then
+            flag(_initial_flag);        // Mark unit as active
+            return @unit;
+        elsif _first_unit.@dead == 1 then
+            // _first_unit got killed. It won't be served by ubind anymore
+            // Replace with the current one
+            _first_unit = @unit;
+        end;
+
+        // Try the next one. If it is the same as the first one, we've seen them all
+        ubind(_unit_type);
+    loop while _first_unit != @unit;
+
+    return null;
+end;
+
+// Searches for and binds a free unit of given type closest to the coordinates on the map given.
+// If no free unit of given type can be found (either because none exists, or because all existing
+// units are occupied), returns immediately.
+//
+// x, y: coordinates of the position to look around
+// unit_type: type of the unit, @flare, @mono, @poly etc.
+// initial_flag: initial flag to set to he freshly bound unit.
+// returns the freshly bound unit closest to given coordinates, or null if no free unit of given type exists
+def findClosestUnit(_x, _y, _unit_type, _initial_flag)
+    while true do
+        ubind(_unit_type);
+        // No unit of this type exists
+        if @unit == null then return null; end;
+
+        _first_unit = @unit;
+        _best_unit = null;
+        _best_distance = 1e10;
+        do
+            if @unit.@controlled == 0 then
+                _distance = len(@unit.@x - _x, @unit.@y - _y);
+                if _distance < _best_distance then
+                    _best_distance = _distance;
+                    _best_unit = @unit;
+                end;
+            elsif _first_unit.@dead == 1 then
+                // _first_unit got killed. It won't be served by ubind anymore
+                // Replace with the current one
+                _first_unit = @unit;
+            end;
+
+            // Try the next one. If it is the same as the first one, we've seen them all
+            ubind(_unit_type);
+        loop while _first_unit != @unit;
+
+        // No free unit at all
+        if _best_unit == null then
+            return null;
+        end;
+
+        // If the best unit is still not controlled, flag it and return
+        if _best_unit.@controlled == 0 then
+            ubind(_best_unit);
+            flag(_initial_flag);
+            return _best_unit;
+        end;
+    end;
+end;
+
+// Searches for and binds a free unit of given type. Waits until the unit of requested type is available.
+// Updates search status in SYS_MESSAGE.
+//
+// unit_type: type of the unit, @flare, @mono, @poly etc.
+// initial_flag: initial flag to set to he freshly bound unit.
+// returns the freshly bound unit
+def waitForFreeUnit(_unit_type, _initial_flag)
+    // Keep looking for unit until one is found
+    while true do
+        ubind(_unit_type);
+        if @unit == null then
+            if SYS_MESSAGE then
+                print($"No unit of type $_unit_type found.");
+                printflush(SYS_MESSAGE);
+             end;
+        elsif @unit.@controlled != 0 then
+            if SYS_MESSAGE then
+                print($"Looking for a free $_unit_type...");
+                printflush(SYS_MESSAGE);
+             end;
+        else
+            flag(_initial_flag);        // Mark unit as active
+            return @unit;
+        end;
+    end;
+end;
+

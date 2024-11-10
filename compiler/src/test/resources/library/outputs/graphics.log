@@ -1,0 +1,321 @@
+Number of reported ambiguities: 46
+Active optimizations:
+    case-expression-optimization = advanced,
+    case-switching = advanced,
+    data-flow-optimization = advanced,
+    dead-code-elimination = advanced,
+    expression-optimization = advanced,
+    function-inlining = advanced,
+    if-expression-optimization = advanced,
+    jump-normalization = advanced,
+    jump-optimization = advanced,
+    jump-straightening = advanced,
+    jump-threading = advanced,
+    loop-hoisting = advanced,
+    loop-optimization = advanced,
+    loop-unrolling = advanced,
+    print-merging = advanced,
+    return-optimization = advanced,
+    single-step-elimination = advanced,
+    stack-optimization = advanced,
+    temp-variables-elimination = advanced,
+    unreachable-code-elimination = advanced
+
+   166 instructions before optimizations.
+     1 instructions eliminated by Temp Variables Elimination.
+     5 instructions eliminated by Case Expression Optimization.
+    16 instructions eliminated by Dead Code Elimination (3 iterations).
+       List of unused variables: SYS_MESSAGE.
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     2 instructions eliminated by If Expression Optimization (3 iterations).
+     8 instructions eliminated by Data Flow Optimization (16 iterations).
+    40 instructions eliminated by Function Inlining (13 iterations).
+    20 function calls inlined by Function Inlining.
+    10 instructions eliminated by Jump Straightening (4 iterations).
+    80 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 878):
+  * Function Inlining: inline function rotateLeftSmall           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function rotateRightSmall          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 12           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 13           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 72           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 80           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 88           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 882):
+  * Function Inlining: inline function rotateRightSmall          cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 12           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 13           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 80           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 88           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 886):
+  * Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 12           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 13           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 88           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 890):
+  * Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 12           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 13           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 894):
+  * Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 12           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 13           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 898):
+  * Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 13           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 902):
+  * Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 14           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 906):
+  * Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 910):
+  * Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
+    Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Pass 1: speed optimization selection (cost limit 914):
+  * Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
+    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+
+Final code before resolving virtual instructions:
+
+    0:  sensor __fn10_type null @type
+    1:  set __tmp3 80
+    2:  jump __label13 equal __fn10_type @logic-display
+    3:  set __tmp3 null
+    4:  jump __label15 notEqual __fn10_type @large-logic-display
+    5:  set __tmp3 176
+        label __label15
+        label __label13
+    6:  print __tmp3
+    7:  print "\n"
+    8:  draw rotate 0 0 90 0 0 0
+    9:  draw translate 0 -80 0 0 0 0
+   10:  draw rotate 0 0 270 0 0 0
+   11:  draw translate -80 0 0 0 0 0
+   12:  draw rotate 0 0 180 0 0 0
+   13:  draw translate -80 -80 0 0 0 0
+   14:  draw scale 1 -1 0 0 0 0
+   15:  draw translate 0 -80 0 0 0 0
+   16:  draw scale -1 1 0 0 0 0
+   17:  draw translate -80 0 0 0 0 0
+   18:  draw rotate 0 0 90 0 0 0
+   19:  draw translate 0 -176 0 0 0 0
+   20:  draw rotate 0 0 270 0 0 0
+   21:  draw translate -176 0 0 0 0 0
+   22:  draw rotate 0 0 180 0 0 0
+   23:  draw translate -176 -176 0 0 0 0
+   24:  draw scale 1 -1 0 0 0 0
+   25:  draw translate 0 -176 0 0 0 0
+   26:  draw scale -1 1 0 0 0 0
+   27:  draw translate -176 0 0 0 0 0
+   28:  sensor __tmp6 null @type
+   29:  jump __label29 notEqual __tmp6 @logic-display
+   30:  draw rotate 0 0 90 0 0 0
+   31:  draw translate 0 -80 0 0 0 0
+   32:  jump __label28 always 0 0
+        label __label29
+   33:  jump __label32 notEqual __tmp6 @large-logic-display
+   34:  draw rotate 0 0 90 0 0 0
+   35:  draw translate 0 -176 0 0 0 0
+   36:  jump __label28 always 0 0
+        label __label32
+   37:  stop
+        label __label28
+   38:  sensor __tmp8 null @type
+   39:  jump __label38 notEqual __tmp8 @logic-display
+   40:  draw rotate 0 0 270 0 0 0
+   41:  draw translate -80 0 0 0 0 0
+   42:  jump __label37 always 0 0
+        label __label38
+   43:  jump __label41 notEqual __tmp8 @large-logic-display
+   44:  draw rotate 0 0 270 0 0 0
+   45:  draw translate -176 0 0 0 0 0
+   46:  jump __label37 always 0 0
+        label __label41
+   47:  stop
+        label __label37
+   48:  sensor __tmp10 null @type
+   49:  jump __label47 notEqual __tmp10 @logic-display
+   50:  draw rotate 0 0 180 0 0 0
+   51:  draw translate -80 -80 0 0 0 0
+   52:  jump __label46 always 0 0
+        label __label47
+   53:  jump __label50 notEqual __tmp10 @large-logic-display
+   54:  draw rotate 0 0 180 0 0 0
+   55:  draw translate -176 -176 0 0 0 0
+   56:  jump __label46 always 0 0
+        label __label50
+   57:  stop
+        label __label46
+   58:  sensor __tmp12 null @type
+   59:  jump __label56 notEqual __tmp12 @logic-display
+   60:  draw scale 1 -1 0 0 0 0
+   61:  draw translate 0 -80 0 0 0 0
+   62:  jump __label55 always 0 0
+        label __label56
+   63:  jump __label59 notEqual __tmp12 @large-logic-display
+   64:  draw scale 1 -1 0 0 0 0
+   65:  draw translate 0 -176 0 0 0 0
+   66:  jump __label55 always 0 0
+        label __label59
+   67:  stop
+        label __label55
+   68:  sensor __tmp14 null @type
+   69:  jump __label65 notEqual __tmp14 @logic-display
+   70:  draw scale -1 1 0 0 0 0
+   71:  draw translate -80 0 0 0 0 0
+   72:  jump __label64 always 0 0
+        label __label65
+   73:  jump __label68 notEqual __tmp14 @large-logic-display
+   74:  draw scale -1 1 0 0 0 0
+   75:  draw translate -176 0 0 0 0 0
+   76:  jump __label64 always 0 0
+        label __label68
+   77:  stop
+        label __label64
+   78:  draw scale 2.2 2.2 0 0 0 0
+   79:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0

@@ -60,7 +60,14 @@ public class MlogDecompilerController {
         }
 
         final long start = System.nanoTime();
-        final String result = MlogDecompiler.decompile(mlog);
+        String result;
+        try {
+            result = MlogDecompiler.decompile(mlog);
+        } catch (RuntimeException e) {
+            logger.error("Error decompiling mlog code", e);
+            result = "Internal error";
+        }
+
         final long end = System.nanoTime();
         logger.info("performance mlog_decompiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

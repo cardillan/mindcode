@@ -392,7 +392,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    7 op equal __tmp1 null null
 +    8 op or __tmp2 true true
 +    9 op equal __tmp3 null null
-+   10 op or __tmp4 true true
++   10 op or __tmp4 1 true
     11 label __label22
     12 print "Water and Cryofluid Level Meter"
     13 set n @links
@@ -406,7 +406,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op equal __tmp1 null null
 -    * op or __tmp2 true true
 -    * op equal __tmp3 null null
--    * op or __tmp4 true true
+-    * op or __tmp4 1 true
      6 label __label22
      7 print "Water and Cryofluid Level Meter"
      8 set n @links

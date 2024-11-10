@@ -8,6 +8,28 @@ Most expressions utilize some operators described below. Other important types o
 
 Those will be discussed later on.
 
+Mindcode evaluates expressions and mathematical functions using the corresponding Mindustry Logic instructions as much as possible, to generate small code. Most of the Mindcode expression evaluation rules therefore follow Mindustry Logic rules, with a few possible exceptions that will be documented here.
+
+Sometimes the expression evaluation in Mindustry Logic itself might be slightly unexpected, and these cases will also be described in this document.     
+
+# Null values and object values
+
+Handling `null` values in Mindustry Logic is governed by these rules:
+
+1. When an invalid operation is attempted, such as `1 / 0`, `sqrt(-1)`, or `log(0)`, the resulting value is `null`.
+2. When a `null` value is used in a mathematical operation, it is converted to zero (`0`).
+
+However, a code produced by Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`. In this case, the result may also be `null`, if the corresponding operation in Mindustry Logic would produce a zero value. The only exceptions are operators producing boolean values, which are guaranteed to evaluate to `true` or `false` and never produce any other value, such as `null`.   
+
+This difference in handling `null` values allows Mindcode to optimize code when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b`. (Such expressions typically aren't present directly in the user code, but may arise as a result of optimizations Mindcode performs.
+
+The impact of the difference in `null` handling by Mindcode is minimal - as has been mentioned above, the `null` value is handled the same as `0` in most cases. The difference between `null` and `0` is meaningful only in these operations:
+
+- `strictEqual` comparison, represented by `===` and `!==` in Mindcode.
+- Printing the value using the `print` or `format` instructions: `null` is output for nulls and `0` for zero values.
+
+Objects used in numerical expressions always have a value of `1`. `n = @unit * 10` will therefore assign `10` to `n` if a unit is bound, `0` otherwise.
+
 # Operators
 
 Most operators do the expected: `+`, `-`, `*`, `/`, and they respect precedence of operation, meaning we multiply and divide, then add and subtract. Add to this operator `\`, which stands for integer division. For example:
@@ -39,78 +61,37 @@ The full list of Mindcode operators in the order of precedence is as follows:
 13. `? :`: ternary operator (`value <= limit ? "ok" : "too high"`)
 14. `=`, `**=`, `*=`, `/=`, `\=`, `%=`, `+=`, `-=`, `<<=`, `>>=`, `&=`, `|=`, `^=`, `&&=`, `||=`: assignments
 
+## Boolean operators
+
 For the following operators, their resulting value is guaranteed to be either `false` or `true` (`0` or `1` respectively) for all possible values of their operands, including `null` values:
 - equality operators: `==`, `!=`, `===`, `!==`
 - relational operators: `<`, `<=`, `>`, `>=`
 - boolean operators: `&&`, `||`
 
-> [!NOTE]
-> Please note that the logical operators (`and`, `or`) behave slightly differently than boolean operators (`&&`, `||`) - specifically, they may produce a `null` value (equivalent to `false`) or any non-zero value (equivalent to `true`).
+> [!TIP]
+> The boolean or operator (`||`) doesn't have a corresponding Mindustry Logic instruction, and is encoded using several (namely, two) mlog instructions. Similarly, while the boolean and operator (`&&`) does have a corresponding mlog instruction, the guarantee to always produce a boolean value precludes using some optimizations on it. 
 >
-> Always use the logical operators, unless you're interested in the numerical value of the expression, e.g. `count += is_active && reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal mlog code.
+> For evaluating conditions, using the logical operators (`and`/`or`) is preferred. Only use the boolean operators when you need to limit the output values to `0` or `1`, e.g. `count += is_active || reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal mlog code.
 
-Handling `null` values by all other operators is governed by these rules:
+## Logical operators
 
-1. When an invalid operation is attempted, such as division by zero, the resulting value is `null`.
-2. When one of the operands to the operation is `null`, the result may also be `null`, if the result of a corresponding operation in Mindustry Logic would be zero.
-
-> [!IMPORTANT]
-> Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`.
- 
-The difference in handling `null` values allows Mindcode to omit an instruction when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b`. (Such expressions typically aren't present in your code right away, but they may arise as a result of optimizations Mindcode performs, be it constant propagation, loop unrolling or others.)
-
-The impact of the difference in `null` handling by Mindcode is minimal. When a `null` value enters any operation where a number is required, it is silently converted to zero. The difference between `null` and `0` is meaningful only in these operations:
-
-- `strictEqual` comparison, represented by `===` and `!==` in Mindcode.
-- Printing the value using the `print` or `format` instructions: `null` is output for nulls and `0` for zero values. 
-
-## Compound assignment operators
-
-The compound assignment operators combine arithmetic operation with an assignment: `x += 1` is equivalent to `x = x + 1`.
-
-Assignment operators are evaluated from right to left:
-
-```
-x += y *= 2;
-```
-is the same as
-```
-y = y * 2;
-x = x + y;
-```
-
-## Boolean operators
-
-Boolean operators are:
-* `<`, `<=`,  `>=`,  `>`
-* `==`, `!=`, `===`, `!==`
-* `&&`, `and`
-
-These operators always produce either `true` or `false` - even if their operands themselves aren't boolean values.
-Note that `true` is identical to `1` and `false` is identical to `0` in Mindustry Logic.
-
-The `||` and `or` operators, although they are meant to provide boolean or, may not produce boolean values
-when their operands aren't boolean themselves. They're identical with the bitwise or (`|`).
-It works as expected with control statements, e.g.
+The logical operators (`and`, `or`) behave slightly differently than boolean operators (`&&`, `||`) - specifically, they may produce a `null` value (equivalent to `false`) or any non-zero value (equivalent to `true`). They are suitable to be used in control statements, where conditional expressions are considered true if they evaluate to a nonzero value:
 
 ```
 items = vault1.totalItems;
-while items or alive do
+while items and !@unit.@dead do
     ...
 end;
 ```
-
-Conditional expressions in control statements are considered true if they evaluate to a nonzero value.
 
 ## Equality operators
 
 There are two kinds of equality operators: strict ones (`===`, `!==`) and non-strict ones (`==`, `!=`).
 
-The strict operators will only consider two values to be equal when they're both numerical and having the same value,
-or they both point to the same object, or they're both `null`.
+The strict operators will only consider two values to be equal when they're both numerical and having the same value, or they both point to the same object, or they're both `null`.
 
-The non-strict equality operators behave differently when one of the values being compared is numerical and the other is not.
-In that scenario, the values are considered equal in these cases:
+The non-strict equality operators behave differently when one of the values being compared is numerical and the other is not. In that scenario, the values are considered equal in these cases:
+
 * one of the values is `null` and the other is `0` (zero), or
 * one of the values is an object and the other is `1` (one).
 
@@ -159,14 +140,66 @@ printflush(message1);
 
 </details>
 
-# Expressions without a valid evaluation
+### Comparison precision
 
-When an expression cannot be mathematically evaluated (e.g. `1 / 0`, `sqrt(-1)`, `log(0)`, ...), the resulting value 
-of the expression is `null`. Additionally, `null` values are treated as zero (`0`). Therefore, `15 + 6 / 0` 
-evaluates to `15`.
+Numeric values are stored in Mindustry Logic variables as floating-point numbers. Floating-point numbers have limited precision, and during mathematical operations might accumulate numerical errors. Therefore, comparing the results of floating-point mathematical operations for equality needs to take possible imprecision into account.
 
-Objects used in numerical expressions always have a value of `1`. `n = @unit * 10` will therefore assign `10` to `n` 
-if a unit is bound, `0` otherwise.
+For example, the following code
+
+```
+param a = 0.1;
+
+b = 1;
+for i in 1 .. 10 do
+    b -= a;
+end;
+
+println(b > 0 ? "greater than zero" : "not greater then zero");
+printflush(message1);
+```
+
+prints `greater than zero`.
+
+After ten iterations, we'd expect the value to be equal to `0` precisely, but due to the numerical imprecision this is not the case. This makes comparing results of floating-point operations to exact values problematic. The standard way to handle this issue is to consider two numbers equal if their difference is smaller than some value.
+
+The equality operators in Mindustry Logic implicitly use , namely `0.000001` (i.e. `1e-6`): if two values differ by less than `1e-6`, they are considered equal by `==`, `!=`, `===` and `!==` operators. Therefore, updating the print call in the above code to  
+
+```
+println(b == 0 ? "equal to zero" : "not equal to zero");
+```
+
+prints `equal to zero`.
+
+> [!TIP]
+> To compare numbers using different precision, you can use the `isZero` or `isEqual` functions from the [`utils` system library](SYSTEM-LIBRARY.markdown#utils-library): `println(isZero(b) ? "equal to zero" : "not equal to zero");` outputs `not equal to zero`.
+
+> [!IMPORTANT] 
+> As has been shown above, the Mindustry Logic precision handling isn't applied to the inequality operators `<`, `<=`, `>` and `>=`. Therefore, `x <= 0` may evaluate to `false`, even though `x == 0` evaluates to `true`. This is especially important if you use these operators in loop conditions where the loop control variable is updated using floating point operations: the number of iterations of the loop may be different from what would be expected if all numerical operations were absolutely precise.        
+
+### Output precision
+
+Mindustry Logic applies the precision handling described above also when displaying values of variables using the `print` and `format` instruction and also on the `Vars` screen. Values that are close to an integer value are displayed as the integer value instead.
+
+Therefore, when a variable value is displayed as an integer by Mindustry, it is necessary to keep in mind that the actual value of the variable might be different, and that the relational operators (`<`, `<=`, `>`, `>=`) operate over the actual value, not the displayed value of the variable.
+
+To display a value of a variable without rounding, it is possible to use the `printExact()` function from the [`utils` system library](SYSTEM-LIBRARY.markdown#utils-library): `printExact(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.   
+
+**Note:** at this moment, Mindcode doesn't display values that are slightly smaller than an integer value rounded. `print(0.99999999);` therefore outputs `0.99999999` and not `1`, as could be expected. This is probably a bug that might eventually get fixed.
+
+## Compound assignment operators
+
+The compound assignment operators combine arithmetic operation with an assignment: `x += 1` is equivalent to `x = x + 1`.
+
+Assignment operators are evaluated from right to left:
+
+```
+x += y *= 2;
+```
+is the same as
+```
+y = y * 2;
+x = x + y;
+```
 
 # Constant expressions
 
@@ -205,13 +238,9 @@ If the value of the constant expression can be only encoded to mlog with loss of
 
 # String expressions
 
-Mindustry Logic doesn't evaluate string expressions at runtime, or better, doesn't evaluate them correctly. When a 
-mathematical operation is performed on string variables or values, the string value is converted to `1` for the 
-purpose of the evaluation. This is also true for the `+` operation, which in some other languages performs string 
-concatenation when used on string values. 
+Mindustry Logic doesn't evaluate string expressions at runtime, or better, doesn't operate on actual string values. When a mathematical operation is performed on string variables or values, the string value is converted to `1` for the purpose of the evaluation. This is also true for the `+` operation, which in some other languages performs string concatenation when used on string values. 
 
-Because string operations do not work anyway, the Mindcode compiler produces a compilation error when it detects a 
-string-based runtime expression:
+Because string operations do not work anyway, the Mindcode compiler produces a compilation error when it detects a string-based runtime expression:
 
 ```
 x = "A";
@@ -249,8 +278,7 @@ displayLevel(vault1, ITEM_LEAD + " level: ", @lead);
 displayLevel(vault1, ITEM_SAND + " level: ", @sand);
 ```
 
-Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are 
-constant:
+Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are constant:
 
 ```
 const TOTAL = 10;

@@ -1,0 +1,118 @@
+// Mindcode system library for Mindustry Logic version 8
+// Graphics functions
+
+const DISPLAY_SIZE_SMALL =  80;
+const DISPLAY_SIZE_LARGE = 176;
+
+// Display size
+
+def displaySize(_display)
+    type = _display.@type;
+    type == @logic-display ? DISPLAY_SIZE_SMALL : type == @large-logic-display ? DISPLAY_SIZE_LARGE : null;
+end;
+
+// Small display transformations
+
+void rotateLeftSmall()
+    rotate(90);
+    translate(0, - DISPLAY_SIZE_SMALL);
+end;
+
+void rotateRightSmall()
+    rotate(270);
+    translate(- DISPLAY_SIZE_SMALL, 0);
+end;
+
+void upsideDownSmall()
+    rotate(180);
+    translate(- DISPLAY_SIZE_SMALL, - DISPLAY_SIZE_SMALL);
+end;
+
+void flipVerticalSmall()
+    scale(1, -1);
+    translate(0, - DISPLAY_SIZE_SMALL);
+end;
+
+void flipHorizontalSmall()
+    scale(-1, 1);
+    translate(- DISPLAY_SIZE_SMALL, 0);
+end;
+
+// Large display transformations
+
+void rotateLeftLarge()
+    rotate(90);
+    translate(0, - DISPLAY_SIZE_LARGE);
+end;
+
+void rotateRightLarge()
+    rotate(270);
+    translate(- DISPLAY_SIZE_LARGE, 0);
+end;
+
+void upsideDownLarge()
+    rotate(180);
+    translate(- DISPLAY_SIZE_LARGE, - DISPLAY_SIZE_LARGE);
+end;
+
+void flipVerticalLarge()
+    scale(1, -1);
+    translate(0, - DISPLAY_SIZE_LARGE);
+end;
+
+void flipHorizontalLarge()
+    scale(-1, 1);
+    translate(- DISPLAY_SIZE_LARGE, 0);
+end;
+
+// Generic display transformations
+
+void rotateLeft(_display)
+    case _display.@type
+        when @logic-display       then rotateLeftSmall();
+        when @large-logic-display then rotateLeftLarge();
+        else stopProcessor();
+    end;
+end;
+
+void rotateRight(_display)
+    case _display.@type
+        when @logic-display       then rotateRightSmall();
+        when @large-logic-display then rotateRightLarge();
+        else stopProcessor();
+    end;
+end;
+
+void upsideDown(_display)
+    case _display.@type
+        when @logic-display       then upsideDownSmall();
+        when @large-logic-display then upsideDownLarge();
+        else stopProcessor();
+    end;
+end;
+
+void flipVertical(_display)
+    case _display.@type
+        when @logic-display       then flipVerticalSmall();
+        when @large-logic-display then flipVerticalLarge();
+        else stopProcessor();
+    end;
+end;
+
+void flipHorizontal(_display)
+    case _display.@type
+        when @logic-display       then flipHorizontalSmall();
+        when @large-logic-display then flipHorizontalLarge();
+        else stopProcessor();
+    end;
+end;
+
+// Scaling
+
+void scaleSmallToLarge()
+    scale(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
+end;
+
+void scaleLargeToSmall()
+    scale(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
+end;

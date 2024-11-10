@@ -1,0 +1,121 @@
+Number of reported ambiguities: 26
+Active optimizations:
+    case-expression-optimization = advanced,
+    case-switching = advanced,
+    data-flow-optimization = advanced,
+    dead-code-elimination = advanced,
+    expression-optimization = advanced,
+    function-inlining = advanced,
+    if-expression-optimization = advanced,
+    jump-normalization = advanced,
+    jump-optimization = advanced,
+    jump-straightening = advanced,
+    jump-threading = advanced,
+    loop-hoisting = advanced,
+    loop-optimization = advanced,
+    loop-unrolling = advanced,
+    print-merging = advanced,
+    return-optimization = advanced,
+    single-step-elimination = advanced,
+    stack-optimization = advanced,
+    temp-variables-elimination = advanced,
+    unreachable-code-elimination = advanced
+
+   150 instructions before optimizations.
+     6 instructions eliminated by Temp Variables Elimination.
+    26 instructions eliminated by Dead Code Elimination (5 iterations).
+     2 instructions eliminated by Jump Normalization (4 iterations).
+    13 instructions eliminated by Jump Optimization (4 iterations).
+    13 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+    13 instructions eliminated by Data Flow Optimization (6 iterations).
+     6 instructions updated by JumpThreading.
+     5 instructions eliminated by Unreachable Code Elimination.
+     4 instructions eliminated by Print Merging.
+    68 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+    0:  set SYS_MESSAGE null
+    1:  ubind null
+    2:  jump __label2 notEqual @unit null
+    3:  set __tmp0 null
+    4:  jump __label1 always 0 0
+        label __label2
+    5:  set __fn0__first_unit @unit
+        label __label4
+    6:  sensor __tmp4 @unit @controlled
+    7:  jump __label7 notEqual __tmp4 0
+    8:  ucontrol flag null 0 0 0 0
+    9:  set __tmp0 @unit
+   10:  jump __label1 always 0 0
+        label __label7
+   11:  sensor __tmp7 __fn0__first_unit @dead
+   12:  jump __label9 notEqual __tmp7 1
+   13:  set __fn0__first_unit @unit
+        label __label9
+   14:  ubind null
+   15:  jump __label4 notEqual __fn0__first_unit @unit
+   16:  set __tmp0 null
+        label __label1
+   17:  print __tmp0
+   18:  print "\n"
+        label __label13
+   19:  ubind null
+   20:  jump __label16 notEqual @unit null
+   21:  set __tmp12 null
+   22:  jump __label12 always 0 0
+        label __label16
+   23:  set __fn1__first_unit @unit
+   24:  set __fn1__best_unit null
+   25:  set __fn1__best_distance 10000000000
+        label __label18
+   26:  sensor __tmp16 @unit @controlled
+   27:  jump __label21 notEqual __tmp16 0
+   28:  sensor __tmp19 @unit @x
+   29:  op sub __tmp20 __tmp19 null
+   30:  sensor __tmp21 @unit @y
+   31:  op sub __tmp22 __tmp21 null
+   32:  op len __fn1__distance __tmp20 __tmp22
+   33:  jump __label22 greaterThanEq __fn1__distance __fn1__best_distance
+   34:  set __fn1__best_distance __fn1__distance
+   35:  set __fn1__best_unit @unit
+   36:  jump __label22 always 0 0
+        label __label21
+   37:  sensor __tmp27 __fn1__first_unit @dead
+   38:  jump __label25 notEqual __tmp27 1
+   39:  set __fn1__first_unit @unit
+        label __label25
+        label __label22
+   40:  ubind null
+   41:  jump __label18 notEqual __fn1__first_unit @unit
+   42:  jump __label27 notEqual __fn1__best_unit null
+   43:  set __tmp12 null
+   44:  jump __label12 always 0 0
+        label __label27
+   45:  sensor __tmp34 __fn1__best_unit @controlled
+   46:  jump __label13 notEqual __tmp34 0
+   47:  ubind __fn1__best_unit
+   48:  ucontrol flag null 0 0 0 0
+   49:  set __tmp12 __fn1__best_unit
+        label __label12
+   50:  print __tmp12
+   51:  print "\n"
+        label __label33
+   52:  ubind null
+   53:  jump __label36 notEqual @unit null
+   54:  jump __label33 equal SYS_MESSAGE false
+   55:  print "No unit of type null found."
+   56:  printflush SYS_MESSAGE
+   57:  jump __label33 always 0 0
+        label __label36
+   58:  sensor __tmp41 @unit @controlled
+   59:  jump __label40 equal __tmp41 0
+   60:  jump __label33 equal SYS_MESSAGE false
+   61:  print "Looking for a free null..."
+   62:  printflush SYS_MESSAGE
+   63:  jump __label33 always 0 0
+        label __label40
+   64:  ucontrol flag null 0 0 0 0
+   65:  set __tmp37 @unit
+   66:  print __tmp37
+   67:  print "\n"

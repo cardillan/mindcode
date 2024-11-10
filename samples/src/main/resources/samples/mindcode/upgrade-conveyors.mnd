@@ -2,6 +2,10 @@
 // github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#mindustry-logic-functions
 #set target = ML7A;
 
+// Import system libraries for advanced units and blocks functions
+require units;
+require blocks;
+
 // These parameters can be changed in the compiled code
 /// Configurable options:
 param MEMORY = cell1;
@@ -25,6 +29,12 @@ param WIDTH = 10;
 param RADIUS = 10;
 
 /// Don't modify anything below this line.
+
+// Try to locate block to output messages to.
+// It is used by the units system library to output messages as well
+findLinkedBlocks(
+    "Automatic conveyor upgrading\nTrying to locate message block", message1,
+    @message, "Message", out SYS_MESSAGE, false);
 
 // Count the total number of upgraded blocks
 TOTAL = 0;
@@ -57,8 +67,8 @@ newType = DOWNGRADE ? @conveyor : @titanium-conveyor;
 while !switch1.@enabled do
 
     // If we don't have an active unit, summon a new one
-    if @unit.@dead !== 0 or @unit.@controller != @this then
-        findUnit();
+    if @unit.@dead != 0 or @unit.@controller != @this then
+        waitForFreeUnit(UNIT, rand(1000));
     end;
 
     // Position the unit to the middle of the band inside the building area
@@ -75,7 +85,7 @@ while !switch1.@enabled do
 
     println($"Position: $x, $ypos");
     println($"Upgrades: $TOTAL");
-    printflush(message1);
+    printflush(SYS_MESSAGE);
 
     // Move to next position
     x += dx;
@@ -95,28 +105,6 @@ while !switch1.@enabled do
     end;
 
     $X = x;
-end;
-
-// A separate function which will find an unused unit we can use
-def findUnit()
-    // Keep looking for unit until one is found
-    while true do
-        ubind(UNIT);
-        if @unit == null then
-            // There's no unit of the requested type
-            print($"No unit of type $UNIT found.");
-        elsif @unit.@controlled != 0 then
-            // This unit is controlled by another processor or the player
-            print($"Looking for a free $UNIT...");
-        else
-            // This unit is free.
-            // Some processors assume that a unit without a flag is free
-            // Mark it so that they won't steal it from us
-            flag(rand(1000));
-            break;
-        end;
-        printflush(message1);
-    end;
 end;
 
 // Returns value of n limited to range min .. max

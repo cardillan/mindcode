@@ -8,6 +8,7 @@ import info.teksol.emulator.processor.ProcessorFlag;
 import info.teksol.mindcode.*;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
+import info.teksol.mindcode.ast.Requirement;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
@@ -26,7 +27,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -57,29 +61,54 @@ public class MindcodeCompiler implements Compiler<String> {
         return compile(inputFiles, inputFiles.getInputFiles());
     }
 
+    private static String readInput(Path inputFile) {
+        try {
+            return Files.readString(inputFile, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new MindcodeInternalError(e, "Error reading file %s.", inputFile);
+        }
+    }
+
+    private InputFiles.InputFile processRequirement(Path relativePath, Requirement requirement) {
+        if (requirement.isSystem()) {
+            return loadLibrary(requirement.getFile());
+        } else if (profile.isWebApplication()) {
+            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(), "Loading code from external file not supported in web application."));
+            return InputFile.createSourceFile("");
+        } else {
+            Path file = relativePath.resolve(requirement.getFile());
+            return new InputFile(requirement.getFile(), file.toAbsolutePath().normalize().toString(), readInput(file));
+        }
+    }
+
     @Override
     public CompilerOutput<String> compile(InputFiles inputFiles, List<InputFiles.InputFile> filesToCompile) {
         String instructions = "";
         RunResults runResults = new RunResults(null,0);
+        Deque<InputFiles.InputFile> queue = new ArrayDeque<>(filesToCompile);
+        Set<InputFiles.InputFile> processedFiles = new HashSet<>();
 
         try {
             long parseStart = System.nanoTime();
             Seq program = null;
-            for (InputFiles.InputFile inputFile : filesToCompile) {
-                // Additional source files are put in front of the others
-                final Seq other = parse(messageConsumer, inputFile);
-                program = Seq.append(other, program);
-                if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-                    return new CompilerOutput<>("", messages, null, 0);
+            while (!queue.isEmpty()) {
+                InputFiles.InputFile inputFile = queue.pop();
+                Path relativePath = Path.of(inputFile.absolutePath()).toAbsolutePath().normalize().getParent();
+                if (processedFiles.add(inputFile)) {
+                    // Additional source files are put in front of the others
+                    List<Requirement> requirements = new ArrayList<>();
+                    final Seq other = inputFile.fileName().startsWith("*")
+                            ? parseLibrary(inputFile.fileName().substring(1), requirements)
+                            : parse(inputFile, requirements);
+                    program = Seq.append(other, program);
+                    if (messages.stream().anyMatch(MindcodeMessage::isError)) {
+                        return new CompilerOutput<>("", messages, null, 0);
+                    }
+                    requirements.stream().map(r -> processRequirement(relativePath, r)).forEach(queue::addLast);
                 }
             }
 
             DirectiveProcessor.processDirectives(program, profile, messageConsumer);
-
-            if (profile.getProcessorVersion().matches(ProcessorVersion.V8A, ProcessorVersion.MAX)) {
-                Seq sys = parseLibrary(inputFiles, "sys");
-                program = Seq.append(sys, program);
-            }
 
             printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
@@ -157,7 +186,7 @@ public class MindcodeCompiler implements Compiler<String> {
         }
     }
 
-    private Seq parseLibrary(InputFiles inputFiles, String filename) {
+    private Seq parseLibrary(InputFiles inputFiles, String filename, List<Requirement> requirements) {
         if (LIBRARY_PARSES.containsKey(filename)) {
             return LIBRARY_PARSES.get(filename);
         }
@@ -165,7 +194,7 @@ public class MindcodeCompiler implements Compiler<String> {
         InputFiles.InputFile inputFile = loadLibrary(inputFiles, filename);
 
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
-        Seq parsed = parse(messageConsumer, inputFile);
+        Seq parsed = parse(loadLibrary(filename), requirements);
         long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
 
         if (before == after) {
@@ -178,7 +207,7 @@ public class MindcodeCompiler implements Compiler<String> {
     /**
      * Parses the source code using ANTLR generated parser.
      */
-    private Seq parse(Consumer<MindcodeMessage> messageConsumer, InputFiles.InputFile inputFile) {
+    private Seq parse(Consumer<MindcodeMessage> messageConsumer, InputFiles.InputFile inputFile, List<Requirement> requirements) {
         MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.getCode()));
         lexer.removeErrorListeners();
@@ -188,7 +217,7 @@ public class MindcodeCompiler implements Compiler<String> {
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
         messageConsumer.accept(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
-        return AstNodeBuilder.generate(inputFile, messageConsumer, context);
+        return AstNodeBuilder.generate(inputFile, messageConsumer, context, requirements);
     }
 
     /** Prints the parse tree according to level */

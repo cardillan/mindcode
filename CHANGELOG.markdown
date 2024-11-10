@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.6.0 - 2024-11-??
+
+**Breaking:** This release comes with a new keyword in Mindcode syntax (`require`), which break existing code where this keyword was used as a variable or function name.
+
+### Fixed
+
+* Fixed the `findLinkedBlocks` library function not to produce a warning about uninitialized variables.
+* Fixed the mlog decompiler crashing on `jump` instructions targeting instructions outside valid range.
+* Fixed unhandled error when decompiling invalid code from mlog by the web application.
+* Fixed `or` operator being evaluated the same as `||` instead of `|` by the processor emulator.
+
+### Added
+
+#### Experimental features
+
+* Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
+* Added new functions to the [`utils` system library](doc/syntax/SYSTEM-LIBRARY.markdown#utils-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `printExact`).
+
+### Changed
+
+* **Breaking:** changed the system library to reside in several separate files that can be added to the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with lower targets as well.
+* Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
+* Changed existing examples to utilize functions from the system library where one is available.
+
 ## 2.5.0 - 2024-11-03
 
 **Breaking:** This release comes with new keywords in Mindcode syntax (`begin`, `var` and `void`), which break existing code where those new keywords were used as a variable or function name.
@@ -51,7 +75,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * Fixed Copy to clipboard button not working ([#168](https://github.com/cardillan/mindcode/issues/168)).
-* Fixed unhandled error when decoding a malformed Schematic file string by the web app.
+* Fixed unhandled error when decoding a malformed Schematic file string by the web application.
 * Fixed Schemacode samples to not use deprecated syntax.
 
 ### Added
@@ -64,7 +88,7 @@ All notable changes to this project will be documented in this file.
 
 * Fixed wrong compilation order of appended files ([#155](https://github.com/cardillan/mindcode/issues/155)).
 * Fixed inadequate reporting of syntax error ([#156](https://github.com/cardillan/mindcode/issues/156)).
-* Fixed Wrong handling of comparison operators by Data Flow Optimization ([#158](https://github.com/cardillan/mindcode/issues/158)).
+* Fixed wrong handling of comparison operators by Data Flow Optimization ([#158](https://github.com/cardillan/mindcode/issues/158)).
 * Fixed wrong parsing of formattable string literals.
 * Fixed inadequate handling of unsupported expressions embedded in formattable string literals.  
 

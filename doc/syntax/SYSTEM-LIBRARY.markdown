@@ -1,14 +1,29 @@
 # System library
 
-Mindcode comes equipped with a system library. At this moment, the library is just a single source file, `sys.mnd`, which is automatically compiled together with each source file, both in the command line compiler and in the web app. The library is only included if the language target is 8A or higher, as it contains functions that build upon some of the instructions that will be added in the upcoming Mindustry 8 version.
+Mindcode comes equipped with a system library. System library is organized in several parts. To use a particular file from the system library, the `require` statement must be used:
 
-To use the functions and constants provided by the system library in your program, you need to compile for Mindustry Logic 8 by including `#set target = ML8A` in your program.
+```
+require blocks;   // Use the 'blocks' system library
+```
+
+System libraries contain functions and sometimes constants that can be used by a Mindcode program. The following system libraries are provided:
+
+* `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
+* `printing`: functions for outputting formatted numbers. Requires the Mindustry Logic 8 instruction set.
+* `blocks`: block-related functions (just the `findLinkedBlocks` function at this moment).
+* `units`: functions for searching and binding available units of required type.
+* `utils`: general utility functions (just the `distance` function at this moment).
 
 The system library is an experimental feature. The functions provided by the library and the mechanism for its inclusion in your program may change in future releases. 
 
-Individual functions in the library are documented here.
+> [!IMPORTANT]
+> Using a program parameter or constant with a name matching a name of one of the library variables causes a compilation error. To avoid this problem, all function parameters in system libraries start with an underscore. Do not declare program parameters or constants starting with an underscore.
+> 
+> This limitation of the system library will be removed in one of the future releases.
+ 
+# Graphics library
 
-# Graphics transformations
+To use the Graphics library, use the `require graphics;` statement. The Graphics library uses Mindustry Logic 8 instructions and therefore also requires `#set target = ML8A;` statement.  
 
 The provided library functions use transformations to rotate, invert or scale graphics output as needed for each display (large or small). Transformations are additive, so it is suggested to call `reset()` at the beginning of each program that uses transformations to clean up possible transformations from earlier runs.
 
@@ -99,7 +114,9 @@ Scales the graphics output so that an output that targets a small display gets d
 
 Scales the graphics output so that an output that targets a large display gets displayed over the entire area of a small display. 
 
-# Blocks
+# Blocks library
+
+To use the Blocks library, use the `require blocks;`
 
 ## findLinkedBlocks
 
@@ -124,7 +141,7 @@ Inputs and outputs:
 Example of a call to this function:
 
 ```
-#set target = ML8A;
+require blocks;
 
 findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
     @large-logic-display,   "Display",  out display,    true,
@@ -137,7 +154,9 @@ findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
 
 When the function call ends, the `display` and `memory` variables are set to a large display or memory cell/memory bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor, otherwise they're `null`. 
 
-# Units
+# Units library
+
+To use the Units library, use the `require units;`
 
 ## findFreeUnit
 
@@ -184,7 +203,9 @@ The function doesn't use units that are controlled by a player or a different pr
 
 The status of the search is output to `SYS_MESSAGE`. Either set the message to an existing memory block to receive the updates, or set `SYS_MESSAGE` to `null` to disable status updates (`const SYS_MESSAGE = null;` is also supported).
 
-# Text output
+# Printing library
+
+To use the Printing library, use the `require printing;` statement. The Printing library uses Mindustry Logic 8 instructions and therefore also requires `#set target = ML8A;` statement.
 
 ## formatNumber
 
@@ -212,7 +233,11 @@ To use the function, the text buffer must not contain placeholders `{0}`, `{1}` 
 
 See also [`formatNumber`](#formatnumber)
 
-# Utility functions
+# Utils library
+
+To use the Utils library, use the `require utils;` statement.
+
+The library contains various utility functions.
 
 ## distance
 
@@ -220,9 +245,56 @@ See also [`formatNumber`](#formatnumber)
 
 Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`). Uses the `len` instruction for efficient hypotenuse calculation.
 
+## round
+
+**Definition:** `def round(x)`
+
+Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`.
+
+## frac
+
+**Definition:** `def frac(x)`
+
+Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
+
+## sign
+
+**Definition:** `def sign(x)`
+
+Returns the sign of the number. The return value is `0` precisely when `x == 0`.
+
+## isZero
+
+Function has two definitions:
+
+* `def isZero(x)`: returns `true` if `x` is precisely zero.
+* `def isZero(x, precision)`: returns `true` if the absolute value of x is less than `precision`.
+
+Note: the equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`. `===` and `!==` considers numeric values equal when they differ by less than `0.000001`. The `isZero` function allows to compare value to zero using different precision.   
+
+## isEqual
+
+**Definition:** `isEqual(a, b, precision)`
+
+Returns `true` if the two values differ by less than `precision`.
+
+Note: the equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`. `===` and `!==` considers numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows to compare values using different precision.   
+
+## printExact
+
+**Definition:** `printExact(n)`
+
+Prints the value into the text buffer without rounding to the nearest integer value. The function is primarily useful for debugging purposes to determine the actual value of variables.
+
+> [!TIP] 
+> The `print` and `format` instructions applied to numerical values round the value to the nearest integer when they differ from the integer value by less than `1e-6`. This makes it impossible to directly print (with sufficient precision) numerical values close to integer values in general, and values close to zero in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExact(10 ** -50)` outputs `1E-50`. 
+
+> [!IMPORTANT]
+> The mathematical operations used by `printExact` to output the value may introduce additional numerical errors to the output value, for example `printExact(1.2345 * 10**-50)` outputs `1.2345000000000002E-50`.    
+
 # Additional resources
 
-The `sys.mnd` is integrated into the compiler and as such is available to both the command-line compiler and the web application. The current version of the file can be found [here](/compiler/src/main/resources/library/sys.mnd).
+The system library is integrated into the compiler and as such is available to both the command-line compiler and the web application. The current version of the library can be found [here](https://github.com/cardillan/mindcode/tree/main/compiler/src/main/resources/library).
 
 ---
 

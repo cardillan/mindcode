@@ -40,6 +40,7 @@ optional_then
     ;
 
 expression : directive                                                                          # compiler_directive
+           | require                                                                            # require_directive
            | MINUS numeric_t                                                                    # literal_minus
            | indirectpropaccess                                                                 # indirect_prop_access
            | case_expr                                                                          # case_expression
@@ -93,6 +94,11 @@ directive : HASHSET option=ID ASSIGN value=INT                      # numeric_di
 
 directive_list
     : id ( COMMA id )*
+    ;
+
+require
+    : REQUIRE file=id                    # require_system
+    | REQUIRE file=literal_t             # require_external
     ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
@@ -289,6 +295,7 @@ NULL : 'null';
 OUT : 'out';
 PARAM : 'param';
 RETURN : 'return';
+REQUIRE : 'require';
 SENSOR : 'sensor';
 STACK : 'stack';
 THEN : 'then';
