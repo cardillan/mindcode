@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 * Fixed the `findLinkedBlocks` library function not to produce a warning about uninitialized variables.
 * Fixed the mlog decompiler crashing on `jump` instructions targeting instructions outside valid range.
 * Fixed unhandled error when decompiling invalid code from mlog by the web application.
+* Fixed `or` operator being evaluated the same as `||` instead of `|` by the processor emulator.
 
 ### Added
 

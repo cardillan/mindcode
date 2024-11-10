@@ -86,7 +86,7 @@ public class ExpressionEvaluator {
 
         map.put(Operation.BINARY_OR,        (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
         map.put(Operation.BOOL_OR,          (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
-        map.put(Operation.LOGICAL_OR,       (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
+        map.put(Operation.LOGICAL_OR,       (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
 
         map.put(Operation.MAX,              (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.MIN,              (r, a, b) -> r.setDoubleValue(Math.min(a.getDoubleValue(), b.getDoubleValue())));
