@@ -1,12 +1,12 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 
 import java.util.List;
 
 public interface Compiler<T> {
 
-    CompilerOutput<T> compile(InputFiles inputFiles);
+    CompilerOutput<T> compile();
 
-    CompilerOutput<String> compile(InputFiles inputFiles, List<InputFiles.InputFile> filesToCompile);
+    CompilerOutput<String> compile(List<InputFile> filesToCompile);
 }

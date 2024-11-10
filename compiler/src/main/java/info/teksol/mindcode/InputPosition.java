@@ -1,9 +1,9 @@
 package info.teksol.mindcode;
 
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import org.antlr.v4.runtime.Token;
 
-public record InputPosition(InputFiles.InputFile inputFile, int line, int column) {
+public record InputPosition(InputFile inputFile, int line, int column) {
 
     public static InputPosition EMPTY = new InputPosition(null, 0, 0);
 
@@ -11,7 +11,7 @@ public record InputPosition(InputFiles.InputFile inputFile, int line, int column
         return (inputFile == null ? "" : inputFile.getAbsolutePath()) + ":" + line + ":" + column;
     }
 
-    public static InputPosition create(InputFiles.InputFile inputFile, Token token) {
+    public static InputPosition create(InputFile inputFile, Token token) {
         return new InputPosition(inputFile, token.getLine(), token.getCharPositionInLine() + 1);
     }
 

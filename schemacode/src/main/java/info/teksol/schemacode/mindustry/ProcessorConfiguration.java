@@ -3,7 +3,7 @@ package info.teksol.schemacode.mindustry;
 import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
@@ -155,7 +155,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                     yield cached;
                 }
 
-                InputFiles.InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode);
+                InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode);
                 builder.info("Compiling %s", processor.program().getProgramId(builder));
                 CompilerProfile compilerProfile = builder.getCompilerProfile();
                 compilerProfile.setPositionTranslator(processor.program().createPositionTranslator(builder));

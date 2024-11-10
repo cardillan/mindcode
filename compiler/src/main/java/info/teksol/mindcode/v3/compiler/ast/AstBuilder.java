@@ -4,7 +4,7 @@ import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ParserAbort;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ProgramContext;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParserBaseVisitor;
@@ -20,9 +20,9 @@ import java.util.function.Consumer;
 
 public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final Consumer<MindcodeMessage> messageConsumer;
-    private final InputFiles.InputFile inputFile;
+    private final InputFile inputFile;
 
-    AstBuilder(Consumer<MindcodeMessage> messageConsumer, InputFiles.InputFile inputFile) {
+    AstBuilder(Consumer<MindcodeMessage> messageConsumer, InputFile inputFile) {
         this.messageConsumer = messageConsumer;
         this.inputFile = inputFile;
     }

@@ -10,7 +10,7 @@ public abstract class AbstractParserTest {
 
     protected ExpectedMessages expectedMessages() {
         return ExpectedMessages.create()
-                .add("Number of reported ambiguities: 0").ignored();
+                .add("Main file: number of reported ambiguities: 0").ignored();
     }
 
     protected MindcodeParser.ProgramContext parse(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {

@@ -18,7 +18,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.*;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.InputFiles;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -31,183 +31,142 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
     // Global cache
-    private static final Map<String, InputFiles.InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
-    private static final Map<String, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
+    private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
+    private static final Map<InputFile, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
 
     private final CompilerProfile profile;
+    private final InputFiles inputFiles;
     private InstructionProcessor instructionProcessor;
 
     private final List<MindcodeMessage> messages = new ArrayList<>();
     private final TranslatingMessageConsumer messageConsumer;
 
-    public MindcodeCompiler(CompilerProfile profile) {
+    public MindcodeCompiler(CompilerProfile profile, InputFiles inputFiles) {
         this.profile = profile;
+        this.inputFiles = inputFiles;
         this.messageConsumer = new TranslatingMessageConsumer(messages::add, profile.getPositionTranslator());
     }
 
     @Override
-    public CompilerOutput<String> compile(InputFiles inputFiles) {
-        return compile(inputFiles, inputFiles.getInputFiles());
-    }
-
-    private static String readInput(Path inputFile) {
-        try {
-            return Files.readString(inputFile, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new MindcodeInternalError(e, "Error reading file %s.", inputFile);
-        }
-    }
-
-    private InputFiles.InputFile processRequirement(Path relativePath, Requirement requirement) {
-        if (requirement.isSystem()) {
-            return loadLibrary(requirement.getFile());
-        } else if (profile.isWebApplication()) {
-            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(), "Loading code from external file not supported in web application."));
-            return InputFile.createSourceFile("");
-        } else {
-            Path file = relativePath.resolve(requirement.getFile());
-            return new InputFile(requirement.getFile(), file.toAbsolutePath().normalize().toString(), readInput(file));
-        }
+    public CompilerOutput<String> compile() {
+        return compile(inputFiles.getInputFiles());
     }
 
     @Override
-    public CompilerOutput<String> compile(InputFiles inputFiles, List<InputFiles.InputFile> filesToCompile) {
-        String instructions = "";
-        RunResults runResults = new RunResults(null,0);
-        Deque<InputFiles.InputFile> queue = new ArrayDeque<>(filesToCompile);
-        Set<InputFiles.InputFile> processedFiles = new HashSet<>();
-
+    public CompilerOutput<String> compile(List<InputFile> filesToCompile) {
         try {
-            long parseStart = System.nanoTime();
-            Seq program = null;
-            while (!queue.isEmpty()) {
-                InputFiles.InputFile inputFile = queue.pop();
-                Path relativePath = Path.of(inputFile.absolutePath()).toAbsolutePath().normalize().getParent();
-                if (processedFiles.add(inputFile)) {
-                    // Additional source files are put in front of the others
-                    List<Requirement> requirements = new ArrayList<>();
-                    final Seq other = inputFile.fileName().startsWith("*")
-                            ? parseLibrary(inputFile.fileName().substring(1), requirements)
-                            : parse(inputFile, requirements);
-                    program = Seq.append(other, program);
-                    if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-                        return new CompilerOutput<>("", messages, null, 0);
-                    }
-                    requirements.stream().map(r -> processRequirement(relativePath, r)).forEach(queue::addLast);
-                }
-            }
-
-            DirectiveProcessor.processDirectives(program, profile, messageConsumer);
-
-            printParseTree(program);
-            long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
-
-            long compileStart = System.nanoTime();
-            instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
-            GeneratorOutput generated = generateCode(program);
-            if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-                return new CompilerOutput<>("", messages, null, 0);
-            }
-            long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
-
-            long optimizeStart = System.nanoTime();
-            List<LogicInstruction> result;
-            if (profile.optimizationsActive() && generated.instructions().size() > 1) {
-                result = optimize(generated);
-            } else {
-                result = generated.instructions();
-            }
-            long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
-
-            // Sort variables before final code printout
-            LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(instructionProcessor, profile);
-            result = resolver.sortVariables(result);
-
-            if (profile.getFinalCodeOutput() != null) {
-                debug("\nFinal code before resolving virtual instructions:\n");
-                String output = switch (profile.getFinalCodeOutput()) {
-                    case PLAIN      -> LogicInstructionPrinter.toStringWithLineNumbers(instructionProcessor, result);
-                    case FLAT_AST   -> LogicInstructionPrinter.toStringWithContextsShort(instructionProcessor, result);
-                    case DEEP_AST   -> LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, result);
-                    case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, result);
-                };
-                debug(output);
-            }
-
-            result = resolver.resolveLabels(result);
-
-            if (profile.isRun()) {
-                long runStart = System.nanoTime();
-                runResults = run(result);
-                long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
-                info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(parseTime, compileTime, optimizeTime, runTime));
-            } else {
-                info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
-            }
-
-            instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
-        } catch (ParserAbort ignored) {
-            // Do nothing
-        } catch (Exception e) {
+            return compileInternal(filesToCompile);
+        } catch (RuntimeException e) {
             if (profile.isPrintStackTrace()) {
                 //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
 
             messageConsumer.accept(ToolMessage.error("Internal error: %s", e.getMessage()));
+            return new CompilerOutput<>("", messages, null, 0);
         }
-
-        return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
     }
 
-    private static InputFiles.InputFile loadLibrary(InputFiles inputFiles, String filename) {
-        return LIBRARY_SOURCES.computeIfAbsent(filename, f -> loadLibraryFromResource(inputFiles, f));
+    private InputFile loadFile(Requirement requirement, Path path) {
+        try {
+            String code = Files.readString(path, StandardCharsets.UTF_8);
+            return inputFiles.registerFile(path, code);
+        } catch (IOException e) {
+            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(), "Error reading file %s.", path));
+            return null;
+        }
     }
 
-    static InputFiles.InputFile loadLibraryFromResource(InputFiles inputFiles, String filename) {
+    private InputFile loadLibrary(Requirement requirement) {
+        return LIBRARY_SOURCES.computeIfAbsent(requirement.getFile(), s -> loadLibraryFromResource(requirement));
+    }
+
+    private InputFile loadLibraryFromResource(Requirement requirement) {
+        String library = requirement.getFile();
+        try {
+            return loadSystemLibrary(library);
+        } catch (NullPointerException e) {
+            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(),
+                    "Unknown system library '%s'.", library));
+            return null;
+        } catch (IOException e) {
+            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(),
+                    "Error reading system library file '%s'.", library));
+            throw new MindcodeInternalError(e, "Error reading system library file '%s'.", library);
+        }
+    }
+
+    InputFile loadSystemLibrary(String libraryName) throws IOException {
         try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + filename + ".mnd")))) {
+                new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + libraryName + ".mnd")))) {
             final StringWriter out = new StringWriter();
             reader.transferTo(out);
-            return inputFiles.registerVirtualFile(Path.of(filename), out.toString());
-        } catch (IOException e) {
-            throw new MindcodeInternalError(e, "Error loading library: " + filename);
+            return inputFiles.registerLibraryFile(Path.of(libraryName), out.toString());
         }
     }
 
-    private Seq parseLibrary(InputFiles inputFiles, String filename, List<Requirement> requirements) {
-        if (LIBRARY_PARSES.containsKey(filename)) {
-            return LIBRARY_PARSES.get(filename);
+    private InputFile processRequirement(Path relativePath, Requirement requirement) {
+        if (requirement.isLibrary()) {
+            return loadLibrary(requirement);
+        } else if (profile.isWebApplication()) {
+            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(), "Loading code from external file not supported in web application."));
+            return null;
+        } else {
+            return loadFile(requirement, relativePath.resolve(requirement.getFile()));
         }
+    }
 
-        InputFiles.InputFile inputFile = loadLibrary(inputFiles, filename);
+    /**
+     * Parses all input files, loading and parsing additional files referenced by the 'require' keyword.
+     * Processes directives found in source files and updates the compiler profile.
+     */
+    private Seq parseFiles(List<InputFile> filesToCompile) {
+        Deque<InputFile> queue = new ArrayDeque<>(filesToCompile);
+        Set<InputFile> processedFiles = new HashSet<>();
+        Seq program = null;
 
-        long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
-        Seq parsed = parse(loadLibrary(filename), requirements);
-        long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
+        try {
+            while (!queue.isEmpty()) {
+                InputFile inputFile = queue.pop();
+                if (processedFiles.add(inputFile)) {
+                    List<Requirement> requirements = new ArrayList<>();
+                    Seq other = inputFile.isLibrary() ? parseLibrary(inputFile, requirements) : parse(inputFile, requirements);
 
-        if (before == after) {
-            LIBRARY_PARSES.put(filename, parsed);
+                    // Additional source files are put in front of the others
+                    program = Seq.append(other, program);
+
+                    if (!requirements.isEmpty()) {
+                        Path relativePath = inputFile.isLibrary()
+                                ? Path.of(inputFile.getAbsolutePath()).getParent()
+                                : inputFiles.getBasePath();
+
+                        requirements.stream()
+                                .map(r -> processRequirement(relativePath, r))
+                                .filter(Objects::nonNull)
+                                .forEach(queue::addLast);
+                    }
+                }
+            }
+
+            DirectiveProcessor.processDirectives(program, profile, messageConsumer);
+
+            printParseTree(program);
+        } catch (ParserAbort ignored) {
+            // Do nothing
         }
-
-        return parsed;
+        return program;
     }
 
     /**
      * Parses the source code using ANTLR generated parser.
      */
-    private Seq parse(Consumer<MindcodeMessage> messageConsumer, InputFiles.InputFile inputFile, List<Requirement> requirements) {
+    private Seq parse(InputFile inputFile, List<Requirement> requirements) {
         MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.getCode()));
         lexer.removeErrorListeners();
@@ -216,8 +175,87 @@ public class MindcodeCompiler implements Compiler<String> {
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
-        messageConsumer.accept(ToolMessage.info("Number of reported ambiguities: %d", errorListener.getAmbiguities()));
+        if (!inputFile.isLibrary()) {
+            messageConsumer.accept(ToolMessage.info("%s: number of reported ambiguities: %d",
+                    inputFile.getDistinctTitle(), errorListener.getAmbiguities()));
+        }
         return AstNodeBuilder.generate(inputFile, messageConsumer, context, requirements);
+    }
+
+    private Seq parseLibrary(InputFile inputFile, List<Requirement> requirements) {
+        if (LIBRARY_PARSES.containsKey(inputFile)) {
+            return LIBRARY_PARSES.get(inputFile);
+        }
+
+        long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
+        Seq parsed = parse(inputFile, requirements);
+        long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
+
+        if (before == after) {
+            // Do not pollute cache with wrong parses
+            LIBRARY_PARSES.put(inputFile, parsed);
+        }
+
+        return parsed;
+    }
+
+    private CompilerOutput<String> compileInternal(List<InputFile> filesToCompile) {
+        // PARSE
+        long parseStart = System.nanoTime();
+        Seq program = parseFiles(filesToCompile);
+        if (messages.stream().anyMatch(MindcodeMessage::isError)) {
+            return new CompilerOutput<>("", messages, null, 0);
+        }
+        long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
+
+        // GENERATE CODE
+        long compileStart = System.nanoTime();
+        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
+        GeneratorOutput generated = generateCode(program);
+        if (messages.stream().anyMatch(MindcodeMessage::isError)) {
+            return new CompilerOutput<>("", messages, null, 0);
+        }
+        long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
+
+        // OPTIMIZE
+        long optimizeStart = System.nanoTime();
+        List<LogicInstruction> optimized = optimize(generated);
+        if (messages.stream().anyMatch(MindcodeMessage::isError)) {
+            return new CompilerOutput<>("", messages, null, 0);
+        }
+        long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
+
+        // Sort variables
+        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(instructionProcessor, profile);
+        List<LogicInstruction> instructions = resolver.sortVariables(optimized);
+
+        // Print unresolved code
+        if (profile.getFinalCodeOutput() != null) {
+            debug("\nFinal code before resolving virtual instructions:\n");
+            debug(LogicInstructionPrinter.toString(profile.getFinalCodeOutput(), instructionProcessor, instructions));
+        }
+
+        // Label resolving
+        List<LogicInstruction> result = resolver.resolveLabels(instructions);
+
+        // RUN if requested
+        // Timing output
+        final RunResults runResults;
+        if (profile.isRun()) {
+            long runStart = System.nanoTime();
+            runResults = run(result);
+            long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
+            info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(
+                    parseTime, compileTime, optimizeTime, runTime));
+        } else {
+            runResults = new RunResults(null,0);
+            info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(
+                    parseTime, compileTime, optimizeTime));
+        }
+
+        String output = LogicInstructionPrinter.toString(instructionProcessor, result);
+
+        return new CompilerOutput<>(output, messages, runResults.textBuffer(), runResults.steps());
     }
 
     /** Prints the parse tree according to level */
@@ -235,7 +273,11 @@ public class MindcodeCompiler implements Compiler<String> {
         return generator.generate(program);
     }
 
-    private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
+    private List<LogicInstruction> optimize(GeneratorOutput generated) {
+        if (!profile.optimizationsActive() || generated.instructions().size() <= 1) {
+            return generated.instructions();
+        }
+
         messageConsumer.accept(
                 OptimizerMessage.debug("%s", profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
@@ -249,7 +291,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
         OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer);
         optimizer.setDebugPrinter(debugPrinter);
-        List<LogicInstruction> result = optimizer.optimize(generatorOutput);
+        List<LogicInstruction> result = optimizer.optimize(generated);
         debugPrinter.print(this::debug);
         return result;
     }

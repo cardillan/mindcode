@@ -1,23 +1,22 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.CollectionUtils;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import java.nio.file.Path;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,23 +30,26 @@ class MindcodeCompilerTest {
     public static final String LIBRARY_TESTS_DIRECTORY = "src/test/resources/library/tests";
     public static final String LIBRARY_OUTPUTS_DIRECTORY = "src/test/resources/library/outputs";
 
-    private MindcodeCompiler createCompiler(boolean run) {
+    private MindcodeCompiler createCompiler(InputFiles inputFiles, boolean run) {
         return new MindcodeCompiler(
                 new CompilerProfile(false, OptimizationLevel.ADVANCED)
                         .setFinalCodeOutput(FinalCodeOutput.PLAIN)
-                        .setRun(run)
+                        .setRun(run),
+                inputFiles
         );
     }
 
     @Test
     public void producesAllOutputs() {
-        CompilerOutput<String> result = createCompiler(true).compile(InputFiles.fromSource("""
+        InputFiles inputFiles = InputFiles.fromSource("""
                 remark("This is a parameter");
                 param value = true;
                 if value then
                     print("Hello");
                 end;
-                """));
+                """);
+
+        CompilerOutput<String> result = createCompiler(inputFiles, true).compile();
 
         assertEquals("""
                 jump 2 always 0 0
@@ -79,10 +81,10 @@ class MindcodeCompilerTest {
     @Test
     public void handlesMultipleFiles() {
         InputFiles inputFiles = InputFiles.create();
-        InputFiles.InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "print(\"File1\");");
-        InputFiles.InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "print(\"File2\");");
+        InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "print(\"File1\");");
+        InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "print(\"File2\");");
 
-        CompilerOutput<String> result = createCompiler(true).compile(inputFiles);
+        CompilerOutput<String> result = createCompiler(inputFiles, true).compile();
 
         assertEquals("""
                 print "File2File1"
@@ -124,15 +126,17 @@ class MindcodeCompilerTest {
     }
 
     private void compileLibrary(String filename) throws IOException {
+        InputFile inputFile;
+        InputFiles inputFiles = InputFiles.create();
+        MindcodeCompiler compiler = createCompiler(inputFiles, false);
+
         Path testFile = Path.of(LIBRARY_TESTS_DIRECTORY, filename + ".mnd");
-        String code;
         if (testFile.toFile().exists()) {
-            // Separate testing code
-            code = Files.readString(testFile);
+            // Explicitly written testing code
+            inputFile = inputFiles.registerSource( Files.readString(testFile));
         } else {
             // Create the test code automatically
-            InputFiles inputFiles = InputFiles.create();
-            InputFiles.InputFile source = MindcodeCompiler.loadLibraryFromResource(inputFiles, filename);
+            InputFile source = compiler.loadSystemLibrary(filename);
 
             String initializations = """
                     #set target = ML8A;
@@ -148,7 +152,7 @@ class MindcodeCompilerTest {
                     .map(s -> s + " = null;")
                     .collect(Collectors.joining("\n"));
 
-        String functionCalls = source.getCode().lines()
+            String functionCalls = source.getCode().lines()
                     .filter(line -> line.startsWith("def "))
                     .map(line -> "println(" + line.substring(4) + ");")
                     .collect(Collectors.joining("\n"));
@@ -159,10 +163,11 @@ class MindcodeCompilerTest {
                     .collect(Collectors.joining("\n"));
 
             // We know there must be a variable names display
-            code = initializations + "\n" + variables + "\n\n" + functionCalls + "\n" + procedureCalls;
+            String code = initializations + "\n" + variables + "\n\n" + functionCalls + "\n" + procedureCalls;
+            inputFile = inputFiles.registerSource(code);
         }
 
-        CompilerOutput<String> result = createCompiler(false).compile(InputFiles.fromSource(code));
+        CompilerOutput<String> result = compiler.compile(List.of(inputFile));
 
         String errorsAndWarnings = result.messages().stream()
                 .filter(MindcodeMessage::isErrorOrWarning)
@@ -171,7 +176,7 @@ class MindcodeCompilerTest {
                 .collect(Collectors.joining("\n"));
 
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".mnd"),
-                normalizeLineEndings(code), StandardCharsets.UTF_8);
+                normalizeLineEndings(inputFile.getCode()), StandardCharsets.UTF_8);
 
         String messages = result.messages().stream()
                 .filter(m -> !m.message().startsWith("\nPerformance: parsed"))

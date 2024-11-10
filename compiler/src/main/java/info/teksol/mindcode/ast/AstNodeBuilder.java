@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.*;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -16,22 +16,22 @@ import java.util.function.Consumer;
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
     private final Consumer<MindcodeMessage> messageConsumer;
-    private final InputFiles.InputFile inputFile;
+    private final InputFile inputFile;
     private final Map<String, Integer> heapAllocations = new HashMap<>();
+    private final List<Requirement> requirements;
     private int temp;
-    private List<Requirement> requirements;
     private HeapAllocation allocatedHeap;
     private StackAllocation allocatedStack;
 
-    public AstNodeBuilder(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer, List<Requirement> requirements) {
+    public AstNodeBuilder(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer, List<Requirement> requirements) {
         this.inputFile = inputFile;
         this.messageConsumer = messageConsumer;
         this.requirements = requirements;
     }
 
-    public static Seq generate(InputFiles.InputFile inputFile, Consumer<MindcodeMessage> messageConsumer,
+    public static Seq generate(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer,
             MindcodeParser.ProgramContext program, List<Requirement> requirements) {
-        final AstNodeBuilder builder = new AstNodeBuilder(inputFile, messageConsumer, requirements););
+        final AstNodeBuilder builder = new AstNodeBuilder(inputFile, messageConsumer, requirements);
         final AstNode node = builder.visit(program);
         return (Seq) node;
     }

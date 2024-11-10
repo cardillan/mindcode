@@ -1,7 +1,7 @@
 package info.teksol.mindcode;
 
 import info.teksol.mindcode.grammar.MissingSemicolonException;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -14,10 +14,10 @@ import java.util.function.Consumer;
 
 public class MindcodeErrorListener extends BaseErrorListener {
     private final Consumer<MindcodeMessage> messageConsumer;
-    private final InputFiles.InputFile inputFile;
+    private final InputFile inputFile;
     private int ambiguities = 0;
 
-    public MindcodeErrorListener(Consumer<MindcodeMessage> messageConsumer, InputFiles.InputFile inputFile) {
+    public MindcodeErrorListener(Consumer<MindcodeMessage> messageConsumer, InputFile inputFile) {
         this.messageConsumer = messageConsumer;
         this.inputFile = inputFile;
     }

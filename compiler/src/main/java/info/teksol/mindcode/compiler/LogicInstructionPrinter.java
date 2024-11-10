@@ -6,7 +6,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class LogicInstructionPrinter {
+
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
@@ -26,30 +27,14 @@ public class LogicInstructionPrinter {
         return buffer.toString();
     }
 
-    private static class LineNumberGenerator {
-        private final StringBuilder buffer;
-        private int lineNumber = 0;
-        private boolean lastRemark = false;
-
-        LineNumberGenerator(StringBuilder buffer) {
-            this.buffer = buffer;
-        }
-
-        void printLineNumber(LogicInstruction instruction) {
-            if (instruction.getRealSize() == 0) {
-                buffer.append("        ");
-                lastRemark = false;
-            } else {
-                buffer.append("%5d:  ".formatted(lineNumber));
-                if (instruction instanceof RemarkInstruction && instruction.getRealSize() == 2) {
-                    lineNumber += lastRemark ? 1 : 2;
-                    lastRemark = true;
-                } else {
-                    lineNumber += instruction.getRealSize();
-                    lastRemark = false;
-                }
-            }
-        }
+    public static String toString(FinalCodeOutput finalCodeOutput, InstructionProcessor instructionProcessor,
+            List<LogicInstruction> instructions) {
+        return switch (finalCodeOutput) {
+            case PLAIN      -> LogicInstructionPrinter.toStringWithLineNumbers(instructionProcessor, instructions);
+            case FLAT_AST   -> LogicInstructionPrinter.toStringWithContextsShort(instructionProcessor, instructions);
+            case DEEP_AST   -> LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, instructions);
+            case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, instructions);
+        };
     }
 
     public static String toStringWithLineNumbers(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
@@ -130,7 +115,7 @@ public class LogicInstructionPrinter {
 
             AstContext astContext = instruction.getAstContext();
             if (astContext.node() != null && astContext.node().inputPosition() != null && !astContext.node().inputPosition().isEmpty()) {
-                InputFiles.InputFile inputFile = astContext.node().inputPosition().inputFile();
+                InputFile inputFile = astContext.node().inputPosition().inputFile();
                 String srcLine = "** Corresponding source code line not found! **";
                 List<String> lines = allLines.get(inputFile.getId());
                 if (lines == null) {
@@ -142,7 +127,7 @@ public class LogicInstructionPrinter {
                 if (line == prevLine) {
                     srcLine = "...";
                 } else if (line >= 0 && line < lines.size()) {
-                    String strPath = inputFile.getDistinctPath().toString();
+                    String strPath = inputFile.getDistinctPath();
                     srcLine = (strPath.isEmpty() ? "" : strPath + ": ") + lines.get(line).trim();
                     prevLine = line;
                 }
@@ -184,6 +169,32 @@ public class LogicInstructionPrinter {
                 buffer.append(instruction.getArg(i).toMlog());
             } else {
                 buffer.append("0");
+            }
+        }
+    }
+
+    private static class LineNumberGenerator {
+        private final StringBuilder buffer;
+        private int lineNumber = 0;
+        private boolean lastRemark = false;
+
+        LineNumberGenerator(StringBuilder buffer) {
+            this.buffer = buffer;
+        }
+
+        void printLineNumber(LogicInstruction instruction) {
+            if (instruction.getRealSize() == 0) {
+                buffer.append("        ");
+                lastRemark = false;
+            } else {
+                buffer.append("%5d:  ".formatted(lineNumber));
+                if (instruction instanceof RemarkInstruction && instruction.getRealSize() == 2) {
+                    lineNumber += lastRemark ? 1 : 2;
+                    lastRemark = true;
+                } else {
+                    lineNumber += instruction.getRealSize();
+                    lastRemark = false;
+                }
             }
         }
     }

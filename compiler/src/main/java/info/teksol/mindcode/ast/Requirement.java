@@ -6,20 +6,20 @@ import java.util.Objects;
 
 public class Requirement extends BaseAstNode {
     private final String file;
-    private final boolean system;
+    private final boolean library;
 
-    public Requirement(InputPosition inputPosition, String file, boolean system) {
+    public Requirement(InputPosition inputPosition, String file, boolean library) {
         super(inputPosition);
         this.file = Objects.requireNonNull(file);
-        this.system = system;
+        this.library = library;
     }
 
     public String getFile() {
         return file;
     }
 
-    public boolean isSystem() {
-        return system;
+    public boolean isLibrary() {
+        return library;
     }
 
     @Override
@@ -28,13 +28,13 @@ public class Requirement extends BaseAstNode {
         if (o == null || getClass() != o.getClass()) return false;
 
         Requirement requirement = (Requirement) o;
-        return system == requirement.system && file.equals(requirement.file);
+        return library == requirement.library && file.equals(requirement.file);
     }
 
     @Override
     public int hashCode() {
         int result = file.hashCode();
-        result = 31 * result + Boolean.hashCode(system);
+        result = 31 * result + Boolean.hashCode(library);
         return result;
     }
 
@@ -42,7 +42,7 @@ public class Requirement extends BaseAstNode {
     public String toString() {
         return "Require{" +
                 "file='" + file + '\'' +
-                ", system=" + system +
+                ", library=" + library +
                 '}';
     }
 }

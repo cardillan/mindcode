@@ -44,11 +44,11 @@ public final class WebappMessage {
     public static WebappMessage transform(MindcodeMessage msg) {
         if (msg.inputPosition().isEmpty()) {
             return new WebappMessage("", false, -1, -1, msg.message());
-        } else if (msg.inputPosition().inputFile().isFileSystem()) {
-            return new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().column(), msg.message());
-        } else {
+        } else if (msg.inputPosition().inputFile().isLibrary()) {
             String position = " at " + msg.inputPosition().inputFile().getDistinctPath() + ":" + msg.inputPosition().line() + ":" + msg.inputPosition().column() + ": ";
             return new WebappMessage("", false, -1, -1, msg.level().getTitle() + position + msg.message());
+        } else {
+            return new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().column(), msg.message());
         }
     }
 }

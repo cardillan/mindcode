@@ -2,7 +2,7 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;
@@ -18,13 +18,13 @@ import java.util.function.Consumer;
 
 public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
-    private final InputFiles.InputFile inputFile;
+    private final InputFile inputFile;
 
-    public AstSchematicsBuilder(InputFiles.InputFile inputFile) {
+    public AstSchematicsBuilder(InputFile inputFile) {
         this.inputFile = inputFile;
     }
 
-    public static AstDefinitions generate(InputFiles.InputFile inputFile, DefinitionsContext parseTree,
+    public static AstDefinitions generate(InputFile inputFile, DefinitionsContext parseTree,
             Consumer<MindcodeMessage> messageListener) {
         final AstSchematicsBuilder builder = new AstSchematicsBuilder(inputFile);
         final AstSchemaItem item = builder.visit(parseTree);

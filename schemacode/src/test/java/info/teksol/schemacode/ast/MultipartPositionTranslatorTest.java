@@ -1,6 +1,7 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.ast.MultipartPositionTranslator.Part;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MultipartPositionTranslatorTest {
     private static final InputFiles inputFiles = InputFiles.create();
-    private static final InputFiles.InputFile inputFileA = inputFiles.registerFile(Path.of("A"), "");
-    private static final InputFiles.InputFile inputFileB = inputFiles.registerFile(Path.of("B"), "");
-    private static final InputFiles.InputFile inputFileC = inputFiles.registerFile(Path.of("C"), "");
+    private static final InputFile inputFileA = inputFiles.registerFile(Path.of("A"), "");
+    private static final InputFile inputFileB = inputFiles.registerFile(Path.of("B"), "");
+    private static final InputFile inputFileC = inputFiles.registerFile(Path.of("C"), "");
 
     @Test
     void translatesSinglePart() {

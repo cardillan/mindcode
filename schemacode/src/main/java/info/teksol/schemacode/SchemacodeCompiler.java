@@ -4,6 +4,7 @@ import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.ast.AstSchematicsBuilder;
@@ -33,7 +34,7 @@ public class SchemacodeCompiler {
      * @return Top node of parsed AST tree
      */
     static DefinitionsContext parseSchematics(Consumer<MindcodeMessage> messageConsumer, InputFiles inputFiles) {
-        InputFiles.InputFile inputFile = inputFiles.getMainInputFile();
+        InputFile inputFile = inputFiles.getMainInputFile();
         final MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
 
         final SchemacodeLexer lexer = new SchemacodeLexer(CharStreams.fromString(inputFile.getCode()));
@@ -47,7 +48,7 @@ public class SchemacodeCompiler {
         return parser.definitions();
     }
 
-    static AstDefinitions createDefinitions(InputFiles.InputFile inputFile, DefinitionsContext parseTree, Consumer<MindcodeMessage> messageListener) {
+    static AstDefinitions createDefinitions(InputFile inputFile, DefinitionsContext parseTree, Consumer<MindcodeMessage> messageListener) {
         return AstSchematicsBuilder.generate(inputFile, parseTree, messageListener);
     }
 
@@ -58,7 +59,7 @@ public class SchemacodeCompiler {
     }
 
     public static CompilerOutput<byte[]> compile(InputFiles inputFiles, CompilerProfile compilerProfile) {
-        InputFiles.InputFile inputFile = inputFiles.getMainInputFile();
+        InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
             return new CompilerOutput<>(new byte[0], List.of());
         }

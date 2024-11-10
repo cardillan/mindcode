@@ -2,13 +2,13 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.InputPositionTranslator;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.InputFile;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;
 
 class MultipartPositionTranslator implements InputPositionTranslator {
-    record Part(int newLines, int lastLineLength, InputFiles.InputFile inputFile, int lineOffset, int columnOffset) {}
+    record Part(int newLines, int lastLineLength, InputFile inputFile, int lineOffset, int columnOffset) {}
     private final List<Part> parts;
 
     public static InputPositionTranslator createTranslator(SchematicsBuilder builder, List<AstProgramSnippet> snippets) {
@@ -82,7 +82,7 @@ class MultipartPositionTranslator implements InputPositionTranslator {
         int lastLineLength = text.length() - lastPos;
 
         final InputPosition source = snippet.getInputPosition(builder);
-        final InputFiles.InputFile inputFile = source.inputFile();
+        final InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
         final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
         return new Part(lines, lastLineLength, inputFile, lineOffset, columnOffset);
@@ -90,7 +90,7 @@ class MultipartPositionTranslator implements InputPositionTranslator {
 
     private static InputPositionTranslator createSimpleTranslator(SchematicsBuilder builder, AstProgramSnippet snippet) {
         final InputPosition source = snippet.getInputPosition(builder);
-        final InputFiles.InputFile inputFile = source.inputFile();
+        final InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
         final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
         return p ->

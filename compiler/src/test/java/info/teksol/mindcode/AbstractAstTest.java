@@ -21,7 +21,7 @@ public class AbstractAstTest extends AbstractParserTest {
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String code) {
         AstNodeBuilder.generate(inputFiles.registerSource(code), expectedMessages, parse(code),
-                , List.of());
+                List.of());
         expectedMessages.validate();
     }
 
