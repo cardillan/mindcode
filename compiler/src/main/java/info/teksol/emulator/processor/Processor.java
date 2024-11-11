@@ -3,6 +3,7 @@ package info.teksol.emulator.processor;
 import info.teksol.emulator.MindustryObject;
 import info.teksol.emulator.MindustryVariable;
 import info.teksol.emulator.blocks.Memory;
+import info.teksol.emulator.blocks.MessageBlock;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.blocks.graphics.GraphicsBuffer;
 import info.teksol.emulator.blocks.graphics.LogicDisplay;
@@ -10,38 +11,52 @@ import info.teksol.evaluator.ConditionEvaluator;
 import info.teksol.evaluator.ExpressionEvaluator;
 import info.teksol.evaluator.LogicCondition;
 import info.teksol.evaluator.LogicOperation;
+import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ToolMessage;
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-import static info.teksol.emulator.processor.ProcessorFlag.*;
+import static info.teksol.emulator.processor.ExecutionFlag.*;
 
 /**
  * Mindustry Processor emulator.
  */
-public class Processor {
-    private final Set<ProcessorFlag> flags;
+public class Processor extends AbstractMessageEmitter {
+    private final Set<ExecutionFlag> flags;
     private final MindustryVariables variables;
     private final Map<String, MindustryBlock> blockMap = new LinkedHashMap<>();
     private List<MindustryBlock> blocks = List.of();
     private final MindustryVariable counter;
+    private int traceCount = 0;
+    private int traceLimit = 0;
     private int steps = 0;
     private int instructions = 0;
     private final BitSet coverage = new BitSet();
 
-    private static final int TEXT_BUFFER_LIMIT = 10000;
+    private static final int TEXT_OUTPUT_LIMIT = 10000;
+    private static final int TEXT_BUFFER_LIMIT = 400;
     private static final int GRAPHICS_BUFFER_LIMIT = 256;
     private TextBuffer textBuffer;
     private GraphicsBuffer graphicsBuffer;
 
-    public Processor() {
-        flags = EnumSet.allOf(ProcessorFlag.class);
+    public Processor(Consumer<MindcodeMessage> messageConsumer, Set<ExecutionFlag> flags, int traceLimit) {
+        super(messageConsumer);
+        this.flags = EnumSet.copyOf(flags);
         variables = new MindustryVariables(this);
         counter = variables.counter;
+        this.traceLimit = traceLimit;
+    }
+
+    public Processor(Consumer<MindcodeMessage> messageConsumer, int traceLimit) {
+        this(messageConsumer, ExecutionFlag.getDefaultFlags(), traceLimit);
     }
 
     public void addBlock(String name, MindustryBlock block) {
@@ -54,8 +69,8 @@ public class Processor {
         return textBuffer.getPrintOutput();
     }
 
-    public String getTextBuffer() {
-        return textBuffer == null ? null : textBuffer.getTextBuffer();
+    public TextBuffer getTextBuffer() {
+        return textBuffer;
     }
 
     public int getSteps() {
@@ -70,11 +85,11 @@ public class Processor {
         return coverage;
     }
 
-    public boolean getFlag(ProcessorFlag flag) {
-        return flags.contains(flag);
+    public boolean getFlag(ExecutionFlag flag) {
+        return flags.contains(flag) && (flag != TRACE_EXECUTION || traceCount < traceLimit);
     }
 
-    public void setFlag(ProcessorFlag flag, boolean value) {
+    public void setFlag(ExecutionFlag flag, boolean value) {
         if (value) {
             flags.add(flag);
         } else {
@@ -82,17 +97,23 @@ public class Processor {
         }
     }
 
-    public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {
-        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && program.stream().noneMatch(StopInstruction.class::isInstance)) {
-            throw new ExecutionException(STOP_PROCESSOR_OPTIONAL, "A stop instruction not present in given program.");            
-        }
+    private void info(@PrintFormat String format, Object... args) {
+        traceCount++;
+        messageConsumer.accept(ToolMessage.info(format, args));
+    }
 
+    public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {
         if (program.isEmpty()) {
             throw new ExecutionException(ERR_INVALID_COUNTER, "No program to run.");
         }
 
+        if (getFlag(TRACE_EXECUTION)) {
+            info("%nProgram execution trace:");
+        }
+
         steps = 0;
-        textBuffer = new TextBuffer(TEXT_BUFFER_LIMIT);
+        textBuffer = new TextBuffer(TEXT_OUTPUT_LIMIT, TEXT_BUFFER_LIMIT,
+                getFlag(ERR_TEXT_BUFFER_OVERFLOW));
         graphicsBuffer = new GraphicsBuffer(GRAPHICS_BUFFER_LIMIT);
 
         counter.setIntValue(0);
@@ -106,23 +127,23 @@ public class Processor {
                 index = counter.getIntValue();
                 if (index == program.size()) {
                     index = 0;
-                    if (getFlag(ProcessorFlag.STOP_ON_PROGRAM_END)) {
+                    if (getFlag(ExecutionFlag.STOP_ON_PROGRAM_END)) {
                         break;
                     }
                 }
                 coverage.set(index);
                 instruction = program.get(index);
 
-                if (false) {
-                    System.out.printf("Step: %d, counter: %d, instruction: %s%n", steps, index, instruction);
-                    instruction.getArgs().stream()
+                if (getFlag(TRACE_EXECUTION)) {
+                    info("Step %d, instruction #%d: %s", steps + 1, index, LogicInstructionPrinter.toStringSimple(instruction));
+                    instruction.inputArgumentsStream()
                             .filter(LogicVariable.class::isInstance)
                             .map(LogicVariable.class::cast)
                             .distinct()
                             .map(a -> a.toMlog() + ": " + (variables.containsVariable(a.toMlog())
-                                    ? getExistingVariable(a).toString()
+                                    ? getExistingVariable(a).printExact()
                                     : " [uninitialized]"))
-                            .forEach(v -> System.out.printf("   variable %s%n", v));
+                            .forEach(v -> info("   in  %s", v));
                 }
 
                 steps++;
@@ -131,12 +152,23 @@ public class Processor {
                     break;
                 }
 
-                // Report possible wrong @counter assignments at the errant instruction
+                if (getFlag(TRACE_EXECUTION)) {
+                    instruction.outputArgumentsStream()
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
+                            .distinct()
+                            .map(a -> a.toMlog() + ": " + (variables.containsVariable(a.toMlog())
+                                    ? getExistingVariable(a).printExact()
+                                    : " [uninitialized]"))
+                            .forEach(v -> info("   out %s", v));
+                }
+
+                // Report possible wrong jump and @counter assignments at the errant instruction
                 int newIndex = counter.getIntValue();
                 if (newIndex < 0 || newIndex > program.size()) {
                     counter.setIntValue(0);
                     throw new ExecutionException(ERR_INVALID_COUNTER,
-                            "Value of '@counter' (%d) outside valid range (0 to %d).".formatted(newIndex, program.size()));
+                            "Value of '@counter' (%d) outside valid range (0 to %d).", newIndex, program.size());
                 }
             } catch (ExecutionException ex) {
                 if (getFlag(ex.getFlag())) {
@@ -148,7 +180,7 @@ public class Processor {
         }
 
         if (steps >= stepLimit) {
-            throw new ExecutionException(ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of %,d exceeded.".formatted(stepLimit));
+            throw new ExecutionException(ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of %,d exceeded.", stepLimit);
         }
     }
 
@@ -156,7 +188,7 @@ public class Processor {
         return switch(instruction.getOpcode()) {
             case DRAW       -> executeDraw((DrawInstruction) instruction);
             case DRAWFLUSH  -> executeDrawflush((DrawflushInstruction) instruction);
-            case END        -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
+            case END        -> { counter.setIntValue(0); yield !getFlag(ExecutionFlag.STOP_ON_END_INSTRUCTION); }
             case FORMAT     -> executeFormat((FormatInstruction) instruction); 
             case GETLINK    -> executeGetlink((GetlinkInstruction) instruction);
             case JUMP       -> executeJump((JumpInstruction) instruction);
@@ -164,11 +196,11 @@ public class Processor {
             case OP         -> executeOp((OpInstruction) instruction);
             case PACKCOLOR  -> executePackColor((PackColorInstruction) instruction);
             case PRINT      -> executePrint((PrintInstruction) instruction);
-            case PRINTFLUSH -> { textBuffer.printflush(); yield true; }
+            case PRINTFLUSH -> executePrintflush((PrintflushInstruction) instruction);
             case READ       -> executeRead((ReadInstruction) instruction);
             case SENSOR     -> executeSensor((SensorInstruction) instruction);
             case SET        -> executeSet((SetInstruction) instruction);
-            case STOP       -> false;
+            case STOP       -> executeStop((StopInstruction) instruction);
             case UBIND,WAIT -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
             case WRITE      -> executeWrite((WriteInstruction) instruction);
             default         -> {
@@ -179,17 +211,26 @@ public class Processor {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends MindustryObject> void blockOperation(LogicVariable value, Class<T> type, Consumer<T> operation) {
+    private <T extends MindustryObject> void blockOperation(String description, LogicVariable value, Class<T> type,
+            Consumer<T> operation, Runnable cleanup) throws ExecutionException {
         MindustryVariable variable = getExistingVariable(value);
         if (variable.getObject() == null) {
-            throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable '" + value.toMlog() + "' is not an object.");
+            cleanup.run();
+            throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable '%s' is not an object.", value.toMlog());
         } else if (!type.isInstance(variable.getObject())) {
-            throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION,
-                    "Unsupported operation 'drawflush' on '" + value.toMlog() + "' (class " + variable.getObject().getClass().getSimpleName() + ").");
+            cleanup.run();
+            throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation '%s' on '%s' (class %s).",
+                    description, value.toMlog(), variable.getObject().getClass().getSimpleName());
         } else {
             operation.accept((T) variable.getObject());
         }
     }
+
+    private <T extends MindustryObject> void blockOperation(String description, LogicVariable value, Class<T> type,
+            Consumer<T> operation) throws ExecutionException {
+        blockOperation(description, value, type, operation, () -> {});
+    }
+
 
     private boolean executeDraw(DrawInstruction ix) {
         graphicsBuffer.draw(ix);
@@ -197,7 +238,8 @@ public class Processor {
     }
 
     private boolean executeDrawflush(DrawflushInstruction ix) {
-        blockOperation(ix.getDisplay(), LogicDisplay.class, display -> display.drawflush(graphicsBuffer));
+        blockOperation("drawflush", ix.getDisplay(), LogicDisplay.class,
+                display -> display.drawflush(graphicsBuffer));
         return true;
     }
 
@@ -233,7 +275,7 @@ public class Processor {
             MindustryVariable b = getExistingVariable(ix.getY());
             LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
             if (logicCondition == null) {
-                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '" + ix.getCondition() + "'.");
+                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '%s'.", ix.getCondition());
             }
             if (logicCondition.evaluate(a, b)) {
                 counter.setIntValue(address);
@@ -248,7 +290,7 @@ public class Processor {
         MindustryVariable index = getExistingVariable(ix.getIndex());
         Map<Integer, ? extends MindustryContent> lookupMap = MindustryContents.getLookupMap(type.getKeyword());
         if (lookupMap == null) {
-            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid lookup type '" + type.getKeyword() + "'.");
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid lookup type '%s'.", type.getKeyword());
         }
         MindustryContent object = lookupMap.get(index.getIntValue());
         MindustryVariable result = getOrCreateVariable(ix.getResult());
@@ -268,7 +310,7 @@ public class Processor {
         MindustryVariable b = getExistingVariable(ix.hasSecondOperand() ? ix.getY() : LogicNumber.ZERO);
         LogicOperation op = ExpressionEvaluator.getOperation(ix.getOperation());
         if (op == null) {
-            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation '" + ix.getOperation() + "'.");
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation '%s'.", ix.getOperation());
         }
         op.execute(target, a, b);
         return true;
@@ -295,10 +337,16 @@ public class Processor {
         return true;
     }
 
+    private boolean executePrintflush(PrintflushInstruction ix) {
+        blockOperation("drawflush", ix.getBlock(), MessageBlock.class,
+                message -> message.printflush(textBuffer), () -> textBuffer.printflush(null));
+        return true;
+    }
+
     private boolean executeRead(ReadInstruction ix) {
         MindustryVariable target = getOrCreateVariable(ix.getResult());
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        blockOperation(ix.getMemory(), Memory.class,
+        blockOperation("read", ix.getMemory(), Memory.class,
                 memory -> target.setDoubleValue(memory.read(index.getIntValue())));
         return true;
     }
@@ -334,10 +382,20 @@ public class Processor {
         return true;
     }
 
+    private boolean executeStop(StopInstruction ix) {
+        if (traceCount < traceLimit) {
+            info("\nstop instruction encountered, dumping variable values:");
+            variables.getAllVariables().stream()
+                    .map(v -> v.getName() + ": " + v.printExact())
+                    .forEach(this::info);
+        }
+        return !getFlag(STOP_ON_STOP_INSTRUCTION);
+    }
+
     private boolean executeWrite(WriteInstruction ix) {
         MindustryVariable source = getExistingVariable(ix.getArg(0));
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        blockOperation(ix.getMemory(), Memory.class,
+        blockOperation("write", ix.getMemory(), Memory.class,
                 memory -> memory.write(index.getIntValue(), source.getDoubleValue()));
         return true;
     }

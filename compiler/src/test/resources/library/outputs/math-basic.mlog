@@ -6,71 +6,67 @@ print "\nT:distance backward\nE:"
 print 5
 print "\nA:"
 print 5
-print "\nT:round 1.5 up\nE:"
+print "\nT:round(1.5)\nE:"
 print 2
 print "\nA:"
 print 2
-print "\nT:round 1.7 up\nE:"
+print "\nT:round(1.7)\nE:"
 print 2
 print "\nA:"
 print 2
-print "\nT:round 2.1 down\nE:"
+print "\nT:round(2.1)\nE:"
 print 2
 print "\nA:"
 print 2
-print "\nT:round 2.5 up\nE:"
+print "\nT:round(2.5)\nE:"
 print 3
 print "\nA:"
 print 3
-print "\nT:round -3.5 up\nE:"
+print "\nT:round(-3.5)\nE:"
 print -3
 print "\nA:"
 print -3
-print "\nT:frac 3.5\nE:"
+print "\nT:frac(3.5)\nE:"
 print 0.5
 print "\nA:"
 print 0.5
-print "\nT:frac -1.5\nE:"
+print "\nT:frac(-1.5)\nE:"
 print -0.5
 print "\nA:"
 print -0.5
-print "\nT:sign 0\nE:"
+print "\nT:sign(0)\nE:"
 print 0
 print "\nA:"
 print 0
-print "\nT:sign 1e-7\nE:"
+print "\nT:sign(1e-7)\nE:"
 print 0
 print "\nA:"
 print 0
-print "\nT:sign 1e-5\nE:"
+print "\nT:sign(1e-5)\nE:"
 print 1
 print "\nA:"
 print 1
-print "\nT:sign -5\nE:"
+print "\nT:sign(-5)\nE:"
 print -1
 print "\nA:"
 print -1
-print "\nT:signExact 0\nE:"
+print "\nT:signExact(0)\nE:"
 print 0
 print "\nA:"
 print 0
-print "\nT:signExact 1e-7\nE:"
+print "\nT:signExact(1e-7)\nE:"
 print 1
 print "\nA:"
 print 1
-print "\nT:signExact -1e-7\nE:"
+print "\nT:signExact(-1e-7)\nE:"
 print -1
 print "\nA:"
 print -1
-print "\nT:isZero 0\nE:"
+print "\nT:isZero(0)\nE:"
 print true
 print "\nA:"
 print true
-print "\nT:isZero 1e-50\nE:"
-print false
-print "\nA:"
-print false
-print "\nT:isZero -1e-50\nE:"
+print "\nT:isZero(1e-50)\nE:"
 print false
 print "\nA:"
 print false
@@ -78,29 +74,20 @@ print "\nT:isZero(-1e-50)\nE:"
 print false
 print "\nA:"
 print false
-print "\nT:printExact(null)\nE:null\nA:"
-print null
-print "\nT:printExact(0)\nE:0\nA:"
+print "\nT:isZero(0.01,0.01)\nE:"
+print false
+print "\nA:"
+print false
+op add __fn7__result null 0
+print "\nT:nullToZero(null)\nE:"
 print 0
-print "\nT:printExact(3.00000007)\nE:"
-print "3.000000070000000\nA:"
-print 3
-print ".0000"
-print 0
-print "00"
-print 700
-print "0000"
-print 0
-print "\nT:printExact(1.2345e-50)\nE:"
-print "1.2345000000000002E-50\nA:"
-print 1.2345000000000002
-print "E"
-print -50
-print "\nT:printExact(-1.2345e-50)\nE:"
-print "-1.2345000000000002E-50\nA:-"
-print 1.2345000000000002
-print "E"
-print -50
+print "\nA:"
+print __fn7__result
+op add __fn7__result 1 0
+print "\nT:nullToZero(1)\nE:"
+print 1
+print "\nA:"
+print __fn7__result
 print "\n"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

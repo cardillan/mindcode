@@ -5,7 +5,7 @@ import info.teksol.mindcode.mimex.BlockType;
 
 import java.util.Arrays;
 
-import static info.teksol.emulator.processor.ProcessorFlag.ERR_MEMORY_ACCESS;
+import static info.teksol.emulator.processor.ExecutionFlag.ERR_MEMORY_ACCESS;
 
 public class Memory extends MindustryBlock {
     private final double[] memory;
@@ -30,7 +30,7 @@ public class Memory extends MindustryBlock {
 
     private int checkIndex(int index) {
         if (index < 0 || index >= memory.length) {
-            throw new ExecutionException(ERR_MEMORY_ACCESS, "Memory access out of bounds: index " + index + ", memory size " + memory.length + ".");
+            throw new ExecutionException(ERR_MEMORY_ACCESS, "Memory access out of bounds: index %d, memory size %d.", index, memory.length);
         }
         return index;
     }

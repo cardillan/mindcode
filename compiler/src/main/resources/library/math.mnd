@@ -1,0 +1,163 @@
+// Mindcode system library for Mindustry Logic version 8
+// Math functions
+
+// Computes the distance between points (x1, y1) and (x2, y2).
+// Uses the len instruction for efficient hypotenuse calculation
+def distance(_x1, _y1, _x2, _y2)
+    len(_x2 - _x1, _y2 - _y1);
+end;
+
+// Rounds the number to the closest integer. 0.5 is rounded up.
+def round(_x)
+    floor(_x + 0.5);
+end;
+
+// Returns the fractional part of the number
+def frac(_x)
+    _x % 1;
+end;
+
+// Returns the sign of the number
+// The return value is zero precisely when _x == 0
+def sign(_x)
+    // Using equality here to get sign behavior consistent with equality operator
+    _x == 0 ? 0 : _x < 0 ? -1 : 1;
+end;
+
+// Returns the exact sign of the number
+// The return value is zero precisely when _x is equal to 0 precisely.
+def signExact(_x)
+    // Use branchless sign computation
+    (_x > 0) - (_x < 0);
+end;
+
+// Returns true if _x is precisely zero.
+def isZero(_x)
+    abs(_x) <= 0;
+end;
+
+// Returns true if the absolute value of _x is less than precision.
+def isZero(_x, _precision)
+    abs(_x) < _precision;
+end;
+
+// Returns true if the two values differ by less than given precision.
+def isEqual(_a, _b, _precision)
+    abs(_a - _b) < _precision;
+end;
+
+// Converts the value of _x to zero if it was null
+// Uses single instruction for the conversion.
+// Creating the instruction through the mlog function ensures it won't get optimized away.
+def nullToZero(_x)
+    mlog("op", "add", out _result, in _x, 0);
+    _result;
+end;
+
+// Sum of just one argument
+inline def sum(_x1)
+    _x1;
+end;
+
+// Sum of two or more arguments
+inline def sum(_x1, _x2, _x...)
+    _sum = _x1 + _x2;
+    for _i in _x do _sum += _i; end;
+    _sum;
+end;
+
+// Average of just one argument
+inline def avg(_x1)
+    _x1;
+end;
+
+// Average of two or more arguments
+inline def avg(_x1, _x2, _x...)
+    _sum = _x1 + _x2;
+    for _i in _x do _sum += _i; end;
+    _sum / (2 + length(_x));
+end;
+
+def median(_x1)
+    _x1;
+end;
+
+def median(_x1, _x2)
+    (_x1 + _x2) / 2;
+end;
+
+def median(_x1, _x2, _x3)
+    min(max(_x1, _x2), max(_x1, _x3), max(_x2, _x3));
+end;
+
+def median(_x1, _x2, _x3, _x4)
+    _y1 = min(_x1, _x2);
+    _y2 = max(_x1, _x2);
+    _y3 = min(_x3, _x4);
+    _y4 = max(_x3, _x4);
+    if _y2 <= _y3 then
+        (_y2 + _y3) / 2;
+    elsif _y1 >= _y4 then
+        (_y1 + _y4) / 2;
+    else
+        (max(_y1, _y3) + min(_y2, _y4)) / 2;
+    end;
+end;
+
+def median(_x1, _x2, _x3, _x4, _x5)
+    _y1 = min(_x1, _x2);
+    _y2 = max(_x1, _x2);
+    _y4 = min(_x4, _x5);
+    _y5 = max(_x4, _x5);
+
+    if _y4 < _y1 then
+        _swap(out _y1, out _y4);
+        _swap(out _y2, out _y5);
+    end;
+
+    if _x3 > _y2 then
+        _y2 < _y4 ? min(_x3, _y4) : min(_y2, _y5);
+    else
+        _x3 > _y4 ? min(_x3, _y5) : min(_y2, _y4);
+    end;
+end;
+
+inline def _swap(in out _a, in out _b)
+    _t = _a; _a = _b; _b = _t;
+end;
+
+inline def median(_x...)
+    _bestDif = 1e10;
+    _best = null;
+    for _i in _x do
+        if _isMedian(out _dif, _i, _x) then
+            return _i;
+        end;
+        if _dif < _bestDif then
+            _bestDif = _dif;
+            _best = _i;
+            _count = 1;
+        elsif _dif <= _bestDif then
+            _best += _i;
+            _count += 1;
+        end;
+    end;
+    _best / _count;
+end;
+
+inline def _isMedian(out _dif, _n, _x...)
+    _lt = _gt = 0;
+    for _i in _x do
+        if _i < _n then
+            _lt += 1;
+        elsif _i > _n then
+            _gt += 1;
+        end;
+    end;
+    _dif = abs(_gt - _lt);
+    if _gt + _lt >= length(x) - 1 then
+        _gt == _lt;
+    else
+        false;
+    end;
+end;

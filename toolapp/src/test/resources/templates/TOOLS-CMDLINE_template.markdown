@@ -51,15 +51,9 @@ action was successful, the output is copied to the clipboard and can be pasted d
 
 ## Running the compiled code
 
-When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but only supports those operations that do not interact with the Mindustry World (specifically, operations that do not input information from the Mindustry World). The exception to this rule is access to external memory cells and memory banks. The emulated processor is equipped with nine memory cells and nine memory banks accessible under the names of `cell1` to `cell9` and `bank1` to `bank9` (they cannot be accessed using the `getlink` instruction). At the beginning of the executions all these memory cells and banks are empty.
+When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but supports only very few operations that interact with the Mindustry World.
 
-The execution of the code ends when one of the following conditions is encountered:
-* end of the instruction list is reached,
-* an `end` or `stop` instruction is executed,
-* execution step limits is exceeded,
-* an unsupported operation is attempted.
-
-When the execution ends, the contents of the print buffer is written to the log file.
+The behavior of the processor emulator can be further modified through the execution flags. For more details, refer to the [processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) documentation.
 
 ## Compiler options
 
@@ -104,4 +98,4 @@ the command line help is included here.
 
 ---
 
-[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher »](TOOLS-MLOG-WATCHER.markdown)
+[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator »](TOOLS-PROCESSOR-EMULATOR.markdown)

@@ -1,0 +1,177 @@
+Number of reported ambiguities: 65
+Active optimizations:
+    case-expression-optimization = basic,
+    case-switching = basic,
+    data-flow-optimization = basic,
+    dead-code-elimination = basic,
+    expression-optimization = basic,
+    function-inlining = basic,
+    if-expression-optimization = basic,
+    jump-normalization = basic,
+    jump-optimization = basic,
+    jump-straightening = basic,
+    jump-threading = basic,
+    loop-hoisting = basic,
+    loop-optimization = basic,
+    loop-unrolling = basic,
+    print-merging = basic,
+    return-optimization = basic,
+    single-step-elimination = basic,
+    stack-optimization = basic,
+    temp-variables-elimination = basic,
+    unreachable-code-elimination = basic
+
+   363 instructions before optimizations.
+    12 instructions eliminated by Temp Variables Elimination.
+    37 instructions eliminated by Dead Code Elimination (6 iterations).
+    25 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
+    13 instructions eliminated by Jump Optimization (5 iterations).
+    46 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     2 instructions eliminated by If Expression Optimization (4 iterations).
+   179 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
+     1 instructions eliminated by Loop Optimization (4 iterations).
+     2 loops improved by Loop Optimization.
+    31 instructions added by Loop Unrolling (7 iterations).
+     1 loops unrolled by Loop Unrolling.
+   727 instructions added by Function Inlining (7 iterations).
+    17 function calls inlined by Function Inlining.
+    33 instructions updated by JumpThreading.
+   577 instructions eliminated by Unreachable Code Elimination.
+   120 instructions eliminated by Print Merging.
+   109 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 744):
+  * Loop Unrolling: unroll loop at line 58                       cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
+    Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2
+    Function Inlining: inline function printExact                cost   404, benefit       35.0, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 717):
+  * Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2 (+78 instructions)
+    Function Inlining: inline function printExact                cost   647, benefit       35.0, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 639):
+  ! Function Inlining: inline function printExact                cost   647, benefit       35.0, efficiency        0.1
+
+Pass 2: speed optimization selection (cost limit 651):
+  * Function Inlining: inline function printExact                cost   647, benefit       35.0, efficiency        0.1 (+512 instructions)
+
+Final code before resolving virtual instructions:
+
+    0:  print "T:printNumber(null)\nE:0\nA:{2}"
+    1:  op floor __fn30__n 0 0
+    2:  format __fn30__n
+    3:  print "\nT:printNumber(1)\nE:1\nA:{2}"
+    4:  op floor __fn30__n 1 0
+    5:  format __fn30__n
+    6:  print "\nT:printNumber(1.5)\nE:1\nA:{2}"
+    7:  op floor __fn30__n 1.5 0
+    8:  format __fn30__n
+    9:  print "\nT:printNumber(-1.5)\nE:-1\nA:{2}"
+   10:  op floor __fn30__n 1.5 0
+   11:  format "-{2}"
+   12:  format __fn30__n
+   13:  print "\nT:printNumber(1234567)\nE:"
+   14:  print "1,234,567\nA:{2}"
+   15:  op floor __fn30__n 1234567 0
+        label __label200
+   16:  op mod __fn30__mod __fn30__n 1000
+   17:  set __tmp24 "{2},00{1}"
+   18:  jump __label203 lessThan __fn30__mod 10
+   19:  set __tmp24 "{2},{1}"
+   20:  jump __label202 greaterThanEq __fn30__mod 100
+   21:  set __tmp24 "{2},0{1}"
+        label __label202
+        label __label203
+   22:  format __tmp24
+   23:  format __fn30__mod
+   24:  op idiv __fn30__n __fn30__n 1000
+   25:  jump __label200 greaterThan __fn30__n 999
+   26:  format __fn30__n
+   27:  print "\nT:printNumber(-1234567)\nE:"
+   28:  print "-1,234,567\nA:{2}"
+   29:  op floor __fn30__n 1234567 0
+   30:  format "-{2}"
+        label __label213
+   31:  op mod __fn30__mod __fn30__n 1000
+   32:  set __tmp24 "{2},00{1}"
+   33:  jump __label216 lessThan __fn30__mod 10
+   34:  set __tmp24 "{2},{1}"
+   35:  jump __label215 greaterThanEq __fn30__mod 100
+   36:  set __tmp24 "{2},0{1}"
+        label __label215
+        label __label216
+   37:  format __tmp24
+   38:  format __fn30__mod
+   39:  op idiv __fn30__n __fn30__n 1000
+   40:  jump __label213 greaterThan __fn30__n 999
+   41:  format __fn30__n
+   42:  print "\nT:printNumber(9009099)\nE:"
+   43:  print "9,009,099\nA:{2}"
+   44:  op floor __fn30__n 9009099 0
+        label __label226
+   45:  op mod __fn30__mod __fn30__n 1000
+   46:  set __tmp24 "{2},00{1}"
+   47:  jump __label229 lessThan __fn30__mod 10
+   48:  set __tmp24 "{2},{1}"
+   49:  jump __label228 greaterThanEq __fn30__mod 100
+   50:  set __tmp24 "{2},0{1}"
+        label __label228
+        label __label229
+   51:  format __tmp24
+   52:  format __fn30__mod
+   53:  op idiv __fn30__n __fn30__n 1000
+   54:  jump __label226 greaterThan __fn30__n 999
+   55:  format __fn30__n
+   56:  print "\nT:printExact(null)\nE:null\nA:"
+   57:  print null
+   58:  print "\nT:printExact(0)\nE:0\nA:"
+   59:  print 0
+   60:  print "\nT:printExact(1)\nE:1\nA:"
+   61:  print 1
+   62:  print "\nT:printExact(1.0000001)\nE:"
+   63:  print "1.000000100000000\nA:"
+   64:  print 1
+   65:  print ".0000"
+   66:  print 0
+   67:  print "0"
+   68:  print 1000
+   69:  print "0000"
+   70:  print 0
+   71:  print "\nT:printExact(3.00000007)\nE:"
+   72:  print "3.000000070000000\nA:"
+   73:  print 3
+   74:  print ".0000"
+   75:  print 0
+   76:  print "00"
+   77:  print 700
+   78:  print "0000"
+   79:  print 0
+   80:  print "\nT:printExact(3e50)\nE:3E50\nA:"
+   81:  print 3
+   82:  print "E"
+   83:  print 50
+   84:  print "\nT:printExact(1.0123456789)\nE:"
+   85:  print "1.0123456789\nA:"
+   86:  print 1.0123456789
+   87:  print "\nT:printExact(1.0000001e20)\nE:"
+   88:  print "1.000000099999999E20\nA:"
+   89:  print 1
+   90:  print ".0000"
+   91:  print 0
+   92:  print "00"
+   93:  print 999
+   94:  print 99999
+   95:  print "E"
+   96:  print 20
+   97:  print "\nT:printExact(1.2345e-50)\nE:"
+   98:  print "1.2345000000000002E-50\nA:"
+   99:  print 1.2345000000000002
+  100:  print "E"
+  101:  print -50
+  102:  print "\nT:printExact(-1.2345e-50)\nE:"
+  103:  print "-1.2345000000000002E-50\nA:-"
+  104:  print 1.2345000000000002
+  105:  print "E"
+  106:  print -50
+  107:  print "\n"
+  108:  end

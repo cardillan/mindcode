@@ -17,5 +17,10 @@
       <option name="PARAMETERS" value="cs -l -c -d 1 '$FileName$'" />
       <option name="WORKING_DIRECTORY" value="$FileDir$" />
     </exec>
+    <filter>
+      <option name="NAME" value="" />
+      <option name="DESCRIPTION" value="" />
+      <option name="REGEXP" value="$FILE_PATH$:$LINE$:$COLUMN$.*" />
+    </filter>
   </tool>
 </toolSet>

@@ -18,4 +18,4 @@ installing the mod - or ask a question here on GitHub.
 
 ---
 
-[« Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Next: Mlog Decompiler »](TOOLS-MLOG-DECOMPILER.markdown)
+[« Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mlog Decompiler »](TOOLS-MLOG-DECOMPILER.markdown)

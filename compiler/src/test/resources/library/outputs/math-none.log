@@ -1,4 +1,4 @@
-Number of reported ambiguities: 53
+Number of reported ambiguities: 27
 
 Final code before resolving virtual instructions:
 
@@ -6,654 +6,509 @@ Final code before resolving virtual instructions:
     1:  set __fn0__y1 1
     2:  set __fn0__x2 4
     3:  set __fn0__y2 5
-    4:  setaddr __fn0retaddr __label10
+    4:  setaddr __fn0retaddr __label13
     5:  call __label0 __fn0retval
-        gotolabel __label10 __fn0
+        gotolabel __label13 __fn0
     6:  set __tmp0 __fn0retval
-        label __label11
-    7:  set __fn10_expected 5
-    8:  set __fn10_actual __tmp0
-    9:  set __fn10_title "distance forward"
+        label __label14
+    7:  set __fn13_expected 5
+    8:  set __fn13_actual __tmp0
+    9:  set __fn13_title "distance forward"
    10:  print "T:"
-   11:  print __fn10_title
+   11:  print __fn13_title
    12:  print "\n"
    13:  print "E:"
-   14:  print __fn10_expected
+   14:  print __fn13_expected
    15:  print "\n"
    16:  print "A:"
-   17:  print __fn10_actual
+   17:  print __fn13_actual
    18:  print "\n"
-   19:  set __tmp1 __fn10_actual
-        label __label12
+   19:  set __tmp1 __fn13_actual
+        label __label15
    20:  set __fn0__x1 -1
    21:  set __fn0__y1 -1
    22:  set __fn0__x2 -4
    23:  set __fn0__y2 -5
-   24:  setaddr __fn0retaddr __label13
+   24:  setaddr __fn0retaddr __label16
    25:  call __label0 __fn0retval
-        gotolabel __label13 __fn0
+        gotolabel __label16 __fn0
    26:  set __tmp2 __fn0retval
-        label __label14
-   27:  set __fn11_expected 5
-   28:  set __fn11_actual __tmp2
-   29:  set __fn11_title "distance backward"
+        label __label17
+   27:  set __fn14_expected 5
+   28:  set __fn14_actual __tmp2
+   29:  set __fn14_title "distance backward"
    30:  print "T:"
-   31:  print __fn11_title
+   31:  print __fn14_title
    32:  print "\n"
    33:  print "E:"
-   34:  print __fn11_expected
+   34:  print __fn14_expected
    35:  print "\n"
    36:  print "A:"
-   37:  print __fn11_actual
+   37:  print __fn14_actual
    38:  print "\n"
-   39:  set __tmp3 __fn11_actual
-        label __label15
+   39:  set __tmp3 __fn14_actual
+        label __label18
    40:  set __fn1__x 1.5
-   41:  setaddr __fn1retaddr __label16
+   41:  setaddr __fn1retaddr __label19
    42:  call __label1 __fn1retval
-        gotolabel __label16 __fn1
+        gotolabel __label19 __fn1
    43:  set __tmp4 __fn1retval
-        label __label17
-   44:  set __fn12_expected 2
-   45:  set __fn12_actual __tmp4
-   46:  set __fn12_title "round 1.5 up"
+        label __label20
+   44:  set __fn15_expected 2
+   45:  set __fn15_actual __tmp4
+   46:  set __fn15_title "round(1.5)"
    47:  print "T:"
-   48:  print __fn12_title
+   48:  print __fn15_title
    49:  print "\n"
    50:  print "E:"
-   51:  print __fn12_expected
+   51:  print __fn15_expected
    52:  print "\n"
    53:  print "A:"
-   54:  print __fn12_actual
+   54:  print __fn15_actual
    55:  print "\n"
-   56:  set __tmp5 __fn12_actual
-        label __label18
+   56:  set __tmp5 __fn15_actual
+        label __label21
    57:  set __fn1__x 1.7
-   58:  setaddr __fn1retaddr __label19
+   58:  setaddr __fn1retaddr __label22
    59:  call __label1 __fn1retval
-        gotolabel __label19 __fn1
+        gotolabel __label22 __fn1
    60:  set __tmp6 __fn1retval
-        label __label20
-   61:  set __fn13_expected 2
-   62:  set __fn13_actual __tmp6
-   63:  set __fn13_title "round 1.7 up"
+        label __label23
+   61:  set __fn16_expected 2
+   62:  set __fn16_actual __tmp6
+   63:  set __fn16_title "round(1.7)"
    64:  print "T:"
-   65:  print __fn13_title
+   65:  print __fn16_title
    66:  print "\n"
    67:  print "E:"
-   68:  print __fn13_expected
+   68:  print __fn16_expected
    69:  print "\n"
    70:  print "A:"
-   71:  print __fn13_actual
+   71:  print __fn16_actual
    72:  print "\n"
-   73:  set __tmp7 __fn13_actual
-        label __label21
+   73:  set __tmp7 __fn16_actual
+        label __label24
    74:  set __fn1__x 2.1
-   75:  setaddr __fn1retaddr __label22
+   75:  setaddr __fn1retaddr __label25
    76:  call __label1 __fn1retval
-        gotolabel __label22 __fn1
+        gotolabel __label25 __fn1
    77:  set __tmp8 __fn1retval
-        label __label23
-   78:  set __fn14_expected 2
-   79:  set __fn14_actual __tmp8
-   80:  set __fn14_title "round 2.1 down"
+        label __label26
+   78:  set __fn17_expected 2
+   79:  set __fn17_actual __tmp8
+   80:  set __fn17_title "round(2.1)"
    81:  print "T:"
-   82:  print __fn14_title
+   82:  print __fn17_title
    83:  print "\n"
    84:  print "E:"
-   85:  print __fn14_expected
+   85:  print __fn17_expected
    86:  print "\n"
    87:  print "A:"
-   88:  print __fn14_actual
+   88:  print __fn17_actual
    89:  print "\n"
-   90:  set __tmp9 __fn14_actual
-        label __label24
+   90:  set __tmp9 __fn17_actual
+        label __label27
    91:  set __fn1__x 2.5
-   92:  setaddr __fn1retaddr __label25
+   92:  setaddr __fn1retaddr __label28
    93:  call __label1 __fn1retval
-        gotolabel __label25 __fn1
+        gotolabel __label28 __fn1
    94:  set __tmp10 __fn1retval
-        label __label26
-   95:  set __fn15_expected 3
-   96:  set __fn15_actual __tmp10
-   97:  set __fn15_title "round 2.5 up"
+        label __label29
+   95:  set __fn18_expected 3
+   96:  set __fn18_actual __tmp10
+   97:  set __fn18_title "round(2.5)"
    98:  print "T:"
-   99:  print __fn15_title
+   99:  print __fn18_title
   100:  print "\n"
   101:  print "E:"
-  102:  print __fn15_expected
+  102:  print __fn18_expected
   103:  print "\n"
   104:  print "A:"
-  105:  print __fn15_actual
+  105:  print __fn18_actual
   106:  print "\n"
-  107:  set __tmp11 __fn15_actual
-        label __label27
+  107:  set __tmp11 __fn18_actual
+        label __label30
   108:  set __fn1__x -3.5
-  109:  setaddr __fn1retaddr __label28
+  109:  setaddr __fn1retaddr __label31
   110:  call __label1 __fn1retval
-        gotolabel __label28 __fn1
+        gotolabel __label31 __fn1
   111:  set __tmp12 __fn1retval
-        label __label29
-  112:  set __fn16_expected -3
-  113:  set __fn16_actual __tmp12
-  114:  set __fn16_title "round -3.5 up"
+        label __label32
+  112:  set __fn19_expected -3
+  113:  set __fn19_actual __tmp12
+  114:  set __fn19_title "round(-3.5)"
   115:  print "T:"
-  116:  print __fn16_title
+  116:  print __fn19_title
   117:  print "\n"
   118:  print "E:"
-  119:  print __fn16_expected
+  119:  print __fn19_expected
   120:  print "\n"
   121:  print "A:"
-  122:  print __fn16_actual
+  122:  print __fn19_actual
   123:  print "\n"
-  124:  set __tmp13 __fn16_actual
-        label __label30
+  124:  set __tmp13 __fn19_actual
+        label __label33
   125:  set __fn2__x 3.5
-  126:  setaddr __fn2retaddr __label31
+  126:  setaddr __fn2retaddr __label34
   127:  call __label2 __fn2retval
-        gotolabel __label31 __fn2
+        gotolabel __label34 __fn2
   128:  set __tmp14 __fn2retval
-        label __label32
-  129:  set __fn17_expected 0.5
-  130:  set __fn17_actual __tmp14
-  131:  set __fn17_title "frac 3.5"
+        label __label35
+  129:  set __fn20_expected 0.5
+  130:  set __fn20_actual __tmp14
+  131:  set __fn20_title "frac(3.5)"
   132:  print "T:"
-  133:  print __fn17_title
+  133:  print __fn20_title
   134:  print "\n"
   135:  print "E:"
-  136:  print __fn17_expected
+  136:  print __fn20_expected
   137:  print "\n"
   138:  print "A:"
-  139:  print __fn17_actual
+  139:  print __fn20_actual
   140:  print "\n"
-  141:  set __tmp15 __fn17_actual
-        label __label33
+  141:  set __tmp15 __fn20_actual
+        label __label36
   142:  set __fn2__x -1.5
-  143:  setaddr __fn2retaddr __label34
+  143:  setaddr __fn2retaddr __label37
   144:  call __label2 __fn2retval
-        gotolabel __label34 __fn2
+        gotolabel __label37 __fn2
   145:  set __tmp16 __fn2retval
-        label __label35
-  146:  set __fn18_expected -0.5
-  147:  set __fn18_actual __tmp16
-  148:  set __fn18_title "frac -1.5"
+        label __label38
+  146:  set __fn21_expected -0.5
+  147:  set __fn21_actual __tmp16
+  148:  set __fn21_title "frac(-1.5)"
   149:  print "T:"
-  150:  print __fn18_title
+  150:  print __fn21_title
   151:  print "\n"
   152:  print "E:"
-  153:  print __fn18_expected
+  153:  print __fn21_expected
   154:  print "\n"
   155:  print "A:"
-  156:  print __fn18_actual
+  156:  print __fn21_actual
   157:  print "\n"
-  158:  set __tmp17 __fn18_actual
-        label __label36
+  158:  set __tmp17 __fn21_actual
+        label __label39
   159:  set __fn3__x 0
-  160:  setaddr __fn3retaddr __label37
+  160:  setaddr __fn3retaddr __label40
   161:  call __label3 __fn3retval
-        gotolabel __label37 __fn3
+        gotolabel __label40 __fn3
   162:  set __tmp18 __fn3retval
-        label __label38
-  163:  set __fn19_expected 0
-  164:  set __fn19_actual __tmp18
-  165:  set __fn19_title "sign 0"
+        label __label41
+  163:  set __fn22_expected 0
+  164:  set __fn22_actual __tmp18
+  165:  set __fn22_title "sign(0)"
   166:  print "T:"
-  167:  print __fn19_title
+  167:  print __fn22_title
   168:  print "\n"
   169:  print "E:"
-  170:  print __fn19_expected
+  170:  print __fn22_expected
   171:  print "\n"
   172:  print "A:"
-  173:  print __fn19_actual
+  173:  print __fn22_actual
   174:  print "\n"
-  175:  set __tmp19 __fn19_actual
-        label __label39
+  175:  set __tmp19 __fn22_actual
+        label __label42
   176:  set __fn3__x 0.0000001
-  177:  setaddr __fn3retaddr __label40
+  177:  setaddr __fn3retaddr __label43
   178:  call __label3 __fn3retval
-        gotolabel __label40 __fn3
+        gotolabel __label43 __fn3
   179:  set __tmp20 __fn3retval
-        label __label41
-  180:  set __fn20_expected 0
-  181:  set __fn20_actual __tmp20
-  182:  set __fn20_title "sign 1e-7"
+        label __label44
+  180:  set __fn23_expected 0
+  181:  set __fn23_actual __tmp20
+  182:  set __fn23_title "sign(1e-7)"
   183:  print "T:"
-  184:  print __fn20_title
+  184:  print __fn23_title
   185:  print "\n"
   186:  print "E:"
-  187:  print __fn20_expected
+  187:  print __fn23_expected
   188:  print "\n"
   189:  print "A:"
-  190:  print __fn20_actual
+  190:  print __fn23_actual
   191:  print "\n"
-  192:  set __tmp21 __fn20_actual
-        label __label42
+  192:  set __tmp21 __fn23_actual
+        label __label45
   193:  set __fn3__x 0.00001
-  194:  setaddr __fn3retaddr __label43
+  194:  setaddr __fn3retaddr __label46
   195:  call __label3 __fn3retval
-        gotolabel __label43 __fn3
+        gotolabel __label46 __fn3
   196:  set __tmp22 __fn3retval
-        label __label44
-  197:  set __fn21_expected 1
-  198:  set __fn21_actual __tmp22
-  199:  set __fn21_title "sign 1e-5"
+        label __label47
+  197:  set __fn24_expected 1
+  198:  set __fn24_actual __tmp22
+  199:  set __fn24_title "sign(1e-5)"
   200:  print "T:"
-  201:  print __fn21_title
+  201:  print __fn24_title
   202:  print "\n"
   203:  print "E:"
-  204:  print __fn21_expected
+  204:  print __fn24_expected
   205:  print "\n"
   206:  print "A:"
-  207:  print __fn21_actual
+  207:  print __fn24_actual
   208:  print "\n"
-  209:  set __tmp23 __fn21_actual
-        label __label45
+  209:  set __tmp23 __fn24_actual
+        label __label48
   210:  set __fn3__x -5
-  211:  setaddr __fn3retaddr __label46
+  211:  setaddr __fn3retaddr __label49
   212:  call __label3 __fn3retval
-        gotolabel __label46 __fn3
+        gotolabel __label49 __fn3
   213:  set __tmp24 __fn3retval
-        label __label47
-  214:  set __fn22_expected -1
-  215:  set __fn22_actual __tmp24
-  216:  set __fn22_title "sign -5"
+        label __label50
+  214:  set __fn25_expected -1
+  215:  set __fn25_actual __tmp24
+  216:  set __fn25_title "sign(-5)"
   217:  print "T:"
-  218:  print __fn22_title
+  218:  print __fn25_title
   219:  print "\n"
   220:  print "E:"
-  221:  print __fn22_expected
+  221:  print __fn25_expected
   222:  print "\n"
   223:  print "A:"
-  224:  print __fn22_actual
+  224:  print __fn25_actual
   225:  print "\n"
-  226:  set __tmp25 __fn22_actual
-        label __label48
+  226:  set __tmp25 __fn25_actual
+        label __label51
   227:  set __fn4__x 0
-  228:  setaddr __fn4retaddr __label49
+  228:  setaddr __fn4retaddr __label52
   229:  call __label4 __fn4retval
-        gotolabel __label49 __fn4
+        gotolabel __label52 __fn4
   230:  set __tmp26 __fn4retval
-        label __label50
-  231:  set __fn23_expected 0
-  232:  set __fn23_actual __tmp26
-  233:  set __fn23_title "signExact 0"
+        label __label53
+  231:  set __fn26_expected 0
+  232:  set __fn26_actual __tmp26
+  233:  set __fn26_title "signExact(0)"
   234:  print "T:"
-  235:  print __fn23_title
+  235:  print __fn26_title
   236:  print "\n"
   237:  print "E:"
-  238:  print __fn23_expected
+  238:  print __fn26_expected
   239:  print "\n"
   240:  print "A:"
-  241:  print __fn23_actual
+  241:  print __fn26_actual
   242:  print "\n"
-  243:  set __tmp27 __fn23_actual
-        label __label51
+  243:  set __tmp27 __fn26_actual
+        label __label54
   244:  set __fn4__x 0.0000001
-  245:  setaddr __fn4retaddr __label52
+  245:  setaddr __fn4retaddr __label55
   246:  call __label4 __fn4retval
-        gotolabel __label52 __fn4
+        gotolabel __label55 __fn4
   247:  set __tmp28 __fn4retval
-        label __label53
-  248:  set __fn24_expected 1
-  249:  set __fn24_actual __tmp28
-  250:  set __fn24_title "signExact 1e-7"
+        label __label56
+  248:  set __fn27_expected 1
+  249:  set __fn27_actual __tmp28
+  250:  set __fn27_title "signExact(1e-7)"
   251:  print "T:"
-  252:  print __fn24_title
+  252:  print __fn27_title
   253:  print "\n"
   254:  print "E:"
-  255:  print __fn24_expected
+  255:  print __fn27_expected
   256:  print "\n"
   257:  print "A:"
-  258:  print __fn24_actual
+  258:  print __fn27_actual
   259:  print "\n"
-  260:  set __tmp29 __fn24_actual
-        label __label54
+  260:  set __tmp29 __fn27_actual
+        label __label57
   261:  set __fn4__x -0.0000001
-  262:  setaddr __fn4retaddr __label55
+  262:  setaddr __fn4retaddr __label58
   263:  call __label4 __fn4retval
-        gotolabel __label55 __fn4
+        gotolabel __label58 __fn4
   264:  set __tmp30 __fn4retval
-        label __label56
-  265:  set __fn25_expected -1
-  266:  set __fn25_actual __tmp30
-  267:  set __fn25_title "signExact -1e-7"
+        label __label59
+  265:  set __fn28_expected -1
+  266:  set __fn28_actual __tmp30
+  267:  set __fn28_title "signExact(-1e-7)"
   268:  print "T:"
-  269:  print __fn25_title
+  269:  print __fn28_title
   270:  print "\n"
   271:  print "E:"
-  272:  print __fn25_expected
+  272:  print __fn28_expected
   273:  print "\n"
   274:  print "A:"
-  275:  print __fn25_actual
+  275:  print __fn28_actual
   276:  print "\n"
-  277:  set __tmp31 __fn25_actual
-        label __label57
+  277:  set __tmp31 __fn28_actual
+        label __label60
   278:  set __fn5__x 0
-  279:  setaddr __fn5retaddr __label58
+  279:  setaddr __fn5retaddr __label61
   280:  call __label5 __fn5retval
-        gotolabel __label58 __fn5
+        gotolabel __label61 __fn5
   281:  set __tmp32 __fn5retval
-        label __label59
-  282:  set __fn26_expected true
-  283:  set __fn26_actual __tmp32
-  284:  set __fn26_title "isZero 0"
+        label __label62
+  282:  set __fn29_expected true
+  283:  set __fn29_actual __tmp32
+  284:  set __fn29_title "isZero(0)"
   285:  print "T:"
-  286:  print __fn26_title
+  286:  print __fn29_title
   287:  print "\n"
   288:  print "E:"
-  289:  print __fn26_expected
+  289:  print __fn29_expected
   290:  print "\n"
   291:  print "A:"
-  292:  print __fn26_actual
+  292:  print __fn29_actual
   293:  print "\n"
-  294:  set __tmp33 __fn26_actual
-        label __label60
+  294:  set __tmp33 __fn29_actual
+        label __label63
   295:  set __fn5__x 1E-50
-  296:  setaddr __fn5retaddr __label61
+  296:  setaddr __fn5retaddr __label64
   297:  call __label5 __fn5retval
-        gotolabel __label61 __fn5
+        gotolabel __label64 __fn5
   298:  set __tmp34 __fn5retval
-        label __label62
-  299:  set __fn27_expected false
-  300:  set __fn27_actual __tmp34
-  301:  set __fn27_title "isZero 1e-50"
+        label __label65
+  299:  set __fn30_expected false
+  300:  set __fn30_actual __tmp34
+  301:  set __fn30_title "isZero(1e-50)"
   302:  print "T:"
-  303:  print __fn27_title
+  303:  print __fn30_title
   304:  print "\n"
   305:  print "E:"
-  306:  print __fn27_expected
+  306:  print __fn30_expected
   307:  print "\n"
   308:  print "A:"
-  309:  print __fn27_actual
+  309:  print __fn30_actual
   310:  print "\n"
-  311:  set __tmp35 __fn27_actual
-        label __label63
+  311:  set __tmp35 __fn30_actual
+        label __label66
   312:  set __fn5__x -1E-50
-  313:  setaddr __fn5retaddr __label64
+  313:  setaddr __fn5retaddr __label67
   314:  call __label5 __fn5retval
-        gotolabel __label64 __fn5
+        gotolabel __label67 __fn5
   315:  set __tmp36 __fn5retval
-        label __label65
-  316:  set __fn28_expected false
-  317:  set __fn28_actual __tmp36
-  318:  set __fn28_title "isZero -1e-50"
+        label __label68
+  316:  set __fn31_expected false
+  317:  set __fn31_actual __tmp36
+  318:  set __fn31_title "isZero(-1e-50)"
   319:  print "T:"
-  320:  print __fn28_title
+  320:  print __fn31_title
   321:  print "\n"
   322:  print "E:"
-  323:  print __fn28_expected
+  323:  print __fn31_expected
   324:  print "\n"
   325:  print "A:"
-  326:  print __fn28_actual
+  326:  print __fn31_actual
   327:  print "\n"
-  328:  set __tmp37 __fn28_actual
-        label __label66
-        label __label67
-  329:  set __fn29__x 0.01
-  330:  set __fn29__precision 0.01
-  331:  op abs __tmp39 __fn29__x 0
-  332:  op lessThan __tmp40 __tmp39 __fn29__precision
-  333:  set __tmp38 __tmp40
-        label __label68
+  328:  set __tmp37 __fn31_actual
         label __label69
-  334:  set __fn30_expected false
-  335:  set __fn30_actual __tmp38
-  336:  set __fn30_title "isZero(-1e-50)"
+        label __label70
+  329:  set __fn32__x 0.01
+  330:  set __fn32__precision 0.01
+  331:  op abs __tmp39 __fn32__x 0
+  332:  op lessThan __tmp40 __tmp39 __fn32__precision
+  333:  set __tmp38 __tmp40
+        label __label71
+        label __label72
+  334:  set __fn33_expected false
+  335:  set __fn33_actual __tmp38
+  336:  set __fn33_title "isZero(0.01,0.01)"
   337:  print "T:"
-  338:  print __fn30_title
+  338:  print __fn33_title
   339:  print "\n"
   340:  print "E:"
-  341:  print __fn30_expected
+  341:  print __fn33_expected
   342:  print "\n"
   343:  print "A:"
-  344:  print __fn30_actual
+  344:  print __fn33_actual
   345:  print "\n"
-  346:  set __tmp41 __fn30_actual
-        label __label70
-        label __label71
-  347:  set __fn31_expected "null"
-  348:  set __fn31_title "printExact(null)"
-  349:  print "T:"
-  350:  print __fn31_title
-  351:  print "\n"
-  352:  print "E:"
-  353:  print __fn31_expected
-  354:  print "\n"
-  355:  print "A:"
-  356:  set __tmp42 "A:"
-        label __label72
-  357:  set __fn7__n null
-  358:  setaddr __fn7retaddr __label73
-  359:  call __label7 __fn7retval
-        gotolabel __label73 __fn7
-  360:  print "\n"
-        label __label74
-  361:  set __fn32_expected "0"
-  362:  set __fn32_title "printExact(0)"
-  363:  print "T:"
-  364:  print __fn32_title
-  365:  print "\n"
-  366:  print "E:"
-  367:  print __fn32_expected
-  368:  print "\n"
-  369:  print "A:"
-  370:  set __tmp43 "A:"
+  346:  set __tmp41 __fn33_actual
+        label __label73
+  347:  set __fn7__x null
+  348:  setaddr __fn7retaddr __label74
+  349:  call __label7 __fn7retval
+        gotolabel __label74 __fn7
+  350:  set __tmp42 __fn7retval
         label __label75
-  371:  set __fn7__n 0
-  372:  setaddr __fn7retaddr __label76
-  373:  call __label7 __fn7retval
-        gotolabel __label76 __fn7
-  374:  print "\n"
-        label __label77
-  375:  set __fn33_expected "3.000000070000000"
-  376:  set __fn33_title "printExact(3.00000007)"
-  377:  print "T:"
-  378:  print __fn33_title
-  379:  print "\n"
-  380:  print "E:"
-  381:  print __fn33_expected
-  382:  print "\n"
-  383:  print "A:"
-  384:  set __tmp44 "A:"
+  351:  set __fn34_expected 0
+  352:  set __fn34_actual __tmp42
+  353:  set __fn34_title "nullToZero(null)"
+  354:  print "T:"
+  355:  print __fn34_title
+  356:  print "\n"
+  357:  print "E:"
+  358:  print __fn34_expected
+  359:  print "\n"
+  360:  print "A:"
+  361:  print __fn34_actual
+  362:  print "\n"
+  363:  set __tmp43 __fn34_actual
+        label __label76
+  364:  set __fn7__x 1
+  365:  setaddr __fn7retaddr __label77
+  366:  call __label7 __fn7retval
+        gotolabel __label77 __fn7
+  367:  set __tmp44 __fn7retval
         label __label78
-  385:  set __fn7__n 3.00000007
-  386:  setaddr __fn7retaddr __label79
-  387:  call __label7 __fn7retval
-        gotolabel __label79 __fn7
-  388:  print "\n"
-        label __label80
-  389:  set __fn34_expected "1.2345000000000002E-50"
-  390:  set __fn34_title "printExact(1.2345e-50)"
-  391:  print "T:"
-  392:  print __fn34_title
-  393:  print "\n"
-  394:  print "E:"
-  395:  print __fn34_expected
-  396:  print "\n"
-  397:  print "A:"
-  398:  set __tmp45 "A:"
-        label __label81
-  399:  set __fn7__n 12345E-54
-  400:  setaddr __fn7retaddr __label82
-  401:  call __label7 __fn7retval
-        gotolabel __label82 __fn7
-  402:  print "\n"
-        label __label83
-  403:  set __fn35_expected "-1.2345000000000002E-50"
-  404:  set __fn35_title "printExact(-1.2345e-50)"
-  405:  print "T:"
-  406:  print __fn35_title
-  407:  print "\n"
-  408:  print "E:"
-  409:  print __fn35_expected
-  410:  print "\n"
-  411:  print "A:"
-  412:  set __tmp46 "A:"
-        label __label84
-  413:  set __fn7__n -12345E-54
-  414:  setaddr __fn7retaddr __label85
-  415:  call __label7 __fn7retval
-        gotolabel __label85 __fn7
-  416:  print "\n"
-  417:  end
+  368:  set __fn35_expected 1
+  369:  set __fn35_actual __tmp44
+  370:  set __fn35_title "nullToZero(1)"
+  371:  print "T:"
+  372:  print __fn35_title
+  373:  print "\n"
+  374:  print "E:"
+  375:  print __fn35_expected
+  376:  print "\n"
+  377:  print "A:"
+  378:  print __fn35_actual
+  379:  print "\n"
+  380:  set __tmp45 __fn35_actual
+        label __label79
+  381:  end
         label __label0
-  418:  op sub __tmp47 __fn0__x2 __fn0__x1
-  419:  op sub __tmp48 __fn0__y2 __fn0__y1
-  420:  op len __tmp49 __tmp47 __tmp48
-  421:  set __fn0retval __tmp49
-        label __label86
-  422:  goto __fn0retaddr __fn0
-  423:  end
+  382:  op sub __tmp46 __fn0__x2 __fn0__x1
+  383:  op sub __tmp47 __fn0__y2 __fn0__y1
+  384:  op len __tmp48 __tmp46 __tmp47
+  385:  set __fn0retval __tmp48
+        label __label80
+  386:  goto __fn0retaddr __fn0
+  387:  end
         label __label1
-  424:  op add __tmp50 __fn1__x 0.5
-  425:  op floor __tmp51 __tmp50 0
-  426:  set __fn1retval __tmp51
-        label __label87
-  427:  goto __fn1retaddr __fn1
-  428:  end
+  388:  op add __tmp49 __fn1__x 0.5
+  389:  op floor __tmp50 __tmp49 0
+  390:  set __fn1retval __tmp50
+        label __label81
+  391:  goto __fn1retaddr __fn1
+  392:  end
         label __label2
-  429:  op mod __tmp52 __fn2__x 1
-  430:  set __fn2retval __tmp52
-        label __label88
-  431:  goto __fn2retaddr __fn2
-  432:  end
+  393:  op mod __tmp51 __fn2__x 1
+  394:  set __fn2retval __tmp51
+        label __label82
+  395:  goto __fn2retaddr __fn2
+  396:  end
         label __label3
-  433:  op equal __tmp53 __fn3__x 0
-  434:  jump __label90 equal __tmp53 false
-  435:  set __tmp54 0
-  436:  jump __label91 always 0 0
-        label __label90
-  437:  op lessThan __tmp55 __fn3__x 0
-  438:  jump __label92 equal __tmp55 false
-  439:  set __tmp56 -1
-  440:  jump __label93 always 0 0
-        label __label92
-  441:  set __tmp56 1
-        label __label93
-  442:  set __tmp54 __tmp56
-        label __label91
-  443:  set __fn3retval __tmp54
-        label __label89
-  444:  goto __fn3retaddr __fn3
-  445:  end
+  397:  op equal __tmp52 __fn3__x 0
+  398:  jump __label84 equal __tmp52 false
+  399:  set __tmp53 0
+  400:  jump __label85 always 0 0
+        label __label84
+  401:  op lessThan __tmp54 __fn3__x 0
+  402:  jump __label86 equal __tmp54 false
+  403:  set __tmp55 -1
+  404:  jump __label87 always 0 0
+        label __label86
+  405:  set __tmp55 1
+        label __label87
+  406:  set __tmp53 __tmp55
+        label __label85
+  407:  set __fn3retval __tmp53
+        label __label83
+  408:  goto __fn3retaddr __fn3
+  409:  end
         label __label4
-  446:  op greaterThan __tmp57 __fn4__x 0
-  447:  op lessThan __tmp58 __fn4__x 0
-  448:  op sub __tmp59 __tmp57 __tmp58
-  449:  set __fn4retval __tmp59
-        label __label94
-  450:  goto __fn4retaddr __fn4
-  451:  end
+  410:  op greaterThan __tmp56 __fn4__x 0
+  411:  op lessThan __tmp57 __fn4__x 0
+  412:  op sub __tmp58 __tmp56 __tmp57
+  413:  set __fn4retval __tmp58
+        label __label88
+  414:  goto __fn4retaddr __fn4
+  415:  end
         label __label5
-  452:  op abs __tmp60 __fn5__x 0
-  453:  op lessThanEq __tmp61 __tmp60 0
-  454:  set __fn5retval __tmp61
-        label __label95
-  455:  goto __fn5retaddr __fn5
-  456:  end
+  416:  op abs __tmp59 __fn5__x 0
+  417:  op lessThanEq __tmp60 __tmp59 0
+  418:  set __fn5retval __tmp60
+        label __label89
+  419:  goto __fn5retaddr __fn5
+  420:  end
         label __label7
-  457:  set __fn5__x __fn7__n
-  458:  setaddr __fn5retaddr __label97
-  459:  call __label5 __fn5retval
-        gotolabel __label97 __fn5
-  460:  jump __label98 equal __fn5retval false
-  461:  print __fn7__n
-  462:  set __tmp62 __fn7__n
-  463:  jump __label99 always 0 0
-        label __label98
-  464:  op lessThan __tmp63 __fn7__n 0
-  465:  jump __label100 equal __tmp63 false
-  466:  print "-"
-  467:  set __tmp64 "-"
-  468:  jump __label101 always 0 0
-        label __label100
-  469:  set __tmp64 null
-        label __label101
-  470:  op abs __tmp65 __fn7__n 0
-  471:  set __fn7__n __tmp65
-  472:  op log10 __tmp66 __fn7__n 0
-  473:  op floor __tmp67 __tmp66 0
-  474:  set __fn7__exp __tmp67
-  475:  op mul __tmp68 -1 __fn7__exp
-  476:  op pow __tmp69 10 __tmp68
-  477:  op mul __tmp70 __fn7__n __tmp69
-  478:  set __fn7__base __tmp70
-  479:  set __fn1__x __fn7__base
-  480:  setaddr __fn1retaddr __label102
-  481:  call __label1 __fn1retval
-        gotolabel __label102 __fn1
-  482:  op sub __tmp71 __fn7__base __fn1retval
-  483:  op abs __tmp72 __tmp71 0
-  484:  op greaterThan __tmp73 __tmp72 0.000001
-  485:  jump __label103 equal __tmp73 false
-  486:  print __fn7__base
-  487:  set __tmp74 __fn7__base
-  488:  jump __label104 always 0 0
-        label __label103
-  489:  op floor __tmp75 __fn7__base 0
-  490:  print __tmp75
-  491:  print "."
-  492:  set __fn7__digit 1
-        label __label105
-  493:  jump __label107 greaterThan __fn7__digit 3
-  494:  set __fn2__x __fn7__base
-  495:  setaddr __fn2retaddr __label108
-  496:  call __label2 __fn2retval
-        gotolabel __label108 __fn2
-  497:  op mul __tmp76 __fn2retval 100000
-  498:  set __fn7__base __tmp76
-  499:  op floor __tmp77 __fn7__base 0
-  500:  set __fn7__t __tmp77
-  501:  op lessThan __tmp78 __fn7__t 10
-  502:  jump __label109 equal __tmp78 false
-  503:  print "0000"
-  504:  set __tmp79 "0000"
-  505:  jump __label110 always 0 0
-        label __label109
-  506:  op lessThan __tmp80 __fn7__t 100
-  507:  jump __label111 equal __tmp80 false
-  508:  print "000"
-  509:  set __tmp81 "000"
-  510:  jump __label112 always 0 0
-        label __label111
-  511:  op lessThan __tmp82 __fn7__t 1000
-  512:  jump __label113 equal __tmp82 false
-  513:  print "00"
-  514:  set __tmp83 "00"
-  515:  jump __label114 always 0 0
-        label __label113
-  516:  op lessThan __tmp84 __fn7__t 1000
-  517:  jump __label115 equal __tmp84 false
-  518:  print "0"
-  519:  set __tmp85 "0"
-  520:  jump __label116 always 0 0
-        label __label115
-  521:  set __tmp85 null
-        label __label116
-  522:  set __tmp83 __tmp85
-        label __label114
-  523:  set __tmp81 __tmp83
-        label __label112
-  524:  set __tmp79 __tmp81
-        label __label110
-  525:  print __fn7__t
-        label __label106
-  526:  op add __fn7__digit __fn7__digit 1
-  527:  jump __label105 always 0 0
-        label __label107
-  528:  set __tmp74 null
-        label __label104
-  529:  op notEqual __tmp86 __fn7__exp 0
-  530:  jump __label117 equal __tmp86 false
-  531:  print "E"
-  532:  print __fn7__exp
-  533:  set __tmp87 __fn7__exp
-  534:  jump __label118 always 0 0
-        label __label117
-  535:  set __tmp87 null
-        label __label118
-  536:  set __tmp62 __tmp87
-        label __label99
-        label __label96
-  537:  goto __fn7retaddr __fn7
-  538:  end
+  421:  op add __fn7__result __fn7__x 0
+  422:  set __fn7retval __fn7__result
+        label __label90
+  423:  goto __fn7retaddr __fn7
+  424:  end

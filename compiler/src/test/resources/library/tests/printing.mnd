@@ -1,0 +1,22 @@
+#set target = ML8A;
+require printing;
+require unittests;
+
+assertWillPrint("0",                            "printNumber(null)");       printNumber(null);          println();
+assertWillPrint("1",                            "printNumber(1)");          printNumber(1);             println();
+assertWillPrint("1",                            "printNumber(1.5)");        printNumber(1.5);           println();
+assertWillPrint("-1",                           "printNumber(-1.5)");       printNumber(-1.5);          println();
+assertWillPrint("1,234,567",                    "printNumber(1234567)");    printNumber(1234567);       println();
+assertWillPrint("-1,234,567",                   "printNumber(-1234567)");   printNumber(-1234567);      println();
+assertWillPrint("9,009,099",                    "printNumber(9009099)");    printNumber(9009099);       println();
+
+assertWillPrint("null",                         "printExact(null)");         printExact(null);           println();
+assertWillPrint("0",                            "printExact(0)");            printExact(0);              println();
+assertWillPrint("1",                            "printExact(1)");            printExact(1);              println();
+assertWillPrint("1.000000100000000",            "printExact(1.0000001)");    printExact(1.0000001);      println();
+assertWillPrint("3.000000070000000",            "printExact(3.00000007)");   printExact(3.00000007);     println();
+assertWillPrint("3E50",                         "printExact(3e50)");         printExact(3e50);           println();
+assertWillPrint("1.0123456789",                 "printExact(1.0123456789)"); printExact(1.0123456789);   println();
+assertWillPrint("1.000000099999999E20",         "printExact(1.0000001e20)"); printExact(1.0000001e20);   println();
+assertWillPrint("1.2345000000000002E-50",       "printExact(1.2345e-50)");   printExact(1.2345e-50);     println();
+assertWillPrint("-1.2345000000000002E-50",      "printExact(-1.2345e-50)");  printExact(-1.2345e-50);    println();

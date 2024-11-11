@@ -594,6 +594,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitNumeric_directive(MindcodeParser.Numeric_directiveContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code boolean_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolean_directive(MindcodeParser.Boolean_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolean_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolean_directive(MindcodeParser.Boolean_directiveContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code string_directive}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

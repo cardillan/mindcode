@@ -1,0 +1,61 @@
+ubind null
+jump 4 notEqual @unit null
+set __tmp0 null
+jump 16 always 0 0
+set __fn0__first_unit @unit
+sensor __tmp4 @unit @controlled
+jump 10 notEqual __tmp4 0
+ucontrol flag null 0 0 0 0
+set __tmp0 @unit
+jump 16 always 0 0
+sensor __tmp7 __fn0__first_unit @dead
+jump 13 notEqual __tmp7 1
+set __fn0__first_unit @unit
+ubind null
+jump 5 notEqual __fn0__first_unit @unit
+set __tmp0 null
+print __tmp0
+print "\n"
+ubind null
+jump 22 notEqual @unit null
+set __tmp12 null
+jump 49 always 0 0
+set __fn1__first_unit @unit
+set __fn1__best_unit null
+set __fn1__best_distance 10000000000
+sensor __tmp16 @unit @controlled
+jump 36 notEqual __tmp16 0
+sensor __tmp19 @unit @x
+op sub __tmp20 __tmp19 null
+sensor __tmp21 @unit @y
+op sub __tmp22 __tmp21 null
+op len __fn1__distance __tmp20 __tmp22
+jump 39 greaterThanEq __fn1__distance __fn1__best_distance
+set __fn1__best_distance __fn1__distance
+set __fn1__best_unit @unit
+jump 39 always 0 0
+sensor __tmp27 __fn1__first_unit @dead
+jump 39 notEqual __tmp27 1
+set __fn1__first_unit @unit
+ubind null
+jump 25 notEqual __fn1__first_unit @unit
+jump 44 notEqual __fn1__best_unit null
+set __tmp12 null
+jump 49 always 0 0
+sensor __tmp34 __fn1__best_unit @controlled
+jump 18 notEqual __tmp34 0
+ubind __fn1__best_unit
+ucontrol flag null 0 0 0 0
+set __tmp12 __fn1__best_unit
+print __tmp12
+print "\n"
+ubind null
+jump 54 notEqual @unit null
+jump 51 always 0 0
+sensor __tmp41 @unit @controlled
+jump 57 equal __tmp41 0
+jump 51 always 0 0
+ucontrol flag null 0 0 0 0
+set __tmp37 @unit
+print __tmp37
+print "\n"

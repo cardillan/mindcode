@@ -50,6 +50,8 @@ An expansion of this feature is planned, where a static mindustry World would be
 
 The main advantage is that the entire output of the program can be displayed and inspected. [Remarks in active mode](SYNTAX-5-OTHER.markdown#option-remarks) can be used to activate additional output just for the purpose of the debugging. Also, the output is available right after compiling the code, without having to go to Mindustry to insert the code into a processor and inspect the output in a properly linked message block. The total size of the produced text can be up to 10,000 characters, as opposed to the 400-character limit of the message block.
 
+For even more detailed insight into the execution of the program, the state of variables at certain points - or even at every executed instruction - can be inspected using the techniques described [here](TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state).
+
 ### Inspecting the variables in real Mindustry processor
 
 The other option to debug a Mindcode program is to examine its behavior in actual Mindustry World. Mindustry provides a way to inspect the program's variables in the **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in sufficiently large programs.
@@ -110,4 +112,4 @@ The number of variables being sorted is limited by the [instruction limit](SYNTA
 
 ---
 
-[« Previous: Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)
+[« Previous: Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)

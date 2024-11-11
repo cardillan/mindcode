@@ -1122,4 +1122,4 @@ The list of all existing icons is quite huge:
 
 ---
 
-[« Previous: Mindcode basics](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Expressions »](SYNTAX-2-EXPRESSIONS.markdown)
+[« Previous: Mindcode basics](SYNTAX.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Expressions »](SYNTAX-2-EXPRESSIONS.markdown)

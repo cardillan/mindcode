@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ToolMessage;
@@ -100,6 +101,15 @@ public class CompileMindcodeAction extends ActionHandler {
                 .choices(Arguments.range(1, 1_000_000_000))
                 .type(Integer.class)
                 .setDefault(defaults.getStepLimit());
+
+        for (ExecutionFlag flag : ExecutionFlag.LIST) {
+            if (flag.isSettable()) {
+                runOptions.addArgument("--" + flag.getOptionName())
+                        .help(flag.getDescription())
+                        .type(Arguments.booleanType())
+                        .dest(flag.name());
+            }
+        }
     }
 
     @Override
@@ -137,12 +147,10 @@ public class CompileMindcodeAction extends ActionHandler {
             if (compilerProfile.isRun()) {
                 result.addMessage(ToolMessage.info(""));
                 result.addMessage(ToolMessage.info("Program output (%,d steps):", result.steps()));
-                if (result.textBuffer() == null) {
-                    result.addMessage(ToolMessage.error("Couldn't obtain program output."));
-                } else if (result.textBuffer().isEmpty()) {
-                    result.addMessage(ToolMessage.info("The program didn't generate any output."));
+                if (result.hasProgramOutput()) {
+                    result.addMessage(ToolMessage.info(result.getProgramOutput()));
                 } else {
-                    result.addMessage(ToolMessage.info(result.textBuffer()));
+                    result.addMessage(ToolMessage.info("The program didn't generate any output."));
                 }
             }
 

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +18,7 @@ public class MindustryContents {
     static final Map<String, Unit> UNIT_MAP = new SimpleReader<>("mimex-units.txt", Unit::new).createFromResource();
     static final Map<String, UnitCommand> UNITCOMMAND_MAP = new SimpleReader<>("mimex-commands.txt", UnitCommand::new).createFromResource();
     static final Map<String, LAccess> LACCESS_MAP = new LAccessReader("mimex-laccess.txt").createFromResource();
+    static final Map<String, LVar> LVAR_MAP = new LVarReader("mimex-vars.txt").createFromResource();
 
     static final Map<Integer, BlockType> BLOCK_ID_MAP = BLOCK_MAP.values().stream()
             .collect(Collectors.toMap(BlockType::id, block -> block));
@@ -82,6 +84,10 @@ public class MindustryContents {
         protected abstract void parseHeader();
         protected abstract T create(String[] columns);
 
+        protected List<T> createUnregistered() {
+            return List.of();
+        }
+
         public AbstractReader(String resource) {
             this.resourceName = resource;
             try (InputStream input = BlockTypeReader.class.getResourceAsStream(resource)) {
@@ -108,12 +114,12 @@ public class MindustryContents {
 
         public Map<String, T> createFromResource() {
             try {
-                ArrayList<T> list = new ArrayList<>(lines.size() - 1);
+                ArrayList<T> list = new ArrayList<>(createUnregistered());
                 for (int i = 1; i < lines.size(); i++) {
                     String[] columns = lines.get(i).split(";", -1);
                     list.add(create(columns));
                 }
-                return list.stream().collect(Collectors.toMap(T::name, t -> t));
+                return list.stream().filter(Objects::nonNull).collect(Collectors.toMap(T::name, t -> t));
             } catch (Exception e) {
                 throw new RuntimeException("Error parsing file " + resourceName, e);
             }
@@ -219,6 +225,48 @@ public class MindustryContents {
                     Boolean.parseBoolean(columns[controls]),
                     Boolean.parseBoolean(columns[settable]),
                     columns[parameters]);
+        }
+    }
+
+    private static class LVarReader extends AbstractReader<LVar> {
+        private int name, global, isobj, constant, numval;
+
+        public LVarReader(String resource) {
+            super(resource);
+        }
+
+        @Override
+        protected List<LVar> createUnregistered() {
+            return List.of(
+                    new LVar("configure", "@configure", false, false, false, 0.0),
+                    new LVar("links", "@links", false, false, false, 0.0),
+                    new LVar("mapw", "@mapw", false, false, false, 0.0),
+                    new LVar("maph", "@maph", false, false, false, 0.0),
+                    new LVar("wait", "@wait", false, false, false, 0.0),
+                    new LVar("thisx", "@thisx", false, false, false, 0.0),
+                    new LVar("thisy", "@thisy", false, false, false, 0.0)
+            );
+        }
+
+        @Override
+        protected void parseHeader() {
+            name = findColumn("name");
+            global = findColumn("global");
+            isobj = findColumn("isobj");
+            constant = findColumn("constant");
+            numval = findColumn("numval");
+        }
+
+        @Override
+        protected LVar create(String[] columns) {
+            return columns[name].charAt(0) == '@' ? new LVar(
+                    columns[name].substring(1),
+                    columns[name],
+                    "global".equals(columns[global]),
+                    Boolean.parseBoolean(columns[isobj]),
+                    Boolean.parseBoolean(columns[constant]),
+                    Double.parseDouble(columns[numval]))
+                    : null;
         }
     }
 }

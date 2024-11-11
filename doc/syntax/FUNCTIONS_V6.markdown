@@ -180,4 +180,4 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 
 ---
 
-[« Previous: Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 7 »](FUNCTIONS_V7.markdown)
+[« Previous: Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 7 »](FUNCTIONS_V7.markdown)

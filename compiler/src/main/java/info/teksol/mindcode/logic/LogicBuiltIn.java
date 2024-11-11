@@ -30,7 +30,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
 
     @Override
     public boolean isConstant() {
-        return true;
+        return canEvaluate();
     }
 
     @Override

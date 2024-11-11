@@ -86,6 +86,7 @@ expression : directive                                                          
            ;
 
 directive : HASHSET option=ID ASSIGN value=INT                      # numeric_directive
+          | HASHSET option=ID ASSIGN value=bool_t                   # boolean_directive
           | HASHSET option=ID ASSIGN value=ID                       # string_directive
           | HASHSET option=ID ( ASSIGN values=directive_list )?     # list_directive
           | HASHSTRICT   {strictSyntax = true;}                     # strict_directive

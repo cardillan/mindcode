@@ -276,7 +276,7 @@ class DataFlowVariableStates {
 
             if (optimizer.canEliminate(instruction, variable)) {
                 // Storing the variable value means the instruction can be completely eliminated (constant propagation)
-                if (value == null) {
+                if (value == null || !value.isConstant()) {
                     values.remove(variable);
                 } else if (values.get(variable) != null && value.equals(values.get(variable).constantValue)) {
                     AstSubcontextType type = instruction.getAstContext().subcontextType();

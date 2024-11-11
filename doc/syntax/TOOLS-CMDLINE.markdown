@@ -51,15 +51,9 @@ action was successful, the output is copied to the clipboard and can be pasted d
 
 ## Running the compiled code
 
-When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but only supports those operations that do not interact with the Mindustry World (specifically, operations that do not input information from the Mindustry World). The exception to this rule is access to external memory cells and memory banks. The emulated processor is equipped with nine memory cells and nine memory banks accessible under the names of `cell1` to `cell9` and `bank1` to `bank9` (they cannot be accessed using the `getlink` instruction). At the beginning of the executions all these memory cells and banks are empty.
+When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but supports only very few operations that interact with the Mindustry World.
 
-The execution of the code ends when one of the following conditions is encountered:
-* end of the instruction list is reached,
-* an `end` or `stop` instruction is executed,
-* execution step limits is exceeded,
-* an unsupported operation is attempted.
-
-When the execution ends, the contents of the print buffer is written to the log file.
+The behavior of the processor emulator can be further modified through the execution flags. For more details, refer to the [processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) documentation.
 
 ## Compiler options
 
@@ -104,7 +98,16 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-a FILE [FILE ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
                 [-r {NONE,PASSIVE,ACTIVE}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
-                [--no-signature] [--run] [--run-steps {1..1000000000}] [-o LEVEL] [--temp-variables-elimination LEVEL]
+                [--no-signature] [--run] [--run-steps {1..1000000000}] [--trace-execution {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
+                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}]
+                [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
+                [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
+                [--err-text-buffer-overflow {true,false}] [--err-graphics-buffer-overflow {true,false}]
+                [--err-invalid-format {true,false}] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
@@ -168,6 +171,42 @@ run options:
   --run-steps {1..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit
                          is reached.
+  --trace-execution {true,false}
+                         output instruction and variable states at each execution step
+  --stop-on-stop-instruction {true,false}
+                         stop execution when the 'stop' instruction is encountered
+  --stop-on-end-instruction {true,false}
+                         stop execution when the 'end' instruction is encountered
+  --stop-on-program-end {true,false}
+                         stop execution when the end of instruction list is reached
+  --err-invalid-counter {true,false}
+                         stop execution when an invalid value is written to '@counter'
+  --err-invalid-identifier {true,false}
+                         stop execution when a malformed identifier or value is encountered
+  --err-unsupported-opcode {true,false}
+                         stop execution when unsupported instruction is encountered
+  --err-uninitialized-var {true,false}
+                         stop execution when an uninitialized variable is used in internal processing
+  --err-assignment-to-fixed-var {true,false}
+                         stop execution on attempts to write a value to an unmodifiable built-in variable
+  --err-not-an-object {true,false}
+                         stop execution when a numerical value is used instead of an object
+  --err-not-a-number {true,false}
+                         stop execution when an object is used instead of a numerical value
+  --err-invalid-content {true,false}
+                         stop execution when an invalid index is used in the 'lookup' instruction
+  --err-invalid-link {true,false}
+                         stop execution when an invalid index is used in the 'getlink' instruction
+  --err-memory-access {true,false}
+                         stop execution when accessing invalid memory-cell or memory-bank index 
+  --err-unsupported-block-operation {true,false}
+                         stop execution when attempting to perform an unsupported operation on a block
+  --err-text-buffer-overflow {true,false}
+                         stop execution when the text buffer size (400 characters) is exceeded
+  --err-graphics-buffer-overflow {true,false}
+                         stop execution when the graphics buffer size (256 operations) is exceeded
+  --err-invalid-format {true,false}
+                         stop execution when no placeholder for the 'format' instruction exists in the buffer
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
@@ -397,4 +436,4 @@ named arguments:
 
 ---
 
-[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher »](TOOLS-MLOG-WATCHER.markdown)
+[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator »](TOOLS-PROCESSOR-EMULATOR.markdown)

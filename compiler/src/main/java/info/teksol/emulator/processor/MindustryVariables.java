@@ -5,12 +5,14 @@ import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.mimex.*;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static info.teksol.emulator.processor.ProcessorFlag.ERR_INVALID_IDENTIFIER;
-import static info.teksol.emulator.processor.ProcessorFlag.ERR_UNINITIALIZED_VAR;
+import static info.teksol.emulator.processor.ExecutionFlag.ERR_INVALID_IDENTIFIER;
+import static info.teksol.emulator.processor.ExecutionFlag.ERR_UNINITIALIZED_VAR;
 
 public class MindustryVariables {
     private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("^[_a-zA-Z][-a-zA-Z_0-9]*$");
@@ -21,9 +23,19 @@ public class MindustryVariables {
 
     private final Map<String, MindustryVariable> variables = new HashMap<>();
 
+    private static final float PI = 3.1415927f;
+    private static final float E = 2.7182818f;
+    private static final float RAD_DEG = 180f / PI;
+    private static final float DEG_RAD = PI / 180;
+
     public MindustryVariables(Processor processor) {
         this.processor = processor;
         variables.put("@counter", counter);
+        variables.put("@unit", null_);
+        variables.put("@pi", MindustryVariable.createConst("@pi", PI));
+        variables.put("@e", MindustryVariable.createConst("@e", E));
+        variables.put("@degToRad", MindustryVariable.createConst("@degToRad", RAD_DEG));
+        variables.put("@radToDeg", MindustryVariable.createConst("@radToDeg", DEG_RAD));
         variables.put("null", null_);
         variables.put("true", MindustryVariable.createConst("true", true));
         variables.put("false", MindustryVariable.createConst("false", false));
@@ -48,6 +60,13 @@ public class MindustryVariables {
         return variables.containsKey(name);
     }
 
+    public List<MindustryVariable> getAllVariables() {
+        return variables.values().stream()
+                .filter(v -> !v.isConstant())
+                .sorted(Comparator.comparing(MindustryVariable::getName))
+                .toList();
+    }
+
     public MindustryVariable getOrCreateVariable(LogicArgument value) {
         return variables.computeIfAbsent(value.toMlog(), this::createVariable);
     }
@@ -58,9 +77,9 @@ public class MindustryVariables {
 
     private MindustryVariable createVariable(String value) {
         if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
-            return MindustryVariable.createVar(null);
+            return MindustryVariable.createVar(value);
         } else {
-            throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid identifier '" + value + "'.");
+            throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid identifier '%s'.", value);
         }
     }
 
@@ -82,12 +101,12 @@ public class MindustryVariables {
             } catch (NumberFormatException ex) {
                 if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
                     if (processor.getFlag(ERR_UNINITIALIZED_VAR)) {
-                        throw new ExecutionException(ERR_UNINITIALIZED_VAR, "Uninitialized variable '" + value + "'.");
+                        throw new ExecutionException(ERR_UNINITIALIZED_VAR, "Uninitialized variable '%s'.", value);
                     } else {
                         return createVariable(value);
                     }
                 } else {
-                    throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid number or identifier '" + value + "'.");
+                    throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid number or identifier '%s'.", value);
                 }
             }
         }

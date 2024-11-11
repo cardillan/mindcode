@@ -826,6 +826,18 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     }
 
     @Test
+    void ignoresRecursiveFunctionsWhenNotCalled() {
+        assertGeneratesMessages(
+                ExpectedMessages.none(),
+                """
+                        def foo()
+                            foo();
+                        end;
+                        """
+        );
+    }
+
+    @Test
     void refusesMisplacedStackAllocation() {
         assertGeneratesMessages(
                 ExpectedMessages.create().add("Stack allocation must not be declared within a function."),

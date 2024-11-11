@@ -15,15 +15,20 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+* Added warnings for unrecognized built-in variables. An unrecognized built-in variable might be invalid or mistyped.
+* Added the built-in math constants `@pi`, `@e`, `@degToRad` and `@radToDeg` to the processor emulator.
+
 #### Experimental features
 
 * Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
-* Added new functions to the [`utils` system library](doc/syntax/SYSTEM-LIBRARY.markdown#utils-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `printExact`).
+* Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExact`).
+* Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
+* Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator. 
 
 ### Changed
 
-* **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to reside in several separate files that can be added to the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with lower targets as well.
-* Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches bot a vararg function and a non-vararg function, the non-vararg function will be called.
+* **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to several separate files that can be included in the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with earlier targets as well.
+* Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called.
 * Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
 * Changed existing examples to utilize functions from the system library where one is available.
 * Changed processor emulator to [output all existing variables and their values](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state) when encountering the `stop` instruction.
@@ -116,7 +121,7 @@ All notable changes to this project will be documented in this file.
 #### Experimental features
  
 * Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
-* Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or higher. 
+* Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or later. 
 * Added support to the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#instruction-propagation) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
 
 ### Changed

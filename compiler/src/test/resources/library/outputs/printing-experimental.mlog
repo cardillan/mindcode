@@ -1,0 +1,33 @@
+print "T:printNumber(null)\nE:0\nA:{2}"
+op floor __fn30__n 0 0
+format __fn30__n
+print "\nT:printNumber(1)\nE:1\nA:{2}"
+op floor __fn30__n 1 0
+format __fn30__n
+print "\nT:printNumber(1.5)\nE:1\nA:{2}"
+op floor __fn30__n 1.5 0
+format __fn30__n
+print "\nT:printNumber(-1.5)\nE:-1\nA:{2}"
+op floor __fn30__n 1.5 0
+format "-{2}"
+format __fn30__n
+print "\nT:printNumber(1234567)\nE:1,234,567\nA:{2}"
+format "{2},{1}"
+format 567
+format "{2},{1}"
+format 234
+format 1
+print "\nT:printNumber(-1234567)\nE:-1,234,567\nA:{2}"
+format "-{2}"
+format "{2},{1}"
+format 567
+format "{2},{1}"
+format 234
+format 1
+print "\nT:printNumber(9009099)\nE:9,009,099\nA:{2}"
+format "{2},0{1}"
+format 99
+format "{2},00{1}"
+format 9
+format 9
+print "\nT:printExact(null)\nE:null\nA:null\nT:printExact(0)\nE:0\nA:0\nT:printExact(1)\nE:1\nA:1\nT:printExact(1.0000001)\nE:1.000000100000000\nA:1.000000100000000\nT:printExact(3.00000007)\nE:3.000000070000000\nA:3.000000070000000\nT:printExact(3e50)\nE:3E50\nA:3E50\nT:printExact(1.0123456789)\nE:1.0123456789\nA:1.0123456789\nT:printExact(1.0000001e20)\nE:1.000000099999999E20\nA:1.000000099999999E20\nT:printExact(1.2345e-50)\nE:1.2345000000000002E-50\nA:1.2345000000000002E-50\nT:printExact(-1.2345e-50)\nE:-1.2345000000000002E-50\nA:-1.2345000000000002E-50\n"

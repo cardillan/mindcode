@@ -171,8 +171,10 @@ println("Elapsed: ", floor(duration), " ms");
 ```
 
 When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead.
-The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI. There isn't a way 
-to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
+The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI.
+
+Mindcode provides the `printExact` function in the `maths` library  
+There isn't a way to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
 necessarily equal to zero.
 
 ## Using units
@@ -462,4 +464,4 @@ end;
 
 ---
 
-[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown)
+[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)

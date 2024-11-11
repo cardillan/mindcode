@@ -354,6 +354,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumeric_directive(MindcodeParser.Numeric_directiveContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code boolean_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolean_directive(MindcodeParser.Boolean_directiveContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code string_directive}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

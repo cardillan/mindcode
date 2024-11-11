@@ -49,11 +49,11 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     52 set __tmp8 DISPLAY
     53 jump __label6 always
     54 label __label11
--    * jump __label14 equal __ast0 @silicon-factory
-+   55 jump __label14 equal __tmp7 @silicon-factory
+-    * jump __label14 equal __ast0 @silicon-smelter
++   55 jump __label14 equal __tmp7 @silicon-smelter
     56 jump __label13 always
     57 label __label14
-    58 set TYPE @silicon-factory
+    58 set TYPE @silicon-smelter
  
     69 set __tmp8 OUTPUT
     70 jump __label6 always
@@ -132,7 +132,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-35 instruct
 -    * set __tmp8 DISPLAY
     50 jump __label6 always
     51 label __label11
-    52 jump __label14 equal __tmp7 @silicon-factory
+    52 jump __label14 equal __tmp7 @silicon-smelter
  
     63 set MUL2 MUL3
     64 set MUL1 MUL2
@@ -429,7 +429,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-55 ins
  
     50 jump __label13 always
     51 label __label14
-    52 set TYPE @silicon-factory
+    52 set TYPE @silicon-smelter
 -    * sensor __tmp9 block @itemCapacity
 -    * set CAPACITY __tmp9
 +   53 sensor CAPACITY block @itemCapacity
@@ -829,11 +829,11 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 in
     43 set DISPLAY block
     44 jump __label6 always
     45 label __label11
--    * jump __label14 equal __tmp7 @silicon-factory
+-    * jump __label14 equal __tmp7 @silicon-smelter
 -    * jump __label13 always
-+   46 jump __label13 notEqual __tmp7 @silicon-factory
++   46 jump __label13 notEqual __tmp7 @silicon-smelter
     47 label __label14
-    48 set TYPE @silicon-factory
+    48 set TYPE @silicon-smelter
     49 sensor CAPACITY block @itemCapacity
  
     56 set OUTPUT @silicon
@@ -2019,8 +2019,8 @@ label __label12
 set DISPLAY block
 jump __label6 always 0 0
 label __label11
-jump __label13 notEqual __tmp7 @silicon-factory
-set TYPE @silicon-factory
+jump __label13 notEqual __tmp7 @silicon-smelter
+set TYPE @silicon-smelter
 sensor CAPACITY block @itemCapacity
 set RES1 @sand
 set RES2 @coal

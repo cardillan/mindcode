@@ -151,7 +151,7 @@ public class HomeController {
                         result.warnings(WebappMessage::transform),
                         result.infos(WebappMessage::transform),
                         optimizationLevel,
-                        run && !result.hasErrors() ? processRunOutput(result.textBuffer()) : null,
+                        run && !result.hasErrors() ? processRunOutput(result.getProgramOutput()) : null,
                         result.steps())
         );
     }

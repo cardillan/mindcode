@@ -65,6 +65,8 @@ public interface InstructionProcessor extends MessageEmitter {
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
     LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
 
+    LogicInstruction normalizeInstruction(LogicInstruction instruction);
+
     /**
      * Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
      * Non-virtual instructions are passed as-is.

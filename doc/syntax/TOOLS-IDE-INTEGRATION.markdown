@@ -47,4 +47,4 @@ Download the extension from the [Visual Studio marketplace](https://marketplace.
 
 Unfortunately, the latest addition to Mindcode syntax probably aren't supported by this extension.
 
-[« Previous: Schemacode](SCHEMACODE.markdown) &nbsp; | &nbsp; [Next: Command line tool »](TOOLS-CMDLINE.markdown)
+[« Previous: Schemacode](SCHEMACODE.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Command line tool »](TOOLS-CMDLINE.markdown)

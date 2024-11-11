@@ -1,15 +1,17 @@
 package info.teksol.emulator;
 
 import info.teksol.emulator.processor.ExecutionException;
-import info.teksol.emulator.processor.ProcessorFlag;
+import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.evaluator.LogicReadable;
 import info.teksol.evaluator.LogicWritable;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.mimex.MindustryContents;
 
+import java.util.Objects;
+
 import static info.teksol.emulator.MindustryVariable.ValueType.*;
-import static info.teksol.emulator.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
-import static info.teksol.emulator.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;
+import static info.teksol.emulator.processor.ExecutionFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
+import static info.teksol.emulator.processor.ExecutionFlag.ERR_NOT_AN_OBJECT;
 
 public class MindustryVariable implements LogicWritable, LogicReadable {
     // TODO Use different implementation for the compiler and remove the type from this class
@@ -27,10 +29,10 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     private MindustryVariable(String name, boolean constant, boolean counter, ValueType valueType, boolean isObject,
             MindustryObject object, double numericValue) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name);
         this.constant = constant;
         this.counter = counter;
-        this.valueType = valueType;
+        this.valueType = Objects.requireNonNull(valueType);
         this.isObject = isObject;
         this.object = object;
         this.numericValue = numericValue;
@@ -108,7 +110,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     public void setObject(MindustryObject object) {
         verifyModification();
         if (counter) {
-            throw new ExecutionException(ProcessorFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '" + name + "'.");
+            throw new ExecutionException(ExecutionFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '%s'.", name);
         }
         if (object == null) {
             setNull();
@@ -122,7 +124,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     public void setNull() {
         verifyModification();
         if (counter) {
-            throw new ExecutionException(ProcessorFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '" + name + "'.");
+            throw new ExecutionException(ExecutionFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '%s'.", name);
         }
         this.valueType = NULL;
         this.isObject = true;
@@ -168,7 +170,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     private void verifyModification() {
         if (constant) {
-            throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot modify a value of '" + name + "'.");
+            throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot modify a value of '%s'.", name);
         }
     }
 
@@ -178,7 +180,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public MindustryObject getExistingObject() {
         if (!isObject || object == null) {
-            throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable '" + name + "' is not an object.");
+            throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable '%s' is not an object.", name);
         }
         return object;
     }
@@ -201,6 +203,10 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public String print() {
         return isObject ? print(object) : print(numericValue);
+    }
+
+    public String printExact() {
+        return isObject ? print(object) : String.valueOf(numericValue);
     }
 
     public boolean invalidNumber() {

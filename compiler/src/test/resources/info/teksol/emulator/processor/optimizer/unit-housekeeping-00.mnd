@@ -67,8 +67,8 @@ while true do
                     print(", ", x, ";", y);
                 when @ctrlPlayer then
                     print(", player");
-                when @ctrlFormation then
-                    print(", group");
+                when @ctrlCommand then
+                    print(", command");
             end;
 
             if (flag != 0) then

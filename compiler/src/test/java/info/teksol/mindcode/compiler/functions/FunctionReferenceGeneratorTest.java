@@ -116,7 +116,7 @@ public class FunctionReferenceGeneratorTest {
             w.println("---");
             w.println();
 
-            w.printf("[« Previous: %s](%s) &nbsp; | &nbsp; [Next: %s »](%s)",
+            w.printf("[« Previous: %s](%s) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: %s »](%s)",
                     navigation[prev], navigation[prev + 1], navigation[next], navigation[next + 1]);
             w.println();
         }

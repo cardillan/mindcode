@@ -1,0 +1,11 @@
+inline def assertEquals(expected, actual, title)
+    println("T:", title);
+    println("E:", expected);
+    println("A:", actual);
+end;
+
+inline def assertWillPrint(expected, title)
+    println("T:", title);
+    println("E:", expected);
+    print("A:");
+end;

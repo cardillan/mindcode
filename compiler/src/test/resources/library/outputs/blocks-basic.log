@@ -1,0 +1,102 @@
+Number of reported ambiguities: 6
+Active optimizations:
+    case-expression-optimization = basic,
+    case-switching = basic,
+    data-flow-optimization = basic,
+    dead-code-elimination = basic,
+    expression-optimization = basic,
+    function-inlining = basic,
+    if-expression-optimization = basic,
+    jump-normalization = basic,
+    jump-optimization = basic,
+    jump-straightening = basic,
+    jump-threading = basic,
+    loop-hoisting = basic,
+    loop-optimization = basic,
+    loop-unrolling = basic,
+    print-merging = basic,
+    return-optimization = basic,
+    single-step-elimination = basic,
+    stack-optimization = basic,
+    temp-variables-elimination = basic,
+    unreachable-code-elimination = basic
+
+   149 instructions before optimizations.
+     5 instructions eliminated by Temp Variables Elimination.
+     6 instructions eliminated by Dead Code Elimination (4 iterations).
+     4 instructions eliminated by Jump Normalization (5 iterations).
+     4 instructions eliminated by Jump Optimization (5 iterations).
+     9 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    18 instructions eliminated by Expression Optimization (2 passes, 4 iterations).
+    56 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+     1 instructions modified by Loop Optimization (4 iterations).
+     1 loops improved by Loop Optimization.
+    10 instructions added by Loop Unrolling (7 iterations).
+     3 loops unrolled by Loop Unrolling.
+     6 instructions eliminated by Unreachable Code Elimination.
+    10 instructions eliminated by Print Merging.
+    41 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 909):
+  * Loop Unrolling: unroll iteration loop at line 6              cost     0, benefit      350.0, efficiency   Infinity (-10 instructions)
+    Loop Unrolling: unroll iteration loop at line 16             cost     6, benefit     8750.0, efficiency     1458.3
+    Loop Unrolling: unroll iteration loop at line 25             cost    16, benefit      350.0, efficiency       21.9
+
+Pass 1: speed optimization selection (cost limit 919):
+  * Loop Unrolling: unroll iteration loop at line 16             cost     6, benefit     8750.0, efficiency     1458.3 (+1 instructions)
+    Loop Unrolling: unroll iteration loop at line 25             cost    16, benefit      350.0, efficiency       21.9
+
+Pass 1: speed optimization selection (cost limit 918):
+  * Loop Unrolling: unroll iteration loop at line 25             cost    16, benefit      350.0, efficiency       21.9 (+3 instructions)
+
+Final code before resolving virtual instructions:
+
+    0:  set __fn0__message message1
+        label __label2
+    1:  set display null
+    2:  set message null
+    3:  set switch null
+    4:  set memory null
+    5:  print "Example program.\nTrying to locate linked blocks"
+    6:  set __fn0__n @links
+    7:  jump __label15 lessThanEq __fn0__n 0
+        label __label38
+    8:  op sub __fn0__n __fn0__n 1
+    9:  getlink __fn0__block __fn0__n
+   10:  print "\nFound: "
+   11:  print __fn0__block
+   12:  sensor __fn0__type __fn0__block @type
+   13:  jump __label63 notEqual @large-logic-display __fn0__type
+   14:  set display __fn0__block
+        label __label63
+   15:  jump __label71 notEqual @message __fn0__type
+   16:  set message __fn0__block
+   17:  set __fn0__message __fn0__block
+        label __label71
+   18:  jump __label79 notEqual @switch __fn0__type
+   19:  set switch __fn0__block
+        label __label79
+   20:  jump __label87 notEqual @memory-bank __fn0__type
+   21:  set memory __fn0__block
+        label __label87
+   22:  jump __label95 notEqual @memory-cell __fn0__type
+   23:  set memory __fn0__block
+        label __label95
+   24:  jump __label38 greaterThan __fn0__n 0
+        label __label15
+   25:  print "\nDisplay: "
+   26:  print display
+   27:  op and __fn0__foundAll 1 display
+   28:  print "\nMessage: "
+   29:  print message
+   30:  print "\nSwitch: "
+   31:  print switch
+   32:  print "\nMemory: "
+   33:  print memory
+   34:  op and __fn0__foundAll __fn0__foundAll memory
+   35:  print "\nMemory: "
+   36:  print memory
+   37:  op and __fn0__foundAll __fn0__foundAll memory
+   38:  printflush __fn0__message
+   39:  jump __label2 equal __fn0__foundAll false
+   40:  end

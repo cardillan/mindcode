@@ -1,0 +1,150 @@
+set __fn0__title "Example program.\nTrying to locate linked blocks"
+set __fn0__message message1
+set __tmp0 8
+set __fn0__requested @large-logic-display
+set __fn0__name "Display"
+set __fn0__variable display
+set __fn0__required true
+jump 35 always 0 0
+set display __fn0__variable
+set __tmp0 15
+set __fn0__requested @message
+set __fn0__name "Message"
+set __fn0__variable message
+set __fn0__required false
+jump 35 always 0 0
+set message __fn0__variable
+set __tmp0 22
+set __fn0__requested @switch
+set __fn0__name "Switch"
+set __fn0__variable switch
+set __fn0__required false
+jump 35 always 0 0
+set switch __fn0__variable
+set __tmp0 29
+set __fn0__requested @memory-bank
+set __fn0__name "Memory"
+set __fn0__variable memory
+set __fn0__required true
+jump 35 always 0 0
+set memory __fn0__variable
+set __tmp0 37
+set __fn0__requested @memory-cell
+set __fn0__name "Memory"
+set __fn0__variable memory
+set __fn0__required true
+set __fn0__variable null
+set @counter __tmp0
+set memory __fn0__variable
+print __fn0__title
+set __tmp1 @links
+set __fn0__n __tmp1
+op greaterThan __tmp2 __fn0__n 0
+jump 99 equal __tmp2 false
+op sub __tmp3 __fn0__n 1
+set __fn0__n __tmp3
+getlink __tmp4 __fn0__n
+set __fn0__block __tmp4
+print "\nFound: "
+print __fn0__block
+sensor __tmp5 __fn0__block @type
+set __fn0__type __tmp5
+set __tmp6 57
+set __fn0__requested @large-logic-display
+set __fn0__name "Display"
+set __fn0__variable display
+set __fn0__required true
+jump 84 always 0 0
+set display __fn0__variable
+set __tmp6 64
+set __fn0__requested @message
+set __fn0__name "Message"
+set __fn0__variable message
+set __fn0__required false
+jump 84 always 0 0
+set message __fn0__variable
+set __tmp6 71
+set __fn0__requested @switch
+set __fn0__name "Switch"
+set __fn0__variable switch
+set __fn0__required false
+jump 84 always 0 0
+set switch __fn0__variable
+set __tmp6 78
+set __fn0__requested @memory-bank
+set __fn0__name "Memory"
+set __fn0__variable memory
+set __fn0__required true
+jump 84 always 0 0
+set memory __fn0__variable
+set __tmp6 97
+set __fn0__requested @memory-cell
+set __fn0__name "Memory"
+set __fn0__variable memory
+set __fn0__required true
+op equal __tmp7 __fn0__requested __fn0__type
+jump 95 equal __tmp7 false
+set __fn0__variable __fn0__block
+op equal __tmp9 __fn0__requested @message
+jump 92 equal __tmp9 false
+set __fn0__message __fn0__block
+set __tmp10 __fn0__message
+jump 93 always 0 0
+set __tmp10 null
+set __tmp8 __tmp10
+jump 96 always 0 0
+set __tmp8 null
+set @counter __tmp6
+set memory __fn0__variable
+jump 41 always 0 0
+set __fn0__foundAll 1
+set __tmp11 106
+set __fn0__requested @large-logic-display
+set __fn0__name "Display"
+set __fn0__variable display
+set __fn0__required true
+jump 133 always 0 0
+set display __fn0__variable
+set __tmp11 113
+set __fn0__requested @message
+set __fn0__name "Message"
+set __fn0__variable message
+set __fn0__required false
+jump 133 always 0 0
+set message __fn0__variable
+set __tmp11 120
+set __fn0__requested @switch
+set __fn0__name "Switch"
+set __fn0__variable switch
+set __fn0__required false
+jump 133 always 0 0
+set switch __fn0__variable
+set __tmp11 127
+set __fn0__requested @memory-bank
+set __fn0__name "Memory"
+set __fn0__variable memory
+set __fn0__required true
+jump 133 always 0 0
+set memory __fn0__variable
+set __tmp11 144
+set __fn0__requested @memory-cell
+set __fn0__name "Memory"
+set __fn0__variable memory
+set __fn0__required true
+print "\n"
+print __fn0__name
+print ": "
+print __fn0__variable
+jump 142 equal __fn0__required false
+op and __tmp13 __fn0__foundAll __fn0__variable
+set __fn0__foundAll __tmp13
+set __tmp12 __fn0__foundAll
+jump 143 always 0 0
+set __tmp12 null
+set @counter __tmp11
+set memory __fn0__variable
+printflush __fn0__message
+op equal __tmp14 __fn0__foundAll false
+jump 2 notEqual __tmp14 false
+end
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

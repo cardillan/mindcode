@@ -1,0 +1,42 @@
+set __fn0__message message1
+set display null
+set message null
+set switch null
+set memory null
+print "Example program.\nTrying to locate linked blocks"
+set __fn0__n @links
+jump 25 lessThanEq __fn0__n 0
+op sub __fn0__n __fn0__n 1
+getlink __fn0__block __fn0__n
+print "\nFound: "
+print __fn0__block
+sensor __fn0__type __fn0__block @type
+jump 15 notEqual @large-logic-display __fn0__type
+set display __fn0__block
+jump 18 notEqual @message __fn0__type
+set message __fn0__block
+set __fn0__message __fn0__block
+jump 20 notEqual @switch __fn0__type
+set switch __fn0__block
+jump 22 notEqual @memory-bank __fn0__type
+set memory __fn0__block
+jump 24 notEqual @memory-cell __fn0__type
+set memory __fn0__block
+jump 8 greaterThan __fn0__n 0
+print "\nDisplay: "
+print display
+op and __fn0__foundAll 1 display
+print "\nMessage: "
+print message
+print "\nSwitch: "
+print switch
+print "\nMemory: "
+print memory
+op and __fn0__foundAll __fn0__foundAll memory
+print "\nMemory: "
+print memory
+op and __fn0__foundAll __fn0__foundAll memory
+printflush __fn0__message
+jump 1 equal __fn0__foundAll false
+end
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

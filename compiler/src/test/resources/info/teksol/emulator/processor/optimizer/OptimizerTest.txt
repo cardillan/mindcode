@@ -1,7 +1,7 @@
 Name                                     Ambiguities   Instructions   Source CRC         Compiled CRC    
 breakout-00.mnd:                                  49            184   DAE429A013DB4541   DC846E05178DF416
 detector-00.mnd:                                  12            173   AB50C63B66EE21DD   966A0E6E27A86341
-factory-monitor-00.mnd:                           87            356   EB61CF1994BB6367   0DF56D6282E67F55
+factory-monitor-00.mnd:                           87            356   863D948F911F2E7A   83B4B69D29251F43
 factory-monitor-silicon-00.mnd:                   62            290   92331871E01FEB02   7540A0CAF5743A7E
 factory-monitor-surge-alloy-00.mnd:               50            187   B570A56D64509A07   E138455B15A570C6
 impact-reactor-logic-00.mnd:                      95            863   1234A425840A18A8   1B3293A75193D84A
@@ -20,7 +20,7 @@ reactor-control-battery-level-00.mnd:             22            584   BEBDD58A4C
 regulator-00.mnd:                                 30            155   AD481523CFD0D6D1   D1DB761A8D3C0D21
 remote-vault-00.mnd:                              19             71   9EA444978E177496   7B9ECE94AC6B2916
 storage-display-00.mnd:                           42            609   CC1D32ACA74DD0AD   F42ACDE002541DDD
-unit-housekeeping-00.mnd:                         13            103   01E93A1EF95FAB2C   096035BB51B9706A
+unit-housekeeping-00.mnd:                         13            105   5C106FEE0E2722BE   8A7CAD473703DC87
 unit-speed-00.mnd:                                23             78   2A68EEB3B75D1513   2E5410585576B84C
 unit-transport-00.mnd:                           152            725   F45D1366D5FB50F9   AB903973F8FD3C50
 unit-transport-flow-rate-00.mnd:                  15             94   DED7F4641C02F55B   2265036D7DBB14F7

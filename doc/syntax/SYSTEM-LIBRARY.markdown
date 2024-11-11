@@ -12,7 +12,7 @@ System libraries contain functions and sometimes constants that can be used by a
 * `printing`: functions for outputting formatted numbers. Requires the Mindustry Logic 8 instruction set.
 * `blocks`: block-related functions (just the `findLinkedBlocks` function at this moment).
 * `units`: functions for searching and binding available units of required type.
-* `utils`: general utility functions (just the `distance` function at this moment).
+* `math`: mathematical functions.
 
 The system library is an experimental feature. The functions provided by the library and the mechanism for its inclusion in your program may change in future releases. 
 
@@ -233,11 +233,11 @@ To use the function, the text buffer must not contain placeholders `{0}`, `{1}` 
 
 See also [`formatNumber`](#formatnumber)
 
-# Utils library
+# Math library
 
-To use the Utils library, use the `require utils;` statement.
+To use the Utils library, use the `require math;` statement.
 
-The library contains various utility functions.
+The library contains various mathematical functions.
 
 ## distance
 
@@ -261,7 +261,13 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 **Definition:** `def sign(x)`
 
-Returns the sign of the number. The return value is `0` precisely when `x == 0`.
+Returns the sign of the number. The return value is `0` precisely when `x == 0` (using the Mindustry Logic native comparison precision).
+
+## signExact
+
+**Definition:** `def sign(x)`
+
+Returns the sign of the number. The return value is `0` when the value of `x` is exactly zero.
 
 ## isZero
 
@@ -286,11 +292,46 @@ Note: the equality operators in Mindustry (and, by extension, Mindcode), i.e. `=
 
 Prints the value into the text buffer without rounding to the nearest integer value. The function is primarily useful for debugging purposes to determine the actual value of variables.
 
+**Note:** when printing the exact representation of numbers that are close to integer value, the Mindustry Logic `print` instruction cannot be used, as it would print the rounded value. In such case a custom printing routine is used, which can take around 50 steps to output the entire number.
+
 > [!TIP] 
 > The `print` and `format` instructions applied to numerical values round the value to the nearest integer when they differ from the integer value by less than `1e-6`. This makes it impossible to directly print (with sufficient precision) numerical values close to integer values in general, and values close to zero in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExact(10 ** -50)` outputs `1E-50`. 
 
 > [!IMPORTANT]
-> The mathematical operations used by `printExact` to output the value may introduce additional numerical errors to the output value, for example `printExact(1.2345 * 10**-50)` outputs `1.2345000000000002E-50`.    
+> The mathematical operations used by `printExact` to output the value may introduce small additional numerical errors to the output value; for example `printExact(3.00000003)` outputs `3.000000029999999`.    
+
+## nullToZero
+
+**Definition:** `nullToZero(x)`
+
+Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+
+## sum
+
+Function has two definitions:
+
+* `def sum(x)`: returns x (covers the degenerate case).
+* `def sum(x1, x2, x...)`: returns the sum of all given arguments.
+
+## avg
+
+Function has two definitions:
+
+* `def avg(x)`: returns x (covers the degenerate case).
+* `def avg(x1, x2, x...)`: returns the average of all given arguments.
+
+## median
+
+Computes the median of given arguments. The function implements a specialized, fast code for up to five arguments. For more arguments a generic algorithm is used. The generic algorithm generates quite a large code and is fairly slow, because Mindcode doesn't support internal memory arrays (so far).  
+
+**Definitions:**
+
+* `def median(x)`
+* `def median(x1, x2)`
+* `def median(x1, x2, x3)`
+* `def median(x1, x2, x3, x4)`
+* `def median(x1, x2, x3, x4, x5)`
+* `def median(x...)`
 
 # Additional resources
 
@@ -298,4 +339,4 @@ The system library is integrated into the compiler and as such is available to b
 
 ---
 
-[« Previous: Mindustry 8](MINDUSTRY-8.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)
+[« Previous: Mindustry 8](MINDUSTRY-8.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)

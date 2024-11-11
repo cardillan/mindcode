@@ -3,7 +3,9 @@ require printing;
 SYS_MESSAGE = null;
 
 _n = null;
+_x = null;
 
 
-formatNumber(_n);
+formatNumber(_x);
 printNumber(_n);
+printExact(_n);

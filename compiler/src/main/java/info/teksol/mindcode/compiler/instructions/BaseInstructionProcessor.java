@@ -286,6 +286,22 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
         };
     }
 
+    @Override
+    public LogicInstruction normalizeInstruction(LogicInstruction instruction) {
+        Opcode opcode;
+        if (instruction instanceof CustomInstruction ix && (opcode = Opcode.fromOpcode(ix.getMlogOpcode())) != null) {
+            Operation operation;
+            if (opcode == OP && (operation = Operation.fromMlog(ix.getArg(0).toMlog())) != null) {
+                List<LogicArgument> args = new ArrayList<>(ix.getArgs());
+                args.set(0, operation);
+                List<InstructionParameterType> params = getParameters(opcode, args);
+                return new OpInstruction(ix.astContext, args, params);
+            }
+            return createInstructionUnchecked(instruction.getAstContext(), Opcode.fromOpcode(ix.getMlogOpcode()), instruction.getArgs());
+        }
+        return instruction;
+    }
+
     private LogicInstruction createGenericInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments,
             List<InstructionParameterType> params) {
         List<InstructionParameterType> outputs = params.stream().filter(InstructionParameterType::isOutput).toList();

@@ -24,8 +24,8 @@ while DISPLAY == null or TYPE == null do
                 SWITCH = block;
             when @logic-display, @large-logic-display then
                 DISPLAY = block;
-            when @silicon-factory then
-                TYPE = @silicon-factory;
+            when @silicon-smelter then
+                TYPE = @silicon-smelter;
                 CAPACITY = block.@itemCapacity;
                 RES1 = @sand;
                 RES2 = @coal;

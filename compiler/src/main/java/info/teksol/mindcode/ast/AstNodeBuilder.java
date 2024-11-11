@@ -18,7 +18,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     private final InputFile inputFile;
     private final Map<String, Integer> heapAllocations = new HashMap<>();
     private int temp;
-    private List<Requirement> requirements;
+    private final List<Requirement> requirements;
     private HeapAllocation allocatedHeap;
     private StackAllocation allocatedStack;
 
@@ -652,6 +652,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 visit(ctx.expression()),
                 "==",
                 new BooleanLiteral(pos(ctx.getStart()), false));
+    }
+
+    @Override
+    public AstNode visitBoolean_directive(MindcodeParser.Boolean_directiveContext ctx) {
+        return new Directive(pos(ctx.getStart()),
+                new DirectiveText(pos(ctx.option), ctx.option.getText()),
+                new DirectiveText(pos(ctx.value.getStart()), ctx.value.getText()));
     }
 
     @Override

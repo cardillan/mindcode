@@ -51,7 +51,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
         private List<String> runProgram(List<LogicInstruction> program) {
             List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, program);
-            Processor processor = new Processor();
+            Processor processor = new Processor(ExpectedMessages.none(), 1000);
             processor.addBlock("bank1", Memory.createMemoryBank());
             processor.addBlock("bank2", Memory.createMemoryBank());
             processor.run(instructions, MAX_STEPS);

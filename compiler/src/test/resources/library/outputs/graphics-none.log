@@ -1,0 +1,282 @@
+Number of reported ambiguities: 46
+
+Final code before resolving virtual instructions:
+
+    0:  set SYS_MESSAGE null
+    1:  set _display null
+        label __label10
+    2:  set __fn10__display _display
+    3:  sensor __tmp1 __fn10__display @type
+    4:  set __fn10_type __tmp1
+    5:  op equal __tmp2 __fn10_type @logic-display
+    6:  jump __label12 equal __tmp2 false
+    7:  set __tmp3 80
+    8:  jump __label13 always 0 0
+        label __label12
+    9:  op equal __tmp4 __fn10_type @large-logic-display
+   10:  jump __label14 equal __tmp4 false
+   11:  set __tmp5 176
+   12:  jump __label15 always 0 0
+        label __label14
+   13:  set __tmp5 null
+        label __label15
+   14:  set __tmp3 __tmp5
+        label __label13
+   15:  set __tmp0 __tmp3
+        label __label11
+   16:  print __tmp0
+   17:  print "\n"
+   18:  setaddr __fn0retaddr __label16
+   19:  call __label0 __fn0retval
+        gotolabel __label16 __fn0
+   20:  setaddr __fn1retaddr __label17
+   21:  call __label1 __fn1retval
+        gotolabel __label17 __fn1
+   22:  setaddr __fn2retaddr __label18
+   23:  call __label2 __fn2retval
+        gotolabel __label18 __fn2
+   24:  setaddr __fn3retaddr __label19
+   25:  call __label3 __fn3retval
+        gotolabel __label19 __fn3
+   26:  setaddr __fn4retaddr __label20
+   27:  call __label4 __fn4retval
+        gotolabel __label20 __fn4
+   28:  setaddr __fn5retaddr __label21
+   29:  call __label5 __fn5retval
+        gotolabel __label21 __fn5
+   30:  setaddr __fn6retaddr __label22
+   31:  call __label6 __fn6retval
+        gotolabel __label22 __fn6
+   32:  setaddr __fn7retaddr __label23
+   33:  call __label7 __fn7retval
+        gotolabel __label23 __fn7
+   34:  setaddr __fn8retaddr __label24
+   35:  call __label8 __fn8retval
+        gotolabel __label24 __fn8
+   36:  setaddr __fn9retaddr __label25
+   37:  call __label9 __fn9retval
+        gotolabel __label25 __fn9
+        label __label26
+   38:  set __fn11__display _display
+   39:  sensor __tmp6 __fn11__display @type
+   40:  set __ast0 __tmp6
+   41:  jump __label30 equal __ast0 @logic-display
+   42:  jump __label29 always 0 0
+        label __label30
+   43:  setaddr __fn0retaddr __label31
+   44:  call __label0 __fn0retval
+        gotolabel __label31 __fn0
+   45:  set __tmp7 null
+   46:  jump __label28 always 0 0
+        label __label29
+   47:  jump __label33 equal __ast0 @large-logic-display
+   48:  jump __label32 always 0 0
+        label __label33
+   49:  setaddr __fn5retaddr __label34
+   50:  call __label5 __fn5retval
+        gotolabel __label34 __fn5
+   51:  set __tmp7 null
+   52:  jump __label28 always 0 0
+        label __label32
+   53:  stop
+   54:  set __tmp7 null
+        label __label28
+        label __label27
+        label __label35
+   55:  set __fn12__display _display
+   56:  sensor __tmp8 __fn12__display @type
+   57:  set __ast1 __tmp8
+   58:  jump __label39 equal __ast1 @logic-display
+   59:  jump __label38 always 0 0
+        label __label39
+   60:  setaddr __fn1retaddr __label40
+   61:  call __label1 __fn1retval
+        gotolabel __label40 __fn1
+   62:  set __tmp9 null
+   63:  jump __label37 always 0 0
+        label __label38
+   64:  jump __label42 equal __ast1 @large-logic-display
+   65:  jump __label41 always 0 0
+        label __label42
+   66:  setaddr __fn6retaddr __label43
+   67:  call __label6 __fn6retval
+        gotolabel __label43 __fn6
+   68:  set __tmp9 null
+   69:  jump __label37 always 0 0
+        label __label41
+   70:  stop
+   71:  set __tmp9 null
+        label __label37
+        label __label36
+        label __label44
+   72:  set __fn13__display _display
+   73:  sensor __tmp10 __fn13__display @type
+   74:  set __ast2 __tmp10
+   75:  jump __label48 equal __ast2 @logic-display
+   76:  jump __label47 always 0 0
+        label __label48
+   77:  setaddr __fn2retaddr __label49
+   78:  call __label2 __fn2retval
+        gotolabel __label49 __fn2
+   79:  set __tmp11 null
+   80:  jump __label46 always 0 0
+        label __label47
+   81:  jump __label51 equal __ast2 @large-logic-display
+   82:  jump __label50 always 0 0
+        label __label51
+   83:  setaddr __fn7retaddr __label52
+   84:  call __label7 __fn7retval
+        gotolabel __label52 __fn7
+   85:  set __tmp11 null
+   86:  jump __label46 always 0 0
+        label __label50
+   87:  stop
+   88:  set __tmp11 null
+        label __label46
+        label __label45
+        label __label53
+   89:  set __fn14__display _display
+   90:  sensor __tmp12 __fn14__display @type
+   91:  set __ast3 __tmp12
+   92:  jump __label57 equal __ast3 @logic-display
+   93:  jump __label56 always 0 0
+        label __label57
+   94:  setaddr __fn3retaddr __label58
+   95:  call __label3 __fn3retval
+        gotolabel __label58 __fn3
+   96:  set __tmp13 null
+   97:  jump __label55 always 0 0
+        label __label56
+   98:  jump __label60 equal __ast3 @large-logic-display
+   99:  jump __label59 always 0 0
+        label __label60
+  100:  setaddr __fn8retaddr __label61
+  101:  call __label8 __fn8retval
+        gotolabel __label61 __fn8
+  102:  set __tmp13 null
+  103:  jump __label55 always 0 0
+        label __label59
+  104:  stop
+  105:  set __tmp13 null
+        label __label55
+        label __label54
+        label __label62
+  106:  set __fn15__display _display
+  107:  sensor __tmp14 __fn15__display @type
+  108:  set __ast4 __tmp14
+  109:  jump __label66 equal __ast4 @logic-display
+  110:  jump __label65 always 0 0
+        label __label66
+  111:  setaddr __fn4retaddr __label67
+  112:  call __label4 __fn4retval
+        gotolabel __label67 __fn4
+  113:  set __tmp15 null
+  114:  jump __label64 always 0 0
+        label __label65
+  115:  jump __label69 equal __ast4 @large-logic-display
+  116:  jump __label68 always 0 0
+        label __label69
+  117:  setaddr __fn9retaddr __label70
+  118:  call __label9 __fn9retval
+        gotolabel __label70 __fn9
+  119:  set __tmp15 null
+  120:  jump __label64 always 0 0
+        label __label68
+  121:  stop
+  122:  set __tmp15 null
+        label __label64
+        label __label63
+        label __label71
+  123:  draw scale 2.2 2.2 0 0 0 0
+        label __label72
+        label __label73
+  124:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
+        label __label74
+  125:  end
+        label __label0
+  126:  draw rotate 0 0 90 0 0 0
+  127:  draw translate 0 -80 0 0 0 0
+        label __label75
+  128:  goto __fn0retaddr __fn0
+  129:  end
+        label __label1
+  130:  draw rotate 0 0 270 0 0 0
+  131:  draw translate -80 0 0 0 0 0
+        label __label76
+  132:  goto __fn1retaddr __fn1
+  133:  end
+        label __label2
+  134:  draw rotate 0 0 180 0 0 0
+  135:  draw translate -80 -80 0 0 0 0
+        label __label77
+  136:  goto __fn2retaddr __fn2
+  137:  end
+        label __label3
+  138:  draw scale 1 -1 0 0 0 0
+  139:  draw translate 0 -80 0 0 0 0
+        label __label78
+  140:  goto __fn3retaddr __fn3
+  141:  end
+        label __label4
+  142:  draw scale -1 1 0 0 0 0
+  143:  draw translate -80 0 0 0 0 0
+        label __label79
+  144:  goto __fn4retaddr __fn4
+  145:  end
+        label __label5
+  146:  draw rotate 0 0 90 0 0 0
+  147:  draw translate 0 -176 0 0 0 0
+        label __label80
+  148:  goto __fn5retaddr __fn5
+  149:  end
+        label __label6
+  150:  draw rotate 0 0 270 0 0 0
+  151:  draw translate -176 0 0 0 0 0
+        label __label81
+  152:  goto __fn6retaddr __fn6
+  153:  end
+        label __label7
+  154:  draw rotate 0 0 180 0 0 0
+  155:  draw translate -176 -176 0 0 0 0
+        label __label82
+  156:  goto __fn7retaddr __fn7
+  157:  end
+        label __label8
+  158:  draw scale 1 -1 0 0 0 0
+  159:  draw translate 0 -176 0 0 0 0
+        label __label83
+  160:  goto __fn8retaddr __fn8
+  161:  end
+        label __label9
+  162:  draw scale -1 1 0 0 0 0
+  163:  draw translate -176 0 0 0 0 0
+        label __label84
+  164:  goto __fn9retaddr __fn9
+  165:  end
+
+
+stop instruction encountered, dumping variable values:
+@counter: 54.0
+SYS_MESSAGE: null
+__ast0: null
+__fn0retaddr: 20.0
+__fn10__display: null
+__fn10_type: null
+__fn11__display: null
+__fn1retaddr: 22.0
+__fn2retaddr: 24.0
+__fn3retaddr: 26.0
+__fn4retaddr: 28.0
+__fn5retaddr: 30.0
+__fn6retaddr: 32.0
+__fn7retaddr: 34.0
+__fn8retaddr: 36.0
+__fn9retaddr: 38.0
+__tmp0: null
+__tmp1: null
+__tmp2: 0.0
+__tmp3: null
+__tmp4: 0.0
+__tmp5: null
+__tmp6: null
+_display: null
