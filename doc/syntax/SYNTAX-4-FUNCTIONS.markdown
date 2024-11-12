@@ -591,15 +591,16 @@ foo(1, 1);  // Calls foo(x, y)
 
 To match a function call with function declaration, the number and types (input, output or input/output) of function call arguments must match the number and types of function parameters. Optional and vararg arguments are taken into account when evaluating the match.
 
-When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. Please note that a function with output parameters, as well as a vararg function, takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
+When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. A function with output parameters takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
 
 * `void foo(a, b)`: called with two arguments.
 * `void foo(x, y, out z)`: conflict - may be also called with two arguments when `z` is omitted.
-* `void foo(m, n, out o, args...)`: conflict - may be also called with two arguments when `o` is omitted and no additional arguments are given.
 
 * `void bar(x)`: `x` is an input parameter
 * `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
 * `void bar(in out z)`: `z` is an input/output parameter, therefore the function clashes with both `bar(x)` and `bar(out y)`.
+
+A vararg function doesn't conflict with a non-vararg function. When a function call matches bot a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling specific number of arguments will be used when possible.  
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 

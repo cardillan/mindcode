@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* **Breaking:** changed the system library to reside in several separate files that can be added to the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with lower targets as well.
+* **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to reside in several separate files that can be added to the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with lower targets as well.
+* Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches bot a vararg function and a non-vararg function, the non-vararg function will be called.
 * Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
 * Changed existing examples to utilize functions from the system library where one is available.
 

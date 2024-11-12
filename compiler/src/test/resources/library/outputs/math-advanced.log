@@ -1,0 +1,285 @@
+Number of reported ambiguities: 53
+Active optimizations:
+    case-expression-optimization = advanced,
+    case-switching = advanced,
+    data-flow-optimization = advanced,
+    dead-code-elimination = advanced,
+    expression-optimization = advanced,
+    function-inlining = advanced,
+    if-expression-optimization = advanced,
+    jump-normalization = advanced,
+    jump-optimization = advanced,
+    jump-straightening = advanced,
+    jump-threading = advanced,
+    loop-hoisting = advanced,
+    loop-optimization = advanced,
+    loop-unrolling = advanced,
+    print-merging = advanced,
+    return-optimization = advanced,
+    single-step-elimination = advanced,
+    stack-optimization = advanced,
+    temp-variables-elimination = advanced,
+    unreachable-code-elimination = advanced
+
+   539 instructions before optimizations.
+    11 instructions eliminated by Temp Variables Elimination.
+    41 instructions eliminated by Dead Code Elimination (6 iterations).
+    13 instructions eliminated by Jump Normalization (4 iterations).
+     9 instructions eliminated by Jump Optimization (4 iterations).
+    23 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+     3 instructions eliminated by If Expression Optimization (3 iterations).
+   220 instructions eliminated by Data Flow Optimization (11 passes, 35 iterations).
+     1 instructions eliminated by Loop Optimization (3 iterations).
+     1 loops improved by Loop Optimization.
+    31 instructions added by Loop Unrolling (13 iterations).
+     1 loops unrolled by Loop Unrolling.
+   261 instructions added by Function Inlining (13 iterations).
+    27 function calls inlined by Function Inlining.
+    19 instructions updated by JumpThreading.
+   273 instructions eliminated by Unreachable Code Elimination.
+   236 instructions eliminated by Print Merging.
+     1 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 622):
+    Loop Unrolling: unroll loop at line 68                       cost    31, benefit      187.5, efficiency        6.0
+    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+  * Function Inlining: inline function frac                      cost     0, benefit      116.4, efficiency   Infinity (-10 instructions)
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function isZero                    cost     2, benefit       28.0, efficiency       14.0
+    Function Inlining: inline function printExact                cost   187, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 5            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 6            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 12           cost     0, benefit        3.5, efficiency   Infinity
+    Function Inlining: inline function call at line 13           cost     0, benefit        3.5, efficiency   Infinity
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 21           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 22           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 23           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 25           cost    47, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    47, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    47, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    47, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    47, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 51           cost     1, benefit       17.5, efficiency       17.5
+    Function Inlining: inline function call at line 59           cost     1, benefit        8.8, efficiency        8.8
+    Function Inlining: inline function call at line 69           cost     0, benefit      109.4, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 632):
+    Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9
+    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function isZero                    cost     2, benefit       28.0, efficiency       14.0
+    Function Inlining: inline function printExact                cost   179, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 5            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 6            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 21           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 22           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 23           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 25           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    45, benefit        3.5, efficiency        0.1
+  * Function Inlining: inline function call at line 51           cost     1, benefit       17.5, efficiency       17.5 (+0 instructions)
+    Function Inlining: inline function call at line 59           cost     1, benefit        8.8, efficiency        8.8
+
+Pass 1: speed optimization selection (cost limit 632):
+    Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9
+    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+  * Function Inlining: inline function isZero                    cost     1, benefit       10.5, efficiency       10.5 (-12 instructions)
+    Function Inlining: inline function printExact                cost   179, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 5            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 6            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 21           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 22           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 23           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 25           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 59           cost     1, benefit        8.8, efficiency        8.8
+
+Pass 1: speed optimization selection (cost limit 644):
+    Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9
+  * Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0 (-17 instructions)
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   175, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 5            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 6            cost     2, benefit        5.0, efficiency        2.5
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 25           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 59           cost     1, benefit        8.8, efficiency        8.8
+
+Pass 1: speed optimization selection (cost limit 661):
+    Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   175, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 25           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    44, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    44, benefit        3.5, efficiency        0.1
+  * Function Inlining: inline function call at line 59           cost     1, benefit        8.8, efficiency        8.8 (-1 instructions)
+
+Pass 1: speed optimization selection (cost limit 662):
+  * Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
+    Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   171, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 25           cost    43, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    43, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    43, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    43, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    43, benefit        3.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 635):
+  * Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8 (-17 instructions)
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 7            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 8            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 9            cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 10           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 11           cost     1, benefit        3.5, efficiency        3.5
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 25           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    70, benefit        3.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 652):
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+  * Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5 (-14 instructions)
+    Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 18           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 19           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 20           cost     2, benefit        3.5, efficiency        1.8
+    Function Inlining: inline function call at line 25           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    70, benefit        3.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 666):
+  * Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0 (-3 instructions)
+    Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 25           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    70, benefit        3.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 669):
+  * Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1 (+212 instructions)
+    Function Inlining: inline function call at line 25           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 26           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 27           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 28           cost    70, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 29           cost    70, benefit        3.5, efficiency        0.1
+
+Final code before resolving virtual instructions:
+
+    0:  print "T:distance forward\nE:5\nA:5\nT:distance backward\nE:5\nA:5\nT:round 1.5 up\nE:2\nA:2\nT:round 1.7 up\nE:2\nA:2\nT:round 2.1 down\nE:2\nA:2\nT:round 2.5 up\nE:3\nA:3\nT:round -3.5 up\nE:-3\nA:-3\nT:frac 3.5\nE:0.5\nA:0.5\nT:frac -1.5\nE:-0.5\nA:-0.5\nT:sign 0\nE:0\nA:0\nT:sign 1e-7\nE:0\nA:0\nT:sign 1e-5\nE:1\nA:1\nT:sign -5\nE:-1\nA:-1\nT:signExact 0\nE:0\nA:0\nT:signExact 1e-7\nE:1\nA:1\nT:signExact -1e-7\nE:-1\nA:-1\nT:isZero 0\nE:1\nA:1\nT:isZero 1e-50\nE:0\nA:0\nT:isZero -1e-50\nE:0\nA:0\nT:isZero(-1e-50)\nE:0\nA:0\nT:printExact(null)\nE:null\nA:null\nT:printExact(0)\nE:0\nA:0\nT:printExact(3.00000007)\nE:3.000000070000000\nA:3.000000070000000\nT:printExact(1.2345e-50)\nE:1.2345000000000002E-50\nA:1.2345000000000002E-50\nT:printExact(-1.2345e-50)\nE:-1.2345000000000002E-50\nA:-1.2345000000000002E-50\n"

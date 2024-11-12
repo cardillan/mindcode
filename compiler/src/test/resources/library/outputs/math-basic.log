@@ -1,0 +1,201 @@
+Number of reported ambiguities: 53
+Active optimizations:
+    case-expression-optimization = basic,
+    case-switching = basic,
+    data-flow-optimization = basic,
+    dead-code-elimination = basic,
+    expression-optimization = basic,
+    function-inlining = basic,
+    if-expression-optimization = basic,
+    jump-normalization = basic,
+    jump-optimization = basic,
+    jump-straightening = basic,
+    jump-threading = basic,
+    loop-hoisting = basic,
+    loop-optimization = basic,
+    loop-unrolling = basic,
+    print-merging = basic,
+    return-optimization = basic,
+    single-step-elimination = basic,
+    stack-optimization = basic,
+    temp-variables-elimination = basic,
+    unreachable-code-elimination = basic
+
+   539 instructions before optimizations.
+    11 instructions eliminated by Temp Variables Elimination.
+    41 instructions eliminated by Dead Code Elimination (6 iterations).
+    13 instructions eliminated by Jump Normalization (4 iterations).
+     9 instructions eliminated by Jump Optimization (4 iterations).
+    22 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+     3 instructions eliminated by If Expression Optimization (3 iterations).
+   220 instructions eliminated by Data Flow Optimization (9 passes, 30 iterations).
+     1 instructions eliminated by Loop Optimization (3 iterations).
+     1 loops improved by Loop Optimization.
+    31 instructions added by Loop Unrolling (11 iterations).
+     1 loops unrolled by Loop Unrolling.
+   261 instructions added by Function Inlining (11 iterations).
+    27 function calls inlined by Function Inlining.
+     5 instructions updated by JumpThreading.
+   273 instructions eliminated by Unreachable Code Elimination.
+   133 instructions eliminated by Print Merging.
+   105 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 622):
+    Loop Unrolling: unroll loop at line 68                       cost    31, benefit      187.5, efficiency        6.0
+    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+  * Function Inlining: inline function frac                      cost     0, benefit      116.4, efficiency   Infinity (-10 instructions)
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function isZero                    cost     2, benefit       28.0, efficiency       14.0
+    Function Inlining: inline function printExact                cost   187, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 632):
+    Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9
+    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+  * Function Inlining: inline function isZero                    cost     2, benefit       28.0, efficiency       14.0 (-12 instructions)
+    Function Inlining: inline function printExact                cost   179, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 644):
+    Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9
+  * Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0 (-17 instructions)
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   175, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 661):
+  * Loop Unrolling: unroll loop at line 68                       cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
+    Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   175, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 634):
+  * Function Inlining: inline function round                     cost     4, benefit       26.3, efficiency        6.6 (-18 instructions)
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
+    Function Inlining: inline function printExact                cost   283, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 652):
+    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
+  * Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5 (-14 instructions)
+    Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 666):
+  * Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0 (-3 instructions)
+    Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1
+
+Pass 1: speed optimization selection (cost limit 669):
+  * Function Inlining: inline function printExact                cost   279, benefit       17.5, efficiency        0.1 (+212 instructions)
+
+Final code before resolving virtual instructions:
+
+    0:  print "T:distance forward\nE:"
+    1:  print 5
+    2:  print "\nA:"
+    3:  print 5
+    4:  print "\nT:distance backward\nE:"
+    5:  print 5
+    6:  print "\nA:"
+    7:  print 5
+    8:  print "\nT:round 1.5 up\nE:"
+    9:  print 2
+   10:  print "\nA:"
+   11:  print 2
+   12:  print "\nT:round 1.7 up\nE:"
+   13:  print 2
+   14:  print "\nA:"
+   15:  print 2
+   16:  print "\nT:round 2.1 down\nE:"
+   17:  print 2
+   18:  print "\nA:"
+   19:  print 2
+   20:  print "\nT:round 2.5 up\nE:"
+   21:  print 3
+   22:  print "\nA:"
+   23:  print 3
+   24:  print "\nT:round -3.5 up\nE:"
+   25:  print -3
+   26:  print "\nA:"
+   27:  print -3
+   28:  print "\nT:frac 3.5\nE:"
+   29:  print 0.5
+   30:  print "\nA:"
+   31:  print 0.5
+   32:  print "\nT:frac -1.5\nE:"
+   33:  print -0.5
+   34:  print "\nA:"
+   35:  print -0.5
+   36:  print "\nT:sign 0\nE:"
+   37:  print 0
+   38:  print "\nA:"
+   39:  print 0
+   40:  print "\nT:sign 1e-7\nE:"
+   41:  print 0
+   42:  print "\nA:"
+   43:  print 0
+   44:  print "\nT:sign 1e-5\nE:"
+   45:  print 1
+   46:  print "\nA:"
+   47:  print 1
+   48:  print "\nT:sign -5\nE:"
+   49:  print -1
+   50:  print "\nA:"
+   51:  print -1
+   52:  print "\nT:signExact 0\nE:"
+   53:  print 0
+   54:  print "\nA:"
+   55:  print 0
+   56:  print "\nT:signExact 1e-7\nE:"
+   57:  print 1
+   58:  print "\nA:"
+   59:  print 1
+   60:  print "\nT:signExact -1e-7\nE:"
+   61:  print -1
+   62:  print "\nA:"
+   63:  print -1
+   64:  print "\nT:isZero 0\nE:"
+   65:  print true
+   66:  print "\nA:"
+   67:  print true
+   68:  print "\nT:isZero 1e-50\nE:"
+   69:  print false
+   70:  print "\nA:"
+   71:  print false
+   72:  print "\nT:isZero -1e-50\nE:"
+   73:  print false
+   74:  print "\nA:"
+   75:  print false
+   76:  print "\nT:isZero(-1e-50)\nE:"
+   77:  print false
+   78:  print "\nA:"
+   79:  print false
+   80:  print "\nT:printExact(null)\nE:null\nA:"
+   81:  print null
+   82:  print "\nT:printExact(0)\nE:0\nA:"
+   83:  print 0
+   84:  print "\nT:printExact(3.00000007)\nE:"
+   85:  print "3.000000070000000\nA:"
+   86:  print 3
+   87:  print ".0000"
+   88:  print 0
+   89:  print "00"
+   90:  print 700
+   91:  print "0000"
+   92:  print 0
+   93:  print "\nT:printExact(1.2345e-50)\nE:"
+   94:  print "1.2345000000000002E-50\nA:"
+   95:  print 1.2345000000000002
+   96:  print "E"
+   97:  print -50
+   98:  print "\nT:printExact(-1.2345e-50)\nE:"
+   99:  print "-1.2345000000000002E-50\nA:-"
+  100:  print 1.2345000000000002
+  101:  print "E"
+  102:  print -50
+  103:  print "\n"
+  104:  end

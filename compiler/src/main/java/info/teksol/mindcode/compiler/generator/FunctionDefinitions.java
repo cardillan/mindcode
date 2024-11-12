@@ -47,7 +47,9 @@ class FunctionDefinitions extends AbstractMessageEmitter {
                 return false;
             }
         }
-        return true;
+
+        // If one function is varagrs and the other is not, it is not a conflict
+        return f1.isVarArgs() == f2.isVarArgs();
     }
 
     private boolean conflicts(FunctionParameter p1, FunctionParameter p2) {
@@ -74,10 +76,16 @@ class FunctionDefinitions extends AbstractMessageEmitter {
     }
 
     public List<LogicFunction> getExactMatches(FunctionCall call) {
-        return functionMap.getOrDefault(call.getFunctionName(), List.of())
+        List<LogicFunction> list = functionMap.getOrDefault(call.getFunctionName(), List.of())
                 .stream()
                 .filter(f -> f.exactMatch(call))
                 .toList();
+
+        if (list.size() == 2 && list.get(0).isVarArgs() != list.get(1).isVarArgs()) {
+            return List.of(list.get(list.get(0).isVarArgs() ? 1 : 0));
+        } else {
+            return list;
+        }
     }
 
     /**

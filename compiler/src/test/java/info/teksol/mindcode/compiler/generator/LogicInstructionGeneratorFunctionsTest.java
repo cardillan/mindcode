@@ -1114,12 +1114,23 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     }
 
     @Test
-    void reportsVarargFunctionConflict() {
+    void reportsVarargFunctionsConflict() {
         assertGeneratesMessages(
                 ExpectedMessages.create()
-                        .add(2, 1, "Function 'foo(a, b, c, d...)' conflicts with function 'foo(a, b, c)'."),
+                        .add(2, 1, "Function 'foo(a, b, c, d...)' conflicts with function 'foo(a, b, c...)'."),
                 """
-                        inline void foo(a, b, c) print(a, b, c); end;
+                        inline void foo(a, b, c...) print(a, b); end;
+                        inline void foo(a, b, c, d...) print(a, b, c); end;
+                        """
+        );
+    }
+
+    @Test
+    void doesNotReportStandardVarargFunctionsConflict() {
+        assertGeneratesMessages(
+                ExpectedMessages.none(),
+                """
+                        inline void foo(a, b, c) print(a, b); end;
                         inline void foo(a, b, c, d...) print(a, b, c); end;
                         """
         );
@@ -1142,6 +1153,39 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         foo(out a, out b);
                         foo(a, b, out c);
                         """
+        );
+    }
+
+    @Test
+    void resolvesVarargFunctions() {
+        assertCompilesTo("""
+                        inline void foo(a) print("one"); end;
+                        inline void foo(a, b) print("two"); end;
+                        inline void foo(a...) print("vararg", length(a)); end;
+                        
+                        foo();
+                        foo(1);
+                        foo(1, 2);
+                        foo(1, 2, 3);
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("vararg")),
+                createInstruction(PRINT, "0"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, "__fn1_a", "1"),
+                createInstruction(PRINT, q("one")),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, "__fn2_a", "1"),
+                createInstruction(SET, "__fn2_b", "2"),
+                createInstruction(PRINT, q("two")),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(PRINT, q("vararg")),
+                createInstruction(PRINT, "3"),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(END)
         );
     }
 
