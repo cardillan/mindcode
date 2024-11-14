@@ -1,4 +1,4 @@
-Number of reported ambiguities: 29
+Number of reported ambiguities: 34
 Active optimizations:
     case-expression-optimization = experimental,
     case-switching = experimental,
@@ -21,16 +21,17 @@ Active optimizations:
     temp-variables-elimination = experimental,
     unreachable-code-elimination = experimental
 
-   150 instructions before optimizations.
+   169 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination.
-    26 instructions eliminated by Dead Code Elimination (5 iterations).
-     2 instructions eliminated by Jump Normalization (2 passes, 4 iterations).
-    13 instructions eliminated by Jump Optimization (4 iterations).
-    13 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
-    14 instructions eliminated by Data Flow Optimization (6 iterations).
+    26 instructions eliminated by Dead Code Elimination (4 iterations).
+     3 instructions eliminated by Jump Normalization (4 iterations).
+    15 instructions eliminated by Jump Optimization (4 iterations).
+    14 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+    19 instructions eliminated by Data Flow Optimization (6 iterations).
      6 instructions updated by JumpThreading.
-    15 instructions eliminated by Unreachable Code Elimination.
-    61 instructions after optimizations.
+     7 instructions eliminated by Unreachable Code Elimination.
+     6 instructions eliminated by Print Merging.
+    73 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
@@ -100,14 +101,27 @@ Final code before resolving virtual instructions:
    50:  print "\n"
         label __label33
    51:  ubind null
-   52:  jump __label36 notEqual @unit null
-   53:  jump __label33 always 0 0
-        label __label36
-   54:  sensor __tmp41 @unit @controlled
-   55:  jump __label40 equal __tmp41 0
-   56:  jump __label33 always 0 0
-        label __label40
-   57:  ucontrol flag null 0 0 0 0
-   58:  set __tmp37 @unit
-   59:  print __tmp37
-   60:  print "\n"
+   52:  jump __label33 equal @unit null
+   53:  sensor __tmp40 @unit @controlled
+   54:  jump __label33 notEqual __tmp40 0
+   55:  ucontrol flag null 0 0 0 0
+   56:  set __tmp37 @unit
+   57:  print __tmp37
+   58:  print "\n"
+        label __label42
+   59:  ubind null
+   60:  jump __label45 notEqual @unit null
+   61:  print "nullNo unit of type null found."
+   62:  printflush null
+   63:  jump __label42 always 0 0
+        label __label45
+   64:  sensor __tmp46 @unit @controlled
+   65:  jump __label47 equal __tmp46 0
+   66:  print "nullLooking for a free null..."
+   67:  printflush null
+   68:  jump __label42 always 0 0
+        label __label47
+   69:  ucontrol flag null 0 0 0 0
+   70:  set __tmp43 @unit
+   71:  print __tmp43
+   72:  print "\n"

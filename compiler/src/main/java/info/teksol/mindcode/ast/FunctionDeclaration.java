@@ -15,6 +15,7 @@ public class FunctionDeclaration extends BaseAstNode {
     private final boolean noinline;
     private final boolean procedure;
     private final String name;
+    private final int callSize;
 
     private final List<FunctionParameter> params;
     private final AstNode body;
@@ -32,10 +33,43 @@ public class FunctionDeclaration extends BaseAstNode {
         this.name = Objects.requireNonNull(name);
         this.params = Objects.requireNonNull(params);
         this.body = Objects.requireNonNull(body);
+        this.callSize = computeCallSize();
     }
 
     public String getCodeDoc() {
         return codeDoc;
+    }
+
+    private int computeCallSize() {
+        // Call size: setting up return address, jump to function, jump back from function
+        // Note: the function return value is set by the function and not generated at the call site,
+        //       therefore it is not counted.
+        int count = 3;
+        for (FunctionParameter param : params) {
+            // One instruction per input parameter (setting up the value)
+            // One instruction per output parameter (retrieving the output value)
+            // in out parameter generates two instructions!
+            count += (param.isInput() ? 1 : 0) + (param.isOutput() ? 1 : 0);
+        }
+        return count;
+    }
+
+    /**
+     * Returns the size of a non-recursive function call to this function. The size corresponds both to the
+     * number of instructions generated and the number of steps executed per call. It is assumed that all output
+     * parameters produced by the function are read - if they aren't, the corresponding instruction might not
+     * be generated.
+     * <p>
+     * A return (jump back to the call site) instruction is included in the count. This additional instruction
+     * is always generated, but might not be executed, fo example when returning from the middle of the function.
+     * <p>
+     * The returned value makes no sense for vararg functions, as vararg functions must always be compiled inline.
+     * For inlined functions, the returned value would be valid if the function wasn't inlined.
+     *
+     * @return the number of instructions needed for a non-recursive call to this function
+     */
+    public int getCallSize() {
+        return callSize;
     }
 
     public boolean isInline() {

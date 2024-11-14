@@ -21,58 +21,19 @@ Active optimizations:
     temp-variables-elimination = basic,
     unreachable-code-elimination = basic
 
-   425 instructions before optimizations.
-     6 instructions eliminated by Temp Variables Elimination.
+   396 instructions before optimizations.
+    16 instructions eliminated by Temp Variables Elimination.
     22 instructions eliminated by Dead Code Elimination (3 iterations).
      3 instructions eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Jump Optimization (4 iterations).
      7 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-   160 instructions eliminated by Data Flow Optimization (8 passes, 27 iterations).
-    14 instructions eliminated by Function Inlining (10 iterations).
-    21 function calls inlined by Function Inlining.
+   143 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     8 instructions added by Function Inlining (4 iterations).
+     4 function calls inlined by Function Inlining.
      7 instructions eliminated by Unreachable Code Elimination.
    109 instructions eliminated by Print Merging.
     92 instructions after optimizations.
-
-Pass 1: speed optimization selection (cost limit 699):
-    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
-    Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8
-  * Function Inlining: inline function frac                      cost     0, benefit        7.0, efficiency   Infinity (-9 instructions)
-    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
-    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
-    Function Inlining: inline function isZero                    cost     1, benefit       10.5, efficiency       10.5
-    Function Inlining: inline function nullToZero                cost     0, benefit        7.0, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 708):
-    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
-    Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8
-    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
-    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
-    Function Inlining: inline function isZero                    cost     1, benefit       10.5, efficiency       10.5
-  * Function Inlining: inline function nullToZero                cost     0, benefit        7.0, efficiency   Infinity (-8 instructions)
-
-Pass 1: speed optimization selection (cost limit 716):
-    Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0
-    Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8
-    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
-    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
-  * Function Inlining: inline function isZero                    cost     1, benefit       10.5, efficiency       10.5 (-13 instructions)
-
-Pass 1: speed optimization selection (cost limit 729):
-  * Function Inlining: inline function distance                  cost     1, benefit       10.0, efficiency       10.0 (-17 instructions)
-    Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8
-    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
-    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
-
-Pass 1: speed optimization selection (cost limit 746):
-  * Function Inlining: inline function round                     cost     3, benefit       17.5, efficiency        5.8 (-19 instructions)
-    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
-    Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5
-
-Pass 1: speed optimization selection (cost limit 765):
-    Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
-  * Function Inlining: inline function signExact                 cost     3, benefit       10.5, efficiency        3.5 (-14 instructions)
 
 Pass 1: speed optimization selection (cost limit 779):
   * Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0 (-3 instructions)
@@ -159,15 +120,15 @@ Final code before resolving virtual instructions:
    77:  print false
    78:  print "\nA:"
    79:  print false
-   80:  op add __fn7__result null 0
+   80:  op add __fn39__result null 0
    81:  print "\nT:nullToZero(null)\nE:"
    82:  print 0
    83:  print "\nA:"
-   84:  print __fn7__result
-   85:  op add __fn7__result 1 0
+   84:  print __fn39__result
+   85:  op add __fn41__result 1 0
    86:  print "\nT:nullToZero(1)\nE:"
    87:  print 1
    88:  print "\nA:"
-   89:  print __fn7__result
+   89:  print __fn41__result
    90:  print "\n"
    91:  end

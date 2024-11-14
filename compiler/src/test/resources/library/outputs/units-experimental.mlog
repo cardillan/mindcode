@@ -50,12 +50,24 @@ set __tmp12 __fn1__best_unit
 print __tmp12
 print "\n"
 ubind null
-jump 54 notEqual @unit null
-jump 51 always 0 0
-sensor __tmp41 @unit @controlled
-jump 57 equal __tmp41 0
-jump 51 always 0 0
+jump 51 equal @unit null
+sensor __tmp40 @unit @controlled
+jump 51 notEqual __tmp40 0
 ucontrol flag null 0 0 0 0
 set __tmp37 @unit
 print __tmp37
+print "\n"
+ubind null
+jump 64 notEqual @unit null
+print "nullNo unit of type null found."
+printflush null
+jump 59 always 0 0
+sensor __tmp46 @unit @controlled
+jump 69 equal __tmp46 0
+print "nullLooking for a free null..."
+printflush null
+jump 59 always 0 0
+ucontrol flag null 0 0 0 0
+set __tmp43 @unit
+print __tmp43
 print "\n"

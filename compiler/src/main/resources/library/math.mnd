@@ -7,17 +7,17 @@
  * Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).
  * Uses the `len` instruction for efficient hypotenuse calculation.
  */
-def distance(_x1, _y1, _x2, _y2)
+inline def distance(_x1, _y1, _x2, _y2)
     len(_x2 - _x1, _y2 - _y1);
 end;
 
 /** Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`. */
-def round(_x)
+inline def round(_x)
     floor(_x + 0.5);
 end;
 
 /** Returns the fractional part of the number. `frac(1.5)` gives `0.5`. */
-def frac(_x)
+inline def frac(_x)
     _x % 1;
 end;
 
@@ -31,18 +31,18 @@ def sign(_x)
 end;
 
 /** Returns the sign of the number. The return value is `0` when the value of `x` is exactly zero. */
-def signExact(_x)
+inline def signExact(_x)
     // Use branchless sign computation
     (_x > 0) - (_x < 0);
 end;
 
 /** Returns `true` when `x` is precisely zero. */
-def isZero(_x)
+inline def isZero(_x)
     abs(_x) <= 0;
 end;
 
 /** Returns `true` when the absolute value of x is less than `precision`. */
-def isZero(_x, _precision)
+inline def isZero(_x, _precision)
     abs(_x) < _precision;
 end;
 
@@ -54,7 +54,7 @@ end;
  * > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows
  * > to compare values using different precision.
  */
-def isEqual(_a, _b, _precision)
+inline def isEqual(_a, _b, _precision)
     abs(_a - _b) < _precision;
 end;
 
@@ -62,7 +62,7 @@ end;
  * Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
  * and makes sure it won't be removed by the optimizer.
  */
-def nullToZero(_x)
+inline def nullToZero(_x)
     mlog("op", "add", out _result, in _x, 0);
     _result;
 end;
@@ -92,17 +92,17 @@ inline def avg(_x1, _x2, _x...)
 end;
 
 /** Returns `x`. The function is a fallback case for the generic `median` function taking a variable number of arguments. */
-def median(_x)
+inline def median(_x)
     _x;
 end;
 
 /** Returns the median of two values. */
-def median(_x1, _x2)
+inline def median(_x1, _x2)
     (_x1 + _x2) / 2;
 end;
 
 /** Returns the median of three values, using an optimized algorithm . */
-def median(_x1, _x2, _x3)
+inline def median(_x1, _x2, _x3)
     min(max(_x1, _x2), max(_x1, _x3), max(_x2, _x3));
 end;
 
@@ -147,10 +147,15 @@ end;
 /**
  * Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
  * and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
+ *
+ * @footprint Ten arguments in total:        *10
+ * @footprint Fifteen arguments in total:    *15
+ * @footprint Twenty arguments in total:     *20
  */
 inline def median(_x...)
     _bestDif = 1e10;
     _best = null;
+    _count = 1;
     for _i in _x do
         if _isMedian(out _dif, _i, _x) then
             return _i;

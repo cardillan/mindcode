@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class MindcodeCompiler implements Compiler<String> {
     // Global cache
     private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
-    private static final Map<String, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
+    private static final Map<String, ParsedLibrary> LIBRARY_PARSES = new ConcurrentHashMap<>();
 
     private final CompilerProfile profile;
     private InstructionProcessor instructionProcessor;
@@ -182,7 +182,9 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private Seq parseLibrary(String filename, List<Requirement> requirements) {
         if (LIBRARY_PARSES.containsKey(filename)) {
-            return LIBRARY_PARSES.get(filename);
+            ParsedLibrary parsedLibrary = LIBRARY_PARSES.get(filename);
+            requirements.addAll(parsedLibrary.requirements);
+            return parsedLibrary.program;
         }
 
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
@@ -190,7 +192,7 @@ public class MindcodeCompiler implements Compiler<String> {
         long after = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
 
         if (before == after) {
-            LIBRARY_PARSES.put(filename, parsed);
+            LIBRARY_PARSES.put(filename, new ParsedLibrary(parsed, List.copyOf(requirements)));
         }
 
         return parsed;
@@ -280,4 +282,6 @@ public class MindcodeCompiler implements Compiler<String> {
         messageConsumer.accept(ToolMessage.debug(message));
     }
 
+    private record ParsedLibrary(Seq program, List<Requirement> requirements) {
+    }
 }

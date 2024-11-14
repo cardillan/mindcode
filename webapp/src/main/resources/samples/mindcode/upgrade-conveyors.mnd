@@ -34,7 +34,7 @@ param RADIUS = 10;
 // It is used by the units system library to output messages as well
 findLinkedBlocks(
     "Automatic conveyor upgrading\nTrying to locate message block", message1,
-    @message, "Message", out SYS_MESSAGE, false);
+    @message, "Message", out MESSAGES, false);
 
 // Count the total number of upgraded blocks
 TOTAL = 0;
@@ -68,7 +68,7 @@ while !switch1.@enabled do
 
     // If we don't have an active unit, summon a new one
     if @unit.@dead != 0 or @unit.@controller != @this then
-        waitForFreeUnit(UNIT, rand(1000));
+        waitForFreeUnit(MESSAGES, UNIT, rand(1000));
     end;
 
     // Position the unit to the middle of the band inside the building area
@@ -85,7 +85,7 @@ while !switch1.@enabled do
 
     println($"Position: $x, $ypos");
     println($"Upgrades: $TOTAL");
-    printflush(SYS_MESSAGE);
+    printflush(MESSAGES);
 
     // Move to next position
     x += dx;

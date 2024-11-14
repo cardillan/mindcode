@@ -10,13 +10,24 @@ assertWillPrint("1,234,567",                    "printNumber(1234567)");    prin
 assertWillPrint("-1,234,567",                   "printNumber(-1234567)");   printNumber(-1234567);      println();
 assertWillPrint("9,009,099",                    "printNumber(9009099)");    printNumber(9009099);       println();
 
-assertWillPrint("null",                         "printExact(null)");         printExact(null);           println();
-assertWillPrint("0",                            "printExact(0)");            printExact(0);              println();
-assertWillPrint("1",                            "printExact(1)");            printExact(1);              println();
-assertWillPrint("1.000000100000000",            "printExact(1.0000001)");    printExact(1.0000001);      println();
-assertWillPrint("3.000000070000000",            "printExact(3.00000007)");   printExact(3.00000007);     println();
-assertWillPrint("3E50",                         "printExact(3e50)");         printExact(3e50);           println();
-assertWillPrint("1.0123456789",                 "printExact(1.0123456789)"); printExact(1.0123456789);   println();
-assertWillPrint("1.000000099999999E20",         "printExact(1.0000001e20)"); printExact(1.0000001e20);   println();
-assertWillPrint("1.2345000000000002E-50",       "printExact(1.2345e-50)");   printExact(1.2345e-50);     println();
-assertWillPrint("-1.2345000000000002E-50",      "printExact(-1.2345e-50)");  printExact(-1.2345e-50);    println();
+assertWillPrint("null",                         "printExactFast(null)");         printExactFast(null);           println();
+assertWillPrint("0",                            "printExactFast(0)");            printExactFast(0);              println();
+assertWillPrint("1",                            "printExactFast(1)");            printExactFast(1);              println();
+assertWillPrint("1.000000100000000",            "printExactFast(1.0000001)");    printExactFast(1.0000001);      println();
+assertWillPrint("3.000000070000000",            "printExactFast(3.00000007)");   printExactFast(3.00000007);     println();
+assertWillPrint("3E50",                         "printExactFast(3e50)");         printExactFast(3e50);           println();
+assertWillPrint("1.0123456789",                 "printExactFast(1.0123456789)"); printExactFast(1.0123456789);   println();
+assertWillPrint("1.000000099999999E20",         "printExactFast(1.0000001e20)"); printExactFast(1.0000001e20);   println();
+assertWillPrint("1.2345000000000002E-50",       "printExactFast(1.2345e-50)");   printExactFast(1.2345e-50);     println();
+assertWillPrint("-1.2345000000000002E-50",      "printExactFast(-1.2345e-50)");  printExactFast(-1.2345e-50);    println();
+
+assertWillPrint("null",                         "printExactSlow(null)");         printExactSlow(null);           println();
+assertWillPrint("0",                            "printExactSlow(0)");            printExactSlow(0);              println();
+assertWillPrint("1.000000000000000",            "printExactSlow(1)");            printExactSlow(1);              println();
+assertWillPrint("1.000000100000000",            "printExactSlow(1.0000001)");    printExactSlow(1.0000001);      println();
+assertWillPrint("3.000000070000000",            "printExactSlow(3.00000007)");   printExactSlow(3.00000007);     println();
+assertWillPrint("3.000000000000000E50",         "printExactSlow(3e50)");         printExactSlow(3e50);           println();
+assertWillPrint("1.012345678900000",            "printExactSlow(1.0123456789)"); printExactSlow(1.0123456789);   println();
+assertWillPrint("1.000000099999999E20",         "printExactSlow(1.0000001e20)"); printExactSlow(1.0000001e20);   println();
+assertWillPrint("1.234500000000000E-50",        "printExactSlow(1.2345e-50)");   printExactSlow(1.2345e-50);     println();
+assertWillPrint("-1.234500000000000E-50",       "printExactSlow(-1.2345e-50)");  printExactSlow(-1.2345e-50);    println();

@@ -16,7 +16,7 @@
  * Function outputs status information while it is running to the block passed in the `message` parameter.
  * When a `@message` block is among the required types and is found, it is used instead of the `message` parameter.
  *
- * Inputs and outputs:
+ * **Inputs and outputs:**
  *
  * - `title`: title to be used as part of the status information.
  * - `message`: initial block to use to output status information. Typically `message1`.
@@ -43,6 +43,10 @@
  * When the function call ends, the `display` and `memory` variables are set to a large display or memory cell/memory
  * bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor,
  * otherwise they're `null`.
+ *
+ * @footprint  Linking two blocks: @message, "M", out m, true, @switch, "S", out s, false
+ * @footprint  Linking four blocks: @message, "M", out m, true, @switch, "S", out s, false, @sorter, "S", out t, true, @conveyor, "C", out c, false
+ * @footprint  Linking six blocks: @message, "M", out m, true, @switch, "S", out s, false, @sorter, "S", out t, true, @conveyor, "C", out c, false, @diode, "D", out d, true, @battery, "B", out b, false
  */
 inline void findLinkedBlocks(_title, _message, _linkMap...)
     do

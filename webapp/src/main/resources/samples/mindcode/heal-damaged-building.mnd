@@ -14,13 +14,13 @@ param UNIT = @poly;
 
 // We'll write messages onto this block
 // It is used by the units system library to output messages as well
-param SYS_MESSAGE = message1;
+param MESSAGES = message1;
 
 /// Don't modify anything below this line.
 
 // Find a unit if we don't have one
 if @unit.@dead != 0  or @unit.@controller != @this then
-    waitForFreeUnit(UNIT, 1);
+    waitForFreeUnit(MESSAGES, UNIT, 1);
 end;
 
 if ulocate(damaged, out dmgx, out dmgy) then
@@ -32,4 +32,4 @@ else
     approach(CENTER.@x + 10 * sin(@tick), CENTER.@y + 10 * cos(@tick), 2);
 end;
 
-printflush(SYS_MESSAGE);
+printflush(MESSAGES);

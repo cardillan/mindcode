@@ -78,16 +78,16 @@ print "\nT:isZero(0.01,0.01)\nE:"
 print false
 print "\nA:"
 print false
-op add __fn7__result null 0
+op add __fn39__result null 0
 print "\nT:nullToZero(null)\nE:"
 print 0
 print "\nA:"
-print __fn7__result
-op add __fn7__result 1 0
+print __fn39__result
+op add __fn41__result 1 0
 print "\nT:nullToZero(1)\nE:"
 print 1
 print "\nA:"
-print __fn7__result
+print __fn41__result
 print "\n"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

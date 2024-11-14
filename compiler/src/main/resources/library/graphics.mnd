@@ -27,31 +27,31 @@ end;
 // Small display transformations
 
 /** Rotates the output to the left (counterclockwise) by 90 degrees for a small display. */
-void rotateLeftSmall()
+inline void rotateLeftSmall()
     rotate(90);
     translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
 /** Rotates the output to the right (clockwise) by 90 degrees for a small display. */
-void rotateRightSmall()
+inline void rotateRightSmall()
     rotate(270);
     translate(- DISPLAY_SIZE_SMALL, 0);
 end;
 
 /** Rotates the output by 180 degrees (upside down) by 90 degrees for a small display. */
-void upsideDownSmall()
+inline void upsideDownSmall()
     rotate(180);
     translate(- DISPLAY_SIZE_SMALL, - DISPLAY_SIZE_SMALL);
 end;
 
 /** Flips the output vertically (along the Y axis) for a small display. */
-void flipVerticalSmall()
+inline void flipVerticalSmall()
     scale(1, -1);
     translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
 /** Flips the output horizontally (along the X axis) for a small display. */
-void flipHorizontalSmall()
+inline void flipHorizontalSmall()
     scale(-1, 1);
     translate(- DISPLAY_SIZE_SMALL, 0);
 end;
@@ -59,31 +59,31 @@ end;
 // Large display transformations
 
 /** Rotates the output to the left (counterclockwise) by 90 degrees for a large display. */
-void rotateLeftLarge()
+inline void rotateLeftLarge()
     rotate(90);
     translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
 /** Rotates the output to the right (clockwise) by 90 degrees for a large display. */
-void rotateRightLarge()
+inline void rotateRightLarge()
     rotate(270);
     translate(- DISPLAY_SIZE_LARGE, 0);
 end;
 
 /** Rotates the output by 180 degrees (upside down) by 90 degrees for a large display. */
-void upsideDownLarge()
+inline void upsideDownLarge()
     rotate(180);
     translate(- DISPLAY_SIZE_LARGE, - DISPLAY_SIZE_LARGE);
 end;
 
 /** Flips the output vertically (along the Y axis) for a large display. */
-void flipVerticalLarge()
+inline void flipVerticalLarge()
     scale(1, -1);
     translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
 /** Flips the output horizontally (along the X axis) for a large display. */
-void flipHorizontalLarge()
+inline void flipHorizontalLarge()
     scale(-1, 1);
     translate(- DISPLAY_SIZE_LARGE, 0);
 end;
@@ -141,7 +141,7 @@ end;
   * Scales the graphics output so that an output that targets a small display gets displayed
   * over the entire area of a large display.
   */
-void scaleSmallToLarge()
+inline void scaleSmallToLarge()
     scale(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
 end;
 
@@ -149,6 +149,6 @@ end;
   * Scales the graphics output so that an output that targets a large display gets displayed
   * over the entire area of a small display.
   */
-void scaleLargeToSmall()
+inline void scaleLargeToSmall()
     scale(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
 end;

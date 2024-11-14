@@ -1,167 +1,104 @@
-set SYS_MESSAGE null
 set _display null
-set __fn10__display _display
-sensor __tmp1 __fn10__display @type
-set __fn10_type __tmp1
-op equal __tmp2 __fn10_type @logic-display
-jump 9 equal __tmp2 false
+set __fn0__display _display
+sensor __tmp1 __fn0__display @type
+set __fn0_type __tmp1
+op equal __tmp2 __fn0_type @logic-display
+jump 8 equal __tmp2 false
 set __tmp3 80
-jump 15 always 0 0
-op equal __tmp4 __fn10_type @large-logic-display
-jump 13 equal __tmp4 false
-set __tmp5 176
 jump 14 always 0 0
+op equal __tmp4 __fn0_type @large-logic-display
+jump 12 equal __tmp4 false
+set __tmp5 176
+jump 13 always 0 0
 set __tmp5 null
 set __tmp3 __tmp5
 set __tmp0 __tmp3
 print __tmp0
 print "\n"
-set __fn0retaddr 20
-jump 126 always 0 0
-set __fn1retaddr 22
-jump 130 always 0 0
-set __fn2retaddr 24
-jump 134 always 0 0
-set __fn3retaddr 26
-jump 138 always 0 0
-set __fn4retaddr 28
-jump 142 always 0 0
-set __fn5retaddr 30
-jump 146 always 0 0
-set __fn6retaddr 32
-jump 150 always 0 0
-set __fn7retaddr 34
-jump 154 always 0 0
-set __fn8retaddr 36
-jump 158 always 0 0
-set __fn9retaddr 38
-jump 162 always 0 0
-set __fn11__display _display
-sensor __tmp6 __fn11__display @type
+set __fn1__display _display
+sensor __tmp6 __fn1__display @type
 set __ast0 __tmp6
-jump 43 equal __ast0 @logic-display
-jump 47 always 0 0
-set __fn0retaddr 45
-jump 126 always 0 0
-set __tmp7 null
-jump 55 always 0 0
-jump 49 equal __ast0 @large-logic-display
-jump 53 always 0 0
-set __fn5retaddr 51
-jump 146 always 0 0
-set __tmp7 null
-jump 55 always 0 0
-stop
-set __tmp7 null
-set __fn12__display _display
-sensor __tmp8 __fn12__display @type
-set __ast1 __tmp8
-jump 60 equal __ast1 @logic-display
-jump 64 always 0 0
-set __fn1retaddr 62
-jump 130 always 0 0
-set __tmp9 null
-jump 72 always 0 0
-jump 66 equal __ast1 @large-logic-display
-jump 70 always 0 0
-set __fn6retaddr 68
-jump 150 always 0 0
-set __tmp9 null
-jump 72 always 0 0
-stop
-set __tmp9 null
-set __fn13__display _display
-sensor __tmp10 __fn13__display @type
-set __ast2 __tmp10
-jump 77 equal __ast2 @logic-display
-jump 81 always 0 0
-set __fn2retaddr 79
-jump 134 always 0 0
-set __tmp11 null
-jump 89 always 0 0
-jump 83 equal __ast2 @large-logic-display
-jump 87 always 0 0
-set __fn7retaddr 85
-jump 154 always 0 0
-set __tmp11 null
-jump 89 always 0 0
-stop
-set __tmp11 null
-set __fn14__display _display
-sensor __tmp12 __fn14__display @type
-set __ast3 __tmp12
-jump 94 equal __ast3 @logic-display
-jump 98 always 0 0
-set __fn3retaddr 96
-jump 138 always 0 0
-set __tmp13 null
-jump 106 always 0 0
-jump 100 equal __ast3 @large-logic-display
-jump 104 always 0 0
-set __fn8retaddr 102
-jump 158 always 0 0
-set __tmp13 null
-jump 106 always 0 0
-stop
-set __tmp13 null
-set __fn15__display _display
-sensor __tmp14 __fn15__display @type
-set __ast4 __tmp14
-jump 111 equal __ast4 @logic-display
-jump 115 always 0 0
-set __fn4retaddr 113
-jump 142 always 0 0
-set __tmp15 null
-jump 123 always 0 0
-jump 117 equal __ast4 @large-logic-display
-jump 121 always 0 0
-set __fn9retaddr 119
-jump 162 always 0 0
-set __tmp15 null
-jump 123 always 0 0
-stop
-set __tmp15 null
-draw scale 2.2 2.2 0 0 0 0
-draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
-end
+jump 22 equal __ast0 @logic-display
+jump 26 always 0 0
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
-set @counter __fn0retaddr
-end
+set __tmp7 null
+jump 34 always 0 0
+jump 28 equal __ast0 @large-logic-display
+jump 32 always 0 0
+draw rotate 0 0 90 0 0 0
+draw translate 0 -176 0 0 0 0
+set __tmp7 null
+jump 34 always 0 0
+stop
+set __tmp7 null
+set __fn4__display _display
+sensor __tmp8 __fn4__display @type
+set __ast1 __tmp8
+jump 39 equal __ast1 @logic-display
+jump 43 always 0 0
 draw rotate 0 0 270 0 0 0
 draw translate -80 0 0 0 0 0
-set @counter __fn1retaddr
-end
+set __tmp9 null
+jump 51 always 0 0
+jump 45 equal __ast1 @large-logic-display
+jump 49 always 0 0
+draw rotate 0 0 270 0 0 0
+draw translate -176 0 0 0 0 0
+set __tmp9 null
+jump 51 always 0 0
+stop
+set __tmp9 null
+set __fn7__display _display
+sensor __tmp10 __fn7__display @type
+set __ast2 __tmp10
+jump 56 equal __ast2 @logic-display
+jump 60 always 0 0
 draw rotate 0 0 180 0 0 0
 draw translate -80 -80 0 0 0 0
-set @counter __fn2retaddr
-end
-draw scale 1 -1 0 0 0 0
-draw translate 0 -80 0 0 0 0
-set @counter __fn3retaddr
-end
-draw scale -1 1 0 0 0 0
-draw translate -80 0 0 0 0 0
-set @counter __fn4retaddr
-end
-draw rotate 0 0 90 0 0 0
-draw translate 0 -176 0 0 0 0
-set @counter __fn5retaddr
-end
-draw rotate 0 0 270 0 0 0
-draw translate -176 0 0 0 0 0
-set @counter __fn6retaddr
-end
+set __tmp11 null
+jump 68 always 0 0
+jump 62 equal __ast2 @large-logic-display
+jump 66 always 0 0
 draw rotate 0 0 180 0 0 0
 draw translate -176 -176 0 0 0 0
-set @counter __fn7retaddr
-end
+set __tmp11 null
+jump 68 always 0 0
+stop
+set __tmp11 null
+set __fn10__display _display
+sensor __tmp12 __fn10__display @type
+set __ast3 __tmp12
+jump 73 equal __ast3 @logic-display
+jump 77 always 0 0
+draw scale 1 -1 0 0 0 0
+draw translate 0 -80 0 0 0 0
+set __tmp13 null
+jump 85 always 0 0
+jump 79 equal __ast3 @large-logic-display
+jump 83 always 0 0
 draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
-set @counter __fn8retaddr
-end
+set __tmp13 null
+jump 85 always 0 0
+stop
+set __tmp13 null
+set __fn13__display _display
+sensor __tmp14 __fn13__display @type
+set __ast4 __tmp14
+jump 90 equal __ast4 @logic-display
+jump 94 always 0 0
+draw scale -1 1 0 0 0 0
+draw translate -80 0 0 0 0 0
+set __tmp15 null
+jump 102 always 0 0
+jump 96 equal __ast4 @large-logic-display
+jump 100 always 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-set @counter __fn9retaddr
+set __tmp15 null
+jump 102 always 0 0
+stop
+set __tmp15 null
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

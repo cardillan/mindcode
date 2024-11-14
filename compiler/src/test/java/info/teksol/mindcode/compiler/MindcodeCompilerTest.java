@@ -143,7 +143,6 @@ class MindcodeCompilerTest {
             String initializations = """
                     #set target = ML8A;
                     require %s;
-                    SYS_MESSAGE = null;
                     """.formatted(filename);
 
             String variables = source.code().lines()
@@ -181,7 +180,6 @@ class MindcodeCompilerTest {
         String errorsAndWarnings = result.messages().stream()
                 .filter(MindcodeMessage::isErrorOrWarning)
                 .map(MindcodeMessage::message)
-                .filter(message -> !"List of unused variables: SYS_MESSAGE.".equals(message.trim()))
                 .collect(Collectors.joining("\n"));
 
         String messages = result.messages().stream()

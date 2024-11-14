@@ -64,8 +64,9 @@ end;
 /**
  * Prints the value into the text buffer without rounding to the nearest integer value.
  * The function is primarily useful for debugging purposes to determine the actual value of variables.
+ * This variant of the function is optimized to produce faster, larger code.
  *
- * **Note:** when printing the exact representation of numbers that are close to integer value, the Mindustry Logic
+ * **Note:** When printing the exact representation of numbers that are close to integer value, the Mindustry Logic
  * `print` instruction cannot be used, as it would print the rounded value. In such case a custom printing routine
  * is used, which can take around 50 steps to output the entire number.
  *
@@ -80,7 +81,7 @@ end;
  * > The mathematical operations used by `printExact` to output the value may introduce small additional numerical
  * > errors to the output value; for example `printExact(3.00000003)` outputs `3.000000029999999`.
  */
-void printExact(_n)
+void printExactFast(_n)
     if isZero(_n) then
         // Will print either 0, or null, depending on the value
         print(_n);
@@ -119,6 +120,39 @@ void printExact(_n)
 
                 print(_t);
             end;
+        end;
+
+        if _exp != 0 then
+            print("E", _exp);
+        end;
+    end;
+end;
+
+/**
+ * Prints the value into the text buffer without rounding to the nearest integer value.
+ * The function is primarily useful for debugging purposes to determine the actual value of variables.
+ * This variant of the function is optimized to produce slower, smaller code.
+ *
+ * **Note:** This function uses exact (slow) printing for all values except zero.
+ *
+ * See also [`printExactFast`](#printexactfast)
+ */
+void printExactSlow(_n)
+    if isZero(_n) then
+        // Will print either 0, or null, depending on the value
+        print(_n);
+    else
+        if _n < 0 then
+            print("-");
+            _n = abs(_n);
+         end;
+        _exp = floor(log10(_n));
+        _base = _n * 10 ** -_exp;
+        print(floor(_base), ".");
+
+        for _digit in 1 .. 15 do
+            _base = frac(_base) * 10;
+            print(floor(_base));
         end;
 
         if _exp != 0 then

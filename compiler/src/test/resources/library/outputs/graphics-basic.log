@@ -1,4 +1,4 @@
-Number of reported ambiguities: 64
+Number of reported ambiguities: 52
 Active optimizations:
     case-expression-optimization = basic,
     case-switching = basic,
@@ -21,203 +21,101 @@ Active optimizations:
     temp-variables-elimination = basic,
     unreachable-code-elimination = basic
 
-   166 instructions before optimizations.
+   103 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
      5 instructions eliminated by Case Expression Optimization.
     15 instructions eliminated by Dead Code Elimination (3 iterations).
-       List of unused variables: SYS_MESSAGE.
      2 instructions eliminated by Jump Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
      2 instructions eliminated by If Expression Optimization (3 iterations).
-     7 instructions eliminated by Data Flow Optimization (15 iterations).
-    40 instructions eliminated by Function Inlining (13 iterations).
-    20 function calls inlined by Function Inlining.
+     7 instructions eliminated by Data Flow Optimization (5 iterations).
     10 instructions eliminated by Jump Straightening (4 iterations).
-    83 instructions after optimizations.
-
-Pass 1: speed optimization selection (cost limit 876):
-  * Function Inlining: inline function rotateLeftSmall           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function rotateRightSmall          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 880):
-  * Function Inlining: inline function rotateRightSmall          cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 884):
-  * Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 888):
-  * Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 892):
-  * Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 896):
-  * Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 900):
-  * Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 904):
-  * Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 908):
-  * Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
-    Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 912):
-  * Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
+    60 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
-    0:  set SYS_MESSAGE null
-    1:  set _display null
-    2:  sensor __fn10_type null @type
-    3:  set __tmp3 80
-    4:  jump __label13 equal __fn10_type @logic-display
-    5:  set __tmp3 null
-    6:  jump __label15 notEqual __fn10_type @large-logic-display
-    7:  set __tmp3 176
-        label __label15
+    0:  set _display null
+    1:  sensor __fn0_type null @type
+    2:  set __tmp3 80
+    3:  jump __label3 equal __fn0_type @logic-display
+    4:  set __tmp3 null
+    5:  jump __label5 notEqual __fn0_type @large-logic-display
+    6:  set __tmp3 176
+        label __label5
+        label __label3
+    7:  print __tmp3
+    8:  print "\n"
+    9:  sensor __tmp6 null @type
+   10:  jump __label9 notEqual __tmp6 @logic-display
+   11:  draw rotate 0 0 90 0 0 0
+   12:  draw translate 0 -80 0 0 0 0
+   13:  jump __label8 always 0 0
+        label __label9
+   14:  jump __label13 notEqual __tmp6 @large-logic-display
+   15:  draw rotate 0 0 90 0 0 0
+   16:  draw translate 0 -176 0 0 0 0
+   17:  jump __label8 always 0 0
         label __label13
-    8:  print __tmp3
-    9:  print "\n"
-   10:  draw rotate 0 0 90 0 0 0
-   11:  draw translate 0 -80 0 0 0 0
-   12:  draw rotate 0 0 270 0 0 0
-   13:  draw translate -80 0 0 0 0 0
-   14:  draw rotate 0 0 180 0 0 0
-   15:  draw translate -80 -80 0 0 0 0
-   16:  draw scale 1 -1 0 0 0 0
-   17:  draw translate 0 -80 0 0 0 0
-   18:  draw scale -1 1 0 0 0 0
-   19:  draw translate -80 0 0 0 0 0
-   20:  draw rotate 0 0 90 0 0 0
-   21:  draw translate 0 -176 0 0 0 0
-   22:  draw rotate 0 0 270 0 0 0
-   23:  draw translate -176 0 0 0 0 0
-   24:  draw rotate 0 0 180 0 0 0
-   25:  draw translate -176 -176 0 0 0 0
-   26:  draw scale 1 -1 0 0 0 0
-   27:  draw translate 0 -176 0 0 0 0
-   28:  draw scale -1 1 0 0 0 0
-   29:  draw translate -176 0 0 0 0 0
-   30:  sensor __tmp6 null @type
-   31:  jump __label29 notEqual __tmp6 @logic-display
-   32:  draw rotate 0 0 90 0 0 0
-   33:  draw translate 0 -80 0 0 0 0
-   34:  jump __label28 always 0 0
-        label __label29
-   35:  jump __label32 notEqual __tmp6 @large-logic-display
-   36:  draw rotate 0 0 90 0 0 0
-   37:  draw translate 0 -176 0 0 0 0
-   38:  jump __label28 always 0 0
-        label __label32
-   39:  stop
-        label __label28
-   40:  sensor __tmp8 null @type
-   41:  jump __label38 notEqual __tmp8 @logic-display
-   42:  draw rotate 0 0 270 0 0 0
-   43:  draw translate -80 0 0 0 0 0
-   44:  jump __label37 always 0 0
-        label __label38
-   45:  jump __label41 notEqual __tmp8 @large-logic-display
-   46:  draw rotate 0 0 270 0 0 0
-   47:  draw translate -176 0 0 0 0 0
-   48:  jump __label37 always 0 0
-        label __label41
-   49:  stop
-        label __label37
-   50:  sensor __tmp10 null @type
-   51:  jump __label47 notEqual __tmp10 @logic-display
-   52:  draw rotate 0 0 180 0 0 0
-   53:  draw translate -80 -80 0 0 0 0
-   54:  jump __label46 always 0 0
-        label __label47
-   55:  jump __label50 notEqual __tmp10 @large-logic-display
-   56:  draw rotate 0 0 180 0 0 0
-   57:  draw translate -176 -176 0 0 0 0
-   58:  jump __label46 always 0 0
-        label __label50
-   59:  stop
+   18:  stop
+        label __label8
+   19:  sensor __tmp8 null @type
+   20:  jump __label20 notEqual __tmp8 @logic-display
+   21:  draw rotate 0 0 270 0 0 0
+   22:  draw translate -80 0 0 0 0 0
+   23:  jump __label19 always 0 0
+        label __label20
+   24:  jump __label24 notEqual __tmp8 @large-logic-display
+   25:  draw rotate 0 0 270 0 0 0
+   26:  draw translate -176 0 0 0 0 0
+   27:  jump __label19 always 0 0
+        label __label24
+   28:  stop
+        label __label19
+   29:  sensor __tmp10 null @type
+   30:  jump __label31 notEqual __tmp10 @logic-display
+   31:  draw rotate 0 0 180 0 0 0
+   32:  draw translate -80 -80 0 0 0 0
+   33:  jump __label30 always 0 0
+        label __label31
+   34:  jump __label35 notEqual __tmp10 @large-logic-display
+   35:  draw rotate 0 0 180 0 0 0
+   36:  draw translate -176 -176 0 0 0 0
+   37:  jump __label30 always 0 0
+        label __label35
+   38:  stop
+        label __label30
+   39:  sensor __tmp12 null @type
+   40:  jump __label42 notEqual __tmp12 @logic-display
+   41:  draw scale 1 -1 0 0 0 0
+   42:  draw translate 0 -80 0 0 0 0
+   43:  jump __label41 always 0 0
+        label __label42
+   44:  jump __label46 notEqual __tmp12 @large-logic-display
+   45:  draw scale 1 -1 0 0 0 0
+   46:  draw translate 0 -176 0 0 0 0
+   47:  jump __label41 always 0 0
         label __label46
-   60:  sensor __tmp12 null @type
-   61:  jump __label56 notEqual __tmp12 @logic-display
-   62:  draw scale 1 -1 0 0 0 0
-   63:  draw translate 0 -80 0 0 0 0
-   64:  jump __label55 always 0 0
-        label __label56
-   65:  jump __label59 notEqual __tmp12 @large-logic-display
-   66:  draw scale 1 -1 0 0 0 0
-   67:  draw translate 0 -176 0 0 0 0
-   68:  jump __label55 always 0 0
-        label __label59
-   69:  stop
-        label __label55
-   70:  sensor __tmp14 null @type
-   71:  jump __label65 notEqual __tmp14 @logic-display
-   72:  draw scale -1 1 0 0 0 0
-   73:  draw translate -80 0 0 0 0 0
-   74:  jump __label64 always 0 0
-        label __label65
-   75:  jump __label68 notEqual __tmp14 @large-logic-display
-   76:  draw scale -1 1 0 0 0 0
-   77:  draw translate -176 0 0 0 0 0
-   78:  jump __label64 always 0 0
-        label __label68
-   79:  stop
-        label __label64
-   80:  draw scale 2.2 2.2 0 0 0 0
-   81:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
-   82:  end
+   48:  stop
+        label __label41
+   49:  sensor __tmp14 null @type
+   50:  jump __label53 notEqual __tmp14 @logic-display
+   51:  draw scale -1 1 0 0 0 0
+   52:  draw translate -80 0 0 0 0 0
+   53:  jump __label52 always 0 0
+        label __label53
+   54:  jump __label57 notEqual __tmp14 @large-logic-display
+   55:  draw scale -1 1 0 0 0 0
+   56:  draw translate -176 0 0 0 0 0
+   57:  jump __label52 always 0 0
+        label __label57
+   58:  stop
+        label __label52
+   59:  end
 
 
 stop instruction encountered, dumping variable values:
-@counter: 40.0
-SYS_MESSAGE: null
-__fn10_type: null
+@counter: 19.0
+__fn0_type: null
 __tmp3: null
 __tmp6: null
 _display: null
