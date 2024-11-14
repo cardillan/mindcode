@@ -269,6 +269,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterOrphan_doc_comment(MindcodeParser.Orphan_doc_commentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOrphan_doc_comment(MindcodeParser.Orphan_doc_commentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCompiler_directive(MindcodeParser.Compiler_directiveContext ctx) { }
 	/**
 	 * {@inheritDoc}

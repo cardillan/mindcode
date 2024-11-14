@@ -448,8 +448,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         }
     }
 
+    private String formatCodeDoc(String text) {
+        return text.substring(3, text.length() - 2);
+    }
+
     @Override
     public AstNode visitFunction_declaration(MindcodeParser.Function_declarationContext ctx) {
+        final String codeDoc = ctx.fundecl().doc == null ? null : formatCodeDoc(ctx.fundecl().doc.getText());
         final String strInline = ctx.fundecl().inline == null ? null : ctx.fundecl().inline.getText();
         final String strType = ctx.fundecl().def.getText();
         final boolean inline = "inline".equals(strInline);
@@ -468,7 +473,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                             "Only the last parameter of an inline function can be declared as vararg."));
         }
 
-        return new FunctionDeclaration(pos(ctx.getStart()), inline, noinline, procedure,
+        return new FunctionDeclaration(pos(ctx.getStart()), codeDoc, inline, noinline, procedure,
                 ctx.fundecl().name.getText(), parameters,
                 visit(ctx.fundecl().body)
         );

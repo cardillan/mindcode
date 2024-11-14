@@ -8,7 +8,7 @@ print __fn13_expected
 print "\n"
 print "A:"
 set __tmp0 "A:"
-set __fn11__n null
+set __fn11__number null
 set __fn11retaddr 13
 jump 239 always 0 0
 print "\n"
@@ -22,7 +22,7 @@ print __fn14_expected
 print "\n"
 print "A:"
 set __tmp1 "A:"
-set __fn11__n 1
+set __fn11__number 1
 set __fn11retaddr 27
 jump 239 always 0 0
 print "\n"
@@ -36,7 +36,7 @@ print __fn15_expected
 print "\n"
 print "A:"
 set __tmp2 "A:"
-set __fn11__n 1.5
+set __fn11__number 1.5
 set __fn11retaddr 41
 jump 239 always 0 0
 print "\n"
@@ -50,7 +50,7 @@ print __fn16_expected
 print "\n"
 print "A:"
 set __tmp3 "A:"
-set __fn11__n -1.5
+set __fn11__number -1.5
 set __fn11retaddr 55
 jump 239 always 0 0
 print "\n"
@@ -64,7 +64,7 @@ print __fn17_expected
 print "\n"
 print "A:"
 set __tmp4 "A:"
-set __fn11__n 1234567
+set __fn11__number 1234567
 set __fn11retaddr 69
 jump 239 always 0 0
 print "\n"
@@ -78,7 +78,7 @@ print __fn18_expected
 print "\n"
 print "A:"
 set __tmp5 "A:"
-set __fn11__n -1234567
+set __fn11__number -1234567
 set __fn11retaddr 83
 jump 239 always 0 0
 print "\n"
@@ -92,7 +92,7 @@ print __fn19_expected
 print "\n"
 print "A:"
 set __tmp6 "A:"
-set __fn11__n 9009099
+set __fn11__number 9009099
 set __fn11retaddr 97
 jump 239 always 0 0
 print "\n"
@@ -238,11 +238,11 @@ jump 272 always 0 0
 print "\n"
 end
 print "{2}"
-set __fn30__x __fn11__n
-op abs __tmp17 __fn30__x 0
+set __fn30__number __fn11__number
+op abs __tmp17 __fn30__number 0
 op floor __tmp18 __tmp17 0
 set __fn30__n __tmp18
-op lessThan __tmp19 __fn30__x 0
+op lessThan __tmp19 __fn30__number 0
 jump 249 equal __tmp19 false
 format "-{2}"
 set __tmp20 "-{2}"

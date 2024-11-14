@@ -1,95 +1,112 @@
 // Mindcode system library for Mindustry Logic version 8
 // Math functions
+//
+//* To use the Math library, use the `require math;` statement.
 
-// Computes the distance between points (x1, y1) and (x2, y2).
-// Uses the len instruction for efficient hypotenuse calculation
+/**
+ * Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).
+ * Uses the `len` instruction for efficient hypotenuse calculation.
+ */
 def distance(_x1, _y1, _x2, _y2)
     len(_x2 - _x1, _y2 - _y1);
 end;
 
-// Rounds the number to the closest integer. 0.5 is rounded up.
+/** Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`. */
 def round(_x)
     floor(_x + 0.5);
 end;
 
-// Returns the fractional part of the number
+/** Returns the fractional part of the number. `frac(1.5)` gives `0.5`. */
 def frac(_x)
     _x % 1;
 end;
 
-// Returns the sign of the number
-// The return value is zero precisely when _x == 0
+/**
+ * Returns the sign of the number. The return value is `0` precisely when `x == 0`
+ * (using the Mindustry Logic native comparison precision).
+ */
 def sign(_x)
     // Using equality here to get sign behavior consistent with equality operator
     _x == 0 ? 0 : _x < 0 ? -1 : 1;
 end;
 
-// Returns the exact sign of the number
-// The return value is zero precisely when _x is equal to 0 precisely.
+/** Returns the sign of the number. The return value is `0` when the value of `x` is exactly zero. */
 def signExact(_x)
     // Use branchless sign computation
     (_x > 0) - (_x < 0);
 end;
 
-// Returns true if _x is precisely zero.
+/** Returns `true` when `x` is precisely zero. */
 def isZero(_x)
     abs(_x) <= 0;
 end;
 
-// Returns true if the absolute value of _x is less than precision.
+/** Returns `true` when the absolute value of x is less than `precision`. */
 def isZero(_x, _precision)
     abs(_x) < _precision;
 end;
 
-// Returns true if the two values differ by less than given precision.
+/**
+ * Returns `true` if the two values differ by less than `precision`.
+ *
+ * > [!NOTE]
+ * > The equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`. `===` and `!==`
+ * > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows
+ * > to compare values using different precision.
+ */
 def isEqual(_a, _b, _precision)
     abs(_a - _b) < _precision;
 end;
 
-// Converts the value of _x to zero if it was null
-// Uses single instruction for the conversion.
-// Creating the instruction through the mlog function ensures it won't get optimized away.
+/**
+ * Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
+ * and makes sure it won't be removed by the optimizer.
+ */
 def nullToZero(_x)
     mlog("op", "add", out _result, in _x, 0);
     _result;
 end;
 
-// Sum of just one argument
-inline def sum(_x1)
-    _x1;
+/** Returns `x`. The function is a fallback case for the generic `sum` function taking a variable number of arguments. */
+inline def sum(_x)
+    _x;
 end;
 
-// Sum of two or more arguments
+/** Returns the sum of all given arguments. */
 inline def sum(_x1, _x2, _x...)
     _sum = _x1 + _x2;
     for _i in _x do _sum += _i; end;
     _sum;
 end;
 
-// Average of just one argument
-inline def avg(_x1)
-    _x1;
+/** Returns `x`. The function is a fallback case for the generic `avg` function taking a variable number of arguments. */
+inline def avg(_x)
+    _x;
 end;
 
-// Average of two or more arguments
+/** Returns the average of all given arguments. */
 inline def avg(_x1, _x2, _x...)
     _sum = _x1 + _x2;
     for _i in _x do _sum += _i; end;
     _sum / (2 + length(_x));
 end;
 
-def median(_x1)
-    _x1;
+/** Returns `x`. The function is a fallback case for the generic `median` function taking a variable number of arguments. */
+def median(_x)
+    _x;
 end;
 
+/** Returns the median of two values. */
 def median(_x1, _x2)
     (_x1 + _x2) / 2;
 end;
 
+/** Returns the median of three values, using an optimized algorithm . */
 def median(_x1, _x2, _x3)
     min(max(_x1, _x2), max(_x1, _x3), max(_x2, _x3));
 end;
 
+/** Returns the median of four values, using an optimized algorithm . */
 def median(_x1, _x2, _x3, _x4)
     _y1 = min(_x1, _x2);
     _y2 = max(_x1, _x2);
@@ -104,6 +121,7 @@ def median(_x1, _x2, _x3, _x4)
     end;
 end;
 
+/** Returns the median of five values, using an optimized algorithm . */
 def median(_x1, _x2, _x3, _x4, _x5)
     _y1 = min(_x1, _x2);
     _y2 = max(_x1, _x2);
@@ -126,6 +144,10 @@ inline def _swap(in out _a, in out _b)
     _t = _a; _a = _b; _b = _t;
 end;
 
+/**
+ * Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
+ * and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
+ */
 inline def median(_x...)
     _bestDif = 1e10;
     _best = null;

@@ -1,11 +1,24 @@
 // Mindcode system library for Mindustry Logic version 8
 // Graphics functions
+//
+//* To use the Graphics library, use the `require graphics;` statement. The Graphics library uses Mindustry Logic 8
+//* instructions and therefore also requires `#set target = ML8A;` statement.
+//*
+//* The provided library functions use transformations to rotate, invert or scale graphics output as needed
+//* for each display (large or small). Transformations are additive, so it is suggested to call `reset()`
+//* at the beginning of each program that uses transformations to clean up possible transformations from earlier runs.
+//*
+//* The parameters used for transformations must be adapted to the size of the output display being drawn.
+//* The transformation functions therefore exist in versions for both logic displays and large logic displays,
+//* plus a version which automatically detects the display type from a block passed in as a parameter.
 
 const DISPLAY_SIZE_SMALL =  80;
 const DISPLAY_SIZE_LARGE = 176;
 
-// Display size
-
+/**
+ * Returns the actual display size based on the type of display passed in as an argument.
+ * When the passed-in argument is not a display, the processor is stopped.
+ */
 def displaySize(_display)
     type = _display.@type;
     type == @logic-display ? DISPLAY_SIZE_SMALL : type == @large-logic-display ? DISPLAY_SIZE_LARGE : null;
@@ -13,26 +26,31 @@ end;
 
 // Small display transformations
 
+/** Rotates the output to the left (counterclockwise) by 90 degrees for a small display. */
 void rotateLeftSmall()
     rotate(90);
     translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
+/** Rotates the output to the right (clockwise) by 90 degrees for a small display. */
 void rotateRightSmall()
     rotate(270);
     translate(- DISPLAY_SIZE_SMALL, 0);
 end;
 
+/** Rotates the output by 180 degrees (upside down) by 90 degrees for a small display. */
 void upsideDownSmall()
     rotate(180);
     translate(- DISPLAY_SIZE_SMALL, - DISPLAY_SIZE_SMALL);
 end;
 
+/** Flips the output vertically (along the Y axis) for a small display. */
 void flipVerticalSmall()
     scale(1, -1);
     translate(0, - DISPLAY_SIZE_SMALL);
 end;
 
+/** Flips the output horizontally (along the X axis) for a small display. */
 void flipHorizontalSmall()
     scale(-1, 1);
     translate(- DISPLAY_SIZE_SMALL, 0);
@@ -40,26 +58,31 @@ end;
 
 // Large display transformations
 
+/** Rotates the output to the left (counterclockwise) by 90 degrees for a large display. */
 void rotateLeftLarge()
     rotate(90);
     translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
+/** Rotates the output to the right (clockwise) by 90 degrees for a large display. */
 void rotateRightLarge()
     rotate(270);
     translate(- DISPLAY_SIZE_LARGE, 0);
 end;
 
+/** Rotates the output by 180 degrees (upside down) by 90 degrees for a large display. */
 void upsideDownLarge()
     rotate(180);
     translate(- DISPLAY_SIZE_LARGE, - DISPLAY_SIZE_LARGE);
 end;
 
+/** Flips the output vertically (along the Y axis) for a large display. */
 void flipVerticalLarge()
     scale(1, -1);
     translate(0, - DISPLAY_SIZE_LARGE);
 end;
 
+/** Flips the output horizontally (along the X axis) for a large display. */
 void flipHorizontalLarge()
     scale(-1, 1);
     translate(- DISPLAY_SIZE_LARGE, 0);
@@ -67,6 +90,7 @@ end;
 
 // Generic display transformations
 
+/** Rotates the output to the left (counterclockwise) by 90 degrees for the given display. */
 void rotateLeft(_display)
     case _display.@type
         when @logic-display       then rotateLeftSmall();
@@ -75,6 +99,7 @@ void rotateLeft(_display)
     end;
 end;
 
+/** Rotates the output to the right (clockwise) by 90 degrees for the given display. */
 void rotateRight(_display)
     case _display.@type
         when @logic-display       then rotateRightSmall();
@@ -83,6 +108,7 @@ void rotateRight(_display)
     end;
 end;
 
+/** Rotates the output by 180 degrees (upside down) by 90 degrees for the given display. */
 void upsideDown(_display)
     case _display.@type
         when @logic-display       then upsideDownSmall();
@@ -91,6 +117,7 @@ void upsideDown(_display)
     end;
 end;
 
+/** Flips the output vertically (along the Y axis) for the given display. */
 void flipVertical(_display)
     case _display.@type
         when @logic-display       then flipVerticalSmall();
@@ -99,6 +126,7 @@ void flipVertical(_display)
     end;
 end;
 
+/** Flips the output horizontally (along the X axis) for the given display. */
 void flipHorizontal(_display)
     case _display.@type
         when @logic-display       then flipHorizontalSmall();
@@ -109,10 +137,18 @@ end;
 
 // Scaling
 
+/**
+  * Scales the graphics output so that an output that targets a small display gets displayed
+  * over the entire area of a large display.
+  */
 void scaleSmallToLarge()
     scale(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
 end;
 
+/**
+  * Scales the graphics output so that an output that targets a large display gets displayed
+  * over the entire area of a small display.
+  */
 void scaleLargeToSmall()
     scale(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
 end;

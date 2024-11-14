@@ -1,4 +1,4 @@
-Number of reported ambiguities: 65
+Number of reported ambiguities: 68
 
 Final code before resolving virtual instructions:
 
@@ -14,7 +14,7 @@ Final code before resolving virtual instructions:
     8:  print "A:"
     9:  set __tmp0 "A:"
         label __label14
-   10:  set __fn11__n null
+   10:  set __fn11__number null
    11:  setaddr __fn11retaddr __label15
    12:  call __label11 __fn11retval
         gotolabel __label15 __fn11
@@ -31,7 +31,7 @@ Final code before resolving virtual instructions:
    22:  print "A:"
    23:  set __tmp1 "A:"
         label __label17
-   24:  set __fn11__n 1
+   24:  set __fn11__number 1
    25:  setaddr __fn11retaddr __label18
    26:  call __label11 __fn11retval
         gotolabel __label18 __fn11
@@ -48,7 +48,7 @@ Final code before resolving virtual instructions:
    36:  print "A:"
    37:  set __tmp2 "A:"
         label __label20
-   38:  set __fn11__n 1.5
+   38:  set __fn11__number 1.5
    39:  setaddr __fn11retaddr __label21
    40:  call __label11 __fn11retval
         gotolabel __label21 __fn11
@@ -65,7 +65,7 @@ Final code before resolving virtual instructions:
    50:  print "A:"
    51:  set __tmp3 "A:"
         label __label23
-   52:  set __fn11__n -1.5
+   52:  set __fn11__number -1.5
    53:  setaddr __fn11retaddr __label24
    54:  call __label11 __fn11retval
         gotolabel __label24 __fn11
@@ -82,7 +82,7 @@ Final code before resolving virtual instructions:
    64:  print "A:"
    65:  set __tmp4 "A:"
         label __label26
-   66:  set __fn11__n 1234567
+   66:  set __fn11__number 1234567
    67:  setaddr __fn11retaddr __label27
    68:  call __label11 __fn11retval
         gotolabel __label27 __fn11
@@ -99,7 +99,7 @@ Final code before resolving virtual instructions:
    78:  print "A:"
    79:  set __tmp5 "A:"
         label __label29
-   80:  set __fn11__n -1234567
+   80:  set __fn11__number -1234567
    81:  setaddr __fn11retaddr __label30
    82:  call __label11 __fn11retval
         gotolabel __label30 __fn11
@@ -116,7 +116,7 @@ Final code before resolving virtual instructions:
    92:  print "A:"
    93:  set __tmp6 "A:"
         label __label32
-   94:  set __fn11__n 9009099
+   94:  set __fn11__number 9009099
    95:  setaddr __fn11retaddr __label33
    96:  call __label11 __fn11retval
         gotolabel __label33 __fn11
@@ -295,11 +295,11 @@ Final code before resolving virtual instructions:
         label __label11
   239:  print "{2}"
         label __label65
-  240:  set __fn30__x __fn11__n
-  241:  op abs __tmp17 __fn30__x 0
+  240:  set __fn30__number __fn11__number
+  241:  op abs __tmp17 __fn30__number 0
   242:  op floor __tmp18 __tmp17 0
   243:  set __fn30__n __tmp18
-  244:  op lessThan __tmp19 __fn30__x 0
+  244:  op lessThan __tmp19 __fn30__number 0
   245:  jump __label67 equal __tmp19 false
   246:  format "-{2}"
   247:  set __tmp20 "-{2}"

@@ -1,14 +1,30 @@
 // Mindcode system library for Mindustry Logic version 8
 // Printing - numeric output
+//
+//* To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
+//* Mindustry Logic 8 instructions and therefore require the `#set target = ML8A;` statement.
 
 require math;
 
-// Formats a number into the text buffer, without external memory.
-// The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
-// Nulls are printed as 0.
-void formatNumber(_x)
-    _n = floor(abs(_x));
-    if _x < 0 then
+/**
+ * **Note:** Function requires target `ML8A` or later.
+ *
+ * Formats the number passed in as a parameter into the text buffer, using comma as thousands separator.
+ * Fractional part of the number to be printed is ignored.
+ *
+ * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
+ * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
+ * at the place of the lowest formatting placeholder.
+ *
+ * Nulls are printed as 0.
+ *
+ * > [!TIP]
+ * > While the functions is optimized for performance, formatting numbers is many times slower than just printing
+ * > them using the `print()` function.
+ */
+void formatNumber(_number)
+    _n = floor(abs(_number));
+    if _number < 0 then
         format("-{2}");     // Prepend the minus sign
     end;
     while _n > 999 do
@@ -23,14 +39,47 @@ void formatNumber(_x)
     format(_n);
 end;
 
-// Prints the number straight away
-// The text buffer must not contain any placeholders lower than {3}.
-void printNumber(_n)
+/**
+ * **Note:** Function requires target `ML8A` or later.
+ *
+ * Prints the number passed in as a parameter into the text buffer, using comma as thousands separator.
+ * Fractional part of the number to be printed is ignored.
+ *
+ * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
+ * The number will be printed at the end of the print buffer.
+ *
+ * Nulls are printed as 0.
+ *
+ * > [!TIP]
+ * > While the functions is optimized for performance, formatting numbers is many times slower than just printing
+ * > them using the `print()` function.
+ *
+ * See also [`formatNumber`](#formatnumber)
+ */
+void printNumber(_number)
     print("{2}");
-    formatNumber(_n);
+    formatNumber(_number);
 end;
 
-// Prints the value into the text buffer without rounding to the nearest integer value
+/**
+ * Prints the value into the text buffer without rounding to the nearest integer value.
+ * The function is primarily useful for debugging purposes to determine the actual value of variables.
+ *
+ * **Note:** when printing the exact representation of numbers that are close to integer value, the Mindustry Logic
+ * `print` instruction cannot be used, as it would print the rounded value. In such case a custom printing routine
+ * is used, which can take around 50 steps to output the entire number.
+ *
+ * > [!TIP]
+ * > The `print` and `format` instructions applied to numerical values round the value to the nearest integer
+ * > when they differ from the integer value by less than `1e-6`. This makes it impossible to directly print
+ * > (with sufficient precision) numerical values close to integer values in general, and values close to zero
+ * > in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExact(10 ** -50)`
+ * > outputs `1E-50`.
+ *
+ * > [!IMPORTANT]
+ * > The mathematical operations used by `printExact` to output the value may introduce small additional numerical
+ * > errors to the output value; for example `printExact(3.00000003)` outputs `3.000000029999999`.
+ */
 void printExact(_n)
     if isZero(_n) then
         // Will print either 0, or null, depending on the value

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class FunctionDeclaration extends BaseAstNode {
+    private final String codeDoc;
     private final boolean inline;
     private final boolean noinline;
     private final boolean procedure;
@@ -18,18 +19,23 @@ public class FunctionDeclaration extends BaseAstNode {
     private final List<FunctionParameter> params;
     private final AstNode body;
 
-    public FunctionDeclaration(InputPosition inputPosition, boolean inline, boolean noinline, boolean procedure,
+    public FunctionDeclaration(InputPosition inputPosition, String codeDoc, boolean inline, boolean noinline, boolean procedure,
             String name, List<FunctionParameter> params, AstNode body) {
         super(inputPosition, body);
         if (inline && noinline) {
             throw new IllegalArgumentException("Both inline and noinline specified.");
         }
+        this.codeDoc = codeDoc;
         this.inline = inline;
         this.noinline = noinline;
         this.procedure = procedure;
         this.name = Objects.requireNonNull(name);
         this.params = Objects.requireNonNull(params);
         this.body = Objects.requireNonNull(body);
+    }
+
+    public String getCodeDoc() {
+        return codeDoc;
     }
 
     public boolean isInline() {

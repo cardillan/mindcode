@@ -1,4 +1,4 @@
-Number of reported ambiguities: 46
+Number of reported ambiguities: 64
 Active optimizations:
     case-expression-optimization = advanced,
     case-switching = advanced,
@@ -56,16 +56,16 @@ Pass 1: speed optimization selection (cost limit 878):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 72           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 80           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 88           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 114          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 123          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 132          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 882):
   * Function Inlining: inline function rotateRightSmall          cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -86,15 +86,15 @@ Pass 1: speed optimization selection (cost limit 882):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 80           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 88           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 114          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 123          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 132          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 886):
   * Function Inlining: inline function upsideDownSmall           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -113,14 +113,14 @@ Pass 1: speed optimization selection (cost limit 886):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 88           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 114          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 123          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 132          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 890):
   * Function Inlining: inline function flipVerticalSmall         cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -137,13 +137,13 @@ Pass 1: speed optimization selection (cost limit 890):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 96           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 123          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 132          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 894):
   * Function Inlining: inline function flipHorizontalSmall       cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -158,12 +158,12 @@ Pass 1: speed optimization selection (cost limit 894):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 104          cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 132          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 898):
   * Function Inlining: inline function rotateLeftLarge           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -176,11 +176,11 @@ Pass 1: speed optimization selection (cost limit 898):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 73           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
     Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 902):
   * Function Inlining: inline function rotateRightLarge          cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -191,10 +191,10 @@ Pass 1: speed optimization selection (cost limit 902):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 81           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 106          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 906):
   * Function Inlining: inline function upsideDownLarge           cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
@@ -203,22 +203,22 @@ Pass 1: speed optimization selection (cost limit 906):
     Function Inlining: inline function call at line 15           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 89           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 115          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 910):
   * Function Inlining: inline function flipVerticalLarge         cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
     Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity
     Function Inlining: inline function call at line 16           cost     1, benefit        3.0, efficiency        3.0
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 97           cost     1, benefit        1.5, efficiency        1.5
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 124          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Pass 1: speed optimization selection (cost limit 914):
   * Function Inlining: inline function flipHorizontalLarge       cost     0, benefit        4.5, efficiency   Infinity (-4 instructions)
     Function Inlining: inline function call at line 17           cost     1, benefit        3.0, efficiency        3.0
-    Function Inlining: inline function call at line 105          cost     1, benefit        1.5, efficiency        1.5
+    Function Inlining: inline function call at line 133          cost     1, benefit        1.5, efficiency        1.5
 
 Final code before resolving virtual instructions:
 

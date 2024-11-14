@@ -803,7 +803,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added support for using [Mindustry built-in icons](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-icons) in 
   `print` functions.
-* Added support for compile-time [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-expressions). 
+* Added support for compile-time [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#strings-in-expressions). 
   Allows - among other things - to embed icons into string constants at compile time, such as
   `const HEADER = "Using unit: " + UNIT-MEGA`    
 
@@ -815,7 +815,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully 
   evaluate the loop condition at each iteration.
 * Changed handling of non-constant string expressions: when detected, a compilation error occurs (see also 
-  [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-expressions)).
+  [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#strings-in-expressions)).
 
 ### Miscellaneous
 

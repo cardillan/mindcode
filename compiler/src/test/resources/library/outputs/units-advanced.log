@@ -1,4 +1,4 @@
-Number of reported ambiguities: 26
+Number of reported ambiguities: 29
 Active optimizations:
     case-expression-optimization = advanced,
     case-switching = advanced,

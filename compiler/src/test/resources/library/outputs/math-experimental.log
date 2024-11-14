@@ -1,4 +1,4 @@
-Number of reported ambiguities: 27
+Number of reported ambiguities: 46
 Active optimizations:
     case-expression-optimization = experimental,
     case-switching = experimental,

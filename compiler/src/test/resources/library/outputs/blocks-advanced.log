@@ -1,4 +1,4 @@
-Number of reported ambiguities: 6
+Number of reported ambiguities: 7
 Active optimizations:
     case-expression-optimization = advanced,
     case-switching = advanced,
@@ -38,16 +38,16 @@ Active optimizations:
     40 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 909):
-  * Loop Unrolling: unroll iteration loop at line 6              cost     0, benefit      350.0, efficiency   Infinity (-14 instructions)
-    Loop Unrolling: unroll iteration loop at line 16             cost     6, benefit     8750.0, efficiency     1458.3
-    Loop Unrolling: unroll iteration loop at line 25             cost    16, benefit      350.0, efficiency       21.9
+  * Loop Unrolling: unroll iteration loop at line 49             cost     0, benefit      350.0, efficiency   Infinity (-14 instructions)
+    Loop Unrolling: unroll iteration loop at line 59             cost     6, benefit     8750.0, efficiency     1458.3
+    Loop Unrolling: unroll iteration loop at line 68             cost    16, benefit      350.0, efficiency       21.9
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Loop Unrolling: unroll iteration loop at line 16             cost     6, benefit     8750.0, efficiency     1458.3 (+1 instructions)
-    Loop Unrolling: unroll iteration loop at line 25             cost    16, benefit      350.0, efficiency       21.9
+  * Loop Unrolling: unroll iteration loop at line 59             cost     6, benefit     8750.0, efficiency     1458.3 (+1 instructions)
+    Loop Unrolling: unroll iteration loop at line 68             cost    16, benefit      350.0, efficiency       21.9
 
 Pass 1: speed optimization selection (cost limit 922):
-  * Loop Unrolling: unroll iteration loop at line 25             cost    16, benefit      350.0, efficiency       21.9 (-2 instructions)
+  * Loop Unrolling: unroll iteration loop at line 68             cost    16, benefit      350.0, efficiency       21.9 (-2 instructions)
 
 Final code before resolving virtual instructions:
 

@@ -101,7 +101,7 @@ class FunctionDefinitions extends AbstractMessageEmitter {
 
 
     private static FunctionDeclaration createMain() {
-        return new FunctionDeclaration(null, true, false,
+        return new FunctionDeclaration(null, null, true, false,
                 true, "", List.of(), new NoOp());
     }
 }

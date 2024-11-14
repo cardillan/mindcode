@@ -18,9 +18,9 @@ class AstContextTest {
     private final CompilerProfile profile = CompilerProfile.standardOptimizations(false);
     private final AstContext root = AstContext.createRootNode(profile);
     private final CallGraph callGraph = CallGraph.createEmpty();
-    private final FunctionDeclaration functionDeclaration1 = new FunctionDeclaration( null,
+    private final FunctionDeclaration functionDeclaration1 = new FunctionDeclaration( null, null,
             false, false, false, "test1",List.of(), new NoOp());
-    private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration( null,
+    private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration( null, null,
             false, false, false, "test2",List.of(), new NoOp());
     private LogicFunction function1;
     private LogicFunction function2;

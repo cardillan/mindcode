@@ -1,4 +1,4 @@
-Number of reported ambiguities: 65
+Number of reported ambiguities: 68
 Active optimizations:
     case-expression-optimization = basic,
     case-switching = basic,
@@ -41,7 +41,7 @@ Active optimizations:
    109 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 744):
-  * Loop Unrolling: unroll loop at line 58                       cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
+  * Loop Unrolling: unroll loop at line 107                      cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
     Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2
     Function Inlining: inline function printExact                cost   404, benefit       35.0, efficiency        0.1
 

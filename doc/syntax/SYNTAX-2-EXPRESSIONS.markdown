@@ -180,7 +180,7 @@ Mindustry Logic applies the precision handling described above also when display
 
 Therefore, when a variable value is displayed as an integer by Mindustry, it is necessary to keep in mind that the actual value of the variable might be different, and that the relational operators (`<`, `<=`, `>`, `>=`) operate over the actual value, not the displayed value of the variable.
 
-To display a value of a variable without rounding, it is possible to use the `printExact()` function from the [`math` system library](SYSTEM-LIBRARY.markdown#utils-library): `printExact(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.   
+To display a value of a variable without rounding, it is possible to use the `printExact()` function from the [`math` system library](SYSTEM-LIBRARY.markdown#math-library): `printExact(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.   
 
 **Note:** at this moment, Mindcode doesn't display values that are slightly smaller than an integer value rounded. `print(0.99999999);` therefore outputs `0.99999999` and not `1`, as could be expected. This is probably a bug that might eventually get fixed.
 

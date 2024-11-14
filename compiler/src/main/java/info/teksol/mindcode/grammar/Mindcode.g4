@@ -83,6 +83,7 @@ expression : directive                                                          
            | break_st                                                                           # break_exp
            | continue_st                                                                        # continue_exp
            | return_st                                                                          # return_exp
+           | DOC_COMMENT                                                                        # orphan_doc_comment
            ;
 
 directive : HASHSET option=ID ASSIGN value=INT                      # numeric_directive
@@ -135,9 +136,9 @@ const_decl : CONST name=id ASSIGN value=expression;
 
 param_decl : PARAM name=id ASSIGN value=expression;
 
-fundecl : (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
-        | (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
-        | {strictSyntax == false}? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id body=expression_list END
+fundecl : (doc=DOC_COMMENT)? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
+        | (doc=DOC_COMMENT)? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
+        | {strictSyntax == false}? (doc=DOC_COMMENT)? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id body=expression_list END
         ;
 
 arg_decl
@@ -395,6 +396,8 @@ BININT : Binary;
 ID : [_a-zA-Z][-a-zA-Z_0-9]*;
 
 REM_COMMENT: '///' ~[/\r\n] ~[\r\n]*;
+
+DOC_COMMENT: '/**' .*? '*/';
 
 COMMENT: '/*' .*? '*/' -> skip;
 SL_COMMENT : '//' ~[\r\n]* -> skip;
