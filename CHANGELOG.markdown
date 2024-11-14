@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
 * Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches bot a vararg function and a non-vararg function, the non-vararg function will be called.
 * Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
 * Changed existing examples to utilize functions from the system library where one is available.
+* Changed processor emulator to [output all existing variables and their values](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state) when encountering the `stop` instruction.
+* Changed the Jump Optimization to handle cases where the jump instruction contains value produced by a function.
 
 ## 2.5.0 - 2024-11-03
 

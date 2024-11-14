@@ -2,7 +2,7 @@
     59 instructions eliminated by Temp Variables Elimination.
    256 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
      3 instructions eliminated by Jump Normalization (3 passes, 5 iterations).
-    70 instructions eliminated by Jump Optimization (5 iterations).
+    71 instructions eliminated by Jump Optimization (2 passes, 5 iterations).
    101 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions modified by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (4 iterations).
@@ -13,7 +13,7 @@
     12 instructions updated by JumpThreading.
     15 instructions eliminated by Unreachable Code Elimination.
     10 instructions eliminated by Print Merging.
-   786 instructions after optimizations.
+   785 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 140):
   * Loop Optimization: replicate condition at line 45            cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
@@ -30,10 +30,10 @@ Pass 1: speed optimization selection (cost limit 138):
 Pass 2: speed optimization selection (cost limit 164):
   ! Loop Unrolling: unroll iteration loop at line 178            cost   181, benefit      275.0, efficiency        1.5
 
-Pass 3: speed optimization selection (cost limit 164):
+Pass 3: speed optimization selection (cost limit 165):
   ! Loop Unrolling: unroll iteration loop at line 178            cost   181, benefit      275.0, efficiency        1.5
 
-Pass 4: speed optimization selection (cost limit 164):
+Pass 4: speed optimization selection (cost limit 165):
   ! Loop Unrolling: unroll iteration loop at line 178            cost   181, benefit      275.0, efficiency        1.5
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-166 instructions):
@@ -4946,6 +4946,19 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1:
    125 label __label48
    126 set __fn3_needed 2
 
+Modifications by Iterated phase, Jump Optimization, pass 3, iteration 1 (-1 instructions):
+ 
+  1112 set __fn26_unit @unit
+  1113 sensor __tmp515 __fn26_unit @speed
+  1114 op div __fn26_travel_time __tmp148 __tmp515
+-    * op greaterThanEq __tmp510 __fn26_travel_time 47
+  1115 label __label330
+-    * jump __label332 equal __tmp510 false
++ 1116 jump __label332 lessThan __fn26_travel_time 47
+  1117 set __tmp518 4
+  1118 label __label332
+  1119 label __label333
+
 Modifications by Final phase, Jump Straightening, iteration 1 (-17 instructions):
  
    207 set UNIT_P2 UNIT_S1
@@ -5219,14 +5232,14 @@ Modifications by Final phase, Jump Threading, iteration 1:
   1094 label __label329
   1095 set __fn26_unit @unit
  
-  1108 op or __tmp523 __tmp520 __tmp522
-  1109 jump __label336 equal __tmp523 false
-  1110 op add __fn25_free __fn25_free 1
+  1107 op or __tmp523 __tmp520 __tmp522
+  1108 jump __label336 equal __tmp523 false
+  1109 op add __fn25_free __fn25_free 1
 -    * jump __label338 lessThan __fn25_free __tmp518
-+ 1111 jump __label337 lessThan __fn25_free __tmp518
-  1112 set __tmp506 true
-  1113 jump __label326 always
-  1114 label __label338
++ 1110 jump __label337 lessThan __fn25_free __tmp518
+  1111 set __tmp506 true
+  1112 jump __label326 always
+  1113 label __label338
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-15 instructions):
  
@@ -5275,19 +5288,19 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-15 ins
    177 print "[gold]Binding units..."
    178 printflush message1
  
-  1101 jump __label337 lessThan __fn25_free __tmp518
-  1102 set __tmp506 true
-  1103 jump __label326 always
+  1100 jump __label337 lessThan __fn25_free __tmp518
+  1101 set __tmp506 true
+  1102 jump __label326 always
 -    * label __label338
 -    * label __label339
 -    * jump __label337 always
-  1104 label __label336
-  1105 op add __fn25_occupied __fn25_occupied 1
-  1106 label __label337
+  1103 label __label336
+  1104 op add __fn25_occupied __fn25_occupied 1
+  1105 label __label337
  
-  1115 label __label327
-  1116 label __label328
-  1117 jump __label340 always
+  1114 label __label327
+  1115 label __label328
+  1116 jump __label340 always
 -    * print __fn25_type
 -    * print ": occupied: "
 -    * print __fn25_occupied
@@ -5299,9 +5312,9 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-15 ins
 -    * label __label342
 -    * label __label343
 -    * print "\n"
-  1118 label __label340
-  1119 label __label341
-  1120 set __tmp506 false
+  1117 label __label340
+  1118 label __label341
+  1119 set __tmp506 false
 
 Modifications by Final phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -5357,17 +5370,17 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-4 instructi
    115 set __fn3_needed 2
    116 label __label49
  
-  1108 label __label335
-  1109 label __label327
-  1110 label __label328
+  1107 label __label335
+  1108 label __label327
+  1109 label __label328
 -    * jump __label340 always
-  1111 label __label340
-  1112 label __label341
-  1113 set __tmp506 false
+  1110 label __label340
+  1111 label __label341
+  1112 set __tmp506 false
  
-  1123 sensor __tmp216 switch1 @enabled
-  1124 jump __label348 notEqual __tmp216 false
-  1125 label __label150
+  1122 sensor __tmp216 switch1 @enabled
+  1123 jump __label348 notEqual __tmp216 false
+  1124 label __label150
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
@@ -6334,8 +6347,7 @@ set __tmp518 2
 set __fn26_unit @unit
 sensor __tmp515 __fn26_unit @speed
 op div __fn26_travel_time __tmp148 __tmp515
-op greaterThanEq __tmp510 __fn26_travel_time 47
-jump __label332 equal __tmp510 false
+jump __label332 lessThan __fn26_travel_time 47
 set __tmp518 4
 label __label332
 label __label333

@@ -1,17 +1,17 @@
    620 instructions before optimizations.
     53 instructions eliminated by Temp Variables Elimination.
     60 instructions eliminated by Dead Code Elimination (10 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-    17 instructions eliminated by Jump Optimization (4 iterations).
-    27 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
-     3 instructions eliminated by Expression Optimization (3 iterations).
-     3 instructions eliminated by If Expression Optimization (3 iterations).
-    92 instructions eliminated by Data Flow Optimization (8 passes, 27 iterations).
-   505 instructions added by Function Inlining (10 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+    18 instructions eliminated by Jump Optimization (2 passes, 5 iterations).
+    27 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     3 instructions eliminated by Expression Optimization (4 iterations).
+     3 instructions eliminated by If Expression Optimization (4 iterations).
+    92 instructions eliminated by Data Flow Optimization (8 passes, 28 iterations).
+   505 instructions added by Function Inlining (11 iterations).
     17 function calls inlined by Function Inlining.
     33 instructions updated by JumpThreading.
      5 instructions eliminated by Unreachable Code Elimination.
-   864 instructions after optimizations.
+   863 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 547):
   * Function Inlining: inline function kilo                      cost     5, benefit      218.8, efficiency       43.8 (-5 instructions)
@@ -125,7 +125,12 @@ Pass 2: speed optimization selection (cost limit 130):
   ! Function Inlining: inline function call at line 91           cost   139, benefit      137.5, efficiency        1.0
   ! Function Inlining: inline function call at line 93           cost   139, benefit      137.5, efficiency        1.0
 
-Pass 3: speed optimization selection (cost limit 130):
+Pass 3: speed optimization selection (cost limit 131):
+  ! Function Inlining: inline function start_reactor             cost   138, benefit      275.0, efficiency        2.0
+  ! Function Inlining: inline function call at line 91           cost   139, benefit      137.5, efficiency        1.0
+  ! Function Inlining: inline function call at line 93           cost   139, benefit      137.5, efficiency        1.0
+
+Pass 4: speed optimization selection (cost limit 131):
   ! Function Inlining: inline function start_reactor             cost   138, benefit      275.0, efficiency        2.0
   ! Function Inlining: inline function call at line 91           cost   139, benefit      137.5, efficiency        1.0
   ! Function Inlining: inline function call at line 93           cost   139, benefit      137.5, efficiency        1.0
@@ -4091,6 +4096,19 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
   1001 op sub __tmp141 __fn3_charge __fn2retval
   1002 op lessThan __tmp142 __tmp141 PWR_ABORT
 
+Modifications by Iterated phase, Jump Optimization, pass 3, iteration 1 (-1 instructions):
+ 
+   834 print "\n"
+   835 label __label36
+   836 label __label32
+-    * op lessThan __tmp38 __fn6_fuel_stored __fn6_limit
+   837 label __label30
+-    * jump __label37 equal __tmp38 false
++  838 jump __label37 greaterThanEq __fn6_fuel_stored __fn6_limit
+   839 control config unloader7 @pyratite
+   840 jump __label38 always
+   841 label __label37
+
 Modifications by Final phase, Jump Threading, iteration 1:
  
    197 jump __label162 greaterThanEq REACTORS_DESIRED 1
@@ -4300,71 +4318,71 @@ Modifications by Final phase, Jump Threading, iteration 1:
    816 print " Critical power.\n"
    817 label __label34
  
-   959 jump __label72 greaterThanEq REACTORS_DESIRED __fn3_reactor_num
-   960 control enabled __fn3_reactor false
-   961 print "STOP unwanted\n"
+   958 jump __label72 greaterThanEq REACTORS_DESIRED __fn3_reactor_num
+   959 control enabled __fn3_reactor false
+   960 print "STOP unwanted\n"
 -    * jump __label73 always
-+  962 jump __label71 always
-   963 label __label72
-   964 op greaterThan __tmp130 __fn3_reactor_num 1
-   965 op mul __tmp131 FUEL_TOT_ABORT __fn3_reactor_num
++  961 jump __label71 always
+   962 label __label72
+   963 op greaterThan __tmp130 __fn3_reactor_num 1
+   964 op mul __tmp131 FUEL_TOT_ABORT __fn3_reactor_num
  
-   968 jump __label74 equal __tmp133 false
-   969 control enabled __fn3_reactor false
-   970 print "STOP system fuel low\n"
+   967 jump __label74 equal __tmp133 false
+   968 control enabled __fn3_reactor false
+   969 print "STOP system fuel low\n"
 -    * jump __label75 always
-+  971 jump __label71 always
-   972 label __label74
-   973 jump __label76 greaterThan __fn3_fuel 1
-   974 control enabled __fn3_reactor false
-   975 print "STOP fuel low\n"
++  970 jump __label71 always
+   971 label __label74
+   972 jump __label76 greaterThan __fn3_fuel 1
+   973 control enabled __fn3_reactor false
+   974 print "STOP fuel low\n"
 -    * jump __label77 always
-+  976 jump __label71 always
-   977 label __label76
-   978 jump __label78 greaterThan __fn3_cryo CRYO_ABORT
-   979 control enabled __fn3_reactor false
-   980 print "STOP out of cryo\n"
++  975 jump __label71 always
+   976 label __label76
+   977 jump __label78 greaterThan __fn3_cryo CRYO_ABORT
+   978 control enabled __fn3_reactor false
+   979 print "STOP out of cryo\n"
 -    * jump __label79 always
-+  981 jump __label71 always
-   982 label __label78
-   983 jump __label80 greaterThanEq __fn3_secs 30
-   984 label __label156
++  980 jump __label71 always
+   981 label __label78
+   982 jump __label80 greaterThanEq __fn3_secs 30
+   983 label __label156
  
-  1006 control enabled __fn3_reactor false
-  1007 print "START FAIL battery\n"
-  1008 set __fn3_supply_fuel false
+  1005 control enabled __fn3_reactor false
+  1006 print "START FAIL battery\n"
+  1007 set __fn3_supply_fuel false
 -    * jump __label84 always
-+ 1009 jump __label71 always
-  1010 label __label83
-  1011 op sub __fn3_time_left 30 __fn3_secs
-  1012 print "Starting "
++ 1008 jump __label71 always
+  1009 label __label83
+  1010 op sub __fn3_time_left 30 __fn3_secs
+  1011 print "Starting "
  
-  1015 print __fn2retval
-  1016 print "J\n"
-  1017 label __label84
+  1014 print __fn2retval
+  1015 print "J\n"
+  1016 label __label84
 -    * jump __label81 always
-+ 1018 jump __label71 always
-  1019 label __label80
-  1020 op lessThan __tmp147 __fn3_charge PWR_ABANDON
-  1021 op lessThan __tmp148 __fn3_surplus FLOW_ABORT
++ 1017 jump __label71 always
+  1018 label __label80
+  1019 op lessThan __tmp147 __fn3_charge PWR_ABANDON
+  1020 op lessThan __tmp148 __fn3_surplus FLOW_ABORT
  
-  1024 control enabled __fn3_reactor false
-  1025 print "ABANDON - battery crit\n"
-  1026 set __fn3_supply_fuel false
+  1023 control enabled __fn3_reactor false
+  1024 print "ABANDON - battery crit\n"
+  1025 set __fn3_supply_fuel false
 -    * jump __label86 always
-+ 1027 jump __label71 always
-  1028 label __label85
-  1029 op idiv __fn3_mins __fn3_secs 6
-  1030 op div __fn3_mins __fn3_mins 10
++ 1026 jump __label71 always
+  1027 label __label85
+  1028 op idiv __fn3_mins __fn3_secs 6
+  1029 op div __fn3_mins __fn3_mins 10
  
-  1072 op add __tmp175 __fn3_fuel __fn3_fuel_stored
-  1073 jump __label93 lessThanEq __tmp175 FUEL_REQ
-  1074 print "WAIT fuel\n"
+  1071 op add __tmp175 __fn3_fuel __fn3_fuel_stored
+  1072 jump __label93 lessThanEq __tmp175 FUEL_REQ
+  1073 print "WAIT fuel\n"
 -    * jump __label94 always
-+ 1075 jump __label92 always
-  1076 label __label93
-  1077 print "WAIT system fuel\n"
-  1078 label __label94
++ 1074 jump __label92 always
+  1075 label __label93
+  1076 print "WAIT system fuel\n"
+  1077 label __label94
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-5 instructions):
  
@@ -4384,31 +4402,31 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-5 inst
    570 control enabled projector1 false
    571 control enabled projector2 false
  
-   924 printflush message1
-   925 label __label8
-   926 jump __label7 always
+   923 printflush message1
+   924 label __label8
+   925 jump __label7 always
 -    * label __label9
 -    * end
-   927 label __label3
-   928 set RET_T_STARTUP __fn3_t_startup
-   929 op sub __tmp111 @tick __fn3_t_startup
+   926 label __label3
+   927 set RET_T_STARTUP __fn3_t_startup
+   928 op sub __tmp111 @tick __fn3_t_startup
  
-  1100 label __label100
-  1101 set __fn3retval __fn3_supply_fuel
-  1102 jump __label67 always
+  1099 label __label100
+  1100 set __fn3retval __fn3_supply_fuel
+  1101 jump __label67 always
 -    * set __fn3retval null
-  1103 label __label67
-  1104 goto __fn3retaddr __fn3
+  1102 label __label67
+  1103 goto __fn3retaddr __fn3
 -    * end
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-  1099 label __label99
-  1100 label __label100
-  1101 set __fn3retval __fn3_supply_fuel
+  1098 label __label99
+  1099 label __label100
+  1100 set __fn3retval __fn3_supply_fuel
 -    * jump __label67 always
-  1102 label __label67
-  1103 goto __fn3retaddr __fn3
+  1101 label __label67
+  1102 goto __fn3retaddr __fn3
 
 Final code before resolving virtual instructions:
 
@@ -5184,8 +5202,7 @@ print 800
 print "\n"
 label __label36
 label __label32
-op lessThan __tmp38 __fn6_fuel_stored __fn6_limit
-jump __label37 equal __tmp38 false
+jump __label37 greaterThanEq __fn6_fuel_stored __fn6_limit
 control config unloader7 @pyratite 0 0 0
 jump __label38 always 0 0
 label __label37

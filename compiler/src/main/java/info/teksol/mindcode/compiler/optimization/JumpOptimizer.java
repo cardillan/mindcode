@@ -1,9 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.Operation;
@@ -32,6 +29,8 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
  * </ol>
  */
 class JumpOptimizer extends BaseOptimizer {
+    private OpInstruction lastOp;
+    private int lastOpIndex;
 
     JumpOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.JUMP_OPTIMIZATION, optimizationContext);
@@ -39,35 +38,46 @@ class JumpOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
-                if (iterator.next() instanceof OpInstruction op
-                        && iterator.peek(0) instanceof JumpInstruction jump
+                LogicInstruction instruction = iterator.next();
+                if (instruction instanceof OpInstruction op) {
+                    lastOp = op;
+                    lastOpIndex = iterator.currentIndex();
+                } else if (lastOp != null
+                        && instruction instanceof JumpInstruction jump
                         && jump.isConditional()
-                        && op.getResult().isTemporaryVariable()
-                        && jump.getX().equals(op.getResult())
+                        && lastOp.getResult().isTemporaryVariable()
+                        && jump.getX().equals(lastOp.getResult())
                         && jump.getY() == FALSE) {
 
                     List<LogicInstruction> list = instructions(
-                            ix -> ix.getArgs().contains(op.getResult()) && !(ix instanceof PushOrPopInstruction));
+                            ix -> ix.getArgs().contains(lastOp.getResult()) && !(ix instanceof PushOrPopInstruction));
 
                     // Not exactly two instructions
                     if (list.size() == 2) {
                         Operation operation = jump.getCondition() == Condition.EQUAL
-                                ? op.getOperation().hasInverse() ? op.getOperation().inverse() : null
-                                : op.getOperation().toCondition() != null ? op.getOperation() : null;
+                                ? lastOp.getOperation().hasInverse() ? lastOp.getOperation().inverse() : null
+                                : lastOp.getOperation().toCondition() != null ? lastOp.getOperation() : null;
 
                         if (operation != null) {
-                            iterator.remove();
-                            iterator.next();        // skip the peeked instruction
                             iterator.set(createJump(jump.getAstContext(), jump.getTarget(), operation.toCondition(),
-                                    op.getX(), op.getY()));
+                                    lastOp.getX(), lastOp.getY()));
+                            removeInstruction(lastOpIndex);
                         }
                     }
+                } else if (instruction instanceof LabelInstruction label) {
+                    if (optimizationContext.isActive(label.getLabel())) {
+                        lastOp = null;
+                    }
+                } else if (!(instruction instanceof NoOpInstruction)) {
+                    lastOp = null;
                 }
-            }
-        }
 
-        return false;
+            }
+
+            return false;
+        }
     }
 }
