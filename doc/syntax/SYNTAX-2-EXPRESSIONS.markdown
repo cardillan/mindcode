@@ -8,27 +8,25 @@ Most expressions utilize some operators described below. Other important types o
 
 Those will be discussed later on.
 
-Mindcode evaluates expressions and mathematical functions using the corresponding Mindustry Logic instructions as much as possible, to generate small code. Most of the Mindcode expression evaluation rules therefore follow Mindustry Logic rules, with a few possible exceptions that will be documented here.
+Mindcode evaluates expressions and mathematical functions using the corresponding Mindustry Logic instructions. Most of the Mindcode expression evaluation rules therefore follow Mindustry Logic rules, with only a few exceptions documented here.
 
-Sometimes the expression evaluation in Mindustry Logic itself might be slightly unexpected, and these cases will also be described in this document.     
+Sometimes the expression evaluation in Mindustry Logic itself might be slightly unexpected, and these cases are also described in this document.     
 
-# Null values and object values
+## Null values in expression
 
 Handling `null` values in Mindustry Logic is governed by these rules:
 
 1. When an invalid operation is attempted, such as `1 / 0`, `sqrt(-1)`, or `log(0)`, the resulting value is `null`.
-2. When a `null` value is used in a mathematical operation, it is converted to zero (`0`).
+2. When a `null` value is used in a mathematical operation, it is converted to zero.
 
-However, a code produced by Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`. In this case, the result may also be `null`, if the corresponding operation in Mindustry Logic would produce a zero value. The only exceptions are operators producing boolean values, which are guaranteed to evaluate to `true` or `false` and never produce any other value, such as `null`.   
+However, a code produced by Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`. In this case, the result may also be `null`, if the corresponding operation in Mindustry Logic would produce a zero value. The only exceptions are operators producing boolean values, which are guaranteed to evaluate to `true` or `false` and never produce any other value.   
 
-This difference in handling `null` values allows Mindcode to optimize code when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b`. (Such expressions typically aren't present directly in the user code, but may arise as a result of optimizations Mindcode performs.
+Note: this difference in handling `null` values allows Mindcode to optimize code when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b` (such expressions typically aren't present directly in the user code, but may arise as a result of optimizations Mindcode performs). Of course, when `a` or `b` happens to be `null`, not executing the operation prevents the conversion from `null` to `0` which would otherwise happen.
 
 The impact of the difference in `null` handling by Mindcode is minimal - as has been mentioned above, the `null` value is handled the same as `0` in most cases. The difference between `null` and `0` is meaningful only in these operations:
 
 - `strictEqual` comparison, represented by `===` and `!==` in Mindcode.
 - Printing the value using the `print` or `format` instructions: `null` is output for nulls and `0` for zero values.
-
-Objects used in numerical expressions always have a value of `1`. `n = @unit * 10` will therefore assign `10` to `n` if a unit is bound, `0` otherwise.
 
 # Operators
 
@@ -39,9 +37,9 @@ Most operators do the expected: `+`, `-`, `*`, `/`, and they respect precedence 
 3 \ 2; // returns 1
 ```
 
-Almost every operator maps directly to Mindustry Logic ones, but several are Mindcode-specific enhancements. These enhancements include boolean negation (`!` and `not`) operators, unary minus (`-`), the strict inequality (`!==`) operator, or compound assignment operators.
+Almost every operator maps directly to Mindustry Logic ones, but several are Mindcode-specific enhancements. These enhancements include boolean negation (`!` and `not`) operators, unary minus (`-`), the strict inequality (`!==`) operator, the boolean or operator (`||`), or compound assignment operators.
 
-Non-alphanumeric operators generally don't require spaces around them -- `a+b` is a valid expression, for example.
+Non-alphanumeric operators generally don't require spaces around them: `a+b` is a valid expression, for example.
 Only the `-` sign needs to be separated by spaces, as `a-b` is an identifier and would be interpreted as variable name instead of an expression.
 
 The full list of Mindcode operators in the order of precedence is as follows:
@@ -69,7 +67,7 @@ For the following operators, their resulting value is guaranteed to be either `f
 - boolean operators: `&&`, `||`
 
 > [!TIP]
-> The boolean or operator (`||`) doesn't have a corresponding Mindustry Logic instruction, and is encoded using several (namely, two) mlog instructions. Similarly, while the boolean and operator (`&&`) does have a corresponding mlog instruction, the guarantee to always produce a boolean value precludes using some optimizations on it. 
+> The "boolean or" operator (`||`) doesn't have a corresponding Mindustry Logic instruction, and is encoded using two mlog instructions. Similarly, while the "boolean and" operator (`&&`) does have a corresponding mlog instruction, the guarantee to always produce a boolean value precludes using some optimizations on it. 
 >
 > For evaluating conditions, using the logical operators (`and`/`or`) is preferred. Only use the boolean operators when you need to limit the output values to `0` or `1`, e.g. `count += is_active || reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal mlog code.
 
@@ -171,7 +169,7 @@ println(b == 0 ? "equal to zero" : "not equal to zero");
 prints `equal to zero`.
 
 > [!TIP]
-> To compare numbers using different precision, you can use the `isZero` or `isEqual` functions from the [`utils` system library](SYSTEM-LIBRARY.markdown#utils-library): `println(isZero(b) ? "equal to zero" : "not equal to zero");` outputs `not equal to zero`.
+> To compare numbers using different precision, you can use the `isZero` or `isEqual` functions from the [`math` system library](SYSTEM-LIBRARY.markdown#math-library): `println(isZero(b) ? "equal to zero" : "not equal to zero");` outputs `not equal to zero`.
 
 > [!IMPORTANT] 
 > As has been shown above, the Mindustry Logic precision handling isn't applied to the inequality operators `<`, `<=`, `>` and `>=`. Therefore, `x <= 0` may evaluate to `false`, even though `x == 0` evaluates to `true`. This is especially important if you use these operators in loop conditions where the loop control variable is updated using floating point operations: the number of iterations of the loop may be different from what would be expected if all numerical operations were absolutely precise.        
@@ -182,7 +180,7 @@ Mindustry Logic applies the precision handling described above also when display
 
 Therefore, when a variable value is displayed as an integer by Mindustry, it is necessary to keep in mind that the actual value of the variable might be different, and that the relational operators (`<`, `<=`, `>`, `>=`) operate over the actual value, not the displayed value of the variable.
 
-To display a value of a variable without rounding, it is possible to use the `printExact()` function from the [`utils` system library](SYSTEM-LIBRARY.markdown#utils-library): `printExact(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.   
+To display a value of a variable without rounding, it is possible to use the `printExact()` function from the [`math` system library](SYSTEM-LIBRARY.markdown#math-library): `printExact(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.   
 
 **Note:** at this moment, Mindcode doesn't display values that are slightly smaller than an integer value rounded. `print(0.99999999);` therefore outputs `0.99999999` and not `1`, as could be expected. This is probably a bug that might eventually get fixed.
 
@@ -201,46 +199,22 @@ y = y * 2;
 x = x + y;
 ```
 
-# Constant expressions
+# Objects in expressions
 
-Expressions or parts of expressions that are constant are evaluated at compile time. For example, `print(60 / 1000)` 
-compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime. Most of Mindcode 
-operators and deterministic built-in functions can be used in constant expressions.
+Behavior of equality operators on objects has been described above.
 
-Constant expressions are evaluated during code generation. Furthermore, expressions that contain some constant
-subexpressions (e.g. `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated
-by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
+For all other expressions, object values are treated as if they have a numeric value of  `1`: `n = @unit * 10` will assign `10` to `n` if a unit is bound, `0` otherwise.
 
-## Constant expressions in Mindustry Logic 7 and lower
+## Strings in expressions
 
-If the result of a constant expression is a value which
-[cannot be encoded into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), the expression isn't 
-evaluated at compile time, but rather computed at runtime. Expressions are evaluated to the maximum extent possible,
-and it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
+Strings are objects in Mindustry Logic, and therefore are evaluated in expressions just like any other object.
 
-```
-print(10 ** 50);            // Cannot be evaluated
-print(10 ** (2 * 25));      // Multiplication can be evaluated, exponentiation cannot
-print(sqrt(10 ** 50));      // Can be evaluated even though 10 ** 50 cannot
-```
+> [!NOTE]
+> Since strings are objects, they can be compared for equality. However, relational operators on strings do not work as expected: `"a" < "b"` evaluates to `false`, because both `"a"` and `"b"` are converted to `1` for the operation. The same is true for all other relational operators `>`, `<=` and `>=`.
+> 
+> This also means that `"a" < "b"`, `"a" > "b"` and `"a" == "b"` all evaluate to `false`.
 
-produces
-
-```
-op pow __tmp0 10 50
-print __tmp0
-print __tmp0
-print 1E25
-end
-```
-
-If the value of the constant expression can be only encoded to mlog with loss of precision, a warning is issued.
-
-# String expressions
-
-Mindustry Logic doesn't evaluate string expressions at runtime, or better, doesn't operate on actual string values. When a mathematical operation is performed on string variables or values, the string value is converted to `1` for the purpose of the evaluation. This is also true for the `+` operation, which in some other languages performs string concatenation when used on string values. 
-
-Because string operations do not work anyway, the Mindcode compiler produces a compilation error when it detects a string-based runtime expression:
+Because string operations are generally unavailable in Mindustry Logic, the Mindcode compiler produces a compilation error when it detects a string-based runtime expression:
 
 ```
 x = "A";
@@ -258,7 +232,7 @@ print(x + y);
 
 compiles, but produces `2`, as Mindustry Logic converts all string values to a numerical `1` for all operations.
 
-The only supported operation is concatenation of string constants and literals using the `+` operator, such as: 
+The only supported operation is concatenation of string constants and literals using the `+` operator, such as:
 
 ```
 const NAME = "John";
@@ -288,7 +262,42 @@ for i in 1 .. TOTAL do
 end;
 ```
 
-Compile-time string concatenation isn't supported for [formattable string literals](SYNTAX.markdown#formattable-string-literals). 
+Compile-time string concatenation isn't supported for [formattable string literals](SYNTAX.markdown#formattable-string-literals).
+
+# Constant expressions
+
+Expressions or parts of expressions that are constant are evaluated at compile time. For example, `print(60 / 1000)` 
+compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime. Most of Mindcode 
+operators and deterministic built-in functions can be used in constant expressions.
+
+Constant expressions are evaluated during code generation. Furthermore, expressions that contain some constant
+subexpressions (e.g. `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated
+by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
+
+## Constant expressions in Mindustry Logic 7 and earlier
+
+If the result of a constant expression is a value which
+[cannot be encoded into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), the expression isn't 
+evaluated at compile time, but rather computed at runtime. Expressions are evaluated to the maximum extent possible,
+and it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
+
+```
+print(10 ** 50);            // Cannot be evaluated
+print(10 ** (2 * 25));      // Multiplication can be evaluated, exponentiation cannot
+print(sqrt(10 ** 50));      // Can be evaluated even though 10 ** 50 cannot
+```
+
+produces
+
+```
+op pow __tmp0 10 50
+print __tmp0
+print __tmp0
+print 1E25
+end
+```
+
+If the value of the constant expression can be only encoded to mlog with loss of precision, a warning is issued.
 
 # Range expressions
 
@@ -331,4 +340,4 @@ print(x);        // "null" again
 
 ---
 
-[« Previous: Variables and constants](SYNTAX-1-VARIABLES.markdown) &nbsp; | &nbsp; [Next: Control flow statements »](SYNTAX-3-STATEMENTS.markdown)
+[« Previous: Variables and constants](SYNTAX-1-VARIABLES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Control flow statements »](SYNTAX-3-STATEMENTS.markdown)

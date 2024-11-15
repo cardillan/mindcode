@@ -17,6 +17,11 @@ public class VoidLiteral extends ConstantAstNode {
     }
 
     @Override
+    public String getLiteralValue() {
+        return "void";
+    }
+
+    @Override
     public int hashCode() {
         return 72841685;
     }

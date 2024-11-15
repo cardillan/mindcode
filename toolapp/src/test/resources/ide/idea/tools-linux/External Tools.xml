@@ -1,0 +1,26 @@
+<toolSet name="External Tools">
+  <tool name="Mindcode" description="Mindcode compiler" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="true" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="mindcode" />
+      <option name="PARAMETERS" value="cm -l -d 1 -u SOURCE --run -w '$FileName$'" />
+      <option name="WORKING_DIRECTORY" value="$FileDir$" />
+    </exec>
+    <filter>
+      <option name="NAME" value="" />
+      <option name="DESCRIPTION" value="" />
+      <option name="REGEXP" value="$FILE_PATH$:$LINE$:$COLUMN$.*" />
+    </filter>
+  </tool>
+  <tool name="Schemacode" description="Schema compiler" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="true" showConsoleOnStdOut="true" showConsoleOnStdErr="true" synchronizeAfterRun="true">
+    <exec>
+      <option name="COMMAND" value="mindcode" />
+      <option name="PARAMETERS" value="cs -l -c -d 1 '$FileName$'" />
+      <option name="WORKING_DIRECTORY" value="$FileDir$" />
+    </exec>
+    <filter>
+      <option name="NAME" value="" />
+      <option name="DESCRIPTION" value="" />
+      <option name="REGEXP" value="$FILE_PATH$:$LINE$:$COLUMN$.*" />
+    </filter>
+  </tool>
+</toolSet>

@@ -17,6 +17,11 @@ public class NullLiteral extends ConstantAstNode {
     }
 
     @Override
+    public String getLiteralValue() {
+        return "null";
+    }
+
+    @Override
     public int hashCode() {
         return 65491987;
     }

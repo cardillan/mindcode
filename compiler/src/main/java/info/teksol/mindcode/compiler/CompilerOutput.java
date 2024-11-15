@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.processor.TextBuffer;
 import info.teksol.mindcode.MindcodeMessage;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String textBuffer, int steps) {
+public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, TextBuffer textBuffer, int steps) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
         return new CompilerOutput<>(output, messages, textBuffer, steps);
@@ -20,6 +21,18 @@ public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, String
 
     public void addMessage(MindcodeMessage message) {
         messages.add(message);
+    }
+
+    public List<String> getPrintOutput() {
+        return textBuffer != null ? textBuffer.getPrintOutput() : List.of();
+    }
+
+    public String getProgramOutput() {
+        return textBuffer != null ? textBuffer.getFormattedOutput() : "";
+    }
+
+    public boolean hasProgramOutput() {
+        return textBuffer != null && !textBuffer().isEmpty();
     }
 
     public <M> List<M> texts(Function<MindcodeMessage, M> messageTransformer) {

@@ -6,13 +6,19 @@ import info.teksol.mindcode.compiler.generator.AstContextType;
 import java.util.Objects;
 
 public class ProgramParameter extends BaseAstNode {
+    private final String codeDoc;
     private final String name;
     private final AstNode value;
 
-    public ProgramParameter(InputPosition inputPosition, String name, AstNode value) {
+    public ProgramParameter(InputPosition inputPosition, String codeDoc, String name, AstNode value) {
         super(inputPosition);
+        this.codeDoc = codeDoc;
         this.name = name;
         this.value = value;
+    }
+
+    public String getCodeDoc() {
+        return codeDoc;
     }
 
     public String getName() {

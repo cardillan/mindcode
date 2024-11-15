@@ -14,22 +14,25 @@ param UNIT = @poly;
 
 // We'll write messages onto this block
 // It is used by the units system library to output messages as well
-param SYS_MESSAGE = message1;
+param MESSAGES = message1;
 
 /// Don't modify anything below this line.
 
+// Title printed to messages to help identify the processor purpose
+const TITLE = "Healing damaged buildings\n";
+
 // Find a unit if we don't have one
 if @unit.@dead != 0  or @unit.@controller != @this then
-    waitForFreeUnit(UNIT, 1);
+    waitForFreeUnit(MESSAGES, TITLE, UNIT, 1);
 end;
 
 if ulocate(damaged, out dmgx, out dmgy) then
-    println($"Found damaged block at $dmgx, $dmgy");
+    println($"${TITLE}Found damaged block at $dmgx, $dmgy");
     approach(dmgx, dmgy, 5);
     target(dmgx, dmgy, true);
 else
-    println("Patrolling");
+    println(TITLE, "Patrolling");
     approach(CENTER.@x + 10 * sin(@tick), CENTER.@y + 10 * cos(@tick), 2);
 end;
 
-printflush(SYS_MESSAGE);
+printflush(MESSAGES);

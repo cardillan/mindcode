@@ -11,6 +11,7 @@ import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
+import info.teksol.mindcode.mimex.LVar;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -313,7 +314,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private void verifyStackAllocation() {
         if (callGraph.getAllocatedStack() == null) {
-            callGraph.recursiveFunctions().forEach(f -> error(f.getDeclaration(),
+            callGraph.recursiveFunctions().filter(LogicFunction::isUsed).forEach(f -> error(f.getDeclaration(),
                     "Function '%s' is recursive and no stack was allocated.", f.getName()));
         }
     }
@@ -1446,12 +1447,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private LogicBuiltIn createBuiltIn(AstNode node, String name) {
+        if (LVar.forName(name) == null) {
+            warn(node, "Built-in variable '%s' not recognized.", name);
+        }
+        return LogicBuiltIn.create(name);
+    }
+
     @Override
     public LogicBuiltIn visitRef(Ref node) {
         if (!node.isStrict()) {
             warn(node, "Built-in variable '%s': omitting the '@' prefix from built-in variable names is deprecated.", node.getName().substring(1));
         }
-        return LogicBuiltIn.create(node.getName());
+        return createBuiltIn(node, node.getName());
     }
 
     @Override
@@ -1535,7 +1543,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             if (constant instanceof LogicParameter p && p.getValue().getType() == ArgumentType.BLOCK) {
                 return p;
             } else {
-                error(node, "'%s' cannot be used for external memory access.", identifier);
+                error(node, "Parameter '%s' is not a block, it cannot be used for external memory access.", identifier);
+                return LogicVariable.special("invalid");
             }
         }
 
@@ -2072,7 +2081,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         }
                     } else {
                         // Going through createValue ensures proper handling and registering of local variables
-                        LogicValue eval = variable.startsWith("@") ? LogicBuiltIn.create(variable) : createValue(node, variable);
+                        LogicValue eval = variable.startsWith("@") ? createBuiltIn(node, variable) : createValue(node, variable);
                         emit(formatter.createInstruction(this, eval));
                     }
 

@@ -1,6 +1,9 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.processor.ExecutionFlag;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.v3.InputFile;
@@ -15,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +38,18 @@ class MindcodeCompilerTest {
         return new MindcodeCompiler(
                 new CompilerProfile(false, OptimizationLevel.ADVANCED)
                         .setFinalCodeOutput(FinalCodeOutput.PLAIN)
+                        .setPrintStackTrace(true)
                         .setRun(run),
                 inputFiles
         );
+    }
+
+    private MindcodeCompiler createCompiler() {
+        return new MindcodeCompiler(createCompilerProfile());
+    }
+
+    private MindcodeCompiler createCompiler(CompilerProfile profile) {
+        return new MindcodeCompiler(profile);
     }
 
     @Test
@@ -60,7 +73,7 @@ class MindcodeCompilerTest {
                 """,
                 result.output());
 
-        assertEquals("Hello", result.textBuffer());
+        assertEquals("Hello", result.getProgramOutput());
 
         int index = CollectionUtils.findFirstIndex(result.messages(),
                 m -> m.message().contains("Final code before resolving virtual instructions"));
@@ -91,7 +104,7 @@ class MindcodeCompilerTest {
                 """,
                 result.output());
 
-        assertEquals("File2File1", result.textBuffer());
+        assertEquals("File2File1", result.getProgramOutput());
 
         int index = CollectionUtils.findFirstIndex(result.messages(),
                 m -> m.message().contains("Final code before resolving virtual instructions"));
@@ -111,25 +124,23 @@ class MindcodeCompilerTest {
         final File[] files = new File(LIBRARY_DIRECTORY).listFiles((dir, name) -> name.endsWith(".mnd"));
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one script in " + LIBRARY_DIRECTORY + "; found none");
+        List<OptimizationLevel> levels = List.of(OptimizationLevel.values());
 
         return DynamicContainer.dynamicContainer("Optimization tests",
                 Stream.of(files)
                         .map(File::getName)
                         .map(f -> f.replace(".mnd", ""))
-                        .map(f -> DynamicTest.dynamicTest(f, null, () -> compileLibrary(f)))
+                        .flatMap(name -> levels.stream().map(
+                                level -> DynamicTest.dynamicTest(name + ":" + level,
+                                        null, () -> compileLibrary(name, level))
+                        ))
         );
     }
 
-    //@Test
-    void compileLibrary() throws IOException {
-        compileLibrary("blocks");
-    }
-
-    private void compileLibrary(String filename) throws IOException {
+    private void compileLibrary(String filename, OptimizationLevel level) throws IOException {
         InputFile inputFile;
         InputFiles inputFiles = InputFiles.create();
         MindcodeCompiler compiler = createCompiler(inputFiles, false);
-
         Path testFile = Path.of(LIBRARY_TESTS_DIRECTORY, filename + ".mnd");
         if (testFile.toFile().exists()) {
             // Explicitly written testing code
@@ -141,7 +152,6 @@ class MindcodeCompilerTest {
             String initializations = """
                     #set target = ML8A;
                     require %s;
-                    SYS_MESSAGE = null;
                     """.formatted(filename);
 
             String variables = source.getCode().lines()
@@ -163,30 +173,37 @@ class MindcodeCompilerTest {
                     .collect(Collectors.joining("\n"));
 
             // We know there must be a variable names display
-            String code = initializations + "\n" + variables + "\n\n" + functionCalls + "\n" + procedureCalls;
-            inputFile = inputFiles.registerSource(code);
+            code = initializations + "\n" + variables + "\n\n" + functionCalls + "\n" + procedureCalls;
+
+            Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".mnd"),
+                    normalizeLineEndings(code), StandardCharsets.UTF_8);
         }
 
-        CompilerOutput<String> result = compiler.compile(List.of(inputFile));
+        CompilerProfile profile = createCompilerProfile()
+                .setAllOptimizationLevels(level)
+                .setRemarks(Remarks.ACTIVE)
+                .clearExecutionFlags(ExecutionFlag.ERR_UNSUPPORTED_OPCODE);
+
+        CompilerOutput<String> result = createCompiler(profile).compile(InputFile.createSourceFiles(code));
 
         String errorsAndWarnings = result.messages().stream()
                 .filter(MindcodeMessage::isErrorOrWarning)
                 .map(MindcodeMessage::message)
-                .filter(message -> !"List of unused variables: SYS_MESSAGE.".equals(message.trim()))
                 .collect(Collectors.joining("\n"));
-
-        Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".mnd"),
-                normalizeLineEndings(inputFile.getCode()), StandardCharsets.UTF_8);
 
         String messages = result.messages().stream()
                 .filter(m -> !m.message().startsWith("\nPerformance: parsed"))
                 .map(m -> m.formatMessage(InputPosition::formatForIde))
                 .collect(Collectors.joining("\n"));
-        Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".log"),
+        Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + "-" + level.name().toLowerCase() + ".log"),
                 normalizeLineEndings(messages), StandardCharsets.UTF_8);
 
-        Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".mlog"),
+        Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + "-" + level.name().toLowerCase() + ".mlog"),
                 normalizeLineEndings(result.output()), StandardCharsets.UTF_8);
+
+        //if (result.hasProgramOutput()) System.out.println(result.getProgramOutput());
+
+        extractTestResults(result.getProgramOutput()).forEach(TestResult::assertValid);
 
         if (!errorsAndWarnings.isEmpty()) {
             fail("Unexpected error or warning messages were generated:\n" + errorsAndWarnings);
@@ -204,5 +221,44 @@ class MindcodeCompilerTest {
         return start < end - 1
                 ? Arrays.stream(declaration.substring(start + 1, end).split(",")).map(String::trim)
                 : Stream.empty();
+    }
+
+    private record TestResult(String title, String expected, String actual) {
+        void assertValid() {
+            assertEquals(expected, actual,"Test " + title + " failed");
+        }
+    }
+
+    private List<TestResult> extractTestResults(String output) {
+        List<TestResult> results = new ArrayList<>();
+        String title = null;
+        String expected = null;
+        String actual = null;
+
+        for (String line : output.split("\n")) {
+            if (line.startsWith("T:")) {
+                title = line.substring(2);
+            } else if (line.startsWith("E:")) {
+                expected = line.substring(2);
+            } else if (line.startsWith("A:")) {
+                actual = line.substring(2);
+
+                if (title == null || expected == null) {
+                    throw new MindcodeInternalError("Unexpected structure of test output.");
+                } else {
+                    results.add(new TestResult(title, expected, actual));
+                    title = null;
+                    expected = null;
+                    actual = null;
+                }
+            }
+        }
+
+        return results;
+    }
+
+    @Test
+    void compileLibrary() throws IOException {
+        compileLibrary("printing", OptimizationLevel.ADVANCED);
     }
 }

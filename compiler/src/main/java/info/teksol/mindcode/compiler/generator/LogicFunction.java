@@ -168,7 +168,7 @@ public class LogicFunction {
     }
 
     /**
-     * @return true if the function is used (is reachable from main program body
+     * @return true if the function is used (is reachable from main program body)
      */
     public boolean isUsed() {
         return useCount > 0;

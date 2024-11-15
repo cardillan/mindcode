@@ -1,8 +1,8 @@
-# Mindcode syntax
+# Mindcode
 
 Mindcode is a high-level language for [Mindustry](https://github.com/anuke/mindustry). The language design was inspired mostly by Ruby, but there are quite a few differences. Mindcode aims to provide programmatic access to full Mindustry Logic functionality. Mindustry Logic instructions interacting with Mindustry World are available through functions (see [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown)). Other instructions are used by expressions, control structures and other statements in Mindcode.
 
-This document covers the basics of Mindcode syntax:
+This documentation covers the basics of Mindcode syntax:
 
 * [Mindcode basics](#mindcode-basics)
 * [Variables and constants](SYNTAX-1-VARIABLES.markdown)
@@ -19,7 +19,7 @@ Function reference for individual compiler versions:
 * [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
 * [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown)
 
-For Mindustry Logic 8 and higher, new mlog instructions and a Mindcode system library of functions are supported:
+For Mindustry Logic 8 and later, new mlog instructions and a Mindcode system library of functions are supported:
 
 * [Mindustry Logic 8](MINDUSTRY-8.markdown)
 * [System Library](SYSTEM-LIBRARY.markdown)
@@ -32,6 +32,7 @@ Supporting tools:
 
 * [IDE Integration](TOOLS-IDE-INTEGRATION.markdown)
 * [Command line tool](TOOLS-CMDLINE.markdown)
+* [Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown)
 * [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
 * [Schematics Refresher](TOOLS-REFRESHER.markdown)
 * [Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown)

@@ -1,0 +1,311 @@
+print "T:printNumber(null)\nE:0\nA:{2}"
+op floor __fn33__n 0 0
+format __fn33__n
+print "\nT:printNumber(1)\nE:1\nA:{2}"
+op floor __fn33__n 1 0
+format __fn33__n
+print "\nT:printNumber(1.5)\nE:1\nA:{2}"
+op floor __fn33__n 1.5 0
+format __fn33__n
+print "\nT:printNumber(-1.5)\nE:-1\nA:{2}"
+op floor __fn33__n 1.5 0
+format "-{2}"
+format __fn33__n
+print "\nT:printNumber(1234567)\nE:"
+print "1,234,567\nA:{2}"
+op floor __fn33__n 1234567 0
+op mod __fn33__mod __fn33__n 1000
+set __tmp34 "{2},00{1}"
+jump 22 lessThan __fn33__mod 10
+set __tmp34 "{2},{1}"
+jump 22 greaterThanEq __fn33__mod 100
+set __tmp34 "{2},0{1}"
+format __tmp34
+format __fn33__mod
+op idiv __fn33__n __fn33__n 1000
+jump 16 greaterThan __fn33__n 999
+format __fn33__n
+print "\nT:printNumber(-1234567)\nE:"
+print "-1,234,567\nA:{2}"
+op floor __fn33__n 1234567 0
+format "-{2}"
+op mod __fn33__mod __fn33__n 1000
+set __tmp34 "{2},00{1}"
+jump 37 lessThan __fn33__mod 10
+set __tmp34 "{2},{1}"
+jump 37 greaterThanEq __fn33__mod 100
+set __tmp34 "{2},0{1}"
+format __tmp34
+format __fn33__mod
+op idiv __fn33__n __fn33__n 1000
+jump 31 greaterThan __fn33__n 999
+format __fn33__n
+print "\nT:printNumber(9009099)\nE:"
+print "9,009,099\nA:{2}"
+op floor __fn33__n 9009099 0
+op mod __fn33__mod __fn33__n 1000
+set __tmp34 "{2},00{1}"
+jump 51 lessThan __fn33__mod 10
+set __tmp34 "{2},{1}"
+jump 51 greaterThanEq __fn33__mod 100
+set __tmp34 "{2},0{1}"
+format __tmp34
+format __fn33__mod
+op idiv __fn33__n __fn33__n 1000
+jump 45 greaterThan __fn33__n 999
+format __fn33__n
+print "\nT:printExactFast(null)\nE:null\n"
+print "A:"
+set __fn4__n null
+set __fn4retaddr 61
+jump 155 always 0 0
+print "\nT:printExactFast(0)\nE:0\nA:"
+set __fn4__n 0
+set __fn4retaddr 65
+jump 155 always 0 0
+print "\nT:printExactFast(1)\nE:1\nA:"
+set __fn4__n 1
+set __fn4retaddr 69
+jump 155 always 0 0
+print "\nT:printExactFast(1.0000001)\nE:"
+print "1.000000100000000\nA:"
+set __fn4__n 1.0000001
+set __fn4retaddr 74
+jump 155 always 0 0
+print "\nT:printExactFast(3.00000007)\nE:"
+print "3.000000070000000\nA:"
+set __fn4__n 3.00000007
+set __fn4retaddr 79
+jump 155 always 0 0
+print "\nT:printExactFast(3e50)\nE:3E50\n"
+print "A:"
+set __fn4__n 3E50
+set __fn4retaddr 84
+jump 155 always 0 0
+print "\nT:printExactFast(1.0123456789)\n"
+print "E:1.0123456789\nA:"
+set __fn4__n 1.0123456789
+set __fn4retaddr 89
+jump 155 always 0 0
+print "\nT:printExactFast(1.0000001e20)\n"
+print "E:1.000000099999999E20\nA:"
+set __fn4__n 10000000999999999E4
+set __fn4retaddr 94
+jump 155 always 0 0
+print "\nT:printExactFast(1.2345e-50)\nE:"
+print "1.2345000000000002E-50\nA:"
+set __fn4__n 12345E-54
+set __fn4retaddr 99
+jump 155 always 0 0
+print "\nT:printExactFast(-1.2345e-50)\n"
+print "E:-1.2345000000000002E-50\nA:"
+set __fn4__n -12345E-54
+set __fn4retaddr 104
+jump 155 always 0 0
+print "\nT:printExactSlow(null)\nE:null\n"
+print "A:"
+set __fn5__n null
+set __fn5retaddr 109
+jump 230 always 0 0
+print "\nT:printExactSlow(0)\nE:0\nA:"
+set __fn5__n 0
+set __fn5retaddr 113
+jump 230 always 0 0
+print "\nT:printExactSlow(1)\nE:"
+print "1.000000000000000\nA:"
+set __fn5__n 1
+set __fn5retaddr 118
+jump 230 always 0 0
+print "\nT:printExactSlow(1.0000001)\nE:"
+print "1.000000100000000\nA:"
+set __fn5__n 1.0000001
+set __fn5retaddr 123
+jump 230 always 0 0
+print "\nT:printExactSlow(3.00000007)\nE:"
+print "3.000000070000000\nA:"
+set __fn5__n 3.00000007
+set __fn5retaddr 128
+jump 230 always 0 0
+print "\nT:printExactSlow(3e50)\nE:"
+print "3.000000000000000E50\nA:"
+set __fn5__n 3E50
+set __fn5retaddr 133
+jump 230 always 0 0
+print "\nT:printExactSlow(1.0123456789)\n"
+print "E:1.012345678900000\nA:"
+set __fn5__n 1.0123456789
+set __fn5retaddr 138
+jump 230 always 0 0
+print "\nT:printExactSlow(1.0000001e20)\n"
+print "E:1.000000099999999E20\nA:"
+set __fn5__n 10000000999999999E4
+set __fn5retaddr 143
+jump 230 always 0 0
+print "\nT:printExactSlow(1.2345e-50)\nE:"
+print "1.234500000000000E-50\nA:"
+set __fn5__n 12345E-54
+set __fn5retaddr 148
+jump 230 always 0 0
+print "\nT:printExactSlow(-1.2345e-50)\n"
+print "E:-1.234500000000000E-50\nA:"
+set __fn5__n -12345E-54
+set __fn5retaddr 153
+jump 230 always 0 0
+print "\n"
+end
+op abs __tmp39 __fn4__n 0
+jump 159 greaterThan __tmp39 0
+print __fn4__n
+jump 228 always 0 0
+jump 162 greaterThanEq __fn4__n 0
+print "-"
+op abs __fn4__n __fn4__n 0
+op log10 __tmp45 __fn4__n 0
+op floor __fn4__exp __tmp45 0
+op mul __tmp47 -1 __fn4__exp
+op pow __tmp48 10 __tmp47
+op mul __fn4__base __fn4__n __tmp48
+op add __tmp51 __fn4__base 0.5
+op floor __tmp50 __tmp51 0
+op sub __tmp53 __fn4__base __tmp50
+op abs __fn4__cmp __tmp53 0
+jump 174 greaterThan __fn4__cmp 0
+print __fn4__base
+jump 225 always 0 0
+jump 177 lessThanEq __fn4__cmp 0.00001
+print __fn4__base
+jump 225 always 0 0
+op floor __tmp59 __fn4__base 0
+print __tmp59
+print "."
+op mod __tmp60 __fn4__base 1
+op mul __fn4__base __tmp60 100000
+op floor __fn4__t __fn4__base 0
+jump 186 greaterThanEq __fn4__t 10
+print "0000"
+jump 194 always 0 0
+jump 189 greaterThanEq __fn4__t 100
+print "000"
+jump 194 always 0 0
+jump 192 greaterThanEq __fn4__t 1000
+print "00"
+jump 194 always 0 0
+jump 194 greaterThanEq __fn4__t 10000
+print "0"
+print __fn4__t
+op mod __tmp60 __fn4__base 1
+op mul __fn4__base __tmp60 100000
+op floor __fn4__t __fn4__base 0
+jump 201 greaterThanEq __fn4__t 10
+print "0000"
+jump 209 always 0 0
+jump 204 greaterThanEq __fn4__t 100
+print "000"
+jump 209 always 0 0
+jump 207 greaterThanEq __fn4__t 1000
+print "00"
+jump 209 always 0 0
+jump 209 greaterThanEq __fn4__t 10000
+print "0"
+print __fn4__t
+op mod __tmp60 __fn4__base 1
+op mul __fn4__base __tmp60 100000
+op floor __fn4__t __fn4__base 0
+jump 216 greaterThanEq __fn4__t 10
+print "0000"
+jump 224 always 0 0
+jump 219 greaterThanEq __fn4__t 100
+print "000"
+jump 224 always 0 0
+jump 222 greaterThanEq __fn4__t 1000
+print "00"
+jump 224 always 0 0
+jump 224 greaterThanEq __fn4__t 10000
+print "0"
+print __fn4__t
+jump 228 equal __fn4__exp 0
+print "E"
+print __fn4__exp
+set @counter __fn4retaddr
+end
+op abs __tmp75 __fn5__n 0
+jump 234 greaterThan __tmp75 0
+print __fn5__n
+jump 308 always 0 0
+jump 237 greaterThanEq __fn5__n 0
+print "-"
+op abs __fn5__n __fn5__n 0
+op log10 __tmp81 __fn5__n 0
+op floor __fn5__exp __tmp81 0
+op mul __tmp83 -1 __fn5__exp
+op pow __tmp84 10 __tmp83
+op mul __fn5__base __fn5__n __tmp84
+op floor __tmp86 __fn5__base 0
+print __tmp86
+print "."
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+op mod __tmp87 __fn5__base 1
+op mul __fn5__base __tmp87 10
+op floor __tmp90 __fn5__base 0
+print __tmp90
+jump 308 equal __fn5__exp 0
+print "E"
+print __fn5__exp
+set @counter __fn5retaddr
+end
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

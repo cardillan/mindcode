@@ -1,0 +1,184 @@
+Number of reported ambiguities: 54
+
+Final code before resolving virtual instructions:
+
+    0:  set _display null
+        label __label0
+    1:  set __fn0__display _display
+    2:  sensor __tmp1 __fn0__display @type
+    3:  set __fn0_type __tmp1
+    4:  op equal __tmp2 __fn0_type @logic-display
+    5:  jump __label2 equal __tmp2 false
+    6:  set __tmp3 80
+    7:  jump __label3 always 0 0
+        label __label2
+    8:  op equal __tmp4 __fn0_type @large-logic-display
+    9:  jump __label4 equal __tmp4 false
+   10:  set __tmp5 176
+   11:  jump __label5 always 0 0
+        label __label4
+   12:  set __tmp5 null
+        label __label5
+   13:  set __tmp3 __tmp5
+        label __label3
+   14:  set __tmp0 __tmp3
+        label __label1
+   15:  print __tmp0
+   16:  print "\n"
+        label __label6
+   17:  set __fn1__display _display
+   18:  sensor __tmp6 __fn1__display @type
+   19:  set __ast0 __tmp6
+   20:  jump __label10 equal __ast0 @logic-display
+   21:  jump __label9 always 0 0
+        label __label10
+        label __label11
+   22:  draw rotate 0 0 90 0 0 0
+   23:  draw translate 0 -80 0 0 0 0
+        label __label12
+   24:  set __tmp7 null
+   25:  jump __label8 always 0 0
+        label __label9
+   26:  jump __label14 equal __ast0 @large-logic-display
+   27:  jump __label13 always 0 0
+        label __label14
+        label __label15
+   28:  draw rotate 0 0 90 0 0 0
+   29:  draw translate 0 -176 0 0 0 0
+        label __label16
+   30:  set __tmp7 null
+   31:  jump __label8 always 0 0
+        label __label13
+   32:  stop
+   33:  set __tmp7 null
+        label __label8
+        label __label7
+        label __label17
+   34:  set __fn4__display _display
+   35:  sensor __tmp8 __fn4__display @type
+   36:  set __ast1 __tmp8
+   37:  jump __label21 equal __ast1 @logic-display
+   38:  jump __label20 always 0 0
+        label __label21
+        label __label22
+   39:  draw rotate 0 0 270 0 0 0
+   40:  draw translate -80 0 0 0 0 0
+        label __label23
+   41:  set __tmp9 null
+   42:  jump __label19 always 0 0
+        label __label20
+   43:  jump __label25 equal __ast1 @large-logic-display
+   44:  jump __label24 always 0 0
+        label __label25
+        label __label26
+   45:  draw rotate 0 0 270 0 0 0
+   46:  draw translate -176 0 0 0 0 0
+        label __label27
+   47:  set __tmp9 null
+   48:  jump __label19 always 0 0
+        label __label24
+   49:  stop
+   50:  set __tmp9 null
+        label __label19
+        label __label18
+        label __label28
+   51:  set __fn7__display _display
+   52:  sensor __tmp10 __fn7__display @type
+   53:  set __ast2 __tmp10
+   54:  jump __label32 equal __ast2 @logic-display
+   55:  jump __label31 always 0 0
+        label __label32
+        label __label33
+   56:  draw rotate 0 0 180 0 0 0
+   57:  draw translate -80 -80 0 0 0 0
+        label __label34
+   58:  set __tmp11 null
+   59:  jump __label30 always 0 0
+        label __label31
+   60:  jump __label36 equal __ast2 @large-logic-display
+   61:  jump __label35 always 0 0
+        label __label36
+        label __label37
+   62:  draw rotate 0 0 180 0 0 0
+   63:  draw translate -176 -176 0 0 0 0
+        label __label38
+   64:  set __tmp11 null
+   65:  jump __label30 always 0 0
+        label __label35
+   66:  stop
+   67:  set __tmp11 null
+        label __label30
+        label __label29
+        label __label39
+   68:  set __fn10__display _display
+   69:  sensor __tmp12 __fn10__display @type
+   70:  set __ast3 __tmp12
+   71:  jump __label43 equal __ast3 @logic-display
+   72:  jump __label42 always 0 0
+        label __label43
+        label __label44
+   73:  draw scale 1 -1 0 0 0 0
+   74:  draw translate 0 -80 0 0 0 0
+        label __label45
+   75:  set __tmp13 null
+   76:  jump __label41 always 0 0
+        label __label42
+   77:  jump __label47 equal __ast3 @large-logic-display
+   78:  jump __label46 always 0 0
+        label __label47
+        label __label48
+   79:  draw scale 1 -1 0 0 0 0
+   80:  draw translate 0 -176 0 0 0 0
+        label __label49
+   81:  set __tmp13 null
+   82:  jump __label41 always 0 0
+        label __label46
+   83:  stop
+   84:  set __tmp13 null
+        label __label41
+        label __label40
+        label __label50
+   85:  set __fn13__display _display
+   86:  sensor __tmp14 __fn13__display @type
+   87:  set __ast4 __tmp14
+   88:  jump __label54 equal __ast4 @logic-display
+   89:  jump __label53 always 0 0
+        label __label54
+        label __label55
+   90:  draw scale -1 1 0 0 0 0
+   91:  draw translate -80 0 0 0 0 0
+        label __label56
+   92:  set __tmp15 null
+   93:  jump __label52 always 0 0
+        label __label53
+   94:  jump __label58 equal __ast4 @large-logic-display
+   95:  jump __label57 always 0 0
+        label __label58
+        label __label59
+   96:  draw scale -1 1 0 0 0 0
+   97:  draw translate -176 0 0 0 0 0
+        label __label60
+   98:  set __tmp15 null
+   99:  jump __label52 always 0 0
+        label __label57
+  100:  stop
+  101:  set __tmp15 null
+        label __label52
+        label __label51
+  102:  end
+
+
+stop instruction encountered, dumping variable values:
+@counter: 33.0
+__ast0: null
+__fn0__display: null
+__fn0_type: null
+__fn1__display: null
+__tmp0: null
+__tmp1: null
+__tmp2: 0.0
+__tmp3: null
+__tmp4: 0.0
+__tmp5: null
+__tmp6: null
+_display: null

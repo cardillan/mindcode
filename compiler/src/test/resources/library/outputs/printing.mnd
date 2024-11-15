@@ -1,9 +1,0 @@
-#set target = ML8A;
-require printing;
-SYS_MESSAGE = null;
-
-_n = null;
-
-
-formatNumber(_n);
-printNumber(_n);

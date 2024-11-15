@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.Directive;
@@ -73,6 +74,17 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
             error(node.getValue(), "Invalid value '%s' of compiler directive '%s'.", node.getValue().getText(), optimization.getOptionName());
         } else {
             profile.setOptimizationLevel(optimization, optLevel);
+        }
+    }
+
+    private void setExecutionFlag(ExecutionFlag flag, CompilerProfile profile, Directive node) {
+        Boolean value =
+                "false".equals(node.getValue().getText()) ? Boolean.FALSE :
+                "true".equals(node.getValue().getText()) ? Boolean.TRUE : null;
+        if (value == null) {
+            error(node.getValue(), "Invalid value '%s' of compiler directive '%s'.", node.getValue().getText(), flag.getOptionName());
+        } else {
+            profile.setExecutionFlag(flag, value);
         }
     }
 
@@ -185,9 +197,15 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         map.put("remarks", this::setRemarks);
         map.put("memory-model", this::setMemoryModel);
         map.put("sort-variables", this::setSortVariables);
-        for (Optimization opt : Optimization.values()) {
+        for (Optimization opt : Optimization.LIST) {
             map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }
+        for (ExecutionFlag flag : ExecutionFlag.values()) {
+            if (flag.isSettable()) {
+                map.put(flag.getOptionName(), (profile, level) -> setExecutionFlag(flag, profile, level));
+            }
+        }
+
         return map;
     }
 }

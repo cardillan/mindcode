@@ -1,0 +1,119 @@
+Number of reported ambiguities: 54
+Active optimizations:
+    case-expression-optimization = advanced,
+    case-switching = advanced,
+    data-flow-optimization = advanced,
+    dead-code-elimination = advanced,
+    expression-optimization = advanced,
+    function-inlining = advanced,
+    if-expression-optimization = advanced,
+    jump-normalization = advanced,
+    jump-optimization = advanced,
+    jump-straightening = advanced,
+    jump-threading = advanced,
+    loop-hoisting = advanced,
+    loop-optimization = advanced,
+    loop-unrolling = advanced,
+    print-merging = advanced,
+    return-optimization = advanced,
+    single-step-elimination = advanced,
+    stack-optimization = advanced,
+    temp-variables-elimination = advanced,
+    unreachable-code-elimination = advanced
+
+   103 instructions before optimizations.
+     1 instructions eliminated by Temp Variables Elimination.
+     5 instructions eliminated by Case Expression Optimization.
+    15 instructions eliminated by Dead Code Elimination (3 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     2 instructions eliminated by If Expression Optimization (3 iterations).
+     8 instructions eliminated by Data Flow Optimization (6 iterations).
+    10 instructions eliminated by Jump Straightening (4 iterations).
+     2 instructions updated by JumpThreading.
+    58 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+        label __start__
+    0:  sensor __fn0_type null @type
+    1:  set __tmp3 80
+    2:  jump __label3 equal __fn0_type @logic-display
+    3:  set __tmp3 null
+    4:  jump __label5 notEqual __fn0_type @large-logic-display
+    5:  set __tmp3 176
+        label __label5
+        label __label3
+    6:  print __tmp3
+    7:  print "\n"
+    8:  sensor __tmp6 null @type
+    9:  jump __label9 notEqual __tmp6 @logic-display
+   10:  draw rotate 0 0 90 0 0 0
+   11:  draw translate 0 -80 0 0 0 0
+   12:  jump __label8 always 0 0
+        label __label9
+   13:  jump __label13 notEqual __tmp6 @large-logic-display
+   14:  draw rotate 0 0 90 0 0 0
+   15:  draw translate 0 -176 0 0 0 0
+   16:  jump __label8 always 0 0
+        label __label13
+   17:  stop
+        label __label8
+   18:  sensor __tmp8 null @type
+   19:  jump __label20 notEqual __tmp8 @logic-display
+   20:  draw rotate 0 0 270 0 0 0
+   21:  draw translate -80 0 0 0 0 0
+   22:  jump __label19 always 0 0
+        label __label20
+   23:  jump __label24 notEqual __tmp8 @large-logic-display
+   24:  draw rotate 0 0 270 0 0 0
+   25:  draw translate -176 0 0 0 0 0
+   26:  jump __label19 always 0 0
+        label __label24
+   27:  stop
+        label __label19
+   28:  sensor __tmp10 null @type
+   29:  jump __label31 notEqual __tmp10 @logic-display
+   30:  draw rotate 0 0 180 0 0 0
+   31:  draw translate -80 -80 0 0 0 0
+   32:  jump __label30 always 0 0
+        label __label31
+   33:  jump __label35 notEqual __tmp10 @large-logic-display
+   34:  draw rotate 0 0 180 0 0 0
+   35:  draw translate -176 -176 0 0 0 0
+   36:  jump __label30 always 0 0
+        label __label35
+   37:  stop
+        label __label30
+   38:  sensor __tmp12 null @type
+   39:  jump __label42 notEqual __tmp12 @logic-display
+   40:  draw scale 1 -1 0 0 0 0
+   41:  draw translate 0 -80 0 0 0 0
+   42:  jump __label41 always 0 0
+        label __label42
+   43:  jump __label46 notEqual __tmp12 @large-logic-display
+   44:  draw scale 1 -1 0 0 0 0
+   45:  draw translate 0 -176 0 0 0 0
+   46:  jump __label41 always 0 0
+        label __label46
+   47:  stop
+        label __label41
+   48:  sensor __tmp14 null @type
+   49:  jump __label53 notEqual __tmp14 @logic-display
+   50:  draw scale -1 1 0 0 0 0
+   51:  draw translate -80 0 0 0 0 0
+   52:  jump __start__ always 0 0
+        label __label53
+   53:  jump __label57 notEqual __tmp14 @large-logic-display
+   54:  draw scale -1 1 0 0 0 0
+   55:  draw translate -176 0 0 0 0 0
+   56:  jump __start__ always 0 0
+        label __label57
+   57:  stop
+
+
+stop instruction encountered, dumping variable values:
+@counter: 18.0
+__fn0_type: null
+__tmp3: null
+__tmp6: null

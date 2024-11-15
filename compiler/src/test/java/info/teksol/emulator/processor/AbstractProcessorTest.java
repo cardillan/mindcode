@@ -165,7 +165,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, Map<String, MindustryBlock> blocks,
             ExpectedMessages expectedMessages, OutputEvaluator evaluator, Path logFile) {
-        Processor processor = new Processor();
+        Processor processor = new Processor(ExpectedMessages.none(), 1000);
         processor.addBlock("bank1", Memory.createMemoryBank());
         processor.addBlock("bank2", Memory.createMemoryBank());
         blocks.forEach(processor::addBlock);

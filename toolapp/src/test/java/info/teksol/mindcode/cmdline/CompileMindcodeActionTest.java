@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -212,6 +214,25 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), actual.getSortVariables());
     }
 
+    @Test
+    public void executionFlags() throws ArgumentParserException {
+        List<Boolean> expected = new ArrayList<>();
+        List<Boolean> actual = new ArrayList<>();
+        boolean value = true;
+        for (ExecutionFlag flag : ExecutionFlag.LIST) {
+            if (flag.isSettable()) {
+                value = !value;
+                String cmdLine = Action.COMPILE_MINDCODE.getShortcut() + " --" + flag.getOptionName() + " " + value;
+                Namespace arguments = parseCommandLine(cmdLine);
+                expected.add(value);
+                actual.add(arguments.<Boolean>get(flag.name()));
+            }
+        }
+        assertEquals(
+                expected.stream().map(Object::toString).collect(Collectors.joining("\n")),
+                actual.stream().map(Object::toString).collect(Collectors.joining("\n")));
+    }
+
     /*
     @Test
     public void memoryModelArgument() throws ArgumentParserException {
@@ -222,7 +243,9 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100 --sort-variables ALL --no-signature");  //  -m restricted
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() +
+                " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100" +
+                " --sort-variables ALL --no-signature --trace-execution true");  //  -m restricted
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());

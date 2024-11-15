@@ -1561,4 +1561,18 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         """
         );
     }
+
+
+    @Test
+    void warnsAtUnknownBuiltIns() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.V8A)),
+                ExpectedMessages.create()
+                        .add("Built-in variable '@fluffy-bunny' not recognized."),
+                """
+                        print(@fluffy-bunny);
+                        """,
+                createInstruction(PRINT, "@fluffy-bunny"),
+                createInstruction(END)
+        );
+    }
 }

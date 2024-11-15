@@ -7,13 +7,13 @@ require units;
 
 // We'll write messages onto this block
 // It is used by the units system library to output messages as well
-param SYS_MESSAGE = message1;
+param MESSAGES = message1;
 
 // Finds a free unit of given type, not returning until such a unit is found
 // Sets the flags of these units to a nonzero value
 // Stores the acquired units in variables
-poly = waitForFreeUnit(@poly, 1);
-mega = waitForFreeUnit(@mega, 1);
+poly = waitForFreeUnit(MESSAGES, "Control two units example\n", @poly, 1);
+mega = waitForFreeUnit(MESSAGES, "Control two units example\n", @mega, 1);
 
 // This is a global variable
 ANGLE = 0;
@@ -28,7 +28,7 @@ def controlUnit(unit)
     ubind(unit);
     move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
     print($"Currently bound unit is ${@unit}.");
-    printflush(SYS_MESSAGE);
+    printflush(MESSAGES);
     wait(0.8);
     ANGLE += 45;
 end;

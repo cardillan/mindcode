@@ -1,10 +1,12 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.emulator.blocks.Memory;
+import info.teksol.emulator.blocks.MessageBlock;
+import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.emulator.processor.ExecutionException;
 import info.teksol.emulator.processor.Processor;
-import info.teksol.emulator.processor.ProcessorFlag;
+import info.teksol.emulator.processor.TextBuffer;
 import info.teksol.mindcode.*;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
@@ -33,12 +35,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
     // Global cache
     private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
-    private static final Map<InputFile, Seq> LIBRARY_PARSES = new ConcurrentHashMap<>();
+    private static final Map<InputFile, ParsedLibrary> LIBRARY_PARSES = new ConcurrentHashMap<>();
 
     private final CompilerProfile profile;
     private final InputFiles inputFiles;
@@ -184,8 +187,9 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private Seq parseLibrary(InputFile inputFile, List<Requirement> requirements) {
         if (LIBRARY_PARSES.containsKey(inputFile)) {
-            return LIBRARY_PARSES.get(inputFile);
-        }
+            ParsedLibrary parsedLibrary = LIBRARY_PARSES.get(inputFile);
+            requirements.addAll(parsedLibrary.requirements);
+            return parsedLibrary.program;        }
 
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
         Seq parsed = parse(inputFile, requirements);
@@ -194,6 +198,7 @@ public class MindcodeCompiler implements Compiler<String> {
         if (before == after) {
             // Do not pollute cache with wrong parses
             LIBRARY_PARSES.put(inputFile, parsed);
+            LIBRARY_PARSES.put(inputFile, new ParsedLibrary(parsed, List.copyOf(requirements)));
         }
 
         return parsed;
@@ -296,25 +301,30 @@ public class MindcodeCompiler implements Compiler<String> {
         return result;
     }
 
-    private record RunResults(String textBuffer, int steps) { }
+    private record RunResults(TextBuffer textBuffer, int steps) { }
 
-    private RunResults run(List<LogicInstruction> program) {
+    private RunResults run(List<LogicInstruction> instructions) {
+        List<LogicInstruction> program = instructions.stream().map(instructionProcessor::normalizeInstruction).toList();
+
         // All flags are already set as we want them to be
-        Processor processor = new Processor();
-        processor.setFlag(ProcessorFlag.ERR_UNINITIALIZED_VAR, false);
-        for (int i = 1; i < 10; i++) {
-            processor.addBlock("cell" + i, Memory.createMemoryCell());
-            processor.addBlock("bank" + i, Memory.createMemoryBank());
-            processor.addBlock("display" + i, LogicDisplay.createLogicDisplay(i < 5));
-        }
+        Processor processor = new Processor(messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
+        addBlocks(processor, "cell", i -> Memory.createMemoryCell());
+        addBlocks(processor, "bank", i -> Memory.createMemoryBank());
+        addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(i < 5));
+        addBlocks(processor, "message", i -> MessageBlock.createMessage());
 
         try {
             processor.run(program, profile.getStepLimit());
             return new RunResults(processor.getTextBuffer(), processor.getSteps());
         } catch (ExecutionException e) {
-            String textBuffer = processor.getTextBuffer();
-            return new RunResults(textBuffer == null || textBuffer.isEmpty() ? e.getMessage()
-                    : textBuffer + "\n" + e.getMessage(), processor.getSteps());
+            processor.getTextBuffer().append("\n" + e.getMessage());
+            return new RunResults(processor.getTextBuffer(), processor.getSteps());
+        }
+    }
+
+    private void addBlocks(Processor processor, String name, Function<Integer, MindustryBlock> creator) {
+        for (int i = 1; i < 10; i++) {
+            processor.addBlock(name + i, creator.apply(i));
         }
     }
 
@@ -326,4 +336,6 @@ public class MindcodeCompiler implements Compiler<String> {
         messageConsumer.accept(ToolMessage.debug(message));
     }
 
+    private record ParsedLibrary(Seq program, List<Requirement> requirements) {
+    }
 }

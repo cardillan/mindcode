@@ -1430,7 +1430,7 @@ format max
 
 The format instruction is used in optimization when these conditions are met:
 
-- The language target supports the format instruction (`8A` or higher)
+- The language target supports the format instruction (`8A` or later)
 - The optimization level is `experimental`
 - The compiled code entering this optimization contains neither a string literal containing a `{0}` placeholder, nor any other substrings that could produce the `{0}` in a text buffer (for example, `print("{{1}}"); format("0");` produces `{0}` in the text buffer and disables this optimization).
 
@@ -1568,4 +1568,4 @@ optimizations inside the branches of `if` and `case` statements.
 
 ---
 
-[« Previous: Advanced features](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_V6.markdown)
+[« Previous: Advanced features](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_V6.markdown)

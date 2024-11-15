@@ -246,6 +246,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral_null(MindcodeParser.Literal_nullContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code orphan_doc_comment}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrphan_doc_comment(MindcodeParser.Orphan_doc_commentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code orphan_doc_comment}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrphan_doc_comment(MindcodeParser.Orphan_doc_commentContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code compiler_directive}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -593,6 +605,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNumeric_directive(MindcodeParser.Numeric_directiveContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolean_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolean_directive(MindcodeParser.Boolean_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolean_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolean_directive(MindcodeParser.Boolean_directiveContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code string_directive}
 	 * labeled alternative in {@link MindcodeParser#directive}.

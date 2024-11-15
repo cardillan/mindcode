@@ -1,0 +1,190 @@
+// Mindcode system library for Mindustry Logic version 8
+// Math functions
+//
+//* To use the Math library, use the `require math;` statement.
+
+/**
+ * Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).
+ * Uses the `len` instruction for efficient hypotenuse calculation.
+ */
+inline def distance(_x1, _y1, _x2, _y2)
+    len(_x2 - _x1, _y2 - _y1);
+end;
+
+/** Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`. */
+inline def round(_x)
+    floor(_x + 0.5);
+end;
+
+/** Returns the fractional part of the number. `frac(1.5)` gives `0.5`. */
+inline def frac(_x)
+    _x % 1;
+end;
+
+/**
+ * Returns the sign of the number. The return value is `0` precisely when `x == 0`
+ * (using the Mindustry Logic native comparison precision).
+ */
+def sign(_x)
+    // Using equality here to get sign behavior consistent with equality operator
+    _x == 0 ? 0 : _x < 0 ? -1 : 1;
+end;
+
+/** Returns the sign of the number. The return value is `0` when the value of `x` is exactly zero. */
+inline def signExact(_x)
+    // Use branchless sign computation
+    (_x > 0) - (_x < 0);
+end;
+
+/** Returns `true` when `x` is precisely zero. */
+inline def isZero(_x)
+    abs(_x) <= 0;
+end;
+
+/** Returns `true` when the absolute value of x is less than `precision`. */
+inline def isZero(_x, _precision)
+    abs(_x) < _precision;
+end;
+
+/**
+ * Returns `true` if the two values differ by less than `precision`.
+ *
+ * > [!NOTE]
+ * > The equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`. `===` and `!==`
+ * > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows
+ * > to compare values using different precision.
+ */
+inline def isEqual(_a, _b, _precision)
+    abs(_a - _b) < _precision;
+end;
+
+/**
+ * Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
+ * and makes sure it won't be removed by the optimizer.
+ */
+inline def nullToZero(_x)
+    mlog("op", "add", out _result, in _x, 0);
+    _result;
+end;
+
+/** Returns `x`. The function is a fallback case for the generic `sum` function taking a variable number of arguments. */
+inline def sum(_x)
+    _x;
+end;
+
+/** Returns the sum of all given arguments. */
+inline def sum(_x1, _x2, _x...)
+    _sum = _x1 + _x2;
+    for _i in _x do _sum += _i; end;
+    _sum;
+end;
+
+/** Returns `x`. The function is a fallback case for the generic `avg` function taking a variable number of arguments. */
+inline def avg(_x)
+    _x;
+end;
+
+/** Returns the average of all given arguments. */
+inline def avg(_x1, _x2, _x...)
+    _sum = _x1 + _x2;
+    for _i in _x do _sum += _i; end;
+    _sum / (2 + length(_x));
+end;
+
+/** Returns `x`. The function is a fallback case for the generic `median` function taking a variable number of arguments. */
+inline def median(_x)
+    _x;
+end;
+
+/** Returns the median of two values. */
+inline def median(_x1, _x2)
+    (_x1 + _x2) / 2;
+end;
+
+/** Returns the median of three values, using an optimized algorithm . */
+inline def median(_x1, _x2, _x3)
+    min(max(_x1, _x2), max(_x1, _x3), max(_x2, _x3));
+end;
+
+/** Returns the median of four values, using an optimized algorithm . */
+def median(_x1, _x2, _x3, _x4)
+    _y1 = min(_x1, _x2);
+    _y2 = max(_x1, _x2);
+    _y3 = min(_x3, _x4);
+    _y4 = max(_x3, _x4);
+    if _y2 <= _y3 then
+        (_y2 + _y3) / 2;
+    elsif _y1 >= _y4 then
+        (_y1 + _y4) / 2;
+    else
+        (max(_y1, _y3) + min(_y2, _y4)) / 2;
+    end;
+end;
+
+/** Returns the median of five values, using an optimized algorithm . */
+def median(_x1, _x2, _x3, _x4, _x5)
+    _y1 = min(_x1, _x2);
+    _y2 = max(_x1, _x2);
+    _y4 = min(_x4, _x5);
+    _y5 = max(_x4, _x5);
+
+    if _y4 < _y1 then
+        _swap(out _y1, out _y4);
+        _swap(out _y2, out _y5);
+    end;
+
+    if _x3 > _y2 then
+        _y2 < _y4 ? min(_x3, _y4) : min(_y2, _y5);
+    else
+        _x3 > _y4 ? min(_x3, _y5) : min(_y2, _y4);
+    end;
+end;
+
+inline def _swap(in out _a, in out _b)
+    _t = _a; _a = _b; _b = _t;
+end;
+
+/**
+ * Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
+ * and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
+ *
+ * @footprint Ten arguments in total:        *10
+ * @footprint Fifteen arguments in total:    *15
+ * @footprint Twenty arguments in total:     *20
+ */
+inline def median(_x...)
+    _bestDif = 1e10;
+    _best = null;
+    _count = 1;
+    for _i in _x do
+        if _isMedian(out _dif, _i, _x) then
+            return _i;
+        end;
+        if _dif < _bestDif then
+            _bestDif = _dif;
+            _best = _i;
+            _count = 1;
+        elsif _dif <= _bestDif then
+            _best += _i;
+            _count += 1;
+        end;
+    end;
+    _best / _count;
+end;
+
+inline def _isMedian(out _dif, _n, _x...)
+    _lt = _gt = 0;
+    for _i in _x do
+        if _i < _n then
+            _lt += 1;
+        elsif _i > _n then
+            _gt += 1;
+        end;
+    end;
+    _dif = abs(_gt - _lt);
+    if _gt + _lt >= length(x) - 1 then
+        _gt == _lt;
+    else
+        false;
+    end;
+end;

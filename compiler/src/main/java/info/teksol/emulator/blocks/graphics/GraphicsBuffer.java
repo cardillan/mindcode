@@ -1,7 +1,7 @@
 package info.teksol.emulator.blocks.graphics;
 
 import info.teksol.emulator.processor.ExecutionException;
-import info.teksol.emulator.processor.ProcessorFlag;
+import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.mindcode.compiler.instructions.DrawInstruction;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class GraphicsBuffer {
 
         // Only report the error once
         if (drawInstructions.size() == sizeLimit + 1) {
-            throw new ExecutionException(ProcessorFlag.ERR_GRAPHICS_BUFFER_OVERFLOW, "Capacity of the graphics buffer (" + sizeLimit + ") exceeded.");
+            throw new ExecutionException(ExecutionFlag.ERR_GRAPHICS_BUFFER_OVERFLOW, "Capacity of the graphics buffer (%d) exceeded.", sizeLimit);
         }
 
         return true;

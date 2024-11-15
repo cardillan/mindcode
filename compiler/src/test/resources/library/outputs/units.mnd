@@ -1,8 +1,9 @@
 #set target = ML8A;
 require units;
-SYS_MESSAGE = null;
 
 _initial_flag = null;
+_message = null;
+_preface = null;
 _unit_type = null;
 _x = null;
 _y = null;
@@ -10,3 +11,4 @@ _y = null;
 println(findFreeUnit(_unit_type, _initial_flag));
 println(findClosestUnit(_x, _y, _unit_type, _initial_flag));
 println(waitForFreeUnit(_unit_type, _initial_flag));
+println(waitForFreeUnit(_message, _preface, _unit_type, _initial_flag));

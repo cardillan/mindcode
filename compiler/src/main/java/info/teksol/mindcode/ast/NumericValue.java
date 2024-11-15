@@ -18,6 +18,11 @@ public class NumericValue extends ConstantAstNode {
         this.value = value;
     }
 
+    @Override
+    public String getLiteralValue() {
+        return String.valueOf(value);
+    }
+
     /**
      * If possible, converts the value to numeric literal.
      *

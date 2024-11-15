@@ -182,7 +182,12 @@ If the first argument passed to the `print()` or `println()` function is a forma
 * If the `$` character is followed by a variable name, the variable is printed (external variables, e.g. `$X`, aren't supported).
 * If the `$` character is not followed by a variable name, next argument from the argument list is printed.
 * To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`. This is not necessary if the next character cannot be part of a variable name. `${}` can be used to place an argument from the argument list immediately followed by some text.
-* To print the `$` character, use `\$`.
+* The `\` character can be used to escape the `\` and `$` characters:
+  * `print($"a\$b")` outputs `a$b`,
+  * `print($"a\\$b")` outputs `a\` followed by the value of `b`.
+* The `\n` sequence is translated to a newline as usual, while no other characters utilize the escape character:  
+  * `print($"a\nb")` outputs `a\nb` (`\n` in the text creates a newline when output),
+  * `print($"a\b\\c")` outputs `a\b\c`: the first `\` is kept as is, while the second one is used to escape the third one. 
 
 | `print()` call                                                        | is the same as                                                         |
 |-----------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -227,7 +232,7 @@ format b
 format c
 ```  
 
-The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a possibility for building outputs incrementally.
+The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such placeholder is then replaced by the value supplied to the `format` instruction. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. This opens up a possibility for building outputs incrementally.
 
 Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2, ...)` function call is therefore just a shorthand for `print(fmt); format(value1, value2, ...);`.
 
@@ -239,10 +244,10 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 
 > [!WARNING]
 > The `printf()` function has two forms depending on the language target:
-> - For ML7A and lower, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument. This version of the function is deprecated.
-> - For ML8A and higher, the `printf()` function performs the run-time formatting described in this chapter.
+> - For ML7A and earlier, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument. This version of the function is deprecated.
+> - For ML8A and later, the `printf()` function performs the run-time formatting described in this chapter.
 > 
-> When migrating from Mindustry Logic 7 to Mindustry Logic 8, replace all occurrences of `printf("` with `print($"` in your codebase.
+> When preparing to migrate from Mindustry Logic 7 to Mindustry Logic 8, replace all occurrences of `printf("` with `print($"` in your codebase.
 
 ## Remarks
 
@@ -591,15 +596,16 @@ foo(1, 1);  // Calls foo(x, y)
 
 To match a function call with function declaration, the number and types (input, output or input/output) of function call arguments must match the number and types of function parameters. Optional and vararg arguments are taken into account when evaluating the match.
 
-When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. Please note that a function with output parameters, as well as a vararg function, takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
+When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. A function with output parameters takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
 
 * `void foo(a, b)`: called with two arguments.
 * `void foo(x, y, out z)`: conflict - may be also called with two arguments when `z` is omitted.
-* `void foo(m, n, out o, args...)`: conflict - may be also called with two arguments when `o` is omitted and no additional arguments are given.
 
 * `void bar(x)`: `x` is an input parameter
 * `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
 * `void bar(in out z)`: `z` is an input/output parameter, therefore the function clashes with both `bar(x)` and `bar(out y)`.
+
+A vararg function doesn't conflict with a non-vararg function. When a function call matches bot a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling specific number of arguments will be used when possible.  
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 
@@ -630,4 +636,4 @@ It is not possible to call a Mindustry Logic function if a matching user-defined
 
 ---
 
-[« Previous: Control flow statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Next: Advanced features »](SYNTAX-5-OTHER.markdown)
+[« Previous: Control flow statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Advanced features »](SYNTAX-5-OTHER.markdown)

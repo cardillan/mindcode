@@ -11,6 +11,8 @@ public abstract class ConstantAstNode extends BaseAstNode {
         super(inputPosition);
     }
 
+    public abstract String getLiteralValue();
+
     public abstract double getAsDouble();
 
     public abstract LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) throws NumericLiteral.NoValidMlogRepresentationException;

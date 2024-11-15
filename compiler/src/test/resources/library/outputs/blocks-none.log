@@ -1,0 +1,191 @@
+Number of reported ambiguities: 7
+
+Final code before resolving virtual instructions:
+
+        label __label0
+    0:  set __fn0__title "Example program.\nTrying to locate linked blocks"
+    1:  set __fn0__message message1
+        label __label2
+    2:  setaddr __tmp0 __label8
+    3:  set __fn0__requested @large-logic-display
+    4:  set __fn0__name "Display"
+    5:  set __fn0__variable display
+    6:  set __fn0__required true
+    7:  jump __label6 always 0 0
+        gotolabel __label8 marker0
+    8:  set display __fn0__variable
+    9:  setaddr __tmp0 __label9
+   10:  set __fn0__requested @message
+   11:  set __fn0__name "Message"
+   12:  set __fn0__variable message
+   13:  set __fn0__required false
+   14:  jump __label6 always 0 0
+        gotolabel __label9 marker0
+   15:  set message __fn0__variable
+   16:  setaddr __tmp0 __label10
+   17:  set __fn0__requested @switch
+   18:  set __fn0__name "Switch"
+   19:  set __fn0__variable switch
+   20:  set __fn0__required false
+   21:  jump __label6 always 0 0
+        gotolabel __label10 marker0
+   22:  set switch __fn0__variable
+   23:  setaddr __tmp0 __label11
+   24:  set __fn0__requested @memory-bank
+   25:  set __fn0__name "Memory"
+   26:  set __fn0__variable memory
+   27:  set __fn0__required true
+   28:  jump __label6 always 0 0
+        gotolabel __label11 marker0
+   29:  set memory __fn0__variable
+   30:  setaddr __tmp0 __label12
+   31:  set __fn0__requested @memory-cell
+   32:  set __fn0__name "Memory"
+   33:  set __fn0__variable memory
+   34:  set __fn0__required true
+        label __label6
+   35:  set __fn0__variable null
+        label __label5
+   36:  goto __tmp0 marker0
+        gotolabel __label12 marker0
+   37:  set memory __fn0__variable
+        label __label7
+   38:  print __fn0__title
+   39:  set __tmp1 @links
+   40:  set __fn0__n __tmp1
+        label __label13
+   41:  op greaterThan __tmp2 __fn0__n 0
+   42:  jump __label15 equal __tmp2 false
+   43:  op sub __tmp3 __fn0__n 1
+   44:  set __fn0__n __tmp3
+   45:  getlink __tmp4 __fn0__n
+   46:  set __fn0__block __tmp4
+   47:  print "\nFound: "
+   48:  print __fn0__block
+   49:  sensor __tmp5 __fn0__block @type
+   50:  set __fn0__type __tmp5
+   51:  setaddr __tmp6 __label19
+   52:  set __fn0__requested @large-logic-display
+   53:  set __fn0__name "Display"
+   54:  set __fn0__variable display
+   55:  set __fn0__required true
+   56:  jump __label17 always 0 0
+        gotolabel __label19 marker1
+   57:  set display __fn0__variable
+   58:  setaddr __tmp6 __label20
+   59:  set __fn0__requested @message
+   60:  set __fn0__name "Message"
+   61:  set __fn0__variable message
+   62:  set __fn0__required false
+   63:  jump __label17 always 0 0
+        gotolabel __label20 marker1
+   64:  set message __fn0__variable
+   65:  setaddr __tmp6 __label21
+   66:  set __fn0__requested @switch
+   67:  set __fn0__name "Switch"
+   68:  set __fn0__variable switch
+   69:  set __fn0__required false
+   70:  jump __label17 always 0 0
+        gotolabel __label21 marker1
+   71:  set switch __fn0__variable
+   72:  setaddr __tmp6 __label22
+   73:  set __fn0__requested @memory-bank
+   74:  set __fn0__name "Memory"
+   75:  set __fn0__variable memory
+   76:  set __fn0__required true
+   77:  jump __label17 always 0 0
+        gotolabel __label22 marker1
+   78:  set memory __fn0__variable
+   79:  setaddr __tmp6 __label23
+   80:  set __fn0__requested @memory-cell
+   81:  set __fn0__name "Memory"
+   82:  set __fn0__variable memory
+   83:  set __fn0__required true
+        label __label17
+   84:  op equal __tmp7 __fn0__requested __fn0__type
+   85:  jump __label24 equal __tmp7 false
+   86:  set __fn0__variable __fn0__block
+   87:  op equal __tmp9 __fn0__requested @message
+   88:  jump __label26 equal __tmp9 false
+   89:  set __fn0__message __fn0__block
+   90:  set __tmp10 __fn0__message
+   91:  jump __label27 always 0 0
+        label __label26
+   92:  set __tmp10 null
+        label __label27
+   93:  set __tmp8 __tmp10
+   94:  jump __label25 always 0 0
+        label __label24
+   95:  set __tmp8 null
+        label __label25
+        label __label16
+   96:  goto __tmp6 marker1
+        gotolabel __label23 marker1
+   97:  set memory __fn0__variable
+        label __label18
+        label __label14
+   98:  jump __label13 always 0 0
+        label __label15
+   99:  set __fn0__foundAll 1
+  100:  setaddr __tmp11 __label31
+  101:  set __fn0__requested @large-logic-display
+  102:  set __fn0__name "Display"
+  103:  set __fn0__variable display
+  104:  set __fn0__required true
+  105:  jump __label29 always 0 0
+        gotolabel __label31 marker2
+  106:  set display __fn0__variable
+  107:  setaddr __tmp11 __label32
+  108:  set __fn0__requested @message
+  109:  set __fn0__name "Message"
+  110:  set __fn0__variable message
+  111:  set __fn0__required false
+  112:  jump __label29 always 0 0
+        gotolabel __label32 marker2
+  113:  set message __fn0__variable
+  114:  setaddr __tmp11 __label33
+  115:  set __fn0__requested @switch
+  116:  set __fn0__name "Switch"
+  117:  set __fn0__variable switch
+  118:  set __fn0__required false
+  119:  jump __label29 always 0 0
+        gotolabel __label33 marker2
+  120:  set switch __fn0__variable
+  121:  setaddr __tmp11 __label34
+  122:  set __fn0__requested @memory-bank
+  123:  set __fn0__name "Memory"
+  124:  set __fn0__variable memory
+  125:  set __fn0__required true
+  126:  jump __label29 always 0 0
+        gotolabel __label34 marker2
+  127:  set memory __fn0__variable
+  128:  setaddr __tmp11 __label35
+  129:  set __fn0__requested @memory-cell
+  130:  set __fn0__name "Memory"
+  131:  set __fn0__variable memory
+  132:  set __fn0__required true
+        label __label29
+  133:  print "\n"
+  134:  print __fn0__name
+  135:  print ": "
+  136:  print __fn0__variable
+  137:  jump __label36 equal __fn0__required false
+  138:  op and __tmp13 __fn0__foundAll __fn0__variable
+  139:  set __fn0__foundAll __tmp13
+  140:  set __tmp12 __fn0__foundAll
+  141:  jump __label37 always 0 0
+        label __label36
+  142:  set __tmp12 null
+        label __label37
+        label __label28
+  143:  goto __tmp11 marker2
+        gotolabel __label35 marker2
+  144:  set memory __fn0__variable
+        label __label30
+  145:  printflush __fn0__message
+        label __label3
+  146:  op equal __tmp14 __fn0__foundAll false
+  147:  jump __label2 notEqual __tmp14 false
+        label __label4
+        label __label1
+  148:  end

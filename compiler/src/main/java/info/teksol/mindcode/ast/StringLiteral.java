@@ -20,6 +20,11 @@ public class StringLiteral extends ConstantAstNode {
     }
 
     @Override
+    public String getLiteralValue() {
+        return '"' + text + '"';
+    }
+
+    @Override
     public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) {
         return LogicString.create(getText());
     }

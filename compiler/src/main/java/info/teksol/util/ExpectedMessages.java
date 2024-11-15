@@ -1,6 +1,7 @@
 package info.teksol.util;
 
 import com.ibm.icu.impl.Assert;
+import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
 import org.intellij.lang.annotations.Language;
@@ -59,6 +60,17 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      */
     public static ExpectedMessages create() {
         return new ExpectedMessages();
+    }
+
+    /**
+     * Adds a message at certain level or lower.
+     *
+     * @param message message to be expected (trimmed for comparison)
+     * @return this instance
+     */
+    public ExpectedMessages addLevelsUpTo(MessageLevel level) {
+        matchers.add(new MatchCounter(new LevelMessageMatcher(level)));
+        return this;
     }
 
     /**
@@ -316,6 +328,18 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         boolean matches(MindcodeMessage msg);
 
         String message();
+    }
+
+    private record LevelMessageMatcher(MessageLevel level) implements MessageMatcher {
+        @Override
+        public boolean matches(MindcodeMessage msg) {
+            return level.strongerOrEqual((msg.level()));
+        }
+
+        @Override
+        public String message() {
+            return "Messages at level " + level + " or weaker";
+        }
     }
 
     private record TextMessageMatcher(String message) implements MessageMatcher {

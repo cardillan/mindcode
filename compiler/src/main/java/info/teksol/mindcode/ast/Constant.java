@@ -5,13 +5,19 @@ import info.teksol.mindcode.InputPosition;
 import java.util.Objects;
 
 public class Constant extends BaseAstNode {
+    private final String codeDoc;
     private final String name;
     private final AstNode value;
 
-    public Constant(InputPosition inputPosition, String name, AstNode value) {
+    public Constant(InputPosition inputPosition, String codeDoc, String name, AstNode value) {
         super(inputPosition);
+        this.codeDoc = codeDoc;
         this.name = name;
         this.value = value;
+    }
+
+    public String getCodeDoc() {
+        return codeDoc;
     }
 
     public String getName() {

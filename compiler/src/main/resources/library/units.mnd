@@ -1,12 +1,21 @@
 // Mindcode system library
 // Units
-
-// Searches for and binds a free unit of given type. If no free unit of given type can be found
-// (either because none exists, or because all existing units are occupied), returns immediately.
 //
-// unit_type: type of the unit, @flare, @mono, @poly etc.
-// initial_flag: initial flag to set to he freshly bound unit.
-// returns the freshly bound unit, or null if no unit can be bound
+//* To use the Units library, use the `require units;`
+
+/**
+ * Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag.
+ * If no free unit of given type can be found (either because none exists, or because all existing units are occupied),
+ * returns immediately.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initial_flag`: initial flag to set to he freshly bound unit.
+ * - Returns the freshly bound unit, or `null` if no free unit of given type exists.
+ *
+ * The function doesn't use units that are controlled by a player or a different processor.
+ */
 def findFreeUnit(_unit_type, _initial_flag)
     ubind(_unit_type);
     // No unit of this type exists
@@ -30,14 +39,20 @@ def findFreeUnit(_unit_type, _initial_flag)
     return null;
 end;
 
-// Searches for and binds a free unit of given type closest to the coordinates on the map given.
-// If no free unit of given type can be found (either because none exists, or because all existing
-// units are occupied), returns immediately.
-//
-// x, y: coordinates of the position to look around
-// unit_type: type of the unit, @flare, @mono, @poly etc.
-// initial_flag: initial flag to set to he freshly bound unit.
-// returns the freshly bound unit closest to given coordinates, or null if no free unit of given type exists
+/**
+ * Searches for and binds a free unit of given type closest to the coordinates on the map given.
+ * If no free unit of given type can be found (either because none exists, or because all existing units
+ * are occupied), returns immediately.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `x`, `y`: position of the map to compute unit distance relative to
+ * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initial_flag`: initial flag to set to he freshly bound unit.
+ * - Returns the freshly bound unit closest to given coordinates, or `null` if no free unit of given type exists.
+ *
+ * The function doesn't use units that are controlled by a player or a different processor.
+*/
 def findClosestUnit(_x, _y, _unit_type, _initial_flag)
     while true do
         ubind(_unit_type);
@@ -78,26 +93,59 @@ def findClosestUnit(_x, _y, _unit_type, _initial_flag)
     end;
 end;
 
-// Searches for and binds a free unit of given type. Waits until the unit of requested type is available.
-// Updates search status in SYS_MESSAGE.
-//
-// unit_type: type of the unit, @flare, @mono, @poly etc.
-// initial_flag: initial flag to set to he freshly bound unit.
-// returns the freshly bound unit
+/**
+ * Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
+ * The function doesn't return until a free unit of the given type can be found.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initial_flag`: initial flag to set to he freshly bound unit.
+ * - Returns the freshly bound unit.
+ *
+ * The function doesn't use units that are controlled by a player or a different processor.
+ */
 def waitForFreeUnit(_unit_type, _initial_flag)
     // Keep looking for unit until one is found
     while true do
         ubind(_unit_type);
+        if @unit != null then
+            if @unit.@controlled == 0 then
+                flag(_initial_flag);        // Mark unit as active
+                return @unit;
+            end;
+        end;
+    end;
+end;
+
+/**
+ * Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
+ * The function doesn't return until a free unit of the given type can be found. The function prints status
+ * information about the search onto a message block - one of two messages:
+ *
+ * - `No unit of type <unit type> found.` when no unit of given type exists,
+ * - `Looking for a free <unit type>...` when units of given type exist, but none is free to use.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `message`: message block to receive status information about the search.
+ * - `preface`: additional text to output before the status message, e.g. description of the processor.
+ * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initial_flag`: initial flag to set to he freshly bound unit.
+ * - Returns the freshly bound unit.
+ *
+ * The function doesn't use units that are controlled by a player or a different processor.
+ */
+def waitForFreeUnit(_message, _preface, _unit_type, _initial_flag)
+    // Keep looking for unit until one is found
+    while true do
+        ubind(_unit_type);
         if @unit == null then
-            if SYS_MESSAGE then
-                print($"No unit of type $_unit_type found.");
-                printflush(SYS_MESSAGE);
-             end;
+            print($"${_preface}No unit of type $_unit_type found.");
+            printflush(_message);
         elsif @unit.@controlled != 0 then
-            if SYS_MESSAGE then
-                print($"Looking for a free $_unit_type...");
-                printflush(SYS_MESSAGE);
-             end;
+            print($"${_preface}Looking for a free $_unit_type...");
+            printflush(_message);
         else
             flag(_initial_flag);        // Mark unit as active
             return @unit;

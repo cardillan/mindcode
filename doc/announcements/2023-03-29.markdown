@@ -274,8 +274,7 @@ Additionally, several operators were added or altered:
 
 ## Library functions
 
-The `println()` and `printf()` functions for easier printing (see
-[Library functions](../syntax/SYNTAX-4-FUNCTIONS.markdown#library-functions)).
+The `println()` and `printf()` functions for easier printing (see [Text output functions](../syntax/SYNTAX-4-FUNCTIONS.markdown#text-output)).
 
 # Compiler enhancements
 

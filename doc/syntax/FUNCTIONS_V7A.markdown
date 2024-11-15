@@ -424,4 +424,4 @@ Sets a property of a unit or building.
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 8A »](FUNCTIONS_V8A.markdown)
+[« Previous: Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 8A »](FUNCTIONS_V8A.markdown)

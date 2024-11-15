@@ -143,11 +143,11 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     @Test
     void realLifeScripts2() {
         assertCompilesTo("""
-                        level = nucleus1.@resource;
+                        level = nucleus1.@coal;
                         print(level);
                         conveyor1.enabled = level < 10;
                         """,
-                createInstruction(SENSOR, "level", "nucleus1", "@resource"),
+                createInstruction(SENSOR, "level", "nucleus1", "@coal"),
                 createInstruction(PRINT, "level"),
                 createInstruction(OP, "lessThan", var(0), "level", "10"),
                 createInstruction(CONTROL, "enabled", "conveyor1", var(0))

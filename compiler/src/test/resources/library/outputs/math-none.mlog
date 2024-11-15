@@ -1,0 +1,397 @@
+set __fn3__x1 1
+set __fn3__y1 1
+set __fn3__x2 4
+set __fn3__y2 5
+op sub __tmp1 __fn3__x2 __fn3__x1
+op sub __tmp2 __fn3__y2 __fn3__y1
+op len __tmp3 __tmp1 __tmp2
+set __tmp0 __tmp3
+set __fn4_expected 5
+set __fn4_actual __tmp0
+set __fn4_title "distance forward"
+print "T:"
+print __fn4_title
+print "\n"
+print "E:"
+print __fn4_expected
+print "\n"
+print "A:"
+print __fn4_actual
+print "\n"
+set __tmp4 __fn4_actual
+set __fn5__x1 -1
+set __fn5__y1 -1
+set __fn5__x2 -4
+set __fn5__y2 -5
+op sub __tmp6 __fn5__x2 __fn5__x1
+op sub __tmp7 __fn5__y2 __fn5__y1
+op len __tmp8 __tmp6 __tmp7
+set __tmp5 __tmp8
+set __fn6_expected 5
+set __fn6_actual __tmp5
+set __fn6_title "distance backward"
+print "T:"
+print __fn6_title
+print "\n"
+print "E:"
+print __fn6_expected
+print "\n"
+print "A:"
+print __fn6_actual
+print "\n"
+set __tmp9 __fn6_actual
+set __fn7__x 1.5
+op add __tmp11 __fn7__x 0.5
+op floor __tmp12 __tmp11 0
+set __tmp10 __tmp12
+set __fn8_expected 2
+set __fn8_actual __tmp10
+set __fn8_title "round(1.5)"
+print "T:"
+print __fn8_title
+print "\n"
+print "E:"
+print __fn8_expected
+print "\n"
+print "A:"
+print __fn8_actual
+print "\n"
+set __tmp13 __fn8_actual
+set __fn9__x 1.7
+op add __tmp15 __fn9__x 0.5
+op floor __tmp16 __tmp15 0
+set __tmp14 __tmp16
+set __fn10_expected 2
+set __fn10_actual __tmp14
+set __fn10_title "round(1.7)"
+print "T:"
+print __fn10_title
+print "\n"
+print "E:"
+print __fn10_expected
+print "\n"
+print "A:"
+print __fn10_actual
+print "\n"
+set __tmp17 __fn10_actual
+set __fn11__x 2.1
+op add __tmp19 __fn11__x 0.5
+op floor __tmp20 __tmp19 0
+set __tmp18 __tmp20
+set __fn12_expected 2
+set __fn12_actual __tmp18
+set __fn12_title "round(2.1)"
+print "T:"
+print __fn12_title
+print "\n"
+print "E:"
+print __fn12_expected
+print "\n"
+print "A:"
+print __fn12_actual
+print "\n"
+set __tmp21 __fn12_actual
+set __fn13__x 2.5
+op add __tmp23 __fn13__x 0.5
+op floor __tmp24 __tmp23 0
+set __tmp22 __tmp24
+set __fn14_expected 3
+set __fn14_actual __tmp22
+set __fn14_title "round(2.5)"
+print "T:"
+print __fn14_title
+print "\n"
+print "E:"
+print __fn14_expected
+print "\n"
+print "A:"
+print __fn14_actual
+print "\n"
+set __tmp25 __fn14_actual
+set __fn15__x -3.5
+op add __tmp27 __fn15__x 0.5
+op floor __tmp28 __tmp27 0
+set __tmp26 __tmp28
+set __fn16_expected -3
+set __fn16_actual __tmp26
+set __fn16_title "round(-3.5)"
+print "T:"
+print __fn16_title
+print "\n"
+print "E:"
+print __fn16_expected
+print "\n"
+print "A:"
+print __fn16_actual
+print "\n"
+set __tmp29 __fn16_actual
+set __fn17__x 3.5
+op mod __tmp31 __fn17__x 1
+set __tmp30 __tmp31
+set __fn18_expected 0.5
+set __fn18_actual __tmp30
+set __fn18_title "frac(3.5)"
+print "T:"
+print __fn18_title
+print "\n"
+print "E:"
+print __fn18_expected
+print "\n"
+print "A:"
+print __fn18_actual
+print "\n"
+set __tmp32 __fn18_actual
+set __fn19__x -1.5
+op mod __tmp34 __fn19__x 1
+set __tmp33 __tmp34
+set __fn20_expected -0.5
+set __fn20_actual __tmp33
+set __fn20_title "frac(-1.5)"
+print "T:"
+print __fn20_title
+print "\n"
+print "E:"
+print __fn20_expected
+print "\n"
+print "A:"
+print __fn20_actual
+print "\n"
+set __tmp35 __fn20_actual
+set __fn0__x 0
+set __fn0retaddr 162
+jump 383 always 0 0
+set __tmp36 __fn0retval
+set __fn21_expected 0
+set __fn21_actual __tmp36
+set __fn21_title "sign(0)"
+print "T:"
+print __fn21_title
+print "\n"
+print "E:"
+print __fn21_expected
+print "\n"
+print "A:"
+print __fn21_actual
+print "\n"
+set __tmp37 __fn21_actual
+set __fn0__x 0.0000001
+set __fn0retaddr 179
+jump 383 always 0 0
+set __tmp38 __fn0retval
+set __fn22_expected 0
+set __fn22_actual __tmp38
+set __fn22_title "sign(1e-7)"
+print "T:"
+print __fn22_title
+print "\n"
+print "E:"
+print __fn22_expected
+print "\n"
+print "A:"
+print __fn22_actual
+print "\n"
+set __tmp39 __fn22_actual
+set __fn0__x 0.00001
+set __fn0retaddr 196
+jump 383 always 0 0
+set __tmp40 __fn0retval
+set __fn23_expected 1
+set __fn23_actual __tmp40
+set __fn23_title "sign(1e-5)"
+print "T:"
+print __fn23_title
+print "\n"
+print "E:"
+print __fn23_expected
+print "\n"
+print "A:"
+print __fn23_actual
+print "\n"
+set __tmp41 __fn23_actual
+set __fn0__x -5
+set __fn0retaddr 213
+jump 383 always 0 0
+set __tmp42 __fn0retval
+set __fn24_expected -1
+set __fn24_actual __tmp42
+set __fn24_title "sign(-5)"
+print "T:"
+print __fn24_title
+print "\n"
+print "E:"
+print __fn24_expected
+print "\n"
+print "A:"
+print __fn24_actual
+print "\n"
+set __tmp43 __fn24_actual
+set __fn25__x 0
+op greaterThan __tmp45 __fn25__x 0
+op lessThan __tmp46 __fn25__x 0
+op sub __tmp47 __tmp45 __tmp46
+set __tmp44 __tmp47
+set __fn26_expected 0
+set __fn26_actual __tmp44
+set __fn26_title "signExact(0)"
+print "T:"
+print __fn26_title
+print "\n"
+print "E:"
+print __fn26_expected
+print "\n"
+print "A:"
+print __fn26_actual
+print "\n"
+set __tmp48 __fn26_actual
+set __fn27__x 0.0000001
+op greaterThan __tmp50 __fn27__x 0
+op lessThan __tmp51 __fn27__x 0
+op sub __tmp52 __tmp50 __tmp51
+set __tmp49 __tmp52
+set __fn28_expected 1
+set __fn28_actual __tmp49
+set __fn28_title "signExact(1e-7)"
+print "T:"
+print __fn28_title
+print "\n"
+print "E:"
+print __fn28_expected
+print "\n"
+print "A:"
+print __fn28_actual
+print "\n"
+set __tmp53 __fn28_actual
+set __fn29__x -0.0000001
+op greaterThan __tmp55 __fn29__x 0
+op lessThan __tmp56 __fn29__x 0
+op sub __tmp57 __tmp55 __tmp56
+set __tmp54 __tmp57
+set __fn30_expected -1
+set __fn30_actual __tmp54
+set __fn30_title "signExact(-1e-7)"
+print "T:"
+print __fn30_title
+print "\n"
+print "E:"
+print __fn30_expected
+print "\n"
+print "A:"
+print __fn30_actual
+print "\n"
+set __tmp58 __fn30_actual
+set __fn31__x 0
+op abs __tmp60 __fn31__x 0
+op lessThanEq __tmp61 __tmp60 0
+set __tmp59 __tmp61
+set __fn32_expected true
+set __fn32_actual __tmp59
+set __fn32_title "isZero(0)"
+print "T:"
+print __fn32_title
+print "\n"
+print "E:"
+print __fn32_expected
+print "\n"
+print "A:"
+print __fn32_actual
+print "\n"
+set __tmp62 __fn32_actual
+set __fn33__x 1E-50
+op abs __tmp64 __fn33__x 0
+op lessThanEq __tmp65 __tmp64 0
+set __tmp63 __tmp65
+set __fn34_expected false
+set __fn34_actual __tmp63
+set __fn34_title "isZero(1e-50)"
+print "T:"
+print __fn34_title
+print "\n"
+print "E:"
+print __fn34_expected
+print "\n"
+print "A:"
+print __fn34_actual
+print "\n"
+set __tmp66 __fn34_actual
+set __fn35__x -1E-50
+op abs __tmp68 __fn35__x 0
+op lessThanEq __tmp69 __tmp68 0
+set __tmp67 __tmp69
+set __fn36_expected false
+set __fn36_actual __tmp67
+set __fn36_title "isZero(-1e-50)"
+print "T:"
+print __fn36_title
+print "\n"
+print "E:"
+print __fn36_expected
+print "\n"
+print "A:"
+print __fn36_actual
+print "\n"
+set __tmp70 __fn36_actual
+set __fn37__x 0.01
+set __fn37__precision 0.01
+op abs __tmp72 __fn37__x 0
+op lessThan __tmp73 __tmp72 __fn37__precision
+set __tmp71 __tmp73
+set __fn38_expected false
+set __fn38_actual __tmp71
+set __fn38_title "isZero(0.01,0.01)"
+print "T:"
+print __fn38_title
+print "\n"
+print "E:"
+print __fn38_expected
+print "\n"
+print "A:"
+print __fn38_actual
+print "\n"
+set __tmp74 __fn38_actual
+set __fn39__x null
+op add __fn39__result __fn39__x 0
+set __tmp75 __fn39__result
+set __fn40_expected 0
+set __fn40_actual __tmp75
+set __fn40_title "nullToZero(null)"
+print "T:"
+print __fn40_title
+print "\n"
+print "E:"
+print __fn40_expected
+print "\n"
+print "A:"
+print __fn40_actual
+print "\n"
+set __tmp76 __fn40_actual
+set __fn41__x 1
+op add __fn41__result __fn41__x 0
+set __tmp77 __fn41__result
+set __fn42_expected 1
+set __fn42_actual __tmp77
+set __fn42_title "nullToZero(1)"
+print "T:"
+print __fn42_title
+print "\n"
+print "E:"
+print __fn42_expected
+print "\n"
+print "A:"
+print __fn42_actual
+print "\n"
+set __tmp78 __fn42_actual
+end
+op equal __tmp79 __fn0__x 0
+jump 387 equal __tmp79 false
+set __tmp80 0
+jump 393 always 0 0
+op lessThan __tmp81 __fn0__x 0
+jump 391 equal __tmp81 false
+set __tmp82 -1
+jump 392 always 0 0
+set __tmp82 1
+set __tmp80 __tmp82
+set __fn0retval __tmp80
+set @counter __fn0retaddr
+end
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

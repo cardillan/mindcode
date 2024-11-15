@@ -19,6 +19,11 @@ public class FormattableLiteral extends StringLiteral {
     }
 
     @Override
+    public String getLiteralValue() {
+        return "$\"" + text + '"';
+    }
+
+    @Override
     public FormattableLiteral withInputPosition(InputPosition inputPosition) {
         return new FormattableLiteral(inputPosition, text);
     }

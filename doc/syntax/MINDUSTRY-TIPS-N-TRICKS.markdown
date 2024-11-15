@@ -156,7 +156,7 @@ print($"Using $UNIT-MEGA to transport items...\n");
 
 Supported Mindustry icons are available through built-in String constants containing them. For a complete list of
 available icons, see [Built-in icons](SYNTAX-1-VARIABLES.markdown#built-in-icons), for a possibility of embedding
-icons into string constant see [String expressions](SYNTAX-2-EXPRESSIONS.markdown#string-expressions).
+icons into string constant see [String expressions](SYNTAX-2-EXPRESSIONS.markdown#strings-in-expressions).
 
 ## Printing values
 
@@ -171,14 +171,16 @@ println("Elapsed: ", floor(duration), " ms");
 ```
 
 When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead.
-The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI. There isn't a way 
-to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
+The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI.
+
+Mindcode provides the `printExact` function in the `maths` library  
+There isn't a way to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
 necessarily equal to zero.
 
 ## Using units
 
 > [!TIP]
-> When compiling code for [Mindustry Logic 8](MINDUSTRY-8.markdown), a system library is available. The system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown) or the [library source file](/compiler/src/main/resources/library/sys.mnd).
+> When compiling code for [Mindustry Logic 8](MINDUSTRY-8.markdown), a system library is available. The system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown#units-library).
 > 
 > The unit functions in the system library are based on the principles described here. 
 
@@ -462,4 +464,4 @@ end;
 
 ---
 
-[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown)
+[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)

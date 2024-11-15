@@ -206,4 +206,26 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
 
         );
     }
+
+    @Test
+    void processesInlineFunctions() {
+        assertCompilesTo(
+                createTestCompiler(createCompilerProfile().setAllOptimizationLevels(ADVANCED)),
+                """
+                        inline def isZero(x)
+                            abs(x) <= 0;
+                        end;
+                        if isZero(rand(10)) then
+                            print("yes");
+                        end;
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(OP, "abs", var(2), var(0)),
+                createInstruction(JUMP, "__start__", "greaterThan", var(2), "0"),
+                createInstruction(PRINT, q("yes"))
+
+
+        );
+    }
 }

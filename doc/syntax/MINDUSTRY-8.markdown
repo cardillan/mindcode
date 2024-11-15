@@ -99,7 +99,7 @@ myPrintNumber(floor(rand(100000)));
 
 Note: `formatNumber` and `printNumber` functions, identical to those above, are part of the [system library](SYSTEM-LIBRARY.markdown).
 
-Existing Print Merging optimization is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target lower than ML8A compiles into
+Existing Print Merging optimization is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target earlier than ML8A compiles into
 
 ```
 print `Minimum: `
@@ -302,4 +302,4 @@ Adds a map locale property value to the text buffer.
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)
+[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)

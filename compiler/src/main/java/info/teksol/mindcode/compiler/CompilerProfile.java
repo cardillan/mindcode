@@ -1,15 +1,14 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.mindcode.InputPositionTranslator;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +47,7 @@ public class CompilerProfile {
     // Compile and run
     private boolean run = false;
     private int stepLimit = DEFAULT_STEP_LIMIT_WEBAPP;
+    private final EnumSet<ExecutionFlag> executionFlags = ExecutionFlag.getDefaultFlags();
 
     // Schematics Builder
 
@@ -82,6 +82,10 @@ public class CompilerProfile {
 
     public boolean isWebApplication() {
         return webApplication;
+    }
+
+    public int getTraceLimit() {
+        return webApplication ? 1000 : 10_000;
     }
 
     public ProcessorVersion getProcessorVersion() {
@@ -272,5 +276,34 @@ public class CompilerProfile {
     public CompilerProfile setStepLimit(int stepLimit) {
         this.stepLimit = stepLimit;
         return this;
+    }
+
+    public CompilerProfile setExecutionFlags(ExecutionFlag... flags) {
+        executionFlags.addAll(Arrays.asList(flags));
+        return this;
+    }
+
+    public CompilerProfile setExecutionFlag(ExecutionFlag flag, boolean value) {
+        if (!flag.isSettable()) {
+            throw new MindcodeInternalError("Trying to update unmodifiable flag %s", flag);
+        }
+        if (value) {
+            executionFlags.add(flag);
+        } else {
+            executionFlags.remove(flag);
+        }
+        return this;
+    }
+
+    public CompilerProfile clearExecutionFlags(ExecutionFlag... flags) {
+        Arrays.stream(flags).filter(f -> !f.isSettable())
+                .forEach(f -> { throw new MindcodeInternalError("Trying to clear unmodifiable flag %s", f); });
+
+        Arrays.asList(flags).forEach(executionFlags::remove);
+        return this;
+    }
+
+    public Set<ExecutionFlag> getExecutionFlags() {
+        return EnumSet.copyOf(executionFlags);
     }
 }

@@ -1,5 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.emulator.processor.ExecutionFlag;
+import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
@@ -184,6 +186,10 @@ abstract class ActionHandler {
             profile.setRun(arguments.getBoolean("run"));
             profile.setStepLimit(arguments.getInt("run_steps"));
         }
+
+        ExecutionFlag.LIST.stream()
+                .filter(flag -> arguments.get(flag.name()) != null)
+                .forEachOrdered(flag -> profile.setExecutionFlag(flag, arguments.get(flag.name())));
 
         return profile;
     }

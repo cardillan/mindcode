@@ -4,21 +4,22 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.intellij.lang.annotations.PrintFormat;
 
 public class ExecutionException extends RuntimeException {
-    private final ProcessorFlag flag;
+    private final ExecutionFlag flag;
 
     private int instructionIndex = -1;
     private LogicInstruction instruction;
 
-    public ExecutionException(ProcessorFlag flag, String message) {
+    public ExecutionException(ExecutionFlag flag, String message) {
         super(message);
         this.flag = flag;
     }
 
-    public ExecutionException(ProcessorFlag flag, @PrintFormat String message, Object... args) {
-        this(flag, String.format(message, args));
+    public ExecutionException(ExecutionFlag flag, @PrintFormat String message, Object... args) {
+        super(String.format(message, args));
+        this.flag = flag;
     }
 
-    public ProcessorFlag getFlag() {
+    public ExecutionFlag getFlag() {
         return flag;
     }
 
@@ -33,7 +34,8 @@ public class ExecutionException extends RuntimeException {
     @Override
     public String getMessage() {
         if (instructionIndex >= 0) {
-            return "Execution exception at instruction %d: %s:\n%s".formatted(instructionIndex, instruction.toMlog(), super.getMessage());
+            return "Execution exception at instruction %d: %s:\n%s\n(Use '#set %s = false;' or '--%s false' command line option to ignore this exception.)"
+                    .formatted(instructionIndex, instruction.toMlog(), super.getMessage(), flag.getOptionName(), flag.getOptionName());
         } else {
             return super.getMessage();
         }

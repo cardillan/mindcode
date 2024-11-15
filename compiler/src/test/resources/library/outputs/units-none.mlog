@@ -1,0 +1,170 @@
+set _initial_flag null
+set _message null
+set _preface null
+set _unit_type null
+set _x null
+set _y null
+set __fn0__unit_type _unit_type
+set __fn0__initial_flag _initial_flag
+ubind __fn0__unit_type
+op equal __tmp1 @unit null
+jump 15 equal __tmp1 false
+set __tmp0 null
+jump 41 always 0 0
+set __tmp2 null
+jump 16 always 0 0
+set __tmp2 null
+set __tmp3 @unit
+set __fn0__first_unit __tmp3
+sensor __tmp4 @unit @controlled
+op equal __tmp5 __tmp4 0
+jump 26 equal __tmp5 false
+ucontrol flag __fn0__initial_flag 0 0 0 0
+set __tmp0 @unit
+jump 41 always 0 0
+set __tmp6 null
+jump 35 always 0 0
+sensor __tmp7 __fn0__first_unit @dead
+op equal __tmp8 __tmp7 1
+jump 33 equal __tmp8 false
+set __tmp10 @unit
+set __fn0__first_unit __tmp10
+set __tmp9 __fn0__first_unit
+jump 34 always 0 0
+set __tmp9 null
+set __tmp6 __tmp9
+ubind __fn0__unit_type
+op notEqual __tmp11 __fn0__first_unit @unit
+jump 18 notEqual __tmp11 false
+set __tmp0 null
+jump 41 always 0 0
+set __tmp0 null
+print __tmp0
+print "\n"
+set __fn1__x _x
+set __fn1__y _y
+set __fn1__unit_type _unit_type
+set __fn1__initial_flag _initial_flag
+jump 109 equal true false
+ubind __fn1__unit_type
+op equal __tmp13 @unit null
+jump 55 equal __tmp13 false
+set __tmp12 null
+jump 110 always 0 0
+set __tmp14 null
+jump 56 always 0 0
+set __tmp14 null
+set __tmp15 @unit
+set __fn1__first_unit __tmp15
+set __fn1__best_unit null
+set __fn1__best_distance 10000000000
+sensor __tmp16 @unit @controlled
+op equal __tmp17 __tmp16 0
+jump 79 equal __tmp17 false
+sensor __tmp19 @unit @x
+op sub __tmp20 __tmp19 __fn1__x
+sensor __tmp21 @unit @y
+op sub __tmp22 __tmp21 __fn1__y
+op len __tmp23 __tmp20 __tmp22
+set __fn1__distance __tmp23
+op lessThan __tmp24 __fn1__distance __fn1__best_distance
+jump 76 equal __tmp24 false
+set __fn1__best_distance __fn1__distance
+set __tmp26 @unit
+set __fn1__best_unit __tmp26
+set __tmp25 __fn1__best_unit
+jump 77 always 0 0
+set __tmp25 null
+set __tmp18 __tmp25
+jump 88 always 0 0
+sensor __tmp27 __fn1__first_unit @dead
+op equal __tmp28 __tmp27 1
+jump 86 equal __tmp28 false
+set __tmp30 @unit
+set __fn1__first_unit __tmp30
+set __tmp29 __fn1__first_unit
+jump 87 always 0 0
+set __tmp29 null
+set __tmp18 __tmp29
+ubind __fn1__unit_type
+op notEqual __tmp31 __fn1__first_unit @unit
+jump 60 notEqual __tmp31 false
+op equal __tmp32 __fn1__best_unit null
+jump 97 equal __tmp32 false
+set __tmp12 null
+jump 110 always 0 0
+set __tmp33 null
+jump 98 always 0 0
+set __tmp33 null
+sensor __tmp34 __fn1__best_unit @controlled
+op equal __tmp35 __tmp34 0
+jump 107 equal __tmp35 false
+ubind __fn1__best_unit
+ucontrol flag __fn1__initial_flag 0 0 0 0
+set __tmp12 __fn1__best_unit
+jump 110 always 0 0
+set __tmp36 null
+jump 108 always 0 0
+set __tmp36 null
+jump 47 always 0 0
+set __tmp12 null
+print __tmp12
+print "\n"
+set __fn2__unit_type _unit_type
+set __fn2__initial_flag _initial_flag
+jump 131 equal true false
+ubind __fn2__unit_type
+op notEqual __tmp38 @unit null
+jump 129 equal __tmp38 false
+sensor __tmp40 @unit @controlled
+op equal __tmp41 __tmp40 0
+jump 126 equal __tmp41 false
+ucontrol flag __fn2__initial_flag 0 0 0 0
+set __tmp37 @unit
+jump 132 always 0 0
+set __tmp42 null
+jump 127 always 0 0
+set __tmp42 null
+set __tmp39 __tmp42
+jump 130 always 0 0
+set __tmp39 null
+jump 114 always 0 0
+set __tmp37 null
+print __tmp37
+print "\n"
+set __fn3__message _message
+set __fn3__preface _preface
+set __fn3__unit_type _unit_type
+set __fn3__initial_flag _initial_flag
+jump 165 equal true false
+ubind __fn3__unit_type
+op equal __tmp44 @unit null
+jump 149 equal __tmp44 false
+print __fn3__preface
+print "No unit of type "
+print __fn3__unit_type
+print " found."
+printflush __fn3__message
+set __tmp45 null
+jump 164 always 0 0
+sensor __tmp46 @unit @controlled
+op notEqual __tmp47 __tmp46 0
+jump 159 equal __tmp47 false
+print __fn3__preface
+print "Looking for a free "
+print __fn3__unit_type
+print "..."
+printflush __fn3__message
+set __tmp48 null
+jump 163 always 0 0
+ucontrol flag __fn3__initial_flag 0 0 0 0
+set __tmp43 @unit
+jump 166 always 0 0
+set __tmp48 null
+set __tmp45 __tmp48
+jump 138 always 0 0
+set __tmp43 null
+print __tmp43
+print "\n"
+end
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

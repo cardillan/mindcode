@@ -1,0 +1,37 @@
+Number of reported ambiguities: 0
+Active optimizations:
+    case-expression-optimization = basic,
+    case-switching = basic,
+    data-flow-optimization = basic,
+    dead-code-elimination = basic,
+    expression-optimization = basic,
+    function-inlining = basic,
+    if-expression-optimization = basic,
+    jump-normalization = basic,
+    jump-optimization = basic,
+    jump-straightening = basic,
+    jump-threading = basic,
+    loop-hoisting = basic,
+    loop-optimization = basic,
+    loop-unrolling = basic,
+    print-merging = basic,
+    return-optimization = basic,
+    single-step-elimination = basic,
+    stack-optimization = basic,
+    temp-variables-elimination = basic,
+    unreachable-code-elimination = basic
+
+    14 instructions before optimizations.
+     1 instructions eliminated by Dead Code Elimination (3 iterations).
+     3 instructions eliminated by Data Flow Optimization (4 iterations).
+     4 instructions eliminated by Print Merging.
+     6 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+    0:  print "T:Unit test\nE:"
+    1:  print 1
+    2:  print "\nA:"
+    3:  print 1
+    4:  print "\n"
+    5:  end

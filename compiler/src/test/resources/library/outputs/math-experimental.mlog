@@ -1,0 +1,5 @@
+print "T:distance forward\nE:5\nA:5\nT:distance backward\nE:5\nA:5\nT:round(1.5)\nE:2\nA:2\nT:round(1.7)\nE:2\nA:2\nT:round(2.1)\nE:2\nA:2\nT:round(2.5)\nE:3\nA:3\nT:round(-3.5)\nE:-3\nA:-3\nT:frac(3.5)\nE:0.5\nA:0.5\nT:frac(-1.5)\nE:-0.5\nA:-0.5\nT:sign(0)\nE:0\nA:0\nT:sign(1e-7)\nE:0\nA:0\nT:sign(1e-5)\nE:1\nA:1\nT:sign(-5)\nE:-1\nA:-1\nT:signExact(0)\nE:0\nA:0\nT:signExact(1e-7)\nE:1\nA:1\nT:signExact(-1e-7)\nE:-1\nA:-1\nT:isZero(0)\nE:1\nA:1\nT:isZero(1e-50)\nE:0\nA:0\nT:isZero(-1e-50)\nE:0\nA:0\nT:isZero(0.01,0.01)\nE:0\nA:0\nT:nullToZero(null)\nE:0\nA:{0}\nT:nullToZero(1)\nE:1\nA:{0}\n"
+op add __fn39__result null 0
+format __fn39__result
+op add __fn41__result 1 0
+format __fn41__result

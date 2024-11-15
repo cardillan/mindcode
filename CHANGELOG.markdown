@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.6.0 - 2024-11-??
+## 2.6.0 - 2024-11-15
 
 **Breaking:** This release comes with a new keyword in Mindcode syntax (`require`), which break existing code where this keyword was used as a variable or function name.
 
@@ -15,16 +15,26 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+* Added warnings for unrecognized built-in variables. An unrecognized built-in variable might be invalid or mistyped.
+* Added the built-in math constants `@pi`, `@e`, `@degToRad` and `@radToDeg` to the processor emulator.
+* Added automatic generation of [Intellij IDEA settings files](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea) to keep them up-to-date with the language definition.
+
 #### Experimental features
 
 * Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
-* Added new functions to the [`utils` system library](doc/syntax/SYSTEM-LIBRARY.markdown#utils-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `printExact`).
+* Added information about the compiled code size of individual functions to the  [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
+* Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExactFast` and `printExactSlow`).
+* Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
+* Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator.
 
 ### Changed
 
-* **Breaking:** changed the system library to reside in several separate files that can be added to the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with lower targets as well.
+* **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to several separate files that can be included in the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and most of them can be used with earlier targets as well.
+* Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called.
 * Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
 * Changed existing examples to utilize functions from the system library where one is available.
+* Changed processor emulator to [output all existing variables and their values](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state) when encountering the `stop` instruction.
+* Changed the Jump Optimization to handle cases where the jump instruction contains a value produced by a function.
 
 ## 2.5.0 - 2024-11-03
 
@@ -113,7 +123,7 @@ All notable changes to this project will be documented in this file.
 #### Experimental features
  
 * Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
-* Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or higher. 
+* Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or later. 
 * Added support to the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#instruction-propagation) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
 
 ### Changed
@@ -795,7 +805,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added support for using [Mindustry built-in icons](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-icons) in 
   `print` functions.
-* Added support for compile-time [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-expressions). 
+* Added support for compile-time [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#strings-in-expressions). 
   Allows - among other things - to embed icons into string constants at compile time, such as
   `const HEADER = "Using unit: " + UNIT-MEGA`    
 
@@ -807,7 +817,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully 
   evaluate the loop condition at each iteration.
 * Changed handling of non-constant string expressions: when detected, a compilation error occurs (see also 
-  [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-expressions)).
+  [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#strings-in-expressions)).
 
 ### Miscellaneous
 

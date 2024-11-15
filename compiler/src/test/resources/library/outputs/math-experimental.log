@@ -1,0 +1,51 @@
+Number of reported ambiguities: 46
+Active optimizations:
+    case-expression-optimization = experimental,
+    case-switching = experimental,
+    data-flow-optimization = experimental,
+    dead-code-elimination = experimental,
+    expression-optimization = experimental,
+    function-inlining = experimental,
+    if-expression-optimization = experimental,
+    jump-normalization = experimental,
+    jump-optimization = experimental,
+    jump-straightening = experimental,
+    jump-threading = experimental,
+    loop-hoisting = experimental,
+    loop-optimization = experimental,
+    loop-unrolling = experimental,
+    print-merging = experimental,
+    return-optimization = experimental,
+    single-step-elimination = experimental,
+    stack-optimization = experimental,
+    temp-variables-elimination = experimental,
+    unreachable-code-elimination = experimental
+
+   396 instructions before optimizations.
+    16 instructions eliminated by Temp Variables Elimination.
+    22 instructions eliminated by Dead Code Elimination (3 iterations).
+     3 instructions eliminated by Jump Normalization (4 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     3 instructions eliminated by If Expression Optimization (3 iterations).
+   143 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     8 instructions added by Function Inlining (4 iterations).
+     4 function calls inlined by Function Inlining.
+     7 instructions eliminated by Unreachable Code Elimination.
+   195 instructions eliminated by Print Merging.
+     5 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 779):
+  * Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0 (-3 instructions)
+    Function Inlining: inline function call at line 14           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 15           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 16           cost     5, benefit        3.5, efficiency        0.7
+    Function Inlining: inline function call at line 17           cost     5, benefit        3.5, efficiency        0.7
+
+Final code before resolving virtual instructions:
+
+    0:  print "T:distance forward\nE:5\nA:5\nT:distance backward\nE:5\nA:5\nT:round(1.5)\nE:2\nA:2\nT:round(1.7)\nE:2\nA:2\nT:round(2.1)\nE:2\nA:2\nT:round(2.5)\nE:3\nA:3\nT:round(-3.5)\nE:-3\nA:-3\nT:frac(3.5)\nE:0.5\nA:0.5\nT:frac(-1.5)\nE:-0.5\nA:-0.5\nT:sign(0)\nE:0\nA:0\nT:sign(1e-7)\nE:0\nA:0\nT:sign(1e-5)\nE:1\nA:1\nT:sign(-5)\nE:-1\nA:-1\nT:signExact(0)\nE:0\nA:0\nT:signExact(1e-7)\nE:1\nA:1\nT:signExact(-1e-7)\nE:-1\nA:-1\nT:isZero(0)\nE:1\nA:1\nT:isZero(1e-50)\nE:0\nA:0\nT:isZero(-1e-50)\nE:0\nA:0\nT:isZero(0.01,0.01)\nE:0\nA:0\nT:nullToZero(null)\nE:0\nA:{0}\nT:nullToZero(1)\nE:1\nA:{0}\n"
+    1:  op add __fn39__result null 0
+    2:  format __fn39__result
+    3:  op add __fn41__result 1 0
+    4:  format __fn41__result

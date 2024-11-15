@@ -42,7 +42,12 @@ public class StandardFunctionsLogic8Test extends AbstractGeneratorTest {
 
     @Test
     void generatesWeatherInstructions() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create()
+                        .add("Built-in variable '@rain' not recognized.")
+                        .add("Built-in variable '@fluffyBunny' not recognized.")
+                ,
+                """
                         active = weathersense(@snow);
                         weatherset(@rain, true);
                         weatherset(@fluffyBunny, false);
@@ -58,7 +63,12 @@ public class StandardFunctionsLogic8Test extends AbstractGeneratorTest {
 
     @Test
     void generatesPlaysound() {
-        assertCompilesTo("""
+        assertCompilesTo(
+                ExpectedMessages.create()
+                        .add("Built-in variable '@sfx-railgun' not recognized.")
+                        .add("Built-in variable '@sfx-laser' not recognized.")
+                ,
+                """
                         playsound(true, @sfx-railgun, 1, 1, 100, 10, true);
                         playsound(false, @sfx-laser, 1, 1, 0.5, false);
                         """,

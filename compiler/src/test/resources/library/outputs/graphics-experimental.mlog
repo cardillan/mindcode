@@ -1,0 +1,60 @@
+sensor __fn0_type null @type
+jump 4 notEqual __fn0_type @logic-display
+print 80
+jump 8 always 0 0
+jump 7 notEqual __fn0_type @large-logic-display
+print 176
+jump 8 always 0 0
+print null
+print "\n"
+sensor __tmp6 null @type
+jump 14 notEqual __tmp6 @logic-display
+draw rotate 0 0 90 0 0 0
+draw translate 0 -80 0 0 0 0
+jump 19 always 0 0
+jump 18 notEqual __tmp6 @large-logic-display
+draw rotate 0 0 90 0 0 0
+draw translate 0 -176 0 0 0 0
+jump 19 always 0 0
+stop
+sensor __tmp8 null @type
+jump 24 notEqual __tmp8 @logic-display
+draw rotate 0 0 270 0 0 0
+draw translate -80 0 0 0 0 0
+jump 29 always 0 0
+jump 28 notEqual __tmp8 @large-logic-display
+draw rotate 0 0 270 0 0 0
+draw translate -176 0 0 0 0 0
+jump 29 always 0 0
+stop
+sensor __tmp10 null @type
+jump 34 notEqual __tmp10 @logic-display
+draw rotate 0 0 180 0 0 0
+draw translate -80 -80 0 0 0 0
+jump 39 always 0 0
+jump 38 notEqual __tmp10 @large-logic-display
+draw rotate 0 0 180 0 0 0
+draw translate -176 -176 0 0 0 0
+jump 39 always 0 0
+stop
+sensor __tmp12 null @type
+jump 44 notEqual __tmp12 @logic-display
+draw scale 1 -1 0 0 0 0
+draw translate 0 -80 0 0 0 0
+jump 49 always 0 0
+jump 48 notEqual __tmp12 @large-logic-display
+draw scale 1 -1 0 0 0 0
+draw translate 0 -176 0 0 0 0
+jump 49 always 0 0
+stop
+sensor __tmp14 null @type
+jump 54 notEqual __tmp14 @logic-display
+draw scale -1 1 0 0 0 0
+draw translate -80 0 0 0 0 0
+jump 0 always 0 0
+jump 58 notEqual __tmp14 @large-logic-display
+draw scale -1 1 0 0 0 0
+draw translate -176 0 0 0 0 0
+jump 0 always 0 0
+stop
+print "Compiled by Mindcode - github.com/cardillan/mindcode"
