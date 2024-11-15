@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.6.0 - 2024-11-??
+## 2.6.0 - 2024-11-15
 
 **Breaking:** This release comes with a new keyword in Mindcode syntax (`require`), which break existing code where this keyword was used as a variable or function name.
 
@@ -22,19 +22,19 @@ All notable changes to this project will be documented in this file.
 #### Experimental features
 
 * Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
-* Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExact`).
+* Added information about the compiled code size of individual functions to the  [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
+* Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExactFast` and `printExactSlow`).
 * Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
 * Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator.
-* Added information about the compiled code size of individual functions to the  [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
 
 ### Changed
 
-* **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to several separate files that can be included in the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and some of them can be used with earlier targets as well.
+* **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to several separate files that can be included in the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and most of them can be used with earlier targets as well.
 * Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called.
 * Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
 * Changed existing examples to utilize functions from the system library where one is available.
 * Changed processor emulator to [output all existing variables and their values](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state) when encountering the `stop` instruction.
-* Changed the Jump Optimization to handle cases where the jump instruction contains value produced by a function.
+* Changed the Jump Optimization to handle cases where the jump instruction contains a value produced by a function.
 
 ## 2.5.0 - 2024-11-03
 
