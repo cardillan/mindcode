@@ -12,7 +12,10 @@
 //* The transformation functions therefore exist in versions for both logic displays and large logic displays,
 //* plus a version which automatically detects the display type from a block passed in as a parameter.
 
+/** Length of the side of the drawing area of the `logic-display` block. */
 const DISPLAY_SIZE_SMALL =  80;
+
+/** Length of the side of the drawing area of the `large-logic-display` block. */
 const DISPLAY_SIZE_LARGE = 176;
 
 /**

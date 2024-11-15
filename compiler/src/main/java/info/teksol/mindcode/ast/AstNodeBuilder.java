@@ -355,9 +355,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitConst_decl(MindcodeParser.Const_declContext ctx) {
+        final String codeDoc = ctx.doc == null ? null : formatCodeDoc(ctx.doc.getText());
         final String name = ctx.name.getText();
         final AstNode value = visit(ctx.value);
-        return new Constant(pos(ctx.getStart()), name, value);
+        return new Constant(pos(ctx.getStart()), codeDoc, name, value);
     }
 
     @Override
@@ -675,9 +676,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitParam_decl(MindcodeParser.Param_declContext ctx) {
+        final String codeDoc = ctx.doc == null ? null : formatCodeDoc(ctx.doc.getText());
         final String name = ctx.name.getText();
         final AstNode value = visit(ctx.value);
-        return new ProgramParameter(pos(ctx.getStart()), name, value);
+        return new ProgramParameter(pos(ctx.getStart()), codeDoc, name, value);
     }
 
     @Override

@@ -20,7 +20,8 @@ public class NumericLiteral extends ConstantAstNode {
         this.literal = String.valueOf(value);
     }
 
-    public String getLiteral() {
+    @Override
+    public String getLiteralValue() {
         return literal;
     }
 

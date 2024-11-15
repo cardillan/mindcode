@@ -25,13 +25,15 @@ System libraries contain functions and sometimes constants that can be used by a
 * `units`: functions for searching and binding available units of required type.
 * `math`: mathematical functions.
 
-As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may be very important. For this reason, the documentation of each function contains a table of the size of the resulting code. The size is measured under the following condition:
+## Compiled function sizes
+
+As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may be very important. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
 
 - all input arguments are variables,
 - all output values provided by the function are used,
 - the optimization level is set to `advanced`.
 
-If a function just returns its input parameter as the return value and does nothing else, it's size is zero. The system libraries sometimes use these functions for consistency, for example as a special case for a vararg function.  
+If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction - it's size is zero. The system libraries sometimes use these functions for consistency, for example as a special case for a vararg function.  
 
 The following types of function calls are measured:
 
@@ -50,9 +52,11 @@ There are several factors which might cause the size of a function used in an ac
 > The function sizes are measured separately for the `speed` and `size` optimization goals. In some cases, optimizing for speed may produce smaller code than optimizing for size. The reason for this primarily is that optimization for speed may unroll some loops resulting in linear code, which is much better suited for further optimizations.
 
 
-## Blocks library
+# Blocks library
 
 To use the Blocks library, use the `require blocks;` statement.
+
+## Functions
 
 ### findLinkedBlocks
 
@@ -105,7 +109,7 @@ bank respectively. `message` and `switch` are set if corresponding blocks are li
 otherwise they're `null`.
 
 
-## Graphics library
+# Graphics library
 
 To use the Graphics library, use the `require graphics;` statement. The Graphics library uses Mindustry Logic 8
 instructions and therefore also requires `#set target = ML8A;` statement.
@@ -117,6 +121,22 @@ at the beginning of each program that uses transformations to clean up possible 
 The parameters used for transformations must be adapted to the size of the output display being drawn.
 The transformation functions therefore exist in versions for both logic displays and large logic displays,
 plus a version which automatically detects the display type from a block passed in as a parameter.
+
+## Constants
+
+### DISPLAY_SIZE_SMALL
+
+**Definition:** `const DISPLAY_SIZE_SMALL = 80;`
+
+Length of the side of the drawing area of the `logic-display` block.
+
+### DISPLAY_SIZE_LARGE
+
+**Definition:** `const DISPLAY_SIZE_LARGE = 176;`
+
+Length of the side of the drawing area of the `large-logic-display` block.
+
+## Functions
 
 ### displaySize
 
@@ -313,9 +333,11 @@ over the entire area of a large display.
 Scales the graphics output so that an output that targets a large display gets displayed
 over the entire area of a small display.
 
-## Math library
+# Math library
 
 To use the Math library, use the `require math;` statement.
+
+## Functions
 
 ### distance
 
@@ -529,10 +551,12 @@ Computes the median of the given arguments using a generic algorithm. The algori
 and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
 
 
-## Printing library
+# Printing library
 
 To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
 Mindustry Logic 8 instructions and therefore require the `#set target = ML8A;` statement.
+
+## Functions
 
 ### formatNumber
 
@@ -632,9 +656,11 @@ This variant of the function is optimized to produce slower, smaller code.
 
 See also [`printExactFast`](#printexactfast)
 
-## Units library
+# Units library
 
 To use the Units library, use the `require units;`
+
+## Functions
 
 ### findFreeUnit
 

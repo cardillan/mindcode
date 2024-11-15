@@ -19,6 +19,11 @@ public class BooleanLiteral extends ConstantAstNode {
     }
 
     @Override
+    public String getLiteralValue() {
+        return String.valueOf(value);
+    }
+
+    @Override
     public LogicBoolean toLogicLiteral(InstructionProcessor instructionProcessor) {
         return value ? LogicBoolean.TRUE : LogicBoolean.FALSE;
     }

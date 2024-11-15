@@ -25,13 +25,15 @@ System libraries contain functions and sometimes constants that can be used by a
 * `units`: functions for searching and binding available units of required type.
 * `math`: mathematical functions.
 
-As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may be very important. For this reason, the documentation of each function contains a table of the size of the resulting code. The size is measured under the following condition:
+## Compiled function sizes
+
+As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may be very important. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
 
 - all input arguments are variables,
 - all output values provided by the function are used,
 - the optimization level is set to `advanced`.
 
-If a function just returns its input parameter as the return value and does nothing else, it's size is zero. The system libraries sometimes use these functions for consistency, for example as a special case for a vararg function.  
+If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction - it's size is zero. The system libraries sometimes use these functions for consistency, for example as a special case for a vararg function.  
 
 The following types of function calls are measured:
 

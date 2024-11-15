@@ -132,9 +132,9 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
 
 alloc_range : LEFT_SBRACKET range_expression RIGHT_SBRACKET;
 
-const_decl : CONST name=id ASSIGN value=expression;
+const_decl : (doc=DOC_COMMENT)? CONST name=id ASSIGN value=expression;
 
-param_decl : PARAM name=id ASSIGN value=expression;
+param_decl : (doc=DOC_COMMENT)? PARAM name=id ASSIGN value=expression;
 
 fundecl : (doc=DOC_COMMENT)? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
         | (doc=DOC_COMMENT)? (inline=(INLINE|NOINLINE))? def=(VOID|DEF) name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END

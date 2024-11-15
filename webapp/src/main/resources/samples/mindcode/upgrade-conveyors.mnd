@@ -30,6 +30,9 @@ param RADIUS = 10;
 
 /// Don't modify anything below this line.
 
+// Title printed to messages to help identify the processor purpose
+const TITLE = "Conveyor upgrading\n";
+
 // Try to locate block to output messages to.
 // It is used by the units system library to output messages as well
 findLinkedBlocks(
@@ -68,7 +71,7 @@ while !switch1.@enabled do
 
     // If we don't have an active unit, summon a new one
     if @unit.@dead != 0 or @unit.@controller != @this then
-        waitForFreeUnit(MESSAGES, UNIT, rand(1000));
+        waitForFreeUnit(MESSAGES, TITLE, UNIT, rand(1000));
     end;
 
     // Position the unit to the middle of the band inside the building area
@@ -83,6 +86,7 @@ while !switch1.@enabled do
     end;
     $TOTAL = TOTAL;
 
+    print(TITLE);
     println($"Position: $x, $ypos");
     println($"Upgrades: $TOTAL");
     printflush(MESSAGES);

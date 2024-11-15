@@ -23,7 +23,8 @@ All notable changes to this project will be documented in this file.
 * Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
 * Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExact`).
 * Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
-* Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator. 
+* Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator.
+* Added information about the compiled code size of individual functions to the  [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
 
 ### Changed
 

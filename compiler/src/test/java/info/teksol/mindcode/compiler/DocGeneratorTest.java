@@ -1,9 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.*;
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.ast.FunctionDeclaration;
-import info.teksol.mindcode.ast.FunctionParameter;
+import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.util.ExpectedMessages;
@@ -41,12 +39,12 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
 
         try (final PrintWriter w = new PrintWriter(TARGET_FILE, StandardCharsets.UTF_8); Stream<String> lineStream = Files.lines(path)) {
             writer = w;
-            lineStream.forEach(this::processLine);
+            lineStream.forEach(this::processTemplateLine);
             writer = null;
         }
     }
 
-    private void processLine(String line)  {
+    private void processTemplateLine(String line)  {
         if (line.startsWith(PREFIX)) {
             processAllLibraries();
         } else {
@@ -72,6 +70,8 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
 
     String libraryName;
     List<FunctionDeclaration> functions = new ArrayList<>();
+    List<Constant> constants = new ArrayList<>();
+    List<ProgramParameter> parameters = new ArrayList<>();
     FunctionDeclaration declaration;
 
     private void processLibrary(Path file) throws IOException {
@@ -81,16 +81,34 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
 
         // Parse and process the module
         functions.clear();
+        constants.clear();
+        parameters.clear();
         AstNode node = translateToAst(ExpectedMessages.create().addLevelsUpTo(MessageLevel.WARNING).ignored(),
                 code, new ArrayList<>());
         processNode(node);
 
         writer.println();
-        writer.println("## " + firstUpperCase(libraryName) +  " library");
+        writer.println("# " + firstUpperCase(libraryName) +  " library");
         writer.println();
         processModuleDoc(code);
 
-        functions.stream().filter(function -> !function.getName().startsWith("_")).forEach(this::processFunction);
+        if (!parameters.isEmpty()) {
+            writer.println();
+            writer.println("## Program parameters");
+            parameters.stream().filter(parameter -> !parameter.getName().startsWith("_")).forEach(this::processParameter);
+        }
+
+        if (!constants.isEmpty()) {
+            writer.println();
+            writer.println("## Constants");
+            constants.stream().filter(constant -> !constant.getName().startsWith("_")).forEach(this::processConstant);
+        }
+
+        if (!functions.isEmpty()) {
+            writer.println();
+            writer.println("## Functions");
+            functions.stream().filter(function -> !function.getName().startsWith("_")).forEach(this::processFunction);
+        }
     }
 
     private String firstUpperCase(String str) {
@@ -108,10 +126,55 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
     }
 
     private void processNode(AstNode node) {
-        if (node instanceof FunctionDeclaration fd) {
-            functions.add(fd);
+        if (node instanceof ProgramParameter programParameter) {
+            parameters.add(programParameter);
+        } else if (node instanceof Constant constant) {
+            constants.add(constant);
+        } else if (node instanceof FunctionDeclaration functionDeclaration) {
+            functions.add(functionDeclaration);
         }
+
         node.getChildren().forEach(this::processNode);
+    }
+
+    private void printValue(AstNode node) {
+        if (node instanceof ConstantAstNode constantAstNode) {
+            writer.print(constantAstNode.getLiteralValue());
+        }
+    }
+
+    private void processParameter(ProgramParameter parameter) {
+        writer.println();
+        writer.println("### " + parameter.getName());
+        writer.println();
+
+        writer.print("**Definition:** `param ");
+        writer.print(parameter.getName());
+        writer.print(" = ");
+        printValue(parameter.getValue());
+        writer.println(";`");
+
+        if (parameter.getCodeDoc() != null) {
+            writer.println();
+            writeCodeDoc(parameter.getCodeDoc());
+        }
+    }
+
+    private void processConstant(Constant constant) {
+        writer.println();
+        writer.println("### " + constant.getName());
+        writer.println();
+
+        writer.print("**Definition:** `const ");
+        writer.print(constant.getName());
+        writer.print(" = ");
+        printValue(constant.getValue());
+        writer.println(";`");
+
+        if (constant.getCodeDoc() != null) {
+            writer.println();
+            writeCodeDoc(constant.getCodeDoc());
+        }
     }
 
     private void processFunction(FunctionDeclaration declaration) {

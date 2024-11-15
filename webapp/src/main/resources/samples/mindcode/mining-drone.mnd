@@ -10,12 +10,15 @@ param PATCH_X = 16;
 param PATCH_Y = 17;
 param MESSAGES = message1;
 
+// Title printed to messages to help identify the processor purpose
+const TITLE = "Drone mining\n";
+
 // Find a unit if we don't have one
 if @unit.@dead != 0 or @unit.@controller != @this then
     // Some Mindustry code on the internet relies on nonzero flag
     // marking used units. Assign non-zero flag to protect our unit
     // from such code run by other processors.
-    waitForFreeUnit(MESSAGES, @poly, rand(1000));
+    waitForFreeUnit(MESSAGES, TITLE, @poly, rand(1000));
 end;
 
 // Throw away anything the unit might have been carrying
@@ -24,6 +27,8 @@ itemDrop(@air, @unit.@totalItems);
 // Mine until the unit is lost or killed
 // Then the program restarts, acquiring another unit
 while @unit.@controller == @this and @unit.@dead == 0 do
+    print(TITLE);
+
     if @unit.@totalItems < @unit.@itemCapacity then
         println("State: mining");
         approach(PATCH_X, PATCH_Y, 3);

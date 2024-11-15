@@ -192,9 +192,7 @@ class MindcodeCompilerTest {
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + "-" + level.name().toLowerCase() + ".mlog"),
                 normalizeLineEndings(result.output()), StandardCharsets.UTF_8);
 
-        if (result.hasProgramOutput()) {
-            System.out.println(result.getProgramOutput());
-        }
+        //if (result.hasProgramOutput()) System.out.println(result.getProgramOutput());
 
         extractTestResults(result.getProgramOutput()).forEach(TestResult::assertValid);
 

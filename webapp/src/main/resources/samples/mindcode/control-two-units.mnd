@@ -12,8 +12,8 @@ param MESSAGES = message1;
 // Finds a free unit of given type, not returning until such a unit is found
 // Sets the flags of these units to a nonzero value
 // Stores the acquired units in variables
-poly = waitForFreeUnit(MESSAGES, @poly, 1);
-mega = waitForFreeUnit(MESSAGES, @mega, 1);
+poly = waitForFreeUnit(MESSAGES, "Control two units example\n", @poly, 1);
+mega = waitForFreeUnit(MESSAGES, "Control two units example\n", @mega, 1);
 
 // This is a global variable
 ANGLE = 0;
