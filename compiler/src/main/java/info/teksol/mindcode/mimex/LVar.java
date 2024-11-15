@@ -1,5 +1,7 @@
 package info.teksol.mindcode.mimex;
 
+import java.util.Collection;
+
 public record LVar(
         String contentName,
         String name,
@@ -16,5 +18,9 @@ public record LVar(
 
     public static LVar forName(String name) {
         return MindustryContents.LVAR_MAP.get(name);
+    }
+
+    public static Collection<LVar> allVars() {
+        return MindustryContents.LVAR_MAP.values();
     }
 }

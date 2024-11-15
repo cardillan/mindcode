@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 * Added warnings for unrecognized built-in variables. An unrecognized built-in variable might be invalid or mistyped.
 * Added the built-in math constants `@pi`, `@e`, `@degToRad` and `@radToDeg` to the processor emulator.
+* Added automatic generation of [Intellij IDEA settings files](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea) to keep them up-to-date with the language definition.
 
 #### Experimental features
 

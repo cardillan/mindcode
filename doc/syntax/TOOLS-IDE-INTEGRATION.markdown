@@ -24,18 +24,21 @@ Intellij IDEA can be downloaded here: https://www.jetbrains.com/idea/download/. 
 
 After installing and running IDEA, you can import the settings file containing Mindcode file types and external tool configurations.
 
-- Windows: [settings.zip](/support/idea-windows/settings.zip) 
-- Linux: [settings.zip](/support/idea-linux/settings.zip) (the settings for Linux were adapted from Windows environment, but weren't tested - they may need some tweaking to work) 
+- File types: [settings.zip](/support/idea/settings-filetypes.zip)
+- External tools (Windows): [settings.zip](/support/idea/settings-tools-windows.zip)
+- External tools (Linux): [settings.zip](/support/idea/settings-tools-linux.zip) (The settings for Linux were adapted from Windows environment, but weren't tested - they may need some tweaking to work.)
 
 To import these settings, choose _File/Manage IDE settings/Import settings..._ and select the appropriate settings file.
 
-The settings contain Mindcode and Schemacode file type definitions configured for syntax highlighting of Mindcode and Mindustry Logic keywords. Unfortunately syntax highlighting doesn't highlight the leading `@` character in Mindustry Logic built-in values and the leading `$` character of formattable string literals, but otherwise is reasonably good.
+The file types settings contain Mindcode and Schemacode file type definitions configured for syntax highlighting of Mindcode and Mindustry Logic keywords. The file containing these settings is automatically kept up-to-date with each release of Mindcode. When a new version adds or removes keywords, importing the settings again will update your IDE to the latest language definition.    
 
-Two external tools are created: `Mindcode compiler` and `Schemacode compiler`. You may want to assign a shortcut key to them in _Settings/Keymap/External tools_, and to  review the command line arguments configured for either tool in _Settings/Tools/External tools_.
+The external tools settings contain two external tools: `Mindcode compiler` and `Schemacode compiler`. You may want to assign a shortcut key to them in _Settings/Keymap/External tools_, and to  review the command line arguments configured for either tool in _Settings/Tools/External tools_.
 
 Example of syntax highlighting with the given settings:
 
 ![image](https://github.com/user-attachments/assets/2ec8bd89-67f5-40d8-9677-1878b54657d2)
+
+Unfortunately syntax highlighting doesn't highlight the leading `@` character in Mindustry Logic built-in values and the leading `$` character of formattable string literals, but otherwise is reasonably good.
 
 ## Visual Studio Code
 
