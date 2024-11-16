@@ -136,4 +136,43 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void propagatesGotoOnlyToUnconditionalJump() {
+        assertCompilesTo(
+                new TestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
+                """
+                        noinline def foo(x2, x3, x4, x5)
+                            if x3 > x2 then
+                                x2 < x4 ? min(x3, x4) : min(x2, x5);
+                            else
+                                x3 > x4 ? min(x3, x5) : min(x2, x4);
+                            end;
+                        end;
+                        print(foo(2, 3, 4, 5));
+                        """,
+                createInstruction(SET, "__fn0_x2", "2"),
+                createInstruction(SET, "__fn0_x3", "3"),
+                createInstruction(SET, "__fn0_x4", "4"),
+                createInstruction(SET, "__fn0_x5", "5"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1003), "lessThanEq", "__fn0_x3", "__fn0_x2"),
+                createInstruction(OP, "min", "__fn0retval", "__fn0_x2", "__fn0_x5"),
+                createInstruction(JUMP, var(1004), "greaterThanEq", "__fn0_x2", "__fn0_x4"),
+                createInstruction(OP, "min", "__fn0retval", "__fn0_x3", "__fn0_x4"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(OP, "min", "__fn0retval", "__fn0_x2", "__fn0_x4"),
+                createInstruction(JUMP, var(1008), "lessThanEq", "__fn0_x3", "__fn0_x4"),
+                createInstruction(OP, "min", "__fn0retval", "__fn0_x3", "__fn0_x5"),
+                createInstruction(LABEL, var(1008)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0")
+        );
+    }
 }

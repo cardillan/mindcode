@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.7.0 - 2024-11-15
+
+### Fixed
+
+* Fixed wrong Jump Threading optimization in out-of-line functions ([#177](https://github.com/cardillan/mindcode/issues/107)).
+
 ## 2.6.0 - 2024-11-15
 
 **Breaking:** This release comes with a new keyword in Mindcode syntax (`require`), which break existing code where this keyword was used as a variable or function name.

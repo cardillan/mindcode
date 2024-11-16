@@ -19,7 +19,7 @@ class JumpThreading extends BaseOptimizer {
     public JumpThreading(OptimizationContext optimizationContext) {
         super(Optimization.JUMP_THREADING, optimizationContext);
     }
-    
+
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator it = createIterator()) {
@@ -27,17 +27,17 @@ class JumpThreading extends BaseOptimizer {
             while (it.hasNext()) {
                 LogicInstruction instruction = it.next();
                 if (instruction instanceof JumpInstruction jump) {
+                    // Target of the jump
                     LogicLabel label = findJumpRedirection(jump);
                     GotoInstruction labeledGoto = advanced() && labeledInstruction(label) instanceof GotoInstruction ix ? ix : null;
-                    if (jump.isUnconditional() && labeledGoto != null || !label.equals(jump.getTarget())) {
-                        if (labeledGoto != null) {
-                            // An unconditional jump targets a goto: replace it with the goto itself
-                            it.set(labeledGoto.withContext(jump.getAstContext()));
-                        } else {
-                            startLabelUsed |= label.equals(FIRST_LABEL);
-                            // Update target of the original jump
-                            it.set(jump.withTarget(label));
-                        }
+                    if (labeledGoto != null && jump.isUnconditional()) {
+                        // An unconditional jump targets a goto: replace it with the goto itself
+                        it.set(labeledGoto.withContext(jump.getAstContext()));
+                        count++;
+                    } else if (!label.equals(jump.getTarget())){
+                        startLabelUsed |= label.equals(FIRST_LABEL);
+                        // Update target of the original jump
+                        it.set(jump.withTarget(label));
                         count++;
                     }
                 }
