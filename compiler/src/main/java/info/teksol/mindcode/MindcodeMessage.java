@@ -12,6 +12,14 @@ public interface MindcodeMessage {
         return this;
     }
 
+    /**
+     * Unstable messages may change from run to run, and therefore aren't suitable for storing
+     * in log files which are under version control.
+     */
+    default boolean isStable() {
+        return true;
+    }
+
     MessageLevel level();
 
     String message();

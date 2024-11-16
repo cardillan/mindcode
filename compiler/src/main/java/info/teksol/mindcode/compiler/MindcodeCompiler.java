@@ -65,12 +65,12 @@ public class MindcodeCompiler implements Compiler<String> {
         messageConsumer.accept(ToolMessage.error(format, args));
     }
 
-    private void info(String message) {
-        messageConsumer.accept(ToolMessage.info(message));
-    }
-
     private void info(@PrintFormat String format, Object... args) {
         messageConsumer.accept(ToolMessage.info(format, args));
+    }
+
+    private void timing(@PrintFormat String format, Object... args) {
+        messageConsumer.accept(TimingMessage.info(format, args));
     }
 
     private void debug(String message) {
@@ -112,28 +112,28 @@ public class MindcodeCompiler implements Compiler<String> {
     }
 
     private InputFile loadLibraryFromResource(Requirement requirement) {
-        String fileName = requirement.getFile();
+        String libraryName = requirement.getFile();
         try {
-            InputFile library = loadSystemLibrary(fileName);
+            InputFile library = loadSystemLibrary(libraryName);
             if (library == null) {
-                error(requirement, "Unknown system library '%s'.", fileName);
+                error(requirement, "Unknown system library '%s'.", libraryName);
             }
             return library;
         } catch (IOException e) {
-            error(requirement, "Error reading system library file '%s'.", fileName);
-            throw new MindcodeInternalError(e, "Error reading system library file '%s'.", fileName);
+            error(requirement, "Error reading system library file '%s'.", libraryName);
+            throw new MindcodeInternalError(e, "Error reading system library file '%s'.", libraryName);
         }
     }
 
-    InputFile loadSystemLibrary(String fileName) throws IOException {
-        try (InputStream resource = MindcodeCompiler.class.getResourceAsStream("/library/" + fileName + ".mnd")) {
+    InputFile loadSystemLibrary(String libraryName) throws IOException {
+        try (InputStream resource = MindcodeCompiler.class.getResourceAsStream("/library/" + libraryName + ".mnd")) {
             if (resource == null) {
                 return null;
             }
             try (final InputStreamReader reader = new InputStreamReader(resource)) {
                 final StringWriter out = new StringWriter();
                 reader.transferTo(out);
-                return inputFiles.registerLibraryFile(Path.of(fileName), out.toString());
+                return inputFiles.registerLibraryFile(Path.of(libraryName), out.toString());
             }
         }
     }
@@ -197,7 +197,7 @@ public class MindcodeCompiler implements Compiler<String> {
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
         if (!inputFile.isLibrary()) {
-            info("%s: number of reported ambiguities: %d", inputFile, errorListener.getAmbiguities());
+            info("%s: number of reported ambiguities: %d", inputFile.getDistinctTitle(), errorListener.getAmbiguities());
         }
         return AstNodeBuilder.generate(inputFile, messageConsumer, context, requirements);
     }
@@ -267,12 +267,12 @@ public class MindcodeCompiler implements Compiler<String> {
             long runStart = System.nanoTime();
             runResults = run(result);
             long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
-            info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(
-                    parseTime, compileTime, optimizeTime, runTime));
+            timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
+                    parseTime, compileTime, optimizeTime, runTime);
         } else {
             runResults = new RunResults(null,0);
-            info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(
-                    parseTime, compileTime, optimizeTime));
+            timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+                    parseTime, compileTime, optimizeTime);
         }
 
         String output = LogicInstructionPrinter.toString(instructionProcessor, result);

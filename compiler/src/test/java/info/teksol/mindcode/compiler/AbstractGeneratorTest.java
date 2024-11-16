@@ -193,11 +193,11 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected GeneratorOutput generateInstructionsNoMsgValidation(TestCompiler compiler, String code) {
         long parse = System.nanoTime();
         Seq program = generateAstTree(code);
-        compiler.addMessage(new TimingMessage("Parse", ((System.nanoTime() - parse) / 1_000_000L)));
+        compiler.addMessage(new OptimizerTimingMessage("Parse", ((System.nanoTime() - parse) / 1_000_000L)));
 
         long compile = System.nanoTime();
         GeneratorOutput output = compiler.generator.generate(program);
-        compiler.addMessage(new TimingMessage("Compile", ((System.nanoTime() - compile) / 1_000_000L)));
+        compiler.addMessage(new OptimizerTimingMessage("Compile", ((System.nanoTime() - compile) / 1_000_000L)));
         compiler.setRootContext(output.rootAstContext());
 
         return output;

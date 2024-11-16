@@ -1,25 +1,25 @@
 print "T:distance(1,1,4,5)\nE:5\nA:5\nT:distance(-1,-1,-4,-5)\nE:5\nA:5\nT:round(1.5)\nE:2\nA:2\nT:round(1.7)\nE:2\nA:2\nT:round(2.1)\nE:2\nA:2\nT:round(2.5)\nE:3\nA:3\nT:round(-3.5)\nE:-3\nA:-3\nT:frac(3.5)\nE:0.5\nA:0.5\nT:frac(-1.5)\nE:-0.5\nA:-0.5\n"
 set __fn0__x 0
 set __fn0retaddr 4
-jump 842 always 0 0
+jump 927 always 0 0
 print "T:sign(0)\nE:0\nA:"
 print __fn0retval
 print "\n"
 set __fn0__x 0.0000001
 set __fn0retaddr 10
-jump 842 always 0 0
+jump 927 always 0 0
 print "T:sign(1e-7)\nE:0\nA:"
 print __fn0retval
 print "\n"
 set __fn0__x 0.00001
 set __fn0retaddr 16
-jump 842 always 0 0
+jump 927 always 0 0
 print "T:sign(1e-5)\nE:1\nA:"
 print __fn0retval
 print "\n"
 set __fn0__x -5
 set __fn0retaddr 22
-jump 842 always 0 0
+jump 927 always 0 0
 print "T:sign(-5)\nE:-1\nA:"
 print __fn0retval
 op add __fn39__result null 0
@@ -34,7 +34,7 @@ set __fn1__x2 4
 set __fn1__x3 6
 set __fn1__x4 8
 set __fn1retaddr 37
-jump 848 always 0 0
+jump 933 always 0 0
 print "T:median(2,4,6,8)\nE:5\nA:"
 print __fn1retval
 print "\n"
@@ -43,7 +43,7 @@ set __fn1__x2 6
 set __fn1__x3 4
 set __fn1__x4 2
 set __fn1retaddr 46
-jump 848 always 0 0
+jump 933 always 0 0
 print "T:median(8,6,4,2)\nE:5\nA:"
 print __fn1retval
 print "\n"
@@ -52,7 +52,7 @@ set __fn1__x2 8
 set __fn1__x3 2
 set __fn1__x4 6
 set __fn1retaddr 55
-jump 848 always 0 0
+jump 933 always 0 0
 print "T:median(4,8,2,6)\nE:5\nA:"
 print __fn1retval
 print "\n"
@@ -61,7 +61,7 @@ set __fn1__x2 6
 set __fn1__x3 4
 set __fn1__x4 8
 set __fn1retaddr 64
-jump 848 always 0 0
+jump 933 always 0 0
 print "T:median(2,6,4,8)\nE:5\nA:"
 print __fn1retval
 print "\n"
@@ -70,7 +70,7 @@ set __fn1__x2 2
 set __fn1__x3 8
 set __fn1__x4 4
 set __fn1retaddr 73
-jump 848 always 0 0
+jump 933 always 0 0
 print "T:median(6,2,8,4)\nE:5\nA:"
 print __fn1retval
 print "\n"
@@ -80,7 +80,7 @@ set __fn2__x3 3
 set __fn2__x4 4
 set __fn2__x5 5
 set __fn2retaddr 83
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(1,2,3,4,5)\nE:3\nA:"
 print __fn2retval
 print "\n"
@@ -89,7 +89,7 @@ set __fn2__x2 4
 set __fn2__x4 2
 set __fn2__x5 1
 set __fn2retaddr 92
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(5,4,3,2,1)\nE:3\nA:"
 print __fn2retval
 print "\n"
@@ -98,787 +98,872 @@ set __fn2__x2 1
 set __fn2__x3 1
 set __fn2__x4 1
 set __fn2retaddr 101
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(1,1,1,1,1)\nE:1\nA:"
 print __fn2retval
 print "\n"
 set __fn2__x5 5
 set __fn2retaddr 107
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(1,1,1,1,5)\nE:1\nA:"
 print __fn2retval
 print "\n"
 set __fn2__x4 5
 set __fn2retaddr 113
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(1,1,1,5,5)\nE:1\nA:"
 print __fn2retval
 print "\n"
 set __fn2__x3 5
 set __fn2retaddr 119
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(1,1,5,5,5)\nE:5\nA:"
 print __fn2retval
 print "\n"
 set __fn2__x2 5
 set __fn2retaddr 125
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(1,5,5,5,5)\nE:5\nA:"
 print __fn2retval
 print "\n"
 set __fn2__x1 5
 set __fn2retaddr 131
-jump 865 always 0 0
+jump 950 always 0 0
 print "T:median(5,5,5,5,5)\nE:5\nA:"
 print __fn2retval
 print "\n"
-set __fn76__bestDif 10000000000
-set __fn76__best null
-set __fn76__count 1
-set __tmp152 140
-set __fn76__i 1
-jump 163 always 0 0
-set __tmp152 143
-set __fn76__i 2
-jump 163 always 0 0
-set __tmp152 146
-set __fn76__i 3
-jump 163 always 0 0
-set __tmp152 149
-set __fn76__i 4
-jump 163 always 0 0
-set __tmp152 152
-set __fn76__i 5
-jump 163 always 0 0
-set __tmp152 155
-set __fn76__i 6
-jump 163 always 0 0
-set __tmp152 158
-set __fn76__i 7
-jump 163 always 0 0
-set __tmp152 161
-set __fn76__i 8
-jump 163 always 0 0
-set __tmp152 215
-set __fn76__i 9
-set __fn77__gt 0
-set __fn77__lt 0
-set __tmp154 168
-set __fn77__i 1
-jump 191 always 0 0
-set __tmp154 171
-set __fn77__i 2
-jump 191 always 0 0
-set __tmp154 174
-set __fn77__i 3
-jump 191 always 0 0
-set __tmp154 177
-set __fn77__i 4
-jump 191 always 0 0
-set __tmp154 180
-set __fn77__i 5
-jump 191 always 0 0
-set __tmp154 183
-set __fn77__i 6
-jump 191 always 0 0
-set __tmp154 186
-set __fn77__i 7
-jump 191 always 0 0
-set __tmp154 189
-set __fn77__i 8
-jump 191 always 0 0
-set __tmp154 197
-set __fn77__i 9
-jump 194 greaterThanEq __fn77__i __fn76__i
-op add __fn77__lt __fn77__lt 1
+set __tmp154 136
 set @counter __tmp154
-jump 196 lessThanEq __fn77__i __fn76__i
-op add __fn77__gt __fn77__gt 1
+set __tmp154 138
 set @counter __tmp154
-op sub __tmp161 __fn77__gt __fn77__lt
-op abs __fn77__dif __tmp161 0
-set __tmp166 false
-op add __tmp163 __fn77__gt __fn77__lt
-jump 203 lessThan __tmp163 0
-op equal __tmp166 __fn77__gt __fn77__lt
-jump 206 equal __tmp166 false
-set __tmp151 __fn76__i
-jump 216 always 0 0
-jump 211 greaterThanEq __fn77__dif __fn76__bestDif
-set __fn76__bestDif __fn77__dif
-set __fn76__best __fn76__i
-set __fn76__count 1
-set @counter __tmp152
-jump 214 greaterThan __fn77__dif __fn76__bestDif
-op add __fn76__best __fn76__best __fn76__i
-op add __fn76__count __fn76__count 1
-set @counter __tmp152
-op div __tmp151 __fn76__best __fn76__count
-print "T:median(1,2,3,4,5,6,7,8,9)\nE:5\nA:"
+set __tmp154 140
+set @counter __tmp154
+set __tmp154 142
+set @counter __tmp154
+set __tmp154 144
+set @counter __tmp154
+set __tmp154 146
+set @counter __tmp154
+set __tmp151 1
+print "T:median(1,1,1,1,1,1)\nE:1\nA:"
 print __tmp151
 print "\n"
 set __fn79__bestDif 10000000000
 set __fn79__best null
 set __fn79__count 1
-set __tmp178 225
-set __fn79__i 9
-jump 248 always 0 0
-set __tmp178 228
-set __fn79__i 8
-jump 248 always 0 0
-set __tmp178 231
-set __fn79__i 7
-jump 248 always 0 0
-set __tmp178 234
-set __fn79__i 6
-jump 248 always 0 0
-set __tmp178 237
-set __fn79__i 5
-jump 248 always 0 0
-set __tmp178 240
-set __fn79__i 4
-jump 248 always 0 0
-set __tmp178 243
-set __fn79__i 3
-jump 248 always 0 0
-set __tmp178 246
-set __fn79__i 2
-jump 248 always 0 0
-set __tmp178 300
+set __tmp178 156
 set __fn79__i 1
+jump 170 always 0 0
+set __tmp178 159
+set __fn79__i 1
+jump 170 always 0 0
+set __tmp178 162
+set __fn79__i 1
+jump 170 always 0 0
+set __tmp178 165
+set __fn79__i 1
+jump 170 always 0 0
+set __tmp178 168
+set __fn79__i 1
+jump 170 always 0 0
+set __tmp178 213
+set __fn79__i 5
 set __fn80__gt 0
 set __fn80__lt 0
-set __tmp180 253
-set __fn80__i 9
-jump 276 always 0 0
-set __tmp180 256
-set __fn80__i 8
-jump 276 always 0 0
-set __tmp180 259
-set __fn80__i 7
-jump 276 always 0 0
-set __tmp180 262
-set __fn80__i 6
-jump 276 always 0 0
-set __tmp180 265
-set __fn80__i 5
-jump 276 always 0 0
-set __tmp180 268
-set __fn80__i 4
-jump 276 always 0 0
-set __tmp180 271
-set __fn80__i 3
-jump 276 always 0 0
-set __tmp180 274
-set __fn80__i 2
-jump 276 always 0 0
-set __tmp180 282
+set __tmp180 175
 set __fn80__i 1
-jump 279 greaterThanEq __fn80__i __fn79__i
+jump 189 always 0 0
+set __tmp180 178
+set __fn80__i 1
+jump 189 always 0 0
+set __tmp180 181
+set __fn80__i 1
+jump 189 always 0 0
+set __tmp180 184
+set __fn80__i 1
+jump 189 always 0 0
+set __tmp180 187
+set __fn80__i 1
+jump 189 always 0 0
+set __tmp180 195
+set __fn80__i 5
+jump 192 greaterThanEq __fn80__i __fn79__i
 op add __fn80__lt __fn80__lt 1
 set @counter __tmp180
-jump 281 lessThanEq __fn80__i __fn79__i
+jump 194 lessThanEq __fn80__i __fn79__i
 op add __fn80__gt __fn80__gt 1
 set @counter __tmp180
 op sub __tmp187 __fn80__gt __fn80__lt
 op abs __fn80__dif __tmp187 0
 set __tmp192 false
 op add __tmp189 __fn80__gt __fn80__lt
-jump 288 lessThan __tmp189 0
+jump 201 lessThan __tmp189 0
 op equal __tmp192 __fn80__gt __fn80__lt
-jump 291 equal __tmp192 false
+jump 204 equal __tmp192 false
 set __tmp177 __fn79__i
-jump 301 always 0 0
-jump 296 greaterThanEq __fn80__dif __fn79__bestDif
+jump 214 always 0 0
+jump 209 greaterThanEq __fn80__dif __fn79__bestDif
 set __fn79__bestDif __fn80__dif
 set __fn79__best __fn79__i
 set __fn79__count 1
 set @counter __tmp178
-jump 299 greaterThan __fn80__dif __fn79__bestDif
+jump 212 greaterThan __fn80__dif __fn79__bestDif
 op add __fn79__best __fn79__best __fn79__i
 op add __fn79__count __fn79__count 1
 set @counter __tmp178
 op div __tmp177 __fn79__best __fn79__count
-print "T:median(9,8,7,6,5,4,3,2,1)\nE:5\nA:"
+print "T:median(1,1,1,1,1,5)\nE:1\nA:"
 print __tmp177
 print "\n"
 set __fn82__bestDif 10000000000
 set __fn82__best null
 set __fn82__count 1
-set __tmp204 310
+set __tmp204 223
 set __fn82__i 1
-jump 333 always 0 0
-set __tmp204 313
-set __fn82__i 3
-jump 333 always 0 0
-set __tmp204 316
+jump 237 always 0 0
+set __tmp204 226
+set __fn82__i 1
+jump 237 always 0 0
+set __tmp204 229
+set __fn82__i 1
+jump 237 always 0 0
+set __tmp204 232
+set __fn82__i 1
+jump 237 always 0 0
+set __tmp204 235
 set __fn82__i 5
-jump 333 always 0 0
-set __tmp204 319
-set __fn82__i 7
-jump 333 always 0 0
-set __tmp204 322
-set __fn82__i 9
-jump 333 always 0 0
-set __tmp204 325
-set __fn82__i 2
-jump 333 always 0 0
-set __tmp204 328
-set __fn82__i 4
-jump 333 always 0 0
-set __tmp204 331
-set __fn82__i 6
-jump 333 always 0 0
-set __tmp204 385
-set __fn82__i 8
+jump 237 always 0 0
+set __tmp204 280
+set __fn82__i 5
 set __fn83__gt 0
 set __fn83__lt 0
-set __tmp206 338
+set __tmp206 242
 set __fn83__i 1
-jump 361 always 0 0
-set __tmp206 341
-set __fn83__i 3
-jump 361 always 0 0
-set __tmp206 344
+jump 256 always 0 0
+set __tmp206 245
+set __fn83__i 1
+jump 256 always 0 0
+set __tmp206 248
+set __fn83__i 1
+jump 256 always 0 0
+set __tmp206 251
+set __fn83__i 1
+jump 256 always 0 0
+set __tmp206 254
 set __fn83__i 5
-jump 361 always 0 0
-set __tmp206 347
-set __fn83__i 7
-jump 361 always 0 0
-set __tmp206 350
-set __fn83__i 9
-jump 361 always 0 0
-set __tmp206 353
-set __fn83__i 2
-jump 361 always 0 0
-set __tmp206 356
-set __fn83__i 4
-jump 361 always 0 0
-set __tmp206 359
-set __fn83__i 6
-jump 361 always 0 0
-set __tmp206 367
-set __fn83__i 8
-jump 364 greaterThanEq __fn83__i __fn82__i
+jump 256 always 0 0
+set __tmp206 262
+set __fn83__i 5
+jump 259 greaterThanEq __fn83__i __fn82__i
 op add __fn83__lt __fn83__lt 1
 set @counter __tmp206
-jump 366 lessThanEq __fn83__i __fn82__i
+jump 261 lessThanEq __fn83__i __fn82__i
 op add __fn83__gt __fn83__gt 1
 set @counter __tmp206
 op sub __tmp213 __fn83__gt __fn83__lt
 op abs __fn83__dif __tmp213 0
 set __tmp218 false
 op add __tmp215 __fn83__gt __fn83__lt
-jump 373 lessThan __tmp215 0
+jump 268 lessThan __tmp215 0
 op equal __tmp218 __fn83__gt __fn83__lt
-jump 376 equal __tmp218 false
+jump 271 equal __tmp218 false
 set __tmp203 __fn82__i
-jump 386 always 0 0
-jump 381 greaterThanEq __fn83__dif __fn82__bestDif
+jump 281 always 0 0
+jump 276 greaterThanEq __fn83__dif __fn82__bestDif
 set __fn82__bestDif __fn83__dif
 set __fn82__best __fn82__i
 set __fn82__count 1
 set @counter __tmp204
-jump 384 greaterThan __fn83__dif __fn82__bestDif
+jump 279 greaterThan __fn83__dif __fn82__bestDif
 op add __fn82__best __fn82__best __fn82__i
 op add __fn82__count __fn82__count 1
 set @counter __tmp204
 op div __tmp203 __fn82__best __fn82__count
-print "T:median(1,3,5,7,9,2,4,6,8)\nE:5\nA:"
+print "T:median(1,1,1,1,5,5)\nE:1\nA:"
 print __tmp203
 print "\n"
 set __fn85__bestDif 10000000000
 set __fn85__best null
 set __fn85__count 1
-set __tmp230 395
-set __fn85__i 7
-jump 418 always 0 0
-set __tmp230 398
-set __fn85__i 4
-jump 418 always 0 0
-set __tmp230 401
-set __fn85__i 2
-jump 418 always 0 0
-set __tmp230 404
-set __fn85__i 8
-jump 418 always 0 0
-set __tmp230 407
+set __tmp230 290
 set __fn85__i 1
-jump 418 always 0 0
-set __tmp230 410
+jump 304 always 0 0
+set __tmp230 293
+set __fn85__i 1
+jump 304 always 0 0
+set __tmp230 296
+set __fn85__i 1
+jump 304 always 0 0
+set __tmp230 299
 set __fn85__i 5
-jump 418 always 0 0
-set __tmp230 413
-set __fn85__i 6
-jump 418 always 0 0
-set __tmp230 416
-set __fn85__i 9
-jump 418 always 0 0
-set __tmp230 470
-set __fn85__i 3
+jump 304 always 0 0
+set __tmp230 302
+set __fn85__i 5
+jump 304 always 0 0
+set __tmp230 347
+set __fn85__i 5
 set __fn86__gt 0
 set __fn86__lt 0
-set __tmp232 423
-set __fn86__i 7
-jump 446 always 0 0
-set __tmp232 426
-set __fn86__i 4
-jump 446 always 0 0
-set __tmp232 429
-set __fn86__i 2
-jump 446 always 0 0
-set __tmp232 432
-set __fn86__i 8
-jump 446 always 0 0
-set __tmp232 435
+set __tmp232 309
 set __fn86__i 1
-jump 446 always 0 0
-set __tmp232 438
+jump 323 always 0 0
+set __tmp232 312
+set __fn86__i 1
+jump 323 always 0 0
+set __tmp232 315
+set __fn86__i 1
+jump 323 always 0 0
+set __tmp232 318
 set __fn86__i 5
-jump 446 always 0 0
-set __tmp232 441
-set __fn86__i 6
-jump 446 always 0 0
-set __tmp232 444
-set __fn86__i 9
-jump 446 always 0 0
-set __tmp232 452
-set __fn86__i 3
-jump 449 greaterThanEq __fn86__i __fn85__i
+jump 323 always 0 0
+set __tmp232 321
+set __fn86__i 5
+jump 323 always 0 0
+set __tmp232 329
+set __fn86__i 5
+jump 326 greaterThanEq __fn86__i __fn85__i
 op add __fn86__lt __fn86__lt 1
 set @counter __tmp232
-jump 451 lessThanEq __fn86__i __fn85__i
+jump 328 lessThanEq __fn86__i __fn85__i
 op add __fn86__gt __fn86__gt 1
 set @counter __tmp232
 op sub __tmp239 __fn86__gt __fn86__lt
 op abs __fn86__dif __tmp239 0
 set __tmp244 false
 op add __tmp241 __fn86__gt __fn86__lt
-jump 458 lessThan __tmp241 0
+jump 335 lessThan __tmp241 0
 op equal __tmp244 __fn86__gt __fn86__lt
-jump 461 equal __tmp244 false
+jump 338 equal __tmp244 false
 set __tmp229 __fn85__i
-jump 471 always 0 0
-jump 466 greaterThanEq __fn86__dif __fn85__bestDif
+jump 348 always 0 0
+jump 343 greaterThanEq __fn86__dif __fn85__bestDif
 set __fn85__bestDif __fn86__dif
 set __fn85__best __fn85__i
 set __fn85__count 1
 set @counter __tmp230
-jump 469 greaterThan __fn86__dif __fn85__bestDif
+jump 346 greaterThan __fn86__dif __fn85__bestDif
 op add __fn85__best __fn85__best __fn85__i
 op add __fn85__count __fn85__count 1
 set @counter __tmp230
 op div __tmp229 __fn85__best __fn85__count
-print "T:median(7,4,2,8,1,5,6,9,3)\nE:5\nA:"
+print "T:median(1,1,1,5,5,5)\nE:3\nA:"
 print __tmp229
 print "\n"
-set __tmp258 476
+set __fn88__bestDif 10000000000
+set __fn88__best null
+set __fn88__count 1
+set __tmp256 357
+set __fn88__i 1
+jump 371 always 0 0
+set __tmp256 360
+set __fn88__i 1
+jump 371 always 0 0
+set __tmp256 363
+set __fn88__i 5
+jump 371 always 0 0
+set __tmp256 366
+set __fn88__i 5
+jump 371 always 0 0
+set __tmp256 369
+set __fn88__i 5
+jump 371 always 0 0
+set __tmp256 414
+set __fn88__i 5
+set __fn89__gt 0
+set __fn89__lt 0
+set __tmp258 376
+set __fn89__i 1
+jump 390 always 0 0
+set __tmp258 379
+set __fn89__i 1
+jump 390 always 0 0
+set __tmp258 382
+set __fn89__i 5
+jump 390 always 0 0
+set __tmp258 385
+set __fn89__i 5
+jump 390 always 0 0
+set __tmp258 388
+set __fn89__i 5
+jump 390 always 0 0
+set __tmp258 396
+set __fn89__i 5
+jump 393 greaterThanEq __fn89__i __fn88__i
+op add __fn89__lt __fn89__lt 1
 set @counter __tmp258
-set __tmp258 478
+jump 395 lessThanEq __fn89__i __fn88__i
+op add __fn89__gt __fn89__gt 1
 set @counter __tmp258
-set __tmp258 480
-set @counter __tmp258
-set __tmp258 482
-set @counter __tmp258
-set __tmp258 484
-set @counter __tmp258
-set __tmp258 486
-set @counter __tmp258
-set __tmp255 1
-print "T:median(1,1,1,1,1,1)\nE:1\nA:"
+op sub __tmp265 __fn89__gt __fn89__lt
+op abs __fn89__dif __tmp265 0
+set __tmp270 false
+op add __tmp267 __fn89__gt __fn89__lt
+jump 402 lessThan __tmp267 0
+op equal __tmp270 __fn89__gt __fn89__lt
+jump 405 equal __tmp270 false
+set __tmp255 __fn88__i
+jump 415 always 0 0
+jump 410 greaterThanEq __fn89__dif __fn88__bestDif
+set __fn88__bestDif __fn89__dif
+set __fn88__best __fn88__i
+set __fn88__count 1
+set @counter __tmp256
+jump 413 greaterThan __fn89__dif __fn88__bestDif
+op add __fn88__best __fn88__best __fn88__i
+op add __fn88__count __fn88__count 1
+set @counter __tmp256
+op div __tmp255 __fn88__best __fn88__count
+print "T:median(1,1,5,5,5,5)\nE:5\nA:"
 print __tmp255
 print "\n"
 set __fn91__bestDif 10000000000
 set __fn91__best null
 set __fn91__count 1
-set __tmp282 496
+set __tmp282 424
 set __fn91__i 1
-jump 510 always 0 0
-set __tmp282 499
-set __fn91__i 1
-jump 510 always 0 0
-set __tmp282 502
-set __fn91__i 1
-jump 510 always 0 0
-set __tmp282 505
-set __fn91__i 1
-jump 510 always 0 0
-set __tmp282 508
-set __fn91__i 1
-jump 510 always 0 0
-set __tmp282 553
+jump 438 always 0 0
+set __tmp282 427
+set __fn91__i 5
+jump 438 always 0 0
+set __tmp282 430
+set __fn91__i 5
+jump 438 always 0 0
+set __tmp282 433
+set __fn91__i 5
+jump 438 always 0 0
+set __tmp282 436
+set __fn91__i 5
+jump 438 always 0 0
+set __tmp282 481
 set __fn91__i 5
 set __fn92__gt 0
 set __fn92__lt 0
-set __tmp284 515
+set __tmp284 443
 set __fn92__i 1
-jump 529 always 0 0
-set __tmp284 518
-set __fn92__i 1
-jump 529 always 0 0
-set __tmp284 521
-set __fn92__i 1
-jump 529 always 0 0
-set __tmp284 524
-set __fn92__i 1
-jump 529 always 0 0
-set __tmp284 527
-set __fn92__i 1
-jump 529 always 0 0
-set __tmp284 535
+jump 457 always 0 0
+set __tmp284 446
 set __fn92__i 5
-jump 532 greaterThanEq __fn92__i __fn91__i
+jump 457 always 0 0
+set __tmp284 449
+set __fn92__i 5
+jump 457 always 0 0
+set __tmp284 452
+set __fn92__i 5
+jump 457 always 0 0
+set __tmp284 455
+set __fn92__i 5
+jump 457 always 0 0
+set __tmp284 463
+set __fn92__i 5
+jump 460 greaterThanEq __fn92__i __fn91__i
 op add __fn92__lt __fn92__lt 1
 set @counter __tmp284
-jump 534 lessThanEq __fn92__i __fn91__i
+jump 462 lessThanEq __fn92__i __fn91__i
 op add __fn92__gt __fn92__gt 1
 set @counter __tmp284
 op sub __tmp291 __fn92__gt __fn92__lt
 op abs __fn92__dif __tmp291 0
 set __tmp296 false
 op add __tmp293 __fn92__gt __fn92__lt
-jump 541 lessThan __tmp293 0
+jump 469 lessThan __tmp293 0
 op equal __tmp296 __fn92__gt __fn92__lt
-jump 544 equal __tmp296 false
+jump 472 equal __tmp296 false
 set __tmp281 __fn91__i
-jump 554 always 0 0
-jump 549 greaterThanEq __fn92__dif __fn91__bestDif
+jump 482 always 0 0
+jump 477 greaterThanEq __fn92__dif __fn91__bestDif
 set __fn91__bestDif __fn92__dif
 set __fn91__best __fn91__i
 set __fn91__count 1
 set @counter __tmp282
-jump 552 greaterThan __fn92__dif __fn91__bestDif
+jump 480 greaterThan __fn92__dif __fn91__bestDif
 op add __fn91__best __fn91__best __fn91__i
 op add __fn91__count __fn91__count 1
 set @counter __tmp282
 op div __tmp281 __fn91__best __fn91__count
-print "T:median(1,1,1,1,1,5)\nE:1\nA:"
+print "T:median(1,5,5,5,5,5)\nE:5\nA:"
 print __tmp281
 print "\n"
-set __fn94__bestDif 10000000000
-set __fn94__best null
-set __fn94__count 1
-set __tmp308 563
-set __fn94__i 1
-jump 577 always 0 0
-set __tmp308 566
-set __fn94__i 1
-jump 577 always 0 0
-set __tmp308 569
-set __fn94__i 1
-jump 577 always 0 0
-set __tmp308 572
-set __fn94__i 1
-jump 577 always 0 0
-set __tmp308 575
-set __fn94__i 5
-jump 577 always 0 0
-set __tmp308 620
-set __fn94__i 5
-set __fn95__gt 0
-set __fn95__lt 0
-set __tmp310 582
-set __fn95__i 1
-jump 596 always 0 0
-set __tmp310 585
-set __fn95__i 1
-jump 596 always 0 0
-set __tmp310 588
-set __fn95__i 1
-jump 596 always 0 0
-set __tmp310 591
-set __fn95__i 1
-jump 596 always 0 0
-set __tmp310 594
-set __fn95__i 5
-jump 596 always 0 0
-set __tmp310 602
-set __fn95__i 5
-jump 599 greaterThanEq __fn95__i __fn94__i
-op add __fn95__lt __fn95__lt 1
+set __tmp310 487
 set @counter __tmp310
-jump 601 lessThanEq __fn95__i __fn94__i
-op add __fn95__gt __fn95__gt 1
+set __tmp310 489
 set @counter __tmp310
-op sub __tmp317 __fn95__gt __fn95__lt
-op abs __fn95__dif __tmp317 0
-set __tmp322 false
-op add __tmp319 __fn95__gt __fn95__lt
-jump 608 lessThan __tmp319 0
-op equal __tmp322 __fn95__gt __fn95__lt
-jump 611 equal __tmp322 false
-set __tmp307 __fn94__i
-jump 621 always 0 0
-jump 616 greaterThanEq __fn95__dif __fn94__bestDif
-set __fn94__bestDif __fn95__dif
-set __fn94__best __fn94__i
-set __fn94__count 1
-set @counter __tmp308
-jump 619 greaterThan __fn95__dif __fn94__bestDif
-op add __fn94__best __fn94__best __fn94__i
-op add __fn94__count __fn94__count 1
-set @counter __tmp308
-op div __tmp307 __fn94__best __fn94__count
-print "T:median(1,1,1,1,5,5)\nE:1\nA:"
+set __tmp310 491
+set @counter __tmp310
+set __tmp310 493
+set @counter __tmp310
+set __tmp310 495
+set @counter __tmp310
+set __tmp310 497
+set @counter __tmp310
+set __tmp307 5
+print "T:median(5,5,5,5,5,5)\nE:5\nA:"
 print __tmp307
 print "\n"
 set __fn97__bestDif 10000000000
 set __fn97__best null
 set __fn97__count 1
-set __tmp334 630
+set __tmp334 507
 set __fn97__i 1
-jump 644 always 0 0
-set __tmp334 633
-set __fn97__i 1
-jump 644 always 0 0
-set __tmp334 636
-set __fn97__i 1
-jump 644 always 0 0
-set __tmp334 639
+jump 530 always 0 0
+set __tmp334 510
+set __fn97__i 2
+jump 530 always 0 0
+set __tmp334 513
+set __fn97__i 3
+jump 530 always 0 0
+set __tmp334 516
+set __fn97__i 4
+jump 530 always 0 0
+set __tmp334 519
 set __fn97__i 5
-jump 644 always 0 0
-set __tmp334 642
-set __fn97__i 5
-jump 644 always 0 0
-set __tmp334 687
-set __fn97__i 5
+jump 530 always 0 0
+set __tmp334 522
+set __fn97__i 6
+jump 530 always 0 0
+set __tmp334 525
+set __fn97__i 7
+jump 530 always 0 0
+set __tmp334 528
+set __fn97__i 8
+jump 530 always 0 0
+set __tmp334 582
+set __fn97__i 9
 set __fn98__gt 0
 set __fn98__lt 0
-set __tmp336 649
+set __tmp336 535
 set __fn98__i 1
-jump 663 always 0 0
-set __tmp336 652
-set __fn98__i 1
-jump 663 always 0 0
-set __tmp336 655
-set __fn98__i 1
-jump 663 always 0 0
-set __tmp336 658
+jump 558 always 0 0
+set __tmp336 538
+set __fn98__i 2
+jump 558 always 0 0
+set __tmp336 541
+set __fn98__i 3
+jump 558 always 0 0
+set __tmp336 544
+set __fn98__i 4
+jump 558 always 0 0
+set __tmp336 547
 set __fn98__i 5
-jump 663 always 0 0
-set __tmp336 661
-set __fn98__i 5
-jump 663 always 0 0
-set __tmp336 669
-set __fn98__i 5
-jump 666 greaterThanEq __fn98__i __fn97__i
+jump 558 always 0 0
+set __tmp336 550
+set __fn98__i 6
+jump 558 always 0 0
+set __tmp336 553
+set __fn98__i 7
+jump 558 always 0 0
+set __tmp336 556
+set __fn98__i 8
+jump 558 always 0 0
+set __tmp336 564
+set __fn98__i 9
+jump 561 greaterThanEq __fn98__i __fn97__i
 op add __fn98__lt __fn98__lt 1
 set @counter __tmp336
-jump 668 lessThanEq __fn98__i __fn97__i
+jump 563 lessThanEq __fn98__i __fn97__i
 op add __fn98__gt __fn98__gt 1
 set @counter __tmp336
 op sub __tmp343 __fn98__gt __fn98__lt
 op abs __fn98__dif __tmp343 0
 set __tmp348 false
 op add __tmp345 __fn98__gt __fn98__lt
-jump 675 lessThan __tmp345 0
+jump 570 lessThan __tmp345 0
 op equal __tmp348 __fn98__gt __fn98__lt
-jump 678 equal __tmp348 false
+jump 573 equal __tmp348 false
 set __tmp333 __fn97__i
-jump 688 always 0 0
-jump 683 greaterThanEq __fn98__dif __fn97__bestDif
+jump 583 always 0 0
+jump 578 greaterThanEq __fn98__dif __fn97__bestDif
 set __fn97__bestDif __fn98__dif
 set __fn97__best __fn97__i
 set __fn97__count 1
 set @counter __tmp334
-jump 686 greaterThan __fn98__dif __fn97__bestDif
+jump 581 greaterThan __fn98__dif __fn97__bestDif
 op add __fn97__best __fn97__best __fn97__i
 op add __fn97__count __fn97__count 1
 set @counter __tmp334
 op div __tmp333 __fn97__best __fn97__count
-print "T:median(1,1,1,5,5,5)\nE:3\nA:"
+print "T:median(1,2,3,4,5,6,7,8,9)\nE:5\nA:"
 print __tmp333
 print "\n"
 set __fn100__bestDif 10000000000
 set __fn100__best null
 set __fn100__count 1
-set __tmp360 697
+set __tmp360 592
+set __fn100__i 9
+jump 615 always 0 0
+set __tmp360 595
+set __fn100__i 8
+jump 615 always 0 0
+set __tmp360 598
+set __fn100__i 7
+jump 615 always 0 0
+set __tmp360 601
+set __fn100__i 6
+jump 615 always 0 0
+set __tmp360 604
+set __fn100__i 5
+jump 615 always 0 0
+set __tmp360 607
+set __fn100__i 4
+jump 615 always 0 0
+set __tmp360 610
+set __fn100__i 3
+jump 615 always 0 0
+set __tmp360 613
+set __fn100__i 2
+jump 615 always 0 0
+set __tmp360 667
 set __fn100__i 1
-jump 711 always 0 0
-set __tmp360 700
-set __fn100__i 1
-jump 711 always 0 0
-set __tmp360 703
-set __fn100__i 5
-jump 711 always 0 0
-set __tmp360 706
-set __fn100__i 5
-jump 711 always 0 0
-set __tmp360 709
-set __fn100__i 5
-jump 711 always 0 0
-set __tmp360 754
-set __fn100__i 5
 set __fn101__gt 0
 set __fn101__lt 0
-set __tmp362 716
+set __tmp362 620
+set __fn101__i 9
+jump 643 always 0 0
+set __tmp362 623
+set __fn101__i 8
+jump 643 always 0 0
+set __tmp362 626
+set __fn101__i 7
+jump 643 always 0 0
+set __tmp362 629
+set __fn101__i 6
+jump 643 always 0 0
+set __tmp362 632
+set __fn101__i 5
+jump 643 always 0 0
+set __tmp362 635
+set __fn101__i 4
+jump 643 always 0 0
+set __tmp362 638
+set __fn101__i 3
+jump 643 always 0 0
+set __tmp362 641
+set __fn101__i 2
+jump 643 always 0 0
+set __tmp362 649
 set __fn101__i 1
-jump 730 always 0 0
-set __tmp362 719
-set __fn101__i 1
-jump 730 always 0 0
-set __tmp362 722
-set __fn101__i 5
-jump 730 always 0 0
-set __tmp362 725
-set __fn101__i 5
-jump 730 always 0 0
-set __tmp362 728
-set __fn101__i 5
-jump 730 always 0 0
-set __tmp362 736
-set __fn101__i 5
-jump 733 greaterThanEq __fn101__i __fn100__i
+jump 646 greaterThanEq __fn101__i __fn100__i
 op add __fn101__lt __fn101__lt 1
 set @counter __tmp362
-jump 735 lessThanEq __fn101__i __fn100__i
+jump 648 lessThanEq __fn101__i __fn100__i
 op add __fn101__gt __fn101__gt 1
 set @counter __tmp362
 op sub __tmp369 __fn101__gt __fn101__lt
 op abs __fn101__dif __tmp369 0
 set __tmp374 false
 op add __tmp371 __fn101__gt __fn101__lt
-jump 742 lessThan __tmp371 0
+jump 655 lessThan __tmp371 0
 op equal __tmp374 __fn101__gt __fn101__lt
-jump 745 equal __tmp374 false
+jump 658 equal __tmp374 false
 set __tmp359 __fn100__i
-jump 755 always 0 0
-jump 750 greaterThanEq __fn101__dif __fn100__bestDif
+jump 668 always 0 0
+jump 663 greaterThanEq __fn101__dif __fn100__bestDif
 set __fn100__bestDif __fn101__dif
 set __fn100__best __fn100__i
 set __fn100__count 1
 set @counter __tmp360
-jump 753 greaterThan __fn101__dif __fn100__bestDif
+jump 666 greaterThan __fn101__dif __fn100__bestDif
 op add __fn100__best __fn100__best __fn100__i
 op add __fn100__count __fn100__count 1
 set @counter __tmp360
 op div __tmp359 __fn100__best __fn100__count
-print "T:median(1,1,5,5,5,5)\nE:5\nA:"
+print "T:median(9,8,7,6,5,4,3,2,1)\nE:5\nA:"
 print __tmp359
 print "\n"
 set __fn103__bestDif 10000000000
 set __fn103__best null
 set __fn103__count 1
-set __tmp386 764
+set __tmp386 677
 set __fn103__i 1
-jump 778 always 0 0
-set __tmp386 767
+jump 700 always 0 0
+set __tmp386 680
+set __fn103__i 3
+jump 700 always 0 0
+set __tmp386 683
 set __fn103__i 5
-jump 778 always 0 0
-set __tmp386 770
-set __fn103__i 5
-jump 778 always 0 0
-set __tmp386 773
-set __fn103__i 5
-jump 778 always 0 0
-set __tmp386 776
-set __fn103__i 5
-jump 778 always 0 0
-set __tmp386 821
-set __fn103__i 5
+jump 700 always 0 0
+set __tmp386 686
+set __fn103__i 7
+jump 700 always 0 0
+set __tmp386 689
+set __fn103__i 9
+jump 700 always 0 0
+set __tmp386 692
+set __fn103__i 2
+jump 700 always 0 0
+set __tmp386 695
+set __fn103__i 4
+jump 700 always 0 0
+set __tmp386 698
+set __fn103__i 6
+jump 700 always 0 0
+set __tmp386 752
+set __fn103__i 8
 set __fn104__gt 0
 set __fn104__lt 0
-set __tmp388 783
+set __tmp388 705
 set __fn104__i 1
-jump 797 always 0 0
-set __tmp388 786
+jump 728 always 0 0
+set __tmp388 708
+set __fn104__i 3
+jump 728 always 0 0
+set __tmp388 711
 set __fn104__i 5
-jump 797 always 0 0
-set __tmp388 789
-set __fn104__i 5
-jump 797 always 0 0
-set __tmp388 792
-set __fn104__i 5
-jump 797 always 0 0
-set __tmp388 795
-set __fn104__i 5
-jump 797 always 0 0
-set __tmp388 803
-set __fn104__i 5
-jump 800 greaterThanEq __fn104__i __fn103__i
+jump 728 always 0 0
+set __tmp388 714
+set __fn104__i 7
+jump 728 always 0 0
+set __tmp388 717
+set __fn104__i 9
+jump 728 always 0 0
+set __tmp388 720
+set __fn104__i 2
+jump 728 always 0 0
+set __tmp388 723
+set __fn104__i 4
+jump 728 always 0 0
+set __tmp388 726
+set __fn104__i 6
+jump 728 always 0 0
+set __tmp388 734
+set __fn104__i 8
+jump 731 greaterThanEq __fn104__i __fn103__i
 op add __fn104__lt __fn104__lt 1
 set @counter __tmp388
-jump 802 lessThanEq __fn104__i __fn103__i
+jump 733 lessThanEq __fn104__i __fn103__i
 op add __fn104__gt __fn104__gt 1
 set @counter __tmp388
 op sub __tmp395 __fn104__gt __fn104__lt
 op abs __fn104__dif __tmp395 0
 set __tmp400 false
 op add __tmp397 __fn104__gt __fn104__lt
-jump 809 lessThan __tmp397 0
+jump 740 lessThan __tmp397 0
 op equal __tmp400 __fn104__gt __fn104__lt
-jump 812 equal __tmp400 false
+jump 743 equal __tmp400 false
 set __tmp385 __fn103__i
-jump 822 always 0 0
-jump 817 greaterThanEq __fn104__dif __fn103__bestDif
+jump 753 always 0 0
+jump 748 greaterThanEq __fn104__dif __fn103__bestDif
 set __fn103__bestDif __fn104__dif
 set __fn103__best __fn103__i
 set __fn103__count 1
 set @counter __tmp386
-jump 820 greaterThan __fn104__dif __fn103__bestDif
+jump 751 greaterThan __fn104__dif __fn103__bestDif
 op add __fn103__best __fn103__best __fn103__i
 op add __fn103__count __fn103__count 1
 set @counter __tmp386
 op div __tmp385 __fn103__best __fn103__count
-print "T:median(1,5,5,5,5,5)\nE:5\nA:"
+print "T:median(1,3,5,7,9,2,4,6,8)\nE:5\nA:"
 print __tmp385
 print "\n"
-set __tmp414 827
+set __fn106__bestDif 10000000000
+set __fn106__best null
+set __fn106__count 1
+set __tmp412 762
+set __fn106__i 7
+jump 785 always 0 0
+set __tmp412 765
+set __fn106__i 4
+jump 785 always 0 0
+set __tmp412 768
+set __fn106__i 2
+jump 785 always 0 0
+set __tmp412 771
+set __fn106__i 8
+jump 785 always 0 0
+set __tmp412 774
+set __fn106__i 1
+jump 785 always 0 0
+set __tmp412 777
+set __fn106__i 5
+jump 785 always 0 0
+set __tmp412 780
+set __fn106__i 6
+jump 785 always 0 0
+set __tmp412 783
+set __fn106__i 9
+jump 785 always 0 0
+set __tmp412 837
+set __fn106__i 3
+set __fn107__gt 0
+set __fn107__lt 0
+set __tmp414 790
+set __fn107__i 7
+jump 813 always 0 0
+set __tmp414 793
+set __fn107__i 4
+jump 813 always 0 0
+set __tmp414 796
+set __fn107__i 2
+jump 813 always 0 0
+set __tmp414 799
+set __fn107__i 8
+jump 813 always 0 0
+set __tmp414 802
+set __fn107__i 1
+jump 813 always 0 0
+set __tmp414 805
+set __fn107__i 5
+jump 813 always 0 0
+set __tmp414 808
+set __fn107__i 6
+jump 813 always 0 0
+set __tmp414 811
+set __fn107__i 9
+jump 813 always 0 0
+set __tmp414 819
+set __fn107__i 3
+jump 816 greaterThanEq __fn107__i __fn106__i
+op add __fn107__lt __fn107__lt 1
 set @counter __tmp414
-set __tmp414 829
+jump 818 lessThanEq __fn107__i __fn106__i
+op add __fn107__gt __fn107__gt 1
 set @counter __tmp414
-set __tmp414 831
-set @counter __tmp414
-set __tmp414 833
-set @counter __tmp414
-set __tmp414 835
-set @counter __tmp414
-set __tmp414 837
-set @counter __tmp414
-set __tmp411 5
-print "T:median(5,5,5,5,5,5)\nE:5\nA:"
+op sub __tmp421 __fn107__gt __fn107__lt
+op abs __fn107__dif __tmp421 0
+set __tmp426 false
+op add __tmp423 __fn107__gt __fn107__lt
+jump 825 lessThan __tmp423 0
+op equal __tmp426 __fn107__gt __fn107__lt
+jump 828 equal __tmp426 false
+set __tmp411 __fn106__i
+jump 838 always 0 0
+jump 833 greaterThanEq __fn107__dif __fn106__bestDif
+set __fn106__bestDif __fn107__dif
+set __fn106__best __fn106__i
+set __fn106__count 1
+set @counter __tmp412
+jump 836 greaterThan __fn107__dif __fn106__bestDif
+op add __fn106__best __fn106__best __fn106__i
+op add __fn106__count __fn106__count 1
+set @counter __tmp412
+op div __tmp411 __fn106__best __fn106__count
+print "T:median(7,4,2,8,1,5,6,9,3)\nE:5\nA:"
 print __tmp411
+print "\n"
+set __fn109__bestDif 10000000000
+set __fn109__best null
+set __fn109__count 1
+set __tmp438 847
+set __fn109__i 1
+jump 870 always 0 0
+set __tmp438 850
+set __fn109__i 1
+jump 870 always 0 0
+set __tmp438 853
+set __fn109__i 1
+jump 870 always 0 0
+set __tmp438 856
+set __fn109__i 1
+jump 870 always 0 0
+set __tmp438 859
+set __fn109__i 9
+jump 870 always 0 0
+set __tmp438 862
+set __fn109__i 9
+jump 870 always 0 0
+set __tmp438 865
+set __fn109__i 9
+jump 870 always 0 0
+set __tmp438 868
+set __fn109__i 9
+jump 870 always 0 0
+set __tmp438 922
+set __fn109__i 5
+set __fn110__gt 0
+set __fn110__lt 0
+set __tmp440 875
+set __fn110__i 1
+jump 898 always 0 0
+set __tmp440 878
+set __fn110__i 1
+jump 898 always 0 0
+set __tmp440 881
+set __fn110__i 1
+jump 898 always 0 0
+set __tmp440 884
+set __fn110__i 1
+jump 898 always 0 0
+set __tmp440 887
+set __fn110__i 9
+jump 898 always 0 0
+set __tmp440 890
+set __fn110__i 9
+jump 898 always 0 0
+set __tmp440 893
+set __fn110__i 9
+jump 898 always 0 0
+set __tmp440 896
+set __fn110__i 9
+jump 898 always 0 0
+set __tmp440 904
+set __fn110__i 5
+jump 901 greaterThanEq __fn110__i __fn109__i
+op add __fn110__lt __fn110__lt 1
+set @counter __tmp440
+jump 903 lessThanEq __fn110__i __fn109__i
+op add __fn110__gt __fn110__gt 1
+set @counter __tmp440
+op sub __tmp447 __fn110__gt __fn110__lt
+op abs __fn110__dif __tmp447 0
+set __tmp452 false
+op add __tmp449 __fn110__gt __fn110__lt
+jump 910 lessThan __tmp449 0
+op equal __tmp452 __fn110__gt __fn110__lt
+jump 913 equal __tmp452 false
+set __tmp437 __fn109__i
+jump 923 always 0 0
+jump 918 greaterThanEq __fn110__dif __fn109__bestDif
+set __fn109__bestDif __fn110__dif
+set __fn109__best __fn109__i
+set __fn109__count 1
+set @counter __tmp438
+jump 921 greaterThan __fn110__dif __fn109__bestDif
+op add __fn109__best __fn109__best __fn109__i
+op add __fn109__count __fn109__count 1
+set @counter __tmp438
+op div __tmp437 __fn109__best __fn109__count
+print "T:median(1,1,1,1,9,9,9,9,5)\nE:5\nA:"
+print __tmp437
 print "\n"
 end
 set __fn0retval 0
-jump 847 equal __fn0__x 0
+jump 932 equal __fn0__x 0
 set __fn0retval 1
-jump 847 greaterThanEq __fn0__x 0
+jump 932 greaterThanEq __fn0__x 0
 set __fn0retval -1
 set @counter __fn0retaddr
 op max __fn1__y2 __fn1__x1 __fn1__x2
 op min __fn1__y3 __fn1__x3 __fn1__x4
-jump 854 greaterThan __fn1__y2 __fn1__y3
-op add __tmp445 __fn1__y2 __fn1__y3
-op div __fn1retval __tmp445 2
+jump 939 greaterThan __fn1__y2 __fn1__y3
+op add __tmp471 __fn1__y2 __fn1__y3
+op div __fn1retval __tmp471 2
 set @counter __fn1retaddr
 op min __fn1__y1 __fn1__x1 __fn1__x2
 op max __fn1__y4 __fn1__x3 __fn1__x4
-jump 860 lessThan __fn1__y1 __fn1__y4
-op add __tmp451 __fn1__y1 __fn1__y4
-op div __fn1retval __tmp451 2
+jump 945 lessThan __fn1__y1 __fn1__y4
+op add __tmp477 __fn1__y1 __fn1__y4
+op div __fn1retval __tmp477 2
 set @counter __fn1retaddr
-op max __tmp453 __fn1__y1 __fn1__y3
-op min __tmp454 __fn1__y2 __fn1__y4
-op add __tmp455 __tmp453 __tmp454
-op div __fn1retval __tmp455 2
+op max __tmp479 __fn1__y1 __fn1__y3
+op min __tmp480 __fn1__y2 __fn1__y4
+op add __tmp481 __tmp479 __tmp480
+op div __fn1retval __tmp481 2
 set @counter __fn1retaddr
 op min __fn2__y1 __fn2__x1 __fn2__x2
 op max __fn2__y2 __fn2__x1 __fn2__x2
 op min __fn2__y4 __fn2__x4 __fn2__x5
 op max __fn2__y5 __fn2__x4 __fn2__x5
-jump 874 greaterThanEq __fn2__y4 __fn2__y1
+jump 959 greaterThanEq __fn2__y4 __fn2__y1
 set __fn2__y4 __fn2__y1
-set __fn110__t __fn2__y2
+set __fn113__t __fn2__y2
 set __fn2__y2 __fn2__y5
-set __fn2__y5 __fn110__t
-jump 879 lessThanEq __fn2__x3 __fn2__y2
+set __fn2__y5 __fn113__t
+jump 964 lessThanEq __fn2__x3 __fn2__y2
 op min __fn2retval __fn2__y2 __fn2__y5
-jump 882 greaterThanEq __fn2__y2 __fn2__y4
+jump 967 greaterThanEq __fn2__y2 __fn2__y4
 op min __fn2retval __fn2__x3 __fn2__y4
 set @counter __fn2retaddr
 op min __fn2retval __fn2__y2 __fn2__y4
-jump 882 lessThanEq __fn2__x3 __fn2__y4
+jump 967 lessThanEq __fn2__x3 __fn2__y4
 op min __fn2retval __fn2__x3 __fn2__y5
 set @counter __fn2retaddr
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

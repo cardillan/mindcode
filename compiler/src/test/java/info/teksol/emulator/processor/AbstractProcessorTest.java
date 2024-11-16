@@ -6,7 +6,7 @@ import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
-import info.teksol.mindcode.compiler.TimingMessage;
+import info.teksol.mindcode.compiler.OptimizerTimingMessage;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.*;
 import info.teksol.util.ExpectedMessages;
@@ -133,7 +133,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         }
 
         List<String> data = compiler.getMessages().stream()
-                .filter(m -> !(m instanceof TimingMessage))
+                .filter(m -> !(m instanceof OptimizerTimingMessage))
                 .map(MindcodeMessage::message)
                 .collect(Collectors.toCollection(ArrayList::new));
 

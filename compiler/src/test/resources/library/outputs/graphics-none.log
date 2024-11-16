@@ -1,4 +1,4 @@
-InputFile{id=1, library=false, path=}: number of reported ambiguities: 18
+Main file: number of reported ambiguities: 18
 
 Final code before resolving virtual instructions:
 

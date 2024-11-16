@@ -1,4 +1,4 @@
-InputFile{id=0, library=false, path=}: number of reported ambiguities: 0
+Main file: number of reported ambiguities: 0
 Active optimizations:
     case-expression-optimization = experimental,
     case-switching = experimental,

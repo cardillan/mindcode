@@ -3,7 +3,12 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
 
-public record TimingMessage(String phase, long milliseconds) implements MindcodeMessage {
+public record OptimizerTimingMessage(String phase, long milliseconds) implements MindcodeMessage {
+
+    @Override
+    public boolean isStable() {
+        return false;
+    }
 
     @Override
     public MessageLevel level() {

@@ -3,6 +3,7 @@ require graphics;
 _display = null;
 
 println(displaySize(_display));
+
 rotateLeftSmall();
 rotateRightSmall();
 upsideDownSmall();

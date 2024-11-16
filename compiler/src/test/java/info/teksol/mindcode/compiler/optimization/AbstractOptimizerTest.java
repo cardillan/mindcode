@@ -3,7 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.TimingMessage;
+import info.teksol.mindcode.compiler.OptimizerTimingMessage;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -83,7 +83,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         GeneratorOutput generatorOutput = super.generateInstructionsNoMsgValidation(compiler, code);
         long optimize = System.nanoTime();
         List<LogicInstruction> instructions = optimizeInstructions(compiler, generatorOutput);
-        compiler.addMessage(new TimingMessage("Optimize", ((System.nanoTime() - optimize) / 1_000_000L)));
+        compiler.addMessage(new OptimizerTimingMessage("Optimize", ((System.nanoTime() - optimize) / 1_000_000L)));
         return new GeneratorOutput(generatorOutput.callGraph(), instructions, generatorOutput.rootAstContext());
     }
 

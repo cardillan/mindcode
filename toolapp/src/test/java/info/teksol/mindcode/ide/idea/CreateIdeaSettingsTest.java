@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -72,27 +74,45 @@ public class CreateIdeaSettingsTest {
 
     private void createZipFile(String fileName, List<FileEntry> entries) throws IOException {
         File zipFile = new File(SETTINGS, fileName);
-        try (ZipOutputStream zipOutStream = new ZipOutputStream(new FileOutputStream(zipFile))) {
-            for (FileEntry entry : entries) {
-                addFile(zipOutStream, entry.fileName, entry.contents);
+        boolean modified = false;
+
+        // Do not modify the files if the content didn't change
+        if (zipFile.exists()) {
+            try (FileSystem zipfs = FileSystems.newFileSystem(zipFile.toPath())) {
+                for (FileEntry entry : entries) {
+                    Path pathInZipfile = zipfs.getPath("/" + entry.fileName);
+                    if (!Files.exists(pathInZipfile) || !Files.readString(pathInZipfile).equals(entry.contents)) {
+                        modified = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            modified = true;
+        }
+
+        if (modified) {
+            try (ZipOutputStream zipOutStream = new ZipOutputStream(new FileOutputStream(zipFile))) {
+                for (FileEntry entry : entries) {
+                    addFile(zipOutStream, entry.fileName, entry.contents);
+                }
             }
         }
     }
 
     private void addFile(ZipOutputStream zipOutStream, String fileName, String contents) throws IOException {
         zipOutStream.putNextEntry(new ZipEntry(fileName));
-        byte[] bytes = replacePatterns(contents).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = contents.getBytes(StandardCharsets.UTF_8);
         zipOutStream.write(bytes);
     }
 
     private FileEntry loadFile(String fileName) throws IOException {
-        String contents = Files.readString(Path.of(TEMPLATES, fileName));
-        return new FileEntry(fileName, contents);
+        return loadFile(fileName, fileName);
     }
 
     private FileEntry loadFile(String dirFileName, String zipFileName) throws IOException {
         String contents = Files.readString(Path.of(TEMPLATES, dirFileName));
-        return new FileEntry(zipFileName, contents);
+        return new FileEntry(zipFileName, replacePatterns(contents));
     }
 
     private String replacePatterns(String contents) {
