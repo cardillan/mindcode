@@ -1,4 +1,4 @@
-Number of reported ambiguities: 34
+InputFile{id=1, library=false, path=}: number of reported ambiguities: 4
 Active optimizations:
     case-expression-optimization = advanced,
     case-switching = advanced,

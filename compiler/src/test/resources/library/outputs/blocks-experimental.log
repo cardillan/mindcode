@@ -1,4 +1,4 @@
-Number of reported ambiguities: 7
+InputFile{id=0, library=false, path=}: number of reported ambiguities: 0
 Active optimizations:
     case-expression-optimization = experimental,
     case-switching = experimental,
@@ -34,8 +34,8 @@ Active optimizations:
     10 instructions added by Loop Unrolling (7 iterations).
      3 loops unrolled by Loop Unrolling.
      6 instructions eliminated by Unreachable Code Elimination.
-    10 instructions eliminated by Print Merging.
-    40 instructions after optimizations.
+    14 instructions eliminated by Print Merging.
+    36 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 909):
   * Loop Unrolling: unroll iteration loop at line 53             cost     0, benefit      350.0, efficiency   Infinity (-14 instructions)
@@ -84,18 +84,14 @@ Final code before resolving virtual instructions:
         label __label95
    24:  jump __label38 greaterThan __fn0__n 0
         label __label15
-   25:  print "\nDisplay: "
-   26:  print display
+   25:  print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
+   26:  format display
    27:  op and __fn0__foundAll 1 display
-   28:  print "\nMessage: "
-   29:  print message
-   30:  print "\nSwitch: "
-   31:  print switch
-   32:  print "\nMemory: "
-   33:  print memory
-   34:  op and __fn0__foundAll __fn0__foundAll memory
-   35:  print "\nMemory: "
-   36:  print memory
-   37:  op and __fn0__foundAll __fn0__foundAll memory
-   38:  printflush __fn0__message
-   39:  jump __label2 equal __fn0__foundAll false
+   28:  format message
+   29:  format switch
+   30:  format memory
+   31:  op and __fn0__foundAll __fn0__foundAll memory
+   32:  print memory
+   33:  op and __fn0__foundAll __fn0__foundAll memory
+   34:  printflush __fn0__message
+   35:  jump __label2 equal __fn0__foundAll false

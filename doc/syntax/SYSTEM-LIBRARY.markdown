@@ -511,7 +511,7 @@ Returns the median of two values.
 |------------------------------- |-----------:|-----------:|
 | Inlined function               |          5 |          5 |
 
-Returns the median of three values, using an optimized algorithm .
+Returns the median of three values .
 
 ### median
 
@@ -523,7 +523,7 @@ Returns the median of three values, using an optimized algorithm .
 | Function body                  |         17 |         17 |
 | Function call                  |          7 |          7 |
 
-Returns the median of four values, using an optimized algorithm .
+Returns the median of four values .
 
 ### median
 
@@ -535,7 +535,7 @@ Returns the median of four values, using an optimized algorithm .
 | Function body                  |         18 |         18 |
 | Function call                  |          8 |          8 |
 
-Returns the median of five values, using an optimized algorithm .
+Returns the median of five values.
 
 ### median
 

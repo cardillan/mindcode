@@ -1,11 +1,10 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.emulator.processor.ExecutionFlag;
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.CollectionUtils;
@@ -34,22 +33,20 @@ class MindcodeCompilerTest {
     public static final String LIBRARY_TESTS_DIRECTORY = "src/test/resources/library/tests";
     public static final String LIBRARY_OUTPUTS_DIRECTORY = "src/test/resources/library/outputs";
 
-    private MindcodeCompiler createCompiler(InputFiles inputFiles, boolean run) {
-        return new MindcodeCompiler(
-                new CompilerProfile(false, OptimizationLevel.ADVANCED)
-                        .setFinalCodeOutput(FinalCodeOutput.PLAIN)
-                        .setPrintStackTrace(true)
-                        .setRun(run),
-                inputFiles
-        );
+    private CompilerProfile createCompilerProfile() {
+        return new CompilerProfile(false, OptimizationLevel.ADVANCED)
+                .setProcessorVersion(ProcessorVersion.MAX)
+                .setFinalCodeOutput(FinalCodeOutput.PLAIN)
+                .setPrintStackTrace(true)
+                .setRun(true);
     }
 
-    private MindcodeCompiler createCompiler() {
-        return new MindcodeCompiler(createCompilerProfile());
+    private MindcodeCompiler createCompiler(CompilerProfile profile, InputFiles inputFiles) {
+        return new MindcodeCompiler(profile, inputFiles);
     }
 
-    private MindcodeCompiler createCompiler(CompilerProfile profile) {
-        return new MindcodeCompiler(profile);
+    private MindcodeCompiler createCompiler(InputFiles inputFiles) {
+        return createCompiler(createCompilerProfile(), inputFiles);
     }
 
     @Test
@@ -62,7 +59,7 @@ class MindcodeCompilerTest {
                 end;
                 """);
 
-        CompilerOutput<String> result = createCompiler(inputFiles, true).compile();
+        CompilerOutput<String> result = createCompiler(inputFiles).compile();
 
         assertEquals("""
                 jump 2 always 0 0
@@ -97,7 +94,7 @@ class MindcodeCompilerTest {
         InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "print(\"File1\");");
         InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "print(\"File2\");");
 
-        CompilerOutput<String> result = createCompiler(inputFiles, true).compile();
+        CompilerOutput<String> result = createCompiler(inputFiles).compile();
 
         assertEquals("""
                 print "File2File1"
@@ -126,7 +123,7 @@ class MindcodeCompilerTest {
         assertTrue(files.length > 0, "Expected to find at least one script in " + LIBRARY_DIRECTORY + "; found none");
         List<OptimizationLevel> levels = List.of(OptimizationLevel.values());
 
-        return DynamicContainer.dynamicContainer("Optimization tests",
+        return DynamicContainer.dynamicContainer("System library tests",
                 Stream.of(files)
                         .map(File::getName)
                         .map(f -> f.replace(".mnd", ""))
@@ -140,21 +137,28 @@ class MindcodeCompilerTest {
     private void compileLibrary(String filename, OptimizationLevel level) throws IOException {
         InputFile inputFile;
         InputFiles inputFiles = InputFiles.create();
-        MindcodeCompiler compiler = createCompiler(inputFiles, false);
+        CompilerProfile profile = createCompilerProfile().setAllOptimizationLevels(level).setRemarks(Remarks.ACTIVE);
+        MindcodeCompiler compiler = createCompiler(profile, inputFiles);
+
+        Path templateFile = Path.of(LIBRARY_TESTS_DIRECTORY, filename + ".txt");
         Path testFile = Path.of(LIBRARY_TESTS_DIRECTORY, filename + ".mnd");
-        if (testFile.toFile().exists()) {
+        if (templateFile.toFile().exists()) {
+            // Create test code from template
+            inputFile = inputFiles.registerSource(processTemplate(Files.readString(templateFile)));
+        } else if (testFile.toFile().exists()) {
             // Explicitly written testing code
             inputFile = inputFiles.registerSource( Files.readString(testFile));
         } else {
             // Create the test code automatically
             InputFile source = compiler.loadSystemLibrary(filename);
 
-            String initializations = """
-                    #set target = ML8A;
-                    require %s;
-                    """.formatted(filename);
+            String initializations = "require " + filename + ";\n";
 
-            String variables = source.getCode().lines()
+            List<String> lines = source.getCode().lines()
+                    .map(line -> line.startsWith("inline ") ? line.substring("inline ".length()) : line)
+                    .toList();
+
+            String variables = lines.stream()
                     .filter(line -> line.startsWith("def ") || line.startsWith("void "))
                     .flatMap(MindcodeCompilerTest::extractVariables)
                     .distinct()
@@ -162,29 +166,25 @@ class MindcodeCompilerTest {
                     .map(s -> s + " = null;")
                     .collect(Collectors.joining("\n"));
 
-            String functionCalls = source.getCode().lines()
+            String functionCalls = lines.stream()
                     .filter(line -> line.startsWith("def "))
                     .map(line -> "println(" + line.substring(4) + ");")
                     .collect(Collectors.joining("\n"));
 
-            String procedureCalls = source.getCode().lines()
+            String procedureCalls = lines.stream()
                     .filter(line -> line.startsWith("void "))
                     .map(line -> line.substring(5) + ";")
                     .collect(Collectors.joining("\n"));
 
             // We know there must be a variable names display
-            code = initializations + "\n" + variables + "\n\n" + functionCalls + "\n" + procedureCalls;
-
-            Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".mnd"),
-                    normalizeLineEndings(code), StandardCharsets.UTF_8);
+            String code = initializations + "\n" + variables + "\n\n" + functionCalls + "\n" + procedureCalls;
+            inputFile = inputFiles.registerSource(code);
         }
 
-        CompilerProfile profile = createCompilerProfile()
-                .setAllOptimizationLevels(level)
-                .setRemarks(Remarks.ACTIVE)
-                .clearExecutionFlags(ExecutionFlag.ERR_UNSUPPORTED_OPCODE);
+        Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, filename + ".mnd"),
+                normalizeLineEndings(inputFile.getCode()), StandardCharsets.UTF_8);
 
-        CompilerOutput<String> result = createCompiler(profile).compile(InputFile.createSourceFiles(code));
+        CompilerOutput<String> result = compiler.compile(List.of(inputFile));
 
         String errorsAndWarnings = result.messages().stream()
                 .filter(MindcodeMessage::isErrorOrWarning)
@@ -208,6 +208,36 @@ class MindcodeCompilerTest {
         if (!errorsAndWarnings.isEmpty()) {
             fail("Unexpected error or warning messages were generated:\n" + errorsAndWarnings);
         }
+    }
+
+    private String processTemplate(String template) {
+        StringBuilder code = new StringBuilder();
+
+        template.lines().forEach(line -> {
+            int index1 = line.indexOf("::");
+            int index2 = line.indexOf(":*");
+            if (index1 >= 0) {
+                String actual = line.substring(0, index1).trim();
+                String expected = line.substring(index1 + 2).trim();
+                code.append("assertEquals(")
+                        .append(expected).append(", ")
+                        .append(actual).append(", ")
+                        .append('"').append(actual.replace('"','\'')).append('"')
+                        .append(");\n");
+            } else if (index2 >= 0) {
+                String actual = line.substring(0, index2).trim();
+                String expected = line.substring(index2 + 2).trim();
+                code.append("assertWillPrint(")
+                        .append(expected).append(", ")
+                        .append('"').append(actual.replace('"','\'')).append('"')
+                        .append(");")
+                        .append(actual).append("; println();\n");
+            } else {
+                code.append(line).append("\n");
+            }
+        });
+
+        return code.toString();
     }
 
     private String normalizeLineEndings(String string) {
@@ -259,6 +289,6 @@ class MindcodeCompilerTest {
 
     @Test
     void compileLibrary() throws IOException {
-        compileLibrary("printing", OptimizationLevel.ADVANCED);
+        compileLibrary("math", OptimizationLevel.ADVANCED);
     }
 }

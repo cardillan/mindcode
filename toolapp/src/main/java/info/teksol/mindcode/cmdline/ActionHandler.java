@@ -1,7 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.emulator.processor.ExecutionFlag;
-import info.teksol.mindcode.InputFile;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;

@@ -103,14 +103,6 @@ public class Processor extends AbstractMessageEmitter {
     }
 
     public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {
-        if (program.isEmpty()) {
-            throw new ExecutionException(ERR_INVALID_COUNTER, "No program to run.");
-        }
-
-        if (getFlag(TRACE_EXECUTION)) {
-            info("%nProgram execution trace:");
-        }
-
         steps = 0;
         textBuffer = new TextBuffer(TEXT_OUTPUT_LIMIT, TEXT_BUFFER_LIMIT,
                 getFlag(ERR_TEXT_BUFFER_OVERFLOW));
@@ -119,6 +111,15 @@ public class Processor extends AbstractMessageEmitter {
         counter.setIntValue(0);
         variables.addConstVariable("@links", blocks.size());
         instructions = program.size();
+
+        if (instructions == 0) {
+            textBuffer.append("No program to run.");
+            return;
+        }
+
+        if (getFlag(TRACE_EXECUTION)) {
+            info("%nProgram execution trace:");
+        }
 
         int index = -1;
         LogicInstruction instruction = null;

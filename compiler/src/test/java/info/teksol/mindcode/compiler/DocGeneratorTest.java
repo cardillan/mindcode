@@ -1,9 +1,13 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.*;
+import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MessageLevel;
+import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -333,7 +337,8 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
                 .setGoal(goal)
                 .setSignature(false);
 
-        CompilerOutput<String> result = new MindcodeCompiler(profile).compile(InputFile.createSourceFiles(code.toString()));
+        CompilerOutput<String> result = new MindcodeCompiler(profile, InputFiles.fromSource(code.toString())).compile();
+
         if (result.hasErrors() || result.hasWarnings()) {
             System.out.println(code);
             result.formatMessages(MindcodeMessage::isErrorOrWarning,

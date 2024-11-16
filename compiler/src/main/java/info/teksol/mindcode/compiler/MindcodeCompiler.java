@@ -24,9 +24,10 @@ import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.InputFiles;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.intellij.lang.annotations.PrintFormat;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -56,6 +57,26 @@ public class MindcodeCompiler implements Compiler<String> {
         this.messageConsumer = new TranslatingMessageConsumer(messages::add, profile.getPositionTranslator());
     }
 
+    private void error(AstElement element, @PrintFormat String format, Object... args) {
+        messageConsumer.accept(CompilerMessage.error(element.inputPosition(), format, args));
+    }
+
+    private void error(@PrintFormat String format, Object... args) {
+        messageConsumer.accept(ToolMessage.error(format, args));
+    }
+
+    private void info(String message) {
+        messageConsumer.accept(ToolMessage.info(message));
+    }
+
+    private void info(@PrintFormat String format, Object... args) {
+        messageConsumer.accept(ToolMessage.info(format, args));
+    }
+
+    private void debug(String message) {
+        messageConsumer.accept(ToolMessage.debug(message));
+    }
+
     @Override
     public CompilerOutput<String> compile() {
         return compile(inputFiles.getInputFiles());
@@ -71,7 +92,7 @@ public class MindcodeCompiler implements Compiler<String> {
                 e.printStackTrace();
             }
 
-            messageConsumer.accept(ToolMessage.error("Internal error: %s", e.getMessage()));
+            error("Internal error: %s", e.getMessage());
             return new CompilerOutput<>("", messages, null, 0);
         }
     }
@@ -81,7 +102,7 @@ public class MindcodeCompiler implements Compiler<String> {
             String code = Files.readString(path, StandardCharsets.UTF_8);
             return inputFiles.registerFile(path, code);
         } catch (IOException e) {
-            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(), "Error reading file %s.", path));
+            error(requirement, "Error reading file %s.", path);
             return null;
         }
     }
@@ -91,26 +112,29 @@ public class MindcodeCompiler implements Compiler<String> {
     }
 
     private InputFile loadLibraryFromResource(Requirement requirement) {
-        String library = requirement.getFile();
+        String fileName = requirement.getFile();
         try {
-            return loadSystemLibrary(library);
-        } catch (NullPointerException e) {
-            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(),
-                    "Unknown system library '%s'.", library));
-            return null;
+            InputFile library = loadSystemLibrary(fileName);
+            if (library == null) {
+                error(requirement, "Unknown system library '%s'.", fileName);
+            }
+            return library;
         } catch (IOException e) {
-            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(),
-                    "Error reading system library file '%s'.", library));
-            throw new MindcodeInternalError(e, "Error reading system library file '%s'.", library);
+            error(requirement, "Error reading system library file '%s'.", fileName);
+            throw new MindcodeInternalError(e, "Error reading system library file '%s'.", fileName);
         }
     }
 
-    InputFile loadSystemLibrary(String libraryName) throws IOException {
-        try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(MindcodeCompiler.class.getResourceAsStream("/library/" + libraryName + ".mnd")))) {
-            final StringWriter out = new StringWriter();
-            reader.transferTo(out);
-            return inputFiles.registerLibraryFile(Path.of(libraryName), out.toString());
+    InputFile loadSystemLibrary(String fileName) throws IOException {
+        try (InputStream resource = MindcodeCompiler.class.getResourceAsStream("/library/" + fileName + ".mnd")) {
+            if (resource == null) {
+                return null;
+            }
+            try (final InputStreamReader reader = new InputStreamReader(resource)) {
+                final StringWriter out = new StringWriter();
+                reader.transferTo(out);
+                return inputFiles.registerLibraryFile(Path.of(fileName), out.toString());
+            }
         }
     }
 
@@ -118,7 +142,7 @@ public class MindcodeCompiler implements Compiler<String> {
         if (requirement.isLibrary()) {
             return loadLibrary(requirement);
         } else if (profile.isWebApplication()) {
-            messageConsumer.accept(CompilerMessage.error(requirement.inputPosition(), "Loading code from external file not supported in web application."));
+            error(requirement, "Loading code from external file not supported in web application.");
             return null;
         } else {
             return loadFile(requirement, relativePath.resolve(requirement.getFile()));
@@ -144,16 +168,10 @@ public class MindcodeCompiler implements Compiler<String> {
                     // Additional source files are put in front of the others
                     program = Seq.append(other, program);
 
-                    if (!requirements.isEmpty()) {
-                        Path relativePath = inputFile.isLibrary()
-                                ? Path.of(inputFile.getAbsolutePath()).getParent()
-                                : inputFiles.getBasePath();
-
-                        requirements.stream()
-                                .map(r -> processRequirement(relativePath, r))
-                                .filter(Objects::nonNull)
-                                .forEach(queue::addLast);
-                    }
+                    requirements.stream()
+                            .map(r -> processRequirement(inputFiles.getBasePath(), r))
+                            .filter(Objects::nonNull)
+                            .forEach(queue::addLast);
                 }
             }
 
@@ -179,8 +197,7 @@ public class MindcodeCompiler implements Compiler<String> {
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
         if (!inputFile.isLibrary()) {
-            messageConsumer.accept(ToolMessage.info("%s: number of reported ambiguities: %d",
-                    inputFile.getDistinctTitle(), errorListener.getAmbiguities()));
+            info("%s: number of reported ambiguities: %d", inputFile, errorListener.getAmbiguities());
         }
         return AstNodeBuilder.generate(inputFile, messageConsumer, context, requirements);
     }
@@ -189,7 +206,8 @@ public class MindcodeCompiler implements Compiler<String> {
         if (LIBRARY_PARSES.containsKey(inputFile)) {
             ParsedLibrary parsedLibrary = LIBRARY_PARSES.get(inputFile);
             requirements.addAll(parsedLibrary.requirements);
-            return parsedLibrary.program;        }
+            return parsedLibrary.program;
+        }
 
         long before = messages.stream().filter(MindcodeMessage::isErrorOrWarning).count();
         Seq parsed = parse(inputFile, requirements);
@@ -197,7 +215,6 @@ public class MindcodeCompiler implements Compiler<String> {
 
         if (before == after) {
             // Do not pollute cache with wrong parses
-            LIBRARY_PARSES.put(inputFile, parsed);
             LIBRARY_PARSES.put(inputFile, new ParsedLibrary(parsed, List.copyOf(requirements)));
         }
 
@@ -326,14 +343,6 @@ public class MindcodeCompiler implements Compiler<String> {
         for (int i = 1; i < 10; i++) {
             processor.addBlock(name + i, creator.apply(i));
         }
-    }
-
-    private void info(String message) {
-        messageConsumer.accept(ToolMessage.info(message));
-    }
-
-    private void debug(String message) {
-        messageConsumer.accept(ToolMessage.debug(message));
     }
 
     private record ParsedLibrary(Seq program, List<Requirement> requirements) {

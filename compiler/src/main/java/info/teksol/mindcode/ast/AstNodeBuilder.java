@@ -18,7 +18,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     private final Consumer<MindcodeMessage> messageConsumer;
     private final InputFile inputFile;
     private final Map<String, Integer> heapAllocations = new HashMap<>();
-    private final List<Requirement> requirements;
     private int temp;
     private final List<Requirement> requirements;
     private HeapAllocation allocatedHeap;

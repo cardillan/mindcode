@@ -1,0 +1,3 @@
+require unittests;
+
+assertEquals(1, 1, "Unit test");

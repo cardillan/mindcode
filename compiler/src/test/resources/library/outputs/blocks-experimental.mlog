@@ -23,17 +23,13 @@ set memory __fn0__block
 jump 24 notEqual @memory-cell __fn0__type
 set memory __fn0__block
 jump 8 greaterThan __fn0__n 0
-print "\nDisplay: "
-print display
+print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
+format display
 op and __fn0__foundAll 1 display
-print "\nMessage: "
-print message
-print "\nSwitch: "
-print switch
-print "\nMemory: "
-print memory
+format message
+format switch
+format memory
 op and __fn0__foundAll __fn0__foundAll memory
-print "\nMemory: "
 print memory
 op and __fn0__foundAll __fn0__foundAll memory
 printflush __fn0__message

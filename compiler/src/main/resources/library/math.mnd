@@ -101,27 +101,38 @@ inline def median(_x1, _x2)
     (_x1 + _x2) / 2;
 end;
 
-/** Returns the median of three values, using an optimized algorithm . */
+/** Returns the median of three values . */
 inline def median(_x1, _x2, _x3)
     min(max(_x1, _x2), max(_x1, _x3), max(_x2, _x3));
+/*
+    _y1 = min(_x1, _x2);
+    if _x3 < _y1 then
+        _y1;
+    else
+        _y2 = max(_x1, _x2);
+        _x3 >= _y2 ? _y2 : _x3;
+    end;
+*/
 end;
 
-/** Returns the median of four values, using an optimized algorithm . */
+/** Returns the median of four values . */
 def median(_x1, _x2, _x3, _x4)
-    _y1 = min(_x1, _x2);
     _y2 = max(_x1, _x2);
     _y3 = min(_x3, _x4);
-    _y4 = max(_x3, _x4);
     if _y2 <= _y3 then
         (_y2 + _y3) / 2;
-    elsif _y1 >= _y4 then
-        (_y1 + _y4) / 2;
     else
-        (max(_y1, _y3) + min(_y2, _y4)) / 2;
+        _y1 = min(_x1, _x2);
+        _y4 = max(_x3, _x4);
+        if _y1 >= _y4 then
+            (_y1 + _y4) / 2;
+        else
+            (max(_y1, _y3) + min(_y2, _y4)) / 2;
+        end;
     end;
 end;
 
-/** Returns the median of five values, using an optimized algorithm . */
+/** Returns the median of five values. */
 def median(_x1, _x2, _x3, _x4, _x5)
     _y1 = min(_x1, _x2);
     _y2 = max(_x1, _x2);

@@ -27,21 +27,21 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
 
     @Override
     public void error(AstElement element, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(CompilerMessage.error(element.inputPosition(), format, args));
+        addMessage(CompilerMessage.error(element.inputPosition(), format, args));
     }
 
     @Override
     public void error(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(CompilerMessage.error(position, format, args));
+        addMessage(CompilerMessage.error(position, format, args));
     }
 
     @Override
     public void warn(AstElement element, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(CompilerMessage.warn(element.inputPosition(), format, args));
+        addMessage(CompilerMessage.warn(element.inputPosition(), format, args));
     }
 
     @Override
     public void warn(InputPosition position, @PrintFormat String format, Object... args) {
-        messageConsumer.accept(CompilerMessage.warn(position, format, args));
+        addMessage(CompilerMessage.warn(position, format, args));
     }
 }
