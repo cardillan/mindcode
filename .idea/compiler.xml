@@ -12,11 +12,11 @@
         <module name="mindcode-schemacode" />
         <module name="mindcode-webapp" />
         <module name="mindcode-samples" />
+        <module name="mindcode-exttest" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="mindcode-mindcode" target="17" />
-      <module name="mindcode-samples" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

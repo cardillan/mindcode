@@ -1,5 +1,5 @@
-MIN_BATCH = 10;
-MAX_BATCH = 1000;
+param MIN_BATCH = 10;
+param MAX_BATCH = 1000;
 
 lastCell = 0;
 do
@@ -27,10 +27,10 @@ loop while MEMORY == null;
 
 total = MEMORY[0];
 BATCH_DURATION = 2000;                // We aim for a batch to be completed in about 2 seconds
-MIN_BATCH = (max(MIN_BATCH, 10) \ 10) * 10;
-MAX_BATCH = (max(MAX_BATCH, MIN_BATCH) \ 10) * 10;
+EFF_MIN_BATCH = (max(MIN_BATCH, 10) \ 10) * 10;
+EFF_MAX_BATCH = (max(MAX_BATCH, EFF_MIN_BATCH) \ 10) * 10;
 BATCH_STEP = 10;
-batch = MIN_BATCH;
+batch = EFF_MIN_BATCH;
 startTime = @time;           // Batch start time
 ratePerMin = 0;
 limit = total + batch;
@@ -58,7 +58,7 @@ while switch1.@enabled == 0 do
                     MEMORY[lastCell] = rate * (1000 / 60);              // items/tick
                     ratePerMin = floor(rate * 60000);                   // items/min
                     if duration <= BATCH_DURATION  then                 // too fast, increase batch time
-                        batch = min(batch + BATCH_STEP, MAX_BATCH);
+                        batch = min(batch + BATCH_STEP, EFF_MAX_BATCH);
                     end;
                 end;
             end;
@@ -67,7 +67,7 @@ while switch1.@enabled == 0 do
     elapsed = floor(@time - startTime);
     if elapsed >= 10000 then
         // Batch didn't complete in 10 seconds
-        batch = max((batch \ 90) * 10, MIN_BATCH);      // Divide batch size by 9, round to tens
+        batch = max((batch \ 90) * 10, EFF_MIN_BATCH);      // Divide batch size by 9, round to tens
         MEMORY[lastCell] = 0;
         ratePerMin = 0;
         startTime = @time;

@@ -6,20 +6,20 @@
     27 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      3 instructions eliminated by Expression Optimization (4 iterations).
      3 instructions eliminated by If Expression Optimization (4 iterations).
-    92 instructions eliminated by Data Flow Optimization (8 passes, 28 iterations).
-   505 instructions added by Function Inlining (11 iterations).
+    91 instructions eliminated by Data Flow Optimization (8 passes, 28 iterations).
+   504 instructions added by Function Inlining (11 iterations).
     17 function calls inlined by Function Inlining.
     33 instructions updated by JumpThreading.
      5 instructions eliminated by Unreachable Code Elimination.
    863 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 547):
+Pass 1: speed optimization selection (cost limit 548):
   * Function Inlining: inline function kilo                      cost     5, benefit      218.8, efficiency       43.8 (-5 instructions)
     Function Inlining: inline function update_fuel               cost    13, benefit      337.5, efficiency       26.0
     Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3
     Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-    Function Inlining: inline function check_radar               cost    23, benefit      175.0, efficiency        7.6
-    Function Inlining: inline function call at line 69           cost    24, benefit       87.5, efficiency        3.6
+    Function Inlining: inline function check_radar               cost    22, benefit      175.0, efficiency        8.0
+    Function Inlining: inline function call at line 69           cost    23, benefit       87.5, efficiency        3.8
     Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
@@ -29,7 +29,7 @@ Pass 1: speed optimization selection (cost limit 547):
     Function Inlining: inline function call at line 82           cost     7, benefit      112.5, efficiency       16.1
     Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 86           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 88           cost    24, benefit       87.5, efficiency        3.6
+    Function Inlining: inline function call at line 88           cost    23, benefit       87.5, efficiency        3.8
     Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
@@ -39,12 +39,12 @@ Pass 1: speed optimization selection (cost limit 547):
     Function Inlining: inline function call at line 105          cost     3, benefit       43.8, efficiency       14.6
     Function Inlining: inline function call at line 173          cost    14, benefit        3.9, efficiency        0.3
 
-Pass 1: speed optimization selection (cost limit 552):
+Pass 1: speed optimization selection (cost limit 553):
   * Function Inlining: inline function update_fuel               cost    13, benefit      337.5, efficiency       26.0 (-1 instructions)
     Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3
     Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-    Function Inlining: inline function check_radar               cost    23, benefit      175.0, efficiency        7.6
-    Function Inlining: inline function call at line 69           cost    24, benefit       87.5, efficiency        3.6
+    Function Inlining: inline function check_radar               cost    22, benefit      175.0, efficiency        8.0
+    Function Inlining: inline function call at line 69           cost    23, benefit       87.5, efficiency        3.8
     Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
@@ -54,18 +54,18 @@ Pass 1: speed optimization selection (cost limit 552):
     Function Inlining: inline function call at line 82           cost     7, benefit      112.5, efficiency       16.1
     Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 86           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 88           cost    24, benefit       87.5, efficiency        3.6
+    Function Inlining: inline function call at line 88           cost    23, benefit       87.5, efficiency        3.8
     Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 96           cost     7, benefit      112.5, efficiency       16.1
     Function Inlining: inline function call at line 173          cost    14, benefit        3.9, efficiency        0.3
 
-Pass 1: speed optimization selection (cost limit 553):
+Pass 1: speed optimization selection (cost limit 554):
     Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3
     Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-  * Function Inlining: inline function check_radar               cost    23, benefit      175.0, efficiency        7.6 (+4 instructions)
-    Function Inlining: inline function call at line 69           cost    24, benefit       87.5, efficiency        3.6
+  * Function Inlining: inline function check_radar               cost    22, benefit      175.0, efficiency        8.0 (+5 instructions)
+    Function Inlining: inline function call at line 69           cost    23, benefit       87.5, efficiency        3.8
     Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
@@ -73,7 +73,7 @@ Pass 1: speed optimization selection (cost limit 553):
     Function Inlining: inline function call at line 77           cost    14, benefit      100.0, efficiency        7.1
     Function Inlining: inline function call at line 80           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 88           cost    24, benefit       87.5, efficiency        3.6
+    Function Inlining: inline function call at line 88           cost    23, benefit       87.5, efficiency        3.8
     Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
     Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
@@ -1240,7 +1240,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    501 print "WAIT power. (%"
    502 print __fn3_charge
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
  
     33 set __tmp5 @tick
     34 label __label6
@@ -1528,13 +1528,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-3
    455 label __label84
    456 jump __label81 always
  
-   572 control enabled projector2 false
-   573 set __fn4retval false
-   574 jump __label101 always
+   565 control enabled reactor5 false
+   566 set __fn4retval true
+   567 jump __label101 always
 -    * set __tmp190 null
-   575 label __label103
-   576 set __fn4retval __tmp190
-   577 label __label101
+   568 jump __label103 always
+   569 label __label102
+   570 control enabled projector1 false
+   571 control enabled projector2 false
+   572 set __fn4retval false
+   573 jump __label101 always
+-    * set __tmp190 null
+   574 label __label103
+   575 set __fn4retval __tmp190
+   576 label __label101
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
      0 printflush message1
@@ -2050,7 +2057,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    184 jump __label123 equal fuel_many false
    185 control config unloader5 @blast-compound
 
-Modifications by Function Inlining: inline function check_radar (+19 instructions):
+Modifications by Function Inlining: inline function check_radar (+18 instructions):
  
     46 set CONTAINER vault1
     47 set NODE node1
@@ -2077,62 +2084,60 @@ Modifications by Function Inlining: inline function check_radar (+19 instruction
 +   65 control enabled reactor5 false
 +   66 set __fn4retval true
 +   67 jump __label131 always
-+   68 set __tmp190 null
-+   69 jump __label130 always
-+   70 label __label129
-+   71 control enabled projector1 false
-+   72 control enabled projector2 false
-+   73 set __fn4retval false
-+   74 jump __label131 always
-+   75 label __label130
-+   76 set __fn4retval __tmp190
-+   77 label __label131
-    78 label __label11
-    79 op notEqual __tmp9 switch1 null
-    80 sensor __tmp10 switch1 @enabled
++   68 jump __label130 always
++   69 label __label129
++   70 control enabled projector1 false
++   71 control enabled projector2 false
++   72 set __fn4retval false
++   73 jump __label131 always
++   74 label __label130
++   75 set __fn4retval __tmp190
++   76 label __label131
+    77 label __label11
+    78 op notEqual __tmp9 switch1 null
+    79 sensor __tmp10 switch1 @enabled
  
-   170 label __label120
-   171 label __label121
-   172 set __fn4_unit cyclone1
+   169 label __label120
+   170 label __label121
+   171 set __fn4_unit cyclone1
 -    * setaddr __fn4retaddr __label24
 -    * call __label4 __fn4retval
 -    * gotolabel __label24 __fn4
-+  173 label __label132
-+  174 radar enemy any any health __fn4_unit 1 __fn4_enemy_found
-+  175 jump __label133 equal __fn4_enemy_found null
-+  176 control enabled projector1 true
-+  177 control enabled projector2 true
-+  178 control config ULD_IN_1 FUEL_OFF
-+  179 control config ULD_OUT_1 FUEL
-+  180 control config ULD_IN_2 FUEL_OFF
-+  181 control config ULD_OUT_2 FUEL
-+  182 control config ULD_IN_MANY FUEL_OFF
-+  183 control config ULD_OUT_MANY FUEL
-+  184 control config ULD_MIXER FUEL_OFF
-+  185 control enabled reactor1 false
-+  186 control enabled reactor2 false
-+  187 control enabled reactor3 false
-+  188 control enabled reactor4 false
-+  189 control enabled reactor5 false
-+  190 set __fn4retval true
-+  191 jump __label135 always
-+  192 set __tmp190 null
-+  193 jump __label134 always
-+  194 label __label133
-+  195 control enabled projector1 false
-+  196 control enabled projector2 false
-+  197 set __fn4retval false
-+  198 jump __label135 always
-+  199 label __label134
-+  200 set __fn4retval __tmp190
-+  201 label __label135
-   202 op or emerg_shutdown emerg_shutdown __fn4retval
-   203 set __fn3_reactor reactor3
-   204 set __fn3_reactor_num 3
++  172 label __label132
++  173 radar enemy any any health __fn4_unit 1 __fn4_enemy_found
++  174 jump __label133 equal __fn4_enemy_found null
++  175 control enabled projector1 true
++  176 control enabled projector2 true
++  177 control config ULD_IN_1 FUEL_OFF
++  178 control config ULD_OUT_1 FUEL
++  179 control config ULD_IN_2 FUEL_OFF
++  180 control config ULD_OUT_2 FUEL
++  181 control config ULD_IN_MANY FUEL_OFF
++  182 control config ULD_OUT_MANY FUEL
++  183 control config ULD_MIXER FUEL_OFF
++  184 control enabled reactor1 false
++  185 control enabled reactor2 false
++  186 control enabled reactor3 false
++  187 control enabled reactor4 false
++  188 control enabled reactor5 false
++  189 set __fn4retval true
++  190 jump __label135 always
++  191 jump __label134 always
++  192 label __label133
++  193 control enabled projector1 false
++  194 control enabled projector2 false
++  195 set __fn4retval false
++  196 jump __label135 always
++  197 label __label134
++  198 set __fn4retval __tmp190
++  199 label __label135
+   200 op or emerg_shutdown emerg_shutdown __fn4retval
+   201 set __fn3_reactor reactor3
+   202 set __fn3_reactor_num 3
  
-   579 label __label67
-   580 goto __fn3retaddr __fn3
-   581 end
+   577 label __label67
+   578 goto __fn3retaddr __fn3
+   579 end
 -    * label __label4
 -    * radar enemy any any health __fn4_unit 1 __fn4_enemy_found
 -    * jump __label102 equal __fn4_enemy_found null
@@ -2152,7 +2157,6 @@ Modifications by Function Inlining: inline function check_radar (+19 instruction
 -    * control enabled reactor5 false
 -    * set __fn4retval true
 -    * jump __label101 always
--    * set __tmp190 null
 -    * jump __label103 always
 -    * label __label102
 -    * control enabled projector1 false
@@ -2193,22 +2197,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
     62 control enabled reactor2 false
     63 control enabled reactor3 false
  
-    73 set __fn4retval false
-    74 jump __label131 always
-    75 label __label130
+    72 set __fn4retval false
+    73 jump __label131 always
+    74 label __label130
 -    * set __fn4retval __tmp190
-    76 label __label131
-    77 label __label11
-    78 op notEqual __tmp9 switch1 null
+    75 label __label131
+    76 label __label11
+    77 op notEqual __tmp9 switch1 null
  
-   170 label __label121
-   171 set __fn4_unit cyclone1
-   172 label __label132
+   169 label __label121
+   170 set __fn4_unit cyclone1
+   171 label __label132
 -    * radar enemy any any health __fn4_unit 1 __fn4_enemy_found
-+  173 radar enemy any any health cyclone1 1 __fn4_enemy_found
-   174 jump __label133 equal __fn4_enemy_found null
-   175 control enabled projector1 true
-   176 control enabled projector2 true
++  172 radar enemy any any health cyclone1 1 __fn4_enemy_found
+   173 jump __label133 equal __fn4_enemy_found null
+   174 control enabled projector1 true
+   175 control enabled projector2 true
 -    * control config ULD_IN_1 FUEL_OFF
 -    * control config ULD_OUT_1 FUEL
 -    * control config ULD_IN_2 FUEL_OFF
@@ -2216,26 +2220,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
 -    * control config ULD_IN_MANY FUEL_OFF
 -    * control config ULD_OUT_MANY FUEL
 -    * control config ULD_MIXER FUEL_OFF
-+  177 control config unloader1 @scrap
-+  178 control config unloader2 @blast-compound
-+  179 control config unloader3 @scrap
-+  180 control config unloader4 @blast-compound
-+  181 control config unloader5 @scrap
-+  182 control config unloader6 @blast-compound
-+  183 control config unloader7 @scrap
-   184 control enabled reactor1 false
-   185 control enabled reactor2 false
-   186 control enabled reactor3 false
++  176 control config unloader1 @scrap
++  177 control config unloader2 @blast-compound
++  178 control config unloader3 @scrap
++  179 control config unloader4 @blast-compound
++  180 control config unloader5 @scrap
++  181 control config unloader6 @blast-compound
++  182 control config unloader7 @scrap
+   183 control enabled reactor1 false
+   184 control enabled reactor2 false
+   185 control enabled reactor3 false
  
-   196 set __fn4retval false
-   197 jump __label135 always
-   198 label __label134
+   194 set __fn4retval false
+   195 jump __label135 always
+   196 label __label134
 -    * set __fn4retval __tmp190
-   199 label __label135
-   200 op or emerg_shutdown emerg_shutdown __fn4retval
-   201 set __fn3_reactor reactor3
+   197 label __label135
+   198 op or emerg_shutdown emerg_shutdown __fn4retval
+   199 set __fn3_reactor reactor3
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-13 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-11 instructions):
      0 printflush message1
 -    * set FUEL @blast-compound
 -    * set FUEL_OFF @scrap
@@ -2260,14 +2264,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     40 radar enemy any any health cyclone1 1 __fn4_enemy_found
     41 jump __label129 equal __fn4_enemy_found null
  
-    55 control enabled reactor5 false
-    56 set __fn4retval true
-    57 jump __label131 always
--    * set __tmp190 null
-    58 jump __label130 always
-    59 label __label129
-    60 control enabled projector1 false
- 
    157 control config unloader4 @scrap
    158 label __label120
    159 label __label121
@@ -2275,14 +2271,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    160 label __label132
    161 radar enemy any any health cyclone1 1 __fn4_enemy_found
    162 jump __label133 equal __fn4_enemy_found null
- 
-   176 control enabled reactor5 false
-   177 set __fn4retval true
-   178 jump __label135 always
--    * set __tmp190 null
-   179 jump __label134 always
-   180 label __label133
-   181 control enabled projector1 false
 
 Modifications by Function Inlining: inline function calc_charge_req (+61 instructions):
  

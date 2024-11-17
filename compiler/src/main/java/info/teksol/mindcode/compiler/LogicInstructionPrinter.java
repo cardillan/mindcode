@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class LogicInstructionPrinter {
@@ -39,9 +40,9 @@ public class LogicInstructionPrinter {
 
     public static String toStringWithLineNumbers(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         final StringBuilder buffer = new StringBuilder();
-        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
+        RealLineNumberGenerator lineNumberGenerator = new RealLineNumberGenerator();
         instructions.forEach(instruction -> {
-            lineNumberGenerator.printLineNumber(instruction);
+            buffer.append(lineNumberGenerator.printLineNumber(instruction, ""));
             buffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
@@ -56,9 +57,9 @@ public class LogicInstructionPrinter {
         format.setMaximumFractionDigits(2);
 
         final StringBuilder buffer = new StringBuilder();
-        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
+        RealLineNumberGenerator lineNumberGenerator = new RealLineNumberGenerator();
         instructions.forEach(instruction -> {
-            lineNumberGenerator.printLineNumber(instruction);
+            buffer.append(lineNumberGenerator.printLineNumber(instruction, ""));
             LinkedList<AstContext> unroll = new LinkedList<>();
             for (AstContext ctx = instruction.getAstContext(); ctx != null; ctx = ctx.parent()) {
                 if (ctx.subcontextType() == (ctx.node() == null ? AstSubcontextType.BASIC : ctx.node().getSubcontextType())) {
@@ -84,9 +85,9 @@ public class LogicInstructionPrinter {
         format.setMaximumFractionDigits(2);
 
         final StringBuilder buffer = new StringBuilder();
-        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
+        RealLineNumberGenerator lineNumberGenerator = new RealLineNumberGenerator();
         instructions.forEach(instruction -> {
-            lineNumberGenerator.printLineNumber(instruction);
+            buffer.append(lineNumberGenerator.printLineNumber(instruction, ""));
             AstContext ctx = instruction.getAstContext();
             buffer.append("%3d:%s  %s %8s ".formatted(ctx.level(), ctx.contextType().text,
                     ctx.subcontextType().text, format.format(ctx.totalWeight())));
@@ -99,16 +100,26 @@ public class LogicInstructionPrinter {
     }
 
     public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
+        return toStringWithSourceCode(instructionProcessor, instructions, i -> "", new RealLineNumberGenerator());
+    }
+
+    public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
+            Function<Integer, String> decorator) {
+        return toStringWithSourceCode(instructionProcessor, instructions, decorator, new VirtualLineNumberGenerator());
+    }
+
+    private static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
+            Function<Integer, String> decorator, LineNumberGenerator lineNumberGenerator) {
         AtomicInteger lineNumber = new AtomicInteger(0);
         final Map<Integer, List<String>> allLines = new HashMap<>();
         int prevLine = -1;
 
         final StringBuilder buffer = new StringBuilder();
         final StringBuilder lineBuffer = new StringBuilder();
-        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
 
+        int index = 0;
         for (LogicInstruction instruction : instructions) {
-            lineNumberGenerator.printLineNumber(instruction);
+            buffer.append(lineNumberGenerator.printLineNumber(instruction, decorator.apply(index++)));
             lineBuffer.setLength(0);
             lineBuffer.append(instruction.getMlogOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
@@ -173,21 +184,22 @@ public class LogicInstructionPrinter {
         }
     }
 
-    private static class LineNumberGenerator {
-        private final StringBuilder buffer;
+    private interface LineNumberGenerator {
+        String printLineNumber(LogicInstruction instruction, String decoration);
+    }
+
+    private static class RealLineNumberGenerator implements LineNumberGenerator {
         private int lineNumber = 0;
         private boolean lastRemark = false;
 
-        LineNumberGenerator(StringBuilder buffer) {
-            this.buffer = buffer;
-        }
-
-        void printLineNumber(LogicInstruction instruction) {
+        @Override
+        public String printLineNumber(LogicInstruction instruction, String decoration) {
+            String result;
             if (instruction.getRealSize() == 0) {
-                buffer.append("        ");
+                result = "%5s%s   ".formatted("", decoration);
                 lastRemark = false;
             } else {
-                buffer.append("%5d:  ".formatted(lineNumber));
+                result = "%5d%s:  ".formatted(lineNumber, decoration);
                 if (instruction instanceof RemarkInstruction && instruction.getRealSize() == 2) {
                     lineNumber += lastRemark ? 1 : 2;
                     lastRemark = true;
@@ -196,6 +208,16 @@ public class LogicInstructionPrinter {
                     lastRemark = false;
                 }
             }
+            return result;
+        }
+    }
+
+    private static class VirtualLineNumberGenerator implements LineNumberGenerator {
+        private int lineNumber = 0;
+
+        @Override
+        public String printLineNumber(LogicInstruction instruction, String decoration) {
+            return "%5d%s:  ".formatted(lineNumber++, decoration);
         }
     }
 }

@@ -2,16 +2,19 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.evaluator.LogicReadable;
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.*;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import info.teksol.util.TraceFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +22,7 @@ import static info.teksol.util.CollectionUtils.findFirstIndex;
 import static info.teksol.util.CollectionUtils.findLastIndex;
 
 class OptimizationContext {
+    private final CompilerProfile profile;
     private final OptimizerExpressionEvaluator expressionEvaluator;
     private final InstructionProcessor instructionProcessor;
     private final List<LogicInstruction> program;
@@ -27,6 +31,8 @@ class OptimizationContext {
 
     private FunctionDataFlow functionDataFlow;
     private BitSet unreachableInstructions;
+
+    private final TraceFile traceFile;
 
     /**
      * Maps instructions to input variable states (i.e. states before the instruction is executed)
@@ -67,7 +73,10 @@ class OptimizationContext {
     private int deletions = 0;
     private boolean updated;
 
-    OptimizationContext(InstructionProcessor instructionProcessor, List<LogicInstruction> program, CallGraph callGraph, AstContext rootContext) {
+    OptimizationContext(TraceFile traceFile, CompilerProfile profile, InstructionProcessor instructionProcessor,
+            List<LogicInstruction> program, CallGraph callGraph, AstContext rootContext) {
+        this.traceFile = traceFile;
+        this.profile = profile;
         this.instructionProcessor = instructionProcessor;
         this.program = program;
         this.callGraph = callGraph;
@@ -118,12 +127,16 @@ class OptimizationContext {
         return updated;
     }
 
-    void debugPrintProgram() {
-        BitSet unreachables = getUnreachableInstructions();
-        for (int i = 0; i < program.size(); i++) {
-            System.out.printf("%4d[%s]:  %s%n", i,
-                    unreachables.get(i) ? " " : "x",
-                    LogicInstructionPrinter.toString(instructionProcessor, program.get(i)));
+    void debugPrintProgram(String title) {
+        if (OptimizationCoordinator.DEBUG_PRINT) {
+            if (!OptimizationCoordinator.TRACE) {
+                traceFile.outputProgram(title);
+            }
+            traceFile.outputProgram("Program before optimization:");
+            BitSet unreachables = computeUnreachableInstructions();
+            String text = LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, program,
+                    index -> unreachables.get(index) ? " [ ]" : " [x]");
+            traceFile.outputProgram(text);
         }
     }
 
@@ -170,61 +183,70 @@ class OptimizationContext {
      */
     public BitSet getUnreachableInstructions() {
         if (unreachableInstructions == null) {
-            unreachableInstructions = new BitSet(program.size());
-            // Also serves as a data stop for reaching the end of instruction list naturally.
-            unreachableInstructions.set(0, program.size());
-            Queue<Integer> heads = new ArrayDeque<>();
-            heads.offer(0);
+            if (profile.getOptimizationLevel(Optimization.UNREACHABLE_CODE_ELIMINATION) == OptimizationLevel.NONE) {
+                unreachableInstructions = new BitSet(program.size());
+            } else {
+                unreachableInstructions = computeUnreachableInstructions();
+            }
+        }
+        return unreachableInstructions;
+    }
 
-            MainLoop:
-            while (!heads.isEmpty()) {
-                int index = heads.poll();
-                while (unreachableInstructions.get(index)) {
-                    unreachableInstructions.clear(index);
-                    LogicInstruction ix = program.get(index);
-                    switch (ix.getOpcode()) {
-                        case END, RETURN -> {
-                            continue MainLoop;
-                        }
-                        case JUMP -> {
-                            JumpInstruction jump = (JumpInstruction) ix;
-                            heads.offer(findLabelIndex(jump.getTarget()));
-                            if (jump.isUnconditional()) {
-                                continue MainLoop;
-                            }
-                        }
-                        case CALL -> {
-                            CallInstruction call = (CallInstruction) ix;
-                            heads.offer(findLabelIndex(call.getCallAddr()));
-                        }
-                        case CALLREC -> {
-                            CallRecInstruction call = (CallRecInstruction) ix;
-                            heads.offer(findLabelIndex(call.getCallAddr()));
-                            heads.offer(findLabelIndex(call.getRetAddr()));
-                            continue MainLoop;
-                        }
-                        case GOTO -> {
-                             GotoInstruction gotoIx = (GotoInstruction) ix;
-                            for (int i = 0; i < program.size(); i++) {
-                                if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(gotoIx.getMarker())) {
-                                    heads.offer(i);
-                                }
-                            }
-                            continue MainLoop;
-                        }
-                        case GOTOOFFSET -> {
-                            GotoOffsetInstruction gotoIx = (GotoOffsetInstruction) ix;
-                            for (int i = 0; i < program.size(); i++) {
-                                if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(gotoIx.getMarker())) {
-                                    heads.offer(i);
-                                }
-                            }
+    private BitSet computeUnreachableInstructions() {
+        BitSet unreachableInstructions = new BitSet(program.size());
+        // Also serves as a data stop for reaching the end of instruction list naturally.
+        unreachableInstructions.set(0, program.size());
+        Queue<Integer> heads = new ArrayDeque<>();
+        heads.offer(0);
+
+        MainLoop:
+        while (!heads.isEmpty()) {
+            int index = heads.poll();
+            while (unreachableInstructions.get(index)) {
+                unreachableInstructions.clear(index);
+                LogicInstruction ix = program.get(index);
+                switch (ix.getOpcode()) {
+                    case END, RETURN -> {
+                        continue MainLoop;
+                    }
+                    case JUMP -> {
+                        JumpInstruction jump = (JumpInstruction) ix;
+                        heads.offer(findLabelIndex(jump.getTarget()));
+                        if (jump.isUnconditional()) {
                             continue MainLoop;
                         }
                     }
-
-                    index++;
+                    case CALL -> {
+                        CallInstruction call = (CallInstruction) ix;
+                        heads.offer(findLabelIndex(call.getCallAddr()));
+                    }
+                    case CALLREC -> {
+                        CallRecInstruction call = (CallRecInstruction) ix;
+                        heads.offer(findLabelIndex(call.getCallAddr()));
+                        heads.offer(findLabelIndex(call.getRetAddr()));
+                        continue MainLoop;
+                    }
+                    case GOTO -> {
+                         GotoInstruction gotoIx = (GotoInstruction) ix;
+                        for (int i = 0; i < program.size(); i++) {
+                            if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(gotoIx.getMarker())) {
+                                heads.offer(i);
+                            }
+                        }
+                        continue MainLoop;
+                    }
+                    case GOTOOFFSET -> {
+                        GotoOffsetInstruction gotoIx = (GotoOffsetInstruction) ix;
+                        for (int i = 0; i < program.size(); i++) {
+                            if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(ix.getMarker())) {
+                                heads.offer(i);
+                            }
+                        }
+                        continue MainLoop;
+                    }
                 }
+
+                index++;
             }
         }
 
@@ -496,7 +518,11 @@ class OptimizationContext {
 
     public void addUninitializedVariable(LogicVariable variable) {
         if (variable.getType().isCompiler()) {
-            throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
+             if (OptimizationCoordinator.IGNORE_UNINITIALIZED) {
+                 instructionProcessor.addMessage(OptimizerMessage.warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog()));
+             } else {
+                 throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
+             }
         }
         uninitializedVariables.add(variable);
     }
@@ -1717,4 +1743,16 @@ class OptimizationContext {
 
     }
     //</editor-fold>
+
+    void trace(Stream<String> text) {
+        traceFile.trace(text);
+    }
+
+    void trace(Supplier<String> text) {
+        traceFile.trace(text);
+    }
+
+    void trace(String text) {
+        traceFile.trace(text);
+    }
 }

@@ -1,0 +1,29 @@
+#set optimization = experimental;
+
+print(foo());
+
+inline def foo()
+    for i in 1 .. 1 do
+        if bar(i) then
+            return i;
+        end;
+    end;
+    "Error";
+end;
+
+inline def bar(n)
+    lt = gt = 0;
+    for i in 1 .. 1 do
+        if i < n then
+            lt += 1;
+        elsif i > n then
+            gt += 1;
+        end;
+    end;
+    dif = abs(gt - lt);
+    if gt + lt >= length(x) - 1 then
+        true;
+    else
+        false;
+    end;
+end;

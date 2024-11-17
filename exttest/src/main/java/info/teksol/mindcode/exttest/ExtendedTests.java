@@ -1,6 +1,7 @@
 package info.teksol.mindcode.exttest;
 
 import info.teksol.mindcode.compiler.optimization.Optimization;
+import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.exttest.cases.TestCaseExecutor;
 import info.teksol.mindcode.exttest.cases.TestCaseSelector;
 import info.teksol.mindcode.exttest.cases.TestCaseSelectorSampled;
@@ -35,10 +36,10 @@ public class ExtendedTests {
         TestCaseSelector testCaseSelector = new TestCaseSelectorSampled(allTests, samples);
 
 
-//        if (OptimizationCoordinator.isDebugOn()) {
-//            System.out.println("Error: debug active");
-//            return;
-//        }
+        if (OptimizationCoordinator.isDebugOn()) {
+            System.out.println("Error: debug active");
+            return;
+        }
 
         File file = new File("results.txt");
         ForkJoinPool forkJoinPool = new ForkJoinPool(24);

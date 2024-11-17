@@ -7,6 +7,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -46,7 +47,8 @@ public class ProjectEulerTest extends AbstractProcessorTest {
                 fileName,
                 s -> s + "\ndef expect(v) print(v); end; def actual(v) print(v); end;",
                 Map.of("bank2", Memory.createMemoryBank()),
-                (useAsserts, actualOutput) -> {
+                (useAsserts, textBuffer) -> {
+                    List<String> actualOutput = textBuffer.getPrintOutput();
                     if (useAsserts) {
                         assertEquals(2, actualOutput.size(), "Expected the script to generate two output values: expected and actual.");
                         assertEquals(actualOutput.get(0), actualOutput.get(1));

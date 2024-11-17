@@ -47,7 +47,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
          * @param output     the actual output produced by the tested code
          * @return true if the actual output matches the expected one
          */
-        boolean compare(boolean useAsserts, List<String> actualOutput);
+        boolean compare(boolean useAsserts, TextBuffer output);
     }
 
     static void done(String scriptsDirectory, String className) throws IOException {
@@ -177,13 +177,27 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         logPerformance(title, code, compiled, processor);
 
         assertAll(
-                () -> evaluator.compare(true, processor.getPrintOutput()),
+                () -> evaluator.compare(true, processor.getTextBuffer()),
                 () -> assertNoUnexpectedMessages(compiler, expectedMessages)
         );
     }
 
+    protected OutputEvaluator createEvaluator(TestCompiler compiler, String expectedOutput) {
+        return (useAsserts, textBuffer) -> {
+            String actualOutput = textBuffer.getFormattedOutput();
+            boolean matches = Objects.equals(expectedOutput, actualOutput);
+            if (useAsserts) {
+                assertEquals(expectedOutput, actualOutput,
+                        () -> compiler.getMessages().stream().map(MindcodeMessage::message)
+                                .collect(Collectors.joining("\n", "\n", "\n")));
+            }
+            return matches;
+        };
+    }
+
     protected OutputEvaluator createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
-        return (useAsserts, actualOutput) -> {
+        return (useAsserts, textBuffer) -> {
+            List<String> actualOutput = textBuffer.getPrintOutput();
             boolean matches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput,
@@ -220,6 +234,21 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         TestCompiler compiler = createTestCompiler();
         testAndEvaluateCode(compiler, null, code, blocks,
                 ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), null);
+    }
+
+    protected void testCode(String code, Map<String, MindustryBlock> blocks, String expectedOutputs) {
+        TestCompiler compiler = createTestCompiler();
+        testAndEvaluateCode(compiler, null, code, blocks,
+                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), null);
+    }
+
+    protected void testCode(TestCompiler compiler, String code, String... expectedOutputs) {
+        testAndEvaluateCode(compiler, "", code, Map.of(), ExpectedMessages.none(),
+                createEvaluator(compiler, List.of(expectedOutputs)), null);
+    }
+
+    protected void testCode(String code, String expectedOutputs) {
+        testCode(code, Map.of(), expectedOutputs);
     }
 
     protected void testCode(String code, String... expectedOutputs) {

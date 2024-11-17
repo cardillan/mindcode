@@ -18,16 +18,16 @@ const SHOW_UNIT_DISTANCE = true;
 // Compile-time constant. Set to false to update status information less often, increasing performance.
 const FAST_UPDATE       = false;
 
-UNIT                    = @mega;        // Which unit to use
-LINK_ID                 = 0;            // Remote vault ID (1-99); if nonzero, items are moved to/from this vault instead of core
+param UNIT              = @mega;        // Which unit to use
+param LINK_ID           = 0;            // Remote vault ID (1-99); if nonzero, items are moved to/from this vault instead of core
 
 // Local and remote limits can be used to reduce the amount of space used by this processor in the container/vault/core.
 // If the value is lower than 100, the capacity will be used up to that percent and the rest will be ignored.
-LOCAL_LIMIT             = 100;          // How much of local container capacity to use, in percents (20-100).
-REMOTE_LIMIT            = 100;          // How much of local container capacity to use, in percents (20-100).
+param LOCAL_LIMIT       = 100;          // How much of local container capacity to use, in percents (20-100).
+param REMOTE_LIMIT      = 100;          // How much of local container capacity to use, in percents (20-100).
 
-LOCAL_LIMIT = max(LOCAL_LIMIT, 20);
-REMOTE_LIMIT = max(REMOTE_LIMIT, 20);
+EFF_LOCAL_LIMIT = max(LOCAL_LIMIT, 20);
+EFF_REMOTE_LIMIT = max(REMOTE_LIMIT, 20);
 MSG = null;
 
 //  BASIC INITIALIZATION
@@ -89,7 +89,7 @@ end;
 //  REMOTE CONTAINER/CORE INITIALIZATION
 //  Includes locating remote vault
 /////////////////////////////////////////////////////////
-CORE = null;
+CORE = CORE_X = CORE_Y = null;
 if LINK_ID == 0 then
     print("[gold]Locating core...");
     printflush(message1);
@@ -145,8 +145,8 @@ if (sorter_type == @sorter) then
     DST = CONTAINER;
     src_capacity = SRC.@itemCapacity;
     dst_capacity = DST.@itemCapacity;
-    LOAD_LEVEL = (src_capacity * (100 - REMOTE_LIMIT)) \ 100;
-    DROP_LEVEL = (dst_capacity * LOCAL_LIMIT) \ 100;
+    LOAD_LEVEL = (src_capacity * (100 - EFF_REMOTE_LIMIT)) \ 100;
+    DROP_LEVEL = (dst_capacity * EFF_LOCAL_LIMIT) \ 100;
     LOCAL_MARGIN = DROP_LEVEL;
     REMOTE_MARGIN = LOAD_LEVEL;
     DIRECTION = (LINK_ID == 0) ? "[] from core"  : "[] from vault #";
@@ -156,9 +156,9 @@ else
     DST = CORE;
     src_capacity = SRC.@itemCapacity;
     dst_capacity = DST.@itemCapacity;
-    LOAD_LEVEL = (src_capacity * (100 - LOCAL_LIMIT)) \ 100;
+    LOAD_LEVEL = (src_capacity * (100 - EFF_LOCAL_LIMIT)) \ 100;
     // Add UNIT_CAPACITY to drop level if the target is core to allow dropping to full core
-    DROP_LEVEL = (dst_capacity * REMOTE_LIMIT) \ 100 + ((LINK_ID == 0) * UNIT_CAPACITY);
+    DROP_LEVEL = (dst_capacity * EFF_REMOTE_LIMIT) \ 100 + ((LINK_ID == 0) * UNIT_CAPACITY);
     LOCAL_MARGIN = LOAD_LEVEL;
     REMOTE_MARGIN = DROP_LEVEL;
     DIRECTION = (LINK_ID == 0) ? "[] to core" : "[] to vault #";
@@ -273,12 +273,12 @@ while true do
         iter = 0;
         print($"Moving [green]$ITEM$DIRECTION$LINK_TXT\n");
         print($"Local items: [gold]$[]", CONTAINER.sensor(ITEM));
-        if LOCAL_LIMIT < 100 then
+        if EFF_LOCAL_LIMIT < 100 then
             print($" (limit [orange]$LOCAL_MARGIN[])");
         end;
         if SHOW_REMOTE_LEVEL then
             print($"\nRemote items: [gold]$[]", CORE.sensor(ITEM));
-            if REMOTE_LIMIT < 100 then
+            if EFF_REMOTE_LIMIT < 100 then
                 print($" (limit [orange]$REMOTE_MARGIN[])");
             end;
         end;

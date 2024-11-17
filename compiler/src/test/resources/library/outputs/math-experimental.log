@@ -21,50 +21,50 @@ Active optimizations:
     temp-variables-elimination = experimental,
     unreachable-code-elimination = experimental
 
-  1639 instructions before optimizations.
+  1651 instructions before optimizations.
    121 instructions eliminated by Temp Variables Elimination.
-   126 instructions eliminated by Dead Code Elimination (2 passes, 5 iterations).
-     9 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    68 instructions eliminated by Jump Optimization (5 iterations).
-    62 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
-     2 instructions modified by Expression Optimization (4 iterations).
-     8 instructions eliminated by If Expression Optimization (4 iterations).
-   294 instructions eliminated by Data Flow Optimization (6 passes, 25 iterations).
-    29 instructions added by Loop Unrolling (10 iterations).
-     4 loops unrolled by Loop Unrolling.
-     5 instructions added by Function Inlining (10 iterations).
+   124 instructions eliminated by Dead Code Elimination (4 iterations).
+     3 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
+    68 instructions eliminated by Jump Optimization (6 iterations).
+    67 instructions eliminated by Single Step Elimination (5 passes, 13 iterations).
+     8 instructions modified by Expression Optimization (2 passes, 5 iterations).
+     8 instructions eliminated by If Expression Optimization (5 iterations).
+   327 instructions eliminated by Data Flow Optimization (11 passes, 37 iterations).
+    49 instructions added by Loop Unrolling (14 iterations).
+     8 loops unrolled by Loop Unrolling.
+     5 instructions added by Function Inlining (14 iterations).
      4 function calls inlined by Function Inlining.
-    54 instructions updated by JumpThreading.
-    69 instructions eliminated by Unreachable Code Elimination.
-   916 instructions after optimizations.
+    32 instructions updated by JumpThreading.
+     4 instructions eliminated by Unreachable Code Elimination.
+   983 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
   * Loop Unrolling: unroll iteration loop at line 78             cost     0, benefit        5.0, efficiency   Infinity (-8 instructions)
     Loop Unrolling: unroll iteration loop at line 90             cost     0, benefit        5.0, efficiency   Infinity
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   139, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   139, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   151, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost     1, benefit      425.0, efficiency      425.0
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   151, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost     1, benefit      425.0, efficiency      425.0
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   125, benefit       44.0, efficiency        0.4
@@ -88,30 +88,30 @@ Pass 1: speed optimization selection (cost limit 0):
 
 Pass 1: speed optimization selection (cost limit 0):
   * Loop Unrolling: unroll iteration loop at line 90             cost     0, benefit        5.0, efficiency   Infinity (-9 instructions)
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   139, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   139, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   151, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost     1, benefit      425.0, efficiency      425.0
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   151, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost     1, benefit      425.0, efficiency      425.0
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   125, benefit       44.0, efficiency        0.4
@@ -134,30 +134,30 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Function Inlining: inline function call at line 48           cost    18, benefit        5.5, efficiency        0.3
 
 Pass 1: speed optimization selection (cost limit 0):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   139, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   241, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   139, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   442, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   151, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost     1, benefit      425.0, efficiency      425.0
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   241, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   151, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost     1, benefit      425.0, efficiency      425.0
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   442, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function sign                      cost    14, benefit       14.0, efficiency        1.0
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   125, benefit       44.0, efficiency        0.4
@@ -179,31 +179,76 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Function Inlining: inline function call at line 47           cost    18, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    18, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 22):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  * Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+Pass 2: speed optimization selection (cost limit 12):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   121, benefit       17.0, efficiency        0.1
+  * Loop Unrolling: unroll iteration loop at line 192            cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   121, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost     0, benefit      425.0, efficiency   Infinity
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+    Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3
+  ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
+  ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
+    Function Inlining: inline function call at line 13           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 14           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 15           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 16           cost     4, benefit        3.5, efficiency        0.9
+  ! Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 37           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
+
+Pass 2: speed optimization selection (cost limit 25):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   121, benefit       17.0, efficiency        0.1
+  * Loop Unrolling: unroll iteration loop at line 192            cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
     Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
@@ -225,33 +270,115 @@ Pass 2: speed optimization selection (cost limit 22):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 9):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3
+Pass 2: speed optimization selection (cost limit 38):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  * Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+    Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
-  * Function Inlining: inline function call at line 13           cost     4, benefit        3.5, efficiency        0.9 (+1 instructions)
+    Function Inlining: inline function call at line 13           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 14           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 15           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 16           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 37           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
+
+Pass 2: speed optimization selection (cost limit 25):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  * Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+    Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3
+  ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
+  ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
+    Function Inlining: inline function call at line 13           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 14           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 15           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 16           cost     4, benefit        3.5, efficiency        0.9
+    Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 37           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
+
+Pass 2: speed optimization selection (cost limit 12):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  * Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3 (-7 instructions)
+  ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
+  ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
+    Function Inlining: inline function call at line 13           cost     4, benefit        3.5, efficiency        0.9
     Function Inlining: inline function call at line 14           cost     4, benefit        3.5, efficiency        0.9
     Function Inlining: inline function call at line 15           cost     4, benefit        3.5, efficiency        0.9
     Function Inlining: inline function call at line 16           cost     4, benefit        3.5, efficiency        0.9
@@ -269,72 +396,25 @@ Pass 2: speed optimization selection (cost limit 9):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 8):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  * Function Inlining: inline function sign                      cost     7, benefit       10.5, efficiency        1.5 (-7 instructions)
-  ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
-  ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
-    Function Inlining: inline function call at line 14           cost     4, benefit        3.5, efficiency        0.9
-    Function Inlining: inline function call at line 15           cost     4, benefit        3.5, efficiency        0.9
-    Function Inlining: inline function call at line 16           cost     4, benefit        3.5, efficiency        0.9
-  ! Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
-  ! Function Inlining: inline function call at line 37           cost    15, benefit        5.0, efficiency        0.3
-  ! Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
-  ! Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
-  ! Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
-  ! Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
-
-Pass 2: speed optimization selection (cost limit 15):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  * Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7 (+13 instructions)
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-    Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+Pass 2: speed optimization selection (cost limit 19):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  * Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
     Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
@@ -342,37 +422,32 @@ Pass 2: speed optimization selection (cost limit 15):
     Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
     Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
     Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
-  ! Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
-  ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 2):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   187, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+Pass 2: speed optimization selection (cost limit 6):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
   ! Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
@@ -389,28 +464,55 @@ Pass 2: speed optimization selection (cost limit 2):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 3: speed optimization selection (cost limit 5):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   187, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+Pass 3: speed optimization selection (cost limit 16):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  * Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7 (+7 instructions)
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+    Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
+  ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
+    Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 37           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
+    Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
+    Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
+
+Pass 3: speed optimization selection (cost limit 9):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
   ! Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
@@ -427,28 +529,54 @@ Pass 3: speed optimization selection (cost limit 5):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 4: speed optimization selection (cost limit 5):
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   187, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   235, benefit       17.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   109, benefit       17.0, efficiency        0.2
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    13, benefit      425.0, efficiency       32.7
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
-  ! Loop Unrolling: unroll iteration loop at line 170            cost   433, benefit       26.0, efficiency        0.1
-  ! Loop Unrolling: unroll iteration loop at line 188            cost    19, benefit      650.0, efficiency       34.2
+Pass 4: speed optimization selection (cost limit 11):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
+  ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
+  ! Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 37           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 38           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 39           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 40           cost    15, benefit        5.0, efficiency        0.3
+  ! Function Inlining: inline function call at line 41           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 42           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 43           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 44           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 45           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 46           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
+  ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
+
+Pass 5: speed optimization selection (cost limit 11):
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
+  ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
+  ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
+  ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
   ! Function Inlining: inline function call at line 36           cost    15, benefit        5.0, efficiency        0.3
@@ -591,1077 +719,1195 @@ Final code before resolving virtual instructions:
   109:  call __label2 __fn2retval
         gotolabel __label85 __fn2
   110:  assertequals 5 __fn2retval "median(5,5,5,5,5)"
-  111:  set __tmp106 1
-  112:  assertequals 1 __tmp106 "median(1,1,1,1,1,1)"
-  113:  set __fn33__bestDif 10000000000
-  114:  set __fn33__best null
-  115:  set __fn33__count 1
-  116:  setaddr __tmp132 __label125
-  117:  set __fn33__i 1
-  118:  jump __label123 always 0 0
-        gotolabel __label125 marker4
-  119:  setaddr __tmp132 __label126
-  120:  set __fn33__i 1
-  121:  jump __label123 always 0 0
-        gotolabel __label126 marker4
-  122:  setaddr __tmp132 __label127
-  123:  set __fn33__i 1
-  124:  jump __label123 always 0 0
-        gotolabel __label127 marker4
-  125:  setaddr __tmp132 __label128
-  126:  set __fn33__i 1
-  127:  jump __label123 always 0 0
-        gotolabel __label128 marker4
-  128:  setaddr __tmp132 __label129
-  129:  set __fn33__i 1
-  130:  jump __label123 always 0 0
+  111:  set __fn32__bestDif 10000000000
+  112:  set __fn32__best null
+  113:  set __fn32__count 1
+  114:  setaddr __tmp108 __label93
+  115:  jump __label116 always 0 0
+        gotolabel __label93 marker2
+  116:  setaddr __tmp108 __label94
+  117:  jump __label116 always 0 0
+        gotolabel __label94 marker2
+  118:  setaddr __tmp108 __label95
+  119:  jump __label116 always 0 0
+        gotolabel __label95 marker2
+  120:  setaddr __tmp108 __label96
+  121:  jump __label116 always 0 0
+        gotolabel __label96 marker2
+  122:  setaddr __tmp108 __label97
+  123:  jump __label116 always 0 0
+        gotolabel __label97 marker2
+  124:  setaddr __tmp108 __label98
+        label __label116
+  125:  jump __label118 greaterThanEq 0 __fn32__bestDif
+  126:  set __fn32__bestDif 0
+  127:  set __fn32__best 1
+  128:  set __fn32__count 1
+  129:  goto __tmp108 marker2
+        label __label118
+  130:  jump __label120 greaterThan 0 __fn32__bestDif
+  131:  op add __fn32__best __fn32__best 1
+  132:  op add __fn32__count __fn32__count 1
+        label __label120
+  133:  goto __tmp108 marker2
+        gotolabel __label98 marker2
+  134:  op div __tmp107 __fn32__best __fn32__count
+  135:  assertequals 1 __tmp107 "median(1,1,1,1,1,1)"
+  136:  set __fn35__bestDif 10000000000
+  137:  set __fn35__best null
+  138:  set __fn35__count 1
+  139:  setaddr __tmp134 __label129
+  140:  set __fn35__i 1
+  141:  jump __label127 always 0 0
         gotolabel __label129 marker4
-  131:  setaddr __tmp132 __label130
-  132:  set __fn33__i 5
-        label __label123
-  133:  set __fn34__gt 0
-  134:  set __fn34__lt 0
-  135:  setaddr __tmp134 __label136
-  136:  set __fn34__i 1
-  137:  jump __label134 always 0 0
-        gotolabel __label136 marker5
-  138:  setaddr __tmp134 __label137
-  139:  set __fn34__i 1
-  140:  jump __label134 always 0 0
-        gotolabel __label137 marker5
-  141:  setaddr __tmp134 __label138
-  142:  set __fn34__i 1
-  143:  jump __label134 always 0 0
-        gotolabel __label138 marker5
-  144:  setaddr __tmp134 __label139
-  145:  set __fn34__i 1
-  146:  jump __label134 always 0 0
-        gotolabel __label139 marker5
-  147:  setaddr __tmp134 __label140
-  148:  set __fn34__i 1
-  149:  jump __label134 always 0 0
-        gotolabel __label140 marker5
-  150:  setaddr __tmp134 __label141
-  151:  set __fn34__i 5
-        label __label134
-  152:  jump __label142 greaterThanEq __fn34__i __fn33__i
-  153:  op add __fn34__lt __fn34__lt 1
-  154:  goto __tmp134 marker5
-        label __label142
-  155:  jump __label144 lessThanEq __fn34__i __fn33__i
-  156:  op add __fn34__gt __fn34__gt 1
-        label __label144
-  157:  goto __tmp134 marker5
-        gotolabel __label141 marker5
-  158:  op sub __tmp141 __fn34__gt __fn34__lt
-  159:  op abs __fn34__dif __tmp141 0
-  160:  set __tmp146 false
-  161:  op add __tmp143 __fn34__gt __fn34__lt
-  162:  jump __label147 lessThan __tmp143 0
-  163:  op equal __tmp146 __fn34__gt __fn34__lt
-        label __label147
-  164:  jump __label148 equal __tmp146 false
-  165:  set __tmp131 __fn33__i
-  166:  jump __label121 always 0 0
-        label __label148
-  167:  jump __label150 greaterThanEq __fn34__dif __fn33__bestDif
-  168:  set __fn33__bestDif __fn34__dif
-  169:  set __fn33__best __fn33__i
-  170:  set __fn33__count 1
-  171:  goto __tmp132 marker4
-        label __label150
-  172:  jump __label152 greaterThan __fn34__dif __fn33__bestDif
-  173:  op add __fn33__best __fn33__best __fn33__i
-  174:  op add __fn33__count __fn33__count 1
-        label __label152
-  175:  goto __tmp132 marker4
+  142:  setaddr __tmp134 __label130
+  143:  set __fn35__i 1
+  144:  jump __label127 always 0 0
         gotolabel __label130 marker4
-  176:  op div __tmp131 __fn33__best __fn33__count
-        label __label121
-  177:  assertequals 1 __tmp131 "median(1,1,1,1,1,5)"
-  178:  set __fn35__bestDif 10000000000
-  179:  set __fn35__best null
-  180:  set __fn35__count 1
-  181:  setaddr __tmp157 __label159
-  182:  set __fn35__i 1
-  183:  jump __label157 always 0 0
-        gotolabel __label159 marker6
-  184:  setaddr __tmp157 __label160
-  185:  set __fn35__i 1
-  186:  jump __label157 always 0 0
-        gotolabel __label160 marker6
-  187:  setaddr __tmp157 __label161
-  188:  set __fn35__i 1
-  189:  jump __label157 always 0 0
-        gotolabel __label161 marker6
-  190:  setaddr __tmp157 __label162
-  191:  set __fn35__i 1
-  192:  jump __label157 always 0 0
-        gotolabel __label162 marker6
-  193:  setaddr __tmp157 __label163
-  194:  set __fn35__i 5
-  195:  jump __label157 always 0 0
-        gotolabel __label163 marker6
-  196:  setaddr __tmp157 __label164
-  197:  set __fn35__i 5
-        label __label157
-  198:  set __fn36__gt 0
-  199:  set __fn36__lt 0
-  200:  setaddr __tmp159 __label170
-  201:  set __fn36__i 1
-  202:  jump __label168 always 0 0
-        gotolabel __label170 marker7
-  203:  setaddr __tmp159 __label171
-  204:  set __fn36__i 1
-  205:  jump __label168 always 0 0
-        gotolabel __label171 marker7
-  206:  setaddr __tmp159 __label172
-  207:  set __fn36__i 1
-  208:  jump __label168 always 0 0
-        gotolabel __label172 marker7
-  209:  setaddr __tmp159 __label173
-  210:  set __fn36__i 1
-  211:  jump __label168 always 0 0
-        gotolabel __label173 marker7
-  212:  setaddr __tmp159 __label174
-  213:  set __fn36__i 5
-  214:  jump __label168 always 0 0
-        gotolabel __label174 marker7
-  215:  setaddr __tmp159 __label175
-  216:  set __fn36__i 5
-        label __label168
-  217:  jump __label176 greaterThanEq __fn36__i __fn35__i
-  218:  op add __fn36__lt __fn36__lt 1
-  219:  goto __tmp159 marker7
-        label __label176
-  220:  jump __label178 lessThanEq __fn36__i __fn35__i
-  221:  op add __fn36__gt __fn36__gt 1
-        label __label178
-  222:  goto __tmp159 marker7
-        gotolabel __label175 marker7
-  223:  op sub __tmp166 __fn36__gt __fn36__lt
-  224:  op abs __fn36__dif __tmp166 0
-  225:  set __tmp171 false
-  226:  op add __tmp168 __fn36__gt __fn36__lt
-  227:  jump __label181 lessThan __tmp168 0
-  228:  op equal __tmp171 __fn36__gt __fn36__lt
-        label __label181
-  229:  jump __label182 equal __tmp171 false
-  230:  set __tmp156 __fn35__i
-  231:  jump __label155 always 0 0
+  145:  setaddr __tmp134 __label131
+  146:  set __fn35__i 1
+  147:  jump __label127 always 0 0
+        gotolabel __label131 marker4
+  148:  setaddr __tmp134 __label132
+  149:  set __fn35__i 1
+  150:  jump __label127 always 0 0
+        gotolabel __label132 marker4
+  151:  setaddr __tmp134 __label133
+  152:  set __fn35__i 1
+  153:  jump __label127 always 0 0
+        gotolabel __label133 marker4
+  154:  setaddr __tmp134 __label134
+  155:  set __fn35__i 5
+        label __label127
+  156:  set __fn36__gt 0
+  157:  set __fn36__lt 0
+  158:  jump __label927 greaterThanEq 1 __fn35__i
+  159:  set __fn36__lt 1
+  160:  jump __label930 always 0 0
+        label __label927
+  161:  jump __label928 lessThanEq 1 __fn35__i
+  162:  set __fn36__gt 1
+        label __label928
+        label __label930
+  163:  jump __label935 greaterThanEq 1 __fn35__i
+  164:  op add __fn36__lt __fn36__lt 1
+  165:  jump __label938 always 0 0
+        label __label935
+  166:  jump __label936 lessThanEq 1 __fn35__i
+  167:  op add __fn36__gt __fn36__gt 1
+        label __label936
+        label __label938
+  168:  jump __label943 greaterThanEq 1 __fn35__i
+  169:  op add __fn36__lt __fn36__lt 1
+  170:  jump __label946 always 0 0
+        label __label943
+  171:  jump __label944 lessThanEq 1 __fn35__i
+  172:  op add __fn36__gt __fn36__gt 1
+        label __label944
+        label __label946
+  173:  jump __label951 greaterThanEq 1 __fn35__i
+  174:  op add __fn36__lt __fn36__lt 1
+  175:  jump __label954 always 0 0
+        label __label951
+  176:  jump __label952 lessThanEq 1 __fn35__i
+  177:  op add __fn36__gt __fn36__gt 1
+        label __label952
+        label __label954
+  178:  jump __label959 greaterThanEq 1 __fn35__i
+  179:  op add __fn36__lt __fn36__lt 1
+  180:  jump __label962 always 0 0
+        label __label959
+  181:  jump __label960 lessThanEq 1 __fn35__i
+  182:  op add __fn36__gt __fn36__gt 1
+        label __label960
+        label __label962
+  183:  jump __label967 greaterThanEq 5 __fn35__i
+  184:  op add __fn36__lt __fn36__lt 1
+  185:  jump __label970 always 0 0
+        label __label967
+  186:  jump __label968 lessThanEq 5 __fn35__i
+  187:  op add __fn36__gt __fn36__gt 1
+        label __label968
+        label __label970
+  188:  op sub __tmp143 __fn36__gt __fn36__lt
+  189:  op abs __fn36__dif __tmp143 0
+  190:  set __tmp148 false
+  191:  op add __tmp145 __fn36__gt __fn36__lt
+  192:  jump __label151 lessThan __tmp145 5
+  193:  op equal __tmp148 __fn36__gt __fn36__lt
+        label __label151
+  194:  jump __label152 equal __tmp148 false
+  195:  set __tmp133 __fn35__i
+  196:  jump __label125 always 0 0
+        label __label152
+  197:  jump __label154 greaterThanEq __fn36__dif __fn35__bestDif
+  198:  set __fn35__bestDif __fn36__dif
+  199:  set __fn35__best __fn35__i
+  200:  set __fn35__count 1
+  201:  goto __tmp134 marker4
+        label __label154
+  202:  jump __label156 greaterThan __fn36__dif __fn35__bestDif
+  203:  op add __fn35__best __fn35__best __fn35__i
+  204:  op add __fn35__count __fn35__count 1
+        label __label156
+  205:  goto __tmp134 marker4
+        gotolabel __label134 marker4
+  206:  op div __tmp133 __fn35__best __fn35__count
+        label __label125
+  207:  assertequals 1 __tmp133 "median(1,1,1,1,1,5)"
+  208:  set __fn38__bestDif 10000000000
+  209:  set __fn38__best null
+  210:  set __fn38__count 1
+  211:  setaddr __tmp160 __label165
+  212:  set __fn38__i 1
+  213:  jump __label163 always 0 0
+        gotolabel __label165 marker6
+  214:  setaddr __tmp160 __label166
+  215:  set __fn38__i 1
+  216:  jump __label163 always 0 0
+        gotolabel __label166 marker6
+  217:  setaddr __tmp160 __label167
+  218:  set __fn38__i 1
+  219:  jump __label163 always 0 0
+        gotolabel __label167 marker6
+  220:  setaddr __tmp160 __label168
+  221:  set __fn38__i 1
+  222:  jump __label163 always 0 0
+        gotolabel __label168 marker6
+  223:  setaddr __tmp160 __label169
+  224:  set __fn38__i 5
+  225:  jump __label163 always 0 0
+        gotolabel __label169 marker6
+  226:  setaddr __tmp160 __label170
+  227:  set __fn38__i 5
+        label __label163
+  228:  set __fn39__gt 0
+  229:  set __fn39__lt 0
+  230:  setaddr __tmp162 __label176
+  231:  set __fn39__i 1
+  232:  jump __label174 always 0 0
+        gotolabel __label176 marker7
+  233:  setaddr __tmp162 __label177
+  234:  set __fn39__i 1
+  235:  jump __label174 always 0 0
+        gotolabel __label177 marker7
+  236:  setaddr __tmp162 __label178
+  237:  set __fn39__i 1
+  238:  jump __label174 always 0 0
+        gotolabel __label178 marker7
+  239:  setaddr __tmp162 __label179
+  240:  set __fn39__i 1
+  241:  jump __label174 always 0 0
+        gotolabel __label179 marker7
+  242:  setaddr __tmp162 __label180
+  243:  set __fn39__i 5
+  244:  jump __label174 always 0 0
+        gotolabel __label180 marker7
+  245:  setaddr __tmp162 __label181
+  246:  set __fn39__i 5
+        label __label174
+  247:  jump __label182 greaterThanEq __fn39__i __fn38__i
+  248:  op add __fn39__lt __fn39__lt 1
+  249:  goto __tmp162 marker7
         label __label182
-  232:  jump __label184 greaterThanEq __fn36__dif __fn35__bestDif
-  233:  set __fn35__bestDif __fn36__dif
-  234:  set __fn35__best __fn35__i
-  235:  set __fn35__count 1
-  236:  goto __tmp157 marker6
+  250:  jump __label184 lessThanEq __fn39__i __fn38__i
+  251:  op add __fn39__gt __fn39__gt 1
         label __label184
-  237:  jump __label186 greaterThan __fn36__dif __fn35__bestDif
-  238:  op add __fn35__best __fn35__best __fn35__i
-  239:  op add __fn35__count __fn35__count 1
-        label __label186
-  240:  goto __tmp157 marker6
-        gotolabel __label164 marker6
-  241:  op div __tmp156 __fn35__best __fn35__count
-        label __label155
-  242:  assertequals 1 __tmp156 "median(1,1,1,1,5,5)"
-  243:  set __fn37__bestDif 10000000000
-  244:  set __fn37__best null
-  245:  set __fn37__count 1
-  246:  setaddr __tmp182 __label193
-  247:  set __fn37__i 1
-  248:  jump __label191 always 0 0
-        gotolabel __label193 marker8
-  249:  setaddr __tmp182 __label194
-  250:  set __fn37__i 1
-  251:  jump __label191 always 0 0
-        gotolabel __label194 marker8
-  252:  setaddr __tmp182 __label195
-  253:  set __fn37__i 1
-  254:  jump __label191 always 0 0
-        gotolabel __label195 marker8
-  255:  setaddr __tmp182 __label196
-  256:  set __fn37__i 5
-  257:  jump __label191 always 0 0
-        gotolabel __label196 marker8
-  258:  setaddr __tmp182 __label197
-  259:  set __fn37__i 5
-  260:  jump __label191 always 0 0
-        gotolabel __label197 marker8
-  261:  setaddr __tmp182 __label198
-  262:  set __fn37__i 5
-        label __label191
-  263:  set __fn38__gt 0
-  264:  set __fn38__lt 0
-  265:  setaddr __tmp184 __label204
-  266:  set __fn38__i 1
-  267:  jump __label202 always 0 0
-        gotolabel __label204 marker9
-  268:  setaddr __tmp184 __label205
-  269:  set __fn38__i 1
-  270:  jump __label202 always 0 0
-        gotolabel __label205 marker9
-  271:  setaddr __tmp184 __label206
-  272:  set __fn38__i 1
-  273:  jump __label202 always 0 0
-        gotolabel __label206 marker9
-  274:  setaddr __tmp184 __label207
-  275:  set __fn38__i 5
-  276:  jump __label202 always 0 0
-        gotolabel __label207 marker9
-  277:  setaddr __tmp184 __label208
-  278:  set __fn38__i 5
-  279:  jump __label202 always 0 0
-        gotolabel __label208 marker9
-  280:  setaddr __tmp184 __label209
-  281:  set __fn38__i 5
-        label __label202
-  282:  jump __label210 greaterThanEq __fn38__i __fn37__i
-  283:  op add __fn38__lt __fn38__lt 1
-  284:  goto __tmp184 marker9
+  252:  goto __tmp162 marker7
+        gotolabel __label181 marker7
+  253:  op sub __tmp169 __fn39__gt __fn39__lt
+  254:  op abs __fn39__dif __tmp169 0
+  255:  set __tmp174 false
+  256:  op add __tmp171 __fn39__gt __fn39__lt
+  257:  jump __label187 lessThan __tmp171 5
+  258:  op equal __tmp174 __fn39__gt __fn39__lt
+        label __label187
+  259:  jump __label188 equal __tmp174 false
+  260:  set __tmp159 __fn38__i
+  261:  jump __label161 always 0 0
+        label __label188
+  262:  jump __label190 greaterThanEq __fn39__dif __fn38__bestDif
+  263:  set __fn38__bestDif __fn39__dif
+  264:  set __fn38__best __fn38__i
+  265:  set __fn38__count 1
+  266:  goto __tmp160 marker6
+        label __label190
+  267:  jump __label192 greaterThan __fn39__dif __fn38__bestDif
+  268:  op add __fn38__best __fn38__best __fn38__i
+  269:  op add __fn38__count __fn38__count 1
+        label __label192
+  270:  goto __tmp160 marker6
+        gotolabel __label170 marker6
+  271:  op div __tmp159 __fn38__best __fn38__count
+        label __label161
+  272:  assertequals 1 __tmp159 "median(1,1,1,1,5,5)"
+  273:  set __fn41__bestDif 10000000000
+  274:  set __fn41__best null
+  275:  set __fn41__count 1
+  276:  setaddr __tmp186 __label201
+  277:  set __fn41__i 1
+  278:  jump __label199 always 0 0
+        gotolabel __label201 marker8
+  279:  setaddr __tmp186 __label202
+  280:  set __fn41__i 1
+  281:  jump __label199 always 0 0
+        gotolabel __label202 marker8
+  282:  setaddr __tmp186 __label203
+  283:  set __fn41__i 1
+  284:  jump __label199 always 0 0
+        gotolabel __label203 marker8
+  285:  setaddr __tmp186 __label204
+  286:  set __fn41__i 5
+  287:  jump __label199 always 0 0
+        gotolabel __label204 marker8
+  288:  setaddr __tmp186 __label205
+  289:  set __fn41__i 5
+  290:  jump __label199 always 0 0
+        gotolabel __label205 marker8
+  291:  setaddr __tmp186 __label206
+  292:  set __fn41__i 5
+        label __label199
+  293:  set __fn42__gt 0
+  294:  set __fn42__lt 0
+  295:  setaddr __tmp188 __label212
+  296:  set __fn42__i 1
+  297:  jump __label210 always 0 0
+        gotolabel __label212 marker9
+  298:  setaddr __tmp188 __label213
+  299:  set __fn42__i 1
+  300:  jump __label210 always 0 0
+        gotolabel __label213 marker9
+  301:  setaddr __tmp188 __label214
+  302:  set __fn42__i 1
+  303:  jump __label210 always 0 0
+        gotolabel __label214 marker9
+  304:  setaddr __tmp188 __label215
+  305:  set __fn42__i 5
+  306:  jump __label210 always 0 0
+        gotolabel __label215 marker9
+  307:  setaddr __tmp188 __label216
+  308:  set __fn42__i 5
+  309:  jump __label210 always 0 0
+        gotolabel __label216 marker9
+  310:  setaddr __tmp188 __label217
+  311:  set __fn42__i 5
         label __label210
-  285:  jump __label212 lessThanEq __fn38__i __fn37__i
-  286:  op add __fn38__gt __fn38__gt 1
-        label __label212
-  287:  goto __tmp184 marker9
-        gotolabel __label209 marker9
-  288:  op sub __tmp191 __fn38__gt __fn38__lt
-  289:  op abs __fn38__dif __tmp191 0
-  290:  set __tmp196 false
-  291:  op add __tmp193 __fn38__gt __fn38__lt
-  292:  jump __label215 lessThan __tmp193 0
-  293:  op equal __tmp196 __fn38__gt __fn38__lt
-        label __label215
-  294:  jump __label216 equal __tmp196 false
-  295:  set __tmp181 __fn37__i
-  296:  jump __label189 always 0 0
-        label __label216
-  297:  jump __label218 greaterThanEq __fn38__dif __fn37__bestDif
-  298:  set __fn37__bestDif __fn38__dif
-  299:  set __fn37__best __fn37__i
-  300:  set __fn37__count 1
-  301:  goto __tmp182 marker8
+  312:  jump __label218 greaterThanEq __fn42__i __fn41__i
+  313:  op add __fn42__lt __fn42__lt 1
+  314:  goto __tmp188 marker9
         label __label218
-  302:  jump __label220 greaterThan __fn38__dif __fn37__bestDif
-  303:  op add __fn37__best __fn37__best __fn37__i
-  304:  op add __fn37__count __fn37__count 1
+  315:  jump __label220 lessThanEq __fn42__i __fn41__i
+  316:  op add __fn42__gt __fn42__gt 1
         label __label220
-  305:  goto __tmp182 marker8
-        gotolabel __label198 marker8
-  306:  op div __tmp181 __fn37__best __fn37__count
-        label __label189
-  307:  assertequals 3 __tmp181 "median(1,1,1,5,5,5)"
-  308:  set __fn39__bestDif 10000000000
-  309:  set __fn39__best null
-  310:  set __fn39__count 1
-  311:  setaddr __tmp207 __label227
-  312:  set __fn39__i 1
-  313:  jump __label225 always 0 0
-        gotolabel __label227 marker10
-  314:  setaddr __tmp207 __label228
-  315:  set __fn39__i 1
-  316:  jump __label225 always 0 0
-        gotolabel __label228 marker10
-  317:  setaddr __tmp207 __label229
-  318:  set __fn39__i 5
-  319:  jump __label225 always 0 0
-        gotolabel __label229 marker10
-  320:  setaddr __tmp207 __label230
-  321:  set __fn39__i 5
-  322:  jump __label225 always 0 0
-        gotolabel __label230 marker10
-  323:  setaddr __tmp207 __label231
-  324:  set __fn39__i 5
-  325:  jump __label225 always 0 0
-        gotolabel __label231 marker10
-  326:  setaddr __tmp207 __label232
-  327:  set __fn39__i 5
-        label __label225
-  328:  set __fn40__gt 0
-  329:  set __fn40__lt 0
-  330:  setaddr __tmp209 __label238
-  331:  set __fn40__i 1
-  332:  jump __label236 always 0 0
-        gotolabel __label238 marker11
-  333:  setaddr __tmp209 __label239
-  334:  set __fn40__i 1
-  335:  jump __label236 always 0 0
-        gotolabel __label239 marker11
-  336:  setaddr __tmp209 __label240
-  337:  set __fn40__i 5
-  338:  jump __label236 always 0 0
-        gotolabel __label240 marker11
-  339:  setaddr __tmp209 __label241
-  340:  set __fn40__i 5
-  341:  jump __label236 always 0 0
-        gotolabel __label241 marker11
-  342:  setaddr __tmp209 __label242
-  343:  set __fn40__i 5
-  344:  jump __label236 always 0 0
-        gotolabel __label242 marker11
-  345:  setaddr __tmp209 __label243
-  346:  set __fn40__i 5
-        label __label236
-  347:  jump __label244 greaterThanEq __fn40__i __fn39__i
-  348:  op add __fn40__lt __fn40__lt 1
-  349:  goto __tmp209 marker11
-        label __label244
-  350:  jump __label246 lessThanEq __fn40__i __fn39__i
-  351:  op add __fn40__gt __fn40__gt 1
-        label __label246
-  352:  goto __tmp209 marker11
-        gotolabel __label243 marker11
-  353:  op sub __tmp216 __fn40__gt __fn40__lt
-  354:  op abs __fn40__dif __tmp216 0
-  355:  set __tmp221 false
-  356:  op add __tmp218 __fn40__gt __fn40__lt
-  357:  jump __label249 lessThan __tmp218 0
-  358:  op equal __tmp221 __fn40__gt __fn40__lt
-        label __label249
-  359:  jump __label250 equal __tmp221 false
-  360:  set __tmp206 __fn39__i
-  361:  jump __label223 always 0 0
-        label __label250
-  362:  jump __label252 greaterThanEq __fn40__dif __fn39__bestDif
-  363:  set __fn39__bestDif __fn40__dif
-  364:  set __fn39__best __fn39__i
-  365:  set __fn39__count 1
-  366:  goto __tmp207 marker10
-        label __label252
-  367:  jump __label254 greaterThan __fn40__dif __fn39__bestDif
-  368:  op add __fn39__best __fn39__best __fn39__i
-  369:  op add __fn39__count __fn39__count 1
-        label __label254
-  370:  goto __tmp207 marker10
-        gotolabel __label232 marker10
-  371:  op div __tmp206 __fn39__best __fn39__count
+  317:  goto __tmp188 marker9
+        gotolabel __label217 marker9
+  318:  op sub __tmp195 __fn42__gt __fn42__lt
+  319:  op abs __fn42__dif __tmp195 0
+  320:  set __tmp200 false
+  321:  op add __tmp197 __fn42__gt __fn42__lt
+  322:  jump __label223 lessThan __tmp197 5
+  323:  op equal __tmp200 __fn42__gt __fn42__lt
         label __label223
-  372:  assertequals 5 __tmp206 "median(1,1,5,5,5,5)"
-  373:  set __fn41__bestDif 10000000000
-  374:  set __fn41__best null
-  375:  set __fn41__count 1
-  376:  setaddr __tmp232 __label261
-  377:  set __fn41__i 1
-  378:  jump __label259 always 0 0
-        gotolabel __label261 marker12
-  379:  setaddr __tmp232 __label262
-  380:  set __fn41__i 5
-  381:  jump __label259 always 0 0
-        gotolabel __label262 marker12
-  382:  setaddr __tmp232 __label263
-  383:  set __fn41__i 5
-  384:  jump __label259 always 0 0
-        gotolabel __label263 marker12
-  385:  setaddr __tmp232 __label264
-  386:  set __fn41__i 5
-  387:  jump __label259 always 0 0
-        gotolabel __label264 marker12
-  388:  setaddr __tmp232 __label265
-  389:  set __fn41__i 5
-  390:  jump __label259 always 0 0
-        gotolabel __label265 marker12
-  391:  setaddr __tmp232 __label266
-  392:  set __fn41__i 5
+  324:  jump __label224 equal __tmp200 false
+  325:  set __tmp185 __fn41__i
+  326:  jump __label197 always 0 0
+        label __label224
+  327:  jump __label226 greaterThanEq __fn42__dif __fn41__bestDif
+  328:  set __fn41__bestDif __fn42__dif
+  329:  set __fn41__best __fn41__i
+  330:  set __fn41__count 1
+  331:  goto __tmp186 marker8
+        label __label226
+  332:  jump __label228 greaterThan __fn42__dif __fn41__bestDif
+  333:  op add __fn41__best __fn41__best __fn41__i
+  334:  op add __fn41__count __fn41__count 1
+        label __label228
+  335:  goto __tmp186 marker8
+        gotolabel __label206 marker8
+  336:  op div __tmp185 __fn41__best __fn41__count
+        label __label197
+  337:  assertequals 3 __tmp185 "median(1,1,1,5,5,5)"
+  338:  set __fn44__bestDif 10000000000
+  339:  set __fn44__best null
+  340:  set __fn44__count 1
+  341:  setaddr __tmp212 __label237
+  342:  set __fn44__i 1
+  343:  jump __label235 always 0 0
+        gotolabel __label237 marker10
+  344:  setaddr __tmp212 __label238
+  345:  set __fn44__i 1
+  346:  jump __label235 always 0 0
+        gotolabel __label238 marker10
+  347:  setaddr __tmp212 __label239
+  348:  set __fn44__i 5
+  349:  jump __label235 always 0 0
+        gotolabel __label239 marker10
+  350:  setaddr __tmp212 __label240
+  351:  set __fn44__i 5
+  352:  jump __label235 always 0 0
+        gotolabel __label240 marker10
+  353:  setaddr __tmp212 __label241
+  354:  set __fn44__i 5
+  355:  jump __label235 always 0 0
+        gotolabel __label241 marker10
+  356:  setaddr __tmp212 __label242
+  357:  set __fn44__i 5
+        label __label235
+  358:  set __fn45__gt 0
+  359:  set __fn45__lt 0
+  360:  setaddr __tmp214 __label248
+  361:  set __fn45__i 1
+  362:  jump __label246 always 0 0
+        gotolabel __label248 marker11
+  363:  setaddr __tmp214 __label249
+  364:  set __fn45__i 1
+  365:  jump __label246 always 0 0
+        gotolabel __label249 marker11
+  366:  setaddr __tmp214 __label250
+  367:  set __fn45__i 5
+  368:  jump __label246 always 0 0
+        gotolabel __label250 marker11
+  369:  setaddr __tmp214 __label251
+  370:  set __fn45__i 5
+  371:  jump __label246 always 0 0
+        gotolabel __label251 marker11
+  372:  setaddr __tmp214 __label252
+  373:  set __fn45__i 5
+  374:  jump __label246 always 0 0
+        gotolabel __label252 marker11
+  375:  setaddr __tmp214 __label253
+  376:  set __fn45__i 5
+        label __label246
+  377:  jump __label254 greaterThanEq __fn45__i __fn44__i
+  378:  op add __fn45__lt __fn45__lt 1
+  379:  goto __tmp214 marker11
+        label __label254
+  380:  jump __label256 lessThanEq __fn45__i __fn44__i
+  381:  op add __fn45__gt __fn45__gt 1
+        label __label256
+  382:  goto __tmp214 marker11
+        gotolabel __label253 marker11
+  383:  op sub __tmp221 __fn45__gt __fn45__lt
+  384:  op abs __fn45__dif __tmp221 0
+  385:  set __tmp226 false
+  386:  op add __tmp223 __fn45__gt __fn45__lt
+  387:  jump __label259 lessThan __tmp223 5
+  388:  op equal __tmp226 __fn45__gt __fn45__lt
         label __label259
-  393:  set __fn42__gt 0
-  394:  set __fn42__lt 0
-  395:  setaddr __tmp234 __label272
-  396:  set __fn42__i 1
-  397:  jump __label270 always 0 0
-        gotolabel __label272 marker13
-  398:  setaddr __tmp234 __label273
-  399:  set __fn42__i 5
-  400:  jump __label270 always 0 0
-        gotolabel __label273 marker13
-  401:  setaddr __tmp234 __label274
-  402:  set __fn42__i 5
-  403:  jump __label270 always 0 0
-        gotolabel __label274 marker13
-  404:  setaddr __tmp234 __label275
-  405:  set __fn42__i 5
-  406:  jump __label270 always 0 0
-        gotolabel __label275 marker13
-  407:  setaddr __tmp234 __label276
-  408:  set __fn42__i 5
-  409:  jump __label270 always 0 0
-        gotolabel __label276 marker13
-  410:  setaddr __tmp234 __label277
-  411:  set __fn42__i 5
-        label __label270
-  412:  jump __label278 greaterThanEq __fn42__i __fn41__i
-  413:  op add __fn42__lt __fn42__lt 1
-  414:  goto __tmp234 marker13
-        label __label278
-  415:  jump __label280 lessThanEq __fn42__i __fn41__i
-  416:  op add __fn42__gt __fn42__gt 1
-        label __label280
-  417:  goto __tmp234 marker13
-        gotolabel __label277 marker13
-  418:  op sub __tmp241 __fn42__gt __fn42__lt
-  419:  op abs __fn42__dif __tmp241 0
-  420:  set __tmp246 false
-  421:  op add __tmp243 __fn42__gt __fn42__lt
-  422:  jump __label283 lessThan __tmp243 0
-  423:  op equal __tmp246 __fn42__gt __fn42__lt
-        label __label283
-  424:  jump __label284 equal __tmp246 false
-  425:  set __tmp231 __fn41__i
-  426:  jump __label257 always 0 0
-        label __label284
-  427:  jump __label286 greaterThanEq __fn42__dif __fn41__bestDif
-  428:  set __fn41__bestDif __fn42__dif
-  429:  set __fn41__best __fn41__i
-  430:  set __fn41__count 1
-  431:  goto __tmp232 marker12
-        label __label286
-  432:  jump __label288 greaterThan __fn42__dif __fn41__bestDif
-  433:  op add __fn41__best __fn41__best __fn41__i
-  434:  op add __fn41__count __fn41__count 1
-        label __label288
-  435:  goto __tmp232 marker12
-        gotolabel __label266 marker12
-  436:  op div __tmp231 __fn41__best __fn41__count
-        label __label257
-  437:  assertequals 5 __tmp231 "median(1,5,5,5,5,5)"
-  438:  setaddr __tmp259 __label306
-  439:  goto __tmp259 marker15
-        gotolabel __label306 marker15
-  440:  setaddr __tmp259 __label307
-  441:  goto __tmp259 marker15
-        gotolabel __label307 marker15
-  442:  setaddr __tmp259 __label308
-  443:  goto __tmp259 marker15
-        gotolabel __label308 marker15
-  444:  setaddr __tmp259 __label309
-  445:  goto __tmp259 marker15
-        gotolabel __label309 marker15
-  446:  setaddr __tmp259 __label310
-  447:  goto __tmp259 marker15
-        gotolabel __label310 marker15
-  448:  setaddr __tmp259 __label311
-  449:  goto __tmp259 marker15
-        gotolabel __label311 marker15
-  450:  set __tmp256 5
-  451:  assertequals 5 __tmp256 "median(5,5,5,5,5,5)"
-  452:  set __fn45__bestDif 10000000000
-  453:  set __fn45__best null
-  454:  set __fn45__count 1
-  455:  setaddr __tmp282 __label329
-  456:  set __fn45__i 1
-  457:  jump __label327 always 0 0
-        gotolabel __label329 marker16
-  458:  setaddr __tmp282 __label330
-  459:  set __fn45__i 2
-  460:  jump __label327 always 0 0
-        gotolabel __label330 marker16
-  461:  setaddr __tmp282 __label331
-  462:  set __fn45__i 3
-  463:  jump __label327 always 0 0
-        gotolabel __label331 marker16
-  464:  setaddr __tmp282 __label332
-  465:  set __fn45__i 4
-  466:  jump __label327 always 0 0
-        gotolabel __label332 marker16
-  467:  setaddr __tmp282 __label333
-  468:  set __fn45__i 5
-  469:  jump __label327 always 0 0
-        gotolabel __label333 marker16
-  470:  setaddr __tmp282 __label334
-  471:  set __fn45__i 6
-  472:  jump __label327 always 0 0
-        gotolabel __label334 marker16
-  473:  setaddr __tmp282 __label335
-  474:  set __fn45__i 7
-  475:  jump __label327 always 0 0
-        gotolabel __label335 marker16
-  476:  setaddr __tmp282 __label336
-  477:  set __fn45__i 8
-  478:  jump __label327 always 0 0
-        gotolabel __label336 marker16
-  479:  setaddr __tmp282 __label337
-  480:  set __fn45__i 9
-        label __label327
-  481:  set __fn46__gt 0
-  482:  set __fn46__lt 0
-  483:  jump __label566 greaterThanEq 1 __fn45__i
-  484:  set __fn46__lt 1
-  485:  jump __label569 always 0 0
-        label __label566
-  486:  jump __label567 lessThanEq 1 __fn45__i
-  487:  set __fn46__gt 1
-        label __label567
-        label __label569
-  488:  jump __label574 greaterThanEq 2 __fn45__i
-  489:  op add __fn46__lt __fn46__lt 1
-  490:  jump __label577 always 0 0
-        label __label574
-  491:  jump __label575 lessThanEq 2 __fn45__i
-  492:  op add __fn46__gt __fn46__gt 1
-        label __label575
-        label __label577
-  493:  jump __label582 greaterThanEq 3 __fn45__i
-  494:  op add __fn46__lt __fn46__lt 1
-  495:  jump __label585 always 0 0
-        label __label582
-  496:  jump __label583 lessThanEq 3 __fn45__i
-  497:  op add __fn46__gt __fn46__gt 1
-        label __label583
-        label __label585
-  498:  jump __label590 greaterThanEq 4 __fn45__i
-  499:  op add __fn46__lt __fn46__lt 1
-  500:  jump __label593 always 0 0
-        label __label590
-  501:  jump __label591 lessThanEq 4 __fn45__i
-  502:  op add __fn46__gt __fn46__gt 1
-        label __label591
-        label __label593
-  503:  jump __label598 greaterThanEq 5 __fn45__i
-  504:  op add __fn46__lt __fn46__lt 1
-  505:  jump __label601 always 0 0
-        label __label598
-  506:  jump __label599 lessThanEq 5 __fn45__i
-  507:  op add __fn46__gt __fn46__gt 1
-        label __label599
-        label __label601
-  508:  jump __label606 greaterThanEq 6 __fn45__i
-  509:  op add __fn46__lt __fn46__lt 1
-  510:  jump __label609 always 0 0
-        label __label606
-  511:  jump __label607 lessThanEq 6 __fn45__i
-  512:  op add __fn46__gt __fn46__gt 1
-        label __label607
-        label __label609
-  513:  jump __label614 greaterThanEq 7 __fn45__i
-  514:  op add __fn46__lt __fn46__lt 1
-  515:  jump __label617 always 0 0
-        label __label614
-  516:  jump __label615 lessThanEq 7 __fn45__i
-  517:  op add __fn46__gt __fn46__gt 1
-        label __label615
-        label __label617
-  518:  jump __label622 greaterThanEq 8 __fn45__i
-  519:  op add __fn46__lt __fn46__lt 1
-  520:  jump __label625 always 0 0
-        label __label622
-  521:  jump __label623 lessThanEq 8 __fn45__i
-  522:  op add __fn46__gt __fn46__gt 1
-        label __label623
-        label __label625
-  523:  jump __label630 greaterThanEq 9 __fn45__i
-  524:  op add __fn46__lt __fn46__lt 1
-  525:  jump __label633 always 0 0
-        label __label630
-  526:  jump __label631 lessThanEq 9 __fn45__i
-  527:  op add __fn46__gt __fn46__gt 1
-        label __label631
-        label __label633
-  528:  op sub __tmp291 __fn46__gt __fn46__lt
-  529:  op abs __fn46__dif __tmp291 0
-  530:  set __tmp296 false
-  531:  op add __tmp293 __fn46__gt __fn46__lt
-  532:  jump __label357 lessThan __tmp293 0
-  533:  op equal __tmp296 __fn46__gt __fn46__lt
-        label __label357
-  534:  jump __label358 equal __tmp296 false
-  535:  set __tmp281 __fn45__i
-  536:  jump __label325 always 0 0
-        label __label358
-  537:  jump __label360 greaterThanEq __fn46__dif __fn45__bestDif
-  538:  set __fn45__bestDif __fn46__dif
-  539:  set __fn45__best __fn45__i
-  540:  set __fn45__count 1
-  541:  goto __tmp282 marker16
-        label __label360
-  542:  jump __label362 greaterThan __fn46__dif __fn45__bestDif
-  543:  op add __fn45__best __fn45__best __fn45__i
-  544:  op add __fn45__count __fn45__count 1
-        label __label362
-  545:  goto __tmp282 marker16
-        gotolabel __label337 marker16
-  546:  op div __tmp281 __fn45__best __fn45__count
-        label __label325
-  547:  assertequals 5 __tmp281 "median(1,2,3,4,5,6,7,8,9)"
-  548:  set __fn47__bestDif 10000000000
-  549:  set __fn47__best null
-  550:  set __fn47__count 1
-  551:  setaddr __tmp307 __label369
-  552:  set __fn47__i 9
-  553:  jump __label367 always 0 0
-        gotolabel __label369 marker18
-  554:  setaddr __tmp307 __label370
-  555:  set __fn47__i 8
-  556:  jump __label367 always 0 0
-        gotolabel __label370 marker18
-  557:  setaddr __tmp307 __label371
-  558:  set __fn47__i 7
-  559:  jump __label367 always 0 0
-        gotolabel __label371 marker18
-  560:  setaddr __tmp307 __label372
-  561:  set __fn47__i 6
-  562:  jump __label367 always 0 0
-        gotolabel __label372 marker18
-  563:  setaddr __tmp307 __label373
-  564:  set __fn47__i 5
-  565:  jump __label367 always 0 0
-        gotolabel __label373 marker18
-  566:  setaddr __tmp307 __label374
-  567:  set __fn47__i 4
-  568:  jump __label367 always 0 0
-        gotolabel __label374 marker18
-  569:  setaddr __tmp307 __label375
-  570:  set __fn47__i 3
-  571:  jump __label367 always 0 0
-        gotolabel __label375 marker18
-  572:  setaddr __tmp307 __label376
-  573:  set __fn47__i 2
-  574:  jump __label367 always 0 0
-        gotolabel __label376 marker18
-  575:  setaddr __tmp307 __label377
-  576:  set __fn47__i 1
-        label __label367
-  577:  set __fn48__gt 0
-  578:  set __fn48__lt 0
-  579:  setaddr __tmp309 __label383
-  580:  set __fn48__i 9
-  581:  jump __label381 always 0 0
-        gotolabel __label383 marker19
-  582:  setaddr __tmp309 __label384
-  583:  set __fn48__i 8
-  584:  jump __label381 always 0 0
-        gotolabel __label384 marker19
-  585:  setaddr __tmp309 __label385
-  586:  set __fn48__i 7
-  587:  jump __label381 always 0 0
-        gotolabel __label385 marker19
-  588:  setaddr __tmp309 __label386
-  589:  set __fn48__i 6
-  590:  jump __label381 always 0 0
-        gotolabel __label386 marker19
-  591:  setaddr __tmp309 __label387
-  592:  set __fn48__i 5
-  593:  jump __label381 always 0 0
-        gotolabel __label387 marker19
-  594:  setaddr __tmp309 __label388
-  595:  set __fn48__i 4
-  596:  jump __label381 always 0 0
-        gotolabel __label388 marker19
-  597:  setaddr __tmp309 __label389
-  598:  set __fn48__i 3
-  599:  jump __label381 always 0 0
-        gotolabel __label389 marker19
-  600:  setaddr __tmp309 __label390
-  601:  set __fn48__i 2
-  602:  jump __label381 always 0 0
-        gotolabel __label390 marker19
-  603:  setaddr __tmp309 __label391
-  604:  set __fn48__i 1
-        label __label381
-  605:  jump __label392 greaterThanEq __fn48__i __fn47__i
-  606:  op add __fn48__lt __fn48__lt 1
-  607:  goto __tmp309 marker19
-        label __label392
-  608:  jump __label394 lessThanEq __fn48__i __fn47__i
-  609:  op add __fn48__gt __fn48__gt 1
-        label __label394
-  610:  goto __tmp309 marker19
-        gotolabel __label391 marker19
-  611:  op sub __tmp316 __fn48__gt __fn48__lt
-  612:  op abs __fn48__dif __tmp316 0
-  613:  set __tmp321 false
-  614:  op add __tmp318 __fn48__gt __fn48__lt
-  615:  jump __label397 lessThan __tmp318 0
-  616:  op equal __tmp321 __fn48__gt __fn48__lt
-        label __label397
-  617:  jump __label398 equal __tmp321 false
-  618:  set __tmp306 __fn47__i
-  619:  jump __label365 always 0 0
-        label __label398
-  620:  jump __label400 greaterThanEq __fn48__dif __fn47__bestDif
-  621:  set __fn47__bestDif __fn48__dif
-  622:  set __fn47__best __fn47__i
-  623:  set __fn47__count 1
-  624:  goto __tmp307 marker18
-        label __label400
-  625:  jump __label402 greaterThan __fn48__dif __fn47__bestDif
-  626:  op add __fn47__best __fn47__best __fn47__i
-  627:  op add __fn47__count __fn47__count 1
-        label __label402
-  628:  goto __tmp307 marker18
-        gotolabel __label377 marker18
-  629:  op div __tmp306 __fn47__best __fn47__count
-        label __label365
-  630:  assertequals 5 __tmp306 "median(9,8,7,6,5,4,3,2,1)"
-  631:  set __fn49__bestDif 10000000000
-  632:  set __fn49__best null
-  633:  set __fn49__count 1
-  634:  setaddr __tmp332 __label409
-  635:  set __fn49__i 1
-  636:  jump __label407 always 0 0
-        gotolabel __label409 marker20
-  637:  setaddr __tmp332 __label410
-  638:  set __fn49__i 3
-  639:  jump __label407 always 0 0
-        gotolabel __label410 marker20
-  640:  setaddr __tmp332 __label411
-  641:  set __fn49__i 5
-  642:  jump __label407 always 0 0
-        gotolabel __label411 marker20
-  643:  setaddr __tmp332 __label412
-  644:  set __fn49__i 7
-  645:  jump __label407 always 0 0
-        gotolabel __label412 marker20
-  646:  setaddr __tmp332 __label413
-  647:  set __fn49__i 9
-  648:  jump __label407 always 0 0
-        gotolabel __label413 marker20
-  649:  setaddr __tmp332 __label414
-  650:  set __fn49__i 2
-  651:  jump __label407 always 0 0
-        gotolabel __label414 marker20
-  652:  setaddr __tmp332 __label415
-  653:  set __fn49__i 4
-  654:  jump __label407 always 0 0
-        gotolabel __label415 marker20
-  655:  setaddr __tmp332 __label416
-  656:  set __fn49__i 6
-  657:  jump __label407 always 0 0
-        gotolabel __label416 marker20
-  658:  setaddr __tmp332 __label417
-  659:  set __fn49__i 8
-        label __label407
-  660:  set __fn50__gt 0
-  661:  set __fn50__lt 0
-  662:  setaddr __tmp334 __label423
-  663:  set __fn50__i 1
-  664:  jump __label421 always 0 0
-        gotolabel __label423 marker21
-  665:  setaddr __tmp334 __label424
-  666:  set __fn50__i 3
-  667:  jump __label421 always 0 0
-        gotolabel __label424 marker21
-  668:  setaddr __tmp334 __label425
-  669:  set __fn50__i 5
-  670:  jump __label421 always 0 0
-        gotolabel __label425 marker21
-  671:  setaddr __tmp334 __label426
-  672:  set __fn50__i 7
-  673:  jump __label421 always 0 0
-        gotolabel __label426 marker21
-  674:  setaddr __tmp334 __label427
-  675:  set __fn50__i 9
-  676:  jump __label421 always 0 0
-        gotolabel __label427 marker21
-  677:  setaddr __tmp334 __label428
-  678:  set __fn50__i 2
-  679:  jump __label421 always 0 0
-        gotolabel __label428 marker21
-  680:  setaddr __tmp334 __label429
-  681:  set __fn50__i 4
-  682:  jump __label421 always 0 0
-        gotolabel __label429 marker21
-  683:  setaddr __tmp334 __label430
-  684:  set __fn50__i 6
-  685:  jump __label421 always 0 0
-        gotolabel __label430 marker21
-  686:  setaddr __tmp334 __label431
-  687:  set __fn50__i 8
-        label __label421
-  688:  jump __label432 greaterThanEq __fn50__i __fn49__i
-  689:  op add __fn50__lt __fn50__lt 1
-  690:  goto __tmp334 marker21
-        label __label432
-  691:  jump __label434 lessThanEq __fn50__i __fn49__i
-  692:  op add __fn50__gt __fn50__gt 1
-        label __label434
-  693:  goto __tmp334 marker21
-        gotolabel __label431 marker21
-  694:  op sub __tmp341 __fn50__gt __fn50__lt
-  695:  op abs __fn50__dif __tmp341 0
-  696:  set __tmp346 false
-  697:  op add __tmp343 __fn50__gt __fn50__lt
-  698:  jump __label437 lessThan __tmp343 0
-  699:  op equal __tmp346 __fn50__gt __fn50__lt
-        label __label437
-  700:  jump __label438 equal __tmp346 false
-  701:  set __tmp331 __fn49__i
-  702:  jump __label405 always 0 0
-        label __label438
-  703:  jump __label440 greaterThanEq __fn50__dif __fn49__bestDif
-  704:  set __fn49__bestDif __fn50__dif
-  705:  set __fn49__best __fn49__i
-  706:  set __fn49__count 1
-  707:  goto __tmp332 marker20
-        label __label440
-  708:  jump __label442 greaterThan __fn50__dif __fn49__bestDif
-  709:  op add __fn49__best __fn49__best __fn49__i
-  710:  op add __fn49__count __fn49__count 1
-        label __label442
-  711:  goto __tmp332 marker20
-        gotolabel __label417 marker20
-  712:  op div __tmp331 __fn49__best __fn49__count
-        label __label405
-  713:  assertequals 5 __tmp331 "median(1,3,5,7,9,2,4,6,8)"
-  714:  set __fn51__bestDif 10000000000
-  715:  set __fn51__best null
-  716:  set __fn51__count 1
-  717:  setaddr __tmp357 __label449
-  718:  set __fn51__i 7
-  719:  jump __label447 always 0 0
-        gotolabel __label449 marker22
-  720:  setaddr __tmp357 __label450
-  721:  set __fn51__i 4
-  722:  jump __label447 always 0 0
-        gotolabel __label450 marker22
-  723:  setaddr __tmp357 __label451
-  724:  set __fn51__i 2
-  725:  jump __label447 always 0 0
-        gotolabel __label451 marker22
-  726:  setaddr __tmp357 __label452
-  727:  set __fn51__i 8
-  728:  jump __label447 always 0 0
-        gotolabel __label452 marker22
-  729:  setaddr __tmp357 __label453
-  730:  set __fn51__i 1
-  731:  jump __label447 always 0 0
-        gotolabel __label453 marker22
-  732:  setaddr __tmp357 __label454
-  733:  set __fn51__i 5
-  734:  jump __label447 always 0 0
-        gotolabel __label454 marker22
-  735:  setaddr __tmp357 __label455
-  736:  set __fn51__i 6
-  737:  jump __label447 always 0 0
-        gotolabel __label455 marker22
-  738:  setaddr __tmp357 __label456
-  739:  set __fn51__i 9
-  740:  jump __label447 always 0 0
-        gotolabel __label456 marker22
-  741:  setaddr __tmp357 __label457
-  742:  set __fn51__i 3
-        label __label447
-  743:  set __fn52__gt 0
-  744:  set __fn52__lt 0
-  745:  setaddr __tmp359 __label463
-  746:  set __fn52__i 7
-  747:  jump __label461 always 0 0
-        gotolabel __label463 marker23
-  748:  setaddr __tmp359 __label464
-  749:  set __fn52__i 4
-  750:  jump __label461 always 0 0
-        gotolabel __label464 marker23
-  751:  setaddr __tmp359 __label465
-  752:  set __fn52__i 2
-  753:  jump __label461 always 0 0
-        gotolabel __label465 marker23
-  754:  setaddr __tmp359 __label466
-  755:  set __fn52__i 8
-  756:  jump __label461 always 0 0
-        gotolabel __label466 marker23
-  757:  setaddr __tmp359 __label467
-  758:  set __fn52__i 1
-  759:  jump __label461 always 0 0
-        gotolabel __label467 marker23
-  760:  setaddr __tmp359 __label468
-  761:  set __fn52__i 5
-  762:  jump __label461 always 0 0
-        gotolabel __label468 marker23
-  763:  setaddr __tmp359 __label469
-  764:  set __fn52__i 6
-  765:  jump __label461 always 0 0
-        gotolabel __label469 marker23
-  766:  setaddr __tmp359 __label470
-  767:  set __fn52__i 9
-  768:  jump __label461 always 0 0
-        gotolabel __label470 marker23
-  769:  setaddr __tmp359 __label471
-  770:  set __fn52__i 3
-        label __label461
-  771:  jump __label472 greaterThanEq __fn52__i __fn51__i
-  772:  op add __fn52__lt __fn52__lt 1
-  773:  goto __tmp359 marker23
-        label __label472
-  774:  jump __label474 lessThanEq __fn52__i __fn51__i
-  775:  op add __fn52__gt __fn52__gt 1
-        label __label474
-  776:  goto __tmp359 marker23
-        gotolabel __label471 marker23
-  777:  op sub __tmp366 __fn52__gt __fn52__lt
-  778:  op abs __fn52__dif __tmp366 0
-  779:  set __tmp371 false
-  780:  op add __tmp368 __fn52__gt __fn52__lt
-  781:  jump __label477 lessThan __tmp368 0
-  782:  op equal __tmp371 __fn52__gt __fn52__lt
-        label __label477
-  783:  jump __label478 equal __tmp371 false
-  784:  set __tmp356 __fn51__i
-  785:  jump __label445 always 0 0
-        label __label478
-  786:  jump __label480 greaterThanEq __fn52__dif __fn51__bestDif
-  787:  set __fn51__bestDif __fn52__dif
-  788:  set __fn51__best __fn51__i
-  789:  set __fn51__count 1
-  790:  goto __tmp357 marker22
-        label __label480
-  791:  jump __label482 greaterThan __fn52__dif __fn51__bestDif
-  792:  op add __fn51__best __fn51__best __fn51__i
-  793:  op add __fn51__count __fn51__count 1
-        label __label482
-  794:  goto __tmp357 marker22
-        gotolabel __label457 marker22
-  795:  op div __tmp356 __fn51__best __fn51__count
-        label __label445
-  796:  assertequals 5 __tmp356 "median(7,4,2,8,1,5,6,9,3)"
-  797:  set __fn53__bestDif 10000000000
-  798:  set __fn53__best null
-  799:  set __fn53__count 1
-  800:  setaddr __tmp382 __label489
-  801:  set __fn53__i 1
-  802:  jump __label487 always 0 0
-        gotolabel __label489 marker24
-  803:  setaddr __tmp382 __label490
-  804:  set __fn53__i 1
-  805:  jump __label487 always 0 0
-        gotolabel __label490 marker24
-  806:  setaddr __tmp382 __label491
-  807:  set __fn53__i 1
-  808:  jump __label487 always 0 0
-        gotolabel __label491 marker24
-  809:  setaddr __tmp382 __label492
-  810:  set __fn53__i 1
-  811:  jump __label487 always 0 0
-        gotolabel __label492 marker24
-  812:  setaddr __tmp382 __label493
-  813:  set __fn53__i 9
-  814:  jump __label487 always 0 0
-        gotolabel __label493 marker24
-  815:  setaddr __tmp382 __label494
-  816:  set __fn53__i 9
-  817:  jump __label487 always 0 0
-        gotolabel __label494 marker24
-  818:  setaddr __tmp382 __label495
-  819:  set __fn53__i 9
-  820:  jump __label487 always 0 0
-        gotolabel __label495 marker24
-  821:  setaddr __tmp382 __label496
-  822:  set __fn53__i 9
-  823:  jump __label487 always 0 0
-        gotolabel __label496 marker24
-  824:  setaddr __tmp382 __label497
-  825:  set __fn53__i 5
-        label __label487
-  826:  set __fn54__gt 0
-  827:  set __fn54__lt 0
-  828:  setaddr __tmp384 __label503
-  829:  set __fn54__i 1
-  830:  jump __label501 always 0 0
-        gotolabel __label503 marker25
-  831:  setaddr __tmp384 __label504
-  832:  set __fn54__i 1
-  833:  jump __label501 always 0 0
-        gotolabel __label504 marker25
-  834:  setaddr __tmp384 __label505
-  835:  set __fn54__i 1
-  836:  jump __label501 always 0 0
-        gotolabel __label505 marker25
-  837:  setaddr __tmp384 __label506
-  838:  set __fn54__i 1
-  839:  jump __label501 always 0 0
-        gotolabel __label506 marker25
-  840:  setaddr __tmp384 __label507
-  841:  set __fn54__i 9
-  842:  jump __label501 always 0 0
-        gotolabel __label507 marker25
-  843:  setaddr __tmp384 __label508
-  844:  set __fn54__i 9
-  845:  jump __label501 always 0 0
-        gotolabel __label508 marker25
-  846:  setaddr __tmp384 __label509
-  847:  set __fn54__i 9
-  848:  jump __label501 always 0 0
-        gotolabel __label509 marker25
-  849:  setaddr __tmp384 __label510
-  850:  set __fn54__i 9
-  851:  jump __label501 always 0 0
-        gotolabel __label510 marker25
-  852:  setaddr __tmp384 __label511
-  853:  set __fn54__i 5
-        label __label501
-  854:  jump __label512 greaterThanEq __fn54__i __fn53__i
-  855:  op add __fn54__lt __fn54__lt 1
-  856:  goto __tmp384 marker25
-        label __label512
-  857:  jump __label514 lessThanEq __fn54__i __fn53__i
-  858:  op add __fn54__gt __fn54__gt 1
-        label __label514
-  859:  goto __tmp384 marker25
-        gotolabel __label511 marker25
-  860:  op sub __tmp391 __fn54__gt __fn54__lt
-  861:  op abs __fn54__dif __tmp391 0
-  862:  set __tmp396 false
-  863:  op add __tmp393 __fn54__gt __fn54__lt
-  864:  jump __label517 lessThan __tmp393 0
-  865:  op equal __tmp396 __fn54__gt __fn54__lt
-        label __label517
-  866:  jump __label518 equal __tmp396 false
-  867:  set __tmp381 __fn53__i
-  868:  jump __label485 always 0 0
-        label __label518
-  869:  jump __label520 greaterThanEq __fn54__dif __fn53__bestDif
-  870:  set __fn53__bestDif __fn54__dif
-  871:  set __fn53__best __fn53__i
-  872:  set __fn53__count 1
-  873:  goto __tmp382 marker24
-        label __label520
-  874:  jump __label522 greaterThan __fn54__dif __fn53__bestDif
-  875:  op add __fn53__best __fn53__best __fn53__i
-  876:  op add __fn53__count __fn53__count 1
-        label __label522
-  877:  goto __tmp382 marker24
-        gotolabel __label497 marker24
-  878:  op div __tmp381 __fn53__best __fn53__count
-        label __label485
-  879:  assertequals 5 __tmp381 "median(1,1,1,1,9,9,9,9,5)"
-  880:  end
-        label __label1
-  881:  op max __fn1__y2 __fn1__x1 __fn1__x2
-  882:  op min __fn1__y3 __fn1__x3 __fn1__x4
-  883:  jump __label530 greaterThan __fn1__y2 __fn1__y3
-  884:  op add __tmp414 __fn1__y2 __fn1__y3
-  885:  op div __fn1retval __tmp414 2
-  886:  goto __fn1retaddr __fn1
-        label __label530
-  887:  op min __fn1__y1 __fn1__x1 __fn1__x2
-  888:  op max __fn1__y4 __fn1__x3 __fn1__x4
-  889:  jump __label532 lessThan __fn1__y1 __fn1__y4
-  890:  op add __tmp420 __fn1__y1 __fn1__y4
-  891:  op div __fn1retval __tmp420 2
-  892:  goto __fn1retaddr __fn1
-        label __label532
-  893:  op max __tmp422 __fn1__y1 __fn1__y3
-  894:  op min __tmp423 __fn1__y2 __fn1__y4
-  895:  op add __tmp424 __tmp422 __tmp423
-  896:  op div __fn1retval __tmp424 2
-  897:  goto __fn1retaddr __fn1
-        label __label2
-  898:  op min __fn2__y1 __fn2__x1 __fn2__x2
-  899:  op max __fn2__y2 __fn2__x1 __fn2__x2
-  900:  op min __fn2__y4 __fn2__x4 __fn2__x5
-  901:  op max __fn2__y5 __fn2__x4 __fn2__x5
-  902:  jump __label535 greaterThanEq __fn2__y4 __fn2__y1
-  903:  set __fn2__y4 __fn2__y1
-  904:  set __fn56__t __fn2__y2
-  905:  set __fn2__y2 __fn2__y5
-  906:  set __fn2__y5 __fn56__t
-        label __label535
-  907:  jump __label541 lessThanEq __fn2__x3 __fn2__y2
-  908:  op min __fn2retval __fn2__y2 __fn2__y5
-  909:  jump __label542 greaterThanEq __fn2__y2 __fn2__y4
-  910:  op min __fn2retval __fn2__x3 __fn2__y4
-  911:  goto __fn2retaddr __fn2
+  389:  jump __label260 equal __tmp226 false
+  390:  set __tmp211 __fn44__i
+  391:  jump __label233 always 0 0
+        label __label260
+  392:  jump __label262 greaterThanEq __fn45__dif __fn44__bestDif
+  393:  set __fn44__bestDif __fn45__dif
+  394:  set __fn44__best __fn44__i
+  395:  set __fn44__count 1
+  396:  goto __tmp212 marker10
+        label __label262
+  397:  jump __label264 greaterThan __fn45__dif __fn44__bestDif
+  398:  op add __fn44__best __fn44__best __fn44__i
+  399:  op add __fn44__count __fn44__count 1
+        label __label264
+  400:  goto __tmp212 marker10
+        gotolabel __label242 marker10
+  401:  op div __tmp211 __fn44__best __fn44__count
+        label __label233
+  402:  assertequals 5 __tmp211 "median(1,1,5,5,5,5)"
+  403:  set __fn47__bestDif 10000000000
+  404:  set __fn47__best null
+  405:  set __fn47__count 1
+  406:  setaddr __tmp238 __label273
+  407:  set __fn47__i 1
+  408:  jump __label271 always 0 0
+        gotolabel __label273 marker12
+  409:  setaddr __tmp238 __label274
+  410:  set __fn47__i 5
+  411:  jump __label271 always 0 0
+        gotolabel __label274 marker12
+  412:  setaddr __tmp238 __label275
+  413:  set __fn47__i 5
+  414:  jump __label271 always 0 0
+        gotolabel __label275 marker12
+  415:  setaddr __tmp238 __label276
+  416:  set __fn47__i 5
+  417:  jump __label271 always 0 0
+        gotolabel __label276 marker12
+  418:  setaddr __tmp238 __label277
+  419:  set __fn47__i 5
+  420:  jump __label271 always 0 0
+        gotolabel __label277 marker12
+  421:  setaddr __tmp238 __label278
+  422:  set __fn47__i 5
+        label __label271
+  423:  set __fn48__gt 0
+  424:  set __fn48__lt 0
+  425:  setaddr __tmp240 __label284
+  426:  set __fn48__i 1
+  427:  jump __label282 always 0 0
+        gotolabel __label284 marker13
+  428:  setaddr __tmp240 __label285
+  429:  set __fn48__i 5
+  430:  jump __label282 always 0 0
+        gotolabel __label285 marker13
+  431:  setaddr __tmp240 __label286
+  432:  set __fn48__i 5
+  433:  jump __label282 always 0 0
+        gotolabel __label286 marker13
+  434:  setaddr __tmp240 __label287
+  435:  set __fn48__i 5
+  436:  jump __label282 always 0 0
+        gotolabel __label287 marker13
+  437:  setaddr __tmp240 __label288
+  438:  set __fn48__i 5
+  439:  jump __label282 always 0 0
+        gotolabel __label288 marker13
+  440:  setaddr __tmp240 __label289
+  441:  set __fn48__i 5
+        label __label282
+  442:  jump __label290 greaterThanEq __fn48__i __fn47__i
+  443:  op add __fn48__lt __fn48__lt 1
+  444:  goto __tmp240 marker13
+        label __label290
+  445:  jump __label292 lessThanEq __fn48__i __fn47__i
+  446:  op add __fn48__gt __fn48__gt 1
+        label __label292
+  447:  goto __tmp240 marker13
+        gotolabel __label289 marker13
+  448:  op sub __tmp247 __fn48__gt __fn48__lt
+  449:  op abs __fn48__dif __tmp247 0
+  450:  set __tmp252 false
+  451:  op add __tmp249 __fn48__gt __fn48__lt
+  452:  jump __label295 lessThan __tmp249 5
+  453:  op equal __tmp252 __fn48__gt __fn48__lt
+        label __label295
+  454:  jump __label296 equal __tmp252 false
+  455:  set __tmp237 __fn47__i
+  456:  jump __label269 always 0 0
+        label __label296
+  457:  jump __label298 greaterThanEq __fn48__dif __fn47__bestDif
+  458:  set __fn47__bestDif __fn48__dif
+  459:  set __fn47__best __fn47__i
+  460:  set __fn47__count 1
+  461:  goto __tmp238 marker12
+        label __label298
+  462:  jump __label300 greaterThan __fn48__dif __fn47__bestDif
+  463:  op add __fn47__best __fn47__best __fn47__i
+  464:  op add __fn47__count __fn47__count 1
+        label __label300
+  465:  goto __tmp238 marker12
+        gotolabel __label278 marker12
+  466:  op div __tmp237 __fn47__best __fn47__count
+        label __label269
+  467:  assertequals 5 __tmp237 "median(1,5,5,5,5,5)"
+  468:  set __fn50__bestDif 10000000000
+  469:  set __fn50__best null
+  470:  set __fn50__count 1
+  471:  setaddr __tmp264 __label309
+  472:  jump __label332 always 0 0
+        gotolabel __label309 marker14
+  473:  setaddr __tmp264 __label310
+  474:  jump __label332 always 0 0
+        gotolabel __label310 marker14
+  475:  setaddr __tmp264 __label311
+  476:  jump __label332 always 0 0
+        gotolabel __label311 marker14
+  477:  setaddr __tmp264 __label312
+  478:  jump __label332 always 0 0
+        gotolabel __label312 marker14
+  479:  setaddr __tmp264 __label313
+  480:  jump __label332 always 0 0
+        gotolabel __label313 marker14
+  481:  setaddr __tmp264 __label314
+        label __label332
+  482:  jump __label334 greaterThanEq 0 __fn50__bestDif
+  483:  set __fn50__bestDif 0
+  484:  set __fn50__best 5
+  485:  set __fn50__count 1
+  486:  goto __tmp264 marker14
+        label __label334
+  487:  jump __label336 greaterThan 0 __fn50__bestDif
+  488:  op add __fn50__best __fn50__best 5
+  489:  op add __fn50__count __fn50__count 1
+        label __label336
+  490:  goto __tmp264 marker14
+        gotolabel __label314 marker14
+  491:  op div __tmp263 __fn50__best __fn50__count
+  492:  assertequals 5 __tmp263 "median(5,5,5,5,5,5)"
+  493:  set __fn53__bestDif 10000000000
+  494:  set __fn53__best null
+  495:  set __fn53__count 1
+  496:  setaddr __tmp290 __label345
+  497:  set __fn53__i 1
+  498:  jump __label343 always 0 0
+        gotolabel __label345 marker16
+  499:  setaddr __tmp290 __label346
+  500:  set __fn53__i 2
+  501:  jump __label343 always 0 0
+        gotolabel __label346 marker16
+  502:  setaddr __tmp290 __label347
+  503:  set __fn53__i 3
+  504:  jump __label343 always 0 0
+        gotolabel __label347 marker16
+  505:  setaddr __tmp290 __label348
+  506:  set __fn53__i 4
+  507:  jump __label343 always 0 0
+        gotolabel __label348 marker16
+  508:  setaddr __tmp290 __label349
+  509:  set __fn53__i 5
+  510:  jump __label343 always 0 0
+        gotolabel __label349 marker16
+  511:  setaddr __tmp290 __label350
+  512:  set __fn53__i 6
+  513:  jump __label343 always 0 0
+        gotolabel __label350 marker16
+  514:  setaddr __tmp290 __label351
+  515:  set __fn53__i 7
+  516:  jump __label343 always 0 0
+        gotolabel __label351 marker16
+  517:  setaddr __tmp290 __label352
+  518:  set __fn53__i 8
+  519:  jump __label343 always 0 0
+        gotolabel __label352 marker16
+  520:  setaddr __tmp290 __label353
+  521:  set __fn53__i 9
+        label __label343
+  522:  set __fn54__gt 0
+  523:  set __fn54__lt 0
+  524:  jump __label688 greaterThanEq 1 __fn53__i
+  525:  set __fn54__lt 1
+  526:  jump __label691 always 0 0
+        label __label688
+  527:  jump __label689 lessThanEq 1 __fn53__i
+  528:  set __fn54__gt 1
+        label __label689
+        label __label691
+  529:  jump __label696 greaterThanEq 2 __fn53__i
+  530:  op add __fn54__lt __fn54__lt 1
+  531:  jump __label699 always 0 0
+        label __label696
+  532:  jump __label697 lessThanEq 2 __fn53__i
+  533:  op add __fn54__gt __fn54__gt 1
+        label __label697
+        label __label699
+  534:  jump __label704 greaterThanEq 3 __fn53__i
+  535:  op add __fn54__lt __fn54__lt 1
+  536:  jump __label707 always 0 0
+        label __label704
+  537:  jump __label705 lessThanEq 3 __fn53__i
+  538:  op add __fn54__gt __fn54__gt 1
+        label __label705
+        label __label707
+  539:  jump __label712 greaterThanEq 4 __fn53__i
+  540:  op add __fn54__lt __fn54__lt 1
+  541:  jump __label715 always 0 0
+        label __label712
+  542:  jump __label713 lessThanEq 4 __fn53__i
+  543:  op add __fn54__gt __fn54__gt 1
+        label __label713
+        label __label715
+  544:  jump __label720 greaterThanEq 5 __fn53__i
+  545:  op add __fn54__lt __fn54__lt 1
+  546:  jump __label723 always 0 0
+        label __label720
+  547:  jump __label721 lessThanEq 5 __fn53__i
+  548:  op add __fn54__gt __fn54__gt 1
+        label __label721
+        label __label723
+  549:  jump __label728 greaterThanEq 6 __fn53__i
+  550:  op add __fn54__lt __fn54__lt 1
+  551:  jump __label731 always 0 0
+        label __label728
+  552:  jump __label729 lessThanEq 6 __fn53__i
+  553:  op add __fn54__gt __fn54__gt 1
+        label __label729
+        label __label731
+  554:  jump __label736 greaterThanEq 7 __fn53__i
+  555:  op add __fn54__lt __fn54__lt 1
+  556:  jump __label739 always 0 0
+        label __label736
+  557:  jump __label737 lessThanEq 7 __fn53__i
+  558:  op add __fn54__gt __fn54__gt 1
+        label __label737
+        label __label739
+  559:  jump __label744 greaterThanEq 8 __fn53__i
+  560:  op add __fn54__lt __fn54__lt 1
+  561:  jump __label747 always 0 0
+        label __label744
+  562:  jump __label745 lessThanEq 8 __fn53__i
+  563:  op add __fn54__gt __fn54__gt 1
+        label __label745
+        label __label747
+  564:  jump __label752 greaterThanEq 9 __fn53__i
+  565:  op add __fn54__lt __fn54__lt 1
+  566:  jump __label755 always 0 0
+        label __label752
+  567:  jump __label753 lessThanEq 9 __fn53__i
+  568:  op add __fn54__gt __fn54__gt 1
+        label __label753
+        label __label755
+  569:  op sub __tmp299 __fn54__gt __fn54__lt
+  570:  op abs __fn54__dif __tmp299 0
+  571:  set __tmp304 false
+  572:  op add __tmp301 __fn54__gt __fn54__lt
+  573:  jump __label373 lessThan __tmp301 8
+  574:  op equal __tmp304 __fn54__gt __fn54__lt
+        label __label373
+  575:  jump __label374 equal __tmp304 false
+  576:  set __tmp289 __fn53__i
+  577:  jump __label341 always 0 0
+        label __label374
+  578:  jump __label376 greaterThanEq __fn54__dif __fn53__bestDif
+  579:  set __fn53__bestDif __fn54__dif
+  580:  set __fn53__best __fn53__i
+  581:  set __fn53__count 1
+  582:  goto __tmp290 marker16
+        label __label376
+  583:  jump __label378 greaterThan __fn54__dif __fn53__bestDif
+  584:  op add __fn53__best __fn53__best __fn53__i
+  585:  op add __fn53__count __fn53__count 1
+        label __label378
+  586:  goto __tmp290 marker16
+        gotolabel __label353 marker16
+  587:  op div __tmp289 __fn53__best __fn53__count
+        label __label341
+  588:  assertequals 5 __tmp289 "median(1,2,3,4,5,6,7,8,9)"
+  589:  set __fn56__bestDif 10000000000
+  590:  set __fn56__best null
+  591:  set __fn56__count 1
+  592:  setaddr __tmp316 __label387
+  593:  set __fn56__i 9
+  594:  jump __label385 always 0 0
+        gotolabel __label387 marker18
+  595:  setaddr __tmp316 __label388
+  596:  set __fn56__i 8
+  597:  jump __label385 always 0 0
+        gotolabel __label388 marker18
+  598:  setaddr __tmp316 __label389
+  599:  set __fn56__i 7
+  600:  jump __label385 always 0 0
+        gotolabel __label389 marker18
+  601:  setaddr __tmp316 __label390
+  602:  set __fn56__i 6
+  603:  jump __label385 always 0 0
+        gotolabel __label390 marker18
+  604:  setaddr __tmp316 __label391
+  605:  set __fn56__i 5
+  606:  jump __label385 always 0 0
+        gotolabel __label391 marker18
+  607:  setaddr __tmp316 __label392
+  608:  set __fn56__i 4
+  609:  jump __label385 always 0 0
+        gotolabel __label392 marker18
+  610:  setaddr __tmp316 __label393
+  611:  set __fn56__i 3
+  612:  jump __label385 always 0 0
+        gotolabel __label393 marker18
+  613:  setaddr __tmp316 __label394
+  614:  set __fn56__i 2
+  615:  jump __label385 always 0 0
+        gotolabel __label394 marker18
+  616:  setaddr __tmp316 __label395
+  617:  set __fn56__i 1
+        label __label385
+  618:  set __fn57__gt 0
+  619:  set __fn57__lt 0
+  620:  jump __label761 greaterThanEq 9 __fn56__i
+  621:  set __fn57__lt 1
+  622:  jump __label764 always 0 0
+        label __label761
+  623:  jump __label762 lessThanEq 9 __fn56__i
+  624:  set __fn57__gt 1
+        label __label762
+        label __label764
+  625:  jump __label769 greaterThanEq 8 __fn56__i
+  626:  op add __fn57__lt __fn57__lt 1
+  627:  jump __label772 always 0 0
+        label __label769
+  628:  jump __label770 lessThanEq 8 __fn56__i
+  629:  op add __fn57__gt __fn57__gt 1
+        label __label770
+        label __label772
+  630:  jump __label777 greaterThanEq 7 __fn56__i
+  631:  op add __fn57__lt __fn57__lt 1
+  632:  jump __label780 always 0 0
+        label __label777
+  633:  jump __label778 lessThanEq 7 __fn56__i
+  634:  op add __fn57__gt __fn57__gt 1
+        label __label778
+        label __label780
+  635:  jump __label785 greaterThanEq 6 __fn56__i
+  636:  op add __fn57__lt __fn57__lt 1
+  637:  jump __label788 always 0 0
+        label __label785
+  638:  jump __label786 lessThanEq 6 __fn56__i
+  639:  op add __fn57__gt __fn57__gt 1
+        label __label786
+        label __label788
+  640:  jump __label793 greaterThanEq 5 __fn56__i
+  641:  op add __fn57__lt __fn57__lt 1
+  642:  jump __label796 always 0 0
+        label __label793
+  643:  jump __label794 lessThanEq 5 __fn56__i
+  644:  op add __fn57__gt __fn57__gt 1
+        label __label794
+        label __label796
+  645:  jump __label801 greaterThanEq 4 __fn56__i
+  646:  op add __fn57__lt __fn57__lt 1
+  647:  jump __label804 always 0 0
+        label __label801
+  648:  jump __label802 lessThanEq 4 __fn56__i
+  649:  op add __fn57__gt __fn57__gt 1
+        label __label802
+        label __label804
+  650:  jump __label809 greaterThanEq 3 __fn56__i
+  651:  op add __fn57__lt __fn57__lt 1
+  652:  jump __label812 always 0 0
+        label __label809
+  653:  jump __label810 lessThanEq 3 __fn56__i
+  654:  op add __fn57__gt __fn57__gt 1
+        label __label810
+        label __label812
+  655:  jump __label817 greaterThanEq 2 __fn56__i
+  656:  op add __fn57__lt __fn57__lt 1
+  657:  jump __label820 always 0 0
+        label __label817
+  658:  jump __label818 lessThanEq 2 __fn56__i
+  659:  op add __fn57__gt __fn57__gt 1
+        label __label818
+        label __label820
+  660:  jump __label825 greaterThanEq 1 __fn56__i
+  661:  op add __fn57__lt __fn57__lt 1
+  662:  jump __label828 always 0 0
+        label __label825
+  663:  jump __label826 lessThanEq 1 __fn56__i
+  664:  op add __fn57__gt __fn57__gt 1
+        label __label826
+        label __label828
+  665:  op sub __tmp325 __fn57__gt __fn57__lt
+  666:  op abs __fn57__dif __tmp325 0
+  667:  set __tmp330 false
+  668:  op add __tmp327 __fn57__gt __fn57__lt
+  669:  jump __label415 lessThan __tmp327 8
+  670:  op equal __tmp330 __fn57__gt __fn57__lt
+        label __label415
+  671:  jump __label416 equal __tmp330 false
+  672:  set __tmp315 __fn56__i
+  673:  jump __label383 always 0 0
+        label __label416
+  674:  jump __label418 greaterThanEq __fn57__dif __fn56__bestDif
+  675:  set __fn56__bestDif __fn57__dif
+  676:  set __fn56__best __fn56__i
+  677:  set __fn56__count 1
+  678:  goto __tmp316 marker18
+        label __label418
+  679:  jump __label420 greaterThan __fn57__dif __fn56__bestDif
+  680:  op add __fn56__best __fn56__best __fn56__i
+  681:  op add __fn56__count __fn56__count 1
+        label __label420
+  682:  goto __tmp316 marker18
+        gotolabel __label395 marker18
+  683:  op div __tmp315 __fn56__best __fn56__count
+        label __label383
+  684:  assertequals 5 __tmp315 "median(9,8,7,6,5,4,3,2,1)"
+  685:  set __fn59__bestDif 10000000000
+  686:  set __fn59__best null
+  687:  set __fn59__count 1
+  688:  setaddr __tmp342 __label429
+  689:  set __fn59__i 1
+  690:  jump __label427 always 0 0
+        gotolabel __label429 marker20
+  691:  setaddr __tmp342 __label430
+  692:  set __fn59__i 3
+  693:  jump __label427 always 0 0
+        gotolabel __label430 marker20
+  694:  setaddr __tmp342 __label431
+  695:  set __fn59__i 5
+  696:  jump __label427 always 0 0
+        gotolabel __label431 marker20
+  697:  setaddr __tmp342 __label432
+  698:  set __fn59__i 7
+  699:  jump __label427 always 0 0
+        gotolabel __label432 marker20
+  700:  setaddr __tmp342 __label433
+  701:  set __fn59__i 9
+  702:  jump __label427 always 0 0
+        gotolabel __label433 marker20
+  703:  setaddr __tmp342 __label434
+  704:  set __fn59__i 2
+  705:  jump __label427 always 0 0
+        gotolabel __label434 marker20
+  706:  setaddr __tmp342 __label435
+  707:  set __fn59__i 4
+  708:  jump __label427 always 0 0
+        gotolabel __label435 marker20
+  709:  setaddr __tmp342 __label436
+  710:  set __fn59__i 6
+  711:  jump __label427 always 0 0
+        gotolabel __label436 marker20
+  712:  setaddr __tmp342 __label437
+  713:  set __fn59__i 8
+        label __label427
+  714:  set __fn60__gt 0
+  715:  set __fn60__lt 0
+  716:  jump __label854 greaterThanEq 1 __fn59__i
+  717:  set __fn60__lt 1
+  718:  jump __label857 always 0 0
+        label __label854
+  719:  jump __label855 lessThanEq 1 __fn59__i
+  720:  set __fn60__gt 1
+        label __label855
+        label __label857
+  721:  jump __label862 greaterThanEq 3 __fn59__i
+  722:  op add __fn60__lt __fn60__lt 1
+  723:  jump __label865 always 0 0
+        label __label862
+  724:  jump __label863 lessThanEq 3 __fn59__i
+  725:  op add __fn60__gt __fn60__gt 1
+        label __label863
+        label __label865
+  726:  jump __label870 greaterThanEq 5 __fn59__i
+  727:  op add __fn60__lt __fn60__lt 1
+  728:  jump __label873 always 0 0
+        label __label870
+  729:  jump __label871 lessThanEq 5 __fn59__i
+  730:  op add __fn60__gt __fn60__gt 1
+        label __label871
+        label __label873
+  731:  jump __label878 greaterThanEq 7 __fn59__i
+  732:  op add __fn60__lt __fn60__lt 1
+  733:  jump __label881 always 0 0
+        label __label878
+  734:  jump __label879 lessThanEq 7 __fn59__i
+  735:  op add __fn60__gt __fn60__gt 1
+        label __label879
+        label __label881
+  736:  jump __label886 greaterThanEq 9 __fn59__i
+  737:  op add __fn60__lt __fn60__lt 1
+  738:  jump __label889 always 0 0
+        label __label886
+  739:  jump __label887 lessThanEq 9 __fn59__i
+  740:  op add __fn60__gt __fn60__gt 1
+        label __label887
+        label __label889
+  741:  jump __label894 greaterThanEq 2 __fn59__i
+  742:  op add __fn60__lt __fn60__lt 1
+  743:  jump __label897 always 0 0
+        label __label894
+  744:  jump __label895 lessThanEq 2 __fn59__i
+  745:  op add __fn60__gt __fn60__gt 1
+        label __label895
+        label __label897
+  746:  jump __label902 greaterThanEq 4 __fn59__i
+  747:  op add __fn60__lt __fn60__lt 1
+  748:  jump __label905 always 0 0
+        label __label902
+  749:  jump __label903 lessThanEq 4 __fn59__i
+  750:  op add __fn60__gt __fn60__gt 1
+        label __label903
+        label __label905
+  751:  jump __label910 greaterThanEq 6 __fn59__i
+  752:  op add __fn60__lt __fn60__lt 1
+  753:  jump __label913 always 0 0
+        label __label910
+  754:  jump __label911 lessThanEq 6 __fn59__i
+  755:  op add __fn60__gt __fn60__gt 1
+        label __label911
+        label __label913
+  756:  jump __label918 greaterThanEq 8 __fn59__i
+  757:  op add __fn60__lt __fn60__lt 1
+  758:  jump __label921 always 0 0
+        label __label918
+  759:  jump __label919 lessThanEq 8 __fn59__i
+  760:  op add __fn60__gt __fn60__gt 1
+        label __label919
+        label __label921
+  761:  op sub __tmp351 __fn60__gt __fn60__lt
+  762:  op abs __fn60__dif __tmp351 0
+  763:  set __tmp356 false
+  764:  op add __tmp353 __fn60__gt __fn60__lt
+  765:  jump __label457 lessThan __tmp353 8
+  766:  op equal __tmp356 __fn60__gt __fn60__lt
+        label __label457
+  767:  jump __label458 equal __tmp356 false
+  768:  set __tmp341 __fn59__i
+  769:  jump __label425 always 0 0
+        label __label458
+  770:  jump __label460 greaterThanEq __fn60__dif __fn59__bestDif
+  771:  set __fn59__bestDif __fn60__dif
+  772:  set __fn59__best __fn59__i
+  773:  set __fn59__count 1
+  774:  goto __tmp342 marker20
+        label __label460
+  775:  jump __label462 greaterThan __fn60__dif __fn59__bestDif
+  776:  op add __fn59__best __fn59__best __fn59__i
+  777:  op add __fn59__count __fn59__count 1
+        label __label462
+  778:  goto __tmp342 marker20
+        gotolabel __label437 marker20
+  779:  op div __tmp341 __fn59__best __fn59__count
+        label __label425
+  780:  assertequals 5 __tmp341 "median(1,3,5,7,9,2,4,6,8)"
+  781:  set __fn62__bestDif 10000000000
+  782:  set __fn62__best null
+  783:  set __fn62__count 1
+  784:  setaddr __tmp368 __label471
+  785:  set __fn62__i 7
+  786:  jump __label469 always 0 0
+        gotolabel __label471 marker22
+  787:  setaddr __tmp368 __label472
+  788:  set __fn62__i 4
+  789:  jump __label469 always 0 0
+        gotolabel __label472 marker22
+  790:  setaddr __tmp368 __label473
+  791:  set __fn62__i 2
+  792:  jump __label469 always 0 0
+        gotolabel __label473 marker22
+  793:  setaddr __tmp368 __label474
+  794:  set __fn62__i 8
+  795:  jump __label469 always 0 0
+        gotolabel __label474 marker22
+  796:  setaddr __tmp368 __label475
+  797:  set __fn62__i 1
+  798:  jump __label469 always 0 0
+        gotolabel __label475 marker22
+  799:  setaddr __tmp368 __label476
+  800:  set __fn62__i 5
+  801:  jump __label469 always 0 0
+        gotolabel __label476 marker22
+  802:  setaddr __tmp368 __label477
+  803:  set __fn62__i 6
+  804:  jump __label469 always 0 0
+        gotolabel __label477 marker22
+  805:  setaddr __tmp368 __label478
+  806:  set __fn62__i 9
+  807:  jump __label469 always 0 0
+        gotolabel __label478 marker22
+  808:  setaddr __tmp368 __label479
+  809:  set __fn62__i 3
+        label __label469
+  810:  set __fn63__gt 0
+  811:  set __fn63__lt 0
+  812:  setaddr __tmp370 __label485
+  813:  set __fn63__i 7
+  814:  jump __label483 always 0 0
+        gotolabel __label485 marker23
+  815:  setaddr __tmp370 __label486
+  816:  set __fn63__i 4
+  817:  jump __label483 always 0 0
+        gotolabel __label486 marker23
+  818:  setaddr __tmp370 __label487
+  819:  set __fn63__i 2
+  820:  jump __label483 always 0 0
+        gotolabel __label487 marker23
+  821:  setaddr __tmp370 __label488
+  822:  set __fn63__i 8
+  823:  jump __label483 always 0 0
+        gotolabel __label488 marker23
+  824:  setaddr __tmp370 __label489
+  825:  set __fn63__i 1
+  826:  jump __label483 always 0 0
+        gotolabel __label489 marker23
+  827:  setaddr __tmp370 __label490
+  828:  set __fn63__i 5
+  829:  jump __label483 always 0 0
+        gotolabel __label490 marker23
+  830:  setaddr __tmp370 __label491
+  831:  set __fn63__i 6
+  832:  jump __label483 always 0 0
+        gotolabel __label491 marker23
+  833:  setaddr __tmp370 __label492
+  834:  set __fn63__i 9
+  835:  jump __label483 always 0 0
+        gotolabel __label492 marker23
+  836:  setaddr __tmp370 __label493
+  837:  set __fn63__i 3
+        label __label483
+  838:  jump __label494 greaterThanEq __fn63__i __fn62__i
+  839:  op add __fn63__lt __fn63__lt 1
+  840:  goto __tmp370 marker23
+        label __label494
+  841:  jump __label496 lessThanEq __fn63__i __fn62__i
+  842:  op add __fn63__gt __fn63__gt 1
+        label __label496
+  843:  goto __tmp370 marker23
+        gotolabel __label493 marker23
+  844:  op sub __tmp377 __fn63__gt __fn63__lt
+  845:  op abs __fn63__dif __tmp377 0
+  846:  set __tmp382 false
+  847:  op add __tmp379 __fn63__gt __fn63__lt
+  848:  jump __label499 lessThan __tmp379 8
+  849:  op equal __tmp382 __fn63__gt __fn63__lt
+        label __label499
+  850:  jump __label500 equal __tmp382 false
+  851:  set __tmp367 __fn62__i
+  852:  jump __label467 always 0 0
+        label __label500
+  853:  jump __label502 greaterThanEq __fn63__dif __fn62__bestDif
+  854:  set __fn62__bestDif __fn63__dif
+  855:  set __fn62__best __fn62__i
+  856:  set __fn62__count 1
+  857:  goto __tmp368 marker22
+        label __label502
+  858:  jump __label504 greaterThan __fn63__dif __fn62__bestDif
+  859:  op add __fn62__best __fn62__best __fn62__i
+  860:  op add __fn62__count __fn62__count 1
+        label __label504
+  861:  goto __tmp368 marker22
+        gotolabel __label479 marker22
+  862:  op div __tmp367 __fn62__best __fn62__count
+        label __label467
+  863:  assertequals 5 __tmp367 "median(7,4,2,8,1,5,6,9,3)"
+  864:  set __fn65__bestDif 10000000000
+  865:  set __fn65__best null
+  866:  set __fn65__count 1
+  867:  setaddr __tmp394 __label513
+  868:  set __fn65__i 1
+  869:  jump __label511 always 0 0
+        gotolabel __label513 marker24
+  870:  setaddr __tmp394 __label514
+  871:  set __fn65__i 1
+  872:  jump __label511 always 0 0
+        gotolabel __label514 marker24
+  873:  setaddr __tmp394 __label515
+  874:  set __fn65__i 1
+  875:  jump __label511 always 0 0
+        gotolabel __label515 marker24
+  876:  setaddr __tmp394 __label516
+  877:  set __fn65__i 1
+  878:  jump __label511 always 0 0
+        gotolabel __label516 marker24
+  879:  setaddr __tmp394 __label517
+  880:  set __fn65__i 9
+  881:  jump __label511 always 0 0
+        gotolabel __label517 marker24
+  882:  setaddr __tmp394 __label518
+  883:  set __fn65__i 9
+  884:  jump __label511 always 0 0
+        gotolabel __label518 marker24
+  885:  setaddr __tmp394 __label519
+  886:  set __fn65__i 9
+  887:  jump __label511 always 0 0
+        gotolabel __label519 marker24
+  888:  setaddr __tmp394 __label520
+  889:  set __fn65__i 9
+  890:  jump __label511 always 0 0
+        gotolabel __label520 marker24
+  891:  setaddr __tmp394 __label521
+  892:  set __fn65__i 5
+        label __label511
+  893:  set __fn66__gt 0
+  894:  set __fn66__lt 0
+  895:  setaddr __tmp396 __label527
+  896:  set __fn66__i 1
+  897:  jump __label525 always 0 0
+        gotolabel __label527 marker25
+  898:  setaddr __tmp396 __label528
+  899:  set __fn66__i 1
+  900:  jump __label525 always 0 0
+        gotolabel __label528 marker25
+  901:  setaddr __tmp396 __label529
+  902:  set __fn66__i 1
+  903:  jump __label525 always 0 0
+        gotolabel __label529 marker25
+  904:  setaddr __tmp396 __label530
+  905:  set __fn66__i 1
+  906:  jump __label525 always 0 0
+        gotolabel __label530 marker25
+  907:  setaddr __tmp396 __label531
+  908:  set __fn66__i 9
+  909:  jump __label525 always 0 0
+        gotolabel __label531 marker25
+  910:  setaddr __tmp396 __label532
+  911:  set __fn66__i 9
+  912:  jump __label525 always 0 0
+        gotolabel __label532 marker25
+  913:  setaddr __tmp396 __label533
+  914:  set __fn66__i 9
+  915:  jump __label525 always 0 0
+        gotolabel __label533 marker25
+  916:  setaddr __tmp396 __label534
+  917:  set __fn66__i 9
+  918:  jump __label525 always 0 0
+        gotolabel __label534 marker25
+  919:  setaddr __tmp396 __label535
+  920:  set __fn66__i 5
+        label __label525
+  921:  jump __label536 greaterThanEq __fn66__i __fn65__i
+  922:  op add __fn66__lt __fn66__lt 1
+  923:  goto __tmp396 marker25
+        label __label536
+  924:  jump __label538 lessThanEq __fn66__i __fn65__i
+  925:  op add __fn66__gt __fn66__gt 1
+        label __label538
+  926:  goto __tmp396 marker25
+        gotolabel __label535 marker25
+  927:  op sub __tmp403 __fn66__gt __fn66__lt
+  928:  op abs __fn66__dif __tmp403 0
+  929:  set __tmp408 false
+  930:  op add __tmp405 __fn66__gt __fn66__lt
+  931:  jump __label541 lessThan __tmp405 8
+  932:  op equal __tmp408 __fn66__gt __fn66__lt
         label __label541
-  912:  op min __fn2retval __fn2__y2 __fn2__y4
-  913:  jump __label546 lessThanEq __fn2__x3 __fn2__y4
-  914:  op min __fn2retval __fn2__x3 __fn2__y5
-        label __label546
+  933:  jump __label542 equal __tmp408 false
+  934:  set __tmp393 __fn65__i
+  935:  jump __label509 always 0 0
         label __label542
-  915:  goto __fn2retaddr __fn2
+  936:  jump __label544 greaterThanEq __fn66__dif __fn65__bestDif
+  937:  set __fn65__bestDif __fn66__dif
+  938:  set __fn65__best __fn65__i
+  939:  set __fn65__count 1
+  940:  goto __tmp394 marker24
+        label __label544
+  941:  jump __label546 greaterThan __fn66__dif __fn65__bestDif
+  942:  op add __fn65__best __fn65__best __fn65__i
+  943:  op add __fn65__count __fn65__count 1
+        label __label546
+  944:  goto __tmp394 marker24
+        gotolabel __label521 marker24
+  945:  op div __tmp393 __fn65__best __fn65__count
+        label __label509
+  946:  assertequals 5 __tmp393 "median(1,1,1,1,9,9,9,9,5)"
+  947:  end
+        label __label1
+  948:  op max __fn1__y2 __fn1__x1 __fn1__x2
+  949:  op min __fn1__y3 __fn1__x3 __fn1__x4
+  950:  jump __label554 greaterThan __fn1__y2 __fn1__y3
+  951:  op add __tmp426 __fn1__y2 __fn1__y3
+  952:  op div __fn1retval __tmp426 2
+  953:  goto __fn1retaddr __fn1
+        label __label554
+  954:  op min __fn1__y1 __fn1__x1 __fn1__x2
+  955:  op max __fn1__y4 __fn1__x3 __fn1__x4
+  956:  jump __label556 lessThan __fn1__y1 __fn1__y4
+  957:  op add __tmp432 __fn1__y1 __fn1__y4
+  958:  op div __fn1retval __tmp432 2
+  959:  goto __fn1retaddr __fn1
+        label __label556
+  960:  op max __tmp434 __fn1__y1 __fn1__y3
+  961:  op min __tmp435 __fn1__y2 __fn1__y4
+  962:  op add __tmp436 __tmp434 __tmp435
+  963:  op div __fn1retval __tmp436 2
+  964:  goto __fn1retaddr __fn1
+        label __label2
+  965:  op min __fn2__y1 __fn2__x1 __fn2__x2
+  966:  op max __fn2__y2 __fn2__x1 __fn2__x2
+  967:  op min __fn2__y4 __fn2__x4 __fn2__x5
+  968:  op max __fn2__y5 __fn2__x4 __fn2__x5
+  969:  jump __label559 greaterThanEq __fn2__y4 __fn2__y1
+  970:  set __fn2__y4 __fn2__y1
+  971:  set __fn68__t __fn2__y2
+  972:  set __fn2__y2 __fn2__y5
+  973:  set __fn2__y5 __fn68__t
+        label __label559
+  974:  jump __label565 lessThanEq __fn2__x3 __fn2__y2
+  975:  op min __fn2retval __fn2__y2 __fn2__y5
+  976:  jump __label566 greaterThanEq __fn2__y2 __fn2__y4
+  977:  op min __fn2retval __fn2__x3 __fn2__y4
+  978:  goto __fn2retaddr __fn2
+        label __label565
+  979:  op min __fn2retval __fn2__y2 __fn2__y4
+  980:  jump __label570 lessThanEq __fn2__x3 __fn2__y4
+  981:  op min __fn2retval __fn2__x3 __fn2__y5
+        label __label570
+        label __label566
+  982:  goto __fn2retaddr __fn2

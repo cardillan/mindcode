@@ -14,9 +14,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.PARAMETERS;
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.RECURSIVE_CALL;
+import static info.teksol.mindcode.compiler.optimization.OptimizationCoordinator.TRACE;
 
 class DataFlowVariableStates {
 
@@ -89,7 +91,7 @@ class DataFlowVariableStates {
          * Indicates the instance is reachable - contain at least one instruction that is not unreachable. Instances
          * which are not reachable are ignored on merges.
          */
-        private boolean reachable = true;
+        private final boolean reachable;
 
         /** An isolated instance only tracks values of variables, cannot be used to determine definitions or reaches. */
         private boolean isolated;
@@ -102,9 +104,10 @@ class DataFlowVariableStates {
             useless = new HashMap<>();
             initialized = new HashSet<>();
             stored = new HashSet<>();
+            reachable = true;
         }
 
-        private VariableStates(VariableStates other, int id, boolean isolated) {
+        private VariableStates(VariableStates other, int id, boolean isolated, boolean reachable) {
             this.id = id;
             this.isolated = isolated;
             values = new LinkedHashMap<>(other.values);
@@ -114,7 +117,11 @@ class DataFlowVariableStates {
             initialized = new HashSet<>(other.initialized);
             stored = new HashSet<>(other.stored);
             dead = other.dead;
-            reachable = other.reachable;
+            this.reachable = reachable;
+        }
+
+        private VariableStates(VariableStates other, int id, boolean isolated) {
+            this(other, id, isolated, other.reachable);
         }
 
         private static Map<LogicVariable, List<LogicInstruction>> deepCopy(Map<LogicVariable, List<LogicInstruction>> original) {
@@ -133,10 +140,20 @@ class DataFlowVariableStates {
          * Creates a copy of variable states, for evaluating parallel branches.
          *
          * @param reason debug message
-         * @return a independent copy of this instance
+         * @return an independent copy of this instance
          */
         public VariableStates copy(String reason) {
-            VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated);
+            return copy(reason, reachable);
+        }
+
+        /**
+         * Creates a copy of variable states, for evaluating parallel branches.
+         *
+         * @param reason debug message
+         * @return an independent copy of this instance
+         */
+        public VariableStates copy(String reason, boolean reachable) {
+            VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated, reachable);
             trace(() -> "*** " + reason + ": created VariableStates instance #" + copy.id + " as a copy of #" + id);
             return copy;
         }
@@ -182,18 +199,12 @@ class DataFlowVariableStates {
             return this;
         }
 
-        public void setReachable() {
-            this.reachable = true;
+        public boolean isReachable() {
+            return reachable;
         }
 
-        public void setUnreachable() {
-            this.reachable = false;
-        }
-
-        private void printInstruction(LogicInstruction instruction) {
-            if (BaseOptimizer.TRACE) {
-                System.out.println("   " + optimizer.instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
-            }
+        private String printInstruction(LogicInstruction instruction) {
+            return "   " + optimizer.instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction);
         }
 
         /**
@@ -214,11 +225,11 @@ class DataFlowVariableStates {
                 if (!invalids.addAll(dependants)) break;
             }
 
-            if (BaseOptimizer.TRACE) {
-                values.values().stream().filter(exp -> exp.dependsOn(invalids))
-                        .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
-                equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
-                        .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
+            if (TRACE) {
+                trace(values.values().stream().filter(exp -> exp.dependsOn(invalids))
+                        .map(exp -> "   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
+                trace(equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
+                        .map(e -> "   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
             }
 
             values.values().removeIf(exp -> exp.dependsOn(invalids));
@@ -272,7 +283,7 @@ class DataFlowVariableStates {
             }
 
             trace(() -> "Value set: " + variable);
-            printInstruction(instruction);
+            trace(() -> printInstruction(instruction));
 
             if (optimizer.canEliminate(instruction, variable)) {
                 // Storing the variable value means the instruction can be completely eliminated (constant propagation)
@@ -287,8 +298,9 @@ class DataFlowVariableStates {
                 } else {
                     values.put(variable, new VariableValue(variable, value));
                 }
-            } else if (!isolated) {
+            } else if (!isolated && reachable) {
                 // Variable cannot be eliminated --> its instruction needs to be kept
+                trace(() -> "--> Keeping instruction: " + instruction.toMlog() + " (value set)");
                 optimizer.keep.add(instruction);      // Ensure the instruction is kept
             }
 
@@ -308,9 +320,7 @@ class DataFlowVariableStates {
                 if (reuseValue) {
                     for (VariableValue expression : values.values()) {
                         if (expression.isExpression() && expression.isEqual(this, instruction)) {
-                            if (BaseOptimizer.TRACE) {
-                                System.out.println("    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
-                            }
+                            trace(() -> "    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
                             equivalences.put(variable, expression.variable);
                             break;
                         }
@@ -366,7 +376,7 @@ class DataFlowVariableStates {
          * @param instruction instruction that caused the call
          */
         public void updateAfterFunctionCall(LogicFunction function, LogicInstruction instruction) {
-            optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false));
+            optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
             optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
             function.getParameters().stream().filter(LogicVariable::isOutput).forEach(initialized::add);
             initialized.add(LogicVariable.fnRetVal(function));
@@ -391,7 +401,7 @@ class DataFlowVariableStates {
          * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
         public LogicValue valueRead(LogicVariable variable) {
-            return valueRead(variable, null, true);
+            return valueRead(variable, null, true, true);
         }
 
         /**
@@ -403,8 +413,8 @@ class DataFlowVariableStates {
          * @param instruction instruction that reads the variable, may be null
          * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
-        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction) {
-            return valueRead(variable, instruction, true);
+        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reachable) {
+            return valueRead(variable, instruction, true, reachable);
         }
 
         /**
@@ -415,23 +425,28 @@ class DataFlowVariableStates {
          * @param variable            variable to be marked
          * @param instruction         instruction that reads the variable, may be null
          * @param reportUninitialized true to report variables that might not be initialized at this read
+         * @param ixReachable         indicates whether the instruction is reachable
          * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
-        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized) {
-            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!") + ")");
+        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized,
+                boolean ixReachable) {
+            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!" : "") + (reachable && ixReachable ? "" : " UNREACHABLE!") + ")");
 
-            if (reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
+            if (ixReachable && reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
                 trace(() -> "*** Detected uninitialized read of " + variable.toMlog());
                 print("Current context:");
                 optimizer.addUninitialized(variable);
             }
 
             if (definitions.containsKey(variable)) {
-                if (BaseOptimizer.TRACE) {
-                    definitions.get(variable).forEach(this::printInstruction);
+                if (TRACE) {
+                    trace(definitions.get(variable).stream().map(this::printInstruction));
                 }
                 // Variable value was read, keep all instructions that define its value
-                if (!isolated) {
+                if (!isolated && ixReachable) {
+                    if (TRACE) {
+                        trace(definitions.get(variable).stream().map(ix -> "--> Keeping instruction: " + ix.toMlog() + " (variable read)"));
+                    }
                     optimizer.keep.addAll(definitions.get(variable));
                 }
             }
@@ -446,6 +461,9 @@ class DataFlowVariableStates {
 
         public void protectVariable(LogicVariable variable) {
             if (definitions.containsKey(variable)) {
+                if (TRACE) {
+                    trace(definitions.get(variable).stream().map(ix -> "--> Keeping instruction: " + ix.toMlog() + " (variable protected)"));
+                }
                 optimizer.keep.addAll(definitions.get(variable));
             }
         }
@@ -569,17 +587,17 @@ class DataFlowVariableStates {
         }
 
         void print(String title) {
-            if (BaseOptimizer.TRACE) {
-                System.out.println(title);
-                System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!"));
-                values.values().forEach(v -> System.out.println("    " + v));
+            if (TRACE) {
+                trace(title);
+                trace("    VariableStates instance #" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!"));
+                values.values().forEach(v -> trace("    " + v));
                 definitions.forEach((k, v) -> {
-                    System.out.println("    Definitions of " + k.toMlog());
-                    v.forEach(ix -> System.out.println("      " + optimizer.instructionIndex(ix)
+                    trace("    Definitions of " + k.toMlog());
+                    v.forEach(ix -> trace("      " + optimizer.instructionIndex(ix)
                             + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
                 });
-                equivalences.forEach((k, v) -> System.out.println("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
-                System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
+                equivalences.forEach((k, v) -> trace("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
+                trace("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
             }
         }
     }
@@ -772,10 +790,16 @@ class DataFlowVariableStates {
         }
     }
 
+    private void trace(Stream<String> text) {
+        optimizationContext.trace(text);
+    }
+
     private void trace(Supplier<String> text) {
-        if (BaseOptimizer.TRACE) {
-            System.out.println(text.get());
-        }
+        optimizationContext.trace(text);
+    }
+
+    private void trace(String text) {
+        optimizationContext.trace(text);
     }
 
     private static <T> Set<T> createIdentitySet(int size) {

@@ -7,6 +7,7 @@ import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
+import info.teksol.util.TraceFile;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -14,6 +15,11 @@ import java.util.function.Consumer;
 import static info.teksol.mindcode.compiler.optimization.OptimizationPhase.*;
 
 public class OptimizationCoordinator {
+    public static final boolean TRACE = false;
+    public static final boolean DEBUG_PRINT = TRACE;
+
+    public static final boolean IGNORE_UNINITIALIZED = false;
+
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
     private final Consumer<MindcodeMessage> messageRecipient;
@@ -26,6 +32,10 @@ public class OptimizationCoordinator {
         this.instructionProcessor = instructionProcessor;
         this.messageRecipient = messageRecipient;
         this.profile = profile;
+    }
+
+    public static boolean isDebugOn() {
+        return TRACE || DEBUG_PRINT || IGNORE_UNINITIALIZED;
     }
 
     public void setDebugPrinter(DebugPrinter debugPrinter) {
@@ -57,39 +67,41 @@ public class OptimizationCoordinator {
     public List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         program.addAll(generatorOutput.instructions());
 
-        optimizationContext = new OptimizationContext(instructionProcessor, program,
-                generatorOutput.callGraph(), generatorOutput.rootAstContext());
+        try (TraceFile traceFile = new TraceFile(TRACE, DEBUG_PRINT)) {
+            optimizationContext = new OptimizationContext(traceFile, profile, instructionProcessor, program,
+                    generatorOutput.callGraph(), generatorOutput.rootAstContext());
 
-        int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        messageRecipient.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
+            int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+            messageRecipient.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
 
-        debugPrinter.registerIteration(null, "", List.copyOf(program));
+            debugPrinter.registerIteration(null, "", List.copyOf(program));
 
-        Map<Optimization, Optimizer> optimizers = createOptimizers();
+            Map<Optimization, Optimizer> optimizers = createOptimizers();
 
-        optimizePhase(INITIAL, optimizers, 0, generatorOutput);
-        boolean modified = true;
-        for (int pass = 1; modified && pass <= profile.getOptimizationPasses(); pass++) {
-            modified = optimizePhase(ITERATED, optimizers, pass, generatorOutput);
+            optimizePhase(INITIAL, optimizers, 0, generatorOutput);
+            boolean modified = true;
+            for (int pass = 1; modified && pass <= profile.getOptimizationPasses(); pass++) {
+                modified = optimizePhase(ITERATED, optimizers, pass, generatorOutput);
+            }
+            if (modified) {
+                messageRecipient.accept(OptimizerMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
+            }
+            optimizePhase(FINAL, optimizers, 0, generatorOutput);
+
+            optimizers.values().forEach(Optimizer::generateFinalMessages);
+            int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+            messageRecipient.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
+
+            if (modified) {
+                messageRecipient.accept(OptimizerMessage.warn("\nOptimization passes limited at %d.",
+                        profile.getOptimizationPasses()));
+            }
+
+            optimizationContext.removeInactiveInstructions();
+            optimizationStatistics.forEach(messageRecipient);
+
+            return List.copyOf(program);
         }
-        if (modified) {
-            messageRecipient.accept(OptimizerMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
-        }
-        optimizePhase(FINAL, optimizers, 0, generatorOutput);
-
-        optimizers.values().forEach(Optimizer::generateFinalMessages);
-        int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        messageRecipient.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
-
-        if (modified) {
-            messageRecipient.accept(OptimizerMessage.warn("\nOptimization passes limited at %d.",
-                    profile.getOptimizationPasses()));
-        }
-
-        optimizationContext.removeInactiveInstructions();
-        optimizationStatistics.forEach(messageRecipient);
-
-        return List.copyOf(program);
     }
 
     private boolean optimizePhase(OptimizationPhase phase, Map<Optimization, Optimizer> optimizers, int pass, GeneratorOutput generatorOutput) {
@@ -107,9 +119,7 @@ public class OptimizationCoordinator {
 
             Optimizer optimizer = optimizers.get(optimization);
             if (optimizer != null) {
-                if (optimizer.optimize(phase, pass)) {
-                    modified = true;
-                }
+                if (optimizer.optimize(phase, pass)) modified = true;
             }
         }
 
@@ -145,9 +155,7 @@ public class OptimizationCoordinator {
                 if (result == OptimizationResult.REALIZED) {
                     Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
                     if (optimizer != null) {
-                        optimizationContext.prepare();
                         optimizer.optimize(phase, pass);
-                        optimizationContext.finish();
                     }
                     modified = true;
                 }

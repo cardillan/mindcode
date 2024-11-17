@@ -35,9 +35,6 @@ import java.util.stream.Stream;
  * instruction not in a program, an error occurs.
  */
 abstract class BaseOptimizer extends AbstractOptimizer {
-    protected static final boolean TRACE = false;
-    protected static final boolean DEBUG_PRINT = TRACE;
-
     protected int modifications = 0;
     protected int insertions = 0;
     protected int deletions = 0;
@@ -64,14 +61,13 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         do {
             optimizationContext.prepare();
 
-            if (TRACE) {
-                System.out.printf("%n*** %s: PASS %d, ITERATION %d ***%n%n", getName().toUpperCase(), pass, iteration);
-            }
-            if (DEBUG_PRINT) {
-                System.out.println("Program at the beginning of the optimization phase:");
-                optimizationContext.debugPrintProgram();
-                System.out.println();
-            }
+            final int thisIteration = iteration;
+            trace(() -> String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n", getName().toUpperCase(),
+                    phase, pass, thisIteration));
+
+            optimizationContext.debugPrintProgram(
+                    String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n", getName().toUpperCase(),
+                            phase, pass, thisIteration));
 
             repeat = optimizeProgram(phase);
             optimizationContext.finish();
@@ -129,6 +125,18 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             emitMessage(MessageLevel.INFO, "%6d instructions %s by %s%s.",
                     count, verb, getName(), visits);
         }
+    }
+
+    protected void trace(Stream<String> text) {
+        optimizationContext.trace(text);
+    }
+
+    protected void trace(Supplier<String> text) {
+        optimizationContext.trace(text);
+    }
+
+    protected void trace(String text) {
+        optimizationContext.trace(text);
     }
 
     //<editor-fold desc="Label & variable tracking">
@@ -731,11 +739,5 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
         return optimizationContext.buildLogicList(context, List.copyOf(instructions));
-    }
-
-    protected final void trace(Supplier<String> text) {
-        if (TRACE) {
-            System.out.println(text.get());
-        }
     }
 }

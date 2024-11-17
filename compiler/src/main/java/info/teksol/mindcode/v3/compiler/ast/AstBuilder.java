@@ -37,7 +37,6 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstMindcodeNode visit(ParseTree tree) {
-        //System.out.println("Visiting: " + tree.getText());
         if (tree instanceof ParserRuleContext ctx && ctx.exception != null) {
             throw new ParserAbort();
         }

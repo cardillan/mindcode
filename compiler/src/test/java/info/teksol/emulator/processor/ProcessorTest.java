@@ -139,7 +139,8 @@ public class ProcessorTest extends AbstractProcessorTest {
                 fileName,
                 s -> s,
                 Map.of(),
-                (useAsserts, actualOutput) -> {
+                (useAsserts, textBuffer) -> {
+                    List<String> actualOutput = textBuffer.getPrintOutput();
                     String messages = actualOutput.stream().filter(s -> !"ok".equals(s)).collect(Collectors.joining());
 
                     if (useAsserts) {
@@ -228,6 +229,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                             print(eval(a >= b), eval(a <= b), eval(a > b), eval(a < b));
                         end;
                         
+                        param A = 0;
                         compare(A, A);
                         """,
                 "T", "T", "F", "F"

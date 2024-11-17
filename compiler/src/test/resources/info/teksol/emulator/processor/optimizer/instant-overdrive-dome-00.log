@@ -3,38 +3,38 @@
    256 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
      3 instructions eliminated by Jump Normalization (3 passes, 5 iterations).
     71 instructions eliminated by Jump Optimization (2 passes, 5 iterations).
-   101 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+   101 instructions eliminated by Single Step Elimination (4 passes, 9 iterations).
      2 instructions modified by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (4 iterations).
-    87 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+    89 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
      2 instructions added by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
     17 instructions eliminated by Jump Straightening (5 iterations).
     12 instructions updated by JumpThreading.
-    15 instructions eliminated by Unreachable Code Elimination.
+    13 instructions eliminated by Unreachable Code Elimination.
     10 instructions eliminated by Print Merging.
    785 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 140):
+Pass 1: speed optimization selection (cost limit 138):
   * Loop Optimization: replicate condition at line 45            cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
     Loop Optimization: replicate condition at line 128           cost     1, benefit       25.0, efficiency       25.0
   ! Loop Unrolling: unroll iteration loop at line 178            cost   209, benefit      275.0, efficiency        1.3
 
-Pass 1: speed optimization selection (cost limit 139):
+Pass 1: speed optimization selection (cost limit 137):
   * Loop Optimization: replicate condition at line 128           cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
   ! Loop Unrolling: unroll iteration loop at line 178            cost   209, benefit      275.0, efficiency        1.3
 
-Pass 1: speed optimization selection (cost limit 138):
+Pass 1: speed optimization selection (cost limit 136):
   ! Loop Unrolling: unroll iteration loop at line 178            cost   209, benefit      275.0, efficiency        1.3
 
-Pass 2: speed optimization selection (cost limit 164):
-  ! Loop Unrolling: unroll iteration loop at line 178            cost   181, benefit      275.0, efficiency        1.5
+Pass 2: speed optimization selection (cost limit 166):
+  ! Loop Unrolling: unroll iteration loop at line 178            cost   177, benefit      275.0, efficiency        1.6
 
-Pass 3: speed optimization selection (cost limit 165):
-  ! Loop Unrolling: unroll iteration loop at line 178            cost   181, benefit      275.0, efficiency        1.5
+Pass 3: speed optimization selection (cost limit 169):
+  ! Loop Unrolling: unroll iteration loop at line 178            cost   173, benefit      275.0, efficiency        1.6
 
-Pass 4: speed optimization selection (cost limit 165):
-  ! Loop Unrolling: unroll iteration loop at line 178            cost   181, benefit      275.0, efficiency        1.5
+Pass 4: speed optimization selection (cost limit 169):
+  ! Loop Unrolling: unroll iteration loop at line 178            cost   173, benefit      275.0, efficiency        1.6
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-166 instructions):
  
@@ -4012,10 +4012,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1237 label __label327
   1238 label __label328
 -    * jump __label340 equal __fn25_output false
+-    * print __fn25_type
 + 1239 jump __label340 equal false false
-  1240 print __fn25_type
++ 1240 print UNIT_TYPE
   1241 print ": occupied: "
   1242 print __fn25_occupied
+  1243 print ", free: "
  
   1252 label __label341
   1253 set __tmp506 false
@@ -4025,7 +4027,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1256 jump __label344 equal __tmp506 false
   1257 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-43 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-42 instructions):
  
      3 remark "Do not modify anything below this line."
      4 set DOME_Y null
@@ -4325,16 +4327,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
   1158 sensor __tmp515 __fn26_unit @speed
   1159 op div __fn26_travel_time __tmp148 __tmp515
   1160 op greaterThanEq __tmp510 __fn26_travel_time 47
- 
-  1166 label __label331
-  1167 set __tmp518 2
-  1168 label __label332
--    * set __fn25_needed __tmp518
-  1169 label __label333
-  1170 sensor __tmp519 @unit @controlled
-  1171 op equal __tmp520 __tmp519 0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-16 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-15 instructions):
  
      2 set UNIT_TYPE @flare
      3 remark "Do not modify anything below this line."
@@ -4459,14 +4453,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    972 label __label284
    973 jump __label286 equal UNIT_P2 null
    974 ubind UNIT_P2
- 
-  1132 op land __tmp504 __tmp502 __tmp503
-  1133 jump __label323 equal __tmp504 false
-  1134 label __label325
--    * set __fn25_needed 0
-  1135 set __fn25_occupied 0
-  1136 set __fn25_free 0
-  1137 ubind UNIT_TYPE
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-7 instructions):
  
@@ -4590,26 +4576,26 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
   1113 label __label281
   1114 op sub __tmp500 @time start
  
-  1127 ubind UNIT_TYPE
-  1128 set __fn25_firstUnit @unit
-  1129 jump __label327 equal __fn25_firstUnit null
-+ 1130 set __tmp518 2
-  1131 label __label329
-  1132 set __fn26_unit @unit
-  1133 sensor __tmp515 __fn26_unit @speed
+  1128 ubind UNIT_TYPE
+  1129 set __fn25_firstUnit @unit
+  1130 jump __label327 equal __fn25_firstUnit null
++ 1131 set __tmp518 2
+  1132 label __label329
+  1133 set __fn26_unit @unit
+  1134 sensor __tmp515 __fn26_unit @speed
  
-  1135 op greaterThanEq __tmp510 __fn26_travel_time 47
-  1136 jump __label330 always
-  1137 label __label330
+  1136 op greaterThanEq __tmp510 __fn26_travel_time 47
+  1137 jump __label330 always
+  1138 label __label330
 -    * jump __label331 equal __tmp510 false
-+ 1138 jump __label332 equal __tmp510 false
-  1139 set __tmp518 4
-  1140 jump __label332 always
++ 1139 jump __label332 equal __tmp510 false
+  1140 set __tmp518 4
+  1141 jump __label332 always
 -    * label __label331
 -    * set __tmp518 2
-  1141 label __label332
-  1142 label __label333
-  1143 sensor __tmp519 @unit @controlled
+  1142 label __label332
+  1143 set __fn25_needed __tmp518
+  1144 label __label333
 
 Modifications by Loop Optimization: replicate condition at line 45 (+1 instructions):
  
@@ -4656,14 +4642,14 @@ Modifications by Loop Optimization: replicate condition at line 128 (+1 instruct
    492 print " === [gold]Supplying Overdrive Dome[] === "
    493 print "\n"
  
-  1194 label __label323
-  1195 label __label324
-  1196 label __label149
+  1196 label __label323
+  1197 label __label324
+  1198 label __label149
 -    * jump __label148 always
-+ 1197 sensor __tmp216 switch1 @enabled
-+ 1198 jump __label348 notEqual __tmp216 false
-  1199 label __label150
-  1200 end
++ 1199 sensor __tmp216 switch1 @enabled
++ 1200 jump __label348 notEqual __tmp216 false
+  1201 label __label150
+  1202 end
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 instructions):
  
@@ -4683,14 +4669,14 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 ins
    166 print ": occupied: "
    167 print __fn3_occupied
  
-  1167 label __label335
-  1168 label __label327
-  1169 label __label328
+  1169 label __label335
+  1170 label __label327
+  1171 label __label328
 -    * jump __label340 equal false false
-+ 1170 jump __label340 always
-  1171 print __fn25_type
-  1172 print ": occupied: "
-  1173 print __fn25_occupied
++ 1172 jump __label340 always
+  1173 print UNIT_TYPE
+  1174 print ": occupied: "
+  1175 print __fn25_occupied
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-18 instructions):
  
@@ -4806,25 +4792,25 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
   1089 set UNIT_P2 __tmp430
   1090 jump __label321 equal SUPPLY_P_FIRST false
  
-  1119 sensor __tmp515 __fn26_unit @speed
-  1120 op div __fn26_travel_time __tmp148 __tmp515
-  1121 op greaterThanEq __tmp510 __fn26_travel_time 47
+  1120 sensor __tmp515 __fn26_unit @speed
+  1121 op div __fn26_travel_time __tmp148 __tmp515
+  1122 op greaterThanEq __tmp510 __fn26_travel_time 47
 -    * jump __label330 always
-  1122 label __label330
-  1123 jump __label332 equal __tmp510 false
-  1124 set __tmp518 4
+  1123 label __label330
+  1124 jump __label332 equal __tmp510 false
+  1125 set __tmp518 4
 -    * jump __label332 always
-  1125 label __label332
-  1126 label __label333
-  1127 sensor __tmp519 @unit @controlled
+  1126 label __label332
+  1127 set __fn25_needed __tmp518
+  1128 label __label333
  
-  1165 label __label340
-  1166 label __label341
-  1167 set __tmp506 false
+  1167 label __label340
+  1168 label __label341
+  1169 set __tmp506 false
 -    * jump __label326 always
-  1168 label __label326
-  1169 jump __label344 equal __tmp506 false
-  1170 end
+  1170 label __label326
+  1171 jump __label344 equal __tmp506 false
+  1172 end
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -4846,7 +4832,7 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    128 label __label46
    129 jump __label48 equal __tmp42 false
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
  
     41 set __fn2_unit @unit
     42 sensor __tmp13 __fn2_unit @speed
@@ -4897,8 +4883,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    142 set __tmp38 true
    143 jump __label42 always
    144 label __label54
+ 
+  1108 op land __tmp504 __tmp502 __tmp503
+  1109 jump __label323 equal __tmp504 false
+  1110 label __label325
+-    * set __fn25_needed 0
+  1111 set __fn25_occupied 0
+  1112 set __fn25_free 0
+  1113 ubind UNIT_TYPE
+ 
+  1123 jump __label332 equal __tmp510 false
+  1124 set __tmp518 4
+  1125 label __label332
+-    * set __fn25_needed __tmp518
+  1126 label __label333
+  1127 sensor __tmp519 @unit @controlled
+  1128 op equal __tmp520 __tmp519 0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-6 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-8 instructions):
  
     36 ubind UNIT_TYPE
     37 set __fn1_firstUnit @unit
@@ -4911,20 +4913,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-6
 -    * op greaterThanEq __tmp8 0 47
     42 label __label16
     43 jump __label18 equal false false
-    44 set __tmp16 4
+-    * set __tmp16 4
+    44 label __label18
+    45 set __fn1_needed 2
+    46 label __label19
  
-   116 ubind __fn0_type
-   117 set __fn3_firstUnit @unit
-   118 jump __label43 equal __fn3_firstUnit null
+   115 ubind __fn0_type
+   116 set __fn3_firstUnit @unit
+   117 jump __label43 equal __fn3_firstUnit null
 -    * set __tmp50 2
-   119 label __label45
-   120 set __fn4_unit @unit
-   121 sensor __tmp47 __fn4_unit @speed
+   118 label __label45
+   119 set __fn4_unit @unit
+   120 sensor __tmp47 __fn4_unit @speed
 -    * set __fn4_travel_time 0
 -    * op greaterThanEq __tmp42 0 47
-   122 label __label46
-   123 jump __label48 equal false false
-   124 set __tmp50 4
+   121 label __label46
+   122 jump __label48 equal false false
+-    * set __tmp50 4
+   123 label __label48
+   124 set __fn3_needed 2
+   125 label __label49
 
 Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1:
  
@@ -4933,375 +4941,377 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1:
     42 label __label16
 -    * jump __label18 equal false false
 +   43 jump __label18 always
-    44 set __tmp16 4
-    45 label __label18
-    46 set __fn1_needed 2
- 
-   120 set __fn4_unit @unit
-   121 sensor __tmp47 __fn4_unit @speed
-   122 label __label46
--    * jump __label48 equal false false
-+  123 jump __label48 always
-   124 set __tmp50 4
-   125 label __label48
-   126 set __fn3_needed 2
-
-Modifications by Iterated phase, Jump Optimization, pass 3, iteration 1 (-1 instructions):
- 
-  1112 set __fn26_unit @unit
-  1113 sensor __tmp515 __fn26_unit @speed
-  1114 op div __fn26_travel_time __tmp148 __tmp515
--    * op greaterThanEq __tmp510 __fn26_travel_time 47
-  1115 label __label330
--    * jump __label332 equal __tmp510 false
-+ 1116 jump __label332 lessThan __fn26_travel_time 47
-  1117 set __tmp518 4
-  1118 label __label332
-  1119 label __label333
-
-Modifications by Final phase, Jump Straightening, iteration 1 (-17 instructions):
- 
-   207 set UNIT_P2 UNIT_S1
-   208 set UNIT_S1 UNIT_P1
-   209 set UNIT_P1 @unit
--    * jump __label71 equal UNIT_S2 null
--    * jump __label68 always
-+  210 jump __label68 notEqual UNIT_S2 null
-   211 label __label71
-   212 label __label72
-   213 label __label69
- 
-   230 sensor __tmp90 @unit @controller
-   231 op equal __tmp91 __tmp90 @this
-   232 op land __tmp92 __tmp89 __tmp91
--    * jump __label79 equal __tmp92 false
--    * jump __label76 always
-+  233 jump __label76 notEqual __tmp92 false
-   234 label __label79
-   235 label __label80
-   236 label __label77
- 
-   240 jump __label81 equal __fn7_firstUnit null
-   241 label __label83
-   242 sensor __tmp97 @unit @controlled
--    * jump __label86 notEqual __tmp97 0
--    * jump __label76 always
-+  243 jump __label76 equal __tmp97 0
-   244 label __label86
-   245 label __label87
-   246 ubind __tmp3
- 
-   268 sensor __tmp110 @unit @controller
-   269 op equal __tmp111 __tmp110 @this
-   270 op land __tmp112 __tmp109 __tmp111
--    * jump __label94 equal __tmp112 false
--    * jump __label91 always
-+  271 jump __label91 notEqual __tmp112 false
-   272 label __label94
-   273 label __label95
-   274 label __label92
- 
-   278 jump __label96 equal __fn9_firstUnit null
-   279 label __label98
-   280 sensor __tmp117 @unit @controlled
--    * jump __label101 notEqual __tmp117 0
--    * jump __label91 always
-+  281 jump __label91 equal __tmp117 0
-   282 label __label101
-   283 label __label102
-   284 ubind __tmp3
- 
-   345 sensor __tmp159 @unit @controller
-   346 op equal __tmp160 __tmp159 @this
-   347 op land __tmp161 __tmp158 __tmp160
--    * jump __label120 equal __tmp161 false
--    * jump __label117 always
-+  348 jump __label117 notEqual __tmp161 false
-   349 label __label120
-   350 label __label121
-   351 label __label118
- 
-   355 jump __label122 equal __fn12_firstUnit null
-   356 label __label124
-   357 sensor __tmp166 @unit @controlled
--    * jump __label127 notEqual __tmp166 0
--    * jump __label117 always
-+  358 jump __label117 equal __tmp166 0
-   359 label __label127
-   360 label __label128
-   361 ubind __tmp3
- 
-   383 sensor __tmp179 @unit @controller
-   384 op equal __tmp180 __tmp179 @this
-   385 op land __tmp181 __tmp178 __tmp180
--    * jump __label135 equal __tmp181 false
--    * jump __label132 always
-+  386 jump __label132 notEqual __tmp181 false
-   387 label __label135
-   388 label __label136
-   389 label __label133
- 
-   393 jump __label137 equal __fn14_firstUnit null
-   394 label __label139
-   395 sensor __tmp186 @unit @controlled
--    * jump __label142 notEqual __tmp186 0
--    * jump __label132 always
-+  396 jump __label132 equal __tmp186 0
-   397 label __label142
-   398 label __label143
-   399 ubind __tmp3
- 
-   489 sensor __tmp228 @unit @controller
-   490 op equal __tmp229 __tmp228 @this
-   491 op land __tmp230 __tmp227 __tmp229
--    * jump __label161 equal __tmp230 false
--    * jump __label158 always
-+  492 jump __label158 notEqual __tmp230 false
-   493 label __label161
-   494 label __label162
-   495 label __label159
- 
-   499 jump __label163 equal __fn17_firstUnit null
-   500 label __label165
-   501 sensor __tmp235 @unit @controlled
--    * jump __label168 notEqual __tmp235 0
--    * jump __label158 always
-+  502 jump __label158 equal __tmp235 0
-   503 label __label168
-   504 label __label169
-   505 ubind __tmp3
- 
-   630 sensor __tmp295 @unit @controller
-   631 op equal __tmp296 __tmp295 @this
-   632 op land __tmp297 __tmp294 __tmp296
--    * jump __label202 equal __tmp297 false
--    * jump __label199 always
-+  633 jump __label199 notEqual __tmp297 false
-   634 label __label202
-   635 label __label203
-   636 label __label200
- 
-   640 jump __label204 equal __fn19_firstUnit null
-   641 label __label206
-   642 sensor __tmp302 @unit @controlled
--    * jump __label209 notEqual __tmp302 0
--    * jump __label199 always
-+  643 jump __label199 equal __tmp302 0
-   644 label __label209
-   645 label __label210
-   646 ubind __tmp3
- 
-   793 sensor __tmp369 @unit @controller
-   794 op equal __tmp370 __tmp369 @this
-   795 op land __tmp371 __tmp368 __tmp370
--    * jump __label247 equal __tmp371 false
--    * jump __label244 always
-+  796 jump __label244 notEqual __tmp371 false
-   797 label __label247
-   798 label __label248
-   799 label __label245
- 
-   803 jump __label249 equal __fn22_firstUnit null
-   804 label __label251
-   805 sensor __tmp376 @unit @controlled
--    * jump __label254 notEqual __tmp376 0
--    * jump __label244 always
-+  806 jump __label244 equal __tmp376 0
-   807 label __label254
-   808 label __label255
-   809 ubind __tmp3
- 
-   934 sensor __tmp436 @unit @controller
-   935 op equal __tmp437 __tmp436 @this
-   936 op land __tmp438 __tmp435 __tmp437
--    * jump __label288 equal __tmp438 false
--    * jump __label285 always
-+  937 jump __label285 notEqual __tmp438 false
-   938 label __label288
-   939 label __label289
-   940 label __label286
- 
-   944 jump __label290 equal __fn24_firstUnit null
-   945 label __label292
-   946 sensor __tmp443 @unit @controlled
--    * jump __label295 notEqual __tmp443 0
--    * jump __label285 always
-+  947 jump __label285 equal __tmp443 0
-   948 label __label295
-   949 label __label296
-   950 ubind __tmp3
-
-Modifications by Final phase, Jump Threading, iteration 1:
- 
-    52 op or __tmp21 __tmp18 __tmp20
-    53 jump __label22 equal __tmp21 false
-    54 op add __fn1_free __fn1_free 1
--    * jump __label24 lessThan __fn1_free 2
-+   55 jump __label23 lessThan __fn1_free 2
-    56 set __tmp4 true
-    57 jump __label12 always
-    58 label __label24
- 
-   132 op or __tmp55 __tmp52 __tmp54
-   133 jump __label52 equal __tmp55 false
-   134 op add __fn3_free __fn3_free 1
--    * jump __label54 lessThan __fn3_free 2
-+  135 jump __label53 lessThan __fn3_free 2
-   136 set __tmp38 true
-   137 jump __label42 always
-   138 label __label54
- 
-   550 jump __label182 lessThan __tmp259 UNIT_CAPACITY
-   551 ucontrol approach DOME_X DOME_Y 6
-   552 set __fn16_state 3
--    * jump __label183 always
-+  553 jump __label181 always
-   554 label __label182
-   555 set __fn16_msg ", loading\n"
-   556 label __label183
- 
-   580 set __fn16_msg ", waiting\n"
-   581 label __label189
-   582 sensor __tmp274 @unit @totalItems
--    * jump __label190 greaterThan __tmp274 0
-+  583 jump __label187 greaterThan __tmp274 0
-   584 ucontrol approach CORE_X CORE_Y 6
-   585 set __fn16_state 2
-   586 label __label190
- 
-   691 jump __label223 lessThan __tmp326 UNIT_CAPACITY
-   692 ucontrol approach DOME_X DOME_Y 6
-   693 set __fn18_state 3
--    * jump __label224 always
-+  694 jump __label222 always
-   695 label __label223
-   696 set __fn18_msg ", loading\n"
-   697 label __label224
- 
-   721 set __fn18_msg ", waiting\n"
-   722 label __label230
-   723 sensor __tmp341 @unit @totalItems
--    * jump __label231 greaterThan __tmp341 0
-+  724 jump __label228 greaterThan __tmp341 0
-   725 ucontrol approach CORE_X CORE_Y 6
-   726 set __fn18_state 2
-   727 label __label231
- 
-   854 jump __label268 lessThan __tmp400 UNIT_CAPACITY
-   855 ucontrol approach DOME_X DOME_Y 6
-   856 set __fn21_state 3
--    * jump __label269 always
-+  857 jump __label267 always
-   858 label __label268
-   859 set __fn21_msg ", loading\n"
-   860 label __label269
- 
-   884 set __fn21_msg ", waiting\n"
-   885 label __label275
-   886 sensor __tmp415 @unit @totalItems
--    * jump __label276 greaterThan __tmp415 0
-+  887 jump __label273 greaterThan __tmp415 0
-   888 ucontrol approach CORE_X CORE_Y 6
-   889 set __fn21_state 2
-   890 label __label276
- 
-   995 jump __label309 lessThan __tmp467 UNIT_CAPACITY
-   996 ucontrol approach DOME_X DOME_Y 6
-   997 set __fn23_state 3
--    * jump __label310 always
-+  998 jump __label308 always
-   999 label __label309
-  1000 set __fn23_msg ", loading\n"
-  1001 label __label310
- 
-  1025 set __fn23_msg ", waiting\n"
-  1026 label __label316
-  1027 sensor __tmp482 @unit @totalItems
--    * jump __label317 greaterThan __tmp482 0
-+ 1028 jump __label314 greaterThan __tmp482 0
-  1029 ucontrol approach CORE_X CORE_Y 6
-  1030 set __fn23_state 2
-  1031 label __label317
- 
-  1089 set __fn25_free 0
-  1090 ubind UNIT_TYPE
-  1091 set __fn25_firstUnit @unit
--    * jump __label327 equal __fn25_firstUnit null
-+ 1092 jump __label340 equal __fn25_firstUnit null
-  1093 set __tmp518 2
-  1094 label __label329
-  1095 set __fn26_unit @unit
- 
-  1107 op or __tmp523 __tmp520 __tmp522
-  1108 jump __label336 equal __tmp523 false
-  1109 op add __fn25_free __fn25_free 1
--    * jump __label338 lessThan __fn25_free __tmp518
-+ 1110 jump __label337 lessThan __fn25_free __tmp518
-  1111 set __tmp506 true
-  1112 jump __label326 always
-  1113 label __label338
-
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-15 instructions):
- 
-    41 sensor __tmp13 __fn2_unit @speed
-    42 label __label16
-    43 jump __label18 always
--    * set __tmp16 4
     44 label __label18
     45 set __fn1_needed 2
     46 label __label19
  
-    54 jump __label23 lessThan __fn1_free 2
-    55 set __tmp4 true
-    56 jump __label12 always
+   119 set __fn4_unit @unit
+   120 sensor __tmp47 __fn4_unit @speed
+   121 label __label46
+-    * jump __label48 equal false false
++  122 jump __label48 always
+   123 label __label48
+   124 set __fn3_needed 2
+   125 label __label49
+
+Modifications by Iterated phase, Jump Optimization, pass 3, iteration 1 (-1 instructions):
+ 
+  1110 set __fn26_unit @unit
+  1111 sensor __tmp515 __fn26_unit @speed
+  1112 op div __fn26_travel_time __tmp148 __tmp515
+-    * op greaterThanEq __tmp510 __fn26_travel_time 47
+  1113 label __label330
+-    * jump __label332 equal __tmp510 false
++ 1114 jump __label332 lessThan __fn26_travel_time 47
+  1115 set __tmp518 4
+  1116 label __label332
+  1117 label __label333
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
+ 
+    40 set __fn2_unit @unit
+    41 sensor __tmp13 __fn2_unit @speed
+    42 label __label16
+-    * jump __label18 always
+    43 label __label18
+    44 set __fn1_needed 2
+    45 label __label19
+ 
+   118 set __fn4_unit @unit
+   119 sensor __tmp47 __fn4_unit @speed
+   120 label __label46
+-    * jump __label48 always
+   121 label __label48
+   122 set __fn3_needed 2
+   123 label __label49
+
+Modifications by Final phase, Jump Straightening, iteration 1 (-17 instructions):
+ 
+   203 set UNIT_P2 UNIT_S1
+   204 set UNIT_S1 UNIT_P1
+   205 set UNIT_P1 @unit
+-    * jump __label71 equal UNIT_S2 null
+-    * jump __label68 always
++  206 jump __label68 notEqual UNIT_S2 null
+   207 label __label71
+   208 label __label72
+   209 label __label69
+ 
+   226 sensor __tmp90 @unit @controller
+   227 op equal __tmp91 __tmp90 @this
+   228 op land __tmp92 __tmp89 __tmp91
+-    * jump __label79 equal __tmp92 false
+-    * jump __label76 always
++  229 jump __label76 notEqual __tmp92 false
+   230 label __label79
+   231 label __label80
+   232 label __label77
+ 
+   236 jump __label81 equal __fn7_firstUnit null
+   237 label __label83
+   238 sensor __tmp97 @unit @controlled
+-    * jump __label86 notEqual __tmp97 0
+-    * jump __label76 always
++  239 jump __label76 equal __tmp97 0
+   240 label __label86
+   241 label __label87
+   242 ubind __tmp3
+ 
+   264 sensor __tmp110 @unit @controller
+   265 op equal __tmp111 __tmp110 @this
+   266 op land __tmp112 __tmp109 __tmp111
+-    * jump __label94 equal __tmp112 false
+-    * jump __label91 always
++  267 jump __label91 notEqual __tmp112 false
+   268 label __label94
+   269 label __label95
+   270 label __label92
+ 
+   274 jump __label96 equal __fn9_firstUnit null
+   275 label __label98
+   276 sensor __tmp117 @unit @controlled
+-    * jump __label101 notEqual __tmp117 0
+-    * jump __label91 always
++  277 jump __label91 equal __tmp117 0
+   278 label __label101
+   279 label __label102
+   280 ubind __tmp3
+ 
+   341 sensor __tmp159 @unit @controller
+   342 op equal __tmp160 __tmp159 @this
+   343 op land __tmp161 __tmp158 __tmp160
+-    * jump __label120 equal __tmp161 false
+-    * jump __label117 always
++  344 jump __label117 notEqual __tmp161 false
+   345 label __label120
+   346 label __label121
+   347 label __label118
+ 
+   351 jump __label122 equal __fn12_firstUnit null
+   352 label __label124
+   353 sensor __tmp166 @unit @controlled
+-    * jump __label127 notEqual __tmp166 0
+-    * jump __label117 always
++  354 jump __label117 equal __tmp166 0
+   355 label __label127
+   356 label __label128
+   357 ubind __tmp3
+ 
+   379 sensor __tmp179 @unit @controller
+   380 op equal __tmp180 __tmp179 @this
+   381 op land __tmp181 __tmp178 __tmp180
+-    * jump __label135 equal __tmp181 false
+-    * jump __label132 always
++  382 jump __label132 notEqual __tmp181 false
+   383 label __label135
+   384 label __label136
+   385 label __label133
+ 
+   389 jump __label137 equal __fn14_firstUnit null
+   390 label __label139
+   391 sensor __tmp186 @unit @controlled
+-    * jump __label142 notEqual __tmp186 0
+-    * jump __label132 always
++  392 jump __label132 equal __tmp186 0
+   393 label __label142
+   394 label __label143
+   395 ubind __tmp3
+ 
+   485 sensor __tmp228 @unit @controller
+   486 op equal __tmp229 __tmp228 @this
+   487 op land __tmp230 __tmp227 __tmp229
+-    * jump __label161 equal __tmp230 false
+-    * jump __label158 always
++  488 jump __label158 notEqual __tmp230 false
+   489 label __label161
+   490 label __label162
+   491 label __label159
+ 
+   495 jump __label163 equal __fn17_firstUnit null
+   496 label __label165
+   497 sensor __tmp235 @unit @controlled
+-    * jump __label168 notEqual __tmp235 0
+-    * jump __label158 always
++  498 jump __label158 equal __tmp235 0
+   499 label __label168
+   500 label __label169
+   501 ubind __tmp3
+ 
+   626 sensor __tmp295 @unit @controller
+   627 op equal __tmp296 __tmp295 @this
+   628 op land __tmp297 __tmp294 __tmp296
+-    * jump __label202 equal __tmp297 false
+-    * jump __label199 always
++  629 jump __label199 notEqual __tmp297 false
+   630 label __label202
+   631 label __label203
+   632 label __label200
+ 
+   636 jump __label204 equal __fn19_firstUnit null
+   637 label __label206
+   638 sensor __tmp302 @unit @controlled
+-    * jump __label209 notEqual __tmp302 0
+-    * jump __label199 always
++  639 jump __label199 equal __tmp302 0
+   640 label __label209
+   641 label __label210
+   642 ubind __tmp3
+ 
+   789 sensor __tmp369 @unit @controller
+   790 op equal __tmp370 __tmp369 @this
+   791 op land __tmp371 __tmp368 __tmp370
+-    * jump __label247 equal __tmp371 false
+-    * jump __label244 always
++  792 jump __label244 notEqual __tmp371 false
+   793 label __label247
+   794 label __label248
+   795 label __label245
+ 
+   799 jump __label249 equal __fn22_firstUnit null
+   800 label __label251
+   801 sensor __tmp376 @unit @controlled
+-    * jump __label254 notEqual __tmp376 0
+-    * jump __label244 always
++  802 jump __label244 equal __tmp376 0
+   803 label __label254
+   804 label __label255
+   805 ubind __tmp3
+ 
+   930 sensor __tmp436 @unit @controller
+   931 op equal __tmp437 __tmp436 @this
+   932 op land __tmp438 __tmp435 __tmp437
+-    * jump __label288 equal __tmp438 false
+-    * jump __label285 always
++  933 jump __label285 notEqual __tmp438 false
+   934 label __label288
+   935 label __label289
+   936 label __label286
+ 
+   940 jump __label290 equal __fn24_firstUnit null
+   941 label __label292
+   942 sensor __tmp443 @unit @controlled
+-    * jump __label295 notEqual __tmp443 0
+-    * jump __label285 always
++  943 jump __label285 equal __tmp443 0
+   944 label __label295
+   945 label __label296
+   946 ubind __tmp3
+
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+    50 op or __tmp21 __tmp18 __tmp20
+    51 jump __label22 equal __tmp21 false
+    52 op add __fn1_free __fn1_free 1
+-    * jump __label24 lessThan __fn1_free 2
++   53 jump __label23 lessThan __fn1_free 2
+    54 set __tmp4 true
+    55 jump __label12 always
+    56 label __label24
+ 
+   128 op or __tmp55 __tmp52 __tmp54
+   129 jump __label52 equal __tmp55 false
+   130 op add __fn3_free __fn3_free 1
+-    * jump __label54 lessThan __fn3_free 2
++  131 jump __label53 lessThan __fn3_free 2
+   132 set __tmp38 true
+   133 jump __label42 always
+   134 label __label54
+ 
+   546 jump __label182 lessThan __tmp259 UNIT_CAPACITY
+   547 ucontrol approach DOME_X DOME_Y 6
+   548 set __fn16_state 3
+-    * jump __label183 always
++  549 jump __label181 always
+   550 label __label182
+   551 set __fn16_msg ", loading\n"
+   552 label __label183
+ 
+   576 set __fn16_msg ", waiting\n"
+   577 label __label189
+   578 sensor __tmp274 @unit @totalItems
+-    * jump __label190 greaterThan __tmp274 0
++  579 jump __label187 greaterThan __tmp274 0
+   580 ucontrol approach CORE_X CORE_Y 6
+   581 set __fn16_state 2
+   582 label __label190
+ 
+   687 jump __label223 lessThan __tmp326 UNIT_CAPACITY
+   688 ucontrol approach DOME_X DOME_Y 6
+   689 set __fn18_state 3
+-    * jump __label224 always
++  690 jump __label222 always
+   691 label __label223
+   692 set __fn18_msg ", loading\n"
+   693 label __label224
+ 
+   717 set __fn18_msg ", waiting\n"
+   718 label __label230
+   719 sensor __tmp341 @unit @totalItems
+-    * jump __label231 greaterThan __tmp341 0
++  720 jump __label228 greaterThan __tmp341 0
+   721 ucontrol approach CORE_X CORE_Y 6
+   722 set __fn18_state 2
+   723 label __label231
+ 
+   850 jump __label268 lessThan __tmp400 UNIT_CAPACITY
+   851 ucontrol approach DOME_X DOME_Y 6
+   852 set __fn21_state 3
+-    * jump __label269 always
++  853 jump __label267 always
+   854 label __label268
+   855 set __fn21_msg ", loading\n"
+   856 label __label269
+ 
+   880 set __fn21_msg ", waiting\n"
+   881 label __label275
+   882 sensor __tmp415 @unit @totalItems
+-    * jump __label276 greaterThan __tmp415 0
++  883 jump __label273 greaterThan __tmp415 0
+   884 ucontrol approach CORE_X CORE_Y 6
+   885 set __fn21_state 2
+   886 label __label276
+ 
+   991 jump __label309 lessThan __tmp467 UNIT_CAPACITY
+   992 ucontrol approach DOME_X DOME_Y 6
+   993 set __fn23_state 3
+-    * jump __label310 always
++  994 jump __label308 always
+   995 label __label309
+   996 set __fn23_msg ", loading\n"
+   997 label __label310
+ 
+  1021 set __fn23_msg ", waiting\n"
+  1022 label __label316
+  1023 sensor __tmp482 @unit @totalItems
+-    * jump __label317 greaterThan __tmp482 0
++ 1024 jump __label314 greaterThan __tmp482 0
+  1025 ucontrol approach CORE_X CORE_Y 6
+  1026 set __fn23_state 2
+  1027 label __label317
+ 
+  1085 set __fn25_free 0
+  1086 ubind UNIT_TYPE
+  1087 set __fn25_firstUnit @unit
+-    * jump __label327 equal __fn25_firstUnit null
++ 1088 jump __label340 equal __fn25_firstUnit null
+  1089 set __tmp518 2
+  1090 label __label329
+  1091 set __fn26_unit @unit
+ 
+  1103 op or __tmp523 __tmp520 __tmp522
+  1104 jump __label336 equal __tmp523 false
+  1105 op add __fn25_free __fn25_free 1
+-    * jump __label338 lessThan __fn25_free __tmp518
++ 1106 jump __label337 lessThan __fn25_free __tmp518
+  1107 set __tmp506 true
+  1108 jump __label326 always
+  1109 label __label338
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-13 instructions):
+ 
+    53 jump __label23 lessThan __fn1_free 2
+    54 set __tmp4 true
+    55 jump __label12 always
 -    * label __label24
 -    * label __label25
 -    * jump __label23 always
-    57 label __label22
-    58 op add __fn1_occupied __fn1_occupied 1
-    59 label __label23
+    56 label __label22
+    57 op add __fn1_occupied __fn1_occupied 1
+    58 label __label23
  
-   117 sensor __tmp47 __fn4_unit @speed
-   118 label __label46
-   119 jump __label48 always
--    * set __tmp50 4
-   120 label __label48
-   121 set __fn3_needed 2
-   122 label __label49
- 
-   130 jump __label53 lessThan __fn3_free 2
-   131 set __tmp38 true
-   132 jump __label42 always
+   128 jump __label53 lessThan __fn3_free 2
+   129 set __tmp38 true
+   130 jump __label42 always
 -    * label __label54
 -    * label __label55
 -    * jump __label53 always
-   133 label __label52
-   134 op add __fn3_occupied __fn3_occupied 1
-   135 label __label53
+   131 label __label52
+   132 op add __fn3_occupied __fn3_occupied 1
+   133 label __label53
  
-   173 printflush message1
-   174 label __label9
-   175 jump __label8 always
+   171 printflush message1
+   172 label __label9
+   173 jump __label8 always
 -    * label __label10
 -    * set __tmp3 null
-   176 label __label7
-   177 print "[gold]Binding units..."
-   178 printflush message1
+   174 label __label7
+   175 print "[gold]Binding units..."
+   176 printflush message1
  
-  1100 jump __label337 lessThan __fn25_free __tmp518
-  1101 set __tmp506 true
-  1102 jump __label326 always
+  1098 jump __label337 lessThan __fn25_free __tmp518
+  1099 set __tmp506 true
+  1100 jump __label326 always
 -    * label __label338
 -    * label __label339
 -    * jump __label337 always
-  1103 label __label336
-  1104 op add __fn25_occupied __fn25_occupied 1
-  1105 label __label337
+  1101 label __label336
+  1102 op add __fn25_occupied __fn25_occupied 1
+  1103 label __label337
  
-  1114 label __label327
-  1115 label __label328
-  1116 jump __label340 always
--    * print __fn25_type
+  1112 label __label327
+  1113 label __label328
+  1114 jump __label340 always
+-    * print UNIT_TYPE
 -    * print ": occupied: "
 -    * print __fn25_occupied
 -    * print ", free: "
@@ -5312,9 +5322,9 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-15 ins
 -    * label __label342
 -    * label __label343
 -    * print "\n"
-  1117 label __label340
-  1118 label __label341
-  1119 set __tmp506 false
+  1115 label __label340
+  1116 label __label341
+  1117 set __tmp506 false
 
 Modifications by Final phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -5323,16 +5333,16 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-2 instruction
     40 set __fn2_unit @unit
 -    * sensor __tmp13 __fn2_unit @speed
     41 label __label16
-    42 jump __label18 always
-    43 label __label18
+    42 label __label18
+    43 set __fn1_needed 2
  
-   113 jump __label43 equal __fn3_firstUnit null
-   114 label __label45
-   115 set __fn4_unit @unit
+   112 jump __label43 equal __fn3_firstUnit null
+   113 label __label45
+   114 set __fn4_unit @unit
 -    * sensor __tmp47 __fn4_unit @speed
-   116 label __label46
-   117 jump __label48 always
-   118 label __label48
+   115 label __label46
+   116 label __label48
+   117 set __fn3_needed 2
 
 Modifications by Final phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
@@ -5341,34 +5351,18 @@ Modifications by Final phase, Dead Code Elimination, iteration 2 (-2 instruction
     39 label __label15
 -    * set __fn2_unit @unit
     40 label __label16
-    41 jump __label18 always
-    42 label __label18
- 
-   111 set __fn3_firstUnit @unit
-   112 jump __label43 equal __fn3_firstUnit null
-   113 label __label45
--    * set __fn4_unit @unit
-   114 label __label46
-   115 jump __label48 always
-   116 label __label48
-
-Modifications by Final phase, Single Step Elimination, iteration 1 (-4 instructions):
- 
-    38 jump __label13 equal __fn1_firstUnit null
-    39 label __label15
-    40 label __label16
--    * jump __label18 always
     41 label __label18
     42 set __fn1_needed 2
-    43 label __label19
  
+   110 set __fn3_firstUnit @unit
    111 jump __label43 equal __fn3_firstUnit null
    112 label __label45
+-    * set __fn4_unit @unit
    113 label __label46
--    * jump __label48 always
    114 label __label48
    115 set __fn3_needed 2
-   116 label __label49
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructions):
  
   1107 label __label335
   1108 label __label327

@@ -4,6 +4,7 @@ import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.processor.AbstractProcessorTest;
 import info.teksol.emulator.processor.Processor;
+import info.teksol.emulator.processor.TextBuffer;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -19,7 +20,7 @@ import java.util.function.Consumer;
 
 public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
-    private static final boolean INTERCEPT = false;
+    private static final boolean INTERCEPT = true;
 
     private DebugPrinter debugPrinter = super.getDebugPrinter();
 
@@ -49,20 +50,20 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             this.compiler = compiler;
         }
 
-        private List<String> runProgram(List<LogicInstruction> program) {
+        private TextBuffer runProgram(List<LogicInstruction> program) {
             List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, program);
             Processor processor = new Processor(ExpectedMessages.none(), 1000);
             processor.addBlock("bank1", Memory.createMemoryBank());
             processor.addBlock("bank2", Memory.createMemoryBank());
             processor.run(instructions, MAX_STEPS);
-            return processor.getPrintOutput();
+            return processor.getTextBuffer();
         }
 
 
         @Override
         public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
             if (errant == null) {
-                List<String> actualOutput = runProgram(program);
+                TextBuffer actualOutput = runProgram(program);
                 if (evaluator.compare(false, actualOutput)) {
                     previous = new ProgramVersion(optimizer, title, program);
                 } else {

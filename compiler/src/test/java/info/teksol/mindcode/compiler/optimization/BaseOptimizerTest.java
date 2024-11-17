@@ -14,6 +14,7 @@ import info.teksol.mindcode.compiler.optimization.BaseOptimizerTest.DummyOptimiz
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.Opcode;
+import info.teksol.util.TraceFile;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
     private final LogicInstruction ix2 = ip.createInstruction(testContext, Opcode.SET, c, P0);
     private final LogicInstruction ix3 = ip.createInstruction(testContext, Opcode.SET, d, P0);
     private final List<LogicInstruction> instructions = new ArrayList<>(List.of(ix0, ix1, ix2));
-    private final OptimizationContext oc = new OptimizationContext(ip, instructions,
-            CallGraph.createEmpty(), AstContext.createRootNode(profile));
+    private final OptimizationContext oc = new OptimizationContext(TraceFile.NULL_TRACE, profile,
+            ip, instructions, CallGraph.createEmpty(), AstContext.createRootNode(profile));
     private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test

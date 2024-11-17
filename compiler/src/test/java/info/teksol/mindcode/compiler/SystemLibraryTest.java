@@ -35,6 +35,7 @@ public class SystemLibraryTest {
         return new CompilerProfile(false, OptimizationLevel.ADVANCED)
                 .setProcessorVersion(ProcessorVersion.MAX)
                 .setFinalCodeOutput(FinalCodeOutput.PLAIN)
+                .setOptimizationPasses(25)
                 .setPrintStackTrace(true)
                 .setRun(true);
     }

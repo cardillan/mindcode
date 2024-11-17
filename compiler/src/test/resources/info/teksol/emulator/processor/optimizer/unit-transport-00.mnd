@@ -11,58 +11,59 @@
 // Compile-time constant. Set to false to speed up processing by not showing individual units distance from target.
 const SHOW_UNIT_DISTANCE = true;
 
-UNIT                    = @mega;    // Which unit to use
-LINK_ID                 = 0;        // Remote vault ID (1-99); if nonzero, items are moved to/from this vault instead of core
-AUTO_ALLOCATION         = true;     // Start in auto allocation mode?
-MAX_UNITS               = 24;       // Max units to use, in both manual and auto allocation modes
-HOUSEKEEPING            = true;     // Leave discarded units with nonzero flag for housekeeping processor to pick them up
+param UNIT                    = @mega;  // Which unit to use
+param LINK_ID                 = 0;      // Remote vault ID (1-99); if nonzero, items are moved to/from this vault instead of core
+param AUTO_ALLOCATION         = true;   // Start in auto allocation mode?
+param MAX_UNITS               = 24;     // Max units to use, in both manual and auto allocation modes
+param HOUSEKEEPING            = true;   // Leave discarded units with nonzero flag for housekeeping processor to pick them up
 
 // Local and remote limits can be used to reduce the amount of space used by this processor in the container/vault/core.
 // If the value is lower than 100, the capacity will be used up to that percent and the rest will be ignored.
-LOCAL_LIMIT             = 100;      // How much of local container capacity to use, in percents (20-100).
-REMOTE_LIMIT            = 100;      // How much of local container capacity to use, in percents (20-100).
+param LOCAL_LIMIT             = 100;    // How much of local container capacity to use, in percents (20-100).
+param REMOTE_LIMIT            = 100;    // How much of local container capacity to use, in percents (20-100).
 
-OVERALLOCATION_LOW      = 0.25;     // Allocate at least this much more units than needed
-OVERALLOCATION_HIGH     = 0.75;     // Allocate at most this much more units than needed
+param OVERALLOCATION_LOW      = 0.25;   // Allocate at least this much more units than needed
+param OVERALLOCATION_HIGH     = 0.75;   // Allocate at most this much more units than needed
 
-STABILIZATION           = false;    // Use average of last three flow rate values for better unit auto allocation stability
+param STABILIZATION           = false;  // Use average of last three flow rate values for better unit auto allocation stability
 
 CONTAINER_INDEX = CORE_X = CORE_Y = ITEM = ITEM_ICON = STATE_LIMIT = null;
 
 //  SETTINGS LOAD/SAVE
 /////////////////////////////////////////////////////////
 MESSAGE = "";
-if cell1 != null then
-    if cell1[0] == 2 then
-        // Restore
-        LINK_ID = cell1[1];
-        AUTO_ALLOCATION = cell1[2];
-        MAX_UNITS = cell1[3];
-        HOUSEKEEPING = cell1[4];
-        LOCAL_LIMIT = cell1[5];
-        REMOTE_LIMIT = cell1[6];
-        OVERALLOCATION_LOW = cell1[7];
-        OVERALLOCATION_HIGH = cell1[8];
-        STABILIZATION = cell1[9];
-        MESSAGE = "[green]Settings restored from memory.[]\n";
-    else
-        // Save
-        cell1[0] = 2;
-        cell1[1] = LINK_ID;
-        cell1[2] = AUTO_ALLOCATION;
-        cell1[3] = MAX_UNITS;
-        cell1[4] = HOUSEKEEPING;
-        cell1[5] = LOCAL_LIMIT;
-        cell1[6] = REMOTE_LIMIT;
-        cell1[7] = OVERALLOCATION_LOW;
-        cell1[8] = OVERALLOCATION_HIGH;
-        cell1[9] = STABILIZATION;
-        MESSAGE = "[green]Settings saved to memory.[]\n";
-    end;
-end;
+//if cell1 != null then
+//    if cell1[0] == 2 then
+//        // Restore
+//        LINK_ID = cell1[1];
+//        AUTO_ALLOCATION = cell1[2];
+//        MAX_UNITS = cell1[3];
+//        HOUSEKEEPING = cell1[4];
+//        EFF_LOCAL_LIMIT = cell1[5];
+//        EFF_REMOTE_LIMIT = cell1[6];
+//        OVERALLOCATION_LOW = cell1[7];
+//        OVERALLOCATION_HIGH = cell1[8];
+//        STABILIZATION = cell1[9];
+//        MESSAGE = "[green]Settings restored from memory.[]\n";
+//    else
+//        // Save
+//        cell1[0] = 2;
+//        cell1[1] = LINK_ID;
+//        cell1[2] = AUTO_ALLOCATION;
+//        cell1[3] = MAX_UNITS;
+//        cell1[4] = HOUSEKEEPING;
+//        cell1[5] = EFF_LOCAL_LIMIT;
+//        cell1[6] = EFF_REMOTE_LIMIT;
+//        cell1[7] = OVERALLOCATION_LOW;
+//        cell1[8] = OVERALLOCATION_HIGH;
+//        cell1[9] = STABILIZATION;
+//        MESSAGE = "[green]Settings saved to memory.[]\n";
+//    end;
+//end;
 
-LOCAL_LIMIT = max(LOCAL_LIMIT, 20);
-REMOTE_LIMIT = max(REMOTE_LIMIT, 20);
+EFF_LOCAL_LIMIT = max(LOCAL_LIMIT, 20);
+EFF_REMOTE_LIMIT = max(REMOTE_LIMIT, 20);
+EFF_AUTO_ALLOCATION = AUTO_ALLOCATION;
 
 //  BASIC INITIALIZATION
 /////////////////////////////////////////////////////////
@@ -217,8 +218,8 @@ if sorter_type == @sorter then
     DST = CONTAINER;
     src_capacity = SRC.@itemCapacity;
     dst_capacity = DST.@itemCapacity;
-    LOAD_LEVEL = (src_capacity * (100 - REMOTE_LIMIT)) \ 100;
-    DROP_LEVEL = (dst_capacity * LOCAL_LIMIT) \ 100;
+    LOAD_LEVEL = (src_capacity * (100 - EFF_REMOTE_LIMIT)) \ 100;
+    DROP_LEVEL = (dst_capacity * EFF_LOCAL_LIMIT) \ 100;
     LOCAL_MARGIN = DROP_LEVEL;
     REMOTE_MARGIN = LOAD_LEVEL;
     LOW_LEVEL_TRIGGER = dst_capacity * (1 - TRIGGER_LEVEL);
@@ -234,9 +235,9 @@ else
     DST = CORE;
     src_capacity = SRC.@itemCapacity;
     dst_capacity = DST.@itemCapacity;
-    LOAD_LEVEL = (src_capacity * (100 - LOCAL_LIMIT)) \ 100;
+    LOAD_LEVEL = (src_capacity * (100 - EFF_LOCAL_LIMIT)) \ 100;
     // Add UNIT_CAPACITY to drop level if the taget is core to allow dropping to full core
-    DROP_LEVEL = (dst_capacity * REMOTE_LIMIT) \ 100 + ((LINK_ID == 0) * UNIT_CAPACITY);
+    DROP_LEVEL = (dst_capacity * EFF_REMOTE_LIMIT) \ 100 + ((LINK_ID == 0) * UNIT_CAPACITY);
     LOCAL_MARGIN = LOAD_LEVEL;
     REMOTE_MARGIN = DROP_LEVEL;
     HIGH_LEVEL_TRIGGER = src_capacity * TRIGGER_LEVEL;
@@ -300,7 +301,7 @@ last_level = loop_time_ms = max_level = min_level = remote_wait_time
     = total_flow_1 = total_flow_2 = transferred = transfers = wait_time = 0;
 
 
-if AUTO_ALLOCATION then
+if EFF_AUTO_ALLOCATION then
     CORR_SIGN = "[]([green]+";
     corr_per_min = 0;
     SPEED_UNIT_TXT = "[])/min";
@@ -326,7 +327,7 @@ while true do
     // Manipulate target
     if switch1.@enabled then
         switch1.enabled = false;
-        AUTO_ALLOCATION = false;
+        EFF_AUTO_ALLOCATION = false;
         AUTO_ALLOCATION_TXT = "";
         TARGET = min(TARGET + 1, MAX_UNITS);
         CORR_SIGN = "[]";
@@ -338,7 +339,7 @@ while true do
     if switch2.@enabled then
         switch2.enabled = false;
         if TARGET < 1 then
-            AUTO_ALLOCATION = true;
+            EFF_AUTO_ALLOCATION = true;
             TARGET = 1;
             DEC_LIMIT = 0;           // No change for next iteration
             INC_LIMIT = 0;
@@ -346,7 +347,7 @@ while true do
             corr_per_min = 0;
             SPEED_UNIT_TXT = "[])/min";
         else
-            AUTO_ALLOCATION = false;
+            EFF_AUTO_ALLOCATION = false;
             TARGET = max(TARGET - 1, 0);
             CORR_SIGN = "[]";
             corr_per_min = "";
@@ -410,7 +411,7 @@ while true do
             transfers = 0;
 
             // Auto allocation uses computed transfer speed
-            if AUTO_ALLOCATION then
+            if EFF_AUTO_ALLOCATION then
                 AUTO_ALLOCATION_TXT = "\n=== [gold]Unit auto allocation[] ===";
                 // Turnaround time in seconds
                 // Travel time (in ms) plus extra loop time (with ticks to ms converstion)
@@ -499,19 +500,19 @@ while true do
             end;
         end;
         print($"\n[]Local items: [gold]$container_items");
-        if LOCAL_LIMIT < 100 then
+        if EFF_LOCAL_LIMIT < 100 then
             print($"[] (limit [orange]$LOCAL_MARGIN[])");
         end;
         if SHOW_REMOTE_LEVEL then
             remote_level = CORE.sensor(ITEM);
             print($"\n[]Remote items: [gold]$remote_level");
-            if REMOTE_LIMIT < 100 then
+            if EFF_REMOTE_LIMIT < 100 then
                 print($"[] (limit [orange]$REMOTE_MARGIN[])");
             end;
         end;
         if TARGET > 0 then
             print($"\n[]Speed: [green]$items_per_min$CORR_SIGN$corr_per_min$SPEED_UNIT_TXT");
-            if AUTO_ALLOCATION then
+            if EFF_AUTO_ALLOCATION then
                 print($"\nUnit throughput: [green]$items_per_min_unit[]/min");
                 print($"\nMin/last round: [green]$turnaround_str[]/[green]$elapsed_str[] s");
             else

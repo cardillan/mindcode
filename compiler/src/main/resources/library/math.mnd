@@ -164,6 +164,10 @@ end;
  * @footprint Twenty arguments in total:     *20
  */
 inline def median(_x...)
+    _median(_x);
+end;
+
+inline def _median(_x...)
     _bestDif = 1e10;
     _best = null;
     _count = 1;
@@ -193,7 +197,7 @@ inline def _isMedian(out _dif, _n, _x...)
         end;
     end;
     _dif = abs(_gt - _lt);
-    if _gt + _lt >= length(x) - 1 then
+    if _gt + _lt >= length(_x) - 1 then
         _gt == _lt;
     else
         false;

@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
+import static info.teksol.mindcode.compiler.optimization.OptimizationCoordinator.TRACE;
 import static info.teksol.util.CollectionUtils.in;
 import static info.teksol.util.CollectionUtils.resultIn;
 
@@ -103,7 +104,12 @@ class DataFlowOptimizer extends BaseOptimizer {
         // Keep defining instructions for orphaned, uninitialized variables.
         orphans.entrySet().stream()
                 .filter(e -> uninitialized.contains(e.getKey()))
-                .forEachOrdered(e -> keep.addAll(e.getValue()));
+                .forEachOrdered(e -> {
+                    if (TRACE) {
+                        e.getValue().forEach(ix -> trace("--> Keeping instruction: " + ix.toMlog() + " (orphaned variable)"));
+                    }
+                    keep.addAll(e.getValue());
+                });
 
         instructionStream()
                 .filter(ix -> replacements.containsKey(ix) || getVariableStates(ix) != null)
@@ -113,7 +119,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             // TODO create mechanism to identify instructions without side effects
             //      Will be used by the DeadCodeEliminator too!
             switch (instruction.getOpcode()) {
-                case SET, OP, PACKCOLOR, READ -> {
+                case SET, SETADDR, OP, PACKCOLOR, READ -> {
                     if (!keep.contains(instruction) || useless.contains(instruction)) {
                         int index = instructionIndex(instruction);
                         if (index >= 0) {
@@ -272,7 +278,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                         .filter(LogicVariable::isMainVariable)
                         .filter(variable -> !optimizationContext.isUnrolledVariable(variable))
                         .distinct()
-                        .forEachOrdered(v -> finalVariableStates.valueRead(v, null, false));
+                        .forEachOrdered(v -> finalVariableStates.valueRead(v, null, false, true));
             }
         }
 
@@ -282,7 +288,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             // Changes to global variables outside of function are needed
             optimizationContext.getFunctionWrites(context.function()).stream()
                     .filter(LogicVariable::isGlobalVariable)
-                    .forEach(v -> finalVariableStates.valueRead(v, null, false));
+                    .forEach(v -> finalVariableStates.valueRead(v, null, false, true));
         }
 
 
@@ -309,7 +315,9 @@ class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processContext(AstContext localContext, AstContext context, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
-        trace(() -> ">>> Entering context " + context.id + ": " + context.hierarchy());
+        trace(() -> ">>> Entering context " + context.id +
+                    " at #" + optimizationContext.firstInstructionIndex(context) +
+                    ": " + context.hierarchy());
         final VariableStates result;
         if (!context.matches(BASIC)) {
             result = processDefaultContext(localContext, context, variableStates, modifyInstructions);
@@ -321,7 +329,9 @@ class DataFlowOptimizer extends BaseOptimizer {
                 default     -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
             };
         }
-        trace(() -> "<<< Exiting  context " + context.id + ": " + context.hierarchy());
+        trace(() -> "<<< Exiting  context " + context.id +
+                    " at #" + optimizationContext.lastInstructionIndex(context) +
+                    ": " + context.hierarchy());
         return result;
     }
 
@@ -493,59 +503,58 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
 
         // We got a degenerate If context - the condition might have been removed by constant expression optimization.
+        // All child contexts have been processed at this point
         if (condition == null) {
             return variableStates;
         }
 
         // Data flow optimization might have fixed the value of the condition. It has two possible outcomes: either
         // the condition was false, in which case the jump in the condition is turned to unconditional jump, or the
-        // condition was true, in which case the jump was entirely removed. We want to only process the body
+        // condition was true, in which case the jump was entirely removed. We want to reachably process the body
         // corresponding to the actual value of the condition: first one if the condition was true, and second one
         // if the condition was false.
-        boolean[] process = {true, true};
-        boolean avoidMerge;
+        boolean[] reachable = {true, true};
 
+        OptimizationContext.LogicList condInstructions = contextInstructions(condition);
+
+        // If there are more jumps in condition context, we don't understand it and can't evaluate it
+        // Jump normalization will solve it for us (maybe)
         // TODO Will need better condition processing after implementing short-circuit boolean eval
         //      Maybe could just process the contexts based on unreachable code information like the case expression.
-        LogicBoolean jumpResult = (lastInstruction(condition) instanceof JumpInstruction jump)
-                ? evaluateJumpInstruction(jump)
-                : LogicBoolean.FALSE;
+        long jumps = condInstructions.stream().filter(JumpInstruction.class::isInstance).count();
+        LogicBoolean jumpResult = jumps == 0 ? LogicBoolean.FALSE :
+                jumps == 1 && (condInstructions.getFromEnd(0) instanceof JumpInstruction jump)
+                        ? evaluateJumpInstruction(jump)     // Evaluate the jump
+                        : null;                             // We don't know
 
-        if (jumpResult != LogicBoolean.FALSE) {
-            // Process first body only if jump evaluation is unknown to us (we know it isn't false)
-            process[0] = jumpResult != LogicBoolean.TRUE;
-
-            // If the jump is unconditional, the control flow is linear - do not merge branches
-            avoidMerge = jumpResult == LogicBoolean.TRUE;
-        } else {
-            // The jump doesn't exist or is always false: don't process second body
-            process[1] = false;
-
-            // The control flow is linear - do not merge branches
-            avoidMerge = true;
+        if (jumpResult != null) {
+            reachable[0] = jumpResult == LogicBoolean.FALSE;    // No jump, process first only
+            reachable[1] = jumpResult == LogicBoolean.TRUE;     // Jump, process second only
         }
 
-        BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
+        BranchedVariableStates branchedStates = new BranchedVariableStates(localContext, variableStates);
         boolean wasBody = false;
-        int body = 0;
+        int bodies = 0;
 
         while (children.hasNext()) {
             AstContext child = children.next();
             switch (child.subcontextType()) {
                 case BODY -> {
                     if (wasBody) {
+                        // Two body contexts next to each other aren't allowed
                         throw new MindcodeInternalError("Expected FLOW_CONTROL, found BODY subcontext in IF context %s", localContext);
                     }
-                    if (process[body]) {
-                        branchedStates.newBranch();
-                        branchedStates.processContext(localContext, child, modifyInstructions);
-                    } else {
-                        skipContext(child);
-                    }
+                    branchedStates.newBranch(localContext, "[entering if body]", reachable[bodies]);
+                    branchedStates.processContext(localContext, child, modifyInstructions);
                     wasBody = true;
-                    body++;
+                    bodies++;
                 }
                 case FLOW_CONTROL -> {
+                    if (!wasBody) {
+                        // There wasn't a body context before this flow control context. This means the flow context
+                        // was preceded by a body that has been since removed, and is unreachable.
+                        branchedStates.newBranch(localContext, "[entering flow control]", false);
+                    }
                     branchedStates.processContext(localContext, child, modifyInstructions);
                     wasBody = false;
                 }
@@ -553,16 +562,22 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        if (avoidMerge) {
-            return branchedStates.getCurrentStates();
+        if (bodies > 1) {
+            // There's more than one body: since this is an if statement, both branches have been processed
+            // Needs the merged result
+            return branchedStates.getFinalStates(localContext);
+        } else if (jumpResult == LogicBoolean.FALSE) {
+            // There's only one body, and we know it was processed (jumpResult is false, meaning there was no jump
+            // around the body): we need the current state. However, there might have been a flow control context
+            // before the body, which would have been processed as unreachable. It can be safely merged with the
+            // current context --> we can retrieve the final state.
+            return branchedStates.getFinalStates(localContext);
+        } else {
+            // There's only one body. Either we don't know it was executed, or we know it wasn't executed.
+            // In both cases we need a default else branch to merge it with.
+            branchedStates.newBranch(localContext, "[default else branch]", true);
+            return branchedStates.getFinalStates(localContext);
         }
-
-        // There was only one body, no else branch. Create a new branch to represent the missing else branch.
-        if (body == 1) {
-            branchedStates.newBranch();
-        }
-
-        return branchedStates.getFinalStates();
     }
 
     /**
@@ -582,7 +597,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
 
         if (localContext.findSubcontext(CONDITION) == null) {
-            BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
+            BranchedVariableStates branchedStates = new BranchedVariableStates(localContext, variableStates);
             boolean hasElse = false;
 
             // The context has been optimized by CaseSwitcher
@@ -591,7 +606,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 switch (child.subcontextType()) {
                     case BODY -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
-                        branchedStates.newBranch();
+                        branchedStates.newBranch(localContext, "[case when]", true);
                     }
                     case ELSE -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
@@ -606,10 +621,10 @@ class DataFlowOptimizer extends BaseOptimizer {
 
             // If there's no else branch, start a new, empty branch representing the missing else.
             if (!hasElse) {
-                branchedStates.newBranch();
+                branchedStates.newBranch(localContext, "[case default else]", true);
             }
 
-            return branchedStates.getFinalStates();
+            return branchedStates.getFinalStates(localContext);
         } else {
             CasedVariableStates casedStates = new CasedVariableStates(variableStates);
             while (iterator.hasNext()) {
@@ -663,7 +678,11 @@ class DataFlowOptimizer extends BaseOptimizer {
                 variableStates.print("  after processing instruction");
             } else {
                 AstContext childContext = context.findDirectChild(instruction.getAstContext());
+                int position = iterator.currentIndex();
                 variableStates = processContext(context, childContext, variableStates, modifyInstructions);
+                if (iterator.currentIndex() == position) {
+                    throw new MindcodeInternalError("No progress on context.");
+                }
             }
         }
 
@@ -710,11 +729,11 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         if (TRACE) {
             counter++;
-            System.out.println("*" + counter + " Processing instruction #" + instructionIndex(instruction) +
+            trace("*" + counter + " Processing instruction #" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
             if (counter == -1) {
-                System.out.println("Breakpoint");
+                trace("Breakpoint");
             }
         }
 
@@ -724,12 +743,6 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (instruction instanceof PopInstruction ix)       return variableStates.popVariable(ix.getVariable());
         if (instruction instanceof LabeledInstruction ix)   return resolveLabel(variableStates, ix.getLabel());
         if (instruction instanceof EndInstruction ix)       return variableStates.setDead(true);
-
-        if (reachable) {
-            variableStates.setReachable();
-        } else if (TRACE) {
-            System.out.println("UNREACHABLE");
-        }
 
         if (modifyInstructions) {
             putVariableStates(instruction, variableStates.isolatedCopy());
@@ -746,7 +759,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         Map<LogicVariable, LogicValue> valueReplacements = new HashMap<>();
         for (LogicVariable variable : inputs) {
-            LogicValue constantValue = variableStates.valueRead(variable, instruction);
+            LogicValue constantValue = variableStates.valueRead(variable, instruction, reachable);
             if (canEliminate(instruction, variable)) {
                 if (constantValue != null) {
                     valueReplacements.put(variable, constantValue);
@@ -762,8 +775,8 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (modifyInstructions && !valueReplacements.isEmpty()) {
             replacements.put(instruction, valueReplacements);
             if (TRACE) {
-                System.out.println("    Detected the following possible value replacements for current instruction:");
-                valueReplacements.forEach((k, v) -> System.out.println("       " + k.toMlog() + " --> " + v.toMlog()));
+                trace("    Detected the following possible value replacements for current instruction:");
+                valueReplacements.forEach((k, v) -> trace("       " + k.toMlog() + " --> " + v.toMlog()));
             }
         }
 
@@ -809,20 +822,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         return null;
     }
 
-    /**
-     * Skip (move to an end of) the given context. Does nothing if the iterator is already past the context.
-     *
-     * @param context context to skip
-     */
-    private void skipContext(AstContext context) {
-        while (iterator.hasNext() && iterator.peek(0).belongsTo(context)) {
-            iterator.next();
-        }
-    }
-
     public void addUninitialized(LogicVariable variable) {
         if (variable.getType().isCompiler()) {
-            throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
+            if (OptimizationCoordinator.IGNORE_UNINITIALIZED) {
+                instructionProcessor.addMessage(OptimizerMessage.warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog()));
+            } else {
+                throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
+            }
         }
         uninitialized.add(variable);
     }
@@ -904,19 +910,25 @@ class DataFlowOptimizer extends BaseOptimizer {
         /** Final states of all branches merged together. */
         private VariableStates merged;
 
-        private BranchedVariableStates(VariableStates initial) {
+        private boolean wasReachable;
+
+        private BranchedVariableStates(AstContext localContext, VariableStates initial) {
             this.initial = initial;
+            trace(() -> "Creating branch states for local context #" + localContext.id);
         }
 
         /**
          * Called when a body of a new branch is encountered. Closes the previous branch (if any) by merging it into
          * the final states, and then creates variable states for the new branch by copying the initial state.
+         *
+         * @param reachable true if the context is reachable, false otherwise
          */
-        private void newBranch() {
+        private void newBranch(AstContext localContext, String caller, boolean reachable) {
+            wasReachable |= reachable;
             if (current != null) {
-                merged = merged == null ? current : merged.merge(current, true, " old branch before starting new branch");
+                merged = merged == null ? current : merged.merge(current, true, "old branch before starting new branch");
             }
-            current = initial.copy("new conditional branch");
+            current = initial.copy("local context #" + localContext.id + ": new conditional branch " + caller + (reachable ? "" : " (unreachable)"), reachable);
         }
 
         /**
@@ -936,10 +948,17 @@ class DataFlowOptimizer extends BaseOptimizer {
          *
          * @return final variable states of the branched expression
          */
-        private VariableStates getFinalStates() {
-            trace(() -> "Getting final states");
-            newBranch();        // Force merging the previous branch
-            return merged == null ? initial : merged;
+        private VariableStates getFinalStates(AstContext localContext) {
+            trace(() -> "Getting final states (local context #" + localContext.id + ")");
+            if (current == null) {
+                throw new MindcodeInternalError("No current branch");
+            }
+            if (wasReachable) {
+                return merged == null ? current : merged.merge(current, true, " obtaining final states");
+            } else {
+                // None of the branches was actually reachable. We use the initial context
+                return initial;
+            }
         }
 
         /**

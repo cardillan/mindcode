@@ -478,6 +478,25 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "result")
         );
     }
+
+    @Test
+    void compilesProperComparison2() {
+        assertCompilesTo("""
+                        inline def eval(b)
+                            b ? "T" : "F";
+                        end;
+                        
+                        inline def compare(a, b)
+                            print(eval(a > b), eval(a < b));
+                        end;
+                        
+                        param A = 0;
+                        compare(A, A);
+                        """,
+                createInstruction(PRINT, q("FF"))
+        );
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Case statements">
@@ -795,6 +814,26 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(OP, "rand", "x", "10"),
                 createInstruction(OP, "add", var(2), "x", "1"),
                 createInstruction(PRINT, var(2)),
+                createInstruction(JUMP, var(1000), "always")
+        );
+    }
+
+
+    @Test
+    void handlesIfsInLoops() {
+        assertCompilesTo("""
+                        a = 1;
+                        b = rand(10);
+                        
+                        while true do
+                            c = a ? 2 * b : 1;
+                            b = b + c;
+                        end;
+                        """,
+                createInstruction(OP, "rand", "b", "10"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "mul", var(1), "2", "b"),
+                createInstruction(OP, "add", "b", "b", var(1)),
                 createInstruction(JUMP, var(1000), "always")
         );
     }

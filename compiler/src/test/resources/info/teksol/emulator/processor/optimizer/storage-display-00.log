@@ -6,7 +6,7 @@
      9 instructions eliminated by Jump Optimization (4 iterations).
     28 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
-   170 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
+   198 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
      6 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
    458 instructions added by Loop Unrolling (7 iterations).
@@ -15,7 +15,7 @@
      1 case expressions converted to switched jumps Case Switching.
     18 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
      2 instructions updated by JumpThreading.
-    49 instructions eliminated by Unreachable Code Elimination.
+    21 instructions eliminated by Unreachable Code Elimination.
      5 instructions eliminated by Print Merging.
    609 instructions after optimizations.
 
@@ -32,9 +32,9 @@ Pass 1: speed optimization selection (cost limit 677):
 
 Pass 1: speed optimization selection (cost limit 330):
     Loop Optimization: replicate condition at line 56            cost     7, benefit       25.0, efficiency        3.6
-  * Loop Unrolling: unroll iteration loop at line 69             cost    97, benefit     1175.0, efficiency       12.1 (+16 instructions)
+  * Loop Unrolling: unroll iteration loop at line 69             cost    97, benefit     1175.0, efficiency       12.1 (-12 instructions)
 
-Pass 1: speed optimization selection (cost limit 314):
+Pass 1: speed optimization selection (cost limit 342):
   * Loop Optimization: replicate condition at line 56            cost     7, benefit       25.0, efficiency        3.6 (+7 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
@@ -3570,7 +3570,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
    324 label __label419
    325 label __label420
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-85 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-113 instructions):
  
     80 sensor CAPACITY CONTAINER @itemCapacity
     81 op div LIMIT CAPACITY 5
@@ -3593,218 +3593,218 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
 -    * op add index 0 1
 -    * op sub y 152 20
    104 jump __label329 notEqual 1 8
-   105 set y 152
-   106 set x 93
- 
-   108 label __label329
-   109 label __label330
-   110 label __label331
+-    * set y 152
+-    * set x 93
+   105 draw color 255 255 255 255
+   106 label __label329
+   107 label __label330
+   108 label __label331
 -    * set item @copper
-   111 label __label334
+   109 label __label334
 -    * op add __tmp26 7 8
 -    * op add __tmp29 132 7
-   112 draw image 15 139 @copper 16 0
+   110 draw image 15 139 @copper 16 0
 -    * op add index 1 1
 -    * op sub y 132 20
-   113 jump __label335 notEqual 2 8
-   114 set y 152
-   115 set x 93
- 
-   117 label __label335
-   118 label __label336
-   119 label __label337
+   111 jump __label335 notEqual 2 8
+-    * set y 152
+-    * set x 93
+   112 draw color 255 255 255 255
+   113 label __label335
+   114 label __label336
+   115 label __label337
 -    * set item @lead
-   120 label __label340
+   116 label __label340
 -    * op add __tmp26 7 8
 -    * op add __tmp29 112 7
-   121 draw image 15 119 @lead 16 0
+   117 draw image 15 119 @lead 16 0
 -    * op add index 2 1
 -    * op sub y 112 20
-   122 jump __label341 notEqual 3 8
-   123 set y 152
-   124 set x 93
- 
-   126 label __label341
-   127 label __label342
-   128 label __label343
+   118 jump __label341 notEqual 3 8
+-    * set y 152
+-    * set x 93
+   119 draw color 255 255 255 255
+   120 label __label341
+   121 label __label342
+   122 label __label343
 -    * set item @coal
-   129 label __label346
+   123 label __label346
 -    * op add __tmp26 7 8
 -    * op add __tmp29 92 7
-   130 draw image 15 99 @coal 16 0
+   124 draw image 15 99 @coal 16 0
 -    * op add index 3 1
 -    * op sub y 92 20
-   131 jump __label347 notEqual 4 8
-   132 set y 152
-   133 set x 93
- 
-   135 label __label347
-   136 label __label348
-   137 label __label349
+   125 jump __label347 notEqual 4 8
+-    * set y 152
+-    * set x 93
+   126 draw color 255 255 255 255
+   127 label __label347
+   128 label __label348
+   129 label __label349
 -    * set item @titanium
-   138 label __label352
+   130 label __label352
 -    * op add __tmp26 7 8
 -    * op add __tmp29 72 7
-   139 draw image 15 79 @titanium 16 0
+   131 draw image 15 79 @titanium 16 0
 -    * op add index 4 1
 -    * op sub y 72 20
-   140 jump __label353 notEqual 5 8
-   141 set y 152
-   142 set x 93
- 
-   144 label __label353
-   145 label __label354
-   146 label __label355
+   132 jump __label353 notEqual 5 8
+-    * set y 152
+-    * set x 93
+   133 draw color 255 255 255 255
+   134 label __label353
+   135 label __label354
+   136 label __label355
 -    * set item @thorium
-   147 label __label358
+   137 label __label358
 -    * op add __tmp26 7 8
 -    * op add __tmp29 52 7
-   148 draw image 15 59 @thorium 16 0
+   138 draw image 15 59 @thorium 16 0
 -    * op add index 5 1
 -    * op sub y 52 20
-   149 jump __label359 notEqual 6 8
-   150 set y 152
-   151 set x 93
- 
-   153 label __label359
-   154 label __label360
-   155 label __label361
+   139 jump __label359 notEqual 6 8
+-    * set y 152
+-    * set x 93
+   140 draw color 255 255 255 255
+   141 label __label359
+   142 label __label360
+   143 label __label361
 -    * set item @scrap
-   156 label __label364
+   144 label __label364
 -    * op add __tmp26 7 8
 -    * op add __tmp29 32 7
-   157 draw image 15 39 @scrap 16 0
+   145 draw image 15 39 @scrap 16 0
 -    * op add index 6 1
 -    * op sub y 32 20
-   158 jump __label365 notEqual 7 8
-   159 set y 152
-   160 set x 93
- 
-   162 label __label365
-   163 label __label366
-   164 label __label367
+   146 jump __label365 notEqual 7 8
+-    * set y 152
+-    * set x 93
+   147 draw color 255 255 255 255
+   148 label __label365
+   149 label __label366
+   150 label __label367
 -    * set item @graphite
-   165 label __label370
+   151 label __label370
 -    * op add __tmp26 7 8
 -    * op add __tmp29 12 7
-   166 draw image 15 19 @graphite 16 0
+   152 draw image 15 19 @graphite 16 0
 -    * op add index 7 1
 -    * op sub y 12 20
-   167 jump __label371 notEqual 8 8
+   153 jump __label371 notEqual 8 8
+-    * set y 152
+-    * set x 93
+   154 draw color 255 255 255 255
+   155 label __label371
+   156 label __label372
+   157 label __label373
+-    * set item @metaglass
+   158 label __label376
+-    * op add __tmp26 93 8
+-    * op add __tmp29 152 7
+   159 draw image 101 159 @metaglass 16 0
+-    * op add index 8 1
+-    * op sub y 152 20
+   160 jump __label377 notEqual 9 8
+-    * set y 152
+-    * set x 93
+   161 draw color 255 255 255 255
+   162 label __label377
+   163 label __label378
+   164 label __label379
+-    * set item @silicon
+   165 label __label382
+-    * op add __tmp26 93 8
+-    * op add __tmp29 132 7
+   166 draw image 101 139 @silicon 16 0
+-    * op add index 9 1
+-    * op sub y 132 20
+   167 jump __label383 notEqual 10 8
 -    * set y 152
 -    * set x 93
    168 draw color 255 255 255 255
-   169 label __label371
-   170 label __label372
-   171 label __label373
--    * set item @metaglass
-   172 label __label376
--    * op add __tmp26 93 8
--    * op add __tmp29 152 7
-   173 draw image 101 159 @metaglass 16 0
--    * op add index 8 1
--    * op sub y 152 20
-   174 jump __label377 notEqual 9 8
-   175 set y 152
-   176 set x 93
- 
-   178 label __label377
-   179 label __label378
-   180 label __label379
--    * set item @silicon
-   181 label __label382
--    * op add __tmp26 93 8
--    * op add __tmp29 132 7
-   182 draw image 101 139 @silicon 16 0
--    * op add index 9 1
--    * op sub y 132 20
-   183 jump __label383 notEqual 10 8
-   184 set y 152
-   185 set x 93
- 
-   187 label __label383
-   188 label __label384
-   189 label __label385
+   169 label __label383
+   170 label __label384
+   171 label __label385
 -    * set item @pyratite
-   190 label __label388
+   172 label __label388
 -    * op add __tmp26 93 8
 -    * op add __tmp29 112 7
-   191 draw image 101 119 @pyratite 16 0
+   173 draw image 101 119 @pyratite 16 0
 -    * op add index 10 1
 -    * op sub y 112 20
-   192 jump __label389 notEqual 11 8
-   193 set y 152
-   194 set x 93
- 
-   196 label __label389
-   197 label __label390
-   198 label __label391
+   174 jump __label389 notEqual 11 8
+-    * set y 152
+-    * set x 93
+   175 draw color 255 255 255 255
+   176 label __label389
+   177 label __label390
+   178 label __label391
 -    * set item @blast-compound
-   199 label __label394
+   179 label __label394
 -    * op add __tmp26 93 8
 -    * op add __tmp29 92 7
-   200 draw image 101 99 @blast-compound 16 0
+   180 draw image 101 99 @blast-compound 16 0
 -    * op add index 11 1
 -    * op sub y 92 20
-   201 jump __label395 notEqual 12 8
-   202 set y 152
-   203 set x 93
- 
-   205 label __label395
-   206 label __label396
-   207 label __label397
+   181 jump __label395 notEqual 12 8
+-    * set y 152
+-    * set x 93
+   182 draw color 255 255 255 255
+   183 label __label395
+   184 label __label396
+   185 label __label397
 -    * set item @plastanium
-   208 label __label400
+   186 label __label400
 -    * op add __tmp26 93 8
 -    * op add __tmp29 72 7
-   209 draw image 101 79 @plastanium 16 0
+   187 draw image 101 79 @plastanium 16 0
 -    * op add index 12 1
 -    * op sub y 72 20
-   210 jump __label401 notEqual 13 8
-   211 set y 152
-   212 set x 93
- 
-   214 label __label401
-   215 label __label402
-   216 label __label403
+   188 jump __label401 notEqual 13 8
+-    * set y 152
+-    * set x 93
+   189 draw color 255 255 255 255
+   190 label __label401
+   191 label __label402
+   192 label __label403
 -    * set item @phase-fabric
-   217 label __label406
+   193 label __label406
 -    * op add __tmp26 93 8
 -    * op add __tmp29 52 7
-   218 draw image 101 59 @phase-fabric 16 0
+   194 draw image 101 59 @phase-fabric 16 0
 -    * op add index 13 1
 -    * op sub y 52 20
-   219 jump __label407 notEqual 14 8
-   220 set y 152
-   221 set x 93
- 
-   223 label __label407
-   224 label __label408
-   225 label __label409
+   195 jump __label407 notEqual 14 8
+-    * set y 152
+-    * set x 93
+   196 draw color 255 255 255 255
+   197 label __label407
+   198 label __label408
+   199 label __label409
 -    * set item @surge-alloy
-   226 label __label412
+   200 label __label412
 -    * op add __tmp26 93 8
 -    * op add __tmp29 32 7
-   227 draw image 101 39 @surge-alloy 16 0
+   201 draw image 101 39 @surge-alloy 16 0
 -    * op add index 14 1
 -    * op sub y 32 20
-   228 jump __label413 notEqual 15 8
-   229 set y 152
-   230 set x 93
- 
-   232 label __label413
-   233 label __label414
-   234 label __label415
+   202 jump __label413 notEqual 15 8
+-    * set y 152
+-    * set x 93
+   203 draw color 255 255 255 255
+   204 label __label413
+   205 label __label414
+   206 label __label415
 -    * set item @spore-pod
-   235 label __label418
+   207 label __label418
 -    * op add __tmp26 93 8
 -    * op add __tmp29 12 7
-   236 draw image 101 19 @spore-pod 16 0
+   208 draw image 101 19 @spore-pod 16 0
 -    * op add index 15 1
 -    * op sub y 12 20
-   237 jump __label419 notEqual 16 8
-   238 draw color 255 255 255 255
-   239 label __label419
+   209 jump __label419 notEqual 16 8
+   210 draw color 255 255 255 255
+   211 label __label419
 
 Modifications by Loop Optimization: replicate condition at line 56 (+7 instructions):
  
@@ -3816,20 +3816,20 @@ Modifications by Loop Optimization: replicate condition at line 56 (+7 instructi
     81 sensor CAPACITY CONTAINER @itemCapacity
     82 op div LIMIT CAPACITY 5
  
-  1008 print " ms"
-  1009 printflush message1
-  1010 label __label18
+   980 print " ms"
+   981 printflush message1
+   982 label __label18
 -    * jump __label17 always
-+ 1011 sensor __tmp11 CONTAINER @dead
-+ 1012 op equal __tmp12 __tmp11 0
-+ 1013 sensor __tmp13 DISPLAY @dead
-+ 1014 op equal __tmp14 __tmp13 0
-+ 1015 op land __tmp15 __tmp12 __tmp14
-+ 1016 op equal __tmp16 LINKS @links
-+ 1017 op land __tmp17 __tmp15 __tmp16
-+ 1018 jump __label425 notEqual __tmp17 false
-  1019 label __label19
-  1020 end
++  983 sensor __tmp11 CONTAINER @dead
++  984 op equal __tmp12 __tmp11 0
++  985 sensor __tmp13 DISPLAY @dead
++  986 op equal __tmp14 __tmp13 0
++  987 op land __tmp15 __tmp12 __tmp14
++  988 op equal __tmp16 LINKS @links
++  989 op land __tmp17 __tmp15 __tmp16
++  990 jump __label425 notEqual __tmp17 false
+   991 label __label19
+   992 end
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-3 instructions):
  
@@ -3855,249 +3855,235 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-3 ins
    103 draw image 15 159 @sand 16 0
 -    * jump __label329 notEqual 1 8
 +  104 jump __label329 always
-   105 set y 152
-   106 set x 93
-   107 draw color 255 255 255 255
- 
-   110 label __label331
-   111 label __label334
-   112 draw image 15 139 @copper 16 0
+   105 draw color 255 255 255 255
+   106 label __label329
+   107 label __label330
+   108 label __label331
+   109 label __label334
+   110 draw image 15 139 @copper 16 0
 -    * jump __label335 notEqual 2 8
-+  113 jump __label335 always
-   114 set y 152
-   115 set x 93
-   116 draw color 255 255 255 255
- 
-   119 label __label337
-   120 label __label340
-   121 draw image 15 119 @lead 16 0
++  111 jump __label335 always
+   112 draw color 255 255 255 255
+   113 label __label335
+   114 label __label336
+   115 label __label337
+   116 label __label340
+   117 draw image 15 119 @lead 16 0
 -    * jump __label341 notEqual 3 8
-+  122 jump __label341 always
-   123 set y 152
-   124 set x 93
-   125 draw color 255 255 255 255
- 
-   128 label __label343
-   129 label __label346
-   130 draw image 15 99 @coal 16 0
++  118 jump __label341 always
+   119 draw color 255 255 255 255
+   120 label __label341
+   121 label __label342
+   122 label __label343
+   123 label __label346
+   124 draw image 15 99 @coal 16 0
 -    * jump __label347 notEqual 4 8
-+  131 jump __label347 always
-   132 set y 152
-   133 set x 93
-   134 draw color 255 255 255 255
- 
-   137 label __label349
-   138 label __label352
-   139 draw image 15 79 @titanium 16 0
++  125 jump __label347 always
+   126 draw color 255 255 255 255
+   127 label __label347
+   128 label __label348
+   129 label __label349
+   130 label __label352
+   131 draw image 15 79 @titanium 16 0
 -    * jump __label353 notEqual 5 8
-+  140 jump __label353 always
-   141 set y 152
-   142 set x 93
-   143 draw color 255 255 255 255
- 
-   146 label __label355
-   147 label __label358
-   148 draw image 15 59 @thorium 16 0
++  132 jump __label353 always
+   133 draw color 255 255 255 255
+   134 label __label353
+   135 label __label354
+   136 label __label355
+   137 label __label358
+   138 draw image 15 59 @thorium 16 0
 -    * jump __label359 notEqual 6 8
-+  149 jump __label359 always
-   150 set y 152
-   151 set x 93
-   152 draw color 255 255 255 255
- 
-   155 label __label361
-   156 label __label364
-   157 draw image 15 39 @scrap 16 0
++  139 jump __label359 always
+   140 draw color 255 255 255 255
+   141 label __label359
+   142 label __label360
+   143 label __label361
+   144 label __label364
+   145 draw image 15 39 @scrap 16 0
 -    * jump __label365 notEqual 7 8
-+  158 jump __label365 always
-   159 set y 152
-   160 set x 93
-   161 draw color 255 255 255 255
- 
-   164 label __label367
-   165 label __label370
-   166 draw image 15 19 @graphite 16 0
++  146 jump __label365 always
+   147 draw color 255 255 255 255
+   148 label __label365
+   149 label __label366
+   150 label __label367
+   151 label __label370
+   152 draw image 15 19 @graphite 16 0
 -    * jump __label371 notEqual 8 8
-   167 draw color 255 255 255 255
-   168 label __label371
-   169 label __label372
-   170 label __label373
-   171 label __label376
-   172 draw image 101 159 @metaglass 16 0
+   153 draw color 255 255 255 255
+   154 label __label371
+   155 label __label372
+   156 label __label373
+   157 label __label376
+   158 draw image 101 159 @metaglass 16 0
 -    * jump __label377 notEqual 9 8
-+  173 jump __label377 always
-   174 set y 152
-   175 set x 93
-   176 draw color 255 255 255 255
- 
-   179 label __label379
-   180 label __label382
-   181 draw image 101 139 @silicon 16 0
++  159 jump __label377 always
+   160 draw color 255 255 255 255
+   161 label __label377
+   162 label __label378
+   163 label __label379
+   164 label __label382
+   165 draw image 101 139 @silicon 16 0
 -    * jump __label383 notEqual 10 8
-+  182 jump __label383 always
-   183 set y 152
-   184 set x 93
-   185 draw color 255 255 255 255
- 
-   188 label __label385
-   189 label __label388
-   190 draw image 101 119 @pyratite 16 0
++  166 jump __label383 always
+   167 draw color 255 255 255 255
+   168 label __label383
+   169 label __label384
+   170 label __label385
+   171 label __label388
+   172 draw image 101 119 @pyratite 16 0
 -    * jump __label389 notEqual 11 8
-+  191 jump __label389 always
-   192 set y 152
-   193 set x 93
-   194 draw color 255 255 255 255
- 
-   197 label __label391
-   198 label __label394
-   199 draw image 101 99 @blast-compound 16 0
++  173 jump __label389 always
+   174 draw color 255 255 255 255
+   175 label __label389
+   176 label __label390
+   177 label __label391
+   178 label __label394
+   179 draw image 101 99 @blast-compound 16 0
 -    * jump __label395 notEqual 12 8
-+  200 jump __label395 always
-   201 set y 152
-   202 set x 93
-   203 draw color 255 255 255 255
- 
-   206 label __label397
-   207 label __label400
-   208 draw image 101 79 @plastanium 16 0
++  180 jump __label395 always
+   181 draw color 255 255 255 255
+   182 label __label395
+   183 label __label396
+   184 label __label397
+   185 label __label400
+   186 draw image 101 79 @plastanium 16 0
 -    * jump __label401 notEqual 13 8
-+  209 jump __label401 always
-   210 set y 152
-   211 set x 93
-   212 draw color 255 255 255 255
- 
-   215 label __label403
-   216 label __label406
-   217 draw image 101 59 @phase-fabric 16 0
++  187 jump __label401 always
+   188 draw color 255 255 255 255
+   189 label __label401
+   190 label __label402
+   191 label __label403
+   192 label __label406
+   193 draw image 101 59 @phase-fabric 16 0
 -    * jump __label407 notEqual 14 8
-+  218 jump __label407 always
-   219 set y 152
-   220 set x 93
-   221 draw color 255 255 255 255
- 
-   224 label __label409
-   225 label __label412
-   226 draw image 101 39 @surge-alloy 16 0
++  194 jump __label407 always
+   195 draw color 255 255 255 255
+   196 label __label407
+   197 label __label408
+   198 label __label409
+   199 label __label412
+   200 draw image 101 39 @surge-alloy 16 0
 -    * jump __label413 notEqual 15 8
-+  227 jump __label413 always
-   228 set y 152
-   229 set x 93
-   230 draw color 255 255 255 255
- 
-   233 label __label415
-   234 label __label418
-   235 draw image 101 19 @spore-pod 16 0
++  201 jump __label413 always
+   202 draw color 255 255 255 255
+   203 label __label413
+   204 label __label414
+   205 label __label415
+   206 label __label418
+   207 draw image 101 19 @spore-pod 16 0
 -    * jump __label419 notEqual 16 8
-+  236 jump __label419 always
-   237 draw color 255 255 255 255
-   238 label __label419
-   239 label __label420
++  208 jump __label419 always
+   209 draw color 255 255 255 255
+   210 label __label419
+   211 label __label420
  
-   244 set y 152
-   245 label __label49
-   246 draw color 0 0 80 255
+   216 set y 152
+   217 label __label49
+   218 draw color 0 0 80 255
 -    * jump __label51 equal true false
-   247 draw rect 23 0 70 176
-   248 jump __label52 always
-   249 label __label51
+   219 draw rect 23 0 70 176
+   220 jump __label52 always
+   221 label __label51
  
-   984 set x 157
-   985 label __label114
-   986 draw color 0 0 80 255
+   956 set x 157
+   957 label __label114
+   958 draw color 0 0 80 255
 -    * jump __label116 equal false false
-+  987 jump __label116 always
-   988 draw rect 23 0 70 176
-   989 jump __label117 always
-   990 label __label116
++  959 jump __label116 always
+   960 draw rect 23 0 70 176
+   961 jump __label117 always
+   962 label __label116
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-   970 label __label323
-   971 op idiv __fn3_amount __fn3_amount 10
-   972 jump __label324 notEqual __fn3_amount 0
+   942 label __label323
+   943 op idiv __fn3_amount __fn3_amount 10
+   944 jump __label324 notEqual __fn3_amount 0
 -    * jump __label86 always
-   973 label __label324
-   974 label __label325
-   975 label __label326
+   945 label __label324
+   946 label __label325
+   947 label __label326
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 2 (-1 instructions):
  
-   969 label __label322
-   970 label __label323
-   971 op idiv __fn3_amount __fn3_amount 10
+   941 label __label322
+   942 label __label323
+   943 op idiv __fn3_amount __fn3_amount 10
 -    * jump __label324 notEqual __fn3_amount 0
-   972 label __label324
-   973 label __label325
-   974 label __label326
+   944 label __label324
+   945 label __label325
+   946 label __label326
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-   968 label __label321
-   969 label __label322
-   970 label __label323
+   940 label __label321
+   941 label __label322
+   942 label __label323
 -    * op idiv __fn3_amount __fn3_amount 10
-   971 label __label324
-   972 label __label325
-   973 label __label326
+   943 label __label324
+   944 label __label325
+   945 label __label326
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-4 instructions):
  
-   466 label __label167
-   467 op sub __fn3_x x 11
-   468 op idiv __fn3_amount __fn3_amount 10
+   438 label __label167
+   439 op sub __fn3_x x 11
+   440 op idiv __fn3_amount __fn3_amount 10
 -    * jump __label168 notEqual __fn3_amount 0
 -    * jump __label86 always
-+  469 jump __label86 equal __fn3_amount 0
-   470 label __label168
-   471 label __label169
-   472 label __label170
++  441 jump __label86 equal __fn3_amount 0
+   442 label __label168
+   443 label __label169
+   444 label __label170
  
-   591 label __label206
-   592 op sub __fn3_x x 22
-   593 op idiv __fn3_amount __fn3_amount 10
+   563 label __label206
+   564 op sub __fn3_x x 22
+   565 op idiv __fn3_amount __fn3_amount 10
 -    * jump __label207 notEqual __fn3_amount 0
 -    * jump __label86 always
-+  594 jump __label86 equal __fn3_amount 0
-   595 label __label207
-   596 label __label208
-   597 label __label209
++  566 jump __label86 equal __fn3_amount 0
+   567 label __label207
+   568 label __label208
+   569 label __label209
  
-   716 label __label245
-   717 op sub __fn3_x x 33
-   718 op idiv __fn3_amount __fn3_amount 10
+   688 label __label245
+   689 op sub __fn3_x x 33
+   690 op idiv __fn3_amount __fn3_amount 10
 -    * jump __label246 notEqual __fn3_amount 0
 -    * jump __label86 always
-+  719 jump __label86 equal __fn3_amount 0
-   720 label __label246
-   721 label __label247
-   722 label __label248
++  691 jump __label86 equal __fn3_amount 0
+   692 label __label246
+   693 label __label247
+   694 label __label248
  
-   841 label __label284
-   842 op sub __fn3_x x 44
-   843 op idiv __fn3_amount __fn3_amount 10
+   813 label __label284
+   814 op sub __fn3_x x 44
+   815 op idiv __fn3_amount __fn3_amount 10
 -    * jump __label285 notEqual __fn3_amount 0
 -    * jump __label86 always
-+  844 jump __label86 equal __fn3_amount 0
-   845 label __label285
-   846 label __label286
-   847 label __label287
++  816 jump __label86 equal __fn3_amount 0
+   817 label __label285
+   818 label __label286
+   819 label __label287
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-   321 write __fn3_amount MEMORY index
-   322 jump __label80 notEqual __fn3_amount __fn3_last
-   323 draw color 255 255 0 255
+   293 write __fn3_amount MEMORY index
+   294 jump __label80 notEqual __fn3_amount __fn3_last
+   295 draw color 255 255 0 255
 -    * jump __label81 always
-+  324 jump __label75 always
-   325 label __label80
-   326 jump __label82 greaterThanEq __fn3_amount __fn3_last
-   327 draw color 255 80 80 255
++  296 jump __label75 always
+   297 label __label80
+   298 jump __label82 greaterThanEq __fn3_amount __fn3_last
+   299 draw color 255 80 80 255
 -    * jump __label83 always
-+  328 jump __label75 always
-   329 label __label82
-   330 draw color 0 255 0 255
-   331 label __label83
++  300 jump __label75 always
+   301 label __label82
+   302 draw color 0 255 0 255
+   303 label __label83
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 instructions):
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-21 instructions):
  
     85 draw color 0 0 80 255
     86 draw rect 0 0 23 176
@@ -4118,8 +4104,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
     98 label __label328
     99 draw image 15 159 @sand 16 0
    100 jump __label329 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    101 label __label329
    102 label __label330
@@ -4127,8 +4111,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    104 label __label334
    105 draw image 15 139 @copper 16 0
    106 jump __label335 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    107 label __label335
    108 label __label336
@@ -4136,8 +4118,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    110 label __label340
    111 draw image 15 119 @lead 16 0
    112 jump __label341 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    113 label __label341
    114 label __label342
@@ -4145,8 +4125,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    116 label __label346
    117 draw image 15 99 @coal 16 0
    118 jump __label347 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    119 label __label347
    120 label __label348
@@ -4154,8 +4132,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    122 label __label352
    123 draw image 15 79 @titanium 16 0
    124 jump __label353 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    125 label __label353
    126 label __label354
@@ -4163,8 +4139,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    128 label __label358
    129 draw image 15 59 @thorium 16 0
    130 jump __label359 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    131 label __label359
    132 label __label360
@@ -4172,8 +4146,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    134 label __label364
    135 draw image 15 39 @scrap 16 0
    136 jump __label365 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    137 label __label365
    138 label __label366
@@ -4182,8 +4154,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    146 label __label376
    147 draw image 101 159 @metaglass 16 0
    148 jump __label377 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    149 label __label377
    150 label __label378
@@ -4191,8 +4161,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    152 label __label382
    153 draw image 101 139 @silicon 16 0
    154 jump __label383 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    155 label __label383
    156 label __label384
@@ -4200,8 +4168,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    158 label __label388
    159 draw image 101 119 @pyratite 16 0
    160 jump __label389 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    161 label __label389
    162 label __label390
@@ -4209,8 +4175,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    164 label __label394
    165 draw image 101 99 @blast-compound 16 0
    166 jump __label395 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    167 label __label395
    168 label __label396
@@ -4218,8 +4182,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    170 label __label400
    171 draw image 101 79 @plastanium 16 0
    172 jump __label401 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    173 label __label401
    174 label __label402
@@ -4227,8 +4189,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    176 label __label406
    177 draw image 101 59 @phase-fabric 16 0
    178 jump __label407 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    179 label __label407
    180 label __label408
@@ -4236,8 +4196,6 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    182 label __label412
    183 draw image 101 39 @surge-alloy 16 0
    184 jump __label413 always
--    * set y 152
--    * set x 93
 -    * draw color 255 255 255 255
    185 label __label413
    186 label __label414

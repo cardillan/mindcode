@@ -5,14 +5,14 @@
     10 instructions eliminated by Jump Optimization (3 iterations).
      7 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
-    10 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
      3 instructions eliminated by Jump Straightening (3 iterations).
      4 instructions eliminated by Print Merging.
-    88 instructions after optimizations.
+    96 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 908):
+Pass 1: speed optimization selection (cost limit 900):
   * Loop Optimization: replicate condition at line 39            cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -124,7 +124,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructi
 Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructions):
  
    110 op add __tmp42 batch BATCH_STEP
-   111 op min __tmp43 __tmp42 MAX_BATCH
+   111 op min __tmp43 __tmp42 EFF_MAX_BATCH
    112 set batch __tmp43
 -    * set __tmp41 batch
    113 jump __label26 always
@@ -168,15 +168,15 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-25 ins
     45 op max __tmp9 MIN_BATCH 10
     46 op idiv __tmp10 __tmp9 10
 -    * op mul __tmp11 __tmp10 10
--    * set MIN_BATCH __tmp11
-+   47 op mul MIN_BATCH __tmp10 10
-    48 op max __tmp12 MAX_BATCH MIN_BATCH
+-    * set EFF_MIN_BATCH __tmp11
++   47 op mul EFF_MIN_BATCH __tmp10 10
+    48 op max __tmp12 MAX_BATCH EFF_MIN_BATCH
     49 op idiv __tmp13 __tmp12 10
 -    * op mul __tmp14 __tmp13 10
--    * set MAX_BATCH __tmp14
-+   50 op mul MAX_BATCH __tmp13 10
+-    * set EFF_MAX_BATCH __tmp14
++   50 op mul EFF_MAX_BATCH __tmp13 10
     51 set BATCH_STEP 10
-    52 set batch MIN_BATCH
+    52 set batch EFF_MIN_BATCH
 -    * set __tmp15 @time
 -    * set startTime __tmp15
 +   53 set startTime @time
@@ -241,9 +241,9 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-25 ins
     88 op lessThanEq __tmp40 duration BATCH_DURATION
     89 jump __label25 equal __tmp40 false
     90 op add __tmp42 batch BATCH_STEP
--    * op min __tmp43 __tmp42 MAX_BATCH
+-    * op min __tmp43 __tmp42 EFF_MAX_BATCH
 -    * set batch __tmp43
-+   91 op min batch __tmp42 MAX_BATCH
++   91 op min batch __tmp42 EFF_MAX_BATCH
     92 jump __label26 always
     93 label __label25
     94 label __label26
@@ -258,9 +258,9 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-25 ins
    110 jump __label27 equal __tmp46 false
    111 op idiv __tmp48 batch 90
    112 op mul __tmp49 __tmp48 10
--    * op max __tmp50 __tmp49 MIN_BATCH
+-    * op max __tmp50 __tmp49 EFF_MIN_BATCH
 -    * set batch __tmp50
-+  113 op max batch __tmp49 MIN_BATCH
++  113 op max batch __tmp49 EFF_MIN_BATCH
    114 write 0 MEMORY lastCell
    115 set ratePerMin 0
 -    * set __tmp51 @time
@@ -370,7 +370,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
 -    * jump __label25 equal __tmp40 false
 +   78 jump __label25 greaterThan duration BATCH_DURATION
     79 op add __tmp42 batch BATCH_STEP
-    80 op min batch __tmp42 MAX_BATCH
+    80 op min batch __tmp42 EFF_MAX_BATCH
     81 jump __label26 always
  
     95 label __label18
@@ -381,7 +381,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
 +   98 jump __label27 lessThan elapsed 10000
     99 op idiv __tmp48 batch 90
    100 op mul __tmp49 __tmp48 10
-   101 op max batch __tmp49 MIN_BATCH
+   101 op max batch __tmp49 EFF_MIN_BATCH
  
    131 write 0 MEMORY lastCell
    132 set n 0
@@ -405,7 +405,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
  
     77 jump __label25 greaterThan duration BATCH_DURATION
     78 op add __tmp42 batch BATCH_STEP
-    79 op min batch __tmp42 MAX_BATCH
+    79 op min batch __tmp42 EFF_MAX_BATCH
 -    * jump __label26 always
     80 label __label25
     81 label __label26
@@ -438,32 +438,15 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
 +   75 op idiv ratePerMin rate 0.000016666666666666667
     76 jump __label25 greaterThan duration BATCH_DURATION
     77 op add __tmp42 batch BATCH_STEP
-    78 op min batch __tmp42 MAX_BATCH
+    78 op min batch __tmp42 EFF_MAX_BATCH
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    36 label __label2
-    37 read total MEMORY 0
-    38 set BATCH_DURATION 2000
--    * op max __tmp9 MIN_BATCH 10
--    * op idiv __tmp10 __tmp9 10
--    * op mul MIN_BATCH __tmp10 10
--    * op max __tmp12 MAX_BATCH MIN_BATCH
--    * op idiv __tmp13 __tmp12 10
--    * op mul MAX_BATCH __tmp13 10
-+   39 op max __tmp9 10 10
-+   40 op idiv __tmp10 10 10
-+   41 op mul MIN_BATCH 1 10
-+   42 op max __tmp12 1000 10
-+   43 op idiv __tmp13 1000 10
-+   44 op mul MAX_BATCH 100 10
-    45 set BATCH_STEP 10
--    * set batch MIN_BATCH
-+   46 set batch 10
+    46 set batch EFF_MIN_BATCH
     47 set startTime @time
     48 set ratePerMin 0
 -    * op add limit total batch
-+   49 op add limit total MIN_BATCH
++   49 op add limit total EFF_MIN_BATCH
     50 control enabled switch1 0
     51 label __label13
     52 sensor __tmp17 switch1 @enabled
@@ -473,183 +456,154 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     75 op idiv ratePerMin rate 0.000016666666666666667
 -    * jump __label25 greaterThan duration BATCH_DURATION
 -    * op add __tmp42 batch BATCH_STEP
--    * op min batch __tmp42 MAX_BATCH
 +   76 jump __label25 greaterThan duration 2000
 +   77 op add __tmp42 batch 10
-+   78 op min batch __tmp42 1000
+    78 op min batch __tmp42 EFF_MAX_BATCH
     79 label __label25
     80 label __label26
-    81 label __label23
- 
-    92 jump __label27 lessThan elapsed 10000
-    93 op idiv __tmp48 batch 90
-    94 op mul __tmp49 __tmp48 10
--    * op max batch __tmp49 MIN_BATCH
-+   95 op max batch __tmp49 10
-    96 write 0 MEMORY lastCell
-    97 set ratePerMin 0
-    98 set startTime @time
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9 instructions):
--    * set MIN_BATCH 10
--    * set MAX_BATCH 1000
-     0 set lastCell 0
-     1 label __label0
-     2 set MEMORY null
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
-    33 jump __label0 equal MEMORY null
-    34 label __label2
-    35 read total MEMORY 0
+    35 jump __label0 equal MEMORY null
+    36 label __label2
+    37 read total MEMORY 0
 -    * set BATCH_DURATION 2000
--    * op max __tmp9 10 10
--    * op idiv __tmp10 10 10
-    36 op mul MIN_BATCH 1 10
--    * op max __tmp12 1000 10
--    * op idiv __tmp13 1000 10
--    * op mul MAX_BATCH 100 10
+    38 op max __tmp9 MIN_BATCH 10
+    39 op idiv __tmp10 __tmp9 10
+    40 op mul EFF_MIN_BATCH __tmp10 10
+    41 op max __tmp12 MAX_BATCH EFF_MIN_BATCH
+    42 op idiv __tmp13 __tmp12 10
+    43 op mul EFF_MAX_BATCH __tmp13 10
 -    * set BATCH_STEP 10
-    37 set batch 10
-    38 set startTime @time
-    39 set ratePerMin 0
--    * op add limit total MIN_BATCH
-+   40 op add limit total 10
-    41 control enabled switch1 0
-    42 label __label13
-    43 sensor __tmp17 switch1 @enabled
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
- 
-    33 jump __label0 equal MEMORY null
-    34 label __label2
-    35 read total MEMORY 0
--    * op mul MIN_BATCH 1 10
-    36 set batch 10
-    37 set startTime @time
-    38 set ratePerMin 0
+    44 set batch EFF_MIN_BATCH
+    45 set startTime @time
+    46 set ratePerMin 0
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-     4 set n @links
-     5 label __label3
-     6 jump __label5 lessThanEq n 0
-+    7 label __label32
-     8 op sub n n 1
-     9 getlink block n
-    10 sensor __tmp5 block @type
+     6 set n @links
+     7 label __label3
+     8 jump __label5 lessThanEq n 0
++    9 label __label32
+    10 op sub n n 1
+    11 getlink block n
+    12 sensor __tmp5 block @type
  
-    26 label __label11
-    27 label __label6
-    28 label __label4
+    28 label __label11
+    29 label __label6
+    30 label __label4
 -    * jump __label3 always
-+   29 jump __label32 greaterThan n 0
-    30 label __label5
-    31 print "Item Counter\n[salmon]No memory attached."
-    32 printflush message1
++   31 jump __label32 greaterThan n 0
+    32 label __label5
+    33 print "Item Counter\n[salmon]No memory attached."
+    34 printflush message1
  
-    46 set n FIRST_BLOCK
-    47 label __label16
-    48 jump __label18 greaterThanEq n @links
-+   49 label __label33
-    50 getlink block n
-    51 op add n n 1
-    52 sensor __tmp23 block @type
+    54 set n FIRST_BLOCK
+    55 label __label16
+    56 jump __label18 greaterThanEq n @links
++   57 label __label33
+    58 getlink block n
+    59 op add n n 1
+    60 sensor __tmp23 block @type
  
-    77 label __label19
-    78 label __label20
-    79 label __label17
+    85 label __label19
+    86 label __label20
+    87 label __label17
 -    * jump __label16 always
-+   80 jump __label33 lessThan n @links
-    81 label __label18
-    82 op sub __tmp44 @time startTime
-    83 op floor elapsed __tmp44
++   88 jump __label33 lessThan n @links
+    89 label __label18
+    90 op sub __tmp44 @time startTime
+    91 op floor elapsed __tmp44
  
-   117 set n 0
-   118 label __label29
-   119 jump __label31 greaterThanEq n @links
-+  120 label __label34
-   121 write 0 MEMORY n
-   122 op add n n 1
-   123 label __label30
+   125 set n 0
+   126 label __label29
+   127 jump __label31 greaterThanEq n @links
++  128 label __label34
+   129 write 0 MEMORY n
+   130 op add n n 1
+   131 label __label30
 -    * jump __label29 always
-+  124 jump __label34 lessThan n @links
-   125 label __label31
-   126 end
++  132 jump __label34 lessThan n @links
+   133 label __label31
+   134 end
 
 Modifications by Loop Optimization: replicate condition at line 39 (+1 instructions):
  
-    42 label __label13
-    43 sensor __tmp17 switch1 @enabled
-    44 jump __label15 notEqual __tmp17 0
-+   45 label __label35
-    46 set start @time
-    47 set n FIRST_BLOCK
-    48 label __label16
+    50 label __label13
+    51 sensor __tmp17 switch1 @enabled
+    52 jump __label15 notEqual __tmp17 0
++   53 label __label35
+    54 set start @time
+    55 set n FIRST_BLOCK
+    56 label __label16
  
-   111 print " ms"
-   112 printflush message1
-   113 label __label14
+   119 print " ms"
+   120 printflush message1
+   121 label __label14
 -    * jump __label13 always
-+  114 sensor __tmp17 switch1 @enabled
-+  115 jump __label35 equal __tmp17 0
-   116 label __label15
-   117 control enabled switch1 0
-   118 write 0 MEMORY lastCell
++  122 sensor __tmp17 switch1 @enabled
++  123 jump __label35 equal __tmp17 0
+   124 label __label15
+   125 control enabled switch1 0
+   126 write 0 MEMORY lastCell
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    46 set start @time
-    47 set n FIRST_BLOCK
-    48 label __label16
+    54 set start @time
+    55 set n FIRST_BLOCK
+    56 label __label16
 -    * jump __label18 greaterThanEq n @links
-+   49 jump __label18 greaterThanEq FIRST_BLOCK @links
-    50 label __label33
-    51 getlink block n
-    52 op add n n 1
++   57 jump __label18 greaterThanEq FIRST_BLOCK @links
+    58 label __label33
+    59 getlink block n
+    60 op add n n 1
  
-   118 write 0 MEMORY lastCell
-   119 set n 0
-   120 label __label29
+   126 write 0 MEMORY lastCell
+   127 set n 0
+   128 label __label29
 -    * jump __label31 greaterThanEq n @links
-+  121 jump __label31 greaterThanEq 0 @links
-   122 label __label34
-   123 write 0 MEMORY n
-   124 op add n n 1
++  129 jump __label31 greaterThanEq 0 @links
+   130 label __label34
+   131 write 0 MEMORY n
+   132 op add n n 1
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   125 label __label30
-   126 jump __label34 lessThan n @links
-   127 label __label31
+   133 label __label30
+   134 jump __label34 lessThan n @links
+   135 label __label31
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-    94 print "Item Counter                  \n"
-    95 print "Total items: [gold]"
-    96 print total
+   102 print "Item Counter                  \n"
+   103 print "Total items: [gold]"
+   104 print total
 -    * print "[]\n"
 -    * print "Rate: [green]"
-+   97 print "[]\nRate: [green]"
-    98 print ratePerMin
++  105 print "[]\nRate: [green]"
+   106 print ratePerMin
 -    * print "[] items/min\n"
 -    * print "Batch size: [green]"
-+   99 print "[] items/min\nBatch size: [green]"
-   100 print batch
++  107 print "[] items/min\nBatch size: [green]"
+   108 print batch
 -    * print "[]\n"
 -    * print "Batch time: [gold]"
-+  101 print "[]\nBatch time: [gold]"
-   102 print elapsed
++  109 print "[]\nBatch time: [gold]"
+   110 print elapsed
 -    * print "[] ms\n"
-   103 op sub __tmp52 @time start
-   104 op floor __tmp53 __tmp52
+   111 op sub __tmp52 @time start
+   112 op floor __tmp53 __tmp52
 -    * print "[lightgray]Loop time: "
-+  105 print "[] ms\n[lightgray]Loop time: "
-   106 print __tmp53
-   107 print " ms"
-   108 printflush message1
++  113 print "[] ms\n[lightgray]Loop time: "
+   114 print __tmp53
+   115 print " ms"
+   116 printflush message1
 
 Final code before resolving virtual instructions:
 
+set MIN_BATCH 10
+set MAX_BATCH 1000
 set lastCell 0
 label __label0
 set MEMORY null
@@ -680,10 +634,16 @@ print "Item Counter\n[salmon]No memory attached."
 printflush message1
 jump __label0 equal MEMORY null
 read total MEMORY 0
-set batch 10
+op max __tmp9 MIN_BATCH 10
+op idiv __tmp10 __tmp9 10
+op mul EFF_MIN_BATCH __tmp10 10
+op max __tmp12 MAX_BATCH EFF_MIN_BATCH
+op idiv __tmp13 __tmp12 10
+op mul EFF_MAX_BATCH __tmp13 10
+set batch EFF_MIN_BATCH
 set startTime @time
 set ratePerMin 0
-op add limit total 10
+op add limit total EFF_MIN_BATCH
 control enabled switch1 0 0 0 0
 sensor __tmp17 switch1 @enabled
 jump __label15 notEqual __tmp17 0
@@ -712,7 +672,7 @@ write __tmp37 MEMORY lastCell
 op idiv ratePerMin rate 0.000016666666666666667
 jump __label25 greaterThan duration 2000
 op add __tmp42 batch 10
-op min batch __tmp42 1000
+op min batch __tmp42 EFF_MAX_BATCH
 label __label25
 label __label23
 label __label21
@@ -724,7 +684,7 @@ op floor elapsed __tmp44 0
 jump __label27 lessThan elapsed 10000
 op idiv __tmp48 batch 90
 op mul __tmp49 __tmp48 10
-op max batch __tmp49 10
+op max batch __tmp49 EFF_MIN_BATCH
 write 0 MEMORY lastCell
 set ratePerMin 0
 set startTime @time

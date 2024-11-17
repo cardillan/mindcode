@@ -1,8 +1,8 @@
 // Item counter. Can handle 3 plastanium conveyors at once, according to tests at 60 FPS.
 
 // Runtime parameters
-MIN_BATCH = 10;
-MAX_BATCH = 1000;
+param MIN_BATCH = 10;
+param MAX_BATCH = 1000;
 
 // Hard constraint to max. number of conveyors to monitor
 // This implementation's speed doesn't depend on number of conveyors linked at runtime
@@ -49,10 +49,10 @@ end;
 
 // Global initialization
 BATCH_DURATION = 2000;                      // We aim for a batch to be completed in about 2 seconds
-MIN_BATCH = max(MIN_BATCH \ 10, 1);         // Sanitize MIN_BATCH and MAX_BATCH
-MAX_BATCH = max(MAX_BATCH \ 10, MIN_BATCH); // Also, we measure batches in tens of items
+EFF_MIN_BATCH = max(MIN_BATCH \ 10, 1);         // Sanitize EFF_MIN_BATCH and EFF_MAX_BATCH
+EFF_MAX_BATCH = max(MAX_BATCH \ 10, MIN_BATCH); // Also, we measure batches in tens of items
 BATCH_STEP = 1;                             // Batch size increase
-BATCH = MIN_BATCH;                          // Current batch size
+BATCH = EFF_MIN_BATCH;                          // Current batch size
 BATCH_TXT = BATCH * 10;
 
 // Progress init
@@ -83,7 +83,7 @@ while switch1.@enabled == 0 do
         MEMORY[lastCell] = rate * (10000 / 60);             // items/tick
         ratePerMin = floor(rate * 600000);                  // items/min
         if duration <= BATCH_DURATION then                  // too fast, increase batch size
-            BATCH = min(BATCH + BATCH_STEP, MAX_BATCH);
+            BATCH = min(BATCH + BATCH_STEP, EFF_MAX_BATCH);
             BATCH_TXT = BATCH * 10;
         end;
         limit += BATCH;                                     // Next limit
@@ -106,7 +106,7 @@ while switch1.@enabled == 0 do
     elapsed = floor(@time - startTime);
     if elapsed >= 10000 then
         // Batch didn't complete in 10 seconds: rate is effectively zero
-        BATCH = max(BATCH \ 5, MIN_BATCH);      // Shrink batch
+        BATCH = max(BATCH \ 5, EFF_MIN_BATCH);      // Shrink batch
         BATCH_TXT = BATCH * 10;
         limit = batches + BATCH;                // Reset rate measurement
         MEMORY[lastCell] = 0;

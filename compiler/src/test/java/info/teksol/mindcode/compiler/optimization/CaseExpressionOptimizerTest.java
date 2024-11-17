@@ -86,12 +86,16 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                         createInstruction(SET, ast0, var),
                         createInstruction(JUMP, label0, EQUAL, ast0, lead),
                         createInstruction(JUMP, label1, EQUAL, ast0, coal),
+                        createInstruction(LABEL, label0),
+                        createInstruction(LABEL, label1),
                         createInstruction(END)
                 ),
                 List.of(
                         createInstruction(SENSOR, var, vault1, firstItem),
                         createInstruction(JUMP, label0, EQUAL, var, lead),
                         createInstruction(JUMP, label1, EQUAL, var, coal),
+                        createInstruction(LABEL, label0),
+                        createInstruction(LABEL, label1),
                         createInstruction(END)
                 )
         );
@@ -103,6 +107,8 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                 createInstruction(SENSOR, var, vault1, firstItem),
                 createInstruction(JUMP, label0, NOT_EQUAL, var, lead),
                 createInstruction(JUMP, label1, NOT_EQUAL, var, coal),
+                createInstruction(LABEL, label0),
+                createInstruction(LABEL, label1),
                 createInstruction(END)
         );
     }
@@ -114,6 +120,8 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                 createInstruction(SET, ast0, var),
                 createInstruction(JUMP, label0, NOT_EQUAL, ast0, lead),
                 createInstruction(JUMP, label1, NOT_EQUAL, coal, ast0),
+                createInstruction(LABEL, label0),
+                createInstruction(LABEL, label1),
                 createInstruction(END)
         );
     }
@@ -125,6 +133,8 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                 createInstruction(JUMP, label0, NOT_EQUAL, ast0, lead),
                 createInstruction(SET, ast0, var),
                 createInstruction(JUMP, label1, NOT_EQUAL, ast0, coal),
+                createInstruction(LABEL, label0),
+                createInstruction(LABEL, label1),
                 createInstruction(END)
         );
     }

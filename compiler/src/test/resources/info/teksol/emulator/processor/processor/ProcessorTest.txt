@@ -1,6 +1,6 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 assignments-in-expressions.mnd:                    2              5        5     100.0%   90D4C6A6823E16B5   B28E7894BDB75ADF
-compilesProperComparison2:                         0              4        4     100.0%   C506D563D0AADCE4   188342307620BB82
+compilesProperComparison2:                         0              4        4     100.0%   FCF21A0D119A4D84   188342307620BB82
 compilesProperComparison:                          0             60       60     100.0%   DE32E1F0B3E8AB1E   087DD5F71B3B4E26
 complex-case-expression.mnd:                       1             49      297     100.0%   D7EEC80CFC87E87E   BD5DB148425EE646
 computesPackColor:                                 1              2        2     100.0%   704495CD1C7F1B5D   ABF615458C567DDA

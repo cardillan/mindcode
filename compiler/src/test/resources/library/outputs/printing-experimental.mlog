@@ -75,132 +75,32 @@ assertflush
 print "-1.2345000000000002E-50"
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
-op abs __tmp48 null 0
 print null
 assertprints "null" "printExactSlow(null)"
 assertflush
-set __fn5__n 0
-set __fn5retaddr 84
-jump 126 always 0 0
+print 0
 assertprints "0" "printExactSlow(0)"
 assertflush
-set __fn5__n 1
-set __fn5retaddr 89
-jump 126 always 0 0
+print "1.000000000000000"
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
-set __fn5__n 1.0000001
-set __fn5retaddr 94
-jump 126 always 0 0
+print "1.000000100000000"
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
-set __fn5__n 3.00000007
-set __fn5retaddr 99
-jump 126 always 0 0
+print "3.000000070000000"
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
-set __fn5__n 3E50
-set __fn5retaddr 104
-jump 126 always 0 0
+print "3.000000000000000E50"
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
-set __fn5__n 1.0123456789
-set __fn5retaddr 109
-jump 126 always 0 0
+print "1.012345678900000"
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
-set __fn5__n 10000000999999999E4
-set __fn5retaddr 114
-jump 126 always 0 0
+print "1.000000099999999E20"
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
-set __fn5__n 12345E-54
-set __fn5retaddr 119
-jump 126 always 0 0
+print "1.234500000000000E-50"
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
-set __fn5__n -12345E-54
-set __fn5retaddr 124
-jump 126 always 0 0
+print "-1.234500000000000E-50"
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-end
-op abs __tmp48 __fn5__n 0
-jump 130 greaterThan __tmp48 0
-print __fn5__n
-set @counter __fn5retaddr
-jump 133 greaterThanEq __fn5__n 0
-print "-"
-op abs __fn5__n __fn5__n 0
-op log10 __tmp54 __fn5__n 0
-op floor __fn5__exp __tmp54 0
-op mul __tmp56 -1 __fn5__exp
-op pow __tmp57 10 __tmp56
-op mul __fn5__base __fn5__n __tmp57
-op floor __tmp59 __fn5__base 0
-print __tmp59
-print "."
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-jump 204 equal __fn5__exp 0
-print "E"
-print __fn5__exp
-set @counter __fn5retaddr
-print "Compiled by Mindcode - github.com/cardillan/mindcode"

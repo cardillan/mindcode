@@ -34,7 +34,7 @@ public class ExecutionException extends RuntimeException {
     @Override
     public String getMessage() {
         if (instructionIndex >= 0) {
-            return "Execution exception at instruction %d: %s:\n%s\n(Use '#set %s = false;' or '--%s false' command line option to ignore this exception.)"
+            return "Execution exception at instruction %d: %s:\n%s\n(Use '#set %s = false;' directive or '--%s false' command line option to ignore this exception.)"
                     .formatted(instructionIndex, instruction.toMlog(), super.getMessage(), flag.getOptionName(), flag.getOptionName());
         } else {
             return super.getMessage();

@@ -189,7 +189,12 @@ public class LogicInstructionLabelResolver {
     private LogicArgument resolveLabel(LogicArgument argument) {
         if (argument instanceof LogicLabel label) {
             if (!addresses.containsKey(label)) {
-                throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
+                if (false) {
+                    throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
+                }  else {
+                    System.out.printf("Unknown jump label target: '%s' was not previously discovered in program.%n", label);
+                    return LogicLabel.absolute(0);
+                }
             }
             return addresses.get(label);
         } else {

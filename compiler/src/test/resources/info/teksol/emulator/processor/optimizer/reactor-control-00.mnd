@@ -59,56 +59,57 @@
 
 
 // System configuration
-PLANT_PROTECTION    = 1;        // If internal battery level gets too low, output to base is switched off
-FAST_START            = 1;        // Starts as many reactors at once as possible during startup
+param PLANT_PROTECTION      = 1;        // If internal battery level gets too low, output to base is switched off
+param FAST_START            = 1;        // Starts as many reactors at once as possible during startup
 
 allocate heap in cell1[0 ... 64];
 
 // Memory bank indexes
-PRODUCTION_INDEX    = 509;
-NET_POWER_INDEX        = 510;
-BATTERY_CHANGE_INDEX= 511;
+const PRODUCTION_INDEX      = 509;
+const NET_POWER_INDEX       = 510;
+const BATTERY_CHANGE_INDEX  = 511;
 
 // REMOTE REACTOR INDEXES
-CELL_PRIOR_REACTORS        = 0;        // Number of reactors managed by this processor (and predecessors)
-CELL_REMOTE_REACTORS    = 1;        // Number of remote reactors
-CELL_REACTORS_ON        = 2;        // How many reactors are running
-CELL_OVERDRIVE             = 3;        // Overdrive active
-CELL_BOOSTS             = 4;        // How much boost is active at remote reactors
+const CELL_PRIOR_REACTORS   = 0;        // Number of reactors managed by this processor (and predecessors)
+const CELL_REMOTE_REACTORS  = 1;        // Number of remote reactors
+const CELL_REACTORS_ON      = 2;        // How many reactors are running
+const CELL_OVERDRIVE        = 3;        // Overdrive active
+const CELL_BOOSTS           = 4;        // How much boost is active at remote reactors
 
 // Modes of operation
-SHUTDOWN            = 0;
-STARTUP                = 1;
-RUNNING                = 2;
+const SHUTDOWN              = 0;
+const STARTUP               = 1;
+const RUNNING               = 2;
 
-BATTERY_SAT         = 47500;    // Single battery saturation level (95%)
-BATTERY_PER_REACTOR    = 100000;    // Require this much battery capacity per reactor
-MIN_CONS_REACTOR    = 1200;        // Minimal consumption per reactor. If it is lower, shut down.
+const BATTERY_SAT           = 47500;    // Single battery saturation level (95%)
+const BATTERY_PER_REACTOR   = 100000;   // Require this much battery capacity per reactor
+const MIN_CONS_REACTOR      = 1200;     // Minimal consumption per reactor. If it is lower, shut down.
 
 // STARTUP MODE CONSTANTS
-POWER_MARGIN        = 1.05;        // How much more power must be generated for output to be activated
-STARTUP_DELAY         = 2000;        // Minimal delay between starting reactors
-STARTUP_BAT_ENERGY    = 25000;    // Energy needed to start a reactor
-REACTOR_OUTPUT         = 6300;        // Nominal net output of one reactor
+const POWER_MARGIN          = 1.05;     // How much more power must be generated for output to be activated
+const STARTUP_DELAY         = 2000;     // Minimal delay between starting reactors
+const STARTUP_BAT_ENERGY    = 25000;    // Energy needed to start a reactor
+const REACTOR_OUTPUT        = 6300;     // Nominal net output of one reactor
 
 // RUNNING MODE CONSTANTS
-COOLANT_CUTOFF        = 750;      // When cryofluid level falls below this, shutdown
-COOLANT_SAT         = 1000;        // Reaching this level of coolant allows shutdown above
-FUEL_CUTOFF            = 700;        // When blast compound level falls below this, shutdown
-FUEL_SAT            = 800;        // Reaching this level of fuel allows shutdown above
-DECOMMIT_DELAY        = 6000;        // Minimal delay between decommitting reactors
-PANIC_ENERGY_DROP    = -2500;    // When battery level drops this much per reactor online, everything is started and boosted
-BATTERY_CRITICAL    = 0.50;        // Level at which all reactors and overdrives will be activated
+const COOLANT_CUTOFF        = 750;      // When cryofluid level falls below this, shutdown
+const COOLANT_SAT           = 1000;     // Reaching this level of coolant allows shutdown above
+const FUEL_CUTOFF           = 700;      // When blast compound level falls below this, shutdown
+const FUEL_SAT              = 800;      // Reaching this level of fuel allows shutdown above
+const DECOMMIT_DELAY        = 6000;     // Minimal delay between decommitting reactors
+const PANIC_ENERGY_DROP     = -2500;    // When battery level drops this much per reactor online, everything is started and boosted
+const BATTERY_CRITICAL      = 0.50;     // Level at which all reactors and overdrives will be activated
 
 // IMPACT REACTOR CONSTANTS
-OWN_CONSUMPTION        = 1500;     // The power the reactor consumes when online
-MAX_PRODUCTION        = 7400;        // Maximal gross output of one reactor (7800 actually, but the last 400 take forever to reach)
-SAFETY_MARGIN        = 1000;        // The average load might be up to this much higher during reactor startup
-STARTUP_TIME        = 5;         // It takes this many seconds for the reactor to begin increasing its output
-RAMP_TIME            = 70;        // It takes this many additional seconds for the reactor to reach max production
+const OWN_CONSUMPTION       = 1500;     // The power the reactor consumes when online
+const MAX_PRODUCTION        = 7400;     // Maximal gross output of one reactor (7800 actually, but the last 400 take forever to reach)
+const SAFETY_MARGIN         = 1000;     // The average load might be up to this much higher during reactor startup
+const STARTUP_TIME          = 5;        // It takes this many seconds for the reactor to begin increasing its output
+const RAMP_TIME             = 70;       // It takes this many additional seconds for the reactor to reach max production
 
-COEF_A1 = 0 - STARTUP_TIME;
-COEF_A2 = RAMP_TIME / (MAX_PRODUCTION * 2);
+const COEF_A1 = 0 - STARTUP_TIME;
+const COEF_A2 = RAMP_TIME / (MAX_PRODUCTION * 2);
+
 COOLANT_FLAG = FUEL_FLAG = START = 0;
 
 reactors = 0;
