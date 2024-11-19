@@ -303,6 +303,11 @@ public class MindustryOpcodeVariants {
 
         add(list, V8A, MAX, W, FUNC, Opcode.LOCALEPRINT, in("property"));
 
+        // Unit testing support
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_EQUALS, in("expected"), in("actual"), in("title"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("expected"), in("title"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH);
+
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);
         add(list, V6,  MAX, S, NONE, Opcode.LABEL,       label("label"));

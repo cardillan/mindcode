@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.processor.Assertion;
 import info.teksol.emulator.processor.TextBuffer;
 import info.teksol.mindcode.MindcodeMessage;
 
@@ -9,14 +10,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, TextBuffer textBuffer, int steps) {
+public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, List<Assertion> assertions, TextBuffer textBuffer, int steps) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
-        return new CompilerOutput<>(output, messages, textBuffer, steps);
+        return new CompilerOutput<>(output, messages, assertions, textBuffer, steps);
     }
 
     public CompilerOutput(T output, List<MindcodeMessage> messages) {
-        this(output, messages, null, 0);
+        this(output, messages, List.of(), null, 0);
     }
 
     public void addMessage(MindcodeMessage message) {

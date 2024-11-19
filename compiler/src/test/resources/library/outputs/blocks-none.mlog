@@ -146,5 +146,6 @@ set memory __fn0__variable
 printflush __fn0__message
 op equal __tmp14 __fn0__foundAll false
 jump 2 notEqual __tmp14 false
+assertequals message message1 "Located message1 block"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

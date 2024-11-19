@@ -9,3 +9,5 @@ findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
     @memory-bank,           "Memory",   out memory,     true,
     @memory-cell,           "Memory",   out memory,     true
 );
+
+assertEquals(message, message1, "Located message1 block");

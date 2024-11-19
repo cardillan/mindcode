@@ -21,33 +21,33 @@ Active optimizations:
     temp-variables-elimination = advanced,
     unreachable-code-elimination = advanced
 
-   149 instructions before optimizations.
+   150 instructions before optimizations.
      5 instructions eliminated by Temp Variables Elimination.
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      4 instructions eliminated by Jump Normalization (5 iterations).
      4 instructions eliminated by Jump Optimization (5 iterations).
     10 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     9 instructions eliminated by Expression Optimization (2 passes, 4 iterations).
-    65 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
+    15 instructions eliminated by Expression Optimization (2 passes, 4 iterations).
+    59 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
      1 instructions modified by Loop Optimization (4 iterations).
      1 loops improved by Loop Optimization.
     10 instructions added by Loop Unrolling (7 iterations).
      3 loops unrolled by Loop Unrolling.
      6 instructions eliminated by Unreachable Code Elimination.
     10 instructions eliminated by Print Merging.
-    40 instructions after optimizations.
+    41 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 909):
-  * Loop Unrolling: unroll iteration loop at line 53             cost     0, benefit      350.0, efficiency   Infinity (-14 instructions)
+Pass 1: speed optimization selection (cost limit 908):
+  * Loop Unrolling: unroll iteration loop at line 53             cost     0, benefit      350.0, efficiency   Infinity (-13 instructions)
     Loop Unrolling: unroll iteration loop at line 63             cost     6, benefit     8750.0, efficiency     1458.3
     Loop Unrolling: unroll iteration loop at line 72             cost    16, benefit      350.0, efficiency       21.9
 
-Pass 1: speed optimization selection (cost limit 923):
+Pass 1: speed optimization selection (cost limit 921):
   * Loop Unrolling: unroll iteration loop at line 63             cost     6, benefit     8750.0, efficiency     1458.3 (+1 instructions)
     Loop Unrolling: unroll iteration loop at line 72             cost    16, benefit      350.0, efficiency       21.9
 
-Pass 1: speed optimization selection (cost limit 922):
-  * Loop Unrolling: unroll iteration loop at line 72             cost    16, benefit      350.0, efficiency       21.9 (-2 instructions)
+Pass 1: speed optimization selection (cost limit 920):
+  * Loop Unrolling: unroll iteration loop at line 72             cost    16, benefit      350.0, efficiency       21.9 (+3 instructions)
 
 Final code before resolving virtual instructions:
 
@@ -99,3 +99,4 @@ Final code before resolving virtual instructions:
    37:  op and __fn0__foundAll __fn0__foundAll memory
    38:  printflush __fn0__message
    39:  jump __label2 equal __fn0__foundAll false
+   40:  assertequals message message1 "Located message1 block"

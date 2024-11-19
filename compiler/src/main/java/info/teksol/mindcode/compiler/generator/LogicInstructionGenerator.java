@@ -448,6 +448,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitFunctionCall(FunctionCall call) {
         // Solve special cases
         return switch (call.getFunctionName()) {
+            case "assertEquals" -> handleAssertEquals(call);
+            case "assertPrints" -> handleAssertPrints(call);
             case "length"       -> handleLength(call);
             case "min", "max"   -> handleMinMax(call);
             case "mlog"         -> handleMlog(call, false);
@@ -1835,7 +1837,42 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
+    private LogicValue handleAssertEquals(FunctionCall call) {
+        validateStandardFunctionArguments(call.getArguments());
+
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
+
+        if (arguments.size() != 3) {
+            error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
+                    call.getFunctionName(), 3, call.getArguments().size());
+        }
+
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+        emit(instructionProcessor.createInstruction(astContext, Opcode.ASSERT_EQUALS,
+                arguments.get(0).value(), arguments.get(1).value(), arguments.get(2).value()));
+        clearSubcontextType();
+        return NULL;
+    }
+
+    private LogicValue handleAssertPrints(FunctionCall call) {
+        validateStandardFunctionArguments(call.getArguments());
+        if (call.getArguments().size() != 3) {
+            error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
+                    call.getFunctionName(), 3, call.getArguments().size());
+        }
+
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        LogicValue expected = visit(call.getArguments().get(0).getExpression());
+        LogicValue title = visit(call.getArguments().get(2).getExpression());
+        emit(instructionProcessor.createInstruction(astContext, Opcode.ASSERT_FLUSH));
+        visit(call.getArguments().get(1).getExpression());  // Just print
+
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+        emit(instructionProcessor.createInstruction(astContext, Opcode.ASSERT_PRINTS, expected, title));
+        clearSubcontextType();
+        return NULL;
+    }
 
     private LogicValue handleLength(FunctionCall call) {
         if (call.getArguments().size() != 1) {
@@ -1937,6 +1974,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         clearSubcontextType();
         return NULL;
     }
+
+    private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
 
     private LogicValue handlePrintf(FunctionCall call) {
         validateStandardFunctionArguments(call.getArguments());

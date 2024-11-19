@@ -26,6 +26,8 @@ public enum ExecutionFlag {
     ERR_GRAPHICS_BUFFER_OVERFLOW    ("stop execution when the graphics buffer size (256 operations) is exceeded"),
 
     ERR_INVALID_FORMAT              ("stop execution when no placeholder for the 'format' instruction exists in the buffer"),
+
+    ERR_INVALID_ASSERT_PRINTS       ("stop execution when 'assertflush' and 'assertprints' are called out of order",false, true),
     ;
 
     private final String description;

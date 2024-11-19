@@ -38,5 +38,6 @@ print memory
 op and __fn0__foundAll __fn0__foundAll memory
 printflush __fn0__message
 jump 1 equal __fn0__foundAll false
+assertequals message message1 "Located message1 block"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

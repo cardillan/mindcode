@@ -212,19 +212,3 @@ Final code before resolving virtual instructions:
   123:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
         label __label84
   124:  end
-
-
-stop instruction encountered, dumping variable values:
-@counter: 53.0
-__ast0: null
-__fn0__display: null
-__fn0_type: null
-__fn11__display: null
-__tmp0: null
-__tmp1: null
-__tmp2: 0.0
-__tmp3: null
-__tmp4: 0.0
-__tmp5: null
-__tmp6: null
-_display: null

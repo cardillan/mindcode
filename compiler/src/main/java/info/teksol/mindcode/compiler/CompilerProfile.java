@@ -306,4 +306,24 @@ public class CompilerProfile {
     public Set<ExecutionFlag> getExecutionFlags() {
         return EnumSet.copyOf(executionFlags);
     }
+
+    public String encode() {
+        int len = OptimizationLevel.values().length;
+        long value = 0;
+        for (Optimization optimization : Optimization.LIST) {
+            value = value * len + getOptimizationLevel(optimization).ordinal();
+        }
+        return Long.toString(value);
+    }
+
+    public CompilerProfile decode(String encoded) {
+        OptimizationLevel[] levels = OptimizationLevel.values();
+        int len = levels.length;
+        long value = Long.parseLong(encoded);
+        for (int i = Optimization.LIST.size() - 1; i >= 0; i--) {
+            setOptimizationLevel(Optimization.LIST.get(i), levels[(int) (value % len)]);
+            value = value / len;
+        }
+        return this;
+    }
 }

@@ -184,6 +184,18 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         }
     }
 
+    private void setProfile(CompilerProfile compilerProfile, Directive node) {
+        String value = node.getValue().getText();
+        try {
+            compilerProfile.decode(value);
+            return;
+        } catch (NumberFormatException ex) {
+            // Do nothing
+        }
+
+        error(node.getValue(), "Invalid value '%s' of compiler directive 'profile'.", value);
+    }
+
     private final Map<String, BiConsumer<CompilerProfile, Directive>> OPTION_HANDLERS = createOptionHandlers();
 
     private Map<String, BiConsumer<CompilerProfile,Directive>> createOptionHandlers() {
@@ -197,6 +209,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         map.put("remarks", this::setRemarks);
         map.put("memory-model", this::setMemoryModel);
         map.put("sort-variables", this::setSortVariables);
+        map.put("profile", this::setProfile);
         for (Optimization opt : Optimization.LIST) {
             map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }

@@ -1,5 +1,4 @@
 require printing;
-require unittests;
 
 printNumber(null)            :* "0"
 printNumber(1)               :* "1"

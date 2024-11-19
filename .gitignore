@@ -14,6 +14,7 @@ db/cluster
 # Compiled artifacts
 Instruction_Samples_*.txt
 out/
+scratches/
 target
 tmp
 mindcode/src/test/resources/scripts/*.mlog

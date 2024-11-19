@@ -188,4 +188,5 @@ Final code before resolving virtual instructions:
   147:  jump __label2 notEqual __tmp14 false
         label __label4
         label __label1
-  148:  end
+  148:  assertequals message message1 "Located message1 block"
+  149:  end

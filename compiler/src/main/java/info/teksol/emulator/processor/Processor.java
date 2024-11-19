@@ -46,6 +46,7 @@ public class Processor extends AbstractMessageEmitter {
     private static final int GRAPHICS_BUFFER_LIMIT = 256;
     private TextBuffer textBuffer;
     private GraphicsBuffer graphicsBuffer;
+    private List<Assertion> assertions = new ArrayList<>();
 
     public Processor(Consumer<MindcodeMessage> messageConsumer, Set<ExecutionFlag> flags, int traceLimit) {
         super(messageConsumer);
@@ -63,6 +64,10 @@ public class Processor extends AbstractMessageEmitter {
         blockMap.put(name, block);
         variables.addLinkedBlock(name, block);
         blocks= List.copyOf(blockMap.values());
+    }
+
+    public List<Assertion> getAssertions() {
+        return assertions;
     }
 
     public List<String> getPrintOutput() {
@@ -107,6 +112,7 @@ public class Processor extends AbstractMessageEmitter {
         textBuffer = new TextBuffer(TEXT_OUTPUT_LIMIT, TEXT_BUFFER_LIMIT,
                 getFlag(ERR_TEXT_BUFFER_OVERFLOW));
         graphicsBuffer = new GraphicsBuffer(GRAPHICS_BUFFER_LIMIT);
+        assertions = new ArrayList<>();
 
         counter.setIntValue(0);
         variables.addConstVariable("@links", blocks.size());
@@ -187,24 +193,27 @@ public class Processor extends AbstractMessageEmitter {
 
     private boolean execute(LogicInstruction instruction) {
         return switch(instruction.getOpcode()) {
-            case DRAW       -> executeDraw((DrawInstruction) instruction);
-            case DRAWFLUSH  -> executeDrawflush((DrawflushInstruction) instruction);
-            case END        -> { counter.setIntValue(0); yield !getFlag(ExecutionFlag.STOP_ON_END_INSTRUCTION); }
-            case FORMAT     -> executeFormat((FormatInstruction) instruction); 
-            case GETLINK    -> executeGetlink((GetlinkInstruction) instruction);
-            case JUMP       -> executeJump((JumpInstruction) instruction);
-            case LOOKUP     -> executeLookup((LookupInstruction) instruction);
-            case OP         -> executeOp((OpInstruction) instruction);
-            case PACKCOLOR  -> executePackColor((PackColorInstruction) instruction);
-            case PRINT      -> executePrint((PrintInstruction) instruction);
-            case PRINTFLUSH -> executePrintflush((PrintflushInstruction) instruction);
-            case READ       -> executeRead((ReadInstruction) instruction);
-            case SENSOR     -> executeSensor((SensorInstruction) instruction);
-            case SET        -> executeSet((SetInstruction) instruction);
-            case STOP       -> executeStop((StopInstruction) instruction);
-            case UBIND,WAIT -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
-            case WRITE      -> executeWrite((WriteInstruction) instruction);
-            default         -> {
+            case ASSERT_EQUALS  -> executeAssertEquals(instruction);
+            case ASSERT_FLUSH   -> executeAssertFlush(instruction);
+            case ASSERT_PRINTS  -> executeAssertPrints(instruction);
+            case DRAW           -> executeDraw((DrawInstruction) instruction);
+            case DRAWFLUSH      -> executeDrawflush((DrawflushInstruction) instruction);
+            case END            -> { counter.setIntValue(0); yield !getFlag(ExecutionFlag.STOP_ON_END_INSTRUCTION); }
+            case FORMAT         -> executeFormat((FormatInstruction) instruction);
+            case GETLINK        -> executeGetlink((GetlinkInstruction) instruction);
+            case JUMP           -> executeJump((JumpInstruction) instruction);
+            case LOOKUP         -> executeLookup((LookupInstruction) instruction);
+            case OP             -> executeOp((OpInstruction) instruction);
+            case PACKCOLOR      -> executePackColor((PackColorInstruction) instruction);
+            case PRINT          -> executePrint((PrintInstruction) instruction);
+            case PRINTFLUSH     -> executePrintflush((PrintflushInstruction) instruction);
+            case READ           -> executeRead((ReadInstruction) instruction);
+            case SENSOR         -> executeSensor((SensorInstruction) instruction);
+            case SET            -> executeSet((SetInstruction) instruction);
+            case STOP           -> executeStop((StopInstruction) instruction);
+            case UBIND,WAIT     -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
+            case WRITE          -> executeWrite((WriteInstruction) instruction);
+            default             -> {
                 if (instruction.getOutputs() == 0) yield true;
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
             }
@@ -232,6 +241,27 @@ public class Processor extends AbstractMessageEmitter {
         blockOperation(description, value, type, operation, () -> {});
     }
 
+
+    private boolean executeAssertEquals(LogicInstruction ix) {
+        String expected = getExistingVariable(ix.getArg(0)).printExact();
+        String actual = getExistingVariable(ix.getArg(1)).printExact();
+        String title = getExistingVariable(ix.getArg(2)).printExact();
+        assertions.add(new Assertion(expected, actual, title));
+        return true;
+    }
+
+    private boolean executeAssertFlush(LogicInstruction ix) {
+        textBuffer.prepareAssert();
+        return true;
+    }
+
+    private boolean executeAssertPrints(LogicInstruction ix) {
+        String expected = getExistingVariable(ix.getArg(0)).printExact();
+        String actual = textBuffer.getAssertedOutput();
+        String title = getExistingVariable(ix.getArg(1)).printExact();
+        assertions.add(new Assertion(expected, actual, title));
+        return true;
+    }
 
     private boolean executeDraw(DrawInstruction ix) {
         graphicsBuffer.draw(ix);

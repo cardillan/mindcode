@@ -10,6 +10,7 @@
 
     <modules>
         <module>compiler</module>
+        <module>exttest</module>
         <module>schemacode</module>
         <module>toolapp</module>
         <module>samples</module>

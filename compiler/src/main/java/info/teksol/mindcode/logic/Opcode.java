@@ -57,6 +57,12 @@ public enum Opcode {
     MAKEMARKER      ("makemarker",      "Create a new logic marker in the world. An ID to identify this marker must be provided. Markers currently limited to 20,000 per world."),
     LOCALEPRINT     ("localeprint",     "Add map locale property value to the text buffer. To set map locale bundles in map editor, check Map Info > Locale Bundles. If client is a mobile device, tries to print a property ending in \".mobile\" first."),
 
+    // Unit testing support
+    ASSERT_EQUALS   ("assertequals",    1),
+    ASSERT_PRINTS   ("assertprints",    1),
+    ASSERT_FLUSH    ("assertflush",     1),
+
+    // Virtual instructions - resolved when the final code is generated
     NOOP            ("noop",            0),
     LABEL           ("label",           0),
     GOTOLABEL       ("gotolabel",       0),

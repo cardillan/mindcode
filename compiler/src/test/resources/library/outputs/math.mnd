@@ -1,6 +1,5 @@
 #set target = ML8A;
 require math;
-require unittests;
 
 assertEquals(5, distance(1,1,4,5), "distance(1,1,4,5)");
 assertEquals(5, distance(-1,-1,-4,-5), "distance(-1,-1,-4,-5)");

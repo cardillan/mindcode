@@ -60,7 +60,6 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
         try (Stream<Path> stream = Files.list(Paths.get(LIBRARY_DIRECTORY))) {
             List<Path> files = stream
                     .filter(f -> f.toString().endsWith(".mnd"))
-                    .filter(f -> !f.toString().contains("unittests.mnd"))
                     //.filter(f -> f.toString().endsWith("units.mnd"))
                     .toList();
             assertFalse(files.isEmpty(), "Expected to find at least one script in " + LIBRARY_DIRECTORY + "; found none");

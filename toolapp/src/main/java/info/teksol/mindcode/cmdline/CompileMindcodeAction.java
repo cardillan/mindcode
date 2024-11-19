@@ -157,6 +157,10 @@ public class CompileMindcodeAction extends ActionHandler {
                 } else {
                     result.addMessage(ToolMessage.info("The program didn't generate any output."));
                 }
+                if (!result.assertions().isEmpty()) {
+                    result.addMessage(ToolMessage.info("The program generated the following assertions:"));
+                    result.assertions().forEach(a -> result.addMessage(a.createMessage()));
+                }
             }
 
             outputMessages(result, output, logFile, positionFormatter);

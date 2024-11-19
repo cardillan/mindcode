@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.emulator.processor.Assertion;
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +45,7 @@ public class SystemLibraryTest {
 
     @Test
     void testOneLibrary() throws IOException {
-        testLibrary("math", OptimizationLevel.ADVANCED);
+        testLibrary("printing", OptimizationLevel.ADVANCED);
     }
 
     @TestFactory
@@ -76,15 +75,20 @@ public class SystemLibraryTest {
         Path templateFile = Path.of(LIBRARY_TESTS_DIRECTORY, libraryName + ".txt");
         Path testFile = Path.of(LIBRARY_TESTS_DIRECTORY, libraryName + ".mnd");
 
+        boolean executableTest;
         InputFile inputFile;
         if (testFile.toFile().exists()) {
             // Manually written testing code
+            executableTest = true;
             inputFile = inputFiles.registerSource( Files.readString(testFile));
         } else if (templateFile.toFile().exists()) {
             // Generate test code from template
+            executableTest = true;
             inputFile = inputFiles.registerSource(generateCodeFromTemplate(Files.readString(templateFile)));
         } else {
             // Generate test code from library source
+            // No reason to execute it at all, just verify it compiles
+            executableTest = false;
             InputFile source = compiler.loadSystemLibrary(libraryName);
             inputFile = inputFiles.registerSource(generateCodeFromSource(libraryName, source.getCode()));
         }
@@ -92,6 +96,7 @@ public class SystemLibraryTest {
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + ".mnd"),
                 normalizeLineEndings(inputFile.getCode()), StandardCharsets.UTF_8);
 
+        profile.setRun(executableTest);
         CompilerOutput<String> result = compiler.compile(List.of(inputFile));
 
         String errorsAndWarnings = result.messages().stream()
@@ -111,11 +116,13 @@ public class SystemLibraryTest {
 
         //if (result.hasProgramOutput()) System.out.println(result.getProgramOutput());
 
-        extractTestResults(result.getProgramOutput()).forEach(TestResult::assertValid);
-
-        if (!errorsAndWarnings.isEmpty()) {
-            fail("Unexpected error or warning messages were generated:\n" + errorsAndWarnings);
+        if (executableTest) {
+            assertFalse(result.assertions().isEmpty(), "No assertions were executed by the unit test.");
         }
+
+        result.assertions().forEach(this::assertSuccess);
+
+        assertTrue(errorsAndWarnings.isEmpty(), "Unexpected error or warning messages were generated:\n" + errorsAndWarnings);
     }
 
     private String generateCodeFromTemplate(String template) {
@@ -135,11 +142,11 @@ public class SystemLibraryTest {
             } else if (index2 >= 0) {
                 String actual = line.substring(0, index2).trim();
                 String expected = line.substring(index2 + 2).trim();
-                code.append("assertWillPrint(")
+                code.append("assertPrints(")
                         .append(expected).append(", ")
+                        .append(actual).append(", ")
                         .append('"').append(actual.replace('"','\'')).append('"')
-                        .append(");")
-                        .append(actual).append("; println();\n");
+                        .append(");\n");
             } else {
                 code.append(line).append("\n");
             }
@@ -189,37 +196,7 @@ public class SystemLibraryTest {
                 : Stream.empty();
     }
 
-    private record TestResult(String title, String expected, String actual) {
-        void assertValid() {
-            assertEquals(expected, actual,"Test " + title + " failed");
-        }
-    }
-
-    private List<TestResult> extractTestResults(String output) {
-        List<TestResult> results = new ArrayList<>();
-        String title = null;
-        String expected = null;
-        String actual = null;
-
-        for (String line : output.split("\n")) {
-            if (line.startsWith("T:")) {
-                title = line.substring(2);
-            } else if (line.startsWith("E:")) {
-                expected = line.substring(2);
-            } else if (line.startsWith("A:")) {
-                actual = line.substring(2);
-
-                if (title == null || expected == null) {
-                    throw new MindcodeInternalError("Unexpected structure of test output.");
-                } else {
-                    results.add(new TestResult(title, expected, actual));
-                    title = null;
-                    expected = null;
-                    actual = null;
-                }
-            }
-        }
-
-        return results;
+    void assertSuccess(Assertion assertion) {
+        assertEquals(assertion.expected(), assertion.actual(), "Test " + assertion.title() + " failed");
     }
 }

@@ -4,6 +4,7 @@ import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MessageBlock;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.blocks.graphics.LogicDisplay;
+import info.teksol.emulator.processor.Assertion;
 import info.teksol.emulator.processor.ExecutionException;
 import info.teksol.emulator.processor.Processor;
 import info.teksol.emulator.processor.TextBuffer;
@@ -93,7 +94,7 @@ public class MindcodeCompiler implements Compiler<String> {
             }
 
             error("Internal error: %s", e.getMessage());
-            return new CompilerOutput<>("", messages, null, 0);
+            return new CompilerOutput<>("", messages, List.of(), null, 0);
         }
     }
 
@@ -226,7 +227,7 @@ public class MindcodeCompiler implements Compiler<String> {
         long parseStart = System.nanoTime();
         Seq program = parseFiles(filesToCompile);
         if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-            return new CompilerOutput<>("", messages, null, 0);
+            return new CompilerOutput<>("", messages);
         }
         long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
@@ -235,7 +236,7 @@ public class MindcodeCompiler implements Compiler<String> {
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
         GeneratorOutput generated = generateCode(program);
         if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-            return new CompilerOutput<>("", messages, null, 0);
+            return new CompilerOutput<>("", messages);
         }
         long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
 
@@ -243,7 +244,7 @@ public class MindcodeCompiler implements Compiler<String> {
         long optimizeStart = System.nanoTime();
         List<LogicInstruction> optimized = optimize(generated);
         if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-            return new CompilerOutput<>("", messages, null, 0);
+            return new CompilerOutput<>("", messages);
         }
         long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
@@ -270,14 +271,14 @@ public class MindcodeCompiler implements Compiler<String> {
             timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
                     parseTime, compileTime, optimizeTime, runTime);
         } else {
-            runResults = new RunResults(null,0);
+            runResults = new RunResults(List.of(), null,0);
             timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
                     parseTime, compileTime, optimizeTime);
         }
 
         String output = LogicInstructionPrinter.toString(instructionProcessor, result);
 
-        return new CompilerOutput<>(output, messages, runResults.textBuffer(), runResults.steps());
+        return new CompilerOutput<>(output, messages, runResults.assertions(), runResults.textBuffer(), runResults.steps());
     }
 
     /** Prints the parse tree according to level */
@@ -318,7 +319,7 @@ public class MindcodeCompiler implements Compiler<String> {
         return result;
     }
 
-    private record RunResults(TextBuffer textBuffer, int steps) { }
+    private record RunResults(List<Assertion> assertions, TextBuffer textBuffer, int steps) { }
 
     private RunResults run(List<LogicInstruction> instructions) {
         List<LogicInstruction> program = instructions.stream().map(instructionProcessor::normalizeInstruction).toList();
@@ -332,10 +333,10 @@ public class MindcodeCompiler implements Compiler<String> {
 
         try {
             processor.run(program, profile.getStepLimit());
-            return new RunResults(processor.getTextBuffer(), processor.getSteps());
+            return new RunResults(processor.getAssertions(), processor.getTextBuffer(), processor.getSteps());
         } catch (ExecutionException e) {
-            processor.getTextBuffer().append("\n" + e.getMessage());
-            return new RunResults(processor.getTextBuffer(), processor.getSteps());
+            return new RunResults(processor.getAssertions(),
+                    processor.getTextBuffer().append("\n" + e.getMessage()), processor.getSteps());
         }
     }
 

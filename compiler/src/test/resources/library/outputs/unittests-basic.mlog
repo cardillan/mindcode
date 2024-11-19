@@ -1,7 +1,0 @@
-print "T:Unit test\nE:"
-print 1
-print "\nA:"
-print 1
-print "\n"
-end
-print "Compiled by Mindcode - github.com/cardillan/mindcode"

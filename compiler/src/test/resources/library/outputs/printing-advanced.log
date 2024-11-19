@@ -1,4 +1,4 @@
-Main file: number of reported ambiguities: 58
+Main file: number of reported ambiguities: 4
 Active optimizations:
     case-expression-optimization = advanced,
     case-switching = advanced,
@@ -21,38 +21,39 @@ Active optimizations:
     temp-variables-elimination = advanced,
     unreachable-code-elimination = advanced
 
-   550 instructions before optimizations.
+   307 instructions before optimizations.
     18 instructions eliminated by Temp Variables Elimination.
-    53 instructions eliminated by Dead Code Elimination (6 iterations).
-    20 instructions eliminated by Jump Normalization (4 iterations).
+    26 instructions eliminated by Dead Code Elimination (6 iterations).
+    29 instructions eliminated by Jump Normalization (4 iterations).
     16 instructions eliminated by Jump Optimization (4 iterations).
-    46 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+    56 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      2 instructions eliminated by If Expression Optimization (3 iterations).
-   187 instructions eliminated by Data Flow Optimization (14 passes, 44 iterations).
+   191 instructions eliminated by Data Flow Optimization (14 passes, 44 iterations).
      2 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
    124 instructions added by Loop Unrolling (16 iterations).
      5 loops unrolled by Loop Unrolling.
-   589 instructions added by Function Inlining (16 iterations).
-    14 function calls inlined by Function Inlining.
-    26 instructions updated by JumpThreading.
-   442 instructions eliminated by Unreachable Code Elimination.
-   225 instructions eliminated by Print Merging.
-   252 instructions after optimizations.
+   803 instructions added by Function Inlining (16 iterations).
+    18 function calls inlined by Function Inlining.
+    35 instructions updated by JumpThreading.
+   660 instructions eliminated by Unreachable Code Elimination.
+    29 instructions eliminated by Print Merging.
+   205 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 607):
+Pass 1: speed optimization selection (cost limit 769):
     Loop Unrolling: unroll loop at line 108                      cost    27, benefit      187.5, efficiency        6.9
   * Loop Unrolling: unroll loop at line 153                      cost    53, benefit     3750.0, efficiency       70.8 (+53 instructions)
     Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2
     Function Inlining: inline function printExactFast            cost   404, benefit       35.0, efficiency        0.1
     Function Inlining: inline function printExactSlow            cost   215, benefit       35.0, efficiency        0.2
+    Function Inlining: inline function call at line 3            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 4            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 5            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 6            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 7            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 8            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 9            cost    17, benefit        3.5, efficiency        0.2
-    Function Inlining: inline function call at line 10           cost    17, benefit        3.5, efficiency        0.2
+    Function Inlining: inline function call at line 10           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 11           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 12           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 13           cost    45, benefit        3.5, efficiency        0.1
@@ -62,7 +63,7 @@ Pass 1: speed optimization selection (cost limit 607):
     Function Inlining: inline function call at line 17           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 18           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 19           cost    45, benefit        3.5, efficiency        0.1
-    Function Inlining: inline function call at line 20           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 20           cost    24, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 21           cost    24, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 22           cost    24, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 23           cost    24, benefit        3.5, efficiency        0.1
@@ -72,20 +73,20 @@ Pass 1: speed optimization selection (cost limit 607):
     Function Inlining: inline function call at line 27           cost    24, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 28           cost    24, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 29           cost    24, benefit        3.5, efficiency        0.1
-    Function Inlining: inline function call at line 30           cost    24, benefit        3.5, efficiency        0.1
 
-Pass 1: speed optimization selection (cost limit 554):
+Pass 1: speed optimization selection (cost limit 716):
   * Loop Unrolling: unroll loop at line 108                      cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
     Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2
     Function Inlining: inline function printExactFast            cost   404, benefit       35.0, efficiency        0.1
-  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function call at line 3            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 4            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 5            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 6            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 7            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 8            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 9            cost    17, benefit        3.5, efficiency        0.2
-    Function Inlining: inline function call at line 10           cost    17, benefit        3.5, efficiency        0.2
+    Function Inlining: inline function call at line 10           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 11           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 12           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 13           cost    45, benefit        3.5, efficiency        0.1
@@ -95,7 +96,7 @@ Pass 1: speed optimization selection (cost limit 554):
     Function Inlining: inline function call at line 17           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 18           cost    45, benefit        3.5, efficiency        0.1
     Function Inlining: inline function call at line 19           cost    45, benefit        3.5, efficiency        0.1
-    Function Inlining: inline function call at line 20           cost    45, benefit        3.5, efficiency        0.1
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -105,19 +106,19 @@ Pass 1: speed optimization selection (cost limit 554):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 527):
+Pass 1: speed optimization selection (cost limit 689):
   * Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2 (+78 instructions)
-  ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function call at line 3            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 4            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 5            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 6            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 7            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 8            cost    17, benefit        3.5, efficiency        0.2
     Function Inlining: inline function call at line 9            cost    17, benefit        3.5, efficiency        0.2
-    Function Inlining: inline function call at line 10           cost    17, benefit        3.5, efficiency        0.2
+    Function Inlining: inline function call at line 10           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
@@ -127,7 +128,7 @@ Pass 1: speed optimization selection (cost limit 527):
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -137,14 +138,14 @@ Pass 1: speed optimization selection (cost limit 527):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 449):
+Pass 1: speed optimization selection (cost limit 611):
   * Loop Unrolling: unroll loop at line 30                       cost     6, benefit      100.0, efficiency       16.7 (-1 instructions)
     Loop Unrolling: unroll loop at line 30                       cost     6, benefit      100.0, efficiency       16.7
     Loop Unrolling: unroll loop at line 30                       cost     6, benefit      100.0, efficiency       16.7
   ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function call at line 10           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
@@ -154,7 +155,7 @@ Pass 1: speed optimization selection (cost limit 449):
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -164,13 +165,13 @@ Pass 1: speed optimization selection (cost limit 449):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 450):
+Pass 1: speed optimization selection (cost limit 612):
   * Loop Unrolling: unroll loop at line 30                       cost     6, benefit      100.0, efficiency       16.7 (-1 instructions)
     Loop Unrolling: unroll loop at line 30                       cost     6, benefit      100.0, efficiency       16.7
   ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function call at line 10           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
@@ -180,7 +181,7 @@ Pass 1: speed optimization selection (cost limit 450):
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -190,12 +191,12 @@ Pass 1: speed optimization selection (cost limit 450):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 451):
+Pass 1: speed optimization selection (cost limit 613):
   * Loop Unrolling: unroll loop at line 30                       cost     6, benefit      100.0, efficiency       16.7 (-1 instructions)
   ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function call at line 10           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
@@ -205,7 +206,7 @@ Pass 1: speed optimization selection (cost limit 451):
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -215,12 +216,12 @@ Pass 1: speed optimization selection (cost limit 451):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 452):
+Pass 1: speed optimization selection (cost limit 614):
   ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
-  * Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0 (+70 instructions)
+  * Function Inlining: inline function call at line 10           cost    72, benefit        3.5, efficiency        0.0 (+70 instructions)
+    Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 14           cost    72, benefit        3.5, efficiency        0.0
@@ -229,7 +230,7 @@ Pass 1: speed optimization selection (cost limit 452):
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -239,10 +240,32 @@ Pass 1: speed optimization selection (cost limit 452):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 382):
+Pass 1: speed optimization selection (cost limit 544):
   ! Function Inlining: inline function printExactFast            cost   575, benefit       31.5, efficiency        0.1
+  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  * Function Inlining: inline function call at line 11           cost    72, benefit        3.5, efficiency        0.0 (+69 instructions)
+    Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 14           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 15           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 16           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 24           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 25           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 26           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 1: speed optimization selection (cost limit 475):
+  ! Function Inlining: inline function printExactFast            cost   503, benefit       28.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
   * Function Inlining: inline function call at line 12           cost    72, benefit        3.5, efficiency        0.0 (+69 instructions)
     Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0
@@ -252,7 +275,7 @@ Pass 1: speed optimization selection (cost limit 382):
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -262,19 +285,18 @@ Pass 1: speed optimization selection (cost limit 382):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 313):
-  ! Function Inlining: inline function printExactFast            cost   503, benefit       28.0, efficiency        0.1
+Pass 1: speed optimization selection (cost limit 406):
+  ! Function Inlining: inline function printExactFast            cost   431, benefit       24.5, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
-  * Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0 (+69 instructions)
+  * Function Inlining: inline function call at line 13           cost    72, benefit        3.5, efficiency        0.0 (+53 instructions)
     Function Inlining: inline function call at line 14           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 15           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 16           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -284,18 +306,17 @@ Pass 1: speed optimization selection (cost limit 313):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 244):
-  ! Function Inlining: inline function printExactFast            cost   431, benefit       24.5, efficiency        0.1
+Pass 1: speed optimization selection (cost limit 353):
+  ! Function Inlining: inline function printExactFast            cost   359, benefit       21.0, efficiency        0.1
   ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
-  * Function Inlining: inline function call at line 14           cost    72, benefit        3.5, efficiency        0.0 (+53 instructions)
+  * Function Inlining: inline function call at line 14           cost    72, benefit        3.5, efficiency        0.0 (+50 instructions)
     Function Inlining: inline function call at line 15           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 16           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -305,16 +326,16 @@ Pass 1: speed optimization selection (cost limit 244):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 191):
-  ! Function Inlining: inline function printExactFast            cost   359, benefit       21.0, efficiency        0.1
-  * Function Inlining: inline function call at line 15           cost    72, benefit        3.5, efficiency        0.0 (+50 instructions)
+Pass 1: speed optimization selection (cost limit 303):
+  * Function Inlining: inline function printExactFast            cost   287, benefit       17.5, efficiency        0.1 (+201 instructions)
+  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+    Function Inlining: inline function call at line 15           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 16           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+    Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -324,15 +345,9 @@ Pass 1: speed optimization selection (cost limit 191):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 141):
-  ! Function Inlining: inline function printExactFast            cost   287, benefit       17.5, efficiency        0.1
-  * Function Inlining: inline function call at line 16           cost    72, benefit        3.5, efficiency        0.0 (+60 instructions)
-    Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+Pass 1: speed optimization selection (cost limit 102):
+  * Function Inlining: inline function call at line 20           cost    77, benefit        3.5, efficiency        0.0 (+75 instructions)
     Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -342,30 +357,8 @@ Pass 1: speed optimization selection (cost limit 141):
     Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
     Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 81):
-  ! Function Inlining: inline function printExactFast            cost   215, benefit       14.0, efficiency        0.1
-  * Function Inlining: inline function call at line 17           cost    72, benefit        3.5, efficiency        0.0 (+60 instructions)
-    Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 24           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 25           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 26           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-    Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
-
-Pass 1: speed optimization selection (cost limit 21):
-  ! Function Inlining: inline function printExactFast            cost   143, benefit       10.5, efficiency        0.1
-  ! Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+Pass 1: speed optimization selection (cost limit 27):
   ! Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -375,13 +368,8 @@ Pass 1: speed optimization selection (cost limit 21):
   ! Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 2: speed optimization selection (cost limit 51):
-  ! Function Inlining: inline function printExactFast            cost   143, benefit       10.5, efficiency        0.1
-  ! Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+Pass 2: speed optimization selection (cost limit 66):
   ! Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -391,13 +379,8 @@ Pass 2: speed optimization selection (cost limit 51):
   ! Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 3: speed optimization selection (cost limit 51):
-  ! Function Inlining: inline function printExactFast            cost   143, benefit       10.5, efficiency        0.1
-  ! Function Inlining: inline function call at line 18           cost    72, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 19           cost    72, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 20           cost    72, benefit        3.5, efficiency        0.0
+Pass 3: speed optimization selection (cost limit 66):
   ! Function Inlining: inline function call at line 21           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 22           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 23           cost    77, benefit        3.5, efficiency        0.0
@@ -407,305 +390,224 @@ Pass 3: speed optimization selection (cost limit 51):
   ! Function Inlining: inline function call at line 27           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 28           cost    77, benefit        3.5, efficiency        0.0
   ! Function Inlining: inline function call at line 29           cost    77, benefit        3.5, efficiency        0.0
-  ! Function Inlining: inline function call at line 30           cost    77, benefit        3.5, efficiency        0.0
 
 Final code before resolving virtual instructions:
 
-    0:  print "T:printNumber(null)\nE:0\nA:{2}"
-    1:  op floor __fn33__n 0 0
-    2:  format __fn33__n
-    3:  print "\nT:printNumber(1)\nE:1\nA:{2}"
-    4:  op floor __fn33__n 1 0
-    5:  format __fn33__n
-    6:  print "\nT:printNumber(1.5)\nE:1\nA:{2}"
-    7:  op floor __fn33__n 1.5 0
-    8:  format __fn33__n
-    9:  print "\nT:printNumber(-1.5)\nE:-1\nA:{2}"
-   10:  op floor __fn33__n 1.5 0
-   11:  format "-{2}"
-   12:  format __fn33__n
-   13:  print "\nT:printNumber(1234567)\nE:1,234,567\nA:{2}"
-   14:  format "{2},{1}"
-   15:  format 567
-   16:  format "{2},{1}"
-   17:  format 234
-   18:  format 1
-   19:  print "\nT:printNumber(-1234567)\nE:-1,234,567\nA:{2}"
-   20:  format "-{2}"
-   21:  format "{2},{1}"
-   22:  format 567
+    0:  assertflush
+    1:  print "{2}"
+    2:  op floor __fn6__n 0 0
+    3:  format __fn6__n
+    4:  assertprints "0" "printNumber(null)"
+    5:  assertflush
+    6:  print "{2}"
+    7:  op floor __fn6__n 1 0
+    8:  format __fn6__n
+    9:  assertprints "1" "printNumber(1)"
+   10:  assertflush
+   11:  print "{2}"
+   12:  op floor __fn6__n 1.5 0
+   13:  format __fn6__n
+   14:  assertprints "1" "printNumber(1.5)"
+   15:  assertflush
+   16:  print "{2}"
+   17:  op floor __fn6__n 1.5 0
+   18:  format "-{2}"
+   19:  format __fn6__n
+   20:  assertprints "-1" "printNumber(-1.5)"
+   21:  assertflush
+   22:  print "{2}"
    23:  format "{2},{1}"
-   24:  format 234
-   25:  format 1
-   26:  print "\nT:printNumber(9009099)\nE:9,009,099\nA:{2}"
-   27:  format "{2},0{1}"
-   28:  format 99
-   29:  format "{2},00{1}"
-   30:  format 9
-   31:  format 9
-   32:  op floor __tmp59 3.00000007 0
-   33:  op mod __tmp60 700.0000001866624 1
-   34:  op floor __fn4__t 0.018666241885512136 0
-   35:  op abs __tmp39 1.0123456789 0
-   36:  op log10 __tmp45 1.0123456789 0
-   37:  op floor __fn4__exp 0.005328833456870865 0
-   38:  op mul __tmp47 -1 0
-   39:  op pow __tmp48 10 0
-   40:  op mul __fn4__base 1.0123456789 1
-   41:  op add __tmp51 1.0123456789 0.5
-   42:  op floor __tmp50 1.5123456789 0
-   43:  op sub __tmp53 1.0123456789 1
-   44:  op abs __fn4__cmp 0.012345678900000046 0
-   45:  print "\nT:printExactFast(null)\nE:null\nA:null\nT:printExactFast(0)\nE:0\nA:0\nT:printExactFast(1)\nE:1\nA:1\nT:printExactFast(1.0000001)\nE:1.000000100000000\nA:1.000000100000000\nT:printExactFast(3.00000007)\nE:3.000000070000000\nA:3.000000070000000\nT:printExactFast(3e50)\nE:3E50\nA:3E50\nT:printExactFast(1.0123456789)\nE:1.0123456789\nA:1.0123456789\nT:printExactFast(1.0000001e20)\nE:1.000000099999999E20\nA:"
-   46:  set __fn4__n 10000000999999999E4
-   47:  setaddr __fn4retaddr __label50
-   48:  call __label4 __fn4retval
-        gotolabel __label50 __fn4
-   49:  print "\nT:printExactFast(1.2345e-50)\nE:1.2345000000000002E-50\nA:"
-   50:  set __fn4__n 12345E-54
-   51:  setaddr __fn4retaddr __label53
-   52:  call __label4 __fn4retval
-        gotolabel __label53 __fn4
-   53:  print "\nT:printExactFast(-1.2345e-50)\nE:-1.2345000000000002E-50\nA:"
-   54:  set __fn4__n -12345E-54
-   55:  setaddr __fn4retaddr __label56
-   56:  call __label4 __fn4retval
-        gotolabel __label56 __fn4
-   57:  print "\nT:printExactSlow(null)\nE:null\nA:"
-   58:  set __fn5__n null
-   59:  setaddr __fn5retaddr __label59
-   60:  call __label5 __fn5retval
-        gotolabel __label59 __fn5
-   61:  print "\nT:printExactSlow(0)\nE:0\nA:"
-   62:  set __fn5__n 0
-   63:  setaddr __fn5retaddr __label62
-   64:  call __label5 __fn5retval
-        gotolabel __label62 __fn5
-   65:  print "\nT:printExactSlow(1)\nE:1.000000000000000\nA:"
-   66:  set __fn5__n 1
-   67:  setaddr __fn5retaddr __label65
-   68:  call __label5 __fn5retval
-        gotolabel __label65 __fn5
-   69:  print "\nT:printExactSlow(1.0000001)\nE:1.000000100000000\nA:"
-   70:  set __fn5__n 1.0000001
-   71:  setaddr __fn5retaddr __label68
-   72:  call __label5 __fn5retval
-        gotolabel __label68 __fn5
-   73:  print "\nT:printExactSlow(3.00000007)\nE:3.000000070000000\nA:"
-   74:  set __fn5__n 3.00000007
-   75:  setaddr __fn5retaddr __label71
-   76:  call __label5 __fn5retval
-        gotolabel __label71 __fn5
-   77:  print "\nT:printExactSlow(3e50)\nE:3.000000000000000E50\nA:"
-   78:  set __fn5__n 3E50
-   79:  setaddr __fn5retaddr __label74
-   80:  call __label5 __fn5retval
-        gotolabel __label74 __fn5
-   81:  print "\nT:printExactSlow(1.0123456789)\nE:1.012345678900000\nA:"
-   82:  set __fn5__n 1.0123456789
-   83:  setaddr __fn5retaddr __label77
-   84:  call __label5 __fn5retval
-        gotolabel __label77 __fn5
-   85:  print "\nT:printExactSlow(1.0000001e20)\nE:1.000000099999999E20\nA:"
-   86:  set __fn5__n 10000000999999999E4
-   87:  setaddr __fn5retaddr __label80
+   24:  format 567
+   25:  format "{2},{1}"
+   26:  format 234
+   27:  format 1
+   28:  assertprints "1,234,567" "printNumber(1234567)"
+   29:  assertflush
+   30:  print "{2}"
+   31:  format "-{2}"
+   32:  format "{2},{1}"
+   33:  format 567
+   34:  format "{2},{1}"
+   35:  format 234
+   36:  format 1
+   37:  assertprints "-1,234,567" "printNumber(-1234567)"
+   38:  assertflush
+   39:  print "{2}"
+   40:  format "{2},0{1}"
+   41:  format 99
+   42:  format "{2},00{1}"
+   43:  format 9
+   44:  format 9
+   45:  assertprints "9,009,099" "printNumber(9009099)"
+   46:  assertflush
+   47:  print null
+   48:  assertprints "null" "printExactFast(null)"
+   49:  assertflush
+   50:  print 0
+   51:  assertprints "0" "printExactFast(0)"
+   52:  assertflush
+   53:  print 1
+   54:  assertprints "1" "printExactFast(1)"
+   55:  assertflush
+   56:  print "1.000000100000000"
+   57:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
+   58:  assertflush
+   59:  print "3.000000070000000"
+   60:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
+   61:  assertflush
+   62:  print "3E50"
+   63:  assertprints "3E50" "printExactFast(3e50)"
+   64:  assertflush
+   65:  print 1.0123456789
+   66:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
+   67:  assertflush
+   68:  print "1.000000099999999E20"
+   69:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
+   70:  assertflush
+   71:  print "1.2345000000000002E-50"
+   72:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+   73:  assertflush
+   74:  print "-1.2345000000000002E-50"
+   75:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+   76:  assertflush
+   77:  op abs __tmp48 null 0
+   78:  print null
+   79:  assertprints "null" "printExactSlow(null)"
+   80:  assertflush
+   81:  set __fn5__n 0
+   82:  setaddr __fn5retaddr __label24
+   83:  call __label5 __fn5retval
+        gotolabel __label24 __fn5
+   84:  assertprints "0" "printExactSlow(0)"
+   85:  assertflush
+   86:  set __fn5__n 1
+   87:  setaddr __fn5retaddr __label25
    88:  call __label5 __fn5retval
-        gotolabel __label80 __fn5
-   89:  print "\nT:printExactSlow(1.2345e-50)\nE:1.234500000000000E-50\nA:"
-   90:  set __fn5__n 12345E-54
-   91:  setaddr __fn5retaddr __label83
-   92:  call __label5 __fn5retval
-        gotolabel __label83 __fn5
-   93:  print "\nT:printExactSlow(-1.2345e-50)\nE:-1.234500000000000E-50\nA:"
-   94:  set __fn5__n -12345E-54
-   95:  setaddr __fn5retaddr __label86
-   96:  call __label5 __fn5retval
-        gotolabel __label86 __fn5
-   97:  print "\n"
-   98:  end
-        label __label4
-   99:  op abs __tmp39 __fn4__n 0
-  100:  jump __label102 greaterThan __tmp39 0
-  101:  print __fn4__n
-  102:  goto __fn4retaddr __fn4
-        label __label102
-  103:  jump __label104 greaterThanEq __fn4__n 0
-  104:  print "-"
-  105:  op abs __fn4__n __fn4__n 0
-        label __label104
-  106:  op log10 __tmp45 __fn4__n 0
-  107:  op floor __fn4__exp __tmp45 0
-  108:  op mul __tmp47 -1 __fn4__exp
-  109:  op pow __tmp48 10 __tmp47
-  110:  op mul __fn4__base __fn4__n __tmp48
-  111:  op add __tmp51 __fn4__base 0.5
-  112:  op floor __tmp50 __tmp51 0
-  113:  op sub __tmp53 __fn4__base __tmp50
-  114:  op abs __fn4__cmp __tmp53 0
-  115:  jump __label108 greaterThan __fn4__cmp 0
-  116:  print __fn4__base
-  117:  jump __label109 always 0 0
-        label __label108
-  118:  jump __label110 lessThanEq __fn4__cmp 0.00001
-  119:  print __fn4__base
-  120:  jump __label111 always 0 0
-        label __label110
-  121:  op floor __tmp59 __fn4__base 0
-  122:  print __tmp59
-  123:  print "."
-  124:  op mod __tmp60 __fn4__base 1
-  125:  op mul __fn4__base __tmp60 100000
-  126:  op floor __fn4__t __fn4__base 0
-  127:  jump __label209 greaterThanEq __fn4__t 10
-  128:  print "0000"
-  129:  jump __label216 always 0 0
-        label __label209
-  130:  jump __label210 greaterThanEq __fn4__t 100
-  131:  print "000"
-  132:  jump __label215 always 0 0
-        label __label210
-  133:  jump __label211 greaterThanEq __fn4__t 1000
-  134:  print "00"
-  135:  jump __label214 always 0 0
-        label __label211
-  136:  jump __label212 greaterThanEq __fn4__t 10000
-  137:  print "0"
-        label __label212
-        label __label214
-        label __label215
-        label __label216
-  138:  print __fn4__t
-  139:  op mod __tmp60 __fn4__base 1
-  140:  op mul __fn4__base __tmp60 100000
-  141:  op floor __fn4__t __fn4__base 0
-  142:  jump __label221 greaterThanEq __fn4__t 10
-  143:  print "0000"
-  144:  jump __label228 always 0 0
-        label __label221
-  145:  jump __label222 greaterThanEq __fn4__t 100
-  146:  print "000"
-  147:  jump __label227 always 0 0
-        label __label222
-  148:  jump __label223 greaterThanEq __fn4__t 1000
-  149:  print "00"
-  150:  jump __label226 always 0 0
-        label __label223
-  151:  jump __label224 greaterThanEq __fn4__t 10000
-  152:  print "0"
-        label __label224
-        label __label226
-        label __label227
-        label __label228
-  153:  print __fn4__t
-  154:  op mod __tmp60 __fn4__base 1
-  155:  op mul __fn4__base __tmp60 100000
-  156:  op floor __fn4__t __fn4__base 0
-  157:  jump __label233 greaterThanEq __fn4__t 10
-  158:  print "0000"
-  159:  jump __label240 always 0 0
-        label __label233
-  160:  jump __label234 greaterThanEq __fn4__t 100
-  161:  print "000"
-  162:  jump __label239 always 0 0
-        label __label234
-  163:  jump __label235 greaterThanEq __fn4__t 1000
-  164:  print "00"
-  165:  jump __label238 always 0 0
-        label __label235
-  166:  jump __label236 greaterThanEq __fn4__t 10000
-  167:  print "0"
-        label __label236
-        label __label238
-        label __label239
-        label __label240
-  168:  print __fn4__t
-        label __label111
-        label __label109
-  169:  jump __label125 equal __fn4__exp 0
-  170:  print "E"
-  171:  print __fn4__exp
-        label __label125
-  172:  goto __fn4retaddr __fn4
+        gotolabel __label25 __fn5
+   89:  assertprints "1.000000000000000" "printExactSlow(1)"
+   90:  assertflush
+   91:  set __fn5__n 1.0000001
+   92:  setaddr __fn5retaddr __label26
+   93:  call __label5 __fn5retval
+        gotolabel __label26 __fn5
+   94:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+   95:  assertflush
+   96:  set __fn5__n 3.00000007
+   97:  setaddr __fn5retaddr __label27
+   98:  call __label5 __fn5retval
+        gotolabel __label27 __fn5
+   99:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  100:  assertflush
+  101:  set __fn5__n 3E50
+  102:  setaddr __fn5retaddr __label28
+  103:  call __label5 __fn5retval
+        gotolabel __label28 __fn5
+  104:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  105:  assertflush
+  106:  set __fn5__n 1.0123456789
+  107:  setaddr __fn5retaddr __label29
+  108:  call __label5 __fn5retval
+        gotolabel __label29 __fn5
+  109:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  110:  assertflush
+  111:  set __fn5__n 10000000999999999E4
+  112:  setaddr __fn5retaddr __label30
+  113:  call __label5 __fn5retval
+        gotolabel __label30 __fn5
+  114:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  115:  assertflush
+  116:  set __fn5__n 12345E-54
+  117:  setaddr __fn5retaddr __label31
+  118:  call __label5 __fn5retval
+        gotolabel __label31 __fn5
+  119:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  120:  assertflush
+  121:  set __fn5__n -12345E-54
+  122:  setaddr __fn5retaddr __label32
+  123:  call __label5 __fn5retval
+        gotolabel __label32 __fn5
+  124:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  125:  end
         label __label5
-  173:  op abs __tmp75 __fn5__n 0
-  174:  jump __label130 greaterThan __tmp75 0
-  175:  print __fn5__n
-  176:  goto __fn5retaddr __fn5
-        label __label130
-  177:  jump __label132 greaterThanEq __fn5__n 0
-  178:  print "-"
-  179:  op abs __fn5__n __fn5__n 0
-        label __label132
-  180:  op log10 __tmp81 __fn5__n 0
-  181:  op floor __fn5__exp __tmp81 0
-  182:  op mul __tmp83 -1 __fn5__exp
-  183:  op pow __tmp84 10 __tmp83
-  184:  op mul __fn5__base __fn5__n __tmp84
-  185:  op floor __tmp86 __fn5__base 0
-  186:  print __tmp86
-  187:  print "."
-  188:  op mod __tmp87 __fn5__base 1
-  189:  op mul __fn5__base __tmp87 10
-  190:  op floor __tmp90 __fn5__base 0
-  191:  print __tmp90
-  192:  op mod __tmp87 __fn5__base 1
-  193:  op mul __fn5__base __tmp87 10
-  194:  op floor __tmp90 __fn5__base 0
-  195:  print __tmp90
-  196:  op mod __tmp87 __fn5__base 1
-  197:  op mul __fn5__base __tmp87 10
-  198:  op floor __tmp90 __fn5__base 0
-  199:  print __tmp90
-  200:  op mod __tmp87 __fn5__base 1
-  201:  op mul __fn5__base __tmp87 10
-  202:  op floor __tmp90 __fn5__base 0
-  203:  print __tmp90
-  204:  op mod __tmp87 __fn5__base 1
-  205:  op mul __fn5__base __tmp87 10
-  206:  op floor __tmp90 __fn5__base 0
-  207:  print __tmp90
-  208:  op mod __tmp87 __fn5__base 1
-  209:  op mul __fn5__base __tmp87 10
-  210:  op floor __tmp90 __fn5__base 0
-  211:  print __tmp90
-  212:  op mod __tmp87 __fn5__base 1
-  213:  op mul __fn5__base __tmp87 10
-  214:  op floor __tmp90 __fn5__base 0
-  215:  print __tmp90
-  216:  op mod __tmp87 __fn5__base 1
-  217:  op mul __fn5__base __tmp87 10
-  218:  op floor __tmp90 __fn5__base 0
-  219:  print __tmp90
-  220:  op mod __tmp87 __fn5__base 1
-  221:  op mul __fn5__base __tmp87 10
-  222:  op floor __tmp90 __fn5__base 0
-  223:  print __tmp90
-  224:  op mod __tmp87 __fn5__base 1
-  225:  op mul __fn5__base __tmp87 10
-  226:  op floor __tmp90 __fn5__base 0
-  227:  print __tmp90
-  228:  op mod __tmp87 __fn5__base 1
-  229:  op mul __fn5__base __tmp87 10
-  230:  op floor __tmp90 __fn5__base 0
-  231:  print __tmp90
-  232:  op mod __tmp87 __fn5__base 1
-  233:  op mul __fn5__base __tmp87 10
-  234:  op floor __tmp90 __fn5__base 0
-  235:  print __tmp90
-  236:  op mod __tmp87 __fn5__base 1
-  237:  op mul __fn5__base __tmp87 10
-  238:  op floor __tmp90 __fn5__base 0
-  239:  print __tmp90
-  240:  op mod __tmp87 __fn5__base 1
-  241:  op mul __fn5__base __tmp87 10
-  242:  op floor __tmp90 __fn5__base 0
-  243:  print __tmp90
-  244:  op mod __tmp87 __fn5__base 1
-  245:  op mul __fn5__base __tmp87 10
-  246:  op floor __tmp90 __fn5__base 0
-  247:  print __tmp90
-  248:  jump __label139 equal __fn5__exp 0
-  249:  print "E"
-  250:  print __fn5__exp
-        label __label139
-  251:  goto __fn5retaddr __fn5
+  126:  op abs __tmp48 __fn5__n 0
+  127:  jump __label76 greaterThan __tmp48 0
+  128:  print __fn5__n
+  129:  goto __fn5retaddr __fn5
+        label __label76
+  130:  jump __label78 greaterThanEq __fn5__n 0
+  131:  print "-"
+  132:  op abs __fn5__n __fn5__n 0
+        label __label78
+  133:  op log10 __tmp54 __fn5__n 0
+  134:  op floor __fn5__exp __tmp54 0
+  135:  op mul __tmp56 -1 __fn5__exp
+  136:  op pow __tmp57 10 __tmp56
+  137:  op mul __fn5__base __fn5__n __tmp57
+  138:  op floor __tmp59 __fn5__base 0
+  139:  print __tmp59
+  140:  print "."
+  141:  op mod __tmp60 __fn5__base 1
+  142:  op mul __fn5__base __tmp60 10
+  143:  op floor __tmp63 __fn5__base 0
+  144:  print __tmp63
+  145:  op mod __tmp60 __fn5__base 1
+  146:  op mul __fn5__base __tmp60 10
+  147:  op floor __tmp63 __fn5__base 0
+  148:  print __tmp63
+  149:  op mod __tmp60 __fn5__base 1
+  150:  op mul __fn5__base __tmp60 10
+  151:  op floor __tmp63 __fn5__base 0
+  152:  print __tmp63
+  153:  op mod __tmp60 __fn5__base 1
+  154:  op mul __fn5__base __tmp60 10
+  155:  op floor __tmp63 __fn5__base 0
+  156:  print __tmp63
+  157:  op mod __tmp60 __fn5__base 1
+  158:  op mul __fn5__base __tmp60 10
+  159:  op floor __tmp63 __fn5__base 0
+  160:  print __tmp63
+  161:  op mod __tmp60 __fn5__base 1
+  162:  op mul __fn5__base __tmp60 10
+  163:  op floor __tmp63 __fn5__base 0
+  164:  print __tmp63
+  165:  op mod __tmp60 __fn5__base 1
+  166:  op mul __fn5__base __tmp60 10
+  167:  op floor __tmp63 __fn5__base 0
+  168:  print __tmp63
+  169:  op mod __tmp60 __fn5__base 1
+  170:  op mul __fn5__base __tmp60 10
+  171:  op floor __tmp63 __fn5__base 0
+  172:  print __tmp63
+  173:  op mod __tmp60 __fn5__base 1
+  174:  op mul __fn5__base __tmp60 10
+  175:  op floor __tmp63 __fn5__base 0
+  176:  print __tmp63
+  177:  op mod __tmp60 __fn5__base 1
+  178:  op mul __fn5__base __tmp60 10
+  179:  op floor __tmp63 __fn5__base 0
+  180:  print __tmp63
+  181:  op mod __tmp60 __fn5__base 1
+  182:  op mul __fn5__base __tmp60 10
+  183:  op floor __tmp63 __fn5__base 0
+  184:  print __tmp63
+  185:  op mod __tmp60 __fn5__base 1
+  186:  op mul __fn5__base __tmp60 10
+  187:  op floor __tmp63 __fn5__base 0
+  188:  print __tmp63
+  189:  op mod __tmp60 __fn5__base 1
+  190:  op mul __fn5__base __tmp60 10
+  191:  op floor __tmp63 __fn5__base 0
+  192:  print __tmp63
+  193:  op mod __tmp60 __fn5__base 1
+  194:  op mul __fn5__base __tmp60 10
+  195:  op floor __tmp63 __fn5__base 0
+  196:  print __tmp63
+  197:  op mod __tmp60 __fn5__base 1
+  198:  op mul __fn5__base __tmp60 10
+  199:  op floor __tmp63 __fn5__base 0
+  200:  print __tmp63
+  201:  jump __label85 equal __fn5__exp 0
+  202:  print "E"
+  203:  print __fn5__exp
+        label __label85
+  204:  goto __fn5retaddr __fn5
