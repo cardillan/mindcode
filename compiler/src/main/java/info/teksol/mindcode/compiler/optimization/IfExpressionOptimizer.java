@@ -59,13 +59,13 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 if (instructionAfter instanceof SetInstruction finalSet) {
                     resTrue = replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
                     resFalse = replaceInstruction(resFalse, resFalse.withResult(finalSet.getResult()));
-                    removeInstruction(finalSet);
+                    invalidateInstruction(finalSet);
                 } else if (resTrue instanceof SetInstruction setTrue && resFalse instanceof SetInstruction setFalse) {
                     replaceInstruction(setTrue, replaceAllArgs(instructionAfter, resVar, setTrue.getValue())
                             .withContext(setTrue.getAstContext()));
                     replaceInstruction(setFalse, replaceAllArgs(instructionAfter, resVar, setFalse.getValue())
                             .withContext(setFalse.getAstContext()));
-                    removeInstruction(instructionAfter);
+                    invalidateInstruction(instructionAfter);
                     canMoveForward = false;
                 }
 

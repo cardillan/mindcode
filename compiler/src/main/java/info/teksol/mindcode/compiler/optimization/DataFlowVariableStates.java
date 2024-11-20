@@ -49,6 +49,9 @@ class DataFlowVariableStates {
     class VariableStates {
         private final int id;
 
+        /** Modification counter for change detection */
+        private int modifications = 0;
+
         /**
          * Maps variables to their known values, which might be a constant represented by a literal,
          * or an expression represented by an instruction.
@@ -95,6 +98,14 @@ class DataFlowVariableStates {
 
         /** An isolated instance only tracks values of variables, cannot be used to determine definitions or reaches. */
         private boolean isolated;
+
+        public String getId() {
+            return "vs#" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!");
+        }
+
+        public long digest() {
+            return ((long) id) << 32 | (long) modifications;
+        }
 
         public VariableStates() {
             id = counter.incrementAndGet();
@@ -153,8 +164,8 @@ class DataFlowVariableStates {
          * @return an independent copy of this instance
          */
         public VariableStates copy(String reason, boolean reachable) {
-            VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated, reachable);
-            trace(() -> "*** " + reason + ": created VariableStates instance #" + copy.id + " as a copy of #" + id);
+            VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated, reachable && this.reachable);
+            trace(() -> "*** " + reason + ": created VariableStates instance " + copy.getId() + " as a copy of " + getId());
             return copy;
         }
 
@@ -196,6 +207,7 @@ class DataFlowVariableStates {
                                 l -> new ArrayList<>()).addAll(e.getValue()));
             }
             dead = true;
+            modifications++;
             return this;
         }
 
@@ -204,7 +216,7 @@ class DataFlowVariableStates {
         }
 
         private String printInstruction(LogicInstruction instruction) {
-            return "   " + optimizer.instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction);
+            return "    " + optimizer.instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction);
         }
 
         /**
@@ -214,6 +226,7 @@ class DataFlowVariableStates {
          */
         // Called when a variable value changes to purge all dependent expressions
         private void invalidateVariable(LogicVariable variable) {
+            modifications++;
             Set<LogicVariable> invalids = new HashSet<>();
             invalids.add(variable);
 
@@ -244,7 +257,8 @@ class DataFlowVariableStates {
          * @return this
          */
         public VariableStates pushVariable(LogicVariable variable) {
-            trace(() -> "Pushing variable " + variable);
+            modifications++;
+            trace(() -> "Pushing variable " + variable.toMlog());
             if (!stored.add(variable)) {
                 throw new MindcodeInternalError("Push called twice on " + variable.toMlog());
             }
@@ -258,7 +272,8 @@ class DataFlowVariableStates {
          * @return this
          */
         public VariableStates popVariable(LogicVariable variable) {
-            trace(() -> "Popping variable " + variable);
+            modifications++;
+            trace(() -> "Popping variable " + variable.toMlog());
             if (!stored.remove(variable)) {
                 throw new MindcodeInternalError("Pop without push on " + variable.toMlog());
             }
@@ -276,13 +291,14 @@ class DataFlowVariableStates {
          *                    (values inferred on the first pass through a loop must not be reused)
          */
         public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value, boolean reuseValue) {
+            modifications++;
             if (stored.contains(variable)) {
                 invalidateVariable(variable);
                 trace(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
                 return;
             }
 
-            trace(() -> "Value set: " + variable);
+            trace(() -> "Value set: " + variable.toMlog());
             trace(() -> printInstruction(instruction));
 
             if (optimizer.canEliminate(instruction, variable)) {
@@ -349,6 +365,7 @@ class DataFlowVariableStates {
          * @param variable variable that is being initialized
          */
         public void markInitialized(LogicVariable variable) {
+            modifications++;
             initialized.add(variable);
         }
 
@@ -360,10 +377,11 @@ class DataFlowVariableStates {
          * @param variable variable to reset
          */
         public void valueReset(LogicVariable variable) {
+            modifications++;
             if (stored.contains(variable)) {
-                trace(() -> "Variable " + variable + " not reset after function call, because it is stored on stack.");
+                trace(() -> "Variable " + variable.toMlog() + " not reset after function call, because it is stored on stack.");
             } else {
-                trace(() -> "Value reset: " + variable);
+                trace(() -> "Value reset: " + variable.toMlog());
                 values.remove(variable);
                 invalidateVariable(variable);
             }
@@ -376,6 +394,7 @@ class DataFlowVariableStates {
          * @param instruction instruction that caused the call
          */
         public void updateAfterFunctionCall(LogicFunction function, LogicInstruction instruction) {
+            modifications++;
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
             optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
             function.getParameters().stream().filter(LogicVariable::isOutput).forEach(initialized::add);
@@ -430,16 +449,17 @@ class DataFlowVariableStates {
          */
         public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized,
                 boolean ixReachable) {
-            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!" : "") + (reachable && ixReachable ? "" : " UNREACHABLE!") + ")");
+            modifications++;
+            trace(() -> "Value read: " + variable.toMlog() + " (instance " + getId() + ")" + (ixReachable ? "" : " instruction unreachable)"));
 
             if (ixReachable && reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
-                trace(() -> "*** Detected uninitialized read of " + variable.toMlog());
-                print("Current context:");
+                print("!!! Detected uninitialized read of " + variable.toMlog());
                 optimizer.addUninitialized(variable);
             }
 
             if (definitions.containsKey(variable)) {
                 if (TRACE) {
+                    trace("Definitions of " + variable.toMlog());
                     trace(definitions.get(variable).stream().map(this::printInstruction));
                 }
                 // Variable value was read, keep all instructions that define its value
@@ -489,20 +509,26 @@ class DataFlowVariableStates {
          * @param reason                 reasons for the merge, for debug purposes
          */
         public VariableStates merge(VariableStates other, boolean propagateUninitialized, String reason) {
-            print("*** Merge " + reason + ":\n  this: ");
-            other.print("  other:");
+            trace("*** Merge " + reason);
+            optimizationContext.indentInc();
+            print("This");
+            other.print("Other");
 
             if (!stored.isEmpty() || !other.stored.isEmpty()) {
                 throw new MindcodeInternalError("Trying to merge variable states having variables on stack.");
             }
 
             if (other.dead || !other.reachable) {
-                print("  result:");
+                print("Result");
+                optimizationContext.indentDec();
                 return this;        // Merging two dead ends produces dead end again
             } else if (dead || !reachable) {
-                other.print("  result:");
+                other.print("Result");
+                optimizationContext.indentDec();
                 return other;
             }
+
+            modifications++;
 
             merge(definitions, other.definitions);
 
@@ -534,7 +560,8 @@ class DataFlowVariableStates {
                 }
             }
 
-            print("  result:");
+            print("Result");
+            optimizationContext.indentDec();
 
             return this;
         }
@@ -588,16 +615,19 @@ class DataFlowVariableStates {
 
         void print(String title) {
             if (TRACE) {
-                trace(title);
-                trace("    VariableStates instance #" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!"));
+                trace(title + ": VariableStates instance " + getId());
                 values.values().forEach(v -> trace("    " + v));
                 definitions.forEach((k, v) -> {
                     trace("    Definitions of " + k.toMlog());
-                    v.forEach(ix -> trace("      " + optimizer.instructionIndex(ix)
+                    v.forEach(ix -> trace("        " + optimizer.instructionIndex(ix)
                             + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
                 });
                 equivalences.forEach((k, v) -> trace("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
-                trace("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
+                if (initialized.isEmpty()) {
+                    trace("    Initialized: <none>");
+                } else {
+                    trace("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
+                }
             }
         }
     }

@@ -86,7 +86,7 @@ class LoopHoisting extends BaseOptimizer {
 
             int index = firstInstructionIndex(anchor);
             insertInstructions(index, instructions);
-            invariants.forEach(this::removeInstruction);
+            invariants.forEach(this::invalidateInstruction);
             improved = true;
         }
 

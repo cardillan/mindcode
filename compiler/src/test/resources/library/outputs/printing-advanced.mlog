@@ -40,8 +40,7 @@ assertflush
 print "{2}"
 format "{2},0{1}"
 format 99
-set __tmp7 "{2},00{1}"
-format __tmp7
+format "{2},00{1}"
 format 9
 format 9
 assertprints "9,009,099" "printNumber(9009099)"

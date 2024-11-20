@@ -813,7 +813,8 @@ class OptimizationContext {
         if (labelIndex < 0) {
             throw new MindcodeInternalError("Label not found in program.\nLabel: " + label);
         }
-        return firstInstructionIndex(labelIndex + 1, ix -> !(ix instanceof LabeledInstruction));
+        return firstInstructionIndex(labelIndex + 1,
+                ix -> !(ix instanceof LabeledInstruction) && !(ix instanceof NoOpInstruction));
     }
 
     /**
@@ -1555,8 +1556,9 @@ class OptimizationContext {
 
     protected LogicInstruction instructionAfter(AstContext astContext) {
         int index = lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1;
-        while (index < program.size() && instructionAt(index) instanceof LabelInstruction ix &&
-            !isActive(ix.getLabel())) {
+        while (index < program.size()
+               && (instructionAt(index) instanceof LabelInstruction ix && !isActive(ix.getLabel())
+               || instructionAt(index) instanceof NoOpInstruction)) {
             index++;
         }
         return index < program.size() ? instructionAt(index) : null;
@@ -1743,6 +1745,14 @@ class OptimizationContext {
 
     }
     //</editor-fold>
+
+    public void indentInc() {
+        traceFile.indentInc();
+    }
+
+    public void indentDec() {
+        traceFile.indentDec();
+    }
 
     void trace(Stream<String> text) {
         traceFile.trace(text);

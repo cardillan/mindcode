@@ -127,6 +127,20 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         }
     }
 
+    public void indentInc() {
+        optimizationContext.indentInc();
+    }
+
+    public void indentDec() {
+        optimizationContext.indentDec();
+    }
+
+    public void indent(Runnable action) {
+        indentInc();
+        action.run();
+        indentDec();
+    }
+
     protected void trace(Stream<String> text) {
         optimizationContext.trace(text);
     }

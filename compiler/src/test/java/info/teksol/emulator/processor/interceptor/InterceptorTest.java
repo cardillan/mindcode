@@ -98,38 +98,15 @@ public class InterceptorTest extends AbstractInterceptorTest {
     }
 
     @Test
-    void compilesVarargLoops() {
-        testCode(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.MAX).decode("11451006976")),
+    void solveCurrentProblem() {
+        testCode(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.MAX).setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
                 """
-                        print(foo(1));
-                        
-                        inline def foo(x...)
-                            for i in x do
-                                if bar(i, x) then
-                                    return i;
-                                end;
-                            end;
-                            "Error";
-                        end;
-                        
-                        inline def bar(n, x...)
-                            lt = gt = 0;
-                            for i in x do
-                                if i < n then
-                                    lt += 1;
-                                elsif i > n then
-                                    gt += 1;
-                                end;
-                            end;
-                            dif = abs(gt - lt);
-                            if gt + lt >= length(x) - 1 then
-                                true;
-                            else
-                                false;
-                            end;
-                        end;
+                        param FROM_INDEX = 0;
+                        param OFFSET_Y = 2;
+                        cly = FROM_INDEX == 1 ? 0 : OFFSET_Y;
+                        print(cly);
                         """,
-                "1"
+                "2"
         );
     }
 }

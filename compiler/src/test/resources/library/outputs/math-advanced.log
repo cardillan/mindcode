@@ -26,10 +26,10 @@ Active optimizations:
    124 instructions eliminated by Dead Code Elimination (4 iterations).
      3 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
     68 instructions eliminated by Jump Optimization (6 iterations).
-    67 instructions eliminated by Single Step Elimination (5 passes, 13 iterations).
+    67 instructions eliminated by Single Step Elimination (4 passes, 13 iterations).
      8 instructions modified by Expression Optimization (2 passes, 5 iterations).
      8 instructions eliminated by If Expression Optimization (5 iterations).
-   327 instructions eliminated by Data Flow Optimization (11 passes, 37 iterations).
+   327 instructions eliminated by Data Flow Optimization (10 passes, 35 iterations).
     49 instructions added by Loop Unrolling (14 iterations).
      8 loops unrolled by Loop Unrolling.
      5 instructions added by Function Inlining (14 iterations).
@@ -375,7 +375,7 @@ Pass 2: speed optimization selection (cost limit 12):
   ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
   ! Loop Unrolling: unroll iteration loop at line 174            cost   433, benefit       26.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 192            cost    19, benefit      650.0, efficiency       34.2
-  * Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3 (-7 instructions)
+  * Function Inlining: inline function sign                      cost    11, benefit       14.0, efficiency        1.3 (-11 instructions)
   ! Function Inlining: inline function median                    cost    59, benefit       25.0, efficiency        0.4
   ! Function Inlining: inline function median                    cost   111, benefit       44.0, efficiency        0.4
     Function Inlining: inline function call at line 13           cost     4, benefit        3.5, efficiency        0.9
@@ -396,7 +396,7 @@ Pass 2: speed optimization selection (cost limit 12):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 19):
+Pass 2: speed optimization selection (cost limit 23):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
     Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -431,7 +431,7 @@ Pass 2: speed optimization selection (cost limit 19):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 6):
+Pass 2: speed optimization selection (cost limit 10):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -464,7 +464,7 @@ Pass 2: speed optimization selection (cost limit 6):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 3: speed optimization selection (cost limit 16):
+Pass 3: speed optimization selection (cost limit 18):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
   * Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7 (+7 instructions)
@@ -497,7 +497,7 @@ Pass 3: speed optimization selection (cost limit 16):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 3: speed optimization selection (cost limit 9):
+Pass 3: speed optimization selection (cost limit 11):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1

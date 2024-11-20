@@ -123,7 +123,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                     if (!keep.contains(instruction) || useless.contains(instruction)) {
                         int index = instructionIndex(instruction);
                         if (index >= 0) {
-                            removeInstruction(index);
+                            invalidateInstruction(index);
                         }
                     }
                 }
@@ -315,9 +315,10 @@ class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processContext(AstContext localContext, AstContext context, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
-        trace(() -> ">>> Entering context " + context.id +
-                    " at #" + optimizationContext.firstInstructionIndex(context) +
+        trace(() -> ">>> Entering context cx#" + context.id +
+                    " at ix#" + optimizationContext.firstInstructionIndex(context) +
                     ": " + context.hierarchy());
+        indentInc();
         final VariableStates result;
         if (!context.matches(BASIC)) {
             result = processDefaultContext(localContext, context, variableStates, modifyInstructions);
@@ -329,8 +330,9 @@ class DataFlowOptimizer extends BaseOptimizer {
                 default     -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
             };
         }
-        trace(() -> "<<< Exiting  context " + context.id +
-                    " at #" + optimizationContext.lastInstructionIndex(context) +
+        indentDec();
+        trace(() -> "<<< Exiting  context cx#" + context.id +
+                    " at ix#" + optimizationContext.lastInstructionIndex(context) +
                     ": " + context.hierarchy());
         return result;
     }
@@ -553,6 +555,8 @@ class DataFlowOptimizer extends BaseOptimizer {
                     if (!wasBody) {
                         // There wasn't a body context before this flow control context. This means the flow context
                         // was preceded by a body that has been since removed, and is unreachable.
+//                        //                                                     ~~~~~~~~~~~~~~~~~~~   HAHAHA!
+//                        bodies++;
                         branchedStates.newBranch(localContext, "[entering flow control]", false);
                     }
                     branchedStates.processContext(localContext, child, modifyInstructions);
@@ -674,8 +678,14 @@ class DataFlowOptimizer extends BaseOptimizer {
             if (instruction.getAstContext() == context) {
                 boolean reachable = !unreachables.get(iterator.nextIndex());
                 iterator.next();
+                long digest = variableStates.digest();
                 variableStates = processInstruction(variableStates, instruction, modifyInstructions, reachable);
-                variableStates.print("  after processing instruction");
+                if (digest == variableStates.digest()) {
+                    trace("    No modifications to variable states " + variableStates.getId());
+                } else {
+                    final VariableStates tmp = variableStates;
+                    indent(() -> tmp.print("After processing instruction"));
+                }
             } else {
                 AstContext childContext = context.findDirectChild(instruction.getAstContext());
                 int position = iterator.currentIndex();
@@ -729,7 +739,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         if (TRACE) {
             counter++;
-            trace("*" + counter + " Processing instruction #" + instructionIndex(instruction) +
+            trace("*" + counter + " Processing instruction ix#" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
             if (counter == -1) {
@@ -743,6 +753,8 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (instruction instanceof PopInstruction ix)       return variableStates.popVariable(ix.getVariable());
         if (instruction instanceof LabeledInstruction ix)   return resolveLabel(variableStates, ix.getLabel());
         if (instruction instanceof EndInstruction ix)       return variableStates.setDead(true);
+
+        indentInc();
 
         if (modifyInstructions) {
             putVariableStates(instruction, variableStates.isolatedCopy());
@@ -803,6 +815,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
+        indentDec();
         return variableStates;
     }
 
@@ -914,7 +927,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         private BranchedVariableStates(AstContext localContext, VariableStates initial) {
             this.initial = initial;
-            trace(() -> "Creating branch states for local context #" + localContext.id);
+            trace(() -> "*** Creating branch states for local context cx#" + localContext.id);
         }
 
         /**
@@ -928,7 +941,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             if (current != null) {
                 merged = merged == null ? current : merged.merge(current, true, "old branch before starting new branch");
             }
-            current = initial.copy("local context #" + localContext.id + ": new conditional branch " + caller + (reachable ? "" : " (unreachable)"), reachable);
+            current = initial.copy("Local context cx#" + localContext.id + ": new conditional branch " + caller + (reachable ? "" : " (unreachable)"), reachable);
         }
 
         /**
@@ -949,7 +962,7 @@ class DataFlowOptimizer extends BaseOptimizer {
          * @return final variable states of the branched expression
          */
         private VariableStates getFinalStates(AstContext localContext) {
-            trace(() -> "Getting final states (local context #" + localContext.id + ")");
+            trace(() -> "Getting final states (local context cx#" + localContext.id + ")");
             if (current == null) {
                 throw new MindcodeInternalError("No current branch");
             }
