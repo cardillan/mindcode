@@ -1,10 +1,7 @@
 package info.teksol.mindcode.v3;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -199,10 +196,12 @@ public class InputFiles {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o == null || getClass() != o.getClass() || parent() != ((InputFileImpl) o).parent()) return false;
+            if (o == null || getClass() != o.getClass() ||
+                parent() != ((InputFileImpl) o).parent() && !library) return false;
 
             InputFileImpl inputFile = (InputFileImpl) o;
-            return id == inputFile.id;
+            return (library == inputFile.library)
+                   && (library ? Objects.equals(path, inputFile.path) : id == inputFile.id);
         }
 
         @Override
