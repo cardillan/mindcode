@@ -428,16 +428,17 @@ class DataFlowOptimizer extends BaseOptimizer {
                         .filter(resultIn(AstContext::subcontextType, CONDITION))
                         .findFirst().get();
                 OptimizationContext.LogicList condition = contextInstructions(conditionContext);
+                long jumps = condition.stream().filter(ix -> ix instanceof JumpInstruction).count();
                 LogicInstruction last = condition.getLast();
-                if (last instanceof NoOpInstruction) {
-                    // NoOp means the jump was already eliminated --> the body WILL be executed
+                if (jumps == 0) {
+                    // There are no jumps in the context
                     propagateUninitialized = false;
-                } else if (last instanceof JumpInstruction jump) {
+                } else if (jumps == 1 && last instanceof JumpInstruction jump) {
                     // If the jump evaluates to false, it means it doesn't skip over the loop body
                     LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
                     propagateUninitialized = initialValue != LogicBoolean.FALSE;
                 } else {
-                    // We cannot guarantee the loop will be executed at least once
+                    // We don't understand the condition structure, and therefore cannot guarantee the loop will be executed at least once
                     // Variable that are initialized in the loop body, but not before the loop, need to remain uninitialized
                     propagateUninitialized = true;
                 }
@@ -455,9 +456,9 @@ class DataFlowOptimizer extends BaseOptimizer {
         for (int pass = 0; pass < (modifyInstructions ? 2 : 1); pass++) {
             iterator.setNextIndex(startIndex);
 
-            VariableStates initial = variableStates.copy("loop initial state");
             final int iteration = pass;
-            trace(() -> "=== Processing loop " + localContext.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
+            trace(() -> "=== Processing loop cx#" + localContext.id + " - iteration " + iteration + " (ix#" + iterator.nextIndex() + ")");
+            VariableStates initial = variableStates.copy("loop initial state");
 
             for (int j = loopStart; j < children.size(); j++) {
                 if (!children.get(j).matches(ITR_TRAILING)) {

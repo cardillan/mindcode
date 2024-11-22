@@ -40,6 +40,7 @@ class SingleStepEliminator extends BaseOptimizer {
                         isJumpToNext = false;
                     } else if (wasJump && ix instanceof JumpInstruction jump && jump.equals(lastJump) && !wasGotoLabel) {
                         removableJumps.add(lastJump);
+                        lastJump = null;
                     }
 
                     if (ix instanceof JumpInstruction jump) {
