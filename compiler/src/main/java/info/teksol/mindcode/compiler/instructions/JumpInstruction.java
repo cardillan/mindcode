@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public class JumpInstruction extends BaseInstruction {
 
     @Override
     public JumpInstruction withContext(AstContext astContext) {
+        if (astContext.subcontextType() == AstSubcontextType.BODY) {
+            throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + this);
+        }
         return new JumpInstruction(this, astContext);
     }
 

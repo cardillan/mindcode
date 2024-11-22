@@ -1,0 +1,52 @@
+allocate stack in bank1[0...512];
+
+const SIZE = 64;
+param ARRAY = bank2;
+
+inline def testAndSwap(i, j, sorted)
+    if (a = ARRAY[i]) > (b = ARRAY[j]) then
+        ARRAY[i] = b;
+        ARRAY[j] = a;
+        false;
+    else
+        sorted;
+    end;
+end;
+
+def bubblesort()
+    n = SIZE;
+    do
+        n -= 1;
+        sorted = true;
+        for i in 0 ... n do
+            sorted = testAndSwap(i, i + 1, sorted);
+        end;
+    loop while !sorted;
+end;
+
+const prime = 987660893;
+counter = 155;
+sum = 0;
+for i in 0 .. SIZE - 1 do
+    sum += counter;
+    ARRAY[i] = counter;
+    counter = (counter + prime) % 10000;
+end;
+
+bubblesort();
+
+sum2 = 0;
+for i in 0 .. SIZE - 1 do
+    sum2 += ARRAY[i];
+end;
+
+assertEquals(sum, sum2, "Array content modified.");
+
+for i in 1 .. SIZE - 1 do
+    if ARRAY[i] < ARRAY[i - 1] then
+        assertEquals(true, false, "Array not sorted");
+        break;
+    end;
+end;
+
+stopProcessor();

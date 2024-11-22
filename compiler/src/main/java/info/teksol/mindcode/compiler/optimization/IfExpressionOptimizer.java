@@ -7,6 +7,7 @@ import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
 
@@ -100,7 +101,10 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     private boolean isReplaceable(LogicInstruction instruction, LogicVariable resVar) {
         return instruction instanceof SetInstruction set && set.getValue().equals(resVar)
-                || experimental() && instruction.inputArgumentsStream().anyMatch(resVar::equals);
+               || experimental()
+                  && instruction.inputArgumentsStream().anyMatch(resVar::equals)
+                  && instruction.getOpcode() != Opcode.JUMP
+                  && instruction.getOpcode() != Opcode.SETADDR;
     }
 
     private LogicInstruction getLastRealInstruction(LogicList instructions) {

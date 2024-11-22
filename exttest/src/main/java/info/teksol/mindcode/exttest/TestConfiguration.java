@@ -8,12 +8,14 @@ import info.teksol.mindcode.exttest.cases.TestCaseSelectorFull;
 import info.teksol.mindcode.exttest.cases.TestCaseSelectorSampled;
 import info.teksol.mindcode.v3.InputFiles;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 public class TestConfiguration {
     private final int parallelism;
     private final InputFiles inputFiles;
+    private final Path resultPath;
     private final Map<Optimization, List<OptimizationLevel>> optimizationLevels;
     private final int sampleCount;
     private final int totalCases;
@@ -21,6 +23,7 @@ public class TestConfiguration {
     private final TestCaseSelector testCaseSelector;
 
     public TestConfiguration(
+            String sourceFileName,
             InputFiles inputFiles,
             int parallelism,
             Map<Optimization, List<OptimizationLevel>> optimizationLevels,
@@ -35,6 +38,11 @@ public class TestConfiguration {
         this.testCaseSelector = sampleCount < 0 || sampleCount >= totalCases
                 ? new TestCaseSelectorFull(totalCases)
                 : new TestCaseSelectorSampled(totalCases, sampleCount);
+
+        Path sourcePath = Path.of(sourceFileName);
+        Path parentPath = sourcePath.getParent();
+        String resultsName = "results-" + sourcePath.getFileName().toString().replace(".mnd", "") + ".txt.";
+        resultPath = Path.of(parentPath == null ? "" : parentPath.toString(), resultsName);
     }
 
     private static int product(int x, int y) {
@@ -43,6 +51,10 @@ public class TestConfiguration {
 
     public InputFiles getInputFiles() {
         return inputFiles;
+    }
+
+    public Path getResultPath() {
+        return resultPath;
     }
 
     public int getParallelism() {

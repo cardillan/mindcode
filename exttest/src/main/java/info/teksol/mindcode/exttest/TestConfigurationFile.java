@@ -24,9 +24,11 @@ public class TestConfigurationFile {
     public static TestConfiguration loadConfiguration(String propertiesFileName) throws IOException {
         TestConfigurationFile config = new TestConfigurationFile(propertiesFileName);
         InputFiles inputFiles = InputFiles.create();
-        //inputFiles.registerSource(Files.readString(Path.of(config.getSourceFileName())));
+        // TODO: We pretend the source file is a library to have it parsed just once and cached.
+        //       Implement a proper caching mechanism for these tests.
         inputFiles.registerLibraryFile(Path.of("__tmp"), Files.readString(Path.of(config.getSourceFileName())));
         return new TestConfiguration(
+                config.getSourceFileName(),
                 inputFiles,
                 config.getParallelism(),
                 config.getOptimizationLevels(),

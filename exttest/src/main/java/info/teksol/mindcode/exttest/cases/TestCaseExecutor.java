@@ -9,7 +9,6 @@ import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.exttest.ErrorResult;
 import info.teksol.mindcode.exttest.TestConfiguration;
 import info.teksol.mindcode.exttest.TestProgress;
-import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.v3.InputFiles;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class TestCaseExecutor {
 
     public CompilerProfile createCompilerProfile(int testCaseNumber) {
         CompilerProfile profile = new CompilerProfile(false)
-                .setProcessorVersion(ProcessorVersion.MAX)
                 .setAllOptimizationLevels(OptimizationLevel.NONE)
                 .setOptimizationPasses(50)
                 .setRun(false);

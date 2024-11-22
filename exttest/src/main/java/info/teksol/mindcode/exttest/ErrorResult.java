@@ -6,7 +6,7 @@ public record ErrorResult(int testCaseNumber, CompilerProfile profile, String un
 
     @Override
     public String toString() {
-        return "Test #" + testCaseNumber + ":"
+        return "Test case #" + testCaseNumber + ":"
                + "\n#set profile = " + profile.encode() + ";"
                + (unexpectedMessages.isEmpty() ? "" : "\nUnexpected messages: \n" + unexpectedMessages)
                + (failedTests.isEmpty() ? "" : "\nFailed tests: \n" + failedTests)

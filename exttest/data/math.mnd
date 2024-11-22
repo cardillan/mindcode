@@ -1,3 +1,4 @@
+#set target = ML8A;
 require math;
 
 assertEquals(0, sign(0), "sign(0)");

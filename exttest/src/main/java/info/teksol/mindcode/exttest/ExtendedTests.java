@@ -4,7 +4,6 @@ import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.exttest.cases.TestCaseExecutor;
 import info.teksol.mindcode.exttest.threadpool.ThreadPoolFramework;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -21,12 +20,10 @@ public class ExtendedTests {
             return;
         }
 
-        File file = new File("results.txt");
-
         TestProgress progress = new TestProgress(configuration);
         TestCaseExecutor testCaseExecutor = new TestCaseExecutor(configuration, progress);
 
-        try (PrintWriter writer = new PrintWriter(file)) {
+        try (PrintWriter writer = new PrintWriter(configuration.getResultPath().toFile())) {
             ExecutionFramework executionFramework = new ThreadPoolFramework(configuration, progress);
             executionFramework.process(writer);
             progress.printFinalMessage(writer);

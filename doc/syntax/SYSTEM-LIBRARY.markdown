@@ -38,9 +38,9 @@ If a function just returns its input parameter as the return value and does noth
 The following types of function calls are measured:
 
 - **Inlined function**: the size of the function when called inline. Valid for functions that are declared inline or inlined later either because they're called just once, or by the Function Inlining optimization.
-- **Function body**: the size of the function when not called inline. It is typically just one instruction larger than the inline version, because an instruction to return from the function to the caller needs to be added. Not shown for functions that are declared inline.
-- **Function call**: the number of instructions used to call the function from another place of the program. Not shown for functions that are declared inline.
-- Vararg functions can only be called inline. For these functions, the size of the function depends heavily on the number of arguments passed in. Therefore, for vararg functions a few examples of function calls and their corresponding sizes are included with each function.
+- **Function body**: the size of the function when not called inline. It is typically just one instruction larger than the inline version, because an instruction to return from the function to the caller needs to be added. Not shown for functions that are declared `inline`.
+- **Function call**: the number of instructions used to call the function from another place of the program. Not shown for functions that are declared `inline`.
+- Vararg functions can only be declared `inline`. For these functions, the size of the function depends heavily on the number of arguments passed in. Therefore, for vararg functions a few examples of function calls and their corresponding sizes are included with each function.
 
 There are several factors which might cause the size of a function used in an actual program to differ from the measurement above:
 

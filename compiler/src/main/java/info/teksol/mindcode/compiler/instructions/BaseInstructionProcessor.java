@@ -493,7 +493,7 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
 
-    protected LogicInstruction validate(LogicInstruction instruction) {
+    protected <T extends LogicInstruction> T validate(T instruction) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(instruction.getOpcode(), instruction.getArgs());
         if (opcodeVariant == null) {
             throw new MindcodeInternalError("Invalid or version incompatible instruction " + instruction);
