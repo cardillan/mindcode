@@ -67,7 +67,7 @@ public class OptimizationCoordinator {
     public List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         program.addAll(generatorOutput.instructions());
 
-        try (TraceFile traceFile = new TraceFile(TRACE, DEBUG_PRINT)) {
+        try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT)) {
             optimizationContext = new OptimizationContext(traceFile, profile, instructionProcessor, program,
                     generatorOutput.callGraph(), generatorOutput.rootAstContext());
 
