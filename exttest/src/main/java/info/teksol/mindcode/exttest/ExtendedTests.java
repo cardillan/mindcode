@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ExtendedTests {
-    public static void main(String[] args) throws InterruptedException, IOException {
+
+    public static void main(String[] args) throws IOException {
         TestConfiguration configuration = TestConfigurationFile.loadConfiguration("standard.properties");
 
         System.out.printf("Sampling %,d configurations out of %,d total configurations (coverage %.3g%%).%n",
@@ -27,10 +28,10 @@ public class ExtendedTests {
             ExecutionFramework executionFramework = new ThreadPoolFramework(configuration, progress);
             executionFramework.process(writer);
             progress.printFinalMessage(writer);
-            progress.printStatistics(writer);
         } catch (IOException e) {
             System.out.println("Error writing results to file");
             e.printStackTrace();
         }
     }
+
 }

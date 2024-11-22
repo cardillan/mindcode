@@ -161,6 +161,9 @@ public class CompileMindcodeAction extends ActionHandler {
                     result.addMessage(ToolMessage.info("The program generated the following assertions:"));
                     result.assertions().forEach(a -> result.addMessage(a.createMessage()));
                 }
+                if (result.executionException() != null) {
+                    result.addMessage(ToolMessage.error(result.executionException().getMessage()));
+                }
             }
 
             outputMessages(result, output, logFile, positionFormatter);

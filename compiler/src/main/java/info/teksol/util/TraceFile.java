@@ -8,13 +8,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class TraceFile implements AutoCloseable {
-    private static final boolean SYSTEM_OUT = true;
     public static final TraceFile NULL_TRACE = new TraceFilePassive();
 
-    public static TraceFile createTraceFile(boolean trace, boolean debugPrint) {
+    public static TraceFile createTraceFile(boolean trace, boolean debugPrint, boolean systemOut) {
         String mindcodeTraceFile = System.getenv("MINDCODE_TRACE_FILE");
         return mindcodeTraceFile != null && (trace || debugPrint)
-                ? new TraceFileActive(mindcodeTraceFile, trace, debugPrint)
+                ? new TraceFileActive(mindcodeTraceFile, trace, debugPrint, systemOut)
                 : NULL_TRACE;
     }
 
@@ -42,12 +41,14 @@ public abstract class TraceFile implements AutoCloseable {
 
         private final boolean trace;
         private final boolean debugPrint;
+        private final boolean systemOut;
         private final PrintStream stream;
         private int indent = 0;
 
-        private TraceFileActive(String mindcodeTraceFile, boolean trace, boolean debugPrint) {
+        private TraceFileActive(String mindcodeTraceFile, boolean trace, boolean debugPrint, boolean systemOut) {
             this.trace = trace;
             this.debugPrint = debugPrint;
+            this.systemOut = systemOut;
             this.stream = createTraceStream(mindcodeTraceFile);
         }
 
@@ -85,7 +86,7 @@ public abstract class TraceFile implements AutoCloseable {
 
         public void trace(String text) {
             if (trace) {
-                if (SYSTEM_OUT) {
+                if (systemOut) {
                     System.out.print(indents.get(indent));
                     System.out.println(text);
                 }
@@ -96,7 +97,7 @@ public abstract class TraceFile implements AutoCloseable {
 
         public void outputProgram(String text) {
             if (debugPrint) {
-                if (SYSTEM_OUT) System.out.println(text);
+                if (systemOut) System.out.println(text);
                 stream.println(text);
             }
         }

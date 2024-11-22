@@ -47,6 +47,11 @@ public interface LogicArgument {
     }
 
     /** @return true if this is a user-declared variable */
+    default boolean isWritable() {
+        return false;
+    }
+
+    /** @return true if this is a user-declared variable */
     default boolean isUserVariable() {
         return false;
     }

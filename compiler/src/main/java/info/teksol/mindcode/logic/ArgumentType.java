@@ -21,7 +21,7 @@ public enum ArgumentType {
 
     // User variables
     BLOCK,
-    PARAMETER,
+    PARAMETER,                      // Program parameter
     GLOBAL_VARIABLE,
     LOCAL_VARIABLE,
 

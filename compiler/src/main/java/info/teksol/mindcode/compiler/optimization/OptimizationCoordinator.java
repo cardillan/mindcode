@@ -17,6 +17,7 @@ import static info.teksol.mindcode.compiler.optimization.OptimizationPhase.*;
 public class OptimizationCoordinator {
     public static final boolean TRACE = false;
     public static final boolean DEBUG_PRINT = TRACE;
+    public static final boolean SYSTEM_OUT = true;
 
     public static final boolean IGNORE_UNINITIALIZED = false;
 
@@ -67,7 +68,7 @@ public class OptimizationCoordinator {
     public List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         program.addAll(generatorOutput.instructions());
 
-        try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT)) {
+        try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
             optimizationContext = new OptimizationContext(traceFile, profile, instructionProcessor, program,
                     generatorOutput.callGraph(), generatorOutput.rootAstContext());
 

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.exttest;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.exttest.cases.TestCaseSelector;
@@ -17,8 +18,10 @@ public class TestConfiguration {
     private final InputFiles inputFiles;
     private final Path resultPath;
     private final Map<Optimization, List<OptimizationLevel>> optimizationLevels;
+    private final List<GenerationGoal> generationGoals;
     private final int sampleCount;
     private final int totalCases;
+    private final boolean run;
 
     private final TestCaseSelector testCaseSelector;
 
@@ -27,13 +30,18 @@ public class TestConfiguration {
             InputFiles inputFiles,
             int parallelism,
             Map<Optimization, List<OptimizationLevel>> optimizationLevels,
-            int sampleCount) {
+            List<GenerationGoal> generationGoals,
+            int sampleCount,
+            boolean run) {
         this.parallelism = parallelism;
         this.inputFiles = inputFiles;
         this.optimizationLevels = optimizationLevels;
+        this.generationGoals = generationGoals;
         this.sampleCount = sampleCount;
+        this.run = run;
+
         this.totalCases = optimizationLevels.values().stream().mapToInt(List::size)
-                .reduce(1, TestConfiguration::product);
+                .reduce(1, TestConfiguration::product) * generationGoals.size();
 
         this.testCaseSelector = sampleCount < 0 || sampleCount >= totalCases
                 ? new TestCaseSelectorFull(totalCases)
@@ -73,12 +81,22 @@ public class TestConfiguration {
         return optimizationLevels;
     }
 
+    public List<GenerationGoal> getGenerationGoals() {
+        return generationGoals;
+    }
+
     public TestCaseSelector getTestCaseSelector() {
         return testCaseSelector;
     }
 
     public void setupProfile(CompilerProfile profile, int testCase) {
-        int remainder = testCase;
+        profile.setRun(run);
+
+        // Goal first
+        int goal = testCase % generationGoals.size();
+        profile.setGoal(generationGoals.get(goal));
+
+        int remainder = testCase / generationGoals.size();
         for (Optimization optimization : Optimization.LIST) {
             List<OptimizationLevel> levels = optimizationLevels.get(optimization);
             int index = remainder % levels.size();

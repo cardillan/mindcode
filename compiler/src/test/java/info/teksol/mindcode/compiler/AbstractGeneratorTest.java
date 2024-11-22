@@ -470,6 +470,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicVariable cell1     = LogicVariable.block("cell1");
     protected static final LogicVariable conveyor1 = LogicVariable.block("conveyor1");
     protected static final LogicVariable vault1    = LogicVariable.block("vault1");
+    protected static final LogicVariable unused    = LogicVariable.unusedVariable();
     protected static final LogicBuiltIn  coal      = LogicBuiltIn.create("@coal");
     protected static final LogicBuiltIn  lead      = LogicBuiltIn.create("@lead");
     protected static final LogicBuiltIn  firstItem = LogicBuiltIn.create("@firstItem");

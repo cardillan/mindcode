@@ -34,6 +34,12 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
     }
 
     @Override
+    public boolean isWritable() {
+        // Some built-ins are writable (e.g. @counter)
+        return true;
+    }
+
+    @Override
     public boolean canEvaluate() {
         return object != null && !isVolatile();
     }

@@ -119,6 +119,9 @@ public class SystemLibraryTest {
 
         if (executableTest) {
             assertFalse(result.assertions().isEmpty(), "No assertions were executed by the unit test.");
+            if (result.executionException() != null) {
+                fail(result.executionException().getMessage());
+            }
         }
 
         result.assertions().forEach(this::assertSuccess);

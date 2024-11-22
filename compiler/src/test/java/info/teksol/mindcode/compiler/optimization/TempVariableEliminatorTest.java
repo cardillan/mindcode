@@ -111,8 +111,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
                         createInstruction(END)
                 ),
                 List.of(
-                        createInstruction(SET, P0, a),
-                        createInstruction(SET, P0, b),
+                        createInstruction(SET, unused, a),
+                        createInstruction(SET, unused, b),
                         createInstruction(END)
                 )
         );
@@ -127,7 +127,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
                         createInstruction(END)
                 ),
                 List.of(
-                        createInstruction(SENSOR, P0, vault1, tmp0),
+                        createInstruction(SENSOR, unused, vault1, tmp0),
                         createInstruction(SET, result, tmp0),
                         createInstruction(END)
                 )
@@ -218,8 +218,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     @Test
     void leavesReadThenSetButOtherValueAlone() {
         assertDoesNotOptimize(
-                createInstruction(READ, P0, cell1, P1),
-                createInstruction(SET, P0, P1),
+                createInstruction(READ, a, cell1, P1),
+                createInstruction(SET, b, P1),
                 createInstruction(END)
         );
     }

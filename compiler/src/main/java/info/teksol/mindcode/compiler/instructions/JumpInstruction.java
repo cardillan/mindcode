@@ -18,15 +18,20 @@ public class JumpInstruction extends BaseInstruction {
     }
 
     @Override
+    protected void validate() {
+        super.validate();
+        if (astContext.subcontextType() == AstSubcontextType.BODY) {
+            throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + this);
+        }
+    }
+
+    @Override
     public JumpInstruction copy() {
         return new JumpInstruction(this, astContext);
     }
 
     @Override
     public JumpInstruction withContext(AstContext astContext) {
-        if (astContext.subcontextType() == AstSubcontextType.BODY) {
-            throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + this);
-        }
         return new JumpInstruction(this, astContext);
     }
 

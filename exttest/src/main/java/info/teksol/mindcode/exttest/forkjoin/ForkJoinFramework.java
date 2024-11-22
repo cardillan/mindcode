@@ -1,6 +1,5 @@
 package info.teksol.mindcode.exttest.forkjoin;
 
-import info.teksol.mindcode.exttest.ErrorResult;
 import info.teksol.mindcode.exttest.ExecutionFramework;
 import info.teksol.mindcode.exttest.TestConfiguration;
 import info.teksol.mindcode.exttest.TestProgress;
@@ -26,22 +25,15 @@ public class ForkJoinFramework implements ExecutionFramework {
 
     @Override
     public void process(PrintWriter writer) {
-        System.out.println("Warming up...");
         try {
             task = forkJoinPool.submit(new ForkJoinTestRunner(progress, configuration.getTestCaseSelector(), caseExecutor,
                     0, configuration.getSampleCount() - 1));
-            Thread.sleep(10_000);
+            Thread.sleep(5_000);
 
             while (true) {
                 try {
                     progress.printProgress();
-
-                    ErrorResult errorResult;
-                    while ((errorResult = progress.errors.poll()) != null) {
-                        writer.println(errorResult);
-                        progress.updateStatistics(errorResult);
-                    }
-                    writer.flush();
+                    progress.processResults(writer);
 
                     task.get(5, TimeUnit.SECONDS);
                     break;

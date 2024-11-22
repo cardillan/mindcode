@@ -3,6 +3,7 @@ package info.teksol.emulator.processor;
 import info.teksol.emulator.MindustryVariable;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.mimex.*;
 
 import java.util.Comparator;
@@ -20,6 +21,8 @@ public class MindustryVariables {
     private final Processor processor;
     public final MindustryVariable counter = MindustryVariable.createCounter();
     public final MindustryVariable null_ = MindustryVariable.createNull();
+
+    private final MindustryVariable unusedVariable = MindustryVariable.createVar("0");
 
     private final Map<String, MindustryVariable> variables = new HashMap<>();
 
@@ -68,11 +71,15 @@ public class MindustryVariables {
     }
 
     public MindustryVariable getOrCreateVariable(LogicArgument value) {
-        return variables.computeIfAbsent(value.toMlog(), this::createVariable);
+        return value == LogicVariable.unusedVariable()
+                ? unusedVariable
+                : variables.computeIfAbsent(value.toMlog(), this::createVariable);
     }
 
     public MindustryVariable getExistingVariable(LogicArgument value) {
-        return variables.computeIfAbsent(value.toMlog(), this::createConstant);
+        return value == LogicVariable.unusedVariable()
+                ? unusedVariable
+                : variables.computeIfAbsent(value.toMlog(), this::createConstant);
     }
 
     private MindustryVariable createVariable(String value) {

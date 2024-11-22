@@ -21,7 +21,7 @@ public class ThreadPoolRunner implements Callable<Integer> {
     public Integer call() {
         int count = 0;
         while (true) {
-            int testRunNumber = progress.nextSample.getAndIncrement();
+            int testRunNumber = progress.nextSample();
             if (testRunNumber >= caseSelector.getSampleCount()) {
                 break;
             }

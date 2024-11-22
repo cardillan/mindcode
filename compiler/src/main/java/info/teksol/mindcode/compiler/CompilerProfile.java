@@ -313,16 +313,20 @@ public class CompilerProfile {
         for (Optimization optimization : Optimization.LIST) {
             value = value * len + getOptimizationLevel(optimization).ordinal();
         }
+        value = value * GenerationGoal.values().length + getGoal().ordinal();
         return Long.toString(value);
     }
 
     public CompilerProfile decode(String encoded) {
+        GenerationGoal[] goals = GenerationGoal.values();
         OptimizationLevel[] levels = OptimizationLevel.values();
         int len = levels.length;
         long value = Long.parseLong(encoded);
+        setGoal(goals[(int) (value % goals.length)]);
+        value /= goals.length;
         for (int i = Optimization.LIST.size() - 1; i >= 0; i--) {
             setOptimizationLevel(Optimization.LIST.get(i), levels[(int) (value % len)]);
-            value = value / len;
+            value /= len;
         }
         return this;
     }

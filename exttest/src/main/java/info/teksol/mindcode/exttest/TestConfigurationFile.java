@@ -1,5 +1,6 @@
 package info.teksol.mindcode.exttest;
 
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.v3.InputFiles;
@@ -32,7 +33,9 @@ public class TestConfigurationFile {
                 inputFiles,
                 config.getParallelism(),
                 config.getOptimizationLevels(),
-                config.getSampleCount());
+                config.getGenerationGoals(),
+                config.getSampleCount(),
+                config.getRun());
     }
 
     private String requireProperty(String propertyName)  {
@@ -60,6 +63,19 @@ public class TestConfigurationFile {
         }
     }
 
+    private boolean getRun() {
+        String setting = properties.getProperty("run");
+        if (setting == null) {
+            return false;
+        } else if (setting.equalsIgnoreCase("true")) {
+            return true;
+        } else if (setting.equalsIgnoreCase("false")) {
+            return false;
+        } else {
+            throw new IllegalArgumentException("Cannot parse 'run' setting '" + setting + "'.");
+        }
+    }
+
     private Map<Optimization, List<OptimizationLevel>> getOptimizationLevels() {
         Map<Optimization, List<OptimizationLevel>> result = new HashMap<>();
         for (Optimization optimization : Optimization.values()) {
@@ -74,6 +90,16 @@ public class TestConfigurationFile {
         return result;
     }
 
+    private List<GenerationGoal> getGenerationGoals() {
+        List<GenerationGoal> result = new ArrayList<>();
+        String settings = properties.getProperty("goal");
+        if (settings == null) {
+            return List.of(GenerationGoal.AUTO);
+        } else {
+            return parseGoals(settings);
+        }
+    }
+
     private List<OptimizationLevel> parseLevels(String settings) {
         List<OptimizationLevel> list = Stream.of(settings.split(","))
                 .map(String::trim)
@@ -82,6 +108,19 @@ public class TestConfigurationFile {
 
         if (list.contains(null)) {
             throw new IllegalArgumentException("Cannot parse optimization levels '" + settings + "'.");
+        }
+
+        return List.copyOf(list);
+    }
+
+    private List<GenerationGoal> parseGoals(String settings) {
+        List<GenerationGoal> list = Stream.of(settings.split(","))
+                .map(String::trim)
+                .map(GenerationGoal::byName)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (list.contains(null)) {
+            throw new IllegalArgumentException("Cannot parse generation goals '" + settings + "'.");
         }
 
         return List.copyOf(list);

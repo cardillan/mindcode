@@ -1,5 +1,6 @@
 package info.teksol.emulator.processor;
 
+import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.ToolMessage;
 
 import java.util.Objects;
@@ -15,11 +16,12 @@ public record Assertion(String expected, String actual, String title) {
     }
 
     public ToolMessage createMessage() {
-        return ToolMessage.info("""
-                        Assertion "%s" (%s):
-                            Expected :%s
-                            Actual   :%s""",
-                title, Objects.equals(expected, actual) ? "success" : "failure", expected, actual);
+        return new ToolMessage(success() ? MessageLevel.INFO : MessageLevel.ERROR,
+                String.format("""
+                                Assertion "%s" (%s):
+                                    Expected :%s
+                                    Actual   :%s""",
+                        title, Objects.equals(expected, actual) ? "success" : "failure", expected, actual));
     }
 
     public String generateErrorMessage() {

@@ -12,11 +12,13 @@ class CompilerProfileTest {
     void testEncodeDecode() {
         String encoded = new CompilerProfile(false)
                 .setAllOptimizationLevels(OptimizationLevel.BASIC)
+                .setGoal(GenerationGoal.SPEED)
                 .setOptimizationLevel(Optimization.CASE_EXPRESSION_OPTIMIZATION, OptimizationLevel.ADVANCED)
                 .encode();
 
         CompilerProfile profile = new CompilerProfile(false).decode(encoded);
 
+        assertEquals(GenerationGoal.SPEED, profile.getGoal());
         for (Optimization optimization : Optimization.LIST) {
             assertEquals(optimization == Optimization.CASE_EXPRESSION_OPTIMIZATION ? OptimizationLevel.ADVANCED : OptimizationLevel.BASIC,
                     profile.getOptimizationLevel(optimization),

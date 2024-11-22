@@ -58,7 +58,7 @@ public class LogicInstructionLabelResolver {
         List<LogicInstruction> result = new ArrayList<>();
         AstContext astContext = program.get(0).getAstContext();
         for (int index = 0, i = 0; i++ < instructions; index += 5) {
-            order.add(index, LogicNumber.ZERO);
+            order.add(index, LogicVariable.unusedVariable());
             result.add(instructionProcessor.createInstruction(astContext,  PACKCOLOR, order.subList(index, index + 5)));
         }
 
@@ -99,7 +99,7 @@ public class LogicInstructionLabelResolver {
     private static boolean matches(LogicArgument logicVariable, SortCategory category) {
         return switch (category) {
             case LINKED     -> logicVariable.getType() == ArgumentType.BLOCK;
-            case PARAMS -> logicVariable.getType() == ArgumentType.PARAMETER;
+            case PARAMS     -> logicVariable.getType() == ArgumentType.PARAMETER;
             case GLOBALS    -> logicVariable.getType() == ArgumentType.GLOBAL_VARIABLE;
             case MAIN       -> logicVariable.isMainVariable();
             case LOCALS     -> logicVariable.isLocalVariable();
@@ -189,7 +189,7 @@ public class LogicInstructionLabelResolver {
     private LogicArgument resolveLabel(LogicArgument argument) {
         if (argument instanceof LogicLabel label) {
             if (!addresses.containsKey(label)) {
-                if (false) {
+                if (true) {
                     throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
                 }  else {
                     System.out.printf("Unknown jump label target: '%s' was not previously discovered in program.%n", label);

@@ -26,8 +26,7 @@ public class TestCaseExecutor {
     public CompilerProfile createCompilerProfile(int testCaseNumber) {
         CompilerProfile profile = new CompilerProfile(false)
                 .setAllOptimizationLevels(OptimizationLevel.NONE)
-                .setOptimizationPasses(50)
-                .setRun(false);
+                .setOptimizationPasses(50);
 
         configuration.setupProfile(profile, testCaseNumber);
         return profile;
@@ -50,12 +49,13 @@ public class TestCaseExecutor {
                 .map(Assertion::generateErrorMessage)
                 .collect(Collectors.joining("\n"));
 
-        boolean ok = unexpectedMessages.isEmpty() && failedTests.isEmpty();
-        if (!ok) {
-            progress.errors.offer(new ErrorResult(testCaseNumber, profile, unexpectedMessages, failedTests));
-            progress.errorCount.incrementAndGet();
-        }
+        boolean ok = unexpectedMessages.isEmpty() && failedTests.isEmpty() && result.executionException() == null;
 
-        progress.finishedCount.incrementAndGet();
+        if (ok) {
+            progress.success();
+        } else {
+            progress.reportError(new ErrorResult(testCaseNumber, profile, unexpectedMessages,
+                    result.executionException(), failedTests));
+        }
     }
 }

@@ -94,7 +94,7 @@ public class MindcodeCompiler implements Compiler<String> {
             }
 
             error("Internal error: %s", e.getMessage());
-            return new CompilerOutput<>("", messages, List.of(), null, 0);
+            return new CompilerOutput<>("", messages, null, List.of(), null, 0);
         }
     }
 
@@ -271,14 +271,15 @@ public class MindcodeCompiler implements Compiler<String> {
             timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
                     parseTime, compileTime, optimizeTime, runTime);
         } else {
-            runResults = new RunResults(List.of(), null,0);
+            runResults = new RunResults(null, List.of(), null,0);
             timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
                     parseTime, compileTime, optimizeTime);
         }
 
         String output = LogicInstructionPrinter.toString(instructionProcessor, result);
 
-        return new CompilerOutput<>(output, messages, runResults.assertions(), runResults.textBuffer(), runResults.steps());
+        return new CompilerOutput<>(output, messages, runResults.exception, runResults.assertions(),
+                runResults.textBuffer(), runResults.steps());
     }
 
     /** Prints the parse tree according to level */
@@ -319,7 +320,7 @@ public class MindcodeCompiler implements Compiler<String> {
         return result;
     }
 
-    private record RunResults(List<Assertion> assertions, TextBuffer textBuffer, int steps) { }
+    private record RunResults(ExecutionException exception, List<Assertion> assertions, TextBuffer textBuffer, int steps) { }
 
     private RunResults run(List<LogicInstruction> instructions) {
         List<LogicInstruction> program = instructions.stream().map(instructionProcessor::normalizeInstruction).toList();
@@ -333,10 +334,9 @@ public class MindcodeCompiler implements Compiler<String> {
 
         try {
             processor.run(program, profile.getStepLimit());
-            return new RunResults(processor.getAssertions(), processor.getTextBuffer(), processor.getSteps());
+            return new RunResults(null, processor.getAssertions(), processor.getTextBuffer(), processor.getSteps());
         } catch (ExecutionException e) {
-            return new RunResults(processor.getAssertions(),
-                    processor.getTextBuffer().append("\n" + e.getMessage()), processor.getSteps());
+            return new RunResults(e, processor.getAssertions(), processor.getTextBuffer(), processor.getSteps());
         }
     }
 

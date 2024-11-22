@@ -1,11 +1,9 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.logic.InstructionParameterType;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +36,7 @@ public class BaseInstruction implements LogicInstruction {
             inputs = (int) params.stream().filter(InstructionParameterType::isInput).count();
             outputs = (int) params.stream().filter(InstructionParameterType::isOutput).count();
         }
+        validate();
     }
 
     protected BaseInstruction(BaseInstruction other, AstContext astContext) {
@@ -48,6 +47,17 @@ public class BaseInstruction implements LogicInstruction {
         this.typedArguments = other.typedArguments;
         this.inputs = other.inputs;
         this.outputs = other.outputs;
+        validate();
+    }
+
+    protected void validate() {
+        if (params != null) {
+            typedArguments.forEach(arg -> {
+                if (arg.isOutput() && !arg.argument().isWritable() && arg.argument().getType() != ArgumentType.UNSPECIFIED) {
+                    throw new MindcodeInternalError("Argument " + arg.argument().toMlog() + " is not writable in " + toMlog());
+                }
+            });
+        }
     }
 
     public AstContext getAstContext() {

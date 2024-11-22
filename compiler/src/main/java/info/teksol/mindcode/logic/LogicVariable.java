@@ -67,6 +67,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
+    public boolean isWritable() {
+        return true;
+    }
+
+    @Override
     public boolean isUserVariable() {
         return getType() == ArgumentType.PARAMETER || getType() == ArgumentType.GLOBAL_VARIABLE || getType() == ArgumentType.LOCAL_VARIABLE;
     }

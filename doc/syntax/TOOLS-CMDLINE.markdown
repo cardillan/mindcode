@@ -106,8 +106,8 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--err-not-an-object {true,false}] [--err-not-a-number {true,false}]
                 [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
-                [--err-text-buffer-overflow {true,false}] [--err-graphics-buffer-overflow {true,false}]
-                [--err-invalid-format {true,false}] [-o LEVEL] [--temp-variables-elimination LEVEL]
+                [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
+                [--err-graphics-buffer-overflow {true,false}] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
@@ -203,10 +203,10 @@ run options:
                          stop execution when attempting to perform an unsupported operation on a block
   --err-text-buffer-overflow {true,false}
                          stop execution when the text buffer size (400 characters) is exceeded
-  --err-graphics-buffer-overflow {true,false}
-                         stop execution when the graphics buffer size (256 operations) is exceeded
   --err-invalid-format {true,false}
                          stop execution when no placeholder for the 'format' instruction exists in the buffer
+  --err-graphics-buffer-overflow {true,false}
+                         stop execution when the graphics buffer size (256 operations) is exceeded
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not

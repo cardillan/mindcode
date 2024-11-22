@@ -1,5 +1,6 @@
 package info.teksol.mindcode.exttest;
 
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 
@@ -12,13 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class TestProgress {
-    public final AtomicInteger nextSample = new AtomicInteger(0);
-    public final AtomicInteger finishedCount = new AtomicInteger(0);
-    public final AtomicInteger errorCount = new AtomicInteger(0);
-    public final Deque<ErrorResult> errors = new ConcurrentLinkedDeque<>();
-    public final Map<Optimization, Map<OptimizationLevel, AtomicInteger>> statistics = new EnumMap<>(Optimization.class);
+    private final AtomicInteger nextSample = new AtomicInteger(0);
+    private final AtomicInteger finishedCount = new AtomicInteger(0);
+    private final AtomicInteger errorCount = new AtomicInteger(0);
+    private final Deque<ErrorResult> errors = new ConcurrentLinkedDeque<>();
+    private final Map<Optimization, Map<OptimizationLevel, AtomicInteger>> statistics = new EnumMap<>(Optimization.class);
+    private final Map<GenerationGoal, AtomicInteger> goalStatistics = new EnumMap<>(GenerationGoal.class);
 
     private final TestConfiguration configuration;
     private final int samples;
@@ -40,13 +43,40 @@ public class TestProgress {
             }
             statistics.put(optimization, levels);
         }
+
+        Stream.of(GenerationGoal.values()).forEach(g -> goalStatistics.put(g, new AtomicInteger(0)));
     }
 
     public boolean finished() {
         return finishedCount.get() >= samples && errors.isEmpty();
     }
 
-    public void updateStatistics(ErrorResult errorResult) {
+    public int nextSample() {
+        return nextSample.getAndIncrement();
+    }
+
+    public void success() {
+        finishedCount.incrementAndGet();
+    }
+
+    public void reportError(ErrorResult errorResult) {
+        errors.offer(errorResult);
+        errorCount.incrementAndGet();
+        finishedCount.incrementAndGet();
+    }
+
+    public void processResults(PrintWriter writer) {
+        ErrorResult errorResult;
+        while ((errorResult = errors.poll()) != null) {
+            writer.println(errorResult);
+            updateStatistics(errorResult);
+        }
+        writer.flush();
+
+    }
+
+    private void updateStatistics(ErrorResult errorResult) {
+        goalStatistics.get(errorResult.profile().getGoal()).incrementAndGet();
         for (Optimization optimization : Optimization.values()) {
             statistics.get(optimization).get(errorResult.profile().getOptimizationLevel(optimization)).incrementAndGet();
         }
@@ -110,18 +140,37 @@ public class TestProgress {
         writer.println("Finished.");
         writer.printf("Total tests: %,d, total failures: %,d (rate %.2f%%), speed: %.2f tests/sec, total time: %s, GC runs: %,d, GC time: %s%n",
                 count, errors, 100d * errors / count, totalRate, formatTime((long) (elapsed / 1_000_000_000d)), gcRuns, formatTime(gcTime / 1000));
+
+        printStatistics(writer);
     }
 
-    public void printStatistics(PrintWriter writer) {
+    private void printStatistics(PrintWriter writer) {
         int errors = errorCount.get();
         if (errors == 0) {
             return;
         }
 
         writer.println();
-        writer.println("Failure distribution per optimization settings:");
+        writer.println("Failure distribution per goal / optimization settings:");
         writer.println();
-        writer.printf("%-35s", "Optimization");
+        writer.printf("%-35s", "Generation goal");
+        for (GenerationGoal goal : GenerationGoal.values()) {
+            writer.printf("%15s", goal.name().charAt(0) + goal.name().substring(1).toLowerCase());
+        }
+        writer.println();
+
+        writer.printf("%-35s", "");
+        for (GenerationGoal level : GenerationGoal.values()) {
+            if (configuration.getGenerationGoals().contains(level)) {
+                writer.printf("%14.1f%%", 100d * goalStatistics.get(level).get() / errors);
+            } else {
+                writer.printf("%15s", "-");
+            }
+        }
+        writer.println();
+
+        writer.println();
+        writer.printf("%-35s", "Optimization level");
         for (OptimizationLevel level : OptimizationLevel.values()) {
             writer.printf("%15s", level.name().charAt(0) + level.name().substring(1).toLowerCase());
         }
@@ -141,7 +190,7 @@ public class TestProgress {
         }
     }
 
-    public static String formatTime(long time) {
+    private static String formatTime(long time) {
         if (time < 0) {
             return "-:--:--";
         } else {
