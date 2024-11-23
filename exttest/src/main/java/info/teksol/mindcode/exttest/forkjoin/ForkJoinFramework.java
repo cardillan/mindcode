@@ -1,7 +1,7 @@
 package info.teksol.mindcode.exttest.forkjoin;
 
+import info.teksol.mindcode.exttest.Configuration;
 import info.teksol.mindcode.exttest.ExecutionFramework;
-import info.teksol.mindcode.exttest.TestConfiguration;
 import info.teksol.mindcode.exttest.TestProgress;
 import info.teksol.mindcode.exttest.cases.TestCaseExecutor;
 
@@ -10,14 +10,14 @@ import java.util.concurrent.*;
 
 public class ForkJoinFramework implements ExecutionFramework {
     private final ForkJoinPool forkJoinPool;
-    private final TestConfiguration configuration;
+    private final Configuration.TestConfiguration configuration;
     private final TestProgress progress;
     private final TestCaseExecutor caseExecutor;
 
     ForkJoinTask<Integer> task;
 
-    public ForkJoinFramework(TestConfiguration configuration, TestProgress progress) {
-        this.forkJoinPool = new ForkJoinPool(configuration.getParallelism());
+    public ForkJoinFramework(Configuration.TestConfiguration configuration, TestProgress progress) {
+        this.forkJoinPool = new ForkJoinPool(configuration.global().threads());
         this.configuration = configuration;
         this.progress = progress;
         this.caseExecutor = new TestCaseExecutor(configuration, progress);
@@ -30,10 +30,10 @@ public class ForkJoinFramework implements ExecutionFramework {
                     0, configuration.getSampleCount() - 1));
             Thread.sleep(5_000);
 
-            while (true) {
+            while (!progress.finished()) {
                 try {
-                    progress.printProgress();
                     progress.processResults(writer);
+                    progress.printProgress(false);
 
                     task.get(5, TimeUnit.SECONDS);
                     break;
@@ -48,6 +48,8 @@ public class ForkJoinFramework implements ExecutionFramework {
             e.printStackTrace();
         } finally {
             task.cancel(true);
+            progress.processResults(writer);
+            progress.printProgress(true);
         }
     }
 }

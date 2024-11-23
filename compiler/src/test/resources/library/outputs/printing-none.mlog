@@ -1,138 +1,139 @@
 assertflush
 set __fn3__number null
 set __fn3retaddr 4
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "0" "printNumber(null)"
 assertflush
 set __fn3__number 1
 set __fn3retaddr 9
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "1" "printNumber(1)"
 assertflush
 set __fn3__number 1.5
 set __fn3retaddr 14
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "1" "printNumber(1.5)"
 assertflush
 set __fn3__number -1.5
 set __fn3retaddr 19
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "-1" "printNumber(-1.5)"
 assertflush
 set __fn3__number 1234567
 set __fn3retaddr 24
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "1,234,567" "printNumber(1234567)"
 assertflush
 set __fn3__number -1234567
 set __fn3retaddr 29
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "-1,234,567" "printNumber(-1234567)"
 assertflush
 set __fn3__number 9009099
 set __fn3retaddr 34
-jump 136 always 0 0
+jump 137 always 0 0
 assertprints "9,009,099" "printNumber(9009099)"
 assertflush
 set __fn4__n null
 set __fn4retaddr 39
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "null" "printExactFast(null)"
 assertflush
 set __fn4__n 0
 set __fn4retaddr 44
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "0" "printExactFast(0)"
 assertflush
 set __fn4__n 1
 set __fn4retaddr 49
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "1" "printExactFast(1)"
 assertflush
 set __fn4__n 1.0000001
 set __fn4retaddr 54
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "1.000000100000000" "printExactFast(1.0000001)"
 assertflush
 set __fn4__n 3.00000007
 set __fn4retaddr 59
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "3.000000070000000" "printExactFast(3.00000007)"
 assertflush
 set __fn4__n 3E50
 set __fn4retaddr 64
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "3E50" "printExactFast(3e50)"
 assertflush
 set __fn4__n 1.0123456789
 set __fn4retaddr 69
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
 set __fn4__n 10000000999999999E4
 set __fn4retaddr 74
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
 assertflush
 set __fn4__n 12345E-54
 set __fn4retaddr 79
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush
 set __fn4__n -12345E-54
 set __fn4retaddr 84
-jump 169 always 0 0
+jump 170 always 0 0
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
 set __fn5__n null
 set __fn5retaddr 89
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "null" "printExactSlow(null)"
 assertflush
 set __fn5__n 0
 set __fn5retaddr 94
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "0" "printExactSlow(0)"
 assertflush
 set __fn5__n 1
 set __fn5retaddr 99
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
 set __fn5__n 1.0000001
 set __fn5retaddr 104
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
 set __fn5__n 3.00000007
 set __fn5retaddr 109
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
 set __fn5__n 3E50
 set __fn5retaddr 114
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
 set __fn5__n 1.0123456789
 set __fn5retaddr 119
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
 set __fn5__n 10000000999999999E4
 set __fn5retaddr 124
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
 set __fn5__n 12345E-54
 set __fn5retaddr 129
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
 set __fn5__n -12345E-54
 set __fn5retaddr 134
-jump 260 always 0 0
+jump 261 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+stop
 end
 print "{2}"
 set __fn6__number __fn3__number
@@ -140,30 +141,30 @@ op abs __tmp0 __fn6__number 0
 op floor __tmp1 __tmp0 0
 set __fn6__n __tmp1
 op lessThan __tmp2 __fn6__number 0
-jump 146 equal __tmp2 false
+jump 147 equal __tmp2 false
 format "-{2}"
 set __tmp3 "-{2}"
-jump 147 always 0 0
+jump 148 always 0 0
 set __tmp3 null
 op greaterThan __tmp4 __fn6__n 999
-jump 166 equal __tmp4 false
+jump 167 equal __tmp4 false
 op mod __tmp5 __fn6__n 1000
 set __fn6__mod __tmp5
 op lessThan __tmp6 __fn6__mod 10
-jump 155 equal __tmp6 false
+jump 156 equal __tmp6 false
 set __tmp7 "{2},00{1}"
-jump 161 always 0 0
+jump 162 always 0 0
 op lessThan __tmp8 __fn6__mod 100
-jump 159 equal __tmp8 false
+jump 160 equal __tmp8 false
 set __tmp9 "{2},0{1}"
-jump 160 always 0 0
+jump 161 always 0 0
 set __tmp9 "{2},{1}"
 set __tmp7 __tmp9
 format __tmp7
 format __fn6__mod
 op idiv __tmp10 __fn6__n 1000
 set __fn6__n __tmp10
-jump 147 always 0 0
+jump 148 always 0 0
 format __fn6__n
 set @counter __fn3retaddr
 end
@@ -171,17 +172,17 @@ set __fn7__x __fn4__n
 op abs __tmp12 __fn7__x 0
 op lessThanEq __tmp13 __tmp12 0
 set __tmp11 __tmp13
-jump 177 equal __tmp11 false
+jump 178 equal __tmp11 false
 print __fn4__n
 set __tmp14 __fn4__n
-jump 258 always 0 0
+jump 259 always 0 0
 op lessThan __tmp15 __fn4__n 0
-jump 184 equal __tmp15 false
+jump 185 equal __tmp15 false
 print "-"
 op abs __tmp17 __fn4__n 0
 set __fn4__n __tmp17
 set __tmp16 __fn4__n
-jump 185 always 0 0
+jump 186 always 0 0
 set __tmp16 null
 op log10 __tmp18 __fn4__n 0
 op floor __tmp19 __tmp18 0
@@ -198,20 +199,20 @@ op sub __tmp26 __fn4__base __tmp23
 op abs __tmp27 __tmp26 0
 set __fn4__cmp __tmp27
 op lessThanEq __tmp28 __fn4__cmp 0
-jump 204 equal __tmp28 false
+jump 205 equal __tmp28 false
 print __fn4__base
 set __tmp29 __fn4__base
-jump 250 always 0 0
+jump 251 always 0 0
 op greaterThan __tmp30 __fn4__cmp 0.00001
-jump 209 equal __tmp30 false
+jump 210 equal __tmp30 false
 print __fn4__base
 set __tmp31 __fn4__base
-jump 249 always 0 0
+jump 250 always 0 0
 op floor __tmp32 __fn4__base 0
 print __tmp32
 print "."
 set __fn4__digit 1
-jump 248 greaterThan __fn4__digit 3
+jump 249 greaterThan __fn4__digit 3
 set __fn9__x __fn4__base
 op mod __tmp34 __fn9__x 1
 set __tmp33 __tmp34
@@ -220,40 +221,40 @@ set __fn4__base __tmp35
 op floor __tmp36 __fn4__base 0
 set __fn4__t __tmp36
 op lessThan __tmp37 __fn4__t 10
-jump 226 equal __tmp37 false
+jump 227 equal __tmp37 false
 print "0000"
 set __tmp38 "0000"
-jump 245 always 0 0
+jump 246 always 0 0
 op lessThan __tmp39 __fn4__t 100
-jump 231 equal __tmp39 false
+jump 232 equal __tmp39 false
 print "000"
 set __tmp40 "000"
-jump 244 always 0 0
+jump 245 always 0 0
 op lessThan __tmp41 __fn4__t 1000
-jump 236 equal __tmp41 false
+jump 237 equal __tmp41 false
 print "00"
 set __tmp42 "00"
-jump 243 always 0 0
+jump 244 always 0 0
 op lessThan __tmp43 __fn4__t 10000
-jump 241 equal __tmp43 false
+jump 242 equal __tmp43 false
 print "0"
 set __tmp44 "0"
-jump 242 always 0 0
+jump 243 always 0 0
 set __tmp44 null
 set __tmp42 __tmp44
 set __tmp40 __tmp42
 set __tmp38 __tmp40
 print __fn4__t
 op add __fn4__digit __fn4__digit 1
-jump 213 always 0 0
+jump 214 always 0 0
 set __tmp31 null
 set __tmp29 __tmp31
 op notEqual __tmp45 __fn4__exp 0
-jump 256 equal __tmp45 false
+jump 257 equal __tmp45 false
 print "E"
 print __fn4__exp
 set __tmp46 __fn4__exp
-jump 257 always 0 0
+jump 258 always 0 0
 set __tmp46 null
 set __tmp14 __tmp46
 set @counter __fn4retaddr
@@ -262,17 +263,17 @@ set __fn10__x __fn5__n
 op abs __tmp48 __fn10__x 0
 op lessThanEq __tmp49 __tmp48 0
 set __tmp47 __tmp49
-jump 268 equal __tmp47 false
+jump 269 equal __tmp47 false
 print __fn5__n
 set __tmp50 __fn5__n
-jump 305 always 0 0
+jump 306 always 0 0
 op lessThan __tmp51 __fn5__n 0
-jump 275 equal __tmp51 false
+jump 276 equal __tmp51 false
 print "-"
 op abs __tmp53 __fn5__n 0
 set __fn5__n __tmp53
 set __tmp52 __fn5__n
-jump 276 always 0 0
+jump 277 always 0 0
 set __tmp52 null
 op log10 __tmp54 __fn5__n 0
 op floor __tmp55 __tmp54 0
@@ -285,7 +286,7 @@ op floor __tmp59 __fn5__base 0
 print __tmp59
 print "."
 set __fn5__digit 1
-jump 297 greaterThan __fn5__digit 15
+jump 298 greaterThan __fn5__digit 15
 set __fn11__x __fn5__base
 op mod __tmp61 __fn11__x 1
 set __tmp60 __tmp61
@@ -294,13 +295,13 @@ set __fn5__base __tmp62
 op floor __tmp63 __fn5__base 0
 print __tmp63
 op add __fn5__digit __fn5__digit 1
-jump 287 always 0 0
+jump 288 always 0 0
 op notEqual __tmp64 __fn5__exp 0
-jump 303 equal __tmp64 false
+jump 304 equal __tmp64 false
 print "E"
 print __fn5__exp
 set __tmp65 __fn5__exp
-jump 304 always 0 0
+jump 305 always 0 0
 set __tmp65 null
 set __tmp50 __tmp65
 set @counter __fn5retaddr

@@ -1,4 +1,4 @@
-Main file: number of reported ambiguities: 14
+Main file: number of reported ambiguities: 15
 Active optimizations:
     case-expression-optimization = advanced,
     case-switching = advanced,
@@ -21,7 +21,7 @@ Active optimizations:
     temp-variables-elimination = advanced,
     unreachable-code-elimination = advanced
 
-  1651 instructions before optimizations.
+  1652 instructions before optimizations.
    121 instructions eliminated by Temp Variables Elimination.
    124 instructions eliminated by Dead Code Elimination (4 iterations).
      3 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
@@ -36,7 +36,7 @@ Active optimizations:
      4 function calls inlined by Function Inlining.
     32 instructions updated by JumpThreading.
      4 instructions eliminated by Unreachable Code Elimination.
-   983 instructions after optimizations.
+   984 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
   * Loop Unrolling: unroll iteration loop at line 78             cost     0, benefit        5.0, efficiency   Infinity (-8 instructions)
@@ -179,7 +179,7 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Function Inlining: inline function call at line 47           cost    18, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    18, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 12):
+Pass 2: speed optimization selection (cost limit 11):
   ! Loop Unrolling: unroll iteration loop at line 174            cost   121, benefit       17.0, efficiency        0.1
   * Loop Unrolling: unroll iteration loop at line 192            cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
@@ -225,7 +225,7 @@ Pass 2: speed optimization selection (cost limit 12):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 25):
+Pass 2: speed optimization selection (cost limit 24):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
     Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -270,7 +270,7 @@ Pass 2: speed optimization selection (cost limit 25):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 38):
+Pass 2: speed optimization selection (cost limit 37):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
     Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -314,7 +314,7 @@ Pass 2: speed optimization selection (cost limit 38):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 25):
+Pass 2: speed optimization selection (cost limit 24):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
     Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -356,7 +356,7 @@ Pass 2: speed optimization selection (cost limit 25):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 12):
+Pass 2: speed optimization selection (cost limit 11):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -396,7 +396,7 @@ Pass 2: speed optimization selection (cost limit 12):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 23):
+Pass 2: speed optimization selection (cost limit 22):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
     Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -431,7 +431,7 @@ Pass 2: speed optimization selection (cost limit 23):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 2: speed optimization selection (cost limit 10):
+Pass 2: speed optimization selection (cost limit 9):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7
@@ -464,7 +464,7 @@ Pass 2: speed optimization selection (cost limit 10):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 3: speed optimization selection (cost limit 18):
+Pass 3: speed optimization selection (cost limit 17):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
   * Loop Unrolling: unroll iteration loop at line 192            cost    13, benefit      425.0, efficiency       32.7 (+7 instructions)
@@ -497,7 +497,7 @@ Pass 3: speed optimization selection (cost limit 18):
     Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
     Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 3: speed optimization selection (cost limit 11):
+Pass 3: speed optimization selection (cost limit 10):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
@@ -529,7 +529,7 @@ Pass 3: speed optimization selection (cost limit 11):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 4: speed optimization selection (cost limit 11):
+Pass 4: speed optimization selection (cost limit 10):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
@@ -561,7 +561,7 @@ Pass 4: speed optimization selection (cost limit 11):
   ! Function Inlining: inline function call at line 47           cost    16, benefit        5.5, efficiency        0.3
   ! Function Inlining: inline function call at line 48           cost    16, benefit        5.5, efficiency        0.3
 
-Pass 5: speed optimization selection (cost limit 11):
+Pass 5: speed optimization selection (cost limit 10):
   ! Loop Unrolling: unroll iteration loop at line 174            cost    43, benefit       17.0, efficiency        0.4
   ! Loop Unrolling: unroll iteration loop at line 174            cost   277, benefit       17.0, efficiency        0.1
   ! Loop Unrolling: unroll iteration loop at line 174            cost   235, benefit       17.0, efficiency        0.1
@@ -1867,47 +1867,223 @@ Final code before resolving virtual instructions:
   945:  op div __tmp393 __fn65__best __fn65__count
         label __label509
   946:  assertequals 5 __tmp393 "median(1,1,1,1,9,9,9,9,5)"
-  947:  end
+  947:  stop
+  948:  end
         label __label1
-  948:  op max __fn1__y2 __fn1__x1 __fn1__x2
-  949:  op min __fn1__y3 __fn1__x3 __fn1__x4
-  950:  jump __label554 greaterThan __fn1__y2 __fn1__y3
-  951:  op add __tmp426 __fn1__y2 __fn1__y3
-  952:  op div __fn1retval __tmp426 2
-  953:  goto __fn1retaddr __fn1
+  949:  op max __fn1__y2 __fn1__x1 __fn1__x2
+  950:  op min __fn1__y3 __fn1__x3 __fn1__x4
+  951:  jump __label554 greaterThan __fn1__y2 __fn1__y3
+  952:  op add __tmp426 __fn1__y2 __fn1__y3
+  953:  op div __fn1retval __tmp426 2
+  954:  goto __fn1retaddr __fn1
         label __label554
-  954:  op min __fn1__y1 __fn1__x1 __fn1__x2
-  955:  op max __fn1__y4 __fn1__x3 __fn1__x4
-  956:  jump __label556 lessThan __fn1__y1 __fn1__y4
-  957:  op add __tmp432 __fn1__y1 __fn1__y4
-  958:  op div __fn1retval __tmp432 2
-  959:  goto __fn1retaddr __fn1
+  955:  op min __fn1__y1 __fn1__x1 __fn1__x2
+  956:  op max __fn1__y4 __fn1__x3 __fn1__x4
+  957:  jump __label556 lessThan __fn1__y1 __fn1__y4
+  958:  op add __tmp432 __fn1__y1 __fn1__y4
+  959:  op div __fn1retval __tmp432 2
+  960:  goto __fn1retaddr __fn1
         label __label556
-  960:  op max __tmp434 __fn1__y1 __fn1__y3
-  961:  op min __tmp435 __fn1__y2 __fn1__y4
-  962:  op add __tmp436 __tmp434 __tmp435
-  963:  op div __fn1retval __tmp436 2
-  964:  goto __fn1retaddr __fn1
+  961:  op max __tmp434 __fn1__y1 __fn1__y3
+  962:  op min __tmp435 __fn1__y2 __fn1__y4
+  963:  op add __tmp436 __tmp434 __tmp435
+  964:  op div __fn1retval __tmp436 2
+  965:  goto __fn1retaddr __fn1
         label __label2
-  965:  op min __fn2__y1 __fn2__x1 __fn2__x2
-  966:  op max __fn2__y2 __fn2__x1 __fn2__x2
-  967:  op min __fn2__y4 __fn2__x4 __fn2__x5
-  968:  op max __fn2__y5 __fn2__x4 __fn2__x5
-  969:  jump __label559 greaterThanEq __fn2__y4 __fn2__y1
-  970:  set __fn2__y4 __fn2__y1
-  971:  set __fn68__t __fn2__y2
-  972:  set __fn2__y2 __fn2__y5
-  973:  set __fn2__y5 __fn68__t
+  966:  op min __fn2__y1 __fn2__x1 __fn2__x2
+  967:  op max __fn2__y2 __fn2__x1 __fn2__x2
+  968:  op min __fn2__y4 __fn2__x4 __fn2__x5
+  969:  op max __fn2__y5 __fn2__x4 __fn2__x5
+  970:  jump __label559 greaterThanEq __fn2__y4 __fn2__y1
+  971:  set __fn2__y4 __fn2__y1
+  972:  set __fn68__t __fn2__y2
+  973:  set __fn2__y2 __fn2__y5
+  974:  set __fn2__y5 __fn68__t
         label __label559
-  974:  jump __label565 lessThanEq __fn2__x3 __fn2__y2
-  975:  op min __fn2retval __fn2__y2 __fn2__y5
-  976:  jump __label566 greaterThanEq __fn2__y2 __fn2__y4
-  977:  op min __fn2retval __fn2__x3 __fn2__y4
-  978:  goto __fn2retaddr __fn2
+  975:  jump __label565 lessThanEq __fn2__x3 __fn2__y2
+  976:  op min __fn2retval __fn2__y2 __fn2__y5
+  977:  jump __label566 greaterThanEq __fn2__y2 __fn2__y4
+  978:  op min __fn2retval __fn2__x3 __fn2__y4
+  979:  goto __fn2retaddr __fn2
         label __label565
-  979:  op min __fn2retval __fn2__y2 __fn2__y4
-  980:  jump __label570 lessThanEq __fn2__x3 __fn2__y4
-  981:  op min __fn2retval __fn2__x3 __fn2__y5
+  980:  op min __fn2retval __fn2__y2 __fn2__y4
+  981:  jump __label570 lessThanEq __fn2__x3 __fn2__y4
+  982:  op min __fn2retval __fn2__x3 __fn2__y5
         label __label570
         label __label566
-  982:  goto __fn2retaddr __fn2
+  983:  goto __fn2retaddr __fn2
+
+
+stop instruction encountered, dumping variable values:
+@counter: 948.0
+__fn19__result: 0.0
+__fn1__x1: 6.0
+__fn1__x2: 2.0
+__fn1__x3: 8.0
+__fn1__x4: 4.0
+__fn1__y1: 2.0
+__fn1__y2: 6.0
+__fn1__y3: 4.0
+__fn1__y4: 8.0
+__fn1retaddr: 68.0
+__fn1retval: 5.0
+__fn20__result: 1.0
+__fn2__x1: 5.0
+__fn2__x2: 5.0
+__fn2__x3: 5.0
+__fn2__x4: 5.0
+__fn2__x5: 5.0
+__fn2__y1: 5.0
+__fn2__y2: 5.0
+__fn2__y4: 5.0
+__fn2__y5: 5.0
+__fn2retaddr: 110.0
+__fn2retval: 5.0
+__fn32__best: 6.0
+__fn32__bestDif: 0.0
+__fn32__count: 6.0
+__fn35__best: 5.0
+__fn35__bestDif: 1.0
+__fn35__count: 5.0
+__fn35__i: 5.0
+__fn36__dif: 5.0
+__fn36__gt: 0.0
+__fn36__lt: 5.0
+__fn38__best: 4.0
+__fn38__bestDif: 2.0
+__fn38__count: 4.0
+__fn38__i: 5.0
+__fn39__dif: 4.0
+__fn39__gt: 0.0
+__fn39__i: 5.0
+__fn39__lt: 4.0
+__fn41__best: 18.0
+__fn41__bestDif: 3.0
+__fn41__count: 6.0
+__fn41__i: 5.0
+__fn42__dif: 3.0
+__fn42__gt: 0.0
+__fn42__i: 5.0
+__fn42__lt: 3.0
+__fn44__best: 20.0
+__fn44__bestDif: 2.0
+__fn44__count: 4.0
+__fn44__i: 5.0
+__fn45__dif: 2.0
+__fn45__gt: 0.0
+__fn45__i: 5.0
+__fn45__lt: 2.0
+__fn47__best: 25.0
+__fn47__bestDif: 1.0
+__fn47__count: 5.0
+__fn47__i: 5.0
+__fn48__dif: 1.0
+__fn48__gt: 0.0
+__fn48__i: 5.0
+__fn48__lt: 1.0
+__fn50__best: 30.0
+__fn50__bestDif: 0.0
+__fn50__count: 6.0
+__fn53__best: 4.0
+__fn53__bestDif: 2.0
+__fn53__count: 1.0
+__fn53__i: 5.0
+__fn54__dif: 0.0
+__fn54__gt: 4.0
+__fn54__lt: 4.0
+__fn56__best: 6.0
+__fn56__bestDif: 2.0
+__fn56__count: 1.0
+__fn56__i: 5.0
+__fn57__dif: 0.0
+__fn57__gt: 4.0
+__fn57__lt: 4.0
+__fn59__best: 3.0
+__fn59__bestDif: 4.0
+__fn59__count: 1.0
+__fn59__i: 5.0
+__fn60__dif: 0.0
+__fn60__gt: 4.0
+__fn60__lt: 4.0
+__fn62__best: 4.0
+__fn62__bestDif: 2.0
+__fn62__count: 1.0
+__fn62__i: 5.0
+__fn63__dif: 0.0
+__fn63__gt: 4.0
+__fn63__i: 3.0
+__fn63__lt: 4.0
+__fn65__best: 40.0
+__fn65__bestDif: 5.0
+__fn65__count: 8.0
+__fn65__i: 5.0
+__fn66__dif: 0.0
+__fn66__gt: 4.0
+__fn66__i: 5.0
+__fn66__lt: 4.0
+__fn68__t: 5.0
+__tmp107: 1.0
+__tmp108: 134.0
+__tmp133: 1.0
+__tmp134: 206.0
+__tmp143: -5.0
+__tmp145: 5.0
+__tmp148: 0.0
+__tmp159: 1.0
+__tmp160: 271.0
+__tmp162: 253.0
+__tmp169: -4.0
+__tmp171: 4.0
+__tmp174: 0.0
+__tmp185: 3.0
+__tmp186: 336.0
+__tmp188: 318.0
+__tmp195: -3.0
+__tmp197: 3.0
+__tmp200: 0.0
+__tmp211: 5.0
+__tmp212: 401.0
+__tmp214: 383.0
+__tmp221: -2.0
+__tmp223: 2.0
+__tmp226: 0.0
+__tmp237: 5.0
+__tmp238: 466.0
+__tmp240: 448.0
+__tmp247: -1.0
+__tmp249: 1.0
+__tmp252: 0.0
+__tmp263: 5.0
+__tmp264: 491.0
+__tmp289: 5.0
+__tmp290: 511.0
+__tmp299: 0.0
+__tmp301: 8.0
+__tmp304: 1.0
+__tmp315: 5.0
+__tmp316: 607.0
+__tmp325: 0.0
+__tmp327: 8.0
+__tmp330: 1.0
+__tmp341: 5.0
+__tmp342: 697.0
+__tmp351: 0.0
+__tmp353: 8.0
+__tmp356: 1.0
+__tmp367: 5.0
+__tmp368: 802.0
+__tmp370: 844.0
+__tmp377: 0.0
+__tmp379: 8.0
+__tmp382: 1.0
+__tmp393: 5.0
+__tmp394: 945.0
+__tmp396: 927.0
+__tmp403: 0.0
+__tmp405: 8.0
+__tmp408: 1.0
+__tmp426: 10.0
+__tmp432: 10.0
+__tmp434: 4.0
+__tmp435: 6.0
+__tmp436: 10.0

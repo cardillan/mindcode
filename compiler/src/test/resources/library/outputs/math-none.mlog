@@ -51,22 +51,22 @@ set __tmp25 __tmp26
 assertequals -0.5 __tmp25 "frac(-1.5)"
 set __fn0__x 0
 set __fn0retaddr 54
-jump 1558 always 0 0
+jump 1559 always 0 0
 set __tmp27 __fn0retval
 assertequals 0 __tmp27 "sign(0)"
 set __fn0__x 0.0000001
 set __fn0retaddr 59
-jump 1558 always 0 0
+jump 1559 always 0 0
 set __tmp28 __fn0retval
 assertequals 0 __tmp28 "sign(1e-7)"
 set __fn0__x 0.00001
 set __fn0retaddr 64
-jump 1558 always 0 0
+jump 1559 always 0 0
 set __tmp29 __fn0retval
 assertequals 1 __tmp29 "sign(1e-5)"
 set __fn0__x -5
 set __fn0retaddr 69
-jump 1558 always 0 0
+jump 1559 always 0 0
 set __tmp30 __fn0retval
 assertequals -1 __tmp30 "sign(-5)"
 set __fn12__x 0
@@ -206,7 +206,7 @@ set __fn1__x2 4
 set __fn1__x3 6
 set __fn1__x4 8
 set __fn1retaddr 209
-jump 1571 always 0 0
+jump 1572 always 0 0
 set __tmp93 __fn1retval
 assertequals 5 __tmp93 "median(2,4,6,8)"
 set __fn1__x1 8
@@ -214,7 +214,7 @@ set __fn1__x2 6
 set __fn1__x3 4
 set __fn1__x4 2
 set __fn1retaddr 217
-jump 1571 always 0 0
+jump 1572 always 0 0
 set __tmp94 __fn1retval
 assertequals 5 __tmp94 "median(8,6,4,2)"
 set __fn1__x1 4
@@ -222,7 +222,7 @@ set __fn1__x2 8
 set __fn1__x3 2
 set __fn1__x4 6
 set __fn1retaddr 225
-jump 1571 always 0 0
+jump 1572 always 0 0
 set __tmp95 __fn1retval
 assertequals 5 __tmp95 "median(4,8,2,6)"
 set __fn1__x1 2
@@ -230,7 +230,7 @@ set __fn1__x2 6
 set __fn1__x3 4
 set __fn1__x4 8
 set __fn1retaddr 233
-jump 1571 always 0 0
+jump 1572 always 0 0
 set __tmp96 __fn1retval
 assertequals 5 __tmp96 "median(2,6,4,8)"
 set __fn1__x1 6
@@ -238,7 +238,7 @@ set __fn1__x2 2
 set __fn1__x3 8
 set __fn1__x4 4
 set __fn1retaddr 241
-jump 1571 always 0 0
+jump 1572 always 0 0
 set __tmp97 __fn1retval
 assertequals 5 __tmp97 "median(6,2,8,4)"
 set __fn2__x1 1
@@ -247,7 +247,7 @@ set __fn2__x3 3
 set __fn2__x4 4
 set __fn2__x5 5
 set __fn2retaddr 250
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp98 __fn2retval
 assertequals 3 __tmp98 "median(1,2,3,4,5)"
 set __fn2__x1 5
@@ -256,7 +256,7 @@ set __fn2__x3 3
 set __fn2__x4 2
 set __fn2__x5 1
 set __fn2retaddr 259
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp99 __fn2retval
 assertequals 3 __tmp99 "median(5,4,3,2,1)"
 set __fn2__x1 1
@@ -265,7 +265,7 @@ set __fn2__x3 1
 set __fn2__x4 1
 set __fn2__x5 1
 set __fn2retaddr 268
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp100 __fn2retval
 assertequals 1 __tmp100 "median(1,1,1,1,1)"
 set __fn2__x1 1
@@ -274,7 +274,7 @@ set __fn2__x3 1
 set __fn2__x4 1
 set __fn2__x5 5
 set __fn2retaddr 277
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp101 __fn2retval
 assertequals 1 __tmp101 "median(1,1,1,1,5)"
 set __fn2__x1 1
@@ -283,7 +283,7 @@ set __fn2__x3 1
 set __fn2__x4 5
 set __fn2__x5 5
 set __fn2retaddr 286
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp102 __fn2retval
 assertequals 1 __tmp102 "median(1,1,1,5,5)"
 set __fn2__x1 1
@@ -292,7 +292,7 @@ set __fn2__x3 5
 set __fn2__x4 5
 set __fn2__x5 5
 set __fn2retaddr 295
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp103 __fn2retval
 assertequals 5 __tmp103 "median(1,1,5,5,5)"
 set __fn2__x1 1
@@ -301,7 +301,7 @@ set __fn2__x3 5
 set __fn2__x4 5
 set __fn2__x5 5
 set __fn2retaddr 304
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp104 __fn2retval
 assertequals 5 __tmp104 "median(1,5,5,5,5)"
 set __fn2__x1 5
@@ -310,7 +310,7 @@ set __fn2__x3 5
 set __fn2__x4 5
 set __fn2__x5 5
 set __fn2retaddr 313
-jump 1600 always 0 0
+jump 1601 always 0 0
 set __tmp105 __fn2retval
 assertequals 5 __tmp105 "median(5,5,5,5,5)"
 set __fn32__bestDif 10000000000
@@ -1555,15 +1555,16 @@ op div __tmp417 __fn65__best __fn65__count
 set __tmp393 __tmp417
 set __tmp392 __tmp393
 assertequals 5 __tmp392 "median(1,1,1,1,9,9,9,9,5)"
+stop
 end
 op equal __tmp418 __fn0__x 0
-jump 1562 equal __tmp418 false
+jump 1563 equal __tmp418 false
 set __tmp419 0
-jump 1568 always 0 0
+jump 1569 always 0 0
 op lessThan __tmp420 __fn0__x 0
-jump 1566 equal __tmp420 false
+jump 1567 equal __tmp420 false
 set __tmp421 -1
-jump 1567 always 0 0
+jump 1568 always 0 0
 set __tmp421 1
 set __tmp419 __tmp421
 set __fn0retval __tmp419
@@ -1574,21 +1575,21 @@ set __fn1__y2 __tmp422
 op min __tmp423 __fn1__x3 __fn1__x4
 set __fn1__y3 __tmp423
 op lessThanEq __tmp424 __fn1__y2 __fn1__y3
-jump 1581 equal __tmp424 false
+jump 1582 equal __tmp424 false
 op add __tmp426 __fn1__y2 __fn1__y3
 op div __tmp427 __tmp426 2
 set __tmp425 __tmp427
-jump 1597 always 0 0
+jump 1598 always 0 0
 op min __tmp428 __fn1__x1 __fn1__x2
 set __fn1__y1 __tmp428
 op max __tmp429 __fn1__x3 __fn1__x4
 set __fn1__y4 __tmp429
 op greaterThanEq __tmp430 __fn1__y1 __fn1__y4
-jump 1591 equal __tmp430 false
+jump 1592 equal __tmp430 false
 op add __tmp432 __fn1__y1 __fn1__y4
 op div __tmp433 __tmp432 2
 set __tmp431 __tmp433
-jump 1596 always 0 0
+jump 1597 always 0 0
 op max __tmp434 __fn1__y1 __fn1__y3
 op min __tmp435 __fn1__y2 __fn1__y4
 op add __tmp436 __tmp434 __tmp435
@@ -1607,7 +1608,7 @@ set __fn2__y4 __tmp440
 op max __tmp441 __fn2__x4 __fn2__x5
 set __fn2__y5 __tmp441
 op lessThan __tmp442 __fn2__y4 __fn2__y1
-jump 1628 equal __tmp442 false
+jump 1629 equal __tmp442 false
 set __fn67__a __fn2__y1
 set __fn67__b __fn2__y4
 set __fn67__t __fn67__a
@@ -1625,24 +1626,24 @@ set __tmp445 __fn68__b
 set __fn2__y2 __fn68__a
 set __fn2__y5 __fn68__b
 set __tmp443 __tmp445
-jump 1629 always 0 0
+jump 1630 always 0 0
 set __tmp443 null
 op greaterThan __tmp446 __fn2__x3 __fn2__y2
-jump 1640 equal __tmp446 false
+jump 1641 equal __tmp446 false
 op lessThan __tmp448 __fn2__y2 __fn2__y4
-jump 1636 equal __tmp448 false
+jump 1637 equal __tmp448 false
 op min __tmp450 __fn2__x3 __fn2__y4
 set __tmp449 __tmp450
-jump 1638 always 0 0
+jump 1639 always 0 0
 op min __tmp451 __fn2__y2 __fn2__y5
 set __tmp449 __tmp451
 set __tmp447 __tmp449
-jump 1648 always 0 0
+jump 1649 always 0 0
 op greaterThan __tmp452 __fn2__x3 __fn2__y4
-jump 1645 equal __tmp452 false
+jump 1646 equal __tmp452 false
 op min __tmp454 __fn2__x3 __fn2__y5
 set __tmp453 __tmp454
-jump 1647 always 0 0
+jump 1648 always 0 0
 op min __tmp455 __fn2__y2 __fn2__y4
 set __tmp453 __tmp455
 set __tmp447 __tmp453

@@ -27,3 +27,5 @@ printExactSlow(1.0123456789) :* "1.012345678900000"
 printExactSlow(1.0000001e20) :* "1.000000099999999E20"
 printExactSlow(1.2345e-50)   :* "1.234500000000000E-50"
 printExactSlow(-1.2345e-50)  :* "-1.234500000000000E-50"
+
+stopProcessor();

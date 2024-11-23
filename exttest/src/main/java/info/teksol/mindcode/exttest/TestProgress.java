@@ -3,6 +3,7 @@ package info.teksol.mindcode.exttest;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.exttest.Configuration.TestConfiguration;
 
 import java.io.PrintWriter;
 import java.lang.management.GarbageCollectorMXBean;
@@ -34,7 +35,7 @@ public class TestProgress {
 
     public TestProgress(TestConfiguration configuration) {
         this.configuration = configuration;
-        this.samples = configuration.getSampleCount();
+        this.samples = configuration.getTestCaseSelector().getSampleCount();
 
         for (Optimization optimization : Optimization.LIST) {
             Map<OptimizationLevel, AtomicInteger> levels = new EnumMap<>(OptimizationLevel.class);
@@ -48,14 +49,14 @@ public class TestProgress {
     }
 
     public boolean finished() {
-        return finishedCount.get() >= samples && errors.isEmpty();
+        return finishedCount.get() >= samples || errorCount.get() > configuration.getFailureLimit();
     }
 
     public int nextSample() {
         return nextSample.getAndIncrement();
     }
 
-    public void success() {
+    public void reportSuccess() {
         finishedCount.incrementAndGet();
     }
 
@@ -82,7 +83,11 @@ public class TestProgress {
         }
     }
 
-    public void printProgress() {
+    public void printProgress(boolean finished) {
+        if (finished && lastCount == finishedCount.get()) {
+            return;
+        }
+
         long time = System.nanoTime();
         long elapsed = time - start;
         int count = finishedCount.get();

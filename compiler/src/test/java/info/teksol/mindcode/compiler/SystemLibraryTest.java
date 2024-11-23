@@ -46,7 +46,7 @@ public class SystemLibraryTest {
 
     @Test
     void testOneLibrary() throws IOException {
-        testLibrary("printing", OptimizationLevel.ADVANCED);
+        testLibrary("math", OptimizationLevel.ADVANCED);
     }
 
     @TestFactory

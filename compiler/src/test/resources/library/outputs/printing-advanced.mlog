@@ -104,3 +104,5 @@ assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
 print "-1.234500000000000E-50"
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+stop
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

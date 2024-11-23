@@ -20,7 +20,7 @@ public class ThreadPoolRunner implements Callable<Integer> {
     @Override
     public Integer call() {
         int count = 0;
-        while (true) {
+        while (!progress.finished()) {
             int testRunNumber = progress.nextSample();
             if (testRunNumber >= caseSelector.getSampleCount()) {
                 break;
@@ -29,9 +29,5 @@ public class ThreadPoolRunner implements Callable<Integer> {
             count++;
         }
         return count;
-    }
-
-    public static Callable<Integer> create(TestProgress progress, TestCaseSelector caseSelector, TestCaseExecutor testCaseExecutor) {
-        return new ThreadPoolRunner(progress, caseSelector, testCaseExecutor);
     }
 }

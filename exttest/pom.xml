@@ -40,6 +40,12 @@
             <version>5.10.3</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.amihaiemil.web</groupId>
+            <artifactId>eo-yaml</artifactId>
+            <version>8.0.6</version>
+        </dependency>
     </dependencies>
 
     <build>

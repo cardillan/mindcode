@@ -1,4 +1,4 @@
-Main file: number of reported ambiguities: 4
+Main file: number of reported ambiguities: 5
 
 Final code before resolving virtual instructions:
 
@@ -164,232 +164,325 @@ Final code before resolving virtual instructions:
   133:  call __label5 __fn5retval
         gotolabel __label32 __fn5
   134:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-  135:  end
+  135:  stop
+  136:  end
         label __label3
-  136:  print "{2}"
+  137:  print "{2}"
         label __label34
-  137:  set __fn6__number __fn3__number
-  138:  op abs __tmp0 __fn6__number 0
-  139:  op floor __tmp1 __tmp0 0
-  140:  set __fn6__n __tmp1
-  141:  op lessThan __tmp2 __fn6__number 0
-  142:  jump __label36 equal __tmp2 false
-  143:  format "-{2}"
-  144:  set __tmp3 "-{2}"
-  145:  jump __label37 always 0 0
+  138:  set __fn6__number __fn3__number
+  139:  op abs __tmp0 __fn6__number 0
+  140:  op floor __tmp1 __tmp0 0
+  141:  set __fn6__n __tmp1
+  142:  op lessThan __tmp2 __fn6__number 0
+  143:  jump __label36 equal __tmp2 false
+  144:  format "-{2}"
+  145:  set __tmp3 "-{2}"
+  146:  jump __label37 always 0 0
         label __label36
-  146:  set __tmp3 null
+  147:  set __tmp3 null
         label __label37
         label __label38
-  147:  op greaterThan __tmp4 __fn6__n 999
-  148:  jump __label40 equal __tmp4 false
-  149:  op mod __tmp5 __fn6__n 1000
-  150:  set __fn6__mod __tmp5
-  151:  op lessThan __tmp6 __fn6__mod 10
-  152:  jump __label41 equal __tmp6 false
-  153:  set __tmp7 "{2},00{1}"
-  154:  jump __label42 always 0 0
+  148:  op greaterThan __tmp4 __fn6__n 999
+  149:  jump __label40 equal __tmp4 false
+  150:  op mod __tmp5 __fn6__n 1000
+  151:  set __fn6__mod __tmp5
+  152:  op lessThan __tmp6 __fn6__mod 10
+  153:  jump __label41 equal __tmp6 false
+  154:  set __tmp7 "{2},00{1}"
+  155:  jump __label42 always 0 0
         label __label41
-  155:  op lessThan __tmp8 __fn6__mod 100
-  156:  jump __label43 equal __tmp8 false
-  157:  set __tmp9 "{2},0{1}"
-  158:  jump __label44 always 0 0
+  156:  op lessThan __tmp8 __fn6__mod 100
+  157:  jump __label43 equal __tmp8 false
+  158:  set __tmp9 "{2},0{1}"
+  159:  jump __label44 always 0 0
         label __label43
-  159:  set __tmp9 "{2},{1}"
+  160:  set __tmp9 "{2},{1}"
         label __label44
-  160:  set __tmp7 __tmp9
+  161:  set __tmp7 __tmp9
         label __label42
-  161:  format __tmp7
-  162:  format __fn6__mod
-  163:  op idiv __tmp10 __fn6__n 1000
-  164:  set __fn6__n __tmp10
+  162:  format __tmp7
+  163:  format __fn6__mod
+  164:  op idiv __tmp10 __fn6__n 1000
+  165:  set __fn6__n __tmp10
         label __label39
-  165:  jump __label38 always 0 0
+  166:  jump __label38 always 0 0
         label __label40
-  166:  format __fn6__n
+  167:  format __fn6__n
         label __label35
         label __label33
-  167:  goto __fn3retaddr __fn3
-  168:  end
+  168:  goto __fn3retaddr __fn3
+  169:  end
         label __label4
         label __label46
-  169:  set __fn7__x __fn4__n
-  170:  op abs __tmp12 __fn7__x 0
-  171:  op lessThanEq __tmp13 __tmp12 0
-  172:  set __tmp11 __tmp13
+  170:  set __fn7__x __fn4__n
+  171:  op abs __tmp12 __fn7__x 0
+  172:  op lessThanEq __tmp13 __tmp12 0
+  173:  set __tmp11 __tmp13
         label __label47
-  173:  jump __label48 equal __tmp11 false
-  174:  print __fn4__n
-  175:  set __tmp14 __fn4__n
-  176:  jump __label49 always 0 0
+  174:  jump __label48 equal __tmp11 false
+  175:  print __fn4__n
+  176:  set __tmp14 __fn4__n
+  177:  jump __label49 always 0 0
         label __label48
-  177:  op lessThan __tmp15 __fn4__n 0
-  178:  jump __label50 equal __tmp15 false
-  179:  print "-"
-  180:  op abs __tmp17 __fn4__n 0
-  181:  set __fn4__n __tmp17
-  182:  set __tmp16 __fn4__n
-  183:  jump __label51 always 0 0
+  178:  op lessThan __tmp15 __fn4__n 0
+  179:  jump __label50 equal __tmp15 false
+  180:  print "-"
+  181:  op abs __tmp17 __fn4__n 0
+  182:  set __fn4__n __tmp17
+  183:  set __tmp16 __fn4__n
+  184:  jump __label51 always 0 0
         label __label50
-  184:  set __tmp16 null
+  185:  set __tmp16 null
         label __label51
-  185:  op log10 __tmp18 __fn4__n 0
-  186:  op floor __tmp19 __tmp18 0
-  187:  set __fn4__exp __tmp19
-  188:  op mul __tmp20 -1 __fn4__exp
-  189:  op pow __tmp21 10 __tmp20
-  190:  op mul __tmp22 __fn4__n __tmp21
-  191:  set __fn4__base __tmp22
+  186:  op log10 __tmp18 __fn4__n 0
+  187:  op floor __tmp19 __tmp18 0
+  188:  set __fn4__exp __tmp19
+  189:  op mul __tmp20 -1 __fn4__exp
+  190:  op pow __tmp21 10 __tmp20
+  191:  op mul __tmp22 __fn4__n __tmp21
+  192:  set __fn4__base __tmp22
         label __label52
-  192:  set __fn8__x __fn4__base
-  193:  op add __tmp24 __fn8__x 0.5
-  194:  op floor __tmp25 __tmp24 0
-  195:  set __tmp23 __tmp25
+  193:  set __fn8__x __fn4__base
+  194:  op add __tmp24 __fn8__x 0.5
+  195:  op floor __tmp25 __tmp24 0
+  196:  set __tmp23 __tmp25
         label __label53
-  196:  op sub __tmp26 __fn4__base __tmp23
-  197:  op abs __tmp27 __tmp26 0
-  198:  set __fn4__cmp __tmp27
-  199:  op lessThanEq __tmp28 __fn4__cmp 0
-  200:  jump __label54 equal __tmp28 false
-  201:  print __fn4__base
-  202:  set __tmp29 __fn4__base
-  203:  jump __label55 always 0 0
+  197:  op sub __tmp26 __fn4__base __tmp23
+  198:  op abs __tmp27 __tmp26 0
+  199:  set __fn4__cmp __tmp27
+  200:  op lessThanEq __tmp28 __fn4__cmp 0
+  201:  jump __label54 equal __tmp28 false
+  202:  print __fn4__base
+  203:  set __tmp29 __fn4__base
+  204:  jump __label55 always 0 0
         label __label54
-  204:  op greaterThan __tmp30 __fn4__cmp 0.00001
-  205:  jump __label56 equal __tmp30 false
-  206:  print __fn4__base
-  207:  set __tmp31 __fn4__base
-  208:  jump __label57 always 0 0
+  205:  op greaterThan __tmp30 __fn4__cmp 0.00001
+  206:  jump __label56 equal __tmp30 false
+  207:  print __fn4__base
+  208:  set __tmp31 __fn4__base
+  209:  jump __label57 always 0 0
         label __label56
-  209:  op floor __tmp32 __fn4__base 0
-  210:  print __tmp32
-  211:  print "."
-  212:  set __fn4__digit 1
+  210:  op floor __tmp32 __fn4__base 0
+  211:  print __tmp32
+  212:  print "."
+  213:  set __fn4__digit 1
         label __label58
-  213:  jump __label60 greaterThan __fn4__digit 3
+  214:  jump __label60 greaterThan __fn4__digit 3
         label __label61
-  214:  set __fn9__x __fn4__base
-  215:  op mod __tmp34 __fn9__x 1
-  216:  set __tmp33 __tmp34
+  215:  set __fn9__x __fn4__base
+  216:  op mod __tmp34 __fn9__x 1
+  217:  set __tmp33 __tmp34
         label __label62
-  217:  op mul __tmp35 __tmp33 100000
-  218:  set __fn4__base __tmp35
-  219:  op floor __tmp36 __fn4__base 0
-  220:  set __fn4__t __tmp36
-  221:  op lessThan __tmp37 __fn4__t 10
-  222:  jump __label63 equal __tmp37 false
-  223:  print "0000"
-  224:  set __tmp38 "0000"
-  225:  jump __label64 always 0 0
+  218:  op mul __tmp35 __tmp33 100000
+  219:  set __fn4__base __tmp35
+  220:  op floor __tmp36 __fn4__base 0
+  221:  set __fn4__t __tmp36
+  222:  op lessThan __tmp37 __fn4__t 10
+  223:  jump __label63 equal __tmp37 false
+  224:  print "0000"
+  225:  set __tmp38 "0000"
+  226:  jump __label64 always 0 0
         label __label63
-  226:  op lessThan __tmp39 __fn4__t 100
-  227:  jump __label65 equal __tmp39 false
-  228:  print "000"
-  229:  set __tmp40 "000"
-  230:  jump __label66 always 0 0
+  227:  op lessThan __tmp39 __fn4__t 100
+  228:  jump __label65 equal __tmp39 false
+  229:  print "000"
+  230:  set __tmp40 "000"
+  231:  jump __label66 always 0 0
         label __label65
-  231:  op lessThan __tmp41 __fn4__t 1000
-  232:  jump __label67 equal __tmp41 false
-  233:  print "00"
-  234:  set __tmp42 "00"
-  235:  jump __label68 always 0 0
+  232:  op lessThan __tmp41 __fn4__t 1000
+  233:  jump __label67 equal __tmp41 false
+  234:  print "00"
+  235:  set __tmp42 "00"
+  236:  jump __label68 always 0 0
         label __label67
-  236:  op lessThan __tmp43 __fn4__t 10000
-  237:  jump __label69 equal __tmp43 false
-  238:  print "0"
-  239:  set __tmp44 "0"
-  240:  jump __label70 always 0 0
+  237:  op lessThan __tmp43 __fn4__t 10000
+  238:  jump __label69 equal __tmp43 false
+  239:  print "0"
+  240:  set __tmp44 "0"
+  241:  jump __label70 always 0 0
         label __label69
-  241:  set __tmp44 null
+  242:  set __tmp44 null
         label __label70
-  242:  set __tmp42 __tmp44
+  243:  set __tmp42 __tmp44
         label __label68
-  243:  set __tmp40 __tmp42
+  244:  set __tmp40 __tmp42
         label __label66
-  244:  set __tmp38 __tmp40
+  245:  set __tmp38 __tmp40
         label __label64
-  245:  print __fn4__t
+  246:  print __fn4__t
         label __label59
-  246:  op add __fn4__digit __fn4__digit 1
-  247:  jump __label58 always 0 0
+  247:  op add __fn4__digit __fn4__digit 1
+  248:  jump __label58 always 0 0
         label __label60
-  248:  set __tmp31 null
+  249:  set __tmp31 null
         label __label57
-  249:  set __tmp29 __tmp31
+  250:  set __tmp29 __tmp31
         label __label55
-  250:  op notEqual __tmp45 __fn4__exp 0
-  251:  jump __label71 equal __tmp45 false
-  252:  print "E"
-  253:  print __fn4__exp
-  254:  set __tmp46 __fn4__exp
-  255:  jump __label72 always 0 0
+  251:  op notEqual __tmp45 __fn4__exp 0
+  252:  jump __label71 equal __tmp45 false
+  253:  print "E"
+  254:  print __fn4__exp
+  255:  set __tmp46 __fn4__exp
+  256:  jump __label72 always 0 0
         label __label71
-  256:  set __tmp46 null
+  257:  set __tmp46 null
         label __label72
-  257:  set __tmp14 __tmp46
+  258:  set __tmp14 __tmp46
         label __label49
         label __label45
-  258:  goto __fn4retaddr __fn4
-  259:  end
+  259:  goto __fn4retaddr __fn4
+  260:  end
         label __label5
         label __label74
-  260:  set __fn10__x __fn5__n
-  261:  op abs __tmp48 __fn10__x 0
-  262:  op lessThanEq __tmp49 __tmp48 0
-  263:  set __tmp47 __tmp49
+  261:  set __fn10__x __fn5__n
+  262:  op abs __tmp48 __fn10__x 0
+  263:  op lessThanEq __tmp49 __tmp48 0
+  264:  set __tmp47 __tmp49
         label __label75
-  264:  jump __label76 equal __tmp47 false
-  265:  print __fn5__n
-  266:  set __tmp50 __fn5__n
-  267:  jump __label77 always 0 0
+  265:  jump __label76 equal __tmp47 false
+  266:  print __fn5__n
+  267:  set __tmp50 __fn5__n
+  268:  jump __label77 always 0 0
         label __label76
-  268:  op lessThan __tmp51 __fn5__n 0
-  269:  jump __label78 equal __tmp51 false
-  270:  print "-"
-  271:  op abs __tmp53 __fn5__n 0
-  272:  set __fn5__n __tmp53
-  273:  set __tmp52 __fn5__n
-  274:  jump __label79 always 0 0
+  269:  op lessThan __tmp51 __fn5__n 0
+  270:  jump __label78 equal __tmp51 false
+  271:  print "-"
+  272:  op abs __tmp53 __fn5__n 0
+  273:  set __fn5__n __tmp53
+  274:  set __tmp52 __fn5__n
+  275:  jump __label79 always 0 0
         label __label78
-  275:  set __tmp52 null
+  276:  set __tmp52 null
         label __label79
-  276:  op log10 __tmp54 __fn5__n 0
-  277:  op floor __tmp55 __tmp54 0
-  278:  set __fn5__exp __tmp55
-  279:  op mul __tmp56 -1 __fn5__exp
-  280:  op pow __tmp57 10 __tmp56
-  281:  op mul __tmp58 __fn5__n __tmp57
-  282:  set __fn5__base __tmp58
-  283:  op floor __tmp59 __fn5__base 0
-  284:  print __tmp59
-  285:  print "."
-  286:  set __fn5__digit 1
+  277:  op log10 __tmp54 __fn5__n 0
+  278:  op floor __tmp55 __tmp54 0
+  279:  set __fn5__exp __tmp55
+  280:  op mul __tmp56 -1 __fn5__exp
+  281:  op pow __tmp57 10 __tmp56
+  282:  op mul __tmp58 __fn5__n __tmp57
+  283:  set __fn5__base __tmp58
+  284:  op floor __tmp59 __fn5__base 0
+  285:  print __tmp59
+  286:  print "."
+  287:  set __fn5__digit 1
         label __label80
-  287:  jump __label82 greaterThan __fn5__digit 15
+  288:  jump __label82 greaterThan __fn5__digit 15
         label __label83
-  288:  set __fn11__x __fn5__base
-  289:  op mod __tmp61 __fn11__x 1
-  290:  set __tmp60 __tmp61
+  289:  set __fn11__x __fn5__base
+  290:  op mod __tmp61 __fn11__x 1
+  291:  set __tmp60 __tmp61
         label __label84
-  291:  op mul __tmp62 __tmp60 10
-  292:  set __fn5__base __tmp62
-  293:  op floor __tmp63 __fn5__base 0
-  294:  print __tmp63
+  292:  op mul __tmp62 __tmp60 10
+  293:  set __fn5__base __tmp62
+  294:  op floor __tmp63 __fn5__base 0
+  295:  print __tmp63
         label __label81
-  295:  op add __fn5__digit __fn5__digit 1
-  296:  jump __label80 always 0 0
+  296:  op add __fn5__digit __fn5__digit 1
+  297:  jump __label80 always 0 0
         label __label82
-  297:  op notEqual __tmp64 __fn5__exp 0
-  298:  jump __label85 equal __tmp64 false
-  299:  print "E"
-  300:  print __fn5__exp
-  301:  set __tmp65 __fn5__exp
-  302:  jump __label86 always 0 0
+  298:  op notEqual __tmp64 __fn5__exp 0
+  299:  jump __label85 equal __tmp64 false
+  300:  print "E"
+  301:  print __fn5__exp
+  302:  set __tmp65 __fn5__exp
+  303:  jump __label86 always 0 0
         label __label85
-  303:  set __tmp65 null
+  304:  set __tmp65 null
         label __label86
-  304:  set __tmp50 __tmp65
+  305:  set __tmp50 __tmp65
         label __label77
         label __label73
-  305:  goto __fn5retaddr __fn5
-  306:  end
+  306:  goto __fn5retaddr __fn5
+  307:  end
+
+
+stop instruction encountered, dumping variable values:
+@counter: 136.0
+__fn10__x: -1.2345E-50
+__fn11__x: 0.015276668818842154
+__fn3__number: 9009099.0
+__fn3retaddr: 34.0
+__fn4__base: 1.2345000000000002
+__fn4__cmp: 0.23450000000000015
+__fn4__digit: 4.0
+__fn4__exp: -50.0
+__fn4__n: 1.2345E-50
+__fn4__t: 99999.0
+__fn4retaddr: 84.0
+__fn5__base: 0.15276668818842154
+__fn5__digit: 16.0
+__fn5__exp: -50.0
+__fn5__n: 1.2345E-50
+__fn5retaddr: 134.0
+__fn6__mod: 9.0
+__fn6__n: 9.0
+__fn6__number: 9009099.0
+__fn7__x: -1.2345E-50
+__fn8__x: 1.2345000000000002
+__fn9__x: 999.9999983634211
+__tmp0: 9009099.0
+__tmp1: 9009099.0
+__tmp10: 9.0
+__tmp11: 0.0
+__tmp12: 1.2345E-50
+__tmp13: 0.0
+__tmp14: -50.0
+__tmp15: 1.0
+__tmp16: 1.2345E-50
+__tmp17: 1.2345E-50
+__tmp18: -49.90850890573205
+__tmp19: -50.0
+__tmp2: 0.0
+__tmp20: 50.0
+__tmp21: 1.0E50
+__tmp22: 1.2345000000000002
+__tmp23: 1.0
+__tmp24: 1.7345000000000002
+__tmp25: 1.0
+__tmp26: 0.23450000000000015
+__tmp27: 0.23450000000000015
+__tmp28: 0.0
+__tmp29: 1.2345000000000002
+__tmp3: null
+__tmp30: 1.0
+__tmp31: 1.2345000000000002
+__tmp32: 1.0
+__tmp33: 0.9999983634211276
+__tmp34: 0.9999983634211276
+__tmp35: 99999.83634211276
+__tmp36: 99999.0
+__tmp37: 0.0
+__tmp38: null
+__tmp39: 0.0
+__tmp4: 0.0
+__tmp40: null
+__tmp41: 0.0
+__tmp42: null
+__tmp43: 0.0
+__tmp44: null
+__tmp45: 1.0
+__tmp46: -50.0
+__tmp47: 0.0
+__tmp48: 1.2345E-50
+__tmp49: 0.0
+__tmp5: 9.0
+__tmp50: -50.0
+__tmp51: 1.0
+__tmp52: 1.2345E-50
+__tmp53: 1.2345E-50
+__tmp54: -49.90850890573205
+__tmp55: -50.0
+__tmp56: 50.0
+__tmp57: 1.0E50
+__tmp58: 1.2345000000000002
+__tmp59: 1.0
+__tmp6: 1.0
+__tmp60: 0.015276668818842154
+__tmp61: 0.015276668818842154
+__tmp62: 0.15276668818842154
+__tmp63: 0.0
+__tmp64: 1.0
+__tmp65: -50.0
+__tmp7: {2},00{1}
+__tmp8: 1.0
+__tmp9: {2},0{1}

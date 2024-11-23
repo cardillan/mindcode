@@ -1,6 +1,6 @@
 allocate stack in bank1[0...512];
 
-param SIZE = 512;
+param SIZE = 64;
 param ARRAY = bank2;
 
 def quicksort(left, right)
@@ -60,3 +60,5 @@ for i in 1 .. SIZE - 1 do
         break;
     end;
 end;
+
+stopProcessor();
