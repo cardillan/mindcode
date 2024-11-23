@@ -240,7 +240,7 @@ class DataFlowVariableStates {
 
             if (TRACE) {
                 trace(values.values().stream().filter(exp -> exp.dependsOn(invalids))
-                        .map(exp -> "   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
+                        .map(exp -> "   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction.toMlog()));
                 trace(equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
                         .map(e -> "   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
             }

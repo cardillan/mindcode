@@ -4,7 +4,6 @@ import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
 import info.teksol.emulator.processor.AbstractProcessorTest;
 import info.teksol.emulator.processor.Processor;
-import info.teksol.emulator.processor.TextBuffer;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -31,40 +30,40 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
     @Override
     protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, Map<String, MindustryBlock> blocks,
-            ExpectedMessages expectedMessages, OutputEvaluator evaluator, Path logFile) {
+            ExpectedMessages expectedMessages, RunEvaluator evaluator, Path logFile) {
         debugPrinter = INTERCEPT ? new InterceptingDebugPrinter(compiler, evaluator) : super.getDebugPrinter();
         super.testAndEvaluateCode(compiler, title, code, blocks, expectedMessages, evaluator, logFile);
     }
 
     private class InterceptingDebugPrinter extends DiffDebugPrinter {
-        private final OutputEvaluator evaluator;
+        private final RunEvaluator evaluator;
         private final TestCompiler compiler;
         private ProgramVersion previous;
         private ProgramVersion errant;
         private String title;
 
-        public InterceptingDebugPrinter(TestCompiler compiler, OutputEvaluator evaluator) {
+        public InterceptingDebugPrinter(TestCompiler compiler, RunEvaluator evaluator) {
             super(3);
             setDiffMargin(10000);
             this.evaluator = evaluator;
             this.compiler = compiler;
         }
 
-        private TextBuffer runProgram(List<LogicInstruction> program) {
+        private Processor runProgram(List<LogicInstruction> program) {
             List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, program);
             Processor processor = new Processor(ExpectedMessages.none(), 1000);
             processor.addBlock("bank1", Memory.createMemoryBank());
             processor.addBlock("bank2", Memory.createMemoryBank());
             processor.run(instructions, MAX_STEPS);
-            return processor.getTextBuffer();
+            return processor;
         }
 
 
         @Override
         public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
             if (errant == null) {
-                TextBuffer actualOutput = runProgram(program);
-                if (evaluator.compare(false, actualOutput)) {
+                Processor processor = runProgram(program);
+                if (evaluator.asExpected(false, processor)) {
                     previous = new ProgramVersion(optimizer, title, program);
                 } else {
                     if (previous == null) {
@@ -78,7 +77,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
         @Override
         public void print(Consumer<String> messageConsumer) {
             if (errant != null) {
-                printDiff(messageConsumer, errant.getTitle(), previous.getProgram(), errant.getProgram());
+                printDiff(System.out::println, errant.getTitle(), previous.getProgram(), errant.getProgram());
             }
         }
 

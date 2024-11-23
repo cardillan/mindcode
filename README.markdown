@@ -7,7 +7,7 @@
 > [!TIP]
 > Mindcode currently undergoes substantial changes to the syntax. You might want to have a look at the [upcoming changes](https://github.com/cardillan/mindcode/discussions/142) that are still being deliberated. Comments and suggestions are welcome.
 
-## Documentation
+## Mindcode Syntax
 
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 

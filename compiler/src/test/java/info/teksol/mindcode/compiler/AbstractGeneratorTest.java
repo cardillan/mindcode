@@ -277,7 +277,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
 
     protected String createUnmatchedArgumentsMessage(TestCompiler compiler, List<LogicInstruction> actual, int index,
             LogicInstruction left, LogicInstruction right) {
-        return "Expected\n" + left + "\nbut found\n" + right + "\non row index " + index + "\n" +
+        return "Expected\n" + left.toMlog() + "\nbut found\n" + right.toMlog() + "\non row index " + index + "\n" +
                 "expected->actual: " + expectedToActual + "\n" +
                 "actual->expected: " + actualToExpected + "\n" +
                 formatMessages(compiler) + "\n" +
@@ -286,7 +286,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
 
     protected String createUnusedVarsMessage(TestCompiler compiler, List<LogicInstruction> actual, int index,
             LogicInstruction left, LogicInstruction right) {
-        return "Expected\n" + left + "\nbut found\n" + right + "\non row index " + index + "\n" +
+        return "Expected\n" + left.toMlog() + "\nbut found\n" + right.toMlog() + "\non row index " + index + "\n" +
                 "expected->actual: " + expectedToActual + "\n" +
                 "actual->expected: " + actualToExpected + "\n" +
                 formatMessages(compiler) + "\n" +

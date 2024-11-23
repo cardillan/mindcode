@@ -101,10 +101,10 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
     @Test
     void preservesEmptyLoops() {
         assertCompilesTo("""
-                        for i = -5; i < -10; i += 1 do
-                            print("a");
-                        end;
-                        """
+                for i = -5; i < -10; i += 1 do
+                    print("a");
+                end;
+                """
         );
     }
 
@@ -330,7 +330,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             i = n += 1;
                             j = 2 * n;
                         end;
-
+                        
                         for i in a, b, c, d, e, f do
                             print(i);
                         end;
@@ -405,7 +405,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             a += 2;
                             b -= 1;
                         end;
-
+                        
                         x = y = 0;
                         for i in 1 ... 10 do
                             foo(out x, out y);
@@ -591,7 +591,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                 createInstruction(PRINT, q("123456789"))
         );
     }
-    
+
     @Test
     void unrollsUpdatesInConditionsBasic() {
         assertCompilesTo(createTestCompiler(basicProfile),
@@ -617,6 +617,36 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         end;
                         """,
                 createInstruction(PRINT, q("0123456789"))
+        );
+    }
+
+    @Test
+    void processesEntryCondition() {
+        assertCompilesTo(createTestCompiler(basicProfile
+                        .setOptimizationLevel(Optimization.LOOP_OPTIMIZATION, OptimizationLevel.NONE)
+                ),
+                """
+                        for i in 1 .. 3 do
+                            print(i);
+                        end;
+                        """,
+                createInstruction(PRINT, q("123"))
+        );
+    }
+
+    @Test
+    void processesExitCondition() {
+        assertCompilesTo(createTestCompiler(basicProfile
+                        .setOptimizationLevel(Optimization.LOOP_OPTIMIZATION, OptimizationLevel.NONE)
+                ),
+                """
+                        i = 1;
+                        do
+                            print(i);
+                            i += 1;
+                        loop while i <= 3;
+                        """,
+                createInstruction(PRINT, q("123"))
         );
     }
 }

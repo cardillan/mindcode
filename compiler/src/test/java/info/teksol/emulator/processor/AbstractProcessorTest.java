@@ -12,6 +12,7 @@ import info.teksol.mindcode.compiler.optimization.*;
 import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -24,8 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 // Base class for algorithm tests
 // Processor for execution is equipped with bank1 memory bank.
@@ -39,15 +39,15 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     // Lambda interface
     // Handles evaluating of expected vs. actual program output
-    protected interface OutputEvaluator {
+    protected interface RunEvaluator {
         /**
-         * Called to compare the actual output with an (implicit) expected one.
+         * Called to compare the actual results of running a code with an expected state.
          * @param useAsserts if true, the evaluator should explicitly assert the equality, otherwise it just reports
          *                   the result. Each evaluator will be called at lest once with useAsserts set to true.
-         * @param output     the actual output produced by the tested code
-         * @return true if the actual output matches the expected one
+         * @param processor  processor containing the results of the test run
+         * @return true if the actual results output matches the expected one
          */
-        boolean compare(boolean useAsserts, TextBuffer output);
+        boolean asExpected(boolean useAsserts, Processor processor);
     }
 
     static void done(String scriptsDirectory, String className) throws IOException {
@@ -164,7 +164,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     }
 
     protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, Map<String, MindustryBlock> blocks,
-            ExpectedMessages expectedMessages, OutputEvaluator evaluator, Path logFile) {
+            ExpectedMessages expectedMessages, RunEvaluator evaluator, Path logFile) {
         Processor processor = new Processor(ExpectedMessages.none(), 1000);
         processor.addBlock("bank1", Memory.createMemoryBank());
         processor.addBlock("bank2", Memory.createMemoryBank());
@@ -176,15 +176,16 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
         logPerformance(title, code, compiled, processor);
 
-        assertAll(
-                () -> evaluator.compare(true, processor.getTextBuffer()),
-                () -> assertNoUnexpectedMessages(compiler, expectedMessages)
-        );
+        List<Executable> executables = new ArrayList<>();
+        executables.add(() -> evaluator.asExpected(true, processor));
+        executables.add(() -> assertNoUnexpectedMessages(compiler, expectedMessages));
+        processor.getAssertions().forEach(a -> executables.add(() -> assertTrue(a.success(), a.generateErrorMessage())));
+        assertAll(executables);
     }
 
-    protected OutputEvaluator createEvaluator(TestCompiler compiler, String expectedOutput) {
-        return (useAsserts, textBuffer) -> {
-            String actualOutput = textBuffer.getFormattedOutput();
+    protected RunEvaluator createOutputEvaluator(TestCompiler compiler, String expectedOutput) {
+        return (useAsserts, processor) -> {
+            String actualOutput = processor.getTextBuffer().getFormattedOutput();
             boolean matches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput,
@@ -195,21 +196,26 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         };
     }
 
-    protected OutputEvaluator createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
-        return (useAsserts, textBuffer) -> {
-            List<String> actualOutput = textBuffer.getPrintOutput();
-            boolean matches = Objects.equals(expectedOutput, actualOutput);
+    protected RunEvaluator createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
+        return (useAsserts, processor) -> {
+            List<String> actualOutput = processor.getPrintOutput();
+            boolean outputMatches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput,
                         () -> compiler.getMessages().stream().map(MindcodeMessage::message)
                                 .collect(Collectors.joining("\n", "\n", "\n")));
             }
-            return matches;
+
+            boolean assertionsMatch = processor.getAssertions().stream().allMatch(Assertion::success);
+            if (useAsserts && !assertionsMatch) {
+                processor.getAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+            }
+            return outputMatches && assertionsMatch;
         };
     }
 
     protected void testAndEvaluateFile(TestCompiler compiler, String fileName, Function<String, String> codeDecorator,
-            Map<String, MindustryBlock> blocks, OutputEvaluator evaluator) throws IOException {
+            Map<String, MindustryBlock> blocks, RunEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         testAndEvaluateCode(compiler, fileName, codeDecorator.apply(readFile(fileName)), blocks,
                 ExpectedMessages.none(), evaluator, logFile);
@@ -239,7 +245,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     protected void testCode(String code, Map<String, MindustryBlock> blocks, String expectedOutputs) {
         TestCompiler compiler = createTestCompiler();
         testAndEvaluateCode(compiler, null, code, blocks,
-                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), null);
+                ExpectedMessages.none(), createOutputEvaluator(compiler, expectedOutputs), null);
     }
 
     protected void testCode(TestCompiler compiler, String code, String... expectedOutputs) {

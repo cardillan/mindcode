@@ -70,10 +70,20 @@ class LoopUnroller extends BaseOptimizer {
         return structure.matches("l(tl)*bft");
     }
 
-    private boolean hasConditionAtFront(AstContext loop) {
+    private boolean hasEntryCondition(AstContext loop) {
         List<AstContext> children = loop.children();
         return (children.size() >= 2) && (children.get(0).subcontextType() == CONDITION
                 || children.get(0).subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
+    }
+
+    private boolean hasExitCondition(AstContext loop) {
+        for (int i = loop.children().size() - 1; i >= 0; i--) {
+            switch (loop.child(i).subcontextType()) {
+                case CONDITION: return true;
+                case BODY, UPDATE: return false;
+            }
+        }
+        throw new MindcodeInternalError("Invalid loop structure.");
     }
 
     // Remove the last jump of condition context if present (it might have been removed by optimizations).
@@ -132,7 +142,8 @@ class LoopUnroller extends BaseOptimizer {
             return null;
         }
 
-        if (hasConditionAtFront(loop)) {
+        boolean entryCondition = hasEntryCondition(loop);
+        if (entryCondition) {
             LogicList condition = contextInstructions(loop.findSubcontext(CONDITION));
             if (condition.getLast() instanceof JumpInstruction jump && evaluateLoopConditionJump(jump, loop) != LogicBoolean.FALSE) {
                 // The loop is not known to execute at least once
@@ -189,14 +200,12 @@ class LoopUnroller extends BaseOptimizer {
                 && (op.getOperation() == Operation.ADD || op.getOperation() == Operation.SUB)
                 && op.getX().equals(loopControl) && op.getY().isNumericLiteral())) {
 
-            boolean orEqual;
+            boolean weakInequality;
             switch (jump.getCondition()) {
-                case LESS_THAN, GREATER_THAN:       orEqual = false; break;
-                case LESS_THAN_EQ, GREATER_THAN_EQ: orEqual = true; break;
+                case LESS_THAN, GREATER_THAN:       weakInequality = false; break;
+                case LESS_THAN_EQ, GREATER_THAN_EQ: weakInequality = true; break;
                 default:                            return -1;  // Nothing else is supported
             }
-
-            boolean invert = !jump.getX().equals(loopControl);
 
             LogicLiteral endValue = findArgumentValue(jump, loopControl);
             if (endValue == null) {
@@ -210,7 +219,7 @@ class LoopUnroller extends BaseOptimizer {
                     .mapToDouble(ix -> (ix.getOperation() == Operation.ADD ? 1d : -1d) * ((LogicLiteral) ix.getY()).getDoubleValue())
                     .sum();
 
-            if (isInt(start) && isInt(end) &&isInt(step)) {
+            if (isInt(start) && isInt(end) && isInt(step)) {
                 int intDiff = (int) end - (int) start;
                 int intStep = (int) step;
                 if (step == 0 || (step < 0 ^ intDiff < 0)) {
@@ -218,8 +227,15 @@ class LoopUnroller extends BaseOptimizer {
                     return -1;
                 }
 
+                // When there's an exit condition, it is used to evaluate the loop:
+                //     in this case, weak inequality means one additional iteration
+                // When there isn't an exit condition, the entry condition is used to evaluate the loop:
+                //     when the entry condition is true, the loop body is NOT executed (it jumps around the loop)
+                //     in this case, strong inequality means one additional iteration
+                boolean additionalLoop = weakInequality ^ !hasExitCondition(loop);
+
                 // Number of steps to reach end
-                return (Math.abs(intDiff) + Math.abs(intStep) - 1) / Math.abs(intStep) + ((orEqual && (intDiff % intStep == 0)) ? 1 : 0);
+                return (Math.abs(intDiff) + Math.abs(intStep) - 1) / Math.abs(intStep) + ((additionalLoop && (intDiff % intStep == 0)) ? 1 : 0);
             }
         }
         return -1;
@@ -239,14 +255,16 @@ class LoopUnroller extends BaseOptimizer {
             LogicLiteral initLiteral, List<LogicInstruction> controlIxs, int loopLimit) {
         MindustryVariable controlVariable = MindustryVariable.createVar(loopControl.toMlog());
         controlVariable.setDoubleValue(initLiteral.getDoubleValue());
-        LogicBoolean terminatingValue = LogicBoolean.get(!isTrailingCondition(loop));
+        LogicBoolean terminatingValue = LogicBoolean.get(!hasExitCondition(loop));
 
         for (int loops = 1; loops <= loopLimit; loops++) {
             LogicLiteral result = null;
             // Update control variable
             for (LogicInstruction ix : controlIxs) {
                 OpInstruction op = (OpInstruction) ix;
-                result = evaluate(op.getOperation(), controlVariable, (LogicLiteral) op.getY());
+                result = op.getX().equals(loopControl)
+                        ? evaluate(op.getOperation(), controlVariable, (LogicLiteral) op.getY())
+                        : evaluate(op.getOperation(), (LogicLiteral) op.getX(), controlVariable);
                 controlVariable.setDoubleValue(result.getDoubleValue());
             }
 
@@ -258,17 +276,6 @@ class LoopUnroller extends BaseOptimizer {
         }
 
         return -1;
-    }
-
-
-    private boolean isTrailingCondition(AstContext loop) {
-        for (int i = loop.children().size() - 1; i >= 0; i--) {
-            switch (loop.child(i).subcontextType()) {
-                case CONDITION: return true;
-                case BODY, UPDATE: return false;
-            }
-        }
-        throw new MindcodeInternalError("Invalid loop structure.");
     }
 
     // Finds the control variable of this loop
@@ -285,8 +292,10 @@ class LoopUnroller extends BaseOptimizer {
                 if (!controlIxs.isEmpty()) {
                     if (controlIxs.stream().allMatch(ix -> ix instanceof OpInstruction op
                             && loop.executesOnce(op)
-                            && op.getResult().equals(variable) && op.getX().equals(variable)
-                            && op.hasSecondOperand() && op.getY().isNumericLiteral())) {
+                            && op.getResult().equals(variable) && op.hasSecondOperand()
+                            && (op.getX().equals(variable) && op.getY().isNumericLiteral()
+                            || op.getY().equals(variable) && op.getX().isNumericLiteral())
+                    )) {
                         if (result != null) {
                             // Both operands are modified inside loop: cannot unroll
                             return null;
@@ -324,6 +333,7 @@ class LoopUnroller extends BaseOptimizer {
         // Jump to body (except the last iteration)
         // Go to next iteration
         // TODO: needs better calculation to take account of multiple iterators/output iterators
+        //       Perhaps LogicFunction.callSize()?
         int savings = (3 * loops - 1);
 
         int size = body.stream().mapToInt(LogicInstruction::getRealSize).sum();

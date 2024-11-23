@@ -99,14 +99,36 @@ public class InterceptorTest extends AbstractInterceptorTest {
 
     @Test
     void solveCurrentProblem() {
-        testCode(createTestCompiler(createCompilerProfile().setProcessorVersion(ProcessorVersion.MAX).setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
+        testCode(createTestCompiler(createCompilerProfile()
+                        .setProcessorVersion(ProcessorVersion.MAX)
+                        .setAllOptimizationLevels(OptimizationLevel.NONE)
+                        .decode("57340723201")
+                ),
                 """
-                        param FROM_INDEX = 0;
-                        param OFFSET_Y = 2;
-                        cly = FROM_INDEX == 1 ? 0 : OFFSET_Y;
-                        print(cly);
-                        """,
-                "2"
-        );
+                        inline def frac(_x)
+                            _x % 1;
+                        end;
+                        
+                        void printExactSlow(_n)
+                            if _n < 0 then
+                                print("-");
+                                _n = abs(_n);
+                             end;
+                            _exp = floor(log10(_n));
+                            _base = _n * 10 ** -_exp;
+                            print(floor(_base), ".");
+                        
+                            for _digit in 1 .. 15 do
+                                _base = frac(_base) * 10;
+                                print(floor(_base));
+                            end;
+                        
+                            if _exp != 0 then
+                                print("E", _exp);
+                            end;
+                        end;
+                        
+                        assertPrints("-1.234500000000000E-50", printExactSlow(-1.2345e-50), "printExactSlow(-1.2345e-50)");
+                        """);
     }
 }

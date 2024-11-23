@@ -38,7 +38,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
     private void visitNode(AstNode node) {
         if (node instanceof Directive directive) {
             processDirective(directive);
-        } else {
+        } else if (node != null) {
             node.getChildren().forEach(this::visitNode);
         }
     }
