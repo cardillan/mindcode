@@ -34,7 +34,12 @@ public class TestCaseExecutor {
         boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && result.executionException() == null;
 
         if (success) {
-            progress.reportSuccess();
+            if (result.assertions().stream().anyMatch(Assertion::success)) {
+                progress.reportSuccess();
+            } else {
+                progress.reportError(new ErrorResult(caseCreator.getTestCaseId(testRunNumber),
+                        compiler.getProfile(), "", null, "No assertions found."));
+            }
         } else {
             progress.reportError(new ErrorResult(caseCreator.getTestCaseId(testRunNumber),
                     compiler.getProfile(), unexpectedMessages, result.executionException(), failedTests));

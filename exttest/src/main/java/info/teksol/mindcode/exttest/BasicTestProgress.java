@@ -48,17 +48,6 @@ public class BasicTestProgress extends AbstractTestProgress {
     }
 
     @Override
-    public void processResults(PrintWriter writer) {
-        ErrorResult errorResult;
-        while ((errorResult = errors.poll()) != null) {
-            writer.println(errorResult);
-            updateStatistics(errorResult);
-        }
-        writer.flush();
-
-    }
-
-    @Override
     public void updateStatistics(ErrorResult errorResult) {
         goalStatistics.get(errorResult.profile().getGoal()).incrementAndGet();
         for (Optimization optimization : Optimization.values()) {

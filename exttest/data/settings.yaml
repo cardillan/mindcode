@@ -5,8 +5,8 @@ threads: 24
 
 # Name of the section containing list of tests to execute
 # Several sections can be present in the config file, the active one is selected here
-#test-suite: single-source
-test-suite: all-sources
+test-suite: single-source
+#test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
