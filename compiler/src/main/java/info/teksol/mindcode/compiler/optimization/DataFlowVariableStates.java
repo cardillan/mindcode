@@ -91,8 +91,10 @@ class DataFlowVariableStates {
         private boolean dead;
 
         /**
-         * Indicates the instance is reachable - contain at least one instruction that is not unreachable. Instances
-         * which are not reachable are ignored on merges.
+         * Indicates the instance is reachable. Unreachable instances represent contexts that were unreachable right
+         * from the start (e.g. inactive branches of if statements). Unreachable instances are discarded in merges.
+         * <p>
+         * TODO: Unreachable variable states are probably the same as dead ones. Investigate possible merging.
          */
         private final boolean reachable;
 
@@ -314,7 +316,7 @@ class DataFlowVariableStates {
                 } else {
                     values.put(variable, new VariableValue(variable, value));
                 }
-            } else if (!isolated && reachable) {
+            } else if (!isolated && reachable && !dead) {
                 // Variable cannot be eliminated --> its instruction needs to be kept
                 trace(() -> "--> Keeping instruction: " + instruction.toMlog() + " (value set)");
                 optimizer.keep.add(instruction);      // Ensure the instruction is kept
@@ -452,7 +454,9 @@ class DataFlowVariableStates {
             modifications++;
             trace(() -> "Value read: " + variable.toMlog() + " (instance " + getId() + ")" + (ixReachable ? "" : " instruction unreachable)"));
 
-            if (ixReachable && reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
+            // Do not report uninitialized reads in unreachable and dead states
+            boolean report = reportUninitialized && !isolated && !dead && reachable && ixReachable;
+            if (report && !initialized.contains(variable) && variable.getType() != ArgumentType.BLOCK) {
                 print("!!! Detected uninitialized read of " + variable.toMlog());
                 optimizer.addUninitialized(variable);
             }

@@ -945,6 +945,24 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SET, "UNIT_S1", var(2))
         );
     }
+
+    @Test
+    void handlesReturnStatementsFromIf() {
+        assertGeneratesMessages(new TestCompiler(CompilerProfile.fullOptimizations(false)
+                        .setOptimizationLevel(Optimization.JUMP_OPTIMIZATION, OptimizationLevel.NONE)
+                        .setOptimizationLevel(Optimization.UNREACHABLE_CODE_ELIMINATION, OptimizationLevel.NONE)
+                ),
+                ExpectedMessages.none(),
+                """
+                        param A = 10;
+                        print(foo());
+                        noinline def foo()
+                            if A > 0 then return true; else return false; end;
+                        end;
+                        """
+        );
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Inline functions">

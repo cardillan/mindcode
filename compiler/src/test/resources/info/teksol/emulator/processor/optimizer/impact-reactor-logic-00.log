@@ -3,137 +3,137 @@
     60 instructions eliminated by Dead Code Elimination (10 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
     18 instructions eliminated by Jump Optimization (2 passes, 5 iterations).
-    27 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+    27 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      3 instructions eliminated by Expression Optimization (4 iterations).
      3 instructions eliminated by If Expression Optimization (4 iterations).
-    91 instructions eliminated by Data Flow Optimization (8 passes, 28 iterations).
-   504 instructions added by Function Inlining (11 iterations).
+    81 instructions eliminated by Data Flow Optimization (8 passes, 28 iterations).
+   493 instructions added by Function Inlining (11 iterations).
     17 function calls inlined by Function Inlining.
     33 instructions updated by JumpThreading.
-     5 instructions eliminated by Unreachable Code Elimination.
+     4 instructions eliminated by Unreachable Code Elimination.
    863 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 548):
-  * Inline function 'kilo' defined at line 117:1                 cost     5, benefit      218.8, efficiency       43.8 (-5 instructions)
+Pass 1: speed optimization selection (cost limit 552):
+  * Inline function 'kilo' defined at line 117:1                 cost     3, benefit      218.8, efficiency       72.9 (-4 instructions)
     Inline function 'update_fuel' defined at line 121:1          cost    13, benefit      337.5, efficiency       26.0
-    Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3
-    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
-    Inline function 'check_radar' defined at line 259:1          cost    22, benefit      175.0, efficiency        8.0
-    Inline function call at line 69:22                           cost    23, benefit       87.5, efficiency        3.8
-    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function 'calc_charge_req' defined at line 126:1      cost    64, benefit      503.9, efficiency        7.9
+    Inline function 'start_reactor' defined at line 140:1        cost   515, benefit      687.5, efficiency        1.3
+    Inline function 'check_radar' defined at line 259:1          cost    21, benefit      175.0, efficiency        8.3
+    Inline function call at line 69:22                           cost    22, benefit       87.5, efficiency        4.0
+    Inline function call at line 73:23                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 74:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 75:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 76:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 77:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 80:14                           cost   129, benefit      137.5, efficiency        1.1
     Inline function call at line 82:5                            cost     7, benefit      112.5, efficiency       16.1
-    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 84:14                           cost   129, benefit      137.5, efficiency        1.1
     Inline function call at line 86:5                            cost     7, benefit      112.5, efficiency       16.1
-    Inline function call at line 88:23                           cost    23, benefit       87.5, efficiency        3.8
-    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 88:23                           cost    22, benefit       87.5, efficiency        4.0
+    Inline function call at line 89:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   129, benefit      137.5, efficiency        1.1
     Inline function call at line 96:5                            cost     7, benefit      112.5, efficiency       16.1
-    Inline function call at line 102:15                          cost     3, benefit       87.5, efficiency       29.2
-    Inline function call at line 103:14                          cost     3, benefit       87.5, efficiency       29.2
-    Inline function call at line 105:15                          cost     3, benefit       43.8, efficiency       14.6
-    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
+    Inline function call at line 102:15                          cost     2, benefit       87.5, efficiency       43.8
+    Inline function call at line 103:14                          cost     2, benefit       87.5, efficiency       43.8
+    Inline function call at line 105:15                          cost     2, benefit       43.8, efficiency       21.9
+    Inline function call at line 173:26                          cost    13, benefit        3.9, efficiency        0.3
 
-Pass 1: speed optimization selection (cost limit 553):
+Pass 1: speed optimization selection (cost limit 556):
   * Inline function 'update_fuel' defined at line 121:1          cost    13, benefit      337.5, efficiency       26.0 (-1 instructions)
-    Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3
-    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
-    Inline function 'check_radar' defined at line 259:1          cost    22, benefit      175.0, efficiency        8.0
-    Inline function call at line 69:22                           cost    23, benefit       87.5, efficiency        3.8
-    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function 'calc_charge_req' defined at line 126:1      cost    64, benefit      503.9, efficiency        7.9
+    Inline function 'start_reactor' defined at line 140:1        cost   515, benefit      687.5, efficiency        1.3
+    Inline function 'check_radar' defined at line 259:1          cost    21, benefit      175.0, efficiency        8.3
+    Inline function call at line 69:22                           cost    22, benefit       87.5, efficiency        4.0
+    Inline function call at line 73:23                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 74:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 75:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 76:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 77:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 80:14                           cost   129, benefit      137.5, efficiency        1.1
     Inline function call at line 82:5                            cost     7, benefit      112.5, efficiency       16.1
-    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 84:14                           cost   129, benefit      137.5, efficiency        1.1
     Inline function call at line 86:5                            cost     7, benefit      112.5, efficiency       16.1
-    Inline function call at line 88:23                           cost    23, benefit       87.5, efficiency        3.8
-    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 88:23                           cost    22, benefit       87.5, efficiency        4.0
+    Inline function call at line 89:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   129, benefit      137.5, efficiency        1.1
     Inline function call at line 96:5                            cost     7, benefit      112.5, efficiency       16.1
-    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
+    Inline function call at line 173:26                          cost    13, benefit        3.9, efficiency        0.3
 
-Pass 1: speed optimization selection (cost limit 554):
-    Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3
-    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
-  * Inline function 'check_radar' defined at line 259:1          cost    22, benefit      175.0, efficiency        8.0 (+5 instructions)
-    Inline function call at line 69:22                           cost    23, benefit       87.5, efficiency        3.8
-    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 88:23                           cost    23, benefit       87.5, efficiency        3.8
-    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
+Pass 1: speed optimization selection (cost limit 557):
+    Inline function 'calc_charge_req' defined at line 126:1      cost    64, benefit      503.9, efficiency        7.9
+    Inline function 'start_reactor' defined at line 140:1        cost   515, benefit      687.5, efficiency        1.3
+  * Inline function 'check_radar' defined at line 259:1          cost    21, benefit      175.0, efficiency        8.3 (+6 instructions)
+    Inline function call at line 69:22                           cost    22, benefit       87.5, efficiency        4.0
+    Inline function call at line 73:23                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 74:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 75:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 76:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 77:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 80:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 84:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 88:23                           cost    22, benefit       87.5, efficiency        4.0
+    Inline function call at line 89:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 173:26                          cost    13, benefit        3.9, efficiency        0.3
 
-Pass 1: speed optimization selection (cost limit 549):
-  * Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3 (+43 instructions)
-    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
-    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
-    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
-    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
+Pass 1: speed optimization selection (cost limit 551):
+  * Inline function 'calc_charge_req' defined at line 126:1      cost    64, benefit      503.9, efficiency        7.9 (+44 instructions)
+    Inline function 'start_reactor' defined at line 140:1        cost   515, benefit      687.5, efficiency        1.3
+    Inline function call at line 73:23                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 74:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 75:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 76:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 77:24                           cost    13, benefit      100.0, efficiency        7.7
+    Inline function call at line 80:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 84:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 89:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   129, benefit      137.5, efficiency        1.1
+    Inline function call at line 173:26                          cost    13, benefit        3.9, efficiency        0.3
 
-Pass 1: speed optimization selection (cost limit 506):
-  ! Inline function 'start_reactor' defined at line 140:1        cost   559, benefit      687.5, efficiency        1.2
-  * Inline function call at line 80:14                           cost   140, benefit      137.5, efficiency        1.0 (+131 instructions)
-    Inline function call at line 84:14                           cost   140, benefit      137.5, efficiency        1.0
-    Inline function call at line 89:14                           cost   140, benefit      137.5, efficiency        1.0
-    Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
-    Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
+Pass 1: speed optimization selection (cost limit 507):
+  ! Inline function 'start_reactor' defined at line 140:1        cost   555, benefit      687.5, efficiency        1.2
+  * Inline function call at line 80:14                           cost   139, benefit      137.5, efficiency        1.0 (+131 instructions)
+    Inline function call at line 84:14                           cost   139, benefit      137.5, efficiency        1.0
+    Inline function call at line 89:14                           cost   139, benefit      137.5, efficiency        1.0
+    Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
+    Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
-Pass 1: speed optimization selection (cost limit 375):
-  ! Inline function 'start_reactor' defined at line 140:1        cost   419, benefit      550.0, efficiency        1.3
-  * Inline function call at line 84:14                           cost   140, benefit      137.5, efficiency        1.0 (+132 instructions)
-    Inline function call at line 89:14                           cost   140, benefit      137.5, efficiency        1.0
-    Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
-    Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
+Pass 1: speed optimization selection (cost limit 376):
+  ! Inline function 'start_reactor' defined at line 140:1        cost   416, benefit      550.0, efficiency        1.3
+  * Inline function call at line 84:14                           cost   139, benefit      137.5, efficiency        1.0 (+132 instructions)
+    Inline function call at line 89:14                           cost   139, benefit      137.5, efficiency        1.0
+    Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
+    Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
-Pass 1: speed optimization selection (cost limit 243):
-  ! Inline function 'start_reactor' defined at line 140:1        cost   279, benefit      412.5, efficiency        1.5
-  * Inline function call at line 89:14                           cost   140, benefit      137.5, efficiency        1.0 (+132 instructions)
-    Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
-    Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
+Pass 1: speed optimization selection (cost limit 244):
+  ! Inline function 'start_reactor' defined at line 140:1        cost   277, benefit      412.5, efficiency        1.5
+  * Inline function call at line 89:14                           cost   139, benefit      137.5, efficiency        1.0 (+132 instructions)
+    Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
+    Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
-Pass 1: speed optimization selection (cost limit 111):
-  ! Inline function 'start_reactor' defined at line 140:1        cost   139, benefit      275.0, efficiency        2.0
-  ! Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
-  ! Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
-
-Pass 2: speed optimization selection (cost limit 130):
+Pass 1: speed optimization selection (cost limit 112):
   ! Inline function 'start_reactor' defined at line 140:1        cost   138, benefit      275.0, efficiency        2.0
   ! Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
   ! Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
-Pass 3: speed optimization selection (cost limit 131):
-  ! Inline function 'start_reactor' defined at line 140:1        cost   138, benefit      275.0, efficiency        2.0
-  ! Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
-  ! Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
+Pass 2: speed optimization selection (cost limit 132):
+  ! Inline function 'start_reactor' defined at line 140:1        cost   136, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   137, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   137, benefit      137.5, efficiency        1.0
 
-Pass 4: speed optimization selection (cost limit 131):
-  ! Inline function 'start_reactor' defined at line 140:1        cost   138, benefit      275.0, efficiency        2.0
-  ! Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
-  ! Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
+Pass 3: speed optimization selection (cost limit 133):
+  ! Inline function 'start_reactor' defined at line 140:1        cost   136, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   137, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   137, benefit      137.5, efficiency        1.0
+
+Pass 4: speed optimization selection (cost limit 133):
+  ! Inline function 'start_reactor' defined at line 140:1        cost   136, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   137, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   137, benefit      137.5, efficiency        1.0
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
  
@@ -1240,7 +1240,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    501 print "WAIT power. (%"
    502 print __fn3_charge
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-8 instructions):
  
     33 set __tmp5 @tick
     34 label __label6
@@ -1510,38 +1510,64 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4
    316 op add __tmp91 __fn8_needed REACTORS_DESIRED
    317 op min REACTORS_DESIRED 5 __tmp91
  
-   436 call __label2 __fn2retval
-   437 gotolabel __label82 __fn2
-   438 set __fn3_charge_req __fn2retval
+   334 op idiv __tmp95 __fn0_val 100
+   335 op div __fn0retval __tmp95 10
+   336 jump __label58 always
+-    * set __fn0retval null
+   337 label __label58
+   338 goto __fn0retaddr __fn0
+   339 end
+ 
+   372 op idiv __fn2_charge_req __tmp108 0.04
+   373 set __fn2retval __fn2_charge_req
+   374 jump __label64 always
+-    * set __fn2retval null
+   375 label __label64
+   376 goto __fn2retaddr __fn2
+   377 end
+ 
+   434 call __label2 __fn2retval
+   435 gotolabel __label82 __fn2
+   436 set __fn3_charge_req __fn2retval
 -    * op sub __tmp141 __fn3_charge __fn3_charge_req
-+  439 op sub __tmp141 __fn3_charge __fn2retval
-   440 op lessThan __tmp142 __tmp141 PWR_ABORT
-   441 op lessThan __tmp143 __fn3_surplus FLOW_ABORT
-   442 op land __tmp144 __tmp142 __tmp143
++  437 op sub __tmp141 __fn3_charge __fn2retval
+   438 op lessThan __tmp142 __tmp141 PWR_ABORT
+   439 op lessThan __tmp143 __fn3_surplus FLOW_ABORT
+   440 op land __tmp144 __tmp142 __tmp143
  
-   450 print "Starting "
-   451 print __fn3_time_left
-   452 print " secs, req "
+   448 print "Starting "
+   449 print __fn3_time_left
+   450 print " secs, req "
 -    * print __fn3_charge_req
-+  453 print __fn2retval
-   454 print "J\n"
-   455 label __label84
-   456 jump __label81 always
++  451 print __fn2retval
+   452 print "J\n"
+   453 label __label84
+   454 jump __label81 always
  
-   565 control enabled reactor5 false
-   566 set __fn4retval true
-   567 jump __label101 always
+   540 label __label100
+   541 set __fn3retval __fn3_supply_fuel
+   542 jump __label67 always
+-    * set __fn3retval null
+   543 label __label67
+   544 goto __fn3retaddr __fn3
+   545 end
+ 
+   562 control enabled reactor5 false
+   563 set __fn4retval true
+   564 jump __label101 always
 -    * set __tmp190 null
-   568 jump __label103 always
-   569 label __label102
-   570 control enabled projector1 false
-   571 control enabled projector2 false
-   572 set __fn4retval false
-   573 jump __label101 always
+   565 jump __label103 always
+   566 label __label102
+   567 control enabled projector1 false
+   568 control enabled projector2 false
+   569 set __fn4retval false
+   570 jump __label101 always
 -    * set __tmp190 null
-   574 label __label103
-   575 set __fn4retval __tmp190
-   576 label __label101
+   571 label __label103
+-    * set __fn4retval __tmp190
+   572 label __label101
+   573 goto __fn4retaddr __fn4
+   574 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
      0 printflush message1
@@ -1680,13 +1706,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    295 op land __tmp86 __tmp83 __tmp85
    296 jump __label54 equal __tmp86 false
  
-   419 setaddr __fn2retaddr __label82
-   420 call __label2 __fn2retval
-   421 gotolabel __label82 __fn2
+   417 setaddr __fn2retaddr __label82
+   418 call __label2 __fn2retval
+   419 gotolabel __label82 __fn2
 -    * set __fn3_charge_req __fn2retval
-   422 op sub __tmp141 __fn3_charge __fn2retval
-   423 op lessThan __tmp142 __tmp141 PWR_ABORT
-   424 op lessThan __tmp143 __fn3_surplus FLOW_ABORT
+   420 op sub __tmp141 __fn3_charge __fn2retval
+   421 op lessThan __tmp142 __tmp141 PWR_ABORT
+   422 op lessThan __tmp143 __fn3_surplus FLOW_ABORT
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
@@ -1724,31 +1750,31 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    229 sensor __tmp57 node1 @powerNetStored
    230 sensor __tmp58 node1 @powerNetCapacity
  
-   320 end
-   321 label __label1
-   322 jump __label60 equal __fn1_fuel false
+   319 end
+   320 label __label1
+   321 jump __label60 equal __fn1_fuel false
 -    * set __tmp97 FUEL
-+  323 control config __fn1_uld_in FUEL
-   324 jump __label61 always
-   325 label __label60
++  322 control config __fn1_uld_in FUEL
+   323 jump __label61 always
+   324 label __label60
 -    * set __tmp97 FUEL_OFF
-+  326 control config __fn1_uld_in FUEL_OFF
-   327 label __label61
++  325 control config __fn1_uld_in FUEL_OFF
+   326 label __label61
 -    * control config __fn1_uld_in __tmp97
-   328 jump __label62 notEqual __fn1_fuel false
+   327 jump __label62 notEqual __fn1_fuel false
 -    * set __tmp99 FUEL
-+  329 control config __fn1_uld_out FUEL
-   330 jump __label63 always
-   331 label __label62
++  328 control config __fn1_uld_out FUEL
+   329 jump __label63 always
+   330 label __label62
 -    * set __tmp99 FUEL_OFF
-+  332 control config __fn1_uld_out FUEL_OFF
-   333 label __label63
++  331 control config __fn1_uld_out FUEL_OFF
+   332 label __label63
 -    * control config __fn1_uld_out __tmp99
-   334 label __label59
-   335 goto __fn1retaddr __fn1
-   336 end
+   333 label __label59
+   334 goto __fn1retaddr __fn1
+   335 end
 
-Modifications by Inline function 'kilo' defined at line 117:1:
+Modifications by Inline function 'kilo' defined at line 117:1 (-2 instructions):
  
    243 label __label42
    244 label __label40
@@ -1760,51 +1786,47 @@ Modifications by Inline function 'kilo' defined at line 117:1:
 +  247 op idiv __tmp95 __fn0_val 100
 +  248 op div __fn0retval __tmp95 10
 +  249 jump __label105 always
-+  250 set __fn0retval null
-+  251 label __label105
-   252 set surplus __fn0retval
-   253 sensor __fn0_val node1 @powerNetStored
++  250 label __label105
+   251 set surplus __fn0retval
+   252 sensor __fn0_val node1 @powerNetStored
 -    * setaddr __fn0retaddr __label44
 -    * call __label0 __fn0retval
 -    * gotolabel __label44 __fn0
-+  254 label __label106
-+  255 op idiv __tmp95 __fn0_val 100
-+  256 op div __fn0retval __tmp95 10
-+  257 jump __label107 always
-+  258 set __fn0retval null
-+  259 label __label107
-   260 set charge __fn0retval
-   261 jump __label45 lessThanEq START_POWER_REQ 0
-   262 set __fn0_val START_POWER_REQ
++  253 label __label106
++  254 op idiv __tmp95 __fn0_val 100
++  255 op div __fn0retval __tmp95 10
++  256 jump __label107 always
++  257 label __label107
+   258 set charge __fn0retval
+   259 jump __label45 lessThanEq START_POWER_REQ 0
+   260 set __fn0_val START_POWER_REQ
 -    * setaddr __fn0retaddr __label47
 -    * call __label0 __fn0retval
 -    * gotolabel __label47 __fn0
-+  263 label __label108
-+  264 op idiv __tmp95 __fn0_val 100
-+  265 op div __fn0retval __tmp95 10
-+  266 jump __label109 always
-+  267 set __fn0retval null
-+  268 label __label109
-   269 print "Req "
-   270 print __fn0retval
-   271 print "kJ / "
++  261 label __label108
++  262 op idiv __tmp95 __fn0_val 100
++  263 op div __fn0retval __tmp95 10
++  264 jump __label109 always
++  265 label __label109
+   266 print "Req "
+   267 print __fn0retval
+   268 print "kJ / "
  
-   319 jump __label7 always
-   320 label __label9
-   321 end
+   316 jump __label7 always
+   317 label __label9
+   318 end
 -    * label __label0
 -    * op idiv __tmp95 __fn0_val 100
 -    * op div __fn0retval __tmp95 10
 -    * jump __label58 always
--    * set __fn0retval null
 -    * label __label58
 -    * goto __fn0retaddr __fn0
 -    * end
-   322 label __label1
-   323 jump __label60 equal __fn1_fuel false
-   324 control config __fn1_uld_in FUEL
+   319 label __label1
+   320 jump __label60 equal __fn1_fuel false
+   321 control config __fn1_uld_in FUEL
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    244 label __label40
    245 set __fn0_val AVG_SURPLUS
@@ -1813,17 +1835,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-3
 +  247 op idiv __tmp95 AVG_SURPLUS 100
    248 op div __fn0retval __tmp95 10
    249 jump __label105 always
--    * set __fn0retval null
    250 label __label105
-   251 set surplus __fn0retval
-   252 sensor __fn0_val node1 @powerNetStored
  
-   254 op idiv __tmp95 __fn0_val 100
-   255 op div __fn0retval __tmp95 10
-   256 jump __label107 always
--    * set __fn0retval null
-   257 label __label107
-   258 set charge __fn0retval
    259 jump __label45 lessThanEq START_POWER_REQ 0
    260 set __fn0_val START_POWER_REQ
    261 label __label108
@@ -1831,10 +1844,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-3
 +  262 op idiv __tmp95 START_POWER_REQ 100
    263 op div __fn0retval __tmp95 10
    264 jump __label109 always
--    * set __fn0retval null
    265 label __label109
-   266 print "Req "
-   267 print __fn0retval
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -2057,7 +2067,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    184 jump __label123 equal fuel_many false
    185 control config unloader5 @blast-compound
 
-Modifications by Inline function 'check_radar' defined at line 259:1 (+18 instructions):
+Modifications by Inline function 'check_radar' defined at line 259:1 (+17 instructions):
  
     46 set CONTAINER vault1
     47 set NODE node1
@@ -2091,53 +2101,51 @@ Modifications by Inline function 'check_radar' defined at line 259:1 (+18 instru
 +   72 set __fn4retval false
 +   73 jump __label131 always
 +   74 label __label130
-+   75 set __fn4retval __tmp190
-+   76 label __label131
-    77 label __label11
-    78 op notEqual __tmp9 switch1 null
-    79 sensor __tmp10 switch1 @enabled
++   75 label __label131
+    76 label __label11
+    77 op notEqual __tmp9 switch1 null
+    78 sensor __tmp10 switch1 @enabled
  
-   169 label __label120
-   170 label __label121
-   171 set __fn4_unit cyclone1
+   168 label __label120
+   169 label __label121
+   170 set __fn4_unit cyclone1
 -    * setaddr __fn4retaddr __label24
 -    * call __label4 __fn4retval
 -    * gotolabel __label24 __fn4
-+  172 label __label132
-+  173 radar enemy any any health __fn4_unit 1 __fn4_enemy_found
-+  174 jump __label133 equal __fn4_enemy_found null
-+  175 control enabled projector1 true
-+  176 control enabled projector2 true
-+  177 control config ULD_IN_1 FUEL_OFF
-+  178 control config ULD_OUT_1 FUEL
-+  179 control config ULD_IN_2 FUEL_OFF
-+  180 control config ULD_OUT_2 FUEL
-+  181 control config ULD_IN_MANY FUEL_OFF
-+  182 control config ULD_OUT_MANY FUEL
-+  183 control config ULD_MIXER FUEL_OFF
-+  184 control enabled reactor1 false
-+  185 control enabled reactor2 false
-+  186 control enabled reactor3 false
-+  187 control enabled reactor4 false
-+  188 control enabled reactor5 false
-+  189 set __fn4retval true
-+  190 jump __label135 always
-+  191 jump __label134 always
-+  192 label __label133
-+  193 control enabled projector1 false
-+  194 control enabled projector2 false
-+  195 set __fn4retval false
-+  196 jump __label135 always
-+  197 label __label134
-+  198 set __fn4retval __tmp190
-+  199 label __label135
-   200 op or emerg_shutdown emerg_shutdown __fn4retval
-   201 set __fn3_reactor reactor3
-   202 set __fn3_reactor_num 3
++  171 label __label132
++  172 radar enemy any any health __fn4_unit 1 __fn4_enemy_found
++  173 jump __label133 equal __fn4_enemy_found null
++  174 control enabled projector1 true
++  175 control enabled projector2 true
++  176 control config ULD_IN_1 FUEL_OFF
++  177 control config ULD_OUT_1 FUEL
++  178 control config ULD_IN_2 FUEL_OFF
++  179 control config ULD_OUT_2 FUEL
++  180 control config ULD_IN_MANY FUEL_OFF
++  181 control config ULD_OUT_MANY FUEL
++  182 control config ULD_MIXER FUEL_OFF
++  183 control enabled reactor1 false
++  184 control enabled reactor2 false
++  185 control enabled reactor3 false
++  186 control enabled reactor4 false
++  187 control enabled reactor5 false
++  188 set __fn4retval true
++  189 jump __label135 always
++  190 jump __label134 always
++  191 label __label133
++  192 control enabled projector1 false
++  193 control enabled projector2 false
++  194 set __fn4retval false
++  195 jump __label135 always
++  196 label __label134
++  197 label __label135
+   198 op or emerg_shutdown emerg_shutdown __fn4retval
+   199 set __fn3_reactor reactor3
+   200 set __fn3_reactor_num 3
  
-   577 label __label67
-   578 goto __fn3retaddr __fn3
-   579 end
+   573 label __label67
+   574 goto __fn3retaddr __fn3
+   575 end
 -    * label __label4
 -    * radar enemy any any health __fn4_unit 1 __fn4_enemy_found
 -    * jump __label102 equal __fn4_enemy_found null
@@ -2164,12 +2172,11 @@ Modifications by Inline function 'check_radar' defined at line 259:1 (+18 instru
 -    * set __fn4retval false
 -    * jump __label101 always
 -    * label __label103
--    * set __fn4retval __tmp190
 -    * label __label101
 -    * goto __fn4retaddr __fn4
 -    * end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     47 set NODE node1
     48 set __fn4_unit cyclone1
@@ -2197,14 +2204,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
     62 control enabled reactor2 false
     63 control enabled reactor3 false
  
-    72 set __fn4retval false
-    73 jump __label131 always
-    74 label __label130
--    * set __fn4retval __tmp190
-    75 label __label131
-    76 label __label11
-    77 op notEqual __tmp9 switch1 null
- 
    169 label __label121
    170 set __fn4_unit cyclone1
    171 label __label132
@@ -2230,14 +2229,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
    183 control enabled reactor1 false
    184 control enabled reactor2 false
    185 control enabled reactor3 false
- 
-   194 set __fn4retval false
-   195 jump __label135 always
-   196 label __label134
--    * set __fn4retval __tmp190
-   197 label __label135
-   198 op or emerg_shutdown emerg_shutdown __fn4retval
-   199 set __fn3_reactor reactor3
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-11 instructions):
      0 printflush message1
@@ -2272,7 +2263,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    161 radar enemy any any health cyclone1 1 __fn4_enemy_found
    162 jump __label133 equal __fn4_enemy_found null
 
-Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+61 instructions):
+Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+56 instructions):
  
     81 op or emerg_shutdown __fn4retval __tmp8
     82 set __fn2_reactor reactor1
@@ -2297,115 +2288,110 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+61 in
 +   98 op idiv __fn2_charge_req __tmp108 0.04
 +   99 set __fn2retval __fn2_charge_req
 +  100 jump __label139 always
-+  101 set __fn2retval null
-+  102 label __label139
-   103 set START_POWER_REQ __fn2retval
-   104 set __fn2_reactor reactor2
-   105 set __fn2_time t_startup2
++  101 label __label139
+   102 set START_POWER_REQ __fn2retval
+   103 set __fn2_reactor reactor2
+   104 set __fn2_time t_startup2
 -    * setaddr __fn2retaddr __label16
 -    * call __label2 __fn2retval
 -    * gotolabel __label16 __fn2
-+  106 label __label140
-+  107 op sub __tmp100 @tick __fn2_time
-+  108 op idiv __fn2_secs __tmp100 60
-+  109 op greaterThan __tmp102 __fn2_secs 30
-+  110 sensor __tmp103 __fn2_reactor @enabled
-+  111 op equal __tmp104 __tmp103 false
-+  112 op or __tmp105 __tmp102 __tmp104
-+  113 jump __label141 equal __tmp105 false
-+  114 set __fn2retval 0
-+  115 jump __label143 always
-+  116 label __label141
-+  117 label __label142
-+  118 op sub __fn2_time_left 30 __fn2_secs
-+  119 op mul __tmp108 __fn2_time_left __fn2_time_left
-+  120 op idiv __fn2_charge_req __tmp108 0.04
-+  121 set __fn2retval __fn2_charge_req
-+  122 jump __label143 always
-+  123 set __fn2retval null
-+  124 label __label143
-   125 op add START_POWER_REQ START_POWER_REQ __fn2retval
-   126 set __fn2_reactor reactor3
-   127 set __fn2_time t_startup3
++  105 label __label140
++  106 op sub __tmp100 @tick __fn2_time
++  107 op idiv __fn2_secs __tmp100 60
++  108 op greaterThan __tmp102 __fn2_secs 30
++  109 sensor __tmp103 __fn2_reactor @enabled
++  110 op equal __tmp104 __tmp103 false
++  111 op or __tmp105 __tmp102 __tmp104
++  112 jump __label141 equal __tmp105 false
++  113 set __fn2retval 0
++  114 jump __label143 always
++  115 label __label141
++  116 label __label142
++  117 op sub __fn2_time_left 30 __fn2_secs
++  118 op mul __tmp108 __fn2_time_left __fn2_time_left
++  119 op idiv __fn2_charge_req __tmp108 0.04
++  120 set __fn2retval __fn2_charge_req
++  121 jump __label143 always
++  122 label __label143
+   123 op add START_POWER_REQ START_POWER_REQ __fn2retval
+   124 set __fn2_reactor reactor3
+   125 set __fn2_time t_startup3
 -    * setaddr __fn2retaddr __label17
 -    * call __label2 __fn2retval
 -    * gotolabel __label17 __fn2
-+  128 label __label144
-+  129 op sub __tmp100 @tick __fn2_time
-+  130 op idiv __fn2_secs __tmp100 60
-+  131 op greaterThan __tmp102 __fn2_secs 30
-+  132 sensor __tmp103 __fn2_reactor @enabled
-+  133 op equal __tmp104 __tmp103 false
-+  134 op or __tmp105 __tmp102 __tmp104
-+  135 jump __label145 equal __tmp105 false
-+  136 set __fn2retval 0
-+  137 jump __label147 always
-+  138 label __label145
-+  139 label __label146
-+  140 op sub __fn2_time_left 30 __fn2_secs
-+  141 op mul __tmp108 __fn2_time_left __fn2_time_left
-+  142 op idiv __fn2_charge_req __tmp108 0.04
-+  143 set __fn2retval __fn2_charge_req
-+  144 jump __label147 always
-+  145 set __fn2retval null
-+  146 label __label147
-   147 op add START_POWER_REQ START_POWER_REQ __fn2retval
-   148 set __fn2_reactor reactor4
-   149 set __fn2_time t_startup4
++  126 label __label144
++  127 op sub __tmp100 @tick __fn2_time
++  128 op idiv __fn2_secs __tmp100 60
++  129 op greaterThan __tmp102 __fn2_secs 30
++  130 sensor __tmp103 __fn2_reactor @enabled
++  131 op equal __tmp104 __tmp103 false
++  132 op or __tmp105 __tmp102 __tmp104
++  133 jump __label145 equal __tmp105 false
++  134 set __fn2retval 0
++  135 jump __label147 always
++  136 label __label145
++  137 label __label146
++  138 op sub __fn2_time_left 30 __fn2_secs
++  139 op mul __tmp108 __fn2_time_left __fn2_time_left
++  140 op idiv __fn2_charge_req __tmp108 0.04
++  141 set __fn2retval __fn2_charge_req
++  142 jump __label147 always
++  143 label __label147
+   144 op add START_POWER_REQ START_POWER_REQ __fn2retval
+   145 set __fn2_reactor reactor4
+   146 set __fn2_time t_startup4
 -    * setaddr __fn2retaddr __label18
 -    * call __label2 __fn2retval
 -    * gotolabel __label18 __fn2
-+  150 label __label148
-+  151 op sub __tmp100 @tick __fn2_time
-+  152 op idiv __fn2_secs __tmp100 60
-+  153 op greaterThan __tmp102 __fn2_secs 30
-+  154 sensor __tmp103 __fn2_reactor @enabled
-+  155 op equal __tmp104 __tmp103 false
-+  156 op or __tmp105 __tmp102 __tmp104
-+  157 jump __label149 equal __tmp105 false
-+  158 set __fn2retval 0
-+  159 jump __label151 always
-+  160 label __label149
-+  161 label __label150
-+  162 op sub __fn2_time_left 30 __fn2_secs
-+  163 op mul __tmp108 __fn2_time_left __fn2_time_left
-+  164 op idiv __fn2_charge_req __tmp108 0.04
-+  165 set __fn2retval __fn2_charge_req
-+  166 jump __label151 always
-+  167 set __fn2retval null
-+  168 label __label151
-   169 op add START_POWER_REQ START_POWER_REQ __fn2retval
-   170 set __fn2_reactor reactor5
-   171 set __fn2_time t_startup5
++  147 label __label148
++  148 op sub __tmp100 @tick __fn2_time
++  149 op idiv __fn2_secs __tmp100 60
++  150 op greaterThan __tmp102 __fn2_secs 30
++  151 sensor __tmp103 __fn2_reactor @enabled
++  152 op equal __tmp104 __tmp103 false
++  153 op or __tmp105 __tmp102 __tmp104
++  154 jump __label149 equal __tmp105 false
++  155 set __fn2retval 0
++  156 jump __label151 always
++  157 label __label149
++  158 label __label150
++  159 op sub __fn2_time_left 30 __fn2_secs
++  160 op mul __tmp108 __fn2_time_left __fn2_time_left
++  161 op idiv __fn2_charge_req __tmp108 0.04
++  162 set __fn2retval __fn2_charge_req
++  163 jump __label151 always
++  164 label __label151
+   165 op add START_POWER_REQ START_POWER_REQ __fn2retval
+   166 set __fn2_reactor reactor5
+   167 set __fn2_time t_startup5
 -    * setaddr __fn2retaddr __label19
 -    * call __label2 __fn2retval
 -    * gotolabel __label19 __fn2
-+  172 label __label152
-+  173 op sub __tmp100 @tick __fn2_time
-+  174 op idiv __fn2_secs __tmp100 60
-+  175 op greaterThan __tmp102 __fn2_secs 30
-+  176 sensor __tmp103 __fn2_reactor @enabled
-+  177 op equal __tmp104 __tmp103 false
-+  178 op or __tmp105 __tmp102 __tmp104
-+  179 jump __label153 equal __tmp105 false
-+  180 set __fn2retval 0
-+  181 jump __label155 always
-+  182 label __label153
-+  183 label __label154
-+  184 op sub __fn2_time_left 30 __fn2_secs
-+  185 op mul __tmp108 __fn2_time_left __fn2_time_left
-+  186 op idiv __fn2_charge_req __tmp108 0.04
-+  187 set __fn2retval __fn2_charge_req
-+  188 jump __label155 always
-+  189 set __fn2retval null
-+  190 label __label155
-   191 op add START_POWER_REQ START_POWER_REQ __fn2retval
-   192 set __fn3_reactor reactor1
-   193 set __fn3_reactor_num 1
++  168 label __label152
++  169 op sub __tmp100 @tick __fn2_time
++  170 op idiv __fn2_secs __tmp100 60
++  171 op greaterThan __tmp102 __fn2_secs 30
++  172 sensor __tmp103 __fn2_reactor @enabled
++  173 op equal __tmp104 __tmp103 false
++  174 op or __tmp105 __tmp102 __tmp104
++  175 jump __label153 equal __tmp105 false
++  176 set __fn2retval 0
++  177 jump __label155 always
++  178 label __label153
++  179 label __label154
++  180 op sub __fn2_time_left 30 __fn2_secs
++  181 op mul __tmp108 __fn2_time_left __fn2_time_left
++  182 op idiv __fn2_charge_req __tmp108 0.04
++  183 set __fn2retval __fn2_charge_req
++  184 jump __label155 always
++  185 label __label155
+   186 op add START_POWER_REQ START_POWER_REQ __fn2retval
+   187 set __fn3_reactor reactor1
+   188 set __fn3_reactor_num 1
  
-   455 jump __label7 always
-   456 label __label9
-   457 end
+   450 jump __label7 always
+   451 label __label9
+   452 end
 -    * label __label2
 -    * op sub __tmp100 @tick __fn2_time
 -    * op idiv __fn2_secs __tmp100 60
@@ -2423,44 +2409,42 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+61 in
 -    * op idiv __fn2_charge_req __tmp108 0.04
 -    * set __fn2retval __fn2_charge_req
 -    * jump __label64 always
--    * set __fn2retval null
 -    * label __label64
 -    * goto __fn2retaddr __fn2
 -    * end
-   458 label __label3
-   459 set RET_T_STARTUP __fn3_t_startup
-   460 op sub __tmp111 @tick __fn3_t_startup
+   453 label __label3
+   454 set RET_T_STARTUP __fn3_t_startup
+   455 op sub __tmp111 @tick __fn3_t_startup
  
-   510 jump __label80 greaterThanEq __fn3_secs 30
-   511 set __fn2_reactor __fn3_reactor
-   512 set __fn2_time __fn3_t_startup
+   505 jump __label80 greaterThanEq __fn3_secs 30
+   506 set __fn2_reactor __fn3_reactor
+   507 set __fn2_time __fn3_t_startup
 -    * setaddr __fn2retaddr __label82
 -    * call __label2 __fn2retval
 -    * gotolabel __label82 __fn2
-+  513 label __label156
-+  514 op sub __tmp100 @tick __fn2_time
-+  515 op idiv __fn2_secs __tmp100 60
-+  516 op greaterThan __tmp102 __fn2_secs 30
-+  517 sensor __tmp103 __fn2_reactor @enabled
-+  518 op equal __tmp104 __tmp103 false
-+  519 op or __tmp105 __tmp102 __tmp104
-+  520 jump __label157 equal __tmp105 false
-+  521 set __fn2retval 0
-+  522 jump __label159 always
-+  523 label __label157
-+  524 label __label158
-+  525 op sub __fn2_time_left 30 __fn2_secs
-+  526 op mul __tmp108 __fn2_time_left __fn2_time_left
-+  527 op idiv __fn2_charge_req __tmp108 0.04
-+  528 set __fn2retval __fn2_charge_req
-+  529 jump __label159 always
-+  530 set __fn2retval null
-+  531 label __label159
-   532 op sub __tmp141 __fn3_charge __fn2retval
-   533 op lessThan __tmp142 __tmp141 PWR_ABORT
-   534 op lessThan __tmp143 __fn3_surplus FLOW_ABORT
++  508 label __label156
++  509 op sub __tmp100 @tick __fn2_time
++  510 op idiv __fn2_secs __tmp100 60
++  511 op greaterThan __tmp102 __fn2_secs 30
++  512 sensor __tmp103 __fn2_reactor @enabled
++  513 op equal __tmp104 __tmp103 false
++  514 op or __tmp105 __tmp102 __tmp104
++  515 jump __label157 equal __tmp105 false
++  516 set __fn2retval 0
++  517 jump __label159 always
++  518 label __label157
++  519 label __label158
++  520 op sub __fn2_time_left 30 __fn2_secs
++  521 op mul __tmp108 __fn2_time_left __fn2_time_left
++  522 op idiv __fn2_charge_req __tmp108 0.04
++  523 set __fn2retval __fn2_charge_req
++  524 jump __label159 always
++  525 label __label159
+   526 op sub __tmp141 __fn3_charge __fn2retval
+   527 op lessThan __tmp142 __tmp141 PWR_ABORT
+   528 op lessThan __tmp143 __fn3_surplus FLOW_ABORT
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     82 set __fn2_reactor reactor1
     83 set __fn2_time t_startup1
@@ -2475,12 +2459,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6
     90 op or __tmp105 __tmp102 __tmp104
     91 jump __label137 equal __tmp105 false
  
-    98 op idiv __fn2_charge_req __tmp108 0.04
-    99 set __fn2retval __fn2_charge_req
-   100 jump __label139 always
--    * set __fn2retval null
-   101 label __label139
-   102 set START_POWER_REQ __fn2retval
    103 set __fn2_reactor reactor2
    104 set __fn2_time t_startup2
    105 label __label140
@@ -2494,12 +2472,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6
    111 op or __tmp105 __tmp102 __tmp104
    112 jump __label141 equal __tmp105 false
  
-   119 op idiv __fn2_charge_req __tmp108 0.04
-   120 set __fn2retval __fn2_charge_req
-   121 jump __label143 always
--    * set __fn2retval null
-   122 label __label143
-   123 op add START_POWER_REQ START_POWER_REQ __fn2retval
    124 set __fn2_reactor reactor3
    125 set __fn2_time t_startup3
    126 label __label144
@@ -2513,12 +2485,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6
    132 op or __tmp105 __tmp102 __tmp104
    133 jump __label145 equal __tmp105 false
  
-   140 op idiv __fn2_charge_req __tmp108 0.04
-   141 set __fn2retval __fn2_charge_req
-   142 jump __label147 always
--    * set __fn2retval null
-   143 label __label147
-   144 op add START_POWER_REQ START_POWER_REQ __fn2retval
    145 set __fn2_reactor reactor4
    146 set __fn2_time t_startup4
    147 label __label148
@@ -2532,12 +2498,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6
    153 op or __tmp105 __tmp102 __tmp104
    154 jump __label149 equal __tmp105 false
  
-   161 op idiv __fn2_charge_req __tmp108 0.04
-   162 set __fn2retval __fn2_charge_req
-   163 jump __label151 always
--    * set __fn2retval null
-   164 label __label151
-   165 op add START_POWER_REQ START_POWER_REQ __fn2retval
    166 set __fn2_reactor reactor5
    167 set __fn2_time t_startup5
    168 label __label152
@@ -2551,14 +2511,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6
    174 op or __tmp105 __tmp102 __tmp104
    175 jump __label153 equal __tmp105 false
  
-   182 op idiv __fn2_charge_req __tmp108 0.04
-   183 set __fn2retval __fn2_charge_req
-   184 jump __label155 always
--    * set __fn2retval null
-   185 label __label155
-   186 op add START_POWER_REQ START_POWER_REQ __fn2retval
-   187 set __fn3_reactor reactor1
- 
    506 set __fn2_reactor __fn3_reactor
    507 set __fn2_time __fn3_t_startup
    508 label __label156
@@ -2571,14 +2523,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-6
    513 op equal __tmp104 __tmp103 false
    514 op or __tmp105 __tmp102 __tmp104
    515 jump __label157 equal __tmp105 false
- 
-   522 op idiv __fn2_charge_req __tmp108 0.04
-   523 set __fn2retval __fn2_charge_req
-   524 jump __label159 always
--    * set __fn2retval null
-   525 label __label159
-   526 op sub __tmp141 __fn3_charge __fn2retval
-   527 op lessThan __tmp142 __tmp141 PWR_ABORT
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
  
@@ -2636,7 +2580,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    497 op sub __tmp100 @tick __fn3_t_startup
    498 op idiv __fn2_secs __tmp100 60
 
-Modifications by Inline function call at line 80:14 (+139 instructions):
+Modifications by Inline function call at line 80:14 (+138 instructions):
  
    179 set __fn3_emerg_shutdown emerg_shutdown
    180 set __fn3_fuel_on fuel_1
@@ -2821,13 +2765,12 @@ Modifications by Inline function call at line 80:14 (+139 instructions):
 +  356 label __label196
 +  357 set __fn3retval __fn3_supply_fuel
 +  358 jump __label197 always
-+  359 set __fn3retval null
-+  360 label __label197
-   361 set fuel_1 __fn3retval
-   362 set t_startup1 RET_T_STARTUP
-   363 label __label110
++  359 label __label197
+   360 set fuel_1 __fn3retval
+   361 set t_startup1 RET_T_STARTUP
+   362 label __label110
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
     30 set t_startup3 __tmp5
     31 set t_startup4 __tmp5
@@ -3024,10 +2967,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
    352 jump __label195 equal __fn3_enabled __tmp184
    353 set RET_T_STARTUP @tick
    354 label __label195
-   355 label __label196
+ 
    356 set __fn3retval __fn3_supply_fuel
    357 jump __label197 always
--    * set __fn3retval null
    358 label __label197
 -    * set fuel_1 __fn3retval
 +  359 set fuel_1 __fn3_supply_fuel
@@ -3077,7 +3019,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    352 label __label197
    353 set fuel_1 __fn3_supply_fuel
 
-Modifications by Inline function call at line 84:14 (+139 instructions):
+Modifications by Inline function call at line 84:14 (+138 instructions):
  
    371 set __fn3_emerg_shutdown emerg_shutdown
    372 set __fn3_fuel_on fuel_2
@@ -3262,13 +3204,12 @@ Modifications by Inline function call at line 84:14 (+139 instructions):
 +  548 label __label234
 +  549 set __fn3retval __fn3_supply_fuel
 +  550 jump __label235 always
-+  551 set __fn3retval null
-+  552 label __label235
-   553 set fuel_2 __fn3retval
-   554 set t_startup2 RET_T_STARTUP
-   555 label __label116
++  551 label __label235
+   552 set fuel_2 __fn3retval
+   553 set t_startup2 RET_T_STARTUP
+   554 label __label116
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    372 set __fn3_fuel_on fuel_2
    373 set __fn3_t_startup t_startup2
@@ -3457,10 +3398,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    545 jump __label233 equal __fn3_enabled __tmp184
    546 set RET_T_STARTUP @tick
    547 label __label233
-   548 label __label234
+ 
    549 set __fn3retval __fn3_supply_fuel
    550 jump __label235 always
--    * set __fn3retval null
    551 label __label235
 -    * set fuel_2 __fn3retval
 +  552 set fuel_2 __fn3_supply_fuel
@@ -3510,7 +3450,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    545 label __label235
    546 set fuel_2 __fn3_supply_fuel
 
-Modifications by Inline function call at line 89:14 (+139 instructions):
+Modifications by Inline function call at line 89:14 (+138 instructions):
  
    592 set __fn3_emerg_shutdown emerg_shutdown
    593 set __fn3_fuel_on fuel_3
@@ -3695,13 +3635,12 @@ Modifications by Inline function call at line 89:14 (+139 instructions):
 +  769 label __label272
 +  770 set __fn3retval __fn3_supply_fuel
 +  771 jump __label273 always
-+  772 set __fn3retval null
-+  773 label __label273
-   774 set fuel_3 __fn3retval
-   775 set t_startup3 RET_T_STARTUP
-   776 set __fn3_reactor reactor4
++  772 label __label273
+   773 set fuel_3 __fn3retval
+   774 set t_startup3 RET_T_STARTUP
+   775 set __fn3_reactor reactor4
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    593 set __fn3_fuel_on fuel_3
    594 set __fn3_t_startup t_startup3
@@ -3890,10 +3829,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    766 jump __label271 equal __fn3_enabled __tmp184
    767 set RET_T_STARTUP @tick
    768 label __label271
-   769 label __label272
+ 
    770 set __fn3retval __fn3_supply_fuel
    771 jump __label273 always
--    * set __fn3retval null
    772 label __label273
 -    * set fuel_3 __fn3retval
 +  773 set fuel_3 __fn3_supply_fuel
@@ -3932,7 +3870,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    766 label __label273
    767 set fuel_3 __fn3_supply_fuel
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-19 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-20 instructions):
  
     59 control enabled projector1 false
     60 control enabled projector2 false
@@ -4083,6 +4021,14 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
   1000 label __label159
   1001 op sub __tmp141 __fn3_charge __fn2retval
   1002 op lessThan __tmp142 __tmp141 PWR_ABORT
+ 
+  1103 label __label99
+  1104 label __label100
+  1105 set __fn3retval __fn3_supply_fuel
+-    * jump __label67 always
+  1106 label __label67
+  1107 goto __fn3retaddr __fn3
+  1108 end
 
 Modifications by Iterated phase, Jump Optimization, pass 3, iteration 1 (-1 instructions):
  
@@ -4372,7 +4318,7 @@ Modifications by Final phase, Jump Threading, iteration 1:
   1076 print "WAIT system fuel\n"
   1077 label __label94
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-5 instructions):
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 instructions):
  
     54 control enabled reactor5 false
     55 set __fn4retval true
@@ -4399,22 +4345,10 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-5 inst
    927 set RET_T_STARTUP __fn3_t_startup
    928 op sub __tmp111 @tick __fn3_t_startup
  
-  1099 label __label100
   1100 set __fn3retval __fn3_supply_fuel
-  1101 jump __label67 always
--    * set __fn3retval null
-  1102 label __label67
-  1103 goto __fn3retaddr __fn3
--    * end
-
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
- 
-  1098 label __label99
-  1099 label __label100
-  1100 set __fn3retval __fn3_supply_fuel
--    * jump __label67 always
   1101 label __label67
   1102 goto __fn3retaddr __fn3
+-    * end
 
 Final code before resolving virtual instructions:
 

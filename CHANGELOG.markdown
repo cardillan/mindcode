@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 * Fixed bugs in the Data Flow Optimization:
   *  The virtual `setaddr` instruction, unused due to the corresponding jump being unreachable, wouldn't be removed from code. This caused errors when referencing a non-existent label.
   * Data Flow Optimization would sometimes corrupt the expected code structure when removing unneeded instructions, causing bugs or runtime errors during subsequent optimizations. 
-  * The entry condition to a loop might be incorrectly evaluated, leading to wrong optimizations of some loops. 
+  * The entry condition to a loop might be incorrectly evaluated, leading to wrong optimizations of some loops.
+  * A variable read in an unreachable part of code might be reported as uninitialized. This might lead to compilation error for compiler-generated uninitialized variables.
 * Fixed the If Expression Optimization mistakenly propagating a jump into the bodies of the if/else statement, causing errors during subsequent optimizations.
 * Fixed the Single Step Elimination occasionally crashing when removing a superfluous jump.
 * Fixed the Loop Unrolling Optimization possibly unrolling incorrect number of iterations on loops with no exit condition.
