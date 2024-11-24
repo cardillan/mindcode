@@ -36,6 +36,7 @@ Supporting tools:
 * [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
 * [Schematics Refresher](TOOLS-REFRESHER.markdown)
 * [Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown)
+* [Testing Framework](TOOLS-TESTING-FRAMEWORK.markdown)
 
 Additional information on Mindcode and Mindustry Logic:
 
