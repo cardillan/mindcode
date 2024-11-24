@@ -15,16 +15,16 @@
    184 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 903):
-    Loop Unrolling: unroll loop at line 41                       cost     2, benefit     7500.0, efficiency     3750.0
-    Loop Unrolling: unroll loop at line 82                       cost    25, benefit    62500.0, efficiency     2500.0
-  * Loop Unrolling: unroll loop at line 83                       cost    47, benefit  2343750.0, efficiency    49867.0 (+38 instructions)
+    Unroll loop at line 41:5                                     cost     2, benefit     7500.0, efficiency     3750.0
+    Unroll loop at line 82:9                                     cost    25, benefit    62500.0, efficiency     2500.0
+  * Unroll loop at line 83:13                                    cost    47, benefit  2343750.0, efficiency    49867.0 (+38 instructions)
 
 Pass 1: speed optimization selection (cost limit 865):
-  * Loop Unrolling: unroll loop at line 41                       cost     2, benefit     7500.0, efficiency     3750.0 (+2 instructions)
-    Loop Unrolling: unroll loop at line 82                       cost    63, benefit    62500.0, efficiency      992.1
+  * Unroll loop at line 41:5                                     cost     2, benefit     7500.0, efficiency     3750.0 (+2 instructions)
+    Unroll loop at line 82:9                                     cost    63, benefit    62500.0, efficiency      992.1
 
 Pass 1: speed optimization selection (cost limit 863):
-  * Loop Unrolling: unroll loop at line 82                       cost    63, benefit    62500.0, efficiency      992.1 (+50 instructions)
+  * Unroll loop at line 82:9                                     cost    63, benefit    62500.0, efficiency      992.1 (+50 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instructions):
  
@@ -490,7 +490,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-3 inst
    120 op lessThan __tmp70 ballY 0
    121 op equal __tmp71 brickCount 0
 
-Modifications by Loop Unrolling: unroll loop at line 83 (+51 instructions):
+Modifications by Unroll loop at line 83:13 (+51 instructions):
  
     75 set y 126
     76 label __label21
@@ -836,7 +836,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    170 label __label22
    171 op sub y y 10
 
-Modifications by Loop Unrolling: unroll loop at line 41 (+9 instructions):
+Modifications by Unroll loop at line 41:5 (+9 instructions):
  
     11 op rand __tmp4 10
     12 op sub ballVY __tmp4 5
@@ -959,7 +959,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     34 label __label6
     35 draw clear 0 0 0
 
-Modifications by Loop Unrolling: unroll loop at line 82 (+66 instructions):
+Modifications by Unroll loop at line 82:9 (+66 instructions):
  
     84 label __label19
     85 label __label20

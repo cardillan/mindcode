@@ -20,22 +20,22 @@
    609 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 680):
-    Loop Optimization: replicate condition at line 56            cost     7, benefit       25.0, efficiency        3.6
-    Loop Unrolling: unroll iteration loop at line 69             cost    97, benefit     1175.0, efficiency       12.1
-    Loop Unrolling: unroll loop at line 150                      cost   337, benefit   156250.0, efficiency      463.6
-  * Case Switching: convert case at line 163                     cost     3, benefit    15625.0, efficiency     5208.3 (+3 instructions)
+    Replicate loop condition at line 56:1                        cost     7, benefit       25.0, efficiency        3.6
+    Unroll iteration loop at line 69:5                           cost    97, benefit     1175.0, efficiency       12.1
+    Unroll loop at line 150:5                                    cost   337, benefit   156250.0, efficiency      463.6
+  * Convert case at line 163:5                                   cost     3, benefit    15625.0, efficiency     5208.3 (+3 instructions)
 
 Pass 1: speed optimization selection (cost limit 677):
-    Loop Optimization: replicate condition at line 56            cost     7, benefit       25.0, efficiency        3.6
-    Loop Unrolling: unroll iteration loop at line 69             cost    97, benefit     1175.0, efficiency       12.1
-  * Loop Unrolling: unroll loop at line 150                      cost   349, benefit   156250.0, efficiency      447.7 (+347 instructions)
+    Replicate loop condition at line 56:1                        cost     7, benefit       25.0, efficiency        3.6
+    Unroll iteration loop at line 69:5                           cost    97, benefit     1175.0, efficiency       12.1
+  * Unroll loop at line 150:5                                    cost   349, benefit   156250.0, efficiency      447.7 (+347 instructions)
 
 Pass 1: speed optimization selection (cost limit 330):
-    Loop Optimization: replicate condition at line 56            cost     7, benefit       25.0, efficiency        3.6
-  * Loop Unrolling: unroll iteration loop at line 69             cost    97, benefit     1175.0, efficiency       12.1 (-12 instructions)
+    Replicate loop condition at line 56:1                        cost     7, benefit       25.0, efficiency        3.6
+  * Unroll iteration loop at line 69:5                           cost    97, benefit     1175.0, efficiency       12.1 (-12 instructions)
 
 Pass 1: speed optimization selection (cost limit 342):
-  * Loop Optimization: replicate condition at line 56            cost     7, benefit       25.0, efficiency        3.6 (+7 instructions)
+  * Replicate loop condition at line 56:1                        cost     7, benefit       25.0, efficiency        3.6 (+7 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -1774,7 +1774,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    290 set __fn3_i 0
    291 label __label84
 
-Modifications by Case Switching: convert case at line 163 (+3 instructions):
+Modifications by Convert case at line 163:5 (+3 instructions):
  
    292 label __label119
    293 op mod __tmp50 __fn3_amount 10
@@ -1896,7 +1896,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     12 op sub n n 1
     13 getlink block n
 
-Modifications by Loop Unrolling: unroll loop at line 150 (+355 instructions):
+Modifications by Unroll loop at line 150:5 (+355 instructions):
  
    287 label __label79
    288 label __label77
@@ -2950,7 +2950,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
    789 jump __label285 notEqual __fn3_amount 0
    790 jump __label86 always
 
-Modifications by Loop Unrolling: unroll iteration loop at line 69 (+103 instructions):
+Modifications by Unroll iteration loop at line 69:5 (+103 instructions):
  
    102 label __label25
    103 draw color 255 255 255 255
@@ -3806,7 +3806,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    210 draw color 255 255 255 255
    211 label __label419
 
-Modifications by Loop Optimization: replicate condition at line 56 (+7 instructions):
+Modifications by Replicate loop condition at line 56:1 (+7 instructions):
  
     76 op equal __tmp16 LINKS @links
     77 op land __tmp17 __tmp15 __tmp16

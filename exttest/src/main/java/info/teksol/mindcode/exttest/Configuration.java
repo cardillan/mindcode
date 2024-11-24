@@ -4,9 +4,9 @@ import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.exttest.cases.TestCaseSelector;
-import info.teksol.mindcode.exttest.cases.TestCaseSelectorFull;
-import info.teksol.mindcode.exttest.cases.TestCaseSelectorSampled;
+import info.teksol.mindcode.exttest.cases.TestCaseCreator;
+import info.teksol.mindcode.exttest.cases.TestCaseCreatorFull;
+import info.teksol.mindcode.exttest.cases.TestCaseCreatorSampled;
 import info.teksol.mindcode.v3.InputFiles;
 
 import java.nio.file.Path;
@@ -18,7 +18,7 @@ public record Configuration(
         String outputPath,
         boolean fullTests,
         int sampleMultiplier,
-        List<TestConfiguration> configurations) {
+        List<SingleTestConfiguration> configurations) {
 
     public void addTestConfiguration(
             String sourceFileName,
@@ -29,7 +29,7 @@ public record Configuration(
             int failureLimit,
             boolean run) {
 
-        configurations.add(new TestConfiguration(
+        configurations.add(new SingleTestConfiguration(
                 sourceFileName,
                 inputFiles,
                 optimizationLevels,
@@ -39,7 +39,11 @@ public record Configuration(
                 run));
     }
 
-    public class TestConfiguration {
+    private static int product(int x, int y) {
+        return x * y;
+    }
+
+    public class SingleTestConfiguration implements TestConfiguration {
         private final String sourceFileName;
         private final InputFiles inputFiles;
         private final Path resultPath;
@@ -50,9 +54,9 @@ public record Configuration(
         private final int failureLimit;
         private final boolean run;
 
-        private final TestCaseSelector testCaseSelector;
+        private final TestCaseCreator testCaseCreator;
 
-        public TestConfiguration(
+        public SingleTestConfiguration(
                 String sourceFileName,
                 InputFiles inputFiles,
                 Map<Optimization, List<OptimizationLevel>> optimizationLevels,
@@ -69,11 +73,11 @@ public record Configuration(
             this.run = run;
 
             this.totalCases = optimizationLevels.values().stream().mapToInt(List::size)
-                                      .reduce(1, TestConfiguration::product) * generationGoals.size();
+                                      .reduce(1, Configuration::product) * generationGoals.size();
 
-            this.testCaseSelector = fullTests || sampleCount >= totalCases
-                    ? new TestCaseSelectorFull(totalCases)
-                    : new TestCaseSelectorSampled(totalCases, sampleCount);
+            this.testCaseCreator = fullTests || sampleCount >= totalCases
+                    ? new TestCaseCreatorFull(this)
+                    : new TestCaseCreatorSampled(this);
 
             Path sourcePath = Path.of(sourceFileName);
             String resultsName = "results-" + sourcePath.getFileName().toString().replace(".mnd", "") + ".txt.";
@@ -85,12 +89,9 @@ public record Configuration(
             }
         }
 
-        public Configuration global() {
-            return Configuration.this;
-        }
-
-        private static int product(int x, int y) {
-            return x * y;
+        @Override
+        public int getThreads() {
+            return threads;
         }
 
         public String getSourceFileName() {
@@ -101,6 +102,7 @@ public record Configuration(
             return run;
         }
 
+        @Override
         public InputFiles getInputFiles() {
             return inputFiles;
         }
@@ -109,30 +111,37 @@ public record Configuration(
             return resultPath;
         }
 
+        @Override
         public int getSampleCount() {
             return sampleCount;
         }
 
+        @Override
         public int getTotalCases() {
             return totalCases;
         }
 
+        @Override
         public int getFailureLimit() {
             return failureLimit;
         }
 
+        @Override
         public Map<Optimization, List<OptimizationLevel>> getOptimizationLevels() {
             return optimizationLevels;
         }
 
+        @Override
         public List<GenerationGoal> getGenerationGoals() {
             return generationGoals;
         }
 
-        public TestCaseSelector getTestCaseSelector() {
-            return testCaseSelector;
+        @Override
+        public TestCaseCreator getTestCaseCreator() {
+            return testCaseCreator;
         }
 
+        @Override
         public CompilerProfile createCompilerProfile(int testCase) {
             CompilerProfile profile = new CompilerProfile(false)
                     .setAllOptimizationLevels(OptimizationLevel.NONE)

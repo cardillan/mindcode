@@ -18,37 +18,37 @@
    697 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 301):
-  * Loop Optimization: replicate condition at line 174           cost     1, benefit      312.5, efficiency      312.5 (+0 instructions)
-    Loop Optimization: replicate condition at line 178           cost     4, benefit      312.5, efficiency       78.1
-    Loop Optimization: replicate condition at line 186           cost     5, benefit      156.3, efficiency       31.3
-    Loop Optimization: replicate condition at line 205           cost     3, benefit       25.0, efficiency        8.3
-    Loop Optimization: replicate condition at line 694           cost     2, benefit       25.0, efficiency       12.5
-    Loop Optimization: replicate condition at line 702           cost     3, benefit       12.5, efficiency        4.2
+  * Replicate loop condition at line 174:9                       cost     1, benefit      312.5, efficiency      312.5 (+0 instructions)
+    Replicate loop condition at line 178:9                       cost     4, benefit      312.5, efficiency       78.1
+    Replicate loop condition at line 186:13                      cost     5, benefit      156.3, efficiency       31.3
+    Replicate loop condition at line 205:1                       cost     3, benefit       25.0, efficiency        8.3
+    Replicate loop condition at line 694:1                       cost     2, benefit       25.0, efficiency       12.5
+    Replicate loop condition at line 702:5                       cost     3, benefit       12.5, efficiency        4.2
 
 Pass 1: speed optimization selection (cost limit 301):
-  * Loop Optimization: replicate condition at line 178           cost     4, benefit      312.5, efficiency       78.1 (+4 instructions)
-    Loop Optimization: replicate condition at line 186           cost     5, benefit      156.3, efficiency       31.3
-    Loop Optimization: replicate condition at line 205           cost     3, benefit       25.0, efficiency        8.3
-    Loop Optimization: replicate condition at line 694           cost     2, benefit       25.0, efficiency       12.5
-    Loop Optimization: replicate condition at line 702           cost     3, benefit       12.5, efficiency        4.2
+  * Replicate loop condition at line 178:9                       cost     4, benefit      312.5, efficiency       78.1 (+4 instructions)
+    Replicate loop condition at line 186:13                      cost     5, benefit      156.3, efficiency       31.3
+    Replicate loop condition at line 205:1                       cost     3, benefit       25.0, efficiency        8.3
+    Replicate loop condition at line 694:1                       cost     2, benefit       25.0, efficiency       12.5
+    Replicate loop condition at line 702:5                       cost     3, benefit       12.5, efficiency        4.2
 
 Pass 1: speed optimization selection (cost limit 297):
-  * Loop Optimization: replicate condition at line 186           cost     5, benefit      156.3, efficiency       31.3 (+5 instructions)
-    Loop Optimization: replicate condition at line 205           cost     3, benefit       25.0, efficiency        8.3
-    Loop Optimization: replicate condition at line 694           cost     2, benefit       25.0, efficiency       12.5
-    Loop Optimization: replicate condition at line 702           cost     3, benefit       12.5, efficiency        4.2
+  * Replicate loop condition at line 186:13                      cost     5, benefit      156.3, efficiency       31.3 (+5 instructions)
+    Replicate loop condition at line 205:1                       cost     3, benefit       25.0, efficiency        8.3
+    Replicate loop condition at line 694:1                       cost     2, benefit       25.0, efficiency       12.5
+    Replicate loop condition at line 702:5                       cost     3, benefit       12.5, efficiency        4.2
 
 Pass 1: speed optimization selection (cost limit 292):
-    Loop Optimization: replicate condition at line 205           cost     3, benefit       25.0, efficiency        8.3
-  * Loop Optimization: replicate condition at line 694           cost     2, benefit       25.0, efficiency       12.5 (+1 instructions)
-    Loop Optimization: replicate condition at line 702           cost     3, benefit       12.5, efficiency        4.2
+    Replicate loop condition at line 205:1                       cost     3, benefit       25.0, efficiency        8.3
+  * Replicate loop condition at line 694:1                       cost     2, benefit       25.0, efficiency       12.5 (+1 instructions)
+    Replicate loop condition at line 702:5                       cost     3, benefit       12.5, efficiency        4.2
 
 Pass 1: speed optimization selection (cost limit 291):
-  * Loop Optimization: replicate condition at line 205           cost     3, benefit       25.0, efficiency        8.3 (+3 instructions)
-    Loop Optimization: replicate condition at line 702           cost     3, benefit       12.5, efficiency        4.2
+  * Replicate loop condition at line 205:1                       cost     3, benefit       25.0, efficiency        8.3 (+3 instructions)
+    Replicate loop condition at line 702:5                       cost     3, benefit       12.5, efficiency        4.2
 
 Pass 1: speed optimization selection (cost limit 288):
-  * Loop Optimization: replicate condition at line 702           cost     3, benefit       12.5, efficiency        4.2 (+3 instructions)
+  * Replicate loop condition at line 702:5                       cost     3, benefit       12.5, efficiency        4.2 (+3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -3261,7 +3261,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    380 set WAIT_LIMIT 30000
    381 label __label71
 
-Modifications by Loop Optimization: replicate condition at line 174 (+1 instructions):
+Modifications by Replicate loop condition at line 174:9 (+1 instructions):
  
    125 label __label29
    126 sensor __tmp43 @unit @controlled
@@ -3286,7 +3286,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     40 label __label216
     41 sensor __tmp12 @unit @controller
 
-Modifications by Loop Optimization: replicate condition at line 178 (+4 instructions):
+Modifications by Replicate loop condition at line 178:9 (+4 instructions):
  
    137 op equal __tmp47 __tmp46 0
    138 op land __tmp48 __tmp45 __tmp47
@@ -3316,7 +3316,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    137 op equal __tmp47 __tmp46 0
    138 op land __tmp48 __tmp45 __tmp47
 
-Modifications by Loop Optimization: replicate condition at line 186 (+5 instructions):
+Modifications by Replicate loop condition at line 186:13 (+5 instructions):
  
    158 op equal __tmp58 __tmp57 false
    159 op land __tmp59 __tmp56 __tmp58
@@ -3335,7 +3335,7 @@ Modifications by Loop Optimization: replicate condition at line 186 (+5 instruct
    171 ucontrol getBlock CORE_X CORE_Y b_type CORE 0
    172 jump __label40 equal b_type @vault
 
-Modifications by Loop Optimization: replicate condition at line 694 (+2 instructions):
+Modifications by Replicate loop condition at line 694:1 (+2 instructions):
  
    895 sensor __tmp365 SORTER @dead
    896 op strictEqual __tmp366 __tmp365 0
@@ -3375,7 +3375,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    903 sensor __tmp365 sorter1 @dead
    904 op strictEqual __tmp366 __tmp365 0
 
-Modifications by Loop Optimization: replicate condition at line 205 (+3 instructions):
+Modifications by Replicate loop condition at line 205:1 (+3 instructions):
  
    194 op notEqual __tmp66 sorter_type @inverted-sorter
    195 op land __tmp67 __tmp65 __tmp66
@@ -3397,7 +3397,7 @@ Modifications by Loop Optimization: replicate condition at line 205 (+3 instruct
    214 jump __label47 notEqual sorter_type @sorter
    215 set SHOW_REMOTE_LEVEL true
 
-Modifications by Loop Optimization: replicate condition at line 702 (+3 instructions):
+Modifications by Replicate loop condition at line 702:5 (+3 instructions):
  
    921 sensor __tmp377 switch2 @enabled
    922 op or __tmp378 __tmp376 __tmp377

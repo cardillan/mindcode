@@ -40,38 +40,38 @@ Active optimizations:
    324 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 768):
-    Loop Unrolling: unroll loop at line 108                      cost    27, benefit      187.5, efficiency        6.9
-  * Loop Unrolling: unroll loop at line 153                      cost    53, benefit     3750.0, efficiency       70.8 (+53 instructions)
-    Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2
-    Function Inlining: inline function printExactFast            cost   404, benefit       35.0, efficiency        0.1
-    Function Inlining: inline function printExactSlow            cost   215, benefit       35.0, efficiency        0.2
+    Unroll loop at *printing:108:13                              cost    27, benefit      187.5, efficiency        6.9
+  * Unroll loop at *printing:153:9                               cost    53, benefit     3750.0, efficiency       70.8 (+53 instructions)
+    Inline function 'printNumber' defined at *printing:42:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printExactFast' defined at *printing:64:1   cost   404, benefit       35.0, efficiency        0.1
+    Inline function 'printExactSlow' defined at *printing:131:1  cost   215, benefit       35.0, efficiency        0.2
 
 Pass 1: speed optimization selection (cost limit 715):
-  * Loop Unrolling: unroll loop at line 108                      cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
-    Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2
-    Function Inlining: inline function printExactFast            cost   404, benefit       35.0, efficiency        0.1
-    Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:108:13                              cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
+    Inline function 'printNumber' defined at *printing:42:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printExactFast' defined at *printing:64:1   cost   404, benefit       35.0, efficiency        0.1
+    Inline function 'printExactSlow' defined at *printing:131:1  cost   692, benefit       35.0, efficiency        0.1
 
 Pass 1: speed optimization selection (cost limit 688):
-  * Function Inlining: inline function printNumber               cost   101, benefit       24.5, efficiency        0.2 (+78 instructions)
-    Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
-  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  * Inline function 'printNumber' defined at *printing:42:1      cost   101, benefit       24.5, efficiency        0.2 (+78 instructions)
+    Inline function 'printExactFast' defined at *printing:64:1   cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:131:1  cost   692, benefit       35.0, efficiency        0.1
 
 Pass 1: speed optimization selection (cost limit 610):
-  ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
-  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactFast' defined at *printing:64:1   cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:131:1  cost   692, benefit       35.0, efficiency        0.1
 
 Pass 2: speed optimization selection (cost limit 638):
-  ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
-  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactFast' defined at *printing:64:1   cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:131:1  cost   692, benefit       35.0, efficiency        0.1
 
 Pass 3: speed optimization selection (cost limit 646):
-  ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
-  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactFast' defined at *printing:64:1   cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:131:1  cost   692, benefit       35.0, efficiency        0.1
 
 Pass 4: speed optimization selection (cost limit 646):
-  ! Function Inlining: inline function printExactFast            cost   647, benefit       35.0, efficiency        0.1
-  ! Function Inlining: inline function printExactSlow            cost   692, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactFast' defined at *printing:64:1   cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:131:1  cost   692, benefit       35.0, efficiency        0.1
 
 Final code before resolving virtual instructions:
 

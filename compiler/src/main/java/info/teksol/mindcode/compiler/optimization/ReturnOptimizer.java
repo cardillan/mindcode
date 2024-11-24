@@ -119,7 +119,7 @@ class ReturnOptimizer extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": optimize return at line " + astContext.node().inputPosition().line();
+            return "Optimize return at " + astContext.node().inputPosition().formatForLog();
         }
     }
 }

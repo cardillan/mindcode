@@ -1,19 +1,19 @@
 package info.teksol.mindcode.exttest.threadpool;
 
 import info.teksol.mindcode.exttest.TestProgress;
+import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseExecutor;
-import info.teksol.mindcode.exttest.cases.TestCaseSelector;
 
 import java.util.concurrent.Callable;
 
 public class ThreadPoolRunner implements Callable<Integer> {
     private final TestProgress progress;
-    private final TestCaseSelector caseSelector;
+    private final TestCaseCreator caseCreator;
     private final TestCaseExecutor caseExecutor;
 
-    public ThreadPoolRunner(TestProgress progress, TestCaseSelector caseSelector, TestCaseExecutor caseExecutor) {
+    public ThreadPoolRunner(TestProgress progress, TestCaseCreator caseCreator, TestCaseExecutor caseExecutor) {
         this.progress = progress;
-        this.caseSelector = caseSelector;
+        this.caseCreator = caseCreator;
         this.caseExecutor = caseExecutor;
     }
 
@@ -21,11 +21,11 @@ public class ThreadPoolRunner implements Callable<Integer> {
     public Integer call() {
         int count = 0;
         while (!progress.finished()) {
-            int testRunNumber = progress.nextSample();
-            if (testRunNumber >= caseSelector.getSampleCount()) {
+            int testRunNumber = progress.nextTestRun();
+            if (testRunNumber >= caseCreator.getSampleCount()) {
                 break;
             }
-            caseExecutor.runTest(caseSelector.getTestCaseNumber(testRunNumber));
+            caseExecutor.runTest(caseCreator, testRunNumber);
             count++;
         }
         return count;

@@ -14,11 +14,11 @@
    584 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 922):
-  * Loop Optimization: replicate condition at line 74            cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
-    Loop Unrolling: unroll loop at line 8                        cost   508, benefit    25600.0, efficiency       50.4
+  * Replicate loop condition at line 74:5                        cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
+    Unroll loop at line 8:1                                      cost   508, benefit    25600.0, efficiency       50.4
 
 Pass 1: speed optimization selection (cost limit 919):
-  * Loop Unrolling: unroll loop at line 8                        cost   508, benefit    25600.0, efficiency       50.4 (+508 instructions)
+  * Unroll loop at line 8:1                                      cost   508, benefit    25600.0, efficiency       50.4 (+508 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -327,7 +327,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     11 set ACCU_CONS 0
     12 set ACCU_PROD 0
 
-Modifications by Loop Optimization: replicate condition at line 74 (+3 instructions):
+Modifications by Replicate loop condition at line 74:5 (+3 instructions):
  
     76 op lessThan __tmp38 @time wait
     77 op land __tmp39 __tmp37 __tmp38
@@ -344,7 +344,7 @@ Modifications by Loop Optimization: replicate condition at line 74 (+3 instructi
     87 print "\n[lightgray]Loops: "
     88 print loops
 
-Modifications by Loop Unrolling: unroll loop at line 8 (+1021 instructions):
+Modifications by Unroll loop at line 8:1 (+1021 instructions):
      0 printflush message1
      1 print "Initializing..."
      2 printflush message1

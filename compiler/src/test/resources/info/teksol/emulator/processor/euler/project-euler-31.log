@@ -14,11 +14,11 @@
     59 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Loop Unrolling: unroll iteration loop at line 4              cost     0, benefit       23.0, efficiency   Infinity (-19 instructions)
-    Return Optimization: optimize return at line 14              cost     2, benefit       13.0, efficiency        6.5
+  * Unroll iteration loop at line 4:1                            cost     0, benefit       23.0, efficiency   Infinity (-19 instructions)
+    Optimize return at line 14:9                                 cost     2, benefit       13.0, efficiency        6.5
 
 Pass 1: speed optimization selection (cost limit 942):
-  * Return Optimization: optimize return at line 14              cost     2, benefit       13.0, efficiency        6.5 (+2 instructions)
+  * Optimize return at line 14:9                                 cost     2, benefit       13.0, efficiency        6.5 (+2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
  
@@ -237,7 +237,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     84 set __fn0retval __fn0_result
     85 label __label17
 
-Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instructions):
+Modifications by Unroll iteration loop at line 4:1 (-2 instructions):
      0 set __sp 16
      1 set index 0
 -    * setaddr __tmp0 __label4
@@ -439,7 +439,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     25 label __label3
     26 label __label12
 
-Modifications by Return Optimization: optimize return at line 14 (+2 instructions):
+Modifications by Optimize return at line 14:9 (+2 instructions):
  
     37 label __label0
     38 jump __label18 notEqual __fn0_amount 0

@@ -10,24 +10,28 @@ test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
-# Global output files will be generated in current directory.
+# Global output files (result.txt) will be generated in current directory.
 output-path: .
 
 # 'true' to run all possible configurations for all tests, 'false' to run the given number of samples
 # (full tests would typically take many hours to complete)
 full-tests: false
 
-# Number of samples configured to run per test will be multiplied by this
-sample-multiplier: 3
+# Number of samples configured to run per test will be multiplied by this number
+# Allows to create a basic configuration that runs reasonably fast
+# and just increase the multiplier for longer, more comprehensive tests
+sample-multiplier: 1
+
 
 # DEFAULT TEST SETTINGS
+
 # All values specified here may be overridden for specific tests
 defaults:
   # Number of test cases to execute
   samples: 500
 
   # When number of failures encountered while executing a test exceeds the given value, the test is stopped
-  # Prevents creation of too large output files and saves CPU time when too may tests fail
+  # Prevents creation of indiscriminately large output files when too may tests fail
   failure-limit: 500
 
   # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
@@ -58,46 +62,112 @@ defaults:
   temp-variables-elimination: [ none, basic ]
   unreachable-code-elimination: [ none, basic, advanced ]
 
+
 # LIST OF SOURCES
 
 # A single file to test
 # Unspecified settings are inherited from default
 single-source:
-  - source: impact-reactor-logic.mnd
-    samples: 100
+  - source: sum-of-primes.mnd
+    samples: 20000
+    run: true
+    # There are no case expressions, recursive functions or print statements in the test file
+    # By excluding these optimizations, the total number of cases gets significantly reduced
+    # The optimizations themselves may run a very little bit faster as well.
+    case-expression-optimization: [ none ]
+    case-switching: [ none ]
+    stack-optimization: [ none ]
+    print-merging: [ none ]
+
+
 
 # List of all files to test
 all-sources:
   - source: math.mnd
     samples: 200
     run: true
-    case-expression-optimization: [ basic ]
-    case-switching: [ basic ]
-    stack-optimization: [ basic ]
+    # There are no case expressions, recursive functions or print statements in the test file
+    # By excluding these optimizations, the total number of cases gets significantly reduced
+    # The optimizations themselves may run a very little bit faster as well.
+    case-expression-optimization: [ none ]
+    case-switching: [ none ]
+    stack-optimization: [ none ]
+    print-merging: [ none ]
+
   - source: printing.mnd
     samples: 400
     run: true
-    case-expression-optimization: [ basic ]
-    case-switching: [ basic ]
-    stack-optimization: [ basic ]
+    # There are no case expressions or recursive functions in the test file
+    # By excluding these optimizations, the total number of cases gets significantly reduced
+    # The optimizations themselves may run a very little bit faster as well.
+    case-expression-optimization: [ none ]
+    case-switching: [ none ]
+    stack-optimization: [ none ]
+
   - source: quick-sort.mnd
     samples: 5000
     run: true
-    case-expression-optimization: [ basic ]
-    case-switching: [ basic ]
+    # There are no case expressions or print statements in the test file
+    # By excluding these optimizations, the total number of cases gets significantly reduced
+    # The optimizations themselves may run a very little bit faster as well.
+    case-expression-optimization: [ none ]
+    case-switching: [ none ]
+    print-merging: [ none ]
+
   - source: bubble-sort.mnd
     samples: 2000
     run: true
-    case-expression-optimization: [ basic ]
-    case-switching: [ basic ]
-    stack-optimization: [ basic ]
+    # There are no case expressions, recursive functions or print statements in the test file
+    # By excluding these optimizations, the total number of cases gets significantly reduced
+    # The optimizations themselves may run a very little bit faster as well.
+    case-expression-optimization: [ none ]
+    case-switching: [ none ]
+    stack-optimization: [ none ]
+    print-merging: [ none ]
+
+  - source: sum-of-primes.mnd
+    samples: 2000
+    run: true
+    # There are no case expressions, recursive functions or print statements in the test file
+    # By excluding these optimizations, the total number of cases gets significantly reduced
+    # The optimizations themselves may run a very little bit faster as well.
+    case-expression-optimization: [ none ]
+    case-switching: [ none ]
+    stack-optimization: [ none ]
+    print-merging: [ none ]
+
   - source: impact-reactor-logic.mnd
     samples: 125
+
   - source: "C:\Home\golem\mindcode\breakout.mnd"
     samples: 1200
+
+  - source: "C:\Home\golem\mindcode\detector.mnd"
+    samples: 100
+
   - source: "C:\Home\golem\mindcode\factory-monitor.mnd"
-    samples: 500
+    samples: 100
+
+  - source: "C:\Home\golem\mindcode\factory-monitor-silicon.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\mindcode\factory-monitor-surge-alloy.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\mindcode\impact-reactor-battery-level.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\mindcode\impact-reactor-power-plant.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\mindcode\instant-overdrive-dome.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\mindcode\instant-overdrive-projector.mnd"
+    samples: 100
+
   - source: "C:\Home\golem\mindcode\mandelbrot-compute.mnd"
     samples: 250
+
   - source: "C:\Home\golem\mindcode\unit-transport.mnd"
     samples: 80

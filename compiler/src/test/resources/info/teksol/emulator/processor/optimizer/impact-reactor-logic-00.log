@@ -14,126 +14,126 @@
    863 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 548):
-  * Function Inlining: inline function kilo                      cost     5, benefit      218.8, efficiency       43.8 (-5 instructions)
-    Function Inlining: inline function update_fuel               cost    13, benefit      337.5, efficiency       26.0
-    Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3
-    Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-    Function Inlining: inline function check_radar               cost    22, benefit      175.0, efficiency        8.0
-    Function Inlining: inline function call at line 69           cost    23, benefit       87.5, efficiency        3.8
-    Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 76           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 77           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 80           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 82           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 86           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 88           cost    23, benefit       87.5, efficiency        3.8
-    Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 96           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 102          cost     3, benefit       87.5, efficiency       29.2
-    Function Inlining: inline function call at line 103          cost     3, benefit       87.5, efficiency       29.2
-    Function Inlining: inline function call at line 105          cost     3, benefit       43.8, efficiency       14.6
-    Function Inlining: inline function call at line 173          cost    14, benefit        3.9, efficiency        0.3
+  * Inline function 'kilo' defined at line 117:1                 cost     5, benefit      218.8, efficiency       43.8 (-5 instructions)
+    Inline function 'update_fuel' defined at line 121:1          cost    13, benefit      337.5, efficiency       26.0
+    Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3
+    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
+    Inline function 'check_radar' defined at line 259:1          cost    22, benefit      175.0, efficiency        8.0
+    Inline function call at line 69:22                           cost    23, benefit       87.5, efficiency        3.8
+    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 82:5                            cost     7, benefit      112.5, efficiency       16.1
+    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 86:5                            cost     7, benefit      112.5, efficiency       16.1
+    Inline function call at line 88:23                           cost    23, benefit       87.5, efficiency        3.8
+    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 96:5                            cost     7, benefit      112.5, efficiency       16.1
+    Inline function call at line 102:15                          cost     3, benefit       87.5, efficiency       29.2
+    Inline function call at line 103:14                          cost     3, benefit       87.5, efficiency       29.2
+    Inline function call at line 105:15                          cost     3, benefit       43.8, efficiency       14.6
+    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
 
 Pass 1: speed optimization selection (cost limit 553):
-  * Function Inlining: inline function update_fuel               cost    13, benefit      337.5, efficiency       26.0 (-1 instructions)
-    Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3
-    Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-    Function Inlining: inline function check_radar               cost    22, benefit      175.0, efficiency        8.0
-    Function Inlining: inline function call at line 69           cost    23, benefit       87.5, efficiency        3.8
-    Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 76           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 77           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 80           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 82           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 86           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 88           cost    23, benefit       87.5, efficiency        3.8
-    Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 96           cost     7, benefit      112.5, efficiency       16.1
-    Function Inlining: inline function call at line 173          cost    14, benefit        3.9, efficiency        0.3
+  * Inline function 'update_fuel' defined at line 121:1          cost    13, benefit      337.5, efficiency       26.0 (-1 instructions)
+    Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3
+    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
+    Inline function 'check_radar' defined at line 259:1          cost    22, benefit      175.0, efficiency        8.0
+    Inline function call at line 69:22                           cost    23, benefit       87.5, efficiency        3.8
+    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 82:5                            cost     7, benefit      112.5, efficiency       16.1
+    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 86:5                            cost     7, benefit      112.5, efficiency       16.1
+    Inline function call at line 88:23                           cost    23, benefit       87.5, efficiency        3.8
+    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 96:5                            cost     7, benefit      112.5, efficiency       16.1
+    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
 
 Pass 1: speed optimization selection (cost limit 554):
-    Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3
-    Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-  * Function Inlining: inline function check_radar               cost    22, benefit      175.0, efficiency        8.0 (+5 instructions)
-    Function Inlining: inline function call at line 69           cost    23, benefit       87.5, efficiency        3.8
-    Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 76           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 77           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 80           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 88           cost    23, benefit       87.5, efficiency        3.8
-    Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 173          cost    14, benefit        3.9, efficiency        0.3
+    Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3
+    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
+  * Inline function 'check_radar' defined at line 259:1          cost    22, benefit      175.0, efficiency        8.0 (+5 instructions)
+    Inline function call at line 69:22                           cost    23, benefit       87.5, efficiency        3.8
+    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 88:23                           cost    23, benefit       87.5, efficiency        3.8
+    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
 
 Pass 1: speed optimization selection (cost limit 549):
-  * Function Inlining: inline function calc_charge_req           cost    69, benefit      503.9, efficiency        7.3 (+43 instructions)
-    Function Inlining: inline function start_reactor             cost   519, benefit      687.5, efficiency        1.3
-    Function Inlining: inline function call at line 73           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 74           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 75           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 76           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 77           cost    14, benefit      100.0, efficiency        7.1
-    Function Inlining: inline function call at line 80           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 84           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 89           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 91           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 93           cost   130, benefit      137.5, efficiency        1.1
-    Function Inlining: inline function call at line 173          cost    14, benefit        3.9, efficiency        0.3
+  * Inline function 'calc_charge_req' defined at line 126:1      cost    69, benefit      503.9, efficiency        7.3 (+43 instructions)
+    Inline function 'start_reactor' defined at line 140:1        cost   519, benefit      687.5, efficiency        1.3
+    Inline function call at line 73:23                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 74:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 75:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 76:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 77:24                           cost    14, benefit      100.0, efficiency        7.1
+    Inline function call at line 80:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 84:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 89:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 91:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 93:14                           cost   130, benefit      137.5, efficiency        1.1
+    Inline function call at line 173:26                          cost    14, benefit        3.9, efficiency        0.3
 
 Pass 1: speed optimization selection (cost limit 506):
-  ! Function Inlining: inline function start_reactor             cost   559, benefit      687.5, efficiency        1.2
-  * Function Inlining: inline function call at line 80           cost   140, benefit      137.5, efficiency        1.0 (+131 instructions)
-    Function Inlining: inline function call at line 84           cost   140, benefit      137.5, efficiency        1.0
-    Function Inlining: inline function call at line 89           cost   140, benefit      137.5, efficiency        1.0
-    Function Inlining: inline function call at line 91           cost   140, benefit      137.5, efficiency        1.0
-    Function Inlining: inline function call at line 93           cost   140, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   559, benefit      687.5, efficiency        1.2
+  * Inline function call at line 80:14                           cost   140, benefit      137.5, efficiency        1.0 (+131 instructions)
+    Inline function call at line 84:14                           cost   140, benefit      137.5, efficiency        1.0
+    Inline function call at line 89:14                           cost   140, benefit      137.5, efficiency        1.0
+    Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
+    Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
 
 Pass 1: speed optimization selection (cost limit 375):
-  ! Function Inlining: inline function start_reactor             cost   419, benefit      550.0, efficiency        1.3
-  * Function Inlining: inline function call at line 84           cost   140, benefit      137.5, efficiency        1.0 (+132 instructions)
-    Function Inlining: inline function call at line 89           cost   140, benefit      137.5, efficiency        1.0
-    Function Inlining: inline function call at line 91           cost   140, benefit      137.5, efficiency        1.0
-    Function Inlining: inline function call at line 93           cost   140, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   419, benefit      550.0, efficiency        1.3
+  * Inline function call at line 84:14                           cost   140, benefit      137.5, efficiency        1.0 (+132 instructions)
+    Inline function call at line 89:14                           cost   140, benefit      137.5, efficiency        1.0
+    Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
+    Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
 
 Pass 1: speed optimization selection (cost limit 243):
-  ! Function Inlining: inline function start_reactor             cost   279, benefit      412.5, efficiency        1.5
-  * Function Inlining: inline function call at line 89           cost   140, benefit      137.5, efficiency        1.0 (+132 instructions)
-    Function Inlining: inline function call at line 91           cost   140, benefit      137.5, efficiency        1.0
-    Function Inlining: inline function call at line 93           cost   140, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   279, benefit      412.5, efficiency        1.5
+  * Inline function call at line 89:14                           cost   140, benefit      137.5, efficiency        1.0 (+132 instructions)
+    Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
+    Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
 
 Pass 1: speed optimization selection (cost limit 111):
-  ! Function Inlining: inline function start_reactor             cost   139, benefit      275.0, efficiency        2.0
-  ! Function Inlining: inline function call at line 91           cost   140, benefit      137.5, efficiency        1.0
-  ! Function Inlining: inline function call at line 93           cost   140, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   139, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   140, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   140, benefit      137.5, efficiency        1.0
 
 Pass 2: speed optimization selection (cost limit 130):
-  ! Function Inlining: inline function start_reactor             cost   138, benefit      275.0, efficiency        2.0
-  ! Function Inlining: inline function call at line 91           cost   139, benefit      137.5, efficiency        1.0
-  ! Function Inlining: inline function call at line 93           cost   139, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   138, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
 Pass 3: speed optimization selection (cost limit 131):
-  ! Function Inlining: inline function start_reactor             cost   138, benefit      275.0, efficiency        2.0
-  ! Function Inlining: inline function call at line 91           cost   139, benefit      137.5, efficiency        1.0
-  ! Function Inlining: inline function call at line 93           cost   139, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   138, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
 Pass 4: speed optimization selection (cost limit 131):
-  ! Function Inlining: inline function start_reactor             cost   138, benefit      275.0, efficiency        2.0
-  ! Function Inlining: inline function call at line 91           cost   139, benefit      137.5, efficiency        1.0
-  ! Function Inlining: inline function call at line 93           cost   139, benefit      137.5, efficiency        1.0
+  ! Inline function 'start_reactor' defined at line 140:1        cost   138, benefit      275.0, efficiency        2.0
+  ! Inline function call at line 91:14                           cost   139, benefit      137.5, efficiency        1.0
+  ! Inline function call at line 93:14                           cost   139, benefit      137.5, efficiency        1.0
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
  
@@ -1748,7 +1748,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    335 goto __fn1retaddr __fn1
    336 end
 
-Modifications by Function Inlining: inline function kilo:
+Modifications by Inline function 'kilo' defined at line 117:1:
  
    243 label __label42
    244 label __label40
@@ -1854,7 +1854,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    260 op idiv __tmp95 START_POWER_REQ 100
    261 op div __fn0retval __tmp95 10
 
-Modifications by Function Inlining: inline function update_fuel (+8 instructions):
+Modifications by Inline function 'update_fuel' defined at line 121:1 (+8 instructions):
  
    108 set __fn1_fuel __fn3retval
    109 set __fn1_uld_in unloader1
@@ -2057,7 +2057,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    184 jump __label123 equal fuel_many false
    185 control config unloader5 @blast-compound
 
-Modifications by Function Inlining: inline function check_radar (+18 instructions):
+Modifications by Inline function 'check_radar' defined at line 259:1 (+18 instructions):
  
     46 set CONTAINER vault1
     47 set NODE node1
@@ -2272,7 +2272,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    161 radar enemy any any health cyclone1 1 __fn4_enemy_found
    162 jump __label133 equal __fn4_enemy_found null
 
-Modifications by Function Inlining: inline function calc_charge_req (+61 instructions):
+Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+61 instructions):
  
     81 op or emerg_shutdown __fn4retval __tmp8
     82 set __fn2_reactor reactor1
@@ -2636,7 +2636,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    497 op sub __tmp100 @tick __fn3_t_startup
    498 op idiv __fn2_secs __tmp100 60
 
-Modifications by Function Inlining: inline function call at line 80 (+139 instructions):
+Modifications by Inline function call at line 80:14 (+139 instructions):
  
    179 set __fn3_emerg_shutdown emerg_shutdown
    180 set __fn3_fuel_on fuel_1
@@ -3077,7 +3077,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    352 label __label197
    353 set fuel_1 __fn3_supply_fuel
 
-Modifications by Function Inlining: inline function call at line 84 (+139 instructions):
+Modifications by Inline function call at line 84:14 (+139 instructions):
  
    371 set __fn3_emerg_shutdown emerg_shutdown
    372 set __fn3_fuel_on fuel_2
@@ -3510,7 +3510,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    545 label __label235
    546 set fuel_2 __fn3_supply_fuel
 
-Modifications by Function Inlining: inline function call at line 89 (+139 instructions):
+Modifications by Inline function call at line 89:14 (+139 instructions):
  
    592 set __fn3_emerg_shutdown emerg_shutdown
    593 set __fn3_fuel_on fuel_3

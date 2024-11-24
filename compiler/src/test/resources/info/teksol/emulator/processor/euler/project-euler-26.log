@@ -11,16 +11,16 @@
    520 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 966):
-  * Loop Optimization: replicate condition at line 17            cost     1, benefit      625.0, efficiency      625.0 (+1 instructions)
-    Loop Optimization: replicate condition at line 18            cost     1, benefit      625.0, efficiency      625.0
-    Loop Unrolling: unroll loop at line 24                       cost   487, benefit   123750.0, efficiency      254.1
+  * Replicate loop condition at line 17:5                        cost     1, benefit      625.0, efficiency      625.0 (+1 instructions)
+    Replicate loop condition at line 18:5                        cost     1, benefit      625.0, efficiency      625.0
+    Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency      254.1
 
 Pass 1: speed optimization selection (cost limit 965):
-  * Loop Optimization: replicate condition at line 18            cost     1, benefit      625.0, efficiency      625.0 (+1 instructions)
-    Loop Unrolling: unroll loop at line 24                       cost   487, benefit   123750.0, efficiency      254.1
+  * Replicate loop condition at line 18:5                        cost     1, benefit      625.0, efficiency      625.0 (+1 instructions)
+    Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency      254.1
 
 Pass 1: speed optimization selection (cost limit 964):
-  * Loop Unrolling: unroll loop at line 24                       cost   487, benefit   123750.0, efficiency      254.1 (+485 instructions)
+  * Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency      254.1 (+485 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
  
@@ -281,7 +281,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 inst
     53 label __label20
     54 print 97
 
-Modifications by Loop Optimization: replicate condition at line 17 (+1 instructions):
+Modifications by Replicate loop condition at line 17:5 (+1 instructions):
  
      7 label __label5
      8 op mod __tmp1 __fn0_n 5
@@ -307,7 +307,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     10 label __label26
     11 op div __fn0_n __fn0_n 5
 
-Modifications by Loop Optimization: replicate condition at line 18 (+1 instructions):
+Modifications by Replicate loop condition at line 18:5 (+1 instructions):
  
     16 label __label8
     17 op mod __tmp4 __fn0_n 2
@@ -322,7 +322,7 @@ Modifications by Loop Optimization: replicate condition at line 18 (+1 instructi
     25 jump __label11 greaterThanEq __fn0_n 2
     26 set __tmp0 0
 
-Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
+Modifications by Unroll loop at line 24:5 (+587 instructions):
  
     28 label __label11
     29 label __label12

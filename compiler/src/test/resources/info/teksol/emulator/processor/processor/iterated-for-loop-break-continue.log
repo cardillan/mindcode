@@ -11,7 +11,7 @@
     33 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 971):
-  * Loop Optimization: replicate condition at line 2             cost     7, benefit       25.0, efficiency        3.6 (+7 instructions)
+  * Replicate loop condition at line 2:1                         cost     7, benefit       25.0, efficiency        3.6 (+7 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -151,7 +151,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     28 jump __label3 always
     29 label __label10
 
-Modifications by Loop Optimization: replicate condition at line 2 (+7 instructions):
+Modifications by Replicate loop condition at line 2:1 (+7 instructions):
  
     10 call __label0 __fn0retval
     11 gotolabel __label5 __fn0

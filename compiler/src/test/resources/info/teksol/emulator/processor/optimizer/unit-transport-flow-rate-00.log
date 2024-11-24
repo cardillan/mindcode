@@ -11,11 +11,11 @@
     94 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 916):
-  * Loop Optimization: replicate condition at line 17            cost     5, benefit       25.0, efficiency        5.0 (+5 instructions)
-    Loop Optimization: replicate condition at line 38            cost     8, benefit       25.0, efficiency        3.1
+  * Replicate loop condition at line 17:1                        cost     5, benefit       25.0, efficiency        5.0 (+5 instructions)
+    Replicate loop condition at line 38:1                        cost     8, benefit       25.0, efficiency        3.1
 
 Pass 1: speed optimization selection (cost limit 911):
-  * Loop Optimization: replicate condition at line 38            cost     8, benefit       25.0, efficiency        3.1 (+8 instructions)
+  * Replicate loop condition at line 38:1                        cost     8, benefit       25.0, efficiency        3.1 (+8 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -318,7 +318,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     94 label __label4
     95 jump __label3 always
 
-Modifications by Loop Optimization: replicate condition at line 17 (+5 instructions):
+Modifications by Replicate loop condition at line 17:1 (+5 instructions):
  
      8 op equal __tmp4 BANK null
      9 op or __tmp5 __tmp3 __tmp4
@@ -371,7 +371,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     23 jump __label14 notEqual __tmp5 false
     24 label __label2
 
-Modifications by Loop Optimization: replicate condition at line 38 (+8 instructions):
+Modifications by Replicate loop condition at line 38:1 (+8 instructions):
  
     40 op strictEqual __tmp16 SESSION_KEY __tmp15
     41 op land __tmp17 __tmp14 __tmp16

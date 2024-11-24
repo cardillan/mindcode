@@ -11,7 +11,7 @@
     77 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 955):
-  * Loop Unrolling: unroll iteration loop at line 2              cost    57, benefit       20.0, efficiency        0.4 (+48 instructions)
+  * Unroll iteration loop at line 2:1                            cost    57, benefit       20.0, efficiency        0.4 (+48 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -147,7 +147,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     53 jump __label3 always
     54 label __label18
 
-Modifications by Loop Unrolling: unroll iteration loop at line 2 (+52 instructions):
+Modifications by Unroll iteration loop at line 2:1 (+52 instructions):
 -    * setaddr __tmp0 __label4
 -    * set i 1
 -    * jump __label2 always

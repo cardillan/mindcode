@@ -26,4 +26,4 @@ target/
 
 ### Mac OS ###
 .DS_Store
-/data/results-*.txt
+/data/results*.txt

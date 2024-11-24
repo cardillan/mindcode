@@ -13,11 +13,11 @@
      4 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 980):
-  * Loop Unrolling: unroll loop at line 3                        cost     0, benefit      200.0, efficiency   Infinity (-5 instructions)
-    Loop Unrolling: unroll loop at line 3                        cost     4, benefit      400.0, efficiency      100.0
+  * Unroll loop at line 3:5                                      cost     0, benefit      200.0, efficiency   Infinity (-5 instructions)
+    Unroll loop at line 3:5                                      cost     4, benefit      400.0, efficiency      100.0
 
 Pass 1: speed optimization selection (cost limit 985):
-  * Loop Unrolling: unroll loop at line 3                        cost     4, benefit      400.0, efficiency      100.0 (-5 instructions)
+  * Unroll loop at line 3:5                                      cost     4, benefit      400.0, efficiency      100.0 (-5 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  
@@ -207,7 +207,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * print __tmp7
     33 end
 
-Modifications by Loop Unrolling: unroll loop at line 3 (+5 instructions):
+Modifications by Unroll loop at line 3:5 (+5 instructions):
      0 label __label0
      1 set __fn0_c 0
 -    * set __fn0_i 0
@@ -310,7 +310,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     11 print 6
     12 jump __label1 always
 
-Modifications by Loop Unrolling: unroll loop at line 3 (+13 instructions):
+Modifications by Unroll loop at line 3:5 (+13 instructions):
  
     13 label __label1
     14 label __label5

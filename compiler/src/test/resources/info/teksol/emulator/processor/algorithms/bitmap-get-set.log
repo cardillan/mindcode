@@ -12,11 +12,11 @@
    185 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 975):
-  * Loop Unrolling: unroll loop at line 13                       cost    46, benefit      400.0, efficiency        8.7 (+38 instructions)
-    Loop Unrolling: unroll loop at line 17                       cost   132, benefit      800.0, efficiency        6.1
+  * Unroll loop at line 13:1                                     cost    46, benefit      400.0, efficiency        8.7 (+38 instructions)
+    Unroll loop at line 17:1                                     cost   132, benefit      800.0, efficiency        6.1
 
 Pass 1: speed optimization selection (cost limit 937):
-  * Loop Unrolling: unroll loop at line 17                       cost   132, benefit      800.0, efficiency        6.1 (+129 instructions)
+  * Unroll loop at line 17:1                                     cost   132, benefit      800.0, efficiency        6.1 (+129 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -146,7 +146,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     35 op add i i 1
     36 jump __label13 lessThan i 16
 
-Modifications by Loop Unrolling: unroll loop at line 13 (+55 instructions):
+Modifications by Unroll loop at line 13:1 (+55 instructions):
      0 set BITS 32
      1 set BITMAP bank1
 -    * set i 0
@@ -493,7 +493,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     84 set i 0
     85 label __label5
 
-Modifications by Loop Unrolling: unroll loop at line 17 (+149 instructions):
+Modifications by Unroll loop at line 17:1 (+149 instructions):
  
     81 label __label45
     82 label __label46

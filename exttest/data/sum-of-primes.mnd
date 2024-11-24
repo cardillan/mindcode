@@ -1,0 +1,58 @@
+// How many bits per variable are stored
+// Cannot use all 64 because of the double <--> long conversions
+const MOD = 48;
+param BITMAP = bank1;
+
+def setBit(bitIndex)
+  BITMAP[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
+end;
+
+def getBit(bitIndex)
+  BITMAP[bitIndex \ MOD] & (1 << (bitIndex % MOD));
+end;
+
+def testAndSetMultiples(n, maximum)
+    if result = !getBit(n \ 2) then
+        max = maximum \ 2;
+        for i = n * n \ 2 ; i <= max ; i += n do
+            setBit(i);
+        end;
+    end;
+    result;
+end;
+
+def sumPrimesUpTo(maximum)
+    sum = 2 + 3;
+    i = 5;
+    sqrtMax = ceil(sqrt(maximum));
+
+    while i <= sqrtMax do
+        if testAndSetMultiples(i, maximum) then
+            sum += i;
+        end;
+        i += 2;
+        if testAndSetMultiples(i, maximum) then
+            sum += i;
+        end;
+        i += 4;
+    end;
+
+    while i <= maximum do
+        if !getBit(i \ 2) then
+            sum += i;
+        end;
+        i += 2;
+        if !getBit(i \ 2) then
+            if i <= maximum then
+                sum += i;
+            end;
+        end;
+        i += 4;
+    end;
+
+    sum;
+end;
+
+assertEquals(21536, sumPrimesUpTo(500), "sum of primes up to 500");
+
+stopProcessor();

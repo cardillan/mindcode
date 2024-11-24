@@ -78,6 +78,10 @@ public class MindcodeCompiler implements Compiler<String> {
         messageConsumer.accept(ToolMessage.debug(message));
     }
 
+    public CompilerProfile getProfile() {
+        return profile;
+    }
+
     @Override
     public CompilerOutput<String> compile() {
         return compile(inputFiles.getInputFiles());

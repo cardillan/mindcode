@@ -1,0 +1,32 @@
+package info.teksol.mindcode.exttest;
+
+import java.io.PrintWriter;
+
+public class ScreeningTestProgress extends AbstractTestProgress {
+    private final int tests;
+
+    public ScreeningTestProgress(Configuration configuration) {
+        tests = configuration.configurations().size();
+    }
+
+    @Override
+    public boolean finished() {
+        return finishedCount.get() >= tests;
+    }
+
+    @Override
+    public void updateStatistics(ErrorResult errorResult) {
+    }
+
+    @Override
+    public void printProgress(boolean finished) {
+    }
+
+    @Override
+    public void printFinalMessage(PrintWriter writer) {
+    }
+
+    @Override
+    public void printStatistics(PrintWriter writer) {
+    }
+}

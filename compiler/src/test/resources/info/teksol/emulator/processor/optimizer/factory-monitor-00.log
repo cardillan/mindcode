@@ -15,7 +15,7 @@
    356 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 621):
-  * Loop Optimization: replicate condition at line 160           cost     1, benefit       25.0, efficiency       25.0 (-5 instructions)
+  * Replicate loop condition at line 160:1                       cost     1, benefit       25.0, efficiency       25.0 (-5 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1755,7 +1755,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    424 label __label76
    425 label __label74
 
-Modifications by Loop Optimization: replicate condition at line 160 (+1 instructions):
+Modifications by Replicate loop condition at line 160:1 (+1 instructions):
  
    281 label __label49
    282 sensor __tmp86 SWITCH @enabled

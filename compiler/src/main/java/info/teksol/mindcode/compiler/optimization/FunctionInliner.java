@@ -150,7 +150,7 @@ class FunctionInliner extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": inline function " + astContext.function().getName();
+            return "Inline function '" + astContext.function().getName() + "' defined at " + astContext.node().inputPosition().formatForLog();
         }
     }
 
@@ -227,7 +227,7 @@ class FunctionInliner extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": inline function call at line " + astContext.node().inputPosition().line();
+            return "Inline function call at " + astContext.node().inputPosition().formatForLog();
         }
     }
 }
