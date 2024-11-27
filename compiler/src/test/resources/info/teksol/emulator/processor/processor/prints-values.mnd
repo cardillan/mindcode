@@ -1,0 +1,20 @@
+param a = 1;
+param b = 0;
+param p = @coal;
+
+assertPrints("Hello",       print("Hello"),             "prints Hello");
+assertPrints("10",          print(10),                  "prints 10");
+assertPrints("5.5",         print(5.5),                 "prints 5.5");
+assertPrints("bank",        print(bank1),               "prints bank");
+assertPrints("memory-bank", print(bank1.@type),         "prints memory-bank");
+assertPrints("null",        print(null),                "prints null");
+assertPrints("1",           print(true),                "prints true");
+assertPrints("0",           print(false),               "prints false");
+assertPrints("null",        print(a / b),               "prints 1 / 0");
+assertPrints("5",           print(p.@id),               "prints @coal.@id");
+assertPrints("0",           print(packcolor(1,1,1,1)),  "prints packcolor");
+
+x = y = @counter;
+assertEquals(x, y, "chained assignments");
+
+stopProcessor();

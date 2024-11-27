@@ -53,4 +53,5 @@ def sumPrimesUpTo(maximum)
     sum;
 end;
 
-print(sumPrimesUpTo(500));
+assertEquals(21536, sumPrimesUpTo(500), "sumPrimesUpTo(500)");
+stopProcessor();

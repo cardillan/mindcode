@@ -20,5 +20,6 @@ while true do
     end;
 end;
 
-expect(1533776805);
-actual(hn);
+assertEquals(1533776805, hn, "Project Euler 45");
+stopProcessor();
+

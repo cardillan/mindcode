@@ -5,8 +5,8 @@ threads: 24
 
 # Name of the section containing list of tests to execute
 # Several sections can be present in the config file, the active one is selected here
-test-suite: single-source
-#test-suite: all-sources
+#test-suite: single-source
+test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
@@ -62,79 +62,119 @@ defaults:
   temp-variables-elimination: [ none, basic ]
   unreachable-code-elimination: [ none, basic, advanced ]
 
+# Default configuration for run tests
+# When different from "default", it needs to be explicitly specified
+run-test:
+  # Number of test cases to execute
+  samples: 500
+
+  # When number of failures encountered while executing a test exceeds the given value, the test is stopped
+  # Prevents creation of indiscriminately large output files when too may tests fail
+  failure-limit: 500
+
+  # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
+  run: true
+
+  # List of goal settings to use
+  goal: [ speed, size ]
+
+  # List of optimization levels for each given optimization
+  data-flow-optimization: [ none, basic, advanced, experimental ]
+  dead-code-elimination: [ none, basic, advanced ]
+  expression-optimization: [ none, basic, advanced ]
+  function-inlining: [ none, basic, advanced ]
+  if-expression-optimization: [ none, basic, experimental ]
+  jump-normalization: [ none, basic ]
+  jump-optimization: [ none, basic ]
+  jump-straightening: [ none, basic ]
+  jump-threading: [ none, basic, advanced ]
+  loop-hoisting: [ none, basic, advanced ]
+  loop-optimization: [ none, basic ]
+  loop-unrolling: [ none, basic, advanced ]
+  return-optimization: [ none, basic ]
+  single-step-elimination: [ none, basic, advanced, experimental ]
+  temp-variables-elimination: [ none, basic ]
+  unreachable-code-elimination: [ none, basic, advanced ]
+  # There are no case expressions or print statements in the test file
+  # By excluding these optimizations, the total number of cases gets significantly reduced
+  # The optimizations themselves may run a very little bit faster as well.
+  case-expression-optimization: [ none ]
+  case-switching: [ none ]
+  print-merging: [ none ]
+  stack-optimization: [ none ]
+
 
 # LIST OF SOURCES
 
 # A single file to test
 # Unspecified settings are inherited from default
 single-source:
-  - source: sum-of-primes.mnd
-    samples: 20000
-    run: true
-    # There are no case expressions, recursive functions or print statements in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
-
+  - source: "C:\Home\golem\mindcode\breakout.mnd"
+    samples: 1200
 
 
 # List of all files to test
 all-sources:
   - source: math.mnd
     samples: 200
-    run: true
-    # There are no case expressions, recursive functions or print statements in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
+    # Different default configuration
+    defaults: run-test
 
   - source: printing.mnd
     samples: 400
-    run: true
-    # There are no case expressions or recursive functions in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
+    # Different default configuration
+    defaults: run-test
+    # Overriding settings from the default configuration
+    print-merging: [ none, basic, advanced, experimental ]
 
   - source: quick-sort.mnd
     samples: 5000
-    run: true
-    # There are no case expressions or print statements in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    print-merging: [ none ]
+    defaults: run-test
+    stack-optimization: [ none, basic ]
+
+  - source: heap-sort.mnd
+    samples: 5000
+    defaults: run-test
 
   - source: bubble-sort.mnd
     samples: 2000
-    run: true
-    # There are no case expressions, recursive functions or print statements in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
+    defaults: run-test
 
   - source: sum-of-primes.mnd
     samples: 2000
-    run: true
-    # There are no case expressions, recursive functions or print statements in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-04.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-18.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-26.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-28.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-31.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-31b.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-45.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-97.mnd"
+    samples: 500
+    defaults: run-test
 
   - source: impact-reactor-logic.mnd
     samples: 125

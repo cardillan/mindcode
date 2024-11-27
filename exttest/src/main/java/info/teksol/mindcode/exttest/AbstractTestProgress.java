@@ -38,7 +38,6 @@ public abstract class AbstractTestProgress implements TestProgress {
         finishedCount.incrementAndGet();
     }
 
-
     @Override
     public void processResults(PrintWriter writer) {
         ErrorResult errorResult;

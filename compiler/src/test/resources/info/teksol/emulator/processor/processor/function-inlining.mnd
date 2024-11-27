@@ -4,7 +4,7 @@ def foo(n)
     for i in 0 ... 50 do
         sum += n + r;
     end;
-    print(floor(sum - 50 * r + 0.5));
+    print(floor(sum - 50 * r + 0.5), "|");
 end;
 
 def bar(s)
@@ -14,7 +14,15 @@ def bar(s)
     foo(40 + s);
 end;
 
-bar(1);
-bar(2);
-bar(3);
-bar(4);
+def test()
+    bar(1);
+    bar(2);
+    bar(3);
+    bar(4);
+end;
+
+assertPrints(
+    "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|",
+    test(),
+    "function-inlining");
+stopProcessor();

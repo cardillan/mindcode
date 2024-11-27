@@ -30,6 +30,7 @@ def baz(n, in out a, in out b)
     print(a, b);
 end;
 
-print("A"); foo(3, in 0, in 0);
-print("B"); bar(3, in 0, in 0);
-print("C"); baz(3, in 0, in 0);
+assertPrints("0001111223221211", foo(3, in 0, in 0), "foo");
+assertPrints("0001111223333444", bar(3, in 0, in 0), "bar");
+assertPrints("0001111223221211", baz(3, in 0, in 0), "baz");
+stopProcessor();

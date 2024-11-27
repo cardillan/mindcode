@@ -9,4 +9,4 @@ Mlog can be decompiled by both the [command line tool](TOOLS-CMDLINE.markdown) a
 
 ---
 
-[« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Testing framework »](TOOLS-TESTING-FRAMEWORK.markdown)
+[« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Testing framework »](TOOLS-TESTING-TOOL.markdown)

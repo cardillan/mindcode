@@ -1,6 +1,12 @@
 noinline def d(n) n; end;
-for i in d(1) ... d(10) do
-    if i == 3 then continue; end;
-    print(i);
-    if i == d(5) then break; end;
+
+def test()
+    for i in d(1) ... d(10) do
+        if i == 3 then continue; end;
+        print(i, "|");
+        if i == d(5) then break; end;
+    end;
 end;
+
+assertPrints("1|2|4|5|", test(), "iterated-for-loop-break-continue");
+stopProcessor();

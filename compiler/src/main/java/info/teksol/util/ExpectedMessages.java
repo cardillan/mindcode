@@ -1,8 +1,8 @@
 package info.teksol.util;
 
 import com.ibm.icu.impl.Assert;
-import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
 import org.intellij.lang.annotations.Language;
 
@@ -333,7 +333,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
     private record LevelMessageMatcher(MessageLevel level) implements MessageMatcher {
         @Override
         public boolean matches(MindcodeMessage msg) {
-            return level.strongerOrEqual((msg.level()));
+            return level.weakerOrEqual((msg.level()));
         }
 
         @Override

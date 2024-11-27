@@ -1,15 +1,15 @@
-# Testing framework
+# Testing tool
 
-## Extended testing tool
+## Extended testing
 
 Mindcode comes with a set of optimizers and other settings that can be independently set, leading to more than half a billion of possible configurations that can be used to compile the code. Only a handful of typical configurations are tested each time Mindcode is built, leaving all other possible configurations untested.
 
-While in an actual usage mostly just the typical configurations - which are tested - get used, sometimes a specific source code construct may result in blocking some of the possible optimizations, causing a relatively rare code structure being fed into subsequent optimizations. This may uncover lurking bugs.
+While typically just a handful of possible configurations, which get tested during each build, are used, sometimes a particular optimization is not feasible, causing a relatively rare code structure being fed into subsequent optimizations. This may uncover additional bugs.
 
-It therefore makes a lot of sense to test non-typical configurations. Furthermore, the _intention_ is for every possible configuration to be correctly handled by Mindcode. To help achieve this goal, a separate testing tool is provided.
+It therefore makes a lot of sense to test non-typical configurations. Furthermore, the _intention_ is for every possible compiler/optimizer configuration to be correctly handled by Mindcode. To help achieve this goal, a separate testing tool is provided.
 
 > [!TIP]
-> It is not expected that regular Mindcode users will use the testing tool. The tool is intended for Mindcode framework developers, and possibly for interested users that might want to extensively test their own code for added safety.
+> It is not expected that regular Mindcode users will use the testing tool. The tool is intended for Mindcode language developers, and possibly for interested users that might want to extensively test their own code for added safety.
 
 ### Setting up the testing tool
 
@@ -25,7 +25,7 @@ java -jar mindcode-exttest.jar
 
 ### Testing tool configuration
 
-Configuration for the testing tool must be stred in a `settings.yaml` file in the current directory. An example configuration file is here:
+Configuration for the testing tool must be stored in a `settings.yaml` file in the current directory. An example configuration file is here:
 
 ```yaml
 # TESTING TOOL SETTINGS
@@ -65,14 +65,14 @@ defaults:
   failure-limit: 500
 
   # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
-  run: false
+  run: true
 
   # List of goal settings to use
   goal: [ speed, size ]
 
   # List of optimization levels for each given optimization
-  case-expression-optimization: [ none, basic ]
-  case-switching: [ none, basic ]
+  case-expression-optimization: [ none ]
+  case-switching: [ none ]
   data-flow-optimization: [ none, basic, advanced, experimental ]
   dead-code-elimination: [ none, basic, advanced ]
   expression-optimization: [ none, basic, advanced ]
@@ -85,10 +85,10 @@ defaults:
   loop-hoisting: [ none, basic, advanced ]
   loop-optimization: [ none, basic ]
   loop-unrolling: [ none, basic, advanced ]
-  print-merging: [ none, basic, advanced, experimental ]
+  print-merging: [ none ]
   return-optimization: [ none, basic ]
   single-step-elimination: [ none, basic, advanced, experimental ]
-  stack-optimization: [ none, basic ]
+  stack-optimization: [ none ]
   temp-variables-elimination: [ none, basic ]
   unreachable-code-elimination: [ none, basic, advanced ]
 
@@ -100,84 +100,57 @@ defaults:
 single-source:
   - source: sum-of-primes.mnd
     samples: 20000
-    run: true
-    # There are no case expressions, recursive functions or print statements in the test file
-    # By excluding these optimizations, the total number of cases gets significantly reduced
-    # The optimizations themselves may run a very little bit faster as well.
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
-
 
 
 # List of all files to test
 all-sources:
   - source: math.mnd
     samples: 200
-    run: true
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
 
   - source: printing.mnd
     samples: 400
-    run: true
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
+    print-merging: [ none, basic, advanced, experimental ]
 
   - source: quick-sort.mnd
     samples: 5000
-    run: true
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    print-merging: [ none ]
+    stack-optimization: [ none, basic ]
 
   - source: bubble-sort.mnd
     samples: 2000
-    run: true
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
 
   - source: sum-of-primes.mnd
     samples: 2000
-    run: true
-    case-expression-optimization: [ none ]
-    case-switching: [ none ]
-    stack-optimization: [ none ]
-    print-merging: [ none ]
 
   - source: impact-reactor-logic.mnd
     samples: 125
+    run: false
 ```
+
+A slightly more complex configuration is available [in the repository](https://github.com/cardillan/mindcode/tree/main/exttest/data/settings.yaml).
 
 ### Preparing a code for testing
 
-A code to be tested by the testing tool must be stored in a standalone file. The file might be tested just by compiling and optimizing it with different settings, or by compiling, optimizing and running it. In both cases, a test will fail when the code doesn't compile or when the compiler/optimizer produces any warnings; therefore it is crucial that no warnings are present when the code is compiled with typical settings (e.g. advanced optimization level for all optimizers).
+A code to be tested by the testing tool must be stored in a standalone file. The test may consist of compiling and optimizing the code with different settings, or of compiling, optimizing and running it. In both cases, a test will fail when the code doesn't compile or when the compiler or optimizer produces any warnings; therefore it is crucial that no warnings are present when the code is compiled with typical settings (e.g. advanced optimization level for all optimizers).
 
-Then the code is compiled, but not run, only bugs that result in additional warnings or compilation crashes will be detected. While a lot of bugs in the past did result in an unexpected warning or compilation failure, obviously there might be bugs that result in faulty code with no additional errors or warnings present. These bugs can be caught by running the code and comparing the produced output with expected value(s). These checks are achieved through the use of `assertEquals` and `assertPrints` functions (see [unit testing](#unit-testing-support)). On top of that, it is also expected that the execution won't fail on any of the [irregular situations](TOOLS-PROCESSOR-EMULATOR.markdown#irregular-situation-handling). A test can be configured to ignore a particular irregular execution by clearing corresponding [execution flag(s)](TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) through the `#set` directives. 
+When the code is compiled, but not run, only bugs that result in additional warnings or compilation crashes will be detected. While a lot of bugs in the past did result in an unexpected warning or compilation failure, obviously there might be bugs that result in faulty code with no additional errors or warnings present. These bugs can be caught by running the code and comparing the produced output to the expected value(s). These checks are achieved through the use of `assertEquals` and `assertPrints` functions (see [unit testing](#unit-testing-support)). On top of that, it is also expected that the execution won't fail on any of the [irregular situations](TOOLS-PROCESSOR-EMULATOR.markdown#irregular-situation-handling). A test can be configured to ignore a particular irregular execution by clearing corresponding [execution flag(s)](TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) through the `#set` directives. 
 
-The code to be tested should therefore conform to these requirements:
+The code to be tested should conform to these requirements:
 
-* Compile without errors or warnings in typical settings.
-* Avoid explicitly setting any optimization levels or code generation goal through the `#set` directives (these settings would override configurations provided by the testing tool).
- * If a specific optimization setting is required for some reason, it should be set up in the testing tool configuration.
+* Compile without errors or warnings in typical settings (see above).
+* Avoid explicitly setting any optimization levels or code generation goal through the `#set` directives (these settings would override configurations set up by the testing tool).
+  * If a specific optimization setting is required for some reason, it should be set up in the testing tool configuration.
 * If the code is meant to be run by the test tool:  
   * Include at least one assertion (`assertEquals` or `assertPrints`).
   * Use the `stopProcessor()` function to stop the execution of the code after all assertions have been run (some optimization configurations might remove the `end` instructions or replace them with jumps to the front of the code, preventing the processor emulator to stop the execution after running the code just once).
   * Use processor emulator flags if necessary to avoid errors when running the code.
 
-### Handling failures
+### Testing failures
 
-When some tests fail, try to figure out whether the problem was caused by an incorrect configuration. When the reason isn't apparent, please report the bug [by creating an issue](https://github.com/cardillan/mindcode/issues/new). Include the exact source code and the `settings.yaml` file that produced the error.    
+When a test produces a failure, it is recorded in the results file for current test (the name of the results file is `result-<source-file-name>.mnd`). When encountering a test failure, please report the bug [by creating an issue](https://github.com/cardillan/mindcode/issues/new). Include the exact source code and the `settings.yaml` file that produced the error.    
 
 ## Unit testing support
 
-Mindcode currently provides a limited support for [unit testing](https://en.wikipedia.org/wiki/Unit_testing), in the language itself and in the processor emulator. Unit testing won't run in Mindustry Logic processors.
+Mindcode currently provides a limited support for [unit testing](https://en.wikipedia.org/wiki/Unit_testing), in the language itself and in the processor emulator. Unit testing code is not meant to be run in Mindustry Logic processors.
 
 The Mindcode compiler supports two functions which generate _assertions_. Assertions are evaluated at runtime by the processor emulator, and the result of the evaluation is reported. Failed assertions are reported as errors.
 

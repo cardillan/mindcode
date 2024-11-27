@@ -1,4 +1,4 @@
-    97 instructions before optimizations.
+    98 instructions before optimizations.
     11 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
     13 instructions eliminated by Dead Code Elimination (4 iterations).
@@ -10,10 +10,10 @@
      3 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
     10 instructions eliminated by Jump Straightening (3 iterations).
-    60 instructions after optimizations.
+    61 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 942):
-  * Convert case at line 16:5                                    cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
+Pass 1: speed optimization selection (cost limit 941):
+  * Convert case at line 27:5                                    cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -578,10 +578,10 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 -    * jump __label0 always
 +   78 jump __label31 lessThanEq i 100
     79 label __label2
-    80 print S0
-    81 print S1
+    80 assertequals 11 S0 "Unexpected value of S0"
+    81 assertequals 21 S1 "Unexpected value of S0"
 
-Modifications by Convert case at line 16:5 (+3 instructions):
+Modifications by Convert case at line 27:5 (+3 instructions):
  
     17 label __label32
     18 op mod __tmp2 __fn0_n 10
@@ -718,9 +718,9 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1:
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    92 print S7
-    93 print S8
-    94 print S9
+    93 assertequals 20 S8 "Unexpected value of S0"
+    94 assertequals 20 S9 "Unexpected value of S0"
+    95 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -800,13 +800,14 @@ jump __label32 greaterThan __fn0_n 0
 label __label7
 op add i i 1
 jump __label31 lessThanEq i 100
-print S0
-print S1
-print S2
-print S3
-print S4
-print S5
-print S6
-print S7
-print S8
-print S9
+assertequals 11 S0 "Unexpected value of S0"
+assertequals 21 S1 "Unexpected value of S0"
+assertequals 20 S2 "Unexpected value of S0"
+assertequals 20 S3 "Unexpected value of S0"
+assertequals 20 S4 "Unexpected value of S0"
+assertequals 20 S5 "Unexpected value of S0"
+assertequals 20 S6 "Unexpected value of S0"
+assertequals 20 S7 "Unexpected value of S0"
+assertequals 20 S8 "Unexpected value of S0"
+assertequals 20 S9 "Unexpected value of S0"
+stop

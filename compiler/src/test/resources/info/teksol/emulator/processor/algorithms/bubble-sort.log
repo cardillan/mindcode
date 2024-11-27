@@ -1,4 +1,4 @@
-    38 instructions before optimizations.
+    41 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Jump Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -7,240 +7,243 @@
      6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      2 instructions modified by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
-    23 instructions after optimizations.
+    26 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
-     1 set ARRAY bank2
-     2 set n SIZE
-     3 label __label0
+     2 set FINAL bank3
+     3 set n SIZE
+     4 label __label0
 -    * op sub __tmp0 n 1
 -    * set n __tmp0
-+    4 op sub n n 1
-     5 set sorted true
-     6 set __tmp1 n
-     7 set i 0
++    5 op sub n n 1
+     6 set sorted true
+     7 set __tmp1 n
+     8 set i 0
  
-    12 set __fn0_i i
-    13 set __fn0_j __tmp2
-    14 set __fn0_sorted sorted
+    13 set __fn0_i i
+    14 set __fn0_j __tmp2
+    15 set __fn0_sorted sorted
 -    * read __tmp4 ARRAY __fn0_i
 -    * set __fn0_a __tmp4
 -    * read __tmp5 ARRAY __fn0_j
 -    * set __fn0_b __tmp5
-+   15 read __fn0_a ARRAY __fn0_i
-+   16 read __fn0_b ARRAY __fn0_j
-    17 op greaterThan __tmp6 __fn0_a __fn0_b
-    18 jump __label8 equal __tmp6 false
-    19 write __fn0_b ARRAY __fn0_i
++   16 read __fn0_a ARRAY __fn0_i
++   17 read __fn0_b ARRAY __fn0_j
+    18 op greaterThan __tmp6 __fn0_a __fn0_b
+    19 jump __label8 equal __tmp6 false
+    20 write __fn0_b ARRAY __fn0_i
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
-    14 set __fn0_sorted sorted
-    15 read __fn0_a ARRAY __fn0_i
-    16 read __fn0_b ARRAY __fn0_j
+    15 set __fn0_sorted sorted
+    16 read __fn0_a ARRAY __fn0_i
+    17 read __fn0_b ARRAY __fn0_j
 -    * op greaterThan __tmp6 __fn0_a __fn0_b
 -    * jump __label8 equal __tmp6 false
-+   17 jump __label8 lessThanEq __fn0_a __fn0_b
-    18 write __fn0_b ARRAY __fn0_i
-    19 write __fn0_a ARRAY __fn0_j
-    20 set __tmp7 false
++   18 jump __label8 lessThanEq __fn0_a __fn0_b
+    19 write __fn0_b ARRAY __fn0_i
+    20 write __fn0_a ARRAY __fn0_j
+    21 set __tmp7 false
  
-    30 jump __label3 always
-    31 label __label5
-    32 label __label1
+    31 jump __label3 always
+    32 label __label5
+    33 label __label1
 -    * op equal __tmp8 sorted false
 -    * jump __label0 notEqual __tmp8 false
-+   33 jump __label0 equal sorted false
-    34 label __label2
-    35 set __tmp9 SIZE
-    36 set i 0
++   34 jump __label0 equal sorted false
+    35 label __label2
+    36 set __tmp9 SIZE
+    37 set i 0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     6 set __tmp1 n
-     7 set i 0
-     8 label __label3
+     7 set __tmp1 n
+     8 set i 0
+     9 label __label3
 -    * jump __label5 greaterThanEq i __tmp1
-+    9 jump __label5 greaterThanEq i n
-    10 op add __tmp2 i 1
-    11 label __label6
-    12 set __fn0_i i
-    13 set __fn0_j __tmp2
-    14 set __fn0_sorted sorted
++   10 jump __label5 greaterThanEq i n
+    11 op add __tmp2 i 1
+    12 label __label6
+    13 set __fn0_i i
+    14 set __fn0_j __tmp2
+    15 set __fn0_sorted sorted
 -    * read __fn0_a ARRAY __fn0_i
 -    * read __fn0_b ARRAY __fn0_j
-+   15 read __fn0_a ARRAY i
-+   16 read __fn0_b ARRAY __tmp2
-    17 jump __label8 lessThanEq __fn0_a __fn0_b
++   16 read __fn0_a ARRAY i
++   17 read __fn0_b ARRAY __tmp2
+    18 jump __label8 lessThanEq __fn0_a __fn0_b
 -    * write __fn0_b ARRAY __fn0_i
 -    * write __fn0_a ARRAY __fn0_j
-+   18 write __fn0_b ARRAY i
-+   19 write __fn0_a ARRAY __tmp2
-    20 set __tmp7 false
-    21 jump __label9 always
-    22 label __label8
++   19 write __fn0_b ARRAY i
++   20 write __fn0_a ARRAY __tmp2
+    21 set __tmp7 false
+    22 jump __label9 always
+    23 label __label8
 -    * set __tmp7 __fn0_sorted
-+   23 set __tmp7 sorted
-    24 label __label9
-    25 set __tmp3 __tmp7
-    26 label __label7
++   24 set __tmp7 sorted
+    25 label __label9
+    26 set __tmp3 __tmp7
+    27 label __label7
 -    * set sorted __tmp3
-+   27 set sorted __tmp7
-    28 label __label4
-    29 op add i i 1
-    30 jump __label3 always
++   28 set sorted __tmp7
+    29 label __label4
+    30 op add i i 1
+    31 jump __label3 always
  
-    35 set __tmp9 SIZE
-    36 set i 0
-    37 label __label10
+    36 set __tmp9 SIZE
+    37 set i 0
+    38 label __label10
 -    * jump __label12 greaterThanEq i __tmp9
-+   38 jump __label12 greaterThanEq i SIZE
-    39 read __tmp10 ARRAY i
-    40 print __tmp10
-    41 label __label11
++   39 jump __label12 greaterThanEq i SIZE
+    40 read __tmp10 FINAL i
+    41 read __tmp11 ARRAY i
+    42 assertequals __tmp10 __tmp11 "unexpected value"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6 instructions):
  
-     3 label __label0
-     4 op sub n n 1
-     5 set sorted true
+     4 label __label0
+     5 op sub n n 1
+     6 set sorted true
 -    * set __tmp1 n
-     6 set i 0
-     7 label __label3
-     8 jump __label5 greaterThanEq i n
-     9 op add __tmp2 i 1
-    10 label __label6
+     7 set i 0
+     8 label __label3
+     9 jump __label5 greaterThanEq i n
+    10 op add __tmp2 i 1
+    11 label __label6
 -    * set __fn0_i i
 -    * set __fn0_j __tmp2
 -    * set __fn0_sorted sorted
-    11 read __fn0_a ARRAY i
-    12 read __fn0_b ARRAY __tmp2
-    13 jump __label8 lessThanEq __fn0_a __fn0_b
- 
-    18 label __label8
-    19 set __tmp7 sorted
-    20 label __label9
--    * set __tmp3 __tmp7
-    21 label __label7
-    22 set sorted __tmp7
-    23 label __label4
- 
-    27 label __label1
-    28 jump __label0 equal sorted false
-    29 label __label2
--    * set __tmp9 SIZE
-    30 set i 0
-    31 label __label10
-    32 jump __label12 greaterThanEq i SIZE
-
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
- 
-     6 set i 0
-     7 label __label3
-     8 jump __label5 greaterThanEq i n
-+    9 label __label13
-    10 op add __tmp2 i 1
-    11 label __label6
     12 read __fn0_a ARRAY i
+    13 read __fn0_b ARRAY __tmp2
+    14 jump __label8 lessThanEq __fn0_a __fn0_b
  
+    19 label __label8
+    20 set __tmp7 sorted
+    21 label __label9
+-    * set __tmp3 __tmp7
+    22 label __label7
     23 set sorted __tmp7
     24 label __label4
-    25 op add i i 1
--    * jump __label3 always
-+   26 jump __label13 lessThan i n
-    27 label __label5
+ 
     28 label __label1
     29 jump __label0 equal sorted false
- 
+    30 label __label2
+-    * set __tmp9 SIZE
     31 set i 0
     32 label __label10
     33 jump __label12 greaterThanEq i SIZE
-+   34 label __label14
-    35 read __tmp10 ARRAY i
-    36 print __tmp10
-    37 label __label11
-    38 op add i i 1
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+     7 set i 0
+     8 label __label3
+     9 jump __label5 greaterThanEq i n
++   10 label __label13
+    11 op add __tmp2 i 1
+    12 label __label6
+    13 read __fn0_a ARRAY i
+ 
+    24 set sorted __tmp7
+    25 label __label4
+    26 op add i i 1
+-    * jump __label3 always
++   27 jump __label13 lessThan i n
+    28 label __label5
+    29 label __label1
+    30 jump __label0 equal sorted false
+ 
+    32 set i 0
+    33 label __label10
+    34 jump __label12 greaterThanEq i SIZE
++   35 label __label14
+    36 read __tmp10 FINAL i
+    37 read __tmp11 ARRAY i
+    38 assertequals __tmp10 __tmp11 "unexpected value"
+    39 label __label11
+    40 op add i i 1
 -    * jump __label10 always
-+   39 jump __label14 lessThan i SIZE
-    40 label __label12
-    41 end
++   41 jump __label14 lessThan i SIZE
+    42 label __label12
+    43 stop
+    44 end
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
-     9 label __label13
-    10 op add __tmp2 i 1
-    11 label __label6
-+   12 set sorted sorted
-    13 read __fn0_a ARRAY i
-    14 read __fn0_b ARRAY __tmp2
+    10 label __label13
+    11 op add __tmp2 i 1
+    12 label __label6
++   13 set sorted sorted
+    14 read __fn0_a ARRAY i
+    15 read __fn0_b ARRAY __tmp2
 -    * jump __label8 lessThanEq __fn0_a __fn0_b
-+   15 jump __label9 lessThanEq __fn0_a __fn0_b
-    16 write __fn0_b ARRAY i
-    17 write __fn0_a ARRAY __tmp2
++   16 jump __label9 lessThanEq __fn0_a __fn0_b
+    17 write __fn0_b ARRAY i
+    18 write __fn0_a ARRAY __tmp2
 -    * set __tmp7 false
-+   18 set sorted false
-    19 jump __label9 always
++   19 set sorted false
+    20 jump __label9 always
 -    * label __label8
 -    * set __tmp7 sorted
-    20 label __label9
-    21 label __label7
+    21 label __label9
+    22 label __label7
 -    * set sorted __tmp7
-    22 label __label4
-    23 op add i i 1
-    24 jump __label13 lessThan i n
+    23 label __label4
+    24 op add i i 1
+    25 jump __label13 lessThan i n
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-    16 write __fn0_b ARRAY i
-    17 write __fn0_a ARRAY __tmp2
-    18 set sorted false
+    17 write __fn0_b ARRAY i
+    18 write __fn0_a ARRAY __tmp2
+    19 set sorted false
 -    * jump __label9 always
-    19 label __label9
-    20 label __label7
-    21 label __label4
+    20 label __label9
+    21 label __label7
+    22 label __label4
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
  
-     9 label __label13
-    10 op add __tmp2 i 1
-    11 label __label6
+    10 label __label13
+    11 op add __tmp2 i 1
+    12 label __label6
 -    * set sorted sorted
-    12 read __fn0_a ARRAY i
-    13 read __fn0_b ARRAY __tmp2
-    14 jump __label9 lessThanEq __fn0_a __fn0_b
+    13 read __fn0_a ARRAY i
+    14 read __fn0_b ARRAY __tmp2
+    15 jump __label9 lessThanEq __fn0_a __fn0_b
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-     5 set sorted true
-     6 set i 0
-     7 label __label3
+     6 set sorted true
+     7 set i 0
+     8 label __label3
 -    * jump __label5 greaterThanEq i n
-+    8 jump __label5 greaterThanEq 0 n
-     9 label __label13
-    10 op add __tmp2 i 1
-    11 label __label6
++    9 jump __label5 greaterThanEq 0 n
+    10 label __label13
+    11 op add __tmp2 i 1
+    12 label __label6
  
-    26 label __label2
-    27 set i 0
-    28 label __label10
+    27 label __label2
+    28 set i 0
+    29 label __label10
 -    * jump __label12 greaterThanEq i SIZE
-+   29 jump __label12 greaterThanEq 0 SIZE
-    30 label __label14
-    31 read __tmp10 ARRAY i
-    32 print __tmp10
++   30 jump __label12 greaterThanEq 0 SIZE
+    31 label __label14
+    32 read __tmp10 FINAL i
+    33 read __tmp11 ARRAY i
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    34 op add i i 1
-    35 jump __label14 lessThan i SIZE
-    36 label __label12
+    37 jump __label14 lessThan i SIZE
+    38 label __label12
+    39 stop
 -    * end
 
 Final code before resolving virtual instructions:
 
 set SIZE 64
 set ARRAY bank2
+set FINAL bank3
 set n SIZE
 label __label0
 op sub n n 1
@@ -263,8 +266,10 @@ jump __label0 equal sorted false
 set i 0
 jump __label12 greaterThanEq 0 SIZE
 label __label14
-read __tmp10 ARRAY i
-print __tmp10
+read __tmp10 FINAL i
+read __tmp11 ARRAY i
+assertequals __tmp10 __tmp11 "unexpected value"
 op add i i 1
 jump __label14 lessThan i SIZE
 label __label12
+stop

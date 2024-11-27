@@ -6,8 +6,8 @@ for value in 200, 100, 50, 20, 10, 5, 2, 1 do
     index += 1;
 end;
 
-expect(41);
-actual(ways(20, 1));
+assertEquals(41, ways(20, 1), "Project Euler 31");
+stopProcessor();
 
 def ways(amount, index)
     if amount == 0 then

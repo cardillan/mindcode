@@ -1,20 +1,11 @@
-allocate stack in bank1[0...512];
+param SIZE = 512;
 param ARRAY = bank2;
-param FINAL = bank3;
-
-inline def output(size)
-    for i in 0 .. size do
-        print(ARRAY[i], " ");
-    end;
-    print("\n");
-end;
 
 def up(index)
     while index > 0 do
         parent = (index - 1) \ 2;
         iv = ARRAY[index];
         pv = ARRAY[parent];
-        //print("Parent: ", parent, ", index: ", index, ", pv: ", pv, ", iv: ", iv, "\n");
         if pv < iv then
             ARRAY[index] = pv;
             ARRAY[parent] = iv;
@@ -46,6 +37,15 @@ def down(index)
     end;
 end;
 
+const prime = 987660893;
+counter = 155;
+sum = 0;
+for i in 0 .. SIZE - 1 do
+    sum += counter;
+    ARRAY[i] = counter;
+    counter = (counter + prime) % 10000;
+end;
+
 // Build a heap
 for i in 1 ... SIZE do
     up(i);
@@ -62,7 +62,19 @@ while index > 0 do
     down(index);
 end;
 
-for i in 0 ... SIZE do
-    assertEquals(FINAL[i], ARRAY[i], "unexpected value");
+
+sum2 = 0;
+for i in 0 .. SIZE - 1 do
+    sum2 += ARRAY[i];
 end;
+
+assertEquals(sum, sum2, "Array content modified.");
+
+for i in 1 .. SIZE - 1 do
+    if ARRAY[i] < ARRAY[i - 1] then
+        assertEquals(true, false, "Array not sorted");
+        break;
+    end;
+end;
+
 stopProcessor();

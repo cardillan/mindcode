@@ -13,5 +13,5 @@ end;
 
 result = ((result << count) + 1) % DIGITS;
 
-expect(7075090433);
-actual(result);
+assertEquals(7075090433, result, "Project Euler 97");
+stopProcessor();

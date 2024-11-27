@@ -3,7 +3,18 @@ S0 = S1 = S2 = S3 = S4 = S5 = S6 = S7 = S8 = S9 = 0;
 for i in 1 .. 100 do
    processNumber(i);
 end;
-print(S0, S1, S2, S3, S4, S5, S6, S7, S8, S9);
+
+assertEquals(11, S0, "Unexpected value of S0");
+assertEquals(21, S1, "Unexpected value of S0");
+assertEquals(20, S2, "Unexpected value of S0");
+assertEquals(20, S3, "Unexpected value of S0");
+assertEquals(20, S4, "Unexpected value of S0");
+assertEquals(20, S5, "Unexpected value of S0");
+assertEquals(20, S6, "Unexpected value of S0");
+assertEquals(20, S7, "Unexpected value of S0");
+assertEquals(20, S8, "Unexpected value of S0");
+assertEquals(20, S9, "Unexpected value of S0");
+stopProcessor();
 
 def processNumber(n)
     while n > 0 do

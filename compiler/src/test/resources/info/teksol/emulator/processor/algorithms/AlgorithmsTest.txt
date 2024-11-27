@@ -1,13 +1,10 @@
 Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-bitmap-get-set.mnd:                                2            185      161      87.0%   F7CDD0AAA95E1FA9   8EBB3318A97C8C72
-bitmap-get.mnd:                                    1             16       16     100.0%   7A614E3E9C3B12F5   0502EBCFC8D0832C
-compute-recursive-fibonacci.mnd:                   3             30     2476     100.0%   CF5C94E489C7D400   18694E69719941C2
-compute-sum-of-primes.mnd:                         7            439     1889      99.7%   C92A5FEC4377D2A4   6E998B1CA2061199
-memory-read-write.mnd:                             1              3        3     100.0%   375767A6AB4A20B9   4CA7F7B7EBBD2D04
-recursive-calls.mnd:                               9             93      263     100.0%   53EE445F6955D959   0263FFC8177622FF
-sorting with bubble-sort.mnd:                      1             23    15410     100.0%   534D523FC7E1BCF3   B9F5828CD25FEB24
-sorting with heap-sort.mnd:                        9             50    64044     100.0%   5FD8AEC1AEC63854   1609842A0CF0F652
-sorting with insert-sort.mnd:                      3             23    25933     100.0%   110AA9138813CE30   A5D967B2263DC0A6
-sorting with quick-sort.mnd:                       4             63    47943     100.0%   1E934E1BCA20ABE9   D89D4D8479DC6895
-sorting with select-sort.mnd:                      1             27    35149     100.0%   74DF156C43CDD10F   6A08E73049036484
+compute-recursive-fibonacci.mnd:                   3             31     2476      96.7%   BDE1C81A7769E0CB   911BA1C749B11F99
+compute-sum-of-primes.mnd:                         7            440     1890      99.7%   B6615E97E02F94A9   556FD38D48B23C51
+memory-read-write.mnd:                             1              4        4     100.0%   D9539CC21D8111B7   CB446C6AC6A1C72E
+sorting with bubble-sort.mnd:                      1             26    15476     100.0%   3F0785747966CD6F   B8D2EF61177D5D18
+sorting with heap-sort.mnd:                        9             53    64558     100.0%   0CEFC91051987EFB   DE1EDE549E7E4E7E
+sorting with insert-sort.mnd:                      3             26    26063     100.0%   0AF6F57A5EBA45E2   47A2DFF660E671AF
+sorting with quick-sort.mnd:                       4             66    48456      98.4%   8909AE66C1E5A20F   7340BD390C56E773
+sorting with select-sort.mnd:                      1             30    35279     100.0%   3F4EE1C8DB9B8B18   6629525D13BA3D7E
 storage-display.mnd:                              25            653      824      25.5%   F7D56DB08E60751D   30FF1E42DDF66445

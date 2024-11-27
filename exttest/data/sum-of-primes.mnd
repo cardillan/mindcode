@@ -53,7 +53,6 @@ def sumPrimesUpTo(maximum)
     sum;
 end;
 
-sumPrimesUpTo(500);
-//assertEquals(21536, sumPrimesUpTo(500), "sum of primes up to 500");
+assertEquals(21536, sumPrimesUpTo(500), "sum of primes up to 500");
 
 stopProcessor();

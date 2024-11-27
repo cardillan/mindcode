@@ -1,0 +1,30 @@
+param A = 0;
+
+inline def eval(b)
+    b ? "T" : "F";
+end;
+
+inline def compare(title, a, b, expected)
+    assertPrints(
+        expected,
+        print(eval(a == b), eval(a != b), eval(a === b), eval(a !== b)),
+        title);
+end;
+
+compare("comparison 1",  null,  0,     "TFFT");
+compare("comparison 2",  null,  1,     "FTFT");
+compare("comparison 3",  null,  2,     "FTFT");
+compare("comparison 4",  @coal, 0,     "FTFT");
+compare("comparison 5",  @coal, 1,     "TFFT");
+compare("comparison 6",  @coal, 2,     "FTFT");
+compare("comparison 7",  @coal, @lead, "FTFT");
+compare("comparison 8",  A,     A,     "TFTF");
+compare("comparison 9",  A,     0,     "TFTF");
+compare("comparison 10", A,     1,     "FTFT");
+compare("comparison 11", "A",   0,     "FTFT");
+compare("comparison 12", "A",   1,     "TFFT");
+compare("comparison 13", "A",   2,     "FTFT");
+compare("comparison 14", "A",   "B",   "FTFT");
+compare("comparison 15", "A",   "A",   "TFTF");
+
+stopProcessor();

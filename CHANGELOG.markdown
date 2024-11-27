@@ -2,33 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.7.0 - 2024-11-15
+## 2.7.0 - 2024-11-25
 
 ### Fixed
 
 * Fixed wrong Jump Threading optimization in out-of-line functions ([#177](https://github.com/cardillan/mindcode/issues/107)).
 * Fixed bugs in the Data Flow Optimization:
-  *  The virtual `setaddr` instruction, unused due to the corresponding jump being unreachable, wouldn't be removed from code. This caused errors when referencing a non-existent label.
+  * The virtual `setaddr` instruction, unused due to the corresponding jump being unreachable, wouldn't be removed from code. This caused errors referencing a non-existent label.
   * Data Flow Optimization would sometimes corrupt the expected code structure when removing unneeded instructions, causing bugs or runtime errors during subsequent optimizations. 
   * The entry condition to a loop might be incorrectly evaluated, leading to wrong optimizations of some loops.
   * A variable read in an unreachable part of code might be reported as uninitialized. This might lead to compilation error for compiler-generated uninitialized variables.
 * Fixed the If Expression Optimization mistakenly propagating a jump into the bodies of the if/else statement, causing errors during subsequent optimizations.
 * Fixed the Single Step Elimination occasionally crashing when removing a superfluous jump.
 * Fixed the Loop Unrolling Optimization possibly unrolling incorrect number of iterations on loops with no exit condition.
-* Fixed a bug in the implementation of the `median()` function in the `math` system library.
+* Fixed a bug in the implementation of the `median(x...)` function in the `math` system library.
   
 ### Added
 
-* Added separate [Testing Framework](doc/syntax/TOOLS-TESTING-FRAMEWORK.markdown) command-line tool. The tool allows compiling and running Mindcode source files under various optimization settings, helping to detect bugs in Mindcode.  
+* Added separate [Testing Framework](doc/syntax/TOOLS-TESTING-TOOL.markdown) command-line tool. The tool allows compiling and running Mindcode source files under various optimization settings, helping to detect bugs in Mindcode.  
 
 #### Experimental features
 
-* Added limited [Unit testing support](doc/syntax/TOOLS-TESTING-FRAMEWORK.markdown#unit-testing-support).
+* Added limited [Unit testing support](doc/syntax/TOOLS-TESTING-TOOL.markdown#unit-testing-support).
 
 ### Changed
 
 * Changed automatic generation of Intellij IDEA settings files to only modify the zip files when the contents of the contained files changes.
 * Changed Loop Unrolling Optimization to handle more cases of loop control variable modification on advanced level.
+
+### Miscellaneous
+
+* This release contains a new implementation  
 
 ## 2.6.0 - 2024-11-15
 

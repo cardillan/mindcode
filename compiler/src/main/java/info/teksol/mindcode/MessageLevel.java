@@ -12,6 +12,10 @@ public enum MessageLevel {
         return ordinal() >= other.ordinal();
     }
 
+    public boolean weakerOrEqual(MessageLevel other) {
+        return ordinal() >= other.ordinal();
+    }
+
     MessageLevel() {
         title = name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
     }

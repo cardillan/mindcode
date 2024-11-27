@@ -1,15 +1,15 @@
-    47 instructions before optimizations.
+    43 instructions before optimizations.
      9 instructions eliminated by Temp Variables Elimination.
-     6 instructions eliminated by Dead Code Elimination (4 iterations).
+     4 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (3 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
      1 instructions eliminated by Single Step Elimination (4 iterations).
-    12 instructions eliminated by Data Flow Optimization (4 iterations).
+    10 instructions eliminated by Data Flow Optimization (4 iterations).
      3 instructions updated by JumpThreading.
      2 instructions eliminated by Unreachable Code Elimination.
     14 instructions after optimizations.
 
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
     24 set pn __tmp14
     25 op add __tmp15 p 3
@@ -26,18 +26,6 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
     41 label __label4
     42 label __label1
     43 jump __label0 always
- 
-    45 label __label7
-    46 set __fn0_v 1533776805
-    47 print __fn0_v
--    * set __tmp20 __fn0_v
-    48 label __label8
-    49 label __label9
-    50 set __fn1_v hn
-    51 print __fn1_v
--    * set __tmp21 __fn1_v
-    52 label __label10
-    53 end
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
@@ -161,21 +149,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     14 label __label0
     15 jump __label3 greaterThanEq pn hn
     16 op add pn pn p
- 
-    30 label __label2
-    31 label __label7
-    32 set __fn0_v 1533776805
--    * print __fn0_v
-+   33 print 1533776805
-    34 label __label8
-    35 label __label9
-    36 set __fn1_v hn
--    * print __fn1_v
-+   37 print hn
-    38 label __label10
-    39 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
 -    * set p 165
 -    * set h 143
 -    * op add p 165 1
@@ -192,18 +167,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      3 op add h 572 1
      4 label __label0
      5 jump __label3 greaterThanEq pn hn
- 
-    19 jump __label0 always
-    20 label __label2
-    21 label __label7
--    * set __fn0_v 1533776805
-    22 print 1533776805
-    23 label __label8
-    24 label __label9
--    * set __fn1_v hn
-    25 print hn
-    26 label __label10
-    27 end
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
@@ -235,14 +198,14 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
 -    * label __label1
 -    * jump __label0 always
     14 label __label2
-    15 label __label7
-    16 print 1533776805
+    15 assertequals 1533776805 hn "Project Euler 45"
+    16 stop
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    18 label __label9
-    19 print hn
-    20 label __label10
+    14 label __label2
+    15 assertequals 1533776805 hn "Project Euler 45"
+    16 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -262,5 +225,5 @@ op add hn hn h
 op add h h 4
 jump __label0 always 0 0
 label __label2
-print 1533776805
-print hn
+assertequals 1533776805 hn "Project Euler 45"
+stop

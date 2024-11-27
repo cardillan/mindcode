@@ -18,9 +18,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConfigurationReader {
 
+    private static final Map<String, YamlMapping> cache = new HashMap<>();
+    private static YamlMapping settings;
+
     public static Configuration loadConfiguration(String settingsFileName) {
         try {
-            YamlMapping settings = Yaml.createYamlInput(new File(settingsFileName)).readYamlMapping();
+            settings = Yaml.createYamlInput(new File(settingsFileName)).readYamlMapping();
 
             int threads = integer(settings, settings, "threads", 1);
             String testSuite = string(settings, settings, "test-suite");
@@ -28,13 +31,12 @@ public class ConfigurationReader {
             boolean fullTests = bool(settings, settings, "full-tests");
             int sampleMultiplier = integer(settings, settings, "sample-multiplier", 1);
 
-            YamlMapping defaults = settings.yamlMapping("defaults");
             YamlSequence configs = settings.yamlSequence(testSuite);
 
             Configuration configuration = new Configuration(threads, resultPath, fullTests, sampleMultiplier,
                     new ArrayList<>());
             for (YamlNode node : configs.values()) {
-                parseTestConfiguration(configuration, node.asMapping(), defaults);
+                parseTestConfiguration(configuration, node.asMapping());
             }
 
             if (configuration.configurations().isEmpty()) {
@@ -51,15 +53,20 @@ public class ConfigurationReader {
         return null;
     }
 
+    private static YamlMapping loadDefaults(String section) {
+        return cache.computeIfAbsent(section, settings::yamlMapping);
+    }
+
     private static final AtomicInteger sourceCounter = new AtomicInteger();
-    private static void parseTestConfiguration(Configuration configuration, YamlMapping mapping, YamlMapping defaults) throws IOException {
+    private static void parseTestConfiguration(Configuration configuration, YamlMapping mapping) throws IOException {
+        String defaultSection = string(mapping, mapping, "defaults", "defaults");
+        YamlMapping defaults = loadDefaults(defaultSection);
         String source = string(mapping, defaults, "source", "");
         InputFiles inputFiles = InputFiles.create();
 
         // We pretend the source file is a library to have it parsed just once and cached.
-        // Each source file needs a unique file name
-        // Since libraries are registered by name, we're safe as long as Mindcode doesn't include a library named
-        // "__tmp" lus a number. We will just not do it.
+        // Each source file needs a unique file name. Since libraries are registered by name (no path),
+        // we're safe as long as Mindcode doesn't include a library named "__tmp" plus a number.
         // TODO: Implement a proper caching mechanism for these tests.
         inputFiles.registerLibraryFile(Path.of("__tmp" + sourceCounter.incrementAndGet()),
                 Files.readString(Path.of(source)));

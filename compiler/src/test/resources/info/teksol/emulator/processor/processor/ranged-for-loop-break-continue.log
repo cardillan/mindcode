@@ -1,6 +1,6 @@
-    34 instructions before optimizations.
+    39 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     4 instructions eliminated by Dead Code Elimination (3 iterations).
+     5 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Jump Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
@@ -8,190 +8,200 @@
      1 loops improved by Loop Optimization.
      2 instructions eliminated by Jump Straightening (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
-    21 instructions after optimizations.
+    25 instructions after optimizations.
 
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
  
-    14 op equal __tmp3 i 3
-    15 jump __label6 equal __tmp3 false
-    16 jump __label4 always
--    * set __tmp4 null
-    17 jump __label7 always
-    18 label __label6
--    * set __tmp4 null
-    19 label __label7
-    20 print i
-    21 set __fn0_n 5
+    16 op equal __tmp4 __fn1_i 3
+    17 jump __label8 equal __tmp4 false
+    18 jump __label6 always
+-    * set __tmp5 null
+    19 jump __label9 always
+    20 label __label8
+-    * set __tmp5 null
+    21 label __label9
+    22 print __fn1_i
+    23 print "|"
  
-    26 op equal __tmp6 i __tmp5
-    27 jump __label9 equal __tmp6 false
-    28 jump __label5 always
--    * set __tmp7 null
-    29 jump __label10 always
-    30 label __label9
--    * set __tmp7 null
-    31 label __label10
-    32 label __label4
-    33 op add i i 1
+    29 op equal __tmp7 __fn1_i __tmp6
+    30 jump __label11 equal __tmp7 false
+    31 jump __label7 always
+-    * set __tmp8 null
+    32 jump __label12 always
+    33 label __label11
+-    * set __tmp8 null
+    34 label __label12
+    35 label __label6
+    36 op add __fn1_i __fn1_i 1
+    37 jump __label5 always
+    38 label __label7
+-    * set __tmp0 null
+    39 label __label2
+    40 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
+    41 stop
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-     6 setaddr __fn0retaddr __label2
-     7 call __label0 __fn0retval
-     8 gotolabel __label2 __fn0
--    * set __tmp1 __fn0retval
--    * set __tmp2 __tmp1
-+    9 set __tmp2 __fn0retval
-    10 set i __tmp0
-    11 label __label3
-    12 jump __label5 greaterThanEq i __tmp2
+     8 setaddr __fn0retaddr __label4
+     9 call __label0 __fn0retval
+    10 gotolabel __label4 __fn0
+-    * set __tmp2 __fn0retval
+-    * set __tmp3 __tmp2
++   11 set __tmp3 __fn0retval
+    12 set __fn1_i __tmp1
+    13 label __label5
+    14 jump __label7 greaterThanEq __fn1_i __tmp3
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
-    10 set i __tmp0
-    11 label __label3
-    12 jump __label5 greaterThanEq i __tmp2
--    * op equal __tmp3 i 3
--    * jump __label6 equal __tmp3 false
-+   13 jump __label6 notEqual i 3
-    14 jump __label4 always
-    15 jump __label7 always
-    16 label __label6
+    12 set __fn1_i __tmp1
+    13 label __label5
+    14 jump __label7 greaterThanEq __fn1_i __tmp3
+-    * op equal __tmp4 __fn1_i 3
+-    * jump __label8 equal __tmp4 false
++   15 jump __label8 notEqual __fn1_i 3
+    16 jump __label6 always
+    17 jump __label9 always
+    18 label __label8
  
-    21 call __label0 __fn0retval
-    22 gotolabel __label8 __fn0
-    23 set __tmp5 __fn0retval
--    * op equal __tmp6 i __tmp5
--    * jump __label9 equal __tmp6 false
-+   24 jump __label9 notEqual i __tmp5
-    25 jump __label5 always
-    26 jump __label10 always
-    27 label __label9
+    24 call __label0 __fn0retval
+    25 gotolabel __label10 __fn0
+    26 set __tmp6 __fn0retval
+-    * op equal __tmp7 __fn1_i __tmp6
+-    * jump __label11 equal __tmp7 false
++   27 jump __label11 notEqual __fn1_i __tmp6
+    28 jump __label7 always
+    29 jump __label12 always
+    30 label __label11
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
-    12 jump __label5 greaterThanEq i __tmp2
-    13 jump __label6 notEqual i 3
-    14 jump __label4 always
--    * jump __label7 always
-    15 label __label6
-    16 label __label7
-    17 print i
+    14 jump __label7 greaterThanEq __fn1_i __tmp3
+    15 jump __label8 notEqual __fn1_i 3
+    16 jump __label6 always
+-    * jump __label9 always
+    17 label __label8
+    18 label __label9
+    19 print __fn1_i
  
-    22 set __tmp5 __fn0retval
-    23 jump __label9 notEqual i __tmp5
-    24 jump __label5 always
--    * jump __label10 always
-    25 label __label9
-    26 label __label10
-    27 label __label4
+    25 set __tmp6 __fn0retval
+    26 jump __label11 notEqual __fn1_i __tmp6
+    27 jump __label7 always
+-    * jump __label12 always
+    28 label __label11
+    29 label __label12
+    30 label __label6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    20 call __label0 __fn0retval
-    21 gotolabel __label8 __fn0
-    22 set __tmp5 __fn0retval
--    * jump __label9 notEqual i __tmp5
-+   23 jump __label9 notEqual i __fn0retval
-    24 jump __label5 always
-    25 label __label9
-    26 label __label10
+    23 call __label0 __fn0retval
+    24 gotolabel __label10 __fn0
+    25 set __tmp6 __fn0retval
+-    * jump __label11 notEqual __fn1_i __tmp6
++   26 jump __label11 notEqual __fn1_i __fn0retval
+    27 jump __label7 always
+    28 label __label11
+    29 label __label12
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    19 setaddr __fn0retaddr __label8
-    20 call __label0 __fn0retval
-    21 gotolabel __label8 __fn0
--    * set __tmp5 __fn0retval
-    22 jump __label9 notEqual i __fn0retval
-    23 jump __label5 always
-    24 label __label9
+    22 setaddr __fn0retaddr __label10
+    23 call __label0 __fn0retval
+    24 gotolabel __label10 __fn0
+-    * set __tmp6 __fn0retval
+    25 jump __label11 notEqual __fn1_i __fn0retval
+    26 jump __label7 always
+    27 label __label11
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-    10 set i __tmp0
-    11 label __label3
-    12 jump __label5 greaterThanEq i __tmp2
-+   13 label __label12
-    14 jump __label6 notEqual i 3
-    15 jump __label4 always
-    16 label __label6
+    12 set __fn1_i __tmp1
+    13 label __label5
+    14 jump __label7 greaterThanEq __fn1_i __tmp3
++   15 label __label14
+    16 jump __label8 notEqual __fn1_i 3
+    17 jump __label6 always
+    18 label __label8
  
-    26 label __label10
-    27 label __label4
-    28 op add i i 1
--    * jump __label3 always
-+   29 jump __label12 lessThan i __tmp2
-    30 label __label5
-    31 end
-    32 label __label0
+    29 label __label12
+    30 label __label6
+    31 op add __fn1_i __fn1_i 1
+-    * jump __label5 always
++   32 jump __label14 lessThan __fn1_i __tmp3
+    33 label __label7
+    34 label __label2
+    35 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-     9 set __tmp2 __fn0retval
-    10 set i __tmp0
-    11 label __label3
--    * jump __label5 greaterThanEq i __tmp2
-+   12 jump __label5 greaterThanEq __tmp0 __fn0retval
-    13 label __label12
-    14 jump __label6 notEqual i 3
-    15 jump __label4 always
+    11 set __tmp3 __fn0retval
+    12 set __fn1_i __tmp1
+    13 label __label5
+-    * jump __label7 greaterThanEq __fn1_i __tmp3
++   14 jump __label7 greaterThanEq __tmp1 __fn0retval
+    15 label __label14
+    16 jump __label8 notEqual __fn1_i 3
+    17 jump __label6 always
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
  
-    11 label __label3
-    12 jump __label5 greaterThanEq __tmp0 __fn0retval
-    13 label __label12
--    * jump __label6 notEqual i 3
--    * jump __label4 always
-+   14 jump __label4 equal i 3
-    15 label __label6
-    16 label __label7
-    17 print i
+    13 label __label5
+    14 jump __label7 greaterThanEq __tmp1 __fn0retval
+    15 label __label14
+-    * jump __label8 notEqual __fn1_i 3
+-    * jump __label6 always
++   16 jump __label6 equal __fn1_i 3
+    17 label __label8
+    18 label __label9
+    19 print __fn1_i
  
-    19 setaddr __fn0retaddr __label8
-    20 call __label0 __fn0retval
-    21 gotolabel __label8 __fn0
--    * jump __label9 notEqual i __fn0retval
--    * jump __label5 always
-+   22 jump __label5 equal i __fn0retval
-    23 label __label9
-    24 label __label10
-    25 label __label4
+    22 setaddr __fn0retaddr __label10
+    23 call __label0 __fn0retval
+    24 gotolabel __label10 __fn0
+-    * jump __label11 notEqual __fn1_i __fn0retval
+-    * jump __label7 always
++   25 jump __label7 equal __fn1_i __fn0retval
+    26 label __label11
+    27 label __label12
+    28 label __label6
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    31 set __fn0retval __fn0_n
-    32 label __label11
-    33 goto __fn0retaddr __fn0
+    37 set __fn0retval __fn0_n
+    38 label __label13
+    39 goto __fn0retaddr __fn0
 -    * end
 
 Final code before resolving virtual instructions:
 
+assertflush
 set __fn0_n 1
-setaddr __fn0retaddr __label1
+setaddr __fn0retaddr __label3
 call __label0 __fn0retval
-gotolabel __label1 __fn0
-set __tmp0 __fn0retval
+gotolabel __label3 __fn0
+set __tmp1 __fn0retval
 set __fn0_n 10
-setaddr __fn0retaddr __label2
+setaddr __fn0retaddr __label4
 call __label0 __fn0retval
-gotolabel __label2 __fn0
-set __tmp2 __fn0retval
-set i __tmp0
-jump __label5 greaterThanEq __tmp0 __fn0retval
-label __label12
-jump __label4 equal i 3
-print i
+gotolabel __label4 __fn0
+set __tmp3 __fn0retval
+set __fn1_i __tmp1
+jump __label7 greaterThanEq __tmp1 __fn0retval
+label __label14
+jump __label6 equal __fn1_i 3
+print __fn1_i
+print "|"
 set __fn0_n 5
-setaddr __fn0retaddr __label8
+setaddr __fn0retaddr __label10
 call __label0 __fn0retval
-gotolabel __label8 __fn0
-jump __label5 equal i __fn0retval
-label __label4
-op add i i 1
-jump __label12 lessThan i __tmp2
-label __label5
+gotolabel __label10 __fn0
+jump __label7 equal __fn1_i __fn0retval
+label __label6
+op add __fn1_i __fn1_i 1
+jump __label14 lessThan __fn1_i __tmp3
+label __label7
+assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
+stop
 end
 label __label0
 set __fn0retval __fn0_n

@@ -94,7 +94,7 @@ public class ExtendedTests {
     private static boolean runScreeningTests(PrintWriter writer, Configuration configuration) {
         TestCaseCreatorScreening testCaseCreator = new TestCaseCreatorScreening(configuration.configurations());
 
-        System.out.printf("Running %d screening tests...%n", testCaseCreator.getTotalCases());
+        System.out.printf("Running %d screening tests:%n", testCaseCreator.getTotalCases());
 
         TestProgress progress = new ScreeningTestProgress(configuration);
         TestCaseExecutor testCaseExecutor = new TestCaseExecutor(progress);
@@ -105,10 +105,10 @@ public class ExtendedTests {
 
         if (progress.getSuccessCount() < testCaseCreator.getTotalCases()) {
             int failures = testCaseCreator.getTotalCases() - progress.getSuccessCount();
-            System.out.printf("%d out of %d screening tests failed.%n", failures, testCaseCreator.getTotalCases());
+            System.out.printf("%n%d out of %d screening tests failed.%n", failures, testCaseCreator.getTotalCases());
             return false;
         } else {
-            System.out.println("All screening tests successful.");
+            System.out.printf("%nAll screening tests successful.%n");
             return true;
         }
     }

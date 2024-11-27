@@ -13,8 +13,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Order(5)
 public class AlgorithmsTest extends AbstractProcessorTest {
@@ -31,29 +29,6 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     }
 
     @Test
-    void memoryBitReadTest() throws IOException {
-        testAndEvaluateFile("bitmap-get.mnd",
-                IntStream.range(0, 16).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
-        );
-    }
-
-    @Test
-    void memoryBitReadWriteTest() throws IOException {
-        testAndEvaluateFile("bitmap-get-set.mnd",
-                IntStream.range(1, 17).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
-        );
-    }
-
-
-    @Test
-    void recursiveCallsTest() throws IOException {
-        testAndEvaluateFile("recursive-calls.mnd",
-                "A0001111223221211B0001111223333444C0001111223221211".chars()
-                        .mapToObj(i -> Character.toString((char) i)).toList()
-        );
-    }
-
-    @Test
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
                 s -> "AMOUNT = 12345;\n" + s,
@@ -66,16 +41,19 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         TestCompiler compiler = createTestCompiler();
         Random rnd = new Random(0);
         double[] array = rnd.ints().mapToDouble(i -> Math.abs(i) % 1000).limit(arrayLength).toArray();
-        List<String> expectedOutput = Arrays.stream(array).mapToInt(d -> (int) d)
-                .sorted().mapToObj(String::valueOf).toList();
+        double[] sorted = Arrays.copyOf(array, array.length);
+        Arrays.sort(sorted);
 
         testAndEvaluateCode(
                 compiler,
                 "sorting with " + fileName,
                 "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
-                Map.of("bank2", Memory.createMemoryBank(array)),
-                ExpectedMessages.none(),
-                createEvaluator(compiler, expectedOutput),
+                Map.of(
+                        "bank2", Memory.createMemoryBank(array),
+                        "bank3", Memory.createMemoryBank(sorted)
+                ),
+                expectedMessagesInfo(),
+                assertEvaluator(),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")
         );
     }
@@ -102,17 +80,15 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     @Execution(ExecutionMode.CONCURRENT)
     DynamicNode computesScriptTests() {
         final List<DynamicTest> result = new ArrayList<>();
-        final Map<String, String> definitions = Map.of(
-                "memory-read-write.mnd", "10",
-                "compute-recursive-fibonacci.mnd", "55",
-                "compute-sum-of-primes.mnd", "21536"
+        final List<String> fileNames = List.of(
+                "memory-read-write.mnd",
+                "compute-recursive-fibonacci.mnd",
+                "compute-sum-of-primes.mnd"
         );
 
         return DynamicContainer.dynamicContainer("Script tests",
-                definitions.keySet().stream().map(name -> DynamicTest.dynamicTest(name, null,
-                        () -> testAndEvaluateFile(name, s -> s,
-                                Map.of("bank2", Memory.createMemoryBank()),
-                                List.of(definitions.get(name))))
+                fileNames.stream().map(name -> DynamicTest.dynamicTest(name, null,
+                        () -> testAndEvaluateFile(name))
                 )
         );
     }

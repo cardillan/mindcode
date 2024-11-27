@@ -3,14 +3,19 @@ inline def sum(n)
     for i in 0 ... n do
         c += i;
     end;
-    print(c);
+    print(c, "|");
     return c;
 end;
 
-result = if sum(4) < sum(8) then
-    print("Less");
-    0;
-else
-    1;
+def test()
+    result = if sum(4) < sum(8) then
+        print("Less");
+        0;
+    else
+        1;
+    end;
+    print("|", result);
 end;
-print(result);
+
+assertPrints("6|28|Less|0", test(), "loops in conditions");
+stopProcessor();

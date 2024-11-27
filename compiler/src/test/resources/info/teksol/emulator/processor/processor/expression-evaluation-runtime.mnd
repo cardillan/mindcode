@@ -2,99 +2,91 @@
 // and remove instructions we want to test
 noinline def d(n) n; end;
 
-// There's no 1000 instruction limit on processor emulator
-inline def eval(actual, expected, operation)
-    if actual == expected then
-        print("ok");
-    else 
-        println($"Wrong operation $operation: expected $expected, but was $actual");
-    end;
-end;
+assertEquals(5,             2 +  d(3),                  "add");
+assertEquals(1,             7 -  d(6),                  "sub");
+assertEquals(6,             3 *  d(2),                  "mul");
+assertEquals(1.5,           6 /  d(4),                  "div");
+assertEquals(1e-5,          1 /  d(1e5),                "div exp");
+assertEquals(1,             6 \  d(4),                  "idiv");
+assertEquals(2,             6 %  d(4),                  "mod");
+assertEquals(16,            2 ** d(4),                  "pow");
 
-eval(2 +  d(3), 5,          "add");
-eval(7 -  d(6), 1,          "sub");
-eval(3 *  d(2), 6,          "mul");
-eval(6 /  d(4), 1.5,        "div");
-eval(1 /  d(1e5), 1e-5,     "div exp");
-eval(6 \  d(4), 1,          "idiv");
-eval(6 %  d(4), 2,          "mod");
-eval(2 ** d(4), 16,         "pow");
+assertEquals(true,          5 == d(5),                  "equal 1");
+assertEquals(false,         5 == d(6),                  "equal 2");
+assertEquals(true,          0 == d(null),               "equal null");
+assertEquals(false,         5 != d(5),                  "notEqual 1");
+assertEquals(true,          5 != d(6),                  "notEqual 2");
+assertEquals(false,         0 != d(null),               "notEqual null");
 
-eval(5 == d(5), true,       "equal");
-eval(5 == d(6), false,      "equal");
-eval(0 == d(null), true,    "equal null");
+assertEquals(false,         1 && d(0),                  "land 1");
+assertEquals(true,          1 && d(2),                  "land 2");
 
-eval(5 != d(5), false,      "notEqual");
-eval(5 != d(6), true,       "notEqual");
-eval(0 != d(null), false,   "notEqual null");
+assertEquals(true,          0 <  d(1),                  "lessThan 1");
+assertEquals(false,         1 <  d(0),                  "lessThan 2");
 
-eval(1 && d(0), false,      "land");
-eval(1 && d(2), true,       "land");
+assertEquals(true,          1 <= d(1),                  "lessThanEq 1");
+assertEquals(false,         1 <= d(0),                  "lessThanEq 2");
+
+assertEquals(true,          2 >  d(1),                  "greaterThan 1");
+assertEquals(false,         1 >  d(2),                  "greaterThan 2");
+
+assertEquals(true,          1 >= d(1),                  "greaterThanEq 1");
+assertEquals(false,         1 >= d(2),                  "greaterThanEq 2");
+
+assertEquals(false,         0    === d(null),           "strictEqual 1");
+assertEquals(true,          null === d(null),           "strictEqual 2");
+
+assertEquals(4,             1 << d(2),                  "shl");
+assertEquals(2,             9 >> d(2),                  "shr");
+
+assertEquals(3,             1 |  d(2),                  "or");
+assertEquals(2,             3 &  d(2),                  "and");
+assertEquals(1,             3 ^  d(2),                  "xor");
  
-eval(0 <  d(1), true,       "lessThan");
-eval(1 <  d(0), false,      "lessThan");
-
-eval(1 <= d(1), true,       "lessThanEq");
-eval(1 <= d(0), false,      "lessThanEq");
-
-eval(2 >  d(1), true,       "greaterThan");
-eval(1 >  d(2), false,      "greaterThan");
-
-eval(1 >= d(1), true,       "greaterThanEq");
-eval(1 >= d(2), false,      "greaterThanEq");
-
-eval(0    === d(null), false,   "strictEqual");
-eval(null === d(null), true,    "strictEqual");
-
-eval(1 << d(2), 4,          "shl");
-eval(9 >> d(2), 2,          "shr");
-
-eval(1 |  d(2), 3,          "or");
-eval(3 &  d(2), 2,          "and");
-eval(3 ^  d(2), 1,          "xor");
-
 // Small values work because long is signed
-eval(~d(0),     -1,         "not1");
-eval(~d(65535), -65536,     "not2");
+assertEquals(-1,            ~d(0),                      "not 1");
+assertEquals(-65536,        ~d(65535),                  "not 2");
 
 a = 0xabcdefabcdefabc;
-eval(~d(a), -(a + 1),       "not3");
+assertEquals(-(a + 1),      ~d(a),                      "not 3");
 
-eval(max(2, d(4)), 4,       "max");
-eval(min(2, d(4)), 2,       "min");
+assertEquals(4,             max(2, d(4)),               "max");
+assertEquals(2,             min(2, d(4)),               "min");
 
-eval(abs(d(-2)), 2,         "abs");
-eval(log(d(2.718281828459045)), 1, "log");
-eval(log10(d(10)),  1,      "log10");
+assertEquals(2,             abs(d(-2)),                 "abs");
+assertEquals(1,             log(d(2.718281828459045)),  "log");
+assertEquals(1,             log10(d(10)),               "log10");
 
-eval(floor(d(2.5)), 2,      "floor");
-eval(ceil(d(2.5)),  3,      "ceil");
-eval(sqrt(d(16)),   4,      "sqrt");
+assertEquals(2,             floor(d(2.5)),              "floor");
+assertEquals(3,             ceil(d(2.5)),               "ceil");
+assertEquals(4,             sqrt(d(16)),                "sqrt");
 
-eval(angle(1, d(1)),        45, "angle");
-eval(angleDiff(45, d(135)), 90, "angleDiff");
+assertEquals(45,            angle(1, d(1)),             "angle");
+assertEquals(90,            angleDiff(45, d(135)),      "angleDiff");
 
 // Mindcode extensions
-eval(-d(8), -8, "unary minus");
-eval(!d(0),  1, "boolean negation");
-eval(!d(1),  0, "boolean negation");
-eval(!d(2),  0, "boolean negation");
+assertEquals(-8,            -d(8),                      "unary minus");
+assertEquals( 1,            !d(0),                      "boolean negation 1");
+assertEquals( 0,            !d(1),                      "boolean negation 2");
+assertEquals( 0,            !d(2),                      "boolean negation 3");
 
 // Compound assignments
-a = 2; eval(a **= d(4),     16, "**=");
-a = 2; eval(a *= d(4),       8, "*=");
-a = 6; eval(a /= d(4),     1.5, "/=");
-a = 6; eval(a \= d(4),       1, "\=");
-a = 6; eval(a %= d(4),       2, "%=");
-a = 4; eval(a += d(2),       6, "+=");
-a = 4; eval(a -= d(2),       2, "-=");
-a = 1; eval(a <<= d(2),      4, "<<=");
-a = 9; eval(a >>= d(2),      2, ">>=");
-a = 1; eval(a |= d(2),       3, "|=");
-a = 3; eval(a &= d(2),       2, "&=");
-a = 3; eval(a ^= d(2),       1, "^=");
-a = 1; eval(a &&= d(0),  false, "&&=");
-a = 1; eval(a &&= d(2),   true, "&&=");
-a = 0; eval(a ||= d(2),   true, "||=");
+a = 2; assertEquals(   16,  a **= d(4),                 "**=");
+a = 2; assertEquals(    8,  a *= d(4),                  "*=");
+a = 6; assertEquals(  1.5,  a /= d(4),                  "/=");
+a = 6; assertEquals(    1,  a \= d(4),                  "\=");
+a = 6; assertEquals(    2,  a %= d(4),                  "%=");
+a = 4; assertEquals(    6,  a += d(2),                  "+=");
+a = 4; assertEquals(    2,  a -= d(2),                  "-=");
+a = 1; assertEquals(    4,  a <<= d(2),                 "<<=");
+a = 9; assertEquals(    2,  a >>= d(2),                 ">>=");
+a = 1; assertEquals(    3,  a |= d(2),                  "|=");
+a = 3; assertEquals(    2,  a &= d(2),                  "&=");
+a = 3; assertEquals(    1,  a ^= d(2),                  "^=");
+a = 1; assertEquals(false,  a &&= d(0),                 "&&=");
+a = 1; assertEquals( true,  a &&= d(2),                 "&&=");
+a = 0; assertEquals( true,  a ||= d(2),                 "||=");
 
 // TODO: add angle, len, trig functions. Rand??
+
+stopProcessor();

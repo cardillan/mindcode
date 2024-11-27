@@ -15,5 +15,5 @@ while current <= LIMIT do
     end;
 end;
 
-expect(669171001);
-actual(sum);
+assertEquals(669171001, sum, "Project Euler 28");
+stopProcessor();

@@ -1,5 +1,19 @@
-param value = 1;
-A = value;
+param a = 1;
+param b = 2;
+A = a;
 B = A;
-print(A + (A += 1));
-print((B += 1) + B);
+
+// The preferred results might be "3", "4": see #96
+assertEquals(4, A + (A += 1), "A + (A += 1)");
+assertEquals(4, (B += 1) + B, "(B += 1) + B");
+
+def test()
+    if res = a < b then
+        print("yes");
+    end;
+    print(res);
+end;
+
+assertPrints("yes1", test(), "assignments in conditions");
+
+stopProcessor();

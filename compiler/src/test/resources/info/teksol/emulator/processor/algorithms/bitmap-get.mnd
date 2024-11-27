@@ -1,7 +1,0 @@
-def getBit(bitIndex)
-  bitIndex % 2;
-end;
-
-for i in 0 ... 16 do
-    print(getBit(i) ? 1 : 0);
-end;

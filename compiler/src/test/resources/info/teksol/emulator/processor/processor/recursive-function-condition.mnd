@@ -6,4 +6,5 @@ def foo(n)
     end;
 end;
 
-print(foo(1));
+assertEquals(null, foo(1), "recursive-function-condition");
+stopProcessor();

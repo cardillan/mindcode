@@ -1,5 +1,6 @@
 allocate stack in bank1[0...512];
 param ARRAY = bank2;
+param FINAL = bank3;
 
 for i in 0 ... SIZE - 1 do
     min = ARRAY[i];
@@ -16,5 +17,6 @@ for i in 0 ... SIZE - 1 do
 end;
 
 for i in 0 ... SIZE do
-    print(ARRAY[i]);
+    assertEquals(FINAL[i], ARRAY[i], "unexpected value");
 end;
+stopProcessor();

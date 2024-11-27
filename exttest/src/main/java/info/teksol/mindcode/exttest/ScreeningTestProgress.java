@@ -10,6 +10,18 @@ public class ScreeningTestProgress extends AbstractTestProgress {
     }
 
     @Override
+    public void reportSuccess() {
+        super.reportSuccess();
+        System.out.print(".");
+    }
+
+    @Override
+    public void reportError(ErrorResult errorResult) {
+        super.reportError(errorResult);
+        System.out.print(".");
+    }
+
+    @Override
     public boolean finished() {
         return finishedCount.get() >= tests;
     }

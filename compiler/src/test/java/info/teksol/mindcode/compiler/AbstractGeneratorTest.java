@@ -203,10 +203,14 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
         return output;
     }
 
-    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
+    protected GeneratorOutput generateInstructions(TestCompiler compiler, ExpectedMessages expectedMessages, String code) {
         GeneratorOutput generatorOutput = generateInstructionsNoMsgValidation(compiler, code);
-        ExpectedMessages.throwOnMessage().validate(compiler.getErrorsAndWarnings());
+        expectedMessages.validate(compiler.getErrorsAndWarnings());
         return generatorOutput;
+    }
+
+    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
+        return generateInstructions(compiler, ExpectedMessages.throwOnMessage(), code);
     }
 
     protected GeneratorOutput generateInstructions(String code) {

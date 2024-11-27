@@ -1,3 +1,4 @@
 allocate heap in bank1[0...512];
 $A = 10;
-print($A);
+assertEquals(10, $A, "value from memory");
+stopProcessor();

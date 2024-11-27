@@ -2,8 +2,8 @@ const LENGTH = 15;
 setup();
 run();
 
-expect(1074);
-actual(r(0, 0));
+assertEquals(1074, r(0, 0), "Project Euler 18");
+stopProcessor();
 
 def run()
     for row = LENGTH - 2; row >= 0; row -= 1 do

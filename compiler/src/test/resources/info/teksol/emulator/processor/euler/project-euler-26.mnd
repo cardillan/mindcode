@@ -9,8 +9,8 @@ for d in 2 .. LIMIT do
     end;
 end;
 
-expect(97);
-actual(maxnum);
+assertEquals(97, maxnum, "Project Euler 26");
+stopProcessor();
 
 def getRepeatLength(d)
     n = d;

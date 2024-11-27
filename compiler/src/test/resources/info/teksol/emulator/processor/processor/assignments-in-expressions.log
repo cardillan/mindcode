@@ -1,83 +1,133 @@
-    12 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+    25 instructions before optimizations.
+     3 instructions eliminated by Temp Variables Elimination.
+     3 instructions eliminated by Dead Code Elimination (3 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      4 instructions eliminated by Data Flow Optimization (6 iterations).
-     5 instructions after optimizations.
+    13 instructions after optimizations.
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
-     0 set value 1
-     1 set A value
-     2 set B A
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-3 instructions):
+ 
+    15 set __fn0_res __tmp5
+    16 jump __label2 equal __fn0_res false
+    17 print "yes"
+-    * set __tmp6 "yes"
+    18 jump __label3 always
+    19 label __label2
+-    * set __tmp6 null
+    20 label __label3
+    21 print __fn0_res
+-    * set __tmp4 __fn0_res
+    22 label __label1
+    23 assertprints "yes1" "assignments in conditions"
+    24 stop
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
+ 
+     1 set b 2
+     2 set A a
+     3 set B A
 -    * op add __tmp0 A 1
 -    * set A __tmp0
-+    3 op add A A 1
-     4 op add __tmp1 A A
-     5 print __tmp1
++    4 op add A A 1
+     5 op add __tmp1 A A
+     6 assertequals 4 __tmp1 "A + (A += 1)"
 -    * op add __tmp2 B 1
 -    * set B __tmp2
-+    6 op add B B 1
-     7 op add __tmp3 B B
-     8 print __tmp3
-     9 end
++    7 op add B B 1
+     8 op add __tmp3 B B
+     9 assertequals 4 __tmp3 "(B += 1) + B"
+    10 assertflush
+    11 label __label0
+-    * op lessThan __tmp5 a b
+-    * set __fn0_res __tmp5
++   12 op lessThan __fn0_res a b
+    13 jump __label2 equal __fn0_res false
+    14 print "yes"
+    15 jump __label3 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    12 op lessThan __fn0_res a b
+    13 jump __label2 equal __fn0_res false
+    14 print "yes"
+-    * jump __label3 always
+    15 label __label2
+    16 label __label3
+    17 print __fn0_res
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
-     0 set value 1
-     1 set A value
+     0 set a 1
+     1 set b 2
+     2 set A a
 -    * set B A
 -    * op add A A 1
-+    2 set B value
-+    3 op add A value 1
-     4 op add __tmp1 A A
-     5 print __tmp1
-     6 op add B B 1
++    3 set B a
++    4 op add A a 1
+     5 op add __tmp1 A A
+     6 assertequals 4 __tmp1 "A + (A += 1)"
+     7 op add B B 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
-     0 set value 1
--    * set A value
-     1 set B value
-     2 op add A value 1
-     3 op add __tmp1 A A
-     4 print __tmp1
+     0 set a 1
+     1 set b 2
+-    * set A a
+     2 set B a
+     3 op add A a 1
+     4 op add __tmp1 A A
+     5 assertequals 4 __tmp1 "A + (A += 1)"
 -    * op add B B 1
-+    5 op add B value 1
-     6 op add __tmp3 B B
-     7 print __tmp3
-     8 end
++    6 op add B a 1
+     7 op add __tmp3 B B
+     8 assertequals 4 __tmp3 "(B += 1) + B"
+     9 assertflush
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
-     0 set value 1
--    * set B value
-     1 op add A value 1
-     2 op add __tmp1 A A
-     3 print __tmp1
-     4 op add B value 1
+     0 set a 1
+     1 set b 2
+-    * set B a
+     2 op add A a 1
+     3 op add __tmp1 A A
+     4 assertequals 4 __tmp1 "A + (A += 1)"
+     5 op add B a 1
 -    * op add __tmp3 B B
--    * print __tmp3
-+    5 op add __tmp3 A A
-+    6 print __tmp1
-     7 end
+-    * assertequals 4 __tmp3 "(B += 1) + B"
++    6 op add __tmp3 A A
++    7 assertequals 4 __tmp1 "(B += 1) + B"
+     8 assertflush
+     9 label __label0
+    10 op lessThan __fn0_res a b
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2 instructions):
  
-     1 op add A value 1
-     2 op add __tmp1 A A
-     3 print __tmp1
--    * op add B value 1
+     2 op add A a 1
+     3 op add __tmp1 A A
+     4 assertequals 4 __tmp1 "A + (A += 1)"
+-    * op add B a 1
 -    * op add __tmp3 A A
-     4 print __tmp1
-     5 end
+     5 assertequals 4 __tmp1 "(B += 1) + B"
+     6 assertflush
+     7 label __label0
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-     2 op add __tmp1 A A
-     3 print __tmp1
-     4 print __tmp1
+    14 label __label1
+    15 assertprints "yes1" "assignments in conditions"
+    16 stop
 -    * end
 
 Final code before resolving virtual instructions:
 
-set value 1
-op add A value 1
+set a 1
+set b 2
+op add A a 1
 op add __tmp1 A A
-print __tmp1
-print __tmp1
+assertequals 4 __tmp1 "A + (A += 1)"
+assertequals 4 __tmp1 "(B += 1) + B"
+assertflush
+op lessThan __fn0_res a b
+jump __label2 equal __fn0_res false
+print "yes"
+label __label2
+print __fn0_res
+assertprints "yes1" "assignments in conditions"
+stop

@@ -1,6 +1,12 @@
 noinline def d(n) n; end;
-for i = 0, j = 10; d(i) <= d(j); i += 2, j += 1 do
-    if d(i) == 4 then continue; end;
-    print(i, j);
-    if d(i) == 10 then break; end;
+
+def test()
+    for i = 0, j = 10; d(i) <= d(j); i += 2, j += 1 do
+        if d(i) == 4 then continue; end;
+        print(i, "|", j, "|");
+        if d(i) == 10 then break; end;
+    end;
 end;
+
+assertPrints("0|10|2|11|6|13|8|14|10|15|", test(), "iterated-for-loop-break-continue");
+stopProcessor();

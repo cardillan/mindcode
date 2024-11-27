@@ -12,8 +12,8 @@ for i in 10 ... LIMIT do
     end;
 end;
 
-expect(9009);
-actual(max);
+assertEquals(9009, max, "Project Euler 4");
+stopProcessor();
 
 def revert(num)
     res = 0;

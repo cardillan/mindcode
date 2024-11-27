@@ -2,6 +2,7 @@ package info.teksol.emulator.processor;
 
 import info.teksol.emulator.blocks.Memory;
 import info.teksol.emulator.blocks.MindustryBlock;
+import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
@@ -165,11 +166,11 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, Map<String, MindustryBlock> blocks,
             ExpectedMessages expectedMessages, RunEvaluator evaluator, Path logFile) {
-        Processor processor = new Processor(ExpectedMessages.none(), 1000);
+        Processor processor = new Processor(expectedMessages, 1000);
         processor.addBlock("bank1", Memory.createMemoryBank());
         processor.addBlock("bank2", Memory.createMemoryBank());
         blocks.forEach(processor::addBlock);
-        List<LogicInstruction> unresolved = generateInstructionsNoMsgValidation(compiler, code).instructions();
+        List<LogicInstruction> unresolved = generateInstructions(compiler, expectedMessages, code).instructions();
         List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         writeLogFile(logFile, compiler, unresolved);
         processor.run(instructions, MAX_STEPS);
@@ -178,7 +179,6 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
         List<Executable> executables = new ArrayList<>();
         executables.add(() -> evaluator.asExpected(true, processor));
-        executables.add(() -> assertNoUnexpectedMessages(compiler, expectedMessages));
         processor.getAssertions().forEach(a -> executables.add(() -> assertTrue(a.success(), a.generateErrorMessage())));
         assertAll(executables);
     }
@@ -196,7 +196,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         };
     }
 
-    protected RunEvaluator createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
+    protected RunEvaluator outputEvaluator(TestCompiler compiler, List<String> expectedOutput) {
         return (useAsserts, processor) -> {
             List<String> actualOutput = processor.getPrintOutput();
             boolean outputMatches = Objects.equals(expectedOutput, actualOutput);
@@ -214,6 +214,27 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         };
     }
 
+    protected RunEvaluator assertEvaluator() {
+        return (useAsserts, processor) -> {
+            if (useAsserts) {
+                if (processor.getAssertions().isEmpty()) {
+                    fail("Expected assertions not present");
+                }
+            }
+            return !processor.getAssertions().isEmpty();
+        };
+    }
+
+    protected ExpectedMessages expectedMessagesInfo() {
+        return ExpectedMessages.create().addLevelsUpTo(MessageLevel.INFO).ignored();
+    }
+
+    protected void testAndEvaluateFile(TestCompiler compiler, String fileName, Map<String, MindustryBlock> blocks,
+            ExpectedMessages expectedMessages, RunEvaluator evaluator) throws IOException {
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        testAndEvaluateCode(compiler, fileName, readFile(fileName), blocks, expectedMessages, evaluator, logFile);
+    }
+
     protected void testAndEvaluateFile(TestCompiler compiler, String fileName, Function<String, String> codeDecorator,
             Map<String, MindustryBlock> blocks, RunEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
@@ -226,20 +247,32 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         TestCompiler compiler = createTestCompiler();
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         testAndEvaluateCode(createTestCompiler(), fileName, codeDecorator.apply(readFile(fileName)), blocks,
-                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), logFile);
+                ExpectedMessages.none(), outputEvaluator(compiler, expectedOutputs), logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, List<String> expectedOutputs) throws IOException {
         TestCompiler compiler = createTestCompiler();
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         testAndEvaluateCode(createTestCompiler(), fileName, readFile(fileName), Map.of(),
-                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), logFile);
+                ExpectedMessages.none(), outputEvaluator(compiler, expectedOutputs), logFile);
+    }
+
+    protected void testAndEvaluateFile(String fileName) throws IOException {
+        TestCompiler compiler = createTestCompiler();
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        testAndEvaluateCode(createTestCompiler(),
+                fileName,
+                readFile(fileName),
+                Map.of(),
+                expectedMessagesInfo(),
+                assertEvaluator(),
+                logFile);
     }
 
     protected void testCode(String code, Map<String, MindustryBlock> blocks, List<String> expectedOutputs) {
         TestCompiler compiler = createTestCompiler();
         testAndEvaluateCode(compiler, null, code, blocks,
-                ExpectedMessages.none(), createEvaluator(compiler, expectedOutputs), null);
+                ExpectedMessages.none(), outputEvaluator(compiler, expectedOutputs), null);
     }
 
     protected void testCode(String code, Map<String, MindustryBlock> blocks, String expectedOutputs) {
@@ -250,7 +283,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     protected void testCode(TestCompiler compiler, String code, String... expectedOutputs) {
         testAndEvaluateCode(compiler, "", code, Map.of(), ExpectedMessages.none(),
-                createEvaluator(compiler, List.of(expectedOutputs)), null);
+                outputEvaluator(compiler, List.of(expectedOutputs)), null);
     }
 
     protected void testCode(String code, String expectedOutputs) {

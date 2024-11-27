@@ -4,4 +4,5 @@ def fib(n)
     n < 2 ? n : fib(n - 1) + fib(n - 2);
 end;
 
-print(fib(10));
+assertEquals(55, fib(10), "fib(10)");
+stopProcessor();
