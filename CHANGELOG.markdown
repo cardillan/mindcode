@@ -27,15 +27,11 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* **Breaking:** changed the default language target from ML7 to ML7A. THe following functions are affected:
+* **Breaking:** changed the default language target from ML7 to ML7A. The following functions are affected:
   * `getBlock`: previously, the building at given coordinates was returned through an output parameter. In ML7A, the building is returned through function return value. See [`getBlock()`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol).
-  * `ulocate`: previously, the function returned a boolean value (`true` when the building was found, `false` otherwise). In ML7A, the function returns a building (if found), and the `found` flag is returned through an output parameter.
+  * `ulocate`: previously, the function returned a boolean value (`true` when the building was found, `false` otherwise). In ML7A, the function returns a building (if found), and the `found` flag is returned through an output parameter. See [`getBlock()`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ulocate).
 * Changed automatic generation of Intellij IDEA settings files to only modify the zip files when the contents of the contained files changes.
 * Changed Loop Unrolling Optimization to handle more cases of loop control variable modification on advanced level.
-
-### Miscellaneous
-
-* This release contains a new implementation  
 
 ## 2.6.0 - 2024-11-15
 
