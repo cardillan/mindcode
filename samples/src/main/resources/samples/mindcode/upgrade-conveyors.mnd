@@ -1,7 +1,3 @@
-// Setting to use non-standard function mapping as described here:
-// github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#mindustry-logic-functions
-#set target = ML7A;
-
 // Import system libraries for advanced units and blocks functions
 require units;
 require blocks;

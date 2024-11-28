@@ -45,7 +45,7 @@ abstract class ActionHandler {
                 .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor," +
                         " version 7 rev. A with standard processor or world processor)")
                 .choices("6", "7s", "7w", "7as", "7aw")
-                .setDefault("7w");
+                .setDefault("7aw");
 
         compiler.addArgument("-i", "--instruction-limit")
                 .help("sets the maximal number of instructions for the speed optimizations")

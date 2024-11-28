@@ -3,8 +3,6 @@
 // switch2: change unit type
 // message1: unit status
 
-#set target = ML7A;      // Using revised syntax for ulocate
-
 UNIT    = @mega;
 
 const RADIUS_WITHIN        = 8;

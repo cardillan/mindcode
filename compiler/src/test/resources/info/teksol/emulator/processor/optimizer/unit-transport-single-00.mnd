@@ -10,8 +10,6 @@
 // message1: status
 // The fourth block is the container
 
-#set target = ML7A;     // Using revised syntax for ulocate
-
 // Compile-time constant. Set to false to speed up processing by not showing individual units distance from target.
 const SHOW_UNIT_DISTANCE = true;
 

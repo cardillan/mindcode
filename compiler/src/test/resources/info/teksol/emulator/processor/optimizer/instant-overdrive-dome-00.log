@@ -16,25 +16,25 @@
    785 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 138):
-  * Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
-    Replicate loop condition at line 128:1                       cost     1, benefit       25.0, efficiency       25.0
-  ! Unroll iteration loop at line 178:9                          cost   209, benefit      275.0, efficiency        1.3
+  * Replicate loop condition at line 44:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+    Replicate loop condition at line 127:1                       cost     1, benefit       25.0, efficiency       25.0
+  ! Unroll iteration loop at line 177:9                          cost   209, benefit      275.0, efficiency        1.3
 
 Pass 1: speed optimization selection (cost limit 137):
-  * Replicate loop condition at line 128:1                       cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
-  ! Unroll iteration loop at line 178:9                          cost   209, benefit      275.0, efficiency        1.3
+  * Replicate loop condition at line 127:1                       cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+  ! Unroll iteration loop at line 177:9                          cost   209, benefit      275.0, efficiency        1.3
 
 Pass 1: speed optimization selection (cost limit 136):
-  ! Unroll iteration loop at line 178:9                          cost   209, benefit      275.0, efficiency        1.3
+  ! Unroll iteration loop at line 177:9                          cost   209, benefit      275.0, efficiency        1.3
 
 Pass 2: speed optimization selection (cost limit 166):
-  ! Unroll iteration loop at line 178:9                          cost   177, benefit      275.0, efficiency        1.6
+  ! Unroll iteration loop at line 177:9                          cost   177, benefit      275.0, efficiency        1.6
 
 Pass 3: speed optimization selection (cost limit 169):
-  ! Unroll iteration loop at line 178:9                          cost   173, benefit      275.0, efficiency        1.6
+  ! Unroll iteration loop at line 177:9                          cost   173, benefit      275.0, efficiency        1.6
 
 Pass 4: speed optimization selection (cost limit 169):
-  ! Unroll iteration loop at line 178:9                          cost   173, benefit      275.0, efficiency        1.6
+  ! Unroll iteration loop at line 177:9                          cost   173, benefit      275.0, efficiency        1.6
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-166 instructions):
  
@@ -4597,7 +4597,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
   1143 set __fn25_needed __tmp518
   1144 label __label333
 
-Modifications by Replicate loop condition at line 45:1 (+1 instructions):
+Modifications by Replicate loop condition at line 44:1 (+1 instructions):
  
     14 label __label3
     15 sensor __tmp1 switch1 @enabled
@@ -4632,7 +4632,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     14 label __label3
     15 sensor __tmp1 switch1 @enabled
 
-Modifications by Replicate loop condition at line 128:1 (+1 instructions):
+Modifications by Replicate loop condition at line 127:1 (+1 instructions):
  
    487 label __label148
    488 sensor __tmp216 switch1 @enabled

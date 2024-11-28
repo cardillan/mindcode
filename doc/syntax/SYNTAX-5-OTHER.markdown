@@ -287,9 +287,6 @@ Considerations:
 The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. Had it not be known by Mindcode, it could be defined like this:
 
 ```
-// the ML7A target uses a bit different syntax for getBlock from the ML7 target.
-#set target = ML7A;
-
 // Using 'getBlock2' as a name to avoid clashing with the existing function name
 inline def getBlock2(x, y, out type, out floor)
     mlogSafe("ucontrol", "getBlock", in x, in y, out type, out building, out floor);

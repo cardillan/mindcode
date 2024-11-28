@@ -28,7 +28,7 @@ public class CompilerProfile {
 
     private final Map<Optimization, OptimizationLevel> levels;
     private final boolean webApplication;
-    private ProcessorVersion processorVersion = ProcessorVersion.V7;
+    private ProcessorVersion processorVersion = ProcessorVersion.V7A;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
     private int instructionLimit = 1000;
     private int optimizationPasses = DEFAULT_WEBAPP_PASSES;

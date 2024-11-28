@@ -2,7 +2,6 @@
 // Unit transport of silicon or phase fabric to overdrive dome using two (or four) units
 
 #set instruction-limit  = 1100;
-#set target = ML7A;                 // Using revised syntax for ulocate
 
 /// This is the preferred unit type to use for bringing in supplies.
 /// If no units of this type exist, we'll try using other types.
