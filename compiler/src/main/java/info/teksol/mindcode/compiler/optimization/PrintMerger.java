@@ -94,8 +94,8 @@ class PrintMerger extends BaseOptimizer {
     private void tryMergeUsingPrint(LogicIterator iterator, PrintInstruction current) {
         if (previous instanceof PrintInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
             if (advanced() || prev.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
-                String str1 = prev.getValue().format();
-                String str2 = current.getValue().format();
+                String str1 = prev.getValue().format(instructionProcessor);
+                String str2 = current.getValue().format(instructionProcessor);
                 // Do not merge strings if the combined length is over 34, unless advanced
                 if (advanced() || str1.length() + str2.length() <= 34) {
                     PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
@@ -115,14 +115,14 @@ class PrintMerger extends BaseOptimizer {
     // If the merge is not possible, sets previous to current
     private void tryMergeUsingFormat(LogicIterator iterator, PrintInstruction current) {
         if (previous instanceof PrintInstruction prev && prev.getValue().isConstant()) {
-            StringBuilder str = new StringBuilder(prev.getValue().format());
+            StringBuilder str = new StringBuilder(prev.getValue().format(instructionProcessor));
             if (current.getValue().isConstant()) {
                 for (PrintInstruction p : printVars) {
                     str.append("{0}");
                     optimizationContext.replaceInstruction(p, createFormat(p.getAstContext(), p.getValue()));
                 }
                 printVars.clear();
-                str.append(current.getValue().format());
+                str.append(current.getValue().format(instructionProcessor));
                 iterator.remove();
 
                 PrintInstruction updated = createPrint(prev.getAstContext(), LogicString.create(str.toString()));
@@ -144,7 +144,7 @@ class PrintMerger extends BaseOptimizer {
         if (previous instanceof RemarkInstruction prev && prev.getAstContext() == current.getAstContext() &&
                 prev.getValue().isConstant() && current.getValue().isConstant()) {
             RemarkInstruction merged = createRemark(current.getAstContext(),
-                    LogicString.create(prev.getValue().format() + current.getValue().format()));
+                    LogicString.create(prev.getValue().format(instructionProcessor) + current.getValue().format(instructionProcessor)));
             removeInstruction(this.previous);
             iterator.set(merged);
             this.previous = merged;
@@ -163,7 +163,7 @@ class PrintMerger extends BaseOptimizer {
                 .flatMap(LogicInstruction::inputArgumentsStream)
                 .filter(LogicString.class::isInstance)
                 .map(LogicString.class::cast)
-                .map(LogicString::format)
+                .map(s -> s.format(instructionProcessor))
                 .anyMatch(this::containsDangerousStrings);
     }
 

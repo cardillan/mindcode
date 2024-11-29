@@ -194,7 +194,7 @@ Final code before resolving virtual instructions:
         gotolabel __label19 __fn4
   101:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
   102:  assertflush
-  103:  set __fn4__n 10000000999999999E4
+  103:  set __fn4__n 10000001E13
   104:  setaddr __fn4retaddr __label20
   105:  call __label4 __fn4retval
         gotolabel __label20 __fn4
@@ -254,7 +254,7 @@ Final code before resolving virtual instructions:
         gotolabel __label29 __fn5
   151:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
   152:  assertflush
-  153:  set __fn5__n 10000000999999999E4
+  153:  set __fn5__n 10000001E13
   154:  setaddr __fn5retaddr __label30
   155:  call __label5 __fn5retval
         gotolabel __label30 __fn5

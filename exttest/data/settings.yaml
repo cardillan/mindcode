@@ -194,10 +194,10 @@ all-sources:
   - source: "C:\Home\golem\mindcode\factory-monitor-surge-alloy.mnd"
     samples: 100
 
-  - source: "C:\Home\golem\mindcode\impact-reactor-battery-level.mnd"
+  - source: "C:\Home\golem\mindcode\power-plant-battery-level.mnd"
     samples: 100
 
-  - source: "C:\Home\golem\mindcode\impact-reactor-power-plant.mnd"
+  - source: "C:\Home\golem\mindcode\power-plant-reactor-control.mnd"
     samples: 100
 
   - source: "C:\Home\golem\mindcode\instant-overdrive-dome.mnd"

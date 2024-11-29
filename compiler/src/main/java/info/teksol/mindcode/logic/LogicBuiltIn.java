@@ -2,6 +2,7 @@ package info.teksol.mindcode.logic;
 
 import info.teksol.evaluator.LogicReadable;
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
 
@@ -65,7 +66,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
     }
 
     @Override
-    public String format() {
+    public String format(InstructionProcessor instructionProcessor) {
         if (object != null) {
             return object.format();
         } else {

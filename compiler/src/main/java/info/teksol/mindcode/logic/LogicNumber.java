@@ -85,9 +85,8 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
-    public String format() {
-        // Code taken from Mindustry to achieve exact match
-        return Math.abs(value - (long) value) < 0.00001 ? String.valueOf((long) value) : String.valueOf(value);
+    public String format(InstructionProcessor instructionProcessor) {
+        return instructionProcessor.formatNumber(value);
     }
 
     @Override

@@ -174,6 +174,7 @@ public interface InstructionProcessor extends MessageEmitter {
 
     Optional<String> mlogFormat(double value);
 
+    String formatNumber(double value);
 
     default String getLabelPrefix() {
         return "__label";

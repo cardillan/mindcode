@@ -25,7 +25,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 import static info.teksol.mindcode.logic.Operation.ADD;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
-public class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
+public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final List<OpcodeVariant> opcodeVariants;
@@ -33,19 +33,37 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
-    protected final boolean mlog8;
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int functionIndex = 0;
 
-    // Protected to allow a subclass to use this constructor in unit tests
-    protected BaseInstructionProcessor(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion processorVersion,
-            ProcessorEdition processorEdition, List<OpcodeVariant> opcodeVariants) {
-        super(messageConsumer);
-        this.processorVersion = processorVersion;
-        this.processorEdition = processorEdition;
-        this.opcodeVariants = opcodeVariants;
-        this.mlog8 = processorVersion.matches(ProcessorVersion.V8A, ProcessorVersion.MAX);
+
+    static class InstructionProcessorParameters {
+        public final Consumer<MindcodeMessage> messageConsumer;
+        public final ProcessorVersion version;
+        public final ProcessorEdition edition;
+        public final List<OpcodeVariant> opcodeVariants;
+
+        public InstructionProcessorParameters(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion version,
+                ProcessorEdition edition, List<OpcodeVariant> opcodeVariants) {
+            this.messageConsumer = messageConsumer;
+            this.version = version;
+            this.edition = edition;
+            this.opcodeVariants = opcodeVariants;
+        }
+
+        public InstructionProcessorParameters(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion version,
+                ProcessorEdition edition) {
+            this(messageConsumer, version, edition, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
+        }
+    }
+
+
+    BaseInstructionProcessor(InstructionProcessorParameters parameters) {
+        super(parameters.messageConsumer);
+        this.processorVersion = parameters.version;
+        this.processorEdition = parameters.edition;
+        this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream()
                 .collect(Collectors.toMap(k -> k, k -> getOpcodeVariantSelectorPosition(k, variantsByOpcode.get(k))));
@@ -598,7 +616,6 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
         return LogicVariable.STACK_POINTER;
     }
 
-
     public Optional<String> mlogRewrite(String literal) {
         try {
             return mlogFormat(Double.parseDouble(literal), literal);
@@ -611,139 +628,79 @@ public class BaseInstructionProcessor extends AbstractMessageEmitter implements 
         return mlogFormat(value, String.valueOf(value));
     }
 
-    // 20 digits precision
+    protected abstract Optional<String> mlogFormat(double value, String literal);
+
+    // 17 Digit precision - enough for 2^54. Larger numbers will lose precision anyway
     protected static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
 
-    protected Optional<String> mlogFormat(double value, String literal) {
-        if (mlog8) {
-            return mlogFormat8(value, literal);
-        }
-
-        if (Double.isFinite(value)) {
-            double abs = Math.abs(value);
-
-            // Is it zero?
-            if (abs <= Double.MIN_NORMAL) {
-                return Optional.of("0");
-            }
-
-            if (1e-20 <= abs && abs < Long.MAX_VALUE) {
-                // Fits into a long, Mindustry can convert it using double precision.
-                BigDecimal decimal = new BigDecimal(literal, CONVERSION_CONTEXT);
-                return Optional.of(decimal.stripTrailingZeros().toPlainString());
-            }
-
-            // Can it be represented as a float at all?
-            if ((float) abs == 0f || !Float.isFinite((float) abs)) {
-                return Optional.empty();
-            }
-
-            // Cannot avoid exponent. Format it so that Mindustry understands it.
-            // Use float representation, as too high a precision might get too high exponents
-            float valueFloat = (float) value;
-            String literalFloat = Float.toString(valueFloat);
-            int dot = literalFloat.indexOf('.');
-            int exp = literalFloat.indexOf('E');
-
-            if (dot >= 0 && exp >= 0) {
-                if (dot >= exp) {
-                    return Optional.empty(); // Not possible, but hey
-                }
-
-                int exponent = Integer.parseInt(literalFloat.substring(exp + 1)) ;
-                if (Math.abs(exponent) > 38) {
-                    // Even float precision would be compromised at this point
-                    return Optional.empty();
-                }
-
-                String mantissa =  literalFloat.substring(0, dot) + literalFloat.substring(dot + 1, exp);
-                exponent -= (exp - dot - 1);
-
-                int lastValidDigit = mantissa.length() - 1;
-                while (mantissa.charAt(lastValidDigit) == '0') {
-                    if (--lastValidDigit < 0) {
-                        return Optional.of("0");
-                    }
-                    exponent++;
-                }
-
-                String mlog = exponent == 0
-                        ? mantissa.substring(0, lastValidDigit + 1)
-                        : mantissa.substring(0, lastValidDigit + 1) + literalFloat.charAt(exp) + exponent;
-
-                double reFloat = Double.parseDouble(String.valueOf(valueFloat));
-                double absDiff = Math.abs(reFloat - value);
-                double relDiff = absDiff / value;
-                if (relDiff > 1e-9) {
-                    // This warning doesn't come with an input position
-                    // This will no longer happen in ML8 - won't fix.
-                    messageConsumer.accept(CompilerMessage.warn(InputPosition.EMPTY,
-                            "Loss of precision while creating mlog literals (original value %s, encoded value %s)",
-                            literal, mlog));
-                }
-
-                return Optional.of(mlog);
-            } else {
-                return Optional.of(literalFloat);
-            }
+    protected Optional<String> mlogFormatWithoutExponent(double absoluteValue, String literal) {
+        // Is it zero?
+        if (absoluteValue <= Double.MIN_NORMAL) {
+            return Optional.of("0");
+        } else if (1e-20 <= absoluteValue && absoluteValue < Long.MAX_VALUE) {
+            // Fits into a long, Mindustry can convert it using double precision.
+            // NOTE: Some precision is lost for numbers above 2^53, since double can only store 53 digits
+            //       of the mantissa.
+            BigDecimal decimal = new BigDecimal(literal, CONVERSION_CONTEXT);
+            return Optional.of(decimal.stripTrailingZeros().toPlainString());
         } else {
             return Optional.empty();
         }
     }
 
-    protected Optional<String> mlogFormat8(double value, String literal) {
-        if (Double.isFinite(value)) {
-            double abs = Math.abs(value);
+    protected Optional<String> mlogFormatWithExponent(double value, String literal, boolean floatPrecision) {
+        int dot = literal.indexOf('.');
+        int exp = literal.indexOf('E');
 
-            // Can it be represented as a double at all?
-            if (!Double.isFinite(abs)) {
-                return Optional.empty();
-            }
+        if (dot >= exp) {
+            // Three possible cases:
+            // 1. Neither a dot, nor an exp: this should have been handled by mlogFormatWithoutExponent.
+            // 2. We have a dot, but not an exp: this should have been handled by mlogFormatWithoutExponent.
+            // 3. The dot comes after the exp: a malformed literal (can't happen).
+            // We should never end up here.
+            throw new MindcodeInternalError("Error formatting numerical constant for mlog: " + literal);
+        }
 
-            // Is it zero?
-            if (abs <= Double.MIN_NORMAL) {
-                return Optional.of("0");
-            }
+        if (dot < 0) {
+            // We have just the exponent: the literal as is will do.
+            // For floats, the check that the value will fit into a float has been made by the caller.
+            return Optional.of(literal);
+        }
 
-            if (1e-20 <= abs && abs < Long.MAX_VALUE) {
-                // Fits into a long, Mindustry can convert it using decimal notation
-                // Hopefully more readable in mlog
-                BigDecimal decimal = new BigDecimal(literal, CONVERSION_CONTEXT);
-                return Optional.of(decimal.stripTrailingZeros().toPlainString());
-            }
-
-            // Cannot avoid exponent. Format it so that Mindustry understands it.
-            String literalDouble = Double.toString(value);
-            int dot = literalDouble.indexOf('.');
-            int exp = literalDouble.indexOf('E');
-
-            if (dot >= 0 && exp >= 0) {
-                if (dot >= exp) {
-                    return Optional.empty(); // Not possible, but hey
-                }
-
-                int exponent = Integer.parseInt(literalDouble.substring(exp + 1)) ;
-                String mantissa =  literalDouble.substring(0, dot) + literalDouble.substring(dot + 1, exp);
-                exponent -= (exp - dot - 1);
-
-                int lastValidDigit = mantissa.length() - 1;
-                while (mantissa.charAt(lastValidDigit) == '0') {
-                    if (--lastValidDigit < 0) {
-                        return Optional.of("0");
-                    }
-                    exponent++;
-                }
-
-                String mlog = exponent == 0
-                        ? mantissa.substring(0, lastValidDigit + 1)
-                        : mantissa.substring(0, lastValidDigit + 1) + literalDouble.charAt(exp) + exponent;
-
-                return Optional.of(mlog);
-            } else {
-                return Optional.of(literalDouble);
-            }
-        } else {
+        int exponent = Integer.parseInt(literal.substring(exp + 1)) ;
+        if (floatPrecision && Math.abs(exponent) > 38) {
+            // Even float precision would be compromised at this point
             return Optional.empty();
         }
+
+        String mantissa = literal.substring(0, dot) + literal.substring(dot + 1, exp);
+        exponent -= (exp - dot - 1);
+
+        int lastValidDigit = mantissa.length() - 1;
+        while (mantissa.charAt(lastValidDigit) == '0') {
+            if (--lastValidDigit < 0) {
+                return Optional.of("0");
+            }
+            exponent++;
+        }
+
+        String mlog = exponent == 0
+                ? mantissa.substring(0, lastValidDigit + 1)
+                : mantissa.substring(0, lastValidDigit + 1) + literal.charAt(exp) + exponent;
+
+        if (floatPrecision) {
+            double rewritten = Double.parseDouble(literal);
+            double absDiff = Math.abs(rewritten - value);
+            double relDiff = Math.abs(absDiff / value);
+            if (relDiff > 1e-9) {
+                // This warning doesn't come with an input position
+                // This will no longer happen in ML8 - won't fix.
+                messageConsumer.accept(CompilerMessage.warn(InputPosition.EMPTY,
+                        "Loss of precision while creating mlog literals (original value %s, encoded value %s)",
+                        literal, mlog));
+            }
+        }
+
+        return Optional.of(mlog);
     }
 }

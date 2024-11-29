@@ -1,5 +1,7 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+
 public interface LogicValue extends LogicArgument {
     /**
      * Indicates that an expressions using the value can be numerically evaluated at compile time.
@@ -17,7 +19,8 @@ public interface LogicValue extends LogicArgument {
      * Provides a text representation of the contained value as if printed by Mindustry Logic
      * Supported only for compile-time constants. Is not the same as an mlog representation!
      *
+     * @param instructionProcessor instruction processor to use for version-dependent formats
      * @return a text representation of the contained value
      */
-    String format();
+    String format(InstructionProcessor instructionProcessor);
 }

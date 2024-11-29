@@ -101,7 +101,7 @@ set __fn4retaddr 101
 jump 169 always 0 0
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
-set __fn4__n 10000000999999999E4
+set __fn4__n 10000001E13
 set __fn4retaddr 106
 jump 169 always 0 0
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
@@ -151,7 +151,7 @@ set __fn5retaddr 151
 jump 244 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
-set __fn5__n 10000000999999999E4
+set __fn5__n 10000001E13
 set __fn5retaddr 156
 jump 244 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"

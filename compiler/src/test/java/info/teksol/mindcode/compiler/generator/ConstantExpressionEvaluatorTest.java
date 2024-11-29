@@ -138,7 +138,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
                         a = "[]" + ITEM_COAL;
                         print(a);
                         """,
-                createInstruction(SET, "a", q("[]" + Icons.getIconValue("ITEM_COAL").format())),
+                createInstruction(SET, "a", q("[]" + Icons.getIconValue("ITEM_COAL").format(null))),
                 createInstruction(PRINT, "a"),
                 createInstruction(END)
         );

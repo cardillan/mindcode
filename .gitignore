@@ -16,7 +16,6 @@ Instruction_Samples_*.txt
 trace*.txt
 scratches/
 out/
-scratches/
 target
 tmp
 mindcode/src/test/resources/scripts/*.mlog

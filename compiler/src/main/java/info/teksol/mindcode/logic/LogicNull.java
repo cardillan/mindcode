@@ -1,5 +1,7 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+
 public enum LogicNull implements LogicLiteral {
     NULL;
 
@@ -24,7 +26,7 @@ public enum LogicNull implements LogicLiteral {
     }
 
     @Override
-    public String format() {
+    public String format(InstructionProcessor instructionProcessor) {
         return "null";
     }
 

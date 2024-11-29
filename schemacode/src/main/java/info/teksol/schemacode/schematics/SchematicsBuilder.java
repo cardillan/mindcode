@@ -213,7 +213,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                         e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
 
         // Add all icon constants
-        Icons.forEachIcon((k, v) -> constants.put(k, AstStringLiteral.fromText(v.format())));
+        Icons.forEachIcon((k, v) -> constants.put(k, AstStringLiteral.fromText(v.format(null))));
     }
 
     private AstText resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {

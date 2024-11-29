@@ -30,6 +30,7 @@ import static info.teksol.emulator.processor.ExecutionFlag.*;
  * Mindustry Processor emulator.
  */
 public class Processor extends AbstractMessageEmitter {
+    private final InstructionProcessor instructionProcessor;
     private final Set<ExecutionFlag> flags;
     private final MindustryVariables variables;
     private final Map<String, MindustryBlock> blockMap = new LinkedHashMap<>();
@@ -48,16 +49,18 @@ public class Processor extends AbstractMessageEmitter {
     private GraphicsBuffer graphicsBuffer;
     private List<Assertion> assertions = new ArrayList<>();
 
-    public Processor(Consumer<MindcodeMessage> messageConsumer, Set<ExecutionFlag> flags, int traceLimit) {
+    public Processor(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer,
+            Set<ExecutionFlag> flags, int traceLimit) {
         super(messageConsumer);
+        this.instructionProcessor = instructionProcessor;
         this.flags = EnumSet.copyOf(flags);
         variables = new MindustryVariables(this);
         counter = variables.counter;
         this.traceLimit = traceLimit;
     }
 
-    public Processor(Consumer<MindcodeMessage> messageConsumer, int traceLimit) {
-        this(messageConsumer, ExecutionFlag.getDefaultFlags(), traceLimit);
+    public Processor(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer, int traceLimit) {
+        this(instructionProcessor, messageConsumer, ExecutionFlag.getDefaultFlags(), traceLimit);
     }
 
     public void addBlock(String name, MindustryBlock block) {
@@ -291,7 +294,7 @@ public class Processor extends AbstractMessageEmitter {
 
     private boolean executeFormat(FormatInstruction ix) {
         MindustryVariable var = getExistingVariable(ix.getValue());
-        if (!textBuffer.format(var.print())) {
+        if (!textBuffer.format(var.print(instructionProcessor))) {
             throw new ExecutionException(ERR_INVALID_FORMAT, "No valid formatting placeholder found in the text buffer.");
         }
         return true;
@@ -364,7 +367,7 @@ public class Processor extends AbstractMessageEmitter {
 
     private boolean executePrint(PrintInstruction ix) {
         MindustryVariable var = getExistingVariable(ix.getValue());
-        textBuffer.print(var.print());
+        textBuffer.print(var.print(instructionProcessor));
         return true;
     }
 

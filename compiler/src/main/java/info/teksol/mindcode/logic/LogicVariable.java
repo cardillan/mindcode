@@ -2,6 +2,7 @@ package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.ast.FunctionParameter;
 import info.teksol.mindcode.compiler.generator.LogicFunction;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 import java.util.Objects;
 
@@ -62,7 +63,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public String format() {
+    public String format(InstructionProcessor instructionProcessor) {
         throw new UnsupportedOperationException();
     }
 

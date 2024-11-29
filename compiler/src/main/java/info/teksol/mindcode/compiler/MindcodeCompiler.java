@@ -330,7 +330,7 @@ public class MindcodeCompiler implements Compiler<String> {
         List<LogicInstruction> program = instructions.stream().map(instructionProcessor::normalizeInstruction).toList();
 
         // All flags are already set as we want them to be
-        Processor processor = new Processor(messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
+        Processor processor = new Processor(instructionProcessor, messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
         addBlocks(processor, "cell", i -> Memory.createMemoryCell());
         addBlocks(processor, "bank", i -> Memory.createMemoryBank());
         addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(i < 5));

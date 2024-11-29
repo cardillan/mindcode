@@ -67,7 +67,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
                 if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
                     // Only addition of a string and a non-null value is supported
                     if (operation == Operation.ADD && a != null && b != null) {
-                        return new StringLiteral(node.inputPosition(), a.print() + b.print());
+                        return new StringLiteral(node.inputPosition(), a.print(instructionProcessor) + b.print(instructionProcessor));
                     } else {
                         error(node, "Unsupported string expression.");
                         return node;
@@ -205,7 +205,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
         }
     }
 
-    private static MindustryVariable variableFromNode(String name, AstNode exp) {
+    private MindustryVariable variableFromNode(String name, AstNode exp) {
         if (exp instanceof NullLiteral n)        return MindustryVariable.createNull();
         if (exp instanceof BooleanLiteral n)     return MindustryVariable.createConst(name, n.getValue());
         if (exp instanceof NumericLiteral n)     return MindustryVariable.createConst( name, n.getAsDouble());
@@ -214,7 +214,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
         if (exp instanceof ConstantAstNode n)    throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
         if (exp instanceof VarRef n) {
             return Icons.isIconName(n.getName())
-                    ? MindustryVariable.createConstString(Icons.getIconValue(n.getName()).format())
+                    ? MindustryVariable.createConstString(Icons.getIconValue(n.getName()).format(instructionProcessor))
                     : null;
         }
         return null;

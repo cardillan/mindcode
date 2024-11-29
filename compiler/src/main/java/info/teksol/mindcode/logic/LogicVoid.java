@@ -1,6 +1,7 @@
 package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 public enum LogicVoid implements LogicValue {
     VOID;
@@ -21,7 +22,7 @@ public enum LogicVoid implements LogicValue {
     }
 
     @Override
-    public String format() {
+    public String format(InstructionProcessor instructionProcessor) {
         throw new MindcodeInternalError("void doesn't have a text representation.");
     }
 

@@ -115,7 +115,7 @@ public class SystemLibraryTest {
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + "-" + level.name().toLowerCase() + ".mlog"),
                 normalizeLineEndings(result.output()), StandardCharsets.UTF_8);
 
-        //if (result.hasProgramOutput()) System.out.println(result.getProgramOutput());
+        if (result.hasProgramOutput()) System.out.println(result.getProgramOutput());
 
         if (executableTest) {
             assertFalse(result.assertions().isEmpty(), "No assertions were executed by the unit test.");

@@ -107,9 +107,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
 -    * op not __tmp2 a
 -    * assertequals __tmp1 __tmp2 "not 3"
 +   34 op add __tmp0 0xabcdefabcdefabc 1
-+   35 op mul __tmp1 -1 773738404492802690
++   35 op mul __tmp1 -1 773738404492802700
 +   36 op not __tmp2 0xabcdefabcdefabc
-+   37 assertequals -773738404492802690 -773738404492802690 "not 3"
++   37 assertequals -773738404492802700 -773738404492802700 "not 3"
     38 assertequals 4 4 "max"
     39 assertequals 2 2 "min"
     40 assertequals 2 2 "abs"
@@ -201,9 +201,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     32 assertequals -65536 -65536 "not 2"
 -    * set a 0xabcdefabcdefabc
 -    * op add __tmp0 0xabcdefabcdefabc 1
--    * op mul __tmp1 -1 773738404492802690
+-    * op mul __tmp1 -1 773738404492802700
 -    * op not __tmp2 0xabcdefabcdefabc
-    33 assertequals -773738404492802690 -773738404492802690 "not 3"
+    33 assertequals -773738404492802700 -773738404492802700 "not 3"
     34 assertequals 4 4 "max"
     35 assertequals 2 2 "min"
  
@@ -299,7 +299,7 @@ assertequals 2 2 "and"
 assertequals 1 1 "xor"
 assertequals -1 -1 "not 1"
 assertequals -65536 -65536 "not 2"
-assertequals -773738404492802690 -773738404492802690 "not 3"
+assertequals -773738404492802700 -773738404492802700 "not 3"
 assertequals 4 4 "max"
 assertequals 2 2 "min"
 assertequals 2 2 "abs"

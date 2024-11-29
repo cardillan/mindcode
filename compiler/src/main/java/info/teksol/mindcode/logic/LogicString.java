@@ -1,6 +1,7 @@
 package info.teksol.mindcode.logic;
 
 import info.teksol.emulator.MindustryString;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
-    public String format() {
+    public String format(InstructionProcessor instructionProcessor) {
         return stringValue;
     }
 
@@ -45,6 +46,10 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     public boolean isObject() {
         return true;
+    }
+
+    public String getStringValue() {
+        return stringValue;
     }
 
     @Override

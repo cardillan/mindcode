@@ -425,7 +425,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * op mul __tmp67 -1 __tmp66
 -    * set __fn0_n a
 +  232 op add __tmp66 0xabcdefabcdefabc 1
-+  233 op mul __tmp67 -1 773738404492802690
++  233 op mul __tmp67 -1 773738404492802700
 +  234 set __fn0_n 0xabcdefabcdefabc
    235 setaddr __fn0retaddr __label34
    236 call __label0 __fn0retval
@@ -434,7 +434,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * op not __tmp69 __tmp68
 -    * assertequals __tmp67 __tmp69 "not 3"
 +  239 op not __tmp69 __fn0retval
-+  240 assertequals -773738404492802690 __tmp69 "not 3"
++  240 assertequals -773738404492802700 __tmp69 "not 3"
    241 set __fn0_n 4
    242 setaddr __fn0retaddr __label35
    243 call __label0 __fn0retval
@@ -919,14 +919,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
    197 assertequals -65536 __tmp65 "not 2"
 -    * set a 0xabcdefabcdefabc
 -    * op add __tmp66 0xabcdefabcdefabc 1
--    * op mul __tmp67 -1 773738404492802690
+-    * op mul __tmp67 -1 773738404492802700
    198 set __fn0_n 0xabcdefabcdefabc
    199 setaddr __fn0retaddr __label34
    200 call __label0 __fn0retval
    201 gotolabel __label34 __fn0
 -    * set __tmp68 __fn0retval
    202 op not __tmp69 __fn0retval
-   203 assertequals -773738404492802690 __tmp69 "not 3"
+   203 assertequals -773738404492802700 __tmp69 "not 3"
    204 set __fn0_n 4
    205 setaddr __fn0retaddr __label35
    206 call __label0 __fn0retval
@@ -1531,7 +1531,7 @@ setaddr __fn0retaddr __label34
 call __label0 __fn0retval
 gotolabel __label34 __fn0
 op not __tmp69 __fn0retval 0
-assertequals -773738404492802690 __tmp69 "not 3"
+assertequals -773738404492802700 __tmp69 "not 3"
 set __fn0_n 4
 setaddr __fn0retaddr __label35
 call __label0 __fn0retval

@@ -1929,7 +1929,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         final String opcode;
         if (args.get(0).hasValue() && args.get(0).value() instanceof LogicString str) {
-            opcode = str.format();
+            opcode = str.format(instructionProcessor);
         } else {
             error(args.get(0).pos(), "First argument to the '%s' function must be a string literal.",
                     call.getFunctionName());
@@ -1945,7 +1945,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 if (arg.outModifier() || arg.inModifier()) {
                     error(arg.pos(), "A string literal passed to the '%s' function must not use an 'out' modifier.", call.getFunctionName());
                 }
-                arguments.add(arg.inModifier() ? str : LogicKeyword.create(str.format()));
+                arguments.add(arg.inModifier() ? str : LogicKeyword.create(str.format(instructionProcessor)));
                 parameters.add(arg.inModifier() ? InstructionParameterType.INPUT : InstructionParameterType.UNSPECIFIED);
             } else if (arg.value() instanceof LogicLiteral lit) {
                 if (arg.outModifier() || arg.inModifier()) {
@@ -1985,7 +1985,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
 
             if (!arguments.isEmpty() && arguments.get(0).value() instanceof LogicString str) {
-                long placeholders = PLACEHOLDER_MATCHER.matcher(str.format()).results().count();
+                long placeholders = PLACEHOLDER_MATCHER.matcher(str.format(instructionProcessor)).results().count();
                 if (placeholders == 0) {
                     warn(call, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
                 }

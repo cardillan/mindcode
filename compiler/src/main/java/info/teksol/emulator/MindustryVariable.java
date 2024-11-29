@@ -5,6 +5,7 @@ import info.teksol.emulator.processor.ExecutionFlag;
 import info.teksol.evaluator.LogicReadable;
 import info.teksol.evaluator.LogicWritable;
 import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.mimex.MindustryContents;
 
 import java.util.Objects;
@@ -189,6 +190,13 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return isObject ? object != null ? 1 : 0 : invalid(numericValue) ? 0 : numericValue;
     }
 
+    public String getStringValue() {
+        if (isObject && object instanceof MindustryString str) {
+            return str.format();
+        }
+        throw new UnsupportedOperationException();
+    }
+
     public long getLongValue() {
         return (long) getDoubleValue();
     }
@@ -201,8 +209,8 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return isObject ? object != null : Math.abs(numericValue) >= 0.00001;
     }
 
-    public String print() {
-        return isObject ? print(object) : print(numericValue);
+    public String print(InstructionProcessor instructionProcessor) {
+        return isObject ? print(object) : instructionProcessor.formatNumber(numericValue);
     }
 
     public String printExact() {
@@ -220,14 +228,6 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public static String print(MindustryObject object) {
         return object == null ? "null" : object.format();
-    }
-
-    public static String print(double value) {
-        if(Math.abs(value - (long) value) < 0.00001) {
-            return String.valueOf((long) value);
-        } else {
-            return String.valueOf(value);
-        }
     }
 
     // TODO track original token/source file for constants
