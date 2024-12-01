@@ -358,7 +358,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         if (!leadingContexts.isEmpty()) {
             if (children.get(currentContext).matches(INIT)) {
-                variableStates = processContext(localContext, children.get(0), variableStates, modifyInstructions);
+                variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions);
                 currentContext++;
             }
 
@@ -370,7 +370,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             // Merge all final states of leading list iterator subcontexts together: the loop body is processed
             // with the final value of every iterator subcontext.
             // First context is without merging to the previous one
-            variableStates = processContext(localContext, leadingContexts.get(0), variableStates, modifyInstructions);
+            variableStates = processContext(localContext, leadingContexts.getFirst(), variableStates, modifyInstructions);
             for (int index = 1; index < leadingContexts.size(); ) {
                 AstContext context = leadingContexts.get(index++);
                 iterator.setNextIndex(firstInstructionIndex(context));
@@ -384,8 +384,8 @@ class DataFlowOptimizer extends BaseOptimizer {
                 currentContext++;
             }
         } else {
-            if (!children.isEmpty() && children.get(0).matches(INIT)) {
-                variableStates = processContext(localContext, children.get(0), variableStates, modifyInstructions);
+            if (!children.isEmpty() && children.getFirst().matches(INIT)) {
+                variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions);
                 currentContext++;
             }
 
@@ -596,7 +596,7 @@ class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processCaseContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
         List<AstContext> children = localContext.children();
         Iterator<AstContext> iterator = children.iterator();
-        if (!children.isEmpty() && children.get(0).matches(INIT)) {
+        if (!children.isEmpty() && children.getFirst().matches(INIT)) {
             AstContext child = iterator.next();
             variableStates = processContext(localContext, child, variableStates, modifyInstructions);
         }
@@ -749,11 +749,14 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
 
         // Handle special cases
-        if (instruction instanceof NoOpInstruction ix)      return variableStates;
-        if (instruction instanceof PushInstruction ix)      return variableStates.pushVariable(ix.getVariable());
-        if (instruction instanceof PopInstruction ix)       return variableStates.popVariable(ix.getVariable());
-        if (instruction instanceof LabeledInstruction ix)   return resolveLabel(variableStates, ix.getLabel());
-        if (instruction instanceof EndInstruction ix)       return variableStates.setDead(true);
+        switch (instruction) {
+            case NoOpInstruction ix     -> { return variableStates; }
+            case PushInstruction ix     -> { return variableStates.pushVariable(ix.getVariable()); }
+            case PopInstruction ix      -> { return variableStates.popVariable(ix.getVariable()); }
+            case LabeledInstruction ix  -> { return resolveLabel(variableStates, ix.getLabel()); }
+            case EndInstruction ix      -> { return variableStates.setDead(true); }
+            default -> { }
+        }
 
         indentInc();
 
@@ -821,19 +824,14 @@ class DataFlowOptimizer extends BaseOptimizer {
     }
 
     // Try to evaluate the instruction
-    // We're not evaluating PackColor, because the result cannot be converted to mlog representation in ML7.
+    // We're not evaluating PackColor, because the result cannot be converted to an mlog representation.
     private LogicValue evaluateInstruction(LogicInstruction instruction, Map<LogicVariable, LogicValue> valueReplacements) {
-        if (instruction instanceof SetInstruction set && set.getValue() instanceof LogicLiteral literal) {
-            return literal;
-        }
-        if (instruction instanceof SetInstruction set && set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile()) {
-            return builtIn;
-        }
-        if (instruction instanceof OpInstruction op && op.getOperation().isDeterministic()) {
-            return evaluateOpInstruction(op, valueReplacements);
-        }
-
-        return null;
+        return switch (instruction) {
+            case SetInstruction set when set.getValue() instanceof LogicLiteral literal -> literal;
+            case SetInstruction set when set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile() -> builtIn;
+            case OpInstruction op when op.getOperation().isDeterministic() -> evaluateOpInstruction(op, valueReplacements);
+            default -> null;
+        };
     }
 
     public void addUninitialized(LogicVariable variable) {

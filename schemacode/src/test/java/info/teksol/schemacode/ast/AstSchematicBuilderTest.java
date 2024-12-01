@@ -110,7 +110,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         '''
                 """);
 
-        assertTrue(parsed.definitions().get(0) instanceof AstStringConstant stringConstant
+        assertTrue(parsed.definitions().getFirst() instanceof AstStringConstant stringConstant
                 && stringConstant.name().equals("value")
                 && stringConstant.value() instanceof AstStringBlock block
                 && block.text().equals("text\nblock\n")
@@ -128,9 +128,9 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 """
         );
 
-        assertTrue(definitions.definitions().get(0) instanceof AstSchematic schematics
-                && schematics.attributes().get(0).attribute().equals("description")
-                && schematics.attributes().get(0).value() instanceof AstStringBlock stringBlock
+        assertTrue(definitions.definitions().getFirst() instanceof AstSchematic schematics
+                && schematics.attributes().getFirst().attribute().equals("description")
+                && schematics.attributes().getFirst().value() instanceof AstStringBlock stringBlock
                 && stringBlock.text().equals("Description"));
     }
 

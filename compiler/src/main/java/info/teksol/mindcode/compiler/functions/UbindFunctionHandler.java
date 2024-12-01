@@ -18,7 +18,7 @@ class UbindFunctionHandler extends AbstractFunctionHandler {
     @Override
     public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
         validateArguments(call, arguments);
-        program.accept(functionMapper.createInstruction(Opcode.UBIND, arguments.get(0).value()));
+        program.accept(functionMapper.createInstruction(Opcode.UBIND, arguments.getFirst().value()));
         return LogicBuiltIn.UNIT;
     }
 

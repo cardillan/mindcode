@@ -117,7 +117,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         Map<String, List<Link>> linksByName = links.stream().collect(Collectors.groupingBy(Link::name));
         linksByName.values().stream()
                 .filter(v -> v.size() > 1)
-                .forEachOrdered(l -> builder.error(processor, "Block link name '%s' used more than once.", l.get(0).name()));
+                .forEachOrdered(l -> builder.error(processor, "Block link name '%s' used more than once.", l.getFirst().name()));
 
         // Detect blocks linked more than once
         Map<Position, List<Link>> linksByPosition = links.stream().collect(Collectors.groupingBy(Link::position));

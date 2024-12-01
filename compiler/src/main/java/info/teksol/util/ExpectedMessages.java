@@ -137,7 +137,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         if (minimumCount > maximumCount) {
             throw new IllegalArgumentException("Minimum count cannot be greater than maximum count");
         }
-        matchers.get(matchers.size() - 1).setLimits(minimumCount, maximumCount);
+        matchers.getLast().setLimits(minimumCount, maximumCount);
         return this;
     }
 
@@ -193,7 +193,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
      * @return this instance
      */
     public ExpectedMessages ignored() {
-        matchers.get(matchers.size() - 1).setIgnored();
+        matchers.getLast().setIgnored();
         return between(0, Integer.MAX_VALUE);
     }
 

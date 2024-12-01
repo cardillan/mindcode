@@ -333,11 +333,11 @@ public final class AstContext {
     }
 
     public AstContext firstChild() {
-        return children.get(0);
+        return children.getFirst();
     }
 
     public AstContext lastChild() {
-        return children.get(children.size() - 1);
+        return children.getLast();
     }
 
     public AstContext nextChild(AstContext child) {

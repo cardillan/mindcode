@@ -585,8 +585,8 @@ class DataFlowVariableStates {
                         // Merge the two lists
                         if (current.size() == 1 && theOther.size() == 1) {
                             ArrayList<LogicInstruction> union = new ArrayList<>();
-                            union.add(current.get(0));
-                            union.add(theOther.get(0));
+                            union.add(current.getFirst());
+                            union.add(theOther.getFirst());
                             map1.put(variable, union);
                         } else {
                             Set<LogicInstruction> union = createIdentitySet(current.size() + theOther.size());
@@ -709,20 +709,23 @@ class DataFlowVariableStates {
                 return false;
             }
 
-            if (instruction instanceof OpInstruction op && op.getOperation().isDeterministic()) {
-                return isOpEqual(variableStates, (OpInstruction) this.instruction, op);
-            } else if (instruction instanceof PackColorInstruction ix) {
-                return isInstructionEqual(variableStates, this.instruction, ix);
-            } else if (instruction instanceof ReadInstruction ix) {
-                // TODO read instructions will depend on memory model
-                // return isInstructionEqual(variableStates, this.instruction, ix);
-                return false;
-            } else if (instruction instanceof SensorInstruction ix) {
-                return instructionProcessor.isDeterministic(ix)
-                        && isInstructionEqual(variableStates, this.instruction, ix);
-            }
+            return switch (instruction) {
+                case OpInstruction op when op.getOperation().isDeterministic() ->
+                        isOpEqual(variableStates, (OpInstruction) this.instruction, op);
 
-            return false;
+                case PackColorInstruction ix ->
+                        isInstructionEqual(variableStates, this.instruction, ix);
+
+                case ReadInstruction ix ->
+                    // TODO read instructions will depend on memory model
+                    // isInstructionEqual(variableStates, this.instruction, ix);
+                        false;
+
+                case SensorInstruction ix when instructionProcessor.isDeterministic(ix) ->
+                         isInstructionEqual(variableStates, this.instruction, ix);
+
+                default -> false;
+            };
         }
 
         private boolean isVolatile(LogicInstruction instruction) {

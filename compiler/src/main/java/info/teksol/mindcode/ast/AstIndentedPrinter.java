@@ -250,7 +250,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
 
     protected void visitList(List<? extends AstNode> nodes) {
         if (nodes.size() == 1) {
-            print("["); visit(nodes.get(0)); print("]");
+            print("["); visit(nodes.getFirst()); print("]");
         } else {
             open("[");
             for (int i = 0; i < nodes.size(); i++) {

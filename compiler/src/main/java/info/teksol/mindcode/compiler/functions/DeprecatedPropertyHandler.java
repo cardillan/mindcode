@@ -53,8 +53,8 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
         List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
         NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
         CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
-        if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
-            return blockArgument.name() + "." + deprecated + " = " + args.get(0).name();
+        if (args.size() == 1 && args.getFirst().type() == InstructionParameterType.INPUT) {
+            return blockArgument.name() + "." + deprecated + " = " + args.getFirst().name();
         } else {
             return null;
         }

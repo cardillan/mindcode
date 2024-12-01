@@ -66,13 +66,13 @@ class LoopOptimizer extends BaseOptimizer {
         List<AstContext> conditions = loop.findSubcontexts(CONDITION);
         if (conditions.size() != 1) return null;
 
-        LogicList condition = contextInstructions(conditions.get(0));
+        LogicList condition = contextInstructions(conditions.getFirst());
         LogicList next = contextInstructions(loop.findSubcontext(FLOW_CONTROL));
         if (condition.isEmpty() || next.isEmpty() || !hasConditionAtFront(loop)) {
             return null;
         }
 
-        if (condition.get(0) instanceof LabelInstruction conditionLabel
+        if (condition.getFirst() instanceof LabelInstruction conditionLabel
                 && condition.getLast() instanceof JumpInstruction jump
                 && jump.isConditional()
                 && next.getLast() instanceof LabelInstruction doneLabel

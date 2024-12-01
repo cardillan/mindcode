@@ -104,7 +104,7 @@ class LoopUnroller extends BaseOptimizer {
 
         List<AstContext> conditions = loop.findSubcontexts(CONDITION);
         if (conditions.size() == 2) {
-            LogicList condition = removeFinalJump(contextInstructions(conditions.get(0)));
+            LogicList condition = removeFinalJump(contextInstructions(conditions.getFirst()));
             if (!condition.isEmpty()) {
                 result.add(condition);
             }
@@ -120,14 +120,14 @@ class LoopUnroller extends BaseOptimizer {
                 .map(this::contextInstructions)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        if (result.size() > 1 && result.get(result.size() - 1).getAstContext().subcontextType() == CONDITION) {
+        if (result.size() > 1 && result.getLast().getAstContext().subcontextType() == CONDITION) {
             // If there are two condition contexts, only keep the second one
-            if (result.get(0).getAstContext().subcontextType() == CONDITION) {
-                result.remove(0);
+            if (result.getFirst().getAstContext().subcontextType() == CONDITION) {
+                result.removeFirst();
             }
-            result.set(result.size() - 1, removeFinalJump(result.get(result.size() - 1)));
+            result.set(result.size() - 1, removeFinalJump(result.getLast()));
         } else {
-            result.set(0, removeFinalJump(result.get(0)));
+            result.set(0, removeFinalJump(result.getFirst()));
         }
 
         return result;
@@ -437,7 +437,7 @@ class LoopUnroller extends BaseOptimizer {
         }
 
         // Get a copy of the context before removing it
-        LogicList labels = contextInstructions(trailing.get(trailing.size() - 1));
+        LogicList labels = contextInstructions(trailing.getLast());
 
         // Remove all loop instructions
         removeMatchingInstructions(ix -> ix.belongsTo(loop));

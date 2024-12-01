@@ -88,7 +88,7 @@ public class InputFiles {
     }
 
     public InputFile getMainInputFile() {
-        return inputFiles.get(0);
+        return inputFiles.getFirst();
     }
 
     public InputFile getInputFile(Path path) {

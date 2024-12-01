@@ -189,19 +189,21 @@ public class Decompiler {
     private void outputConfiguration(Block block) {
         Class<? extends Configuration> cfgClass = block.configurationClass();
         Configuration cfg = block.configuration().as(cfgClass);
-        if (cfg instanceof BlockConfiguration b)                sbr.append(" block ").append(b.getName());
-        else if (cfg instanceof BooleanConfiguration b)         sbr.append(b.value() ? " enabled" : " disabled");
-        else if (cfg instanceof Color c)                        writeColor(c);
-        else if (cfg instanceof ItemConfiguration i)            sbr.append(" item ").append(i.getName());
-        else if (cfg instanceof LiquidConfiguration l)          sbr.append(" liquid ").append(l.getName());
-        else if (cfg instanceof Position p)                     writeConnection(block, p);
-        else if (cfg instanceof PositionArray p)                writeConnections(block, p);
-        else if (cfg instanceof ProcessorConfiguration p)       writeProcessor(block, p);
-        else if (cfg instanceof TextConfiguration t)            writeText(t);
-        else if (cfg instanceof UnitConfiguration u)            sbr.append(" unit ").append(u.getName());
-        else if (cfg instanceof UnitCommandConfiguration c)     sbr.append(" command ").append(c.getName());
-        else if (cfg instanceof UnitPlan p)                     sbr.append(" unit ").append(p.unitName());
-        else                                                    sbr.append(" // unknown configuration: ").append(cfg);
+        switch (cfg) {
+            case BlockConfiguration b       -> sbr.append(" block ").append(b.getName());
+            case BooleanConfiguration b     -> sbr.append(b.value() ? " enabled" : " disabled");
+            case Color c                    -> writeColor(c);
+            case ItemConfiguration i        -> sbr.append(" item ").append(i.getName());
+            case LiquidConfiguration l      -> sbr.append(" liquid ").append(l.getName());
+            case Position p                 -> writeConnection(block, p);
+            case PositionArray p            -> writeConnections(block, p);
+            case ProcessorConfiguration p   -> writeProcessor(block, p);
+            case TextConfiguration t        -> writeText(t);
+            case UnitConfiguration u        -> sbr.append(" unit ").append(u.getName());
+            case UnitCommandConfiguration c -> sbr.append(" command ").append(c.getName());
+            case UnitPlan p                 -> sbr.append(" unit ").append(p.unitName());
+            default                         -> sbr.append(" // unknown configuration: ").append(cfg);
+        }
     }
 
     private void writeColor(Color color) {

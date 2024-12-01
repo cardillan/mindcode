@@ -129,12 +129,11 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
     }
 
     private void processNode(AstNode node) {
-        if (node instanceof ProgramParameter programParameter) {
-            parameters.add(programParameter);
-        } else if (node instanceof Constant constant) {
-            constants.add(constant);
-        } else if (node instanceof FunctionDeclaration functionDeclaration) {
-            functions.add(functionDeclaration);
+        switch (node) {
+            case ProgramParameter p     -> parameters.add(p);
+            case Constant c             -> constants.add(c);
+            case FunctionDeclaration f  -> functions.add(f);
+            default -> { }
         }
 
         node.getChildren().forEach(this::processNode);

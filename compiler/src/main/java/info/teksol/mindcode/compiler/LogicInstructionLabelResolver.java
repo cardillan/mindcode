@@ -56,7 +56,7 @@ public class LogicInstructionLabelResolver {
         int instructions = Math.min(limit, order.size() / 4);
 
         List<LogicInstruction> result = new ArrayList<>();
-        AstContext astContext = program.get(0).getAstContext();
+        AstContext astContext = program.getFirst().getAstContext();
         for (int index = 0, i = 0; i++ < instructions; index += 5) {
             order.add(index, LogicVariable.unusedVariable());
             result.add(instructionProcessor.createInstruction(astContext,  PACKCOLOR, order.subList(index, index + 5)));
@@ -114,7 +114,7 @@ public class LogicInstructionLabelResolver {
         }
 
         // Save the last instruction before it is resolved
-        LogicInstruction last = program.get(program.size() - 1);
+        LogicInstruction last = program.getLast();
 
         program = resolveRemarks(program);
         calculateAddresses(program);
@@ -189,12 +189,7 @@ public class LogicInstructionLabelResolver {
     private LogicArgument resolveLabel(LogicArgument argument) {
         if (argument instanceof LogicLabel label) {
             if (!addresses.containsKey(label)) {
-                if (true) {
-                    throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
-                }  else {
-                    System.out.printf("Unknown jump label target: '%s' was not previously discovered in program.%n", label);
-                    return LogicLabel.absolute(0);
-                }
+                throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
             }
             return addresses.get(label);
         } else {

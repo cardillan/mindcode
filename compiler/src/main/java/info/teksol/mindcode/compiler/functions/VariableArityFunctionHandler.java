@@ -24,7 +24,7 @@ class VariableArityFunctionHandler extends AbstractFunctionHandler {
     @Override
     public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
         arguments.forEach(arg -> program.accept(functionMapper.createInstruction(opcodeVariant.opcode(), arg.value())));
-        return arguments.get(arguments.size() - 1).value();
+        return arguments.getLast().value();
     }
 
     @Override

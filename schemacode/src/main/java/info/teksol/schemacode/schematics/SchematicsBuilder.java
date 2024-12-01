@@ -90,7 +90,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
             return null;
         }
 
-        astSchematic = schematicsList.get(0);
+        astSchematic = schematicsList.getFirst();
 
         Map<String, Long> labelCounts = astSchematic.blocks().stream()
                 .filter(b -> b.labels() != null && !b.labels().isEmpty())
@@ -205,7 +205,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                 .forEachOrdered(node -> error(node, "Identifier '%s' already defined.", node.name()));
 
         Map<String, AstStringConstant> astConstants = astConstantLists.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0)));
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getFirst()));
 
         // Resolve indirections
         constants = astConstants.entrySet().stream()
@@ -248,19 +248,20 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     }
 
     private Configuration getConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
-        if (astConfiguration == null)                                 return  EmptyConfiguration.EMPTY;
-        if (astConfiguration instanceof AstBlockReference r)          return  verifyValue(r, blockPos, BlockConfiguration.forName(r.item()), r.item(), "block");
-        if (astConfiguration instanceof AstBoolean b)                 return  BooleanConfiguration.of(b.value());
-        if (astConfiguration instanceof AstConnection c)              return  c.evaluate(this, blockPos.position());
-        if (astConfiguration instanceof AstConnections c)             return  new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-        if (astConfiguration instanceof AstItemReference r)           return  verifyValue(r, blockPos, ItemConfiguration.forName(r.item()), r.item(), "item");
-        if (astConfiguration instanceof AstLiquidReference r)         return  verifyValue(r, blockPos, LiquidConfiguration.forName(r.liquid()), r.liquid(), "liquid");
-        if (astConfiguration instanceof AstProcessor p)               return  ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
-        if (astConfiguration instanceof AstRgbaValue rgb)             return  convertToRgbValue(blockPos, rgb);
-        if (astConfiguration instanceof AstText t)                    return  new TextConfiguration(t.getText(this));
-        if (astConfiguration instanceof AstUnitCommandReference r)    return  verifyValue(r, blockPos, UnitCommandConfiguration.forName(r.item()), r.item(), "command");
-        if (astConfiguration instanceof AstUnitReference r)           return  decodeUnitConfiguration(blockPos, r);
-        return EmptyConfiguration.EMPTY;
+        return switch (astConfiguration) {
+            case AstBlockReference r        -> verifyConfiguration(r, blockPos, "block");
+            case AstBoolean b               -> BooleanConfiguration.of(b.value());
+            case AstConnection c            -> c.evaluate(this, blockPos.position());
+            case AstConnections c           -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
+            case AstItemReference r         -> verifyConfiguration(r, blockPos, "item");
+            case AstLiquidReference r       -> verifyConfiguration(r, blockPos, "liquid");
+            case AstProcessor p             -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
+            case AstRgbaValue rgb           -> convertToRgbValue(blockPos, rgb);
+            case AstText t                  -> new TextConfiguration(t.getText(this));
+            case AstUnitCommandReference r  -> verifyConfiguration(r, blockPos, "command");
+            case AstUnitReference r         -> decodeUnitConfiguration(blockPos, r);
+            case null, default              -> EmptyConfiguration.EMPTY;
+        };
     }
 
     private Color convertToRgbValue(BlockPosition blockPos, AstRgbaValue rgb) {
@@ -272,10 +273,11 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         );
     }
 
-    private Configuration verifyValue(AstElement element, BlockPosition blockPos, Configuration value, String strValue, String valueName) {
+    private Configuration verifyConfiguration(AstContentsReference reference, BlockPosition blockPos, String valueName) {
+        Configuration value = reference.getConfiguration();
         if (value == null) {
-            error(element, "Block '%s' at %s: unknown or unsupported %s '%s'.",
-                    blockPos.name(), blockPos.position().toStringAbsolute(), valueName, strValue);
+            error(reference, "Block '%s' at %s: unknown or unsupported %s '%s'.",
+                    blockPos.name(), blockPos.position().toStringAbsolute(), valueName, reference.getConfigurationText());
             return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
         } else {
             return value;
@@ -292,7 +294,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
 
     private Configuration decodeUnitConfiguration(BlockPosition blockPos, AstUnitReference ref) {
         return switch (blockPos.configurationType()) {
-            case UNIT_OR_BLOCK -> verifyValue(ref, blockPos, UnitConfiguration.forName(ref.unit()), ref.unit(), "ref");
+            case UNIT_OR_BLOCK -> verifyConfiguration(ref, blockPos, "ref");
             case UNIT_PLAN -> {
                 if (blockPos.blockType().unitPlans().contains(ref.unit())) {
                     yield new UnitPlan(ref.unit());
@@ -318,11 +320,11 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
             list.stream().skip(1).forEach(a -> error(a, "Attribute '%s' is already defined.", name));
         }
 
-        if (!expectedType.isInstance(list.get(0).value())) {
+        if (!expectedType.isInstance(list.getFirst().value())) {
             throw new SchematicsInternalError("Attribute '%s': expected type %s, actual type %s.", name,
-                    expectedType, list.get(0).value().getClass());
+                    expectedType, list.getFirst().value().getClass());
         } else {
-            return expectedType.cast(list.get(0).value());
+            return expectedType.cast(list.getFirst().value());
         }
     }
 

@@ -111,25 +111,19 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     static LogicKeyword toKeyword(LogicValue arg) {
         // Syntactically, instruction keywords are just identifiers.
         // To convert it to keyword, we use the plain variable name.
-        if (arg instanceof LogicVariable lv) {
-            return LogicKeyword.create(lv.getName());
-        } else if (arg instanceof LogicBoolean lb) {
-            // Handles the case where true/false are used as a selector or keyword
-            return LogicKeyword.create(lb.toMlog());
-        } else {
-            throw new MindcodeInternalError("Unexpected type of argument " + arg);
-        }
+        return switch (arg) {
+            case LogicVariable lv -> LogicKeyword.create(lv.getName());
+            case LogicBoolean lb  -> LogicKeyword.create(lb.toMlog()); // Handles the case where true/false are used as a selector or keyword
+            default -> throw new MindcodeInternalError("Unexpected type of argument " + arg);
+        };
     }
 
     static LogicKeyword toKeywordOptional(LogicValue arg) {
-        if (arg instanceof LogicVariable lv) {
-            return LogicKeyword.create(lv.getName());
-        } else if (arg instanceof LogicBoolean lb) {
-            // Handles the case where true/false are used as a selector or keyword
-            return LogicKeyword.create(lb.toMlog());
-        } else {
-            return LogicKeyword.create("");        // A keyword that cannot exist
-        }
+        return switch (arg) {
+            case LogicVariable lv -> LogicKeyword.create(lv.getName());
+            case LogicBoolean lb  -> LogicKeyword.create(lb.toMlog()); // Handles the case where true/false are used as a selector or keyword
+            default               -> LogicKeyword.create(""); // A keyword that cannot exist
+        };
     }
 
     static String joinNamedArguments(List<NamedParameter> arguments) {
@@ -250,7 +244,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
                     default      -> selector.name();
             };
             case STOP   -> "stopProcessor";
-            case STATUS -> switch (opcodeVariant.namedParameters().get(0).name()) {
+            case STATUS -> switch (opcodeVariant.namedParameters().getFirst().name()) {
                     case "true"  -> "clearStatus";
                     case "false" -> "applyStatus";
                     default      -> throw new MindcodeInternalError("Opcode variant " + opcodeVariant + " not mapped to a function.");
@@ -261,10 +255,10 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
     private FunctionHandler collapseFunctions(List<FunctionHandler> functions) {
         if (functions.size() == 1) {
-            return functions.get(0);
+            return functions.getFirst();
         } else {
             if (functions.stream().anyMatch(fn -> !(fn instanceof SelectorFunction))) {
-                throw new InvalidMetadataException("Function name collision; " + functions.get(0).getName() + " maps to:"
+                throw new InvalidMetadataException("Function name collision; " + functions.getFirst().getName() + " maps to:"
                         + System.lineSeparator()
                         + functions.stream().map(f -> f.getOpcodeVariant().toString()).collect(Collectors.joining(System.lineSeparator())));
             }
@@ -272,8 +266,8 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
             Map<String, FunctionHandler> keywordMap = functions.stream()
                     .collect(Collectors.toMap(f -> ((SelectorFunction) f).getKeyword(), f -> f));
 
-            String name = functions.get(0).getName();
-            OpcodeVariant opcodeVariant = functions.get(0).getOpcodeVariant();
+            String name = functions.getFirst().getName();
+            OpcodeVariant opcodeVariant = functions.getFirst().getOpcodeVariant();
             return new MultiplexedFunctionHandler(this, keywordMap, name, opcodeVariant);
         }
     }

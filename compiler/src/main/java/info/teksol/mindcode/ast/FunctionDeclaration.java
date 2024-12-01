@@ -85,7 +85,7 @@ public class FunctionDeclaration extends BaseAstNode {
     }
 
     public boolean isVarArg() {
-        return !params.isEmpty() && params.get(params.size() - 1).isVarArgs();
+        return !params.isEmpty() && params.getLast().isVarArgs();
     }
 
     public IntRange getParameterCount() {

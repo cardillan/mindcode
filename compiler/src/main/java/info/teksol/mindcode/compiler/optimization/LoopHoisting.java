@@ -50,11 +50,11 @@ class LoopHoisting extends BaseOptimizer {
 
         AstContext anchor;
         List<AstContext> parts = new ArrayList<>(loop.children());
-        if (parts.get(0).matches(INIT)) {
-            parts.remove(0);
+        if (parts.getFirst().matches(INIT)) {
+            parts.removeFirst();
         }
 
-        anchor = parts.get(0);
+        anchor = parts.getFirst();
 
         int conditions = (int) parts.stream().filter(c -> c.matches(CONDITION)).count();
         if (conditions == 0) {
@@ -64,7 +64,7 @@ class LoopHoisting extends BaseOptimizer {
                 return;
             }
         } else if (conditions == 2) {
-            if (!parts.get(0).matches(CONDITION)) return;
+            if (!parts.getFirst().matches(CONDITION)) return;
         } else if (conditions != 1) {
             return;
         }

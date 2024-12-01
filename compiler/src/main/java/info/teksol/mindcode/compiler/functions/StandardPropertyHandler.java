@@ -98,8 +98,8 @@ class StandardPropertyHandler extends AbstractPropertyHandler {
         NamedParameter block = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
         Objects.requireNonNull(block);
         CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
-        if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
-            return block.name() + "." + getName() + " = " + args.get(0).name();
+        if (args.size() == 1 && args.getFirst().type() == InstructionParameterType.INPUT) {
+            return block.name() + "." + getName() + " = " + args.getFirst().name();
         } else {
             return null;
         }

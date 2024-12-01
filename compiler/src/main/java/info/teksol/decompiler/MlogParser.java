@@ -89,11 +89,11 @@ public class MlogParser {
         }
 
         if (!tokens.isEmpty()) {
-            if (tokens.size() == 1 && tokens.get(0).charAt(tokens.get(0).length() - 1) == ':') {
+            if (tokens.size() == 1 && tokens.getFirst().endsWith(":")) {
                 // Symbolic label
-                labels.put(content.size(), tokens.get(0));
+                labels.put(content.size(), tokens.getFirst());
             } else {
-                Opcode opcode = Opcode.fromOpcode(tokens.get(0));
+                Opcode opcode = Opcode.fromOpcode(tokens.getFirst());
                 if (opcode != null) {
                     List<MlogExpression> arguments = tokens.stream().skip(1).map(this::arg)
                             .collect(Collectors.toCollection(ArrayList::new));
@@ -103,7 +103,7 @@ public class MlogParser {
                     }
                     content.add(new InstructionExpression(opcode, arguments.subList(0, parameters.size()),parameters));
                 } else {
-                    content.add(error("Unrecognized opcode '" + tokens.get(0) + "'."));
+                    content.add(error("Unrecognized opcode '" + tokens.getFirst() + "'."));
                 }
             }
         }

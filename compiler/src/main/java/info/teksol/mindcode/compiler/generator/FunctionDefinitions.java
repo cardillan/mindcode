@@ -82,7 +82,7 @@ class FunctionDefinitions extends AbstractMessageEmitter {
                 .toList();
 
         if (list.size() == 2 && list.get(0).isVarArgs() != list.get(1).isVarArgs()) {
-            return List.of(list.get(list.get(0).isVarArgs() ? 1 : 0));
+            return List.of(list.get(list.getFirst().isVarArgs() ? 1 : 0));
         } else {
             return list;
         }
@@ -96,7 +96,7 @@ class FunctionDefinitions extends AbstractMessageEmitter {
      */
     public LogicFunction getExactMatch(FunctionCall call) {
         List<LogicFunction> result = getExactMatches(call);
-        return result.size() == 1 ? result.get(0) : null;
+        return result.size() == 1 ? result.getFirst() : null;
     }
 
 

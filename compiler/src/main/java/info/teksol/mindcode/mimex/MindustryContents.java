@@ -95,7 +95,7 @@ public class MindustryContents {
                 lines = reader.lines()
                         .filter(l -> !l.startsWith("//") && !l.isBlank())
                         .toList();
-                header = List.of(lines.get(0).split(";"));
+                header = List.of(lines.getFirst().split(";"));
                 parseHeader();
             } catch (IOException e) {
                 throw new RuntimeException("Cannot read resource " + resource, e);
@@ -107,7 +107,7 @@ public class MindustryContents {
         protected int findColumn(String columnName) {
             int index = header.indexOf(columnName);
             if (index < 0) {
-                throw new IllegalStateException("Cannot locate column " + columnName + " in " + lines.get(0));
+                throw new IllegalStateException("Cannot locate column " + columnName + " in " + lines.getFirst());
             }
             return index;
         }

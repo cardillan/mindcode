@@ -52,7 +52,7 @@ class TempVariableEliminator extends BaseOptimizer {
                             ix -> ix.getArgs().contains(value) && !(ix instanceof PushOrPopInstruction));
 
                     // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
-                    if (list.size() == 2 && list.get(0) == previous) {
+                    if (list.size() == 2 && list.getFirst() == previous) {
                         // Make sure all arg1 arguments of the other instruction are output
                         boolean replacesOutputArg = previous.typedArgumentsStream()
                                 .filter(t -> t.argument().equals(value))

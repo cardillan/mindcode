@@ -43,7 +43,7 @@ class CaseExpressionOptimizer extends BaseOptimizer {
                             in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
                     // The set instruction is not the first one
-                    if (list.get(0) != ix) continue;
+                    if (list.getFirst() != ix) continue;
 
                     // Some of the other instructions aren't part of the case expression
                     if (!list.stream().skip(1).allMatch(in -> isStandardCaseWhenInstruction(in, result))) continue;

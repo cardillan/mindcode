@@ -26,7 +26,7 @@ public class Directive extends BaseAstNode {
     }
 
     public DirectiveText getValue() {
-        return values.get(0);
+        return values.getFirst();
     }
 
     public List<DirectiveText> getValues() {

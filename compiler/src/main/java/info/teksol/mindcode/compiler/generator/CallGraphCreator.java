@@ -46,14 +46,11 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void visitNode(AstNode nodeToVisit) {
-        if (nodeToVisit instanceof StackAllocation n) {
-            visitStackAllocation(n);
-        } else if (nodeToVisit instanceof FunctionDeclaration n) {
-            visitFunctionDeclaration(n);
-        } else if (nodeToVisit instanceof FunctionCall n) {
-            visitFunctionCall(n);
-        } else {
-            nodeToVisit.getChildren().forEach(this::visitNode);
+        switch (nodeToVisit) {
+            case StackAllocation n      -> visitStackAllocation(n);
+            case FunctionDeclaration n  -> visitFunctionDeclaration(n);
+            case FunctionCall n         -> visitFunctionCall(n);
+            default                     -> nodeToVisit.getChildren().forEach(this::visitNode);
         }
     }
 
@@ -81,7 +78,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         if (functionCall.getFunctionName().equals("sync")
                 && functionCall.getArguments().size() == 1
-                && functionCall.getArguments().get(0).getExpression() instanceof VarRef var
+                && functionCall.getArguments().getFirst().getExpression() instanceof VarRef var
                 && var.getName().equals(var.getName().toUpperCase())) {
             syncedVariables.add(var.getName());
             warn(functionCall, "Variable '%s' is used as argument in the 'sync()' function, will be considered volatile.", var.getName());
@@ -149,7 +146,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             // Visit all children
             function.getCallCardinality().forEach(this::visitFunction);
         }
-        callStack.remove(callStack.size() - 1);
+        callStack.removeLast();
     }
 
     private void validateFunction(LogicFunction function) {

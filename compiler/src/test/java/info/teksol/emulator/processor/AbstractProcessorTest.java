@@ -55,7 +55,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         Path path = Path.of(scriptsDirectory, className + ".txt");
         String[] array = results.get(className).toArray(new String[0]);
         List<String> texts = Stream.of(array).sorted().collect(Collectors.toCollection(ArrayList::new));
-        texts.add(0, headers.get(className));
+        texts.addFirst(headers.get(className));
         Files.write(path, texts);
     }
 

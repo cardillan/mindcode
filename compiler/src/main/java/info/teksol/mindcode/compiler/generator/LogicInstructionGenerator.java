@@ -518,7 +518,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 error(call,"Cannot resolve function '%s'.", functionName);
                 return NULL;
             } else {
-                return handleUserFunctionCall(exactMatches.get(0), call, arguments);
+                return handleUserFunctionCall(exactMatches.getFirst(), call, arguments);
             }
         } else {
             setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
@@ -535,7 +535,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     yield NULL;
                 }
                 case 1  -> {
-                    yield handleUserFunctionCall(looseMatches.get(0), call, arguments);
+                    yield handleUserFunctionCall(looseMatches.getFirst(), call, arguments);
                 }
                 default -> {
                     error(call, "Cannot resolve function '%s'.", functionName);
@@ -711,7 +711,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private List<LogicFunctionArgument> substituteArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {
         // Filter variables representing input parameters
-        Predicate<LogicFunctionArgument> predicate = a -> a.value() instanceof LogicVariable variable && function.isInputFunctionParameter(variable);
+        Predicate<LogicFunctionArgument> predicate =
+                a -> a.value() instanceof LogicVariable variable && function.isInputFunctionParameter(variable);
 
         long count = IntStream.range(0, arguments.size())
                 .filter(i -> predicate.test(arguments.get(i)) && !function.getParameter(i).equals(arguments.get(i).value()))
@@ -809,7 +810,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private void retrieveFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments, boolean recursiveCall) {
         // Filter variables representing input parameters
-        Predicate<LogicFunctionArgument> predicate = a -> a.value() instanceof LogicVariable variable && function.isOutputFunctionParameter(variable);
+        Predicate<LogicFunctionArgument> predicate =
+                a -> a.value() instanceof LogicVariable variable && function.isOutputFunctionParameter(variable);
 
         long count = recursiveCall
                 ? IntStream.range(0, arguments.size())
@@ -1044,42 +1046,44 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             rvalue = eval;
         }
 
-        if (node.getVar() instanceof HeapAccess heapAccess) {
-            final LogicValue address = resolveHeapIndex(heapAccess);
-            emit(createWrite(rvalue, createMemoryVariable(heapAccess, heapAccess.getCellName()), address));
-        } else if (node.getVar() instanceof PropertyAccess propertyAccess) {
-            LogicValue propTarget = visit(propertyAccess.getTarget());
-            LogicArgument prop = visit(propertyAccess.getProperty());
-            String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName().substring(1) : prop.toMlog();
-            // Implicit out modifier as this is an assignment
-            LogicFunctionArgument argument = new LogicFunctionArgument(node.getValue().inputPosition(), rvalue, false, false);
-            if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(argument)) == null) {
-                error(node, "Undefined property '%s.%s'.", propTarget.toMlog(), prop.toMlog());
-                return NULL;
+        switch (node.getVar()) {
+            case HeapAccess heapAccess -> {
+                final LogicValue address = resolveHeapIndex(heapAccess);
+                emit(createWrite(rvalue, createMemoryVariable(heapAccess, heapAccess.getCellName()), address));
             }
-        } else if (node.getVar() instanceof VarRef varRef) {
-            String name = varRef.getName();
-            if (identifiers.get(name) != null || formattables.containsKey(name)) {
-                error(node, "Assignment to constant or parameter '%s' not allowed.", name);
-                return NULL;
-            }
-
-            final LogicValue target = visit(node.getVar());
-            if (target instanceof LogicVariable variable) {
-                if (target.getType() != ArgumentType.BLOCK) {
-                    emit(createSet(variable, rvalue));
-                    return target;
-                } else {
-                    error(node, "Assignment to variable '%s' not allowed (name reserved for linked blocks).", variable.getName());
+            case PropertyAccess propertyAccess -> {
+                LogicValue propTarget = visit(propertyAccess.getTarget());
+                LogicArgument prop = visit(propertyAccess.getProperty());
+                String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName().substring(1) : prop.toMlog();
+                // Implicit out modifier as this is an assignment
+                LogicFunctionArgument argument = new LogicFunctionArgument(node.getValue().inputPosition(), rvalue, false, false);
+                if (functionMapper.handleProperty(node, instructions::add, propertyName, propTarget, List.of(argument)) == null) {
+                    error(node, "Undefined property '%s.%s'.", propTarget.toMlog(), prop.toMlog());
                     return NULL;
                 }
-            } else {
-                throw new MindcodeInternalError("Unsupported assignment target '%s'.", name);
             }
-        } else if (node.getVar() instanceof Ref r) {
-            error(node, "Assignment to built-in variable '%s' not allowed.", r.getName());
-        } else {
-            throw new MindcodeInternalError("Unhandled assignment target in %s.", node);
+            case VarRef varRef -> {
+                String name = varRef.getName();
+                if (identifiers.get(name) != null || formattables.containsKey(name)) {
+                    error(node, "Assignment to constant or parameter '%s' not allowed.", name);
+                    return NULL;
+                }
+
+                final LogicValue target = visit(node.getVar());
+                if (target instanceof LogicVariable variable) {
+                    if (target.getType() != ArgumentType.BLOCK) {
+                        emit(createSet(variable, rvalue));
+                        return target;
+                    } else {
+                        error(node, "Assignment to variable '%s' not allowed (name reserved for linked blocks).", variable.getName());
+                        return NULL;
+                    }
+                } else {
+                    throw new MindcodeInternalError("Unsupported assignment target '%s'.", name);
+                }
+            }
+            case Ref r -> error(node, "Assignment to built-in variable '%s' not allowed.", r.getName());
+            default -> throw new MindcodeInternalError("Unhandled assignment target in %s.", node);
         }
 
         if (rvalue instanceof LogicVariable variable) {
@@ -1928,10 +1932,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final List<LogicFunctionArgument> args = processArguments(call.getArguments());
 
         final String opcode;
-        if (args.get(0).hasValue() && args.get(0).value() instanceof LogicString str) {
+        if (args.getFirst().hasValue() && args.getFirst().value() instanceof LogicString str) {
             opcode = str.format(instructionProcessor);
         } else {
-            error(args.get(0).pos(), "First argument to the '%s' function must be a string literal.",
+            error(args.getFirst().pos(), "First argument to the '%s' function must be a string literal.",
                     call.getFunctionName());
             opcode = "noop";
         }
@@ -1984,7 +1988,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
             final List<LogicFunctionArgument> arguments = processArguments(call.getArguments());
 
-            if (!arguments.isEmpty() && arguments.get(0).value() instanceof LogicString str) {
+            if (!arguments.isEmpty() && arguments.getFirst().value() instanceof LogicString str) {
                 long placeholders = PLACEHOLDER_MATCHER.matcher(str.format(instructionProcessor)).results().count();
                 if (placeholders == 0) {
                     warn(call, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
@@ -2003,7 +2007,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 emit(i == 0 ? createPrint(arguments.get(i).value()) : createFormat(arguments.get(i).value()));
             }
             clearSubcontextType();
-            return arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1).value();
+            return arguments.isEmpty() ? NULL : arguments.getLast().value();
         } else {
             warn(call, "The '%s' function is deprecated.", functionName);
             return handleFormattedOutput(call, Formatter.PRINTF);
@@ -2011,13 +2015,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private String evaluateFormattableNode(FunctionArgument node) {
-        if (node.getExpression() instanceof FormattableLiteral fmt) {
-            return fmt.getText();
-        } else if (node.getExpression() instanceof VarRef var && formattables.containsKey(var.getName())) {
-            return formattables.get(var.getName()).getText();
-        } else {
-            return null;
-        }
+        return switch (node.getExpression()) {
+            case FormattableLiteral fmt -> fmt.getText();
+            case VarRef var when formattables.containsKey(var.getName()) -> formattables.get(var.getName()).getText();
+            default -> null;
+        };
     }
 
     private LogicValue handleFormattedOutput(FunctionCall call, Formatter formatter) {
@@ -2057,7 +2059,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         } else {
             // Only create instruction for each argument
             arguments.forEach(argument -> emit(formatter.createInstruction(this, argument.value())));
-            returnValue = arguments.isEmpty() ? NULL : arguments.get(arguments.size() - 1).value();
+            returnValue = arguments.isEmpty() ? NULL : arguments.getLast().value();
         }
 
         if (formatter.createsNewLine()) {

@@ -33,7 +33,7 @@ class OptimizerExpressionEvaluator {
     }
 
     private LogicLiteral evaluateUnaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicReadable x &&x.canEvaluate()) {
+        if (op.getX() instanceof LogicReadable x && x.canEvaluate()) {
             return evaluate(op.getOperation(), x, LogicNull.NULL);
         }
         return null;

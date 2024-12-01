@@ -66,8 +66,8 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     protected List<ProgramVersion> diffLevel1() {
-        ProgramVersion first = versions.get(0);
-        ProgramVersion last = versions.get(versions.size() - 1);
+        ProgramVersion first = versions.getFirst();
+        ProgramVersion last = versions.getLast();
         last.setTitle("all optimizers");
         return List.of(first, last);
     }

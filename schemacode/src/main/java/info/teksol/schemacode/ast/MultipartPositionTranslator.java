@@ -14,7 +14,7 @@ class MultipartPositionTranslator implements InputPositionTranslator {
     public static InputPositionTranslator createTranslator(SchematicsBuilder builder, List<AstProgramSnippet> snippets) {
         return switch (snippets.size()) {
             case 0  -> p -> p;
-            case 1  -> createSimpleTranslator(builder, snippets.get(0));
+            case 1  -> createSimpleTranslator(builder, snippets.getFirst());
             default -> new MultipartPositionTranslator(snippets.stream().map(s -> createPart(builder, s)).toList());
         };
     }

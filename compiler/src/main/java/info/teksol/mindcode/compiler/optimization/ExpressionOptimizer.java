@@ -191,7 +191,7 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     /**
      * Returns the operands in a tuple. If one of the operands is a numeric literal, it will be returned
-     * in _1 (the operands may get swapped).
+     * in e1 (the operands may get swapped).
 
      * @param ix instruction to inspect
      * @return a tuple containing a constant operand and the other operand.

@@ -48,13 +48,15 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
     }
 
     private AstNode evaluateInner(AstNode node) {
-        if (node instanceof BinaryOp n)       return evaluateBinaryOp(n);
-        if (node instanceof Constant n)       return evaluateConstant(n);
-        if (node instanceof FunctionCall n)   return evaluateFunctionCall(n);
-        if (node instanceof IfExpression n)   return evaluateIfExpression(n);
-        if (node instanceof UnaryOp n)        return evaluateUnaryOp(n);
-        if (node instanceof VarRef n)         return evaluateVarRef(n);
-        return node;
+        return switch (node) {
+            case BinaryOp n     -> evaluateBinaryOp(n);
+            case Constant n     -> evaluateConstant(n);
+            case FunctionCall n -> evaluateFunctionCall(n);
+            case IfExpression n -> evaluateIfExpression(n);
+            case UnaryOp n      -> evaluateUnaryOp(n);
+            case VarRef n       -> evaluateVarRef(n);
+            default             -> node;
+        };
     }
 
     private AstNode evaluateBinaryOp(BinaryOp node) {
@@ -153,8 +155,8 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
             if (evaluated.size() == numArgs) {
                 // All parameters are constant
                 // a and b are the same argument for unary functions
-                MindustryVariable a = variableFromNode("a", evaluated.get(0));
-                MindustryVariable b = variableFromNode("b", evaluated.get(numArgs - 1));
+                MindustryVariable a = variableFromNode("a", evaluated.getFirst());
+                MindustryVariable b = variableFromNode("b", evaluated.getLast());
                 if (getObject(a) instanceof MindustryString || getObject(b) instanceof MindustryString) {
                     error(node, "Unsupported string expression.");
                     return node;
@@ -206,17 +208,17 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
     }
 
     private MindustryVariable variableFromNode(String name, AstNode exp) {
-        if (exp instanceof NullLiteral n)        return MindustryVariable.createNull();
-        if (exp instanceof BooleanLiteral n)     return MindustryVariable.createConst(name, n.getValue());
-        if (exp instanceof NumericLiteral n)     return MindustryVariable.createConst( name, n.getAsDouble());
-        if (exp instanceof NumericValue n)       return MindustryVariable.createConst(name, n.getAsDouble());
-        if (exp instanceof StringLiteral n)      return MindustryVariable.createConstString(n.getText());
-        if (exp instanceof ConstantAstNode n)    throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
-        if (exp instanceof VarRef n) {
-            return Icons.isIconName(n.getName())
+        return switch (exp) {
+            case NullLiteral n      -> MindustryVariable.createNull();
+            case BooleanLiteral n   -> MindustryVariable.createConst(name, n.getValue());
+            case NumericLiteral n   -> MindustryVariable.createConst(name, n.getAsDouble());
+            case NumericValue n     -> MindustryVariable.createConst(name, n.getAsDouble());
+            case StringLiteral n    -> MindustryVariable.createConstString(n.getText());
+            case ConstantAstNode n  -> throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
+            case VarRef n -> Icons.isIconName(n.getName())
                     ? MindustryVariable.createConstString(Icons.getIconValue(n.getName()).format(instructionProcessor))
                     : null;
-        }
-        return null;
+            default -> null;
+        };
     }
 }

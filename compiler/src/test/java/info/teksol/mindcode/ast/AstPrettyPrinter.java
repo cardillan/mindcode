@@ -78,7 +78,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
             case 1:
                 buffer.append(" = ");
-                visit(node.getArguments().get(0));
+                visit(node.getArguments().getFirst());
                 break;
 
             default:
@@ -127,7 +127,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
                 node.getIterators().stream().map(Object::toString).collect(Collectors.joining(", "))
         ).append(" in (");
         if (!node.getValues().isEmpty()) {
-            visit(node.getValues().get(0));
+            visit(node.getValues().getFirst());
             for (int i = 1; i < node.getValues().size(); i++) {
                 buffer.append(", ").append(node.getValues().get(i));
             }
@@ -263,7 +263,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
             buffer.append(", ");
         }
         if (!node.getArguments().isEmpty()) {
-            visit(node.getArguments().get(node.getArguments().size() - 1));
+            visit(node.getArguments().getLast());
         }
         buffer.append(")");
         return null;
@@ -314,7 +314,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         buffer.append("\n");
         for (int i = 0; i < node.getAlternatives().size(); i++) {
             buffer.append("when ");
-            visit(node.getAlternatives().get(i).getValues().get(0));
+            visit(node.getAlternatives().get(i).getValues().getFirst());
             for (int j = 1; j < node.getAlternatives().get(i).getValues().size(); j++) {
                 buffer.append(", ");
                 visit(node.getAlternatives().get(i).getValues().get(j));
@@ -351,7 +351,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
                 buffer.append(", ");
             }
             if (!node.getParams().isEmpty()) {
-                visit(node.getParams().get(node.getParams().size() - 1));
+                visit(node.getParams().getLast());
             }
             buffer.append(")");
         }

@@ -75,7 +75,7 @@ public class LogicFunction {
 
     public boolean isVarArgs() {
         List<FunctionParameter> parameters = getDeclaredParameters();
-        return !parameters.isEmpty() && parameters.get(parameters.size() - 1).isVarArgs();
+        return !parameters.isEmpty() && parameters.getLast().isVarArgs();
     }
 
     public boolean isVoid() {
