@@ -17,11 +17,11 @@
     <description>Mindcode's web application: online compilation, storage and retrieval of your scripts</description>
 
     <properties>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>22</java.version>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>2.5.12</spring.version>
+        <spring.version>3.4.0</spring.version>
     </properties>
 
     <dependencyManagement>
@@ -94,6 +94,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.7.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
@@ -116,7 +117,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.5.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -129,7 +130,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.4.0</version>
                 <configuration>
                     <verbose>false</verbose>
                     <failOnError>false</failOnError>
@@ -140,7 +141,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.8.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -154,23 +155,26 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <showDeprecation>false</showDeprecation>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>22</source>
+                    <target>22</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.5.2</version>
             </plugin>
             <plugin>
                 <!-- Code Coverage -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.9</version>
+                <version>0.8.12</version>
                 <executions>
                     <execution>
                         <goals>

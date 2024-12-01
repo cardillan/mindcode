@@ -19,4 +19,14 @@
       <module name="mindcode-mindcode" target="17" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="mindcode-compiler" options="-parameters" />
+      <module name="mindcode-exttest" options="-parameters" />
+      <module name="mindcode-samples" options="-parameters" />
+      <module name="mindcode-schemacode" options="-parameters" />
+      <module name="mindcode-toolapp" options="-parameters" />
+      <module name="mindcode-webapp" options="-parameters" />
+    </option>
+  </component>
 </project>
