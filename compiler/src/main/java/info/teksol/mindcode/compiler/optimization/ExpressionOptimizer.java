@@ -105,7 +105,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             return;
                         }
                     }
-                    case ADD, SUB, XOR -> {
+                    case ADD, SUB, BITWISE_XOR -> {
                         if (value == 0) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
@@ -122,16 +122,16 @@ class ExpressionOptimizer extends BaseOptimizer {
                             return;
                         }
                     }
-                    case BINARY_OR, BOOL_OR, LOGICAL_OR -> {
-                        if (value == 0 && ix.getOperation() != Operation.BOOL_OR) {
+                    case BITWISE_OR, BOOLEAN_OR, LOGICAL_OR -> {
+                        if (value == 0 && ix.getOperation() != Operation.BOOLEAN_OR) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
-                        } else if (value != 0 && ix.getOperation() != Operation.BINARY_OR) {
+                        } else if (value != 0 && ix.getOperation() != Operation.BITWISE_OR) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.TRUE));
                             return;
                         }
                     }
-                    case BINARY_AND, BOOL_AND, LOGICAL_AND -> {
+                    case BITWISE_AND, BOOLEAN_AND, LOGICAL_AND -> {
                         if (value == 0) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
@@ -155,11 +155,11 @@ class ExpressionOptimizer extends BaseOptimizer {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
                         }
-                        case BINARY_AND, BINARY_OR, LOGICAL_AND, LOGICAL_OR, MIN, MAX -> {
+                        case BITWISE_AND, BITWISE_OR, LOGICAL_AND, LOGICAL_OR, MIN, MAX -> {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), ix.getX()));
                             return;
                         }
-                        case SUB, XOR -> {
+                        case SUB, BITWISE_XOR -> {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
                         }

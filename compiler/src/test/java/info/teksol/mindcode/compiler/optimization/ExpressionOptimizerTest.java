@@ -311,7 +311,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.SUB, tmp0, a, a),
-                        createInstruction(OP, Operation.XOR, tmp1, a, a),
+                        createInstruction(OP, Operation.BITWISE_XOR, tmp1, a, a),
                         createInstruction(END)
                 ),
                 List.of(

@@ -1431,7 +1431,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     // Code generation optimization:
-    // If the BOOL_OR is reused in one of these operations, LOGICAL_OR can be used instead
+    // If the BOOLEAN_OR is reused in one of these operations, LOGICAL_OR can be used instead
     // - the exact numerical value of the result isn't important.
     private static final Set<String> LOGICAL_OPERATIONS = Set.of("and", "or", "||", "&&");
 

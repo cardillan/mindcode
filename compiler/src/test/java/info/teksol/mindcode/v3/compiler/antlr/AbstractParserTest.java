@@ -2,11 +2,12 @@ package info.teksol.mindcode.v3.compiler.antlr;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.util.ExpectedMessages;
 
 public abstract class AbstractParserTest {
 
-    protected final InputPosition EMPTY = InputPosition.EMPTY;
+    protected static final InputPosition EMPTY = InputPosition.EMPTY;
 
     protected ExpectedMessages expectedMessages() {
         return ExpectedMessages.create()
@@ -14,11 +15,13 @@ public abstract class AbstractParserTest {
     }
 
     protected MindcodeParser.ProgramContext parse(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
-        MindcodeParser.ProgramContext parsed = MindcodeParserFacade.parse(expectedMessages, inputFiles.getMainInputFile());
+        MindcodeCompiler compiler = new MindcodeCompiler(MindcodeCompiler.CompilationPhase.PARSER, expectedMessages);
+        compiler.compile(inputFiles.getMainInputFile());
+
         if (validate) {
             expectedMessages.validate();
         }
-        return parsed;
+        return compiler.getParseTree(inputFiles.getMainInputFile());
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String source) {

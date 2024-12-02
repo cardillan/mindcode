@@ -70,7 +70,7 @@ expression : directive                                                          
            | left=expression op=AND right=expression                                            # binop_and
            | left=expression op=OR right=expression                                             # binop_or
            | <assoc=right> cond=expression QUESTION_MARK
-                                (true_branch=expression COLON false_branch=expression)          # ternary_op
+                                true_branch=expression COLON false_branch=expression            # ternary_op
            | assign                                                                             # assignment
            | const_decl                                                                         # constant
            | param_decl                                                                         # parameter

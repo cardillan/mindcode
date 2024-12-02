@@ -77,15 +77,15 @@ public class ExpressionEvaluator {
 
         map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
-        map.put(Operation.XOR,              (r, a, b) -> r.setLongValue(a.getLongValue() ^  b.getLongValue()));
-        map.put(Operation.NOT,              (r, a, b) -> r.setLongValue(~a.getLongValue()));
+        map.put(Operation.BITWISE_XOR,              (r, a, b) -> r.setLongValue(a.getLongValue() ^ b.getLongValue()));
+        map.put(Operation.BITWISE_NOT,              (r, a, b) -> r.setLongValue(~a.getLongValue()));
 
-        map.put(Operation.BINARY_AND,       (r, a, b) -> r.setLongValue(a.getLongValue() & b.getLongValue()));
-        map.put(Operation.BOOL_AND,         (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
+        map.put(Operation.BITWISE_AND,       (r, a, b) -> r.setLongValue(a.getLongValue() & b.getLongValue()));
+        map.put(Operation.BOOLEAN_AND,         (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
         map.put(Operation.LOGICAL_AND,      (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
 
-        map.put(Operation.BINARY_OR,        (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
-        map.put(Operation.BOOL_OR,          (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
+        map.put(Operation.BITWISE_OR,        (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
+        map.put(Operation.BOOLEAN_OR,          (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
         map.put(Operation.LOGICAL_OR,       (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
 
         map.put(Operation.MAX,              (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));

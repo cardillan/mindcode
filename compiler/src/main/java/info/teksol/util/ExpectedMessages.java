@@ -355,7 +355,7 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
 
     private record RegexMessageMatcher(Pattern pattern) implements MessageMatcher {
         private RegexMessageMatcher(String pattern) {
-            this(Pattern.compile(pattern));
+            this(Pattern.compile(pattern, Pattern.DOTALL));
         }
 
         @Override

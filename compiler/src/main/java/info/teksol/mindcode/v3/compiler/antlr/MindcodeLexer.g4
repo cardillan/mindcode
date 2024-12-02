@@ -31,6 +31,7 @@ NULL                    : 'null' ;
 OUT                     : 'out' ;
 PARAM                   : 'param' ;
 RETURN                  : 'return' ;
+REQUIRE                 : 'require' ;
 STACK                   : 'stack' ;
 THEN                    : 'then' ;
 TRUE                    : 'true' ;
@@ -39,13 +40,76 @@ VOID                    : 'void' ;
 WHEN                    : 'when' ;
 WHILE                   : 'while' ;
 
+// Relational operators
+EQUAL                   : '==' ;
+GREATER_THAN            : '>' ;
+GREATER_THAN_EQUAL      : '>=' ;
+LESS_THAN               : '<' ;
+LESS_THAN_EQUAL         : '<=' ;
+NOT_EQUAL               : '!=' ;
+STRICT_EQUAL            : '===' ;
+STRICT_NOT_EQUAL        : '!==' ;
+
+// Bitwise, boolean and logical operators
+BITWISE_AND             : '&' ;
+BITWISE_NOT             : '~' ;
+BITWISE_OR              : '|' ;
+BITWISE_XOR             : '^' ;
+BOOLEAN_AND             : '&&' ;
+BOOLEAN_NOT             : '!' ;
+BOOLEAN_OR              : '||' ;
+LOGICAL_AND             : 'and' ;
+LOGICAL_NOT             : 'not' ;
+LOGICAL_OR              : 'or';
+SHIFT_LEFT              : '<<' ;
+SHIFT_RIGHT             : '>>' ;
+
+// Opening/closing symbols
+// Braces - '{', '}' - aren't defined here
+// They only appear as part of interpolated strings and are handled specially there
+LPAREN                  : '(' ;
+RPAREN                  : ')' ;
+LBRACKET                : '[' ;
+RBRACKET                : ']' ;
+
+// Other operators
+DECREMENT               : '--' ;
+DIV                     : '/' ;
+IDIV                    : '\\' ;
+INCREMENT               : '++' ;
+MINUS                   : '-' ;
+MOD                     : '%' ;
+MUL                     : '*' ;
+PLUS                    : '+' ;
+POW                     : '**' ;
+
+// Assignments
 ASSIGN                  : '=' ;
+ASSIGN_BITWISE_AND      : '&=' ;
+ASSIGN_BITWISE_OR       : '|=' ;
+ASSIGN_BITWISE_XOR      : '^=' ;
+ASSIGN_BOOLEAN_AND      : '&&=' ;
+ASSIGN_BOOLEAN_OR       : '||=' ;
+ASSIGN_DIV              : '/=' ;
+ASSIGN_IDIV             : '\\=' ;
+ASSIGN_MINUS            : '-=' ;
+ASSIGN_MOD              : '%=' ;
+ASSIGN_MUL              : '*=' ;
+ASSIGN_PLUS             : '+=' ;
+ASSIGN_POW              : '**=' ;
+ASSIGN_SHIFT_LEFT       : '<<=' ;
+ASSIGN_SHIFT_RIGHT      : '>>=' ;
+
+// Symbols
 AT                      : '@' ;
+COLON                   : ':' ;
 COMMA                   : ',' ;
+DOLLAR                  : '$' ;
 DOT                     : '.' ;
-DOUBLEDOT               : '..' ;
-TRIPLEDOT               : '...' ;
+DOT2                    : '..' ;  
+DOT3                    : '...' ;  
 DOUBLEQUOTE             : '"' ;
+QUESTION                : '?' ;
 SEMICOLON               : ';' ;
 
 // fragments
@@ -61,6 +125,7 @@ fragment LetterDigitDash: [-a-zA-Z0-9_] ;
 // Identifiers
 
 IDENTIFIER              : Letter LetterOrDigit* ;
+EXTIDENTIFIER           : DOLLAR Letter LetterOrDigit* ;
 BUILTINIDENTIFIER       : AT Letter
                         | AT Letter LetterDigitDash* LetterOrDigit ;
 
@@ -88,11 +153,14 @@ COMMENTEDCOMMENT        : '////' ~[\r\n]* -> skip ;
 ENHANCEDCOMMENT         : {!inFormat}? '///' {inFormat = true; newLines=false;} -> pushMode(InComment);
 
 // Whitespace + comments
-COMMENT                 : '/*' .*? '*/'      -> skip;
-EMPTYCOMMENT            : '//' [\r\n]        -> skip;
-LINECOMMENT             : '//' ~'/' ~[\r\n]* -> skip;
-NEWLINE                 : {newLines}? [\r\n] -> skip;
-WHITESPACE              : [ \t]+             -> skip;
+DOC_COMMENT             : '/**' .*? '*/'            -> channel(HIDDEN);
+COMMENT                 : '/*' .*? '*/'             -> skip;
+EMPTYCOMMENT            : '//' [\r\n]               -> skip;
+LINECOMMENT             : '//' ~[/\r\n] ~[\r\n]*    -> skip;
+NEWLINE                 : {newLines}? [\r\n]        -> skip;
+WHITESPACE              : [ \t]+                    -> skip;
+
+ANY : . ;
 
 // MODES
 

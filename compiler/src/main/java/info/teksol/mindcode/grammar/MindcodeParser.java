@@ -1535,13 +1535,13 @@ public class MindcodeParser extends Parser {
 		public ExpressionContext true_branch;
 		public ExpressionContext false_branch;
 		public TerminalNode QUESTION_MARK() { return getToken(MindcodeParser.QUESTION_MARK, 0); }
+		public TerminalNode COLON() { return getToken(MindcodeParser.COLON, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode COLON() { return getToken(MindcodeParser.COLON, 0); }
 		public Ternary_opContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -2146,14 +2146,12 @@ public class MindcodeParser extends Parser {
 						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
 						setState(260);
 						match(QUESTION_MARK);
-						{
 						setState(261);
 						((Ternary_opContext)_localctx).true_branch = expression(0);
 						setState(262);
 						match(COLON);
 						setState(263);
-						((Ternary_opContext)_localctx).false_branch = expression(0);
-						}
+						((Ternary_opContext)_localctx).false_branch = expression(14);
 						}
 						break;
 					}
@@ -7252,7 +7250,7 @@ public class MindcodeParser extends Parser {
 		"\u0102\u0005N\u0000\u0000\u0102\u010a\u0003\u0010\b\u0010\u0103\u0104"+
 		"\n\u000e\u0000\u0000\u0104\u0105\u00052\u0000\u0000\u0105\u0106\u0003"+
 		"\u0010\b\u0000\u0106\u0107\u0005%\u0000\u0000\u0107\u0108\u0003\u0010"+
-		"\b\u0000\u0108\u010a\u0001\u0000\u0000\u0000\u0109\u00e5\u0001\u0000\u0000"+
+		"\b\u000e\u0108\u010a\u0001\u0000\u0000\u0000\u0109\u00e5\u0001\u0000\u0000"+
 		"\u0000\u0109\u00e8\u0001\u0000\u0000\u0000\u0109\u00eb\u0001\u0000\u0000"+
 		"\u0000\u0109\u00ee\u0001\u0000\u0000\u0000\u0109\u00f1\u0001\u0000\u0000"+
 		"\u0000\u0109\u00f4\u0001\u0000\u0000\u0000\u0109\u00f7\u0001\u0000\u0000"+

@@ -1,18 +1,31 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class AstIdentifier extends AstBaseMindcodeNode {
-    private final String name;
+    private final @NotNull String name;
+    private final boolean external;
 
-    public AstIdentifier(InputPosition inputPosition, String name) {
+    public AstIdentifier(InputPosition inputPosition, @NotNull String name) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
+        this.external = false;
     }
 
-    public String getName() {
+    public AstIdentifier(InputPosition inputPosition, @NotNull String name, boolean external) {
+        super(inputPosition);
+        this.name = Objects.requireNonNull(name);
+        this.external = external;
+    }
+
+    public boolean isExternal() {
+        return external;
+    }
+
+    public @NotNull String getName() {
         return name;
     }
 
@@ -22,18 +35,21 @@ public class AstIdentifier extends AstBaseMindcodeNode {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstIdentifier that = (AstIdentifier) o;
-        return name.equals(that.name);
+        return external == that.external && name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        int result = name.hashCode();
+        result = 31 * result + Boolean.hashCode(external);
+        return result;
     }
 
     @Override
     public String toString() {
         return "AstIdentifier{" +
-                "name='" + name + '\'' +
-                '}';
+               "names=" + name +
+               ", external=" + external +
+               '}';
     }
 }

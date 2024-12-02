@@ -4,6 +4,7 @@ import info.teksol.mindcode.InputPosition;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AstExpressionList extends AstBaseMindcodeNode {
     private final List<AstMindcodeNode> expressions;
@@ -34,7 +35,7 @@ public class AstExpressionList extends AstBaseMindcodeNode {
     @Override
     public String toString() {
         return "AstExpressionList{" +
-                "expressions=" + expressions +
-                '}';
+               "expressions=" + expressions.stream().map(Object::toString).collect(Collectors.joining("\n", "\n", "\n")) +
+               '}';
     }
 }
