@@ -40,6 +40,28 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     }
 
     @Test
+    void inlinesFunctionWithOutputParameter() {
+        assertCompilesTo("""
+                        param c = 10;
+                        void foo(a, out b)
+                            b = c * a;
+                        end;
+                        
+                        foo(10, out x);
+                        foo(20, out y);
+                        
+                        print(x, y);
+                        """,
+                createInstruction(SET, "c", "10"),
+                createInstruction(OP, "mul", "__fn0_b", "c", "10"),
+                createInstruction(SET, "x", "__fn0_b"),
+                createInstruction(OP, "mul", "__fn0_b", "c", "20"),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, "__fn0_b")
+        );
+    }
+
+    @Test
     void inlinesTwoFunction() {
         assertCompilesTo("""
                         def foo(n)

@@ -705,6 +705,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         emit(createGotoLabel(returnLabel, LogicLabel.symbolic(functionPrefix)));
 
+        setSubcontextType(function, AstSubcontextType.PARAMETERS);
         retrieveFunctionParameters(function, arguments, false);
         return passReturnValue(function);
     }
