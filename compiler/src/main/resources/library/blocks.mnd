@@ -48,32 +48,34 @@
  * @footprint  Linking four blocks: @message, "M", out m, true, @switch, "S", out s, false, @sorter, "S", out t, true, @conveyor, "C", out c, false
  * @footprint  Linking six blocks:  @message, "M", out m, true, @switch, "S", out s, false, @sorter, "S", out t, true, @conveyor, "C", out c, false, @diode, "D", out d, true, @battery, "B", out b, false
  */
-inline void findLinkedBlocks(_title, _message, _linkMap...)
+inline void findLinkedBlocks(title, message, linkMap...)
     do
-        for _requested, _name, out _variable, _required in _linkMap do
-            _variable = null;
+        // Declare variables just once and reuse them, otherwise warnings about unused variables
+        // would get generated
+        var requested, name, variable, required;
+
+        for requested, name, out variable, required in linkMap do
+            variable = null;
         end;
-        print(_title);
-        _n = @links;
-        while _n > 0 do
-            _n = _n - 1;
-            _block = getlink(_n);
-            print("\nFound: ", _block);
-            _type = _block.@type;
-            for _requested, _name, out _variable, _required in _linkMap do
-                if _requested == _type then
-                    _variable = _block;
-                    if _requested == @message then _message = _block; end;
+        print(title);
+        var n = @links;
+        while n > 0 do
+            var block = getlink(--n);
+            print("\nFound: ", block);
+            var type = block.@type;
+            for requested, name, out variable, required in linkMap do
+                if requested == type then
+                    variable = block;
+                    if requested == @message then message = block; end;
                  end;
             end;
         end;
 
-        _foundAll = 1;
-        for _requested, _name, out _variable, _required in _linkMap do
-            print($"\n$_name: $_variable");
-            if _required then _foundAll &= _variable; end;
+        var foundAll = 1;
+        for requested, name, out variable, required in linkMap do
+            print($"\n$name: $variable");
+            if required then foundAll &= variable; end;
         end;
-        printflush(_message);
-    loop while !_foundAll;
+        printflush(message);
+    while !foundAll;
 end;
-

@@ -1,13 +1,5 @@
 # System library
 
-> [!NOTE]
-> The system library is an experimental feature. The functions provided by the library and the mechanism for its inclusion in your program may change in future releases.
-
-> [!IMPORTANT]
-> Using a program parameter or constant with a name matching a name of one of the library variables causes a compilation error. To avoid this problem, all function parameters in system libraries start with an underscore and are in lowercase. Do not declare program parameters or constants starting with an underscore.
->
-> This limitation of the system library will be removed in one of the future releases.
-
 Mindcode comes equipped with a system library. System library is stored in several files. The `require` statement imports the library functions into your program:
 
 ```
@@ -64,9 +56,9 @@ To use the Blocks library, use the `require blocks;` statement.
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Linking two blocks             |         24 |         47 |
-| Linking four blocks            |         35 |         71 |
-| Linking six blocks             |         46 |         95 |
+| Linking two blocks             |         23 |         46 |
+| Linking four blocks            |         32 |         70 |
+| Linking six blocks             |         41 |         94 |
 
 Searches blocks linked to the processor for blocks of requested types, and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.
@@ -112,7 +104,7 @@ otherwise they're `null`.
 # Graphics library
 
 To use the Graphics library, use the `require graphics;` statement. The Graphics library uses Mindustry Logic 8
-instructions and therefore also requires `#set target = ML8A;` statement.
+instructions and therefore also requires `#set target = 8;` statement.
 
 The provided library functions use transformations to rotate, invert or scale graphics output as needed
 for each display (large or small). Transformations are additive, so it is suggested to call `reset()`
@@ -138,14 +130,47 @@ Length of the side of the drawing area of the `large-logic-display` block.
 
 ## Functions
 
+### unpackcolor
+
+**Definition:** `void unpackcolor(packedColor, out r, out g, out b, out a)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          9 |          9 |
+| Function body                  |         10 |         10 |
+| Function call                  |          8 |          8 |
+
+Unpacks numeric value created by the `packcolor` instruction (or a corresponding color literal) into
+individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
+all four color channels.
+
+**Inputs and outputs:**
+
+- `packedColor`: color value to unpack
+- `r`: variable to receive the value corresponding to the red channel
+- `g`: variable to receive the value corresponding to the green channel
+- `b`: variable to receive the value corresponding to the blue channel
+- `a`: variable to receive the value corresponding to the alpha channel
+
+### drawflush
+
+**Definition:** `inline void drawflush()`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          1 |          1 |
+
+Clears the processor's graphics buffer without outputting the contents into any display. Equivalent to
+`drawflush(null);`.
+
 ### displaySize
 
 **Definition:** `def displaySize(display)`
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |          6 |          6 |
-| Function body                  |          7 |          7 |
+| Inlined function               |          7 |          7 |
+| Function body                  |          8 |          8 |
 | Function call                  |          4 |          4 |
 
 Returns the actual display size based on the type of display passed in as an argument.
@@ -398,8 +423,8 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |          5 |          5 |
-| Function body                  |          6 |          6 |
+| Inlined function               |          6 |          6 |
+| Function body                  |          7 |          7 |
 | Function call                  |          4 |          4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
@@ -461,6 +486,29 @@ Returns `true` if the two values differ by less than `precision`.
 Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
 and makes sure it won't be removed by the optimizer.
 
+### boolean
+
+**Definition:** `inline def boolean(x)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          1 |          1 |
+
+Converts the value of `x` to boolean values (`0` or `1`). The returning value will be `0`
+if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
+
+### integer
+
+**Definition:** `inline def integer(x)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          1 |          1 |
+
+Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
+(`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
+Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+
 ### sum
 
 **Definition:** `inline def sum(x)`
@@ -504,6 +552,33 @@ Returns `x`. The function is a fallback case for the generic `avg` function taki
 | Twenty arguments in total      |         20 |         20 |
 
 Returns the average of all given arguments.
+
+### log2
+
+**Definition:** `inline def log2(number)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          2 |          2 |
+
+Returns the logarithm of the number in base 2
+
+### lerp
+
+**Definition:** `inline def lerp(from, to, ratio)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          4 |          4 |
+
+Perform linear interpolation between two values.
+
+**Inputs and outputs:**
+
+- `from`: first value
+- `to`: second value
+- `ratio`: value in the range of 0 .. 1, 0 corresponds to `from`, 1 corresponds to `to`, fractional value
+           corresponds to a point in between (2/3 to a point two-thirds of the way from `from` to `to`).
 
 ### median
 
@@ -553,8 +628,8 @@ Returns the median of four values .
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |         17 |         17 |
-| Function body                  |         18 |         18 |
+| Inlined function               |         18 |         18 |
+| Function body                  |         19 |         19 |
 | Function call                  |          8 |          8 |
 
 Returns the median of five values.
@@ -576,9 +651,20 @@ and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
 # Printing library
 
 To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
-Mindustry Logic 8 instructions and therefore require the `#set target = ML8A;` statement.
+Mindustry Logic 8 instructions and therefore require the `#set target = 8;` statement.
 
 ## Functions
+
+### printflush
+
+**Definition:** `inline void printflush()`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          1 |          1 |
+
+Clears the processor's text buffer without outputting the contents into any message block. Equivalent to
+`printflush(null);`.
 
 ### formatNumber
 
@@ -586,11 +672,11 @@ Mindustry Logic 8 instructions and therefore require the `#set target = ML8A;` s
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |         16 |         16 |
-| Function body                  |         17 |         17 |
+| Inlined function               |         17 |         17 |
+| Function body                  |         18 |         18 |
 | Function call                  |          4 |          4 |
 
-**Note:** Function requires target `ML8A` or later.
+**Note:** Function requires Mindustry Logic version 8 or later.
 
 Formats the number passed in as a parameter into the text buffer, using comma as thousands separator.
 Fractional part of the number to be printed is ignored.
@@ -611,11 +697,11 @@ Nulls are printed as 0.
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |         17 |         17 |
-| Function body                  |         18 |         18 |
+| Inlined function               |         18 |         18 |
+| Function body                  |         19 |         19 |
 | Function call                  |          4 |          4 |
 
-**Note:** Function requires target `ML8A` or later.
+**Note:** Function requires Mindustry Logic version 8 or later.
 
 Prints the number passed in as a parameter into the text buffer, using comma as thousands separator.
 Fractional part of the number to be printed is ignored.
@@ -630,6 +716,112 @@ Nulls are printed as 0.
 > them using the `print()` function.
 
 See also [`formatNumber`](#formatnumber)
+
+### formatBinaryNumber
+
+**Definition:** `void formatBinaryNumber(number, digits)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |         13 |         13 |
+| Function body                  |         14 |         14 |
+| Function call                  |          5 |          5 |
+
+**Note:** Function requires Mindustry Logic version 8 or later.
+
+Formats the number passed in as a parameter into the text buffer in binary base, using given number of digits.
+Fractional part of the number to be printed is ignored.
+
+To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
+The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
+at the place of the lowest formatting placeholder.
+
+Nulls are printed as zero values.
+
+**Inputs and outputs:**
+
+- `number`: number to be formatted
+- `digits`: minimal number of digits to output (padded on the left by zeroes)
+
+### printBinaryNumber
+
+**Definition:** `void printBinaryNumber(number, digits)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |         14 |         14 |
+| Function body                  |         15 |         15 |
+| Function call                  |          5 |          5 |
+
+**Note:** Function requires Mindustry Logic version 8 or later.
+
+Prints the number passed in as a parameter into the text buffer in binary base, using given number of digits.
+Fractional part of the number to be printed is ignored.
+
+To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
+The number will be printed at the end of the print buffer.
+
+Nulls are printed as zero values.
+
+See also [`formatBinaryNumber`](#formatbinarynumber)
+
+**Inputs and outputs:**
+
+- `number`: number to be formatted
+- `digits`: minimal number of digits to output (padded on the left by zeroes)
+
+### formatHexNumber
+
+**Definition:** `void formatHexNumber(number, digits)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |         34 |         34 |
+| Function body                  |         35 |         35 |
+| Function call                  |          5 |          5 |
+
+**Note:** Function requires Mindustry Logic version 8 or later.
+
+Formats the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
+Fractional part of the number to be printed is ignored.
+
+To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
+The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
+at the place of the lowest formatting placeholder.
+
+Nulls are printed as zero values.
+
+**Inputs and outputs:**
+
+- `number`: number to be formatted
+- `digits`: minimal number of digits to output (padded on the left by zeroes)
+
+### printHexNumber
+
+**Definition:** `void printHexNumber(number, digits)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |         35 |         35 |
+| Function body                  |         36 |         36 |
+| Function call                  |          5 |          5 |
+
+**Note:** Function requires Mindustry Logic version 8 or later.
+
+Prints the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
+Fractional part of the number to be printed is ignored.
+
+To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
+The number will be printed at the end of the print buffer.
+
+Nulls are printed as zero values.
+
+See also [`formatBinaryNumber`](#formatbinarynumber)
+
+**Inputs and outputs:**
+
+- `number`: number to be formatted
+- `digits`: minimal number of digits to output (padded on the left by zeroes)
 
 ### printExactFast
 
@@ -756,8 +948,8 @@ The function doesn't use units that are controlled by a player or a different pr
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |         18 |         18 |
-| Function body                  |         19 |         19 |
+| Inlined function               |         16 |         16 |
+| Function body                  |         17 |         17 |
 | Function call                  |          7 |          7 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.

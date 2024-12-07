@@ -1,14 +1,14 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public record AstProgramSnippetFile(InputPosition inputPosition, AstText fileName) implements AstProgramSnippet {
+public record AstProgramSnippetFile(SourcePosition sourcePosition, AstText fileName) implements AstProgramSnippet {
 
     @Override
     public String getProgramId(SchematicsBuilder builder) {
@@ -34,14 +34,14 @@ public record AstProgramSnippetFile(InputPosition inputPosition, AstText fileNam
     }
 
     @Override
-    public InputPosition getInputPosition(SchematicsBuilder builder) {
+    public SourcePosition getSourcePosition(SchematicsBuilder builder) {
         if (builder.externalFilesAllowed()) {
             Path path = builder.getBasePath().resolve(fileName.getText(builder));
             InputFile inputFile = builder.getInputFiles().getInputFile(path);
-            return new InputPosition(inputFile, 1, 1);
+            return new SourcePosition(inputFile, 1, 1);
         } else {
             builder.error("Loading code from external file not supported in web application.");
-            return InputPosition.EMPTY;
+            return SourcePosition.EMPTY;
         }
     }
 }

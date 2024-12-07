@@ -1,151 +1,150 @@
-set __fn0__title "Example program.\nTrying to locate linked blocks"
-set __fn0__message message1
-set __tmp0 8
-set __fn0__requested @large-logic-display
-set __fn0__name "Display"
-set __fn0__variable display
-set __fn0__required true
-jump 35 always 0 0
-set display __fn0__variable
-set __tmp0 15
-set __fn0__requested @message
-set __fn0__name "Message"
-set __fn0__variable message
-set __fn0__required false
-jump 35 always 0 0
-set message __fn0__variable
-set __tmp0 22
-set __fn0__requested @switch
-set __fn0__name "Switch"
-set __fn0__variable switch
-set __fn0__required false
-jump 35 always 0 0
-set switch __fn0__variable
-set __tmp0 29
-set __fn0__requested @memory-bank
-set __fn0__name "Memory"
-set __fn0__variable memory
-set __fn0__required true
-jump 35 always 0 0
-set memory __fn0__variable
-set __tmp0 37
-set __fn0__requested @memory-cell
-set __fn0__name "Memory"
-set __fn0__variable memory
-set __fn0__required true
-set __fn0__variable null
-set @counter __tmp0
-set memory __fn0__variable
-print __fn0__title
-set __tmp1 @links
-set __fn0__n __tmp1
-op greaterThan __tmp2 __fn0__n 0
-jump 99 equal __tmp2 false
-op sub __tmp3 __fn0__n 1
-set __fn0__n __tmp3
-getlink __tmp4 __fn0__n
-set __fn0__block __tmp4
+jump 0 equal message1 null
+set :fn0:title "Example program.\nTrying to locate linked blocks"
+set :fn0:message message1
+set *tmp0 9
+set :fn0:requested @large-logic-display
+set :fn0:name "Display"
+set :fn0:variable :display
+set :fn0:required true
+jump 36 always 0 0
+set :display :fn0:variable
+set *tmp0 16
+set :fn0:requested @message
+set :fn0:name "Message"
+set :fn0:variable :message
+set :fn0:required false
+jump 36 always 0 0
+set :message :fn0:variable
+set *tmp0 23
+set :fn0:requested @switch
+set :fn0:name "Switch"
+set :fn0:variable :switch
+set :fn0:required false
+jump 36 always 0 0
+set :switch :fn0:variable
+set *tmp0 30
+set :fn0:requested @memory-bank
+set :fn0:name "Memory"
+set :fn0:variable :memory
+set :fn0:required true
+jump 36 always 0 0
+set :memory :fn0:variable
+set *tmp0 38
+set :fn0:requested @memory-cell
+set :fn0:name "Memory"
+set :fn0:variable :memory
+set :fn0:required true
+set :fn0:variable null
+set @counter *tmp0
+set :memory :fn0:variable
+print :fn0:title
+set :fn0:n @links
+op greaterThan *tmp1 :fn0:n 0
+jump 98 equal *tmp1 false
+op sub :fn0:n :fn0:n 1
+getlink *tmp2 :fn0:n
+set :fn0:block *tmp2
 print "\nFound: "
-print __fn0__block
-sensor __tmp5 __fn0__block @type
-set __fn0__type __tmp5
-set __tmp6 57
-set __fn0__requested @large-logic-display
-set __fn0__name "Display"
-set __fn0__variable display
-set __fn0__required true
-jump 84 always 0 0
-set display __fn0__variable
-set __tmp6 64
-set __fn0__requested @message
-set __fn0__name "Message"
-set __fn0__variable message
-set __fn0__required false
-jump 84 always 0 0
-set message __fn0__variable
-set __tmp6 71
-set __fn0__requested @switch
-set __fn0__name "Switch"
-set __fn0__variable switch
-set __fn0__required false
-jump 84 always 0 0
-set switch __fn0__variable
-set __tmp6 78
-set __fn0__requested @memory-bank
-set __fn0__name "Memory"
-set __fn0__variable memory
-set __fn0__required true
-jump 84 always 0 0
-set memory __fn0__variable
-set __tmp6 97
-set __fn0__requested @memory-cell
-set __fn0__name "Memory"
-set __fn0__variable memory
-set __fn0__required true
-op equal __tmp7 __fn0__requested __fn0__type
-jump 95 equal __tmp7 false
-set __fn0__variable __fn0__block
-op equal __tmp9 __fn0__requested @message
-jump 92 equal __tmp9 false
-set __fn0__message __fn0__block
-set __tmp10 __fn0__message
-jump 93 always 0 0
-set __tmp10 null
-set __tmp8 __tmp10
-jump 96 always 0 0
-set __tmp8 null
-set @counter __tmp6
-set memory __fn0__variable
+print :fn0:block
+sensor *tmp3 :fn0:block @type
+set :fn0:type *tmp3
+set *tmp4 56
+set :fn0:requested @large-logic-display
+set :fn0:name "Display"
+set :fn0:variable :display
+set :fn0:required true
+jump 83 always 0 0
+set :display :fn0:variable
+set *tmp4 63
+set :fn0:requested @message
+set :fn0:name "Message"
+set :fn0:variable :message
+set :fn0:required false
+jump 83 always 0 0
+set :message :fn0:variable
+set *tmp4 70
+set :fn0:requested @switch
+set :fn0:name "Switch"
+set :fn0:variable :switch
+set :fn0:required false
+jump 83 always 0 0
+set :switch :fn0:variable
+set *tmp4 77
+set :fn0:requested @memory-bank
+set :fn0:name "Memory"
+set :fn0:variable :memory
+set :fn0:required true
+jump 83 always 0 0
+set :memory :fn0:variable
+set *tmp4 96
+set :fn0:requested @memory-cell
+set :fn0:name "Memory"
+set :fn0:variable :memory
+set :fn0:required true
+op equal *tmp5 :fn0:requested :fn0:type
+jump 94 equal *tmp5 false
+set :fn0:variable :fn0:block
+op equal *tmp7 :fn0:requested @message
+jump 91 equal *tmp7 false
+set :fn0:message :fn0:block
+set *tmp8 :fn0:message
+jump 92 always 0 0
+set *tmp8 null
+set *tmp6 *tmp8
+jump 95 always 0 0
+set *tmp6 null
+set @counter *tmp4
+set :memory :fn0:variable
 jump 41 always 0 0
-set __fn0__foundAll 1
-set __tmp11 106
-set __fn0__requested @large-logic-display
-set __fn0__name "Display"
-set __fn0__variable display
-set __fn0__required true
-jump 133 always 0 0
-set display __fn0__variable
-set __tmp11 113
-set __fn0__requested @message
-set __fn0__name "Message"
-set __fn0__variable message
-set __fn0__required false
-jump 133 always 0 0
-set message __fn0__variable
-set __tmp11 120
-set __fn0__requested @switch
-set __fn0__name "Switch"
-set __fn0__variable switch
-set __fn0__required false
-jump 133 always 0 0
-set switch __fn0__variable
-set __tmp11 127
-set __fn0__requested @memory-bank
-set __fn0__name "Memory"
-set __fn0__variable memory
-set __fn0__required true
-jump 133 always 0 0
-set memory __fn0__variable
-set __tmp11 144
-set __fn0__requested @memory-cell
-set __fn0__name "Memory"
-set __fn0__variable memory
-set __fn0__required true
+set :fn0:foundAll 1
+set *tmp9 105
+set :fn0:requested @large-logic-display
+set :fn0:name "Display"
+set :fn0:variable :display
+set :fn0:required true
+jump 132 always 0 0
+set :display :fn0:variable
+set *tmp9 112
+set :fn0:requested @message
+set :fn0:name "Message"
+set :fn0:variable :message
+set :fn0:required false
+jump 132 always 0 0
+set :message :fn0:variable
+set *tmp9 119
+set :fn0:requested @switch
+set :fn0:name "Switch"
+set :fn0:variable :switch
+set :fn0:required false
+jump 132 always 0 0
+set :switch :fn0:variable
+set *tmp9 126
+set :fn0:requested @memory-bank
+set :fn0:name "Memory"
+set :fn0:variable :memory
+set :fn0:required true
+jump 132 always 0 0
+set :memory :fn0:variable
+set *tmp9 143
+set :fn0:requested @memory-cell
+set :fn0:name "Memory"
+set :fn0:variable :memory
+set :fn0:required true
 print "\n"
-print __fn0__name
-print ": "
-print __fn0__variable
-jump 142 equal __fn0__required false
-op and __tmp13 __fn0__foundAll __fn0__variable
-set __fn0__foundAll __tmp13
-set __tmp12 __fn0__foundAll
-jump 143 always 0 0
-set __tmp12 null
-set @counter __tmp11
-set memory __fn0__variable
-printflush __fn0__message
-op equal __tmp14 __fn0__foundAll false
-jump 2 notEqual __tmp14 false
-assertequals message message1 "Located message1 block"
+print :fn0:name
+print ":"
+print " "
+print :fn0:variable
+jump 141 equal :fn0:required false
+op and :fn0:foundAll :fn0:foundAll :fn0:variable
+set *tmp10 :fn0:foundAll
+jump 142 always 0 0
+set *tmp10 null
+set @counter *tmp9
+set :memory :fn0:variable
+printflush :fn0:message
+op equal *tmp11 :fn0:foundAll false
+jump 3 notEqual *tmp11 false
+assertequals :message message1 "Located message1 block"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

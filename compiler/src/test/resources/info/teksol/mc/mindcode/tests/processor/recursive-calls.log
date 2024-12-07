@@ -1,0 +1,486 @@
+   147 instructions before optimizations.
+     6 instructions eliminated by Temp Variables Elimination.
+    15 instructions eliminated by Dead Code Elimination (5 iterations).
+     3 instructions eliminated by Jump Optimization (3 iterations).
+     3 instructions eliminated by Single Step Elimination (4 iterations).
+     7 instructions eliminated by Data Flow Optimization (4 iterations).
+     3 instructions eliminated by Unreachable Code Elimination.
+    12 instructions eliminated by Stack Optimization.
+    98 instructions after optimizations.
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructions):
+ 
+     6 set :fn0:b 0
+     7 callrec bank1 *label0 *label4 :fn0*retval
+     8 label *label4
+-    * set *tmp0 :fn0*retval
+     9 assertprints "0001111223221211" "foo"
+    10 assertflush
+    11 set :fn1:n 3
+ 
+    13 set :fn1:b 0
+    14 callrec bank1 *label1 *label5 :fn1*retval
+    15 label *label5
+-    * set *tmp1 :fn1*retval
+    16 assertprints "0001111223333444" "bar"
+    17 assertflush
+    18 set :fn2:n 3
+ 
+    20 set :fn2:b 0
+    21 callrec bank1 *label2 *label6 :fn2*retval
+    22 label *label6
+-    * set *tmp2 :fn2*retval
+    23 assertprints "0001111223221211" "baz"
+    24 stop
+    25 end
+ 
+    45 pop bank1 :fn0:a
+    46 pop bank1 :fn0:n
+    47 set *tmp9 :fn0*retval
+-    * set *tmp5 *tmp9
+    48 jump *label9 always
+    49 label *label8
+-    * set *tmp5 null
+    50 label *label9
+    51 op add *tmp10 :fn0:b 1
+    52 set :fn0:b *tmp10
+ 
+    78 set :fn1:a *tmp18
+    79 pop bank1 :fn1:n
+    80 set *tmp19 :fn1*retval
+-    * set *tmp13 *tmp19
+    81 jump *label13 always
+    82 label *label12
+-    * set *tmp13 null
+    83 label *label13
+    84 op add *tmp20 :fn1:b 1
+    85 set :fn1:b *tmp20
+ 
+   111 pop bank1 :fn2:b
+   112 pop bank1 :fn2:n
+   113 set *tmp27 :fn2*retval
+-    * set *tmp23 *tmp27
+   114 jump *label17 always
+   115 label *label16
+-    * set *tmp23 null
+   116 label *label17
+   117 op add *tmp28 :fn2:b 1
+   118 set :fn2:b *tmp28
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-3 instructions):
+ 
+    44 pop bank1 :fn0:b
+    45 pop bank1 :fn0:a
+    46 pop bank1 :fn0:n
+-    * set *tmp9 :fn0*retval
+    47 jump *label9 always
+    48 label *label8
+    49 label *label9
+ 
+    76 set :fn1:b *tmp17
+    77 set :fn1:a *tmp18
+    78 pop bank1 :fn1:n
+-    * set *tmp19 :fn1*retval
+    79 jump *label13 always
+    80 label *label12
+    81 label *label13
+ 
+   108 pop bank1 :fn2:a
+   109 pop bank1 :fn2:b
+   110 pop bank1 :fn2:n
+-    * set *tmp27 :fn2*retval
+   111 jump *label17 always
+   112 label *label16
+   113 label *label17
+
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructions):
+ 
+    51 set :fn0:b *tmp10
+    52 print :fn0:a
+    53 print :fn0:b
+-    * set :fn0*retval :fn0:b
+    54 label *label7
+    55 return bank1
+    56 end
+ 
+    82 set :fn1:b *tmp20
+    83 print :fn1:a
+    84 print :fn1:b
+-    * set :fn1*retval :fn1:b
+    85 label *label11
+    86 return bank1
+    87 end
+ 
+   113 set :fn2:b *tmp28
+   114 print :fn2:a
+   115 print :fn2:b
+-    * set :fn2*retval :fn2:b
+   116 label *label15
+   117 return bank1
+   118 end
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
+ 
+    26 label *label0
+    27 print :fn0:a
+    28 print :fn0:b
+-    * op add *tmp3 :fn0:a 1
+-    * set :fn0:a *tmp3
++   29 op add :fn0:a :fn0:a 1
+    30 op greaterThan *tmp4 :fn0:n 0
+    31 jump *label8 equal *tmp4 false
+    32 op sub *tmp6 :fn0:n 1
+ 
+    46 jump *label9 always
+    47 label *label8
+    48 label *label9
+-    * op add *tmp10 :fn0:b 1
+-    * set :fn0:b *tmp10
++   49 op add :fn0:b :fn0:b 1
+    50 print :fn0:a
+    51 print :fn0:b
+    52 label *label7
+ 
+    55 label *label1
+    56 print :fn1:a
+    57 print :fn1:b
+-    * op add *tmp11 :fn1:a 1
+-    * set :fn1:a *tmp11
++   58 op add :fn1:a :fn1:a 1
+    59 op greaterThan *tmp12 :fn1:n 0
+    60 jump *label12 equal *tmp12 false
+    61 op sub *tmp14 :fn1:n 1
+ 
+    75 jump *label13 always
+    76 label *label12
+    77 label *label13
+-    * op add *tmp20 :fn1:b 1
+-    * set :fn1:b *tmp20
++   78 op add :fn1:b :fn1:b 1
+    79 print :fn1:a
+    80 print :fn1:b
+    81 label *label11
+ 
+    84 label *label2
+    85 print :fn2:a
+    86 print :fn2:b
+-    * op add *tmp21 :fn2:a 1
+-    * set :fn2:a *tmp21
++   87 op add :fn2:a :fn2:a 1
+    88 op greaterThan *tmp22 :fn2:n 0
+    89 jump *label16 equal *tmp22 false
+    90 op sub *tmp24 :fn2:n 1
+ 
+   104 jump *label17 always
+   105 label *label16
+   106 label *label17
+-    * op add *tmp28 :fn2:b 1
+-    * set :fn2:b *tmp28
++  107 op add :fn2:b :fn2:b 1
+   108 print :fn2:a
+   109 print :fn2:b
+   110 label *label15
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 instructions):
+ 
+    27 print :fn0:a
+    28 print :fn0:b
+    29 op add :fn0:a :fn0:a 1
+-    * op greaterThan *tmp4 :fn0:n 0
+-    * jump *label8 equal *tmp4 false
++   30 jump *label8 lessThanEq :fn0:n 0
+    31 op sub *tmp6 :fn0:n 1
+    32 push bank1 :fn0:n
+    33 push bank1 :fn0:a
+ 
+    55 print :fn1:a
+    56 print :fn1:b
+    57 op add :fn1:a :fn1:a 1
+-    * op greaterThan *tmp12 :fn1:n 0
+-    * jump *label12 equal *tmp12 false
++   58 jump *label12 lessThanEq :fn1:n 0
+    59 op sub *tmp14 :fn1:n 1
+    60 push bank1 :fn1:n
+    61 set *tmp15 :fn1:b
+ 
+    83 print :fn2:a
+    84 print :fn2:b
+    85 op add :fn2:a :fn2:a 1
+-    * op greaterThan *tmp22 :fn2:n 0
+-    * jump *label16 equal *tmp22 false
++   86 jump *label16 lessThanEq :fn2:n 0
+    87 op sub *tmp24 :fn2:n 1
+    88 push bank1 :fn2:n
+    89 push bank1 :fn2:b
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-3 instructions):
+ 
+    42 pop bank1 :fn0:b
+    43 pop bank1 :fn0:a
+    44 pop bank1 :fn0:n
+-    * jump *label9 always
+    45 label *label8
+    46 label *label9
+    47 op add :fn0:b :fn0:b 1
+ 
+    69 set :fn1:b *tmp17
+    70 set :fn1:a *tmp18
+    71 pop bank1 :fn1:n
+-    * jump *label13 always
+    72 label *label12
+    73 label *label13
+    74 op add :fn1:b :fn1:b 1
+ 
+    96 pop bank1 :fn2:a
+    97 pop bank1 :fn2:b
+    98 pop bank1 :fn2:n
+-    * jump *label17 always
+    99 label *label16
+   100 label *label17
+   101 op add :fn2:b :fn2:b 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    34 push bank1 :fn0:b
+    35 set *tmp7 :fn0:b
+    36 set *tmp8 :fn0:a
+-    * set :fn0:n *tmp6
+-    * set :fn0:a *tmp7
++   37 op sub :fn0:n :fn0:n 1
++   38 set :fn0:a :fn0:b
+    39 set :fn0:b *tmp8
+    40 callrec bank1 *label0 *label10 :fn0*retval
+    41 label *label10
+ 
+    59 push bank1 :fn1:n
+    60 set *tmp15 :fn1:b
+    61 set *tmp16 :fn1:a
+-    * set :fn1:n *tmp14
+-    * set :fn1:a *tmp15
++   62 op sub :fn1:n :fn1:n 1
++   63 set :fn1:a :fn1:b
+    64 set :fn1:b *tmp16
+    65 callrec bank1 *label1 *label14 :fn1*retval
+    66 label *label14
+    67 set *tmp17 :fn1:a
+    68 set *tmp18 :fn1:b
+-    * set :fn1:b *tmp17
++   69 set :fn1:b :fn1:a
+    70 set :fn1:a *tmp18
+    71 pop bank1 :fn1:n
+    72 label *label12
+ 
+    88 push bank1 :fn2:a
+    89 set *tmp25 :fn2:b
+    90 set *tmp26 :fn2:a
+-    * set :fn2:n *tmp24
+-    * set :fn2:a *tmp25
++   91 op sub :fn2:n :fn2:n 1
++   92 set :fn2:a :fn2:b
+    93 set :fn2:b *tmp26
+    94 callrec bank1 *label2 *label18 :fn2*retval
+    95 label *label18
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
+ 
+    28 print :fn0:b
+    29 op add :fn0:a :fn0:a 1
+    30 jump *label8 lessThanEq :fn0:n 0
+-    * op sub *tmp6 :fn0:n 1
+    31 push bank1 :fn0:n
+    32 push bank1 :fn0:a
+    33 push bank1 :fn0:b
+-    * set *tmp7 :fn0:b
+    34 set *tmp8 :fn0:a
+    35 op sub :fn0:n :fn0:n 1
+    36 set :fn0:a :fn0:b
+ 
+    53 print :fn1:b
+    54 op add :fn1:a :fn1:a 1
+    55 jump *label12 lessThanEq :fn1:n 0
+-    * op sub *tmp14 :fn1:n 1
+    56 push bank1 :fn1:n
+-    * set *tmp15 :fn1:b
+    57 set *tmp16 :fn1:a
+    58 op sub :fn1:n :fn1:n 1
+    59 set :fn1:a :fn1:b
+    60 set :fn1:b *tmp16
+    61 callrec bank1 *label1 *label14 :fn1*retval
+    62 label *label14
+-    * set *tmp17 :fn1:a
+    63 set *tmp18 :fn1:b
+    64 set :fn1:b :fn1:a
+    65 set :fn1:a *tmp18
+ 
+    77 print :fn2:b
+    78 op add :fn2:a :fn2:a 1
+    79 jump *label16 lessThanEq :fn2:n 0
+-    * op sub *tmp24 :fn2:n 1
+    80 push bank1 :fn2:n
+    81 push bank1 :fn2:b
+    82 push bank1 :fn2:a
+-    * set *tmp25 :fn2:b
+    83 set *tmp26 :fn2:a
+    84 op sub :fn2:n :fn2:n 1
+    85 set :fn2:a :fn2:b
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 instructions):
+ 
+    47 print :fn0:b
+    48 label *label7
+    49 return bank1
+-    * end
+    50 label *label1
+    51 print :fn1:a
+    52 print :fn1:b
+ 
+    70 print :fn1:b
+    71 label *label11
+    72 return bank1
+-    * end
+    73 label *label2
+    74 print :fn2:a
+    75 print :fn2:b
+ 
+    94 print :fn2:b
+    95 label *label15
+    96 return bank1
+-    * end
+
+Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions):
+ 
+    28 print :fn0:b
+    29 op add :fn0:a :fn0:a 1
+    30 jump *label8 lessThanEq :fn0:n 0
+-    * push bank1 :fn0:n
+    31 push bank1 :fn0:a
+    32 push bank1 :fn0:b
+    33 set *tmp8 :fn0:a
+ 
+    38 label *label10
+    39 pop bank1 :fn0:b
+    40 pop bank1 :fn0:a
+-    * pop bank1 :fn0:n
+    41 label *label8
+    42 label *label9
+    43 op add :fn0:b :fn0:b 1
+ 
+    50 print :fn1:b
+    51 op add :fn1:a :fn1:a 1
+    52 jump *label12 lessThanEq :fn1:n 0
+-    * push bank1 :fn1:n
+    53 set *tmp16 :fn1:a
+    54 op sub :fn1:n :fn1:n 1
+    55 set :fn1:a :fn1:b
+ 
+    59 set *tmp18 :fn1:b
+    60 set :fn1:b :fn1:a
+    61 set :fn1:a *tmp18
+-    * pop bank1 :fn1:n
+    62 label *label12
+    63 label *label13
+    64 op add :fn1:b :fn1:b 1
+ 
+    71 print :fn2:b
+    72 op add :fn2:a :fn2:a 1
+    73 jump *label16 lessThanEq :fn2:n 0
+-    * push bank1 :fn2:n
+    74 push bank1 :fn2:b
+    75 push bank1 :fn2:a
+    76 set *tmp26 :fn2:a
+ 
+    81 label *label18
+    82 pop bank1 :fn2:a
+    83 pop bank1 :fn2:b
+-    * pop bank1 :fn2:n
+    84 label *label16
+    85 label *label17
+    86 op add :fn2:b :fn2:b 1
+
+Final code before resolving virtual instructions:
+
+label *label3
+jump *label3 equal bank1 null
+set *sp 0
+assertflush
+set :fn0:n 3
+set :fn0:a 0
+set :fn0:b 0
+callrec bank1 *label0 *label4 :fn0*retval
+label *label4
+assertprints "0001111223221211" "foo"
+assertflush
+set :fn1:n 3
+set :fn1:a 0
+set :fn1:b 0
+callrec bank1 *label1 *label5 :fn1*retval
+label *label5
+assertprints "0001111223333444" "bar"
+assertflush
+set :fn2:n 3
+set :fn2:a 0
+set :fn2:b 0
+callrec bank1 *label2 *label6 :fn2*retval
+label *label6
+assertprints "0001111223221211" "baz"
+stop
+end
+label *label0
+print :fn0:a
+print :fn0:b
+op add :fn0:a :fn0:a 1
+jump *label8 lessThanEq :fn0:n 0
+push bank1 :fn0:a
+push bank1 :fn0:b
+set *tmp8 :fn0:a
+op sub :fn0:n :fn0:n 1
+set :fn0:a :fn0:b
+set :fn0:b *tmp8
+callrec bank1 *label0 *label10 :fn0*retval
+label *label10
+pop bank1 :fn0:b
+pop bank1 :fn0:a
+label *label8
+op add :fn0:b :fn0:b 1
+print :fn0:a
+print :fn0:b
+return bank1
+label *label1
+print :fn1:a
+print :fn1:b
+op add :fn1:a :fn1:a 1
+jump *label12 lessThanEq :fn1:n 0
+set *tmp16 :fn1:a
+op sub :fn1:n :fn1:n 1
+set :fn1:a :fn1:b
+set :fn1:b *tmp16
+callrec bank1 *label1 *label14 :fn1*retval
+label *label14
+set *tmp18 :fn1:b
+set :fn1:b :fn1:a
+set :fn1:a *tmp18
+label *label12
+op add :fn1:b :fn1:b 1
+print :fn1:a
+print :fn1:b
+return bank1
+label *label2
+print :fn2:a
+print :fn2:b
+op add :fn2:a :fn2:a 1
+jump *label16 lessThanEq :fn2:n 0
+push bank1 :fn2:b
+push bank1 :fn2:a
+set *tmp26 :fn2:a
+op sub :fn2:n :fn2:n 1
+set :fn2:a :fn2:b
+set :fn2:b *tmp26
+callrec bank1 *label2 *label18 :fn2*retval
+label *label18
+pop bank1 :fn2:a
+pop bank1 :fn2:b
+label *label16
+op add :fn2:b :fn2:b 1
+print :fn2:a
+print :fn2:b
+return bank1

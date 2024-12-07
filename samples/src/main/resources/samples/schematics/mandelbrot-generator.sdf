@@ -127,11 +127,23 @@ message3:
     @logic-processor     at (18,  4) processor links * end mindcode = control end
 end
 
-// Note: using compiled mlog code to avoid delays while compiling mindcode in the web app
-
 control = """
-    const DISPLAY_SIZE = 176;
-    const HALF_SIZE = DISPLAY_SIZE / 2;
+    #set instruction-limit = 1500;
+
+    linked message1, message2, message3, display1;
+    linked memory      = bank1;
+    linked buttonUp    = switch1;
+    linked buttonLeft  = switch2;
+    linked buttonRight = switch3;
+    linked buttonDown  = switch4;
+    linked buttonPlus  = switch5;
+    linked buttonMinus = switch6;
+    linked buttonJulia = switch7;
+    linked buttonLoad  = switch8;
+    linked buttonSave  = switch9;
+
+    const DISPLAY_SIZE_LARGE = 176;
+    const HALF_SIZE = DISPLAY_SIZE_LARGE / 2;
     const MAX_DEPTH = 63;
     const SKIP = 17;
 
@@ -140,7 +152,7 @@ control = """
     const BOOKMARK_COUNT = 13;
     const BOOKMARK_SIZE = 6;
     const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE;
-    const PROCESSORS = SLOTS + DISPLAY_SIZE;
+    const PROCESSORS = SLOTS + DISPLAY_SIZE_LARGE;
 
     allocate heap in memory[VARIABLES ... BOOKMARKS];
 
@@ -150,267 +162,174 @@ control = """
     const RUNNING_TEXT = "Rendering...\n-------------------------\n";
     const FINISHED_TEXT = "Finished.\n-------------------------\n";
 
-    do text1 = ""; loop while bank1 == null;
-    do text1 = ""; loop while message1 == null;
-    do text1 = ""; loop while message2 == null;
-    do text1 = ""; loop while message3 == null;
+    noinit external cached START;
+    noinit external cached STOP;
+    noinit external cached X;
+    noinit external cached Y;
+    noinit external cached ZOOM;
+    noinit external cached JULIA;
+    noinit external cached JULIA_X;
+    noinit external cached JULIA_Y;
+    noinit external cached PALETTE;
 
-    memory = bank1;
+    var CHANGE = false;
+    var text0 = RUNNING_TEXT;
+    var text1 = "";
+    var text2 = "";
 
-    print("Initializing...");
-    printflush(message1);
+    // Bookmark buttons state
+    var bookmark_x = message2.@x;
+    var bookmark_y = message2.@y;
+    var bookmark = 1;
+    var bookmark_clr = -1;
+    var position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
 
-    text0 = RUNNING_TEXT;
-    text1 = "";
-    text2 = "";
+    // Palette buttons state
+    var palette_x = message3.@x;
+    var palette_clr = -1;
 
-    X = -0.8;
-    Y = 0;
-    ZOOM = 50;
-    JULIA = false;
-    JULIA_X = 0;
-    JULIA_Y = 0;
+    begin
+        initialize();
 
-    i = BOOKMARKS;
-    i = bookmark(memory, i, -0.8,           0,           50);
-    i = bookmark(memory, i, -0.14375,     1.0,         1600);
-    i = bookmark(memory, i, -1.675,       0.0,        25600);
-    i = bookmark(memory, i, -1.413547,   -0.03234831,  2500);
-    i = bookmark(memory, i,  0.37359375,  0.09015625, 12800);
-    i = bookmark(memory, i, -1.408547,   -0.03734831, 10000);
-    i = bookmark(memory, i,  0.371875,    0.078125,    3200);
-    i = bookmark(memory, i, -1.382347,   -0.02114831,  5000);
-    i = bookmark(memory, i,  0.355,       0.66,        3200);
-    i = bookmark(memory, i,  0.018125,   -0.818125,    6400);
+        var checking = 999;
+        var updateBookmarks = true;
+        var print = true;
 
-    i = bookmark_julia(memory, i,  0.0,        0.0,           50,  -0.8,       0.0);
-    i = bookmark_julia(memory, i, -0.14375,    1.03125,     3200,  -0.14375,   1.0);
-    i = bookmark_julia(memory, i, -1.403547,   -0.02734831, 5000,  -1.408547, -0.03734831);
+        // Initialization complete
+        START = 1;
 
-    while i < SLOTS do
-        i = bookmark(memory, i, X, Y, ZOOM);
+        while true do
+            if print then printInfo(); print = false; end;
+
+            handleMove(buttonUp,    0,  1, 1);
+            handleMove(buttonLeft, -1,  0, 1);
+            handleMove(buttonRight, 1,  0, 1);
+            handleMove(buttonDown,  0, -1, 1);
+            handleMove(buttonPlus,  0,  0, 2);      // zoom  in
+            handleMove(buttonMinus, 0,  0, 0.5);    // zoom  out
+
+            if buttonJulia.@enabled != JULIA then
+                CHANGE = true;
+                JULIA = buttonJulia.@enabled;
+                if JULIA then JULIA_X = X; JULIA_Y = Y; end;
+            end;
+
+            if buttonLoad.@enabled then
+                loadBookmark(position, bookmark);
+                CHANGE = true;
+            end;
+
+            if buttonSave.@enabled then
+                saveBookmark(position, bookmark);
+                updateBookmarks = true;
+            end;
+
+            handleTopRowButtons(out updateBookmarks);
+
+            if updateBookmarks then
+                printBookmarks(position, bookmark);
+                updateBookmarks = false;
+            end;
+
+            // Computation progress
+            if memory[checking] == 0 then
+                checking -= 2;
+                if checking <= PROCESSORS then
+                    text0 = FINISHED_TEXT;
+                end;
+            end;
+
+            // Parameters changed, recompute
+            if CHANGE then
+                print("Initializing...");
+                printflush(message1);
+
+                // Sent signal to stop all processors
+                STOP++;
+
+                // Waiting for all processors to actually stop
+                for var i = 511; i > PROCESSORS; i -= 2 do
+                    do while memory[i] > 0;
+                end;
+
+                CHANGE = false;
+
+                // Clearing slots means processors will allocate them again
+                // This fixes a situation where a processor gets destroyed or nonfunctional
+                for var i in SLOTS ... PROCESSORS do
+                    memory[i] = 0;
+                end;
+
+                // Dim the current display
+                color(86, 86, 102, 204);
+                rect(0, 0, 176, 176);
+                drawflush(display1);
+
+                // Signal next round of computing to processors
+                START++;
+
+                // Actual processors start at 511 at the highest.
+                // Assigning 999 means we'll spend loops before processing the region where processors are,
+                // giving them time to start computation and set the flag accordingly.
+                // Otherwise we might consider some stopped even if they weren't.
+                checking = 999;
+
+                text0 = RUNNING_TEXT;
+                text1 = text2 = "";
+                print = true;
+            end;
+        end;
     end;
 
-    $STATE = 0;
-    $STOP = 1;
-    $X = X;
-    $Y = Y;
-    $ZOOM = ZOOM;
-    $JULIA = JULIA;
-    $JULIA_X = JULIA_X;
-    $JULIA_Y = JULIA_Y;
-    $PALETTE = PALETTE;
+    //   STATUS OUTPUT
+    ///////////////////////////////////////////////////////////////////////
 
-    switch7.enabled = JULIA;
-
-    // Palette creation
-    r = 128; g = 192; b = 64;
-
-    for i in 0 ... MAX_DEPTH do
-        memory[i] = packcolor(r / 256, g / 256, b / 256, 255);
-        r = (r + 147) % 256;
-        g = (g +  87) % 256;
-        b = (b +  59) % 256;
-    end;
-
-    memory[MAX_DEPTH] = packcolor(0, 0, 0, 1);
-
-    bookmark_x = message2.@x;
-    bookmark_y = message2.@y;
-    bookmark = 1;
-    bookmark_clr = -1;
-    position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
-
-    palette_x = message3.@x;
-    PALETTE = 1;
-    palette_clr = -1;
-
-    // Skip first n blocks that are not on the bookmark/palette bar
-    for first_link in 0 ... @links do
-        switch = getlink(first_link);
-        if switch.@y == bookmark_y then break; end;
-    end;
-
-    checking = 999;
-    CHANGE = false;
-    update_bookmarks = true;
-
-    // Initialization complete
-    $STATE = 1;
-
-    while true do
+    inline void printInfo()
         println("Mandelbrot Mania! v3.0");
         print(text0);
         if JULIA then
-            println($"Julia set of Mandelbrot");
-            println($"fractal at coordinates");
-            println($"   X: $JULIA_X");
-            println($"   Y: $JULIA_Y");
+            println("Julia set of Mandelbrot");
+            println("fractal at coordinates");
+            print($"   X: $JULIA_X\n");
+            print($"   Y: $JULIA_Y\n");
         else
             println("Mandelbrot set");
         end;
         println("-------------------------");
-        println($"X: $X");
-        println($"Y: $Y");
-        println($"Zoom: $ZOOM");
+        print($"X: $X\n");
+        print($"Y: $Y\n");
+        print($"Zoom: $ZOOM\n");
         println(text1, text2);
         printflush(message1);
-
-        handle_move(switch1,  0,  1, 1);    // up
-        handle_move(switch2, -1,  0, 1);    // left
-        handle_move(switch3,  1,  0, 1);    // right
-        handle_move(switch4,  0, -1, 1);    // down
-        handle_move(switch5,  0,  0, 2);    // zoom in
-        handle_move(switch6,  0,  0, 0.5);  // zoom out
-
-        if switch7.@enabled != JULIA then
-            CHANGE = true;
-            JULIA = switch7.@enabled;
-            if JULIA then
-                JULIA_X = X;
-                JULIA_Y = Y;
-            end;
-        end;
-
-        if CHANGE then
-            text1 = text2 = "";
-        end;
-
-        if switch8.@enabled then
-            // Load bookmark
-            X = memory[position];
-            Y = memory[position + 1];
-            ZOOM = memory[position + 2];
-            JULIA = memory[position + 3];
-            JULIA_X = memory[position + 4];
-            JULIA_Y = memory[position + 5];
-            switch7.enabled = JULIA;
-            switch8.enabled = false;
-            text1 = "\nLoaded from #";
-            text2 = bookmark;
-            CHANGE = true;
-        end;
-
-        if switch9.@enabled then
-            // Store bookmark
-            memory[position] = X;
-            memory[position + 1] = Y;
-            memory[position + 2] = ZOOM;
-            memory[position + 3] = JULIA;
-            memory[position + 4] = JULIA_X;
-            memory[position + 5] = JULIA_Y;
-            switch9.enabled = false;
-            text1 = "\nSaved to #";
-            text2 = bookmark;
-            update_bookmarks = true;
-        end;
-
-        for n in first_link ... @links do
-            switch = getlink(n);
-            if switch.@type == @switch and switch.@y == bookmark_y then
-                button_x = switch.@x;
-                if button_x >= palette_x then
-                    index = button_x - palette_x;
-                    if index == PALETTE then
-                        switch.enabled = true;
-                    elsif index == palette_clr then
-                        switch.enabled = false;
-                        palette_clr = -1;
-                    elsif switch.@enabled then
-                        palette_clr = PALETTE;
-                        PALETTE = index;
-                        CHANGE = true;
-                    end;
-                else
-                    index = button_x - bookmark_x;
-                    if index == bookmark then
-                        switch.enabled = true;
-                    elsif index == bookmark_clr then
-                        switch.enabled = false;
-                        bookmark_clr = -1;
-                    elsif switch.@enabled then
-                        bookmark_clr = bookmark;
-                        bookmark = index;
-                        position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
-                        update_bookmarks = true;
-                    end;
-                end;
-            end;
-        end;
-
-        if update_bookmarks then
-            println($"BOOKMARKS");
-            println($"[o] [o] [o] [o] ...");
-            println($"      [o] Load");
-            println($"      [o] Save");
-            println($"-------------------------");
-            println($"Selected bookmark #$bookmark:");
-            if memory[position + 3] then
-                println($"Julia set of Mandelbrot");
-                println($"fractal at coordinates");
-                println($"   X: $", memory[position + 4]);
-                println($"   Y: $", memory[position + 5]);
-            else
-                println("Mandelbrot set");
-            end;
-            println("-------------------------");
-            println($"X: $", memory[position]);
-            println($"Y: $", memory[position + 1]);
-            println($"Zoom: $", memory[position + 2]);
-            printflush(message2);
-
-            update_bookmarks = false;
-        end;
-
-        print("Palette #", PALETTE);
-        printflush(message3);
-
-        if memory[checking] == 0 then
-            checking -= 2;
-            if checking <= PROCESSORS then
-                text0 = FINISHED_TEXT;
-            end;
-        end;
-
-        if CHANGE then
-            print("Initializing...");
-            printflush(message1);
-
-            // Sent signal to stop all processors
-            $STOP += 1;
-
-            // Waiting for all processors to actually stop
-            for i = 511; i > PROCESSORS; i -= 2 do
-                do
-                    // Mindcode doesn't allow empty loop body
-                    null;
-                loop while memory[i] > 0;
-            end;
-
-            CHANGE = false;
-
-            for i in SLOTS ... PROCESSORS do
-                memory[i] = 0;
-            end;
-            color(86, 86, 102, 192);
-            rect(0, 0, 176, 176);
-            drawflush(display1);
-            $X = X;
-            $Y = Y;
-            $ZOOM = ZOOM;
-            $JULIA = JULIA;
-            $JULIA_X = JULIA_X;
-            $JULIA_Y = JULIA_Y;
-            $PALETTE = PALETTE;
-            $STATE += 1;
-
-            checking = 999;
-            text0 = RUNNING_TEXT;
-        end;
     end;
 
-    inline def handle_move(switch, x, y, z)
-        if switch.@enabled then
+    inline void printBookmarks(position, bookmark)
+        println("BOOKMARKS");
+        println("[o] [o] [o] [o] ...");
+        println("      [o] Load");
+        println("      [o] Save");
+        println("-------------------------");
+        print($"Selected bookmark #$bookmark:\n");
+        if memory[position + 3] then
+            println("Julia set of Mandelbrot");
+            println("fractal at coordinates");
+            print($"   X: $\n", memory[position + 4]);
+            print($"   Y: $\n", memory[position + 5]);
+        else
+            println("Mandelbrot set");
+        end;
+        println("-------------------------");
+        print($"X: $\n", memory[position]);
+        print($"Y: $\n", memory[position + 1]);
+        print($"Zoom: $\n", memory[position + 2]);
+        printflush(message2);
+    end;
+
+    //   BUTTON HANDLING
+    ///////////////////////////////////////////////////////////////////////
+
+    inline void handleMove(switch, x, y, z)
+        if switch.enabled then
             CHANGE = true;
             if x != 0 then
                 X = X + x * SHIFT / ZOOM;
@@ -425,167 +344,272 @@ control = """
         end;
     end;
 
-    inline def bookmark(memory, position, x, y, zoom)
-        memory[position] = x;       position = position + 1;
-        memory[position] = y;       position = position + 1;
-        memory[position] = zoom;    position = position + 1;
-        memory[position] = false;   position = position + 1;
+    inline void loadBookmark(position, bookmark)
+        X = memory[position];
+        Y = memory[position + 1];
+        ZOOM = memory[position + 2];
+        JULIA = memory[position + 3];
+        JULIA_X = memory[position + 4];
+        JULIA_Y = memory[position + 5];
+        buttonJulia.enabled = JULIA;
+        buttonLoad.enabled = false;
+        text1 = "\nLoaded from #";
+        text2 = bookmark;
+    end;
+
+    inline void saveBookmark(position, bookmark)
+        memory[position] = X;
+        memory[position + 1] = Y;
+        memory[position + 2] = ZOOM;
+        memory[position + 3] = JULIA;
+        memory[position + 4] = JULIA_X;
+        memory[position + 5] = JULIA_Y;
+        buttonSave.enabled = false;
+        text1 = "\nSaved to #";
+        text2 = bookmark;
+    end;
+
+    inline void handleTopRowButtons(in out updateBookmarks)
+        for var n in 0 ... @links do
+            var switch = getlink(n);
+            if switch.@type == @switch and switch.@y == bookmark_y then
+                var button_x = switch.@x;
+                if button_x >= palette_x then
+                    var index = button_x - palette_x;
+                    if index == PALETTE then
+                        switch.enabled = true;
+                    elsif index == palette_clr then
+                        switch.enabled = false;
+                        palette_clr = -1;
+                    elsif switch.@enabled then
+                        palette_clr = PALETTE;
+                        PALETTE = index;
+                        print("Palette #", PALETTE);
+                        printflush(message3);
+                        CHANGE = true;
+                    end;
+                else
+                    var index = button_x - bookmark_x;
+                    if index == bookmark then
+                        switch.enabled = true;
+                    elsif index == bookmark_clr then
+                        switch.enabled = false;
+                        bookmark_clr = -1;
+                    elsif switch.@enabled then
+                        bookmark_clr = bookmark;
+                        bookmark = index;
+                        position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1);
+                        updateBookmarks = true;
+                    end;
+                end;
+            end;
+        end;
+    end;
+
+    //   INITIALIZATION
+    ///////////////////////////////////////////////////////////////////////
+
+    inline void initialize()
+        print("Initializing...");
+        printflush(message1);
+
+        createPalette();
+        initializeBookmarks();
+
+        STOP = 1;
+        X = -0.8;
+        Y = 0;
+        ZOOM = 50;
+        JULIA = false;
+        JULIA_X = 0;
+        JULIA_Y = 0;
+        PALETTE = 1;
+
+        print("Palette #", PALETTE);
+        printflush(message3);
+    end;
+
+    inline void createPalette()
+        // Palette creation
+        var r = 128, g = 192, b = 64;
+
+        for var i in 0 ... MAX_DEPTH do
+            memory[i] = packcolor(r / 256, g / 256, b / 256, 255);
+            r = (r + 147) % 256;
+            g = (g +  87) % 256;
+            b = (b +  59) % 256;
+        end;
+
+        memory[MAX_DEPTH] = packcolor(0, 0, 0, 1);
+    end;
+
+    inline void initializeBookmarks()
+        var i = BOOKMARKS;
+        bookmark(memory, out i, -0.8,           0,           50);
+        bookmark(memory, out i, -0.14375,     1.0,         1600);
+        bookmark(memory, out i, -1.675,       0.0,        25600);
+        bookmark(memory, out i, -1.413547,   -0.03234831,  2500);
+        bookmark(memory, out i,  0.37359375,  0.09015625, 12800);
+        bookmark(memory, out i, -1.408547,   -0.03734831, 10000);
+        bookmark(memory, out i,  0.371875,    0.078125,    3200);
+        bookmark(memory, out i, -1.382347,   -0.02114831,  5000);
+        bookmark(memory, out i,  0.355,       0.66,        3200);
+        bookmark(memory, out i,  0.018125,   -0.818125,    6400);
+
+        bookmarkJulia(memory, out i,  0.0,        0.0,           50,  -0.8,       0.0);
+        bookmarkJulia(memory, out i, -0.14375,    1.03125,     3200,  -0.14375,   1.0);
+        bookmarkJulia(memory, out i, -1.403547,   -0.02734831, 5000,  -1.408547, -0.03734831);
+
+        while i < SLOTS do
+            bookmark(memory, out i, X, Y, ZOOM);
+        end;
+    end;
+
+    inline void bookmark(memory, in out position, x, y, zoom)
+        memory[position++] = x;
+        memory[position++] = y;
+        memory[position++] = zoom;
+        memory[position++] = false;
         position += 2;
     end;
 
-    inline def bookmark_julia(memory, position, x, y, zoom, julia_x, julia_y)
-        memory[position] = x;       position = position + 1;
-        memory[position] = y;       position = position + 1;
-        memory[position] = zoom;    position = position + 1;
-        memory[position] = true;    position = position + 1;
-        memory[position] = julia_x; position = position + 1;
-        memory[position] = julia_y; position = position + 1;
+    inline void bookmarkJulia(memory, in out position, x, y, zoom, julia_x, julia_y)
+        memory[position++] = x;
+        memory[position++] = y;
+        memory[position++] = zoom;
+        memory[position++] = true;
+        memory[position++] = julia_x;
+        memory[position++] = julia_y;
     end;
     """
 
 compute = """
-    const DISPLAY_SIZE = 176;
-    const HALF_SIZE = DISPLAY_SIZE / 2;
+    require blocks;
+
+    const DISPLAY_SIZE_LARGE = 176;
+    const HALF_SIZE = DISPLAY_SIZE_LARGE / 2;
     const MAX_DEPTH = 63;
     const SKIP = 17;
 
+    // Indices to the shared memory
     const VARIABLES = MAX_DEPTH + 1;
     const BOOKMARKS = VARIABLES + 16;
     const BOOKMARK_COUNT = 13;
     const BOOKMARK_SIZE = 6;
     const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE;
-    const PROCESSORS = SLOTS + DISPLAY_SIZE;
+    const PROCESSORS = SLOTS + DISPLAY_SIZE_LARGE;
 
+    var display, memory;
     allocate heap in memory[VARIABLES ... BOOKMARKS];
 
+    external $START;        // Start signal
+    external $STOP;         // Stop signal
+    external $X;            // Coordinates and palette
+    external $Y;
+    external $ZOOM;
+    external $JULIA;
+    external $JULIA_X;
+    external $JULIA_Y;
+    external $PALETTE;
+
+    // Current coordinates
+    var ZOOM, OFFSET_X, OFFSET_Y;
+    var JULIA, JULIA_X, JULIA_Y;
+
+    // Palette configuration
+    var PALETTE, SMOOTH;
     const ONE_TO_LOG = 1 / log(2);
     const QUARTER_TO_LOG = 0.25 / log(2);
 
-    display = null;
-    memory = null;
+    // Processor ID and processor state indexes
+    // Dynamically updated when a conflict with another processor is detected
+    var PROCESSOR_ID = @this.@x + 10000 * @this.@y;
+    var PROC_ID_INDEX = PROCESSORS;
+    var PROC_STATE_INDEX = PROCESSORS + 1;
 
-    while display == null || memory == null do
-        for n in 0 ... @links do
-            block = getlink(n);
-            case block.@type
-                when @large-logic-display   then display = block;
-                when @memory-bank           then memory = block;
-            end;
-        end;
-    end;
+    begin
+        findLinkedBlocks("Mandelbrot Generator", null,
+            @large-logic-display,   "Display",  out display,    true,
+            @memory-bank,           "Memory",   out memory,     true
+        );
 
-    control = 0;
+        var start = 0, stop;
+        while true do
+            // Waiting for a start signal
+            do
+                // setState finds a non-conflicting processor slot
+                // Writing zero state means this processor is not computing.
+                setState(0);
+            while start == $START;
 
-    ID = @this.@x + 10000 * @this.@y;
+            // New computation starts here
+            start = $START;
+            stop = $STOP;
 
-    PROC_ID = PROCESSORS;
-    PROC_STATE = PROCESSORS + 1;
+            // We're on our job
+            setState(start);
 
-    while true do
-        // Waiting for state to change
-        while control == $STATE do
-            storeState(memory, 0);
-        end;
+            // Load positional information
+            ZOOM     = $ZOOM;
+            OFFSET_X = -HALF_SIZE / ZOOM + $X;
+            OFFSET_Y = -HALF_SIZE / ZOOM + $Y;
+            JULIA    = $JULIA;
+            JULIA_X  = $JULIA_X;
+            JULIA_Y  = $JULIA_Y;
+            PALETTE  = $PALETTE;
+            SMOOTH   = PALETTE > 1;
 
-        control = $STATE;
-        stop = $STOP;
-        X = $X;
-        Y = $Y;
-        ZOOM = $ZOOM;
-        JULIA = $JULIA;
-        JULIA_X = $JULIA_X;
-        JULIA_Y = $JULIA_Y;
-        PALETTE = $PALETTE;
+            var line = 8;
+            var increment = 8;
+            var next_increment = 16;
+            wait(rand(0.1));
 
-        SMOOTH = PALETTE > 1;
+        MasterLoop:
+            for var lines in 0 ... DISPLAY_SIZE_LARGE do
+                // Find a line
+                var x = (SKIP * line) % DISPLAY_SIZE_LARGE;
+                var position = x + SLOTS;
 
-        storeState(memory, control);
+                if memory[position] == 0 then
+                    memory[position] = PROCESSOR_ID;
 
-        OFFSET_X = -HALF_SIZE / ZOOM + X;
-        OFFSET_Y = -HALF_SIZE / ZOOM + Y;
+                    for var y in 0 ... DISPLAY_SIZE_LARGE do
+                        var iterations = compute(x, y);
+                        drawPixel(x, y, iterations);
 
-        line = 8;
-        increment = 8;
-        next_increment = 16;
-        wait(rand(0.1));
-
-    MasterLoop:
-        for lines in 0 ... DISPLAY_SIZE do
-            // Find a line
-            x = (SKIP * line) % DISPLAY_SIZE;
-            position = x + SLOTS;
-
-            if memory[position] == 0 then
-                memory[position] = ID;
-
-                for y in 0 ... DISPLAY_SIZE do
-                    iterations = compute(x, y);
-                    if SMOOTH then
-                        if iterations == MAX_DEPTH then
-                            color(0, 0, 0, 255);
-                        else
-                            case PALETTE
-                                when 2 then
-                                    r = 255 - 7 * abs(32 - iterations);
-                                    g = 240 - 6 * abs(iterations - 32);
-                                    b = 120 + 4 * abs(32 - iterations);
-                                    color(r, g, b, 255);
-
-                                when 3 then
-                                    r = 255 * sin(iterations / MAX_DEPTH * 360);
-                                    g = 255 * cos(iterations / MAX_DEPTH * 360);
-                                    b = 100 + 4 * abs(iterations - 32);
-                                    color(r, g, b, 255);
-
-                                when 4 then
-                                    r = 4 * iterations;
-                                    g = 96 + 1.5 * iterations;
-                                    color(r, g, 0, 255);
-
-                                else
-                                    r = 255 - 4 * iterations;
-                                    color(r, r, 0, 255);
-                            end;
+                        if memory[position] != PROCESSOR_ID then
+                            break;   // Another processor took over this line
                         end;
-                    else
-                        clr = memory[iterations];
-                        col(clr);
-                    end;
-                    rect(x, y, 1, 1);
-                    drawflush(display);
 
-                    if memory[position] != ID then
-                        break;   // Another processor took over this line
-                    end;
-
-                    if stop != $STOP then
-                        break MasterLoop;        // Break is signalled
+                        if stop != $STOP then
+                            break MasterLoop;        // Break is signalled
+                        end;
                     end;
                 end;
-            end;
 
-            line = line + increment;
-            if line > DISPLAY_SIZE then
-                next_increment /= 2;
-                increment = next_increment;
-                line = increment / 2;
+                line += increment;
+                if line > DISPLAY_SIZE_LARGE then
+                    increment = next_increment /= 2;
+                    line = increment / 2;
+                end;
             end;
         end;
     end;
 
     def compute(x, y)
-        zx = x / ZOOM + OFFSET_X;
-        zy = y / ZOOM + OFFSET_Y;
+        var zx = x / ZOOM + OFFSET_X;
+        var zy = y / ZOOM + OFFSET_Y;
+        var cx, cy;
 
         if JULIA then
             cx = JULIA_X;
             cy = JULIA_Y;
         else
-            cx = x / ZOOM + OFFSET_X;
-            cy = y / ZOOM + OFFSET_Y;
+            cx = zx;
+            cy = zy;
 
             // Cardioid test
-            p = len(cx - 0.25, cy);
+            var p = len(cx - 0.25, cy);
             if cx <= p - 2 * p * p + 0.25 then
                 return MAX_DEPTH;
             end;
@@ -596,9 +620,10 @@ compute = """
             end;
         end;
 
+        var dist, i;
         for i in 0 ... MAX_DEPTH do
-            x1 = zx;
-            y1 = zy;
+            var x1 = zx;
+            var y1 = zy;
             zx = x1 * x1 - y1 * y1 + cx;
             zy = 2 * x1 * y1 + cy;
             dist = len(zx, zy);
@@ -608,25 +633,64 @@ compute = """
         end;
 
         if i < SMOOTH * MAX_DEPTH then
-            correction = 4 - log(log(dist) * QUARTER_TO_LOG) * ONE_TO_LOG;
+            // Correction only if we're smoothing and not at max iteration
+            var correction = 4 - log(log(dist) * QUARTER_TO_LOG) * ONE_TO_LOG;
             i += correction;
         end;
 
         return i;
     end;
 
-    def storeState(memory, state)
-        while PROC_STATE < 512 do
-            if memory[PROC_ID] == ID then
-                memory[PROC_STATE] = state;
+    void drawPixel(x, y, iterations)
+        if SMOOTH then
+            if iterations == MAX_DEPTH then
+                color(0, 0, 0, 255);
+            else
+                var r, g, b;
+                case PALETTE
+                    when 2 then
+                        r = 255 - 7 * abs(32 - iterations);
+                        g = 240 - 6 * abs(iterations - 32);
+                        b = 120 + 4 * abs(32 - iterations);
+                        color(r, g, b, 255);
+
+                    when 3 then
+                        r = 255 * sin(iterations / MAX_DEPTH * 360);
+                        g = 255 * cos(iterations / MAX_DEPTH * 360);
+                        b = 100 + 4 * abs(iterations - 32);
+                        color(r, g, b, 255);
+
+                    when 4 then
+                        r = 4 * iterations;
+                        g = 96 + 1.5 * iterations;
+                        color(r, g, 0, 255);
+
+                    else
+                        r = 255 - 4 * iterations;
+                        color(r, r, 0, 255);
+                end;
+            end;
+        else
+            col(memory[iterations]);
+        end;
+
+        rect(x, y, 1, 1);
+        drawflush(display);
+    end;
+
+    void setState(state)
+        // At index 512, we exceed the memory bank capacity
+        while PROC_STATE_INDEX < 512 do
+            if memory[PROC_ID_INDEX] == PROCESSOR_ID then
+                memory[PROC_STATE_INDEX] = state;
                 break;
-            elsif memory[PROC_ID] == 0 then
-                memory[PROC_ID] = ID;
-                memory[PROC_STATE] = state;
+            elsif memory[PROC_ID_INDEX] == 0 then
+                memory[PROC_ID_INDEX] = PROCESSOR_ID;
+                memory[PROC_STATE_INDEX] = state;
                 break;
             else
-                PROC_ID += 2;
-                PROC_STATE += 2;
+                PROC_ID_INDEX += 2;
+                PROC_STATE_INDEX += 2;
             end;
         end;
     end;

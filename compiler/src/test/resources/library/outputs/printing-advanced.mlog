@@ -1,23 +1,23 @@
 assertflush
 print "{2}"
-op floor __fn6__n 0 0
-format __fn6__n
+op floor :fn8:n 0 0
+format :fn8:n
 assertprints "0" "printNumber(null)"
 assertflush
 print "{2}"
-op floor __fn6__n 1 0
-format __fn6__n
+op floor :fn8:n 1 0
+format :fn8:n
 assertprints "1" "printNumber(1)"
 assertflush
 print "{2}"
-op floor __fn6__n 1.5 0
-format __fn6__n
+op floor :fn8:n 1.5 0
+format :fn8:n
 assertprints "1" "printNumber(1.5)"
 assertflush
 print "{2}"
-op floor __fn6__n 1.5 0
+op floor :fn8:n 1.5 0
 format "-{2}"
-format __fn6__n
+format :fn8:n
 assertprints "-1" "printNumber(-1.5)"
 assertflush
 print "{2}"
@@ -45,64 +45,329 @@ format 9
 format 9
 assertprints "9,009,099" "printNumber(9009099)"
 assertflush
+print "{2}"
+format "{2}{1}"
+format 1
+format "{2}{1}"
+format 0
+format "{2}{1}"
+format 0
+format "{2}{1}"
+format 1
+format "0b"
+assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
+assertflush
+print "{2}"
+format "{2}{1}"
+format 0
+format "{2}{1}"
+format 1
+format "{2}{1}"
+format 0
+format "{2}{1}"
+format 1
+format "{2}0"
+format "{2}0"
+format "0b"
+assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
+assertflush
+print "{2}"
+format "{2}F"
+format "{2}E"
+format "{2}D"
+format "{2}C"
+format "{2}B"
+format "{2}A"
+format "0x"
+assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+assertflush
+print "{2}"
+format "{2}{1}"
+format 0
+format "{2}{1}"
+format 9
+format "{2}{1}"
+format 8
+format "{2}{1}"
+format 7
+format "{2}{1}"
+format 6
+format "{2}{1}"
+format 5
+format "{2}{1}"
+format 4
+format "{2}{1}"
+format 3
+format "{2}{1}"
+format 2
+format "{2}{1}"
+format 1
+format "0x"
+assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
+assertflush
+print "{2}"
+format "{2}C"
+format "{2}C"
+format "{2}B"
+format "{2}B"
+format "{2}A"
+format "{2}A"
+format "{2}0"
+format "{2}0"
+format "0x"
+assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+assertflush
+op abs *tmp23 null 0
 print null
 assertprints "null" "printExactFast(null)"
 assertflush
-print 0
+set :fn6:n 0
+set :fn6*retaddr 126
+jump 219 always 0 0
 assertprints "0" "printExactFast(0)"
 assertflush
-print 1
+set :fn6:n 1
+set :fn6*retaddr 131
+jump 219 always 0 0
 assertprints "1" "printExactFast(1)"
 assertflush
-print "1.000000100000000"
+set :fn6:n 1.0000001
+set :fn6*retaddr 136
+jump 219 always 0 0
 assertprints "1.000000100000000" "printExactFast(1.0000001)"
 assertflush
-print "3.000000070000000"
+set :fn6:n 3.00000007
+set :fn6*retaddr 141
+jump 219 always 0 0
 assertprints "3.000000070000000" "printExactFast(3.00000007)"
 assertflush
-print "3E50"
+set :fn6:n 3E50
+set :fn6*retaddr 146
+jump 219 always 0 0
 assertprints "3E50" "printExactFast(3e50)"
 assertflush
-print 1.0123456789
+set :fn6:n 1.0123456789
+set :fn6*retaddr 151
+jump 219 always 0 0
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
-print "1.000000099999999E20"
+set :fn6:n 10000001E13
+set :fn6*retaddr 156
+jump 219 always 0 0
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
 assertflush
-print "1.2345000000000002E-50"
+set :fn6:n 12345E-54
+set :fn6*retaddr 161
+jump 219 always 0 0
 assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush
-print "-1.2345000000000002E-50"
+set :fn6:n -12345E-54
+set :fn6*retaddr 166
+jump 219 always 0 0
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
-print null
+set :fn7:n null
+set :fn7*retaddr 171
+jump 293 always 0 0
 assertprints "null" "printExactSlow(null)"
 assertflush
-print 0
+set :fn7:n 0
+set :fn7*retaddr 176
+jump 293 always 0 0
 assertprints "0" "printExactSlow(0)"
 assertflush
-print "1.000000000000000"
+set :fn7:n 1
+set :fn7*retaddr 181
+jump 293 always 0 0
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
-print "1.000000100000000"
+set :fn7:n 1.0000001
+set :fn7*retaddr 186
+jump 293 always 0 0
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
-print "3.000000070000000"
+set :fn7:n 3.00000007
+set :fn7*retaddr 191
+jump 293 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
-print "3.000000000000000E50"
+set :fn7:n 3E50
+set :fn7*retaddr 196
+jump 293 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
-print "1.012345678900000"
+set :fn7:n 1.0123456789
+set :fn7*retaddr 201
+jump 293 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
-print "1.000000099999999E20"
+set :fn7:n 10000001E13
+set :fn7*retaddr 206
+jump 293 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
-print "1.234500000000000E-50"
+set :fn7:n 12345E-54
+set :fn7*retaddr 211
+jump 293 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
-print "-1.234500000000000E-50"
+set :fn7:n -12345E-54
+set :fn7*retaddr 216
+jump 293 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 stop
+end
+op abs *tmp23 :fn6:n 0
+jump 223 greaterThan *tmp23 0
+print :fn6:n
+set @counter :fn6*retaddr
+jump 226 greaterThanEq :fn6:n 0
+print "-"
+op abs :fn6:n :fn6:n 0
+op log10 *tmp29 :fn6:n 0
+op floor :fn6:exp *tmp29 0
+op sub *tmp31 0 :fn6:exp
+op pow *tmp32 10 *tmp31
+op mul :fn6:base :fn6:n *tmp32
+op add *tmp35 :fn6:base 0.5
+op floor *tmp34 *tmp35 0
+op sub *tmp37 :fn6:base *tmp34
+op abs :fn6:cmp *tmp37 0
+jump 238 greaterThan :fn6:cmp 0
+print :fn6:base
+jump 289 always 0 0
+jump 241 lessThanEq :fn6:cmp 0.00001
+print :fn6:base
+jump 289 always 0 0
+op floor *tmp43 :fn6:base 0
+print *tmp43
+print "."
+op mod *tmp44 :fn6:base 1
+op mul :fn6:base *tmp44 100000
+op floor :fn6:t :fn6:base 0
+jump 250 greaterThanEq :fn6:t 10
+print "0000"
+jump 258 always 0 0
+jump 253 greaterThanEq :fn6:t 100
+print "000"
+jump 258 always 0 0
+jump 256 greaterThanEq :fn6:t 1000
+print "00"
+jump 258 always 0 0
+jump 258 greaterThanEq :fn6:t 10000
+print "0"
+print :fn6:t
+op mod *tmp44 :fn6:base 1
+op mul :fn6:base *tmp44 100000
+op floor :fn6:t :fn6:base 0
+jump 265 greaterThanEq :fn6:t 10
+print "0000"
+jump 273 always 0 0
+jump 268 greaterThanEq :fn6:t 100
+print "000"
+jump 273 always 0 0
+jump 271 greaterThanEq :fn6:t 1000
+print "00"
+jump 273 always 0 0
+jump 273 greaterThanEq :fn6:t 10000
+print "0"
+print :fn6:t
+op mod *tmp44 :fn6:base 1
+op mul :fn6:base *tmp44 100000
+op floor :fn6:t :fn6:base 0
+jump 280 greaterThanEq :fn6:t 10
+print "0000"
+jump 288 always 0 0
+jump 283 greaterThanEq :fn6:t 100
+print "000"
+jump 288 always 0 0
+jump 286 greaterThanEq :fn6:t 1000
+print "00"
+jump 288 always 0 0
+jump 288 greaterThanEq :fn6:t 10000
+print "0"
+print :fn6:t
+jump 292 equal :fn6:exp 0
+print "E"
+print :fn6:exp
+set @counter :fn6*retaddr
+op abs *tmp59 :fn7:n 0
+jump 297 greaterThan *tmp59 0
+print :fn7:n
+set @counter :fn7*retaddr
+jump 300 greaterThanEq :fn7:n 0
+print "-"
+op abs :fn7:n :fn7:n 0
+op log10 *tmp65 :fn7:n 0
+op floor :fn7:exp *tmp65 0
+op sub *tmp67 0 :fn7:exp
+op pow *tmp68 10 *tmp67
+op mul :fn7:base :fn7:n *tmp68
+op floor *tmp70 :fn7:base 0
+print *tmp70
+print "."
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+jump 371 equal :fn7:exp 0
+print "E"
+print :fn7:exp
+set @counter :fn7*retaddr
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

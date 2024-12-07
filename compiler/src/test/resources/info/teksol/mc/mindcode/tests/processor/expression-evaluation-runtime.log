@@ -1,0 +1,1548 @@
+   402 instructions before optimizations.
+   101 instructions eliminated by Data Flow Optimization (22 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
+   300 instructions after optimizations.
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     2 call *label0 :fn0*retval
+     3 gotolabel *label1 :fn0
+     4 set *tmp0 :fn0*retval
+-    * op add *tmp1 2 *tmp0
++    5 op add *tmp1 2 :fn0*retval
+     6 assertequals 5 *tmp1 "add"
+     7 set :fn0:n 6
+     8 setaddr :fn0*retaddr *label2
+     9 call *label0 :fn0*retval
+    10 gotolabel *label2 :fn0
+    11 set *tmp2 :fn0*retval
+-    * op sub *tmp3 7 *tmp2
++   12 op sub *tmp3 7 :fn0*retval
+    13 assertequals 1 *tmp3 "sub"
+    14 set :fn0:n 2
+    15 setaddr :fn0*retaddr *label3
+    16 call *label0 :fn0*retval
+    17 gotolabel *label3 :fn0
+    18 set *tmp4 :fn0*retval
+-    * op mul *tmp5 3 *tmp4
++   19 op mul *tmp5 3 :fn0*retval
+    20 assertequals 6 *tmp5 "mul"
+    21 set :fn0:n 4
+    22 setaddr :fn0*retaddr *label4
+    23 call *label0 :fn0*retval
+    24 gotolabel *label4 :fn0
+    25 set *tmp6 :fn0*retval
+-    * op div *tmp7 6 *tmp6
++   26 op div *tmp7 6 :fn0*retval
+    27 assertequals 1.5 *tmp7 "div"
+    28 set :fn0:n 100000
+    29 setaddr :fn0*retaddr *label5
+    30 call *label0 :fn0*retval
+    31 gotolabel *label5 :fn0
+    32 set *tmp8 :fn0*retval
+-    * op div *tmp9 1 *tmp8
++   33 op div *tmp9 1 :fn0*retval
+    34 assertequals 0.00001 *tmp9 "div exp"
+    35 set :fn0:n 4
+    36 setaddr :fn0*retaddr *label6
+    37 call *label0 :fn0*retval
+    38 gotolabel *label6 :fn0
+    39 set *tmp10 :fn0*retval
+-    * op idiv *tmp11 6 *tmp10
++   40 op idiv *tmp11 6 :fn0*retval
+    41 assertequals 1 *tmp11 "idiv"
+    42 set :fn0:n 4
+    43 setaddr :fn0*retaddr *label7
+    44 call *label0 :fn0*retval
+    45 gotolabel *label7 :fn0
+    46 set *tmp12 :fn0*retval
+-    * op mod *tmp13 6 *tmp12
++   47 op mod *tmp13 6 :fn0*retval
+    48 assertequals 2 *tmp13 "mod"
+    49 set :fn0:n 4
+    50 setaddr :fn0*retaddr *label8
+    51 call *label0 :fn0*retval
+    52 gotolabel *label8 :fn0
+    53 set *tmp14 :fn0*retval
+-    * op pow *tmp15 2 *tmp14
++   54 op pow *tmp15 2 :fn0*retval
+    55 assertequals 16 *tmp15 "pow"
+    56 set :fn0:n 5
+    57 setaddr :fn0*retaddr *label9
+    58 call *label0 :fn0*retval
+    59 gotolabel *label9 :fn0
+    60 set *tmp16 :fn0*retval
+-    * op equal *tmp17 5 *tmp16
++   61 op equal *tmp17 5 :fn0*retval
+    62 assertequals true *tmp17 "equal 1"
+    63 set :fn0:n 6
+    64 setaddr :fn0*retaddr *label10
+    65 call *label0 :fn0*retval
+    66 gotolabel *label10 :fn0
+    67 set *tmp18 :fn0*retval
+-    * op equal *tmp19 5 *tmp18
++   68 op equal *tmp19 5 :fn0*retval
+    69 assertequals false *tmp19 "equal 2"
+    70 set :fn0:n null
+    71 setaddr :fn0*retaddr *label11
+    72 call *label0 :fn0*retval
+    73 gotolabel *label11 :fn0
+    74 set *tmp20 :fn0*retval
+-    * op equal *tmp21 0 *tmp20
++   75 op equal *tmp21 0 :fn0*retval
+    76 assertequals true *tmp21 "equal null"
+    77 set :fn0:n 5
+    78 setaddr :fn0*retaddr *label12
+    79 call *label0 :fn0*retval
+    80 gotolabel *label12 :fn0
+    81 set *tmp22 :fn0*retval
+-    * op notEqual *tmp23 5 *tmp22
++   82 op notEqual *tmp23 5 :fn0*retval
+    83 assertequals false *tmp23 "notEqual 1"
+    84 set :fn0:n 6
+    85 setaddr :fn0*retaddr *label13
+    86 call *label0 :fn0*retval
+    87 gotolabel *label13 :fn0
+    88 set *tmp24 :fn0*retval
+-    * op notEqual *tmp25 5 *tmp24
++   89 op notEqual *tmp25 5 :fn0*retval
+    90 assertequals true *tmp25 "notEqual 2"
+    91 set :fn0:n null
+    92 setaddr :fn0*retaddr *label14
+    93 call *label0 :fn0*retval
+    94 gotolabel *label14 :fn0
+    95 set *tmp26 :fn0*retval
+-    * op notEqual *tmp27 0 *tmp26
++   96 op notEqual *tmp27 0 :fn0*retval
+    97 assertequals false *tmp27 "notEqual null"
+    98 set :fn0:n 0
+    99 setaddr :fn0*retaddr *label15
+   100 call *label0 :fn0*retval
+   101 gotolabel *label15 :fn0
+   102 set *tmp28 :fn0*retval
+-    * op land *tmp29 1 *tmp28
++  103 op land *tmp29 1 :fn0*retval
+   104 assertequals false *tmp29 "land 1"
+   105 set :fn0:n 2
+   106 setaddr :fn0*retaddr *label16
+   107 call *label0 :fn0*retval
+   108 gotolabel *label16 :fn0
+   109 set *tmp30 :fn0*retval
+-    * op land *tmp31 1 *tmp30
++  110 op land *tmp31 1 :fn0*retval
+   111 assertequals true *tmp31 "land 2"
+   112 set :fn0:n 1
+   113 setaddr :fn0*retaddr *label17
+   114 call *label0 :fn0*retval
+   115 gotolabel *label17 :fn0
+   116 set *tmp32 :fn0*retval
+-    * op lessThan *tmp33 0 *tmp32
++  117 op lessThan *tmp33 0 :fn0*retval
+   118 assertequals true *tmp33 "lessThan 1"
+   119 set :fn0:n 0
+   120 setaddr :fn0*retaddr *label18
+   121 call *label0 :fn0*retval
+   122 gotolabel *label18 :fn0
+   123 set *tmp34 :fn0*retval
+-    * op lessThan *tmp35 1 *tmp34
++  124 op lessThan *tmp35 1 :fn0*retval
+   125 assertequals false *tmp35 "lessThan 2"
+   126 set :fn0:n 1
+   127 setaddr :fn0*retaddr *label19
+   128 call *label0 :fn0*retval
+   129 gotolabel *label19 :fn0
+   130 set *tmp36 :fn0*retval
+-    * op lessThanEq *tmp37 1 *tmp36
++  131 op lessThanEq *tmp37 1 :fn0*retval
+   132 assertequals true *tmp37 "lessThanEq 1"
+   133 set :fn0:n 0
+   134 setaddr :fn0*retaddr *label20
+   135 call *label0 :fn0*retval
+   136 gotolabel *label20 :fn0
+   137 set *tmp38 :fn0*retval
+-    * op lessThanEq *tmp39 1 *tmp38
++  138 op lessThanEq *tmp39 1 :fn0*retval
+   139 assertequals false *tmp39 "lessThanEq 2"
+   140 set :fn0:n 1
+   141 setaddr :fn0*retaddr *label21
+   142 call *label0 :fn0*retval
+   143 gotolabel *label21 :fn0
+   144 set *tmp40 :fn0*retval
+-    * op greaterThan *tmp41 2 *tmp40
++  145 op greaterThan *tmp41 2 :fn0*retval
+   146 assertequals true *tmp41 "greaterThan 1"
+   147 set :fn0:n 2
+   148 setaddr :fn0*retaddr *label22
+   149 call *label0 :fn0*retval
+   150 gotolabel *label22 :fn0
+   151 set *tmp42 :fn0*retval
+-    * op greaterThan *tmp43 1 *tmp42
++  152 op greaterThan *tmp43 1 :fn0*retval
+   153 assertequals false *tmp43 "greaterThan 2"
+   154 set :fn0:n 1
+   155 setaddr :fn0*retaddr *label23
+   156 call *label0 :fn0*retval
+   157 gotolabel *label23 :fn0
+   158 set *tmp44 :fn0*retval
+-    * op greaterThanEq *tmp45 1 *tmp44
++  159 op greaterThanEq *tmp45 1 :fn0*retval
+   160 assertequals true *tmp45 "greaterThanEq 1"
+   161 set :fn0:n 2
+   162 setaddr :fn0*retaddr *label24
+   163 call *label0 :fn0*retval
+   164 gotolabel *label24 :fn0
+   165 set *tmp46 :fn0*retval
+-    * op greaterThanEq *tmp47 1 *tmp46
++  166 op greaterThanEq *tmp47 1 :fn0*retval
+   167 assertequals false *tmp47 "greaterThanEq 2"
+   168 set :fn0:n null
+   169 setaddr :fn0*retaddr *label25
+   170 call *label0 :fn0*retval
+   171 gotolabel *label25 :fn0
+   172 set *tmp48 :fn0*retval
+-    * op strictEqual *tmp49 0 *tmp48
++  173 op strictEqual *tmp49 0 :fn0*retval
+   174 assertequals false *tmp49 "strictEqual 1"
+   175 set :fn0:n null
+   176 setaddr :fn0*retaddr *label26
+   177 call *label0 :fn0*retval
+   178 gotolabel *label26 :fn0
+   179 set *tmp50 :fn0*retval
+-    * op strictEqual *tmp51 null *tmp50
++  180 op strictEqual *tmp51 null :fn0*retval
+   181 assertequals true *tmp51 "strictEqual 2"
+   182 set :fn0:n 2
+   183 setaddr :fn0*retaddr *label27
+   184 call *label0 :fn0*retval
+   185 gotolabel *label27 :fn0
+   186 set *tmp52 :fn0*retval
+-    * op shl *tmp53 1 *tmp52
++  187 op shl *tmp53 1 :fn0*retval
+   188 assertequals 4 *tmp53 "shl"
+   189 set :fn0:n 2
+   190 setaddr :fn0*retaddr *label28
+   191 call *label0 :fn0*retval
+   192 gotolabel *label28 :fn0
+   193 set *tmp54 :fn0*retval
+-    * op shr *tmp55 9 *tmp54
++  194 op shr *tmp55 9 :fn0*retval
+   195 assertequals 2 *tmp55 "shr"
+   196 set :fn0:n 2
+   197 setaddr :fn0*retaddr *label29
+   198 call *label0 :fn0*retval
+   199 gotolabel *label29 :fn0
+   200 set *tmp56 :fn0*retval
+-    * op or *tmp57 1 *tmp56
++  201 op or *tmp57 1 :fn0*retval
+   202 assertequals 3 *tmp57 "or"
+   203 set :fn0:n 2
+   204 setaddr :fn0*retaddr *label30
+   205 call *label0 :fn0*retval
+   206 gotolabel *label30 :fn0
+   207 set *tmp58 :fn0*retval
+-    * op and *tmp59 3 *tmp58
++  208 op and *tmp59 3 :fn0*retval
+   209 assertequals 2 *tmp59 "and"
+   210 set :fn0:n 2
+   211 setaddr :fn0*retaddr *label31
+   212 call *label0 :fn0*retval
+   213 gotolabel *label31 :fn0
+   214 set *tmp60 :fn0*retval
+-    * op xor *tmp61 3 *tmp60
++  215 op xor *tmp61 3 :fn0*retval
+   216 assertequals 1 *tmp61 "xor"
+   217 set :fn0:n 0
+   218 setaddr :fn0*retaddr *label32
+   219 call *label0 :fn0*retval
+   220 gotolabel *label32 :fn0
+   221 set *tmp62 :fn0*retval
+-    * op not *tmp63 *tmp62
++  222 op not *tmp63 :fn0*retval
+   223 assertequals -1 *tmp63 "not 1"
+   224 set :fn0:n 65535
+   225 setaddr :fn0*retaddr *label33
+   226 call *label0 :fn0*retval
+   227 gotolabel *label33 :fn0
+   228 set *tmp64 :fn0*retval
+-    * op not *tmp65 *tmp64
++  229 op not *tmp65 :fn0*retval
+   230 assertequals -65536 *tmp65 "not 2"
+   231 set :a 0xabcdefabcdef
+-    * op add *tmp66 :a 1
+-    * op sub *tmp67 0 *tmp66
+-    * set :fn0:n :a
++  232 op add *tmp66 0xabcdefabcdef 1
++  233 op sub *tmp67 0 188900977659376
++  234 set :fn0:n 0xabcdefabcdef
+   235 setaddr :fn0*retaddr *label34
+   236 call *label0 :fn0*retval
+   237 gotolabel *label34 :fn0
+   238 set *tmp68 :fn0*retval
+-    * op not *tmp69 *tmp68
+-    * assertequals *tmp67 *tmp69 "not 3"
++  239 op not *tmp69 :fn0*retval
++  240 assertequals -188900977659376 *tmp69 "not 3"
+   241 set :fn0:n 4
+   242 setaddr :fn0*retaddr *label35
+   243 call *label0 :fn0*retval
+   244 gotolabel *label35 :fn0
+   245 set *tmp70 :fn0*retval
+-    * op max *tmp71 2 *tmp70
++  246 op max *tmp71 2 :fn0*retval
+   247 assertequals 4 *tmp71 "max"
+   248 set :fn0:n 4
+   249 setaddr :fn0*retaddr *label36
+   250 call *label0 :fn0*retval
+   251 gotolabel *label36 :fn0
+   252 set *tmp72 :fn0*retval
+-    * op min *tmp73 2 *tmp72
++  253 op min *tmp73 2 :fn0*retval
+   254 assertequals 2 *tmp73 "min"
+   255 set :fn0:n -2
+   256 setaddr :fn0*retaddr *label37
+   257 call *label0 :fn0*retval
+   258 gotolabel *label37 :fn0
+   259 set *tmp74 :fn0*retval
+-    * op abs *tmp75 *tmp74
++  260 op abs *tmp75 :fn0*retval
+   261 assertequals 2 *tmp75 "abs"
+   262 set :fn0:n 2.718281828459045
+   263 setaddr :fn0*retaddr *label38
+   264 call *label0 :fn0*retval
+   265 gotolabel *label38 :fn0
+   266 set *tmp76 :fn0*retval
+-    * op log *tmp77 *tmp76
++  267 op log *tmp77 :fn0*retval
+   268 assertequals 1 *tmp77 "log"
+   269 set :fn0:n 10
+   270 setaddr :fn0*retaddr *label39
+   271 call *label0 :fn0*retval
+   272 gotolabel *label39 :fn0
+   273 set *tmp78 :fn0*retval
+-    * op log10 *tmp79 *tmp78
++  274 op log10 *tmp79 :fn0*retval
+   275 assertequals 1 *tmp79 "log10"
+   276 set :fn0:n 2.5
+   277 setaddr :fn0*retaddr *label40
+   278 call *label0 :fn0*retval
+   279 gotolabel *label40 :fn0
+   280 set *tmp80 :fn0*retval
+-    * op floor *tmp81 *tmp80
++  281 op floor *tmp81 :fn0*retval
+   282 assertequals 2 *tmp81 "floor"
+   283 set :fn0:n 2.5
+   284 setaddr :fn0*retaddr *label41
+   285 call *label0 :fn0*retval
+   286 gotolabel *label41 :fn0
+   287 set *tmp82 :fn0*retval
+-    * op ceil *tmp83 *tmp82
++  288 op ceil *tmp83 :fn0*retval
+   289 assertequals 3 *tmp83 "ceil"
+   290 set :fn0:n 16
+   291 setaddr :fn0*retaddr *label42
+   292 call *label0 :fn0*retval
+   293 gotolabel *label42 :fn0
+   294 set *tmp84 :fn0*retval
+-    * op sqrt *tmp85 *tmp84
++  295 op sqrt *tmp85 :fn0*retval
+   296 assertequals 4 *tmp85 "sqrt"
+   297 set :fn0:n 1
+   298 setaddr :fn0*retaddr *label43
+   299 call *label0 :fn0*retval
+   300 gotolabel *label43 :fn0
+   301 set *tmp86 :fn0*retval
+-    * op angle *tmp87 1 *tmp86
++  302 op angle *tmp87 1 :fn0*retval
+   303 assertequals 45 *tmp87 "angle"
+   304 set :fn0:n 135
+   305 setaddr :fn0*retaddr *label44
+   306 call *label0 :fn0*retval
+   307 gotolabel *label44 :fn0
+   308 set *tmp88 :fn0*retval
+-    * op angleDiff *tmp89 45 *tmp88
++  309 op angleDiff *tmp89 45 :fn0*retval
+   310 assertequals 90 *tmp89 "angleDiff"
+   311 set :fn0:n 8
+   312 setaddr :fn0*retaddr *label45
+   313 call *label0 :fn0*retval
+   314 gotolabel *label45 :fn0
+   315 set *tmp90 :fn0*retval
+-    * op sub *tmp91 0 *tmp90
++  316 op sub *tmp91 0 :fn0*retval
+   317 assertequals -8 *tmp91 "unary minus"
+   318 set :fn0:n 0
+   319 setaddr :fn0*retaddr *label46
+   320 call *label0 :fn0*retval
+   321 gotolabel *label46 :fn0
+   322 set *tmp92 :fn0*retval
+-    * op equal *tmp93 *tmp92 false
++  323 op equal *tmp93 :fn0*retval false
+   324 assertequals 1 *tmp93 "boolean negation 1"
+   325 set :fn0:n 1
+   326 setaddr :fn0*retaddr *label47
+   327 call *label0 :fn0*retval
+   328 gotolabel *label47 :fn0
+   329 set *tmp94 :fn0*retval
+-    * op equal *tmp95 *tmp94 false
++  330 op equal *tmp95 :fn0*retval false
+   331 assertequals 0 *tmp95 "boolean negation 2"
+   332 set :fn0:n 2
+   333 setaddr :fn0*retaddr *label48
+   334 call *label0 :fn0*retval
+   335 gotolabel *label48 :fn0
+   336 set *tmp96 :fn0*retval
+-    * op equal *tmp97 *tmp96 false
++  337 op equal *tmp97 :fn0*retval false
+   338 assertequals 0 *tmp97 "boolean negation 3"
+   339 set :a 2
+   340 set :fn0:n 4
+ 
+   342 call *label0 :fn0*retval
+   343 gotolabel *label49 :fn0
+   344 set *tmp98 :fn0*retval
+-    * op pow :a :a *tmp98
++  345 op pow :a 2 :fn0*retval
+   346 assertequals 16 :a "**="
+   347 set :a 2
+   348 set :fn0:n 4
+ 
+   350 call *label0 :fn0*retval
+   351 gotolabel *label50 :fn0
+   352 set *tmp99 :fn0*retval
+-    * op mul :a :a *tmp99
++  353 op mul :a 2 :fn0*retval
+   354 assertequals 8 :a "*="
+   355 set :a 6
+   356 set :fn0:n 4
+ 
+   358 call *label0 :fn0*retval
+   359 gotolabel *label51 :fn0
+   360 set *tmp100 :fn0*retval
+-    * op div :a :a *tmp100
++  361 op div :a 6 :fn0*retval
+   362 assertequals 1.5 :a "/="
+   363 set :a 6
+   364 set :fn0:n 4
+ 
+   366 call *label0 :fn0*retval
+   367 gotolabel *label52 :fn0
+   368 set *tmp101 :fn0*retval
+-    * op idiv :a :a *tmp101
++  369 op idiv :a 6 :fn0*retval
+   370 assertequals 1 :a "\="
+   371 set :a 6
+   372 set :fn0:n 4
+ 
+   374 call *label0 :fn0*retval
+   375 gotolabel *label53 :fn0
+   376 set *tmp102 :fn0*retval
+-    * op mod :a :a *tmp102
++  377 op mod :a 6 :fn0*retval
+   378 assertequals 2 :a "%="
+   379 set :a 4
+   380 set :fn0:n 2
+ 
+   382 call *label0 :fn0*retval
+   383 gotolabel *label54 :fn0
+   384 set *tmp103 :fn0*retval
+-    * op add :a :a *tmp103
++  385 op add :a 4 :fn0*retval
+   386 assertequals 6 :a "+="
+   387 set :a 4
+   388 set :fn0:n 2
+ 
+   390 call *label0 :fn0*retval
+   391 gotolabel *label55 :fn0
+   392 set *tmp104 :fn0*retval
+-    * op sub :a :a *tmp104
++  393 op sub :a 4 :fn0*retval
+   394 assertequals 2 :a "-="
+   395 set :a 1
+   396 set :fn0:n 2
+ 
+   398 call *label0 :fn0*retval
+   399 gotolabel *label56 :fn0
+   400 set *tmp105 :fn0*retval
+-    * op shl :a :a *tmp105
++  401 op shl :a 1 :fn0*retval
+   402 assertequals 4 :a "<<="
+   403 set :a 9
+   404 set :fn0:n 2
+ 
+   406 call *label0 :fn0*retval
+   407 gotolabel *label57 :fn0
+   408 set *tmp106 :fn0*retval
+-    * op shr :a :a *tmp106
++  409 op shr :a 9 :fn0*retval
+   410 assertequals 2 :a ">>="
+   411 set :a 1
+   412 set :fn0:n 2
+ 
+   414 call *label0 :fn0*retval
+   415 gotolabel *label58 :fn0
+   416 set *tmp107 :fn0*retval
+-    * op or :a :a *tmp107
++  417 op or :a 1 :fn0*retval
+   418 assertequals 3 :a "|="
+   419 set :a 3
+   420 set :fn0:n 2
+ 
+   422 call *label0 :fn0*retval
+   423 gotolabel *label59 :fn0
+   424 set *tmp108 :fn0*retval
+-    * op and :a :a *tmp108
++  425 op and :a 3 :fn0*retval
+   426 assertequals 2 :a "&="
+   427 set :a 3
+   428 set :fn0:n 2
+ 
+   430 call *label0 :fn0*retval
+   431 gotolabel *label60 :fn0
+   432 set *tmp109 :fn0*retval
+-    * op xor :a :a *tmp109
++  433 op xor :a 3 :fn0*retval
+   434 assertequals 1 :a "^="
+   435 set :a 1
+   436 set :fn0:n 0
+ 
+   438 call *label0 :fn0*retval
+   439 gotolabel *label61 :fn0
+   440 set *tmp110 :fn0*retval
+-    * op land :a :a *tmp110
++  441 op land :a 1 :fn0*retval
+   442 assertequals false :a "&&="
+   443 set :a 1
+   444 set :fn0:n 2
+ 
+   446 call *label0 :fn0*retval
+   447 gotolabel *label62 :fn0
+   448 set *tmp111 :fn0*retval
+-    * op land :a :a *tmp111
++  449 op land :a 1 :fn0*retval
+   450 assertequals true :a "&&="
+   451 set :a 0
+-    * set :fn0:n 2
+   452 setaddr :fn0*retaddr *label63
+   453 call *label0 :fn0*retval
+   454 gotolabel *label63 :fn0
+   455 set *tmp112 :fn0*retval
+-    * op or *tmp113 :a *tmp112
++  456 op or *tmp113 0 :fn0*retval
+   457 op notEqual :a *tmp113 false
+   458 assertequals true :a "||="
+   459 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-82 instructions):
+ 
+     1 setaddr :fn0*retaddr *label1
+     2 call *label0 :fn0*retval
+     3 gotolabel *label1 :fn0
+-    * set *tmp0 :fn0*retval
+     4 op add *tmp1 2 :fn0*retval
+     5 assertequals 5 *tmp1 "add"
+     6 set :fn0:n 6
+     7 setaddr :fn0*retaddr *label2
+     8 call *label0 :fn0*retval
+     9 gotolabel *label2 :fn0
+-    * set *tmp2 :fn0*retval
+    10 op sub *tmp3 7 :fn0*retval
+    11 assertequals 1 *tmp3 "sub"
+    12 set :fn0:n 2
+    13 setaddr :fn0*retaddr *label3
+    14 call *label0 :fn0*retval
+    15 gotolabel *label3 :fn0
+-    * set *tmp4 :fn0*retval
+    16 op mul *tmp5 3 :fn0*retval
+    17 assertequals 6 *tmp5 "mul"
+    18 set :fn0:n 4
+    19 setaddr :fn0*retaddr *label4
+    20 call *label0 :fn0*retval
+    21 gotolabel *label4 :fn0
+-    * set *tmp6 :fn0*retval
+    22 op div *tmp7 6 :fn0*retval
+    23 assertequals 1.5 *tmp7 "div"
+    24 set :fn0:n 100000
+    25 setaddr :fn0*retaddr *label5
+    26 call *label0 :fn0*retval
+    27 gotolabel *label5 :fn0
+-    * set *tmp8 :fn0*retval
+    28 op div *tmp9 1 :fn0*retval
+    29 assertequals 0.00001 *tmp9 "div exp"
+    30 set :fn0:n 4
+    31 setaddr :fn0*retaddr *label6
+    32 call *label0 :fn0*retval
+    33 gotolabel *label6 :fn0
+-    * set *tmp10 :fn0*retval
+    34 op idiv *tmp11 6 :fn0*retval
+    35 assertequals 1 *tmp11 "idiv"
+    36 set :fn0:n 4
+    37 setaddr :fn0*retaddr *label7
+    38 call *label0 :fn0*retval
+    39 gotolabel *label7 :fn0
+-    * set *tmp12 :fn0*retval
+    40 op mod *tmp13 6 :fn0*retval
+    41 assertequals 2 *tmp13 "mod"
+    42 set :fn0:n 4
+    43 setaddr :fn0*retaddr *label8
+    44 call *label0 :fn0*retval
+    45 gotolabel *label8 :fn0
+-    * set *tmp14 :fn0*retval
+    46 op pow *tmp15 2 :fn0*retval
+    47 assertequals 16 *tmp15 "pow"
+    48 set :fn0:n 5
+    49 setaddr :fn0*retaddr *label9
+    50 call *label0 :fn0*retval
+    51 gotolabel *label9 :fn0
+-    * set *tmp16 :fn0*retval
+    52 op equal *tmp17 5 :fn0*retval
+    53 assertequals true *tmp17 "equal 1"
+    54 set :fn0:n 6
+    55 setaddr :fn0*retaddr *label10
+    56 call *label0 :fn0*retval
+    57 gotolabel *label10 :fn0
+-    * set *tmp18 :fn0*retval
+    58 op equal *tmp19 5 :fn0*retval
+    59 assertequals false *tmp19 "equal 2"
+    60 set :fn0:n null
+    61 setaddr :fn0*retaddr *label11
+    62 call *label0 :fn0*retval
+    63 gotolabel *label11 :fn0
+-    * set *tmp20 :fn0*retval
+    64 op equal *tmp21 0 :fn0*retval
+    65 assertequals true *tmp21 "equal null"
+    66 set :fn0:n 5
+    67 setaddr :fn0*retaddr *label12
+    68 call *label0 :fn0*retval
+    69 gotolabel *label12 :fn0
+-    * set *tmp22 :fn0*retval
+    70 op notEqual *tmp23 5 :fn0*retval
+    71 assertequals false *tmp23 "notEqual 1"
+    72 set :fn0:n 6
+    73 setaddr :fn0*retaddr *label13
+    74 call *label0 :fn0*retval
+    75 gotolabel *label13 :fn0
+-    * set *tmp24 :fn0*retval
+    76 op notEqual *tmp25 5 :fn0*retval
+    77 assertequals true *tmp25 "notEqual 2"
+    78 set :fn0:n null
+    79 setaddr :fn0*retaddr *label14
+    80 call *label0 :fn0*retval
+    81 gotolabel *label14 :fn0
+-    * set *tmp26 :fn0*retval
+    82 op notEqual *tmp27 0 :fn0*retval
+    83 assertequals false *tmp27 "notEqual null"
+    84 set :fn0:n 0
+    85 setaddr :fn0*retaddr *label15
+    86 call *label0 :fn0*retval
+    87 gotolabel *label15 :fn0
+-    * set *tmp28 :fn0*retval
+    88 op land *tmp29 1 :fn0*retval
+    89 assertequals false *tmp29 "land 1"
+    90 set :fn0:n 2
+    91 setaddr :fn0*retaddr *label16
+    92 call *label0 :fn0*retval
+    93 gotolabel *label16 :fn0
+-    * set *tmp30 :fn0*retval
+    94 op land *tmp31 1 :fn0*retval
+    95 assertequals true *tmp31 "land 2"
+    96 set :fn0:n 1
+    97 setaddr :fn0*retaddr *label17
+    98 call *label0 :fn0*retval
+    99 gotolabel *label17 :fn0
+-    * set *tmp32 :fn0*retval
+   100 op lessThan *tmp33 0 :fn0*retval
+   101 assertequals true *tmp33 "lessThan 1"
+   102 set :fn0:n 0
+   103 setaddr :fn0*retaddr *label18
+   104 call *label0 :fn0*retval
+   105 gotolabel *label18 :fn0
+-    * set *tmp34 :fn0*retval
+   106 op lessThan *tmp35 1 :fn0*retval
+   107 assertequals false *tmp35 "lessThan 2"
+   108 set :fn0:n 1
+   109 setaddr :fn0*retaddr *label19
+   110 call *label0 :fn0*retval
+   111 gotolabel *label19 :fn0
+-    * set *tmp36 :fn0*retval
+   112 op lessThanEq *tmp37 1 :fn0*retval
+   113 assertequals true *tmp37 "lessThanEq 1"
+   114 set :fn0:n 0
+   115 setaddr :fn0*retaddr *label20
+   116 call *label0 :fn0*retval
+   117 gotolabel *label20 :fn0
+-    * set *tmp38 :fn0*retval
+   118 op lessThanEq *tmp39 1 :fn0*retval
+   119 assertequals false *tmp39 "lessThanEq 2"
+   120 set :fn0:n 1
+   121 setaddr :fn0*retaddr *label21
+   122 call *label0 :fn0*retval
+   123 gotolabel *label21 :fn0
+-    * set *tmp40 :fn0*retval
+   124 op greaterThan *tmp41 2 :fn0*retval
+   125 assertequals true *tmp41 "greaterThan 1"
+   126 set :fn0:n 2
+   127 setaddr :fn0*retaddr *label22
+   128 call *label0 :fn0*retval
+   129 gotolabel *label22 :fn0
+-    * set *tmp42 :fn0*retval
+   130 op greaterThan *tmp43 1 :fn0*retval
+   131 assertequals false *tmp43 "greaterThan 2"
+   132 set :fn0:n 1
+   133 setaddr :fn0*retaddr *label23
+   134 call *label0 :fn0*retval
+   135 gotolabel *label23 :fn0
+-    * set *tmp44 :fn0*retval
+   136 op greaterThanEq *tmp45 1 :fn0*retval
+   137 assertequals true *tmp45 "greaterThanEq 1"
+   138 set :fn0:n 2
+   139 setaddr :fn0*retaddr *label24
+   140 call *label0 :fn0*retval
+   141 gotolabel *label24 :fn0
+-    * set *tmp46 :fn0*retval
+   142 op greaterThanEq *tmp47 1 :fn0*retval
+   143 assertequals false *tmp47 "greaterThanEq 2"
+   144 set :fn0:n null
+   145 setaddr :fn0*retaddr *label25
+   146 call *label0 :fn0*retval
+   147 gotolabel *label25 :fn0
+-    * set *tmp48 :fn0*retval
+   148 op strictEqual *tmp49 0 :fn0*retval
+   149 assertequals false *tmp49 "strictEqual 1"
+   150 set :fn0:n null
+   151 setaddr :fn0*retaddr *label26
+   152 call *label0 :fn0*retval
+   153 gotolabel *label26 :fn0
+-    * set *tmp50 :fn0*retval
+   154 op strictEqual *tmp51 null :fn0*retval
+   155 assertequals true *tmp51 "strictEqual 2"
+   156 set :fn0:n 2
+   157 setaddr :fn0*retaddr *label27
+   158 call *label0 :fn0*retval
+   159 gotolabel *label27 :fn0
+-    * set *tmp52 :fn0*retval
+   160 op shl *tmp53 1 :fn0*retval
+   161 assertequals 4 *tmp53 "shl"
+   162 set :fn0:n 2
+   163 setaddr :fn0*retaddr *label28
+   164 call *label0 :fn0*retval
+   165 gotolabel *label28 :fn0
+-    * set *tmp54 :fn0*retval
+   166 op shr *tmp55 9 :fn0*retval
+   167 assertequals 2 *tmp55 "shr"
+   168 set :fn0:n 2
+   169 setaddr :fn0*retaddr *label29
+   170 call *label0 :fn0*retval
+   171 gotolabel *label29 :fn0
+-    * set *tmp56 :fn0*retval
+   172 op or *tmp57 1 :fn0*retval
+   173 assertequals 3 *tmp57 "or"
+   174 set :fn0:n 2
+   175 setaddr :fn0*retaddr *label30
+   176 call *label0 :fn0*retval
+   177 gotolabel *label30 :fn0
+-    * set *tmp58 :fn0*retval
+   178 op and *tmp59 3 :fn0*retval
+   179 assertequals 2 *tmp59 "and"
+   180 set :fn0:n 2
+   181 setaddr :fn0*retaddr *label31
+   182 call *label0 :fn0*retval
+   183 gotolabel *label31 :fn0
+-    * set *tmp60 :fn0*retval
+   184 op xor *tmp61 3 :fn0*retval
+   185 assertequals 1 *tmp61 "xor"
+   186 set :fn0:n 0
+   187 setaddr :fn0*retaddr *label32
+   188 call *label0 :fn0*retval
+   189 gotolabel *label32 :fn0
+-    * set *tmp62 :fn0*retval
+   190 op not *tmp63 :fn0*retval
+   191 assertequals -1 *tmp63 "not 1"
+   192 set :fn0:n 65535
+   193 setaddr :fn0*retaddr *label33
+   194 call *label0 :fn0*retval
+   195 gotolabel *label33 :fn0
+-    * set *tmp64 :fn0*retval
+   196 op not *tmp65 :fn0*retval
+   197 assertequals -65536 *tmp65 "not 2"
+-    * set :a 0xabcdefabcdef
+-    * op add *tmp66 0xabcdefabcdef 1
+-    * op sub *tmp67 0 188900977659376
+   198 set :fn0:n 0xabcdefabcdef
+   199 setaddr :fn0*retaddr *label34
+   200 call *label0 :fn0*retval
+   201 gotolabel *label34 :fn0
+-    * set *tmp68 :fn0*retval
+   202 op not *tmp69 :fn0*retval
+   203 assertequals -188900977659376 *tmp69 "not 3"
+   204 set :fn0:n 4
+   205 setaddr :fn0*retaddr *label35
+   206 call *label0 :fn0*retval
+   207 gotolabel *label35 :fn0
+-    * set *tmp70 :fn0*retval
+   208 op max *tmp71 2 :fn0*retval
+   209 assertequals 4 *tmp71 "max"
+   210 set :fn0:n 4
+   211 setaddr :fn0*retaddr *label36
+   212 call *label0 :fn0*retval
+   213 gotolabel *label36 :fn0
+-    * set *tmp72 :fn0*retval
+   214 op min *tmp73 2 :fn0*retval
+   215 assertequals 2 *tmp73 "min"
+   216 set :fn0:n -2
+   217 setaddr :fn0*retaddr *label37
+   218 call *label0 :fn0*retval
+   219 gotolabel *label37 :fn0
+-    * set *tmp74 :fn0*retval
+   220 op abs *tmp75 :fn0*retval
+   221 assertequals 2 *tmp75 "abs"
+   222 set :fn0:n 2.718281828459045
+   223 setaddr :fn0*retaddr *label38
+   224 call *label0 :fn0*retval
+   225 gotolabel *label38 :fn0
+-    * set *tmp76 :fn0*retval
+   226 op log *tmp77 :fn0*retval
+   227 assertequals 1 *tmp77 "log"
+   228 set :fn0:n 10
+   229 setaddr :fn0*retaddr *label39
+   230 call *label0 :fn0*retval
+   231 gotolabel *label39 :fn0
+-    * set *tmp78 :fn0*retval
+   232 op log10 *tmp79 :fn0*retval
+   233 assertequals 1 *tmp79 "log10"
+   234 set :fn0:n 2.5
+   235 setaddr :fn0*retaddr *label40
+   236 call *label0 :fn0*retval
+   237 gotolabel *label40 :fn0
+-    * set *tmp80 :fn0*retval
+   238 op floor *tmp81 :fn0*retval
+   239 assertequals 2 *tmp81 "floor"
+   240 set :fn0:n 2.5
+   241 setaddr :fn0*retaddr *label41
+   242 call *label0 :fn0*retval
+   243 gotolabel *label41 :fn0
+-    * set *tmp82 :fn0*retval
+   244 op ceil *tmp83 :fn0*retval
+   245 assertequals 3 *tmp83 "ceil"
+   246 set :fn0:n 16
+   247 setaddr :fn0*retaddr *label42
+   248 call *label0 :fn0*retval
+   249 gotolabel *label42 :fn0
+-    * set *tmp84 :fn0*retval
+   250 op sqrt *tmp85 :fn0*retval
+   251 assertequals 4 *tmp85 "sqrt"
+   252 set :fn0:n 1
+   253 setaddr :fn0*retaddr *label43
+   254 call *label0 :fn0*retval
+   255 gotolabel *label43 :fn0
+-    * set *tmp86 :fn0*retval
+   256 op angle *tmp87 1 :fn0*retval
+   257 assertequals 45 *tmp87 "angle"
+   258 set :fn0:n 135
+   259 setaddr :fn0*retaddr *label44
+   260 call *label0 :fn0*retval
+   261 gotolabel *label44 :fn0
+-    * set *tmp88 :fn0*retval
+   262 op angleDiff *tmp89 45 :fn0*retval
+   263 assertequals 90 *tmp89 "angleDiff"
+   264 set :fn0:n 8
+   265 setaddr :fn0*retaddr *label45
+   266 call *label0 :fn0*retval
+   267 gotolabel *label45 :fn0
+-    * set *tmp90 :fn0*retval
+   268 op sub *tmp91 0 :fn0*retval
+   269 assertequals -8 *tmp91 "unary minus"
+   270 set :fn0:n 0
+   271 setaddr :fn0*retaddr *label46
+   272 call *label0 :fn0*retval
+   273 gotolabel *label46 :fn0
+-    * set *tmp92 :fn0*retval
+   274 op equal *tmp93 :fn0*retval false
+   275 assertequals 1 *tmp93 "boolean negation 1"
+   276 set :fn0:n 1
+   277 setaddr :fn0*retaddr *label47
+   278 call *label0 :fn0*retval
+   279 gotolabel *label47 :fn0
+-    * set *tmp94 :fn0*retval
+   280 op equal *tmp95 :fn0*retval false
+   281 assertequals 0 *tmp95 "boolean negation 2"
+   282 set :fn0:n 2
+   283 setaddr :fn0*retaddr *label48
+   284 call *label0 :fn0*retval
+   285 gotolabel *label48 :fn0
+-    * set *tmp96 :fn0*retval
+   286 op equal *tmp97 :fn0*retval false
+   287 assertequals 0 *tmp97 "boolean negation 3"
+-    * set :a 2
+   288 set :fn0:n 4
+   289 setaddr :fn0*retaddr *label49
+   290 call *label0 :fn0*retval
+   291 gotolabel *label49 :fn0
+-    * set *tmp98 :fn0*retval
+   292 op pow :a 2 :fn0*retval
+   293 assertequals 16 :a "**="
+-    * set :a 2
+   294 set :fn0:n 4
+   295 setaddr :fn0*retaddr *label50
+   296 call *label0 :fn0*retval
+   297 gotolabel *label50 :fn0
+-    * set *tmp99 :fn0*retval
+   298 op mul :a 2 :fn0*retval
+   299 assertequals 8 :a "*="
+-    * set :a 6
+   300 set :fn0:n 4
+   301 setaddr :fn0*retaddr *label51
+   302 call *label0 :fn0*retval
+   303 gotolabel *label51 :fn0
+-    * set *tmp100 :fn0*retval
+   304 op div :a 6 :fn0*retval
+   305 assertequals 1.5 :a "/="
+-    * set :a 6
+   306 set :fn0:n 4
+   307 setaddr :fn0*retaddr *label52
+   308 call *label0 :fn0*retval
+   309 gotolabel *label52 :fn0
+-    * set *tmp101 :fn0*retval
+   310 op idiv :a 6 :fn0*retval
+   311 assertequals 1 :a "\="
+-    * set :a 6
+   312 set :fn0:n 4
+   313 setaddr :fn0*retaddr *label53
+   314 call *label0 :fn0*retval
+   315 gotolabel *label53 :fn0
+-    * set *tmp102 :fn0*retval
+   316 op mod :a 6 :fn0*retval
+   317 assertequals 2 :a "%="
+-    * set :a 4
+   318 set :fn0:n 2
+   319 setaddr :fn0*retaddr *label54
+   320 call *label0 :fn0*retval
+   321 gotolabel *label54 :fn0
+-    * set *tmp103 :fn0*retval
+   322 op add :a 4 :fn0*retval
+   323 assertequals 6 :a "+="
+-    * set :a 4
+   324 set :fn0:n 2
+   325 setaddr :fn0*retaddr *label55
+   326 call *label0 :fn0*retval
+   327 gotolabel *label55 :fn0
+-    * set *tmp104 :fn0*retval
+   328 op sub :a 4 :fn0*retval
+   329 assertequals 2 :a "-="
+-    * set :a 1
+   330 set :fn0:n 2
+   331 setaddr :fn0*retaddr *label56
+   332 call *label0 :fn0*retval
+   333 gotolabel *label56 :fn0
+-    * set *tmp105 :fn0*retval
+   334 op shl :a 1 :fn0*retval
+   335 assertequals 4 :a "<<="
+-    * set :a 9
+   336 set :fn0:n 2
+   337 setaddr :fn0*retaddr *label57
+   338 call *label0 :fn0*retval
+   339 gotolabel *label57 :fn0
+-    * set *tmp106 :fn0*retval
+   340 op shr :a 9 :fn0*retval
+   341 assertequals 2 :a ">>="
+-    * set :a 1
+   342 set :fn0:n 2
+   343 setaddr :fn0*retaddr *label58
+   344 call *label0 :fn0*retval
+   345 gotolabel *label58 :fn0
+-    * set *tmp107 :fn0*retval
+   346 op or :a 1 :fn0*retval
+   347 assertequals 3 :a "|="
+-    * set :a 3
+   348 set :fn0:n 2
+   349 setaddr :fn0*retaddr *label59
+   350 call *label0 :fn0*retval
+   351 gotolabel *label59 :fn0
+-    * set *tmp108 :fn0*retval
+   352 op and :a 3 :fn0*retval
+   353 assertequals 2 :a "&="
+-    * set :a 3
+-    * set :fn0:n 2
+   354 setaddr :fn0*retaddr *label60
+   355 call *label0 :fn0*retval
+   356 gotolabel *label60 :fn0
+-    * set *tmp109 :fn0*retval
+   357 op xor :a 3 :fn0*retval
+   358 assertequals 1 :a "^="
+-    * set :a 1
+   359 set :fn0:n 0
+   360 setaddr :fn0*retaddr *label61
+   361 call *label0 :fn0*retval
+   362 gotolabel *label61 :fn0
+-    * set *tmp110 :fn0*retval
+   363 op land :a 1 :fn0*retval
+   364 assertequals false :a "&&="
+-    * set :a 1
+   365 set :fn0:n 2
+   366 setaddr :fn0*retaddr *label62
+   367 call *label0 :fn0*retval
+   368 gotolabel *label62 :fn0
+-    * set *tmp111 :fn0*retval
+   369 op land :a 1 :fn0*retval
+   370 assertequals true :a "&&="
+-    * set :a 0
+   371 setaddr :fn0*retaddr *label63
+   372 call *label0 :fn0*retval
+   373 gotolabel *label63 :fn0
+-    * set *tmp112 :fn0*retval
+   374 op or *tmp113 0 :fn0*retval
+   375 op notEqual :a *tmp113 false
+   376 assertequals true :a "||="
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+   345 gotolabel *label58 :fn0
+   346 op or :a 1 :fn0*retval
+   347 assertequals 3 :a "|="
+-    * set :fn0:n 2
+   348 setaddr :fn0*retaddr *label59
+   349 call *label0 :fn0*retval
+   350 gotolabel *label59 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
+ 
+   339 gotolabel *label57 :fn0
+   340 op shr :a 9 :fn0*retval
+   341 assertequals 2 :a ">>="
+-    * set :fn0:n 2
+   342 setaddr :fn0*retaddr *label58
+   343 call *label0 :fn0*retval
+   344 gotolabel *label58 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
+ 
+   333 gotolabel *label56 :fn0
+   334 op shl :a 1 :fn0*retval
+   335 assertequals 4 :a "<<="
+-    * set :fn0:n 2
+   336 setaddr :fn0*retaddr *label57
+   337 call *label0 :fn0*retval
+   338 gotolabel *label57 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
+ 
+   327 gotolabel *label55 :fn0
+   328 op sub :a 4 :fn0*retval
+   329 assertequals 2 :a "-="
+-    * set :fn0:n 2
+   330 setaddr :fn0*retaddr *label56
+   331 call *label0 :fn0*retval
+   332 gotolabel *label56 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 7 (-1 instructions):
+ 
+   321 gotolabel *label54 :fn0
+   322 op add :a 4 :fn0*retval
+   323 assertequals 6 :a "+="
+-    * set :fn0:n 2
+   324 setaddr :fn0*retaddr *label55
+   325 call *label0 :fn0*retval
+   326 gotolabel *label55 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 8 (-1 instructions):
+ 
+   309 gotolabel *label52 :fn0
+   310 op idiv :a 6 :fn0*retval
+   311 assertequals 1 :a "\="
+-    * set :fn0:n 4
+   312 setaddr :fn0*retaddr *label53
+   313 call *label0 :fn0*retval
+   314 gotolabel *label53 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 9 (-1 instructions):
+ 
+   303 gotolabel *label51 :fn0
+   304 op div :a 6 :fn0*retval
+   305 assertequals 1.5 :a "/="
+-    * set :fn0:n 4
+   306 setaddr :fn0*retaddr *label52
+   307 call *label0 :fn0*retval
+   308 gotolabel *label52 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 10 (-1 instructions):
+ 
+   297 gotolabel *label50 :fn0
+   298 op mul :a 2 :fn0*retval
+   299 assertequals 8 :a "*="
+-    * set :fn0:n 4
+   300 setaddr :fn0*retaddr *label51
+   301 call *label0 :fn0*retval
+   302 gotolabel *label51 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 11 (-1 instructions):
+ 
+   291 gotolabel *label49 :fn0
+   292 op pow :a 2 :fn0*retval
+   293 assertequals 16 :a "**="
+-    * set :fn0:n 4
+   294 setaddr :fn0*retaddr *label50
+   295 call *label0 :fn0*retval
+   296 gotolabel *label50 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 12 (-1 instructions):
+ 
+   237 gotolabel *label40 :fn0
+   238 op floor *tmp81 :fn0*retval
+   239 assertequals 2 *tmp81 "floor"
+-    * set :fn0:n 2.5
+   240 setaddr :fn0*retaddr *label41
+   241 call *label0 :fn0*retval
+   242 gotolabel *label41 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 13 (-1 instructions):
+ 
+   207 gotolabel *label35 :fn0
+   208 op max *tmp71 2 :fn0*retval
+   209 assertequals 4 *tmp71 "max"
+-    * set :fn0:n 4
+   210 setaddr :fn0*retaddr *label36
+   211 call *label0 :fn0*retval
+   212 gotolabel *label36 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 14 (-1 instructions):
+ 
+   177 gotolabel *label30 :fn0
+   178 op and *tmp59 3 :fn0*retval
+   179 assertequals 2 *tmp59 "and"
+-    * set :fn0:n 2
+   180 setaddr :fn0*retaddr *label31
+   181 call *label0 :fn0*retval
+   182 gotolabel *label31 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 15 (-1 instructions):
+ 
+   171 gotolabel *label29 :fn0
+   172 op or *tmp57 1 :fn0*retval
+   173 assertequals 3 *tmp57 "or"
+-    * set :fn0:n 2
+   174 setaddr :fn0*retaddr *label30
+   175 call *label0 :fn0*retval
+   176 gotolabel *label30 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 16 (-1 instructions):
+ 
+   165 gotolabel *label28 :fn0
+   166 op shr *tmp55 9 :fn0*retval
+   167 assertequals 2 *tmp55 "shr"
+-    * set :fn0:n 2
+   168 setaddr :fn0*retaddr *label29
+   169 call *label0 :fn0*retval
+   170 gotolabel *label29 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 17 (-1 instructions):
+ 
+   159 gotolabel *label27 :fn0
+   160 op shl *tmp53 1 :fn0*retval
+   161 assertequals 4 *tmp53 "shl"
+-    * set :fn0:n 2
+   162 setaddr :fn0*retaddr *label28
+   163 call *label0 :fn0*retval
+   164 gotolabel *label28 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 18 (-1 instructions):
+ 
+   147 gotolabel *label25 :fn0
+   148 op strictEqual *tmp49 0 :fn0*retval
+   149 assertequals false *tmp49 "strictEqual 1"
+-    * set :fn0:n null
+   150 setaddr :fn0*retaddr *label26
+   151 call *label0 :fn0*retval
+   152 gotolabel *label26 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 19 (-1 instructions):
+ 
+    39 gotolabel *label7 :fn0
+    40 op mod *tmp13 6 :fn0*retval
+    41 assertequals 2 *tmp13 "mod"
+-    * set :fn0:n 4
+    42 setaddr :fn0*retaddr *label8
+    43 call *label0 :fn0*retval
+    44 gotolabel *label8 :fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 20 (-1 instructions):
+ 
+    33 gotolabel *label6 :fn0
+    34 op idiv *tmp11 6 :fn0*retval
+    35 assertequals 1 *tmp11 "idiv"
+-    * set :fn0:n 4
+    36 setaddr :fn0*retaddr *label7
+    37 call *label0 :fn0*retval
+    38 gotolabel *label7 :fn0
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+ 
+   362 set :fn0*retval :fn0:n
+   363 label *label64
+   364 goto :fn0*retaddr :fn0
+-    * end
+
+Final code before resolving virtual instructions:
+
+set :fn0:n 3
+setaddr :fn0*retaddr *label1
+call *label0 :fn0*retval
+gotolabel *label1 :fn0
+op add *tmp1 2 :fn0*retval
+assertequals 5 *tmp1 "add"
+set :fn0:n 6
+setaddr :fn0*retaddr *label2
+call *label0 :fn0*retval
+gotolabel *label2 :fn0
+op sub *tmp3 7 :fn0*retval
+assertequals 1 *tmp3 "sub"
+set :fn0:n 2
+setaddr :fn0*retaddr *label3
+call *label0 :fn0*retval
+gotolabel *label3 :fn0
+op mul *tmp5 3 :fn0*retval
+assertequals 6 *tmp5 "mul"
+set :fn0:n 4
+setaddr :fn0*retaddr *label4
+call *label0 :fn0*retval
+gotolabel *label4 :fn0
+op div *tmp7 6 :fn0*retval
+assertequals 1.5 *tmp7 "div"
+set :fn0:n 100000
+setaddr :fn0*retaddr *label5
+call *label0 :fn0*retval
+gotolabel *label5 :fn0
+op div *tmp9 1 :fn0*retval
+assertequals 0.00001 *tmp9 "div exp"
+set :fn0:n 4
+setaddr :fn0*retaddr *label6
+call *label0 :fn0*retval
+gotolabel *label6 :fn0
+op idiv *tmp11 6 :fn0*retval
+assertequals 1 *tmp11 "idiv"
+setaddr :fn0*retaddr *label7
+call *label0 :fn0*retval
+gotolabel *label7 :fn0
+op mod *tmp13 6 :fn0*retval
+assertequals 2 *tmp13 "mod"
+setaddr :fn0*retaddr *label8
+call *label0 :fn0*retval
+gotolabel *label8 :fn0
+op pow *tmp15 2 :fn0*retval
+assertequals 16 *tmp15 "pow"
+set :fn0:n 5
+setaddr :fn0*retaddr *label9
+call *label0 :fn0*retval
+gotolabel *label9 :fn0
+op equal *tmp17 5 :fn0*retval
+assertequals true *tmp17 "equal 1"
+set :fn0:n 6
+setaddr :fn0*retaddr *label10
+call *label0 :fn0*retval
+gotolabel *label10 :fn0
+op equal *tmp19 5 :fn0*retval
+assertequals false *tmp19 "equal 2"
+set :fn0:n null
+setaddr :fn0*retaddr *label11
+call *label0 :fn0*retval
+gotolabel *label11 :fn0
+op equal *tmp21 0 :fn0*retval
+assertequals true *tmp21 "equal null"
+set :fn0:n 5
+setaddr :fn0*retaddr *label12
+call *label0 :fn0*retval
+gotolabel *label12 :fn0
+op notEqual *tmp23 5 :fn0*retval
+assertequals false *tmp23 "notEqual 1"
+set :fn0:n 6
+setaddr :fn0*retaddr *label13
+call *label0 :fn0*retval
+gotolabel *label13 :fn0
+op notEqual *tmp25 5 :fn0*retval
+assertequals true *tmp25 "notEqual 2"
+set :fn0:n null
+setaddr :fn0*retaddr *label14
+call *label0 :fn0*retval
+gotolabel *label14 :fn0
+op notEqual *tmp27 0 :fn0*retval
+assertequals false *tmp27 "notEqual null"
+set :fn0:n 0
+setaddr :fn0*retaddr *label15
+call *label0 :fn0*retval
+gotolabel *label15 :fn0
+op land *tmp29 1 :fn0*retval
+assertequals false *tmp29 "land 1"
+set :fn0:n 2
+setaddr :fn0*retaddr *label16
+call *label0 :fn0*retval
+gotolabel *label16 :fn0
+op land *tmp31 1 :fn0*retval
+assertequals true *tmp31 "land 2"
+set :fn0:n 1
+setaddr :fn0*retaddr *label17
+call *label0 :fn0*retval
+gotolabel *label17 :fn0
+op lessThan *tmp33 0 :fn0*retval
+assertequals true *tmp33 "lessThan 1"
+set :fn0:n 0
+setaddr :fn0*retaddr *label18
+call *label0 :fn0*retval
+gotolabel *label18 :fn0
+op lessThan *tmp35 1 :fn0*retval
+assertequals false *tmp35 "lessThan 2"
+set :fn0:n 1
+setaddr :fn0*retaddr *label19
+call *label0 :fn0*retval
+gotolabel *label19 :fn0
+op lessThanEq *tmp37 1 :fn0*retval
+assertequals true *tmp37 "lessThanEq 1"
+set :fn0:n 0
+setaddr :fn0*retaddr *label20
+call *label0 :fn0*retval
+gotolabel *label20 :fn0
+op lessThanEq *tmp39 1 :fn0*retval
+assertequals false *tmp39 "lessThanEq 2"
+set :fn0:n 1
+setaddr :fn0*retaddr *label21
+call *label0 :fn0*retval
+gotolabel *label21 :fn0
+op greaterThan *tmp41 2 :fn0*retval
+assertequals true *tmp41 "greaterThan 1"
+set :fn0:n 2
+setaddr :fn0*retaddr *label22
+call *label0 :fn0*retval
+gotolabel *label22 :fn0
+op greaterThan *tmp43 1 :fn0*retval
+assertequals false *tmp43 "greaterThan 2"
+set :fn0:n 1
+setaddr :fn0*retaddr *label23
+call *label0 :fn0*retval
+gotolabel *label23 :fn0
+op greaterThanEq *tmp45 1 :fn0*retval
+assertequals true *tmp45 "greaterThanEq 1"
+set :fn0:n 2
+setaddr :fn0*retaddr *label24
+call *label0 :fn0*retval
+gotolabel *label24 :fn0
+op greaterThanEq *tmp47 1 :fn0*retval
+assertequals false *tmp47 "greaterThanEq 2"
+set :fn0:n null
+setaddr :fn0*retaddr *label25
+call *label0 :fn0*retval
+gotolabel *label25 :fn0
+op strictEqual *tmp49 0 :fn0*retval
+assertequals false *tmp49 "strictEqual 1"
+setaddr :fn0*retaddr *label26
+call *label0 :fn0*retval
+gotolabel *label26 :fn0
+op strictEqual *tmp51 null :fn0*retval
+assertequals true *tmp51 "strictEqual 2"
+set :fn0:n 2
+setaddr :fn0*retaddr *label27
+call *label0 :fn0*retval
+gotolabel *label27 :fn0
+op shl *tmp53 1 :fn0*retval
+assertequals 4 *tmp53 "shl"
+setaddr :fn0*retaddr *label28
+call *label0 :fn0*retval
+gotolabel *label28 :fn0
+op shr *tmp55 9 :fn0*retval
+assertequals 2 *tmp55 "shr"
+setaddr :fn0*retaddr *label29
+call *label0 :fn0*retval
+gotolabel *label29 :fn0
+op or *tmp57 1 :fn0*retval
+assertequals 3 *tmp57 "or"
+setaddr :fn0*retaddr *label30
+call *label0 :fn0*retval
+gotolabel *label30 :fn0
+op and *tmp59 3 :fn0*retval
+assertequals 2 *tmp59 "and"
+setaddr :fn0*retaddr *label31
+call *label0 :fn0*retval
+gotolabel *label31 :fn0
+op xor *tmp61 3 :fn0*retval
+assertequals 1 *tmp61 "xor"
+set :fn0:n 0
+setaddr :fn0*retaddr *label32
+call *label0 :fn0*retval
+gotolabel *label32 :fn0
+op not *tmp63 :fn0*retval 0
+assertequals -1 *tmp63 "not 1"
+set :fn0:n 65535
+setaddr :fn0*retaddr *label33
+call *label0 :fn0*retval
+gotolabel *label33 :fn0
+op not *tmp65 :fn0*retval 0
+assertequals -65536 *tmp65 "not 2"
+set :fn0:n 0xabcdefabcdef
+setaddr :fn0*retaddr *label34
+call *label0 :fn0*retval
+gotolabel *label34 :fn0
+op not *tmp69 :fn0*retval 0
+assertequals -188900977659376 *tmp69 "not 3"
+set :fn0:n 4
+setaddr :fn0*retaddr *label35
+call *label0 :fn0*retval
+gotolabel *label35 :fn0
+op max *tmp71 2 :fn0*retval
+assertequals 4 *tmp71 "max"
+setaddr :fn0*retaddr *label36
+call *label0 :fn0*retval
+gotolabel *label36 :fn0
+op min *tmp73 2 :fn0*retval
+assertequals 2 *tmp73 "min"
+set :fn0:n -2
+setaddr :fn0*retaddr *label37
+call *label0 :fn0*retval
+gotolabel *label37 :fn0
+op abs *tmp75 :fn0*retval 0
+assertequals 2 *tmp75 "abs"
+set :fn0:n 2.718281828459045
+setaddr :fn0*retaddr *label38
+call *label0 :fn0*retval
+gotolabel *label38 :fn0
+op log *tmp77 :fn0*retval 0
+assertequals 1 *tmp77 "log"
+set :fn0:n 10
+setaddr :fn0*retaddr *label39
+call *label0 :fn0*retval
+gotolabel *label39 :fn0
+op log10 *tmp79 :fn0*retval 0
+assertequals 1 *tmp79 "log10"
+set :fn0:n 2.5
+setaddr :fn0*retaddr *label40
+call *label0 :fn0*retval
+gotolabel *label40 :fn0
+op floor *tmp81 :fn0*retval 0
+assertequals 2 *tmp81 "floor"
+setaddr :fn0*retaddr *label41
+call *label0 :fn0*retval
+gotolabel *label41 :fn0
+op ceil *tmp83 :fn0*retval 0
+assertequals 3 *tmp83 "ceil"
+set :fn0:n 16
+setaddr :fn0*retaddr *label42
+call *label0 :fn0*retval
+gotolabel *label42 :fn0
+op sqrt *tmp85 :fn0*retval 0
+assertequals 4 *tmp85 "sqrt"
+set :fn0:n 1
+setaddr :fn0*retaddr *label43
+call *label0 :fn0*retval
+gotolabel *label43 :fn0
+op angle *tmp87 1 :fn0*retval
+assertequals 45 *tmp87 "angle"
+set :fn0:n 135
+setaddr :fn0*retaddr *label44
+call *label0 :fn0*retval
+gotolabel *label44 :fn0
+op angleDiff *tmp89 45 :fn0*retval
+assertequals 90 *tmp89 "angleDiff"
+set :fn0:n 8
+setaddr :fn0*retaddr *label45
+call *label0 :fn0*retval
+gotolabel *label45 :fn0
+op sub *tmp91 0 :fn0*retval
+assertequals -8 *tmp91 "unary minus"
+set :fn0:n 0
+setaddr :fn0*retaddr *label46
+call *label0 :fn0*retval
+gotolabel *label46 :fn0
+op equal *tmp93 :fn0*retval false
+assertequals 1 *tmp93 "boolean negation 1"
+set :fn0:n 1
+setaddr :fn0*retaddr *label47
+call *label0 :fn0*retval
+gotolabel *label47 :fn0
+op equal *tmp95 :fn0*retval false
+assertequals 0 *tmp95 "boolean negation 2"
+set :fn0:n 2
+setaddr :fn0*retaddr *label48
+call *label0 :fn0*retval
+gotolabel *label48 :fn0
+op equal *tmp97 :fn0*retval false
+assertequals 0 *tmp97 "boolean negation 3"
+set :fn0:n 4
+setaddr :fn0*retaddr *label49
+call *label0 :fn0*retval
+gotolabel *label49 :fn0
+op pow :a 2 :fn0*retval
+assertequals 16 :a "**="
+setaddr :fn0*retaddr *label50
+call *label0 :fn0*retval
+gotolabel *label50 :fn0
+op mul :a 2 :fn0*retval
+assertequals 8 :a "*="
+setaddr :fn0*retaddr *label51
+call *label0 :fn0*retval
+gotolabel *label51 :fn0
+op div :a 6 :fn0*retval
+assertequals 1.5 :a "/="
+setaddr :fn0*retaddr *label52
+call *label0 :fn0*retval
+gotolabel *label52 :fn0
+op idiv :a 6 :fn0*retval
+assertequals 1 :a "\="
+setaddr :fn0*retaddr *label53
+call *label0 :fn0*retval
+gotolabel *label53 :fn0
+op mod :a 6 :fn0*retval
+assertequals 2 :a "%="
+set :fn0:n 2
+setaddr :fn0*retaddr *label54
+call *label0 :fn0*retval
+gotolabel *label54 :fn0
+op add :a 4 :fn0*retval
+assertequals 6 :a "+="
+setaddr :fn0*retaddr *label55
+call *label0 :fn0*retval
+gotolabel *label55 :fn0
+op sub :a 4 :fn0*retval
+assertequals 2 :a "-="
+setaddr :fn0*retaddr *label56
+call *label0 :fn0*retval
+gotolabel *label56 :fn0
+op shl :a 1 :fn0*retval
+assertequals 4 :a "<<="
+setaddr :fn0*retaddr *label57
+call *label0 :fn0*retval
+gotolabel *label57 :fn0
+op shr :a 9 :fn0*retval
+assertequals 2 :a ">>="
+setaddr :fn0*retaddr *label58
+call *label0 :fn0*retval
+gotolabel *label58 :fn0
+op or :a 1 :fn0*retval
+assertequals 3 :a "|="
+setaddr :fn0*retaddr *label59
+call *label0 :fn0*retval
+gotolabel *label59 :fn0
+op and :a 3 :fn0*retval
+assertequals 2 :a "&="
+setaddr :fn0*retaddr *label60
+call *label0 :fn0*retval
+gotolabel *label60 :fn0
+op xor :a 3 :fn0*retval
+assertequals 1 :a "^="
+set :fn0:n 0
+setaddr :fn0*retaddr *label61
+call *label0 :fn0*retval
+gotolabel *label61 :fn0
+op land :a 1 :fn0*retval
+assertequals false :a "&&="
+set :fn0:n 2
+setaddr :fn0*retaddr *label62
+call *label0 :fn0*retval
+gotolabel *label62 :fn0
+op land :a 1 :fn0*retval
+assertequals true :a "&&="
+setaddr :fn0*retaddr *label63
+call *label0 :fn0*retval
+gotolabel *label63 :fn0
+op or *tmp113 0 :fn0*retval
+op notEqual :a *tmp113 false
+assertequals true :a "||="
+stop
+end
+label *label0
+set :fn0*retval :fn0:n
+goto :fn0*retaddr :fn0

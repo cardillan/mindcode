@@ -1,331 +1,474 @@
 assertflush
 print "{2}"
-op floor __fn6__n 0 0
-format __fn6__n
+op floor :fn8:n 0 0
+format :fn8:n
 assertprints "0" "printNumber(null)"
 assertflush
 print "{2}"
-op floor __fn6__n 1 0
-format __fn6__n
+op floor :fn8:n 1 0
+format :fn8:n
 assertprints "1" "printNumber(1)"
 assertflush
 print "{2}"
-op floor __fn6__n 1.5 0
-format __fn6__n
+op floor :fn8:n 1.5 0
+format :fn8:n
 assertprints "1" "printNumber(1.5)"
 assertflush
 print "{2}"
-op floor __fn6__n 1.5 0
+op floor :fn8:n 1.5 0
 format "-{2}"
-format __fn6__n
+format :fn8:n
 assertprints "-1" "printNumber(-1.5)"
 assertflush
 print "{2}"
-op floor __fn6__n 1234567 0
-op mod __fn6__mod __fn6__n 1000
-jump 28 greaterThanEq __fn6__mod 10
-set __tmp7 "{2},00{1}"
+op floor :fn8:n 1234567 0
+op mod :fn8:mod :fn8:n 1000
+jump 28 greaterThanEq :fn8:mod 10
+set *tmp7 "{2},00{1}"
 jump 32 always 0 0
-jump 31 greaterThanEq __fn6__mod 100
-set __tmp7 "{2},0{1}"
+jump 31 greaterThanEq :fn8:mod 100
+set *tmp7 "{2},0{1}"
 jump 32 always 0 0
-set __tmp7 "{2},{1}"
-format __tmp7
-format __fn6__mod
-op idiv __fn6__n __fn6__n 1000
-jump 24 greaterThan __fn6__n 999
-format __fn6__n
+set *tmp7 "{2},{1}"
+format *tmp7
+format :fn8:mod
+op idiv :fn8:n :fn8:n 1000
+jump 24 greaterThan :fn8:n 999
+format :fn8:n
 assertprints "1,234,567" "printNumber(1234567)"
 assertflush
 print "{2}"
-op floor __fn6__n 1234567 0
+op floor :fn8:n 1234567 0
 format "-{2}"
-op mod __fn6__mod __fn6__n 1000
-jump 46 greaterThanEq __fn6__mod 10
-set __tmp7 "{2},00{1}"
+op mod :fn8:mod :fn8:n 1000
+jump 46 greaterThanEq :fn8:mod 10
+set *tmp7 "{2},00{1}"
 jump 50 always 0 0
-jump 49 greaterThanEq __fn6__mod 100
-set __tmp7 "{2},0{1}"
+jump 49 greaterThanEq :fn8:mod 100
+set *tmp7 "{2},0{1}"
 jump 50 always 0 0
-set __tmp7 "{2},{1}"
-format __tmp7
-format __fn6__mod
-op idiv __fn6__n __fn6__n 1000
-jump 42 greaterThan __fn6__n 999
-format __fn6__n
+set *tmp7 "{2},{1}"
+format *tmp7
+format :fn8:mod
+op idiv :fn8:n :fn8:n 1000
+jump 42 greaterThan :fn8:n 999
+format :fn8:n
 assertprints "-1,234,567" "printNumber(-1234567)"
 assertflush
 print "{2}"
-op floor __fn6__n 9009099 0
-op mod __fn6__mod __fn6__n 1000
-jump 63 greaterThanEq __fn6__mod 10
-set __tmp7 "{2},00{1}"
+op floor :fn8:n 9009099 0
+op mod :fn8:mod :fn8:n 1000
+jump 63 greaterThanEq :fn8:mod 10
+set *tmp7 "{2},00{1}"
 jump 67 always 0 0
-jump 66 greaterThanEq __fn6__mod 100
-set __tmp7 "{2},0{1}"
+jump 66 greaterThanEq :fn8:mod 100
+set *tmp7 "{2},0{1}"
 jump 67 always 0 0
-set __tmp7 "{2},{1}"
-format __tmp7
-format __fn6__mod
-op idiv __fn6__n __fn6__n 1000
-jump 59 greaterThan __fn6__n 999
-format __fn6__n
+set *tmp7 "{2},{1}"
+format *tmp7
+format :fn8:mod
+op idiv :fn8:n :fn8:n 1000
+jump 59 greaterThan :fn8:n 999
+format :fn8:n
 assertprints "9,009,099" "printNumber(9009099)"
 assertflush
-set __fn4__n null
-set __fn4retaddr 77
-jump 175 always 0 0
+print "{2}"
+set :fn9:digits 0
+op floor :fn9:n 0b1001 0
+op and *tmp11 :fn9:n 1
+format "{2}{1}"
+format *tmp11
+op shr :fn9:n :fn9:n 1
+op sub :fn9:digits :fn9:digits 1
+jump 77 greaterThan :fn9:n 0
+jump 87 lessThanEq :fn9:digits 0
+format "{2}0"
+op sub :fn9:digits :fn9:digits 1
+jump 84 greaterThan :fn9:digits 0
+format "0b"
+assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
+assertflush
+print "{2}"
+set :fn9:digits 6
+op floor :fn9:n 0b1010 0
+op and *tmp11 :fn9:n 1
+format "{2}{1}"
+format *tmp11
+op shr :fn9:n :fn9:n 1
+op sub :fn9:digits :fn9:digits 1
+jump 93 greaterThan :fn9:n 0
+jump 103 lessThanEq :fn9:digits 0
+format "{2}0"
+op sub :fn9:digits :fn9:digits 1
+jump 100 greaterThan :fn9:digits 0
+format "0b"
+assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
+assertflush
+print "{2}"
+set :fn10:digits 0
+op floor :fn10:n 0xABCDEF 0
+op mod :fn10:digit :fn10:n 16
+jump 116 lessThan :fn10:digit 0
+jump 113 lessThanEq :fn10:digit 9
+jump 116 always 0 0
+format "{2}{1}"
+format :fn10:digit
+jump 133 always 0 0
+jump 119 notEqual :fn10:digit 10
+format "{2}A"
+jump 133 always 0 0
+jump 122 notEqual :fn10:digit 11
+format "{2}B"
+jump 133 always 0 0
+jump 125 notEqual :fn10:digit 12
+format "{2}C"
+jump 133 always 0 0
+jump 128 notEqual :fn10:digit 13
+format "{2}D"
+jump 133 always 0 0
+jump 131 notEqual :fn10:digit 14
+format "{2}E"
+jump 133 always 0 0
+jump 133 notEqual :fn10:digit 15
+format "{2}F"
+op shr :fn10:n :fn10:n 4
+op sub :fn10:digits :fn10:digits 1
+jump 109 greaterThan :fn10:n 0
+jump 140 lessThanEq :fn10:digits 0
+format "{2}0"
+op sub :fn10:digits :fn10:digits 1
+jump 137 greaterThan :fn10:digits 0
+format "0x"
+assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+assertflush
+print "{2}"
+set :fn10:digits 0
+op floor :fn10:n 0x1234567890 0
+op mod :fn10:digit :fn10:n 16
+jump 153 lessThan :fn10:digit 0
+jump 150 lessThanEq :fn10:digit 9
+jump 153 always 0 0
+format "{2}{1}"
+format :fn10:digit
+jump 170 always 0 0
+jump 156 notEqual :fn10:digit 10
+format "{2}A"
+jump 170 always 0 0
+jump 159 notEqual :fn10:digit 11
+format "{2}B"
+jump 170 always 0 0
+jump 162 notEqual :fn10:digit 12
+format "{2}C"
+jump 170 always 0 0
+jump 165 notEqual :fn10:digit 13
+format "{2}D"
+jump 170 always 0 0
+jump 168 notEqual :fn10:digit 14
+format "{2}E"
+jump 170 always 0 0
+jump 170 notEqual :fn10:digit 15
+format "{2}F"
+op shr :fn10:n :fn10:n 4
+op sub :fn10:digits :fn10:digits 1
+jump 146 greaterThan :fn10:n 0
+jump 177 lessThanEq :fn10:digits 0
+format "{2}0"
+op sub :fn10:digits :fn10:digits 1
+jump 174 greaterThan :fn10:digits 0
+format "0x"
+assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
+assertflush
+print "{2}"
+set :fn10:digits 8
+op floor :fn10:n 0xAABBCC 0
+op mod :fn10:digit :fn10:n 16
+jump 190 lessThan :fn10:digit 0
+jump 187 lessThanEq :fn10:digit 9
+jump 190 always 0 0
+format "{2}{1}"
+format :fn10:digit
+jump 207 always 0 0
+jump 193 notEqual :fn10:digit 10
+format "{2}A"
+jump 207 always 0 0
+jump 196 notEqual :fn10:digit 11
+format "{2}B"
+jump 207 always 0 0
+jump 199 notEqual :fn10:digit 12
+format "{2}C"
+jump 207 always 0 0
+jump 202 notEqual :fn10:digit 13
+format "{2}D"
+jump 207 always 0 0
+jump 205 notEqual :fn10:digit 14
+format "{2}E"
+jump 207 always 0 0
+jump 207 notEqual :fn10:digit 15
+format "{2}F"
+op shr :fn10:n :fn10:n 4
+op sub :fn10:digits :fn10:digits 1
+jump 183 greaterThan :fn10:n 0
+jump 214 lessThanEq :fn10:digits 0
+format "{2}0"
+op sub :fn10:digits :fn10:digits 1
+jump 211 greaterThan :fn10:digits 0
+format "0x"
+assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+assertflush
+set :fn6:n null
+set :fn6*retaddr 220
+jump 318 always 0 0
 assertprints "null" "printExactFast(null)"
 assertflush
-set __fn4__n 0
-set __fn4retaddr 82
-jump 175 always 0 0
+set :fn6:n 0
+set :fn6*retaddr 225
+jump 318 always 0 0
 assertprints "0" "printExactFast(0)"
 assertflush
-set __fn4__n 1
-set __fn4retaddr 87
-jump 175 always 0 0
+set :fn6:n 1
+set :fn6*retaddr 230
+jump 318 always 0 0
 assertprints "1" "printExactFast(1)"
 assertflush
-set __fn4__n 1.0000001
-set __fn4retaddr 92
-jump 175 always 0 0
+set :fn6:n 1.0000001
+set :fn6*retaddr 235
+jump 318 always 0 0
 assertprints "1.000000100000000" "printExactFast(1.0000001)"
 assertflush
-set __fn4__n 3.00000007
-set __fn4retaddr 97
-jump 175 always 0 0
+set :fn6:n 3.00000007
+set :fn6*retaddr 240
+jump 318 always 0 0
 assertprints "3.000000070000000" "printExactFast(3.00000007)"
 assertflush
-set __fn4__n 3E50
-set __fn4retaddr 102
-jump 175 always 0 0
+set :fn6:n 3E50
+set :fn6*retaddr 245
+jump 318 always 0 0
 assertprints "3E50" "printExactFast(3e50)"
 assertflush
-set __fn4__n 1.0123456789
-set __fn4retaddr 107
-jump 175 always 0 0
+set :fn6:n 1.0123456789
+set :fn6*retaddr 250
+jump 318 always 0 0
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
-set __fn4__n 10000001E13
-set __fn4retaddr 112
-jump 175 always 0 0
+set :fn6:n 10000001E13
+set :fn6*retaddr 255
+jump 318 always 0 0
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
 assertflush
-set __fn4__n 12345E-54
-set __fn4retaddr 117
-jump 175 always 0 0
+set :fn6:n 12345E-54
+set :fn6*retaddr 260
+jump 318 always 0 0
 assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush
-set __fn4__n -12345E-54
-set __fn4retaddr 122
-jump 175 always 0 0
+set :fn6:n -12345E-54
+set :fn6*retaddr 265
+jump 318 always 0 0
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
-set __fn5__n null
-set __fn5retaddr 127
-jump 250 always 0 0
+set :fn7:n null
+set :fn7*retaddr 270
+jump 393 always 0 0
 assertprints "null" "printExactSlow(null)"
 assertflush
-set __fn5__n 0
-set __fn5retaddr 132
-jump 250 always 0 0
+set :fn7:n 0
+set :fn7*retaddr 275
+jump 393 always 0 0
 assertprints "0" "printExactSlow(0)"
 assertflush
-set __fn5__n 1
-set __fn5retaddr 137
-jump 250 always 0 0
+set :fn7:n 1
+set :fn7*retaddr 280
+jump 393 always 0 0
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
-set __fn5__n 1.0000001
-set __fn5retaddr 142
-jump 250 always 0 0
+set :fn7:n 1.0000001
+set :fn7*retaddr 285
+jump 393 always 0 0
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
-set __fn5__n 3.00000007
-set __fn5retaddr 147
-jump 250 always 0 0
+set :fn7:n 3.00000007
+set :fn7*retaddr 290
+jump 393 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
-set __fn5__n 3E50
-set __fn5retaddr 152
-jump 250 always 0 0
+set :fn7:n 3E50
+set :fn7*retaddr 295
+jump 393 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
-set __fn5__n 1.0123456789
-set __fn5retaddr 157
-jump 250 always 0 0
+set :fn7:n 1.0123456789
+set :fn7*retaddr 300
+jump 393 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
-set __fn5__n 10000001E13
-set __fn5retaddr 162
-jump 250 always 0 0
+set :fn7:n 10000001E13
+set :fn7*retaddr 305
+jump 393 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
-set __fn5__n 12345E-54
-set __fn5retaddr 167
-jump 250 always 0 0
+set :fn7:n 12345E-54
+set :fn7*retaddr 310
+jump 393 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
-set __fn5__n -12345E-54
-set __fn5retaddr 172
-jump 250 always 0 0
+set :fn7:n -12345E-54
+set :fn7*retaddr 315
+jump 393 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 stop
 end
-op abs __tmp12 __fn4__n 0
-jump 179 greaterThan __tmp12 0
-print __fn4__n
-jump 248 always 0 0
-jump 182 greaterThanEq __fn4__n 0
+op abs *tmp23 :fn6:n 0
+jump 322 greaterThan *tmp23 0
+print :fn6:n
+jump 391 always 0 0
+jump 325 greaterThanEq :fn6:n 0
 print "-"
-op abs __fn4__n __fn4__n 0
-op log10 __tmp18 __fn4__n 0
-op floor __fn4__exp __tmp18 0
-op mul __tmp20 -1 __fn4__exp
-op pow __tmp21 10 __tmp20
-op mul __fn4__base __fn4__n __tmp21
-op add __tmp24 __fn4__base 0.5
-op floor __tmp23 __tmp24 0
-op sub __tmp26 __fn4__base __tmp23
-op abs __fn4__cmp __tmp26 0
-jump 194 greaterThan __fn4__cmp 0
-print __fn4__base
-jump 245 always 0 0
-jump 197 lessThanEq __fn4__cmp 0.00001
-print __fn4__base
-jump 245 always 0 0
-op floor __tmp32 __fn4__base 0
-print __tmp32
+op abs :fn6:n :fn6:n 0
+op log10 *tmp29 :fn6:n 0
+op floor :fn6:exp *tmp29 0
+op sub *tmp31 0 :fn6:exp
+op pow *tmp32 10 *tmp31
+op mul :fn6:base :fn6:n *tmp32
+op add *tmp35 :fn6:base 0.5
+op floor *tmp34 *tmp35 0
+op sub *tmp37 :fn6:base *tmp34
+op abs :fn6:cmp *tmp37 0
+jump 337 greaterThan :fn6:cmp 0
+print :fn6:base
+jump 388 always 0 0
+jump 340 lessThanEq :fn6:cmp 0.00001
+print :fn6:base
+jump 388 always 0 0
+op floor *tmp43 :fn6:base 0
+print *tmp43
 print "."
-op mod __tmp33 __fn4__base 1
-op mul __fn4__base __tmp33 100000
-op floor __fn4__t __fn4__base 0
-jump 206 greaterThanEq __fn4__t 10
+op mod *tmp44 :fn6:base 1
+op mul :fn6:base *tmp44 100000
+op floor :fn6:t :fn6:base 0
+jump 349 greaterThanEq :fn6:t 10
 print "0000"
-jump 214 always 0 0
-jump 209 greaterThanEq __fn4__t 100
+jump 357 always 0 0
+jump 352 greaterThanEq :fn6:t 100
 print "000"
-jump 214 always 0 0
-jump 212 greaterThanEq __fn4__t 1000
+jump 357 always 0 0
+jump 355 greaterThanEq :fn6:t 1000
 print "00"
-jump 214 always 0 0
-jump 214 greaterThanEq __fn4__t 10000
+jump 357 always 0 0
+jump 357 greaterThanEq :fn6:t 10000
 print "0"
-print __fn4__t
-op mod __tmp33 __fn4__base 1
-op mul __fn4__base __tmp33 100000
-op floor __fn4__t __fn4__base 0
-jump 221 greaterThanEq __fn4__t 10
+print :fn6:t
+op mod *tmp44 :fn6:base 1
+op mul :fn6:base *tmp44 100000
+op floor :fn6:t :fn6:base 0
+jump 364 greaterThanEq :fn6:t 10
 print "0000"
-jump 229 always 0 0
-jump 224 greaterThanEq __fn4__t 100
+jump 372 always 0 0
+jump 367 greaterThanEq :fn6:t 100
 print "000"
-jump 229 always 0 0
-jump 227 greaterThanEq __fn4__t 1000
+jump 372 always 0 0
+jump 370 greaterThanEq :fn6:t 1000
 print "00"
-jump 229 always 0 0
-jump 229 greaterThanEq __fn4__t 10000
+jump 372 always 0 0
+jump 372 greaterThanEq :fn6:t 10000
 print "0"
-print __fn4__t
-op mod __tmp33 __fn4__base 1
-op mul __fn4__base __tmp33 100000
-op floor __fn4__t __fn4__base 0
-jump 236 greaterThanEq __fn4__t 10
+print :fn6:t
+op mod *tmp44 :fn6:base 1
+op mul :fn6:base *tmp44 100000
+op floor :fn6:t :fn6:base 0
+jump 379 greaterThanEq :fn6:t 10
 print "0000"
-jump 244 always 0 0
-jump 239 greaterThanEq __fn4__t 100
+jump 387 always 0 0
+jump 382 greaterThanEq :fn6:t 100
 print "000"
-jump 244 always 0 0
-jump 242 greaterThanEq __fn4__t 1000
+jump 387 always 0 0
+jump 385 greaterThanEq :fn6:t 1000
 print "00"
-jump 244 always 0 0
-jump 244 greaterThanEq __fn4__t 10000
+jump 387 always 0 0
+jump 387 greaterThanEq :fn6:t 10000
 print "0"
-print __fn4__t
-jump 248 equal __fn4__exp 0
+print :fn6:t
+jump 391 equal :fn6:exp 0
 print "E"
-print __fn4__exp
-set @counter __fn4retaddr
+print :fn6:exp
+set @counter :fn6*retaddr
 end
-op abs __tmp48 __fn5__n 0
-jump 254 greaterThan __tmp48 0
-print __fn5__n
-jump 328 always 0 0
-jump 257 greaterThanEq __fn5__n 0
+op abs *tmp59 :fn7:n 0
+jump 397 greaterThan *tmp59 0
+print :fn7:n
+jump 471 always 0 0
+jump 400 greaterThanEq :fn7:n 0
 print "-"
-op abs __fn5__n __fn5__n 0
-op log10 __tmp54 __fn5__n 0
-op floor __fn5__exp __tmp54 0
-op mul __tmp56 -1 __fn5__exp
-op pow __tmp57 10 __tmp56
-op mul __fn5__base __fn5__n __tmp57
-op floor __tmp59 __fn5__base 0
-print __tmp59
+op abs :fn7:n :fn7:n 0
+op log10 *tmp65 :fn7:n 0
+op floor :fn7:exp *tmp65 0
+op sub *tmp67 0 :fn7:exp
+op pow *tmp68 10 *tmp67
+op mul :fn7:base :fn7:n *tmp68
+op floor *tmp70 :fn7:base 0
+print *tmp70
 print "."
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-op mod __tmp60 __fn5__base 1
-op mul __fn5__base __tmp60 10
-op floor __tmp63 __fn5__base 0
-print __tmp63
-jump 328 equal __fn5__exp 0
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+op mod *tmp71 :fn7:base 1
+op mul :fn7:base *tmp71 10
+op floor *tmp74 :fn7:base 0
+print *tmp74
+jump 471 equal :fn7:exp 0
 print "E"
-print __fn5__exp
-set @counter __fn5retaddr
+print :fn7:exp
+set @counter :fn7*retaddr
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

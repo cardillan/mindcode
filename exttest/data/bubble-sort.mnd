@@ -21,7 +21,7 @@ def bubblesort()
         for i in 0 ... n do
             sorted = testAndSwap(i, i + 1, sorted);
         end;
-    loop while !sorted;
+    while !sorted;
 end;
 
 const prime = 987660893;

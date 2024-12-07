@@ -1,0 +1,364 @@
+// Unit transport using a single unit only, for microprocessor
+// All main features supported except:
+// - manual/auto unit allocation (always uses a single unit; can be turned on or off)
+// - saving settings into memory
+// - no unit parking (when turned off, it stops using the unit, but it isn't parked)
+
+// Linked structures
+// switch1: activate/deactivate switch
+// sorter1: item type selector
+// message1: status
+// The fourth block is the container
+
+// Compile-time constant. Set to false to speed up processing by not showing individual units distance from target.
+const SHOW_UNIT_DISTANCE = true;
+
+// Compile-time constant. Set to false to update status information less often, increasing performance.
+const FAST_UPDATE       = false;
+
+param UNIT              = @mega;        // Which unit to use
+param LINK_ID           = 0;            // Remote vault ID (1-99); if nonzero, items are moved to/from this vault instead of core
+
+// Local and remote limits can be used to reduce the amount of space used by this processor in the container/vault/core.
+// If the value is lower than 100, the capacity will be used up to that percent and the rest will be ignored.
+param LOCAL_LIMIT       = 100;          // How much of local container capacity to use, in percents (20-100).
+param REMOTE_LIMIT      = 100;          // How much of local container capacity to use, in percents (20-100).
+
+EFF_LOCAL_LIMIT = max(LOCAL_LIMIT, 20);
+EFF_REMOTE_LIMIT = max(REMOTE_LIMIT, 20);
+MSG = null;
+
+//  BASIC INITIALIZATION
+/////////////////////////////////////////////////////////
+const RADIUS_WITHIN     = 8;
+const RADIUS_APPROACH   = 6;
+
+const S_UNUSED          = 0;            // Unit is not used.
+const S_UNLOAD          = 1;            // Unloading wrong items held by unit/initializing unit
+const S_APPROACH_SRC    = 2;            // Approaching source block
+const S_APPROACH_DST    = 3;            // Approaching destination block
+
+//  WAITING FOR ACTIVE SWITCH
+/////////////////////////////////////////////////////////
+while switch1.@enabled == false do
+    println("Unit Transport - Single");
+    println("Activate switch to start.");
+    printflush(message1);
+end;
+
+//  BIND UNIT
+/////////////////////////////////////////////////////////
+while @unit.@dead !== 0 do
+    rebindUnit();
+end;
+
+// This is our unit. We'll keep it
+UNIT_CAPACITY = @unit.@itemCapacity;
+SPEED_SEC = @unit.@speed / 10;
+flag(1);
+
+//  LOCAL CONTAINER INITIALIZATION
+/////////////////////////////////////////////////////////
+while true do
+    CONTAINER = null;
+    DROP_TARGET = null;
+    n = @links;
+    while n > 0 do
+        n = n - 1;
+        block = getlink(n);
+        if block.@itemCapacity > 0 then
+            DROP_TARGET = CONTAINER;
+            CONTAINER = block;
+        end;
+    end;
+
+    if CONTAINER == null then
+        println("[salmon]No destination.");
+    elsif (DROP_TARGET != null) and (DROP_TARGET.@itemCapacity < 300) then
+        print($"Destination: $CONTAINER\n");
+        print($"Item dump: $DROP_TARGET\n");
+        print($"[salmon]Item dump must be a container or a vault!");
+    else
+        break;
+    end;
+    printflush(message1);
+end;
+
+//  REMOTE CONTAINER/CORE INITIALIZATION
+//  Includes locating remote vault
+/////////////////////////////////////////////////////////
+CORE = CORE_X = CORE_Y = null;
+if LINK_ID == 0 then
+    print("[gold]Locating core...");
+    printflush(message1);
+    // Use existing unit
+    CORE = ulocate(building, core, false, out CORE_X, out CORE_Y);
+else
+    print($"[gold]Locating vault #$LINK_ID...");
+    printflush(message1);
+    QUERY_FLAG = 99999900 + LINK_ID;
+    flag = QUERY_FLAG;
+    flag(flag);
+    while (flag == QUERY_FLAG) and (@unit.@dead === 0) do
+        stop();                       // Keep controlling the unit
+        flag = @unit.@flag;
+    end;
+    if (flag != QUERY_FLAG) then
+        position = flag \ 100;
+        CORE_X = position % @mapw;
+        CORE_Y = position \ @mapw;
+        // §§§ B and not A --> B > A
+        while (within(CORE_X, CORE_Y, RADIUS_WITHIN) == false) and (@unit.@dead == 0) do
+            approach(CORE_X, CORE_Y, RADIUS_APPROACH);
+        end;
+        CORE = getBlock(CORE_X, CORE_Y, out b_type);
+        if b_type != @vault then
+            CORE = null;
+        end;
+    end;
+end;
+
+if CORE == null then
+    // Finding the core failed. We don't know the reason, so we'll start all over agan
+    end();
+end;
+
+//  SORTER AND DIRECTION INITIALIZATION
+/////////////////////////////////////////////////////////
+SORTER = sorter1;
+sorter_type = SORTER.@type;
+while (sorter_type != @sorter) and (sorter_type != @inverted-sorter) do
+    println("[salmon]Block sorter1 is neither a sorter, nor an inverted sorter.");
+    if SORTER != null then
+        print("Block found: ", SORTER);
+    end;
+    printflush(message1);
+    SORTER = sorter1;
+    sorter_type = SORTER.@type;
+end;
+
+if (sorter_type == @sorter) then
+    SHOW_REMOTE_LEVEL = true;
+    SRC = CORE;
+    DST = CONTAINER;
+    src_capacity = SRC.@itemCapacity;
+    dst_capacity = DST.@itemCapacity;
+    LOAD_LEVEL = (src_capacity * (100 - EFF_REMOTE_LIMIT)) \ 100;
+    DROP_LEVEL = (dst_capacity * EFF_LOCAL_LIMIT) \ 100;
+    LOCAL_MARGIN = DROP_LEVEL;
+    REMOTE_MARGIN = LOAD_LEVEL;
+    DIRECTION = (LINK_ID == 0) ? "[] from core"  : "[] from vault #";
+else
+    SHOW_REMOTE_LEVEL = LINK_ID > 0;
+    SRC = CONTAINER;
+    DST = CORE;
+    src_capacity = SRC.@itemCapacity;
+    dst_capacity = DST.@itemCapacity;
+    LOAD_LEVEL = (src_capacity * (100 - EFF_LOCAL_LIMIT)) \ 100;
+    // Add UNIT_CAPACITY to drop level if the target is core to allow dropping to full core
+    DROP_LEVEL = (dst_capacity * EFF_REMOTE_LIMIT) \ 100 + ((LINK_ID == 0) * UNIT_CAPACITY);
+    LOCAL_MARGIN = LOAD_LEVEL;
+    REMOTE_MARGIN = DROP_LEVEL;
+    DIRECTION = (LINK_ID == 0) ? "[] to core" : "[] to vault #";
+end;
+LINK_TXT = (LINK_ID == 0) ? ""  : LINK_ID;
+
+SRC_X = SRC.@x;
+SRC_Y = SRC.@y;
+DST_X = DST.@x;
+DST_Y = DST.@y;
+
+//  DROPPING POSITION
+/////////////////////////////////////////////////////////
+if DROP_TARGET == null then
+    DROP_TARGET = CORE;
+    DROP_X = CORE_X;
+    DROP_Y = CORE_Y;
+else
+    DROP_X = DROP_TARGET.@x;
+    DROP_Y = DROP_TARGET.@y;
+end;
+
+//  MAIN LOOP INITIALIZATION
+/////////////////////////////////////////////////////////
+LAST_ITEM = @mono;      // Must not be null
+iter = 0;
+loop_time = 0;
+state = S_UNLOAD;
+stop();
+
+//  MAIN LOOP 
+/////////////////////////////////////////////////////////
+while true do
+    start = @time;
+
+    // Bind new unit if it is somehow lost
+    if (@unit.@dead === 0) <= (@unit.@controller != @this) then
+        findUnit();
+        flag(1);            // Mark unit as active
+        state = S_UNLOAD;   // We'll unload our unit first
+    end;
+
+    // We have a bound, functioning unit
+
+    // Configure item to transport
+    ITEM = SORTER.@config;
+    if ITEM != LAST_ITEM then
+        while ITEM == null do
+            print("[salmon]No item type selected for transport.");
+            printflush(message1);
+            ITEM = SORTER.@config;
+        end;
+        LAST_ITEM = ITEM;
+        state = S_UNLOAD;
+    end;
+
+    show_state = S_UNUSED;
+
+    // Unloads everything to the core. Used as starting state, to make sure
+    // the unit is free to accept whatever it has to transport
+    if state == S_UNLOAD then
+        if @unit.@firstItem == ITEM then
+            // Jump threading optimization here...
+            state = S_APPROACH_DST;
+        elsif @unit.@totalItems == 0 then
+            // Jump threading optimization here...
+            state = S_APPROACH_SRC;
+        else
+            MSG = "\nUnloading previous items: [green]";
+            approach(DROP_X, DROP_Y, RADIUS_APPROACH);
+            if within(DROP_X, DROP_Y, RADIUS_WITHIN) then
+                itemDrop(DROP_TARGET, UNIT_CAPACITY);
+            end;
+        end;
+    end;
+
+    if state == S_APPROACH_SRC then
+        if within(SRC_X, SRC_Y, RADIUS_WITHIN) then
+            max_load = max(SRC.sensor(ITEM) - LOAD_LEVEL, 0);
+            itemTake(SRC, ITEM, max_load);
+            if @unit.@totalItems >= UNIT_CAPACITY then
+                state = S_APPROACH_DST;
+            else
+                MSG = "\nLoading items: [green]";
+            end;
+        else
+            approach(SRC_X, SRC_Y, RADIUS_APPROACH);
+            MSG = "\nGoing to source: [green]";
+            show_state = S_APPROACH_SRC;
+        end;
+    end;
+
+    if state == S_APPROACH_DST then
+        if within(DST_X, DST_Y, RADIUS_WITHIN) then
+            max_drop = max(DROP_LEVEL - DST.sensor(ITEM), 0);
+            itemDrop(DST, max_drop);
+            if @unit.@totalItems <= 0 then
+                state = S_APPROACH_SRC;
+                // Issue the command now to save one loop
+                approach(SRC_X, SRC_Y, RADIUS_APPROACH);
+            else
+                MSG = "\nDropping items: [green]";
+            end;
+        else
+            approach(DST_X, DST_Y, RADIUS_APPROACH);
+            MSG = "\nGoing to destination: [green]";
+            show_state = S_APPROACH_DST;
+        end;
+    end;
+
+    if FAST_UPDATE ? true : (iter > 3) then
+        iter = 0;
+        print($"Moving [green]$ITEM$DIRECTION$LINK_TXT\n");
+        print($"Local items: [gold]$[]", CONTAINER.sensor(ITEM));
+        if EFF_LOCAL_LIMIT < 100 then
+            print($" (limit [orange]$LOCAL_MARGIN[])");
+        end;
+        if SHOW_REMOTE_LEVEL then
+            print($"\nRemote items: [gold]$[]", CORE.sensor(ITEM));
+            if EFF_REMOTE_LIMIT < 100 then
+                print($" (limit [orange]$REMOTE_MARGIN[])");
+            end;
+        end;
+        println(MSG, @unit.@totalItems, "[]");
+        if SHOW_UNIT_DISTANCE then
+            if show_state == S_APPROACH_SRC then
+                print($"[]  arriving in [gold]$ sec[]\n", len(SRC_X - @unit.@x, SRC_Y - @unit.@y) \ SPEED_SEC / 10);
+            elsif show_state == S_APPROACH_DST then
+                print($"[]  arriving in [gold]$ sec[]\n", len(DST_X - @unit.@x, DST_Y - @unit.@y) \ SPEED_SEC / 10);
+            end;
+        end;
+        println("[lightgray]Loop time: ", floor(loop_time), " ms[]");
+        printflush(message1);
+
+        if switch1.@enabled == 0 then break; end;
+        if SRC.@dead != 0 then break; end;
+        if DST.@dead != 0 then break; end;
+        if SORTER.@dead != 0 then break; end;
+    else
+        iter += 1;
+    end;
+
+    loop_time = @time - start;
+end;
+
+while (SORTER.@dead === 0) == false do
+    println("[salmon]sorter1 is missing!");
+    println("[gold]Please place and link sorter or inverted sorter to the processor.");
+    printflush(message1);
+    printflush(message2);
+    SORTER = sorter1;
+end;
+
+if SRC.@dead !== 0 or DST.@dead !== 0 then
+    switch1.enabled = false;
+    while switch1.@enabled == false do
+        println("[salmon]Local or remote container became invalid.");
+        println("[gold]Please fix and press button to reinitialize.");
+        printflush(message1);
+        printflush(message2);
+    end;
+end;
+
+inline def rebindUnit()
+    // TODO fix uninitialized warning
+    first_unit = null;
+
+    while true do
+        ubind(UNIT);
+        if @unit != null then
+            first_unit = @unit;
+            break;
+        end;
+        print($"[salmon]No unit of type $UNIT found. 1");
+        printflush(message1);
+    end;
+
+    // We have some unit. Try to find unit owned by us
+    do
+        if @unit.@controller == @this then
+            return null;
+        end;
+        ubind(UNIT);
+        print($"[gold]Looking for old unit...");
+        printflush(message1);
+    while @unit != first_unit and first_unit.@dead === 0;
+
+    // We went through entire loop (or lost first unit) and didn't find unit we already owned
+    // Grab first free unit
+    findUnit();
+end;
+
+inline def findUnit()
+    while true do
+        ubind(UNIT);
+        if @unit == null then
+            print($"[salmon]No unit of type $UNIT found. 2");
+        elsif @unit.@controlled != 0 then
+            print($"[salmon]Looking for a free $UNIT...");
+        else
+            return null;
+        end;
+        printflush(message1);
+    end;
+end;

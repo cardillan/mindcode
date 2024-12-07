@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.Version;
+import info.teksol.mc.Version;
 
 import java.util.List;
 

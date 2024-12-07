@@ -1,10 +1,10 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.mindustry.UnitCommandConfiguration;
 
-public record AstUnitCommandReference(InputPosition inputPosition, String command) implements AstContentsReference {
+public record AstUnitCommandReference(SourcePosition sourcePosition, String command) implements AstContentsReference {
 
     @Override
     public String getConfigurationText() {

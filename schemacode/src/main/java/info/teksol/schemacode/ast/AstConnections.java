@@ -1,12 +1,12 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 
 import java.util.List;
 
-public record AstConnections(InputPosition inputPosition, List<AstConnection> connections) implements AstConfiguration {
+public record AstConnections(SourcePosition sourcePosition, List<AstConnection> connections) implements AstConfiguration {
 
-    public AstConnections(InputPosition inputPosition, AstConnection... connections) {
-        this(inputPosition, List.of(connections));
+    public AstConnections(SourcePosition sourcePosition, AstConnection... connections) {
+        this(sourcePosition, List.of(connections));
     }
 }

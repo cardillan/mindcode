@@ -18,8 +18,7 @@ switch1:
             on = switch1.@enabled;
             // Starting at 1, we want to skip the switch
             for link in 1 ... @links do
-                device = getlink(link);
-                device.enabled = on;
+                getlink(link).enabled = on;
             end;
             """
     end

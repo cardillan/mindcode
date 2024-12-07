@@ -1,222 +1,217 @@
-Main file: number of reported ambiguities: 4
 
 Final code before resolving virtual instructions:
 
-    0:  set _initial_flag null
-    1:  set _message null
-    2:  set _preface null
-    3:  set _unit_type null
-    4:  set _x null
-    5:  set _y null
-        label __label0
-    6:  set __fn0__unit_type _unit_type
-    7:  set __fn0__initial_flag _initial_flag
-    8:  ubind __fn0__unit_type
-    9:  op equal __tmp1 @unit null
-   10:  jump __label2 equal __tmp1 false
-   11:  set __tmp0 null
-   12:  jump __label1 always 0 0
-   13:  set __tmp2 null
-   14:  jump __label3 always 0 0
-        label __label2
-   15:  set __tmp2 null
-        label __label3
-   16:  set __tmp3 @unit
-   17:  set __fn0__first_unit __tmp3
-        label __label4
-   18:  sensor __tmp4 @unit @controlled
-   19:  op equal __tmp5 __tmp4 0
-   20:  jump __label7 equal __tmp5 false
-   21:  ucontrol flag __fn0__initial_flag 0 0 0 0
-   22:  set __tmp0 @unit
-   23:  jump __label1 always 0 0
-   24:  set __tmp6 null
-   25:  jump __label8 always 0 0
-        label __label7
-   26:  sensor __tmp7 __fn0__first_unit @dead
-   27:  op equal __tmp8 __tmp7 1
-   28:  jump __label9 equal __tmp8 false
-   29:  set __tmp10 @unit
-   30:  set __fn0__first_unit __tmp10
-   31:  set __tmp9 __fn0__first_unit
-   32:  jump __label10 always 0 0
-        label __label9
-   33:  set __tmp9 null
-        label __label10
-   34:  set __tmp6 __tmp9
-        label __label8
-   35:  ubind __fn0__unit_type
-        label __label5
-   36:  op notEqual __tmp11 __fn0__first_unit @unit
-   37:  jump __label4 notEqual __tmp11 false
-        label __label6
-   38:  set __tmp0 null
-   39:  jump __label1 always 0 0
-   40:  set __tmp0 null
-        label __label1
-   41:  print __tmp0
-   42:  print "\n"
-        label __label11
-   43:  set __fn1__x _x
-   44:  set __fn1__y _y
-   45:  set __fn1__unit_type _unit_type
-   46:  set __fn1__initial_flag _initial_flag
-        label __label13
-   47:  jump __label15 equal true false
-   48:  ubind __fn1__unit_type
-   49:  op equal __tmp13 @unit null
-   50:  jump __label16 equal __tmp13 false
-   51:  set __tmp12 null
-   52:  jump __label12 always 0 0
-   53:  set __tmp14 null
-   54:  jump __label17 always 0 0
-        label __label16
-   55:  set __tmp14 null
-        label __label17
-   56:  set __tmp15 @unit
-   57:  set __fn1__first_unit __tmp15
-   58:  set __fn1__best_unit null
-   59:  set __fn1__best_distance 10000000000
-        label __label18
-   60:  sensor __tmp16 @unit @controlled
-   61:  op equal __tmp17 __tmp16 0
-   62:  jump __label21 equal __tmp17 false
-   63:  sensor __tmp19 @unit @x
-   64:  op sub __tmp20 __tmp19 __fn1__x
-   65:  sensor __tmp21 @unit @y
-   66:  op sub __tmp22 __tmp21 __fn1__y
-   67:  op len __tmp23 __tmp20 __tmp22
-   68:  set __fn1__distance __tmp23
-   69:  op lessThan __tmp24 __fn1__distance __fn1__best_distance
-   70:  jump __label23 equal __tmp24 false
-   71:  set __fn1__best_distance __fn1__distance
-   72:  set __tmp26 @unit
-   73:  set __fn1__best_unit __tmp26
-   74:  set __tmp25 __fn1__best_unit
-   75:  jump __label24 always 0 0
-        label __label23
-   76:  set __tmp25 null
-        label __label24
-   77:  set __tmp18 __tmp25
-   78:  jump __label22 always 0 0
-        label __label21
-   79:  sensor __tmp27 __fn1__first_unit @dead
-   80:  op equal __tmp28 __tmp27 1
-   81:  jump __label25 equal __tmp28 false
-   82:  set __tmp30 @unit
-   83:  set __fn1__first_unit __tmp30
-   84:  set __tmp29 __fn1__first_unit
-   85:  jump __label26 always 0 0
-        label __label25
-   86:  set __tmp29 null
-        label __label26
-   87:  set __tmp18 __tmp29
-        label __label22
-   88:  ubind __fn1__unit_type
-        label __label19
-   89:  op notEqual __tmp31 __fn1__first_unit @unit
-   90:  jump __label18 notEqual __tmp31 false
-        label __label20
-   91:  op equal __tmp32 __fn1__best_unit null
-   92:  jump __label27 equal __tmp32 false
-   93:  set __tmp12 null
-   94:  jump __label12 always 0 0
-   95:  set __tmp33 null
-   96:  jump __label28 always 0 0
-        label __label27
-   97:  set __tmp33 null
-        label __label28
-   98:  sensor __tmp34 __fn1__best_unit @controlled
-   99:  op equal __tmp35 __tmp34 0
-  100:  jump __label29 equal __tmp35 false
-  101:  ubind __fn1__best_unit
-  102:  ucontrol flag __fn1__initial_flag 0 0 0 0
-  103:  set __tmp12 __fn1__best_unit
-  104:  jump __label12 always 0 0
-  105:  set __tmp36 null
-  106:  jump __label30 always 0 0
-        label __label29
-  107:  set __tmp36 null
-        label __label30
-        label __label14
-  108:  jump __label13 always 0 0
-        label __label15
-  109:  set __tmp12 null
-        label __label12
-  110:  print __tmp12
-  111:  print "\n"
-        label __label31
-  112:  set __fn2__unit_type _unit_type
-  113:  set __fn2__initial_flag _initial_flag
-        label __label33
-  114:  jump __label35 equal true false
-  115:  ubind __fn2__unit_type
-  116:  op notEqual __tmp38 @unit null
-  117:  jump __label36 equal __tmp38 false
-  118:  sensor __tmp40 @unit @controlled
-  119:  op equal __tmp41 __tmp40 0
-  120:  jump __label38 equal __tmp41 false
-  121:  ucontrol flag __fn2__initial_flag 0 0 0 0
-  122:  set __tmp37 @unit
-  123:  jump __label32 always 0 0
-  124:  set __tmp42 null
-  125:  jump __label39 always 0 0
-        label __label38
-  126:  set __tmp42 null
-        label __label39
-  127:  set __tmp39 __tmp42
-  128:  jump __label37 always 0 0
-        label __label36
-  129:  set __tmp39 null
-        label __label37
-        label __label34
-  130:  jump __label33 always 0 0
-        label __label35
-  131:  set __tmp37 null
-        label __label32
-  132:  print __tmp37
-  133:  print "\n"
-        label __label40
-  134:  set __fn3__message _message
-  135:  set __fn3__preface _preface
-  136:  set __fn3__unit_type _unit_type
-  137:  set __fn3__initial_flag _initial_flag
-        label __label42
-  138:  jump __label44 equal true false
-  139:  ubind __fn3__unit_type
-  140:  op equal __tmp44 @unit null
-  141:  jump __label45 equal __tmp44 false
-  142:  print __fn3__preface
-  143:  print "No unit of type "
-  144:  print __fn3__unit_type
-  145:  print " found."
-  146:  printflush __fn3__message
-  147:  set __tmp45 null
-  148:  jump __label46 always 0 0
-        label __label45
-  149:  sensor __tmp46 @unit @controlled
-  150:  op notEqual __tmp47 __tmp46 0
-  151:  jump __label47 equal __tmp47 false
-  152:  print __fn3__preface
-  153:  print "Looking for a free "
-  154:  print __fn3__unit_type
-  155:  print "..."
-  156:  printflush __fn3__message
-  157:  set __tmp48 null
-  158:  jump __label48 always 0 0
-        label __label47
-  159:  ucontrol flag __fn3__initial_flag 0 0 0 0
-  160:  set __tmp43 @unit
-  161:  jump __label41 always 0 0
-  162:  set __tmp48 null
-        label __label48
-  163:  set __tmp45 __tmp48
-        label __label46
-        label __label43
-  164:  jump __label42 always 0 0
-        label __label44
-  165:  set __tmp43 null
-        label __label41
-  166:  print __tmp43
+    0:  set :initial_flag null
+    1:  set :message null
+    2:  set :preface null
+    3:  set :unit_type null
+    4:  set :x null
+    5:  set :y null
+    6:  set :fn0:unit_type :unit_type
+    7:  set :fn0:initial_flag :initial_flag
+    8:  ubind :fn0:unit_type
+    9:  op equal *tmp1 @unit null
+   10:  jump *label1 equal *tmp1 false
+   11:  set *tmp0 null
+   12:  jump *label0 always 0 0
+   13:  set *tmp2 null
+   14:  jump *label2 always 0 0
+        label *label1
+   15:  set *tmp2 null
+        label *label2
+   16:  set :fn0:first_unit @unit
+        label *label3
+   17:  sensor *tmp3 @unit @controlled
+   18:  op equal *tmp4 *tmp3 0
+   19:  jump *label6 equal *tmp4 false
+   20:  ucontrol flag :fn0:initial_flag 0 0 0 0
+   21:  set *tmp0 @unit
+   22:  jump *label0 always 0 0
+   23:  set *tmp5 null
+   24:  jump *label7 always 0 0
+        label *label6
+   25:  sensor *tmp6 :fn0:first_unit @dead
+   26:  op equal *tmp7 *tmp6 1
+   27:  jump *label8 equal *tmp7 false
+   28:  set *tmp9 @unit
+   29:  set :fn0:first_unit *tmp9
+   30:  set *tmp8 :fn0:first_unit
+   31:  jump *label9 always 0 0
+        label *label8
+   32:  set *tmp8 null
+        label *label9
+   33:  set *tmp5 *tmp8
+        label *label7
+   34:  ubind :fn0:unit_type
+        label *label4
+   35:  op notEqual *tmp10 :fn0:first_unit @unit
+   36:  jump *label3 notEqual *tmp10 false
+        label *label5
+   37:  set *tmp0 null
+   38:  jump *label0 always 0 0
+   39:  set *tmp0 null
+        label *label0
+   40:  print *tmp0
+   41:  print "\n"
+   42:  set :fn1:x :x
+   43:  set :fn1:y :y
+   44:  set :fn1:unit_type :unit_type
+   45:  set :fn1:initial_flag :initial_flag
+        label *label11
+   46:  jump *label13 equal true false
+   47:  ubind :fn1:unit_type
+   48:  op equal *tmp12 @unit null
+   49:  jump *label14 equal *tmp12 false
+   50:  set *tmp11 null
+   51:  jump *label10 always 0 0
+   52:  set *tmp13 null
+   53:  jump *label15 always 0 0
+        label *label14
+   54:  set *tmp13 null
+        label *label15
+   55:  set :fn1:first_unit @unit
+   56:  set :fn1:best_unit null
+   57:  set :fn1:best_distance 10000000000
+        label *label16
+   58:  sensor *tmp14 @unit @controlled
+   59:  op equal *tmp15 *tmp14 0
+   60:  jump *label19 equal *tmp15 false
+   61:  sensor *tmp17 @unit @x
+   62:  op sub *tmp18 *tmp17 :fn1:x
+   63:  sensor *tmp19 @unit @y
+   64:  op sub *tmp20 *tmp19 :fn1:y
+   65:  op len *tmp21 *tmp18 *tmp20
+   66:  set :fn1:distance *tmp21
+   67:  op lessThan *tmp22 :fn1:distance :fn1:best_distance
+   68:  jump *label21 equal *tmp22 false
+   69:  set :fn1:best_distance :fn1:distance
+   70:  set *tmp24 @unit
+   71:  set :fn1:best_unit *tmp24
+   72:  set *tmp23 :fn1:best_unit
+   73:  jump *label22 always 0 0
+        label *label21
+   74:  set *tmp23 null
+        label *label22
+   75:  set *tmp16 *tmp23
+   76:  jump *label20 always 0 0
+        label *label19
+   77:  sensor *tmp25 :fn1:first_unit @dead
+   78:  op equal *tmp26 *tmp25 1
+   79:  jump *label23 equal *tmp26 false
+   80:  set *tmp28 @unit
+   81:  set :fn1:first_unit *tmp28
+   82:  set *tmp27 :fn1:first_unit
+   83:  jump *label24 always 0 0
+        label *label23
+   84:  set *tmp27 null
+        label *label24
+   85:  set *tmp16 *tmp27
+        label *label20
+   86:  ubind :fn1:unit_type
+        label *label17
+   87:  op notEqual *tmp29 :fn1:first_unit @unit
+   88:  jump *label16 notEqual *tmp29 false
+        label *label18
+   89:  op equal *tmp30 :fn1:best_unit null
+   90:  jump *label25 equal *tmp30 false
+   91:  set *tmp11 null
+   92:  jump *label10 always 0 0
+   93:  set *tmp31 null
+   94:  jump *label26 always 0 0
+        label *label25
+   95:  set *tmp31 null
+        label *label26
+   96:  sensor *tmp32 :fn1:best_unit @controlled
+   97:  op equal *tmp33 *tmp32 0
+   98:  jump *label27 equal *tmp33 false
+   99:  ubind :fn1:best_unit
+  100:  ucontrol flag :fn1:initial_flag 0 0 0 0
+  101:  set *tmp11 :fn1:best_unit
+  102:  jump *label10 always 0 0
+  103:  set *tmp34 null
+  104:  jump *label28 always 0 0
+        label *label27
+  105:  set *tmp34 null
+        label *label28
+        label *label12
+  106:  jump *label11 always 0 0
+        label *label13
+  107:  set *tmp11 null
+        label *label10
+  108:  print *tmp11
+  109:  print "\n"
+  110:  set :fn2:unit_type :unit_type
+  111:  set :fn2:initial_flag :initial_flag
+        label *label30
+  112:  jump *label32 equal true false
+  113:  ubind :fn2:unit_type
+  114:  op notEqual *tmp36 @unit null
+  115:  jump *label33 equal *tmp36 false
+  116:  sensor *tmp38 @unit @controlled
+  117:  op equal *tmp39 *tmp38 0
+  118:  jump *label35 equal *tmp39 false
+  119:  ucontrol flag :fn2:initial_flag 0 0 0 0
+  120:  set *tmp35 @unit
+  121:  jump *label29 always 0 0
+  122:  set *tmp40 null
+  123:  jump *label36 always 0 0
+        label *label35
+  124:  set *tmp40 null
+        label *label36
+  125:  set *tmp37 *tmp40
+  126:  jump *label34 always 0 0
+        label *label33
+  127:  set *tmp37 null
+        label *label34
+        label *label31
+  128:  jump *label30 always 0 0
+        label *label32
+  129:  set *tmp35 null
+        label *label29
+  130:  print *tmp35
+  131:  print "\n"
+  132:  set :fn3:message :message
+  133:  set :fn3:preface :preface
+  134:  set :fn3:unit_type :unit_type
+  135:  set :fn3:initial_flag :initial_flag
+        label *label38
+  136:  jump *label40 equal true false
+  137:  ubind :fn3:unit_type
+  138:  op equal *tmp42 @unit null
+  139:  jump *label41 equal *tmp42 false
+  140:  print :fn3:preface
+  141:  print "No unit of type "
+  142:  print :fn3:unit_type
+  143:  print " "
+  144:  print "found."
+  145:  printflush :fn3:message
+  146:  set *tmp43 null
+  147:  jump *label42 always 0 0
+        label *label41
+  148:  sensor *tmp44 @unit @controlled
+  149:  op notEqual *tmp45 *tmp44 0
+  150:  jump *label43 equal *tmp45 false
+  151:  print :fn3:preface
+  152:  print "Looking for a free "
+  153:  print :fn3:unit_type
+  154:  print "."
+  155:  print ".."
+  156:  printflush :fn3:message
+  157:  set *tmp46 null
+  158:  jump *label44 always 0 0
+        label *label43
+  159:  ucontrol flag :fn3:initial_flag 0 0 0 0
+  160:  set *tmp41 @unit
+  161:  jump *label37 always 0 0
+  162:  set *tmp46 null
+        label *label44
+  163:  set *tmp43 *tmp46
+        label *label42
+        label *label39
+  164:  jump *label38 always 0 0
+        label *label40
+  165:  set *tmp41 null
+        label *label37
+  166:  print *tmp41
   167:  print "\n"
   168:  end

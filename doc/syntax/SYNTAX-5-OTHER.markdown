@@ -4,8 +4,7 @@ This document describes the more advanced features of Mindcode.
 
 # Compiler directives
 
-Mindcode allows you to alter some compiler options in the source code using special `#set` commands.
-The basic syntax is: 
+Mindcode allows you to alter some compiler options in the source code using special `#set` commands. The basic syntax is: 
 
 ```
 #set option = value;
@@ -17,48 +16,51 @@ Supported compiler options are described below.
 
 ## Option `target`
 
-Use the `target` option to specify the Mindcode version:
+Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. The target versions consist of a major and minor version number. As of now, these versions exist:
+
+| Version | Description                                                      |
+|:-------:|:-----------------------------------------------------------------|
+|   6.0   | Mindustry Logic for the latest release of Mindustry 6.           |
+|   7.0   | Mindustry Logic for the latest release of Mindustry 7.           |
+|   7.1   | As above, with slightly revised syntax of some functions.        |
+|   8.0   | Mindustry Logic for the latest BE release of future Mindustry 8. |
+
+Version 8.0 will be the version corresponding to the official Mindustry 8 release. Future enhancements of Mindustry 8 Logic or, possibly, of the Mindcode language will be incorporated as separate versions with updated minor version number.
+
+The target can be set using either just a major, or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the most recent minor version in given major category is used. Example:
 
 ```
-#set target = ML6;
+#set target = 7;        // Sets version 7.1
+#set target = 7.0;      // Sets version 7.0
 ```
 
-Possible values for this option are:
-* `ML6`: compile for Mindcode Logic version 6
-* `ML7S`: compile for Mindcode Logic version 7 standard processors
-* `ML7W`: compile for Mindcode Logic version 7 world processor
-* `ML7AS`: compile for Mindcode Logic version 7 (revision A) standard processors
-* `ML7AW`: compile for Mindcode Logic version 7 (revision A) world processor
-* `ML8AS`: compile for Mindcode Logic version 8 (revision A) standard processors
-* `ML8AW`: compile for Mindcode Logic version 8 (revision A) world processor
+To use a world-processor variant of Mindcode language, it is necessary to add `W` as a suffix to the version number:
+
+```
+#set target = 8W;     // World-processor logic version 8
+#set target = 7.0W    // World-processor logic version 7.0
+```
+
+The same names of version targets is used with the `-t` / `--target` command-line option.
 
 ## Option `remarks`
 
-This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks), 
-are propagated to the compiled code. Remarks are written into the compiled code as `print` instructions. Possible values 
-of the `remarks` option are:
+This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks), are propagated to the compiled code. Remarks are written into the compiled code as `print` instructions. Possible values of the `remarks` option are:
 
 * `none`: remarks are suppressed in the compiled code - they do not appear there at all.
-* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous 
-  remarks, so that the print statement themselves aren't executed. This is the default value.
+* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statement themselves aren't executed. This is the default value.
 * `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
-Passive remarks can be used for putting instructions or comments in the compiled code, or to mark a specific portion 
-of the code. Remarks in a loop may help identifying individual iterations when the loop is unrolled, for example.
+Passive remarks can be used for putting instructions or comments in the compiled code, or to mark a specific portion of the code. Remarks in a loop may help identifying individual iterations when the loop is unrolled, for example.
 
-Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler 
-option (potentially through a command line switch without modifying the source code).
+Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler option (potentially through a command line switch without modifying the source code).
 
 ## Option `goal`
 
-Use the `goal` option to specify whether Mindcode should prefer to generate smaller code, or faster code. 
-Possible values are:
+Use the `goal` option to specify whether Mindcode should prefer to generate smaller code, or faster code. Possible values are:
 
 * `size`: Mindcode tries to generate smaller code.
-* `speed`: Mindcode can generate additional instructions, if it makes the resulting code faster while adhering to 
-  the 1000 instructions limit. When several possible optimizations of this kind are available, the ones having the 
-  best effect (highest speedup per additional instruction generated) are selected until the instruction limit is 
-  reached. 
+* `speed`: Mindcode can generate additional instructions, if it makes the resulting code faster while adhering to the 1000 instructions limit. When several possible optimizations of this kind are available, the ones having the best effect (highest speedup per additional instruction generated) are selected until the instruction limit is reached. 
 * `auto`: the default value. At this moment the setting is identical to `speed`.
 
 ## Option `sort-variables`
@@ -71,9 +73,9 @@ The value assigned to the sort-variables directive is a list of variable categor
 
 * `linked`: variables representing [linked blocks](SYNTAX-1-VARIABLES.markdown#linked-blocks), 
 * `params`: variables representing [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), 
-* `globals`: [global variables](SYNTAX-1-VARIABLES.markdown#global-variables),
-* `main`: [main variables](SYNTAX-1-VARIABLES.markdown#main-variables),
-* `locals`: [local variables](SYNTAX-1-VARIABLES.markdown#local-variables),
+* `globals`: [global variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
+* `main`: [main variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
+* `locals`: [local variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
 * `all`: user variables that aren't matched by any other specified category,
 * `none`: no variables at all. Can be used as a `#set sort-variables=none;`, ensuring that no variable ordering will be performed.  
 
@@ -87,30 +89,18 @@ The number of variables being sorted is limited by the [instruction limit](#opti
 
 ## Option `memory-model`
 
-This option has been added to support future enhancements of Mindcode. Setting the option doesn't have any effect at 
-this moment. 
+This option has been added to support future enhancements of Mindcode. Setting the option doesn't have any effect at this moment. 
 
 ## Option `instruction-limit`
 
-This option allows to change the instruction limit used by [speed
-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed). The speed optimization strives not to exceed 
-this instruction limit. In some cases, the optimization cost estimates are too conservative - some optimizations 
-applied together may lead to code reductions that are not known to individual optimizers considering each 
-optimization in isolation. In these cases, increasing the instruction limit might allow more optimizations to be 
-performed. When the resulting code exceeds 1000 instructions, it is not usable in Mindustry processors and the 
-option should be decreased or set back to 1000. (A new feature, which would perform this trial-and-error 
-optimization automatically, is planned.)
+This option allows to change the instruction limit used by [speed optimization](SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed). The speed optimization strives not to exceed this instruction limit. In some cases, the optimization cost estimates are too conservative - some optimizations applied together may lead to code reductions that are not known to individual optimizers considering each optimization in isolation. In these cases, increasing the instruction limit might allow more optimizations to be performed. When the resulting code exceeds 1000 instructions, it is not usable in Mindustry processors and the option should be decreased or set back to 1000. (A new feature, which would perform this trial-and-error optimization automatically, is planned.)
 
-The limit only affects the optimization for speed. The option has no effect on code generated by the compiler or 
-optimizers which do not work in the speed optimization mode, and doesn't help reduce the code size generated outside 
-the optimization for speed mechanism. 
+The limit only affects the optimization for speed. The option has no effect on code generated by the compiler or optimizers which do not work in the speed optimization mode, and doesn't help reduce the code size generated outside the optimization for speed mechanism. 
 
-It is also possible to decrease the instruction limit, if you wish so. The valid range for this compiler option is 1 
-to 100,000 for the command-line tool, and 1 to 1,500 for the web application.
+It is also possible to decrease the instruction limit, if you wish so. The valid range for this compiler option is 1 to 100,000 for the command-line tool, and 1 to 1,500 for the web application.
 
 > [!IMPORTANT]
-> Setting the limit to a very high value can have severe impact on the performance of the compiler. High 
-> values of the instruction limit might cause the code compilation to take minutes or even hours to complete.
+> Setting the limit to a very high value can have severe impact on the performance of the compiler. High values of the instruction limit might cause the code compilation to take minutes or even hours to complete.
 
 ## Option `optimization`
 
@@ -127,14 +117,11 @@ Possible values for this option are:
 * `advanced`
 * `experimental`
 
-The `none` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations.
-The `advanced` optimizations performs all the available optimizations, even those that might take more time, or 
-which make changes that are potentially risky or make understanding of the resulting mlog code more difficult.
+The `none` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations. The `advanced` optimizations performs all the available optimizations, even those that might take more time, or which make changes that are potentially risky or make understanding of the resulting mlog code more difficult.
 
 The `experimental` level is used for new optimizations that are still being evaluated, or for optimizations that might alter the meaning of existing code. Optimizations performed on the experimental level will typically be migrated to advanced or basic levels eventually.
 
-The default optimization level for the web application compiler is `basic`, for the command line compiler it is 
-`advanced`.
+The default optimization level for the web application compiler is `basic`, for the command line compiler it is `advanced`.
 
 ## Option `passes`
 
@@ -144,25 +131,19 @@ Use the `passes` option to set the maximum number of optimization passes to be d
 #set passes = 10;
 ```
 
-The default value is 3 for the web application and 25 for the command line tool. The number of optimization passes
-can be limited to a value between 1 and 1000 (inclusive).
+The default value is 3 for the web application and 25 for the command line tool. The number of optimization passes can be limited to a value between 1 and 1000 (inclusive).
 
-A more complex code can usually benefit from more optimization passes. On the other hand, each optimization pass can
-take some time to complete. Limiting the total number can prevent optimization from taking too much time or
-consuming too many resources (this is a consideration for the web application).
+A more complex code can usually benefit from more optimization passes. On the other hand, each optimization pass can take some time to complete. Limiting the total number can prevent optimization from taking too much time or consuming too many resources (this is a consideration for the web application).
 
 ## Individual optimization options
 
-It is possible to set the level of individual optimization tasks. Every optimization is assigned a name,
-and this name can be used in the compiler directive like this:
+It is possible to set the level of individual optimization tasks. Every optimization is assigned a name, and this name can be used in the compiler directive like this:
 
 ```
 #set dead-code-elimination = advanced;
 ```
 
-Not all optimizations support the `advanced` level. For those the level `advanced` is the same as `basic`.
-The complete list of available optimizations, including the option name for setting the level of given optimization
-and availability of the advanced optimization level is:
+Not all optimizations support the `advanced` level. For those the level `advanced` is the same as `basic`. The complete list of available optimizations, including the option name for setting the level of given optimization and availability of the advanced optimization level is:
 
 | Optimization                                                                                       | Option name                  | Advanced |
 |----------------------------------------------------------------------------------------------------|------------------------------|:--------:|
@@ -189,11 +170,9 @@ and availability of the advanced optimization level is:
 
 This table doesn't track which optimizations provide some functionality on the `experimental` level. This information is available in the individual optimization documentation. 
 
-You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
-deactivating it might allow you to use Mindcode until a fix is available.
+You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers, deactivating it might allow you to use Mindcode until a fix is available.
 
-In particular, some optimizers expect to work on code that was already processed by different optimizations,
-so turning off some optimizations might render other optimizations ineffective. **This is not a bug.**  
+In particular, some optimizers expect to work on code that was already processed by different optimizations, so turning off some optimizations might render other optimizations ineffective. **This is not a bug.**  
 
 # Creating custom mlog instructions
 
@@ -225,10 +204,10 @@ For better understanding, the creating of custom instructions will be demonstrat
 
 ## The `format` instruction
 
-The `format` instruction was introduced in Mindustry Logic 8. When compiling for target ML7A, the instruction isn't available. We can create it using this code:
+The `format` instruction was introduced in Mindustry Logic 8. When compiling for mindustry Logic 7, the instruction isn't available. We can create it using this code:
 
 ```
-#set target = ML7A;
+#set target = 7;
 inline void format(value)
     mlog("format", in value);
 end;
@@ -249,15 +228,15 @@ format __tmp0
 
 Considerations:
 
-* The Print Merging optimization under ML8A target knows and properly handles the `format` instruction. When replaced by a custom instruction, the Print Merger won't be aware of it and might produce incorrect code. It would be necessary to turn off Print Merging optimization, if the `format` instruction was introduced in this way.
+* The Print Merging optimization under Mindustry Logic 8 language target knows and properly handles the `format` instruction. When replaced by a custom instruction, the Print Merger won't be aware of it and might produce incorrect code. It would be necessary to turn off Print Merging optimization, if the `format` instruction was introduced in this way.
 * The processor emulator doesn't recognize custom instructions and won't handle them. The output produced by running the above code using the processor emulator would therefore be incorrect.
 
 ## The `draw print` instruction
 
-Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the ML8A target, this instruction is mapped to the `drawPrint()` function. Unfortunately, this instruction takes an additional keyword argument - alignment, which needs special treatment when defining a custom instruction. Each possible value of alignment needs to be handled separately.
+Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. Unfortunately, this instruction takes an additional keyword argument - alignment, which needs special treatment when defining a custom instruction. Each possible value of alignment needs to be handled separately.
 
 ```
-#set target = ML7A;
+#set target = 7;
 inline void drawPrintCenter(x, y)
     mlog("draw", "print", in x, in y, "center", 0, 0, 0);
 end;

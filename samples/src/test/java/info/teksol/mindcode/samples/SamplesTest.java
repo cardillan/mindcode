@@ -1,16 +1,17 @@
 package info.teksol.mindcode.samples;
 
-import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.CompilerFacade;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,21 +46,27 @@ class SamplesTest {
     }
 
     private void compileMindcode(Sample sample) {
-        evaluateOutput(sample, CompilerFacade.compile(true, sample.source(),
-                OptimizationLevel.BASIC, false));
+        InputFiles inputFiles = InputFiles.fromSource(sample.source());
+        CompilerProfile profile = new CompilerProfile(true, OptimizationLevel.BASIC)
+                .setSyntacticMode(sample.relaxed() ? SyntacticMode.RELAXED : SyntacticMode.STRICT);
+
+        MindcodeCompiler compiler = new MindcodeCompiler(s -> {}, profile, inputFiles);
+        compiler.compile();
+        evaluateOutput(sample, compiler.getMessages());
     }
 
     private void buildSchematic(Sample sample) {
         evaluateOutput(sample, SchemacodeCompiler.compile(
                 InputFiles.fromSource(sample.source()),
-                CompilerProfile.fullOptimizations(true)));
+                CompilerProfile.fullOptimizations(true)).messages());
     }
 
-    private void evaluateOutput(Sample sample, CompilerOutput<?> output) {
-        output.messages().stream().filter(MindcodeMessage::isErrorOrWarning)
+    private void evaluateOutput(Sample sample, List<MindcodeMessage> output) {
+        output.stream().filter(MindcodeMessage::isErrorOrWarning)
                 .map(MindcodeMessage::formatMessage)
                 .forEach(System.out::println);
 
-        assertFalse(output.hasErrors() || output.hasWarnings(), "Sample " + sample.name() + " generated warnings or errors.");
+        assertFalse(output.stream().anyMatch(MindcodeMessage::isErrorOrWarning),
+                "Sample " + sample.name() + " generated warnings or errors.");
     }
 }

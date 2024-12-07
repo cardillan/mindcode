@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mc.messages.MindcodeMessage;
 
 public final class WebappMessage {
     private final String prefix;
@@ -42,13 +42,13 @@ public final class WebappMessage {
     }
 
     public static WebappMessage transform(MindcodeMessage msg) {
-        if (msg.inputPosition().isEmpty()) {
+        if (msg.sourcePosition().isEmpty()) {
             return new WebappMessage("", false, -1, -1, msg.message());
-        } else if (msg.inputPosition().inputFile().isLibrary()) {
-            String position = " at " + msg.inputPosition().inputFile().getDistinctPath() + ":" + msg.inputPosition().line() + ":" + msg.inputPosition().column() + ": ";
+        } else if (msg.sourcePosition().isLibrary()) {
+            String position = " at " + msg.sourcePosition().inputFile().getDistinctPath() + ":" + msg.sourcePosition().line() + ":" + msg.sourcePosition().column() + ": ";
             return new WebappMessage("", false, -1, -1, msg.level().getTitle() + position + msg.message());
         } else {
-            return new WebappMessage(msg.level().getTitle(), true, msg.inputPosition().line(), msg.inputPosition().column(), msg.message());
+            return new WebappMessage(msg.level().getTitle(), true, msg.sourcePosition().line(), msg.sourcePosition().column(), msg.message());
         }
     }
 }

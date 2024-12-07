@@ -1,5 +1,7 @@
 require printing;
 
+begin
+
 assertPrints("0", printNumber(null), "printNumber(null)");
 assertPrints("1", printNumber(1), "printNumber(1)");
 assertPrints("1", printNumber(1.5), "printNumber(1.5)");
@@ -7,6 +9,11 @@ assertPrints("-1", printNumber(-1.5), "printNumber(-1.5)");
 assertPrints("1,234,567", printNumber(1234567), "printNumber(1234567)");
 assertPrints("-1,234,567", printNumber(-1234567), "printNumber(-1234567)");
 assertPrints("9,009,099", printNumber(9009099), "printNumber(9009099)");
+assertPrints("0b1001", printBinaryNumber(0b1001, 0), "printBinaryNumber(0b1001, 0)");
+assertPrints("0b001010", printBinaryNumber(0b1010, 6), "printBinaryNumber(0b1010, 6)");
+assertPrints("0xABCDEF", printHexNumber(0xABCDEF, 0), "printHexNumber(0xABCDEF, 0)");
+assertPrints("0x1234567890", printHexNumber(0x1234567890, 0), "printHexNumber(0x1234567890, 0)");
+assertPrints("0x00AABBCC", printHexNumber(0xAABBCC, 8), "printHexNumber(0xAABBCC, 8)");
 assertPrints("null", printExactFast(null), "printExactFast(null)");
 assertPrints("0", printExactFast(0), "printExactFast(0)");
 assertPrints("1", printExactFast(1), "printExactFast(1)");
@@ -29,3 +36,5 @@ assertPrints("1.234500000000000E-50", printExactSlow(1.2345e-50), "printExactSlo
 assertPrints("-1.234500000000000E-50", printExactSlow(-1.2345e-50), "printExactSlow(-1.2345e-50)");
 
 stopProcessor();
+
+end;

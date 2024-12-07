@@ -1,10 +1,10 @@
 package info.teksol.mindcode.exttest.cases;
 
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.exttest.TestConfiguration;
-import info.teksol.mindcode.v3.InputFile;
-import info.teksol.mindcode.v3.InputFiles;
 
 public class TestCaseCreatorFull implements TestCaseCreator {
     private final TestConfiguration configuration;
@@ -27,7 +27,7 @@ public class TestCaseCreatorFull implements TestCaseCreator {
     public MindcodeCompiler createCaseCompiler(int testRunNumber) {
         InputFiles inputFiles = configuration.getInputFiles();
         CompilerProfile profile = configuration.createCompilerProfile(testRunNumber);
-        return new MindcodeCompiler(profile, inputFiles);
+        return new MindcodeCompiler(message -> {}, profile, inputFiles);
     }
 
     @Override

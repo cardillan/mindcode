@@ -21,18 +21,21 @@ param MESSAGES = message1;
 // Title printed to messages to help identify the processor purpose
 const TITLE = "Healing damaged buildings\n";
 
-// Find a unit if we don't have one
-if @unit.@dead != 0  or @unit.@controller != @this then
-    waitForFreeUnit(MESSAGES, TITLE, UNIT, 1);
-end;
+begin
+    // Find a unit if we don't have one
+    if @unit.@dead != 0  or @unit.@controller != @this then
+        waitForFreeUnit(MESSAGES, TITLE, UNIT, 1);
+    end;
 
-if ulocate(damaged, out dmgx, out dmgy) then
-    println($"${TITLE}Found damaged block at $dmgx, $dmgy");
-    approach(dmgx, dmgy, 5);
-    target(dmgx, dmgy, true);
-else
-    println(TITLE, "Patrolling");
-    approach(CENTER.@x + 10 * sin(@tick), CENTER.@y + 10 * cos(@tick), 2);
-end;
+    var dmgx, dmgy;
+    if ulocate(damaged, out dmgx, out dmgy) then
+        println($"${TITLE}Found damaged block at $dmgx, $dmgy");
+        approach(dmgx, dmgy, 5);
+        target(dmgx, dmgy, true);
+    else
+        println(TITLE, "Patrolling");
+        approach(CENTER.@x + 10 * sin(@tick), CENTER.@y + 10 * cos(@tick), 2);
+    end;
 
-printflush(MESSAGES);
+    printflush(MESSAGES);
+end;

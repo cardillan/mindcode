@@ -1,0 +1,9 @@
+allocate stack in bank1;
+
+def fib(n)
+    return n < 2 ? max(n, 0) : fib(n - 1);
+end;
+
+assertEquals(0, fib(0), "recursion");
+
+stopProcessor();

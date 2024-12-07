@@ -85,27 +85,29 @@ end;
 is compiled to
 
 ```
-packcolor 0 MAX MIN A B
-packcolor 0 i __fn0_n null null
+packcolor 0 MAX MIN .A :i
+packcolor 0 :fn0:n null null null
 set MIN 10
 set MAX 50
-set B "not first"
-jump 7 notEqual A null
-set B "first"
-set i MIN
-jump 16 greaterThan MIN MAX
-print i
-op add A A 1
-op mul __fn0_n 2 i
-print __fn0_n
-op add A A 1
-op add i i 1
-jump 9 lessThanEq i MAX
+jump 7 notEqual .A null
+set *tmp1 "first"
+jump 8 always 0 0
+set *tmp1 "not first"
+set :i MIN
+jump 17 greaterThan MIN MAX
+print :i
+op add .A .A 1
+op mul :fn0:n 2 :i
+print :fn0:n
+op add .A .A 1
+op add :i :i 1
+jump 10 lessThanEq :i MAX
 print "\n"
-print B
+print *tmp1
 print ": "
-print A
+print .A
 print "\n"
+end
 ```
 
 The number of variables being sorted is limited by the [instruction limit](SYNTAX-5-OTHER.markdown#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.

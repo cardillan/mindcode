@@ -16,25 +16,25 @@
  *
  * The function doesn't use units that are controlled by a player or a different processor.
  */
-def findFreeUnit(_unit_type, _initial_flag)
-    ubind(_unit_type);
+def findFreeUnit(unit_type, initial_flag)
+    ubind(unit_type);
     // No unit of this type exists
     if @unit == null then return null; end;
 
-    _first_unit = @unit;
+    var first_unit = @unit;
     do
         if @unit.@controlled == 0 then
-            flag(_initial_flag);        // Mark unit as active
+            flag(initial_flag);        // Mark unit as active
             return @unit;
-        elsif _first_unit.@dead == 1 then
-            // _first_unit got killed. It won't be served by ubind anymore
+        elsif first_unit.@dead == 1 then
+            // first_unit got killed. It won't be served by ubind anymore
             // Replace with the current one
-            _first_unit = @unit;
+            first_unit = @unit;
         end;
 
         // Try the next one. If it is the same as the first one, we've seen them all
-        ubind(_unit_type);
-    loop while _first_unit != @unit;
+        ubind(unit_type);
+    while first_unit != @unit;
 
     return null;
 end;
@@ -53,42 +53,42 @@ end;
  *
  * The function doesn't use units that are controlled by a player or a different processor.
 */
-def findClosestUnit(_x, _y, _unit_type, _initial_flag)
+def findClosestUnit(x, y, unit_type, initial_flag)
     while true do
-        ubind(_unit_type);
+        ubind(unit_type);
         // No unit of this type exists
         if @unit == null then return null; end;
 
-        _first_unit = @unit;
-        _best_unit = null;
-        _best_distance = 1e10;
+        var first_unit = @unit;
+        var best_unit = null;
+        var best_distance = 1e10;
         do
             if @unit.@controlled == 0 then
-                _distance = len(@unit.@x - _x, @unit.@y - _y);
-                if _distance < _best_distance then
-                    _best_distance = _distance;
-                    _best_unit = @unit;
+                var distance = len(@unit.@x - x, @unit.@y - y);
+                if distance < best_distance then
+                    best_distance = distance;
+                    best_unit = @unit;
                 end;
-            elsif _first_unit.@dead == 1 then
-                // _first_unit got killed. It won't be served by ubind anymore
+            elsif first_unit.@dead == 1 then
+                // first_unit got killed. It won't be served by ubind anymore
                 // Replace with the current one
-                _first_unit = @unit;
+                first_unit = @unit;
             end;
 
             // Try the next one. If it is the same as the first one, we've seen them all
-            ubind(_unit_type);
-        loop while _first_unit != @unit;
+            ubind(unit_type);
+        while first_unit != @unit;
 
         // No free unit at all
-        if _best_unit == null then
+        if best_unit == null then
             return null;
         end;
 
         // If the best unit is still not controlled, flag it and return
-        if _best_unit.@controlled == 0 then
-            ubind(_best_unit);
-            flag(_initial_flag);
-            return _best_unit;
+        if best_unit.@controlled == 0 then
+            ubind(best_unit);
+            flag(initial_flag);
+            return best_unit;
         end;
     end;
 end;
@@ -105,13 +105,13 @@ end;
  *
  * The function doesn't use units that are controlled by a player or a different processor.
  */
-def waitForFreeUnit(_unit_type, _initial_flag)
+def waitForFreeUnit(unit_type, initial_flag)
     // Keep looking for unit until one is found
     while true do
-        ubind(_unit_type);
+        ubind(unit_type);
         if @unit != null then
             if @unit.@controlled == 0 then
-                flag(_initial_flag);        // Mark unit as active
+                flag(initial_flag);        // Mark unit as active
                 return @unit;
             end;
         end;
@@ -136,18 +136,18 @@ end;
  *
  * The function doesn't use units that are controlled by a player or a different processor.
  */
-def waitForFreeUnit(_message, _preface, _unit_type, _initial_flag)
+def waitForFreeUnit(message, preface, unit_type, initial_flag)
     // Keep looking for unit until one is found
     while true do
-        ubind(_unit_type);
+        ubind(unit_type);
         if @unit == null then
-            print($"${_preface}No unit of type $_unit_type found.");
-            printflush(_message);
+            print($"${preface}No unit of type $unit_type found.");
+            printflush(message);
         elsif @unit.@controlled != 0 then
-            print($"${_preface}Looking for a free $_unit_type...");
-            printflush(_message);
+            print($"${preface}Looking for a free $unit_type...");
+            printflush(message);
         else
-            flag(_initial_flag);        // Mark unit as active
+            flag(initial_flag);        // Mark unit as active
             return @unit;
         end;
     end;

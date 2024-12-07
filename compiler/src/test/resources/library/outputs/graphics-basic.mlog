@@ -1,14 +1,44 @@
-set _display null
-sensor __fn0_type null @type
-jump 5 notEqual __fn0_type @logic-display
-set __tmp3 80
-jump 9 always 0 0
-jump 8 notEqual __fn0_type @large-logic-display
-set __tmp3 176
-jump 9 always 0 0
-set __tmp3 null
-print __tmp3
-print "\n"
+jump 0 equal display1 null
+jump 1 equal display2 null
+jump 2 equal display3 null
+jump 3 equal display4 null
+jump 4 equal display5 null
+sensor :fn0:type display1 @type
+jump 9 notEqual :fn0:type @logic-display
+set :fn0*retval 80
+jump 13 always 0 0
+jump 12 notEqual :fn0:type @large-logic-display
+set :fn0*retval 176
+jump 13 always 0 0
+set :fn0*retval null
+assertequals 176 :fn0*retval "large display size"
+sensor :fn0:type display5 @type
+jump 18 notEqual :fn0:type @logic-display
+set :fn0*retval 80
+jump 22 always 0 0
+jump 21 notEqual :fn0:type @large-logic-display
+set :fn0*retval 176
+jump 22 always 0 0
+set :fn0*retval null
+assertequals 80 :fn0*retval "small display size"
+set :x %336699cc
+op div :fn1:bits %336699cc %00000001
+op and *tmp3 :fn1:bits 4278190080
+op div :fn1:r *tmp3 4278190080
+op and *tmp5 :fn1:bits 16711680
+op div :fn1:g *tmp5 16711680
+op and *tmp7 :fn1:bits 65280
+op div :fn1:b *tmp7 65280
+op and *tmp9 :fn1:bits 255
+op div :fn1:a *tmp9 255
+set :r :fn1:r
+set :g :fn1:g
+set :b :fn1:b
+set :a :fn1:a
+assertequals 0.2 :fn1:r "red channel"
+assertequals 0.4 :fn1:g "green channel"
+assertequals 0.6 :fn1:b "blue channel"
+assertequals 0.8 :fn1:a "alpha channel"
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
 draw rotate 0 0 270 0 0 0
@@ -29,55 +59,55 @@ draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-sensor __tmp6 null @type
-jump 36 notEqual __tmp6 @logic-display
+sensor *tmp12 display1 @type
+jump 66 notEqual *tmp12 @logic-display
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
-jump 41 always 0 0
-jump 40 notEqual __tmp6 @large-logic-display
+jump 71 always 0 0
+jump 70 notEqual *tmp12 @large-logic-display
 draw rotate 0 0 90 0 0 0
 draw translate 0 -176 0 0 0 0
-jump 41 always 0 0
+jump 71 always 0 0
 stop
-sensor __tmp8 null @type
-jump 46 notEqual __tmp8 @logic-display
+sensor *tmp15 display2 @type
+jump 76 notEqual *tmp15 @logic-display
 draw rotate 0 0 270 0 0 0
 draw translate -80 0 0 0 0 0
-jump 51 always 0 0
-jump 50 notEqual __tmp8 @large-logic-display
+jump 81 always 0 0
+jump 80 notEqual *tmp15 @large-logic-display
 draw rotate 0 0 270 0 0 0
 draw translate -176 0 0 0 0 0
-jump 51 always 0 0
+jump 81 always 0 0
 stop
-sensor __tmp10 null @type
-jump 56 notEqual __tmp10 @logic-display
+sensor *tmp18 display3 @type
+jump 86 notEqual *tmp18 @logic-display
 draw rotate 0 0 180 0 0 0
 draw translate -80 -80 0 0 0 0
-jump 61 always 0 0
-jump 60 notEqual __tmp10 @large-logic-display
+jump 91 always 0 0
+jump 90 notEqual *tmp18 @large-logic-display
 draw rotate 0 0 180 0 0 0
 draw translate -176 -176 0 0 0 0
-jump 61 always 0 0
+jump 91 always 0 0
 stop
-sensor __tmp12 null @type
-jump 66 notEqual __tmp12 @logic-display
+sensor *tmp21 display4 @type
+jump 96 notEqual *tmp21 @logic-display
 draw scale 1 -1 0 0 0 0
 draw translate 0 -80 0 0 0 0
-jump 71 always 0 0
-jump 70 notEqual __tmp12 @large-logic-display
+jump 101 always 0 0
+jump 100 notEqual *tmp21 @large-logic-display
 draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
-jump 71 always 0 0
+jump 101 always 0 0
 stop
-sensor __tmp14 null @type
-jump 76 notEqual __tmp14 @logic-display
+sensor *tmp24 display5 @type
+jump 106 notEqual *tmp24 @logic-display
 draw scale -1 1 0 0 0 0
 draw translate -80 0 0 0 0 0
-jump 81 always 0 0
-jump 80 notEqual __tmp14 @large-logic-display
+jump 111 always 0 0
+jump 110 notEqual *tmp24 @large-logic-display
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-jump 81 always 0 0
+jump 111 always 0 0
 stop
 draw scale 2.2 2.2 0 0 0 0
 draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0

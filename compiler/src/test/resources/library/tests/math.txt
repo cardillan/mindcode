@@ -1,5 +1,6 @@
-#set target = ML8A;
 require math;
+
+begin
 
 distance(1,1,4,5)         :: 5
 distance(-1,-1,-4,-5)     :: 5
@@ -23,10 +24,23 @@ isZero(-1e-50)            :: false
 isZero(0.01,0.01)         :: false
 nullToZero(null)          :: 0
 nullToZero(1)             :: 1
+boolean(0)                :: 0
+boolean(100)              :: 1
+boolean(-100)             :: 1
+boolean(-0.001)           :: 1
+boolean(0.0000001)        :: 0
+integer(0.9)              :: 0
+integer(-5.9)             :: -5.0
+integer(100)              :: 100
 sum(1)                    :: 1
 sum(1,2,3,4)              :: 10
 avg(1)                    :: 1
 avg(1,2,3,4)              :: 2.5
+log2(16)                  :: 4
+log2(1 << 30)             :: 30
+lerp(1, 10, 0)            :: 1
+lerp(1, 10, 1)            :: 10
+lerp(1, 10, 0.5)          :: 5.5
 median(1)                 :: 1
 median(2,4)               :: 3
 median(1,3,5)             :: 3
@@ -60,3 +74,5 @@ median(7,4,2,8,1,5,6,9,3) :: 5
 median(1,1,1,1,9,9,9,9,5) :: 5
 
 stopProcessor();
+
+end;

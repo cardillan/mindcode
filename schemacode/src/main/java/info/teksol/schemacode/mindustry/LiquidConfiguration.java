@@ -1,6 +1,6 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.mindcode.mimex.Liquid;
+import info.teksol.mc.mindcode.logic.mimex.Liquid;
 import info.teksol.schemacode.config.Configuration;
 
 import java.util.Objects;

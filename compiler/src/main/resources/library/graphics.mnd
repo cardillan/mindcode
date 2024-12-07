@@ -2,7 +2,7 @@
 // Graphics functions
 //
 //* To use the Graphics library, use the `require graphics;` statement. The Graphics library uses Mindustry Logic 8
-//* instructions and therefore also requires `#set target = ML8A;` statement.
+//* instructions and therefore also requires `#set target = 8;` statement.
 //*
 //* The provided library functions use transformations to rotate, invert or scale graphics output as needed
 //* for each display (large or small). Transformations are additive, so it is suggested to call `reset()`
@@ -19,11 +19,41 @@ const DISPLAY_SIZE_SMALL =  80;
 const DISPLAY_SIZE_LARGE = 176;
 
 /**
+ * Unpacks numeric value created by the `packcolor` instruction (or a corresponding color literal) into
+ * individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
+ * all four color channels.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `packedColor`: color value to unpack
+ * - `r`: variable to receive the value corresponding to the red channel
+ * - `g`: variable to receive the value corresponding to the green channel
+ * - `b`: variable to receive the value corresponding to the blue channel
+ * - `a`: variable to receive the value corresponding to the alpha channel
+ */
+void unpackcolor(packedColor, out r, out g, out b, out a)
+    var bits = packedColor / %00000001;
+    r = (bits & (0xFF << 24)) / (255 << 24);
+    g = (bits & (0xFF << 16)) / (255 << 16);
+    b = (bits & (0xFF <<  8)) / (255 <<  8);
+    a = (bits & (0xFF <<  0)) / (255 <<  0);
+end;
+
+
+/**
+ * Clears the processor's graphics buffer without outputting the contents into any display. Equivalent to
+ * `drawflush(null);`.
+ */
+inline void drawflush()
+    drawflush(null);
+end;
+
+/**
  * Returns the actual display size based on the type of display passed in as an argument.
  * When the passed-in argument is not a display, the processor is stopped.
  */
-def displaySize(_display)
-    type = _display.@type;
+def displaySize(display)
+    var type = display.@type;
     type == @logic-display ? DISPLAY_SIZE_SMALL : type == @large-logic-display ? DISPLAY_SIZE_LARGE : null;
 end;
 
@@ -94,8 +124,8 @@ end;
 // Generic display transformations
 
 /** Rotates the output to the left (counterclockwise) by 90 degrees for the given display. */
-void rotateLeft(_display)
-    case _display.@type
+void rotateLeft(display)
+    case display.@type
         when @logic-display       then rotateLeftSmall();
         when @large-logic-display then rotateLeftLarge();
         else stopProcessor();
@@ -103,8 +133,8 @@ void rotateLeft(_display)
 end;
 
 /** Rotates the output to the right (clockwise) by 90 degrees for the given display. */
-void rotateRight(_display)
-    case _display.@type
+void rotateRight(display)
+    case display.@type
         when @logic-display       then rotateRightSmall();
         when @large-logic-display then rotateRightLarge();
         else stopProcessor();
@@ -112,8 +142,8 @@ void rotateRight(_display)
 end;
 
 /** Rotates the output by 180 degrees (upside down) by 90 degrees for the given display. */
-void upsideDown(_display)
-    case _display.@type
+void upsideDown(display)
+    case display.@type
         when @logic-display       then upsideDownSmall();
         when @large-logic-display then upsideDownLarge();
         else stopProcessor();
@@ -121,8 +151,8 @@ void upsideDown(_display)
 end;
 
 /** Flips the output vertically (along the Y axis) for the given display. */
-void flipVertical(_display)
-    case _display.@type
+void flipVertical(display)
+    case display.@type
         when @logic-display       then flipVerticalSmall();
         when @large-logic-display then flipVerticalLarge();
         else stopProcessor();
@@ -130,8 +160,8 @@ void flipVertical(_display)
 end;
 
 /** Flips the output horizontally (along the X axis) for the given display. */
-void flipHorizontal(_display)
-    case _display.@type
+void flipHorizontal(display)
+    case display.@type
         when @logic-display       then flipHorizontalSmall();
         when @large-logic-display then flipHorizontalLarge();
         else stopProcessor();

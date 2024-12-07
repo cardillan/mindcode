@@ -7,28 +7,32 @@ require units;
 
 // We'll write messages onto this block
 // It is used by the units system library to output messages as well
-param MESSAGES = message1;
-
-// Finds a free unit of given type, not returning until such a unit is found
-// Sets the flags of these units to a nonzero value
-// Stores the acquired units in variables
-poly = waitForFreeUnit(MESSAGES, "Control two units example\n", @poly, 1);
-mega = waitForFreeUnit(MESSAGES, "Control two units example\n", @mega, 1);
+param message = message1;
 
 // This is a global variable
-ANGLE = 0;
+var angle = 0;
 
-while true do
-    controlUnit(poly);
-    controlUnit(mega);
+// The entire code needs to be enclosed in a code block (begin ... end)
+begin
+    // Finds a free unit of given type, not returning until such a unit is found
+    // Sets the flags of these units to a nonzero value (1)
+    // Stores the acquired units in variables
+    var poly = waitForFreeUnit(message, "Control two units example\n", @poly, 1);
+    var mega = waitForFreeUnit(message, "Control two units example\n", @mega, 1);
+
+    while true do
+        controlUnit(poly);
+        controlUnit(mega);
+    end;
 end;
 
-def controlUnit(unit)
+// A function
+void controlUnit(unit)
     // Binds the unit stored in a variable
     ubind(unit);
-    move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
+    move(@thisx + 10 * sin(angle), @thisy + 10 * cos(angle));
     print($"Currently bound unit is ${@unit}.");
-    printflush(MESSAGES);
+    printflush(message);
     wait(0.8);
-    ANGLE += 45;
+    angle += 45;
 end;

@@ -1,0 +1,92 @@
+// Make sure possible future optimizations won't use constant expression evaluation 
+// and remove instructions we want to test
+noinline def d(n) n; end;
+
+assertEquals(5,             2 +  d(3),                  "add");
+assertEquals(1,             7 -  d(6),                  "sub");
+assertEquals(6,             3 *  d(2),                  "mul");
+assertEquals(1.5,           6 /  d(4),                  "div");
+assertEquals(1e-5,          1 /  d(1e5),                "div exp");
+assertEquals(1,             6 \  d(4),                  "idiv");
+assertEquals(2,             6 %  d(4),                  "mod");
+assertEquals(16,            2 ** d(4),                  "pow");
+
+assertEquals(true,          5 == d(5),                  "equal 1");
+assertEquals(false,         5 == d(6),                  "equal 2");
+assertEquals(true,          0 == d(null),               "equal null");
+assertEquals(false,         5 != d(5),                  "notEqual 1");
+assertEquals(true,          5 != d(6),                  "notEqual 2");
+assertEquals(false,         0 != d(null),               "notEqual null");
+
+assertEquals(false,         1 && d(0),                  "land 1");
+assertEquals(true,          1 && d(2),                  "land 2");
+
+assertEquals(true,          0 <  d(1),                  "lessThan 1");
+assertEquals(false,         1 <  d(0),                  "lessThan 2");
+
+assertEquals(true,          1 <= d(1),                  "lessThanEq 1");
+assertEquals(false,         1 <= d(0),                  "lessThanEq 2");
+
+assertEquals(true,          2 >  d(1),                  "greaterThan 1");
+assertEquals(false,         1 >  d(2),                  "greaterThan 2");
+
+assertEquals(true,          1 >= d(1),                  "greaterThanEq 1");
+assertEquals(false,         1 >= d(2),                  "greaterThanEq 2");
+
+assertEquals(false,         0    === d(null),           "strictEqual 1");
+assertEquals(true,          null === d(null),           "strictEqual 2");
+
+assertEquals(4,             1 << d(2),                  "shl");
+assertEquals(2,             9 >> d(2),                  "shr");
+
+assertEquals(3,             1 |  d(2),                  "or");
+assertEquals(2,             3 &  d(2),                  "and");
+assertEquals(1,             3 ^  d(2),                  "xor");
+ 
+// Small values work because long is signed
+assertEquals(-1,            ~d(0),                      "not 1");
+assertEquals(-65536,        ~d(65535),                  "not 2");
+
+a = 0xabcdefabcdef;
+assertEquals(-(a + 1),      ~d(a),                      "not 3");
+
+assertEquals(4,             max(2, d(4)),               "max");
+assertEquals(2,             min(2, d(4)),               "min");
+
+assertEquals(2,             abs(d(-2)),                 "abs");
+assertEquals(1,             log(d(2.718281828459045)),  "log");
+assertEquals(1,             log10(d(10)),               "log10");
+
+assertEquals(2,             floor(d(2.5)),              "floor");
+assertEquals(3,             ceil(d(2.5)),               "ceil");
+assertEquals(4,             sqrt(d(16)),                "sqrt");
+
+assertEquals(45,            angle(1, d(1)),             "angle");
+assertEquals(90,            angleDiff(45, d(135)),      "angleDiff");
+
+// Mindcode extensions
+assertEquals(-8,            -d(8),                      "unary minus");
+assertEquals( 1,            !d(0),                      "boolean negation 1");
+assertEquals( 0,            !d(1),                      "boolean negation 2");
+assertEquals( 0,            !d(2),                      "boolean negation 3");
+
+// Compound assignments
+a = 2; assertEquals(   16,  a **= d(4),                 "**=");
+a = 2; assertEquals(    8,  a *= d(4),                  "*=");
+a = 6; assertEquals(  1.5,  a /= d(4),                  "/=");
+a = 6; assertEquals(    1,  a \= d(4),                  "\=");
+a = 6; assertEquals(    2,  a %= d(4),                  "%=");
+a = 4; assertEquals(    6,  a += d(2),                  "+=");
+a = 4; assertEquals(    2,  a -= d(2),                  "-=");
+a = 1; assertEquals(    4,  a <<= d(2),                 "<<=");
+a = 9; assertEquals(    2,  a >>= d(2),                 ">>=");
+a = 1; assertEquals(    3,  a |= d(2),                  "|=");
+a = 3; assertEquals(    2,  a &= d(2),                  "&=");
+a = 3; assertEquals(    1,  a ^= d(2),                  "^=");
+a = 1; assertEquals(false,  a &&= d(0),                 "&&=");
+a = 1; assertEquals( true,  a &&= d(2),                 "&&=");
+a = 0; assertEquals( true,  a ||= d(2),                 "||=");
+
+// TODO: add angle, len, trig functions. Rand??
+
+stopProcessor();

@@ -1,7 +1,7 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 
-public record AstVirtual(InputPosition inputPosition) implements AstConfiguration {
+public record AstVirtual(SourcePosition sourcePosition) implements AstConfiguration {
 
 }

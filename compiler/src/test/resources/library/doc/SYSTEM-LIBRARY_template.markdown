@@ -1,13 +1,5 @@
 # System library
 
-> [!NOTE]
-> The system library is an experimental feature. The functions provided by the library and the mechanism for its inclusion in your program may change in future releases.
-
-> [!IMPORTANT]
-> Using a program parameter or constant with a name matching a name of one of the library variables causes a compilation error. To avoid this problem, all function parameters in system libraries start with an underscore and are in lowercase. Do not declare program parameters or constants starting with an underscore.
->
-> This limitation of the system library will be removed in one of the future releases.
-
 Mindcode comes equipped with a system library. System library is stored in several files. The `require` statement imports the library functions into your program:
 
 ```

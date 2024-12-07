@@ -1,14 +1,17 @@
 require units;
 
-_initial_flag = null;
-_message = null;
-_preface = null;
-_unit_type = null;
-_x = null;
-_y = null;
+begin
 
-println(findFreeUnit(_unit_type, _initial_flag));
-println(findClosestUnit(_x, _y, _unit_type, _initial_flag));
-println(waitForFreeUnit(_unit_type, _initial_flag));
-println(waitForFreeUnit(_message, _preface, _unit_type, _initial_flag));
+    var initial_flag = null;
+    var message = null;
+    var preface = null;
+    var unit_type = null;
+    var x = null;
+    var y = null;
 
+    println(findFreeUnit(unit_type, initial_flag));
+    println(findClosestUnit(x, y, unit_type, initial_flag));
+    println(waitForFreeUnit(unit_type, initial_flag));
+    println(waitForFreeUnit(message, preface, unit_type, initial_flag));
+
+end;

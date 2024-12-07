@@ -1,4 +1,4 @@
-#set target = ML8A;
+#set target = 8;
 require printing;
 
 assertPrints("0", printNumber(null), "printNumber(null)");

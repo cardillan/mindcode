@@ -1,10 +1,10 @@
 package info.teksol.mindcode.exttest;
 
 import com.amihaiemil.eoyaml.*;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.GenerationGoal;
 
 import java.io.File;
 import java.io.IOException;

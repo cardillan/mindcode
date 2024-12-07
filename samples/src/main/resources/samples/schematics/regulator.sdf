@@ -80,7 +80,7 @@ mindcode_source = """
         if switch == null then println("No switch."); repeat = true; end;
         if container == null then println("No container."); repeat = true; end;
         printflush(MESSAGE);
-    loop while repeat;
+    while repeat;
 
     // Reset text buffer
     printflush(null);

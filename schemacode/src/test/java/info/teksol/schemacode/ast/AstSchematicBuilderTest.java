@@ -1,10 +1,10 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Language;
-import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

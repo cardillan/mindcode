@@ -1,9 +1,9 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
-public record AstStringRef(InputPosition inputPosition, String reference) implements AstText {
+public record AstStringRef(SourcePosition sourcePosition, String reference) implements AstText {
 
     @Override
     public String getText(SchematicsBuilder builder) {
@@ -11,7 +11,7 @@ public record AstStringRef(InputPosition inputPosition, String reference) implem
     }
 
     @Override
-    public InputPosition getTextPosition(SchematicsBuilder builder) {
+    public SourcePosition getTextPosition(SchematicsBuilder builder) {
         return builder.getText(this, reference).getTextPosition(builder);
     }
 

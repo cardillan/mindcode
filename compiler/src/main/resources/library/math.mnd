@@ -20,43 +20,43 @@ const RAD_TO_DEG = 57.29577951308232;
  * Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).
  * Uses the `len` instruction for efficient hypotenuse calculation.
  */
-inline def distance(_x1, _y1, _x2, _y2)
-    len(_x2 - _x1, _y2 - _y1);
+inline def distance(x1, y1, x2, y2)
+    len(x2 - x1, y2 - y1);
 end;
 
 /** Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`. */
-inline def round(_x)
-    floor(_x + 0.5);
+inline def round(x)
+    floor(x + 0.5);
 end;
 
 /** Returns the fractional part of the number. `frac(1.5)` gives `0.5`. */
-inline def frac(_x)
-    _x % 1;
+inline def frac(x)
+    x % 1;
 end;
 
 /**
  * Returns the sign of the number. The return value is `0` precisely when `x == 0`
  * (using the Mindustry Logic native comparison precision).
  */
-def sign(_x)
+def sign(x)
     // Using equality here to get sign behavior consistent with equality operator
-    _x == 0 ? 0 : _x < 0 ? -1 : 1;
+    x == 0 ? 0 : x < 0 ? -1 : 1;
 end;
 
 /** Returns the sign of the number. The return value is `0` when the value of `x` is exactly zero. */
-inline def signExact(_x)
+inline def signExact(x)
     // Use branchless sign computation
-    (_x > 0) - (_x < 0);
+    (x > 0) - (x < 0);
 end;
 
 /** Returns `true` when `x` is precisely zero. */
-inline def isZero(_x)
-    abs(_x) <= 0;
+inline def isZero(x)
+    abs(x) <= 0;
 end;
 
 /** Returns `true` when the absolute value of x is less than `precision`. */
-inline def isZero(_x, _precision)
-    abs(_x) < _precision;
+inline def isZero(x, precision)
+    abs(x) < precision;
 end;
 
 /**
@@ -67,105 +67,135 @@ end;
  * > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows
  * > to compare values using different precision.
  */
-inline def isEqual(_a, _b, _precision)
-    abs(_a - _b) < _precision;
+inline def isEqual(a, b, precision)
+    abs(a - b) < precision;
 end;
 
 /**
  * Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
  * and makes sure it won't be removed by the optimizer.
  */
-inline def nullToZero(_x)
-    mlog("op", "add", out _result, in _x, 0);
-    _result;
+inline def nullToZero(x)
+    var result;
+    mlog("op", "add", out result, in x, 0);
+    result;
+end;
+
+/**
+ * Converts the value of `x` to boolean values (`0` or `1`). The returning value will be `0`
+ * if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
+ */
+inline def boolean(x)
+    x != 0;
+end;
+
+/**
+ * Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
+ * (`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
+ * Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+ */
+inline def integer(x)
+    var result;
+    mlog("op", "or", out result, in x, 0);
+    result;
 end;
 
 /** Returns `x`. The function is a fallback case for the generic `sum` function taking a variable number of arguments. */
-inline def sum(_x)
-    _x;
+inline def sum(x)
+    x;
 end;
 
 /** Returns the sum of all given arguments. */
-inline def sum(_x1, _x2, _x...)
-    _sum = _x1 + _x2;
-    for _i in _x do _sum += _i; end;
-    _sum;
+inline def sum(x1, x2, x...)
+    var sum = x1 + x2;
+    for var i in x do sum += i; end;
+    sum;
 end;
 
 /** Returns `x`. The function is a fallback case for the generic `avg` function taking a variable number of arguments. */
-inline def avg(_x)
-    _x;
+inline def avg(x)
+    x;
 end;
 
 /** Returns the average of all given arguments. */
-inline def avg(_x1, _x2, _x...)
-    _sum = _x1 + _x2;
-    for _i in _x do _sum += _i; end;
-    _sum / (2 + length(_x));
+inline def avg(x1, x2, x...)
+    var sum = x1 + x2;
+    for var i in x do sum += i; end;
+    sum / (2 + length(x));
+end;
+
+/** Returns the logarithm of the number in base 2 */
+inline def log2(number)
+    log(number) / log(2);
+end;
+
+/**
+ * Perform linear interpolation between two values.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `from`: first value
+ * - `to`: second value
+ * - `ratio`: value in the range of 0 .. 1, 0 corresponds to `from`, 1 corresponds to `to`, fractional value
+ *            corresponds to a point in between (2/3 to a point two-thirds of the way from `from` to `to`).
+ */
+inline def lerp(from, to, ratio)
+    (1 - ratio) * from + ratio * to;
 end;
 
 /** Returns `x`. The function is a fallback case for the generic `median` function taking a variable number of arguments. */
-inline def median(_x)
-    _x;
+inline def median(x)
+    x;
 end;
 
 /** Returns the median of two values. */
-inline def median(_x1, _x2)
-    (_x1 + _x2) / 2;
+inline def median(x1, x2)
+    (x1 + x2) / 2;
 end;
 
 /** Returns the median of three values . */
-inline def median(_x1, _x2, _x3)
-    min(max(_x1, _x2), max(_x1, _x3), max(_x2, _x3));
-/*
-    _y1 = min(_x1, _x2);
-    if _x3 < _y1 then
-        _y1;
-    else
-        _y2 = max(_x1, _x2);
-        _x3 >= _y2 ? _y2 : _x3;
-    end;
-*/
+inline def median(x1, x2, x3)
+    min(max(x1, x2), max(x1, x3), max(x2, x3));
 end;
 
 /** Returns the median of four values . */
-def median(_x1, _x2, _x3, _x4)
-    _y2 = max(_x1, _x2);
-    _y3 = min(_x3, _x4);
-    if _y2 <= _y3 then
-        (_y2 + _y3) / 2;
+def median(x1, x2, x3, x4)
+    var y2 = max(x1, x2);
+    var y3 = min(x3, x4);
+    if y2 <= y3 then
+        (y2 + y3) / 2;
     else
-        _y1 = min(_x1, _x2);
-        _y4 = max(_x3, _x4);
-        if _y1 >= _y4 then
-            (_y1 + _y4) / 2;
+        var y1 = min(x1, x2);
+        var y4 = max(x3, x4);
+        if y1 >= y4 then
+            (y1 + y4) / 2;
         else
-            (max(_y1, _y3) + min(_y2, _y4)) / 2;
+            (max(y1, y3) + min(y2, y4)) / 2;
         end;
     end;
 end;
 
 /** Returns the median of five values. */
-def median(_x1, _x2, _x3, _x4, _x5)
-    _y1 = min(_x1, _x2);
-    _y2 = max(_x1, _x2);
-    _y4 = min(_x4, _x5);
-    _y5 = max(_x4, _x5);
+def median(x1, x2, x3, x4, x5)
+    var y1 = min(x1, x2);
+    var y2 = max(x1, x2);
+    var y4 = min(x4, x5);
+    var y5 = max(x4, x5);
 
-    if _y4 < _y1 then
-        _swap(out _y1, out _y4);
-        _swap(out _y2, out _y5);
+    if y4 < y1 then
+        _swap(out y1, out y4);
+        _swap(out y2, out y5);
     end;
 
-    if _x3 > _y2 then
-        _y2 < _y4 ? min(_x3, _y4) : min(_y2, _y5);
+    if x3 > y2 then
+        y2 < y4 ? min(x3, y4) : min(y2, y5);
     else
-        _x3 > _y4 ? min(_x3, _y5) : min(_y2, _y4);
+        x3 > y4 ? min(x3, y5) : min(y2, y4);
     end;
 end;
 
-inline def _swap(in out _a, in out _b)
-    _t = _a; _a = _b; _b = _t;
+inline def _swap(in out a, in out b)
+    var t = a; a = b; b = t;
 end;
 
 /**
@@ -176,42 +206,43 @@ end;
  * @footprint Fifteen arguments in total:    *15
  * @footprint Twenty arguments in total:     *20
  */
-inline def median(_x...)
-    _median(_x);
+inline def median(x...)
+    _median(x);
 end;
 
-inline def _median(_x...)
-    _bestDif = 1e10;
-    _best = null;
-    _count = 1;
-    for _i in _x do
-        if _isMedian(out _dif, _i, _x) then
-            return _i;
+inline def _median(x...)
+    var bestDif = 1e10;
+    var best = null;
+    var count = 1;
+    var dif;
+    for var i in x do
+        if _isMedian(out dif, i, x) then
+            return i;
         end;
-        if _dif < _bestDif then
-            _bestDif = _dif;
-            _best = _i;
-            _count = 1;
-        elsif _dif <= _bestDif then
-            _best += _i;
-            _count += 1;
+        if dif < bestDif then
+            bestDif = dif;
+            best = i;
+            count = 1;
+        elsif dif <= bestDif then
+            best += i;
+            count += 1;
         end;
     end;
-    _best / _count;
+    best / count;
 end;
 
-inline def _isMedian(out _dif, _n, _x...)
-    _lt = _gt = 0;
-    for _i in _x do
-        if _i < _n then
-            _lt += 1;
-        elsif _i > _n then
-            _gt += 1;
+inline def _isMedian(out dif, n, x...)
+    var lt = 0, gt = 0;
+    for var i in x do
+        if i < n then
+            lt += 1;
+        elsif i > n then
+            gt += 1;
         end;
     end;
-    _dif = abs(_gt - _lt);
-    if _gt + _lt >= length(_x) - 1 then
-        _gt == _lt;
+    dif = abs(gt - lt);
+    if gt + lt >= length(x) - 1 then
+        gt == lt;
     else
         false;
     end;

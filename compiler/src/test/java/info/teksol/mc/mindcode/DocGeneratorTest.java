@@ -1,0 +1,415 @@
+package info.teksol.mc.mindcode;
+
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.mindcode.compiler.CompilationPhase;
+import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.ast.AbstractAstBuilderTest;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.util.StringUtils;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+@NullMarked
+@Order(5)
+public class DocGeneratorTest {
+    private static final String PREFIX = "#generate";
+    private static final String SOURCE_FILE = "src/test/resources/library/doc/SYSTEM-LIBRARY_template.markdown";
+    private static final String TARGET_FILE = "../doc/syntax/SYSTEM-LIBRARY.markdown";
+    private static final String LIBRARY_DIRECTORY = "src/main/resources/library";
+    private static final String FOOTPRINT = "@footprint";
+
+    @Test
+    void generateLibraryDocumentation() throws IOException {
+        Path path = Path.of(SOURCE_FILE);
+
+        try (final PrintWriter w = new PrintWriter(TARGET_FILE, StandardCharsets.UTF_8); Stream<String> lineStream = Files.lines(path)) {
+            DocGenerator docGenerator = new DocGenerator(w);
+            lineStream.forEach(docGenerator::processTemplateLine);
+        }
+    }
+
+    private static class DocGenerator extends AbstractAstBuilderTest {
+        private final PrintWriter writer;
+
+        public DocGenerator(PrintWriter writer) {
+            this.writer = writer;
+        }
+
+        private void processTemplateLine(String line) {
+            if (line.startsWith(PREFIX)) {
+                processAllLibraries();
+            } else {
+                writer.println(line);
+            }
+        }
+
+        private void processAllLibraries() {
+            try (Stream<Path> stream = Files.list(Paths.get(LIBRARY_DIRECTORY))) {
+                List<Path> files = stream
+                        .filter(f -> f.toString().endsWith(".mnd"))
+                        //.filter(f -> f.toString().endsWith("units.mnd"))
+                        .toList();
+                assertFalse(files.isEmpty(), "Expected to find at least one script in " + LIBRARY_DIRECTORY + "; found none");
+                for (Path file : files) {
+                    processLibrary(file);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Nullable String libraryName;
+        List<AstFunctionDeclaration> functions = new ArrayList<>();
+        List<AstConstant> constants = new ArrayList<>();
+        List<AstParameter> parameters = new ArrayList<>();
+        @Nullable AstFunctionDeclaration declaration;
+
+        private void processLibrary(Path file) throws IOException {
+            String fileName = file.getFileName().toString();
+            libraryName = fileName.substring(0, fileName.lastIndexOf("."));
+            String code = Files.readString(file);
+
+            // Parse and process the module
+            functions.clear();
+            constants.clear();
+            parameters.clear();
+
+            AstModule node = build(expectedMessages()
+                            .add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),
+                    InputFiles.fromSource(code));
+            processNode(node);
+
+            writer.println();
+            writer.println("# " + StringUtils.firstUpperCase(libraryName) + " library");
+            writer.println();
+            processModuleDoc(code);
+
+            if (!parameters.isEmpty()) {
+                writer.println();
+                writer.println("## Program parameters");
+                parameters.stream().filter(parameter -> !parameter.getParameterName().startsWith("_")).forEach(this::processParameter);
+            }
+
+            if (!constants.isEmpty()) {
+                writer.println();
+                writer.println("## Constants");
+                constants.stream().filter(constant -> !constant.getConstantName().startsWith("_")).forEach(this::processConstant);
+            }
+
+            if (!functions.isEmpty()) {
+                writer.println();
+                writer.println("## Functions");
+                functions.stream().filter(function -> !function.getName().startsWith("_")).forEach(this::processFunction);
+            }
+        }
+
+        private void processModuleDoc(String code) {
+            for (String line : code.lines().toList()) {
+                if (!line.startsWith("//")) {
+                    return;
+                } else if (line.startsWith("//*")) {
+                    writer.println(line.substring(line.startsWith("//* ") ? 4 : 3).trim());
+                }
+            }
+        }
+
+        private void processNode(AstMindcodeNode node) {
+            switch (node) {
+                case AstParameter n -> parameters.add(n);
+                case AstConstant n -> constants.add(n);
+                case AstFunctionDeclaration n -> functions.add(n);
+                default -> {
+                }
+            }
+
+            node.getChildren().forEach(this::processNode);
+        }
+
+        private void printValue(AstMindcodeNode node) {
+            if (node instanceof AstLiteral literal) {
+                writer.print(literal.getLiteral());
+            }
+        }
+
+        private void processParameter(AstParameter parameter) {
+            writer.println();
+            writer.println("### " + parameter.getParameterName());
+            writer.println();
+
+            writer.print("**Definition:** `param ");
+            writer.print(parameter.getParameterName());
+            writer.print(" = ");
+            printValue(parameter.getValue());
+            writer.println(";`");
+
+            if (parameter.getDocComment() != null) {
+                writer.println();
+                writeDocComment(parameter.getDocComment().getComment());
+            }
+        }
+
+        private void processConstant(AstConstant constant) {
+            writer.println();
+            writer.println("### " + constant.getConstantName());
+            writer.println();
+
+            writer.print("**Definition:** `const ");
+            writer.print(constant.getConstantName());
+            writer.print(" = ");
+            printValue(constant.getValue());
+            writer.println(";`");
+
+            if (constant.getDocComment() != null) {
+                writer.println();
+                writeDocComment(constant.getDocComment().getComment());
+            }
+        }
+
+        private void processFunction(AstFunctionDeclaration declaration) {
+            this.declaration = declaration;
+            writer.println();
+            writer.println("### " + declaration.getName());
+            writer.println();
+            writeFunction();
+
+            writer.println();
+            writer.printf("| %-30s | %10s | %10s |%n", "Optimization goal:", "Speed", "Size");
+            writer.printf("|-%-30s |-%10s:|-%10s:|%n", dashes(30), dashes(10), dashes(10));
+
+            if (!declaration.isVarargs()) {
+                int speed = measureFootprint(null, GenerationGoal.SPEED);
+                int size = measureFootprint(null, GenerationGoal.SIZE);
+                if (!declaration.isNoinline()) {
+                    writer.printf("| %-30s | %10s | %10s |%n", "Inlined function", speed, size);
+                } else {
+                    // TODO Implement if noinline function is ever added to the library
+                    throw new UnsupportedOperationException("Size calculation for noinline functions is not supported");
+                }
+                if (!declaration.isInline()) {
+                    int callSize = declaration.computeCallSize();
+                    // +1 for the return from the function call
+                    writer.printf("| %-30s | %10s | %10s |%n", "Function body", speed + 1, size + 1);
+                    writer.printf("| %-30s | %10s | %10s |%n", "Function call", callSize, callSize);
+                }
+            } else {
+                List<FootprintConfig> footprintConfigs = processFootprints(declaration.getDocComment());
+                footprintConfigs.forEach(footprintConfig -> {
+                    int speed = measureFootprint(footprintConfig, GenerationGoal.SPEED);
+                    int size = measureFootprint(footprintConfig, GenerationGoal.SIZE);
+                    writer.printf("| %-30s | %10s | %10s |%n", footprintConfig.title, speed, size);
+                });
+            }
+
+            if (declaration.getDocComment() != null) {
+                writer.println();
+                writeDocComment(declaration.getDocComment().getComment());
+            }
+        }
+
+        private final List<FootprintConfig> defaultFootprintConfigs = List.of(
+                new FootprintConfig("Five arguments in total", null, 5),
+                new FootprintConfig("Ten arguments in total", null, 10),
+                new FootprintConfig("Twenty arguments in total", null, 20)
+        );
+
+        private List<FootprintConfig> processFootprints(@Nullable AstDocComment docComment) {
+            if (docComment == null) {
+                return defaultFootprintConfigs;
+            } else {
+                List<FootprintConfig> list = docComment.getComment().lines().filter(l -> l.contains(FOOTPRINT)).map(this::processFootprint).toList();
+                return list.isEmpty() ? defaultFootprintConfigs : list;
+            }
+        }
+
+        private FootprintConfig processFootprint(String directive) {
+            int index = directive.indexOf(FOOTPRINT);
+            String trimmed = directive.substring(index + FOOTPRINT.length()).trim();
+            int index2 = trimmed.indexOf(':');
+            if (index2 == -1) {
+                throw new MindcodeInternalError("Malformed %s directive", FOOTPRINT);
+            }
+            String title = trimmed.substring(0, index2);
+            String declaration = trimmed.substring(index2 + 1).trim();
+            if (declaration.startsWith("*")) {
+                return new FootprintConfig(title, null, Integer.parseInt(declaration.substring(1)));
+            } else {
+                return new FootprintConfig(title, declaration, 0);
+            }
+        }
+
+        private int measureFootprint(@Nullable FootprintConfig footprintConfig, GenerationGoal goal) {
+            Objects.requireNonNull(declaration);
+            int createdParams = 0;
+
+            StringBuilder code = new StringBuilder()
+                    .append("require ").append(libraryName).append(";\n")
+                    .append("\n");
+
+            List<AstFunctionParameter> inputs = declaration.getParameters().stream()
+                    .filter(p -> !p.isVarargs() && p.isInput())
+                    .toList();
+
+            createdParams += inputs.size();
+            inputs.forEach(parameter -> code.append("param prm_").append(parameter.getName()).append(" = 0;\n"));
+
+            List<String> additionalOutputs = new ArrayList<>();
+            declaration.getParameters().stream()
+                    .filter(p -> !p.isVarargs() && p.isOutput())
+                    .map(AstFunctionParameter::getName)
+                    .map(name -> "prm_" + name)
+                    .forEach(additionalOutputs::add);
+
+            String varargs = null;
+            if (footprintConfig != null) {
+                if (footprintConfig.declarations == null) {
+                    int count = footprintConfig.argCount - declaration.getParameters().size() + 1;
+                    if (count < 0) {
+                        throw new MindcodeInternalError("Invalid argument count");
+                    }
+                    for (int i = 0; i < count; i++) {
+                        code.append("param prm_").append(i).append(" = ").append(i).append(";\n");
+                    }
+                    createdParams += count;
+                    varargs = IntStream.range(0, count).mapToObj(i -> "prm_" + i).collect(Collectors.joining(", "));
+                } else {
+                    varargs = footprintConfig.declarations;
+                    for (String vararg : footprintConfig.declarations.split(" *, *")) {
+                        int index = vararg.indexOf("prm_");
+                        if (index != -1) {
+                            String name = vararg.substring(index);
+                            code.append("param ").append(name).append(" = ").append(name.substring(4)).append(";\n");
+                            createdParams++;
+                        }
+                        if (vararg.startsWith("out ")) {
+                            additionalOutputs.add(vararg.substring(4));
+                        }
+                    }
+                }
+            }
+
+            code.append("\n");
+            if (declaration.getDataType() != DataType.VOID) code.append("print(");
+            code.append(declaration.getName()).append("(");
+
+            boolean first = true;
+            for (AstFunctionParameter parameter : declaration.getParameters()) {
+                if (first) {
+                    first = false;
+                } else {
+                    code.append(", ");
+                }
+                if (parameter.isVarargs()) {
+                    if (varargs != null) {
+                        code.append(varargs);
+                    }
+                } else {
+                    if (parameter.isOutput()) code.append("out ");
+                    code.append("prm_").append(parameter.getName());
+                }
+            }
+            code.append(")");
+            if (declaration.getDataType() != DataType.VOID) code.append(")");
+            code.append(";\n");
+
+            if (!additionalOutputs.isEmpty()) {
+                code.append(additionalOutputs.stream().collect(Collectors.joining(",", "print(", ");\n")));
+            }
+
+            //System.out.println(code);
+
+            CompilerProfile profile = createCompilerProfile()
+                    .setProcessorVersion(ProcessorVersion.MAX)
+                    .setAllOptimizationLevels(OptimizationLevel.ADVANCED)
+                    .setGoal(goal)
+                    .setSignature(false);
+
+            MindcodeCompiler compiler = new MindcodeCompiler(CompilationPhase.ALL,
+                    expectedMessages().add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),
+                    profile,
+                    InputFiles.fromSource(code.toString()));
+
+            compiler.compile();
+
+            return compiler.getInstructions().size()
+                   - (declaration.getDataType() == DataType.VOID ? 0 : 1)
+                   - createdParams
+                   - additionalOutputs.size();
+        }
+
+        private void writeFunction() {
+            Objects.requireNonNull(declaration);
+            writer.print("**Definition:** `");
+            if (declaration.isInline()) writer.print("inline ");
+            if (declaration.isNoinline()) writer.print("noinline ");
+            writer.print(declaration.getDataType() == DataType.VOID ? "void " : "def ");
+            writer.print(declaration.getName());
+            writer.print("(");
+            boolean first = true;
+            for (AstFunctionParameter parameter : declaration.getParameters()) {
+                if (first) {
+                    first = false;
+                } else {
+                    writer.print(", ");
+                }
+                if (parameter.hasInModifier()) writer.print("in ");
+                if (parameter.hasOutModifier()) writer.print("out ");
+                writer.print(parameter.getName().substring(parameter.getName().charAt(0) == '_' ? 1 : 0));
+                if (parameter.isVarargs()) writer.print("...");
+            }
+            writer.println(")`");
+        }
+
+        private void writeDocComment(String docComment) {
+            String commentText = docComment.substring(3, docComment.length() - 2);
+            if (!commentText.contains("\n")) {
+                writer.println(commentText.trim());
+            } else {
+                commentText.lines().forEach(this::writeLine);
+            }
+        }
+
+        private void writeLine(String line) {
+            String trimmed = line.trim();
+            if (!trimmed.contains(FOOTPRINT)) {
+                if (trimmed.startsWith("*")) {
+                    writer.println(trimmed.substring(trimmed.startsWith("* ") ? 2 : 1));
+                } else if (!trimmed.isEmpty()) {
+                    writer.println(line);
+                }
+            }
+        }
+
+        private record FootprintConfig(String title, @Nullable String declarations, int argCount) {
+        }
+
+        private String dashes(int count) {
+            final char[] array = new char[count];
+            Arrays.fill(array, '-');
+            return new String(array);
+        }
+    }
+}

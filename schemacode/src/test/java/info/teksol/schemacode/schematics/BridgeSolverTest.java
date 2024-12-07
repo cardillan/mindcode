@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mc.messages.ExpectedMessages;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.AbstractSchematicsTest;
-import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;

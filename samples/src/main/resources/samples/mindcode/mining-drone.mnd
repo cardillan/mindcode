@@ -5,42 +5,47 @@ require units;
 // It is possible to change them in the compiled code.
 
 /// Configurable options:
-param CONTAINER = vault1;
-param PATCH_X = 16;
-param PATCH_Y = 17;
-param MESSAGES = message1;
+param container = vault1;
+param patch_x = 16;
+param patch_y = 17;
+param messages = message1;
 
 // Title printed to messages to help identify the processor purpose
-const TITLE = "Drone mining\n";
+const title = "Drone mining\n";
 
-// Find a unit if we don't have one
-if @unit.@dead != 0 or @unit.@controller != @this then
-    // Some Mindustry code on the internet relies on nonzero flag
-    // marking used units. Assign non-zero flag to protect our unit
-    // from such code run by other processors.
-    waitForFreeUnit(MESSAGES, TITLE, @poly, rand(1000));
-end;
+// Creates a variable representing a Mindustry block linked as message1
+linked message1;
 
-// Throw away anything the unit might have been carrying
-itemDrop(@air, @unit.@totalItems);
-
-// Mine until the unit is lost or killed
-// Then the program restarts, acquiring another unit
-while @unit.@controller == @this and @unit.@dead == 0 do
-    print(TITLE);
-
-    if @unit.@totalItems < @unit.@itemCapacity then
-        println("State: mining");
-        approach(PATCH_X, PATCH_Y, 3);
-        mine(PATCH_X, PATCH_Y);
-    else
-        println("State: dropping");
-        approach(CONTAINER.@x, CONTAINER.@y, 3);
-        itemDrop(CONTAINER, @unit.@totalItems);
+begin
+    // Find a unit if we don't have one
+    if @unit.@dead != 0 or @unit.@controller != @this then
+        // Some Mindustry code on the internet relies on nonzero flag
+        // marking used units. Assign non-zero flag to protect our unit
+        // from such code run by other processors.
+        waitForFreeUnit(messages, title, @poly, rand(1000));
     end;
 
-    println("Unit capacity: ", @unit.@itemCapacity);
-    println("Total items: ", @unit.@totalItems);
-    println("First item: ", @unit.@firstItem);
-    printflush(message1);
+    // Throw away anything the unit might have been carrying
+    itemDrop(@air, @unit.@totalItems);
+
+    // Mine until the unit is lost or killed
+    // Then the program restarts, acquiring another unit
+    while @unit.@controller == @this and @unit.@dead == 0 do
+        print(title);
+
+        if @unit.@totalItems < @unit.@itemCapacity then
+            println("State: mining");
+            approach(patch_x, patch_y, 3);
+            mine(patch_x, patch_y);
+        else
+            println("State: dropping");
+            approach(container.@x, container.@y, 3);
+            itemDrop(container, @unit.@totalItems);
+        end;
+
+        println("Unit capacity: ", @unit.@itemCapacity);
+        println("Total items: ", @unit.@totalItems);
+        println("First item: ", @unit.@firstItem);
+        printflush(message1);
+    end;
 end;

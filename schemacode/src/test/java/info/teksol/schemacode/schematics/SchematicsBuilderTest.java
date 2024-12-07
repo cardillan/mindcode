@@ -1,6 +1,7 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.mimex.Icons;
+import info.teksol.mc.messages.ExpectedMessages;
+import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.EmptyConfiguration;
@@ -8,7 +9,6 @@ import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
-import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

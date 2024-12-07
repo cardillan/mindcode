@@ -1,8 +1,9 @@
 package info.teksol.mindcode.exttest;
 
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.util.StringUtils;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.io.PrintWriter;
@@ -128,7 +129,7 @@ public class BasicTestProgress extends AbstractTestProgress {
         writer.println();
         writer.printf("%-35s", "Generation goal");
         for (GenerationGoal goal : GenerationGoal.values()) {
-            writer.printf("%15s", goal.name().charAt(0) + goal.name().substring(1).toLowerCase());
+            writer.printf("%15s", StringUtils.titleCase(goal.name()));
         }
         writer.println();
 
@@ -145,7 +146,7 @@ public class BasicTestProgress extends AbstractTestProgress {
         writer.println();
         writer.printf("%-35s", "Optimization level");
         for (OptimizationLevel level : OptimizationLevel.values()) {
-            writer.printf("%15s", level.name().charAt(0) + level.name().substring(1).toLowerCase());
+            writer.printf("%15s", StringUtils.titleCase(level.name()));
         }
         writer.println();
 

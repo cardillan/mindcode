@@ -1,2859 +1,2842 @@
-Main file: number of reported ambiguities: 15
 
 Final code before resolving virtual instructions:
 
-        label __label3
-    0:  set __fn3__x1 1
-    1:  set __fn3__y1 1
-    2:  set __fn3__x2 4
-    3:  set __fn3__y2 5
-    4:  op sub __tmp1 __fn3__x2 __fn3__x1
-    5:  op sub __tmp2 __fn3__y2 __fn3__y1
-    6:  op len __tmp3 __tmp1 __tmp2
-    7:  set __tmp0 __tmp3
-        label __label4
-    8:  assertequals 5 __tmp0 "distance(1,1,4,5)"
-        label __label5
-    9:  set __fn4__x1 -1
-   10:  set __fn4__y1 -1
-   11:  set __fn4__x2 -4
-   12:  set __fn4__y2 -5
-   13:  op sub __tmp5 __fn4__x2 __fn4__x1
-   14:  op sub __tmp6 __fn4__y2 __fn4__y1
-   15:  op len __tmp7 __tmp5 __tmp6
-   16:  set __tmp4 __tmp7
-        label __label6
-   17:  assertequals 5 __tmp4 "distance(-1,-1,-4,-5)"
-        label __label7
-   18:  set __fn5__x 1.5
-   19:  op add __tmp9 __fn5__x 0.5
-   20:  op floor __tmp10 __tmp9 0
-   21:  set __tmp8 __tmp10
-        label __label8
-   22:  assertequals 2 __tmp8 "round(1.5)"
-        label __label9
-   23:  set __fn6__x 1.7
-   24:  op add __tmp12 __fn6__x 0.5
-   25:  op floor __tmp13 __tmp12 0
-   26:  set __tmp11 __tmp13
-        label __label10
-   27:  assertequals 2 __tmp11 "round(1.7)"
-        label __label11
-   28:  set __fn7__x 2.1
-   29:  op add __tmp15 __fn7__x 0.5
-   30:  op floor __tmp16 __tmp15 0
-   31:  set __tmp14 __tmp16
-        label __label12
-   32:  assertequals 2 __tmp14 "round(2.1)"
-        label __label13
-   33:  set __fn8__x 2.5
-   34:  op add __tmp18 __fn8__x 0.5
-   35:  op floor __tmp19 __tmp18 0
-   36:  set __tmp17 __tmp19
-        label __label14
-   37:  assertequals 3 __tmp17 "round(2.5)"
-        label __label15
-   38:  set __fn9__x -3.5
-   39:  op add __tmp21 __fn9__x 0.5
-   40:  op floor __tmp22 __tmp21 0
-   41:  set __tmp20 __tmp22
-        label __label16
-   42:  assertequals -3 __tmp20 "round(-3.5)"
-        label __label17
-   43:  set __fn10__x 3.5
-   44:  op mod __tmp24 __fn10__x 1
-   45:  set __tmp23 __tmp24
-        label __label18
-   46:  assertequals 0.5 __tmp23 "frac(3.5)"
-        label __label19
-   47:  set __fn11__x -1.5
-   48:  op mod __tmp26 __fn11__x 1
-   49:  set __tmp25 __tmp26
-        label __label20
-   50:  assertequals -0.5 __tmp25 "frac(-1.5)"
-   51:  set __fn0__x 0
-   52:  setaddr __fn0retaddr __label21
-   53:  call __label0 __fn0retval
-        gotolabel __label21 __fn0
-   54:  set __tmp27 __fn0retval
-   55:  assertequals 0 __tmp27 "sign(0)"
-   56:  set __fn0__x 0.0000001
-   57:  setaddr __fn0retaddr __label22
-   58:  call __label0 __fn0retval
-        gotolabel __label22 __fn0
-   59:  set __tmp28 __fn0retval
-   60:  assertequals 0 __tmp28 "sign(1e-7)"
-   61:  set __fn0__x 0.00001
-   62:  setaddr __fn0retaddr __label23
-   63:  call __label0 __fn0retval
-        gotolabel __label23 __fn0
-   64:  set __tmp29 __fn0retval
-   65:  assertequals 1 __tmp29 "sign(1e-5)"
-   66:  set __fn0__x -5
-   67:  setaddr __fn0retaddr __label24
-   68:  call __label0 __fn0retval
-        gotolabel __label24 __fn0
-   69:  set __tmp30 __fn0retval
-   70:  assertequals -1 __tmp30 "sign(-5)"
-        label __label25
-   71:  set __fn12__x 0
-   72:  op greaterThan __tmp32 __fn12__x 0
-   73:  op lessThan __tmp33 __fn12__x 0
-   74:  op sub __tmp34 __tmp32 __tmp33
-   75:  set __tmp31 __tmp34
-        label __label26
-   76:  assertequals 0 __tmp31 "signExact(0)"
-        label __label27
-   77:  set __fn13__x 0.0000001
-   78:  op greaterThan __tmp36 __fn13__x 0
-   79:  op lessThan __tmp37 __fn13__x 0
-   80:  op sub __tmp38 __tmp36 __tmp37
-   81:  set __tmp35 __tmp38
-        label __label28
-   82:  assertequals 1 __tmp35 "signExact(1e-7)"
-        label __label29
-   83:  set __fn14__x -0.0000001
-   84:  op greaterThan __tmp40 __fn14__x 0
-   85:  op lessThan __tmp41 __fn14__x 0
-   86:  op sub __tmp42 __tmp40 __tmp41
-   87:  set __tmp39 __tmp42
-        label __label30
-   88:  assertequals -1 __tmp39 "signExact(-1e-7)"
-        label __label31
-   89:  set __fn15__x 0
-   90:  op abs __tmp44 __fn15__x 0
-   91:  op lessThanEq __tmp45 __tmp44 0
-   92:  set __tmp43 __tmp45
-        label __label32
-   93:  assertequals true __tmp43 "isZero(0)"
-        label __label33
-   94:  set __fn16__x 1E-50
-   95:  op abs __tmp47 __fn16__x 0
-   96:  op lessThanEq __tmp48 __tmp47 0
-   97:  set __tmp46 __tmp48
-        label __label34
-   98:  assertequals false __tmp46 "isZero(1e-50)"
-        label __label35
-   99:  set __fn17__x -1E-50
-  100:  op abs __tmp50 __fn17__x 0
-  101:  op lessThanEq __tmp51 __tmp50 0
-  102:  set __tmp49 __tmp51
-        label __label36
-  103:  assertequals false __tmp49 "isZero(-1e-50)"
-        label __label37
-  104:  set __fn18__x 0.01
-  105:  set __fn18__precision 0.01
-  106:  op abs __tmp53 __fn18__x 0
-  107:  op lessThan __tmp54 __tmp53 __fn18__precision
-  108:  set __tmp52 __tmp54
-        label __label38
-  109:  assertequals false __tmp52 "isZero(0.01,0.01)"
-        label __label39
-  110:  set __fn19__x null
-  111:  op add __fn19__result __fn19__x 0
-  112:  set __tmp55 __fn19__result
-        label __label40
-  113:  assertequals 0 __tmp55 "nullToZero(null)"
-        label __label41
-  114:  set __fn20__x 1
-  115:  op add __fn20__result __fn20__x 0
-  116:  set __tmp56 __fn20__result
-        label __label42
-  117:  assertequals 1 __tmp56 "nullToZero(1)"
-        label __label43
-  118:  set __fn21__x 1
-  119:  set __tmp57 __fn21__x
-        label __label44
-  120:  assertequals 1 __tmp57 "sum(1)"
-        label __label45
-  121:  set __fn22__x1 1
-  122:  set __fn22__x2 2
-  123:  op add __tmp59 __fn22__x1 __fn22__x2
-  124:  set __fn22__sum __tmp59
-  125:  setaddr __tmp60 __label50
-  126:  set __fn22__i 3
-  127:  jump __label48 always 0 0
-        gotolabel __label50 marker0
-  128:  setaddr __tmp60 __label51
-  129:  set __fn22__i 4
-        label __label48
-  130:  op add __tmp61 __fn22__sum __fn22__i
-  131:  set __fn22__sum __tmp61
-        label __label47
-  132:  goto __tmp60 marker0
-        gotolabel __label51 marker0
-        label __label49
-  133:  set __tmp58 __fn22__sum
-        label __label46
-  134:  assertequals 10 __tmp58 "sum(1,2,3,4)"
-        label __label52
-  135:  set __fn23__x 1
-  136:  set __tmp62 __fn23__x
-        label __label53
-  137:  assertequals 1 __tmp62 "avg(1)"
-        label __label54
-  138:  set __fn24__x1 1
-  139:  set __fn24__x2 2
-  140:  op add __tmp64 __fn24__x1 __fn24__x2
-  141:  set __fn24__sum __tmp64
-  142:  setaddr __tmp65 __label59
-  143:  set __fn24__i 3
-  144:  jump __label57 always 0 0
-        gotolabel __label59 marker1
-  145:  setaddr __tmp65 __label60
-  146:  set __fn24__i 4
-        label __label57
-  147:  op add __tmp66 __fn24__sum __fn24__i
-  148:  set __fn24__sum __tmp66
-        label __label56
-  149:  goto __tmp65 marker1
-        gotolabel __label60 marker1
-        label __label58
-  150:  op add __tmp67 2 2
-  151:  op div __tmp68 __fn24__sum __tmp67
-  152:  set __tmp63 __tmp68
-        label __label55
-  153:  assertequals 2.5 __tmp63 "avg(1,2,3,4)"
-        label __label61
-  154:  set __fn25__x 1
-  155:  set __tmp69 __fn25__x
-        label __label62
-  156:  assertequals 1 __tmp69 "median(1)"
-        label __label63
-  157:  set __fn26__x1 2
-  158:  set __fn26__x2 4
-  159:  op add __tmp71 __fn26__x1 __fn26__x2
-  160:  op div __tmp72 __tmp71 2
-  161:  set __tmp70 __tmp72
-        label __label64
-  162:  assertequals 3 __tmp70 "median(2,4)"
-        label __label65
-  163:  set __fn27__x1 1
-  164:  set __fn27__x2 3
-  165:  set __fn27__x3 5
-  166:  op max __tmp74 __fn27__x1 __fn27__x2
-  167:  op max __tmp75 __fn27__x1 __fn27__x3
-  168:  op max __tmp76 __fn27__x2 __fn27__x3
-  169:  op min __tmp77 __tmp74 __tmp75
-  170:  op min __tmp77 __tmp77 __tmp76
-  171:  set __tmp73 __tmp77
-        label __label66
-  172:  assertequals 3 __tmp73 "median(1,3,5)"
-        label __label67
-  173:  set __fn28__x1 1
-  174:  set __fn28__x2 1
-  175:  set __fn28__x3 1
-  176:  op max __tmp79 __fn28__x1 __fn28__x2
-  177:  op max __tmp80 __fn28__x1 __fn28__x3
-  178:  op max __tmp81 __fn28__x2 __fn28__x3
-  179:  op min __tmp82 __tmp79 __tmp80
-  180:  op min __tmp82 __tmp82 __tmp81
-  181:  set __tmp78 __tmp82
-        label __label68
-  182:  assertequals 1 __tmp78 "median(1,1,1)"
-        label __label69
-  183:  set __fn29__x1 1
-  184:  set __fn29__x2 1
-  185:  set __fn29__x3 3
-  186:  op max __tmp84 __fn29__x1 __fn29__x2
-  187:  op max __tmp85 __fn29__x1 __fn29__x3
-  188:  op max __tmp86 __fn29__x2 __fn29__x3
-  189:  op min __tmp87 __tmp84 __tmp85
-  190:  op min __tmp87 __tmp87 __tmp86
-  191:  set __tmp83 __tmp87
-        label __label70
-  192:  assertequals 1 __tmp83 "median(1,1,3)"
-        label __label71
-  193:  set __fn30__x1 1
-  194:  set __fn30__x2 3
-  195:  set __fn30__x3 3
-  196:  op max __tmp89 __fn30__x1 __fn30__x2
-  197:  op max __tmp90 __fn30__x1 __fn30__x3
-  198:  op max __tmp91 __fn30__x2 __fn30__x3
-  199:  op min __tmp92 __tmp89 __tmp90
-  200:  op min __tmp92 __tmp92 __tmp91
-  201:  set __tmp88 __tmp92
-        label __label72
-  202:  assertequals 3 __tmp88 "median(1,3,3)"
-  203:  set __fn1__x1 2
-  204:  set __fn1__x2 4
-  205:  set __fn1__x3 6
-  206:  set __fn1__x4 8
-  207:  setaddr __fn1retaddr __label73
-  208:  call __label1 __fn1retval
-        gotolabel __label73 __fn1
-  209:  set __tmp93 __fn1retval
-  210:  assertequals 5 __tmp93 "median(2,4,6,8)"
-  211:  set __fn1__x1 8
-  212:  set __fn1__x2 6
-  213:  set __fn1__x3 4
-  214:  set __fn1__x4 2
-  215:  setaddr __fn1retaddr __label74
-  216:  call __label1 __fn1retval
-        gotolabel __label74 __fn1
-  217:  set __tmp94 __fn1retval
-  218:  assertequals 5 __tmp94 "median(8,6,4,2)"
-  219:  set __fn1__x1 4
-  220:  set __fn1__x2 8
-  221:  set __fn1__x3 2
-  222:  set __fn1__x4 6
-  223:  setaddr __fn1retaddr __label75
-  224:  call __label1 __fn1retval
-        gotolabel __label75 __fn1
-  225:  set __tmp95 __fn1retval
-  226:  assertequals 5 __tmp95 "median(4,8,2,6)"
-  227:  set __fn1__x1 2
-  228:  set __fn1__x2 6
-  229:  set __fn1__x3 4
-  230:  set __fn1__x4 8
-  231:  setaddr __fn1retaddr __label76
-  232:  call __label1 __fn1retval
-        gotolabel __label76 __fn1
-  233:  set __tmp96 __fn1retval
-  234:  assertequals 5 __tmp96 "median(2,6,4,8)"
-  235:  set __fn1__x1 6
-  236:  set __fn1__x2 2
-  237:  set __fn1__x3 8
-  238:  set __fn1__x4 4
-  239:  setaddr __fn1retaddr __label77
-  240:  call __label1 __fn1retval
-        gotolabel __label77 __fn1
-  241:  set __tmp97 __fn1retval
-  242:  assertequals 5 __tmp97 "median(6,2,8,4)"
-  243:  set __fn2__x1 1
-  244:  set __fn2__x2 2
-  245:  set __fn2__x3 3
-  246:  set __fn2__x4 4
-  247:  set __fn2__x5 5
-  248:  setaddr __fn2retaddr __label78
-  249:  call __label2 __fn2retval
-        gotolabel __label78 __fn2
-  250:  set __tmp98 __fn2retval
-  251:  assertequals 3 __tmp98 "median(1,2,3,4,5)"
-  252:  set __fn2__x1 5
-  253:  set __fn2__x2 4
-  254:  set __fn2__x3 3
-  255:  set __fn2__x4 2
-  256:  set __fn2__x5 1
-  257:  setaddr __fn2retaddr __label79
-  258:  call __label2 __fn2retval
-        gotolabel __label79 __fn2
-  259:  set __tmp99 __fn2retval
-  260:  assertequals 3 __tmp99 "median(5,4,3,2,1)"
-  261:  set __fn2__x1 1
-  262:  set __fn2__x2 1
-  263:  set __fn2__x3 1
-  264:  set __fn2__x4 1
-  265:  set __fn2__x5 1
-  266:  setaddr __fn2retaddr __label80
-  267:  call __label2 __fn2retval
-        gotolabel __label80 __fn2
-  268:  set __tmp100 __fn2retval
-  269:  assertequals 1 __tmp100 "median(1,1,1,1,1)"
-  270:  set __fn2__x1 1
-  271:  set __fn2__x2 1
-  272:  set __fn2__x3 1
-  273:  set __fn2__x4 1
-  274:  set __fn2__x5 5
-  275:  setaddr __fn2retaddr __label81
-  276:  call __label2 __fn2retval
-        gotolabel __label81 __fn2
-  277:  set __tmp101 __fn2retval
-  278:  assertequals 1 __tmp101 "median(1,1,1,1,5)"
-  279:  set __fn2__x1 1
-  280:  set __fn2__x2 1
-  281:  set __fn2__x3 1
-  282:  set __fn2__x4 5
-  283:  set __fn2__x5 5
-  284:  setaddr __fn2retaddr __label82
-  285:  call __label2 __fn2retval
-        gotolabel __label82 __fn2
-  286:  set __tmp102 __fn2retval
-  287:  assertequals 1 __tmp102 "median(1,1,1,5,5)"
-  288:  set __fn2__x1 1
-  289:  set __fn2__x2 1
-  290:  set __fn2__x3 5
-  291:  set __fn2__x4 5
-  292:  set __fn2__x5 5
-  293:  setaddr __fn2retaddr __label83
-  294:  call __label2 __fn2retval
-        gotolabel __label83 __fn2
-  295:  set __tmp103 __fn2retval
-  296:  assertequals 5 __tmp103 "median(1,1,5,5,5)"
-  297:  set __fn2__x1 1
-  298:  set __fn2__x2 5
-  299:  set __fn2__x3 5
-  300:  set __fn2__x4 5
-  301:  set __fn2__x5 5
-  302:  setaddr __fn2retaddr __label84
-  303:  call __label2 __fn2retval
-        gotolabel __label84 __fn2
-  304:  set __tmp104 __fn2retval
-  305:  assertequals 5 __tmp104 "median(1,5,5,5,5)"
-  306:  set __fn2__x1 5
-  307:  set __fn2__x2 5
-  308:  set __fn2__x3 5
-  309:  set __fn2__x4 5
-  310:  set __fn2__x5 5
-  311:  setaddr __fn2retaddr __label85
-  312:  call __label2 __fn2retval
-        gotolabel __label85 __fn2
-  313:  set __tmp105 __fn2retval
-  314:  assertequals 5 __tmp105 "median(5,5,5,5,5)"
-        label __label86
-        label __label88
-  315:  set __fn32__bestDif 10000000000
-  316:  set __fn32__best null
-  317:  set __fn32__count 1
-  318:  setaddr __tmp108 __label93
-  319:  set __fn32__i 1
-  320:  jump __label91 always 0 0
-        gotolabel __label93 marker2
-  321:  setaddr __tmp108 __label94
-  322:  set __fn32__i 1
-  323:  jump __label91 always 0 0
-        gotolabel __label94 marker2
-  324:  setaddr __tmp108 __label95
-  325:  set __fn32__i 1
-  326:  jump __label91 always 0 0
-        gotolabel __label95 marker2
-  327:  setaddr __tmp108 __label96
-  328:  set __fn32__i 1
-  329:  jump __label91 always 0 0
-        gotolabel __label96 marker2
-  330:  setaddr __tmp108 __label97
-  331:  set __fn32__i 1
-  332:  jump __label91 always 0 0
-        gotolabel __label97 marker2
-  333:  setaddr __tmp108 __label98
-  334:  set __fn32__i 1
-        label __label91
-        label __label99
-  335:  set __fn33__n __fn32__i
-  336:  set __fn33__gt 0
-  337:  set __fn33__lt __fn33__gt
-  338:  setaddr __tmp110 __label104
-  339:  set __fn33__i 1
-  340:  jump __label102 always 0 0
-        gotolabel __label104 marker3
-  341:  setaddr __tmp110 __label105
-  342:  set __fn33__i 1
-  343:  jump __label102 always 0 0
-        gotolabel __label105 marker3
-  344:  setaddr __tmp110 __label106
-  345:  set __fn33__i 1
-  346:  jump __label102 always 0 0
-        gotolabel __label106 marker3
-  347:  setaddr __tmp110 __label107
-  348:  set __fn33__i 1
-  349:  jump __label102 always 0 0
-        gotolabel __label107 marker3
-  350:  setaddr __tmp110 __label108
-  351:  set __fn33__i 1
-  352:  jump __label102 always 0 0
-        gotolabel __label108 marker3
-  353:  setaddr __tmp110 __label109
-  354:  set __fn33__i 1
-        label __label102
-  355:  op lessThan __tmp111 __fn33__i __fn33__n
-  356:  jump __label110 equal __tmp111 false
-  357:  op add __tmp113 __fn33__lt 1
-  358:  set __fn33__lt __tmp113
-  359:  set __tmp112 __fn33__lt
-  360:  jump __label111 always 0 0
-        label __label110
-  361:  op greaterThan __tmp114 __fn33__i __fn33__n
-  362:  jump __label112 equal __tmp114 false
-  363:  op add __tmp116 __fn33__gt 1
-  364:  set __fn33__gt __tmp116
-  365:  set __tmp115 __fn33__gt
-  366:  jump __label113 always 0 0
-        label __label112
-  367:  set __tmp115 null
-        label __label113
-  368:  set __tmp112 __tmp115
-        label __label111
-        label __label101
-  369:  goto __tmp110 marker3
-        gotolabel __label109 marker3
-        label __label103
-  370:  op sub __tmp117 __fn33__gt __fn33__lt
-  371:  op abs __tmp118 __tmp117 0
-  372:  set __fn33__dif __tmp118
-  373:  op add __tmp119 __fn33__gt __fn33__lt
-  374:  op sub __tmp120 6 1
-  375:  op greaterThanEq __tmp121 __tmp119 __tmp120
-  376:  jump __label114 equal __tmp121 false
-  377:  op equal __tmp123 __fn33__gt __fn33__lt
-  378:  set __tmp122 __tmp123
-  379:  jump __label115 always 0 0
-        label __label114
-  380:  set __tmp122 false
-        label __label115
-  381:  set __tmp109 __tmp122
-        label __label100
-  382:  set __fn32__dif __fn33__dif
-  383:  jump __label116 equal __tmp109 false
-  384:  set __tmp107 __fn32__i
-  385:  jump __label89 always 0 0
-  386:  set __tmp124 null
-  387:  jump __label117 always 0 0
-        label __label116
-  388:  set __tmp124 null
-        label __label117
-  389:  op lessThan __tmp125 __fn32__dif __fn32__bestDif
-  390:  jump __label118 equal __tmp125 false
-  391:  set __fn32__bestDif __fn32__dif
-  392:  set __fn32__best __fn32__i
-  393:  set __fn32__count 1
-  394:  set __tmp126 __fn32__count
-  395:  jump __label119 always 0 0
-        label __label118
-  396:  op lessThanEq __tmp127 __fn32__dif __fn32__bestDif
-  397:  jump __label120 equal __tmp127 false
-  398:  op add __tmp129 __fn32__best __fn32__i
-  399:  set __fn32__best __tmp129
-  400:  op add __tmp130 __fn32__count 1
-  401:  set __fn32__count __tmp130
-  402:  set __tmp128 __fn32__count
-  403:  jump __label121 always 0 0
-        label __label120
-  404:  set __tmp128 null
-        label __label121
-  405:  set __tmp126 __tmp128
-        label __label119
-        label __label90
-  406:  goto __tmp108 marker2
-        gotolabel __label98 marker2
-        label __label92
-  407:  op div __tmp131 __fn32__best __fn32__count
-  408:  set __tmp107 __tmp131
-        label __label89
-  409:  set __tmp106 __tmp107
-        label __label87
-  410:  assertequals 1 __tmp106 "median(1,1,1,1,1,1)"
-        label __label122
-        label __label124
-  411:  set __fn35__bestDif 10000000000
-  412:  set __fn35__best null
-  413:  set __fn35__count 1
-  414:  setaddr __tmp134 __label129
-  415:  set __fn35__i 1
-  416:  jump __label127 always 0 0
-        gotolabel __label129 marker4
-  417:  setaddr __tmp134 __label130
-  418:  set __fn35__i 1
-  419:  jump __label127 always 0 0
-        gotolabel __label130 marker4
-  420:  setaddr __tmp134 __label131
-  421:  set __fn35__i 1
-  422:  jump __label127 always 0 0
-        gotolabel __label131 marker4
-  423:  setaddr __tmp134 __label132
-  424:  set __fn35__i 1
-  425:  jump __label127 always 0 0
-        gotolabel __label132 marker4
-  426:  setaddr __tmp134 __label133
-  427:  set __fn35__i 1
-  428:  jump __label127 always 0 0
-        gotolabel __label133 marker4
-  429:  setaddr __tmp134 __label134
-  430:  set __fn35__i 5
-        label __label127
-        label __label135
-  431:  set __fn36__n __fn35__i
-  432:  set __fn36__gt 0
-  433:  set __fn36__lt __fn36__gt
-  434:  setaddr __tmp136 __label140
-  435:  set __fn36__i 1
-  436:  jump __label138 always 0 0
-        gotolabel __label140 marker5
-  437:  setaddr __tmp136 __label141
-  438:  set __fn36__i 1
-  439:  jump __label138 always 0 0
-        gotolabel __label141 marker5
-  440:  setaddr __tmp136 __label142
-  441:  set __fn36__i 1
-  442:  jump __label138 always 0 0
-        gotolabel __label142 marker5
-  443:  setaddr __tmp136 __label143
-  444:  set __fn36__i 1
-  445:  jump __label138 always 0 0
-        gotolabel __label143 marker5
-  446:  setaddr __tmp136 __label144
-  447:  set __fn36__i 1
-  448:  jump __label138 always 0 0
-        gotolabel __label144 marker5
-  449:  setaddr __tmp136 __label145
-  450:  set __fn36__i 5
-        label __label138
-  451:  op lessThan __tmp137 __fn36__i __fn36__n
-  452:  jump __label146 equal __tmp137 false
-  453:  op add __tmp139 __fn36__lt 1
-  454:  set __fn36__lt __tmp139
-  455:  set __tmp138 __fn36__lt
-  456:  jump __label147 always 0 0
-        label __label146
-  457:  op greaterThan __tmp140 __fn36__i __fn36__n
-  458:  jump __label148 equal __tmp140 false
-  459:  op add __tmp142 __fn36__gt 1
-  460:  set __fn36__gt __tmp142
-  461:  set __tmp141 __fn36__gt
-  462:  jump __label149 always 0 0
-        label __label148
-  463:  set __tmp141 null
-        label __label149
-  464:  set __tmp138 __tmp141
-        label __label147
-        label __label137
-  465:  goto __tmp136 marker5
-        gotolabel __label145 marker5
-        label __label139
-  466:  op sub __tmp143 __fn36__gt __fn36__lt
-  467:  op abs __tmp144 __tmp143 0
-  468:  set __fn36__dif __tmp144
-  469:  op add __tmp145 __fn36__gt __fn36__lt
-  470:  op sub __tmp146 6 1
-  471:  op greaterThanEq __tmp147 __tmp145 __tmp146
-  472:  jump __label150 equal __tmp147 false
-  473:  op equal __tmp149 __fn36__gt __fn36__lt
-  474:  set __tmp148 __tmp149
-  475:  jump __label151 always 0 0
-        label __label150
-  476:  set __tmp148 false
-        label __label151
-  477:  set __tmp135 __tmp148
-        label __label136
-  478:  set __fn35__dif __fn36__dif
-  479:  jump __label152 equal __tmp135 false
-  480:  set __tmp133 __fn35__i
-  481:  jump __label125 always 0 0
-  482:  set __tmp150 null
-  483:  jump __label153 always 0 0
-        label __label152
-  484:  set __tmp150 null
-        label __label153
-  485:  op lessThan __tmp151 __fn35__dif __fn35__bestDif
-  486:  jump __label154 equal __tmp151 false
-  487:  set __fn35__bestDif __fn35__dif
-  488:  set __fn35__best __fn35__i
-  489:  set __fn35__count 1
-  490:  set __tmp152 __fn35__count
-  491:  jump __label155 always 0 0
-        label __label154
-  492:  op lessThanEq __tmp153 __fn35__dif __fn35__bestDif
-  493:  jump __label156 equal __tmp153 false
-  494:  op add __tmp155 __fn35__best __fn35__i
-  495:  set __fn35__best __tmp155
-  496:  op add __tmp156 __fn35__count 1
-  497:  set __fn35__count __tmp156
-  498:  set __tmp154 __fn35__count
-  499:  jump __label157 always 0 0
-        label __label156
-  500:  set __tmp154 null
-        label __label157
-  501:  set __tmp152 __tmp154
-        label __label155
-        label __label126
-  502:  goto __tmp134 marker4
-        gotolabel __label134 marker4
-        label __label128
-  503:  op div __tmp157 __fn35__best __fn35__count
-  504:  set __tmp133 __tmp157
-        label __label125
-  505:  set __tmp132 __tmp133
-        label __label123
-  506:  assertequals 1 __tmp132 "median(1,1,1,1,1,5)"
-        label __label158
-        label __label160
-  507:  set __fn38__bestDif 10000000000
-  508:  set __fn38__best null
-  509:  set __fn38__count 1
-  510:  setaddr __tmp160 __label165
-  511:  set __fn38__i 1
-  512:  jump __label163 always 0 0
-        gotolabel __label165 marker6
-  513:  setaddr __tmp160 __label166
-  514:  set __fn38__i 1
-  515:  jump __label163 always 0 0
-        gotolabel __label166 marker6
-  516:  setaddr __tmp160 __label167
-  517:  set __fn38__i 1
-  518:  jump __label163 always 0 0
-        gotolabel __label167 marker6
-  519:  setaddr __tmp160 __label168
-  520:  set __fn38__i 1
-  521:  jump __label163 always 0 0
-        gotolabel __label168 marker6
-  522:  setaddr __tmp160 __label169
-  523:  set __fn38__i 5
-  524:  jump __label163 always 0 0
-        gotolabel __label169 marker6
-  525:  setaddr __tmp160 __label170
-  526:  set __fn38__i 5
-        label __label163
-        label __label171
-  527:  set __fn39__n __fn38__i
-  528:  set __fn39__gt 0
-  529:  set __fn39__lt __fn39__gt
-  530:  setaddr __tmp162 __label176
-  531:  set __fn39__i 1
-  532:  jump __label174 always 0 0
-        gotolabel __label176 marker7
-  533:  setaddr __tmp162 __label177
-  534:  set __fn39__i 1
-  535:  jump __label174 always 0 0
-        gotolabel __label177 marker7
-  536:  setaddr __tmp162 __label178
-  537:  set __fn39__i 1
-  538:  jump __label174 always 0 0
-        gotolabel __label178 marker7
-  539:  setaddr __tmp162 __label179
-  540:  set __fn39__i 1
-  541:  jump __label174 always 0 0
-        gotolabel __label179 marker7
-  542:  setaddr __tmp162 __label180
-  543:  set __fn39__i 5
-  544:  jump __label174 always 0 0
-        gotolabel __label180 marker7
-  545:  setaddr __tmp162 __label181
-  546:  set __fn39__i 5
-        label __label174
-  547:  op lessThan __tmp163 __fn39__i __fn39__n
-  548:  jump __label182 equal __tmp163 false
-  549:  op add __tmp165 __fn39__lt 1
-  550:  set __fn39__lt __tmp165
-  551:  set __tmp164 __fn39__lt
-  552:  jump __label183 always 0 0
-        label __label182
-  553:  op greaterThan __tmp166 __fn39__i __fn39__n
-  554:  jump __label184 equal __tmp166 false
-  555:  op add __tmp168 __fn39__gt 1
-  556:  set __fn39__gt __tmp168
-  557:  set __tmp167 __fn39__gt
-  558:  jump __label185 always 0 0
-        label __label184
-  559:  set __tmp167 null
-        label __label185
-  560:  set __tmp164 __tmp167
-        label __label183
-        label __label173
-  561:  goto __tmp162 marker7
-        gotolabel __label181 marker7
-        label __label175
-  562:  op sub __tmp169 __fn39__gt __fn39__lt
-  563:  op abs __tmp170 __tmp169 0
-  564:  set __fn39__dif __tmp170
-  565:  op add __tmp171 __fn39__gt __fn39__lt
-  566:  op sub __tmp172 6 1
-  567:  op greaterThanEq __tmp173 __tmp171 __tmp172
-  568:  jump __label186 equal __tmp173 false
-  569:  op equal __tmp175 __fn39__gt __fn39__lt
-  570:  set __tmp174 __tmp175
-  571:  jump __label187 always 0 0
-        label __label186
-  572:  set __tmp174 false
-        label __label187
-  573:  set __tmp161 __tmp174
-        label __label172
-  574:  set __fn38__dif __fn39__dif
-  575:  jump __label188 equal __tmp161 false
-  576:  set __tmp159 __fn38__i
-  577:  jump __label161 always 0 0
-  578:  set __tmp176 null
-  579:  jump __label189 always 0 0
-        label __label188
-  580:  set __tmp176 null
-        label __label189
-  581:  op lessThan __tmp177 __fn38__dif __fn38__bestDif
-  582:  jump __label190 equal __tmp177 false
-  583:  set __fn38__bestDif __fn38__dif
-  584:  set __fn38__best __fn38__i
-  585:  set __fn38__count 1
-  586:  set __tmp178 __fn38__count
-  587:  jump __label191 always 0 0
-        label __label190
-  588:  op lessThanEq __tmp179 __fn38__dif __fn38__bestDif
-  589:  jump __label192 equal __tmp179 false
-  590:  op add __tmp181 __fn38__best __fn38__i
-  591:  set __fn38__best __tmp181
-  592:  op add __tmp182 __fn38__count 1
-  593:  set __fn38__count __tmp182
-  594:  set __tmp180 __fn38__count
-  595:  jump __label193 always 0 0
-        label __label192
-  596:  set __tmp180 null
-        label __label193
-  597:  set __tmp178 __tmp180
-        label __label191
-        label __label162
-  598:  goto __tmp160 marker6
-        gotolabel __label170 marker6
-        label __label164
-  599:  op div __tmp183 __fn38__best __fn38__count
-  600:  set __tmp159 __tmp183
-        label __label161
-  601:  set __tmp158 __tmp159
-        label __label159
-  602:  assertequals 1 __tmp158 "median(1,1,1,1,5,5)"
-        label __label194
-        label __label196
-  603:  set __fn41__bestDif 10000000000
-  604:  set __fn41__best null
-  605:  set __fn41__count 1
-  606:  setaddr __tmp186 __label201
-  607:  set __fn41__i 1
-  608:  jump __label199 always 0 0
-        gotolabel __label201 marker8
-  609:  setaddr __tmp186 __label202
-  610:  set __fn41__i 1
-  611:  jump __label199 always 0 0
-        gotolabel __label202 marker8
-  612:  setaddr __tmp186 __label203
-  613:  set __fn41__i 1
-  614:  jump __label199 always 0 0
-        gotolabel __label203 marker8
-  615:  setaddr __tmp186 __label204
-  616:  set __fn41__i 5
-  617:  jump __label199 always 0 0
-        gotolabel __label204 marker8
-  618:  setaddr __tmp186 __label205
-  619:  set __fn41__i 5
-  620:  jump __label199 always 0 0
-        gotolabel __label205 marker8
-  621:  setaddr __tmp186 __label206
-  622:  set __fn41__i 5
-        label __label199
-        label __label207
-  623:  set __fn42__n __fn41__i
-  624:  set __fn42__gt 0
-  625:  set __fn42__lt __fn42__gt
-  626:  setaddr __tmp188 __label212
-  627:  set __fn42__i 1
-  628:  jump __label210 always 0 0
-        gotolabel __label212 marker9
-  629:  setaddr __tmp188 __label213
-  630:  set __fn42__i 1
-  631:  jump __label210 always 0 0
-        gotolabel __label213 marker9
-  632:  setaddr __tmp188 __label214
-  633:  set __fn42__i 1
-  634:  jump __label210 always 0 0
-        gotolabel __label214 marker9
-  635:  setaddr __tmp188 __label215
-  636:  set __fn42__i 5
-  637:  jump __label210 always 0 0
-        gotolabel __label215 marker9
-  638:  setaddr __tmp188 __label216
-  639:  set __fn42__i 5
-  640:  jump __label210 always 0 0
-        gotolabel __label216 marker9
-  641:  setaddr __tmp188 __label217
-  642:  set __fn42__i 5
-        label __label210
-  643:  op lessThan __tmp189 __fn42__i __fn42__n
-  644:  jump __label218 equal __tmp189 false
-  645:  op add __tmp191 __fn42__lt 1
-  646:  set __fn42__lt __tmp191
-  647:  set __tmp190 __fn42__lt
-  648:  jump __label219 always 0 0
-        label __label218
-  649:  op greaterThan __tmp192 __fn42__i __fn42__n
-  650:  jump __label220 equal __tmp192 false
-  651:  op add __tmp194 __fn42__gt 1
-  652:  set __fn42__gt __tmp194
-  653:  set __tmp193 __fn42__gt
-  654:  jump __label221 always 0 0
-        label __label220
-  655:  set __tmp193 null
-        label __label221
-  656:  set __tmp190 __tmp193
-        label __label219
-        label __label209
-  657:  goto __tmp188 marker9
-        gotolabel __label217 marker9
-        label __label211
-  658:  op sub __tmp195 __fn42__gt __fn42__lt
-  659:  op abs __tmp196 __tmp195 0
-  660:  set __fn42__dif __tmp196
-  661:  op add __tmp197 __fn42__gt __fn42__lt
-  662:  op sub __tmp198 6 1
-  663:  op greaterThanEq __tmp199 __tmp197 __tmp198
-  664:  jump __label222 equal __tmp199 false
-  665:  op equal __tmp201 __fn42__gt __fn42__lt
-  666:  set __tmp200 __tmp201
-  667:  jump __label223 always 0 0
-        label __label222
-  668:  set __tmp200 false
-        label __label223
-  669:  set __tmp187 __tmp200
-        label __label208
-  670:  set __fn41__dif __fn42__dif
-  671:  jump __label224 equal __tmp187 false
-  672:  set __tmp185 __fn41__i
-  673:  jump __label197 always 0 0
-  674:  set __tmp202 null
-  675:  jump __label225 always 0 0
-        label __label224
-  676:  set __tmp202 null
-        label __label225
-  677:  op lessThan __tmp203 __fn41__dif __fn41__bestDif
-  678:  jump __label226 equal __tmp203 false
-  679:  set __fn41__bestDif __fn41__dif
-  680:  set __fn41__best __fn41__i
-  681:  set __fn41__count 1
-  682:  set __tmp204 __fn41__count
-  683:  jump __label227 always 0 0
-        label __label226
-  684:  op lessThanEq __tmp205 __fn41__dif __fn41__bestDif
-  685:  jump __label228 equal __tmp205 false
-  686:  op add __tmp207 __fn41__best __fn41__i
-  687:  set __fn41__best __tmp207
-  688:  op add __tmp208 __fn41__count 1
-  689:  set __fn41__count __tmp208
-  690:  set __tmp206 __fn41__count
-  691:  jump __label229 always 0 0
-        label __label228
-  692:  set __tmp206 null
-        label __label229
-  693:  set __tmp204 __tmp206
-        label __label227
-        label __label198
-  694:  goto __tmp186 marker8
-        gotolabel __label206 marker8
-        label __label200
-  695:  op div __tmp209 __fn41__best __fn41__count
-  696:  set __tmp185 __tmp209
-        label __label197
-  697:  set __tmp184 __tmp185
-        label __label195
-  698:  assertequals 3 __tmp184 "median(1,1,1,5,5,5)"
-        label __label230
-        label __label232
-  699:  set __fn44__bestDif 10000000000
-  700:  set __fn44__best null
-  701:  set __fn44__count 1
-  702:  setaddr __tmp212 __label237
-  703:  set __fn44__i 1
-  704:  jump __label235 always 0 0
-        gotolabel __label237 marker10
-  705:  setaddr __tmp212 __label238
-  706:  set __fn44__i 1
-  707:  jump __label235 always 0 0
-        gotolabel __label238 marker10
-  708:  setaddr __tmp212 __label239
-  709:  set __fn44__i 5
-  710:  jump __label235 always 0 0
-        gotolabel __label239 marker10
-  711:  setaddr __tmp212 __label240
-  712:  set __fn44__i 5
-  713:  jump __label235 always 0 0
-        gotolabel __label240 marker10
-  714:  setaddr __tmp212 __label241
-  715:  set __fn44__i 5
-  716:  jump __label235 always 0 0
-        gotolabel __label241 marker10
-  717:  setaddr __tmp212 __label242
-  718:  set __fn44__i 5
-        label __label235
-        label __label243
-  719:  set __fn45__n __fn44__i
-  720:  set __fn45__gt 0
-  721:  set __fn45__lt __fn45__gt
-  722:  setaddr __tmp214 __label248
-  723:  set __fn45__i 1
-  724:  jump __label246 always 0 0
-        gotolabel __label248 marker11
-  725:  setaddr __tmp214 __label249
-  726:  set __fn45__i 1
-  727:  jump __label246 always 0 0
-        gotolabel __label249 marker11
-  728:  setaddr __tmp214 __label250
-  729:  set __fn45__i 5
-  730:  jump __label246 always 0 0
-        gotolabel __label250 marker11
-  731:  setaddr __tmp214 __label251
-  732:  set __fn45__i 5
-  733:  jump __label246 always 0 0
-        gotolabel __label251 marker11
-  734:  setaddr __tmp214 __label252
-  735:  set __fn45__i 5
-  736:  jump __label246 always 0 0
-        gotolabel __label252 marker11
-  737:  setaddr __tmp214 __label253
-  738:  set __fn45__i 5
-        label __label246
-  739:  op lessThan __tmp215 __fn45__i __fn45__n
-  740:  jump __label254 equal __tmp215 false
-  741:  op add __tmp217 __fn45__lt 1
-  742:  set __fn45__lt __tmp217
-  743:  set __tmp216 __fn45__lt
-  744:  jump __label255 always 0 0
-        label __label254
-  745:  op greaterThan __tmp218 __fn45__i __fn45__n
-  746:  jump __label256 equal __tmp218 false
-  747:  op add __tmp220 __fn45__gt 1
-  748:  set __fn45__gt __tmp220
-  749:  set __tmp219 __fn45__gt
-  750:  jump __label257 always 0 0
-        label __label256
-  751:  set __tmp219 null
-        label __label257
-  752:  set __tmp216 __tmp219
-        label __label255
-        label __label245
-  753:  goto __tmp214 marker11
-        gotolabel __label253 marker11
-        label __label247
-  754:  op sub __tmp221 __fn45__gt __fn45__lt
-  755:  op abs __tmp222 __tmp221 0
-  756:  set __fn45__dif __tmp222
-  757:  op add __tmp223 __fn45__gt __fn45__lt
-  758:  op sub __tmp224 6 1
-  759:  op greaterThanEq __tmp225 __tmp223 __tmp224
-  760:  jump __label258 equal __tmp225 false
-  761:  op equal __tmp227 __fn45__gt __fn45__lt
-  762:  set __tmp226 __tmp227
-  763:  jump __label259 always 0 0
-        label __label258
-  764:  set __tmp226 false
-        label __label259
-  765:  set __tmp213 __tmp226
-        label __label244
-  766:  set __fn44__dif __fn45__dif
-  767:  jump __label260 equal __tmp213 false
-  768:  set __tmp211 __fn44__i
-  769:  jump __label233 always 0 0
-  770:  set __tmp228 null
-  771:  jump __label261 always 0 0
-        label __label260
-  772:  set __tmp228 null
-        label __label261
-  773:  op lessThan __tmp229 __fn44__dif __fn44__bestDif
-  774:  jump __label262 equal __tmp229 false
-  775:  set __fn44__bestDif __fn44__dif
-  776:  set __fn44__best __fn44__i
-  777:  set __fn44__count 1
-  778:  set __tmp230 __fn44__count
-  779:  jump __label263 always 0 0
-        label __label262
-  780:  op lessThanEq __tmp231 __fn44__dif __fn44__bestDif
-  781:  jump __label264 equal __tmp231 false
-  782:  op add __tmp233 __fn44__best __fn44__i
-  783:  set __fn44__best __tmp233
-  784:  op add __tmp234 __fn44__count 1
-  785:  set __fn44__count __tmp234
-  786:  set __tmp232 __fn44__count
-  787:  jump __label265 always 0 0
-        label __label264
-  788:  set __tmp232 null
-        label __label265
-  789:  set __tmp230 __tmp232
-        label __label263
-        label __label234
-  790:  goto __tmp212 marker10
-        gotolabel __label242 marker10
-        label __label236
-  791:  op div __tmp235 __fn44__best __fn44__count
-  792:  set __tmp211 __tmp235
-        label __label233
-  793:  set __tmp210 __tmp211
-        label __label231
-  794:  assertequals 5 __tmp210 "median(1,1,5,5,5,5)"
-        label __label266
-        label __label268
-  795:  set __fn47__bestDif 10000000000
-  796:  set __fn47__best null
-  797:  set __fn47__count 1
-  798:  setaddr __tmp238 __label273
-  799:  set __fn47__i 1
-  800:  jump __label271 always 0 0
-        gotolabel __label273 marker12
-  801:  setaddr __tmp238 __label274
-  802:  set __fn47__i 5
-  803:  jump __label271 always 0 0
-        gotolabel __label274 marker12
-  804:  setaddr __tmp238 __label275
-  805:  set __fn47__i 5
-  806:  jump __label271 always 0 0
-        gotolabel __label275 marker12
-  807:  setaddr __tmp238 __label276
-  808:  set __fn47__i 5
-  809:  jump __label271 always 0 0
-        gotolabel __label276 marker12
-  810:  setaddr __tmp238 __label277
-  811:  set __fn47__i 5
-  812:  jump __label271 always 0 0
-        gotolabel __label277 marker12
-  813:  setaddr __tmp238 __label278
-  814:  set __fn47__i 5
-        label __label271
-        label __label279
-  815:  set __fn48__n __fn47__i
-  816:  set __fn48__gt 0
-  817:  set __fn48__lt __fn48__gt
-  818:  setaddr __tmp240 __label284
-  819:  set __fn48__i 1
-  820:  jump __label282 always 0 0
-        gotolabel __label284 marker13
-  821:  setaddr __tmp240 __label285
-  822:  set __fn48__i 5
-  823:  jump __label282 always 0 0
-        gotolabel __label285 marker13
-  824:  setaddr __tmp240 __label286
-  825:  set __fn48__i 5
-  826:  jump __label282 always 0 0
-        gotolabel __label286 marker13
-  827:  setaddr __tmp240 __label287
-  828:  set __fn48__i 5
-  829:  jump __label282 always 0 0
-        gotolabel __label287 marker13
-  830:  setaddr __tmp240 __label288
-  831:  set __fn48__i 5
-  832:  jump __label282 always 0 0
-        gotolabel __label288 marker13
-  833:  setaddr __tmp240 __label289
-  834:  set __fn48__i 5
-        label __label282
-  835:  op lessThan __tmp241 __fn48__i __fn48__n
-  836:  jump __label290 equal __tmp241 false
-  837:  op add __tmp243 __fn48__lt 1
-  838:  set __fn48__lt __tmp243
-  839:  set __tmp242 __fn48__lt
-  840:  jump __label291 always 0 0
-        label __label290
-  841:  op greaterThan __tmp244 __fn48__i __fn48__n
-  842:  jump __label292 equal __tmp244 false
-  843:  op add __tmp246 __fn48__gt 1
-  844:  set __fn48__gt __tmp246
-  845:  set __tmp245 __fn48__gt
-  846:  jump __label293 always 0 0
-        label __label292
-  847:  set __tmp245 null
-        label __label293
-  848:  set __tmp242 __tmp245
-        label __label291
-        label __label281
-  849:  goto __tmp240 marker13
-        gotolabel __label289 marker13
-        label __label283
-  850:  op sub __tmp247 __fn48__gt __fn48__lt
-  851:  op abs __tmp248 __tmp247 0
-  852:  set __fn48__dif __tmp248
-  853:  op add __tmp249 __fn48__gt __fn48__lt
-  854:  op sub __tmp250 6 1
-  855:  op greaterThanEq __tmp251 __tmp249 __tmp250
-  856:  jump __label294 equal __tmp251 false
-  857:  op equal __tmp253 __fn48__gt __fn48__lt
-  858:  set __tmp252 __tmp253
-  859:  jump __label295 always 0 0
-        label __label294
-  860:  set __tmp252 false
-        label __label295
-  861:  set __tmp239 __tmp252
-        label __label280
-  862:  set __fn47__dif __fn48__dif
-  863:  jump __label296 equal __tmp239 false
-  864:  set __tmp237 __fn47__i
-  865:  jump __label269 always 0 0
-  866:  set __tmp254 null
-  867:  jump __label297 always 0 0
-        label __label296
-  868:  set __tmp254 null
-        label __label297
-  869:  op lessThan __tmp255 __fn47__dif __fn47__bestDif
-  870:  jump __label298 equal __tmp255 false
-  871:  set __fn47__bestDif __fn47__dif
-  872:  set __fn47__best __fn47__i
-  873:  set __fn47__count 1
-  874:  set __tmp256 __fn47__count
-  875:  jump __label299 always 0 0
-        label __label298
-  876:  op lessThanEq __tmp257 __fn47__dif __fn47__bestDif
-  877:  jump __label300 equal __tmp257 false
-  878:  op add __tmp259 __fn47__best __fn47__i
-  879:  set __fn47__best __tmp259
-  880:  op add __tmp260 __fn47__count 1
-  881:  set __fn47__count __tmp260
-  882:  set __tmp258 __fn47__count
-  883:  jump __label301 always 0 0
-        label __label300
-  884:  set __tmp258 null
-        label __label301
-  885:  set __tmp256 __tmp258
-        label __label299
-        label __label270
-  886:  goto __tmp238 marker12
-        gotolabel __label278 marker12
-        label __label272
-  887:  op div __tmp261 __fn47__best __fn47__count
-  888:  set __tmp237 __tmp261
-        label __label269
-  889:  set __tmp236 __tmp237
-        label __label267
-  890:  assertequals 5 __tmp236 "median(1,5,5,5,5,5)"
-        label __label302
-        label __label304
-  891:  set __fn50__bestDif 10000000000
-  892:  set __fn50__best null
-  893:  set __fn50__count 1
-  894:  setaddr __tmp264 __label309
-  895:  set __fn50__i 5
-  896:  jump __label307 always 0 0
-        gotolabel __label309 marker14
-  897:  setaddr __tmp264 __label310
-  898:  set __fn50__i 5
-  899:  jump __label307 always 0 0
-        gotolabel __label310 marker14
-  900:  setaddr __tmp264 __label311
-  901:  set __fn50__i 5
-  902:  jump __label307 always 0 0
-        gotolabel __label311 marker14
-  903:  setaddr __tmp264 __label312
-  904:  set __fn50__i 5
-  905:  jump __label307 always 0 0
-        gotolabel __label312 marker14
-  906:  setaddr __tmp264 __label313
-  907:  set __fn50__i 5
-  908:  jump __label307 always 0 0
-        gotolabel __label313 marker14
-  909:  setaddr __tmp264 __label314
-  910:  set __fn50__i 5
-        label __label307
-        label __label315
-  911:  set __fn51__n __fn50__i
-  912:  set __fn51__gt 0
-  913:  set __fn51__lt __fn51__gt
-  914:  setaddr __tmp266 __label320
-  915:  set __fn51__i 5
-  916:  jump __label318 always 0 0
-        gotolabel __label320 marker15
-  917:  setaddr __tmp266 __label321
-  918:  set __fn51__i 5
-  919:  jump __label318 always 0 0
-        gotolabel __label321 marker15
-  920:  setaddr __tmp266 __label322
-  921:  set __fn51__i 5
-  922:  jump __label318 always 0 0
-        gotolabel __label322 marker15
-  923:  setaddr __tmp266 __label323
-  924:  set __fn51__i 5
-  925:  jump __label318 always 0 0
-        gotolabel __label323 marker15
-  926:  setaddr __tmp266 __label324
-  927:  set __fn51__i 5
-  928:  jump __label318 always 0 0
-        gotolabel __label324 marker15
-  929:  setaddr __tmp266 __label325
-  930:  set __fn51__i 5
-        label __label318
-  931:  op lessThan __tmp267 __fn51__i __fn51__n
-  932:  jump __label326 equal __tmp267 false
-  933:  op add __tmp269 __fn51__lt 1
-  934:  set __fn51__lt __tmp269
-  935:  set __tmp268 __fn51__lt
-  936:  jump __label327 always 0 0
-        label __label326
-  937:  op greaterThan __tmp270 __fn51__i __fn51__n
-  938:  jump __label328 equal __tmp270 false
-  939:  op add __tmp272 __fn51__gt 1
-  940:  set __fn51__gt __tmp272
-  941:  set __tmp271 __fn51__gt
-  942:  jump __label329 always 0 0
-        label __label328
-  943:  set __tmp271 null
-        label __label329
-  944:  set __tmp268 __tmp271
-        label __label327
-        label __label317
-  945:  goto __tmp266 marker15
-        gotolabel __label325 marker15
-        label __label319
-  946:  op sub __tmp273 __fn51__gt __fn51__lt
-  947:  op abs __tmp274 __tmp273 0
-  948:  set __fn51__dif __tmp274
-  949:  op add __tmp275 __fn51__gt __fn51__lt
-  950:  op sub __tmp276 6 1
-  951:  op greaterThanEq __tmp277 __tmp275 __tmp276
-  952:  jump __label330 equal __tmp277 false
-  953:  op equal __tmp279 __fn51__gt __fn51__lt
-  954:  set __tmp278 __tmp279
-  955:  jump __label331 always 0 0
-        label __label330
-  956:  set __tmp278 false
-        label __label331
-  957:  set __tmp265 __tmp278
-        label __label316
-  958:  set __fn50__dif __fn51__dif
-  959:  jump __label332 equal __tmp265 false
-  960:  set __tmp263 __fn50__i
-  961:  jump __label305 always 0 0
-  962:  set __tmp280 null
-  963:  jump __label333 always 0 0
-        label __label332
-  964:  set __tmp280 null
-        label __label333
-  965:  op lessThan __tmp281 __fn50__dif __fn50__bestDif
-  966:  jump __label334 equal __tmp281 false
-  967:  set __fn50__bestDif __fn50__dif
-  968:  set __fn50__best __fn50__i
-  969:  set __fn50__count 1
-  970:  set __tmp282 __fn50__count
-  971:  jump __label335 always 0 0
-        label __label334
-  972:  op lessThanEq __tmp283 __fn50__dif __fn50__bestDif
-  973:  jump __label336 equal __tmp283 false
-  974:  op add __tmp285 __fn50__best __fn50__i
-  975:  set __fn50__best __tmp285
-  976:  op add __tmp286 __fn50__count 1
-  977:  set __fn50__count __tmp286
-  978:  set __tmp284 __fn50__count
-  979:  jump __label337 always 0 0
-        label __label336
-  980:  set __tmp284 null
-        label __label337
-  981:  set __tmp282 __tmp284
-        label __label335
-        label __label306
-  982:  goto __tmp264 marker14
-        gotolabel __label314 marker14
-        label __label308
-  983:  op div __tmp287 __fn50__best __fn50__count
-  984:  set __tmp263 __tmp287
-        label __label305
-  985:  set __tmp262 __tmp263
-        label __label303
-  986:  assertequals 5 __tmp262 "median(5,5,5,5,5,5)"
-        label __label338
-        label __label340
-  987:  set __fn53__bestDif 10000000000
-  988:  set __fn53__best null
-  989:  set __fn53__count 1
-  990:  setaddr __tmp290 __label345
-  991:  set __fn53__i 1
-  992:  jump __label343 always 0 0
-        gotolabel __label345 marker16
-  993:  setaddr __tmp290 __label346
-  994:  set __fn53__i 2
-  995:  jump __label343 always 0 0
-        gotolabel __label346 marker16
-  996:  setaddr __tmp290 __label347
-  997:  set __fn53__i 3
-  998:  jump __label343 always 0 0
-        gotolabel __label347 marker16
-  999:  setaddr __tmp290 __label348
- 1000:  set __fn53__i 4
- 1001:  jump __label343 always 0 0
-        gotolabel __label348 marker16
- 1002:  setaddr __tmp290 __label349
- 1003:  set __fn53__i 5
- 1004:  jump __label343 always 0 0
-        gotolabel __label349 marker16
- 1005:  setaddr __tmp290 __label350
- 1006:  set __fn53__i 6
- 1007:  jump __label343 always 0 0
-        gotolabel __label350 marker16
- 1008:  setaddr __tmp290 __label351
- 1009:  set __fn53__i 7
- 1010:  jump __label343 always 0 0
-        gotolabel __label351 marker16
- 1011:  setaddr __tmp290 __label352
- 1012:  set __fn53__i 8
- 1013:  jump __label343 always 0 0
-        gotolabel __label352 marker16
- 1014:  setaddr __tmp290 __label353
- 1015:  set __fn53__i 9
-        label __label343
-        label __label354
- 1016:  set __fn54__n __fn53__i
- 1017:  set __fn54__gt 0
- 1018:  set __fn54__lt __fn54__gt
- 1019:  setaddr __tmp292 __label359
- 1020:  set __fn54__i 1
- 1021:  jump __label357 always 0 0
-        gotolabel __label359 marker17
- 1022:  setaddr __tmp292 __label360
- 1023:  set __fn54__i 2
- 1024:  jump __label357 always 0 0
-        gotolabel __label360 marker17
- 1025:  setaddr __tmp292 __label361
- 1026:  set __fn54__i 3
- 1027:  jump __label357 always 0 0
-        gotolabel __label361 marker17
- 1028:  setaddr __tmp292 __label362
- 1029:  set __fn54__i 4
- 1030:  jump __label357 always 0 0
-        gotolabel __label362 marker17
- 1031:  setaddr __tmp292 __label363
- 1032:  set __fn54__i 5
- 1033:  jump __label357 always 0 0
-        gotolabel __label363 marker17
- 1034:  setaddr __tmp292 __label364
- 1035:  set __fn54__i 6
- 1036:  jump __label357 always 0 0
-        gotolabel __label364 marker17
- 1037:  setaddr __tmp292 __label365
- 1038:  set __fn54__i 7
- 1039:  jump __label357 always 0 0
-        gotolabel __label365 marker17
- 1040:  setaddr __tmp292 __label366
- 1041:  set __fn54__i 8
- 1042:  jump __label357 always 0 0
-        gotolabel __label366 marker17
- 1043:  setaddr __tmp292 __label367
- 1044:  set __fn54__i 9
-        label __label357
- 1045:  op lessThan __tmp293 __fn54__i __fn54__n
- 1046:  jump __label368 equal __tmp293 false
- 1047:  op add __tmp295 __fn54__lt 1
- 1048:  set __fn54__lt __tmp295
- 1049:  set __tmp294 __fn54__lt
- 1050:  jump __label369 always 0 0
-        label __label368
- 1051:  op greaterThan __tmp296 __fn54__i __fn54__n
- 1052:  jump __label370 equal __tmp296 false
- 1053:  op add __tmp298 __fn54__gt 1
- 1054:  set __fn54__gt __tmp298
- 1055:  set __tmp297 __fn54__gt
- 1056:  jump __label371 always 0 0
-        label __label370
- 1057:  set __tmp297 null
-        label __label371
- 1058:  set __tmp294 __tmp297
-        label __label369
-        label __label356
- 1059:  goto __tmp292 marker17
-        gotolabel __label367 marker17
-        label __label358
- 1060:  op sub __tmp299 __fn54__gt __fn54__lt
- 1061:  op abs __tmp300 __tmp299 0
- 1062:  set __fn54__dif __tmp300
- 1063:  op add __tmp301 __fn54__gt __fn54__lt
- 1064:  op sub __tmp302 9 1
- 1065:  op greaterThanEq __tmp303 __tmp301 __tmp302
- 1066:  jump __label372 equal __tmp303 false
- 1067:  op equal __tmp305 __fn54__gt __fn54__lt
- 1068:  set __tmp304 __tmp305
- 1069:  jump __label373 always 0 0
-        label __label372
- 1070:  set __tmp304 false
-        label __label373
- 1071:  set __tmp291 __tmp304
-        label __label355
- 1072:  set __fn53__dif __fn54__dif
- 1073:  jump __label374 equal __tmp291 false
- 1074:  set __tmp289 __fn53__i
- 1075:  jump __label341 always 0 0
- 1076:  set __tmp306 null
- 1077:  jump __label375 always 0 0
-        label __label374
- 1078:  set __tmp306 null
-        label __label375
- 1079:  op lessThan __tmp307 __fn53__dif __fn53__bestDif
- 1080:  jump __label376 equal __tmp307 false
- 1081:  set __fn53__bestDif __fn53__dif
- 1082:  set __fn53__best __fn53__i
- 1083:  set __fn53__count 1
- 1084:  set __tmp308 __fn53__count
- 1085:  jump __label377 always 0 0
-        label __label376
- 1086:  op lessThanEq __tmp309 __fn53__dif __fn53__bestDif
- 1087:  jump __label378 equal __tmp309 false
- 1088:  op add __tmp311 __fn53__best __fn53__i
- 1089:  set __fn53__best __tmp311
- 1090:  op add __tmp312 __fn53__count 1
- 1091:  set __fn53__count __tmp312
- 1092:  set __tmp310 __fn53__count
- 1093:  jump __label379 always 0 0
-        label __label378
- 1094:  set __tmp310 null
-        label __label379
- 1095:  set __tmp308 __tmp310
-        label __label377
-        label __label342
- 1096:  goto __tmp290 marker16
-        gotolabel __label353 marker16
-        label __label344
- 1097:  op div __tmp313 __fn53__best __fn53__count
- 1098:  set __tmp289 __tmp313
-        label __label341
- 1099:  set __tmp288 __tmp289
-        label __label339
- 1100:  assertequals 5 __tmp288 "median(1,2,3,4,5,6,7,8,9)"
-        label __label380
-        label __label382
- 1101:  set __fn56__bestDif 10000000000
- 1102:  set __fn56__best null
- 1103:  set __fn56__count 1
- 1104:  setaddr __tmp316 __label387
- 1105:  set __fn56__i 9
- 1106:  jump __label385 always 0 0
-        gotolabel __label387 marker18
- 1107:  setaddr __tmp316 __label388
- 1108:  set __fn56__i 8
- 1109:  jump __label385 always 0 0
-        gotolabel __label388 marker18
- 1110:  setaddr __tmp316 __label389
- 1111:  set __fn56__i 7
- 1112:  jump __label385 always 0 0
-        gotolabel __label389 marker18
- 1113:  setaddr __tmp316 __label390
- 1114:  set __fn56__i 6
- 1115:  jump __label385 always 0 0
-        gotolabel __label390 marker18
- 1116:  setaddr __tmp316 __label391
- 1117:  set __fn56__i 5
- 1118:  jump __label385 always 0 0
-        gotolabel __label391 marker18
- 1119:  setaddr __tmp316 __label392
- 1120:  set __fn56__i 4
- 1121:  jump __label385 always 0 0
-        gotolabel __label392 marker18
- 1122:  setaddr __tmp316 __label393
- 1123:  set __fn56__i 3
- 1124:  jump __label385 always 0 0
-        gotolabel __label393 marker18
- 1125:  setaddr __tmp316 __label394
- 1126:  set __fn56__i 2
- 1127:  jump __label385 always 0 0
-        gotolabel __label394 marker18
- 1128:  setaddr __tmp316 __label395
- 1129:  set __fn56__i 1
-        label __label385
-        label __label396
- 1130:  set __fn57__n __fn56__i
- 1131:  set __fn57__gt 0
- 1132:  set __fn57__lt __fn57__gt
- 1133:  setaddr __tmp318 __label401
- 1134:  set __fn57__i 9
- 1135:  jump __label399 always 0 0
-        gotolabel __label401 marker19
- 1136:  setaddr __tmp318 __label402
- 1137:  set __fn57__i 8
- 1138:  jump __label399 always 0 0
-        gotolabel __label402 marker19
- 1139:  setaddr __tmp318 __label403
- 1140:  set __fn57__i 7
- 1141:  jump __label399 always 0 0
-        gotolabel __label403 marker19
- 1142:  setaddr __tmp318 __label404
- 1143:  set __fn57__i 6
- 1144:  jump __label399 always 0 0
-        gotolabel __label404 marker19
- 1145:  setaddr __tmp318 __label405
- 1146:  set __fn57__i 5
- 1147:  jump __label399 always 0 0
-        gotolabel __label405 marker19
- 1148:  setaddr __tmp318 __label406
- 1149:  set __fn57__i 4
- 1150:  jump __label399 always 0 0
-        gotolabel __label406 marker19
- 1151:  setaddr __tmp318 __label407
- 1152:  set __fn57__i 3
- 1153:  jump __label399 always 0 0
-        gotolabel __label407 marker19
- 1154:  setaddr __tmp318 __label408
- 1155:  set __fn57__i 2
- 1156:  jump __label399 always 0 0
-        gotolabel __label408 marker19
- 1157:  setaddr __tmp318 __label409
- 1158:  set __fn57__i 1
-        label __label399
- 1159:  op lessThan __tmp319 __fn57__i __fn57__n
- 1160:  jump __label410 equal __tmp319 false
- 1161:  op add __tmp321 __fn57__lt 1
- 1162:  set __fn57__lt __tmp321
- 1163:  set __tmp320 __fn57__lt
- 1164:  jump __label411 always 0 0
-        label __label410
- 1165:  op greaterThan __tmp322 __fn57__i __fn57__n
- 1166:  jump __label412 equal __tmp322 false
- 1167:  op add __tmp324 __fn57__gt 1
- 1168:  set __fn57__gt __tmp324
- 1169:  set __tmp323 __fn57__gt
- 1170:  jump __label413 always 0 0
-        label __label412
- 1171:  set __tmp323 null
-        label __label413
- 1172:  set __tmp320 __tmp323
-        label __label411
-        label __label398
- 1173:  goto __tmp318 marker19
-        gotolabel __label409 marker19
-        label __label400
- 1174:  op sub __tmp325 __fn57__gt __fn57__lt
- 1175:  op abs __tmp326 __tmp325 0
- 1176:  set __fn57__dif __tmp326
- 1177:  op add __tmp327 __fn57__gt __fn57__lt
- 1178:  op sub __tmp328 9 1
- 1179:  op greaterThanEq __tmp329 __tmp327 __tmp328
- 1180:  jump __label414 equal __tmp329 false
- 1181:  op equal __tmp331 __fn57__gt __fn57__lt
- 1182:  set __tmp330 __tmp331
- 1183:  jump __label415 always 0 0
-        label __label414
- 1184:  set __tmp330 false
-        label __label415
- 1185:  set __tmp317 __tmp330
-        label __label397
- 1186:  set __fn56__dif __fn57__dif
- 1187:  jump __label416 equal __tmp317 false
- 1188:  set __tmp315 __fn56__i
- 1189:  jump __label383 always 0 0
- 1190:  set __tmp332 null
- 1191:  jump __label417 always 0 0
-        label __label416
- 1192:  set __tmp332 null
-        label __label417
- 1193:  op lessThan __tmp333 __fn56__dif __fn56__bestDif
- 1194:  jump __label418 equal __tmp333 false
- 1195:  set __fn56__bestDif __fn56__dif
- 1196:  set __fn56__best __fn56__i
- 1197:  set __fn56__count 1
- 1198:  set __tmp334 __fn56__count
- 1199:  jump __label419 always 0 0
-        label __label418
- 1200:  op lessThanEq __tmp335 __fn56__dif __fn56__bestDif
- 1201:  jump __label420 equal __tmp335 false
- 1202:  op add __tmp337 __fn56__best __fn56__i
- 1203:  set __fn56__best __tmp337
- 1204:  op add __tmp338 __fn56__count 1
- 1205:  set __fn56__count __tmp338
- 1206:  set __tmp336 __fn56__count
- 1207:  jump __label421 always 0 0
-        label __label420
- 1208:  set __tmp336 null
-        label __label421
- 1209:  set __tmp334 __tmp336
-        label __label419
-        label __label384
- 1210:  goto __tmp316 marker18
-        gotolabel __label395 marker18
-        label __label386
- 1211:  op div __tmp339 __fn56__best __fn56__count
- 1212:  set __tmp315 __tmp339
-        label __label383
- 1213:  set __tmp314 __tmp315
-        label __label381
- 1214:  assertequals 5 __tmp314 "median(9,8,7,6,5,4,3,2,1)"
-        label __label422
-        label __label424
- 1215:  set __fn59__bestDif 10000000000
- 1216:  set __fn59__best null
- 1217:  set __fn59__count 1
- 1218:  setaddr __tmp342 __label429
- 1219:  set __fn59__i 1
- 1220:  jump __label427 always 0 0
-        gotolabel __label429 marker20
- 1221:  setaddr __tmp342 __label430
- 1222:  set __fn59__i 3
- 1223:  jump __label427 always 0 0
-        gotolabel __label430 marker20
- 1224:  setaddr __tmp342 __label431
- 1225:  set __fn59__i 5
- 1226:  jump __label427 always 0 0
-        gotolabel __label431 marker20
- 1227:  setaddr __tmp342 __label432
- 1228:  set __fn59__i 7
- 1229:  jump __label427 always 0 0
-        gotolabel __label432 marker20
- 1230:  setaddr __tmp342 __label433
- 1231:  set __fn59__i 9
- 1232:  jump __label427 always 0 0
-        gotolabel __label433 marker20
- 1233:  setaddr __tmp342 __label434
- 1234:  set __fn59__i 2
- 1235:  jump __label427 always 0 0
-        gotolabel __label434 marker20
- 1236:  setaddr __tmp342 __label435
- 1237:  set __fn59__i 4
- 1238:  jump __label427 always 0 0
-        gotolabel __label435 marker20
- 1239:  setaddr __tmp342 __label436
- 1240:  set __fn59__i 6
- 1241:  jump __label427 always 0 0
-        gotolabel __label436 marker20
- 1242:  setaddr __tmp342 __label437
- 1243:  set __fn59__i 8
-        label __label427
-        label __label438
- 1244:  set __fn60__n __fn59__i
- 1245:  set __fn60__gt 0
- 1246:  set __fn60__lt __fn60__gt
- 1247:  setaddr __tmp344 __label443
- 1248:  set __fn60__i 1
- 1249:  jump __label441 always 0 0
-        gotolabel __label443 marker21
- 1250:  setaddr __tmp344 __label444
- 1251:  set __fn60__i 3
- 1252:  jump __label441 always 0 0
-        gotolabel __label444 marker21
- 1253:  setaddr __tmp344 __label445
- 1254:  set __fn60__i 5
- 1255:  jump __label441 always 0 0
-        gotolabel __label445 marker21
- 1256:  setaddr __tmp344 __label446
- 1257:  set __fn60__i 7
- 1258:  jump __label441 always 0 0
-        gotolabel __label446 marker21
- 1259:  setaddr __tmp344 __label447
- 1260:  set __fn60__i 9
- 1261:  jump __label441 always 0 0
-        gotolabel __label447 marker21
- 1262:  setaddr __tmp344 __label448
- 1263:  set __fn60__i 2
- 1264:  jump __label441 always 0 0
-        gotolabel __label448 marker21
- 1265:  setaddr __tmp344 __label449
- 1266:  set __fn60__i 4
- 1267:  jump __label441 always 0 0
-        gotolabel __label449 marker21
- 1268:  setaddr __tmp344 __label450
- 1269:  set __fn60__i 6
- 1270:  jump __label441 always 0 0
-        gotolabel __label450 marker21
- 1271:  setaddr __tmp344 __label451
- 1272:  set __fn60__i 8
-        label __label441
- 1273:  op lessThan __tmp345 __fn60__i __fn60__n
- 1274:  jump __label452 equal __tmp345 false
- 1275:  op add __tmp347 __fn60__lt 1
- 1276:  set __fn60__lt __tmp347
- 1277:  set __tmp346 __fn60__lt
- 1278:  jump __label453 always 0 0
-        label __label452
- 1279:  op greaterThan __tmp348 __fn60__i __fn60__n
- 1280:  jump __label454 equal __tmp348 false
- 1281:  op add __tmp350 __fn60__gt 1
- 1282:  set __fn60__gt __tmp350
- 1283:  set __tmp349 __fn60__gt
- 1284:  jump __label455 always 0 0
-        label __label454
- 1285:  set __tmp349 null
-        label __label455
- 1286:  set __tmp346 __tmp349
-        label __label453
-        label __label440
- 1287:  goto __tmp344 marker21
-        gotolabel __label451 marker21
-        label __label442
- 1288:  op sub __tmp351 __fn60__gt __fn60__lt
- 1289:  op abs __tmp352 __tmp351 0
- 1290:  set __fn60__dif __tmp352
- 1291:  op add __tmp353 __fn60__gt __fn60__lt
- 1292:  op sub __tmp354 9 1
- 1293:  op greaterThanEq __tmp355 __tmp353 __tmp354
- 1294:  jump __label456 equal __tmp355 false
- 1295:  op equal __tmp357 __fn60__gt __fn60__lt
- 1296:  set __tmp356 __tmp357
- 1297:  jump __label457 always 0 0
-        label __label456
- 1298:  set __tmp356 false
-        label __label457
- 1299:  set __tmp343 __tmp356
-        label __label439
- 1300:  set __fn59__dif __fn60__dif
- 1301:  jump __label458 equal __tmp343 false
- 1302:  set __tmp341 __fn59__i
- 1303:  jump __label425 always 0 0
- 1304:  set __tmp358 null
- 1305:  jump __label459 always 0 0
-        label __label458
- 1306:  set __tmp358 null
-        label __label459
- 1307:  op lessThan __tmp359 __fn59__dif __fn59__bestDif
- 1308:  jump __label460 equal __tmp359 false
- 1309:  set __fn59__bestDif __fn59__dif
- 1310:  set __fn59__best __fn59__i
- 1311:  set __fn59__count 1
- 1312:  set __tmp360 __fn59__count
- 1313:  jump __label461 always 0 0
-        label __label460
- 1314:  op lessThanEq __tmp361 __fn59__dif __fn59__bestDif
- 1315:  jump __label462 equal __tmp361 false
- 1316:  op add __tmp363 __fn59__best __fn59__i
- 1317:  set __fn59__best __tmp363
- 1318:  op add __tmp364 __fn59__count 1
- 1319:  set __fn59__count __tmp364
- 1320:  set __tmp362 __fn59__count
- 1321:  jump __label463 always 0 0
-        label __label462
- 1322:  set __tmp362 null
-        label __label463
- 1323:  set __tmp360 __tmp362
-        label __label461
-        label __label426
- 1324:  goto __tmp342 marker20
-        gotolabel __label437 marker20
-        label __label428
- 1325:  op div __tmp365 __fn59__best __fn59__count
- 1326:  set __tmp341 __tmp365
-        label __label425
- 1327:  set __tmp340 __tmp341
-        label __label423
- 1328:  assertequals 5 __tmp340 "median(1,3,5,7,9,2,4,6,8)"
-        label __label464
-        label __label466
- 1329:  set __fn62__bestDif 10000000000
- 1330:  set __fn62__best null
- 1331:  set __fn62__count 1
- 1332:  setaddr __tmp368 __label471
- 1333:  set __fn62__i 7
- 1334:  jump __label469 always 0 0
-        gotolabel __label471 marker22
- 1335:  setaddr __tmp368 __label472
- 1336:  set __fn62__i 4
- 1337:  jump __label469 always 0 0
-        gotolabel __label472 marker22
- 1338:  setaddr __tmp368 __label473
- 1339:  set __fn62__i 2
- 1340:  jump __label469 always 0 0
-        gotolabel __label473 marker22
- 1341:  setaddr __tmp368 __label474
- 1342:  set __fn62__i 8
- 1343:  jump __label469 always 0 0
-        gotolabel __label474 marker22
- 1344:  setaddr __tmp368 __label475
- 1345:  set __fn62__i 1
- 1346:  jump __label469 always 0 0
-        gotolabel __label475 marker22
- 1347:  setaddr __tmp368 __label476
- 1348:  set __fn62__i 5
- 1349:  jump __label469 always 0 0
-        gotolabel __label476 marker22
- 1350:  setaddr __tmp368 __label477
- 1351:  set __fn62__i 6
- 1352:  jump __label469 always 0 0
-        gotolabel __label477 marker22
- 1353:  setaddr __tmp368 __label478
- 1354:  set __fn62__i 9
- 1355:  jump __label469 always 0 0
-        gotolabel __label478 marker22
- 1356:  setaddr __tmp368 __label479
- 1357:  set __fn62__i 3
-        label __label469
-        label __label480
- 1358:  set __fn63__n __fn62__i
- 1359:  set __fn63__gt 0
- 1360:  set __fn63__lt __fn63__gt
- 1361:  setaddr __tmp370 __label485
- 1362:  set __fn63__i 7
- 1363:  jump __label483 always 0 0
-        gotolabel __label485 marker23
- 1364:  setaddr __tmp370 __label486
- 1365:  set __fn63__i 4
- 1366:  jump __label483 always 0 0
-        gotolabel __label486 marker23
- 1367:  setaddr __tmp370 __label487
- 1368:  set __fn63__i 2
- 1369:  jump __label483 always 0 0
-        gotolabel __label487 marker23
- 1370:  setaddr __tmp370 __label488
- 1371:  set __fn63__i 8
- 1372:  jump __label483 always 0 0
-        gotolabel __label488 marker23
- 1373:  setaddr __tmp370 __label489
- 1374:  set __fn63__i 1
- 1375:  jump __label483 always 0 0
-        gotolabel __label489 marker23
- 1376:  setaddr __tmp370 __label490
- 1377:  set __fn63__i 5
- 1378:  jump __label483 always 0 0
-        gotolabel __label490 marker23
- 1379:  setaddr __tmp370 __label491
- 1380:  set __fn63__i 6
- 1381:  jump __label483 always 0 0
-        gotolabel __label491 marker23
- 1382:  setaddr __tmp370 __label492
- 1383:  set __fn63__i 9
- 1384:  jump __label483 always 0 0
-        gotolabel __label492 marker23
- 1385:  setaddr __tmp370 __label493
- 1386:  set __fn63__i 3
-        label __label483
- 1387:  op lessThan __tmp371 __fn63__i __fn63__n
- 1388:  jump __label494 equal __tmp371 false
- 1389:  op add __tmp373 __fn63__lt 1
- 1390:  set __fn63__lt __tmp373
- 1391:  set __tmp372 __fn63__lt
- 1392:  jump __label495 always 0 0
-        label __label494
- 1393:  op greaterThan __tmp374 __fn63__i __fn63__n
- 1394:  jump __label496 equal __tmp374 false
- 1395:  op add __tmp376 __fn63__gt 1
- 1396:  set __fn63__gt __tmp376
- 1397:  set __tmp375 __fn63__gt
- 1398:  jump __label497 always 0 0
-        label __label496
- 1399:  set __tmp375 null
-        label __label497
- 1400:  set __tmp372 __tmp375
-        label __label495
-        label __label482
- 1401:  goto __tmp370 marker23
-        gotolabel __label493 marker23
-        label __label484
- 1402:  op sub __tmp377 __fn63__gt __fn63__lt
- 1403:  op abs __tmp378 __tmp377 0
- 1404:  set __fn63__dif __tmp378
- 1405:  op add __tmp379 __fn63__gt __fn63__lt
- 1406:  op sub __tmp380 9 1
- 1407:  op greaterThanEq __tmp381 __tmp379 __tmp380
- 1408:  jump __label498 equal __tmp381 false
- 1409:  op equal __tmp383 __fn63__gt __fn63__lt
- 1410:  set __tmp382 __tmp383
- 1411:  jump __label499 always 0 0
-        label __label498
- 1412:  set __tmp382 false
-        label __label499
- 1413:  set __tmp369 __tmp382
-        label __label481
- 1414:  set __fn62__dif __fn63__dif
- 1415:  jump __label500 equal __tmp369 false
- 1416:  set __tmp367 __fn62__i
- 1417:  jump __label467 always 0 0
- 1418:  set __tmp384 null
- 1419:  jump __label501 always 0 0
-        label __label500
- 1420:  set __tmp384 null
-        label __label501
- 1421:  op lessThan __tmp385 __fn62__dif __fn62__bestDif
- 1422:  jump __label502 equal __tmp385 false
- 1423:  set __fn62__bestDif __fn62__dif
- 1424:  set __fn62__best __fn62__i
- 1425:  set __fn62__count 1
- 1426:  set __tmp386 __fn62__count
- 1427:  jump __label503 always 0 0
-        label __label502
- 1428:  op lessThanEq __tmp387 __fn62__dif __fn62__bestDif
- 1429:  jump __label504 equal __tmp387 false
- 1430:  op add __tmp389 __fn62__best __fn62__i
- 1431:  set __fn62__best __tmp389
- 1432:  op add __tmp390 __fn62__count 1
- 1433:  set __fn62__count __tmp390
- 1434:  set __tmp388 __fn62__count
- 1435:  jump __label505 always 0 0
-        label __label504
- 1436:  set __tmp388 null
-        label __label505
- 1437:  set __tmp386 __tmp388
-        label __label503
-        label __label468
- 1438:  goto __tmp368 marker22
-        gotolabel __label479 marker22
-        label __label470
- 1439:  op div __tmp391 __fn62__best __fn62__count
- 1440:  set __tmp367 __tmp391
-        label __label467
- 1441:  set __tmp366 __tmp367
-        label __label465
- 1442:  assertequals 5 __tmp366 "median(7,4,2,8,1,5,6,9,3)"
-        label __label506
-        label __label508
- 1443:  set __fn65__bestDif 10000000000
- 1444:  set __fn65__best null
- 1445:  set __fn65__count 1
- 1446:  setaddr __tmp394 __label513
- 1447:  set __fn65__i 1
- 1448:  jump __label511 always 0 0
-        gotolabel __label513 marker24
- 1449:  setaddr __tmp394 __label514
- 1450:  set __fn65__i 1
- 1451:  jump __label511 always 0 0
-        gotolabel __label514 marker24
- 1452:  setaddr __tmp394 __label515
- 1453:  set __fn65__i 1
- 1454:  jump __label511 always 0 0
-        gotolabel __label515 marker24
- 1455:  setaddr __tmp394 __label516
- 1456:  set __fn65__i 1
- 1457:  jump __label511 always 0 0
-        gotolabel __label516 marker24
- 1458:  setaddr __tmp394 __label517
- 1459:  set __fn65__i 9
- 1460:  jump __label511 always 0 0
-        gotolabel __label517 marker24
- 1461:  setaddr __tmp394 __label518
- 1462:  set __fn65__i 9
- 1463:  jump __label511 always 0 0
-        gotolabel __label518 marker24
- 1464:  setaddr __tmp394 __label519
- 1465:  set __fn65__i 9
- 1466:  jump __label511 always 0 0
-        gotolabel __label519 marker24
- 1467:  setaddr __tmp394 __label520
- 1468:  set __fn65__i 9
- 1469:  jump __label511 always 0 0
-        gotolabel __label520 marker24
- 1470:  setaddr __tmp394 __label521
- 1471:  set __fn65__i 5
-        label __label511
-        label __label522
- 1472:  set __fn66__n __fn65__i
- 1473:  set __fn66__gt 0
- 1474:  set __fn66__lt __fn66__gt
- 1475:  setaddr __tmp396 __label527
- 1476:  set __fn66__i 1
- 1477:  jump __label525 always 0 0
-        gotolabel __label527 marker25
- 1478:  setaddr __tmp396 __label528
- 1479:  set __fn66__i 1
- 1480:  jump __label525 always 0 0
-        gotolabel __label528 marker25
- 1481:  setaddr __tmp396 __label529
- 1482:  set __fn66__i 1
- 1483:  jump __label525 always 0 0
-        gotolabel __label529 marker25
- 1484:  setaddr __tmp396 __label530
- 1485:  set __fn66__i 1
- 1486:  jump __label525 always 0 0
-        gotolabel __label530 marker25
- 1487:  setaddr __tmp396 __label531
- 1488:  set __fn66__i 9
- 1489:  jump __label525 always 0 0
-        gotolabel __label531 marker25
- 1490:  setaddr __tmp396 __label532
- 1491:  set __fn66__i 9
- 1492:  jump __label525 always 0 0
-        gotolabel __label532 marker25
- 1493:  setaddr __tmp396 __label533
- 1494:  set __fn66__i 9
- 1495:  jump __label525 always 0 0
-        gotolabel __label533 marker25
- 1496:  setaddr __tmp396 __label534
- 1497:  set __fn66__i 9
- 1498:  jump __label525 always 0 0
-        gotolabel __label534 marker25
- 1499:  setaddr __tmp396 __label535
- 1500:  set __fn66__i 5
-        label __label525
- 1501:  op lessThan __tmp397 __fn66__i __fn66__n
- 1502:  jump __label536 equal __tmp397 false
- 1503:  op add __tmp399 __fn66__lt 1
- 1504:  set __fn66__lt __tmp399
- 1505:  set __tmp398 __fn66__lt
- 1506:  jump __label537 always 0 0
-        label __label536
- 1507:  op greaterThan __tmp400 __fn66__i __fn66__n
- 1508:  jump __label538 equal __tmp400 false
- 1509:  op add __tmp402 __fn66__gt 1
- 1510:  set __fn66__gt __tmp402
- 1511:  set __tmp401 __fn66__gt
- 1512:  jump __label539 always 0 0
-        label __label538
- 1513:  set __tmp401 null
-        label __label539
- 1514:  set __tmp398 __tmp401
-        label __label537
-        label __label524
- 1515:  goto __tmp396 marker25
-        gotolabel __label535 marker25
-        label __label526
- 1516:  op sub __tmp403 __fn66__gt __fn66__lt
- 1517:  op abs __tmp404 __tmp403 0
- 1518:  set __fn66__dif __tmp404
- 1519:  op add __tmp405 __fn66__gt __fn66__lt
- 1520:  op sub __tmp406 9 1
- 1521:  op greaterThanEq __tmp407 __tmp405 __tmp406
- 1522:  jump __label540 equal __tmp407 false
- 1523:  op equal __tmp409 __fn66__gt __fn66__lt
- 1524:  set __tmp408 __tmp409
- 1525:  jump __label541 always 0 0
-        label __label540
- 1526:  set __tmp408 false
-        label __label541
- 1527:  set __tmp395 __tmp408
-        label __label523
- 1528:  set __fn65__dif __fn66__dif
- 1529:  jump __label542 equal __tmp395 false
- 1530:  set __tmp393 __fn65__i
- 1531:  jump __label509 always 0 0
- 1532:  set __tmp410 null
- 1533:  jump __label543 always 0 0
-        label __label542
- 1534:  set __tmp410 null
-        label __label543
- 1535:  op lessThan __tmp411 __fn65__dif __fn65__bestDif
- 1536:  jump __label544 equal __tmp411 false
- 1537:  set __fn65__bestDif __fn65__dif
- 1538:  set __fn65__best __fn65__i
- 1539:  set __fn65__count 1
- 1540:  set __tmp412 __fn65__count
- 1541:  jump __label545 always 0 0
-        label __label544
- 1542:  op lessThanEq __tmp413 __fn65__dif __fn65__bestDif
- 1543:  jump __label546 equal __tmp413 false
- 1544:  op add __tmp415 __fn65__best __fn65__i
- 1545:  set __fn65__best __tmp415
- 1546:  op add __tmp416 __fn65__count 1
- 1547:  set __fn65__count __tmp416
- 1548:  set __tmp414 __fn65__count
- 1549:  jump __label547 always 0 0
-        label __label546
- 1550:  set __tmp414 null
-        label __label547
- 1551:  set __tmp412 __tmp414
-        label __label545
-        label __label510
- 1552:  goto __tmp394 marker24
-        gotolabel __label521 marker24
-        label __label512
- 1553:  op div __tmp417 __fn65__best __fn65__count
- 1554:  set __tmp393 __tmp417
-        label __label509
- 1555:  set __tmp392 __tmp393
-        label __label507
- 1556:  assertequals 5 __tmp392 "median(1,1,1,1,9,9,9,9,5)"
- 1557:  stop
- 1558:  end
-        label __label0
- 1559:  op equal __tmp418 __fn0__x 0
- 1560:  jump __label549 equal __tmp418 false
- 1561:  set __tmp419 0
- 1562:  jump __label550 always 0 0
-        label __label549
- 1563:  op lessThan __tmp420 __fn0__x 0
- 1564:  jump __label551 equal __tmp420 false
- 1565:  set __tmp421 -1
- 1566:  jump __label552 always 0 0
-        label __label551
- 1567:  set __tmp421 1
-        label __label552
- 1568:  set __tmp419 __tmp421
-        label __label550
- 1569:  set __fn0retval __tmp419
-        label __label548
- 1570:  goto __fn0retaddr __fn0
- 1571:  end
-        label __label1
- 1572:  op max __tmp422 __fn1__x1 __fn1__x2
- 1573:  set __fn1__y2 __tmp422
- 1574:  op min __tmp423 __fn1__x3 __fn1__x4
- 1575:  set __fn1__y3 __tmp423
- 1576:  op lessThanEq __tmp424 __fn1__y2 __fn1__y3
- 1577:  jump __label554 equal __tmp424 false
- 1578:  op add __tmp426 __fn1__y2 __fn1__y3
- 1579:  op div __tmp427 __tmp426 2
- 1580:  set __tmp425 __tmp427
- 1581:  jump __label555 always 0 0
-        label __label554
- 1582:  op min __tmp428 __fn1__x1 __fn1__x2
- 1583:  set __fn1__y1 __tmp428
- 1584:  op max __tmp429 __fn1__x3 __fn1__x4
- 1585:  set __fn1__y4 __tmp429
- 1586:  op greaterThanEq __tmp430 __fn1__y1 __fn1__y4
- 1587:  jump __label556 equal __tmp430 false
- 1588:  op add __tmp432 __fn1__y1 __fn1__y4
- 1589:  op div __tmp433 __tmp432 2
- 1590:  set __tmp431 __tmp433
- 1591:  jump __label557 always 0 0
-        label __label556
- 1592:  op max __tmp434 __fn1__y1 __fn1__y3
- 1593:  op min __tmp435 __fn1__y2 __fn1__y4
- 1594:  op add __tmp436 __tmp434 __tmp435
- 1595:  op div __tmp437 __tmp436 2
- 1596:  set __tmp431 __tmp437
-        label __label557
- 1597:  set __tmp425 __tmp431
-        label __label555
- 1598:  set __fn1retval __tmp425
-        label __label553
- 1599:  goto __fn1retaddr __fn1
- 1600:  end
-        label __label2
- 1601:  op min __tmp438 __fn2__x1 __fn2__x2
- 1602:  set __fn2__y1 __tmp438
- 1603:  op max __tmp439 __fn2__x1 __fn2__x2
- 1604:  set __fn2__y2 __tmp439
- 1605:  op min __tmp440 __fn2__x4 __fn2__x5
- 1606:  set __fn2__y4 __tmp440
- 1607:  op max __tmp441 __fn2__x4 __fn2__x5
- 1608:  set __fn2__y5 __tmp441
- 1609:  op lessThan __tmp442 __fn2__y4 __fn2__y1
- 1610:  jump __label559 equal __tmp442 false
-        label __label561
- 1611:  set __fn67__a __fn2__y1
- 1612:  set __fn67__b __fn2__y4
- 1613:  set __fn67__t __fn67__a
- 1614:  set __fn67__a __fn67__b
- 1615:  set __fn67__b __fn67__t
- 1616:  set __tmp444 __fn67__b
-        label __label562
- 1617:  set __fn2__y1 __fn67__a
- 1618:  set __fn2__y4 __fn67__b
-        label __label563
- 1619:  set __fn68__a __fn2__y2
- 1620:  set __fn68__b __fn2__y5
- 1621:  set __fn68__t __fn68__a
- 1622:  set __fn68__a __fn68__b
- 1623:  set __fn68__b __fn68__t
- 1624:  set __tmp445 __fn68__b
-        label __label564
- 1625:  set __fn2__y2 __fn68__a
- 1626:  set __fn2__y5 __fn68__b
- 1627:  set __tmp443 __tmp445
- 1628:  jump __label560 always 0 0
-        label __label559
- 1629:  set __tmp443 null
-        label __label560
- 1630:  op greaterThan __tmp446 __fn2__x3 __fn2__y2
- 1631:  jump __label565 equal __tmp446 false
- 1632:  op lessThan __tmp448 __fn2__y2 __fn2__y4
- 1633:  jump __label567 equal __tmp448 false
- 1634:  op min __tmp450 __fn2__x3 __fn2__y4
- 1635:  set __tmp449 __tmp450
- 1636:  jump __label568 always 0 0
-        label __label567
- 1637:  op min __tmp451 __fn2__y2 __fn2__y5
- 1638:  set __tmp449 __tmp451
-        label __label568
- 1639:  set __tmp447 __tmp449
- 1640:  jump __label566 always 0 0
-        label __label565
- 1641:  op greaterThan __tmp452 __fn2__x3 __fn2__y4
- 1642:  jump __label569 equal __tmp452 false
- 1643:  op min __tmp454 __fn2__x3 __fn2__y5
- 1644:  set __tmp453 __tmp454
- 1645:  jump __label570 always 0 0
-        label __label569
- 1646:  op min __tmp455 __fn2__y2 __fn2__y4
- 1647:  set __tmp453 __tmp455
-        label __label570
- 1648:  set __tmp447 __tmp453
-        label __label566
- 1649:  set __fn2retval __tmp447
-        label __label558
- 1650:  goto __fn2retaddr __fn2
- 1651:  end
+    0:  set :fn3:x1 1
+    1:  set :fn3:y1 1
+    2:  set :fn3:x2 4
+    3:  set :fn3:y2 5
+    4:  op sub *tmp1 :fn3:x2 :fn3:x1
+    5:  op sub *tmp2 :fn3:y2 :fn3:y1
+    6:  op len *tmp3 *tmp1 *tmp2
+    7:  set *tmp0 *tmp3
+        label *label3
+    8:  assertequals 5 *tmp0 "distance(1,1,4,5)"
+    9:  set :fn4:x1 -1
+   10:  set :fn4:y1 -1
+   11:  set :fn4:x2 -4
+   12:  set :fn4:y2 -5
+   13:  op sub *tmp5 :fn4:x2 :fn4:x1
+   14:  op sub *tmp6 :fn4:y2 :fn4:y1
+   15:  op len *tmp7 *tmp5 *tmp6
+   16:  set *tmp4 *tmp7
+        label *label4
+   17:  assertequals 5 *tmp4 "distance(-1,-1,-4,-5)"
+   18:  set :fn5:x 1.5
+   19:  op add *tmp9 :fn5:x 0.5
+   20:  op floor *tmp10 *tmp9 0
+   21:  set *tmp8 *tmp10
+        label *label5
+   22:  assertequals 2 *tmp8 "round(1.5)"
+   23:  set :fn6:x 1.7
+   24:  op add *tmp12 :fn6:x 0.5
+   25:  op floor *tmp13 *tmp12 0
+   26:  set *tmp11 *tmp13
+        label *label6
+   27:  assertequals 2 *tmp11 "round(1.7)"
+   28:  set :fn7:x 2.1
+   29:  op add *tmp15 :fn7:x 0.5
+   30:  op floor *tmp16 *tmp15 0
+   31:  set *tmp14 *tmp16
+        label *label7
+   32:  assertequals 2 *tmp14 "round(2.1)"
+   33:  set :fn8:x 2.5
+   34:  op add *tmp18 :fn8:x 0.5
+   35:  op floor *tmp19 *tmp18 0
+   36:  set *tmp17 *tmp19
+        label *label8
+   37:  assertequals 3 *tmp17 "round(2.5)"
+   38:  set :fn9:x -3.5
+   39:  op add *tmp21 :fn9:x 0.5
+   40:  op floor *tmp22 *tmp21 0
+   41:  set *tmp20 *tmp22
+        label *label9
+   42:  assertequals -3 *tmp20 "round(-3.5)"
+   43:  set :fn10:x 3.5
+   44:  op mod *tmp24 :fn10:x 1
+   45:  set *tmp23 *tmp24
+        label *label10
+   46:  assertequals 0.5 *tmp23 "frac(3.5)"
+   47:  set :fn11:x -1.5
+   48:  op mod *tmp26 :fn11:x 1
+   49:  set *tmp25 *tmp26
+        label *label11
+   50:  assertequals -0.5 *tmp25 "frac(-1.5)"
+   51:  set :fn0:x 0
+   52:  setaddr :fn0*retaddr *label12
+   53:  call *label0 :fn0*retval
+        gotolabel *label12 :fn0
+   54:  set *tmp27 :fn0*retval
+   55:  assertequals 0 *tmp27 "sign(0)"
+   56:  set :fn0:x 0.0000001
+   57:  setaddr :fn0*retaddr *label13
+   58:  call *label0 :fn0*retval
+        gotolabel *label13 :fn0
+   59:  set *tmp28 :fn0*retval
+   60:  assertequals 0 *tmp28 "sign(1e-7)"
+   61:  set :fn0:x 0.00001
+   62:  setaddr :fn0*retaddr *label14
+   63:  call *label0 :fn0*retval
+        gotolabel *label14 :fn0
+   64:  set *tmp29 :fn0*retval
+   65:  assertequals 1 *tmp29 "sign(1e-5)"
+   66:  set :fn0:x -5
+   67:  setaddr :fn0*retaddr *label15
+   68:  call *label0 :fn0*retval
+        gotolabel *label15 :fn0
+   69:  set *tmp30 :fn0*retval
+   70:  assertequals -1 *tmp30 "sign(-5)"
+   71:  set :fn12:x 0
+   72:  op greaterThan *tmp32 :fn12:x 0
+   73:  op lessThan *tmp33 :fn12:x 0
+   74:  op sub *tmp34 *tmp32 *tmp33
+   75:  set *tmp31 *tmp34
+        label *label16
+   76:  assertequals 0 *tmp31 "signExact(0)"
+   77:  set :fn13:x 0.0000001
+   78:  op greaterThan *tmp36 :fn13:x 0
+   79:  op lessThan *tmp37 :fn13:x 0
+   80:  op sub *tmp38 *tmp36 *tmp37
+   81:  set *tmp35 *tmp38
+        label *label17
+   82:  assertequals 1 *tmp35 "signExact(1e-7)"
+   83:  set :fn14:x -0.0000001
+   84:  op greaterThan *tmp40 :fn14:x 0
+   85:  op lessThan *tmp41 :fn14:x 0
+   86:  op sub *tmp42 *tmp40 *tmp41
+   87:  set *tmp39 *tmp42
+        label *label18
+   88:  assertequals -1 *tmp39 "signExact(-1e-7)"
+   89:  set :fn15:x 0
+   90:  op abs *tmp44 :fn15:x 0
+   91:  op lessThanEq *tmp45 *tmp44 0
+   92:  set *tmp43 *tmp45
+        label *label19
+   93:  assertequals true *tmp43 "isZero(0)"
+   94:  set :fn16:x 1E-50
+   95:  op abs *tmp47 :fn16:x 0
+   96:  op lessThanEq *tmp48 *tmp47 0
+   97:  set *tmp46 *tmp48
+        label *label20
+   98:  assertequals false *tmp46 "isZero(1e-50)"
+   99:  set :fn17:x -1E-50
+  100:  op abs *tmp50 :fn17:x 0
+  101:  op lessThanEq *tmp51 *tmp50 0
+  102:  set *tmp49 *tmp51
+        label *label21
+  103:  assertequals false *tmp49 "isZero(-1e-50)"
+  104:  set :fn18:x 0.01
+  105:  set :fn18:precision 0.01
+  106:  op abs *tmp53 :fn18:x 0
+  107:  op lessThan *tmp54 *tmp53 :fn18:precision
+  108:  set *tmp52 *tmp54
+        label *label22
+  109:  assertequals false *tmp52 "isZero(0.01,0.01)"
+  110:  set :fn19:x null
+  111:  op add :fn19:result :fn19:x 0
+  112:  set *tmp55 :fn19:result
+        label *label23
+  113:  assertequals 0 *tmp55 "nullToZero(null)"
+  114:  set :fn20:x 1
+  115:  op add :fn20:result :fn20:x 0
+  116:  set *tmp56 :fn20:result
+        label *label24
+  117:  assertequals 1 *tmp56 "nullToZero(1)"
+  118:  set :fn21:x 0
+  119:  op notEqual *tmp58 :fn21:x 0
+  120:  set *tmp57 *tmp58
+        label *label25
+  121:  assertequals 0 *tmp57 "boolean(0)"
+  122:  set :fn22:x 100
+  123:  op notEqual *tmp60 :fn22:x 0
+  124:  set *tmp59 *tmp60
+        label *label26
+  125:  assertequals 1 *tmp59 "boolean(100)"
+  126:  set :fn23:x -100
+  127:  op notEqual *tmp62 :fn23:x 0
+  128:  set *tmp61 *tmp62
+        label *label27
+  129:  assertequals 1 *tmp61 "boolean(-100)"
+  130:  set :fn24:x -0.001
+  131:  op notEqual *tmp64 :fn24:x 0
+  132:  set *tmp63 *tmp64
+        label *label28
+  133:  assertequals 1 *tmp63 "boolean(-0.001)"
+  134:  set :fn25:x 0.0000001
+  135:  op notEqual *tmp66 :fn25:x 0
+  136:  set *tmp65 *tmp66
+        label *label29
+  137:  assertequals 0 *tmp65 "boolean(0.0000001)"
+  138:  set :fn26:x 0.9
+  139:  op or :fn26:result :fn26:x 0
+  140:  set *tmp67 :fn26:result
+        label *label30
+  141:  assertequals 0 *tmp67 "integer(0.9)"
+  142:  set :fn27:x -5.9
+  143:  op or :fn27:result :fn27:x 0
+  144:  set *tmp68 :fn27:result
+        label *label31
+  145:  assertequals -5 *tmp68 "integer(-5.9)"
+  146:  set :fn28:x 100
+  147:  op or :fn28:result :fn28:x 0
+  148:  set *tmp69 :fn28:result
+        label *label32
+  149:  assertequals 100 *tmp69 "integer(100)"
+  150:  set :fn29:x 1
+  151:  set *tmp70 :fn29:x
+        label *label33
+  152:  assertequals 1 *tmp70 "sum(1)"
+  153:  set :fn30:x1 1
+  154:  set :fn30:x2 2
+  155:  op add *tmp72 :fn30:x1 :fn30:x2
+  156:  set :fn30:sum *tmp72
+  157:  setaddr *tmp73 *label38
+  158:  set :fn30:i 3
+  159:  jump *label35 always 0 0
+        gotolabel *label38 marker0
+  160:  setaddr *tmp73 *label39
+  161:  set :fn30:i 4
+        label *label35
+  162:  op add :fn30:sum :fn30:sum :fn30:i
+        label *label36
+  163:  goto *tmp73 marker0
+        gotolabel *label39 marker0
+        label *label37
+  164:  set *tmp71 :fn30:sum
+        label *label34
+  165:  assertequals 10 *tmp71 "sum(1,2,3,4)"
+  166:  set :fn31:x 1
+  167:  set *tmp74 :fn31:x
+        label *label40
+  168:  assertequals 1 *tmp74 "avg(1)"
+  169:  set :fn32:x1 1
+  170:  set :fn32:x2 2
+  171:  op add *tmp76 :fn32:x1 :fn32:x2
+  172:  set :fn32:sum *tmp76
+  173:  setaddr *tmp77 *label45
+  174:  set :fn32:i 3
+  175:  jump *label42 always 0 0
+        gotolabel *label45 marker1
+  176:  setaddr *tmp77 *label46
+  177:  set :fn32:i 4
+        label *label42
+  178:  op add :fn32:sum :fn32:sum :fn32:i
+        label *label43
+  179:  goto *tmp77 marker1
+        gotolabel *label46 marker1
+        label *label44
+  180:  op add *tmp78 2 2
+  181:  op div *tmp79 :fn32:sum *tmp78
+  182:  set *tmp75 *tmp79
+        label *label41
+  183:  assertequals 2.5 *tmp75 "avg(1,2,3,4)"
+  184:  set :fn33:number 16
+  185:  op log *tmp81 :fn33:number 0
+  186:  op div *tmp82 *tmp81 0.6931471805599453
+  187:  set *tmp80 *tmp82
+        label *label47
+  188:  assertequals 4 *tmp80 "log2(16)"
+  189:  set :fn34:number 1073741824
+  190:  op log *tmp84 :fn34:number 0
+  191:  op div *tmp85 *tmp84 0.6931471805599453
+  192:  set *tmp83 *tmp85
+        label *label48
+  193:  assertequals 30 *tmp83 "log2(1 << 30)"
+  194:  set :fn35:from 1
+  195:  set :fn35:to 10
+  196:  set :fn35:ratio 0
+  197:  op sub *tmp87 1 :fn35:ratio
+  198:  op mul *tmp88 *tmp87 :fn35:from
+  199:  op mul *tmp89 :fn35:ratio :fn35:to
+  200:  op add *tmp90 *tmp88 *tmp89
+  201:  set *tmp86 *tmp90
+        label *label49
+  202:  assertequals 1 *tmp86 "lerp(1, 10, 0)"
+  203:  set :fn36:from 1
+  204:  set :fn36:to 10
+  205:  set :fn36:ratio 1
+  206:  op sub *tmp92 1 :fn36:ratio
+  207:  op mul *tmp93 *tmp92 :fn36:from
+  208:  op mul *tmp94 :fn36:ratio :fn36:to
+  209:  op add *tmp95 *tmp93 *tmp94
+  210:  set *tmp91 *tmp95
+        label *label50
+  211:  assertequals 10 *tmp91 "lerp(1, 10, 1)"
+  212:  set :fn37:from 1
+  213:  set :fn37:to 10
+  214:  set :fn37:ratio 0.5
+  215:  op sub *tmp97 1 :fn37:ratio
+  216:  op mul *tmp98 *tmp97 :fn37:from
+  217:  op mul *tmp99 :fn37:ratio :fn37:to
+  218:  op add *tmp100 *tmp98 *tmp99
+  219:  set *tmp96 *tmp100
+        label *label51
+  220:  assertequals 5.5 *tmp96 "lerp(1, 10, 0.5)"
+  221:  set :fn38:x 1
+  222:  set *tmp101 :fn38:x
+        label *label52
+  223:  assertequals 1 *tmp101 "median(1)"
+  224:  set :fn39:x1 2
+  225:  set :fn39:x2 4
+  226:  op add *tmp103 :fn39:x1 :fn39:x2
+  227:  op div *tmp104 *tmp103 2
+  228:  set *tmp102 *tmp104
+        label *label53
+  229:  assertequals 3 *tmp102 "median(2,4)"
+  230:  set :fn40:x1 1
+  231:  set :fn40:x2 3
+  232:  set :fn40:x3 5
+  233:  op max *tmp106 :fn40:x1 :fn40:x2
+  234:  op max *tmp107 :fn40:x1 :fn40:x3
+  235:  op max *tmp108 :fn40:x2 :fn40:x3
+  236:  op min *tmp109 *tmp106 *tmp107
+  237:  op min *tmp109 *tmp109 *tmp108
+  238:  set *tmp105 *tmp109
+        label *label54
+  239:  assertequals 3 *tmp105 "median(1,3,5)"
+  240:  set :fn41:x1 1
+  241:  set :fn41:x2 1
+  242:  set :fn41:x3 1
+  243:  op max *tmp111 :fn41:x1 :fn41:x2
+  244:  op max *tmp112 :fn41:x1 :fn41:x3
+  245:  op max *tmp113 :fn41:x2 :fn41:x3
+  246:  op min *tmp114 *tmp111 *tmp112
+  247:  op min *tmp114 *tmp114 *tmp113
+  248:  set *tmp110 *tmp114
+        label *label55
+  249:  assertequals 1 *tmp110 "median(1,1,1)"
+  250:  set :fn42:x1 1
+  251:  set :fn42:x2 1
+  252:  set :fn42:x3 3
+  253:  op max *tmp116 :fn42:x1 :fn42:x2
+  254:  op max *tmp117 :fn42:x1 :fn42:x3
+  255:  op max *tmp118 :fn42:x2 :fn42:x3
+  256:  op min *tmp119 *tmp116 *tmp117
+  257:  op min *tmp119 *tmp119 *tmp118
+  258:  set *tmp115 *tmp119
+        label *label56
+  259:  assertequals 1 *tmp115 "median(1,1,3)"
+  260:  set :fn43:x1 1
+  261:  set :fn43:x2 3
+  262:  set :fn43:x3 3
+  263:  op max *tmp121 :fn43:x1 :fn43:x2
+  264:  op max *tmp122 :fn43:x1 :fn43:x3
+  265:  op max *tmp123 :fn43:x2 :fn43:x3
+  266:  op min *tmp124 *tmp121 *tmp122
+  267:  op min *tmp124 *tmp124 *tmp123
+  268:  set *tmp120 *tmp124
+        label *label57
+  269:  assertequals 3 *tmp120 "median(1,3,3)"
+  270:  set :fn1:x1 2
+  271:  set :fn1:x2 4
+  272:  set :fn1:x3 6
+  273:  set :fn1:x4 8
+  274:  setaddr :fn1*retaddr *label58
+  275:  call *label1 :fn1*retval
+        gotolabel *label58 :fn1
+  276:  set *tmp125 :fn1*retval
+  277:  assertequals 5 *tmp125 "median(2,4,6,8)"
+  278:  set :fn1:x1 8
+  279:  set :fn1:x2 6
+  280:  set :fn1:x3 4
+  281:  set :fn1:x4 2
+  282:  setaddr :fn1*retaddr *label59
+  283:  call *label1 :fn1*retval
+        gotolabel *label59 :fn1
+  284:  set *tmp126 :fn1*retval
+  285:  assertequals 5 *tmp126 "median(8,6,4,2)"
+  286:  set :fn1:x1 4
+  287:  set :fn1:x2 8
+  288:  set :fn1:x3 2
+  289:  set :fn1:x4 6
+  290:  setaddr :fn1*retaddr *label60
+  291:  call *label1 :fn1*retval
+        gotolabel *label60 :fn1
+  292:  set *tmp127 :fn1*retval
+  293:  assertequals 5 *tmp127 "median(4,8,2,6)"
+  294:  set :fn1:x1 2
+  295:  set :fn1:x2 6
+  296:  set :fn1:x3 4
+  297:  set :fn1:x4 8
+  298:  setaddr :fn1*retaddr *label61
+  299:  call *label1 :fn1*retval
+        gotolabel *label61 :fn1
+  300:  set *tmp128 :fn1*retval
+  301:  assertequals 5 *tmp128 "median(2,6,4,8)"
+  302:  set :fn1:x1 6
+  303:  set :fn1:x2 2
+  304:  set :fn1:x3 8
+  305:  set :fn1:x4 4
+  306:  setaddr :fn1*retaddr *label62
+  307:  call *label1 :fn1*retval
+        gotolabel *label62 :fn1
+  308:  set *tmp129 :fn1*retval
+  309:  assertequals 5 *tmp129 "median(6,2,8,4)"
+  310:  set :fn2:x1 1
+  311:  set :fn2:x2 2
+  312:  set :fn2:x3 3
+  313:  set :fn2:x4 4
+  314:  set :fn2:x5 5
+  315:  setaddr :fn2*retaddr *label63
+  316:  call *label2 :fn2*retval
+        gotolabel *label63 :fn2
+  317:  set *tmp130 :fn2*retval
+  318:  assertequals 3 *tmp130 "median(1,2,3,4,5)"
+  319:  set :fn2:x1 5
+  320:  set :fn2:x2 4
+  321:  set :fn2:x3 3
+  322:  set :fn2:x4 2
+  323:  set :fn2:x5 1
+  324:  setaddr :fn2*retaddr *label64
+  325:  call *label2 :fn2*retval
+        gotolabel *label64 :fn2
+  326:  set *tmp131 :fn2*retval
+  327:  assertequals 3 *tmp131 "median(5,4,3,2,1)"
+  328:  set :fn2:x1 1
+  329:  set :fn2:x2 1
+  330:  set :fn2:x3 1
+  331:  set :fn2:x4 1
+  332:  set :fn2:x5 1
+  333:  setaddr :fn2*retaddr *label65
+  334:  call *label2 :fn2*retval
+        gotolabel *label65 :fn2
+  335:  set *tmp132 :fn2*retval
+  336:  assertequals 1 *tmp132 "median(1,1,1,1,1)"
+  337:  set :fn2:x1 1
+  338:  set :fn2:x2 1
+  339:  set :fn2:x3 1
+  340:  set :fn2:x4 1
+  341:  set :fn2:x5 5
+  342:  setaddr :fn2*retaddr *label66
+  343:  call *label2 :fn2*retval
+        gotolabel *label66 :fn2
+  344:  set *tmp133 :fn2*retval
+  345:  assertequals 1 *tmp133 "median(1,1,1,1,5)"
+  346:  set :fn2:x1 1
+  347:  set :fn2:x2 1
+  348:  set :fn2:x3 1
+  349:  set :fn2:x4 5
+  350:  set :fn2:x5 5
+  351:  setaddr :fn2*retaddr *label67
+  352:  call *label2 :fn2*retval
+        gotolabel *label67 :fn2
+  353:  set *tmp134 :fn2*retval
+  354:  assertequals 1 *tmp134 "median(1,1,1,5,5)"
+  355:  set :fn2:x1 1
+  356:  set :fn2:x2 1
+  357:  set :fn2:x3 5
+  358:  set :fn2:x4 5
+  359:  set :fn2:x5 5
+  360:  setaddr :fn2*retaddr *label68
+  361:  call *label2 :fn2*retval
+        gotolabel *label68 :fn2
+  362:  set *tmp135 :fn2*retval
+  363:  assertequals 5 *tmp135 "median(1,1,5,5,5)"
+  364:  set :fn2:x1 1
+  365:  set :fn2:x2 5
+  366:  set :fn2:x3 5
+  367:  set :fn2:x4 5
+  368:  set :fn2:x5 5
+  369:  setaddr :fn2*retaddr *label69
+  370:  call *label2 :fn2*retval
+        gotolabel *label69 :fn2
+  371:  set *tmp136 :fn2*retval
+  372:  assertequals 5 *tmp136 "median(1,5,5,5,5)"
+  373:  set :fn2:x1 5
+  374:  set :fn2:x2 5
+  375:  set :fn2:x3 5
+  376:  set :fn2:x4 5
+  377:  set :fn2:x5 5
+  378:  setaddr :fn2*retaddr *label70
+  379:  call *label2 :fn2*retval
+        gotolabel *label70 :fn2
+  380:  set *tmp137 :fn2*retval
+  381:  assertequals 5 *tmp137 "median(5,5,5,5,5)"
+  382:  set :fn45:bestDif 10000000000
+  383:  set :fn45:best null
+  384:  set :fn45:count 1
+  385:  setaddr *tmp140 *label76
+  386:  set :fn45:i 1
+  387:  jump *label73 always 0 0
+        gotolabel *label76 marker2
+  388:  setaddr *tmp140 *label77
+  389:  set :fn45:i 1
+  390:  jump *label73 always 0 0
+        gotolabel *label77 marker2
+  391:  setaddr *tmp140 *label78
+  392:  set :fn45:i 1
+  393:  jump *label73 always 0 0
+        gotolabel *label78 marker2
+  394:  setaddr *tmp140 *label79
+  395:  set :fn45:i 1
+  396:  jump *label73 always 0 0
+        gotolabel *label79 marker2
+  397:  setaddr *tmp140 *label80
+  398:  set :fn45:i 1
+  399:  jump *label73 always 0 0
+        gotolabel *label80 marker2
+  400:  setaddr *tmp140 *label81
+  401:  set :fn45:i 1
+        label *label73
+  402:  set :fn46:n :fn45:i
+  403:  set :fn46:lt 0
+  404:  set :fn46:gt 0
+  405:  setaddr *tmp142 *label86
+  406:  set :fn46:i 1
+  407:  jump *label83 always 0 0
+        gotolabel *label86 marker3
+  408:  setaddr *tmp142 *label87
+  409:  set :fn46:i 1
+  410:  jump *label83 always 0 0
+        gotolabel *label87 marker3
+  411:  setaddr *tmp142 *label88
+  412:  set :fn46:i 1
+  413:  jump *label83 always 0 0
+        gotolabel *label88 marker3
+  414:  setaddr *tmp142 *label89
+  415:  set :fn46:i 1
+  416:  jump *label83 always 0 0
+        gotolabel *label89 marker3
+  417:  setaddr *tmp142 *label90
+  418:  set :fn46:i 1
+  419:  jump *label83 always 0 0
+        gotolabel *label90 marker3
+  420:  setaddr *tmp142 *label91
+  421:  set :fn46:i 1
+        label *label83
+  422:  op lessThan *tmp143 :fn46:i :fn46:n
+  423:  jump *label92 equal *tmp143 false
+  424:  op add :fn46:lt :fn46:lt 1
+  425:  set *tmp144 :fn46:lt
+  426:  jump *label93 always 0 0
+        label *label92
+  427:  op greaterThan *tmp145 :fn46:i :fn46:n
+  428:  jump *label94 equal *tmp145 false
+  429:  op add :fn46:gt :fn46:gt 1
+  430:  set *tmp146 :fn46:gt
+  431:  jump *label95 always 0 0
+        label *label94
+  432:  set *tmp146 null
+        label *label95
+  433:  set *tmp144 *tmp146
+        label *label93
+        label *label84
+  434:  goto *tmp142 marker3
+        gotolabel *label91 marker3
+        label *label85
+  435:  op sub *tmp147 :fn46:gt :fn46:lt
+  436:  op abs *tmp148 *tmp147 0
+  437:  set :fn46:dif *tmp148
+  438:  op add *tmp149 :fn46:gt :fn46:lt
+  439:  op sub *tmp150 6 1
+  440:  op greaterThanEq *tmp151 *tmp149 *tmp150
+  441:  jump *label96 equal *tmp151 false
+  442:  op equal *tmp153 :fn46:gt :fn46:lt
+  443:  set *tmp152 *tmp153
+  444:  jump *label97 always 0 0
+        label *label96
+  445:  set *tmp152 false
+        label *label97
+  446:  set *tmp141 *tmp152
+        label *label82
+  447:  set :fn45:dif :fn46:dif
+  448:  jump *label98 equal *tmp141 false
+  449:  set *tmp139 :fn45:i
+  450:  jump *label72 always 0 0
+  451:  set *tmp154 null
+  452:  jump *label99 always 0 0
+        label *label98
+  453:  set *tmp154 null
+        label *label99
+  454:  op lessThan *tmp155 :fn45:dif :fn45:bestDif
+  455:  jump *label100 equal *tmp155 false
+  456:  set :fn45:bestDif :fn45:dif
+  457:  set :fn45:best :fn45:i
+  458:  set :fn45:count 1
+  459:  set *tmp156 :fn45:count
+  460:  jump *label101 always 0 0
+        label *label100
+  461:  op lessThanEq *tmp157 :fn45:dif :fn45:bestDif
+  462:  jump *label102 equal *tmp157 false
+  463:  op add :fn45:best :fn45:best :fn45:i
+  464:  op add :fn45:count :fn45:count 1
+  465:  set *tmp158 :fn45:count
+  466:  jump *label103 always 0 0
+        label *label102
+  467:  set *tmp158 null
+        label *label103
+  468:  set *tmp156 *tmp158
+        label *label101
+        label *label74
+  469:  goto *tmp140 marker2
+        gotolabel *label81 marker2
+        label *label75
+  470:  op div *tmp159 :fn45:best :fn45:count
+  471:  set *tmp139 *tmp159
+        label *label72
+  472:  set *tmp138 *tmp139
+        label *label71
+  473:  assertequals 1 *tmp138 "median(1,1,1,1,1,1)"
+  474:  set :fn48:bestDif 10000000000
+  475:  set :fn48:best null
+  476:  set :fn48:count 1
+  477:  setaddr *tmp162 *label109
+  478:  set :fn48:i 1
+  479:  jump *label106 always 0 0
+        gotolabel *label109 marker4
+  480:  setaddr *tmp162 *label110
+  481:  set :fn48:i 1
+  482:  jump *label106 always 0 0
+        gotolabel *label110 marker4
+  483:  setaddr *tmp162 *label111
+  484:  set :fn48:i 1
+  485:  jump *label106 always 0 0
+        gotolabel *label111 marker4
+  486:  setaddr *tmp162 *label112
+  487:  set :fn48:i 1
+  488:  jump *label106 always 0 0
+        gotolabel *label112 marker4
+  489:  setaddr *tmp162 *label113
+  490:  set :fn48:i 1
+  491:  jump *label106 always 0 0
+        gotolabel *label113 marker4
+  492:  setaddr *tmp162 *label114
+  493:  set :fn48:i 5
+        label *label106
+  494:  set :fn49:n :fn48:i
+  495:  set :fn49:lt 0
+  496:  set :fn49:gt 0
+  497:  setaddr *tmp164 *label119
+  498:  set :fn49:i 1
+  499:  jump *label116 always 0 0
+        gotolabel *label119 marker5
+  500:  setaddr *tmp164 *label120
+  501:  set :fn49:i 1
+  502:  jump *label116 always 0 0
+        gotolabel *label120 marker5
+  503:  setaddr *tmp164 *label121
+  504:  set :fn49:i 1
+  505:  jump *label116 always 0 0
+        gotolabel *label121 marker5
+  506:  setaddr *tmp164 *label122
+  507:  set :fn49:i 1
+  508:  jump *label116 always 0 0
+        gotolabel *label122 marker5
+  509:  setaddr *tmp164 *label123
+  510:  set :fn49:i 1
+  511:  jump *label116 always 0 0
+        gotolabel *label123 marker5
+  512:  setaddr *tmp164 *label124
+  513:  set :fn49:i 5
+        label *label116
+  514:  op lessThan *tmp165 :fn49:i :fn49:n
+  515:  jump *label125 equal *tmp165 false
+  516:  op add :fn49:lt :fn49:lt 1
+  517:  set *tmp166 :fn49:lt
+  518:  jump *label126 always 0 0
+        label *label125
+  519:  op greaterThan *tmp167 :fn49:i :fn49:n
+  520:  jump *label127 equal *tmp167 false
+  521:  op add :fn49:gt :fn49:gt 1
+  522:  set *tmp168 :fn49:gt
+  523:  jump *label128 always 0 0
+        label *label127
+  524:  set *tmp168 null
+        label *label128
+  525:  set *tmp166 *tmp168
+        label *label126
+        label *label117
+  526:  goto *tmp164 marker5
+        gotolabel *label124 marker5
+        label *label118
+  527:  op sub *tmp169 :fn49:gt :fn49:lt
+  528:  op abs *tmp170 *tmp169 0
+  529:  set :fn49:dif *tmp170
+  530:  op add *tmp171 :fn49:gt :fn49:lt
+  531:  op sub *tmp172 6 1
+  532:  op greaterThanEq *tmp173 *tmp171 *tmp172
+  533:  jump *label129 equal *tmp173 false
+  534:  op equal *tmp175 :fn49:gt :fn49:lt
+  535:  set *tmp174 *tmp175
+  536:  jump *label130 always 0 0
+        label *label129
+  537:  set *tmp174 false
+        label *label130
+  538:  set *tmp163 *tmp174
+        label *label115
+  539:  set :fn48:dif :fn49:dif
+  540:  jump *label131 equal *tmp163 false
+  541:  set *tmp161 :fn48:i
+  542:  jump *label105 always 0 0
+  543:  set *tmp176 null
+  544:  jump *label132 always 0 0
+        label *label131
+  545:  set *tmp176 null
+        label *label132
+  546:  op lessThan *tmp177 :fn48:dif :fn48:bestDif
+  547:  jump *label133 equal *tmp177 false
+  548:  set :fn48:bestDif :fn48:dif
+  549:  set :fn48:best :fn48:i
+  550:  set :fn48:count 1
+  551:  set *tmp178 :fn48:count
+  552:  jump *label134 always 0 0
+        label *label133
+  553:  op lessThanEq *tmp179 :fn48:dif :fn48:bestDif
+  554:  jump *label135 equal *tmp179 false
+  555:  op add :fn48:best :fn48:best :fn48:i
+  556:  op add :fn48:count :fn48:count 1
+  557:  set *tmp180 :fn48:count
+  558:  jump *label136 always 0 0
+        label *label135
+  559:  set *tmp180 null
+        label *label136
+  560:  set *tmp178 *tmp180
+        label *label134
+        label *label107
+  561:  goto *tmp162 marker4
+        gotolabel *label114 marker4
+        label *label108
+  562:  op div *tmp181 :fn48:best :fn48:count
+  563:  set *tmp161 *tmp181
+        label *label105
+  564:  set *tmp160 *tmp161
+        label *label104
+  565:  assertequals 1 *tmp160 "median(1,1,1,1,1,5)"
+  566:  set :fn51:bestDif 10000000000
+  567:  set :fn51:best null
+  568:  set :fn51:count 1
+  569:  setaddr *tmp184 *label142
+  570:  set :fn51:i 1
+  571:  jump *label139 always 0 0
+        gotolabel *label142 marker6
+  572:  setaddr *tmp184 *label143
+  573:  set :fn51:i 1
+  574:  jump *label139 always 0 0
+        gotolabel *label143 marker6
+  575:  setaddr *tmp184 *label144
+  576:  set :fn51:i 1
+  577:  jump *label139 always 0 0
+        gotolabel *label144 marker6
+  578:  setaddr *tmp184 *label145
+  579:  set :fn51:i 1
+  580:  jump *label139 always 0 0
+        gotolabel *label145 marker6
+  581:  setaddr *tmp184 *label146
+  582:  set :fn51:i 5
+  583:  jump *label139 always 0 0
+        gotolabel *label146 marker6
+  584:  setaddr *tmp184 *label147
+  585:  set :fn51:i 5
+        label *label139
+  586:  set :fn52:n :fn51:i
+  587:  set :fn52:lt 0
+  588:  set :fn52:gt 0
+  589:  setaddr *tmp186 *label152
+  590:  set :fn52:i 1
+  591:  jump *label149 always 0 0
+        gotolabel *label152 marker7
+  592:  setaddr *tmp186 *label153
+  593:  set :fn52:i 1
+  594:  jump *label149 always 0 0
+        gotolabel *label153 marker7
+  595:  setaddr *tmp186 *label154
+  596:  set :fn52:i 1
+  597:  jump *label149 always 0 0
+        gotolabel *label154 marker7
+  598:  setaddr *tmp186 *label155
+  599:  set :fn52:i 1
+  600:  jump *label149 always 0 0
+        gotolabel *label155 marker7
+  601:  setaddr *tmp186 *label156
+  602:  set :fn52:i 5
+  603:  jump *label149 always 0 0
+        gotolabel *label156 marker7
+  604:  setaddr *tmp186 *label157
+  605:  set :fn52:i 5
+        label *label149
+  606:  op lessThan *tmp187 :fn52:i :fn52:n
+  607:  jump *label158 equal *tmp187 false
+  608:  op add :fn52:lt :fn52:lt 1
+  609:  set *tmp188 :fn52:lt
+  610:  jump *label159 always 0 0
+        label *label158
+  611:  op greaterThan *tmp189 :fn52:i :fn52:n
+  612:  jump *label160 equal *tmp189 false
+  613:  op add :fn52:gt :fn52:gt 1
+  614:  set *tmp190 :fn52:gt
+  615:  jump *label161 always 0 0
+        label *label160
+  616:  set *tmp190 null
+        label *label161
+  617:  set *tmp188 *tmp190
+        label *label159
+        label *label150
+  618:  goto *tmp186 marker7
+        gotolabel *label157 marker7
+        label *label151
+  619:  op sub *tmp191 :fn52:gt :fn52:lt
+  620:  op abs *tmp192 *tmp191 0
+  621:  set :fn52:dif *tmp192
+  622:  op add *tmp193 :fn52:gt :fn52:lt
+  623:  op sub *tmp194 6 1
+  624:  op greaterThanEq *tmp195 *tmp193 *tmp194
+  625:  jump *label162 equal *tmp195 false
+  626:  op equal *tmp197 :fn52:gt :fn52:lt
+  627:  set *tmp196 *tmp197
+  628:  jump *label163 always 0 0
+        label *label162
+  629:  set *tmp196 false
+        label *label163
+  630:  set *tmp185 *tmp196
+        label *label148
+  631:  set :fn51:dif :fn52:dif
+  632:  jump *label164 equal *tmp185 false
+  633:  set *tmp183 :fn51:i
+  634:  jump *label138 always 0 0
+  635:  set *tmp198 null
+  636:  jump *label165 always 0 0
+        label *label164
+  637:  set *tmp198 null
+        label *label165
+  638:  op lessThan *tmp199 :fn51:dif :fn51:bestDif
+  639:  jump *label166 equal *tmp199 false
+  640:  set :fn51:bestDif :fn51:dif
+  641:  set :fn51:best :fn51:i
+  642:  set :fn51:count 1
+  643:  set *tmp200 :fn51:count
+  644:  jump *label167 always 0 0
+        label *label166
+  645:  op lessThanEq *tmp201 :fn51:dif :fn51:bestDif
+  646:  jump *label168 equal *tmp201 false
+  647:  op add :fn51:best :fn51:best :fn51:i
+  648:  op add :fn51:count :fn51:count 1
+  649:  set *tmp202 :fn51:count
+  650:  jump *label169 always 0 0
+        label *label168
+  651:  set *tmp202 null
+        label *label169
+  652:  set *tmp200 *tmp202
+        label *label167
+        label *label140
+  653:  goto *tmp184 marker6
+        gotolabel *label147 marker6
+        label *label141
+  654:  op div *tmp203 :fn51:best :fn51:count
+  655:  set *tmp183 *tmp203
+        label *label138
+  656:  set *tmp182 *tmp183
+        label *label137
+  657:  assertequals 1 *tmp182 "median(1,1,1,1,5,5)"
+  658:  set :fn54:bestDif 10000000000
+  659:  set :fn54:best null
+  660:  set :fn54:count 1
+  661:  setaddr *tmp206 *label175
+  662:  set :fn54:i 1
+  663:  jump *label172 always 0 0
+        gotolabel *label175 marker8
+  664:  setaddr *tmp206 *label176
+  665:  set :fn54:i 1
+  666:  jump *label172 always 0 0
+        gotolabel *label176 marker8
+  667:  setaddr *tmp206 *label177
+  668:  set :fn54:i 1
+  669:  jump *label172 always 0 0
+        gotolabel *label177 marker8
+  670:  setaddr *tmp206 *label178
+  671:  set :fn54:i 5
+  672:  jump *label172 always 0 0
+        gotolabel *label178 marker8
+  673:  setaddr *tmp206 *label179
+  674:  set :fn54:i 5
+  675:  jump *label172 always 0 0
+        gotolabel *label179 marker8
+  676:  setaddr *tmp206 *label180
+  677:  set :fn54:i 5
+        label *label172
+  678:  set :fn55:n :fn54:i
+  679:  set :fn55:lt 0
+  680:  set :fn55:gt 0
+  681:  setaddr *tmp208 *label185
+  682:  set :fn55:i 1
+  683:  jump *label182 always 0 0
+        gotolabel *label185 marker9
+  684:  setaddr *tmp208 *label186
+  685:  set :fn55:i 1
+  686:  jump *label182 always 0 0
+        gotolabel *label186 marker9
+  687:  setaddr *tmp208 *label187
+  688:  set :fn55:i 1
+  689:  jump *label182 always 0 0
+        gotolabel *label187 marker9
+  690:  setaddr *tmp208 *label188
+  691:  set :fn55:i 5
+  692:  jump *label182 always 0 0
+        gotolabel *label188 marker9
+  693:  setaddr *tmp208 *label189
+  694:  set :fn55:i 5
+  695:  jump *label182 always 0 0
+        gotolabel *label189 marker9
+  696:  setaddr *tmp208 *label190
+  697:  set :fn55:i 5
+        label *label182
+  698:  op lessThan *tmp209 :fn55:i :fn55:n
+  699:  jump *label191 equal *tmp209 false
+  700:  op add :fn55:lt :fn55:lt 1
+  701:  set *tmp210 :fn55:lt
+  702:  jump *label192 always 0 0
+        label *label191
+  703:  op greaterThan *tmp211 :fn55:i :fn55:n
+  704:  jump *label193 equal *tmp211 false
+  705:  op add :fn55:gt :fn55:gt 1
+  706:  set *tmp212 :fn55:gt
+  707:  jump *label194 always 0 0
+        label *label193
+  708:  set *tmp212 null
+        label *label194
+  709:  set *tmp210 *tmp212
+        label *label192
+        label *label183
+  710:  goto *tmp208 marker9
+        gotolabel *label190 marker9
+        label *label184
+  711:  op sub *tmp213 :fn55:gt :fn55:lt
+  712:  op abs *tmp214 *tmp213 0
+  713:  set :fn55:dif *tmp214
+  714:  op add *tmp215 :fn55:gt :fn55:lt
+  715:  op sub *tmp216 6 1
+  716:  op greaterThanEq *tmp217 *tmp215 *tmp216
+  717:  jump *label195 equal *tmp217 false
+  718:  op equal *tmp219 :fn55:gt :fn55:lt
+  719:  set *tmp218 *tmp219
+  720:  jump *label196 always 0 0
+        label *label195
+  721:  set *tmp218 false
+        label *label196
+  722:  set *tmp207 *tmp218
+        label *label181
+  723:  set :fn54:dif :fn55:dif
+  724:  jump *label197 equal *tmp207 false
+  725:  set *tmp205 :fn54:i
+  726:  jump *label171 always 0 0
+  727:  set *tmp220 null
+  728:  jump *label198 always 0 0
+        label *label197
+  729:  set *tmp220 null
+        label *label198
+  730:  op lessThan *tmp221 :fn54:dif :fn54:bestDif
+  731:  jump *label199 equal *tmp221 false
+  732:  set :fn54:bestDif :fn54:dif
+  733:  set :fn54:best :fn54:i
+  734:  set :fn54:count 1
+  735:  set *tmp222 :fn54:count
+  736:  jump *label200 always 0 0
+        label *label199
+  737:  op lessThanEq *tmp223 :fn54:dif :fn54:bestDif
+  738:  jump *label201 equal *tmp223 false
+  739:  op add :fn54:best :fn54:best :fn54:i
+  740:  op add :fn54:count :fn54:count 1
+  741:  set *tmp224 :fn54:count
+  742:  jump *label202 always 0 0
+        label *label201
+  743:  set *tmp224 null
+        label *label202
+  744:  set *tmp222 *tmp224
+        label *label200
+        label *label173
+  745:  goto *tmp206 marker8
+        gotolabel *label180 marker8
+        label *label174
+  746:  op div *tmp225 :fn54:best :fn54:count
+  747:  set *tmp205 *tmp225
+        label *label171
+  748:  set *tmp204 *tmp205
+        label *label170
+  749:  assertequals 3 *tmp204 "median(1,1,1,5,5,5)"
+  750:  set :fn57:bestDif 10000000000
+  751:  set :fn57:best null
+  752:  set :fn57:count 1
+  753:  setaddr *tmp228 *label208
+  754:  set :fn57:i 1
+  755:  jump *label205 always 0 0
+        gotolabel *label208 marker10
+  756:  setaddr *tmp228 *label209
+  757:  set :fn57:i 1
+  758:  jump *label205 always 0 0
+        gotolabel *label209 marker10
+  759:  setaddr *tmp228 *label210
+  760:  set :fn57:i 5
+  761:  jump *label205 always 0 0
+        gotolabel *label210 marker10
+  762:  setaddr *tmp228 *label211
+  763:  set :fn57:i 5
+  764:  jump *label205 always 0 0
+        gotolabel *label211 marker10
+  765:  setaddr *tmp228 *label212
+  766:  set :fn57:i 5
+  767:  jump *label205 always 0 0
+        gotolabel *label212 marker10
+  768:  setaddr *tmp228 *label213
+  769:  set :fn57:i 5
+        label *label205
+  770:  set :fn58:n :fn57:i
+  771:  set :fn58:lt 0
+  772:  set :fn58:gt 0
+  773:  setaddr *tmp230 *label218
+  774:  set :fn58:i 1
+  775:  jump *label215 always 0 0
+        gotolabel *label218 marker11
+  776:  setaddr *tmp230 *label219
+  777:  set :fn58:i 1
+  778:  jump *label215 always 0 0
+        gotolabel *label219 marker11
+  779:  setaddr *tmp230 *label220
+  780:  set :fn58:i 5
+  781:  jump *label215 always 0 0
+        gotolabel *label220 marker11
+  782:  setaddr *tmp230 *label221
+  783:  set :fn58:i 5
+  784:  jump *label215 always 0 0
+        gotolabel *label221 marker11
+  785:  setaddr *tmp230 *label222
+  786:  set :fn58:i 5
+  787:  jump *label215 always 0 0
+        gotolabel *label222 marker11
+  788:  setaddr *tmp230 *label223
+  789:  set :fn58:i 5
+        label *label215
+  790:  op lessThan *tmp231 :fn58:i :fn58:n
+  791:  jump *label224 equal *tmp231 false
+  792:  op add :fn58:lt :fn58:lt 1
+  793:  set *tmp232 :fn58:lt
+  794:  jump *label225 always 0 0
+        label *label224
+  795:  op greaterThan *tmp233 :fn58:i :fn58:n
+  796:  jump *label226 equal *tmp233 false
+  797:  op add :fn58:gt :fn58:gt 1
+  798:  set *tmp234 :fn58:gt
+  799:  jump *label227 always 0 0
+        label *label226
+  800:  set *tmp234 null
+        label *label227
+  801:  set *tmp232 *tmp234
+        label *label225
+        label *label216
+  802:  goto *tmp230 marker11
+        gotolabel *label223 marker11
+        label *label217
+  803:  op sub *tmp235 :fn58:gt :fn58:lt
+  804:  op abs *tmp236 *tmp235 0
+  805:  set :fn58:dif *tmp236
+  806:  op add *tmp237 :fn58:gt :fn58:lt
+  807:  op sub *tmp238 6 1
+  808:  op greaterThanEq *tmp239 *tmp237 *tmp238
+  809:  jump *label228 equal *tmp239 false
+  810:  op equal *tmp241 :fn58:gt :fn58:lt
+  811:  set *tmp240 *tmp241
+  812:  jump *label229 always 0 0
+        label *label228
+  813:  set *tmp240 false
+        label *label229
+  814:  set *tmp229 *tmp240
+        label *label214
+  815:  set :fn57:dif :fn58:dif
+  816:  jump *label230 equal *tmp229 false
+  817:  set *tmp227 :fn57:i
+  818:  jump *label204 always 0 0
+  819:  set *tmp242 null
+  820:  jump *label231 always 0 0
+        label *label230
+  821:  set *tmp242 null
+        label *label231
+  822:  op lessThan *tmp243 :fn57:dif :fn57:bestDif
+  823:  jump *label232 equal *tmp243 false
+  824:  set :fn57:bestDif :fn57:dif
+  825:  set :fn57:best :fn57:i
+  826:  set :fn57:count 1
+  827:  set *tmp244 :fn57:count
+  828:  jump *label233 always 0 0
+        label *label232
+  829:  op lessThanEq *tmp245 :fn57:dif :fn57:bestDif
+  830:  jump *label234 equal *tmp245 false
+  831:  op add :fn57:best :fn57:best :fn57:i
+  832:  op add :fn57:count :fn57:count 1
+  833:  set *tmp246 :fn57:count
+  834:  jump *label235 always 0 0
+        label *label234
+  835:  set *tmp246 null
+        label *label235
+  836:  set *tmp244 *tmp246
+        label *label233
+        label *label206
+  837:  goto *tmp228 marker10
+        gotolabel *label213 marker10
+        label *label207
+  838:  op div *tmp247 :fn57:best :fn57:count
+  839:  set *tmp227 *tmp247
+        label *label204
+  840:  set *tmp226 *tmp227
+        label *label203
+  841:  assertequals 5 *tmp226 "median(1,1,5,5,5,5)"
+  842:  set :fn60:bestDif 10000000000
+  843:  set :fn60:best null
+  844:  set :fn60:count 1
+  845:  setaddr *tmp250 *label241
+  846:  set :fn60:i 1
+  847:  jump *label238 always 0 0
+        gotolabel *label241 marker12
+  848:  setaddr *tmp250 *label242
+  849:  set :fn60:i 5
+  850:  jump *label238 always 0 0
+        gotolabel *label242 marker12
+  851:  setaddr *tmp250 *label243
+  852:  set :fn60:i 5
+  853:  jump *label238 always 0 0
+        gotolabel *label243 marker12
+  854:  setaddr *tmp250 *label244
+  855:  set :fn60:i 5
+  856:  jump *label238 always 0 0
+        gotolabel *label244 marker12
+  857:  setaddr *tmp250 *label245
+  858:  set :fn60:i 5
+  859:  jump *label238 always 0 0
+        gotolabel *label245 marker12
+  860:  setaddr *tmp250 *label246
+  861:  set :fn60:i 5
+        label *label238
+  862:  set :fn61:n :fn60:i
+  863:  set :fn61:lt 0
+  864:  set :fn61:gt 0
+  865:  setaddr *tmp252 *label251
+  866:  set :fn61:i 1
+  867:  jump *label248 always 0 0
+        gotolabel *label251 marker13
+  868:  setaddr *tmp252 *label252
+  869:  set :fn61:i 5
+  870:  jump *label248 always 0 0
+        gotolabel *label252 marker13
+  871:  setaddr *tmp252 *label253
+  872:  set :fn61:i 5
+  873:  jump *label248 always 0 0
+        gotolabel *label253 marker13
+  874:  setaddr *tmp252 *label254
+  875:  set :fn61:i 5
+  876:  jump *label248 always 0 0
+        gotolabel *label254 marker13
+  877:  setaddr *tmp252 *label255
+  878:  set :fn61:i 5
+  879:  jump *label248 always 0 0
+        gotolabel *label255 marker13
+  880:  setaddr *tmp252 *label256
+  881:  set :fn61:i 5
+        label *label248
+  882:  op lessThan *tmp253 :fn61:i :fn61:n
+  883:  jump *label257 equal *tmp253 false
+  884:  op add :fn61:lt :fn61:lt 1
+  885:  set *tmp254 :fn61:lt
+  886:  jump *label258 always 0 0
+        label *label257
+  887:  op greaterThan *tmp255 :fn61:i :fn61:n
+  888:  jump *label259 equal *tmp255 false
+  889:  op add :fn61:gt :fn61:gt 1
+  890:  set *tmp256 :fn61:gt
+  891:  jump *label260 always 0 0
+        label *label259
+  892:  set *tmp256 null
+        label *label260
+  893:  set *tmp254 *tmp256
+        label *label258
+        label *label249
+  894:  goto *tmp252 marker13
+        gotolabel *label256 marker13
+        label *label250
+  895:  op sub *tmp257 :fn61:gt :fn61:lt
+  896:  op abs *tmp258 *tmp257 0
+  897:  set :fn61:dif *tmp258
+  898:  op add *tmp259 :fn61:gt :fn61:lt
+  899:  op sub *tmp260 6 1
+  900:  op greaterThanEq *tmp261 *tmp259 *tmp260
+  901:  jump *label261 equal *tmp261 false
+  902:  op equal *tmp263 :fn61:gt :fn61:lt
+  903:  set *tmp262 *tmp263
+  904:  jump *label262 always 0 0
+        label *label261
+  905:  set *tmp262 false
+        label *label262
+  906:  set *tmp251 *tmp262
+        label *label247
+  907:  set :fn60:dif :fn61:dif
+  908:  jump *label263 equal *tmp251 false
+  909:  set *tmp249 :fn60:i
+  910:  jump *label237 always 0 0
+  911:  set *tmp264 null
+  912:  jump *label264 always 0 0
+        label *label263
+  913:  set *tmp264 null
+        label *label264
+  914:  op lessThan *tmp265 :fn60:dif :fn60:bestDif
+  915:  jump *label265 equal *tmp265 false
+  916:  set :fn60:bestDif :fn60:dif
+  917:  set :fn60:best :fn60:i
+  918:  set :fn60:count 1
+  919:  set *tmp266 :fn60:count
+  920:  jump *label266 always 0 0
+        label *label265
+  921:  op lessThanEq *tmp267 :fn60:dif :fn60:bestDif
+  922:  jump *label267 equal *tmp267 false
+  923:  op add :fn60:best :fn60:best :fn60:i
+  924:  op add :fn60:count :fn60:count 1
+  925:  set *tmp268 :fn60:count
+  926:  jump *label268 always 0 0
+        label *label267
+  927:  set *tmp268 null
+        label *label268
+  928:  set *tmp266 *tmp268
+        label *label266
+        label *label239
+  929:  goto *tmp250 marker12
+        gotolabel *label246 marker12
+        label *label240
+  930:  op div *tmp269 :fn60:best :fn60:count
+  931:  set *tmp249 *tmp269
+        label *label237
+  932:  set *tmp248 *tmp249
+        label *label236
+  933:  assertequals 5 *tmp248 "median(1,5,5,5,5,5)"
+  934:  set :fn63:bestDif 10000000000
+  935:  set :fn63:best null
+  936:  set :fn63:count 1
+  937:  setaddr *tmp272 *label274
+  938:  set :fn63:i 5
+  939:  jump *label271 always 0 0
+        gotolabel *label274 marker14
+  940:  setaddr *tmp272 *label275
+  941:  set :fn63:i 5
+  942:  jump *label271 always 0 0
+        gotolabel *label275 marker14
+  943:  setaddr *tmp272 *label276
+  944:  set :fn63:i 5
+  945:  jump *label271 always 0 0
+        gotolabel *label276 marker14
+  946:  setaddr *tmp272 *label277
+  947:  set :fn63:i 5
+  948:  jump *label271 always 0 0
+        gotolabel *label277 marker14
+  949:  setaddr *tmp272 *label278
+  950:  set :fn63:i 5
+  951:  jump *label271 always 0 0
+        gotolabel *label278 marker14
+  952:  setaddr *tmp272 *label279
+  953:  set :fn63:i 5
+        label *label271
+  954:  set :fn64:n :fn63:i
+  955:  set :fn64:lt 0
+  956:  set :fn64:gt 0
+  957:  setaddr *tmp274 *label284
+  958:  set :fn64:i 5
+  959:  jump *label281 always 0 0
+        gotolabel *label284 marker15
+  960:  setaddr *tmp274 *label285
+  961:  set :fn64:i 5
+  962:  jump *label281 always 0 0
+        gotolabel *label285 marker15
+  963:  setaddr *tmp274 *label286
+  964:  set :fn64:i 5
+  965:  jump *label281 always 0 0
+        gotolabel *label286 marker15
+  966:  setaddr *tmp274 *label287
+  967:  set :fn64:i 5
+  968:  jump *label281 always 0 0
+        gotolabel *label287 marker15
+  969:  setaddr *tmp274 *label288
+  970:  set :fn64:i 5
+  971:  jump *label281 always 0 0
+        gotolabel *label288 marker15
+  972:  setaddr *tmp274 *label289
+  973:  set :fn64:i 5
+        label *label281
+  974:  op lessThan *tmp275 :fn64:i :fn64:n
+  975:  jump *label290 equal *tmp275 false
+  976:  op add :fn64:lt :fn64:lt 1
+  977:  set *tmp276 :fn64:lt
+  978:  jump *label291 always 0 0
+        label *label290
+  979:  op greaterThan *tmp277 :fn64:i :fn64:n
+  980:  jump *label292 equal *tmp277 false
+  981:  op add :fn64:gt :fn64:gt 1
+  982:  set *tmp278 :fn64:gt
+  983:  jump *label293 always 0 0
+        label *label292
+  984:  set *tmp278 null
+        label *label293
+  985:  set *tmp276 *tmp278
+        label *label291
+        label *label282
+  986:  goto *tmp274 marker15
+        gotolabel *label289 marker15
+        label *label283
+  987:  op sub *tmp279 :fn64:gt :fn64:lt
+  988:  op abs *tmp280 *tmp279 0
+  989:  set :fn64:dif *tmp280
+  990:  op add *tmp281 :fn64:gt :fn64:lt
+  991:  op sub *tmp282 6 1
+  992:  op greaterThanEq *tmp283 *tmp281 *tmp282
+  993:  jump *label294 equal *tmp283 false
+  994:  op equal *tmp285 :fn64:gt :fn64:lt
+  995:  set *tmp284 *tmp285
+  996:  jump *label295 always 0 0
+        label *label294
+  997:  set *tmp284 false
+        label *label295
+  998:  set *tmp273 *tmp284
+        label *label280
+  999:  set :fn63:dif :fn64:dif
+ 1000:  jump *label296 equal *tmp273 false
+ 1001:  set *tmp271 :fn63:i
+ 1002:  jump *label270 always 0 0
+ 1003:  set *tmp286 null
+ 1004:  jump *label297 always 0 0
+        label *label296
+ 1005:  set *tmp286 null
+        label *label297
+ 1006:  op lessThan *tmp287 :fn63:dif :fn63:bestDif
+ 1007:  jump *label298 equal *tmp287 false
+ 1008:  set :fn63:bestDif :fn63:dif
+ 1009:  set :fn63:best :fn63:i
+ 1010:  set :fn63:count 1
+ 1011:  set *tmp288 :fn63:count
+ 1012:  jump *label299 always 0 0
+        label *label298
+ 1013:  op lessThanEq *tmp289 :fn63:dif :fn63:bestDif
+ 1014:  jump *label300 equal *tmp289 false
+ 1015:  op add :fn63:best :fn63:best :fn63:i
+ 1016:  op add :fn63:count :fn63:count 1
+ 1017:  set *tmp290 :fn63:count
+ 1018:  jump *label301 always 0 0
+        label *label300
+ 1019:  set *tmp290 null
+        label *label301
+ 1020:  set *tmp288 *tmp290
+        label *label299
+        label *label272
+ 1021:  goto *tmp272 marker14
+        gotolabel *label279 marker14
+        label *label273
+ 1022:  op div *tmp291 :fn63:best :fn63:count
+ 1023:  set *tmp271 *tmp291
+        label *label270
+ 1024:  set *tmp270 *tmp271
+        label *label269
+ 1025:  assertequals 5 *tmp270 "median(5,5,5,5,5,5)"
+ 1026:  set :fn66:bestDif 10000000000
+ 1027:  set :fn66:best null
+ 1028:  set :fn66:count 1
+ 1029:  setaddr *tmp294 *label307
+ 1030:  set :fn66:i 1
+ 1031:  jump *label304 always 0 0
+        gotolabel *label307 marker16
+ 1032:  setaddr *tmp294 *label308
+ 1033:  set :fn66:i 2
+ 1034:  jump *label304 always 0 0
+        gotolabel *label308 marker16
+ 1035:  setaddr *tmp294 *label309
+ 1036:  set :fn66:i 3
+ 1037:  jump *label304 always 0 0
+        gotolabel *label309 marker16
+ 1038:  setaddr *tmp294 *label310
+ 1039:  set :fn66:i 4
+ 1040:  jump *label304 always 0 0
+        gotolabel *label310 marker16
+ 1041:  setaddr *tmp294 *label311
+ 1042:  set :fn66:i 5
+ 1043:  jump *label304 always 0 0
+        gotolabel *label311 marker16
+ 1044:  setaddr *tmp294 *label312
+ 1045:  set :fn66:i 6
+ 1046:  jump *label304 always 0 0
+        gotolabel *label312 marker16
+ 1047:  setaddr *tmp294 *label313
+ 1048:  set :fn66:i 7
+ 1049:  jump *label304 always 0 0
+        gotolabel *label313 marker16
+ 1050:  setaddr *tmp294 *label314
+ 1051:  set :fn66:i 8
+ 1052:  jump *label304 always 0 0
+        gotolabel *label314 marker16
+ 1053:  setaddr *tmp294 *label315
+ 1054:  set :fn66:i 9
+        label *label304
+ 1055:  set :fn67:n :fn66:i
+ 1056:  set :fn67:lt 0
+ 1057:  set :fn67:gt 0
+ 1058:  setaddr *tmp296 *label320
+ 1059:  set :fn67:i 1
+ 1060:  jump *label317 always 0 0
+        gotolabel *label320 marker17
+ 1061:  setaddr *tmp296 *label321
+ 1062:  set :fn67:i 2
+ 1063:  jump *label317 always 0 0
+        gotolabel *label321 marker17
+ 1064:  setaddr *tmp296 *label322
+ 1065:  set :fn67:i 3
+ 1066:  jump *label317 always 0 0
+        gotolabel *label322 marker17
+ 1067:  setaddr *tmp296 *label323
+ 1068:  set :fn67:i 4
+ 1069:  jump *label317 always 0 0
+        gotolabel *label323 marker17
+ 1070:  setaddr *tmp296 *label324
+ 1071:  set :fn67:i 5
+ 1072:  jump *label317 always 0 0
+        gotolabel *label324 marker17
+ 1073:  setaddr *tmp296 *label325
+ 1074:  set :fn67:i 6
+ 1075:  jump *label317 always 0 0
+        gotolabel *label325 marker17
+ 1076:  setaddr *tmp296 *label326
+ 1077:  set :fn67:i 7
+ 1078:  jump *label317 always 0 0
+        gotolabel *label326 marker17
+ 1079:  setaddr *tmp296 *label327
+ 1080:  set :fn67:i 8
+ 1081:  jump *label317 always 0 0
+        gotolabel *label327 marker17
+ 1082:  setaddr *tmp296 *label328
+ 1083:  set :fn67:i 9
+        label *label317
+ 1084:  op lessThan *tmp297 :fn67:i :fn67:n
+ 1085:  jump *label329 equal *tmp297 false
+ 1086:  op add :fn67:lt :fn67:lt 1
+ 1087:  set *tmp298 :fn67:lt
+ 1088:  jump *label330 always 0 0
+        label *label329
+ 1089:  op greaterThan *tmp299 :fn67:i :fn67:n
+ 1090:  jump *label331 equal *tmp299 false
+ 1091:  op add :fn67:gt :fn67:gt 1
+ 1092:  set *tmp300 :fn67:gt
+ 1093:  jump *label332 always 0 0
+        label *label331
+ 1094:  set *tmp300 null
+        label *label332
+ 1095:  set *tmp298 *tmp300
+        label *label330
+        label *label318
+ 1096:  goto *tmp296 marker17
+        gotolabel *label328 marker17
+        label *label319
+ 1097:  op sub *tmp301 :fn67:gt :fn67:lt
+ 1098:  op abs *tmp302 *tmp301 0
+ 1099:  set :fn67:dif *tmp302
+ 1100:  op add *tmp303 :fn67:gt :fn67:lt
+ 1101:  op sub *tmp304 9 1
+ 1102:  op greaterThanEq *tmp305 *tmp303 *tmp304
+ 1103:  jump *label333 equal *tmp305 false
+ 1104:  op equal *tmp307 :fn67:gt :fn67:lt
+ 1105:  set *tmp306 *tmp307
+ 1106:  jump *label334 always 0 0
+        label *label333
+ 1107:  set *tmp306 false
+        label *label334
+ 1108:  set *tmp295 *tmp306
+        label *label316
+ 1109:  set :fn66:dif :fn67:dif
+ 1110:  jump *label335 equal *tmp295 false
+ 1111:  set *tmp293 :fn66:i
+ 1112:  jump *label303 always 0 0
+ 1113:  set *tmp308 null
+ 1114:  jump *label336 always 0 0
+        label *label335
+ 1115:  set *tmp308 null
+        label *label336
+ 1116:  op lessThan *tmp309 :fn66:dif :fn66:bestDif
+ 1117:  jump *label337 equal *tmp309 false
+ 1118:  set :fn66:bestDif :fn66:dif
+ 1119:  set :fn66:best :fn66:i
+ 1120:  set :fn66:count 1
+ 1121:  set *tmp310 :fn66:count
+ 1122:  jump *label338 always 0 0
+        label *label337
+ 1123:  op lessThanEq *tmp311 :fn66:dif :fn66:bestDif
+ 1124:  jump *label339 equal *tmp311 false
+ 1125:  op add :fn66:best :fn66:best :fn66:i
+ 1126:  op add :fn66:count :fn66:count 1
+ 1127:  set *tmp312 :fn66:count
+ 1128:  jump *label340 always 0 0
+        label *label339
+ 1129:  set *tmp312 null
+        label *label340
+ 1130:  set *tmp310 *tmp312
+        label *label338
+        label *label305
+ 1131:  goto *tmp294 marker16
+        gotolabel *label315 marker16
+        label *label306
+ 1132:  op div *tmp313 :fn66:best :fn66:count
+ 1133:  set *tmp293 *tmp313
+        label *label303
+ 1134:  set *tmp292 *tmp293
+        label *label302
+ 1135:  assertequals 5 *tmp292 "median(1,2,3,4,5,6,7,8,9)"
+ 1136:  set :fn69:bestDif 10000000000
+ 1137:  set :fn69:best null
+ 1138:  set :fn69:count 1
+ 1139:  setaddr *tmp316 *label346
+ 1140:  set :fn69:i 9
+ 1141:  jump *label343 always 0 0
+        gotolabel *label346 marker18
+ 1142:  setaddr *tmp316 *label347
+ 1143:  set :fn69:i 8
+ 1144:  jump *label343 always 0 0
+        gotolabel *label347 marker18
+ 1145:  setaddr *tmp316 *label348
+ 1146:  set :fn69:i 7
+ 1147:  jump *label343 always 0 0
+        gotolabel *label348 marker18
+ 1148:  setaddr *tmp316 *label349
+ 1149:  set :fn69:i 6
+ 1150:  jump *label343 always 0 0
+        gotolabel *label349 marker18
+ 1151:  setaddr *tmp316 *label350
+ 1152:  set :fn69:i 5
+ 1153:  jump *label343 always 0 0
+        gotolabel *label350 marker18
+ 1154:  setaddr *tmp316 *label351
+ 1155:  set :fn69:i 4
+ 1156:  jump *label343 always 0 0
+        gotolabel *label351 marker18
+ 1157:  setaddr *tmp316 *label352
+ 1158:  set :fn69:i 3
+ 1159:  jump *label343 always 0 0
+        gotolabel *label352 marker18
+ 1160:  setaddr *tmp316 *label353
+ 1161:  set :fn69:i 2
+ 1162:  jump *label343 always 0 0
+        gotolabel *label353 marker18
+ 1163:  setaddr *tmp316 *label354
+ 1164:  set :fn69:i 1
+        label *label343
+ 1165:  set :fn70:n :fn69:i
+ 1166:  set :fn70:lt 0
+ 1167:  set :fn70:gt 0
+ 1168:  setaddr *tmp318 *label359
+ 1169:  set :fn70:i 9
+ 1170:  jump *label356 always 0 0
+        gotolabel *label359 marker19
+ 1171:  setaddr *tmp318 *label360
+ 1172:  set :fn70:i 8
+ 1173:  jump *label356 always 0 0
+        gotolabel *label360 marker19
+ 1174:  setaddr *tmp318 *label361
+ 1175:  set :fn70:i 7
+ 1176:  jump *label356 always 0 0
+        gotolabel *label361 marker19
+ 1177:  setaddr *tmp318 *label362
+ 1178:  set :fn70:i 6
+ 1179:  jump *label356 always 0 0
+        gotolabel *label362 marker19
+ 1180:  setaddr *tmp318 *label363
+ 1181:  set :fn70:i 5
+ 1182:  jump *label356 always 0 0
+        gotolabel *label363 marker19
+ 1183:  setaddr *tmp318 *label364
+ 1184:  set :fn70:i 4
+ 1185:  jump *label356 always 0 0
+        gotolabel *label364 marker19
+ 1186:  setaddr *tmp318 *label365
+ 1187:  set :fn70:i 3
+ 1188:  jump *label356 always 0 0
+        gotolabel *label365 marker19
+ 1189:  setaddr *tmp318 *label366
+ 1190:  set :fn70:i 2
+ 1191:  jump *label356 always 0 0
+        gotolabel *label366 marker19
+ 1192:  setaddr *tmp318 *label367
+ 1193:  set :fn70:i 1
+        label *label356
+ 1194:  op lessThan *tmp319 :fn70:i :fn70:n
+ 1195:  jump *label368 equal *tmp319 false
+ 1196:  op add :fn70:lt :fn70:lt 1
+ 1197:  set *tmp320 :fn70:lt
+ 1198:  jump *label369 always 0 0
+        label *label368
+ 1199:  op greaterThan *tmp321 :fn70:i :fn70:n
+ 1200:  jump *label370 equal *tmp321 false
+ 1201:  op add :fn70:gt :fn70:gt 1
+ 1202:  set *tmp322 :fn70:gt
+ 1203:  jump *label371 always 0 0
+        label *label370
+ 1204:  set *tmp322 null
+        label *label371
+ 1205:  set *tmp320 *tmp322
+        label *label369
+        label *label357
+ 1206:  goto *tmp318 marker19
+        gotolabel *label367 marker19
+        label *label358
+ 1207:  op sub *tmp323 :fn70:gt :fn70:lt
+ 1208:  op abs *tmp324 *tmp323 0
+ 1209:  set :fn70:dif *tmp324
+ 1210:  op add *tmp325 :fn70:gt :fn70:lt
+ 1211:  op sub *tmp326 9 1
+ 1212:  op greaterThanEq *tmp327 *tmp325 *tmp326
+ 1213:  jump *label372 equal *tmp327 false
+ 1214:  op equal *tmp329 :fn70:gt :fn70:lt
+ 1215:  set *tmp328 *tmp329
+ 1216:  jump *label373 always 0 0
+        label *label372
+ 1217:  set *tmp328 false
+        label *label373
+ 1218:  set *tmp317 *tmp328
+        label *label355
+ 1219:  set :fn69:dif :fn70:dif
+ 1220:  jump *label374 equal *tmp317 false
+ 1221:  set *tmp315 :fn69:i
+ 1222:  jump *label342 always 0 0
+ 1223:  set *tmp330 null
+ 1224:  jump *label375 always 0 0
+        label *label374
+ 1225:  set *tmp330 null
+        label *label375
+ 1226:  op lessThan *tmp331 :fn69:dif :fn69:bestDif
+ 1227:  jump *label376 equal *tmp331 false
+ 1228:  set :fn69:bestDif :fn69:dif
+ 1229:  set :fn69:best :fn69:i
+ 1230:  set :fn69:count 1
+ 1231:  set *tmp332 :fn69:count
+ 1232:  jump *label377 always 0 0
+        label *label376
+ 1233:  op lessThanEq *tmp333 :fn69:dif :fn69:bestDif
+ 1234:  jump *label378 equal *tmp333 false
+ 1235:  op add :fn69:best :fn69:best :fn69:i
+ 1236:  op add :fn69:count :fn69:count 1
+ 1237:  set *tmp334 :fn69:count
+ 1238:  jump *label379 always 0 0
+        label *label378
+ 1239:  set *tmp334 null
+        label *label379
+ 1240:  set *tmp332 *tmp334
+        label *label377
+        label *label344
+ 1241:  goto *tmp316 marker18
+        gotolabel *label354 marker18
+        label *label345
+ 1242:  op div *tmp335 :fn69:best :fn69:count
+ 1243:  set *tmp315 *tmp335
+        label *label342
+ 1244:  set *tmp314 *tmp315
+        label *label341
+ 1245:  assertequals 5 *tmp314 "median(9,8,7,6,5,4,3,2,1)"
+ 1246:  set :fn72:bestDif 10000000000
+ 1247:  set :fn72:best null
+ 1248:  set :fn72:count 1
+ 1249:  setaddr *tmp338 *label385
+ 1250:  set :fn72:i 1
+ 1251:  jump *label382 always 0 0
+        gotolabel *label385 marker20
+ 1252:  setaddr *tmp338 *label386
+ 1253:  set :fn72:i 3
+ 1254:  jump *label382 always 0 0
+        gotolabel *label386 marker20
+ 1255:  setaddr *tmp338 *label387
+ 1256:  set :fn72:i 5
+ 1257:  jump *label382 always 0 0
+        gotolabel *label387 marker20
+ 1258:  setaddr *tmp338 *label388
+ 1259:  set :fn72:i 7
+ 1260:  jump *label382 always 0 0
+        gotolabel *label388 marker20
+ 1261:  setaddr *tmp338 *label389
+ 1262:  set :fn72:i 9
+ 1263:  jump *label382 always 0 0
+        gotolabel *label389 marker20
+ 1264:  setaddr *tmp338 *label390
+ 1265:  set :fn72:i 2
+ 1266:  jump *label382 always 0 0
+        gotolabel *label390 marker20
+ 1267:  setaddr *tmp338 *label391
+ 1268:  set :fn72:i 4
+ 1269:  jump *label382 always 0 0
+        gotolabel *label391 marker20
+ 1270:  setaddr *tmp338 *label392
+ 1271:  set :fn72:i 6
+ 1272:  jump *label382 always 0 0
+        gotolabel *label392 marker20
+ 1273:  setaddr *tmp338 *label393
+ 1274:  set :fn72:i 8
+        label *label382
+ 1275:  set :fn73:n :fn72:i
+ 1276:  set :fn73:lt 0
+ 1277:  set :fn73:gt 0
+ 1278:  setaddr *tmp340 *label398
+ 1279:  set :fn73:i 1
+ 1280:  jump *label395 always 0 0
+        gotolabel *label398 marker21
+ 1281:  setaddr *tmp340 *label399
+ 1282:  set :fn73:i 3
+ 1283:  jump *label395 always 0 0
+        gotolabel *label399 marker21
+ 1284:  setaddr *tmp340 *label400
+ 1285:  set :fn73:i 5
+ 1286:  jump *label395 always 0 0
+        gotolabel *label400 marker21
+ 1287:  setaddr *tmp340 *label401
+ 1288:  set :fn73:i 7
+ 1289:  jump *label395 always 0 0
+        gotolabel *label401 marker21
+ 1290:  setaddr *tmp340 *label402
+ 1291:  set :fn73:i 9
+ 1292:  jump *label395 always 0 0
+        gotolabel *label402 marker21
+ 1293:  setaddr *tmp340 *label403
+ 1294:  set :fn73:i 2
+ 1295:  jump *label395 always 0 0
+        gotolabel *label403 marker21
+ 1296:  setaddr *tmp340 *label404
+ 1297:  set :fn73:i 4
+ 1298:  jump *label395 always 0 0
+        gotolabel *label404 marker21
+ 1299:  setaddr *tmp340 *label405
+ 1300:  set :fn73:i 6
+ 1301:  jump *label395 always 0 0
+        gotolabel *label405 marker21
+ 1302:  setaddr *tmp340 *label406
+ 1303:  set :fn73:i 8
+        label *label395
+ 1304:  op lessThan *tmp341 :fn73:i :fn73:n
+ 1305:  jump *label407 equal *tmp341 false
+ 1306:  op add :fn73:lt :fn73:lt 1
+ 1307:  set *tmp342 :fn73:lt
+ 1308:  jump *label408 always 0 0
+        label *label407
+ 1309:  op greaterThan *tmp343 :fn73:i :fn73:n
+ 1310:  jump *label409 equal *tmp343 false
+ 1311:  op add :fn73:gt :fn73:gt 1
+ 1312:  set *tmp344 :fn73:gt
+ 1313:  jump *label410 always 0 0
+        label *label409
+ 1314:  set *tmp344 null
+        label *label410
+ 1315:  set *tmp342 *tmp344
+        label *label408
+        label *label396
+ 1316:  goto *tmp340 marker21
+        gotolabel *label406 marker21
+        label *label397
+ 1317:  op sub *tmp345 :fn73:gt :fn73:lt
+ 1318:  op abs *tmp346 *tmp345 0
+ 1319:  set :fn73:dif *tmp346
+ 1320:  op add *tmp347 :fn73:gt :fn73:lt
+ 1321:  op sub *tmp348 9 1
+ 1322:  op greaterThanEq *tmp349 *tmp347 *tmp348
+ 1323:  jump *label411 equal *tmp349 false
+ 1324:  op equal *tmp351 :fn73:gt :fn73:lt
+ 1325:  set *tmp350 *tmp351
+ 1326:  jump *label412 always 0 0
+        label *label411
+ 1327:  set *tmp350 false
+        label *label412
+ 1328:  set *tmp339 *tmp350
+        label *label394
+ 1329:  set :fn72:dif :fn73:dif
+ 1330:  jump *label413 equal *tmp339 false
+ 1331:  set *tmp337 :fn72:i
+ 1332:  jump *label381 always 0 0
+ 1333:  set *tmp352 null
+ 1334:  jump *label414 always 0 0
+        label *label413
+ 1335:  set *tmp352 null
+        label *label414
+ 1336:  op lessThan *tmp353 :fn72:dif :fn72:bestDif
+ 1337:  jump *label415 equal *tmp353 false
+ 1338:  set :fn72:bestDif :fn72:dif
+ 1339:  set :fn72:best :fn72:i
+ 1340:  set :fn72:count 1
+ 1341:  set *tmp354 :fn72:count
+ 1342:  jump *label416 always 0 0
+        label *label415
+ 1343:  op lessThanEq *tmp355 :fn72:dif :fn72:bestDif
+ 1344:  jump *label417 equal *tmp355 false
+ 1345:  op add :fn72:best :fn72:best :fn72:i
+ 1346:  op add :fn72:count :fn72:count 1
+ 1347:  set *tmp356 :fn72:count
+ 1348:  jump *label418 always 0 0
+        label *label417
+ 1349:  set *tmp356 null
+        label *label418
+ 1350:  set *tmp354 *tmp356
+        label *label416
+        label *label383
+ 1351:  goto *tmp338 marker20
+        gotolabel *label393 marker20
+        label *label384
+ 1352:  op div *tmp357 :fn72:best :fn72:count
+ 1353:  set *tmp337 *tmp357
+        label *label381
+ 1354:  set *tmp336 *tmp337
+        label *label380
+ 1355:  assertequals 5 *tmp336 "median(1,3,5,7,9,2,4,6,8)"
+ 1356:  set :fn75:bestDif 10000000000
+ 1357:  set :fn75:best null
+ 1358:  set :fn75:count 1
+ 1359:  setaddr *tmp360 *label424
+ 1360:  set :fn75:i 7
+ 1361:  jump *label421 always 0 0
+        gotolabel *label424 marker22
+ 1362:  setaddr *tmp360 *label425
+ 1363:  set :fn75:i 4
+ 1364:  jump *label421 always 0 0
+        gotolabel *label425 marker22
+ 1365:  setaddr *tmp360 *label426
+ 1366:  set :fn75:i 2
+ 1367:  jump *label421 always 0 0
+        gotolabel *label426 marker22
+ 1368:  setaddr *tmp360 *label427
+ 1369:  set :fn75:i 8
+ 1370:  jump *label421 always 0 0
+        gotolabel *label427 marker22
+ 1371:  setaddr *tmp360 *label428
+ 1372:  set :fn75:i 1
+ 1373:  jump *label421 always 0 0
+        gotolabel *label428 marker22
+ 1374:  setaddr *tmp360 *label429
+ 1375:  set :fn75:i 5
+ 1376:  jump *label421 always 0 0
+        gotolabel *label429 marker22
+ 1377:  setaddr *tmp360 *label430
+ 1378:  set :fn75:i 6
+ 1379:  jump *label421 always 0 0
+        gotolabel *label430 marker22
+ 1380:  setaddr *tmp360 *label431
+ 1381:  set :fn75:i 9
+ 1382:  jump *label421 always 0 0
+        gotolabel *label431 marker22
+ 1383:  setaddr *tmp360 *label432
+ 1384:  set :fn75:i 3
+        label *label421
+ 1385:  set :fn76:n :fn75:i
+ 1386:  set :fn76:lt 0
+ 1387:  set :fn76:gt 0
+ 1388:  setaddr *tmp362 *label437
+ 1389:  set :fn76:i 7
+ 1390:  jump *label434 always 0 0
+        gotolabel *label437 marker23
+ 1391:  setaddr *tmp362 *label438
+ 1392:  set :fn76:i 4
+ 1393:  jump *label434 always 0 0
+        gotolabel *label438 marker23
+ 1394:  setaddr *tmp362 *label439
+ 1395:  set :fn76:i 2
+ 1396:  jump *label434 always 0 0
+        gotolabel *label439 marker23
+ 1397:  setaddr *tmp362 *label440
+ 1398:  set :fn76:i 8
+ 1399:  jump *label434 always 0 0
+        gotolabel *label440 marker23
+ 1400:  setaddr *tmp362 *label441
+ 1401:  set :fn76:i 1
+ 1402:  jump *label434 always 0 0
+        gotolabel *label441 marker23
+ 1403:  setaddr *tmp362 *label442
+ 1404:  set :fn76:i 5
+ 1405:  jump *label434 always 0 0
+        gotolabel *label442 marker23
+ 1406:  setaddr *tmp362 *label443
+ 1407:  set :fn76:i 6
+ 1408:  jump *label434 always 0 0
+        gotolabel *label443 marker23
+ 1409:  setaddr *tmp362 *label444
+ 1410:  set :fn76:i 9
+ 1411:  jump *label434 always 0 0
+        gotolabel *label444 marker23
+ 1412:  setaddr *tmp362 *label445
+ 1413:  set :fn76:i 3
+        label *label434
+ 1414:  op lessThan *tmp363 :fn76:i :fn76:n
+ 1415:  jump *label446 equal *tmp363 false
+ 1416:  op add :fn76:lt :fn76:lt 1
+ 1417:  set *tmp364 :fn76:lt
+ 1418:  jump *label447 always 0 0
+        label *label446
+ 1419:  op greaterThan *tmp365 :fn76:i :fn76:n
+ 1420:  jump *label448 equal *tmp365 false
+ 1421:  op add :fn76:gt :fn76:gt 1
+ 1422:  set *tmp366 :fn76:gt
+ 1423:  jump *label449 always 0 0
+        label *label448
+ 1424:  set *tmp366 null
+        label *label449
+ 1425:  set *tmp364 *tmp366
+        label *label447
+        label *label435
+ 1426:  goto *tmp362 marker23
+        gotolabel *label445 marker23
+        label *label436
+ 1427:  op sub *tmp367 :fn76:gt :fn76:lt
+ 1428:  op abs *tmp368 *tmp367 0
+ 1429:  set :fn76:dif *tmp368
+ 1430:  op add *tmp369 :fn76:gt :fn76:lt
+ 1431:  op sub *tmp370 9 1
+ 1432:  op greaterThanEq *tmp371 *tmp369 *tmp370
+ 1433:  jump *label450 equal *tmp371 false
+ 1434:  op equal *tmp373 :fn76:gt :fn76:lt
+ 1435:  set *tmp372 *tmp373
+ 1436:  jump *label451 always 0 0
+        label *label450
+ 1437:  set *tmp372 false
+        label *label451
+ 1438:  set *tmp361 *tmp372
+        label *label433
+ 1439:  set :fn75:dif :fn76:dif
+ 1440:  jump *label452 equal *tmp361 false
+ 1441:  set *tmp359 :fn75:i
+ 1442:  jump *label420 always 0 0
+ 1443:  set *tmp374 null
+ 1444:  jump *label453 always 0 0
+        label *label452
+ 1445:  set *tmp374 null
+        label *label453
+ 1446:  op lessThan *tmp375 :fn75:dif :fn75:bestDif
+ 1447:  jump *label454 equal *tmp375 false
+ 1448:  set :fn75:bestDif :fn75:dif
+ 1449:  set :fn75:best :fn75:i
+ 1450:  set :fn75:count 1
+ 1451:  set *tmp376 :fn75:count
+ 1452:  jump *label455 always 0 0
+        label *label454
+ 1453:  op lessThanEq *tmp377 :fn75:dif :fn75:bestDif
+ 1454:  jump *label456 equal *tmp377 false
+ 1455:  op add :fn75:best :fn75:best :fn75:i
+ 1456:  op add :fn75:count :fn75:count 1
+ 1457:  set *tmp378 :fn75:count
+ 1458:  jump *label457 always 0 0
+        label *label456
+ 1459:  set *tmp378 null
+        label *label457
+ 1460:  set *tmp376 *tmp378
+        label *label455
+        label *label422
+ 1461:  goto *tmp360 marker22
+        gotolabel *label432 marker22
+        label *label423
+ 1462:  op div *tmp379 :fn75:best :fn75:count
+ 1463:  set *tmp359 *tmp379
+        label *label420
+ 1464:  set *tmp358 *tmp359
+        label *label419
+ 1465:  assertequals 5 *tmp358 "median(7,4,2,8,1,5,6,9,3)"
+ 1466:  set :fn78:bestDif 10000000000
+ 1467:  set :fn78:best null
+ 1468:  set :fn78:count 1
+ 1469:  setaddr *tmp382 *label463
+ 1470:  set :fn78:i 1
+ 1471:  jump *label460 always 0 0
+        gotolabel *label463 marker24
+ 1472:  setaddr *tmp382 *label464
+ 1473:  set :fn78:i 1
+ 1474:  jump *label460 always 0 0
+        gotolabel *label464 marker24
+ 1475:  setaddr *tmp382 *label465
+ 1476:  set :fn78:i 1
+ 1477:  jump *label460 always 0 0
+        gotolabel *label465 marker24
+ 1478:  setaddr *tmp382 *label466
+ 1479:  set :fn78:i 1
+ 1480:  jump *label460 always 0 0
+        gotolabel *label466 marker24
+ 1481:  setaddr *tmp382 *label467
+ 1482:  set :fn78:i 9
+ 1483:  jump *label460 always 0 0
+        gotolabel *label467 marker24
+ 1484:  setaddr *tmp382 *label468
+ 1485:  set :fn78:i 9
+ 1486:  jump *label460 always 0 0
+        gotolabel *label468 marker24
+ 1487:  setaddr *tmp382 *label469
+ 1488:  set :fn78:i 9
+ 1489:  jump *label460 always 0 0
+        gotolabel *label469 marker24
+ 1490:  setaddr *tmp382 *label470
+ 1491:  set :fn78:i 9
+ 1492:  jump *label460 always 0 0
+        gotolabel *label470 marker24
+ 1493:  setaddr *tmp382 *label471
+ 1494:  set :fn78:i 5
+        label *label460
+ 1495:  set :fn79:n :fn78:i
+ 1496:  set :fn79:lt 0
+ 1497:  set :fn79:gt 0
+ 1498:  setaddr *tmp384 *label476
+ 1499:  set :fn79:i 1
+ 1500:  jump *label473 always 0 0
+        gotolabel *label476 marker25
+ 1501:  setaddr *tmp384 *label477
+ 1502:  set :fn79:i 1
+ 1503:  jump *label473 always 0 0
+        gotolabel *label477 marker25
+ 1504:  setaddr *tmp384 *label478
+ 1505:  set :fn79:i 1
+ 1506:  jump *label473 always 0 0
+        gotolabel *label478 marker25
+ 1507:  setaddr *tmp384 *label479
+ 1508:  set :fn79:i 1
+ 1509:  jump *label473 always 0 0
+        gotolabel *label479 marker25
+ 1510:  setaddr *tmp384 *label480
+ 1511:  set :fn79:i 9
+ 1512:  jump *label473 always 0 0
+        gotolabel *label480 marker25
+ 1513:  setaddr *tmp384 *label481
+ 1514:  set :fn79:i 9
+ 1515:  jump *label473 always 0 0
+        gotolabel *label481 marker25
+ 1516:  setaddr *tmp384 *label482
+ 1517:  set :fn79:i 9
+ 1518:  jump *label473 always 0 0
+        gotolabel *label482 marker25
+ 1519:  setaddr *tmp384 *label483
+ 1520:  set :fn79:i 9
+ 1521:  jump *label473 always 0 0
+        gotolabel *label483 marker25
+ 1522:  setaddr *tmp384 *label484
+ 1523:  set :fn79:i 5
+        label *label473
+ 1524:  op lessThan *tmp385 :fn79:i :fn79:n
+ 1525:  jump *label485 equal *tmp385 false
+ 1526:  op add :fn79:lt :fn79:lt 1
+ 1527:  set *tmp386 :fn79:lt
+ 1528:  jump *label486 always 0 0
+        label *label485
+ 1529:  op greaterThan *tmp387 :fn79:i :fn79:n
+ 1530:  jump *label487 equal *tmp387 false
+ 1531:  op add :fn79:gt :fn79:gt 1
+ 1532:  set *tmp388 :fn79:gt
+ 1533:  jump *label488 always 0 0
+        label *label487
+ 1534:  set *tmp388 null
+        label *label488
+ 1535:  set *tmp386 *tmp388
+        label *label486
+        label *label474
+ 1536:  goto *tmp384 marker25
+        gotolabel *label484 marker25
+        label *label475
+ 1537:  op sub *tmp389 :fn79:gt :fn79:lt
+ 1538:  op abs *tmp390 *tmp389 0
+ 1539:  set :fn79:dif *tmp390
+ 1540:  op add *tmp391 :fn79:gt :fn79:lt
+ 1541:  op sub *tmp392 9 1
+ 1542:  op greaterThanEq *tmp393 *tmp391 *tmp392
+ 1543:  jump *label489 equal *tmp393 false
+ 1544:  op equal *tmp395 :fn79:gt :fn79:lt
+ 1545:  set *tmp394 *tmp395
+ 1546:  jump *label490 always 0 0
+        label *label489
+ 1547:  set *tmp394 false
+        label *label490
+ 1548:  set *tmp383 *tmp394
+        label *label472
+ 1549:  set :fn78:dif :fn79:dif
+ 1550:  jump *label491 equal *tmp383 false
+ 1551:  set *tmp381 :fn78:i
+ 1552:  jump *label459 always 0 0
+ 1553:  set *tmp396 null
+ 1554:  jump *label492 always 0 0
+        label *label491
+ 1555:  set *tmp396 null
+        label *label492
+ 1556:  op lessThan *tmp397 :fn78:dif :fn78:bestDif
+ 1557:  jump *label493 equal *tmp397 false
+ 1558:  set :fn78:bestDif :fn78:dif
+ 1559:  set :fn78:best :fn78:i
+ 1560:  set :fn78:count 1
+ 1561:  set *tmp398 :fn78:count
+ 1562:  jump *label494 always 0 0
+        label *label493
+ 1563:  op lessThanEq *tmp399 :fn78:dif :fn78:bestDif
+ 1564:  jump *label495 equal *tmp399 false
+ 1565:  op add :fn78:best :fn78:best :fn78:i
+ 1566:  op add :fn78:count :fn78:count 1
+ 1567:  set *tmp400 :fn78:count
+ 1568:  jump *label496 always 0 0
+        label *label495
+ 1569:  set *tmp400 null
+        label *label496
+ 1570:  set *tmp398 *tmp400
+        label *label494
+        label *label461
+ 1571:  goto *tmp382 marker24
+        gotolabel *label471 marker24
+        label *label462
+ 1572:  op div *tmp401 :fn78:best :fn78:count
+ 1573:  set *tmp381 *tmp401
+        label *label459
+ 1574:  set *tmp380 *tmp381
+        label *label458
+ 1575:  assertequals 5 *tmp380 "median(1,1,1,1,9,9,9,9,5)"
+ 1576:  stop
+ 1577:  end
+        label *label0
+ 1578:  op equal *tmp402 :fn0:x 0
+ 1579:  jump *label498 equal *tmp402 false
+ 1580:  set *tmp403 0
+ 1581:  jump *label499 always 0 0
+        label *label498
+ 1582:  op lessThan *tmp404 :fn0:x 0
+ 1583:  jump *label500 equal *tmp404 false
+ 1584:  set *tmp405 -1
+ 1585:  jump *label501 always 0 0
+        label *label500
+ 1586:  set *tmp405 1
+        label *label501
+ 1587:  set *tmp403 *tmp405
+        label *label499
+ 1588:  set :fn0*retval *tmp403
+        label *label497
+ 1589:  goto :fn0*retaddr :fn0
+ 1590:  end
+        label *label1
+ 1591:  op max *tmp406 :fn1:x1 :fn1:x2
+ 1592:  set :fn1:y2 *tmp406
+ 1593:  op min *tmp407 :fn1:x3 :fn1:x4
+ 1594:  set :fn1:y3 *tmp407
+ 1595:  op lessThanEq *tmp408 :fn1:y2 :fn1:y3
+ 1596:  jump *label503 equal *tmp408 false
+ 1597:  op add *tmp410 :fn1:y2 :fn1:y3
+ 1598:  op div *tmp411 *tmp410 2
+ 1599:  set *tmp409 *tmp411
+ 1600:  jump *label504 always 0 0
+        label *label503
+ 1601:  op min *tmp412 :fn1:x1 :fn1:x2
+ 1602:  set :fn1:y1 *tmp412
+ 1603:  op max *tmp413 :fn1:x3 :fn1:x4
+ 1604:  set :fn1:y4 *tmp413
+ 1605:  op greaterThanEq *tmp414 :fn1:y1 :fn1:y4
+ 1606:  jump *label505 equal *tmp414 false
+ 1607:  op add *tmp416 :fn1:y1 :fn1:y4
+ 1608:  op div *tmp417 *tmp416 2
+ 1609:  set *tmp415 *tmp417
+ 1610:  jump *label506 always 0 0
+        label *label505
+ 1611:  op max *tmp418 :fn1:y1 :fn1:y3
+ 1612:  op min *tmp419 :fn1:y2 :fn1:y4
+ 1613:  op add *tmp420 *tmp418 *tmp419
+ 1614:  op div *tmp421 *tmp420 2
+ 1615:  set *tmp415 *tmp421
+        label *label506
+ 1616:  set *tmp409 *tmp415
+        label *label504
+ 1617:  set :fn1*retval *tmp409
+        label *label502
+ 1618:  goto :fn1*retaddr :fn1
+ 1619:  end
+        label *label2
+ 1620:  op min *tmp422 :fn2:x1 :fn2:x2
+ 1621:  set :fn2:y1 *tmp422
+ 1622:  op max *tmp423 :fn2:x1 :fn2:x2
+ 1623:  set :fn2:y2 *tmp423
+ 1624:  op min *tmp424 :fn2:x4 :fn2:x5
+ 1625:  set :fn2:y4 *tmp424
+ 1626:  op max *tmp425 :fn2:x4 :fn2:x5
+ 1627:  set :fn2:y5 *tmp425
+ 1628:  op lessThan *tmp426 :fn2:y4 :fn2:y1
+ 1629:  jump *label508 equal *tmp426 false
+ 1630:  set :fn80:a :fn2:y1
+ 1631:  set :fn80:b :fn2:y4
+ 1632:  set :fn80:t :fn80:a
+ 1633:  set :fn80:a :fn80:b
+ 1634:  set :fn80:b :fn80:t
+ 1635:  set *tmp428 :fn80:b
+        label *label510
+ 1636:  set :fn2:y1 :fn80:a
+ 1637:  set :fn2:y4 :fn80:b
+ 1638:  set :fn81:a :fn2:y2
+ 1639:  set :fn81:b :fn2:y5
+ 1640:  set :fn81:t :fn81:a
+ 1641:  set :fn81:a :fn81:b
+ 1642:  set :fn81:b :fn81:t
+ 1643:  set *tmp429 :fn81:b
+        label *label511
+ 1644:  set :fn2:y2 :fn81:a
+ 1645:  set :fn2:y5 :fn81:b
+ 1646:  set *tmp427 *tmp429
+ 1647:  jump *label509 always 0 0
+        label *label508
+ 1648:  set *tmp427 null
+        label *label509
+ 1649:  op greaterThan *tmp430 :fn2:x3 :fn2:y2
+ 1650:  jump *label512 equal *tmp430 false
+ 1651:  op lessThan *tmp432 :fn2:y2 :fn2:y4
+ 1652:  jump *label514 equal *tmp432 false
+ 1653:  op min *tmp434 :fn2:x3 :fn2:y4
+ 1654:  set *tmp433 *tmp434
+ 1655:  jump *label515 always 0 0
+        label *label514
+ 1656:  op min *tmp435 :fn2:y2 :fn2:y5
+ 1657:  set *tmp433 *tmp435
+        label *label515
+ 1658:  set *tmp431 *tmp433
+ 1659:  jump *label513 always 0 0
+        label *label512
+ 1660:  op greaterThan *tmp436 :fn2:x3 :fn2:y4
+ 1661:  jump *label516 equal *tmp436 false
+ 1662:  op min *tmp438 :fn2:x3 :fn2:y5
+ 1663:  set *tmp437 *tmp438
+ 1664:  jump *label517 always 0 0
+        label *label516
+ 1665:  op min *tmp439 :fn2:y2 :fn2:y4
+ 1666:  set *tmp437 *tmp439
+        label *label517
+ 1667:  set *tmp431 *tmp437
+        label *label513
+ 1668:  set :fn2*retval *tmp431
+        label *label507
+ 1669:  goto :fn2*retaddr :fn2
+ 1670:  end
 
 
 stop instruction encountered, dumping variable values:
-@counter: 1558.0
-__fn0__x: -5.0
-__fn0retaddr: 69.0
-__fn0retval: -1.0
-__fn10__x: 3.5
-__fn11__x: -1.5
-__fn12__x: 0.0
-__fn13__x: 1.0E-7
-__fn14__x: -1.0E-7
-__fn15__x: 0.0
-__fn16__x: 1.0E-50
-__fn17__x: -1.0E-50
-__fn18__precision: 0.01
-__fn18__x: 0.01
-__fn19__result: 0.0
-__fn19__x: null
-__fn1__x1: 6.0
-__fn1__x2: 2.0
-__fn1__x3: 8.0
-__fn1__x4: 4.0
-__fn1__y1: 2.0
-__fn1__y2: 6.0
-__fn1__y3: 4.0
-__fn1__y4: 8.0
-__fn1retaddr: 241.0
-__fn1retval: 5.0
-__fn20__result: 1.0
-__fn20__x: 1.0
-__fn21__x: 1.0
-__fn22__i: 4.0
-__fn22__sum: 10.0
-__fn22__x1: 1.0
-__fn22__x2: 2.0
-__fn23__x: 1.0
-__fn24__i: 4.0
-__fn24__sum: 10.0
-__fn24__x1: 1.0
-__fn24__x2: 2.0
-__fn25__x: 1.0
-__fn26__x1: 2.0
-__fn26__x2: 4.0
-__fn27__x1: 1.0
-__fn27__x2: 3.0
-__fn27__x3: 5.0
-__fn28__x1: 1.0
-__fn28__x2: 1.0
-__fn28__x3: 1.0
-__fn29__x1: 1.0
-__fn29__x2: 1.0
-__fn29__x3: 3.0
-__fn2__x1: 5.0
-__fn2__x2: 5.0
-__fn2__x3: 5.0
-__fn2__x4: 5.0
-__fn2__x5: 5.0
-__fn2__y1: 5.0
-__fn2__y2: 5.0
-__fn2__y4: 5.0
-__fn2__y5: 5.0
-__fn2retaddr: 313.0
-__fn2retval: 5.0
-__fn30__x1: 1.0
-__fn30__x2: 3.0
-__fn30__x3: 3.0
-__fn32__best: 6.0
-__fn32__bestDif: 0.0
-__fn32__count: 6.0
-__fn32__dif: 0.0
-__fn32__i: 1.0
-__fn33__dif: 0.0
-__fn33__gt: 0.0
-__fn33__i: 1.0
-__fn33__lt: 0.0
-__fn33__n: 1.0
-__fn35__best: 5.0
-__fn35__bestDif: 1.0
-__fn35__count: 5.0
-__fn35__dif: 5.0
-__fn35__i: 5.0
-__fn36__dif: 5.0
-__fn36__gt: 0.0
-__fn36__i: 5.0
-__fn36__lt: 5.0
-__fn36__n: 5.0
-__fn38__best: 4.0
-__fn38__bestDif: 2.0
-__fn38__count: 4.0
-__fn38__dif: 4.0
-__fn38__i: 5.0
-__fn39__dif: 4.0
-__fn39__gt: 0.0
-__fn39__i: 5.0
-__fn39__lt: 4.0
-__fn39__n: 5.0
-__fn3__x1: 1.0
-__fn3__x2: 4.0
-__fn3__y1: 1.0
-__fn3__y2: 5.0
-__fn41__best: 18.0
-__fn41__bestDif: 3.0
-__fn41__count: 6.0
-__fn41__dif: 3.0
-__fn41__i: 5.0
-__fn42__dif: 3.0
-__fn42__gt: 0.0
-__fn42__i: 5.0
-__fn42__lt: 3.0
-__fn42__n: 5.0
-__fn44__best: 20.0
-__fn44__bestDif: 2.0
-__fn44__count: 4.0
-__fn44__dif: 2.0
-__fn44__i: 5.0
-__fn45__dif: 2.0
-__fn45__gt: 0.0
-__fn45__i: 5.0
-__fn45__lt: 2.0
-__fn45__n: 5.0
-__fn47__best: 25.0
-__fn47__bestDif: 1.0
-__fn47__count: 5.0
-__fn47__dif: 1.0
-__fn47__i: 5.0
-__fn48__dif: 1.0
-__fn48__gt: 0.0
-__fn48__i: 5.0
-__fn48__lt: 1.0
-__fn48__n: 5.0
-__fn4__x1: -1.0
-__fn4__x2: -4.0
-__fn4__y1: -1.0
-__fn4__y2: -5.0
-__fn50__best: 30.0
-__fn50__bestDif: 0.0
-__fn50__count: 6.0
-__fn50__dif: 0.0
-__fn50__i: 5.0
-__fn51__dif: 0.0
-__fn51__gt: 0.0
-__fn51__i: 5.0
-__fn51__lt: 0.0
-__fn51__n: 5.0
-__fn53__best: 4.0
-__fn53__bestDif: 2.0
-__fn53__count: 1.0
-__fn53__dif: 0.0
-__fn53__i: 5.0
-__fn54__dif: 0.0
-__fn54__gt: 4.0
-__fn54__i: 9.0
-__fn54__lt: 4.0
-__fn54__n: 5.0
-__fn56__best: 6.0
-__fn56__bestDif: 2.0
-__fn56__count: 1.0
-__fn56__dif: 0.0
-__fn56__i: 5.0
-__fn57__dif: 0.0
-__fn57__gt: 4.0
-__fn57__i: 1.0
-__fn57__lt: 4.0
-__fn57__n: 5.0
-__fn59__best: 3.0
-__fn59__bestDif: 4.0
-__fn59__count: 1.0
-__fn59__dif: 0.0
-__fn59__i: 5.0
-__fn5__x: 1.5
-__fn60__dif: 0.0
-__fn60__gt: 4.0
-__fn60__i: 8.0
-__fn60__lt: 4.0
-__fn60__n: 5.0
-__fn62__best: 4.0
-__fn62__bestDif: 2.0
-__fn62__count: 1.0
-__fn62__dif: 0.0
-__fn62__i: 5.0
-__fn63__dif: 0.0
-__fn63__gt: 4.0
-__fn63__i: 3.0
-__fn63__lt: 4.0
-__fn63__n: 5.0
-__fn65__best: 40.0
-__fn65__bestDif: 5.0
-__fn65__count: 8.0
-__fn65__dif: 0.0
-__fn65__i: 5.0
-__fn66__dif: 0.0
-__fn66__gt: 4.0
-__fn66__i: 5.0
-__fn66__lt: 4.0
-__fn66__n: 5.0
-__fn67__a: 1.0
-__fn67__b: 4.0
-__fn67__t: 4.0
-__fn68__a: 2.0
-__fn68__b: 5.0
-__fn68__t: 5.0
-__fn6__x: 1.7
-__fn7__x: 2.1
-__fn8__x: 2.5
-__fn9__x: -3.5
-__tmp0: 5.0
-__tmp1: 3.0
-__tmp10: 2.0
-__tmp100: 1.0
-__tmp101: 1.0
-__tmp102: 1.0
-__tmp103: 5.0
-__tmp104: 5.0
-__tmp105: 5.0
-__tmp106: 1.0
-__tmp107: 1.0
-__tmp108: 407.0
-__tmp109: 0.0
-__tmp11: 2.0
-__tmp110: 370.0
-__tmp111: 0.0
-__tmp112: null
-__tmp114: 0.0
-__tmp115: null
-__tmp117: 0.0
-__tmp118: 0.0
-__tmp119: 0.0
-__tmp12: 2.2
-__tmp120: 5.0
-__tmp121: 0.0
-__tmp122: 0.0
-__tmp124: null
-__tmp125: 0.0
-__tmp126: 6.0
-__tmp127: 1.0
-__tmp128: 6.0
-__tmp129: 6.0
-__tmp13: 2.0
-__tmp130: 6.0
-__tmp131: 1.0
-__tmp132: 1.0
-__tmp133: 1.0
-__tmp134: 503.0
-__tmp135: 0.0
-__tmp136: 466.0
-__tmp137: 0.0
-__tmp138: null
-__tmp139: 5.0
-__tmp14: 2.0
-__tmp140: 0.0
-__tmp141: null
-__tmp142: 1.0
-__tmp143: -5.0
-__tmp144: 5.0
-__tmp145: 5.0
-__tmp146: 5.0
-__tmp147: 1.0
-__tmp148: 0.0
-__tmp149: 0.0
-__tmp15: 2.6
-__tmp150: null
-__tmp151: 0.0
-__tmp152: null
-__tmp153: 0.0
-__tmp154: null
-__tmp155: 5.0
-__tmp156: 5.0
-__tmp157: 1.0
-__tmp158: 1.0
-__tmp159: 1.0
-__tmp16: 2.0
-__tmp160: 599.0
-__tmp161: 0.0
-__tmp162: 562.0
-__tmp163: 0.0
-__tmp164: null
-__tmp165: 4.0
-__tmp166: 0.0
-__tmp167: null
-__tmp168: 2.0
-__tmp169: -4.0
-__tmp17: 3.0
-__tmp170: 4.0
-__tmp171: 4.0
-__tmp172: 5.0
-__tmp173: 0.0
-__tmp174: 0.0
-__tmp176: null
-__tmp177: 0.0
-__tmp178: null
-__tmp179: 0.0
-__tmp18: 3.0
-__tmp180: null
-__tmp181: 4.0
-__tmp182: 4.0
-__tmp183: 1.0
-__tmp184: 3.0
-__tmp185: 3.0
-__tmp186: 695.0
-__tmp187: 0.0
-__tmp188: 658.0
-__tmp189: 0.0
-__tmp19: 3.0
-__tmp190: null
-__tmp191: 3.0
-__tmp192: 0.0
-__tmp193: null
-__tmp194: 3.0
-__tmp195: -3.0
-__tmp196: 3.0
-__tmp197: 3.0
-__tmp198: 5.0
-__tmp199: 0.0
-__tmp2: 4.0
-__tmp20: -3.0
-__tmp200: 0.0
-__tmp202: null
-__tmp203: 0.0
-__tmp204: 6.0
-__tmp205: 1.0
-__tmp206: 6.0
-__tmp207: 18.0
-__tmp208: 6.0
-__tmp209: 3.0
-__tmp21: -3.0
-__tmp210: 5.0
-__tmp211: 5.0
-__tmp212: 791.0
-__tmp213: 0.0
-__tmp214: 754.0
-__tmp215: 0.0
-__tmp216: null
-__tmp217: 2.0
-__tmp218: 0.0
-__tmp219: null
-__tmp22: -3.0
-__tmp220: 4.0
-__tmp221: -2.0
-__tmp222: 2.0
-__tmp223: 2.0
-__tmp224: 5.0
-__tmp225: 0.0
-__tmp226: 0.0
-__tmp228: null
-__tmp229: 0.0
-__tmp23: 0.5
-__tmp230: 4.0
-__tmp231: 1.0
-__tmp232: 4.0
-__tmp233: 20.0
-__tmp234: 4.0
-__tmp235: 5.0
-__tmp236: 5.0
-__tmp237: 5.0
-__tmp238: 887.0
-__tmp239: 0.0
-__tmp24: 0.5
-__tmp240: 850.0
-__tmp241: 0.0
-__tmp242: null
-__tmp243: 1.0
-__tmp244: 0.0
-__tmp245: null
-__tmp246: 5.0
-__tmp247: -1.0
-__tmp248: 1.0
-__tmp249: 1.0
-__tmp25: -0.5
-__tmp250: 5.0
-__tmp251: 0.0
-__tmp252: 0.0
-__tmp253: 0.0
-__tmp254: null
-__tmp255: 0.0
-__tmp256: 5.0
-__tmp257: 1.0
-__tmp258: 5.0
-__tmp259: 25.0
-__tmp26: -0.5
-__tmp260: 5.0
-__tmp261: 5.0
-__tmp262: 5.0
-__tmp263: 5.0
-__tmp264: 983.0
-__tmp265: 0.0
-__tmp266: 946.0
-__tmp267: 0.0
-__tmp268: null
-__tmp27: 0.0
-__tmp270: 0.0
-__tmp271: null
-__tmp273: 0.0
-__tmp274: 0.0
-__tmp275: 0.0
-__tmp276: 5.0
-__tmp277: 0.0
-__tmp278: 0.0
-__tmp28: 0.0
-__tmp280: null
-__tmp281: 0.0
-__tmp282: 6.0
-__tmp283: 1.0
-__tmp284: 6.0
-__tmp285: 30.0
-__tmp286: 6.0
-__tmp287: 5.0
-__tmp288: 5.0
-__tmp289: 5.0
-__tmp29: 1.0
-__tmp290: 1005.0
-__tmp291: 1.0
-__tmp292: 1060.0
-__tmp293: 0.0
-__tmp294: 4.0
-__tmp295: 4.0
-__tmp296: 1.0
-__tmp297: 4.0
-__tmp298: 4.0
-__tmp299: 0.0
-__tmp3: 5.0
-__tmp30: -1.0
-__tmp300: 0.0
-__tmp301: 8.0
-__tmp302: 8.0
-__tmp303: 1.0
-__tmp304: 1.0
-__tmp305: 1.0
-__tmp306: null
-__tmp307: 1.0
-__tmp308: 1.0
-__tmp31: 0.0
-__tmp314: 5.0
-__tmp315: 5.0
-__tmp316: 1119.0
-__tmp317: 1.0
-__tmp318: 1174.0
-__tmp319: 1.0
-__tmp32: 0.0
-__tmp320: 4.0
-__tmp321: 4.0
-__tmp322: 0.0
-__tmp323: null
-__tmp324: 4.0
-__tmp325: 0.0
-__tmp326: 0.0
-__tmp327: 8.0
-__tmp328: 8.0
-__tmp329: 1.0
-__tmp33: 0.0
-__tmp330: 1.0
-__tmp331: 1.0
-__tmp332: null
-__tmp333: 1.0
-__tmp334: 1.0
-__tmp34: 0.0
-__tmp340: 5.0
-__tmp341: 5.0
-__tmp342: 1227.0
-__tmp343: 1.0
-__tmp344: 1288.0
-__tmp345: 0.0
-__tmp346: 4.0
-__tmp347: 4.0
-__tmp348: 1.0
-__tmp349: 4.0
-__tmp35: 1.0
-__tmp350: 4.0
-__tmp351: 0.0
-__tmp352: 0.0
-__tmp353: 8.0
-__tmp354: 8.0
-__tmp355: 1.0
-__tmp356: 1.0
-__tmp357: 1.0
-__tmp358: null
-__tmp359: 1.0
-__tmp36: 1.0
-__tmp360: 1.0
-__tmp366: 5.0
-__tmp367: 5.0
-__tmp368: 1350.0
-__tmp369: 1.0
-__tmp37: 0.0
-__tmp370: 1402.0
-__tmp371: 1.0
-__tmp372: 4.0
-__tmp373: 4.0
-__tmp374: 1.0
-__tmp375: 4.0
-__tmp376: 4.0
-__tmp377: 0.0
-__tmp378: 0.0
-__tmp379: 8.0
-__tmp38: 1.0
-__tmp380: 8.0
-__tmp381: 1.0
-__tmp382: 1.0
-__tmp383: 1.0
-__tmp384: null
-__tmp385: 0.0
-__tmp386: null
-__tmp387: 0.0
-__tmp388: null
-__tmp39: -1.0
-__tmp392: 5.0
-__tmp393: 5.0
-__tmp394: 1553.0
-__tmp395: 1.0
-__tmp396: 1516.0
-__tmp397: 0.0
-__tmp398: null
-__tmp399: 4.0
-__tmp4: 5.0
-__tmp40: 0.0
-__tmp400: 0.0
-__tmp401: null
-__tmp402: 4.0
-__tmp403: 0.0
-__tmp404: 0.0
-__tmp405: 8.0
-__tmp406: 8.0
-__tmp407: 1.0
-__tmp408: 1.0
-__tmp409: 1.0
-__tmp41: 1.0
-__tmp410: null
-__tmp411: 0.0
-__tmp412: 8.0
-__tmp413: 1.0
-__tmp414: 8.0
-__tmp415: 40.0
-__tmp416: 8.0
-__tmp418: 0.0
-__tmp419: -1.0
-__tmp42: -1.0
-__tmp420: 1.0
-__tmp421: -1.0
-__tmp422: 6.0
-__tmp423: 4.0
-__tmp424: 0.0
-__tmp425: 5.0
-__tmp426: 10.0
-__tmp427: 5.0
-__tmp428: 2.0
-__tmp429: 8.0
-__tmp43: 1.0
-__tmp430: 0.0
-__tmp431: 5.0
-__tmp432: 10.0
-__tmp433: 5.0
-__tmp434: 4.0
-__tmp435: 6.0
-__tmp436: 10.0
-__tmp437: 5.0
-__tmp438: 5.0
-__tmp439: 5.0
-__tmp44: 0.0
-__tmp440: 5.0
-__tmp441: 5.0
-__tmp442: 0.0
-__tmp443: null
-__tmp444: 4.0
-__tmp445: 5.0
-__tmp446: 0.0
-__tmp447: 5.0
-__tmp448: 1.0
-__tmp449: 5.0
-__tmp45: 1.0
-__tmp450: 5.0
-__tmp452: 0.0
-__tmp453: 5.0
-__tmp455: 5.0
-__tmp46: 0.0
-__tmp47: 1.0E-50
-__tmp48: 0.0
-__tmp49: 0.0
-__tmp5: -3.0
-__tmp50: 1.0E-50
-__tmp51: 0.0
-__tmp52: 0.0
-__tmp53: 0.01
-__tmp54: 0.0
-__tmp55: 0.0
-__tmp56: 1.0
-__tmp57: 1.0
-__tmp58: 10.0
-__tmp59: 3.0
-__tmp6: -4.0
-__tmp60: 133.0
-__tmp61: 10.0
-__tmp62: 1.0
-__tmp63: 2.5
-__tmp64: 3.0
-__tmp65: 150.0
-__tmp66: 10.0
-__tmp67: 4.0
-__tmp68: 2.5
-__tmp69: 1.0
-__tmp7: 5.0
-__tmp70: 3.0
-__tmp71: 6.0
-__tmp72: 3.0
-__tmp73: 3.0
-__tmp74: 3.0
-__tmp75: 5.0
-__tmp76: 5.0
-__tmp77: 3.0
-__tmp78: 1.0
-__tmp79: 1.0
-__tmp8: 2.0
-__tmp80: 1.0
-__tmp81: 1.0
-__tmp82: 1.0
-__tmp83: 1.0
-__tmp84: 1.0
-__tmp85: 3.0
-__tmp86: 3.0
-__tmp87: 1.0
-__tmp88: 3.0
-__tmp89: 3.0
-__tmp9: 2.0
-__tmp90: 3.0
-__tmp91: 3.0
-__tmp92: 3.0
-__tmp93: 5.0
-__tmp94: 5.0
-__tmp95: 5.0
-__tmp96: 5.0
-__tmp97: 5.0
-__tmp98: 3.0
-__tmp99: 3.0
+*tmp0: 5.0
+*tmp1: 3.0
+*tmp10: 2.0
+*tmp100: 5.5
+*tmp101: 1.0
+*tmp102: 3.0
+*tmp103: 6.0
+*tmp104: 3.0
+*tmp105: 3.0
+*tmp106: 3.0
+*tmp107: 5.0
+*tmp108: 5.0
+*tmp109: 3.0
+*tmp11: 2.0
+*tmp110: 1.0
+*tmp111: 1.0
+*tmp112: 1.0
+*tmp113: 1.0
+*tmp114: 1.0
+*tmp115: 1.0
+*tmp116: 1.0
+*tmp117: 3.0
+*tmp118: 3.0
+*tmp119: 1.0
+*tmp12: 2.2
+*tmp120: 3.0
+*tmp121: 3.0
+*tmp122: 3.0
+*tmp123: 3.0
+*tmp124: 3.0
+*tmp125: 5.0
+*tmp126: 5.0
+*tmp127: 5.0
+*tmp128: 5.0
+*tmp129: 5.0
+*tmp13: 2.0
+*tmp130: 3.0
+*tmp131: 3.0
+*tmp132: 1.0
+*tmp133: 1.0
+*tmp134: 1.0
+*tmp135: 5.0
+*tmp136: 5.0
+*tmp137: 5.0
+*tmp138: 1.0
+*tmp139: 1.0
+*tmp14: 2.0
+*tmp140: 470.0
+*tmp141: 0.0
+*tmp142: 435.0
+*tmp143: 0.0
+*tmp144: null
+*tmp145: 0.0
+*tmp146: null
+*tmp147: 0.0
+*tmp148: 0.0
+*tmp149: 0.0
+*tmp15: 2.6
+*tmp150: 5.0
+*tmp151: 0.0
+*tmp152: 0.0
+*tmp154: null
+*tmp155: 0.0
+*tmp156: 6.0
+*tmp157: 1.0
+*tmp158: 6.0
+*tmp159: 1.0
+*tmp16: 2.0
+*tmp160: 1.0
+*tmp161: 1.0
+*tmp162: 562.0
+*tmp163: 0.0
+*tmp164: 527.0
+*tmp165: 0.0
+*tmp166: null
+*tmp167: 0.0
+*tmp168: null
+*tmp169: -5.0
+*tmp17: 3.0
+*tmp170: 5.0
+*tmp171: 5.0
+*tmp172: 5.0
+*tmp173: 1.0
+*tmp174: 0.0
+*tmp175: 0.0
+*tmp176: null
+*tmp177: 0.0
+*tmp178: null
+*tmp179: 0.0
+*tmp18: 3.0
+*tmp180: null
+*tmp181: 1.0
+*tmp182: 1.0
+*tmp183: 1.0
+*tmp184: 654.0
+*tmp185: 0.0
+*tmp186: 619.0
+*tmp187: 0.0
+*tmp188: null
+*tmp189: 0.0
+*tmp19: 3.0
+*tmp190: null
+*tmp191: -4.0
+*tmp192: 4.0
+*tmp193: 4.0
+*tmp194: 5.0
+*tmp195: 0.0
+*tmp196: 0.0
+*tmp198: null
+*tmp199: 0.0
+*tmp2: 4.0
+*tmp20: -3.0
+*tmp200: null
+*tmp201: 0.0
+*tmp202: null
+*tmp203: 1.0
+*tmp204: 3.0
+*tmp205: 3.0
+*tmp206: 746.0
+*tmp207: 0.0
+*tmp208: 711.0
+*tmp209: 0.0
+*tmp21: -3.0
+*tmp210: null
+*tmp211: 0.0
+*tmp212: null
+*tmp213: -3.0
+*tmp214: 3.0
+*tmp215: 3.0
+*tmp216: 5.0
+*tmp217: 0.0
+*tmp218: 0.0
+*tmp22: -3.0
+*tmp220: null
+*tmp221: 0.0
+*tmp222: 6.0
+*tmp223: 1.0
+*tmp224: 6.0
+*tmp225: 3.0
+*tmp226: 5.0
+*tmp227: 5.0
+*tmp228: 838.0
+*tmp229: 0.0
+*tmp23: 0.5
+*tmp230: 803.0
+*tmp231: 0.0
+*tmp232: null
+*tmp233: 0.0
+*tmp234: null
+*tmp235: -2.0
+*tmp236: 2.0
+*tmp237: 2.0
+*tmp238: 5.0
+*tmp239: 0.0
+*tmp24: 0.5
+*tmp240: 0.0
+*tmp242: null
+*tmp243: 0.0
+*tmp244: 4.0
+*tmp245: 1.0
+*tmp246: 4.0
+*tmp247: 5.0
+*tmp248: 5.0
+*tmp249: 5.0
+*tmp25: -0.5
+*tmp250: 930.0
+*tmp251: 0.0
+*tmp252: 895.0
+*tmp253: 0.0
+*tmp254: null
+*tmp255: 0.0
+*tmp256: null
+*tmp257: -1.0
+*tmp258: 1.0
+*tmp259: 1.0
+*tmp26: -0.5
+*tmp260: 5.0
+*tmp261: 0.0
+*tmp262: 0.0
+*tmp263: 0.0
+*tmp264: null
+*tmp265: 0.0
+*tmp266: 5.0
+*tmp267: 1.0
+*tmp268: 5.0
+*tmp269: 5.0
+*tmp27: 0.0
+*tmp270: 5.0
+*tmp271: 5.0
+*tmp272: 1022.0
+*tmp273: 0.0
+*tmp274: 987.0
+*tmp275: 0.0
+*tmp276: null
+*tmp277: 0.0
+*tmp278: null
+*tmp279: 0.0
+*tmp28: 0.0
+*tmp280: 0.0
+*tmp281: 0.0
+*tmp282: 5.0
+*tmp283: 0.0
+*tmp284: 0.0
+*tmp286: null
+*tmp287: 0.0
+*tmp288: 6.0
+*tmp289: 1.0
+*tmp29: 1.0
+*tmp290: 6.0
+*tmp291: 5.0
+*tmp292: 5.0
+*tmp293: 5.0
+*tmp294: 1044.0
+*tmp295: 1.0
+*tmp296: 1097.0
+*tmp297: 0.0
+*tmp298: 4.0
+*tmp299: 1.0
+*tmp3: 5.0
+*tmp30: -1.0
+*tmp300: 4.0
+*tmp301: 0.0
+*tmp302: 0.0
+*tmp303: 8.0
+*tmp304: 8.0
+*tmp305: 1.0
+*tmp306: 1.0
+*tmp307: 1.0
+*tmp308: null
+*tmp309: 1.0
+*tmp31: 0.0
+*tmp310: 1.0
+*tmp314: 5.0
+*tmp315: 5.0
+*tmp316: 1154.0
+*tmp317: 1.0
+*tmp318: 1207.0
+*tmp319: 1.0
+*tmp32: 0.0
+*tmp320: 4.0
+*tmp321: 0.0
+*tmp322: null
+*tmp323: 0.0
+*tmp324: 0.0
+*tmp325: 8.0
+*tmp326: 8.0
+*tmp327: 1.0
+*tmp328: 1.0
+*tmp329: 1.0
+*tmp33: 0.0
+*tmp330: null
+*tmp331: 1.0
+*tmp332: 1.0
+*tmp336: 5.0
+*tmp337: 5.0
+*tmp338: 1258.0
+*tmp339: 1.0
+*tmp34: 0.0
+*tmp340: 1317.0
+*tmp341: 0.0
+*tmp342: 4.0
+*tmp343: 1.0
+*tmp344: 4.0
+*tmp345: 0.0
+*tmp346: 0.0
+*tmp347: 8.0
+*tmp348: 8.0
+*tmp349: 1.0
+*tmp35: 1.0
+*tmp350: 1.0
+*tmp351: 1.0
+*tmp352: null
+*tmp353: 1.0
+*tmp354: 1.0
+*tmp358: 5.0
+*tmp359: 5.0
+*tmp36: 1.0
+*tmp360: 1377.0
+*tmp361: 1.0
+*tmp362: 1427.0
+*tmp363: 1.0
+*tmp364: 4.0
+*tmp365: 1.0
+*tmp366: 4.0
+*tmp367: 0.0
+*tmp368: 0.0
+*tmp369: 8.0
+*tmp37: 0.0
+*tmp370: 8.0
+*tmp371: 1.0
+*tmp372: 1.0
+*tmp373: 1.0
+*tmp374: null
+*tmp375: 0.0
+*tmp376: null
+*tmp377: 0.0
+*tmp378: null
+*tmp38: 1.0
+*tmp380: 5.0
+*tmp381: 5.0
+*tmp382: 1572.0
+*tmp383: 1.0
+*tmp384: 1537.0
+*tmp385: 0.0
+*tmp386: null
+*tmp387: 0.0
+*tmp388: null
+*tmp389: 0.0
+*tmp39: -1.0
+*tmp390: 0.0
+*tmp391: 8.0
+*tmp392: 8.0
+*tmp393: 1.0
+*tmp394: 1.0
+*tmp395: 1.0
+*tmp396: null
+*tmp397: 0.0
+*tmp398: 8.0
+*tmp399: 1.0
+*tmp4: 5.0
+*tmp40: 0.0
+*tmp400: 8.0
+*tmp402: 0.0
+*tmp403: -1.0
+*tmp404: 1.0
+*tmp405: -1.0
+*tmp406: 6.0
+*tmp407: 4.0
+*tmp408: 0.0
+*tmp409: 5.0
+*tmp41: 1.0
+*tmp410: 10.0
+*tmp411: 5.0
+*tmp412: 2.0
+*tmp413: 8.0
+*tmp414: 0.0
+*tmp415: 5.0
+*tmp416: 10.0
+*tmp417: 5.0
+*tmp418: 4.0
+*tmp419: 6.0
+*tmp42: -1.0
+*tmp420: 10.0
+*tmp421: 5.0
+*tmp422: 5.0
+*tmp423: 5.0
+*tmp424: 5.0
+*tmp425: 5.0
+*tmp426: 0.0
+*tmp427: null
+*tmp428: 4.0
+*tmp429: 5.0
+*tmp43: 1.0
+*tmp430: 0.0
+*tmp431: 5.0
+*tmp432: 1.0
+*tmp433: 5.0
+*tmp434: 5.0
+*tmp436: 0.0
+*tmp437: 5.0
+*tmp439: 5.0
+*tmp44: 0.0
+*tmp45: 1.0
+*tmp46: 0.0
+*tmp47: 1.0E-50
+*tmp48: 0.0
+*tmp49: 0.0
+*tmp5: -3.0
+*tmp50: 1.0E-50
+*tmp51: 0.0
+*tmp52: 0.0
+*tmp53: 0.01
+*tmp54: 0.0
+*tmp55: 0.0
+*tmp56: 1.0
+*tmp57: 0.0
+*tmp58: 0.0
+*tmp59: 1.0
+*tmp6: -4.0
+*tmp60: 1.0
+*tmp61: 1.0
+*tmp62: 1.0
+*tmp63: 1.0
+*tmp64: 1.0
+*tmp65: 0.0
+*tmp66: 0.0
+*tmp67: 0.0
+*tmp68: -5.0
+*tmp69: 100.0
+*tmp7: 5.0
+*tmp70: 1.0
+*tmp71: 10.0
+*tmp72: 3.0
+*tmp73: 164.0
+*tmp74: 1.0
+*tmp75: 2.5
+*tmp76: 3.0
+*tmp77: 180.0
+*tmp78: 4.0
+*tmp79: 2.5
+*tmp8: 2.0
+*tmp80: 4.0
+*tmp81: 2.772588722239781
+*tmp82: 4.0
+*tmp83: 30.0
+*tmp84: 20.79441541679836
+*tmp85: 30.0
+*tmp86: 1.0
+*tmp87: 1.0
+*tmp88: 1.0
+*tmp89: 0.0
+*tmp9: 2.0
+*tmp90: 1.0
+*tmp91: 10.0
+*tmp92: 0.0
+*tmp93: 0.0
+*tmp94: 10.0
+*tmp95: 10.0
+*tmp96: 5.5
+*tmp97: 0.5
+*tmp98: 0.5
+*tmp99: 5.0
+:fn0*retaddr: 69.0
+:fn0*retval: -1.0
+:fn0:x: -5.0
+:fn1*retaddr: 308.0
+:fn1*retval: 5.0
+:fn10:x: 3.5
+:fn11:x: -1.5
+:fn12:x: 0.0
+:fn13:x: 1.0E-7
+:fn14:x: -1.0E-7
+:fn15:x: 0.0
+:fn16:x: 1.0E-50
+:fn17:x: -1.0E-50
+:fn18:precision: 0.01
+:fn18:x: 0.01
+:fn19:result: 0.0
+:fn19:x: null
+:fn1:x1: 6.0
+:fn1:x2: 2.0
+:fn1:x3: 8.0
+:fn1:x4: 4.0
+:fn1:y1: 2.0
+:fn1:y2: 6.0
+:fn1:y3: 4.0
+:fn1:y4: 8.0
+:fn2*retaddr: 380.0
+:fn2*retval: 5.0
+:fn20:result: 1.0
+:fn20:x: 1.0
+:fn21:x: 0.0
+:fn22:x: 100.0
+:fn23:x: -100.0
+:fn24:x: -0.001
+:fn25:x: 1.0E-7
+:fn26:result: 0.0
+:fn26:x: 0.9
+:fn27:result: -5.0
+:fn27:x: -5.9
+:fn28:result: 100.0
+:fn28:x: 100.0
+:fn29:x: 1.0
+:fn2:x1: 5.0
+:fn2:x2: 5.0
+:fn2:x3: 5.0
+:fn2:x4: 5.0
+:fn2:x5: 5.0
+:fn2:y1: 5.0
+:fn2:y2: 5.0
+:fn2:y4: 5.0
+:fn2:y5: 5.0
+:fn30:i: 4.0
+:fn30:sum: 10.0
+:fn30:x1: 1.0
+:fn30:x2: 2.0
+:fn31:x: 1.0
+:fn32:i: 4.0
+:fn32:sum: 10.0
+:fn32:x1: 1.0
+:fn32:x2: 2.0
+:fn33:number: 16.0
+:fn34:number: 1.073741824E9
+:fn35:from: 1.0
+:fn35:ratio: 0.0
+:fn35:to: 10.0
+:fn36:from: 1.0
+:fn36:ratio: 1.0
+:fn36:to: 10.0
+:fn37:from: 1.0
+:fn37:ratio: 0.5
+:fn37:to: 10.0
+:fn38:x: 1.0
+:fn39:x1: 2.0
+:fn39:x2: 4.0
+:fn3:x1: 1.0
+:fn3:x2: 4.0
+:fn3:y1: 1.0
+:fn3:y2: 5.0
+:fn40:x1: 1.0
+:fn40:x2: 3.0
+:fn40:x3: 5.0
+:fn41:x1: 1.0
+:fn41:x2: 1.0
+:fn41:x3: 1.0
+:fn42:x1: 1.0
+:fn42:x2: 1.0
+:fn42:x3: 3.0
+:fn43:x1: 1.0
+:fn43:x2: 3.0
+:fn43:x3: 3.0
+:fn45:best: 6.0
+:fn45:bestDif: 0.0
+:fn45:count: 6.0
+:fn45:dif: 0.0
+:fn45:i: 1.0
+:fn46:dif: 0.0
+:fn46:gt: 0.0
+:fn46:i: 1.0
+:fn46:lt: 0.0
+:fn46:n: 1.0
+:fn48:best: 5.0
+:fn48:bestDif: 1.0
+:fn48:count: 5.0
+:fn48:dif: 5.0
+:fn48:i: 5.0
+:fn49:dif: 5.0
+:fn49:gt: 0.0
+:fn49:i: 5.0
+:fn49:lt: 5.0
+:fn49:n: 5.0
+:fn4:x1: -1.0
+:fn4:x2: -4.0
+:fn4:y1: -1.0
+:fn4:y2: -5.0
+:fn51:best: 4.0
+:fn51:bestDif: 2.0
+:fn51:count: 4.0
+:fn51:dif: 4.0
+:fn51:i: 5.0
+:fn52:dif: 4.0
+:fn52:gt: 0.0
+:fn52:i: 5.0
+:fn52:lt: 4.0
+:fn52:n: 5.0
+:fn54:best: 18.0
+:fn54:bestDif: 3.0
+:fn54:count: 6.0
+:fn54:dif: 3.0
+:fn54:i: 5.0
+:fn55:dif: 3.0
+:fn55:gt: 0.0
+:fn55:i: 5.0
+:fn55:lt: 3.0
+:fn55:n: 5.0
+:fn57:best: 20.0
+:fn57:bestDif: 2.0
+:fn57:count: 4.0
+:fn57:dif: 2.0
+:fn57:i: 5.0
+:fn58:dif: 2.0
+:fn58:gt: 0.0
+:fn58:i: 5.0
+:fn58:lt: 2.0
+:fn58:n: 5.0
+:fn5:x: 1.5
+:fn60:best: 25.0
+:fn60:bestDif: 1.0
+:fn60:count: 5.0
+:fn60:dif: 1.0
+:fn60:i: 5.0
+:fn61:dif: 1.0
+:fn61:gt: 0.0
+:fn61:i: 5.0
+:fn61:lt: 1.0
+:fn61:n: 5.0
+:fn63:best: 30.0
+:fn63:bestDif: 0.0
+:fn63:count: 6.0
+:fn63:dif: 0.0
+:fn63:i: 5.0
+:fn64:dif: 0.0
+:fn64:gt: 0.0
+:fn64:i: 5.0
+:fn64:lt: 0.0
+:fn64:n: 5.0
+:fn66:best: 4.0
+:fn66:bestDif: 2.0
+:fn66:count: 1.0
+:fn66:dif: 0.0
+:fn66:i: 5.0
+:fn67:dif: 0.0
+:fn67:gt: 4.0
+:fn67:i: 9.0
+:fn67:lt: 4.0
+:fn67:n: 5.0
+:fn69:best: 6.0
+:fn69:bestDif: 2.0
+:fn69:count: 1.0
+:fn69:dif: 0.0
+:fn69:i: 5.0
+:fn6:x: 1.7
+:fn70:dif: 0.0
+:fn70:gt: 4.0
+:fn70:i: 1.0
+:fn70:lt: 4.0
+:fn70:n: 5.0
+:fn72:best: 3.0
+:fn72:bestDif: 4.0
+:fn72:count: 1.0
+:fn72:dif: 0.0
+:fn72:i: 5.0
+:fn73:dif: 0.0
+:fn73:gt: 4.0
+:fn73:i: 8.0
+:fn73:lt: 4.0
+:fn73:n: 5.0
+:fn75:best: 4.0
+:fn75:bestDif: 2.0
+:fn75:count: 1.0
+:fn75:dif: 0.0
+:fn75:i: 5.0
+:fn76:dif: 0.0
+:fn76:gt: 4.0
+:fn76:i: 3.0
+:fn76:lt: 4.0
+:fn76:n: 5.0
+:fn78:best: 40.0
+:fn78:bestDif: 5.0
+:fn78:count: 8.0
+:fn78:dif: 0.0
+:fn78:i: 5.0
+:fn79:dif: 0.0
+:fn79:gt: 4.0
+:fn79:i: 5.0
+:fn79:lt: 4.0
+:fn79:n: 5.0
+:fn7:x: 2.1
+:fn80:a: 1.0
+:fn80:b: 4.0
+:fn80:t: 4.0
+:fn81:a: 2.0
+:fn81:b: 5.0
+:fn81:t: 5.0
+:fn8:x: 2.5
+:fn9:x: -3.5
+@counter: 1577.0

@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 public interface AstText extends AstConfiguration {
@@ -12,7 +12,7 @@ public interface AstText extends AstConfiguration {
      *
      * @return the text position within the source file
      */
-    InputPosition getTextPosition(SchematicsBuilder builder);
+    SourcePosition getTextPosition(SchematicsBuilder builder);
 
     default int getIndent(SchematicsBuilder builder) {
         return 0;

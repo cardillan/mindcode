@@ -4,25 +4,27 @@ There's currently a bunch of issues marked with the `help wanted` label. You can
 
 ## Guidelines
 
-Mindcode uses JDK17, Maven and Spring Boot. 
+Mindcode uses JDK22, Maven and Spring Boot. 
 
-The project consists of four modules:
+The project consists of separate modules:
+* `mindcode-annotations` contains annotation preprocessor used for automatic code generation
 * `mindcode-compiler` contains several independent parts:
-  * Mindcode compiler, itself consisting of the grammar definition, parser, code generator and optimizer. Work is currently under way to make these parts better separated.
+  * Mindcode compiler, itself consisting of the grammar definition, parser, AST builder, code generator and optimizer.
   * Processor emulator, capable of running mlog code in an emulated environment with limited support for Mindustry World interaction.
+* `mindcode-exttest` tool for testing Mindcode compiler/processor emulator under various compiler settings. 
 * `mindcode-schemacode`: contains the grammar definition, compiler and decompiler for Schemacode.
 * `mindcode-toolapp`: contains the command-line interface.
 * `mindcode-webapp`: contains the web application frontend.
 
-Unit tests are used extensively to verify that source code gets compiled, optimized and executed as expected. 
+Unit tests are used primarily to verify that source code gets compiled, optimized and executed as expected. This use of unit test
 
 Please do not make large changes before discussing them first. Especially do not alter existing syntax without prior agreement.
 
-Changes to the Mindcode compiler are more complicated. The grammar, parser and code generator will be completely rewritten in near horizon. The optimizers, on the other hand, do not adhere to usual CS compiler standards, are not well documented and appear to be somewhat fragile. A comprehensive refactoring of the optimizers is not currently planned.         
+The grammar, AST builder and code generator were recently completely rewritten and should be quite accessible. The optimizers, on the other hand, do not adhere to usual CS compiler standards, are not well documented and appear to be somewhat fragile. A comprehensive refactoring of the optimizers would be great, but is not planned for near future.         
 
 ### System library
 
-Mindcode now provides a [system library](doc/syntax/SYNTAX.markdown), currently as an experimental feature. Contributions to the system library are welcome: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
+Mindcode now provides a [system library](doc/syntax/SYSTEM-LIBRARY.markdown). Contributions to the system library are welcome: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
 
 ## Running Mindcode locally
 

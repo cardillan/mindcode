@@ -1,12 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.emulator.processor.ExecutionFlag;
+import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.*;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.*;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.jupiter.api.Test;
@@ -32,6 +32,12 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     public void inputArgumentFile() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd");
         assertEquals(new File("input.mnd"), arguments.get("input"));
+    }
+
+    @Test
+    public void excerptArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " input.mnd output.mlog --excerpt 3:5-7:4");
+        assertEquals(new ExcerptSpecification(3,5,7,4), arguments.get("excerpt"));
     }
 
     @Test
@@ -146,9 +152,15 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     }
 
     @Test
-    public void targetArgument() throws ArgumentParserException {
+    public void targetArgument6() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6");
         assertEquals("6", arguments.get("target"));
+    }
+
+    @Test
+    public void targetArgument70w() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 7.0w");
+        assertEquals("7.0w", arguments.get("target"));
     }
 
     @Test
@@ -244,12 +256,12 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() +
-                " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100" +
+                " -t 7.0w -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100" +
                 " --sort-variables ALL --no-signature --trace-execution true");  //  -m restricted
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
-        assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
-        assertEquals(ProcessorVersion.V6, actual.getProcessorVersion());
+        assertEquals(ProcessorEdition.WORLD_PROCESSOR, actual.getProcessorEdition());
+        assertEquals(ProcessorVersion.V7, actual.getProcessorVersion());
         assertEquals(OptimizationLevel.NONE, actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(1, actual.getParseTreeLevel());
         assertEquals(3, actual.getDebugLevel());

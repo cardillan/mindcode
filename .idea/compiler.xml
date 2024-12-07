@@ -7,27 +7,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mindcode-toolapp" />
+        <module name="mindcode-annotations" />
         <module name="mindcode-compiler" />
-        <module name="mindcode-schemacode" />
-        <module name="mindcode-webapp" />
-        <module name="mindcode-samples" />
-        <module name="mindcode-exttest" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mindcode-annotations" target="22" />
       <module name="mindcode-mindcode" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="mindcode-compiler" options="-parameters" />
-      <module name="mindcode-exttest" options="-parameters" />
-      <module name="mindcode-samples" options="-parameters" />
-      <module name="mindcode-schemacode" options="-parameters" />
-      <module name="mindcode-toolapp" options="-parameters" />
-      <module name="mindcode-webapp" options="-parameters" />
+      <module name="mindcode-compiler" options="-proc:full -parameters" />
+      <module name="mindcode-exttest" options="-proc:none" />
+      <module name="mindcode-samples" options="-proc:none -parameters" />
+      <module name="mindcode-schemacode" options="-proc:none -parameters" />
+      <module name="mindcode-toolapp" options="-proc:none" />
+      <module name="mindcode-webapp" options="-proc:none -parameters" />
     </option>
   </component>
 </project>

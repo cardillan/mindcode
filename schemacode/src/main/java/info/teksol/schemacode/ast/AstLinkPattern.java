@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
@@ -8,7 +8,7 @@ import info.teksol.schemacode.schematics.SchematicsBuilder;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
-public record AstLinkPattern(InputPosition inputPosition, String match) implements AstLink {
+public record AstLinkPattern(SourcePosition sourcePosition, String match) implements AstLink {
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {

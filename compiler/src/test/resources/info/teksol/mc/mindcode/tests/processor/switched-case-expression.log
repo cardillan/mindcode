@@ -1,0 +1,643 @@
+    87 instructions before optimizations.
+     1 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Case Expression Optimization.
+    13 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Optimization (3 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+    26 instructions modified by Data Flow Optimization (2 passes, 8 iterations).
+     1 instructions eliminated by Loop Optimization (2 iterations).
+     2 loops improved by Loop Optimization.
+     3 instructions added by Case Switching (3 iterations).
+     1 case expressions converted to switched jumps Case Switching.
+    10 instructions eliminated by Jump Straightening (3 iterations).
+    61 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 941):
+  * Convert case at line 27:5                                    cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
+
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+    16 jump *label6 equal *tmp1 false
+    17 op mod *tmp2 :fn0:n 10
+    18 set :fn1:n *tmp2
+-    * set *tmp5 :fn1:n
+-    * jump *label10 equal *tmp5 0
++   19 jump *label10 equal :fn1:n 0
+    20 jump *label9 always
+    21 label *label10
+    22 op add .S0 .S0 1
+    23 set *tmp4 .S0
+    24 jump *label8 always
+    25 label *label9
+-    * jump *label12 equal *tmp5 1
++   26 jump *label12 equal :fn1:n 1
+    27 jump *label11 always
+    28 label *label12
+    29 op add .S1 .S1 1
+    30 set *tmp4 .S1
+    31 jump *label8 always
+    32 label *label11
+-    * jump *label14 equal *tmp5 2
++   33 jump *label14 equal :fn1:n 2
+    34 jump *label13 always
+    35 label *label14
+    36 op add .S2 .S2 1
+    37 set *tmp4 .S2
+    38 jump *label8 always
+    39 label *label13
+-    * jump *label16 equal *tmp5 3
++   40 jump *label16 equal :fn1:n 3
+    41 jump *label15 always
+    42 label *label16
+    43 op add .S3 .S3 1
+    44 set *tmp4 .S3
+    45 jump *label8 always
+    46 label *label15
+-    * jump *label18 equal *tmp5 4
++   47 jump *label18 equal :fn1:n 4
+    48 jump *label17 always
+    49 label *label18
+    50 op add .S4 .S4 1
+    51 set *tmp4 .S4
+    52 jump *label8 always
+    53 label *label17
+-    * jump *label20 equal *tmp5 5
++   54 jump *label20 equal :fn1:n 5
+    55 jump *label19 always
+    56 label *label20
+    57 op add .S5 .S5 1
+    58 set *tmp4 .S5
+    59 jump *label8 always
+    60 label *label19
+-    * jump *label22 equal *tmp5 6
++   61 jump *label22 equal :fn1:n 6
+    62 jump *label21 always
+    63 label *label22
+    64 op add .S6 .S6 1
+    65 set *tmp4 .S6
+    66 jump *label8 always
+    67 label *label21
+-    * jump *label24 equal *tmp5 7
++   68 jump *label24 equal :fn1:n 7
+    69 jump *label23 always
+    70 label *label24
+    71 op add .S7 .S7 1
+    72 set *tmp4 .S7
+    73 jump *label8 always
+    74 label *label23
+-    * jump *label26 equal *tmp5 8
++   75 jump *label26 equal :fn1:n 8
+    76 jump *label25 always
+    77 label *label26
+    78 op add .S8 .S8 1
+    79 set *tmp4 .S8
+    80 jump *label8 always
+    81 label *label25
+-    * jump *label28 equal *tmp5 9
++   82 jump *label28 equal :fn1:n 9
+    83 jump *label27 always
+    84 label *label28
+    85 op add .S9 .S9 1
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
+ 
+    88 label *label27
+    89 set *tmp4 null
+    90 label *label8
+-    * set *tmp3 *tmp4
+    91 label *label7
+    92 op idiv :fn0:n :fn0:n 10
+    93 label *label5
+    94 jump *label4 always
+    95 label *label6
+-    * set *tmp0 null
+    96 label *label3
+    97 label *label1
+    98 op add :i :i 1
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-11 instructions):
+ 
+    20 jump *label9 always
+    21 label *label10
+    22 op add .S0 .S0 1
+-    * set *tmp4 .S0
+    23 jump *label8 always
+    24 label *label9
+    25 jump *label12 equal :fn1:n 1
+    26 jump *label11 always
+    27 label *label12
+    28 op add .S1 .S1 1
+-    * set *tmp4 .S1
+    29 jump *label8 always
+    30 label *label11
+    31 jump *label14 equal :fn1:n 2
+    32 jump *label13 always
+    33 label *label14
+    34 op add .S2 .S2 1
+-    * set *tmp4 .S2
+    35 jump *label8 always
+    36 label *label13
+    37 jump *label16 equal :fn1:n 3
+    38 jump *label15 always
+    39 label *label16
+    40 op add .S3 .S3 1
+-    * set *tmp4 .S3
+    41 jump *label8 always
+    42 label *label15
+    43 jump *label18 equal :fn1:n 4
+    44 jump *label17 always
+    45 label *label18
+    46 op add .S4 .S4 1
+-    * set *tmp4 .S4
+    47 jump *label8 always
+    48 label *label17
+    49 jump *label20 equal :fn1:n 5
+    50 jump *label19 always
+    51 label *label20
+    52 op add .S5 .S5 1
+-    * set *tmp4 .S5
+    53 jump *label8 always
+    54 label *label19
+    55 jump *label22 equal :fn1:n 6
+    56 jump *label21 always
+    57 label *label22
+    58 op add .S6 .S6 1
+-    * set *tmp4 .S6
+    59 jump *label8 always
+    60 label *label21
+    61 jump *label24 equal :fn1:n 7
+    62 jump *label23 always
+    63 label *label24
+    64 op add .S7 .S7 1
+-    * set *tmp4 .S7
+    65 jump *label8 always
+    66 label *label23
+    67 jump *label26 equal :fn1:n 8
+    68 jump *label25 always
+    69 label *label26
+    70 op add .S8 .S8 1
+-    * set *tmp4 .S8
+    71 jump *label8 always
+    72 label *label25
+    73 jump *label28 equal :fn1:n 9
+    74 jump *label27 always
+    75 label *label28
+    76 op add .S9 .S9 1
+-    * set *tmp4 .S9
+    77 jump *label8 always
+    78 label *label27
+-    * set *tmp4 null
+    79 label *label8
+    80 label *label7
+    81 op idiv :fn0:n :fn0:n 10
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+ 
+    14 label *label4
+    15 op greaterThan *tmp1 :fn0:n 0
+    16 jump *label6 equal *tmp1 false
+-    * op mod *tmp2 :fn0:n 10
+-    * set :fn1:n *tmp2
++   17 op mod :fn1:n :fn0:n 10
+    18 jump *label10 equal :fn1:n 0
+    19 jump *label9 always
+    20 label *label10
+
+Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 instructions):
+ 
+    15 op greaterThan *tmp1 :fn0:n 0
+    16 jump *label6 equal *tmp1 false
+    17 op mod :fn1:n :fn0:n 10
+-    * jump *label10 equal :fn1:n 0
+-    * jump *label9 always
++   18 jump *label9 notEqual :fn1:n 0
+    19 label *label10
+    20 op add .S0 .S0 1
+    21 jump *label8 always
+    22 label *label9
+-    * jump *label12 equal :fn1:n 1
+-    * jump *label11 always
++   23 jump *label11 notEqual :fn1:n 1
+    24 label *label12
+    25 op add .S1 .S1 1
+    26 jump *label8 always
+    27 label *label11
+-    * jump *label14 equal :fn1:n 2
+-    * jump *label13 always
++   28 jump *label13 notEqual :fn1:n 2
+    29 label *label14
+    30 op add .S2 .S2 1
+    31 jump *label8 always
+    32 label *label13
+-    * jump *label16 equal :fn1:n 3
+-    * jump *label15 always
++   33 jump *label15 notEqual :fn1:n 3
+    34 label *label16
+    35 op add .S3 .S3 1
+    36 jump *label8 always
+    37 label *label15
+-    * jump *label18 equal :fn1:n 4
+-    * jump *label17 always
++   38 jump *label17 notEqual :fn1:n 4
+    39 label *label18
+    40 op add .S4 .S4 1
+    41 jump *label8 always
+    42 label *label17
+-    * jump *label20 equal :fn1:n 5
+-    * jump *label19 always
++   43 jump *label19 notEqual :fn1:n 5
+    44 label *label20
+    45 op add .S5 .S5 1
+    46 jump *label8 always
+    47 label *label19
+-    * jump *label22 equal :fn1:n 6
+-    * jump *label21 always
++   48 jump *label21 notEqual :fn1:n 6
+    49 label *label22
+    50 op add .S6 .S6 1
+    51 jump *label8 always
+    52 label *label21
+-    * jump *label24 equal :fn1:n 7
+-    * jump *label23 always
++   53 jump *label23 notEqual :fn1:n 7
+    54 label *label24
+    55 op add .S7 .S7 1
+    56 jump *label8 always
+    57 label *label23
+-    * jump *label26 equal :fn1:n 8
+-    * jump *label25 always
++   58 jump *label25 notEqual :fn1:n 8
+    59 label *label26
+    60 op add .S8 .S8 1
+    61 jump *label8 always
+    62 label *label25
+-    * jump *label28 equal :fn1:n 9
+-    * jump *label27 always
++   63 jump *label27 notEqual :fn1:n 9
+    64 label *label28
+    65 op add .S9 .S9 1
+    66 jump *label8 always
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    12 jump *label2 greaterThan :i 100
+    13 set :fn0:n :i
+    14 label *label4
+-    * op greaterThan *tmp1 :fn0:n 0
+-    * jump *label6 equal *tmp1 false
++   15 jump *label6 lessThanEq :fn0:n 0
+    16 op mod :fn1:n :fn0:n 10
+    17 jump *label9 notEqual :fn1:n 0
+    18 label *label10
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    62 jump *label27 notEqual :fn1:n 9
+    63 label *label28
+    64 op add .S9 .S9 1
+-    * jump *label8 always
+    65 label *label27
+    66 label *label8
+    67 label *label7
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set .S9 0
+-    * set .S8 .S9
+-    * set .S7 .S8
+-    * set .S6 .S7
+-    * set .S5 .S6
+-    * set .S4 .S5
+-    * set .S3 .S4
+-    * set .S2 .S3
+-    * set .S1 .S2
+-    * set .S0 .S1
++    1 set .S8 0
++    2 set .S7 .S9
++    3 set .S6 .S8
++    4 set .S5 .S7
++    5 set .S4 .S6
++    6 set .S3 .S5
++    7 set .S2 .S4
++    8 set .S1 .S3
++    9 set .S0 .S2
+    10 set :i 1
+    11 label *label0
+    12 jump *label2 greaterThan :i 100
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
+     0 set .S9 0
+     1 set .S8 0
+-    * set .S7 .S9
+-    * set .S6 .S8
+-    * set .S5 .S7
+-    * set .S4 .S6
+-    * set .S3 .S5
+-    * set .S2 .S4
+-    * set .S1 .S3
+-    * set .S0 .S2
++    2 set .S7 0
++    3 set .S6 0
++    4 set .S5 .S9
++    5 set .S4 .S8
++    6 set .S3 .S7
++    7 set .S2 .S6
++    8 set .S1 .S5
++    9 set .S0 .S4
+    10 set :i 1
+    11 label *label0
+    12 jump *label2 greaterThan :i 100
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
+ 
+     1 set .S8 0
+     2 set .S7 0
+     3 set .S6 0
+-    * set .S5 .S9
+-    * set .S4 .S8
+-    * set .S3 .S7
+-    * set .S2 .S6
+-    * set .S1 .S5
+-    * set .S0 .S4
++    4 set .S5 0
++    5 set .S4 0
++    6 set .S3 0
++    7 set .S2 0
++    8 set .S1 .S9
++    9 set .S0 .S8
+    10 set :i 1
+    11 label *label0
+    12 jump *label2 greaterThan :i 100
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
+ 
+     5 set .S4 0
+     6 set .S3 0
+     7 set .S2 0
+-    * set .S1 .S9
+-    * set .S0 .S8
++    8 set .S1 0
++    9 set .S0 0
+    10 set :i 1
+    11 label *label0
+    12 jump *label2 greaterThan :i 100
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     9 set .S0 0
+    10 set :i 1
+    11 label *label0
+-    * jump *label2 greaterThan :i 100
++   12 label *label29
+    13 set :fn0:n :i
+    14 label *label4
+    15 jump *label6 lessThanEq :fn0:n 0
++   16 label *label30
+    17 op mod :fn1:n :fn0:n 10
+    18 jump *label9 notEqual :fn1:n 0
+    19 label *label10
+ 
+    68 label *label7
+    69 op idiv :fn0:n :fn0:n 10
+    70 label *label5
+-    * jump *label4 always
++   71 jump *label30 greaterThan :fn0:n 0
+    72 label *label6
+    73 label *label3
+    74 label *label1
+    75 op add :i :i 1
+-    * jump *label0 always
++   76 jump *label29 lessThanEq :i 100
+    77 label *label2
+    78 assertequals 11 .S0 "Unexpected value of S0"
+    79 assertequals 21 .S1 "Unexpected value of S0"
+
+Modifications by Convert case at line 27:5 (+3 instructions):
+ 
+    15 jump *label6 lessThanEq :fn0:n 0
+    16 label *label30
+    17 op mod :fn1:n :fn0:n 10
+-    * jump *label9 notEqual :fn1:n 0
++   18 jump *label31 lessThan :fn1:n 0
++   19 jump *label31 greaterThan :fn1:n 9
++   20 gotooffset *label33 :fn1:n 0 *label32
++   21 gotolabel *label33 *label32
++   22 jump *label10 always
++   23 gotolabel *label34 *label32
++   24 jump *label12 always
++   25 gotolabel *label35 *label32
++   26 jump *label14 always
++   27 gotolabel *label36 *label32
++   28 jump *label16 always
++   29 gotolabel *label37 *label32
++   30 jump *label18 always
++   31 gotolabel *label38 *label32
++   32 jump *label20 always
++   33 gotolabel *label39 *label32
++   34 jump *label22 always
++   35 gotolabel *label40 *label32
++   36 jump *label24 always
++   37 gotolabel *label41 *label32
++   38 jump *label26 always
++   39 gotolabel *label42 *label32
++   40 jump *label28 always
+    41 label *label10
+    42 op add .S0 .S0 1
+    43 jump *label8 always
+    44 label *label9
+-    * jump *label11 notEqual :fn1:n 1
+    45 label *label12
+    46 op add .S1 .S1 1
+    47 jump *label8 always
+    48 label *label11
+-    * jump *label13 notEqual :fn1:n 2
+    49 label *label14
+    50 op add .S2 .S2 1
+    51 jump *label8 always
+    52 label *label13
+-    * jump *label15 notEqual :fn1:n 3
+    53 label *label16
+    54 op add .S3 .S3 1
+    55 jump *label8 always
+    56 label *label15
+-    * jump *label17 notEqual :fn1:n 4
+    57 label *label18
+    58 op add .S4 .S4 1
+    59 jump *label8 always
+    60 label *label17
+-    * jump *label19 notEqual :fn1:n 5
+    61 label *label20
+    62 op add .S5 .S5 1
+    63 jump *label8 always
+    64 label *label19
+-    * jump *label21 notEqual :fn1:n 6
+    65 label *label22
+    66 op add .S6 .S6 1
+    67 jump *label8 always
+    68 label *label21
+-    * jump *label23 notEqual :fn1:n 7
+    69 label *label24
+    70 op add .S7 .S7 1
+    71 jump *label8 always
+    72 label *label23
+-    * jump *label25 notEqual :fn1:n 8
+    73 label *label26
+    74 op add .S8 .S8 1
+    75 jump *label8 always
+    76 label *label25
+-    * jump *label27 notEqual :fn1:n 9
+    77 label *label28
+    78 op add .S9 .S9 1
+    79 label *label27
++   80 label *label31
+    81 label *label8
+    82 label *label7
+    83 op idiv :fn0:n :fn0:n 10
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    12 label *label29
+    13 set :fn0:n :i
+    14 label *label4
+-    * jump *label6 lessThanEq :fn0:n 0
++   15 jump *label6 lessThanEq :i 0
+    16 label *label30
+    17 op mod :fn1:n :fn0:n 10
+    18 jump *label31 lessThan :fn1:n 0
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1:
+ 
+    41 label *label10
+    42 op add .S0 .S0 1
+    43 jump *label8 always
+-    * label *label9
+    44 label *label12
+    45 op add .S1 .S1 1
+    46 jump *label8 always
+-    * label *label11
+    47 label *label14
+    48 op add .S2 .S2 1
+    49 jump *label8 always
+-    * label *label13
+    50 label *label16
+    51 op add .S3 .S3 1
+    52 jump *label8 always
+-    * label *label15
+    53 label *label18
+    54 op add .S4 .S4 1
+    55 jump *label8 always
+-    * label *label17
+    56 label *label20
+    57 op add .S5 .S5 1
+    58 jump *label8 always
+-    * label *label19
+    59 label *label22
+    60 op add .S6 .S6 1
+    61 jump *label8 always
+-    * label *label21
+    62 label *label24
+    63 op add .S7 .S7 1
+    64 jump *label8 always
+-    * label *label23
+    65 label *label26
+    66 op add .S8 .S8 1
+    67 jump *label8 always
+-    * label *label25
+    68 label *label28
+    69 op add .S9 .S9 1
+    70 label *label27
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    91 assertequals 20 .S8 "Unexpected value of S0"
+    92 assertequals 20 .S9 "Unexpected value of S0"
+    93 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set .S9 0
+set .S8 0
+set .S7 0
+set .S6 0
+set .S5 0
+set .S4 0
+set .S3 0
+set .S2 0
+set .S1 0
+set .S0 0
+set :i 1
+label *label29
+set :fn0:n :i
+jump *label6 lessThanEq :i 0
+label *label30
+op mod :fn1:n :fn0:n 10
+jump *label31 lessThan :fn1:n 0
+jump *label31 greaterThan :fn1:n 9
+gotooffset *label33 :fn1:n 0 *label32
+gotolabel *label33 *label32
+jump *label10 always 0 0
+gotolabel *label34 *label32
+jump *label12 always 0 0
+gotolabel *label35 *label32
+jump *label14 always 0 0
+gotolabel *label36 *label32
+jump *label16 always 0 0
+gotolabel *label37 *label32
+jump *label18 always 0 0
+gotolabel *label38 *label32
+jump *label20 always 0 0
+gotolabel *label39 *label32
+jump *label22 always 0 0
+gotolabel *label40 *label32
+jump *label24 always 0 0
+gotolabel *label41 *label32
+jump *label26 always 0 0
+gotolabel *label42 *label32
+jump *label28 always 0 0
+label *label10
+op add .S0 .S0 1
+jump *label8 always 0 0
+label *label12
+op add .S1 .S1 1
+jump *label8 always 0 0
+label *label14
+op add .S2 .S2 1
+jump *label8 always 0 0
+label *label16
+op add .S3 .S3 1
+jump *label8 always 0 0
+label *label18
+op add .S4 .S4 1
+jump *label8 always 0 0
+label *label20
+op add .S5 .S5 1
+jump *label8 always 0 0
+label *label22
+op add .S6 .S6 1
+jump *label8 always 0 0
+label *label24
+op add .S7 .S7 1
+jump *label8 always 0 0
+label *label26
+op add .S8 .S8 1
+jump *label8 always 0 0
+label *label28
+op add .S9 .S9 1
+label *label31
+label *label8
+op idiv :fn0:n :fn0:n 10
+jump *label30 greaterThan :fn0:n 0
+label *label6
+op add :i :i 1
+jump *label29 lessThanEq :i 100
+assertequals 11 .S0 "Unexpected value of S0"
+assertequals 21 .S1 "Unexpected value of S0"
+assertequals 20 .S2 "Unexpected value of S0"
+assertequals 20 .S3 "Unexpected value of S0"
+assertequals 20 .S4 "Unexpected value of S0"
+assertequals 20 .S5 "Unexpected value of S0"
+assertequals 20 .S6 "Unexpected value of S0"
+assertequals 20 .S7 "Unexpected value of S0"
+assertequals 20 .S8 "Unexpected value of S0"
+assertequals 20 .S9 "Unexpected value of S0"
+stop

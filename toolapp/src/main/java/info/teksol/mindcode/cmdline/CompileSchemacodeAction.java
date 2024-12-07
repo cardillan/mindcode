@@ -1,11 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.ToolMessage;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchemacodeCompiler;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -19,7 +20,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
-import java.util.function.Function;
 
 public class CompileSchemacodeAction extends ActionHandler {
 
@@ -81,7 +81,7 @@ public class CompileSchemacodeAction extends ActionHandler {
         final File output = resolveOutputFile(file, arguments.get("output"), ".msch");
         final File logFile = resolveOutputFile(file, arguments.get("log"), ".log");
         final boolean mlogToStdErr = isStdInOut(output);
-        final Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
+        final PositionFormatter positionFormatter = SourcePosition::formatForIde;
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output());

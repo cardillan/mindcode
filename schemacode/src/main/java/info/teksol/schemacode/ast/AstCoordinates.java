@@ -1,21 +1,21 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
-public record AstCoordinates(InputPosition inputPosition, Position coordinates, boolean relative, String relativeTo) implements AstSchemaItem {
+public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, String relativeTo) implements AstSchemaItem {
 
-    public AstCoordinates(InputPosition inputPosition, int x, int y, String relativeTo) {
-        this(inputPosition,new Position(x, y), true, relativeTo);
+    public AstCoordinates(SourcePosition sourcePosition, int x, int y, String relativeTo) {
+        this(sourcePosition,new Position(x, y), true, relativeTo);
     }
 
-    public AstCoordinates(InputPosition inputPosition, int x, int y) {
-        this(inputPosition,new Position(x, y), false, null);
+    public AstCoordinates(SourcePosition sourcePosition, int x, int y) {
+        this(sourcePosition,new Position(x, y), false, null);
     }
 
-    public AstCoordinates(InputPosition inputPosition, int x, int y, boolean relative) {
-        this(inputPosition,new Position(x, y), relative, null);
+    public AstCoordinates(SourcePosition sourcePosition, int x, int y, boolean relative) {
+        this(sourcePosition,new Position(x, y), relative, null);
     }
 
     public Position coordinates() {
@@ -44,10 +44,10 @@ public record AstCoordinates(InputPosition inputPosition, Position coordinates, 
     }
 
     public AstCoordinates relative(boolean negate) {
-        return negate ? new AstCoordinates(inputPosition, -getX(), -getY(), true) : new AstCoordinates(inputPosition, getX(), getY(), true);
+        return negate ? new AstCoordinates(sourcePosition, -getX(), -getY(), true) : new AstCoordinates(sourcePosition, getX(), getY(), true);
     }
 
     public AstCoordinates relativeTo(String id) {
-        return new AstCoordinates(inputPosition, getX(), getY(), id);
+        return new AstCoordinates(sourcePosition, getX(), getY(), id);
     }
 }

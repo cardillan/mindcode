@@ -1,8 +1,8 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.decompiler.MlogDecompiler;
+import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerProfile;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;

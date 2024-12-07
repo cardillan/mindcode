@@ -1,16 +1,16 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.InputPositionTranslator;
+import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record AstProgram(InputPosition inputPosition, List<AstProgramSnippet> snippets) implements AstSchemaItem {
+public record AstProgram(SourcePosition sourcePosition, List<AstProgramSnippet> snippets) implements AstSchemaItem {
 
-    public AstProgram(InputPosition inputPosition, AstProgramSnippet... snippets) {
-        this(inputPosition, List.of(snippets));
+    public AstProgram(SourcePosition sourcePosition, AstProgramSnippet... snippets) {
+        this(sourcePosition, List.of(snippets));
     }
 
     public String getProgramText(SchematicsBuilder builder) {
@@ -25,7 +25,7 @@ public record AstProgram(InputPosition inputPosition, List<AstProgramSnippet> sn
                 .collect(Collectors.joining(", "));
     }
 
-    public InputPositionTranslator createPositionTranslator(SchematicsBuilder builder) {
+    public SourcePositionTranslator createPositionTranslator(SchematicsBuilder builder) {
         return MultipartPositionTranslator.createTranslator(builder, snippets);
     }
 }

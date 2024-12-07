@@ -1,13 +1,13 @@
 package info.teksol.mindcode.exttest;
 
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorFull;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorSampled;
-import info.teksol.mindcode.v3.InputFiles;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -143,8 +143,7 @@ public record Configuration(
 
         @Override
         public CompilerProfile createCompilerProfile(int testCase) {
-            CompilerProfile profile = new CompilerProfile(false)
-                    .setAllOptimizationLevels(OptimizationLevel.NONE)
+            CompilerProfile profile = new CompilerProfile(false, OptimizationLevel.NONE)
                     .setOptimizationPasses(50)
                     .setRun(run);
 

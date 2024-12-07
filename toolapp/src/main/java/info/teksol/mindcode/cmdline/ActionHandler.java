@@ -1,13 +1,15 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.emulator.processor.ExecutionFlag;
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.compiler.*;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.*;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -23,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 abstract class ActionHandler {
@@ -41,11 +42,16 @@ abstract class ActionHandler {
     void addCompilerOptions(Subparser subparser, CompilerProfile defaults) {
         ArgumentGroup compiler = subparser.addArgumentGroup("compiler options");
 
+        compiler.addArgument("-y", "--syntax")
+                .help("specifies syntactic mode used to compile the source code")
+                .type(Arguments.caseInsensitiveEnumType(SyntacticMode.class))
+                .setDefault(defaults.getSyntacticMode());
+
         compiler.addArgument("-t", "--target")
-                .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor," +
-                        " version 7 rev. A with standard processor or world processor)")
-                .choices("6", "7s", "7w", "7as", "7aw")
-                .setDefault("7aw");
+                .help("selects target processor version and edition ('w' suffix specifies the world processor)")
+                .type(String.class)
+                .choices(new CaseInsensitiveChoices(ProcessorVersion.getPossibleVersions()))
+                .setDefault("7w");
 
         compiler.addArgument("-i", "--instruction-limit")
                 .help("sets the maximal number of instructions for the speed optimizations")
@@ -70,11 +76,17 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(Remarks.class))
                 .setDefault(defaults.getRemarks());
 
+        compiler.addArgument("--link-guards")
+                .help("when set to true, generates code to ensure each declared linked block is linked " +
+                      "to the processor before the program runs")
+                .type(Arguments.booleanType())
+                .setDefault(defaults.isLinkedBlockGuards());
+
         compiler.addArgument("--sort-variables")
                 .help("prepends the final code with instructions which ensure variables are created inside the processor" +
-                        " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
-                        " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
-                        " specifying any category, " + SortCategory.usefulCategories()  + " are used.")
+                      " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
+                      " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
+                      " specifying any category, " + SortCategory.usefulCategories() + " are used.")
                 .type(Arguments.caseInsensitiveEnumType(SortCategory.class))
                 .nargs("*")
                 .setDefault(List.of(SortCategory.NONE));
@@ -150,13 +162,10 @@ abstract class ActionHandler {
                 .filter(opt -> arguments.get(opt.name()) != null)
                 .forEachOrdered(opt -> profile.setOptimizationLevel(opt, arguments.get(opt.name())));
 
-        switch (arguments.getString("target")) {
-            case "6" -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.S);
-            case "7s" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.S);
-            case "7w" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.W);
-            case "7as" -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.S);
-            case "7aw" -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.W);
-        }
+        String target = arguments.getString("target").toLowerCase();
+        String processor = target.endsWith("w") ? target.substring(0, target.length() - 1) : target;
+        ProcessorEdition edition = target.endsWith("w") ? ProcessorEdition.W : ProcessorEdition.S;
+        profile.setProcessorVersionEdition(ProcessorVersion.byCode(processor), edition);
 
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
         profile.setDebugLevel(arguments.getInt("debug_messages"));
@@ -223,6 +232,12 @@ abstract class ActionHandler {
         inputFiles.registerFile(path, source);
     }
 
+    static void readFile(InputFiles inputFiles, File file, ExcerptSpecification excerpt) {
+        String source = readInput(file);
+        Path path = isStdInOut(file) ? Path.of("") : file.toPath();
+        inputFiles.registerFile(path, excerpt == null ? source : excerpt.apply(source));
+    }
+
     static String readInput(File inputFile) {
         if (isStdInOut(inputFile)) {
             return readStdin();
@@ -230,7 +245,7 @@ abstract class ActionHandler {
             try {
                 return Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
             } catch (IOException e) {
-                throw new ProcessingException(e, "Error reading file %s.", inputFile.getPath());
+                throw new ProcessingException(e, "Error reading file '%s'.", inputFile.getPath());
             }
         }
     }
@@ -245,6 +260,7 @@ abstract class ActionHandler {
         }
     }
 
+    // MUSTDO Review
     static void writeOutput(File outputFile, List<String> data, boolean useErrorOutput) {
         if (isStdInOut(outputFile)) {
             data.forEach(useErrorOutput ? System.err::println : System.out::println);
@@ -275,7 +291,7 @@ abstract class ActionHandler {
         c.setContents(data, data);
     }
 
-    static void outputMessages(CompilerOutput<?> result, File outputFile, File logFile, Function<InputPosition, String> positionFormatter) {
+    static void outputMessages(CompilerOutput<?> result, File outputFile, File logFile, PositionFormatter positionFormatter) {
         // If mlog gets written to stdout, write log to stderr
         if (isStdInOut(logFile)) {
             boolean alwaysErr = isStdInOut(outputFile);
@@ -288,5 +304,14 @@ abstract class ActionHandler {
                     .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
         }
 
+    }
+
+    static ConsoleMessageLogger createMessageLogger(File outputFile, File logFile, PositionFormatter positionFormatter) {
+        if (isStdInOut(logFile)) {
+            // If mlog gets written to stdout, write log to stderr
+            return new ConsoleMessageLogger(positionFormatter, MessageLevel.DEBUG, isStdInOut(outputFile));
+        } else {
+            return new ConsoleMessageLogger(positionFormatter, MessageLevel.INFO, isStdInOut(outputFile));
+        }
     }
 }

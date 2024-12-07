@@ -1,7 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schematics.BlockOrder;
 import info.teksol.schemacode.schematics.Decompiler;

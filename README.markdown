@@ -1,22 +1,30 @@
-# Mindcode
+<div markdown="1" align="center">
+   <img width="25%" src="logo.png">
 
-**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself. The project uses lots of automated tests to make sure the produced code is correct.   
+# Mindcode: a high-level compiler for mlog
+
+<br>
+
+[![Static Badge](https://img.shields.io/badge/web%20app-blue?link=http%3A%2F%2Fmindcode.herokuapp.com%2F)](http://mindcode.herokuapp.com/)
+[![Static Badge](https://img.shields.io/badge/doc-mincdcode-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](doc/syntax/SYNTAX.markdown)
+[![Static Badge](https://img.shields.io/badge/doc-mlog-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](https://yrueii.github.io/Mlog%20Documentation/)
+[![Static Badge](https://img.shields.io/badge/chat-discord-blue?link=https%3A%2F%2Fdiscord.gg%2FA8vdVdvf)](https://discord.gg/A8vdVdvf)
+
+</div>
+<br>
+
+**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself. The project uses lots of automated tests to eliminate compiler bugs.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
-
-> [!TIP]
-> Mindcode currently undergoes substantial changes to the syntax. You might want to have a look at the [upcoming changes](https://github.com/cardillan/mindcode/discussions/142) that are still being deliberated. Comments and suggestions are welcome.
 
 ## Mindcode Syntax
 
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
-> [!IMPORTANT]
-> In the [2.3.0 release](CHANGELOG.markdown#230---2024-10-16), Mindcode introduces a stricter form of the syntax where semicolons and the `do`/`then` keywords are no longer optional. The original syntax is deprecated, but will be available for some time through the `#relaxed;` directive, which can be put at the beginning of your code. Other changes to the syntax include compulsory `out` keywords for output function call arguments and using the `@` prefix for Mindustry built-in variables used as properties. The old syntax is still supported, but generates a warning. See [Strict and Relaxed syntax](doc/syntax/SYNTAX-STRICT-RELAXED.markdown) for a description of all changes to the syntax.
-> 
-> The relaxed variant of the syntax will be eventually removed.    
-
 ## Latest development
+
+> [!NOTE]
+> Deprecated functionalities from Mindcode 2.x were removed. The system for specifying [language version targets](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) has been changed.
 
 The most important recent changes to Mindcode include:
 
@@ -24,14 +32,16 @@ The most important recent changes to Mindcode include:
   * Full support for the Mindustry Logic in the upcoming [Mindustry version 8](/doc/syntax/MINDUSTRY-8.markdown).
 * Basic functionality
   * Significant improvement in reporting error messages generated during compilation.
+  * A built-in [library of system functions](doc/syntax/SYSTEM-LIBRARY.markdown).
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
   * Support for running the compiled mlog code in an emulated processor.
   * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
 * Mindcode syntax
-  * User-defined functions enhancements: user-defined functions may provide additional return values through [output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters), can accept [variable number of arguments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions) and can be [overloaded](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
-  * A built-in [library of system functions](doc/syntax/SYSTEM-LIBRARY.markdown).
-  * New mechanism for [program parametrization](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
-  * Improved [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) supporting more than one loop variable and modification of the list elements while iterating.   
+  * Expressions in string interpolation: `print($"Sum: ${a + b}.");`
+  * Support for color literals: `%00ffff80`
+  * Prefix/postfix increment/decrement operators: `i++, --j`
+  * Redefined [strict and relaxed syntax modes](/doc/syntax/SYNTAX.markdown#strict-syntax) 
+  * Optional variable declaration (compulsory in strict syntax)
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 

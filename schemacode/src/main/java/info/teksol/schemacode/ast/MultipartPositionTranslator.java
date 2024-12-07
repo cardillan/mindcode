@@ -1,17 +1,17 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.InputPositionTranslator;
-import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;
 
-class MultipartPositionTranslator implements InputPositionTranslator {
+class MultipartPositionTranslator implements SourcePositionTranslator {
     record Part(int newLines, int lastLineLength, InputFile inputFile, int lineOffset, int columnOffset) {}
     private final List<Part> parts;
 
-    public static InputPositionTranslator createTranslator(SchematicsBuilder builder, List<AstProgramSnippet> snippets) {
+    public static SourcePositionTranslator createTranslator(SchematicsBuilder builder, List<AstProgramSnippet> snippets) {
         return switch (snippets.size()) {
             case 0  -> p -> p;
             case 1  -> createSimpleTranslator(builder, snippets.getFirst());
@@ -28,9 +28,9 @@ class MultipartPositionTranslator implements InputPositionTranslator {
         int line;
         int column;
 
-        Position(InputPosition inputPosition) {
-            line = inputPosition.line() - 1;
-            column = inputPosition.column() - 1;
+        Position(SourcePosition sourcePosition) {
+            line = sourcePosition.line() - 1;
+            column = sourcePosition.column() - 1;
         }
 
         boolean isAfter(Part part) {
@@ -57,7 +57,7 @@ class MultipartPositionTranslator implements InputPositionTranslator {
     }
 
     @Override
-    public InputPosition apply(InputPosition position) {
+    public SourcePosition apply(SourcePosition position) {
         Position pos = new Position(position);
         int index = 0;
 
@@ -67,7 +67,7 @@ class MultipartPositionTranslator implements InputPositionTranslator {
         }
 
         Part part = parts.get(index);
-        return new InputPosition(part.inputFile, pos.line + part.lineOffset + 1, pos.column + part.columnOffset + 1);
+        return new SourcePosition(part.inputFile, pos.line + part.lineOffset + 1, pos.column + part.columnOffset + 1);
     }
 
     private static Part createPart(SchematicsBuilder builder, AstProgramSnippet snippet) {
@@ -81,20 +81,20 @@ class MultipartPositionTranslator implements InputPositionTranslator {
         }
         int lastLineLength = text.length() - lastPos;
 
-        final InputPosition source = snippet.getInputPosition(builder);
+        final SourcePosition source = snippet.getSourcePosition(builder);
         final InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
         final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
         return new Part(lines, lastLineLength, inputFile, lineOffset, columnOffset);
     }
 
-    private static InputPositionTranslator createSimpleTranslator(SchematicsBuilder builder, AstProgramSnippet snippet) {
-        final InputPosition source = snippet.getInputPosition(builder);
+    private static SourcePositionTranslator createSimpleTranslator(SchematicsBuilder builder, AstProgramSnippet snippet) {
+        final SourcePosition source = snippet.getSourcePosition(builder);
         final InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
         final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
         return p ->
-                new InputPosition(source.inputFile(), p.line() + lineOffset,
+                new SourcePosition(source.inputFile(), p.line() + lineOffset,
                 p.column() + columnOffset);
     }
 }

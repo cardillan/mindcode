@@ -1,0 +1,692 @@
+   171 instructions before optimizations.
+    11 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Case Expression Optimization.
+    10 instructions eliminated by Dead Code Elimination (4 iterations).
+     2 instructions eliminated by Jump Optimization (3 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+    18 instructions eliminated by Data Flow Optimization (5 iterations).
+     1 instructions added by Loop Optimization (2 iterations).
+     2 loops improved by Loop Optimization.
+     8 instructions eliminated by Jump Straightening (3 iterations).
+     4 instructions updated by JumpThreading.
+    26 instructions eliminated by Print Merging.
+    93 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 881):
+  * Replicate loop condition at line 68:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
+ 
+    21 getlink *tmp3 :n
+    22 set :block *tmp3
+    23 sensor *tmp5 :block @type
+-    * set *tmp6 *tmp5
+-    * jump *label8 equal *tmp6 @message
++   24 jump *label8 equal *tmp5 @message
+    25 jump *label7 always
+    26 label *label8
+    27 set .MESSAGE :block
+    28 set *tmp4 .MESSAGE
+    29 jump *label6 always
+    30 label *label7
+-    * jump *label10 equal *tmp6 @switch
++   31 jump *label10 equal *tmp5 @switch
+    32 jump *label9 always
+    33 label *label10
+    34 set .SWITCH :block
+    35 set *tmp4 .SWITCH
+    36 jump *label6 always
+    37 label *label9
+-    * jump *label12 equal *tmp6 @mass-driver
++   38 jump *label12 equal *tmp5 @mass-driver
+    39 jump *label11 always
+    40 label *label12
+    41 sensor *tmp8 :block @firstItem
+-    * set *tmp9 *tmp8
+-    * jump *label15 equal *tmp9 @titanium
++   42 jump *label15 equal *tmp8 @titanium
+    43 jump *label14 always
+    44 label *label15
+    45 set .TITANIUM :block
+    46 set *tmp7 .TITANIUM
+    47 jump *label13 always
+    48 label *label14
+-    * jump *label17 equal *tmp9 @silicon
++   49 jump *label17 equal *tmp8 @silicon
+    50 jump *label16 always
+    51 label *label17
+    52 set .SILICON :block
+    53 set *tmp7 .SILICON
+    54 jump *label13 always
+    55 label *label16
+-    * jump *label19 equal *tmp9 @copper
++   56 jump *label19 equal *tmp8 @copper
+    57 jump *label18 always
+    58 label *label19
+    59 set .COPPER :block
+    60 set *tmp7 .COPPER
+    61 jump *label13 always
+    62 label *label18
+-    * jump *label21 equal *tmp9 @lead
++   63 jump *label21 equal *tmp8 @lead
+    64 jump *label20 always
+    65 label *label21
+    66 set .LEAD :block
+ 
+    72 set *tmp4 *tmp7
+    73 jump *label6 always
+    74 label *label11
+-    * jump *label23 equal *tmp6 @logic-display
++   75 jump *label23 equal *tmp5 @logic-display
+    76 jump *label22 always
+    77 label *label23
+    78 set .DISPLAY :block
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
+ 
+    25 jump *label7 always
+    26 label *label8
+    27 set .MESSAGE :block
+-    * set *tmp4 .MESSAGE
+    28 jump *label6 always
+    29 label *label7
+    30 jump *label10 equal *tmp5 @switch
+    31 jump *label9 always
+    32 label *label10
+    33 set .SWITCH :block
+-    * set *tmp4 .SWITCH
+    34 jump *label6 always
+    35 label *label9
+    36 jump *label12 equal *tmp5 @mass-driver
+ 
+    67 label *label20
+    68 set *tmp7 null
+    69 label *label13
+-    * set *tmp4 *tmp7
+    70 jump *label6 always
+    71 label *label11
+    72 jump *label23 equal *tmp5 @logic-display
+    73 jump *label22 always
+    74 label *label23
+    75 set .DISPLAY :block
+-    * set *tmp4 .DISPLAY
+    76 jump *label6 always
+    77 label *label22
+    78 print "\n"
+    79 print :block
+    80 print " is not supported."
+-    * set *tmp4 " is not supported."
+    81 label *label6
+    82 print "\n"
+    83 print "Nominal production: "
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-5 instructions):
+ 
+    41 jump *label14 always
+    42 label *label15
+    43 set .TITANIUM :block
+-    * set *tmp7 .TITANIUM
+    44 jump *label13 always
+    45 label *label14
+    46 jump *label17 equal *tmp8 @silicon
+    47 jump *label16 always
+    48 label *label17
+    49 set .SILICON :block
+-    * set *tmp7 .SILICON
+    50 jump *label13 always
+    51 label *label16
+    52 jump *label19 equal *tmp8 @copper
+    53 jump *label18 always
+    54 label *label19
+    55 set .COPPER :block
+-    * set *tmp7 .COPPER
+    56 jump *label13 always
+    57 label *label18
+    58 jump *label21 equal *tmp8 @lead
+    59 jump *label20 always
+    60 label *label21
+    61 set .LEAD :block
+-    * set *tmp7 .LEAD
+    62 jump *label13 always
+    63 label *label20
+-    * set *tmp7 null
+    64 label *label13
+    65 jump *label6 always
+    66 label *label11
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
+ 
+    11 print "\n"
+    12 print "Configuring..."
+    13 print "\n"
+-    * set *tmp0 @links
+-    * set :n *tmp0
++   14 set :n @links
+    15 label *label3
+    16 op greaterThan *tmp1 :n 0
+    17 jump *label5 equal *tmp1 false
+-    * op sub *tmp2 :n 1
+-    * set :n *tmp2
+-    * getlink *tmp3 :n
+-    * set :block *tmp3
++   18 op sub :n :n 1
++   19 getlink :block :n
+    20 sensor *tmp5 :block @type
+    21 jump *label8 equal *tmp5 @message
+    22 jump *label7 always
+ 
+   121 set .ICON_SIZE 16
+   122 set .ICON_X 11
+   123 set .ICON_Y1 11
+-    * op add *tmp17 .ICON_Y1 .ROW_HEIGHT
+-    * set .ICON_Y2 *tmp17
+-    * op add *tmp18 .ICON_Y2 .ROW_HEIGHT
+-    * set .ICON_Y3 *tmp18
+-    * op add *tmp19 .ICON_Y3 .ROW_HEIGHT
+-    * set .ICON_Y4 *tmp19
++  124 op add .ICON_Y2 .ICON_Y1 .ROW_HEIGHT
++  125 op add .ICON_Y3 .ICON_Y2 .ROW_HEIGHT
++  126 op add .ICON_Y4 .ICON_Y3 .ROW_HEIGHT
+   127 set .BAR_X 20
+   128 set .BAR_Y1 4
+-    * op add *tmp20 .BAR_Y1 .ROW_HEIGHT
+-    * set .BAR_Y2 *tmp20
+-    * op add *tmp21 .BAR_Y2 .ROW_HEIGHT
+-    * set .BAR_Y3 *tmp21
+-    * op add *tmp22 .BAR_Y3 .ROW_HEIGHT
+-    * set .BAR_Y4 *tmp22
++  129 op add .BAR_Y2 .BAR_Y1 .ROW_HEIGHT
++  130 op add .BAR_Y3 .BAR_Y2 .ROW_HEIGHT
++  131 op add .BAR_Y4 .BAR_Y3 .ROW_HEIGHT
+   132 set .BAR_LENGTH 56
+-    * op div *tmp23 .BAR_LENGTH 200
+-    * set .MULTIPLICATOR *tmp23
++  133 op div .MULTIPLICATOR .BAR_LENGTH 200
+   134 set *tmp24 .SWITCH
+   135 control enabled *tmp24 0
+   136 label *label24
+   137 sensor *tmp26 .SWITCH @enabled
+   138 op equal *tmp27 *tmp26 0
+   139 jump *label26 equal *tmp27 false
+-    * set *tmp28 @time
+-    * set :start *tmp28
++  140 set :start @time
+   141 draw clear 0 0 80
+   142 draw color 255 255 255 255
+   143 draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
+
+Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-8 instructions):
+ 
+    18 op sub :n :n 1
+    19 getlink :block :n
+    20 sensor *tmp5 :block @type
+-    * jump *label8 equal *tmp5 @message
+-    * jump *label7 always
++   21 jump *label7 notEqual *tmp5 @message
+    22 label *label8
+    23 set .MESSAGE :block
+    24 jump *label6 always
+    25 label *label7
+-    * jump *label10 equal *tmp5 @switch
+-    * jump *label9 always
++   26 jump *label9 notEqual *tmp5 @switch
+    27 label *label10
+    28 set .SWITCH :block
+    29 jump *label6 always
+    30 label *label9
+-    * jump *label12 equal *tmp5 @mass-driver
+-    * jump *label11 always
++   31 jump *label11 notEqual *tmp5 @mass-driver
+    32 label *label12
+    33 sensor *tmp8 :block @firstItem
+-    * jump *label15 equal *tmp8 @titanium
+-    * jump *label14 always
++   34 jump *label14 notEqual *tmp8 @titanium
+    35 label *label15
+    36 set .TITANIUM :block
+    37 jump *label13 always
+    38 label *label14
+-    * jump *label17 equal *tmp8 @silicon
+-    * jump *label16 always
++   39 jump *label16 notEqual *tmp8 @silicon
+    40 label *label17
+    41 set .SILICON :block
+    42 jump *label13 always
+    43 label *label16
+-    * jump *label19 equal *tmp8 @copper
+-    * jump *label18 always
++   44 jump *label18 notEqual *tmp8 @copper
+    45 label *label19
+    46 set .COPPER :block
+    47 jump *label13 always
+    48 label *label18
+-    * jump *label21 equal *tmp8 @lead
+-    * jump *label20 always
++   49 jump *label20 notEqual *tmp8 @lead
+    50 label *label21
+    51 set .LEAD :block
+    52 jump *label13 always
+ 
+    54 label *label13
+    55 jump *label6 always
+    56 label *label11
+-    * jump *label23 equal *tmp5 @logic-display
+-    * jump *label22 always
++   57 jump *label22 notEqual *tmp5 @logic-display
+    58 label *label23
+    59 set .DISPLAY :block
+    60 jump *label6 always
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    13 print "\n"
+    14 set :n @links
+    15 label *label3
+-    * op greaterThan *tmp1 :n 0
+-    * jump *label5 equal *tmp1 false
++   16 jump *label5 lessThanEq :n 0
+    17 op sub :n :n 1
+    18 getlink :block :n
+    19 sensor *tmp5 :block @type
+ 
+   126 control enabled *tmp24 0
+   127 label *label24
+   128 sensor *tmp26 .SWITCH @enabled
+-    * op equal *tmp27 *tmp26 0
+-    * jump *label26 equal *tmp27 false
++  129 jump *label26 notEqual *tmp26 0
+   130 set :start @time
+   131 draw clear 0 0 80
+   132 draw color 255 255 255 255
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    48 jump *label20 notEqual *tmp8 @lead
+    49 label *label21
+    50 set .LEAD :block
+-    * jump *label13 always
+    51 label *label20
+    52 label *label13
+    53 jump *label6 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set .EXPECTED_FLOW_STR null
+     1 set :flow_str null
+     2 set .SWITCH null
+-    * set .DISPLAY .SWITCH
+-    * set .MESSAGE .DISPLAY
++    3 set .DISPLAY null
++    4 set .MESSAGE .SWITCH
+     5 label *label0
+     6 set .TITANIUM null
+     7 set .SILICON null
+ 
+    63 label *label6
+    64 print "\n"
+    65 print "Nominal production: "
+-    * print .EXPECTED_FLOW_STR
++   66 print null
+    67 print "/"
+    68 print "min"
+    69 print "\n"
+    70 print "Actual production: "
+-    * print :flow_str
++   71 print null
+    72 print "/"
+    73 print "min"
+    74 label *label4
+ 
+   111 set .ICON_SIZE 16
+   112 set .ICON_X 11
+   113 set .ICON_Y1 11
+-    * op add .ICON_Y2 .ICON_Y1 .ROW_HEIGHT
+-    * op add .ICON_Y3 .ICON_Y2 .ROW_HEIGHT
+-    * op add .ICON_Y4 .ICON_Y3 .ROW_HEIGHT
++  114 op add .ICON_Y2 11 19
++  115 op add .ICON_Y3 30 19
++  116 op add .ICON_Y4 49 19
+   117 set .BAR_X 20
+   118 set .BAR_Y1 4
+-    * op add .BAR_Y2 .BAR_Y1 .ROW_HEIGHT
+-    * op add .BAR_Y3 .BAR_Y2 .ROW_HEIGHT
+-    * op add .BAR_Y4 .BAR_Y3 .ROW_HEIGHT
++  119 op add .BAR_Y2 4 19
++  120 op add .BAR_Y3 23 19
++  121 op add .BAR_Y4 42 19
+   122 set .BAR_LENGTH 56
+-    * op div .MULTIPLICATOR .BAR_LENGTH 200
++  123 op div .MULTIPLICATOR 56 200
+   124 set *tmp24 .SWITCH
+-    * control enabled *tmp24 0
++  125 control enabled .SWITCH 0
+   126 label *label24
+   127 sensor *tmp26 .SWITCH @enabled
+   128 jump *label26 notEqual *tmp26 0
+   129 set :start @time
+   130 draw clear 0 0 80
+   131 draw color 255 255 255 255
+-    * draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
+-    * draw image .ICON_X .ICON_Y3 @silicon .ICON_SIZE 0
+-    * draw image .ICON_X .ICON_Y2 @copper .ICON_SIZE 0
+-    * draw image .ICON_X .ICON_Y1 @lead .ICON_SIZE 0
++  132 draw image 11 68 @titanium 16 0
++  133 draw image 11 49 @silicon 16 0
++  134 draw image 11 30 @copper 16 0
++  135 draw image 11 11 @lead 16 0
+   136 draw color 0 128 0 255
+   137 sensor *tmp29 .TITANIUM @totalItems
+-    * op mul *tmp30 *tmp29 .MULTIPLICATOR
+-    * draw rect .BAR_X .BAR_Y4 *tmp30 .BAR_HEIGHT
++  138 op mul *tmp30 *tmp29 0.28
++  139 draw rect 20 61 *tmp30 14
+   140 sensor *tmp31 .SILICON @totalItems
+-    * op mul *tmp32 *tmp31 .MULTIPLICATOR
+-    * draw rect .BAR_X .BAR_Y3 *tmp32 .BAR_HEIGHT
++  141 op mul *tmp32 *tmp31 0.28
++  142 draw rect 20 42 *tmp32 14
+   143 sensor *tmp33 .COPPER @totalItems
+-    * op mul *tmp34 *tmp33 .MULTIPLICATOR
+-    * draw rect .BAR_X .BAR_Y2 *tmp34 .BAR_HEIGHT
++  144 op mul *tmp34 *tmp33 0.28
++  145 draw rect 20 23 *tmp34 14
+   146 sensor *tmp35 .LEAD @totalItems
+-    * op mul *tmp36 *tmp35 .MULTIPLICATOR
+-    * draw rect .BAR_X .BAR_Y1 *tmp36 .BAR_HEIGHT
++  147 op mul *tmp36 *tmp35 0.28
++  148 draw rect 20 4 *tmp36 14
+   149 draw color 0 255 0 255
+-    * draw lineRect .BAR_X .BAR_Y4 .BAR_LENGTH .BAR_HEIGHT
+-    * draw lineRect .BAR_X .BAR_Y3 .BAR_LENGTH .BAR_HEIGHT
+-    * draw lineRect .BAR_X .BAR_Y2 .BAR_LENGTH .BAR_HEIGHT
+-    * draw lineRect .BAR_X .BAR_Y1 .BAR_LENGTH .BAR_HEIGHT
++  150 draw lineRect 20 61 56 14
++  151 draw lineRect 20 42 56 14
++  152 draw lineRect 20 23 56 14
++  153 draw lineRect 20 4 56 14
+   154 drawflush .DISPLAY
+   155 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
+   156 op sub *tmp37 @time :start
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+-    * set .EXPECTED_FLOW_STR null
+-    * set :flow_str null
+     0 set .SWITCH null
+     1 set .DISPLAY null
+-    * set .MESSAGE .SWITCH
++    2 set .MESSAGE null
+     3 label *label0
+     4 set .TITANIUM null
+     5 set .SILICON null
+ 
+   104 op or *tmp16 *tmp14 *tmp15
+   105 jump *label0 notEqual *tmp16 false
+   106 label *label2
+-    * set .ROW_HEIGHT 19
+-    * set .BAR_HEIGHT 14
+-    * set .ICON_SIZE 16
+-    * set .ICON_X 11
+-    * set .ICON_Y1 11
+-    * op add .ICON_Y2 11 19
+-    * op add .ICON_Y3 30 19
+-    * op add .ICON_Y4 49 19
+-    * set .BAR_X 20
+-    * set .BAR_Y1 4
+-    * op add .BAR_Y2 4 19
+-    * op add .BAR_Y3 23 19
+-    * op add .BAR_Y4 42 19
+-    * set .BAR_LENGTH 56
+-    * op div .MULTIPLICATOR 56 200
+-    * set *tmp24 .SWITCH
+   107 control enabled .SWITCH 0
+   108 label *label24
+   109 sensor *tmp26 .SWITCH @enabled
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    12 set :n @links
+    13 label *label3
+    14 jump *label5 lessThanEq :n 0
++   15 label *label27
+    16 op sub :n :n 1
+    17 getlink :block :n
+    18 sensor *tmp5 :block @type
+ 
+    71 print "/"
+    72 print "min"
+    73 label *label4
+-    * jump *label3 always
++   74 jump *label27 greaterThan :n 0
+    75 label *label5
+    76 print "Message: "
+    77 print .MESSAGE
+
+Modifications by Replicate loop condition at line 68:1 (+1 instructions):
+ 
+   109 label *label24
+   110 sensor *tmp26 .SWITCH @enabled
+   111 jump *label26 notEqual *tmp26 0
++  112 label *label28
+   113 set :start @time
+   114 draw clear 0 0 80
+   115 draw color 255 255 255 255
+ 
+   142 print *tmp38
+   143 printflush .MESSAGE
+   144 label *label25
+-    * jump *label24 always
++  145 sensor *tmp26 .SWITCH @enabled
++  146 jump *label28 equal *tmp26 0
+   147 label *label26
+   148 end
+
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+    32 jump *label14 notEqual *tmp8 @titanium
+    33 label *label15
+    34 set .TITANIUM :block
+-    * jump *label13 always
++   35 jump *label6 always
+    36 label *label14
+    37 jump *label16 notEqual *tmp8 @silicon
+    38 label *label17
+    39 set .SILICON :block
+-    * jump *label13 always
++   40 jump *label6 always
+    41 label *label16
+    42 jump *label18 notEqual *tmp8 @copper
+    43 label *label19
+    44 set .COPPER :block
+-    * jump *label13 always
++   45 jump *label6 always
+    46 label *label18
+-    * jump *label20 notEqual *tmp8 @lead
++   47 jump *label6 notEqual *tmp8 @lead
+    48 label *label21
+    49 set .LEAD :block
+    50 label *label20
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   145 sensor *tmp26 .SWITCH @enabled
+   146 jump *label28 equal *tmp26 0
+   147 label *label26
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
+ 
+     5 set .SILICON null
+     6 set .COPPER null
+     7 set .LEAD null
+-    * print "Surge Alloy Factory Driver Monitor"
+-    * print "\n"
+-    * print "Configuring..."
+-    * print "\n"
++    8 print "Surge Alloy Factory Driver Monitor\nConfiguring...\n"
+     9 set :n @links
+    10 label *label3
+    11 jump *label5 lessThanEq :n 0
+ 
+    53 set .DISPLAY :block
+    54 jump *label6 always
+    55 label *label22
+-    * print "\n"
+-    * print :block
+-    * print " is not supported."
++   56 print "\n{0} is not supported."
++   57 format :block
+    58 label *label6
+-    * print "\n"
+-    * print "Nominal production: "
+-    * print null
+-    * print "/"
+-    * print "min"
+-    * print "\n"
+-    * print "Actual production: "
+-    * print null
+-    * print "/"
+-    * print "min"
++   59 print "\nNominal production: null/min\nActual production: null/min"
+    60 label *label4
+    61 jump *label27 greaterThan :n 0
+    62 label *label5
+-    * print "Message: "
+-    * print .MESSAGE
+-    * print "\n"
+-    * print "Switch: "
+-    * print .SWITCH
+-    * print "\n"
+-    * print "Display: "
+-    * print .DISPLAY
+-    * print "\n"
+-    * print "Titanium: "
+-    * print .TITANIUM
+-    * print "\n"
+-    * print "Silicon: "
+-    * print .SILICON
+-    * print "\n"
+-    * print "Copper: "
+-    * print .COPPER
+-    * print "\n"
+-    * print "Lead: "
+-    * print .LEAD
+-    * print "\n"
++   63 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nTitanium: {0}\nSilicon: {0}\nCopper: {0}\nLead: {0}\n"
++   64 format .MESSAGE
++   65 format .SWITCH
++   66 format .DISPLAY
++   67 format .TITANIUM
++   68 format .SILICON
++   69 format .COPPER
++   70 format .LEAD
+    71 printflush .MESSAGE
+    72 label *label1
+    73 op equal *tmp10 .TITANIUM null
+
+Final code before resolving virtual instructions:
+
+set .SWITCH null
+set .DISPLAY null
+set .MESSAGE null
+label *label0
+set .TITANIUM null
+set .SILICON null
+set .COPPER null
+set .LEAD null
+print "Surge Alloy Factory Driver Monitor\nConfiguring...\n"
+set :n @links
+jump *label5 lessThanEq :n 0
+label *label27
+op sub :n :n 1
+getlink :block :n
+sensor *tmp5 :block @type
+jump *label7 notEqual *tmp5 @message
+set .MESSAGE :block
+jump *label6 always 0 0
+label *label7
+jump *label9 notEqual *tmp5 @switch
+set .SWITCH :block
+jump *label6 always 0 0
+label *label9
+jump *label11 notEqual *tmp5 @mass-driver
+sensor *tmp8 :block @firstItem
+jump *label14 notEqual *tmp8 @titanium
+set .TITANIUM :block
+jump *label6 always 0 0
+label *label14
+jump *label16 notEqual *tmp8 @silicon
+set .SILICON :block
+jump *label6 always 0 0
+label *label16
+jump *label18 notEqual *tmp8 @copper
+set .COPPER :block
+jump *label6 always 0 0
+label *label18
+jump *label6 notEqual *tmp8 @lead
+set .LEAD :block
+jump *label6 always 0 0
+label *label11
+jump *label22 notEqual *tmp5 @logic-display
+set .DISPLAY :block
+jump *label6 always 0 0
+label *label22
+print "\n{0} is not supported."
+format :block
+label *label6
+print "\nNominal production: null/min\nActual production: null/min"
+jump *label27 greaterThan :n 0
+label *label5
+print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nTitanium: {0}\nSilicon: {0}\nCopper: {0}\nLead: {0}\n"
+format .MESSAGE
+format .SWITCH
+format .DISPLAY
+format .TITANIUM
+format .SILICON
+format .COPPER
+format .LEAD
+printflush .MESSAGE
+op equal *tmp10 .TITANIUM null
+op equal *tmp11 .SILICON null
+op or *tmp12 *tmp10 *tmp11
+op equal *tmp13 .COPPER null
+op or *tmp14 *tmp12 *tmp13
+op equal *tmp15 .LEAD null
+op or *tmp16 *tmp14 *tmp15
+jump *label0 notEqual *tmp16 false
+control enabled .SWITCH 0 0 0 0
+sensor *tmp26 .SWITCH @enabled
+jump *label26 notEqual *tmp26 0
+label *label28
+set :start @time
+draw clear 0 0 80 0 0 0
+draw color 255 255 255 255 0 0
+draw image 11 68 @titanium 16 0 0
+draw image 11 49 @silicon 16 0 0
+draw image 11 30 @copper 16 0 0
+draw image 11 11 @lead 16 0 0
+draw color 0 128 0 255 0 0
+sensor *tmp29 .TITANIUM @totalItems
+op mul *tmp30 *tmp29 0.28
+draw rect 20 61 *tmp30 14 0 0
+sensor *tmp31 .SILICON @totalItems
+op mul *tmp32 *tmp31 0.28
+draw rect 20 42 *tmp32 14 0 0
+sensor *tmp33 .COPPER @totalItems
+op mul *tmp34 *tmp33 0.28
+draw rect 20 23 *tmp34 14 0 0
+sensor *tmp35 .LEAD @totalItems
+op mul *tmp36 *tmp35 0.28
+draw rect 20 4 *tmp36 14 0 0
+draw color 0 255 0 255 0 0
+draw lineRect 20 61 56 14 0 0
+draw lineRect 20 42 56 14 0 0
+draw lineRect 20 23 56 14 0 0
+draw lineRect 20 4 56 14 0 0
+drawflush .DISPLAY
+print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
+op sub *tmp37 @time :start
+op floor *tmp38 *tmp37 0
+print *tmp38
+printflush .MESSAGE
+sensor *tmp26 .SWITCH @enabled
+jump *label28 equal *tmp26 0
+label *label26

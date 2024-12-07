@@ -1,13 +1,13 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.AstElement;
-import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.ToolMessage;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.mimex.BlockType;
-import info.teksol.mindcode.mimex.Icons;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.Icons;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
@@ -17,7 +17,6 @@ import org.intellij.lang.annotations.PrintFormat;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,7 +33,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     private BlockPositionMap<Block> positionMap;
 
     public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
-            Consumer<MindcodeMessage> messageConsumer, AstDefinitions astDefinitions) {
+            MessageConsumer messageConsumer, AstDefinitions astDefinitions) {
         super(messageConsumer);
         this.inputFiles = inputFiles;
         this.compilerProfile = compilerProfile;
@@ -42,20 +41,12 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     }
 
     public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
-            AstDefinitions definitions, Consumer<MindcodeMessage> messageListener) {
+            AstDefinitions definitions, MessageConsumer messageListener) {
         return new SchematicsBuilder(inputFiles, compilerProfile, messageListener, definitions);
-    }
-
-    public void error(@PrintFormat String message, Object... args) {
-        addMessage(ToolMessage.error(message, args));
     }
 
     public void warn(@PrintFormat String message, Object... args) {
         addMessage(ToolMessage.warn(message, args));
-    }
-
-    public void info(@PrintFormat String message, Object... args) {
-        addMessage(ToolMessage.info(message, args));
     }
 
     public CompilerProfile getCompilerProfile() {
@@ -124,7 +115,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = convertAstConfiguration(blockPos, astBlock.configuration());
-            blocks.add(new Block(astBlock.inputPosition(), index, astBlock.labels(), type, blockPos.position(), direction,
+            blocks.add(new Block(astBlock.sourcePosition(), index, astBlock.labels(), type, blockPos.position(), direction,
                     configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass())));
         }
 
@@ -284,7 +275,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         }
     }
 
-    private int clamp(AstElement element, BlockPosition blockPos, String component, int value) {
+    private int clamp(SourceElement element, BlockPosition blockPos, String component, int value) {
         if (value < 0 || value > 255) {
             error(element, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
                     blockPos.name(), blockPos.position().toStringAbsolute(), value, component);
@@ -364,7 +355,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         return sbr.toString();
     }
 
-    public AstText getText(AstElement element, String reference) {
+    public AstText getText(SourceElement element, String reference) {
         AstText result = constants.get(reference);
         if (result == null) {
             error(element, "Undefined identifier '%s'.", reference);
@@ -378,7 +369,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                 () -> new SchematicsInternalError("Invalid block index %d.", index));
     }
 
-    public BlockPosition getBlockPosition(AstElement element, String name) {
+    public BlockPosition getBlockPosition(SourceElement element, String name) {
         BlockPosition blockPosition = astLabelMap.get(name);
         if (blockPosition != null) {
             return blockPosition;

@@ -1,0 +1,205 @@
+    38 instructions before optimizations.
+     4 instructions eliminated by Temp Variables Elimination.
+     4 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Normalization (3 iterations).
+     2 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Single Step Elimination (4 iterations).
+    10 instructions eliminated by Data Flow Optimization (4 iterations).
+     3 instructions updated by JumpThreading.
+     2 instructions eliminated by Unreachable Code Elimination.
+    14 instructions after optimizations.
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
+ 
+    21 jump *label3 equal *tmp11 false
+    22 op add :pn :pn :p
+    23 op add :p :p 3
+-    * set *tmp12 :p
+    24 jump *label4 always
+    25 label *label3
+    26 op lessThan *tmp13 :hn :pn
+ 
+    33 jump *label2 always
+    34 set *tmp14 null
+    35 label *label6
+-    * set *tmp12 *tmp14
+    36 label *label4
+    37 label *label1
+    38 jump *label0 always
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
+ 
+    27 jump *label5 equal *tmp13 false
+    28 op add :hn :hn :h
+    29 op add :h :h 4
+-    * set *tmp14 :h
+    30 jump *label6 always
+    31 label *label5
+    32 jump *label2 always
+-    * set *tmp14 null
+    33 label *label6
+    34 label *label4
+    35 label *label1
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 instructions):
+ 
+     3 op mul *tmp0 3 :p
+     4 op sub *tmp1 *tmp0 1
+     5 op mul *tmp2 :p *tmp1
+-    * op idiv *tmp3 *tmp2 2
+-    * set :pn *tmp3
++    6 op idiv :pn *tmp2 2
+     7 op mul *tmp4 2 :h
+     8 op sub *tmp5 *tmp4 1
+-    * op mul *tmp6 :h *tmp5
+-    * set :hn *tmp6
++    9 op mul :hn :h *tmp5
+    10 op mul *tmp7 3 :p
+-    * op add *tmp8 *tmp7 1
+-    * set :p *tmp8
++   11 op add :p *tmp7 1
+    12 op mul *tmp9 4 :h
+-    * op add *tmp10 *tmp9 1
+-    * set :h *tmp10
++   13 op add :h *tmp9 1
+    14 label *label0
+    15 jump *label2 equal true false
+    16 op lessThan *tmp11 :pn :hn
+
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
+ 
+    12 op mul *tmp9 4 :h
+    13 op add :h *tmp9 1
+    14 label *label0
+-    * jump *label2 equal true false
+    15 op lessThan *tmp11 :pn :hn
+    16 jump *label3 equal *tmp11 false
+    17 op add :pn :pn :p
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    12 op mul *tmp9 4 :h
+    13 op add :h *tmp9 1
+    14 label *label0
+-    * op lessThan *tmp11 :pn :hn
+-    * jump *label3 equal *tmp11 false
++   15 jump *label3 greaterThanEq :pn :hn
+    16 op add :pn :pn :p
+    17 op add :p :p 3
+    18 jump *label4 always
+    19 label *label3
+-    * op lessThan *tmp13 :hn :pn
+-    * jump *label5 equal *tmp13 false
++   20 jump *label5 greaterThanEq :hn :pn
+    21 op add :hn :hn :h
+    22 op add :h :h 4
+    23 jump *label6 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set :p 165
+     1 set :h 143
+-    * op add :p :p 1
+-    * op mul *tmp0 3 :p
+-    * op sub *tmp1 *tmp0 1
+-    * op mul *tmp2 :p *tmp1
+-    * op idiv :pn *tmp2 2
+-    * op mul *tmp4 2 :h
+-    * op sub *tmp5 *tmp4 1
+-    * op mul :hn :h *tmp5
+-    * op mul *tmp7 3 :p
+-    * op add :p *tmp7 1
+-    * op mul *tmp9 4 :h
+-    * op add :h *tmp9 1
++    2 op add :p 165 1
++    3 op mul *tmp0 3 166
++    4 op sub *tmp1 498 1
++    5 op mul *tmp2 166 497
++    6 op idiv :pn 82502 2
++    7 op mul *tmp4 2 143
++    8 op sub *tmp5 286 1
++    9 op mul :hn 143 285
++   10 op mul *tmp7 3 166
++   11 op add :p 498 1
++   12 op mul *tmp9 4 143
++   13 op add :h 572 1
+    14 label *label0
+    15 jump *label3 greaterThanEq :pn :hn
+    16 op add :pn :pn :p
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
+-    * set :p 165
+-    * set :h 143
+-    * op add :p 165 1
+-    * op mul *tmp0 3 166
+-    * op sub *tmp1 498 1
+-    * op mul *tmp2 166 497
+     0 op idiv :pn 82502 2
+-    * op mul *tmp4 2 143
+-    * op sub *tmp5 286 1
+     1 op mul :hn 143 285
+-    * op mul *tmp7 3 166
+     2 op add :p 498 1
+-    * op mul *tmp9 4 143
+     3 op add :h 572 1
+     4 label *label0
+     5 jump *label3 greaterThanEq :pn :hn
+
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+     5 jump *label3 greaterThanEq :pn :hn
+     6 op add :pn :pn :p
+     7 op add :p :p 3
+-    * jump *label4 always
++    8 jump *label0 always
+     9 label *label3
+-    * jump *label5 greaterThanEq :hn :pn
++   10 jump *label2 greaterThanEq :hn :pn
+    11 op add :hn :hn :h
+    12 op add :h :h 4
+-    * jump *label6 always
++   13 jump *label0 always
+    14 label *label5
+    15 jump *label2 always
+    16 label *label6
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
+ 
+    11 op add :hn :hn :h
+    12 op add :h :h 4
+    13 jump *label0 always
+-    * label *label5
+-    * jump *label2 always
+-    * label *label6
+-    * label *label4
+-    * label *label1
+-    * jump *label0 always
+    14 label *label2
+    15 assertequals 1533776805 :hn "Project Euler 45"
+    16 stop
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    14 label *label2
+    15 assertequals 1533776805 :hn "Project Euler 45"
+    16 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+op idiv :pn 82502 2
+op mul :hn 143 285
+op add :p 498 1
+op add :h 572 1
+label *label0
+jump *label3 greaterThanEq :pn :hn
+op add :pn :pn :p
+op add :p :p 3
+jump *label0 always 0 0
+label *label3
+jump *label2 greaterThanEq :hn :pn
+op add :hn :hn :h
+op add :h :h 4
+jump *label0 always 0 0
+label *label2
+assertequals 1533776805 :hn "Project Euler 45"
+stop

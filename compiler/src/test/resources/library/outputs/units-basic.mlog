@@ -1,87 +1,81 @@
-set _initial_flag null
-set _message null
-set _preface null
-set _unit_type null
-set _x null
-set _y null
+set :initial_flag null
+set :message null
+set :preface null
+set :unit_type null
+set :x null
+set :y null
 ubind null
 jump 10 notEqual @unit null
-set __tmp0 null
+set *tmp0 null
 jump 22 always 0 0
-set __fn0__first_unit @unit
-sensor __tmp4 @unit @controlled
-jump 16 notEqual __tmp4 0
+set :fn0:first_unit @unit
+sensor *tmp3 @unit @controlled
+jump 16 notEqual *tmp3 0
 ucontrol flag null 0 0 0 0
-set __tmp0 @unit
+set *tmp0 @unit
 jump 22 always 0 0
-sensor __tmp7 __fn0__first_unit @dead
-jump 19 notEqual __tmp7 1
-set __fn0__first_unit @unit
+sensor *tmp6 :fn0:first_unit @dead
+jump 19 notEqual *tmp6 1
+set :fn0:first_unit @unit
 ubind null
-jump 11 notEqual __fn0__first_unit @unit
-set __tmp0 null
-print __tmp0
+jump 11 notEqual :fn0:first_unit @unit
+set *tmp0 null
+print *tmp0
 print "\n"
 ubind null
 jump 28 notEqual @unit null
-set __tmp12 null
+set *tmp11 null
 jump 55 always 0 0
-set __fn1__first_unit @unit
-set __fn1__best_unit null
-set __fn1__best_distance 10000000000
-sensor __tmp16 @unit @controlled
-jump 42 notEqual __tmp16 0
-sensor __tmp19 @unit @x
-op sub __tmp20 __tmp19 null
-sensor __tmp21 @unit @y
-op sub __tmp22 __tmp21 null
-op len __fn1__distance __tmp20 __tmp22
-jump 45 greaterThanEq __fn1__distance __fn1__best_distance
-set __fn1__best_distance __fn1__distance
-set __fn1__best_unit @unit
+set :fn1:first_unit @unit
+set :fn1:best_unit null
+set :fn1:best_distance 10000000000
+sensor *tmp14 @unit @controlled
+jump 42 notEqual *tmp14 0
+sensor *tmp17 @unit @x
+op sub *tmp18 *tmp17 null
+sensor *tmp19 @unit @y
+op sub *tmp20 *tmp19 null
+op len :fn1:distance *tmp18 *tmp20
+jump 45 greaterThanEq :fn1:distance :fn1:best_distance
+set :fn1:best_distance :fn1:distance
+set :fn1:best_unit @unit
 jump 45 always 0 0
-sensor __tmp27 __fn1__first_unit @dead
-jump 45 notEqual __tmp27 1
-set __fn1__first_unit @unit
+sensor *tmp25 :fn1:first_unit @dead
+jump 45 notEqual *tmp25 1
+set :fn1:first_unit @unit
 ubind null
-jump 31 notEqual __fn1__first_unit @unit
-jump 50 notEqual __fn1__best_unit null
-set __tmp12 null
+jump 31 notEqual :fn1:first_unit @unit
+jump 50 notEqual :fn1:best_unit null
+set *tmp11 null
 jump 55 always 0 0
-sensor __tmp34 __fn1__best_unit @controlled
-jump 24 notEqual __tmp34 0
-ubind __fn1__best_unit
+sensor *tmp32 :fn1:best_unit @controlled
+jump 24 notEqual *tmp32 0
+ubind :fn1:best_unit
 ucontrol flag null 0 0 0 0
-set __tmp12 __fn1__best_unit
-print __tmp12
+set *tmp11 :fn1:best_unit
+print *tmp11
 print "\n"
 ubind null
 jump 57 equal @unit null
-sensor __tmp40 @unit @controlled
-jump 57 notEqual __tmp40 0
+sensor *tmp38 @unit @controlled
+jump 57 notEqual *tmp38 0
 ucontrol flag null 0 0 0 0
-set __tmp37 @unit
-print __tmp37
+set *tmp35 @unit
+print *tmp35
 print "\n"
 ubind null
-jump 73 notEqual @unit null
-print null
-print "No unit of type "
-print null
-print " found."
+jump 70 notEqual @unit null
+print "nullNo unit of type null found."
 printflush null
 jump 65 always 0 0
-sensor __tmp46 @unit @controlled
-jump 81 equal __tmp46 0
-print null
-print "Looking for a free "
-print null
-print "..."
+sensor *tmp44 @unit @controlled
+jump 75 equal *tmp44 0
+print "nullLooking for a free null..."
 printflush null
 jump 65 always 0 0
 ucontrol flag null 0 0 0 0
-set __tmp43 @unit
-print __tmp43
+set *tmp41 @unit
+print *tmp41
 print "\n"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

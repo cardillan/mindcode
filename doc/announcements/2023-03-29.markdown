@@ -98,14 +98,14 @@ Mindustry Logic version 7 (as of release 142) is now fully supported, including 
 The web app compiler targets Version 7 with World Processor instruction set. The command-line compiler can set the target 
 platform to Version 6, Version 7 and Version 7 + World Processor.
 
-Check out [Function reference for Mindustry Logic 7](../syntax/FUNCTIONS_V7.markdown) for a list of all supported functions in Version 7.
+Check out [Function reference for Mindustry Logic 7.1](../syntax/FUNCTIONS_71.markdown) for a list of all supported functions in Version 7.
 
 Code developed and compiled using previous Mindcode versions should compile just fine when targeting version 7
 (with or without the World Processor instruction set), except when trying to use instructions that were explicitly removed from
 Version 7 Logic:
 * `ucontrol pathfind` (mapped to the `pathfind()` function)
 * `rally` and `resupply` can no longer be used as a `group` argument in `ulocate` instruction (mapped to the 
-[`ulocate(...)`](../syntax/FUNCTIONS_V7.markdown#instruction-ulocate) function).
+[`ulocate(...)`](../syntax/FUNCTIONS_71.markdown#instruction-ulocate) function).
 
 If you want to continue developing for Mindustry Logic V6, the best way now is to use the command line compiler.
 Support for the web app will hopefully be added shortly.
@@ -256,7 +256,7 @@ Do-while loops therefore always execute at least once:
 ```
 do
     ubind(@poly)
-loop while @unit == null
+while @unit == null
 ```
 
 ### Operators

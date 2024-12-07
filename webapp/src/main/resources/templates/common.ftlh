@@ -171,7 +171,8 @@
 <div style="margin-top:1cm;text-align:center;">
     <nav>
         <#if mindcode == "Y">
-            <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>
+            <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a> |
+            <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYSTEM-LIBRARY.markdown">System library</a>
         <#else>
             <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown">Schemacode syntax</a>
         </#if>

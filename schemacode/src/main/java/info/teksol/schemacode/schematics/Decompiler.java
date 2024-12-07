@@ -1,6 +1,6 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.mimex.Icons;
+import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;

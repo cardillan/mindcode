@@ -1,9 +1,9 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
-public record AstProgramSnippetText(InputPosition inputPosition, AstText programText) implements AstProgramSnippet {
+public record AstProgramSnippetText(SourcePosition sourcePosition, AstText programText) implements AstProgramSnippet {
 
     @Override
     public String getProgramId(SchematicsBuilder builder) {
@@ -16,7 +16,7 @@ public record AstProgramSnippetText(InputPosition inputPosition, AstText program
     }
 
     @Override
-    public InputPosition getInputPosition(SchematicsBuilder builder) {
+    public SourcePosition getSourcePosition(SchematicsBuilder builder) {
         return programText.getTextPosition(builder);
     }
 

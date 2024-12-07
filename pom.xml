@@ -15,6 +15,7 @@
         <module>toolapp</module>
         <module>samples</module>
         <module>webapp</module>
+        <module>annotations</module>
     </modules>
 
     <name>Mindcode</name>
@@ -23,7 +24,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>6.2.0</spring.version>
-        <revision>2.7.3</revision>
+        <revision>3.0.0-preview1</revision>
     </properties>
 
     <dependencies>

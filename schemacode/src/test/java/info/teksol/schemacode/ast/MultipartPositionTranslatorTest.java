@@ -1,8 +1,8 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.v3.InputFile;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.ast.MultipartPositionTranslator.Part;
 import org.junit.jupiter.api.Test;
 
@@ -23,10 +23,10 @@ class MultipartPositionTranslatorTest {
                 new Part(10, 20, inputFileA, 10, 8)
         ));
 
-        InputPosition position = instance.apply(new InputPosition(null, 5, 5));
+        SourcePosition position = instance.apply(new SourcePosition(null, 5, 5));
 
         assertEquals(
-                new InputPosition(inputFileA, 15, 13),
+                new SourcePosition(inputFileA, 15, 13),
                 position);
     }
 
@@ -39,23 +39,23 @@ class MultipartPositionTranslatorTest {
         ));
 
         assertEquals(
-                new InputPosition(inputFileA, 1, 1),
-                instance.apply(new InputPosition(null, 1, 1)));
+                new SourcePosition(inputFileA, 1, 1),
+                instance.apply(new SourcePosition(null, 1, 1)));
         assertEquals(
-                new InputPosition(inputFileB, 1, 1),
-                instance.apply(new InputPosition(null, 2, 1)));
+                new SourcePosition(inputFileB, 1, 1),
+                instance.apply(new SourcePosition(null, 2, 1)));
         assertEquals(
-                new InputPosition(inputFileC, 1, 1),
-                instance.apply(new InputPosition(null, 3, 1)));
+                new SourcePosition(inputFileC, 1, 1),
+                instance.apply(new SourcePosition(null, 3, 1)));
         assertEquals(
-                new InputPosition(inputFileA, 1, 5),
-                instance.apply(new InputPosition(null, 1, 5)));
+                new SourcePosition(inputFileA, 1, 5),
+                instance.apply(new SourcePosition(null, 1, 5)));
         assertEquals(
-                new InputPosition(inputFileB, 1, 5),
-                instance.apply(new InputPosition(null, 2, 5)));
+                new SourcePosition(inputFileB, 1, 5),
+                instance.apply(new SourcePosition(null, 2, 5)));
         assertEquals(
-                new InputPosition(inputFileC, 1, 5),
-                instance.apply(new InputPosition(null, 3, 5)));
+                new SourcePosition(inputFileC, 1, 5),
+                instance.apply(new SourcePosition(null, 3, 5)));
     }
 
     @Test
@@ -67,23 +67,23 @@ class MultipartPositionTranslatorTest {
         ));
 
         assertEquals(
-                new InputPosition(inputFileA, 1, 1),
-                instance.apply(new InputPosition(null, 1, 1)));
+                new SourcePosition(inputFileA, 1, 1),
+                instance.apply(new SourcePosition(null, 1, 1)));
         assertEquals(
-                new InputPosition(inputFileB, 1, 1),
-                instance.apply(new InputPosition(null, 1, 11)));
+                new SourcePosition(inputFileB, 1, 1),
+                instance.apply(new SourcePosition(null, 1, 11)));
         assertEquals(
-                new InputPosition(inputFileC, 1, 1),
-                instance.apply(new InputPosition(null, 1, 21)));
+                new SourcePosition(inputFileC, 1, 1),
+                instance.apply(new SourcePosition(null, 1, 21)));
         assertEquals(
-                new InputPosition(inputFileA, 1, 5),
-                instance.apply(new InputPosition(null, 1, 5)));
+                new SourcePosition(inputFileA, 1, 5),
+                instance.apply(new SourcePosition(null, 1, 5)));
         assertEquals(
-                new InputPosition(inputFileB, 1, 5),
-                instance.apply(new InputPosition(null, 1, 15)));
+                new SourcePosition(inputFileB, 1, 5),
+                instance.apply(new SourcePosition(null, 1, 15)));
         assertEquals(
-                new InputPosition(inputFileC, 1, 5),
-                instance.apply(new InputPosition(null, 1, 25)));
+                new SourcePosition(inputFileC, 1, 5),
+                instance.apply(new SourcePosition(null, 1, 25)));
     }
 
     @Test
@@ -95,19 +95,19 @@ class MultipartPositionTranslatorTest {
         ));
 
         assertEquals(
-                new InputPosition(inputFileA, 3, 10),
-                instance.apply(new InputPosition(null, 3, 10)));
+                new SourcePosition(inputFileA, 3, 10),
+                instance.apply(new SourcePosition(null, 3, 10)));
         assertEquals(
-                new InputPosition(inputFileB, 1, 1),
-                instance.apply(new InputPosition(null, 3, 11)));
+                new SourcePosition(inputFileB, 1, 1),
+                instance.apply(new SourcePosition(null, 3, 11)));
         assertEquals(
-                new InputPosition(inputFileB, 1, 10),
-                instance.apply(new InputPosition(null, 3, 20)));
+                new SourcePosition(inputFileB, 1, 10),
+                instance.apply(new SourcePosition(null, 3, 20)));
         assertEquals(
-                new InputPosition(inputFileC, 1, 1),
-                instance.apply(new InputPosition(null, 3, 21)));
+                new SourcePosition(inputFileC, 1, 1),
+                instance.apply(new SourcePosition(null, 3, 21)));
         assertEquals(
-                new InputPosition(inputFileC, 2, 1),
-                instance.apply(new InputPosition(null, 4, 1)));
+                new SourcePosition(inputFileC, 2, 1),
+                instance.apply(new SourcePosition(null, 4, 1)));
     }
 }

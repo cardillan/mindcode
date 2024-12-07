@@ -27,10 +27,10 @@ void bar()
     println("No parameters");
 end;
 
-y = 10;
+var y = 10;
 foo(20, out x, out y);    // Passing y as an input value for c, and obtaining return values from b and c
 foo(20, , in y * 2);      // Not obtaining the value of b and c, but passing y * 2 as an input value for c   
-bar();                    // Calling a function with no arguments
+bar();                    // Calling a function with no parameters
 ```
 
 All argument are passed by value, not by reference:
@@ -39,12 +39,12 @@ All argument are passed by value, not by reference:
 void foo(in out x)
     x = 20;
     println(x);
-    println(GLOBAL);
+    println(global);
 end;
 
-GLOBAL = 10;
-foo(in out GLOBAL);     // The ame as just foo(out GLOBAL); 
-println(GLOBAL);
+var global = 10;
+foo(in out global);     // The same as just foo(out global); 
+println(global);
 ```
 
 outputs `20`, `10` and `20`. The change to the global variable will only happen when the function call is finished. This behavior is consistent for all types of user functions (inline, stackless and recursive).
@@ -59,20 +59,21 @@ Mindcode currently supports targeting Mindustry versions 6, 7 and 8. It is possi
 
 A specific `7A` target was added to Mindcode, where the `getBlock` and `ulocate` functions return the building that was found at given coordinates or located using the criteria. This update makes the most occurring use case, where the located building is the only used output of the function, a natural way to use the function.
 
-The `8A` target represents the upcoming [Mindustry 8 version](MINDUSTRY-8.markdown).
+The `8` and `8.0` targets represent the upcoming [Mindustry 8 version](MINDUSTRY-8.markdown).
 
-At this point, `7` is still the default target for both command line tool and web application. `8A` will become the default when Mindustry 8 is released.
+At this point, `7` is still the default target for both command line tool and web application. `8` will become the default when Mindustry 8 is released.
 
 All supported functions and their respective Mindustry instruction counterparts can be found in the function reference. Please note that the reference serves just to document all existing functions and the way they are compiled to Mindustry Logic, but it does not aim to describe the behavior of the functions/instructions.
 
-* [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
-* [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
-* [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
-* [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown)
+* [Function reference for Mindustry Logic 6.0](FUNCTIONS_60.markdown)
+* [Function reference for Mindustry Logic 7.0](FUNCTIONS_70.markdown)
+* [Function reference for Mindustry Logic 7.1](FUNCTIONS_71.markdown)
+* [Function reference for Mindustry Logic 8.0](FUNCTIONS_80.markdown)
 
 ## Instruction mapping rules
 
 Generally, functions are mapped to instructions using these rules:
+
 * If the instruction has just one form (such as `getlink`), the function name corresponds to the instruction name. All instruction names are lowercase.
 * If the instruction takes several forms depending on the exact operation the instruction performs (such as `draw` or `ucontrol`), the function name corresponds to the operation. In this case, the function name can be camelCase (such as `itemTake`).
 
@@ -86,7 +87,7 @@ There are a few issues with these rules:
 
 ## Methods
 
-Some instructions perform an operation on an object (a linked block), which is passed as an argument to one of instruction parameters. In these cases, the instruction can be mapped to a method called on the given block, e.g. `block.shoot(x, y, doShoot)` translates to `control shoot block x y doShoot 0`.
+Some instructions perform an operation on an object (a linked block), which is passed as an argument to one of instruction parameters. In these cases, the instruction can be mapped to a method called on the given block, e.g. `block.shoot(x, y, doShoot);` translates to `control shoot :block :x :y :doShoot 0`.
 
 In some cases, the instruction can be invoked either as a function or as a method (`printflush(message1)` or `message1.printflush()`). All existing mappings are shown in the function reference above.
 
@@ -96,17 +97,18 @@ There is a special case for `control` instruction setting a single value on a li
 
 - `block.enabled = boolean`, which is equivalent to `block.enabled(boolean)`
 - `block.config = value`, which is equivalent to `block.config(value)`
+- `block.color = value`, which is equivalent to `block.color(value)`
 
-The `block` in the examples can be a variable or a linked block object.
+The `block` in the examples can be a regular variable or a linked variable.
 
-Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS_V7.markdown#instruction-setprop) instruction. Looking for ways to support this syntax in the future.
+Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS_70.markdown#instruction-setprop) instruction.
 
 ## Alternative `sensor` syntax
 
 The `sensor` method accepts an expression, not just constant property name, as an argument:
 
 ```
-amount = vault1.sensor(use_titanium ? @titanium : @copper);
+var amount = vault1.sensor(useTitanium ? @titanium : @copper);
 ```
 
 If the property you're trying to obtain is hard-coded, you can again use an alternate syntax: `amount = storage.@thorium` instead of the longer equivalent `amount = storage.sensor(@thorium)`. You can use this for any property, not just item types, such as `@unit.@dead` instead of `@unit.sensor(@dead)`.
@@ -119,14 +121,14 @@ The `min()` and `max()` functions in Mindcode can take two or more arguments:
 
 ```
 print(min(a, b, c));
-total = max(i, j, k, l);
+var total = max(i, j, k, l);
 ```
 
 Unlike the Mindustry `op min`/`op max` operations, the `min()` and `max()` functions may return `null` if all of their arguments are `null` as well. Otherwise, `null` is converted to zero as is usual in Mindustry Logic. 
 
 ## The `message()` function
 
-The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`,  which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (this is for backwards compatibility with earlier Mindustry versions).
+The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`, which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (this is for backwards compatibility with earlier Mindustry versions).
 
 Mindcode therefore allows to pass in the `@wait` built-in value as an argument to this function, even though the parameter is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
 
@@ -136,27 +138,27 @@ The print function, which corresponds to the `print` instruction, is described i
 
 ## The `sync()` function
 
-A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#global-variables) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function becomes volatile - Mindcode assumes the value of the variable may change by an external operation.
-
-As a result, Mindcode makes sure the variable is reread on every access and disable optimizations that would allow to reuse the value of the variable:
+A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#variable-scope) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function should be declared `volatile`, as the value of the variable may apparently change by an external operation.
 
 ```
-sync(A);
-before = A;
+volatile var synced;
+sync(synced);
+var before = synced;
 wait(1000);
-after = A;
+var after = synced;
 print(after - before);
 ```
 
-This snippet of code is meant to compute a difference in the value of `A` caused by external synchronization, and produces this mlog code: 
+This snippet of code is meant to compute a difference in the value of `synced` caused by external synchronization, and produces this mlog code: 
 
 ```
-sync A
-set before A
+sync .synced
+set .before .synced
 wait 1000
-set after A
-op sub __tmp2 after before
-print __tmp2
+set .after .synced
+op sub *tmp0 .after .before
+print *tmp0
+end
 ```
 
 As can be seen, the code actually does compute the difference between the value of the variable from two different points in time.
@@ -171,53 +173,82 @@ There are several functions that can be used to send output to the text buffer, 
 
 ### Plain text output
 
-Printing text, variables and expressions just as they are is possible using the `print` and `println` functions. These functions take any number of arguments and generate a `print` instruction for each of them. The `println` function outputs one additional `print` instruction containing just the `\n` (newline) character, creating a new line in the text to be printed.
+Printing text, variables and expressions just as they are is possible using the `print()` and `println()` functions. These functions take any number of arguments and generate a `print` instruction for each of them. The `println()` function outputs one additional `print` instruction containing just the `"\n"` string, creating a new line in the text to be printed.
 
 The value returned by functions performing plain text output corresponds to the value of the last argument in the argument list. If there were no arguments in the list (e.g. `println()`), the returned value is `null`.  
 
 ### Compile-time formatting
 
-If the first argument passed to the `print()` or `println()` function is a formattable string literal, the functions perform compile-time formatting. All `$` characters inside the formattable string literal are replaced with variables and expressions like this:
+If the first argument passed to the `print()` or `println()` function is a [formattable string literal](SYNTAX.markdown#formattable-string-literals), the functions perform compile-time formatting. All `$` characters inside the formattable string literal are replaced with variables and expressions like this:
 
-* If the `$` character is followed by a variable name, the variable is printed (external variables, e.g. `$X`, aren't supported).
+* If the `$` character is followed by a variable name, the variable is printed (external variables with the `$` prefix, e.g. `$X`, aren't supported).
 * If the `$` character is not followed by a variable name, next argument from the argument list is printed.
 * To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`. This is not necessary if the next character cannot be part of a variable name. `${}` can be used to place an argument from the argument list immediately followed by some text.
+* It is possible to put expressions, including, for example, function calls, in curly braces: `${sum / count}`.
 * The `\` character can be used to escape the `\` and `$` characters:
-  * `print($"a\$b")` outputs `a$b`,
-  * `print($"a\\$b")` outputs `a\` followed by the value of `b`.
+  * `print($"a\$b");` outputs `a$b`,
+  * `print($"a\\$b");` outputs `a\` followed by the value of `b`.
 * The `\n` sequence is translated to a newline as usual, while no other characters utilize the escape character:  
-  * `print($"a\nb")` outputs `a\nb` (`\n` in the text creates a newline when output),
-  * `print($"a\b\\c")` outputs `a\b\c`: the first `\` is kept as is, while the second one is used to escape the third one. 
+  * `print($"a\nb");` outputs `a\nb` (`\n` in the text creates a newline when output),
+  * `print($"a\b\\c");` outputs `a\b\c`: the first `\` is kept as is, while the second one is used to escape the third one. 
 
-| `print()` call                                                        | is the same as                                                         |
-|-----------------------------------------------------------------------|------------------------------------------------------------------------|
-| `print($"$@unit at position $x, $y")`                                 | `print(@unit, " at position ", x, ", ", y)`                            |
-| `print($"Time: $ sec, increment: $", floor(@second), current - last)` | `print("Time: ", floor(@second), " sec, increment: ", current - last)` |
-| `print($"Coordinates: ${real}+${imag}i")`                             | `print("Coordinates: ", real, "+", imag, "i")`                         |
-| `print($"Price: \$$price")`                                           | `print("Price: $", price)`                                             |
-| `print($"Speed: ${}m/s", distance / time)`                            | `print("Speed: ", distance / time, "m/s")`                             |
+| `print()` call                                                         | is the same as                                                         |
+|------------------------------------------------------------------------|------------------------------------------------------------------------|
+| `print($"$@unit at position $x, $y");`                                 | `print(@unit, " at position ", x, ", ", y)`                            |
+| `print($"Time: $ sec, increment: $", floor(@second), current - last);` | `print("Time: ", floor(@second), " sec, increment: ", current - last)` |
+| `print($"Coordinates: ${real}+${imag}i");`                             | `print("Coordinates: ", real, "+", imag, "i")`                         |
+| `print($"Price: \$$price");`                                           | `print("Price: $", price)`                                             |
+| `print($"Speed: ${distance / time}m/s");`                              | `print("Speed: ", distance / time, "m/s")`                             |
 
 The `println()` function works the same, but outputs an additional newline character to the text buffer.  
 
-The function was inspired by string interpolation in Ruby, but there are important differences. Firstly, the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide means to do it at runtime). Secondly, only variables are allowed in curly braces, not expressions:
+The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide means to do it at runtime).
 
 ```
-x = 3;
-y = 4;
+var x = 3;
+var y = 4;
 println("Position: $, $", x, y);      // No formatting - the first parameter isn't a formattable string literal
                                       // Will output "Position: $, $34\n"
 println($"Position: $, $", x, y);     // Will be formatted and will ultimately output "Position: 3, 4\n"
 
-println($"Distance: ${len(x, y)}");   // Not allowed - expressions within the string aren't supported
-                                      // Causes compilation error
-println($"Distance: $", len(x, y));   // Allowed - the expression for $ is taken from the list
-                                      // Will output "Distance: 5\n"
+println($"Distance: $", len(x, y));   // Will output "Distance: 5\n"
+                                      // The expression for $ is taken from the list
+println($"Distance: ${len(x, y)}");   // The same as above
                                       
-const FORMAT = $"Position: $, $"; 
-println(FORMAT, x, y);                // Allowed - the formattable string can be assigned to a constant                                      
+const format = $"Position: $x, $y"; 
+println(format);                      // The formattable string can be assigned to a constant                                      
 ```
 
 Compile-time formatting is supported by the `print()` and `println()` functions. The value returned by these functions performing compile-time formatting is always `null`.
+
+#### Using formattable string literal constants in functions
+
+Variables and expressions embedded in the formattable string literals are evaluated in the context of the function in which they're used:
+
+```
+const format = $"Position: $x, $y";
+var x = 10;               // Global variables
+
+void foo(x, y)
+    println(format);      // Uses function parameters x, y
+end;
+
+void bar(y)        
+    println(format);      // Uses global variable x and parameter y
+end;
+
+void baz(x)        
+    println(format);      // Uses parameter x and undeclared local variable y
+end;
+
+begin
+    foo(1, 2);            // Prints "Position: 1, 2"
+    bar(20);              // Prints "Position: 10, 20"
+    baz(30);              // Prints "Position: 30, null"
+end;
+```
+
+When compiled in strict syntax, the above code produces error "Variable 'y' is not defined.". The error is located in the definition of the constant `format`, which makes identifying the cause of the error difficult. Use formattable string literal constants with caution. 
 
 ### Run-time formatting
 
@@ -234,7 +265,7 @@ format c
 
 The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such placeholder is then replaced by the value supplied to the `format` instruction. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. This opens up a possibility for building outputs incrementally.
 
-Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2, ...)` function call is therefore just a shorthand for `print(fmt); format(value1, value2, ...);`.
+Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2)` function call is therefore just a shorthand for `print(fmt); format(value1, value2);`.
 
 > [!TIP]
 > Since the `format` instruction allows to decouple the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction, even when their arguments get resolved to constant values during optimizations. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
@@ -242,12 +273,10 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 > [!TIP]
 > Print merging optimizations can utilize the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the code itself. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
 
-> [!WARNING]
-> The `printf()` function has two forms depending on the language target:
-> - For ML7A and earlier, the `printf()` function performs compile-time formatting, and can take both formattable string literal and a standard string literal as the format argument. This version of the function is deprecated.
-> - For ML8A and later, the `printf()` function performs the run-time formatting described in this chapter.
+> [!NOTE]
+> The `printf()` function is only supported in Mindustry Logic 8.
 > 
-> When preparing to migrate from Mindustry Logic 7 to Mindustry Logic 8, replace all occurrences of `printf("` with `print($"` in your codebase.
+> In older versions of Mindcode, `printf()` function performed compile-time formatting, and could take both formattable string literal and a standard string literal as the format argument. This version of the function is no longer available. Use `print()`/`println()` functions instead.
 
 ## Remarks
 
@@ -265,8 +294,10 @@ param MIN = 10;
 param MAX = 100;
 
 remark("Don't modify anything below this line.");
-for i in MIN .. MAX do
-    print("Here is some actual code");
+for var i in MIN .. MAX do
+    println("Here is some actual code");
+    // ...
+    printflush(message1);
 end;
 ```
 
@@ -279,20 +310,21 @@ set MIN 10
 set MAX 100
 jump 6 always 0 0
 print "Don't modify anything below this line."
-set i MIN
-jump 0 greaterThan MIN MAX
-print "Here is some actual code"
-op add i i 1
-jump 8 lessThanEq i MAX
+set :i MIN
+jump 12 greaterThan MIN MAX
+print "Here is some actual code\n"
+printflush message1
+op add :i :i 1
+jump 8 lessThanEq :i MAX
 end
 ```
 
 Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get fully evaluated when possible:
 
 ```
-for i in 1 .. 3 do
-    remark("Iteration $i:");
-    remark("Setting cell1[$i] to $", i * i);
+for var i in 1 .. 3 do
+    remark($"Iteration $i:");
+    remark($"Setting cell1[$i] to ${i * i}");
     cell1[i] = i * i;
 end;
 ```
@@ -340,6 +372,8 @@ print "Hello"
 end
 ```
 
+In strict syntax mode, remarks can oly be used inside code blocks.
+
 ### Enhanced comments
 
 An alternative way to create a remark is the enhanced comment:
@@ -348,9 +382,53 @@ An alternative way to create a remark is the enhanced comment:
 /// This is an enhanced comment
 ```
 
-which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment supports compile-time formatting just as the `remark` function does (`///Iteration: $i` is the same as `remark($"Iteration: $i");`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1);` cannot be expressed using an enhanced comment).       
+which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment supports compile-time formatting just as the `remark` function does (`///Iteration: ${i + 1}` is the same as `remark($"Iteration: ${i + 1}");`). There is no way to pass in additional parameters (`remark("Iteration: $", i + 1);` cannot be expressed using an enhanced comment and the expression must be embedded inside the format string).
 
-# System library
+In strict syntax mode, enhanced comments are allowed outside code blocks:
+
+```
+#set syntax = strict;
+
+/// Configurable options:
+param MIN = 10;
+param MAX = 100;
+
+/// Don't modify anything below this line.
+linked message1;
+
+begin
+    for var i in MIN .. MAX do
+        println("Here is some actual code");
+        // ...
+        printflush(message1);
+    end;
+end;
+```
+
+If the enhanced comment is used at the end of a line containing a statement, the generated output is moved in front of the statement:
+
+```
+param MIN = 10;       /// Minimal value
+param MAX = 100;      /// Maximal value
+
+print(MAX - MIN);
+```
+
+produces:
+
+```
+jump 2 always 0 0
+print "Minimal value"
+set MIN 10
+jump 5 always 0 0
+print "Maximal value"
+set MAX 100
+op sub *tmp0 MAX MIN
+print *tmp0
+end
+```
+
+# System library functions
 
 The system function discussed so far are supported directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY.markdown).
 
@@ -368,17 +446,52 @@ Functions not returning any value must be declared using the `void` keyword:
 
 ```
 void update(message, status)
-    println("Status: ", status);
-    printf("Game time: $ sec", floor(@time) / 1000);
+    println($"Status: $status");
+    println($"Game time: ${floor(@time) / 1000} sec");
     printflush(message);
 end;
+```
+
+Functions that do return a value must be declared using the `def` keyword, and they need to provide a return value on all possible code paths. The last statement executed on all code paths must be either an expression providing the function value, or a `return` statement providing the function value:
+
+```
+def foo(number)
+    if number < 0 then
+        println("negative");
+        return -1;         // Directly provides the return value, terminating the code path 
+    end;
+    
+    // The if expression always has a value
+    if number = 0 then
+        println("zero");
+        0;    // Provides value of the true branch
+    else
+        println("positive");
+        1;    // Provides value of the false branch
+    end;
+    
+    // At this point the return value of the function is the value of the above if expression
+end;
+```
+
+Loops are statements, not expressions, and provide a value of `null`:
+
+```
+def foo(count)
+    sum = 0;
+    while count > 0 do
+        sum += count--;        
+    end;
+end;
+
+print(foo(10));       // Prints "null"
 ```
 
 As has been described above, function parameters in user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
 
 ```
 def function(in x, out y, in out z)
-    ...
+    // ...
 end; 
 ```
 
@@ -386,7 +499,7 @@ The `in` modifier to mark input parameters is optional - function parameters are
 
 ## Function parameters and local variables
 
-Function parameters and variables used in functions are local to the function. See also [local variables](SYNTAX-1-VARIABLES.markdown#local-variables) and [global variables](SYNTAX-1-VARIABLES.markdown#global-variables).
+Function parameters and variables used in functions are local to the function. See also [variable scope](SYNTAX-1-VARIABLES.markdown#variable-scope).
 
 ## Return values
 
@@ -421,8 +534,7 @@ end;
 
 ## Inline functions
 
-Normal function are compiled once and called from other places in the program. Inline functions are compiled into every place they're called from,
-so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
+Normal function are compiled once and called from other places in the program. Inline functions are compiled into every place they're called from, so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
 
 ```
 inline void printtext(name, value, min, max)
@@ -437,15 +549,11 @@ printtext("Health", health, minHealth, maxHealth);
 printtext("Speed", speed, minSpeed, maxSpeed);
 ```
 
-Large inline functions called multiple times can generate lots of instructions and make the compiled code too long.
-If this happens, remove the `inline` keyword from some function definitions to generate less code.
+Large inline functions called multiple times can generate lots of instructions and make the compiled code too long. If this happens, remove the `inline` keyword from some function definitions to generate less code.
 
-The compiler will automatically make a function inline when it is called just once in the entire program. This
-is safe, as in this case the program will always be both smaller and faster. if a function is called more than once, 
-it can still be inlined by the [Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).
+The compiler will automatically make a function inline when it is called just once in the entire program. This is safe, as in this case the program will always be both smaller and faster. If a function is called more than once, it can still be inlined by the [Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).
 
-To prevent inlining of a particular function, either directly by the compiler or later on by the optimizer, use the 
-`noinline` keyword:
+To prevent inlining of a particular function, either directly by the compiler or later on by the optimizer, use the `noinline` keyword:
 
 ```
 noinline void foo()
@@ -480,10 +588,22 @@ println(fib(8)); // 21
 
 Declaring a recursive function inline leads to compilation error.
 
-Mindcode detects the presence of recursive functions and only requires the stack when at least one is found in the program.
-A significant limitation is imposed on recursive functions: parameters and local variables may end up being stored on the stack.
-As the stack itself is stored in a memory bank or memory cell, any non-numeric value of these variables will get lost.
-For more information, see discussion of [stack](SYNTAX-1-VARIABLES.markdown#stack) in the **Variables** section.
+Mindcode detects the presence of recursive functions and only requires the stack when at least one is found in the program. A significant limitation is imposed on recursive functions: parameters and local variables may end up being stored on the stack. As the stack itself is stored in a memory bank or memory cell, any non-numeric value of these variables will get lost.
+
+### Stack
+
+When using recursive functions, some of their local variables and parameters may have to be stored on a stack. As Mindustry Logic doesn't provide a built-in stack, external memory is used instead. This places the same limitations on local variables and parameters of recursive functions as on arrays and external variables (that is, only numeric values are supported).
+
+Stack needs to be allocated similarly to heap:
+
+```
+allocate stack in bank1[256...512];
+```
+
+> [!NOTE]
+> When no range is given (e.g. `allocate stack in cell1`), full range of the given memory block is assumed.
+
+When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls a recursive function. If your code contains a recursive function, it won't compile unless the stack is allocated. Therefore, if your code compiles without the `allocate stack` statement, you don't need to worry about your functions not supporting non-numeric variables or parameters.
 
 ## Vararg functions
 
@@ -522,7 +642,7 @@ inline void foo(args...)
 end;
 
 foo(1, 2, 3, 4);
-foo(1, 2, 3, 4, 5);         // Causes error in the call to println() function, as it expectsexactly  4 arguments 
+foo(1, 2, 3, 4, 5);         // Causes error in the call to println() function, as it expects exactly 4 arguments 
 ```
 
 An `out` argument may also be passed via vararg to a function that accepts it: 
@@ -598,14 +718,14 @@ To match a function call with function declaration, the number and types (input,
 
 When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. A function with output parameters takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
 
-* `void foo(a, b)`: called with two arguments.
-* `void foo(x, y, out z)`: conflict - may be also called with two arguments when `z` is omitted.
+* `void foo(a, b)`: takes two arguments.
+* `void foo(x, y, out z)`: conflict - may also take two arguments when `z` is omitted.
 
 * `void bar(x)`: `x` is an input parameter
 * `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
 * `void bar(in out z)`: `z` is an input/output parameter, therefore the function clashes with both `bar(x)` and `bar(out y)`.
 
-A vararg function doesn't conflict with a non-vararg function. When a function call matches bot a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling specific number of arguments will be used when possible.  
+A vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling specific number of arguments will be used when possible.  
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 
@@ -620,7 +740,7 @@ found = ulocate(ore, @copper);                  // Calls the user-defined functi
 found = ulocate(ore, @copper, out x, out y);    // Calls the Mindustry Logic function
 ```
 
-If, however, the ulocate function was defined with output variables as well, both calls would call the user-defined function:
+If, however, the user defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
 
 ```
 def ulocate(ore, oreType, out x, out y)

@@ -47,6 +47,7 @@ All flags are described in the following table:
 | Flag                            | Default | Meaning                                                                    |
 |---------------------------------|:-------:|----------------------------------------------------------------------------|
 | trace-execution                 |  false  | output instruction and variable states at each execution step              |
+| dump-variables-on-stop          |  false  | output variable values when the `stop` instruction is encountered          |
 | stop-on-stop-instruction        |  true   | stop when the `stop` instruction is encountered                            |
 | stop-on-end-instruction         |  true   | stop when the `end` instruction is encountered                             |
 | stop-on-program-end             |  true   | stop when the end of instruction list is reached                           |
@@ -56,7 +57,7 @@ All flags are described in the following table:
 | err-uninitialized-var           |  false  | stop when an uninitialized variable is read                                |
 | err-assignment-to-fixed-var     |  true   | stop on attempts to write a value to an unmodifiable built-in variable     |
 | err-not-an-object               |  true   | stop when a numerical value is used instead of an object                   |
-| err-not-a-number                |  true   | stop when an object is used instead of a numerical value                   |
+| err-not-a-number                |  true   | stop when an object is used instead of a numeric value                     |
 | err-invalid-content             |  true   | stop when an invalid index is used in the `lookup` instruction             |
 | err-invalid-link                |  true   | stop when an invalid index is used in the `getlink` instruction            |
 | err-memory-access               |  true   | stop when accessing invalid memory-cell or memory-bank index               |
@@ -78,21 +79,21 @@ Example of the variable dump:
 ```
 stop instruction encountered, dumping variable values:
 @counter: 76.0
-__fn13__base: 60000.09930373835
-__fn13__cmp: 8.976000009930374E-8
-__fn13__exp: 0.0
-__fn13__n: 1.00000008976
-__fn13__t: 60000.0
-__tmp1: 1.00000008976
-__tmp10: 1.0
-__tmp12: 1.0
-__tmp13: 1.50000008976
-__tmp15: 8.976000009930374E-8
-__tmp21: 1.0
-__tmp22: 0.6000009930373835
-__tmp7: 3.898227098923865E-8
-__tmp9: -0.0
-number: 1.00000008976
+:fn13:base: 60000.09930373835
+:fn13:cmp: 8.976000009930374E-8
+:fn13:exp: 0.0
+:fn13:n: 1.00000008976
+:fn13:t: 60000.0
+*tmp1: 1.00000008976
+*tmp10: 1.0
+*tmp12: 1.0
+*tmp13: 1.50000008976
+*tmp15: 8.976000009930374E-8
+*tmp21: 1.0
+*tmp22: 0.6000009930373835
+*tmp7: 3.898227098923865E-8
+*tmp9: -0.0
+:number: 1.00000008976
 ```
 
 Secondly, when the `trace-execution` flag is set, the instruction to be executed, followed by the values of all input variables, is printed to the message log at each step. The value of output variables is also printed after the instruction is executed. The size of the output produced by this mechanism can be quite sizeable, but it can be used to inspect the program flow in detail.
@@ -101,34 +102,34 @@ Example of the execution trace:
 
 ```
 Program execution trace:
-Step 1, instruction #0: set number 1.00000008976
-   out number: 1.00000008976
-Step 2, instruction #1: set __fn13__n number
-   in  number: 1.00000008976
-   out __fn13__n: 1.00000008976
-Step 3, instruction #2: op abs __tmp1 number
-   in  number: 1.00000008976
-   out __tmp1: 1.00000008976
-Step 4, instruction #3: jump 6 greaterThan __tmp1 0
-   in  __tmp1: 1.00000008976
-Step 5, instruction #6: jump 9 greaterThanEq number 0
-   in  number: 1.00000008976
-Step 6, instruction #9: op log10 __tmp7 __fn13__n
-   in  __fn13__n: 1.00000008976
-   out __tmp7: 3.898227098923865E-8
-Step 7, instruction #10: op floor __fn13__exp __tmp7
-   in  __tmp7: 3.898227098923865E-8
-   out __fn13__exp: 0.0
-Step 8, instruction #11: op mul __tmp9 -1 __fn13__exp
-   in  __fn13__exp: 0.0
-   out __tmp9: -0.0
-Step 9, instruction #12: op pow __tmp10 10 __tmp9
-   in  __tmp9: -0.0
-   out __tmp10: 1.0
-Step 10, instruction #13: op mul __fn13__base __fn13__n __tmp10
-   in  __fn13__n: 1.00000008976
-   in  __tmp10: 1.0
-   out __fn13__base: 1.00000008976
+Step 1, instruction #0: set :number 1.00000008976
+   out :number: 1.00000008976
+Step 2, instruction #1: set :fn13:n :number
+   in  :number: 1.00000008976
+   out :fn13:n: 1.00000008976
+Step 3, instruction #2: op abs *tmp1 :number
+   in  :number: 1.00000008976
+   out *tmp1: 1.00000008976
+Step 4, instruction #3: jump 6 greaterThan *tmp1 0
+   in  *tmp1: 1.00000008976
+Step 5, instruction #6: jump 9 greaterThanEq :number 0
+   in  :number: 1.00000008976
+Step 6, instruction #9: op log10 *tmp7 :fn13:n
+   in  :fn13:n: 1.00000008976
+   out *tmp7: 3.898227098923865E-8
+Step 7, instruction #10: op floor :fn13:exp *tmp7
+   in  *tmp7: 3.898227098923865E-8
+   out :fn13:exp: 0.0
+Step 8, instruction #11: op mul *tmp9 -1 :fn13:exp
+   in  :fn13:exp: 0.0
+   out *tmp9: -0.0
+Step 9, instruction #12: op pow *tmp10 10 *tmp9
+   in  *tmp9: -0.0
+   out *tmp10: 1.0
+Step 10, instruction #13: op mul :fn13:base :fn13:n *tmp10
+   in  :fn13:n: 1.00000008976
+   in  *tmp10: 1.0
+   out :fn13:base: 1.00000008976
 ```
 
 In the web app, the number of messages output by either of these two mechanisms is limited to 1000; in the command-line application, the limit is 10,000. 

@@ -1,8 +1,11 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.compiler.CompilerFacade;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.ListMessageLogger;
+import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.samples.Sample;
 import info.teksol.mindcode.samples.Samples;
 import org.slf4j.Logger;
@@ -18,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Controller
@@ -106,12 +109,18 @@ public class HomeController {
             run = true;
         }
 
+        ListMessageLogger messageLogger = new ListMessageLogger();
+        MindcodeCompiler compiler = new MindcodeCompiler(
+                messageLogger,
+                new CompilerProfile(true, level).setRun(run),
+                InputFiles.fromSource(sourceCode));
+
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = CompilerFacade.compile(true, sourceCode, level, run);
+        compiler.compile();
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = result.output();
+        final String compiledCode = compiler.getOutput();
         return new ModelAndView(
                 "home",
                 "model",
@@ -122,16 +131,45 @@ public class HomeController {
                         (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
                         compiledCode,
                         (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
-                        result.errors(WebappMessage::transform),
-                        result.warnings(WebappMessage::transform),
-                        result.infos(WebappMessage::transform),
+                        errors(compiler),
+                        warnings(compiler),
+                        messages(compiler),
                         optimizationLevel,
-                        run && !result.hasErrors() ? processRunOutput(result.getProgramOutput()) : null,
-                        result.steps())
+                        processRunOutput(compiler),
+                        compiler.getSteps())
         );
     }
 
-    private String processRunOutput(String output) {
-        return output == null || output.isEmpty() ? "The program produced no output." : output;
+    public List<WebappMessage> errors(MindcodeCompiler compiler) {
+        return formatMessages(compiler, MindcodeMessage::isError);
+    }
+
+    public List<WebappMessage> warnings(MindcodeCompiler compiler) {
+        return formatMessages(compiler, MindcodeMessage::isWarning);
+    }
+
+    public List<WebappMessage> messages(MindcodeCompiler compiler) {
+        return formatMessages(compiler, MindcodeMessage::isInfo);
+    }
+
+    public List<WebappMessage> formatMessages(MindcodeCompiler compiler, Predicate<MindcodeMessage> filter) {
+        return compiler.getMessages().stream().filter(filter)
+                .map(WebappMessage::transform)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private String processRunOutput(MindcodeCompiler compiler) {
+        if (compiler.hasErrors()) {
+            return null;
+        } else {
+            String output = compiler.getTextBuffer().getFormattedOutput();
+            String text = output.isEmpty() ? "The program produced no output." : output;
+
+            if (compiler.getExecutionException() != null) {
+                text = text + "\n" + compiler.getExecutionException().getWebAppMessage();
+            }
+
+            return text;
+        }
     }
 }

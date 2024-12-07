@@ -1,20 +1,42 @@
-set _display null
-set __fn0__display _display
-sensor __tmp1 __fn0__display @type
-set __fn0_type __tmp1
-op equal __tmp2 __fn0_type @logic-display
-jump 8 equal __tmp2 false
-set __tmp3 80
-jump 14 always 0 0
-op equal __tmp4 __fn0_type @large-logic-display
-jump 12 equal __tmp4 false
-set __tmp5 176
-jump 13 always 0 0
-set __tmp5 null
-set __tmp3 __tmp5
-set __tmp0 __tmp3
-print __tmp0
-print "\n"
+jump 0 equal display1 null
+jump 1 equal display2 null
+jump 2 equal display3 null
+jump 3 equal display4 null
+jump 4 equal display5 null
+set :fn0:display display1
+set :fn0*retaddr 8
+jump 147 always 0 0
+set *tmp0 :fn0*retval
+assertequals 176 *tmp0 "large display size"
+set :fn0:display display5
+set :fn0*retaddr 13
+jump 147 always 0 0
+set *tmp1 :fn0*retval
+assertequals 80 *tmp1 "small display size"
+set :x %336699cc
+set :fn1:packedColor :x
+op div *tmp2 :fn1:packedColor %00000001
+set :fn1:bits *tmp2
+op and *tmp3 :fn1:bits 4278190080
+op div *tmp4 *tmp3 4278190080
+set :fn1:r *tmp4
+op and *tmp5 :fn1:bits 16711680
+op div *tmp6 *tmp5 16711680
+set :fn1:g *tmp6
+op and *tmp7 :fn1:bits 65280
+op div *tmp8 *tmp7 65280
+set :fn1:b *tmp8
+op and *tmp9 :fn1:bits 255
+op div *tmp10 *tmp9 255
+set :fn1:a *tmp10
+set :r :fn1:r
+set :g :fn1:g
+set :b :fn1:b
+set :a :fn1:a
+assertequals 0.2 :r "red channel"
+assertequals 0.4 :g "green channel"
+assertequals 0.6 :b "blue channel"
+assertequals 0.8 :a "alpha channel"
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
 draw rotate 0 0 270 0 0 0
@@ -35,92 +57,107 @@ draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-set __fn11__display _display
-sensor __tmp6 __fn11__display @type
-set __ast0 __tmp6
-jump 42 equal __ast0 @logic-display
-jump 46 always 0 0
+set :fn12:display display1
+sensor *tmp12 :fn12:display @type
+set *tmp13 *tmp12
+jump 64 equal *tmp13 @logic-display
+jump 68 always 0 0
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
-set __tmp7 null
-jump 54 always 0 0
-jump 48 equal __ast0 @large-logic-display
-jump 52 always 0 0
+set *tmp11 null
+jump 76 always 0 0
+jump 70 equal *tmp13 @large-logic-display
+jump 74 always 0 0
 draw rotate 0 0 90 0 0 0
 draw translate 0 -176 0 0 0 0
-set __tmp7 null
-jump 54 always 0 0
+set *tmp11 null
+jump 76 always 0 0
 stop
-set __tmp7 null
-set __fn14__display _display
-sensor __tmp8 __fn14__display @type
-set __ast1 __tmp8
-jump 59 equal __ast1 @logic-display
-jump 63 always 0 0
+set *tmp11 null
+set :fn15:display display2
+sensor *tmp15 :fn15:display @type
+set *tmp16 *tmp15
+jump 81 equal *tmp16 @logic-display
+jump 85 always 0 0
 draw rotate 0 0 270 0 0 0
 draw translate -80 0 0 0 0 0
-set __tmp9 null
-jump 71 always 0 0
-jump 65 equal __ast1 @large-logic-display
-jump 69 always 0 0
+set *tmp14 null
+jump 93 always 0 0
+jump 87 equal *tmp16 @large-logic-display
+jump 91 always 0 0
 draw rotate 0 0 270 0 0 0
 draw translate -176 0 0 0 0 0
-set __tmp9 null
-jump 71 always 0 0
+set *tmp14 null
+jump 93 always 0 0
 stop
-set __tmp9 null
-set __fn17__display _display
-sensor __tmp10 __fn17__display @type
-set __ast2 __tmp10
-jump 76 equal __ast2 @logic-display
-jump 80 always 0 0
+set *tmp14 null
+set :fn18:display display3
+sensor *tmp18 :fn18:display @type
+set *tmp19 *tmp18
+jump 98 equal *tmp19 @logic-display
+jump 102 always 0 0
 draw rotate 0 0 180 0 0 0
 draw translate -80 -80 0 0 0 0
-set __tmp11 null
-jump 88 always 0 0
-jump 82 equal __ast2 @large-logic-display
-jump 86 always 0 0
+set *tmp17 null
+jump 110 always 0 0
+jump 104 equal *tmp19 @large-logic-display
+jump 108 always 0 0
 draw rotate 0 0 180 0 0 0
 draw translate -176 -176 0 0 0 0
-set __tmp11 null
-jump 88 always 0 0
+set *tmp17 null
+jump 110 always 0 0
 stop
-set __tmp11 null
-set __fn20__display _display
-sensor __tmp12 __fn20__display @type
-set __ast3 __tmp12
-jump 93 equal __ast3 @logic-display
-jump 97 always 0 0
+set *tmp17 null
+set :fn21:display display4
+sensor *tmp21 :fn21:display @type
+set *tmp22 *tmp21
+jump 115 equal *tmp22 @logic-display
+jump 119 always 0 0
 draw scale 1 -1 0 0 0 0
 draw translate 0 -80 0 0 0 0
-set __tmp13 null
-jump 105 always 0 0
-jump 99 equal __ast3 @large-logic-display
-jump 103 always 0 0
+set *tmp20 null
+jump 127 always 0 0
+jump 121 equal *tmp22 @large-logic-display
+jump 125 always 0 0
 draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
-set __tmp13 null
-jump 105 always 0 0
+set *tmp20 null
+jump 127 always 0 0
 stop
-set __tmp13 null
-set __fn23__display _display
-sensor __tmp14 __fn23__display @type
-set __ast4 __tmp14
-jump 110 equal __ast4 @logic-display
-jump 114 always 0 0
+set *tmp20 null
+set :fn24:display display5
+sensor *tmp24 :fn24:display @type
+set *tmp25 *tmp24
+jump 132 equal *tmp25 @logic-display
+jump 136 always 0 0
 draw scale -1 1 0 0 0 0
 draw translate -80 0 0 0 0 0
-set __tmp15 null
-jump 122 always 0 0
-jump 116 equal __ast4 @large-logic-display
-jump 120 always 0 0
+set *tmp23 null
+jump 144 always 0 0
+jump 138 equal *tmp25 @large-logic-display
+jump 142 always 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-set __tmp15 null
-jump 122 always 0 0
+set *tmp23 null
+jump 144 always 0 0
 stop
-set __tmp15 null
+set *tmp23 null
 draw scale 2.2 2.2 0 0 0 0
 draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
+end
+sensor *tmp26 :fn0:display @type
+set :fn0:type *tmp26
+op equal *tmp27 :fn0:type @logic-display
+jump 153 equal *tmp27 false
+set *tmp28 80
+jump 159 always 0 0
+op equal *tmp29 :fn0:type @large-logic-display
+jump 157 equal *tmp29 false
+set *tmp30 176
+jump 158 always 0 0
+set *tmp30 null
+set *tmp28 *tmp30
+set :fn0*retval *tmp28
+set @counter :fn0*retaddr
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

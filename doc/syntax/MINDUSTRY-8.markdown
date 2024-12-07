@@ -1,10 +1,10 @@
 # New functionality in Mindustry 8
 
-Mindustry version 8 will hopefully be released in November 2024. The expected new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to 8A either by command-line argument, or by the `#set target = ML8A;` directive.
+Mindustry version 8 will hopefully be released soon. The expected new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to 8 either by command-line argument, or by the `#set target = 8;` directive.
 
-The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown).
+The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.0](FUNCTIONS_80.markdown).
 
-To run the code produced by Mindcode for language target `ML8A`, you need to use one of the development versions of Mindustry (a "bleeding-edge" version).
+To run the code produced by Mindcode Logic 8, you need to use one of the development versions of Mindustry (a "bleeding-edge" version).
 
 ## Running development versions of Mindustry
 
@@ -31,7 +31,7 @@ java.exe -jar Mindustry-BE-Desktop-<build number>.jar
 
 ## Numeric literals
 
-Mindustry now handles the numeric literals with double precision. Loss of precision, and inability to encode some numerical constants into mlog, no longer happen.  
+Mindustry now handles the numeric literals with double precision. Loss of precision, and inability to encode some numeric constants into mlog, no longer happen.  
 
 ## `format` instruction
 
@@ -46,7 +46,7 @@ printflush message1
 
 will output `Test: BA` to message1.
 
-The `printf` function was repurposed in ML8+ to use this mechanism: `printf(fmt, a, b, c)` gets translated to
+The `printf` function is designed to use this mechanism: `printf(fmt, a, b, c)` gets translated to
 
 ```
 print fmt
@@ -62,7 +62,7 @@ Apart from the `printf()`, Mindcode supports new `format()` function, which just
 The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
 
 ```
-#set target = ML8A;
+#set target = 8;
 
 // Formats a number into the text buffer, without external memory.
 // The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
@@ -99,7 +99,7 @@ myPrintNumber(floor(rand(100000)));
 
 Note: `formatNumber` and `printNumber` functions, identical to those above, are part of the [system library](SYSTEM-LIBRARY.markdown).
 
-Existing Print Merging optimization is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target earlier than ML8A compiles into
+Existing Print Merging optimization is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target earlier than 8 compiles into
 
 ```
 print `Minimum: `
@@ -123,8 +123,7 @@ format max
 To prevent the new Print Merging optimization interfering with custom uses of the format instruction, it isn't used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, are detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format` with no restrictions:
 
 ```
-#set target = ML8A;
-#set optimization = experimental;
+#set target = 8;
 param a = 10;               // prevent a from being propagated as a constant
 println("{2} {1}");         // if you use "{1} {0}" instead, the output will be the same, but different optimization will happen 
 format("Before");
@@ -149,7 +148,7 @@ and will output
 After Before
 Value: 10
 ```
-The new print merging functionality is available on the experimental optimization level. The `format` instruction is also supported by the emulator, allowing to experiment with the new print support right away in the web app.
+The `format` instruction is also supported by the emulator, allowing you to experiment with the new print support right away in the web app.
 
 ## New drawing commands
 
@@ -302,4 +301,4 @@ Adds a map locale property value to the text buffer.
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS_V8A.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)
+[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS_80.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)

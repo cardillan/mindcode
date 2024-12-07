@@ -1,12 +1,12 @@
 package info.teksol.mindcode.exttest;
 
-import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.exttest.Configuration.SingleTestConfiguration;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorScreening;
 import info.teksol.mindcode.exttest.cases.TestCaseExecutor;
 import info.teksol.mindcode.exttest.forkjoin.ForkJoinFramework;
 import info.teksol.mindcode.exttest.threadpool.ThreadPoolFramework;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.io.IOException;

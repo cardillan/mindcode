@@ -2,22 +2,16 @@
 
 ## Formatting text
 
-The only way to print text in Mindustry Logic is to use the `print` instruction (made available to Mindcode through 
-various kinds of `print()` function) one or more times to construct the resulting string in a text buffer.
-Each `print` instruction adds its argument, converted to string if necessary, to the end of the text buffer.
-Every `printflush` instruction, even unsuccessful, clears the text buffer.
+The only way to print text in Mindustry Logic is to use the `print` instruction (made available to Mindcode through various kinds of `print()` function) one or more times to construct the resulting string in a text buffer. Each `print` instruction adds its argument, converted to string if necessary, to the end of the text buffer. Every `printflush` instruction, even unsuccessful, clears the text buffer.
 
-When a text is being printed into a message by using the `printflush` instruction, the entire string from the text 
-buffer is displayed in the message block. At this moment, the string is inspected for special character sequences 
-that can alter the appearance of the text in the message block. Two kinds of formatting are supported:
+When a text is being printed into a message by using the `printflush` instruction, the entire string from the text buffer is displayed in the message block. At this moment, the string is inspected for special character sequences that can alter the appearance of the text in the message block. Two kinds of formatting are supported:
 
 * Line breaks
 * Setting text color
 
 ### Line breaks
 
-When the `\n` sequence of characters is found in the string being printed, the `\n` sequence is replaced by a line 
-break. For example:
+When the `\n` sequence of characters is found in the string being printed, the `\n` sequence is replaced by a line break. For example:
 
 ```
 print("One\nTwo");
@@ -31,9 +25,7 @@ One
 Two
 ```
 
-Note that the backslash character is only recognized as part of the `\n` sequence, it is not otherwise specially 
-handled. Specifically, it is not possible to encode it as `\\`, unlike many other programming languages. Therefore, 
-the following code snippet
+Note that the backslash character is only recognized as part of the `\n` sequence, it is not otherwise specially handled. Specifically, it is not possible to encode it as `\\`, unlike many other programming languages. Therefore, the following code snippet
 
 ```
 print("One\\Two\\nThree");
@@ -60,14 +52,11 @@ which finally produces
 One\nTwo
 ```
 
-This is because the square brackets are used co encode color (see the next paragraph). The `[]` cancels `[red]`,
-and together they split apart `\` and `n` in such a way the message block doesn't recognize them anymore.
+This is because the square brackets are used co encode color (see the next paragraph). The `[]` cancels `[red]`, and together they split apart `\` and `n` in such a way the message block doesn't recognize them anymore.
 
 ### Setting text color
 
-The color of the text can be set by entering the color in square brackets. Colors can be specified using
-predefined color names (in uppercase or lowercase, but not mixed-case), or by entering the color in `#RRGGBB`
-or `#RRGGBBAA` form. The `[]` sequence then restores the previous color. It is therefore possible to use
+The color of the text can be set by entering the color in square brackets. Colors can be specified using predefined color names (in uppercase or lowercase, but not mixed-case), or by entering the color in `#RRGGBB` or `#RRGGBBAA` form. The `[]` sequence then restores the previous color. It is therefore possible to use
 
 ```
 println("[red]This is red");
@@ -123,8 +112,7 @@ maroon
 
 </details>
 
-When a color name or color code is not recognized in square brackets, the text including the brackets is left as is.
-A sequence of two left square brackets, i.e. `[[`, is always printed as `[` e.g.:
+When a color name or color code is not recognized in square brackets, the text including the brackets is left as is. A sequence of two left square brackets, i.e. `[[`, is always printed as `[` e.g.:
 
 ```
 println("The color is [[red]");
@@ -139,29 +127,25 @@ The color is [red]
 The state is [alarm]
 ```
 
-In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a 
-color name.
+In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a color name.
 
 ### Displaying icons 
 
 It is also possible to use built-in Mindustry icons in the `print` instruction, for example
 
 ```
-println(ITEM-COAL, ": ", vault1.coal);
-println(ITEM-LEAD, ": ", vault1.lead);
-println(ITEM-SAND, ": ", vault1.sand);
+println(ITEM_COAL, ": ", vault1.coal);
+println(ITEM_LEAD, ": ", vault1.lead);
+println(ITEM_SAND, ": ", vault1.sand);
 
-print($"Using $UNIT-MEGA to transport items...\n"); 
+print($"Using $UNIT_MEGA to transport items...\n"); 
 ```
 
-Supported Mindustry icons are available through built-in String constants containing them. For a complete list of
-available icons, see [Built-in icons](SYNTAX-1-VARIABLES.markdown#built-in-icons), for a possibility of embedding
-icons into string constant see [String expressions](SYNTAX-2-EXPRESSIONS.markdown#strings-in-expressions).
+Supported Mindustry icons are available through built-in String constants containing them. For a complete list of available icons, see [Built-in icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons), for a possibility of embedding icons into string constant see [String concatenation](SYNTAX-2-EXPRESSIONS.markdown#string-concatenation).
 
 ## Printing values
 
-When printing numbers, Mindustry prints the full representation of a number. It might be sometimes cumbersome,
-as fractions can produce a lot of digits. To avoid this, use the `floor` or `ceil` function:
+When printing numbers, Mindustry prints the full representation of a number. It might be sometimes cumbersome, as fractions can produce a lot of digits. To avoid this, use the `floor` or `ceil` function:
 
 ```
 start_time = @time;
@@ -170,48 +154,35 @@ duration = @time - start_time;
 println("Elapsed: ", floor(duration), " ms");
 ```
 
-When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead.
-The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI.
+When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead. The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI.
 
-Mindcode provides the `printExact` function in the `maths` library  
-There isn't a way to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
-necessarily equal to zero.
+Mindcode provides the `printExact` function in the `maths` library There isn't a way to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't necessarily equal to zero.
 
 ## Using units
 
 > [!TIP]
-> When compiling code for [Mindustry Logic 8](MINDUSTRY-8.markdown), a system library is available. The system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown#units-library).
+> The `units` system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown#units-library).
 > 
 > The unit functions in the system library are based on the principles described here. 
 
-Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack,
-build, heal or move things around. Using units isn't that complicated, but it isn't always immediately apparent 
-what needs to be done or what went wrong with your code, if it doesn't work as expected.
+Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately apparent what needs to be done or what went wrong with your code, if it doesn't work as expected.
 
-I'm laying out just the basic pointers here, you'll need to combine the techniques mentioned in your own way to 
-create a truly robust solution. 
+I'm laying out just the basic pointers here, you'll need to combine the techniques mentioned in your own way to create a truly robust solution. 
 
 ### Binding units
 
-Unit needs to be bound to the processor to be controlled through it, using the `ubind` instruction (and a 
-corresponding `ubind()` function). Only one unit can be bound at a time. All [commands controlling the
-unit](FUNCTIONS_V7A.markdown#instruction-ucontrol) are then sent to the bound unit.
+Unit needs to be bound to the processor to be controlled through it, using the `ubind` instruction (and a corresponding `ubind()` function). Only one unit can be bound at a time. All [commands controlling the unit](FUNCTIONS_80.markdown#instruction-ucontrol) are then sent to the bound unit.
 
-You need to specify a unit type when binding a unit (e.g. `ubind(@poly)`). If there is at least one unit of the 
-requested type, it is bound to your processor, and it is stored in a built-in variable named `@unit`. (The `ubind()` 
-function also returns this value for convenience.) If no unit of the requested type exists, no unit is bound and 
-`@unit` contains `null`. When you call `ubind()` again with the same unit type, a next available unit is returned. 
-Once you've gone through all existing units, the first one is bound again.
+You need to specify a unit type when binding a unit (e.g. `ubind(@poly)`). If there is at least one unit of the requested type, it is bound to your processor, and it is stored in a built-in variable named `@unit`. (The `ubind()` function also returns this value for convenience.) If no unit of the requested type exists, no unit is bound and `@unit` contains `null`. When you call `ubind()` again with the same unit type, a next available unit is returned. Once you've gone through all existing units, the first one is bound again.
 
-The `@unit` variable is special, as it always contain the unit currently bound to the processor. You can store this 
-value in another variable. One possible reason to do that is that you can use such variable to determine you've 
-already encountered all existing units:
+The `@unit` variable is special, as it always contain the unit currently bound to the processor. You can store this value in another variable. One possible reason to do that is that you can use such variable to determine you've already encountered all existing units:
 
 ```
-first_unit = ubind(@poly);
-if first_unit != null then
+var count
+var firstUnit = ubind(@poly);
+if firstUnit != null then
     count = 1;
-    while ubind(@poly) != first_unit do
+    while ubind(@poly) != firstUnit do
         count += 1;
     end;
 else
@@ -222,88 +193,76 @@ print($"There are $count active poly(s).");
 printflush(message1);
 ```
 
-This code counts the current number of active polys by binding all of them; as soon as the first one is encountered 
-again, we know we've seen them all. There is a slight problem with this code: if the unit stored in `first_unit` is 
-destroyed, it will never be bound again, and we'll end up in an infinite loop. More on detecting destroyed units 
+This code counts the current number of active polys by binding all of them; as soon as the first one is encountered again, we know we've seen them all. There is a slight problem with this code: if the unit stored in `firstUnit` is destroyed, it will never be bound again, and we'll end up in an infinite loop. More on detecting destroyed units 
 later.
 
-There's one additional, very important thing you can do with a unit stored in a variable: it can be used to bind 
-that unit again. For example:
+There's one additional, very important thing you can do with a unit stored in a variable: it can be used to bind that unit again. For example:
 
 ```
-poly = ubind(@poly);     // We just assume the units exist
-mega = ubind(@mega);
+var poly = ubind(@poly);     // We just assume the units exist
+var mega = ubind(@mega);
 
-ANGLE = 0;
+var angle = 0;
 while true do
     controlUnit(poly);
     controlUnit(mega);
 end;
 
-def controlUnit(my_unit)
-    ubind(my_unit);
-    move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
+def controlUnit(myUnit)
+    ubind(myUnit);
+    move(@thisx + 10 * sin(angle), @thisy + 10 * cos(angle));
     print($"Currently bound unit is ${@unit}.");
     printflush(message1);
     wait(0.8);
-    ANGLE += 45;
+    angle += 45;
 end;
 ```
 
 ### Flagging units
 
-Each unit has a flag, which can hold a numeric value (integer or decimal values). Initially, each unit has a zero 
-flag. A lot of code that can be seen on the internet uses flags to mark units that are in use, so that other 
-processors know to avoid them. Typical code might look like this:
+Each unit has a flag, which can hold a numeric value (integer or decimal values). Initially, each unit has a zero flag. A lot of code that can be seen on the internet uses flags to mark units that are in use, so that other processors know to avoid them. Typical code might look like this:
 
 ```
-def myFindFreeUnit(unit_type, mark_flag)
+def myFindFreeUnit(unitType, markFlag)
     do
-        ubind(unit_type);
-    loop while @unit.flag !== 0;      
+        ubind(unitType);
+    while @unit.@flag !== 0;      
 
-    // If no unit was found, @unit would be null and so would be @unit.flag. 
+    // If no unit was found, @unit would be null and so would be @unit.@flag. 
     // The strict comparison (!==) ensures the loop will only end when a live unit with zero flag is found  
 
-    flag(mark_flag);
+    flag(markFlag);
     return @unit;
 end;
 
 flag = rand(10**10);
-my_unit = myFindFreeUnit(@mono, flag);
+myUnit = myFindFreeUnit(@mono, flag);
 ```
 
-Later on, you might loop through all units and use the particular value of the flag to recognize those you acquired.
-Flags are typically generated randomly so that two processors running the same code do not steal each other's units.
+Later on, you might loop through all units and use the particular value of the flag to recognize those you acquired. Flags are typically generated randomly so that two processors running the same code do not steal each other's units.
 
 There are two downsides to this arrangement:
 
-* If a processor for some reason stops controlling the unit without clearing its flag, all other processors will 
-  consider that unit used and won't reuse it, potentially leading to shortage of available units.
-* The flag actually allows you to store various information about unit state, for example which particular task was 
-  it assigned to. It is possible to encode the flag and the state into one numerical value, although it requires 
-  more computations and makes the code at least a bit slower.
+* If a processor for some reason stops controlling the unit without clearing its flag, all other processors will consider that unit used and won't reuse it, potentially leading to shortage of available units.
+* The flag actually allows you to store various information about unit state, for example which particular task was it assigned to. It is possible to encode the flag and the state into one numeric value, although it requires more computations and makes the code at least a bit slower.
   
 ### Unit controllers
 
-The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is 
-free, the `@unit.controlled` property returns `0`. When the value is nonzero, the unit is controlled, either by
-a processor, or directly by a player, or by being part of the units commanded indirectly by player (different values 
-are assigned to each of these possibilities).
+The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is free, the `@unit.@controlled` property returns `0`. When the value is nonzero, the unit is controlled, either by a processor, or directly by a player, or by being part of the units commanded indirectly by player (different values are assigned to each of these possibilities).
 
-A wee bit enhanced `myFindFreeUnit()` function using the `controlled` property might look like this:
+A wee bit enhanced `myFindFreeUnit()` function using the `@controlled` property might look like this:
 
 ```
-def myFindFreeUnit(unit_type, initial_flag)
+def myFindFreeUnit(unitType, initialFlag)
     // Keep looking for unit until one is found
     while true do
-        ubind(unit_type);
+        ubind(unitType);
         if @unit == null then
             print($"No unit of type $unit_type found.");
         elsif @unit.controlled != 0 then
             print($"Looking for a free $unit_type...");
         else
-            flag(initial_flag);		// Mark unit as active
+            flag(initialFlag);		// Mark unit as active
             return @unit;
         end;
         printflush(message1);
@@ -311,52 +270,41 @@ def myFindFreeUnit(unit_type, initial_flag)
 end;
 ```
 
-We're still flagging the unit. First of all, it assigns the initial state to it right off the bat, and secondly, it 
-will signal to other processors that might use flags to recognize free units that this one is busy. 
+We're still flagging the unit. First of all, it assigns the initial state to it right off the bat, and secondly, it will signal to other processors that might use flags to recognize free units that this one is busy.
 
-The other property is `@unit.controller`. This returns the processor that is actively controlling the unit, or 
-`null` if no processor controls that unit. Use this property to detect that your unit was lost:
+The other property is `@unit.@controller`. This returns the processor that is actively controlling the unit, or `null` if no processor controls that unit. Use this property to detect that your unit was lost:
 
 ```
-if @unit.controller != @this then
+if @unit.@controller != @this then
     // We lost our unit. Immediatelly get a new one.
     myFindFreeUnit(@mega, STATE_INIT);
 end;
 ```
 
-Unit can become lost if a player or another rogue processor takes over it, so it is definitely useful to guard 
-yourself against this possibility.
+Unit can become lost if a player or another rogue processor takes over it, so it is definitely useful to guard yourself against this possibility.
 
-Unit becomes controlled by the processor when it is issued a command. Most
-[ucontrol instructions](FUNCTIONS_V7.markdown#instruction-ucontrol) will do so. Notably, setting a flag marks the 
-unit as controlled while querying the flag or other properties of the unit won't.
+Unit becomes controlled by the processor when it is issued a command. Most [ucontrol instructions](FUNCTIONS_80.markdown#instruction-ucontrol) will do so. Notably, setting a flag marks the unit as controlled while querying the flag or other properties of the unit won't.
 
-If a unit is not issued commands from a processor for some time, it becomes free again and both `controlled` and 
-`controller` properties are cleared. My tests show it takes about 10 seconds:
+If a unit is not issued commands from a processor for some time, it becomes free again and both `@controlled` and `@controller` properties are cleared. My tests show it takes about 10 seconds:
 
 ```
-loops = 0;
 ubind(@poly);
 start = @time;
 flag(10);
-while @unit.controller == @this do
-    loops += 1;      // while loop doesn't allow empty body as of now 
-end;
-print($"Unit was controlled for $ ms", floor(@time - start));
+do while @unit.@controller == @this;
+print($"Unit was controlled for ${floor(@time - start)} ms");
 printflush(message1);
 ```
 
 ### Detecting destroyed units
 
-When a unit is destroyed, the variable that pointed to it keeps its original value. It is possible to detect a 
-destroyed unit (as well as a destroyed building, actually) by querying the `dead` property. A value of `0` (or 
-`false`) means the unit is alive, a value of `1` (or `true`) means it is, well, dead as a parrot.
+When a unit is destroyed, the variable that pointed to it keeps its original value. It is possible to detect a destroyed unit (as well as a destroyed building, actually) by querying the `@dead` property. A value of `0` (or `false`) means the unit is alive, a value of `1` (or `true`) means it is, well, dead as a parrot.
 
 > [!TIP]
-> The `dead` property always returns either `0` or `1`. Specifically, invoking `var.dead` returns 1 when `var` happens to be `null`.
+> The `@dead` property always returns either `0` or `1`. Specifically, invoking `var.@dead` returns 1 when `var` happens to be `null`.
 
 ```
-if @unit.controller != @this or @unit.dead == 1 then
+if @unit.@controller != @this or @unit.@dead == 1 then
     // We lost our unit. Immediatelly get a new one.
     myFindFreeUnit(@mega, STATE_INIT);
 end;
@@ -364,50 +312,39 @@ end;
 
 ### Discarding unwanted items
 
-Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that 
-are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
+Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
 
 ```
-itemDrop(@air, @unit.totalItems);
+itemDrop(@air, @unit.@totalItems);
 ```
 
-In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
-suggest specifying the correct amount, just in case something changes in the future.     
+In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still suggest specifying the correct amount, just in case something changes in the future.     
 
 ## Using Buildings
 
-Mindustry allows your processors to control and receive information from any allied building only if they are linked 
-to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get 
-building and block information. Getting this data is not just limited to your buildings. You can also obtain enemy 
-building information, which is not possible with linking to your processor since you can't link to an enemy building.
+Mindustry allows your processors to control and receive information from any allied building only if they are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to your processor since you can't link to an enemy building.
 
 ### Locating the core
 
-One of the first thing you'll probably want to do is to locate your core, as it is the most important building in 
-the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, just 
-issue this command:
+One of the first thing you'll probably want to do is to locate your core, as it is the most important building in the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, just issue this command:
 
 ```
-found = ulocate(building, core, false, core_x, core_y, core);
+found = ulocate(building, core, false, out core_x, out core_y, out core);
 ```
 
 Let's look at each argument here: 
 
-* `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it 
-wasn't.  If you don't need it, use just `ulocate(building, core, false, core_x, core_y, core)`.
+* `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it wasn't.  If you don't need it, use just `ulocate(building, core, false, out core_x, out core_y, out core)`.
 * `ulocate` is the name of the function we're calling.
-* `building` and `core` are constant values that specify what are we looking for, They must be specified exactly 
-  like this, you cannot, for example, store them in variable (e.g. `type = core; ulocate(building, type, false, 
-  core_x, core_y, core)` won't work).
+* `building` and `core` are constant values that specify what are we looking for, They must be specified exactly like this, you cannot, for example, store them in variable (e.g. `type = core; ulocate(building, type, false, out core_x, out core_y, out core)` won't work).
 * `false` specifies we're looking for our own core. Put `true` if you want to locate enemy one.
-* `core_x` and `core_y` are variables that will receive the position of the core on the map. Use them to send your 
-  units there.
-* `core` is the building itself, and it can be used to query its state:
+* `core_x` and `core_y` are variables that will receive the position of the core on the map. Since they receive a value produced by the instruction, they are "output" arguments and need to be marked with the `out` keyword. Use them to send your units there. If you don't need them, you can omit them.
+* `core`, again an output argument, receives the building itself, and it can be used to query its state:
 
 ```
 findFreeUnit(@poly, 1);
-ulocate(building, core, false, core_x, core_y, core);
-println("Silicon status: ", core.silicon);
+ulocate(building, core, false, , , out core);
+println("Silicon status: ", core.@silicon);
 printflush(message1) ;
 ```
 
@@ -418,47 +355,63 @@ will tell you how bad your silicone situation is.
 You can obtain building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
 ```
-getBlock(x, y, type, building, floor);
+building = getBlock(x, y, out type, out floor);
 ```
 
 Let's look at each argument here:
 * `getBlock` it’s a function that itself returns nothing, but the arguments are returned with a value 
+* `building` variable which receives the building at given location. If there is no building, it will become `null`.
 * `x` and `y` coordinates
-* `type` variable name that is returned with the block type. If it’s a building returns `building`. If there is free space, returns `air`. If it’s a solid environmental block, returns `solid`
-* `building` variable name that is returned with the `building`. If there is no building, returns null.
-* `floor` variable name that is returned with the floor type.
+* `type` variable which receives the block type. If it’s a building, it receives the proper type, such as `@vault`. If there is free space, receives `@air`. If it's a solid environmental block, receives `@solid`
+* `floor` variable which receives the floor type.
 
-If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, myVariable)`. If a unit is out of range, or if the block doesn’t exist, all arguments return `null`.
+If you don't need some arguments, just omit them: `getBlock(x, y, , out floor)`. If a unit is out of range, or if the block doesn’t exist, all return values are `null`.
 
-In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
+In the example code below the flare finds the nearest enemy turret and approaches it. If the unit is within range of the turret, checks the building variable. If it's `null`, turret has been destroyed, if not, it's still exists. If `ulocate` return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
 
 ```
-findFreeUnit(@flare, 1);
-unitRange = @unit.range;
-enTurr = ulocate(building, turret, true, outx, outy);       // Locating nearest enemy turret. If found, enTurr == 1 and (outx, ouy)- it's coordinates, else enTurr == 0.
-while @unit.controlled == 1 do      // If the unit still controlled by this proc
-    if enTurr == 0 then
-        println("There are no more turrets");
-        printflush(message1);
-        wait(3);
-        end();
-    end;
-    approach(outx, outy, unitRange);
-    inNear = within(outx, outy, unitRange);
-    if inNear == 1 then
-        getBlock(outx, outy, 0, block, 0);       // We don't need a block type or floor type, only a building
-        if block === null then
-            print($"Enemy turrer at ${outx}, ${outy} has been destroyed!\n");
+// This example adheres to the strict syntax:
+// All variables are explicitly declared, code is enclosed in code block.
+
+// A system library for manging units
+require units;
+
+// Expect a message1 block linked to this processor
+linked message1;
+
+begin
+    // Function from the system library: gives us the unit
+    waitForFreeUnit(@flare, 1);
+    var unitRange = @unit.@range;
+    var turretX, turretY;
+
+    // Locating nearest enemy turret. If found, turret != null and (turretX, turretY) are it's coordinates
+    var turret = ulocate(building, turret, true, out turretX, out turretY);
+
+    // If the unit still controlled by this proc
+    while @unit.@controller == @this do
+        if turret == null then
+            println("There are no more turrets.");
             printflush(message1);
             wait(3);
-            enTurr = ulocate(building, turret, true, outx, outy);        // Finding the next enemy turret
-        else
-            print($"Enemy turret at ${outx}, ${outy} still exists\n");
+            end();
         end;
-    else
-        print($"Searching for enemy turrer at ${outx}, ${outy}...\n");
+        approach(turretX, turretY, unitRange);
+        if within(turretX, turretY, unitRange) == 1 then
+            var block = getBlock(turretX, turretY);             // We don't need a block type or floor type, only a building
+            if block == null then
+                println($"Enemy turret at $turretX, $turretY has been destroyed!");
+                printflush(message1);
+                wait(3);
+                turret = ulocate(building, turret, true, out turretX, out turretY);        // Finding another enemy turret
+            else
+                println($"Enemy turret at $turretX, $turretY still exists");
+            end;
+        else
+            println($"Searching for enemy turret at $turretX, $turretY...");
+        end;
+        printflush(message1);
     end;
-    printflush(message1);
 end;
 ```
 

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ide.idea;
 
-import info.teksol.mindcode.grammar.MindcodeLexer;
-import info.teksol.mindcode.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
 import info.teksol.schemacode.grammar.SchemacodeLexer;
 import org.antlr.v4.runtime.Vocabulary;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 
-public record AstDirection(InputPosition inputPosition, String direction) implements AstSchemaItem {
+public record AstDirection(SourcePosition sourcePosition, String direction) implements AstSchemaItem {
 }

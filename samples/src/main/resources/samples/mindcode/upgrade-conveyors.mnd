@@ -1,110 +1,109 @@
+#set syntax = STRICT;
+
 // Import system libraries for advanced units and blocks functions
 require units;
 require blocks;
 
 // These parameters can be changed in the compiled code
 /// Configurable options:
-param MEMORY = cell1;
-param UNIT = @poly;
+param memory = cell1;
+param unit = @poly;
 
 // Coordinates of the map area to process
 // By default an entire map is converted
-param SW_X = 0;
-param SW_Y = 0;
-param NE_X = @mapw;
-param NE_Y = @maph;
+param sw_x = 0;
+param sw_y = 0;
+param ne_x = @mapw;
+param ne_y = @maph;
 
 // Setting to true restores copper conveyors (useful for testing)
-param DOWNGRADE = false;
+param downgrade = false;
 
 // Upgrading in stripes of given width -- faster processing
 // (Could be even wider, the build radius is ~20 blocks or so)
-param WIDTH = 10;
+param width = 10;
 
 // How close unit needs to get to the block being upgraded
-param RADIUS = 10;
+param radius = 10;
 
 /// Don't modify anything below this line.
 
+// Declaring variables representing blocks linked to the processor
+linked message1;    // Used to output messages to unless something else is found
+linked switch1;     // Used to pause processing
+
 // Title printed to messages to help identify the processor purpose
-const TITLE = "Conveyor upgrading\n";
+const title = "Conveyor upgrading\n";
 
-// Try to locate block to output messages to.
-// It is used by the units system library to output messages as well
-findLinkedBlocks(
-    "Automatic conveyor upgrading\nTrying to locate message block", message1,
-    @message, "Message", out MESSAGES, false);
+// Setting up external variables
+allocate heap in memory[0 ... 16];
 
-// Count the total number of upgraded blocks
-TOTAL = 0;
+// External cached variables:
+// Initial value is read from the external memory into global variables.
+// When reading, the cached value is used (no external memory access)
+// When writing, the value written is propagated to the external memory too.
+// The progress of the upgrade is automatically kept in the external memory.
+external cached x, y, dx, dy;
+external cached total;
 
-allocate heap in MEMORY[0 ... 16];
+// Global variables
+var oldType = downgrade ? @titanium-conveyor : @conveyor;
+var newType = downgrade ? @conveyor : @titanium-conveyor;
 
-// If a memory cell is attached, the progress can be stored there
-// After resetting the processor, e.g. by modifying the unit type,
-// we'll be able to pick up where we were stopped.
-if $INITIALIZED then
-    x = limit($X, SW_X, NE_X);
-    y = limit($Y, SW_Y, NE_Y);
-    dx = $DX == 1 ? 1 : -1;
-    dy = $DY > 0 ? WIDTH : -WIDTH;
-    TOTAL = $TOTAL;
-else
-    $INITIALIZED = true;
-    x = $X = SW_X;
-    y = $Y = SW_Y;
-    dx = 1;
-    dy = WIDTH;
-end;
+// This is a main code block
+begin
+    // Try to locate block to output messages to.
+    // It is used by the units system library to output messages as well
+    var messages;
+    findLinkedBlocks(
+        "Automatic conveyor upgrading\nTrying to locate message block", message1,
+        @message, "Message", out messages, false);
 
-oldType = DOWNGRADE ? @titanium-conveyor : @conveyor;
-newType = DOWNGRADE ? @conveyor : @titanium-conveyor;
+    // Ensure the values read from external memory are meaningful
+    x = limit(x, sw_x, ne_x);
+    y = limit(y, sw_y, ne_y);
+    dx = dx == 1 ? 1 : -1;
+    dy = dy > 0 ? width : -width;
 
-// It is possible to pause/stop the processing by attaching a switch and activating it
-// When the switch is active, the program renitializes and without attached memory,
-// the progress is lost.
-while !switch1.@enabled do
-
-    // If we don't have an active unit, summon a new one
-    if @unit.@dead != 0 or @unit.@controller != @this then
-        waitForFreeUnit(MESSAGES, TITLE, UNIT, rand(1000));
-    end;
-
-    // Position the unit to the middle of the band inside the building area
-    ypos = limit(y + WIDTH \ 2, SW_Y, NE_Y);
-    while not within(x, ypos, RADIUS) do
-        move(x, ypos);
-    end;
-
-    // Upgrade all blocks in the band
-    for yrep in y .. min(NE_Y, y + WIDTH - 1) do
-        replace(x, yrep, oldType, newType);
-    end;
-    $TOTAL = TOTAL;
-
-    print(TITLE);
-    println($"Position: $x, $ypos");
-    println($"Upgrades: $TOTAL");
-    printflush(MESSAGES);
-
-    // Move to next position
-    x += dx;
-    if x > NE_X or x < SW_X then
-        // Reached end, reverse the direction and move to the next strip
-        dx = -dx;
-        y += dy;
-        x = limit(x, SW_X, NE_X);
-        $DX = dx;
-
-        if y > NE_Y or y < SW_Y then
-            dy = -dy;
-            y = limit(y, SW_Y, NE_Y);
-            $DY = dy;
+    // It is possible to pause/stop the processing by attaching a switch and activating it
+    // When the switch is active, the program reinitializes and without attached memory,
+    // the progress is lost.
+    while !switch1.@enabled do
+        // If we don't have an active unit, summon a new one
+        if @unit.@dead != 0 or @unit.@controller != @this then
+            waitForFreeUnit(messages, title, unit, rand(1000));
         end;
-        $Y = y;
-    end;
 
-    $X = x;
+        // Position the unit to the middle of the band inside the building area
+        var ypos = limit(y + width \ 2, sw_y, ne_y);
+        while not within(x, ypos, radius) do
+            move(x, ypos);
+        end;
+
+        // Upgrade all blocks in the band
+        for var yrep in y .. min(ne_y, y + width - 1) do
+            replace(x, yrep);
+        end;
+
+        print(title);
+        println($"Position: $x, $ypos");
+        println($"Upgrades: $total");
+        printflush(messages);
+
+        // Move to next position
+        x += dx;
+        if x > ne_x or x < sw_x then
+            // Reached end, reverse the direction and move to the next strip
+            dx = -dx;
+            y += dy;
+            x = limit(x, sw_x, ne_x);
+
+            if y > ne_y or y < sw_y then
+                dy = -dy;
+                y = limit(y, sw_y, ne_y);
+            end;
+        end;
+    end;
 end;
 
 // Returns value of n limited to range min .. max
@@ -114,8 +113,9 @@ end;
 
 // If a block of type oldType is found at position,
 // replaces it with newType
-def replace(x, y, oldType, newType)
-    building = getBlock(x, y, out type);
+void replace(x, y)
+    var type;
+    var building = getBlock(x, y, out type);
 
     if type == oldType then
         build(x, y, newType, building.@rotation, 0);
@@ -123,7 +123,7 @@ def replace(x, y, oldType, newType)
         // for the unit to finish building the block
         do
             getBlock(x, y, out type);
-        loop while type != newType;
-        TOTAL += 1;
+        while type != newType;
+        total++;
     end;
 end;

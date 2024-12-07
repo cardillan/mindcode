@@ -2,12 +2,20 @@
 // Printing - numeric output
 //
 //* To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
-//* Mindustry Logic 8 instructions and therefore require the `#set target = ML8A;` statement.
+//* Mindustry Logic 8 instructions and therefore require the `#set target = 8;` statement.
 
 require math;
 
 /**
- * **Note:** Function requires target `ML8A` or later.
+ * Clears the processor's text buffer without outputting the contents into any message block. Equivalent to
+ * `printflush(null);`.
+ */
+inline void printflush()
+    printflush(null);
+end;
+
+/**
+ * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Formats the number passed in as a parameter into the text buffer, using comma as thousands separator.
  * Fractional part of the number to be printed is ignored.
@@ -22,25 +30,25 @@ require math;
  * > While the functions is optimized for performance, formatting numbers is many times slower than just printing
  * > them using the `print()` function.
  */
-void formatNumber(_number)
-    _n = floor(abs(_number));
-    if _number < 0 then
+void formatNumber(number)
+    var n = floor(abs(number));
+    if number < 0 then
         format("-{2}");     // Prepend the minus sign
     end;
-    while _n > 999 do
-        _mod = _n % 1000;
+    while n > 999 do
+        var mod = n % 1000;
         // Insert placeholder for the next group, thousands separator, leading zeroes (if any) and a placeholder for this group.
-        format(_mod < 10 ? "{2},00{1}" : _mod < 100 ? "{2},0{1}" : "{2},{1}");
-        format(_mod);
-        _n \= 1000;
+        format(mod < 10 ? "{2},00{1}" : mod < 100 ? "{2},0{1}" : "{2},{1}");
+        format(mod);
+        n \= 1000;
     end;
 
     // Put the rest of the number into the remaining placeholder
-    format(_n);
+    format(n);
 end;
 
 /**
- * **Note:** Function requires target `ML8A` or later.
+ * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Prints the number passed in as a parameter into the text buffer, using comma as thousands separator.
  * Fractional part of the number to be printed is ignored.
@@ -56,10 +64,134 @@ end;
  *
  * See also [`formatNumber`](#formatnumber)
  */
-void printNumber(_number)
+void printNumber(number)
     print("{2}");
-    formatNumber(_number);
+    formatNumber(number);
 end;
+
+/**
+ * **Note:** Function requires Mindustry Logic version 8 or later.
+ *
+ * Formats the number passed in as a parameter into the text buffer in binary base, using given number of digits.
+ * Fractional part of the number to be printed is ignored.
+ *
+ * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
+ * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
+ * at the place of the lowest formatting placeholder.
+ *
+ * Nulls are printed as zero values.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `number`: number to be formatted
+ * - `digits`: minimal number of digits to output (padded on the left by zeroes)
+ */
+void formatBinaryNumber(number, digits)
+    var n = floor(number);
+    do
+        format("{2}{1}", n & 1);
+        n >>= 1;
+        --digits;
+    while n > 0;
+
+    while digits > 0 do
+        format("{2}0");
+        digits--;
+    end;
+
+    // Binary prefix
+    format("0b");
+end;
+
+/**
+ * **Note:** Function requires Mindustry Logic version 8 or later.
+ *
+ * Prints the number passed in as a parameter into the text buffer in binary base, using given number of digits.
+ * Fractional part of the number to be printed is ignored.
+ *
+ * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
+ * The number will be printed at the end of the print buffer.
+ *
+ * Nulls are printed as zero values.
+ *
+ * See also [`formatBinaryNumber`](#formatbinarynumber)
+ *
+ * **Inputs and outputs:**
+ *
+ * - `number`: number to be formatted
+ * - `digits`: minimal number of digits to output (padded on the left by zeroes)
+ */
+void printBinaryNumber(number, digits)
+    print("{2}");
+    formatBinaryNumber(number, digits);
+end;
+
+/**
+ * **Note:** Function requires Mindustry Logic version 8 or later.
+ *
+ * Formats the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
+ * Fractional part of the number to be printed is ignored.
+ *
+ * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
+ * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
+ * at the place of the lowest formatting placeholder.
+ *
+ * Nulls are printed as zero values.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `number`: number to be formatted
+ * - `digits`: minimal number of digits to output (padded on the left by zeroes)
+ */
+void formatHexNumber(number, digits)
+    var n = floor(number);
+    do
+        var digit = n % 16;
+        case digit
+            when 0 .. 9 then format("{2}{1}", digit);
+            when 10 then format("{2}A");
+            when 11 then format("{2}B");
+            when 12 then format("{2}C");
+            when 13 then format("{2}D");
+            when 14 then format("{2}E");
+            when 15 then format("{2}F");
+        end;
+        n >>= 4;
+        --digits;
+    while n > 0;
+
+    while digits > 0 do
+        format("{2}0");
+        digits--;
+    end;
+
+    // Hexadecimal prefix
+    format("0x");
+end;
+
+/**
+ * **Note:** Function requires Mindustry Logic version 8 or later.
+ *
+ * Prints the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
+ * Fractional part of the number to be printed is ignored.
+ *
+ * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
+ * The number will be printed at the end of the print buffer.
+ *
+ * Nulls are printed as zero values.
+ *
+ * See also [`formatBinaryNumber`](#formatbinarynumber)
+ *
+ * **Inputs and outputs:**
+ *
+ * - `number`: number to be formatted
+ * - `digits`: minimal number of digits to output (padded on the left by zeroes)
+ */
+void printHexNumber(number, digits)
+    print("{2}");
+    formatHexNumber(number, digits);
+end;
+
 
 /**
  * Prints the value into the text buffer without rounding to the nearest integer value.
@@ -81,49 +213,49 @@ end;
  * > The mathematical operations used by `printExact` to output the value may introduce small additional numerical
  * > errors to the output value; for example `printExact(3.00000003)` outputs `3.000000029999999`.
  */
-void printExactFast(_n)
-    if isZero(_n) then
+void printExactFast(n)
+    if isZero(n) then
         // Will print either 0, or null, depending on the value
-        print(_n);
+        print(n);
     else
-        if _n < 0 then
+        if n < 0 then
             print("-");
-            _n = abs(_n);
+            n = abs(n);
          end;
-        _exp = floor(log10(_n));
-        _base = _n * 10 ** -_exp;
-        _cmp = abs(_base - round(_base));
-        if _cmp <= 0 then
+        var exp = floor(log10(n));
+        var base = n * 10 ** -exp;
+        var cmp = abs(base - round(base));
+        if cmp <= 0 then
             // An exact integer, use native function
-            print(_base);
-        elsif _cmp > 1e-5 then
+            print(base);
+        elsif cmp > 1e-5 then
             // Mindustry Logic won't round to integer, use native function
-            print(_base);
+            print(base);
         else
             // Mindustry logic would round. Use custom routine.
-            print(floor(_base), ".");
+            print(floor(base), ".");
 
             // Printing the fractional part, 5 digits at a time
             // More digits would be even faster, but 5 divides the 15 digits we want to output nicely.
-            for _digit in 1 .. 3 do
-                _base = frac(_base) * 100000;
-                _t = floor(_base);
-                if _t < 10 then
+            for var digit in 1 .. 3 do
+                base = frac(base) * 100000;
+                var t = floor(base);
+                if t < 10 then
                     print("0000");
-                elsif _t < 100 then
+                elsif t < 100 then
                     print("000");
-                elsif _t < 1000 then
+                elsif t < 1000 then
                     print("00");
-                elsif _t < 10000 then
+                elsif t < 10000 then
                     print("0");
                 end;
 
-                print(_t);
+                print(t);
             end;
         end;
 
-        if _exp != 0 then
-            print("E", _exp);
+        if exp != 0 then
+            print("E", exp);
         end;
     end;
 end;
@@ -137,26 +269,26 @@ end;
  *
  * See also [`printExactFast`](#printexactfast)
  */
-void printExactSlow(_n)
-    if isZero(_n) then
+void printExactSlow(n)
+    if isZero(n) then
         // Will print either 0, or null, depending on the value
-        print(_n);
+        print(n);
     else
-        if _n < 0 then
+        if n < 0 then
             print("-");
-            _n = abs(_n);
+            n = abs(n);
          end;
-        _exp = floor(log10(_n));
-        _base = _n * 10 ** -_exp;
-        print(floor(_base), ".");
+        var exp = floor(log10(n));
+        var base = n * 10 ** -exp;
+        print(floor(base), ".");
 
-        for _digit in 1 .. 15 do
-            _base = frac(_base) * 10;
-            print(floor(_base));
+        for var digit in 1 .. 15 do
+            base = frac(base) * 10;
+            print(floor(base));
         end;
 
-        if _exp != 0 then
-            print("E", _exp);
+        if exp != 0 then
+            print("E", exp);
         end;
     end;
 end;

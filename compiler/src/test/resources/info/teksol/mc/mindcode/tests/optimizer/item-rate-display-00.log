@@ -1,0 +1,4693 @@
+   206 instructions before optimizations.
+    26 instructions eliminated by Temp Variables Elimination.
+    16 instructions eliminated by Dead Code Elimination (3 iterations).
+    12 instructions eliminated by Jump Optimization (4 iterations).
+    11 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+   137 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
+     1 instructions eliminated by Loop Optimization (3 iterations).
+     6 loops improved by Loop Optimization.
+   670 instructions added by Loop Unrolling (6 iterations).
+     2 loops unrolled by Loop Unrolling.
+    16 instructions eliminated by Print Merging.
+   657 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 871):
+    Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency       25.0
+    Unroll loop at line 24:1                                     cost   137, benefit     1450.0, efficiency       10.6
+  * Unroll loop at line 65:5                                     cost   473, benefit    36250.0, efficiency       76.6 (+411 instructions)
+
+Pass 1: speed optimization selection (cost limit 460):
+  * Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+    Unroll loop at line 24:1                                     cost   137, benefit     1450.0, efficiency       10.6
+
+Pass 1: speed optimization selection (cost limit 459):
+  * Unroll loop at line 24:1                                     cost   137, benefit     1450.0, efficiency       10.6 (+137 instructions)
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instructions):
+ 
+    24 op lessThan *tmp6 :ptr .INDEX
+    25 jump *label0 equal *tmp6 false
+    26 op add :ptr :ptr .SKIP_SIZE
+-    * set *tmp7 :ptr
+    27 jump *label1 always
+    28 label *label0
+-    * set *tmp7 null
+    29 label *label1
+    30 set *tmp8 :ptr
+    31 read *tmp9 MEMORY *tmp8
+ 
+    39 jump *label5 equal *tmp11 false
+    40 op sub *tmp13 .SIZE 1
+    41 set :ptr *tmp13
+-    * set *tmp12 :ptr
+    42 jump *label6 always
+    43 label *label5
+-    * set *tmp12 null
+    44 label *label6
+    45 set *tmp14 :ptr
+    46 read *tmp15 MEMORY *tmp14
+ 
+    80 op add :n :n 1
+    81 jump *label12 always
+    82 label *label14
+-    * set *tmp23 null
+    83 jump *label11 always
+    84 label *label10
+-    * set *tmp23 null
+    85 label *label11
+    86 op div *tmp28 150 :maximum
+    87 set :scale *tmp28
+ 
+   107 op lessThan *tmp34 :head .INDEX
+   108 jump *label15 equal *tmp34 false
+   109 op add :head :head .SKIP_SIZE
+-    * set *tmp35 :head
+   110 jump *label16 always
+   111 label *label15
+-    * set *tmp35 null
+   112 label *label16
+   113 set :tail :head
+   114 set :value 0
+ 
+   124 jump *label20 equal *tmp39 false
+   125 op sub *tmp41 .SIZE 1
+   126 set :head *tmp41
+-    * set *tmp40 :head
+   127 jump *label21 always
+   128 label *label20
+-    * set *tmp40 null
+   129 label *label21
+   130 label *label18
+   131 op add :i :i 1
+ 
+   154 jump *label25 equal *tmp50 false
+   155 op sub *tmp52 .SIZE 1
+   156 set :head *tmp52
+-    * set *tmp51 :head
+   157 jump *label26 always
+   158 label *label25
+-    * set *tmp51 null
+   159 label *label26
+   160 op sub :tail :tail 1
+   161 op lessThanEq *tmp53 :tail .INDEX
+   162 jump *label27 equal *tmp53 false
+   163 op sub *tmp55 .SIZE 1
+   164 set :tail *tmp55
+-    * set *tmp54 :tail
+   165 jump *label28 always
+   166 label *label27
+-    * set *tmp54 null
+   167 label *label28
+   168 op mul *tmp56 :value :scale
+   169 op add *tmp57 10 *tmp56
+ 
+   188 jump *label29 equal *tmp62 false
+   189 op mul *tmp64 1.5 :newMax
+   190 set :maximum *tmp64
+-    * set *tmp63 :maximum
+   191 jump *label30 always
+   192 label *label29
+-    * set *tmp63 null
+   193 label *label30
+   194 set *tmp65 POSITION
+   195 write :maximum COORD *tmp65
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 instructions):
+ 
+    13 set .INDEX 256
+    14 set .SIZE 511
+    15 op sub *tmp0 .SIZE .INDEX
+-    * op sub *tmp1 *tmp0 1
+-    * set .SKIP_SIZE *tmp1
+-    * op mul *tmp2 POSITION 30
+-    * set .SHIFT *tmp2
++   16 op sub .SKIP_SIZE *tmp0 1
++   17 op mul .SHIFT POSITION 30
+    18 set *tmp3 .INDEX
+    19 read *tmp4 MEMORY *tmp3
+-    * op sub *tmp5 *tmp4 .SHIFT
+-    * set :ptr *tmp5
++   20 op sub :ptr *tmp4 .SHIFT
+    21 op lessThan *tmp6 :ptr .INDEX
+    22 jump *label0 equal *tmp6 false
+    23 op add :ptr :ptr .SKIP_SIZE
+ 
+    25 label *label0
+    26 label *label1
+    27 set *tmp8 :ptr
+-    * read *tmp9 MEMORY *tmp8
+-    * set :maximum *tmp9
++   28 read :maximum MEMORY *tmp8
+    29 set :n 0
+    30 label *label2
+    31 jump *label4 greaterThanEq :n 29
+-    * op sub *tmp10 :ptr 1
+-    * set :ptr *tmp10
++   32 op sub :ptr :ptr 1
+    33 op lessThanEq *tmp11 :ptr .INDEX
+    34 jump *label5 equal *tmp11 false
+-    * op sub *tmp13 .SIZE 1
+-    * set :ptr *tmp13
++   35 op sub :ptr .SIZE 1
+    36 jump *label6 always
+    37 label *label5
+    38 label *label6
+    39 set *tmp14 :ptr
+    40 read *tmp15 MEMORY *tmp14
+-    * op max *tmp16 :maximum *tmp15
+-    * set :maximum *tmp16
++   41 op max :maximum :maximum *tmp15
+    42 label *label3
+    43 op add :n :n 1
+    44 jump *label2 always
+    45 label *label4
+-    * op mul *tmp17 :maximum SMOOTH
+-    * set :maximum *tmp17
++   46 op mul :maximum :maximum SMOOTH
+    47 label *label7
+    48 sensor *tmp18 switch1 @enabled
+    49 op equal *tmp19 *tmp18 0
+    50 jump *label9 equal *tmp19 false
+    51 print "Item Rate Display"
+-    * set *tmp20 @time
+-    * set :start *tmp20
++   52 set :start @time
+    53 sensor *tmp21 COORD @dead
+    54 op equal *tmp22 *tmp21 0
+    55 jump *label10 equal *tmp22 false
+ 
+    58 op lessThan *tmp24 :n TOTAL
+    59 jump *label14 equal *tmp24 false
+    60 set *tmp25 :n
+-    * read *tmp26 COORD *tmp25
+-    * set :m *tmp26
++   61 read :m COORD *tmp25
+    62 print "\n"
+    63 print "Coord: [gold]"
+    64 print :m
+    65 print "["
+    66 print "]"
+-    * op max *tmp27 :maximum :m
+-    * set :maximum *tmp27
++   67 op max :maximum :maximum :m
+    68 label *label13
+    69 op add :n :n 1
+    70 jump *label12 always
+ 
+    72 jump *label11 always
+    73 label *label10
+    74 label *label11
+-    * op div *tmp28 150 :maximum
+-    * set :scale *tmp28
++   75 op div :scale 150 :maximum
+    76 op ceil *tmp29 :maximum
+    77 print "\n"
+    78 print "Maximum: [green]"
+ 
+    90 draw rect 10 10 156 156
+    91 set *tmp31 .INDEX
+    92 read *tmp32 MEMORY *tmp31
+-    * op sub *tmp33 *tmp32 .SHIFT
+-    * set :head *tmp33
++   93 op sub :head *tmp32 .SHIFT
+    94 op lessThan *tmp34 :head .INDEX
+    95 jump *label15 equal *tmp34 false
+    96 op add :head :head .SKIP_SIZE
+ 
+   109 op sub :head :head 1
+   110 op lessThanEq *tmp39 :head .INDEX
+   111 jump *label20 equal *tmp39 false
+-    * op sub *tmp41 .SIZE 1
+-    * set :head *tmp41
++  112 op sub :head .SIZE 1
+   113 jump *label21 always
+   114 label *label20
+   115 label *label21
+ 
+   118 jump *label17 always
+   119 label *label19
+   120 op mul *tmp42 :value :scale
+-    * op add *tmp43 10 *tmp42
+-    * set :last *tmp43
++  121 op add :last 10 *tmp42
+   122 set :newMax :value
+   123 draw color 80 255 80 255
+   124 set :x 159
+ 
+   126 label *label22
+   127 jump *label24 greaterThanEq :n 29
+   128 set *tmp44 :tail
+-    * read *tmp45 MEMORY *tmp44
+-    * set :t *tmp45
++  129 read :t MEMORY *tmp44
+   130 set *tmp46 :head
+-    * read *tmp47 MEMORY *tmp46
+-    * set :h *tmp47
++  131 read :h MEMORY *tmp46
+   132 op sub *tmp48 :value :t
+-    * op add *tmp49 *tmp48 :h
+-    * set :value *tmp49
++  133 op add :value *tmp48 :h
+   134 op sub :head :head 1
+   135 op lessThanEq *tmp50 :head .INDEX
+   136 jump *label25 equal *tmp50 false
+-    * op sub *tmp52 .SIZE 1
+-    * set :head *tmp52
++  137 op sub :head .SIZE 1
+   138 jump *label26 always
+   139 label *label25
+   140 label *label26
+   141 op sub :tail :tail 1
+   142 op lessThanEq *tmp53 :tail .INDEX
+   143 jump *label27 equal *tmp53 false
+-    * op sub *tmp55 .SIZE 1
+-    * set :tail *tmp55
++  144 op sub :tail .SIZE 1
+   145 jump *label28 always
+   146 label *label27
+   147 label *label28
+   148 op mul *tmp56 :value :scale
+-    * op add *tmp57 10 *tmp56
+-    * set :y *tmp57
+-    * op sub *tmp58 :x 5
+-    * set :x1 *tmp58
++  149 op add :y 10 *tmp56
++  150 op sub :x1 :x 5
+   151 draw line :x :last :x1 :y
+   152 set :x :x1
+   153 set :last :y
+-    * op max *tmp59 :newMax :value
+-    * set :newMax *tmp59
++  154 op max :newMax :newMax :value
+   155 label *label23
+   156 op add :n :n 1
+   157 jump *label22 always
+   158 label *label24
+   159 draw color 255 255 255 255
+   160 draw lineRect 10 10 156 156
+-    * op max *tmp60 :newMax :maximum
+-    * set :maximum *tmp60
++  161 op max :maximum :newMax :maximum
+   162 op mul *tmp61 3 :newMax
+   163 op lessThan *tmp62 *tmp61 :maximum
+   164 jump *label29 equal *tmp62 false
+-    * op mul *tmp64 1.5 :newMax
+-    * set :maximum *tmp64
++  165 op mul :maximum 1.5 :newMax
+   166 jump *label30 always
+   167 label *label29
+   168 label *label30
+ 
+   177 print "ms"
+   178 op div *tmp69 @time FREQ
+   179 op ceil *tmp70 *tmp69
+-    * op mul *tmp71 FREQ *tmp70
+-    * set :wait *tmp71
++  180 op mul :wait FREQ *tmp70
+   181 set :loops 0
+   182 label *label31
+   183 op lessThan *tmp72 @time :wait
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-12 instructions):
+ 
+    18 set *tmp3 .INDEX
+    19 read *tmp4 MEMORY *tmp3
+    20 op sub :ptr *tmp4 .SHIFT
+-    * op lessThan *tmp6 :ptr .INDEX
+-    * jump *label0 equal *tmp6 false
++   21 jump *label0 greaterThanEq :ptr .INDEX
+    22 op add :ptr :ptr .SKIP_SIZE
+    23 jump *label1 always
+    24 label *label0
+ 
+    29 label *label2
+    30 jump *label4 greaterThanEq :n 29
+    31 op sub :ptr :ptr 1
+-    * op lessThanEq *tmp11 :ptr .INDEX
+-    * jump *label5 equal *tmp11 false
++   32 jump *label5 greaterThan :ptr .INDEX
+    33 op sub :ptr .SIZE 1
+    34 jump *label6 always
+    35 label *label5
+ 
+    44 op mul :maximum :maximum SMOOTH
+    45 label *label7
+    46 sensor *tmp18 switch1 @enabled
+-    * op equal *tmp19 *tmp18 0
+-    * jump *label9 equal *tmp19 false
++   47 jump *label9 notEqual *tmp18 0
+    48 print "Item Rate Display"
+    49 set :start @time
+    50 sensor *tmp21 COORD @dead
+-    * op equal *tmp22 *tmp21 0
+-    * jump *label10 equal *tmp22 false
++   51 jump *label10 notEqual *tmp21 0
+    52 set :n 0
+    53 label *label12
+-    * op lessThan *tmp24 :n TOTAL
+-    * jump *label14 equal *tmp24 false
++   54 jump *label14 greaterThanEq :n TOTAL
+    55 set *tmp25 :n
+    56 read :m COORD *tmp25
+    57 print "\n"
+ 
+    86 set *tmp31 .INDEX
+    87 read *tmp32 MEMORY *tmp31
+    88 op sub :head *tmp32 .SHIFT
+-    * op lessThan *tmp34 :head .INDEX
+-    * jump *label15 equal *tmp34 false
++   89 jump *label15 greaterThanEq :head .INDEX
+    90 op add :head :head .SKIP_SIZE
+    91 jump *label16 always
+    92 label *label15
+ 
+    95 set :value 0
+    96 set :i 0
+    97 label *label17
+-    * op lessThan *tmp36 :i SMOOTH
+-    * jump *label19 equal *tmp36 false
++   98 jump *label19 greaterThanEq :i SMOOTH
+    99 set *tmp37 :head
+   100 read *tmp38 MEMORY *tmp37
+   101 op add :value :value *tmp38
+   102 op sub :head :head 1
+-    * op lessThanEq *tmp39 :head .INDEX
+-    * jump *label20 equal *tmp39 false
++  103 jump *label20 greaterThan :head .INDEX
+   104 op sub :head .SIZE 1
+   105 jump *label21 always
+   106 label *label20
+ 
+   124 op sub *tmp48 :value :t
+   125 op add :value *tmp48 :h
+   126 op sub :head :head 1
+-    * op lessThanEq *tmp50 :head .INDEX
+-    * jump *label25 equal *tmp50 false
++  127 jump *label25 greaterThan :head .INDEX
+   128 op sub :head .SIZE 1
+   129 jump *label26 always
+   130 label *label25
+   131 label *label26
+   132 op sub :tail :tail 1
+-    * op lessThanEq *tmp53 :tail .INDEX
+-    * jump *label27 equal *tmp53 false
++  133 jump *label27 greaterThan :tail .INDEX
+   134 op sub :tail .SIZE 1
+   135 jump *label28 always
+   136 label *label27
+ 
+   150 draw lineRect 10 10 156 156
+   151 op max :maximum :newMax :maximum
+   152 op mul *tmp61 3 :newMax
+-    * op lessThan *tmp62 *tmp61 :maximum
+-    * jump *label29 equal *tmp62 false
++  153 jump *label29 greaterThanEq *tmp61 :maximum
+   154 op mul :maximum 1.5 :newMax
+   155 jump *label30 always
+   156 label *label29
+ 
+   169 op mul :wait FREQ *tmp70
+   170 set :loops 0
+   171 label *label31
+-    * op lessThan *tmp72 @time :wait
+-    * jump *label33 equal *tmp72 false
++  172 jump *label33 greaterThanEq @time :wait
+   173 op add :loops :loops 1
+   174 label *label32
+   175 jump *label31 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
+ 
+    20 op sub :ptr *tmp4 .SHIFT
+    21 jump *label0 greaterThanEq :ptr .INDEX
+    22 op add :ptr :ptr .SKIP_SIZE
+-    * jump *label1 always
+    23 label *label0
+    24 label *label1
+    25 set *tmp8 :ptr
+ 
+    30 op sub :ptr :ptr 1
+    31 jump *label5 greaterThan :ptr .INDEX
+    32 op sub :ptr .SIZE 1
+-    * jump *label6 always
+    33 label *label5
+    34 label *label6
+    35 set *tmp14 :ptr
+ 
+    62 op add :n :n 1
+    63 jump *label12 always
+    64 label *label14
+-    * jump *label11 always
+    65 label *label10
+    66 label *label11
+    67 op div :scale 150 :maximum
+ 
+    85 op sub :head *tmp32 .SHIFT
+    86 jump *label15 greaterThanEq :head .INDEX
+    87 op add :head :head .SKIP_SIZE
+-    * jump *label16 always
+    88 label *label15
+    89 label *label16
+    90 set :tail :head
+ 
+    98 op sub :head :head 1
+    99 jump *label20 greaterThan :head .INDEX
+   100 op sub :head .SIZE 1
+-    * jump *label21 always
+   101 label *label20
+   102 label *label21
+   103 label *label18
+ 
+   121 op sub :head :head 1
+   122 jump *label25 greaterThan :head .INDEX
+   123 op sub :head .SIZE 1
+-    * jump *label26 always
+   124 label *label25
+   125 label *label26
+   126 op sub :tail :tail 1
+   127 jump *label27 greaterThan :tail .INDEX
+   128 op sub :tail .SIZE 1
+-    * jump *label28 always
+   129 label *label27
+   130 label *label28
+   131 op mul *tmp56 :value :scale
+ 
+   145 op mul *tmp61 3 :newMax
+   146 jump *label29 greaterThanEq *tmp61 :maximum
+   147 op mul :maximum 1.5 :newMax
+-    * jump *label30 always
+   148 label *label29
+   149 label *label30
+   150 set *tmp65 POSITION
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    12 draw stroke 1
+    13 set .INDEX 256
+    14 set .SIZE 511
+-    * op sub *tmp0 .SIZE .INDEX
+-    * op sub .SKIP_SIZE *tmp0 1
++   15 op sub *tmp0 511 256
++   16 op sub .SKIP_SIZE 255 1
+    17 op mul .SHIFT POSITION 30
+-    * set *tmp3 .INDEX
+-    * read *tmp4 MEMORY *tmp3
++   18 set *tmp3 256
++   19 read *tmp4 MEMORY .INDEX
+    20 op sub :ptr *tmp4 .SHIFT
+-    * jump *label0 greaterThanEq :ptr .INDEX
+-    * op add :ptr :ptr .SKIP_SIZE
++   21 jump *label0 greaterThanEq :ptr 256
++   22 op add :ptr :ptr 254
+    23 label *label0
+    24 label *label1
+    25 set *tmp8 :ptr
+-    * read :maximum MEMORY *tmp8
++   26 read :maximum MEMORY :ptr
+    27 set :n 0
+    28 label *label2
+    29 jump *label4 greaterThanEq :n 29
+    30 op sub :ptr :ptr 1
+-    * jump *label5 greaterThan :ptr .INDEX
+-    * op sub :ptr .SIZE 1
++   31 jump *label5 greaterThan :ptr 256
++   32 op sub :ptr 511 1
+    33 label *label5
+    34 label *label6
+    35 set *tmp14 :ptr
+-    * read *tmp15 MEMORY *tmp14
++   36 read *tmp15 MEMORY :ptr
+    37 op max :maximum :maximum *tmp15
+    38 label *label3
+    39 op add :n :n 1
+ 
+    51 label *label12
+    52 jump *label14 greaterThanEq :n TOTAL
+    53 set *tmp25 :n
+-    * read :m COORD *tmp25
++   54 read :m COORD :n
+    55 print "\n"
+    56 print "Coord: [gold]"
+    57 print :m
+ 
+    80 draw clear 0 0 80
+    81 draw color 0 80 0 255
+    82 draw rect 10 10 156 156
+-    * set *tmp31 .INDEX
+-    * read *tmp32 MEMORY *tmp31
++   83 set *tmp31 256
++   84 read *tmp32 MEMORY .INDEX
+    85 op sub :head *tmp32 .SHIFT
+-    * jump *label15 greaterThanEq :head .INDEX
+-    * op add :head :head .SKIP_SIZE
++   86 jump *label15 greaterThanEq :head 256
++   87 op add :head :head 254
+    88 label *label15
+    89 label *label16
+    90 set :tail :head
+ 
+    93 label *label17
+    94 jump *label19 greaterThanEq :i SMOOTH
+    95 set *tmp37 :head
+-    * read *tmp38 MEMORY *tmp37
++   96 read *tmp38 MEMORY :head
+    97 op add :value :value *tmp38
+    98 op sub :head :head 1
+-    * jump *label20 greaterThan :head .INDEX
+-    * op sub :head .SIZE 1
++   99 jump *label20 greaterThan :head 256
++  100 op sub :head 511 1
+   101 label *label20
+   102 label *label21
+   103 label *label18
+ 
+   113 label *label22
+   114 jump *label24 greaterThanEq :n 29
+   115 set *tmp44 :tail
+-    * read :t MEMORY *tmp44
++  116 read :t MEMORY :tail
+   117 set *tmp46 :head
+-    * read :h MEMORY *tmp46
++  118 read :h MEMORY :head
+   119 op sub *tmp48 :value :t
+   120 op add :value *tmp48 :h
+   121 op sub :head :head 1
+-    * jump *label25 greaterThan :head .INDEX
+-    * op sub :head .SIZE 1
++  122 jump *label25 greaterThan :head 256
++  123 op sub :head 511 1
+   124 label *label25
+   125 label *label26
+   126 op sub :tail :tail 1
+-    * jump *label27 greaterThan :tail .INDEX
+-    * op sub :tail .SIZE 1
++  127 jump *label27 greaterThan :tail 256
++  128 op sub :tail 511 1
+   129 label *label27
+   130 label *label28
+   131 op mul *tmp56 :value :scale
+ 
+   148 label *label29
+   149 label *label30
+   150 set *tmp65 POSITION
+-    * write :maximum COORD *tmp65
++  151 write :maximum COORD POSITION
+   152 op sub *tmp67 @time :start
+   153 op floor *tmp68 *tmp67
+   154 print "\n"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
+ 
+    11 printflush message1
+    12 draw stroke 1
+    13 set .INDEX 256
+-    * set .SIZE 511
+-    * op sub *tmp0 511 256
+-    * op sub .SKIP_SIZE 255 1
+    14 op mul .SHIFT POSITION 30
+-    * set *tmp3 256
+-    * read *tmp4 MEMORY .INDEX
++   15 read *tmp4 MEMORY 256
+    16 op sub :ptr *tmp4 .SHIFT
+    17 jump *label0 greaterThanEq :ptr 256
+    18 op add :ptr :ptr 254
+    19 label *label0
+    20 label *label1
+-    * set *tmp8 :ptr
+    21 read :maximum MEMORY :ptr
+    22 set :n 0
+    23 label *label2
+ 
+    27 op sub :ptr 511 1
+    28 label *label5
+    29 label *label6
+-    * set *tmp14 :ptr
+    30 read *tmp15 MEMORY :ptr
+    31 op max :maximum :maximum *tmp15
+    32 label *label3
+ 
+    44 set :n 0
+    45 label *label12
+    46 jump *label14 greaterThanEq :n TOTAL
+-    * set *tmp25 :n
+    47 read :m COORD :n
+    48 print "\n"
+    49 print "Coord: [gold]"
+ 
+    73 draw clear 0 0 80
+    74 draw color 0 80 0 255
+    75 draw rect 10 10 156 156
+-    * set *tmp31 256
+-    * read *tmp32 MEMORY .INDEX
++   76 read *tmp32 MEMORY 256
+    77 op sub :head *tmp32 .SHIFT
+    78 jump *label15 greaterThanEq :head 256
+    79 op add :head :head 254
+ 
+    84 set :i 0
+    85 label *label17
+    86 jump *label19 greaterThanEq :i SMOOTH
+-    * set *tmp37 :head
+    87 read *tmp38 MEMORY :head
+    88 op add :value :value *tmp38
+    89 op sub :head :head 1
+ 
+   103 set :n 0
+   104 label *label22
+   105 jump *label24 greaterThanEq :n 29
+-    * set *tmp44 :tail
+   106 read :t MEMORY :tail
+-    * set *tmp46 :head
+   107 read :h MEMORY :head
+   108 op sub *tmp48 :value :t
+   109 op add :value *tmp48 :h
+ 
+   136 op mul :maximum 1.5 :newMax
+   137 label *label29
+   138 label *label30
+-    * set *tmp65 POSITION
+   139 write :maximum COORD POSITION
+   140 op sub *tmp67 @time :start
+   141 op floor *tmp68 *tmp67
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    10 print "\n"
+    11 printflush message1
+    12 draw stroke 1
+-    * set .INDEX 256
+    13 op mul .SHIFT POSITION 30
+    14 read *tmp4 MEMORY 256
+    15 op sub :ptr *tmp4 .SHIFT
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    20 read :maximum MEMORY :ptr
+    21 set :n 0
+    22 label *label2
+-    * jump *label4 greaterThanEq :n 29
++   23 label *label34
+    24 op sub :ptr :ptr 1
+    25 jump *label5 greaterThan :ptr 256
+    26 op sub :ptr 511 1
+ 
+    30 op max :maximum :maximum *tmp15
+    31 label *label3
+    32 op add :n :n 1
+-    * jump *label2 always
++   33 jump *label34 lessThan :n 29
+    34 label *label4
+    35 op mul :maximum :maximum SMOOTH
+    36 label *label7
+ 
+    43 set :n 0
+    44 label *label12
+    45 jump *label14 greaterThanEq :n TOTAL
++   46 label *label35
+    47 read :m COORD :n
+    48 print "\n"
+    49 print "Coord: [gold]"
+ 
+    53 op max :maximum :maximum :m
+    54 label *label13
+    55 op add :n :n 1
+-    * jump *label12 always
++   56 jump *label35 lessThan :n TOTAL
+    57 label *label14
+    58 label *label10
+    59 label *label11
+ 
+    84 set :i 0
+    85 label *label17
+    86 jump *label19 greaterThanEq :i SMOOTH
++   87 label *label36
+    88 read *tmp38 MEMORY :head
+    89 op add :value :value *tmp38
+    90 op sub :head :head 1
+ 
+    94 label *label21
+    95 label *label18
+    96 op add :i :i 1
+-    * jump *label17 always
++   97 jump *label36 lessThan :i SMOOTH
+    98 label *label19
+    99 op mul *tmp42 :value :scale
+   100 op add :last 10 *tmp42
+ 
+   103 set :x 159
+   104 set :n 0
+   105 label *label22
+-    * jump *label24 greaterThanEq :n 29
++  106 label *label37
+   107 read :t MEMORY :tail
+   108 read :h MEMORY :head
+   109 op sub *tmp48 :value :t
+ 
+   127 op max :newMax :newMax :value
+   128 label *label23
+   129 op add :n :n 1
+-    * jump *label22 always
++  130 jump *label37 lessThan :n 29
+   131 label *label24
+   132 draw color 255 255 255 255
+   133 draw lineRect 10 10 156 156
+ 
+   151 set :loops 0
+   152 label *label31
+   153 jump *label33 greaterThanEq @time :wait
++  154 label *label38
+   155 op add :loops :loops 1
+   156 label *label32
+-    * jump *label31 always
++  157 jump *label38 lessThan @time :wait
+   158 label *label33
+   159 drawflush display1
+   160 print "\nLoops: "
+
+Modifications by Unroll loop at line 65:5 (+503 instructions):
+ 
+   101 set :newMax :value
+   102 draw color 80 255 80 255
+   103 set :x 159
+-    * set :n 0
+-    * label *label22
+-    * label *label37
+-    * read :t MEMORY :tail
+-    * read :h MEMORY :head
+-    * op sub *tmp48 :value :t
+-    * op add :value *tmp48 :h
+-    * op sub :head :head 1
+-    * jump *label25 greaterThan :head 256
+-    * op sub :head 511 1
+-    * label *label25
+-    * label *label26
+-    * op sub :tail :tail 1
+-    * jump *label27 greaterThan :tail 256
+-    * op sub :tail 511 1
+-    * label *label27
+-    * label *label28
+-    * op mul *tmp56 :value :scale
+-    * op add :y 10 *tmp56
+-    * op sub :x1 :x 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
+-    * set :last :y
+-    * op max :newMax :newMax :value
+-    * label *label23
+-    * op add :n :n 1
+-    * jump *label37 lessThan :n 29
+-    * label *label24
++  104 set :n 0
++  105 label *label39
++  106 label *label40
++  107 read :t MEMORY :tail
++  108 read :h MEMORY :head
++  109 op sub *tmp48 :value :t
++  110 op add :value *tmp48 :h
++  111 op sub :head :head 1
++  112 jump *label41 greaterThan :head 256
++  113 op sub :head 511 1
++  114 label *label41
++  115 label *label42
++  116 op sub :tail :tail 1
++  117 jump *label43 greaterThan :tail 256
++  118 op sub :tail 511 1
++  119 label *label43
++  120 label *label44
++  121 op mul *tmp56 :value :scale
++  122 op add :y 10 *tmp56
++  123 op sub :x1 :x 5
++  124 draw line :x :last :x1 :y
++  125 set :x :x1
++  126 set :last :y
++  127 op max :newMax :newMax :value
++  128 label *label45
++  129 op add :n :n 1
++  130 label *label46
++  131 read :t MEMORY :tail
++  132 read :h MEMORY :head
++  133 op sub *tmp48 :value :t
++  134 op add :value *tmp48 :h
++  135 op sub :head :head 1
++  136 jump *label47 greaterThan :head 256
++  137 op sub :head 511 1
++  138 label *label47
++  139 label *label48
++  140 op sub :tail :tail 1
++  141 jump *label49 greaterThan :tail 256
++  142 op sub :tail 511 1
++  143 label *label49
++  144 label *label50
++  145 op mul *tmp56 :value :scale
++  146 op add :y 10 *tmp56
++  147 op sub :x1 :x 5
++  148 draw line :x :last :x1 :y
++  149 set :x :x1
++  150 set :last :y
++  151 op max :newMax :newMax :value
++  152 label *label51
++  153 op add :n :n 1
++  154 label *label52
++  155 read :t MEMORY :tail
++  156 read :h MEMORY :head
++  157 op sub *tmp48 :value :t
++  158 op add :value *tmp48 :h
++  159 op sub :head :head 1
++  160 jump *label53 greaterThan :head 256
++  161 op sub :head 511 1
++  162 label *label53
++  163 label *label54
++  164 op sub :tail :tail 1
++  165 jump *label55 greaterThan :tail 256
++  166 op sub :tail 511 1
++  167 label *label55
++  168 label *label56
++  169 op mul *tmp56 :value :scale
++  170 op add :y 10 *tmp56
++  171 op sub :x1 :x 5
++  172 draw line :x :last :x1 :y
++  173 set :x :x1
++  174 set :last :y
++  175 op max :newMax :newMax :value
++  176 label *label57
++  177 op add :n :n 1
++  178 label *label58
++  179 read :t MEMORY :tail
++  180 read :h MEMORY :head
++  181 op sub *tmp48 :value :t
++  182 op add :value *tmp48 :h
++  183 op sub :head :head 1
++  184 jump *label59 greaterThan :head 256
++  185 op sub :head 511 1
++  186 label *label59
++  187 label *label60
++  188 op sub :tail :tail 1
++  189 jump *label61 greaterThan :tail 256
++  190 op sub :tail 511 1
++  191 label *label61
++  192 label *label62
++  193 op mul *tmp56 :value :scale
++  194 op add :y 10 *tmp56
++  195 op sub :x1 :x 5
++  196 draw line :x :last :x1 :y
++  197 set :x :x1
++  198 set :last :y
++  199 op max :newMax :newMax :value
++  200 label *label63
++  201 op add :n :n 1
++  202 label *label64
++  203 read :t MEMORY :tail
++  204 read :h MEMORY :head
++  205 op sub *tmp48 :value :t
++  206 op add :value *tmp48 :h
++  207 op sub :head :head 1
++  208 jump *label65 greaterThan :head 256
++  209 op sub :head 511 1
++  210 label *label65
++  211 label *label66
++  212 op sub :tail :tail 1
++  213 jump *label67 greaterThan :tail 256
++  214 op sub :tail 511 1
++  215 label *label67
++  216 label *label68
++  217 op mul *tmp56 :value :scale
++  218 op add :y 10 *tmp56
++  219 op sub :x1 :x 5
++  220 draw line :x :last :x1 :y
++  221 set :x :x1
++  222 set :last :y
++  223 op max :newMax :newMax :value
++  224 label *label69
++  225 op add :n :n 1
++  226 label *label70
++  227 read :t MEMORY :tail
++  228 read :h MEMORY :head
++  229 op sub *tmp48 :value :t
++  230 op add :value *tmp48 :h
++  231 op sub :head :head 1
++  232 jump *label71 greaterThan :head 256
++  233 op sub :head 511 1
++  234 label *label71
++  235 label *label72
++  236 op sub :tail :tail 1
++  237 jump *label73 greaterThan :tail 256
++  238 op sub :tail 511 1
++  239 label *label73
++  240 label *label74
++  241 op mul *tmp56 :value :scale
++  242 op add :y 10 *tmp56
++  243 op sub :x1 :x 5
++  244 draw line :x :last :x1 :y
++  245 set :x :x1
++  246 set :last :y
++  247 op max :newMax :newMax :value
++  248 label *label75
++  249 op add :n :n 1
++  250 label *label76
++  251 read :t MEMORY :tail
++  252 read :h MEMORY :head
++  253 op sub *tmp48 :value :t
++  254 op add :value *tmp48 :h
++  255 op sub :head :head 1
++  256 jump *label77 greaterThan :head 256
++  257 op sub :head 511 1
++  258 label *label77
++  259 label *label78
++  260 op sub :tail :tail 1
++  261 jump *label79 greaterThan :tail 256
++  262 op sub :tail 511 1
++  263 label *label79
++  264 label *label80
++  265 op mul *tmp56 :value :scale
++  266 op add :y 10 *tmp56
++  267 op sub :x1 :x 5
++  268 draw line :x :last :x1 :y
++  269 set :x :x1
++  270 set :last :y
++  271 op max :newMax :newMax :value
++  272 label *label81
++  273 op add :n :n 1
++  274 label *label82
++  275 read :t MEMORY :tail
++  276 read :h MEMORY :head
++  277 op sub *tmp48 :value :t
++  278 op add :value *tmp48 :h
++  279 op sub :head :head 1
++  280 jump *label83 greaterThan :head 256
++  281 op sub :head 511 1
++  282 label *label83
++  283 label *label84
++  284 op sub :tail :tail 1
++  285 jump *label85 greaterThan :tail 256
++  286 op sub :tail 511 1
++  287 label *label85
++  288 label *label86
++  289 op mul *tmp56 :value :scale
++  290 op add :y 10 *tmp56
++  291 op sub :x1 :x 5
++  292 draw line :x :last :x1 :y
++  293 set :x :x1
++  294 set :last :y
++  295 op max :newMax :newMax :value
++  296 label *label87
++  297 op add :n :n 1
++  298 label *label88
++  299 read :t MEMORY :tail
++  300 read :h MEMORY :head
++  301 op sub *tmp48 :value :t
++  302 op add :value *tmp48 :h
++  303 op sub :head :head 1
++  304 jump *label89 greaterThan :head 256
++  305 op sub :head 511 1
++  306 label *label89
++  307 label *label90
++  308 op sub :tail :tail 1
++  309 jump *label91 greaterThan :tail 256
++  310 op sub :tail 511 1
++  311 label *label91
++  312 label *label92
++  313 op mul *tmp56 :value :scale
++  314 op add :y 10 *tmp56
++  315 op sub :x1 :x 5
++  316 draw line :x :last :x1 :y
++  317 set :x :x1
++  318 set :last :y
++  319 op max :newMax :newMax :value
++  320 label *label93
++  321 op add :n :n 1
++  322 label *label94
++  323 read :t MEMORY :tail
++  324 read :h MEMORY :head
++  325 op sub *tmp48 :value :t
++  326 op add :value *tmp48 :h
++  327 op sub :head :head 1
++  328 jump *label95 greaterThan :head 256
++  329 op sub :head 511 1
++  330 label *label95
++  331 label *label96
++  332 op sub :tail :tail 1
++  333 jump *label97 greaterThan :tail 256
++  334 op sub :tail 511 1
++  335 label *label97
++  336 label *label98
++  337 op mul *tmp56 :value :scale
++  338 op add :y 10 *tmp56
++  339 op sub :x1 :x 5
++  340 draw line :x :last :x1 :y
++  341 set :x :x1
++  342 set :last :y
++  343 op max :newMax :newMax :value
++  344 label *label99
++  345 op add :n :n 1
++  346 label *label100
++  347 read :t MEMORY :tail
++  348 read :h MEMORY :head
++  349 op sub *tmp48 :value :t
++  350 op add :value *tmp48 :h
++  351 op sub :head :head 1
++  352 jump *label101 greaterThan :head 256
++  353 op sub :head 511 1
++  354 label *label101
++  355 label *label102
++  356 op sub :tail :tail 1
++  357 jump *label103 greaterThan :tail 256
++  358 op sub :tail 511 1
++  359 label *label103
++  360 label *label104
++  361 op mul *tmp56 :value :scale
++  362 op add :y 10 *tmp56
++  363 op sub :x1 :x 5
++  364 draw line :x :last :x1 :y
++  365 set :x :x1
++  366 set :last :y
++  367 op max :newMax :newMax :value
++  368 label *label105
++  369 op add :n :n 1
++  370 label *label106
++  371 read :t MEMORY :tail
++  372 read :h MEMORY :head
++  373 op sub *tmp48 :value :t
++  374 op add :value *tmp48 :h
++  375 op sub :head :head 1
++  376 jump *label107 greaterThan :head 256
++  377 op sub :head 511 1
++  378 label *label107
++  379 label *label108
++  380 op sub :tail :tail 1
++  381 jump *label109 greaterThan :tail 256
++  382 op sub :tail 511 1
++  383 label *label109
++  384 label *label110
++  385 op mul *tmp56 :value :scale
++  386 op add :y 10 *tmp56
++  387 op sub :x1 :x 5
++  388 draw line :x :last :x1 :y
++  389 set :x :x1
++  390 set :last :y
++  391 op max :newMax :newMax :value
++  392 label *label111
++  393 op add :n :n 1
++  394 label *label112
++  395 read :t MEMORY :tail
++  396 read :h MEMORY :head
++  397 op sub *tmp48 :value :t
++  398 op add :value *tmp48 :h
++  399 op sub :head :head 1
++  400 jump *label113 greaterThan :head 256
++  401 op sub :head 511 1
++  402 label *label113
++  403 label *label114
++  404 op sub :tail :tail 1
++  405 jump *label115 greaterThan :tail 256
++  406 op sub :tail 511 1
++  407 label *label115
++  408 label *label116
++  409 op mul *tmp56 :value :scale
++  410 op add :y 10 *tmp56
++  411 op sub :x1 :x 5
++  412 draw line :x :last :x1 :y
++  413 set :x :x1
++  414 set :last :y
++  415 op max :newMax :newMax :value
++  416 label *label117
++  417 op add :n :n 1
++  418 label *label118
++  419 read :t MEMORY :tail
++  420 read :h MEMORY :head
++  421 op sub *tmp48 :value :t
++  422 op add :value *tmp48 :h
++  423 op sub :head :head 1
++  424 jump *label119 greaterThan :head 256
++  425 op sub :head 511 1
++  426 label *label119
++  427 label *label120
++  428 op sub :tail :tail 1
++  429 jump *label121 greaterThan :tail 256
++  430 op sub :tail 511 1
++  431 label *label121
++  432 label *label122
++  433 op mul *tmp56 :value :scale
++  434 op add :y 10 *tmp56
++  435 op sub :x1 :x 5
++  436 draw line :x :last :x1 :y
++  437 set :x :x1
++  438 set :last :y
++  439 op max :newMax :newMax :value
++  440 label *label123
++  441 op add :n :n 1
++  442 label *label124
++  443 read :t MEMORY :tail
++  444 read :h MEMORY :head
++  445 op sub *tmp48 :value :t
++  446 op add :value *tmp48 :h
++  447 op sub :head :head 1
++  448 jump *label125 greaterThan :head 256
++  449 op sub :head 511 1
++  450 label *label125
++  451 label *label126
++  452 op sub :tail :tail 1
++  453 jump *label127 greaterThan :tail 256
++  454 op sub :tail 511 1
++  455 label *label127
++  456 label *label128
++  457 op mul *tmp56 :value :scale
++  458 op add :y 10 *tmp56
++  459 op sub :x1 :x 5
++  460 draw line :x :last :x1 :y
++  461 set :x :x1
++  462 set :last :y
++  463 op max :newMax :newMax :value
++  464 label *label129
++  465 op add :n :n 1
++  466 label *label130
++  467 read :t MEMORY :tail
++  468 read :h MEMORY :head
++  469 op sub *tmp48 :value :t
++  470 op add :value *tmp48 :h
++  471 op sub :head :head 1
++  472 jump *label131 greaterThan :head 256
++  473 op sub :head 511 1
++  474 label *label131
++  475 label *label132
++  476 op sub :tail :tail 1
++  477 jump *label133 greaterThan :tail 256
++  478 op sub :tail 511 1
++  479 label *label133
++  480 label *label134
++  481 op mul *tmp56 :value :scale
++  482 op add :y 10 *tmp56
++  483 op sub :x1 :x 5
++  484 draw line :x :last :x1 :y
++  485 set :x :x1
++  486 set :last :y
++  487 op max :newMax :newMax :value
++  488 label *label135
++  489 op add :n :n 1
++  490 label *label136
++  491 read :t MEMORY :tail
++  492 read :h MEMORY :head
++  493 op sub *tmp48 :value :t
++  494 op add :value *tmp48 :h
++  495 op sub :head :head 1
++  496 jump *label137 greaterThan :head 256
++  497 op sub :head 511 1
++  498 label *label137
++  499 label *label138
++  500 op sub :tail :tail 1
++  501 jump *label139 greaterThan :tail 256
++  502 op sub :tail 511 1
++  503 label *label139
++  504 label *label140
++  505 op mul *tmp56 :value :scale
++  506 op add :y 10 *tmp56
++  507 op sub :x1 :x 5
++  508 draw line :x :last :x1 :y
++  509 set :x :x1
++  510 set :last :y
++  511 op max :newMax :newMax :value
++  512 label *label141
++  513 op add :n :n 1
++  514 label *label142
++  515 read :t MEMORY :tail
++  516 read :h MEMORY :head
++  517 op sub *tmp48 :value :t
++  518 op add :value *tmp48 :h
++  519 op sub :head :head 1
++  520 jump *label143 greaterThan :head 256
++  521 op sub :head 511 1
++  522 label *label143
++  523 label *label144
++  524 op sub :tail :tail 1
++  525 jump *label145 greaterThan :tail 256
++  526 op sub :tail 511 1
++  527 label *label145
++  528 label *label146
++  529 op mul *tmp56 :value :scale
++  530 op add :y 10 *tmp56
++  531 op sub :x1 :x 5
++  532 draw line :x :last :x1 :y
++  533 set :x :x1
++  534 set :last :y
++  535 op max :newMax :newMax :value
++  536 label *label147
++  537 op add :n :n 1
++  538 label *label148
++  539 read :t MEMORY :tail
++  540 read :h MEMORY :head
++  541 op sub *tmp48 :value :t
++  542 op add :value *tmp48 :h
++  543 op sub :head :head 1
++  544 jump *label149 greaterThan :head 256
++  545 op sub :head 511 1
++  546 label *label149
++  547 label *label150
++  548 op sub :tail :tail 1
++  549 jump *label151 greaterThan :tail 256
++  550 op sub :tail 511 1
++  551 label *label151
++  552 label *label152
++  553 op mul *tmp56 :value :scale
++  554 op add :y 10 *tmp56
++  555 op sub :x1 :x 5
++  556 draw line :x :last :x1 :y
++  557 set :x :x1
++  558 set :last :y
++  559 op max :newMax :newMax :value
++  560 label *label153
++  561 op add :n :n 1
++  562 label *label154
++  563 read :t MEMORY :tail
++  564 read :h MEMORY :head
++  565 op sub *tmp48 :value :t
++  566 op add :value *tmp48 :h
++  567 op sub :head :head 1
++  568 jump *label155 greaterThan :head 256
++  569 op sub :head 511 1
++  570 label *label155
++  571 label *label156
++  572 op sub :tail :tail 1
++  573 jump *label157 greaterThan :tail 256
++  574 op sub :tail 511 1
++  575 label *label157
++  576 label *label158
++  577 op mul *tmp56 :value :scale
++  578 op add :y 10 *tmp56
++  579 op sub :x1 :x 5
++  580 draw line :x :last :x1 :y
++  581 set :x :x1
++  582 set :last :y
++  583 op max :newMax :newMax :value
++  584 label *label159
++  585 op add :n :n 1
++  586 label *label160
++  587 read :t MEMORY :tail
++  588 read :h MEMORY :head
++  589 op sub *tmp48 :value :t
++  590 op add :value *tmp48 :h
++  591 op sub :head :head 1
++  592 jump *label161 greaterThan :head 256
++  593 op sub :head 511 1
++  594 label *label161
++  595 label *label162
++  596 op sub :tail :tail 1
++  597 jump *label163 greaterThan :tail 256
++  598 op sub :tail 511 1
++  599 label *label163
++  600 label *label164
++  601 op mul *tmp56 :value :scale
++  602 op add :y 10 *tmp56
++  603 op sub :x1 :x 5
++  604 draw line :x :last :x1 :y
++  605 set :x :x1
++  606 set :last :y
++  607 op max :newMax :newMax :value
++  608 label *label165
++  609 op add :n :n 1
++  610 label *label166
++  611 read :t MEMORY :tail
++  612 read :h MEMORY :head
++  613 op sub *tmp48 :value :t
++  614 op add :value *tmp48 :h
++  615 op sub :head :head 1
++  616 jump *label167 greaterThan :head 256
++  617 op sub :head 511 1
++  618 label *label167
++  619 label *label168
++  620 op sub :tail :tail 1
++  621 jump *label169 greaterThan :tail 256
++  622 op sub :tail 511 1
++  623 label *label169
++  624 label *label170
++  625 op mul *tmp56 :value :scale
++  626 op add :y 10 *tmp56
++  627 op sub :x1 :x 5
++  628 draw line :x :last :x1 :y
++  629 set :x :x1
++  630 set :last :y
++  631 op max :newMax :newMax :value
++  632 label *label171
++  633 op add :n :n 1
++  634 label *label172
++  635 read :t MEMORY :tail
++  636 read :h MEMORY :head
++  637 op sub *tmp48 :value :t
++  638 op add :value *tmp48 :h
++  639 op sub :head :head 1
++  640 jump *label173 greaterThan :head 256
++  641 op sub :head 511 1
++  642 label *label173
++  643 label *label174
++  644 op sub :tail :tail 1
++  645 jump *label175 greaterThan :tail 256
++  646 op sub :tail 511 1
++  647 label *label175
++  648 label *label176
++  649 op mul *tmp56 :value :scale
++  650 op add :y 10 *tmp56
++  651 op sub :x1 :x 5
++  652 draw line :x :last :x1 :y
++  653 set :x :x1
++  654 set :last :y
++  655 op max :newMax :newMax :value
++  656 label *label177
++  657 op add :n :n 1
++  658 label *label178
++  659 read :t MEMORY :tail
++  660 read :h MEMORY :head
++  661 op sub *tmp48 :value :t
++  662 op add :value *tmp48 :h
++  663 op sub :head :head 1
++  664 jump *label179 greaterThan :head 256
++  665 op sub :head 511 1
++  666 label *label179
++  667 label *label180
++  668 op sub :tail :tail 1
++  669 jump *label181 greaterThan :tail 256
++  670 op sub :tail 511 1
++  671 label *label181
++  672 label *label182
++  673 op mul *tmp56 :value :scale
++  674 op add :y 10 *tmp56
++  675 op sub :x1 :x 5
++  676 draw line :x :last :x1 :y
++  677 set :x :x1
++  678 set :last :y
++  679 op max :newMax :newMax :value
++  680 label *label183
++  681 op add :n :n 1
++  682 label *label184
++  683 read :t MEMORY :tail
++  684 read :h MEMORY :head
++  685 op sub *tmp48 :value :t
++  686 op add :value *tmp48 :h
++  687 op sub :head :head 1
++  688 jump *label185 greaterThan :head 256
++  689 op sub :head 511 1
++  690 label *label185
++  691 label *label186
++  692 op sub :tail :tail 1
++  693 jump *label187 greaterThan :tail 256
++  694 op sub :tail 511 1
++  695 label *label187
++  696 label *label188
++  697 op mul *tmp56 :value :scale
++  698 op add :y 10 *tmp56
++  699 op sub :x1 :x 5
++  700 draw line :x :last :x1 :y
++  701 set :x :x1
++  702 set :last :y
++  703 op max :newMax :newMax :value
++  704 label *label189
++  705 op add :n :n 1
++  706 label *label190
++  707 read :t MEMORY :tail
++  708 read :h MEMORY :head
++  709 op sub *tmp48 :value :t
++  710 op add :value *tmp48 :h
++  711 op sub :head :head 1
++  712 jump *label191 greaterThan :head 256
++  713 op sub :head 511 1
++  714 label *label191
++  715 label *label192
++  716 op sub :tail :tail 1
++  717 jump *label193 greaterThan :tail 256
++  718 op sub :tail 511 1
++  719 label *label193
++  720 label *label194
++  721 op mul *tmp56 :value :scale
++  722 op add :y 10 *tmp56
++  723 op sub :x1 :x 5
++  724 draw line :x :last :x1 :y
++  725 set :x :x1
++  726 set :last :y
++  727 op max :newMax :newMax :value
++  728 label *label195
++  729 op add :n :n 1
++  730 label *label196
++  731 read :t MEMORY :tail
++  732 read :h MEMORY :head
++  733 op sub *tmp48 :value :t
++  734 op add :value *tmp48 :h
++  735 op sub :head :head 1
++  736 jump *label197 greaterThan :head 256
++  737 op sub :head 511 1
++  738 label *label197
++  739 label *label198
++  740 op sub :tail :tail 1
++  741 jump *label199 greaterThan :tail 256
++  742 op sub :tail 511 1
++  743 label *label199
++  744 label *label200
++  745 op mul *tmp56 :value :scale
++  746 op add :y 10 *tmp56
++  747 op sub :x1 :x 5
++  748 draw line :x :last :x1 :y
++  749 set :x :x1
++  750 set :last :y
++  751 op max :newMax :newMax :value
++  752 label *label201
++  753 op add :n :n 1
++  754 label *label202
++  755 read :t MEMORY :tail
++  756 read :h MEMORY :head
++  757 op sub *tmp48 :value :t
++  758 op add :value *tmp48 :h
++  759 op sub :head :head 1
++  760 jump *label203 greaterThan :head 256
++  761 op sub :head 511 1
++  762 label *label203
++  763 label *label204
++  764 op sub :tail :tail 1
++  765 jump *label205 greaterThan :tail 256
++  766 op sub :tail 511 1
++  767 label *label205
++  768 label *label206
++  769 op mul *tmp56 :value :scale
++  770 op add :y 10 *tmp56
++  771 op sub :x1 :x 5
++  772 draw line :x :last :x1 :y
++  773 set :x :x1
++  774 set :last :y
++  775 op max :newMax :newMax :value
++  776 label *label207
++  777 op add :n :n 1
++  778 label *label208
++  779 read :t MEMORY :tail
++  780 read :h MEMORY :head
++  781 op sub *tmp48 :value :t
++  782 op add :value *tmp48 :h
++  783 op sub :head :head 1
++  784 jump *label209 greaterThan :head 256
++  785 op sub :head 511 1
++  786 label *label209
++  787 label *label210
++  788 op sub :tail :tail 1
++  789 jump *label211 greaterThan :tail 256
++  790 op sub :tail 511 1
++  791 label *label211
++  792 label *label212
++  793 op mul *tmp56 :value :scale
++  794 op add :y 10 *tmp56
++  795 op sub :x1 :x 5
++  796 draw line :x :last :x1 :y
++  797 set :x :x1
++  798 set :last :y
++  799 op max :newMax :newMax :value
++  800 label *label213
++  801 op add :n :n 1
++  802 label *label24
+   803 draw color 255 255 255 255
+   804 draw lineRect 10 10 156 156
+   805 op max :maximum :newMax :maximum
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+    42 jump *label10 notEqual *tmp21 0
+    43 set :n 0
+    44 label *label12
+-    * jump *label14 greaterThanEq :n TOTAL
++   45 jump *label14 greaterThanEq 0 TOTAL
+    46 label *label35
+    47 read :m COORD :n
+    48 print "\n"
+ 
+    83 set :value 0
+    84 set :i 0
+    85 label *label17
+-    * jump *label19 greaterThanEq :i SMOOTH
++   86 jump *label19 greaterThanEq 0 SMOOTH
+    87 label *label36
+    88 read *tmp38 MEMORY :head
+    89 op add :value :value *tmp38
+ 
+   120 label *label44
+   121 op mul *tmp56 :value :scale
+   122 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  123 op sub :x1 159 5
++  124 draw line 159 :last 154 :y
++  125 set :x 154
+   126 set :last :y
+   127 op max :newMax :newMax :value
+   128 label *label45
+-    * op add :n :n 1
++  129 op add :n 0 1
+   130 label *label46
+   131 read :t MEMORY :tail
+   132 read :h MEMORY :head
+ 
+   144 label *label50
+   145 op mul *tmp56 :value :scale
+   146 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  147 op sub :x1 :x1 5
+   148 draw line :x :last :x1 :y
+   149 set :x :x1
+   150 set :last :y
+   151 op max :newMax :newMax :value
+   152 label *label51
+-    * op add :n :n 1
++  153 op add :n 1 1
+   154 label *label52
+   155 read :t MEMORY :tail
+   156 read :h MEMORY :head
+ 
+   168 label *label56
+   169 op mul *tmp56 :value :scale
+   170 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  171 op sub :x1 :x1 5
+   172 draw line :x :last :x1 :y
+   173 set :x :x1
+   174 set :last :y
+   175 op max :newMax :newMax :value
+   176 label *label57
+-    * op add :n :n 1
++  177 op add :n 2 1
+   178 label *label58
+   179 read :t MEMORY :tail
+   180 read :h MEMORY :head
+ 
+   192 label *label62
+   193 op mul *tmp56 :value :scale
+   194 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  195 op sub :x1 :x1 5
+   196 draw line :x :last :x1 :y
+   197 set :x :x1
+   198 set :last :y
+   199 op max :newMax :newMax :value
+   200 label *label63
+-    * op add :n :n 1
++  201 op add :n 3 1
+   202 label *label64
+   203 read :t MEMORY :tail
+   204 read :h MEMORY :head
+ 
+   216 label *label68
+   217 op mul *tmp56 :value :scale
+   218 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  219 op sub :x1 :x1 5
+   220 draw line :x :last :x1 :y
+   221 set :x :x1
+   222 set :last :y
+   223 op max :newMax :newMax :value
+   224 label *label69
+-    * op add :n :n 1
++  225 op add :n 4 1
+   226 label *label70
+   227 read :t MEMORY :tail
+   228 read :h MEMORY :head
+ 
+   240 label *label74
+   241 op mul *tmp56 :value :scale
+   242 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  243 op sub :x1 :x1 5
+   244 draw line :x :last :x1 :y
+   245 set :x :x1
+   246 set :last :y
+   247 op max :newMax :newMax :value
+   248 label *label75
+-    * op add :n :n 1
++  249 op add :n 5 1
+   250 label *label76
+   251 read :t MEMORY :tail
+   252 read :h MEMORY :head
+ 
+   264 label *label80
+   265 op mul *tmp56 :value :scale
+   266 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  267 op sub :x1 :x1 5
+   268 draw line :x :last :x1 :y
+   269 set :x :x1
+   270 set :last :y
+   271 op max :newMax :newMax :value
+   272 label *label81
+-    * op add :n :n 1
++  273 op add :n 6 1
+   274 label *label82
+   275 read :t MEMORY :tail
+   276 read :h MEMORY :head
+ 
+   288 label *label86
+   289 op mul *tmp56 :value :scale
+   290 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  291 op sub :x1 :x1 5
+   292 draw line :x :last :x1 :y
+   293 set :x :x1
+   294 set :last :y
+   295 op max :newMax :newMax :value
+   296 label *label87
+-    * op add :n :n 1
++  297 op add :n 7 1
+   298 label *label88
+   299 read :t MEMORY :tail
+   300 read :h MEMORY :head
+ 
+   312 label *label92
+   313 op mul *tmp56 :value :scale
+   314 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  315 op sub :x1 :x1 5
+   316 draw line :x :last :x1 :y
+   317 set :x :x1
+   318 set :last :y
+   319 op max :newMax :newMax :value
+   320 label *label93
+-    * op add :n :n 1
++  321 op add :n 8 1
+   322 label *label94
+   323 read :t MEMORY :tail
+   324 read :h MEMORY :head
+ 
+   336 label *label98
+   337 op mul *tmp56 :value :scale
+   338 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  339 op sub :x1 :x1 5
+   340 draw line :x :last :x1 :y
+   341 set :x :x1
+   342 set :last :y
+   343 op max :newMax :newMax :value
+   344 label *label99
+-    * op add :n :n 1
++  345 op add :n 9 1
+   346 label *label100
+   347 read :t MEMORY :tail
+   348 read :h MEMORY :head
+ 
+   360 label *label104
+   361 op mul *tmp56 :value :scale
+   362 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  363 op sub :x1 :x1 5
+   364 draw line :x :last :x1 :y
+   365 set :x :x1
+   366 set :last :y
+   367 op max :newMax :newMax :value
+   368 label *label105
+-    * op add :n :n 1
++  369 op add :n 10 1
+   370 label *label106
+   371 read :t MEMORY :tail
+   372 read :h MEMORY :head
+ 
+   384 label *label110
+   385 op mul *tmp56 :value :scale
+   386 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  387 op sub :x1 :x1 5
+   388 draw line :x :last :x1 :y
+   389 set :x :x1
+   390 set :last :y
+   391 op max :newMax :newMax :value
+   392 label *label111
+-    * op add :n :n 1
++  393 op add :n 11 1
+   394 label *label112
+   395 read :t MEMORY :tail
+   396 read :h MEMORY :head
+ 
+   408 label *label116
+   409 op mul *tmp56 :value :scale
+   410 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  411 op sub :x1 :x1 5
+   412 draw line :x :last :x1 :y
+   413 set :x :x1
+   414 set :last :y
+   415 op max :newMax :newMax :value
+   416 label *label117
+-    * op add :n :n 1
++  417 op add :n 12 1
+   418 label *label118
+   419 read :t MEMORY :tail
+   420 read :h MEMORY :head
+ 
+   432 label *label122
+   433 op mul *tmp56 :value :scale
+   434 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  435 op sub :x1 :x1 5
+   436 draw line :x :last :x1 :y
+   437 set :x :x1
+   438 set :last :y
+   439 op max :newMax :newMax :value
+   440 label *label123
+-    * op add :n :n 1
++  441 op add :n 13 1
+   442 label *label124
+   443 read :t MEMORY :tail
+   444 read :h MEMORY :head
+ 
+   456 label *label128
+   457 op mul *tmp56 :value :scale
+   458 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  459 op sub :x1 :x1 5
+   460 draw line :x :last :x1 :y
+   461 set :x :x1
+   462 set :last :y
+   463 op max :newMax :newMax :value
+   464 label *label129
+-    * op add :n :n 1
++  465 op add :n 14 1
+   466 label *label130
+   467 read :t MEMORY :tail
+   468 read :h MEMORY :head
+ 
+   480 label *label134
+   481 op mul *tmp56 :value :scale
+   482 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  483 op sub :x1 :x1 5
+   484 draw line :x :last :x1 :y
+   485 set :x :x1
+   486 set :last :y
+   487 op max :newMax :newMax :value
+   488 label *label135
+-    * op add :n :n 1
++  489 op add :n 15 1
+   490 label *label136
+   491 read :t MEMORY :tail
+   492 read :h MEMORY :head
+ 
+   504 label *label140
+   505 op mul *tmp56 :value :scale
+   506 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  507 op sub :x1 :x1 5
+   508 draw line :x :last :x1 :y
+   509 set :x :x1
+   510 set :last :y
+   511 op max :newMax :newMax :value
+   512 label *label141
+-    * op add :n :n 1
++  513 op add :n 16 1
+   514 label *label142
+   515 read :t MEMORY :tail
+   516 read :h MEMORY :head
+ 
+   528 label *label146
+   529 op mul *tmp56 :value :scale
+   530 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  531 op sub :x1 :x1 5
+   532 draw line :x :last :x1 :y
+   533 set :x :x1
+   534 set :last :y
+   535 op max :newMax :newMax :value
+   536 label *label147
+-    * op add :n :n 1
++  537 op add :n 17 1
+   538 label *label148
+   539 read :t MEMORY :tail
+   540 read :h MEMORY :head
+ 
+   552 label *label152
+   553 op mul *tmp56 :value :scale
+   554 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  555 op sub :x1 :x1 5
+   556 draw line :x :last :x1 :y
+   557 set :x :x1
+   558 set :last :y
+   559 op max :newMax :newMax :value
+   560 label *label153
+-    * op add :n :n 1
++  561 op add :n 18 1
+   562 label *label154
+   563 read :t MEMORY :tail
+   564 read :h MEMORY :head
+ 
+   576 label *label158
+   577 op mul *tmp56 :value :scale
+   578 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  579 op sub :x1 :x1 5
+   580 draw line :x :last :x1 :y
+   581 set :x :x1
+   582 set :last :y
+   583 op max :newMax :newMax :value
+   584 label *label159
+-    * op add :n :n 1
++  585 op add :n 19 1
+   586 label *label160
+   587 read :t MEMORY :tail
+   588 read :h MEMORY :head
+ 
+   600 label *label164
+   601 op mul *tmp56 :value :scale
+   602 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  603 op sub :x1 :x1 5
+   604 draw line :x :last :x1 :y
+   605 set :x :x1
+   606 set :last :y
+   607 op max :newMax :newMax :value
+   608 label *label165
+-    * op add :n :n 1
++  609 op add :n 20 1
+   610 label *label166
+   611 read :t MEMORY :tail
+   612 read :h MEMORY :head
+ 
+   624 label *label170
+   625 op mul *tmp56 :value :scale
+   626 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  627 op sub :x1 :x1 5
+   628 draw line :x :last :x1 :y
+   629 set :x :x1
+   630 set :last :y
+   631 op max :newMax :newMax :value
+   632 label *label171
+-    * op add :n :n 1
++  633 op add :n 21 1
+   634 label *label172
+   635 read :t MEMORY :tail
+   636 read :h MEMORY :head
+ 
+   648 label *label176
+   649 op mul *tmp56 :value :scale
+   650 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  651 op sub :x1 :x1 5
+   652 draw line :x :last :x1 :y
+   653 set :x :x1
+   654 set :last :y
+   655 op max :newMax :newMax :value
+   656 label *label177
+-    * op add :n :n 1
++  657 op add :n 22 1
+   658 label *label178
+   659 read :t MEMORY :tail
+   660 read :h MEMORY :head
+ 
+   672 label *label182
+   673 op mul *tmp56 :value :scale
+   674 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  675 op sub :x1 :x1 5
+   676 draw line :x :last :x1 :y
+   677 set :x :x1
+   678 set :last :y
+   679 op max :newMax :newMax :value
+   680 label *label183
+-    * op add :n :n 1
++  681 op add :n 23 1
+   682 label *label184
+   683 read :t MEMORY :tail
+   684 read :h MEMORY :head
+ 
+   696 label *label188
+   697 op mul *tmp56 :value :scale
+   698 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  699 op sub :x1 :x1 5
+   700 draw line :x :last :x1 :y
+   701 set :x :x1
+   702 set :last :y
+   703 op max :newMax :newMax :value
+   704 label *label189
+-    * op add :n :n 1
++  705 op add :n 24 1
+   706 label *label190
+   707 read :t MEMORY :tail
+   708 read :h MEMORY :head
+ 
+   720 label *label194
+   721 op mul *tmp56 :value :scale
+   722 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  723 op sub :x1 :x1 5
+   724 draw line :x :last :x1 :y
+   725 set :x :x1
+   726 set :last :y
+   727 op max :newMax :newMax :value
+   728 label *label195
+-    * op add :n :n 1
++  729 op add :n 25 1
+   730 label *label196
+   731 read :t MEMORY :tail
+   732 read :h MEMORY :head
+ 
+   744 label *label200
+   745 op mul *tmp56 :value :scale
+   746 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  747 op sub :x1 :x1 5
+   748 draw line :x :last :x1 :y
+   749 set :x :x1
+   750 set :last :y
+   751 op max :newMax :newMax :value
+   752 label *label201
+-    * op add :n :n 1
++  753 op add :n 26 1
+   754 label *label202
+   755 read :t MEMORY :tail
+   756 read :h MEMORY :head
+ 
+   768 label *label206
+   769 op mul *tmp56 :value :scale
+   770 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  771 op sub :x1 :x1 5
+   772 draw line :x :last :x1 :y
+   773 set :x :x1
+   774 set :last :y
+   775 op max :newMax :newMax :value
+   776 label *label207
+-    * op add :n :n 1
++  777 op add :n 27 1
+   778 label *label208
+   779 read :t MEMORY :tail
+   780 read :h MEMORY :head
+ 
+   782 op add :value *tmp48 :h
+   783 op sub :head :head 1
+   784 jump *label209 greaterThan :head 256
+-    * op sub :head 511 1
+   785 label *label209
+   786 label *label210
+   787 op sub :tail :tail 1
+   788 jump *label211 greaterThan :tail 256
+-    * op sub :tail 511 1
+   789 label *label211
+   790 label *label212
+   791 op mul *tmp56 :value :scale
+   792 op add :y 10 *tmp56
+-    * op sub :x1 :x 5
++  793 op sub :x1 :x1 5
+   794 draw line :x :last :x1 :y
+-    * set :x :x1
+-    * set :last :y
+   795 op max :newMax :newMax :value
+   796 label *label213
+-    * op add :n :n 1
++  797 op add :n 28 1
+   798 label *label24
+   799 draw color 255 255 255 255
+   800 draw lineRect 10 10 156 156
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-31 instructions):
+ 
+   100 op add :last 10 *tmp42
+   101 set :newMax :value
+   102 draw color 80 255 80 255
+-    * set :x 159
+-    * set :n 0
+   103 label *label39
+   104 label *label40
+   105 read :t MEMORY :tail
+ 
+   124 set :last :y
+   125 op max :newMax :newMax :value
+   126 label *label45
+-    * op add :n 0 1
+   127 label *label46
+   128 read :t MEMORY :tail
+   129 read :h MEMORY :head
+ 
+   141 label *label50
+   142 op mul *tmp56 :value :scale
+   143 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  144 op sub :x1 154 5
++  145 draw line 154 :last 149 :y
++  146 set :x 149
+   147 set :last :y
+   148 op max :newMax :newMax :value
+   149 label *label51
+-    * op add :n 1 1
+   150 label *label52
+   151 read :t MEMORY :tail
+   152 read :h MEMORY :head
+ 
+   164 label *label56
+   165 op mul *tmp56 :value :scale
+   166 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  167 op sub :x1 149 5
++  168 draw line :x :last 144 :y
++  169 set :x 144
+   170 set :last :y
+   171 op max :newMax :newMax :value
+   172 label *label57
+-    * op add :n 2 1
+   173 label *label58
+   174 read :t MEMORY :tail
+   175 read :h MEMORY :head
+ 
+   187 label *label62
+   188 op mul *tmp56 :value :scale
+   189 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  190 op sub :x1 144 5
++  191 draw line :x :last 139 :y
++  192 set :x 139
+   193 set :last :y
+   194 op max :newMax :newMax :value
+   195 label *label63
+-    * op add :n 3 1
+   196 label *label64
+   197 read :t MEMORY :tail
+   198 read :h MEMORY :head
+ 
+   210 label *label68
+   211 op mul *tmp56 :value :scale
+   212 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  213 op sub :x1 139 5
++  214 draw line :x :last 134 :y
++  215 set :x 134
+   216 set :last :y
+   217 op max :newMax :newMax :value
+   218 label *label69
+-    * op add :n 4 1
+   219 label *label70
+   220 read :t MEMORY :tail
+   221 read :h MEMORY :head
+ 
+   233 label *label74
+   234 op mul *tmp56 :value :scale
+   235 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  236 op sub :x1 134 5
++  237 draw line :x :last 129 :y
++  238 set :x 129
+   239 set :last :y
+   240 op max :newMax :newMax :value
+   241 label *label75
+-    * op add :n 5 1
+   242 label *label76
+   243 read :t MEMORY :tail
+   244 read :h MEMORY :head
+ 
+   256 label *label80
+   257 op mul *tmp56 :value :scale
+   258 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  259 op sub :x1 129 5
++  260 draw line :x :last 124 :y
++  261 set :x 124
+   262 set :last :y
+   263 op max :newMax :newMax :value
+   264 label *label81
+-    * op add :n 6 1
+   265 label *label82
+   266 read :t MEMORY :tail
+   267 read :h MEMORY :head
+ 
+   279 label *label86
+   280 op mul *tmp56 :value :scale
+   281 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  282 op sub :x1 124 5
++  283 draw line :x :last 119 :y
++  284 set :x 119
+   285 set :last :y
+   286 op max :newMax :newMax :value
+   287 label *label87
+-    * op add :n 7 1
+   288 label *label88
+   289 read :t MEMORY :tail
+   290 read :h MEMORY :head
+ 
+   302 label *label92
+   303 op mul *tmp56 :value :scale
+   304 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  305 op sub :x1 119 5
++  306 draw line :x :last 114 :y
++  307 set :x 114
+   308 set :last :y
+   309 op max :newMax :newMax :value
+   310 label *label93
+-    * op add :n 8 1
+   311 label *label94
+   312 read :t MEMORY :tail
+   313 read :h MEMORY :head
+ 
+   325 label *label98
+   326 op mul *tmp56 :value :scale
+   327 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  328 op sub :x1 114 5
++  329 draw line :x :last 109 :y
++  330 set :x 109
+   331 set :last :y
+   332 op max :newMax :newMax :value
+   333 label *label99
+-    * op add :n 9 1
+   334 label *label100
+   335 read :t MEMORY :tail
+   336 read :h MEMORY :head
+ 
+   348 label *label104
+   349 op mul *tmp56 :value :scale
+   350 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  351 op sub :x1 109 5
++  352 draw line :x :last 104 :y
++  353 set :x 104
+   354 set :last :y
+   355 op max :newMax :newMax :value
+   356 label *label105
+-    * op add :n 10 1
+   357 label *label106
+   358 read :t MEMORY :tail
+   359 read :h MEMORY :head
+ 
+   371 label *label110
+   372 op mul *tmp56 :value :scale
+   373 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  374 op sub :x1 104 5
++  375 draw line :x :last 99 :y
++  376 set :x 99
+   377 set :last :y
+   378 op max :newMax :newMax :value
+   379 label *label111
+-    * op add :n 11 1
+   380 label *label112
+   381 read :t MEMORY :tail
+   382 read :h MEMORY :head
+ 
+   394 label *label116
+   395 op mul *tmp56 :value :scale
+   396 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  397 op sub :x1 99 5
++  398 draw line :x :last 94 :y
++  399 set :x 94
+   400 set :last :y
+   401 op max :newMax :newMax :value
+   402 label *label117
+-    * op add :n 12 1
+   403 label *label118
+   404 read :t MEMORY :tail
+   405 read :h MEMORY :head
+ 
+   417 label *label122
+   418 op mul *tmp56 :value :scale
+   419 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  420 op sub :x1 94 5
++  421 draw line :x :last 89 :y
++  422 set :x 89
+   423 set :last :y
+   424 op max :newMax :newMax :value
+   425 label *label123
+-    * op add :n 13 1
+   426 label *label124
+   427 read :t MEMORY :tail
+   428 read :h MEMORY :head
+ 
+   440 label *label128
+   441 op mul *tmp56 :value :scale
+   442 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  443 op sub :x1 89 5
++  444 draw line :x :last 84 :y
++  445 set :x 84
+   446 set :last :y
+   447 op max :newMax :newMax :value
+   448 label *label129
+-    * op add :n 14 1
+   449 label *label130
+   450 read :t MEMORY :tail
+   451 read :h MEMORY :head
+ 
+   463 label *label134
+   464 op mul *tmp56 :value :scale
+   465 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  466 op sub :x1 84 5
++  467 draw line :x :last 79 :y
++  468 set :x 79
+   469 set :last :y
+   470 op max :newMax :newMax :value
+   471 label *label135
+-    * op add :n 15 1
+   472 label *label136
+   473 read :t MEMORY :tail
+   474 read :h MEMORY :head
+ 
+   486 label *label140
+   487 op mul *tmp56 :value :scale
+   488 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  489 op sub :x1 79 5
++  490 draw line :x :last 74 :y
++  491 set :x 74
+   492 set :last :y
+   493 op max :newMax :newMax :value
+   494 label *label141
+-    * op add :n 16 1
+   495 label *label142
+   496 read :t MEMORY :tail
+   497 read :h MEMORY :head
+ 
+   509 label *label146
+   510 op mul *tmp56 :value :scale
+   511 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  512 op sub :x1 74 5
++  513 draw line :x :last 69 :y
++  514 set :x 69
+   515 set :last :y
+   516 op max :newMax :newMax :value
+   517 label *label147
+-    * op add :n 17 1
+   518 label *label148
+   519 read :t MEMORY :tail
+   520 read :h MEMORY :head
+ 
+   532 label *label152
+   533 op mul *tmp56 :value :scale
+   534 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  535 op sub :x1 69 5
++  536 draw line :x :last 64 :y
++  537 set :x 64
+   538 set :last :y
+   539 op max :newMax :newMax :value
+   540 label *label153
+-    * op add :n 18 1
+   541 label *label154
+   542 read :t MEMORY :tail
+   543 read :h MEMORY :head
+ 
+   555 label *label158
+   556 op mul *tmp56 :value :scale
+   557 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  558 op sub :x1 64 5
++  559 draw line :x :last 59 :y
++  560 set :x 59
+   561 set :last :y
+   562 op max :newMax :newMax :value
+   563 label *label159
+-    * op add :n 19 1
+   564 label *label160
+   565 read :t MEMORY :tail
+   566 read :h MEMORY :head
+ 
+   578 label *label164
+   579 op mul *tmp56 :value :scale
+   580 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  581 op sub :x1 59 5
++  582 draw line :x :last 54 :y
++  583 set :x 54
+   584 set :last :y
+   585 op max :newMax :newMax :value
+   586 label *label165
+-    * op add :n 20 1
+   587 label *label166
+   588 read :t MEMORY :tail
+   589 read :h MEMORY :head
+ 
+   601 label *label170
+   602 op mul *tmp56 :value :scale
+   603 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  604 op sub :x1 54 5
++  605 draw line :x :last 49 :y
++  606 set :x 49
+   607 set :last :y
+   608 op max :newMax :newMax :value
+   609 label *label171
+-    * op add :n 21 1
+   610 label *label172
+   611 read :t MEMORY :tail
+   612 read :h MEMORY :head
+ 
+   624 label *label176
+   625 op mul *tmp56 :value :scale
+   626 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  627 op sub :x1 49 5
++  628 draw line :x :last 44 :y
++  629 set :x 44
+   630 set :last :y
+   631 op max :newMax :newMax :value
+   632 label *label177
+-    * op add :n 22 1
+   633 label *label178
+   634 read :t MEMORY :tail
+   635 read :h MEMORY :head
+ 
+   647 label *label182
+   648 op mul *tmp56 :value :scale
+   649 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  650 op sub :x1 44 5
++  651 draw line :x :last 39 :y
++  652 set :x 39
+   653 set :last :y
+   654 op max :newMax :newMax :value
+   655 label *label183
+-    * op add :n 23 1
+   656 label *label184
+   657 read :t MEMORY :tail
+   658 read :h MEMORY :head
+ 
+   670 label *label188
+   671 op mul *tmp56 :value :scale
+   672 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  673 op sub :x1 39 5
++  674 draw line :x :last 34 :y
++  675 set :x 34
+   676 set :last :y
+   677 op max :newMax :newMax :value
+   678 label *label189
+-    * op add :n 24 1
+   679 label *label190
+   680 read :t MEMORY :tail
+   681 read :h MEMORY :head
+ 
+   693 label *label194
+   694 op mul *tmp56 :value :scale
+   695 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  696 op sub :x1 34 5
++  697 draw line :x :last 29 :y
++  698 set :x 29
+   699 set :last :y
+   700 op max :newMax :newMax :value
+   701 label *label195
+-    * op add :n 25 1
+   702 label *label196
+   703 read :t MEMORY :tail
+   704 read :h MEMORY :head
+ 
+   716 label *label200
+   717 op mul *tmp56 :value :scale
+   718 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  719 op sub :x1 29 5
++  720 draw line :x :last 24 :y
++  721 set :x 24
+   722 set :last :y
+   723 op max :newMax :newMax :value
+   724 label *label201
+-    * op add :n 26 1
+   725 label *label202
+   726 read :t MEMORY :tail
+   727 read :h MEMORY :head
+ 
+   739 label *label206
+   740 op mul *tmp56 :value :scale
+   741 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
+-    * set :x :x1
++  742 op sub :x1 24 5
++  743 draw line :x :last 19 :y
++  744 set :x 19
+   745 set :last :y
+   746 op max :newMax :newMax :value
+   747 label *label207
+-    * op add :n 27 1
+   748 label *label208
+   749 read :t MEMORY :tail
+   750 read :h MEMORY :head
+ 
+   760 label *label212
+   761 op mul *tmp56 :value :scale
+   762 op add :y 10 *tmp56
+-    * op sub :x1 :x1 5
+-    * draw line :x :last :x1 :y
++  763 op sub :x1 19 5
++  764 draw line :x :last 14 :y
+   765 op max :newMax :newMax :value
+   766 label *label213
+-    * op add :n 28 1
+   767 label *label24
+   768 draw color 255 255 255 255
+   769 draw lineRect 10 10 156 156
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-30 instructions):
+ 
+   118 label *label44
+   119 op mul *tmp56 :value :scale
+   120 op add :y 10 *tmp56
+-    * op sub :x1 159 5
+   121 draw line 159 :last 154 :y
+-    * set :x 154
+   122 set :last :y
+   123 op max :newMax :newMax :value
+   124 label *label45
+ 
+   139 label *label50
+   140 op mul *tmp56 :value :scale
+   141 op add :y 10 *tmp56
+-    * op sub :x1 154 5
+   142 draw line 154 :last 149 :y
+   143 set :x 149
+   144 set :last :y
+ 
+   161 label *label56
+   162 op mul *tmp56 :value :scale
+   163 op add :y 10 *tmp56
+-    * op sub :x1 149 5
+-    * draw line :x :last 144 :y
++  164 draw line 149 :last 144 :y
+   165 set :x 144
+   166 set :last :y
+   167 op max :newMax :newMax :value
+ 
+   183 label *label62
+   184 op mul *tmp56 :value :scale
+   185 op add :y 10 *tmp56
+-    * op sub :x1 144 5
+-    * draw line :x :last 139 :y
++  186 draw line 144 :last 139 :y
+   187 set :x 139
+   188 set :last :y
+   189 op max :newMax :newMax :value
+ 
+   205 label *label68
+   206 op mul *tmp56 :value :scale
+   207 op add :y 10 *tmp56
+-    * op sub :x1 139 5
+-    * draw line :x :last 134 :y
++  208 draw line 139 :last 134 :y
+   209 set :x 134
+   210 set :last :y
+   211 op max :newMax :newMax :value
+ 
+   227 label *label74
+   228 op mul *tmp56 :value :scale
+   229 op add :y 10 *tmp56
+-    * op sub :x1 134 5
+-    * draw line :x :last 129 :y
++  230 draw line 134 :last 129 :y
+   231 set :x 129
+   232 set :last :y
+   233 op max :newMax :newMax :value
+ 
+   249 label *label80
+   250 op mul *tmp56 :value :scale
+   251 op add :y 10 *tmp56
+-    * op sub :x1 129 5
+-    * draw line :x :last 124 :y
++  252 draw line 129 :last 124 :y
+   253 set :x 124
+   254 set :last :y
+   255 op max :newMax :newMax :value
+ 
+   271 label *label86
+   272 op mul *tmp56 :value :scale
+   273 op add :y 10 *tmp56
+-    * op sub :x1 124 5
+-    * draw line :x :last 119 :y
++  274 draw line 124 :last 119 :y
+   275 set :x 119
+   276 set :last :y
+   277 op max :newMax :newMax :value
+ 
+   293 label *label92
+   294 op mul *tmp56 :value :scale
+   295 op add :y 10 *tmp56
+-    * op sub :x1 119 5
+-    * draw line :x :last 114 :y
++  296 draw line 119 :last 114 :y
+   297 set :x 114
+   298 set :last :y
+   299 op max :newMax :newMax :value
+ 
+   315 label *label98
+   316 op mul *tmp56 :value :scale
+   317 op add :y 10 *tmp56
+-    * op sub :x1 114 5
+-    * draw line :x :last 109 :y
++  318 draw line 114 :last 109 :y
+   319 set :x 109
+   320 set :last :y
+   321 op max :newMax :newMax :value
+ 
+   337 label *label104
+   338 op mul *tmp56 :value :scale
+   339 op add :y 10 *tmp56
+-    * op sub :x1 109 5
+-    * draw line :x :last 104 :y
++  340 draw line 109 :last 104 :y
+   341 set :x 104
+   342 set :last :y
+   343 op max :newMax :newMax :value
+ 
+   359 label *label110
+   360 op mul *tmp56 :value :scale
+   361 op add :y 10 *tmp56
+-    * op sub :x1 104 5
+-    * draw line :x :last 99 :y
++  362 draw line 104 :last 99 :y
+   363 set :x 99
+   364 set :last :y
+   365 op max :newMax :newMax :value
+ 
+   381 label *label116
+   382 op mul *tmp56 :value :scale
+   383 op add :y 10 *tmp56
+-    * op sub :x1 99 5
+-    * draw line :x :last 94 :y
++  384 draw line 99 :last 94 :y
+   385 set :x 94
+   386 set :last :y
+   387 op max :newMax :newMax :value
+ 
+   403 label *label122
+   404 op mul *tmp56 :value :scale
+   405 op add :y 10 *tmp56
+-    * op sub :x1 94 5
+-    * draw line :x :last 89 :y
++  406 draw line 94 :last 89 :y
+   407 set :x 89
+   408 set :last :y
+   409 op max :newMax :newMax :value
+ 
+   425 label *label128
+   426 op mul *tmp56 :value :scale
+   427 op add :y 10 *tmp56
+-    * op sub :x1 89 5
+-    * draw line :x :last 84 :y
++  428 draw line 89 :last 84 :y
+   429 set :x 84
+   430 set :last :y
+   431 op max :newMax :newMax :value
+ 
+   447 label *label134
+   448 op mul *tmp56 :value :scale
+   449 op add :y 10 *tmp56
+-    * op sub :x1 84 5
+-    * draw line :x :last 79 :y
++  450 draw line 84 :last 79 :y
+   451 set :x 79
+   452 set :last :y
+   453 op max :newMax :newMax :value
+ 
+   469 label *label140
+   470 op mul *tmp56 :value :scale
+   471 op add :y 10 *tmp56
+-    * op sub :x1 79 5
+-    * draw line :x :last 74 :y
++  472 draw line 79 :last 74 :y
+   473 set :x 74
+   474 set :last :y
+   475 op max :newMax :newMax :value
+ 
+   491 label *label146
+   492 op mul *tmp56 :value :scale
+   493 op add :y 10 *tmp56
+-    * op sub :x1 74 5
+-    * draw line :x :last 69 :y
++  494 draw line 74 :last 69 :y
+   495 set :x 69
+   496 set :last :y
+   497 op max :newMax :newMax :value
+ 
+   513 label *label152
+   514 op mul *tmp56 :value :scale
+   515 op add :y 10 *tmp56
+-    * op sub :x1 69 5
+-    * draw line :x :last 64 :y
++  516 draw line 69 :last 64 :y
+   517 set :x 64
+   518 set :last :y
+   519 op max :newMax :newMax :value
+ 
+   535 label *label158
+   536 op mul *tmp56 :value :scale
+   537 op add :y 10 *tmp56
+-    * op sub :x1 64 5
+-    * draw line :x :last 59 :y
++  538 draw line 64 :last 59 :y
+   539 set :x 59
+   540 set :last :y
+   541 op max :newMax :newMax :value
+ 
+   557 label *label164
+   558 op mul *tmp56 :value :scale
+   559 op add :y 10 *tmp56
+-    * op sub :x1 59 5
+-    * draw line :x :last 54 :y
++  560 draw line 59 :last 54 :y
+   561 set :x 54
+   562 set :last :y
+   563 op max :newMax :newMax :value
+ 
+   579 label *label170
+   580 op mul *tmp56 :value :scale
+   581 op add :y 10 *tmp56
+-    * op sub :x1 54 5
+-    * draw line :x :last 49 :y
++  582 draw line 54 :last 49 :y
+   583 set :x 49
+   584 set :last :y
+   585 op max :newMax :newMax :value
+ 
+   601 label *label176
+   602 op mul *tmp56 :value :scale
+   603 op add :y 10 *tmp56
+-    * op sub :x1 49 5
+-    * draw line :x :last 44 :y
++  604 draw line 49 :last 44 :y
+   605 set :x 44
+   606 set :last :y
+   607 op max :newMax :newMax :value
+ 
+   623 label *label182
+   624 op mul *tmp56 :value :scale
+   625 op add :y 10 *tmp56
+-    * op sub :x1 44 5
+-    * draw line :x :last 39 :y
++  626 draw line 44 :last 39 :y
+   627 set :x 39
+   628 set :last :y
+   629 op max :newMax :newMax :value
+ 
+   645 label *label188
+   646 op mul *tmp56 :value :scale
+   647 op add :y 10 *tmp56
+-    * op sub :x1 39 5
+-    * draw line :x :last 34 :y
++  648 draw line 39 :last 34 :y
+   649 set :x 34
+   650 set :last :y
+   651 op max :newMax :newMax :value
+ 
+   667 label *label194
+   668 op mul *tmp56 :value :scale
+   669 op add :y 10 *tmp56
+-    * op sub :x1 34 5
+-    * draw line :x :last 29 :y
++  670 draw line 34 :last 29 :y
+   671 set :x 29
+   672 set :last :y
+   673 op max :newMax :newMax :value
+ 
+   689 label *label200
+   690 op mul *tmp56 :value :scale
+   691 op add :y 10 *tmp56
+-    * op sub :x1 29 5
+-    * draw line :x :last 24 :y
++  692 draw line 29 :last 24 :y
+   693 set :x 24
+   694 set :last :y
+   695 op max :newMax :newMax :value
+ 
+   711 label *label206
+   712 op mul *tmp56 :value :scale
+   713 op add :y 10 *tmp56
+-    * op sub :x1 24 5
+-    * draw line :x :last 19 :y
++  714 draw line 24 :last 19 :y
+   715 set :x 19
+   716 set :last :y
+   717 op max :newMax :newMax :value
+ 
+   731 label *label212
+   732 op mul *tmp56 :value :scale
+   733 op add :y 10 *tmp56
+-    * op sub :x1 19 5
+-    * draw line :x :last 14 :y
++  734 draw line 19 :last 14 :y
+   735 op max :newMax :newMax :value
+   736 label *label213
+   737 label *label24
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-27 instructions):
+ 
+   140 op mul *tmp56 :value :scale
+   141 op add :y 10 *tmp56
+   142 draw line 154 :last 149 :y
+-    * set :x 149
+   143 set :last :y
+   144 op max :newMax :newMax :value
+   145 label *label51
+ 
+   161 op mul *tmp56 :value :scale
+   162 op add :y 10 *tmp56
+   163 draw line 149 :last 144 :y
+-    * set :x 144
+   164 set :last :y
+   165 op max :newMax :newMax :value
+   166 label *label57
+ 
+   182 op mul *tmp56 :value :scale
+   183 op add :y 10 *tmp56
+   184 draw line 144 :last 139 :y
+-    * set :x 139
+   185 set :last :y
+   186 op max :newMax :newMax :value
+   187 label *label63
+ 
+   203 op mul *tmp56 :value :scale
+   204 op add :y 10 *tmp56
+   205 draw line 139 :last 134 :y
+-    * set :x 134
+   206 set :last :y
+   207 op max :newMax :newMax :value
+   208 label *label69
+ 
+   224 op mul *tmp56 :value :scale
+   225 op add :y 10 *tmp56
+   226 draw line 134 :last 129 :y
+-    * set :x 129
+   227 set :last :y
+   228 op max :newMax :newMax :value
+   229 label *label75
+ 
+   245 op mul *tmp56 :value :scale
+   246 op add :y 10 *tmp56
+   247 draw line 129 :last 124 :y
+-    * set :x 124
+   248 set :last :y
+   249 op max :newMax :newMax :value
+   250 label *label81
+ 
+   266 op mul *tmp56 :value :scale
+   267 op add :y 10 *tmp56
+   268 draw line 124 :last 119 :y
+-    * set :x 119
+   269 set :last :y
+   270 op max :newMax :newMax :value
+   271 label *label87
+ 
+   287 op mul *tmp56 :value :scale
+   288 op add :y 10 *tmp56
+   289 draw line 119 :last 114 :y
+-    * set :x 114
+   290 set :last :y
+   291 op max :newMax :newMax :value
+   292 label *label93
+ 
+   308 op mul *tmp56 :value :scale
+   309 op add :y 10 *tmp56
+   310 draw line 114 :last 109 :y
+-    * set :x 109
+   311 set :last :y
+   312 op max :newMax :newMax :value
+   313 label *label99
+ 
+   329 op mul *tmp56 :value :scale
+   330 op add :y 10 *tmp56
+   331 draw line 109 :last 104 :y
+-    * set :x 104
+   332 set :last :y
+   333 op max :newMax :newMax :value
+   334 label *label105
+ 
+   350 op mul *tmp56 :value :scale
+   351 op add :y 10 *tmp56
+   352 draw line 104 :last 99 :y
+-    * set :x 99
+   353 set :last :y
+   354 op max :newMax :newMax :value
+   355 label *label111
+ 
+   371 op mul *tmp56 :value :scale
+   372 op add :y 10 *tmp56
+   373 draw line 99 :last 94 :y
+-    * set :x 94
+   374 set :last :y
+   375 op max :newMax :newMax :value
+   376 label *label117
+ 
+   392 op mul *tmp56 :value :scale
+   393 op add :y 10 *tmp56
+   394 draw line 94 :last 89 :y
+-    * set :x 89
+   395 set :last :y
+   396 op max :newMax :newMax :value
+   397 label *label123
+ 
+   413 op mul *tmp56 :value :scale
+   414 op add :y 10 *tmp56
+   415 draw line 89 :last 84 :y
+-    * set :x 84
+   416 set :last :y
+   417 op max :newMax :newMax :value
+   418 label *label129
+ 
+   434 op mul *tmp56 :value :scale
+   435 op add :y 10 *tmp56
+   436 draw line 84 :last 79 :y
+-    * set :x 79
+   437 set :last :y
+   438 op max :newMax :newMax :value
+   439 label *label135
+ 
+   455 op mul *tmp56 :value :scale
+   456 op add :y 10 *tmp56
+   457 draw line 79 :last 74 :y
+-    * set :x 74
+   458 set :last :y
+   459 op max :newMax :newMax :value
+   460 label *label141
+ 
+   476 op mul *tmp56 :value :scale
+   477 op add :y 10 *tmp56
+   478 draw line 74 :last 69 :y
+-    * set :x 69
+   479 set :last :y
+   480 op max :newMax :newMax :value
+   481 label *label147
+ 
+   497 op mul *tmp56 :value :scale
+   498 op add :y 10 *tmp56
+   499 draw line 69 :last 64 :y
+-    * set :x 64
+   500 set :last :y
+   501 op max :newMax :newMax :value
+   502 label *label153
+ 
+   518 op mul *tmp56 :value :scale
+   519 op add :y 10 *tmp56
+   520 draw line 64 :last 59 :y
+-    * set :x 59
+   521 set :last :y
+   522 op max :newMax :newMax :value
+   523 label *label159
+ 
+   539 op mul *tmp56 :value :scale
+   540 op add :y 10 *tmp56
+   541 draw line 59 :last 54 :y
+-    * set :x 54
+   542 set :last :y
+   543 op max :newMax :newMax :value
+   544 label *label165
+ 
+   560 op mul *tmp56 :value :scale
+   561 op add :y 10 *tmp56
+   562 draw line 54 :last 49 :y
+-    * set :x 49
+   563 set :last :y
+   564 op max :newMax :newMax :value
+   565 label *label171
+ 
+   581 op mul *tmp56 :value :scale
+   582 op add :y 10 *tmp56
+   583 draw line 49 :last 44 :y
+-    * set :x 44
+   584 set :last :y
+   585 op max :newMax :newMax :value
+   586 label *label177
+ 
+   602 op mul *tmp56 :value :scale
+   603 op add :y 10 *tmp56
+   604 draw line 44 :last 39 :y
+-    * set :x 39
+   605 set :last :y
+   606 op max :newMax :newMax :value
+   607 label *label183
+ 
+   623 op mul *tmp56 :value :scale
+   624 op add :y 10 *tmp56
+   625 draw line 39 :last 34 :y
+-    * set :x 34
+   626 set :last :y
+   627 op max :newMax :newMax :value
+   628 label *label189
+ 
+   644 op mul *tmp56 :value :scale
+   645 op add :y 10 *tmp56
+   646 draw line 34 :last 29 :y
+-    * set :x 29
+   647 set :last :y
+   648 op max :newMax :newMax :value
+   649 label *label195
+ 
+   665 op mul *tmp56 :value :scale
+   666 op add :y 10 *tmp56
+   667 draw line 29 :last 24 :y
+-    * set :x 24
+   668 set :last :y
+   669 op max :newMax :newMax :value
+   670 label *label201
+ 
+   686 op mul *tmp56 :value :scale
+   687 op add :y 10 *tmp56
+   688 draw line 24 :last 19 :y
+-    * set :x 19
+   689 set :last :y
+   690 op max :newMax :newMax :value
+   691 label *label207
+
+Modifications by Replicate loop condition at line 32:1 (+1 instructions):
+ 
+    36 label *label7
+    37 sensor *tmp18 switch1 @enabled
+    38 jump *label9 notEqual *tmp18 0
++   39 label *label214
+    40 print "Item Rate Display"
+    41 set :start @time
+    42 sensor *tmp21 COORD @dead
+ 
+   741 print :loops
+   742 printflush message1
+   743 label *label8
+-    * jump *label7 always
++  744 sensor *tmp18 switch1 @enabled
++  745 jump *label214 equal *tmp18 0
+   746 label *label9
+   747 control enabled switch1 0
+   748 end
+
+Modifications by Unroll loop at line 24:1 (+167 instructions):
+ 
+    18 label *label0
+    19 label *label1
+    20 read :maximum MEMORY :ptr
+-    * set :n 0
+-    * label *label2
+-    * label *label34
+-    * op sub :ptr :ptr 1
+-    * jump *label5 greaterThan :ptr 256
+-    * op sub :ptr 511 1
+-    * label *label5
+-    * label *label6
+-    * read *tmp15 MEMORY :ptr
+-    * op max :maximum :maximum *tmp15
+-    * label *label3
+-    * op add :n :n 1
+-    * jump *label34 lessThan :n 29
+-    * label *label4
++   21 set :n 0
++   22 label *label215
++   23 label *label216
++   24 op sub :ptr :ptr 1
++   25 jump *label217 greaterThan :ptr 256
++   26 op sub :ptr 511 1
++   27 label *label217
++   28 label *label218
++   29 read *tmp15 MEMORY :ptr
++   30 op max :maximum :maximum *tmp15
++   31 label *label219
++   32 op add :n :n 1
++   33 label *label220
++   34 op sub :ptr :ptr 1
++   35 jump *label221 greaterThan :ptr 256
++   36 op sub :ptr 511 1
++   37 label *label221
++   38 label *label222
++   39 read *tmp15 MEMORY :ptr
++   40 op max :maximum :maximum *tmp15
++   41 label *label223
++   42 op add :n :n 1
++   43 label *label224
++   44 op sub :ptr :ptr 1
++   45 jump *label225 greaterThan :ptr 256
++   46 op sub :ptr 511 1
++   47 label *label225
++   48 label *label226
++   49 read *tmp15 MEMORY :ptr
++   50 op max :maximum :maximum *tmp15
++   51 label *label227
++   52 op add :n :n 1
++   53 label *label228
++   54 op sub :ptr :ptr 1
++   55 jump *label229 greaterThan :ptr 256
++   56 op sub :ptr 511 1
++   57 label *label229
++   58 label *label230
++   59 read *tmp15 MEMORY :ptr
++   60 op max :maximum :maximum *tmp15
++   61 label *label231
++   62 op add :n :n 1
++   63 label *label232
++   64 op sub :ptr :ptr 1
++   65 jump *label233 greaterThan :ptr 256
++   66 op sub :ptr 511 1
++   67 label *label233
++   68 label *label234
++   69 read *tmp15 MEMORY :ptr
++   70 op max :maximum :maximum *tmp15
++   71 label *label235
++   72 op add :n :n 1
++   73 label *label236
++   74 op sub :ptr :ptr 1
++   75 jump *label237 greaterThan :ptr 256
++   76 op sub :ptr 511 1
++   77 label *label237
++   78 label *label238
++   79 read *tmp15 MEMORY :ptr
++   80 op max :maximum :maximum *tmp15
++   81 label *label239
++   82 op add :n :n 1
++   83 label *label240
++   84 op sub :ptr :ptr 1
++   85 jump *label241 greaterThan :ptr 256
++   86 op sub :ptr 511 1
++   87 label *label241
++   88 label *label242
++   89 read *tmp15 MEMORY :ptr
++   90 op max :maximum :maximum *tmp15
++   91 label *label243
++   92 op add :n :n 1
++   93 label *label244
++   94 op sub :ptr :ptr 1
++   95 jump *label245 greaterThan :ptr 256
++   96 op sub :ptr 511 1
++   97 label *label245
++   98 label *label246
++   99 read *tmp15 MEMORY :ptr
++  100 op max :maximum :maximum *tmp15
++  101 label *label247
++  102 op add :n :n 1
++  103 label *label248
++  104 op sub :ptr :ptr 1
++  105 jump *label249 greaterThan :ptr 256
++  106 op sub :ptr 511 1
++  107 label *label249
++  108 label *label250
++  109 read *tmp15 MEMORY :ptr
++  110 op max :maximum :maximum *tmp15
++  111 label *label251
++  112 op add :n :n 1
++  113 label *label252
++  114 op sub :ptr :ptr 1
++  115 jump *label253 greaterThan :ptr 256
++  116 op sub :ptr 511 1
++  117 label *label253
++  118 label *label254
++  119 read *tmp15 MEMORY :ptr
++  120 op max :maximum :maximum *tmp15
++  121 label *label255
++  122 op add :n :n 1
++  123 label *label256
++  124 op sub :ptr :ptr 1
++  125 jump *label257 greaterThan :ptr 256
++  126 op sub :ptr 511 1
++  127 label *label257
++  128 label *label258
++  129 read *tmp15 MEMORY :ptr
++  130 op max :maximum :maximum *tmp15
++  131 label *label259
++  132 op add :n :n 1
++  133 label *label260
++  134 op sub :ptr :ptr 1
++  135 jump *label261 greaterThan :ptr 256
++  136 op sub :ptr 511 1
++  137 label *label261
++  138 label *label262
++  139 read *tmp15 MEMORY :ptr
++  140 op max :maximum :maximum *tmp15
++  141 label *label263
++  142 op add :n :n 1
++  143 label *label264
++  144 op sub :ptr :ptr 1
++  145 jump *label265 greaterThan :ptr 256
++  146 op sub :ptr 511 1
++  147 label *label265
++  148 label *label266
++  149 read *tmp15 MEMORY :ptr
++  150 op max :maximum :maximum *tmp15
++  151 label *label267
++  152 op add :n :n 1
++  153 label *label268
++  154 op sub :ptr :ptr 1
++  155 jump *label269 greaterThan :ptr 256
++  156 op sub :ptr 511 1
++  157 label *label269
++  158 label *label270
++  159 read *tmp15 MEMORY :ptr
++  160 op max :maximum :maximum *tmp15
++  161 label *label271
++  162 op add :n :n 1
++  163 label *label272
++  164 op sub :ptr :ptr 1
++  165 jump *label273 greaterThan :ptr 256
++  166 op sub :ptr 511 1
++  167 label *label273
++  168 label *label274
++  169 read *tmp15 MEMORY :ptr
++  170 op max :maximum :maximum *tmp15
++  171 label *label275
++  172 op add :n :n 1
++  173 label *label276
++  174 op sub :ptr :ptr 1
++  175 jump *label277 greaterThan :ptr 256
++  176 op sub :ptr 511 1
++  177 label *label277
++  178 label *label278
++  179 read *tmp15 MEMORY :ptr
++  180 op max :maximum :maximum *tmp15
++  181 label *label279
++  182 op add :n :n 1
++  183 label *label280
++  184 op sub :ptr :ptr 1
++  185 jump *label281 greaterThan :ptr 256
++  186 op sub :ptr 511 1
++  187 label *label281
++  188 label *label282
++  189 read *tmp15 MEMORY :ptr
++  190 op max :maximum :maximum *tmp15
++  191 label *label283
++  192 op add :n :n 1
++  193 label *label284
++  194 op sub :ptr :ptr 1
++  195 jump *label285 greaterThan :ptr 256
++  196 op sub :ptr 511 1
++  197 label *label285
++  198 label *label286
++  199 read *tmp15 MEMORY :ptr
++  200 op max :maximum :maximum *tmp15
++  201 label *label287
++  202 op add :n :n 1
++  203 label *label288
++  204 op sub :ptr :ptr 1
++  205 jump *label289 greaterThan :ptr 256
++  206 op sub :ptr 511 1
++  207 label *label289
++  208 label *label290
++  209 read *tmp15 MEMORY :ptr
++  210 op max :maximum :maximum *tmp15
++  211 label *label291
++  212 op add :n :n 1
++  213 label *label292
++  214 op sub :ptr :ptr 1
++  215 jump *label293 greaterThan :ptr 256
++  216 op sub :ptr 511 1
++  217 label *label293
++  218 label *label294
++  219 read *tmp15 MEMORY :ptr
++  220 op max :maximum :maximum *tmp15
++  221 label *label295
++  222 op add :n :n 1
++  223 label *label296
++  224 op sub :ptr :ptr 1
++  225 jump *label297 greaterThan :ptr 256
++  226 op sub :ptr 511 1
++  227 label *label297
++  228 label *label298
++  229 read *tmp15 MEMORY :ptr
++  230 op max :maximum :maximum *tmp15
++  231 label *label299
++  232 op add :n :n 1
++  233 label *label300
++  234 op sub :ptr :ptr 1
++  235 jump *label301 greaterThan :ptr 256
++  236 op sub :ptr 511 1
++  237 label *label301
++  238 label *label302
++  239 read *tmp15 MEMORY :ptr
++  240 op max :maximum :maximum *tmp15
++  241 label *label303
++  242 op add :n :n 1
++  243 label *label304
++  244 op sub :ptr :ptr 1
++  245 jump *label305 greaterThan :ptr 256
++  246 op sub :ptr 511 1
++  247 label *label305
++  248 label *label306
++  249 read *tmp15 MEMORY :ptr
++  250 op max :maximum :maximum *tmp15
++  251 label *label307
++  252 op add :n :n 1
++  253 label *label308
++  254 op sub :ptr :ptr 1
++  255 jump *label309 greaterThan :ptr 256
++  256 op sub :ptr 511 1
++  257 label *label309
++  258 label *label310
++  259 read *tmp15 MEMORY :ptr
++  260 op max :maximum :maximum *tmp15
++  261 label *label311
++  262 op add :n :n 1
++  263 label *label312
++  264 op sub :ptr :ptr 1
++  265 jump *label313 greaterThan :ptr 256
++  266 op sub :ptr 511 1
++  267 label *label313
++  268 label *label314
++  269 read *tmp15 MEMORY :ptr
++  270 op max :maximum :maximum *tmp15
++  271 label *label315
++  272 op add :n :n 1
++  273 label *label316
++  274 op sub :ptr :ptr 1
++  275 jump *label317 greaterThan :ptr 256
++  276 op sub :ptr 511 1
++  277 label *label317
++  278 label *label318
++  279 read *tmp15 MEMORY :ptr
++  280 op max :maximum :maximum *tmp15
++  281 label *label319
++  282 op add :n :n 1
++  283 label *label320
++  284 op sub :ptr :ptr 1
++  285 jump *label321 greaterThan :ptr 256
++  286 op sub :ptr 511 1
++  287 label *label321
++  288 label *label322
++  289 read *tmp15 MEMORY :ptr
++  290 op max :maximum :maximum *tmp15
++  291 label *label323
++  292 op add :n :n 1
++  293 label *label324
++  294 op sub :ptr :ptr 1
++  295 jump *label325 greaterThan :ptr 256
++  296 op sub :ptr 511 1
++  297 label *label325
++  298 label *label326
++  299 read *tmp15 MEMORY :ptr
++  300 op max :maximum :maximum *tmp15
++  301 label *label327
++  302 op add :n :n 1
++  303 label *label328
++  304 op sub :ptr :ptr 1
++  305 jump *label329 greaterThan :ptr 256
++  306 op sub :ptr 511 1
++  307 label *label329
++  308 label *label330
++  309 read *tmp15 MEMORY :ptr
++  310 op max :maximum :maximum *tmp15
++  311 label *label331
++  312 op add :n :n 1
++  313 label *label4
+   314 op mul :maximum :maximum SMOOTH
+   315 label *label7
+   316 sensor *tmp18 switch1 @enabled
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    29 read *tmp15 MEMORY :ptr
+    30 op max :maximum :maximum *tmp15
+    31 label *label219
+-    * op add :n :n 1
++   32 op add :n 0 1
+    33 label *label220
+    34 op sub :ptr :ptr 1
+    35 jump *label221 greaterThan :ptr 256
+ 
+    39 read *tmp15 MEMORY :ptr
+    40 op max :maximum :maximum *tmp15
+    41 label *label223
+-    * op add :n :n 1
++   42 op add :n 1 1
+    43 label *label224
+    44 op sub :ptr :ptr 1
+    45 jump *label225 greaterThan :ptr 256
+ 
+    49 read *tmp15 MEMORY :ptr
+    50 op max :maximum :maximum *tmp15
+    51 label *label227
+-    * op add :n :n 1
++   52 op add :n 2 1
+    53 label *label228
+    54 op sub :ptr :ptr 1
+    55 jump *label229 greaterThan :ptr 256
+ 
+    59 read *tmp15 MEMORY :ptr
+    60 op max :maximum :maximum *tmp15
+    61 label *label231
+-    * op add :n :n 1
++   62 op add :n 3 1
+    63 label *label232
+    64 op sub :ptr :ptr 1
+    65 jump *label233 greaterThan :ptr 256
+ 
+    69 read *tmp15 MEMORY :ptr
+    70 op max :maximum :maximum *tmp15
+    71 label *label235
+-    * op add :n :n 1
++   72 op add :n 4 1
+    73 label *label236
+    74 op sub :ptr :ptr 1
+    75 jump *label237 greaterThan :ptr 256
+ 
+    79 read *tmp15 MEMORY :ptr
+    80 op max :maximum :maximum *tmp15
+    81 label *label239
+-    * op add :n :n 1
++   82 op add :n 5 1
+    83 label *label240
+    84 op sub :ptr :ptr 1
+    85 jump *label241 greaterThan :ptr 256
+ 
+    89 read *tmp15 MEMORY :ptr
+    90 op max :maximum :maximum *tmp15
+    91 label *label243
+-    * op add :n :n 1
++   92 op add :n 6 1
+    93 label *label244
+    94 op sub :ptr :ptr 1
+    95 jump *label245 greaterThan :ptr 256
+ 
+    99 read *tmp15 MEMORY :ptr
+   100 op max :maximum :maximum *tmp15
+   101 label *label247
+-    * op add :n :n 1
++  102 op add :n 7 1
+   103 label *label248
+   104 op sub :ptr :ptr 1
+   105 jump *label249 greaterThan :ptr 256
+ 
+   109 read *tmp15 MEMORY :ptr
+   110 op max :maximum :maximum *tmp15
+   111 label *label251
+-    * op add :n :n 1
++  112 op add :n 8 1
+   113 label *label252
+   114 op sub :ptr :ptr 1
+   115 jump *label253 greaterThan :ptr 256
+ 
+   119 read *tmp15 MEMORY :ptr
+   120 op max :maximum :maximum *tmp15
+   121 label *label255
+-    * op add :n :n 1
++  122 op add :n 9 1
+   123 label *label256
+   124 op sub :ptr :ptr 1
+   125 jump *label257 greaterThan :ptr 256
+ 
+   129 read *tmp15 MEMORY :ptr
+   130 op max :maximum :maximum *tmp15
+   131 label *label259
+-    * op add :n :n 1
++  132 op add :n 10 1
+   133 label *label260
+   134 op sub :ptr :ptr 1
+   135 jump *label261 greaterThan :ptr 256
+ 
+   139 read *tmp15 MEMORY :ptr
+   140 op max :maximum :maximum *tmp15
+   141 label *label263
+-    * op add :n :n 1
++  142 op add :n 11 1
+   143 label *label264
+   144 op sub :ptr :ptr 1
+   145 jump *label265 greaterThan :ptr 256
+ 
+   149 read *tmp15 MEMORY :ptr
+   150 op max :maximum :maximum *tmp15
+   151 label *label267
+-    * op add :n :n 1
++  152 op add :n 12 1
+   153 label *label268
+   154 op sub :ptr :ptr 1
+   155 jump *label269 greaterThan :ptr 256
+ 
+   159 read *tmp15 MEMORY :ptr
+   160 op max :maximum :maximum *tmp15
+   161 label *label271
+-    * op add :n :n 1
++  162 op add :n 13 1
+   163 label *label272
+   164 op sub :ptr :ptr 1
+   165 jump *label273 greaterThan :ptr 256
+ 
+   169 read *tmp15 MEMORY :ptr
+   170 op max :maximum :maximum *tmp15
+   171 label *label275
+-    * op add :n :n 1
++  172 op add :n 14 1
+   173 label *label276
+   174 op sub :ptr :ptr 1
+   175 jump *label277 greaterThan :ptr 256
+ 
+   179 read *tmp15 MEMORY :ptr
+   180 op max :maximum :maximum *tmp15
+   181 label *label279
+-    * op add :n :n 1
++  182 op add :n 15 1
+   183 label *label280
+   184 op sub :ptr :ptr 1
+   185 jump *label281 greaterThan :ptr 256
+ 
+   189 read *tmp15 MEMORY :ptr
+   190 op max :maximum :maximum *tmp15
+   191 label *label283
+-    * op add :n :n 1
++  192 op add :n 16 1
+   193 label *label284
+   194 op sub :ptr :ptr 1
+   195 jump *label285 greaterThan :ptr 256
+ 
+   199 read *tmp15 MEMORY :ptr
+   200 op max :maximum :maximum *tmp15
+   201 label *label287
+-    * op add :n :n 1
++  202 op add :n 17 1
+   203 label *label288
+   204 op sub :ptr :ptr 1
+   205 jump *label289 greaterThan :ptr 256
+ 
+   209 read *tmp15 MEMORY :ptr
+   210 op max :maximum :maximum *tmp15
+   211 label *label291
+-    * op add :n :n 1
++  212 op add :n 18 1
+   213 label *label292
+   214 op sub :ptr :ptr 1
+   215 jump *label293 greaterThan :ptr 256
+ 
+   219 read *tmp15 MEMORY :ptr
+   220 op max :maximum :maximum *tmp15
+   221 label *label295
+-    * op add :n :n 1
++  222 op add :n 19 1
+   223 label *label296
+   224 op sub :ptr :ptr 1
+   225 jump *label297 greaterThan :ptr 256
+ 
+   229 read *tmp15 MEMORY :ptr
+   230 op max :maximum :maximum *tmp15
+   231 label *label299
+-    * op add :n :n 1
++  232 op add :n 20 1
+   233 label *label300
+   234 op sub :ptr :ptr 1
+   235 jump *label301 greaterThan :ptr 256
+ 
+   239 read *tmp15 MEMORY :ptr
+   240 op max :maximum :maximum *tmp15
+   241 label *label303
+-    * op add :n :n 1
++  242 op add :n 21 1
+   243 label *label304
+   244 op sub :ptr :ptr 1
+   245 jump *label305 greaterThan :ptr 256
+ 
+   249 read *tmp15 MEMORY :ptr
+   250 op max :maximum :maximum *tmp15
+   251 label *label307
+-    * op add :n :n 1
++  252 op add :n 22 1
+   253 label *label308
+   254 op sub :ptr :ptr 1
+   255 jump *label309 greaterThan :ptr 256
+ 
+   259 read *tmp15 MEMORY :ptr
+   260 op max :maximum :maximum *tmp15
+   261 label *label311
+-    * op add :n :n 1
++  262 op add :n 23 1
+   263 label *label312
+   264 op sub :ptr :ptr 1
+   265 jump *label313 greaterThan :ptr 256
+ 
+   269 read *tmp15 MEMORY :ptr
+   270 op max :maximum :maximum *tmp15
+   271 label *label315
+-    * op add :n :n 1
++  272 op add :n 24 1
+   273 label *label316
+   274 op sub :ptr :ptr 1
+   275 jump *label317 greaterThan :ptr 256
+ 
+   279 read *tmp15 MEMORY :ptr
+   280 op max :maximum :maximum *tmp15
+   281 label *label319
+-    * op add :n :n 1
++  282 op add :n 25 1
+   283 label *label320
+   284 op sub :ptr :ptr 1
+   285 jump *label321 greaterThan :ptr 256
+ 
+   289 read *tmp15 MEMORY :ptr
+   290 op max :maximum :maximum *tmp15
+   291 label *label323
+-    * op add :n :n 1
++  292 op add :n 26 1
+   293 label *label324
+   294 op sub :ptr :ptr 1
+   295 jump *label325 greaterThan :ptr 256
+ 
+   299 read *tmp15 MEMORY :ptr
+   300 op max :maximum :maximum *tmp15
+   301 label *label327
+-    * op add :n :n 1
++  302 op add :n 27 1
+   303 label *label328
+   304 op sub :ptr :ptr 1
+   305 jump *label329 greaterThan :ptr 256
+ 
+   309 read *tmp15 MEMORY :ptr
+   310 op max :maximum :maximum *tmp15
+   311 label *label331
+-    * op add :n :n 1
++  312 op add :n 28 1
+   313 label *label4
+   314 op mul :maximum :maximum SMOOTH
+   315 label *label7
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-30 instructions):
+ 
+    18 label *label0
+    19 label *label1
+    20 read :maximum MEMORY :ptr
+-    * set :n 0
+    21 label *label215
+    22 label *label216
+    23 op sub :ptr :ptr 1
+ 
+    28 read *tmp15 MEMORY :ptr
+    29 op max :maximum :maximum *tmp15
+    30 label *label219
+-    * op add :n 0 1
+    31 label *label220
+    32 op sub :ptr :ptr 1
+    33 jump *label221 greaterThan :ptr 256
+ 
+    37 read *tmp15 MEMORY :ptr
+    38 op max :maximum :maximum *tmp15
+    39 label *label223
+-    * op add :n 1 1
+    40 label *label224
+    41 op sub :ptr :ptr 1
+    42 jump *label225 greaterThan :ptr 256
+ 
+    46 read *tmp15 MEMORY :ptr
+    47 op max :maximum :maximum *tmp15
+    48 label *label227
+-    * op add :n 2 1
+    49 label *label228
+    50 op sub :ptr :ptr 1
+    51 jump *label229 greaterThan :ptr 256
+ 
+    55 read *tmp15 MEMORY :ptr
+    56 op max :maximum :maximum *tmp15
+    57 label *label231
+-    * op add :n 3 1
+    58 label *label232
+    59 op sub :ptr :ptr 1
+    60 jump *label233 greaterThan :ptr 256
+ 
+    64 read *tmp15 MEMORY :ptr
+    65 op max :maximum :maximum *tmp15
+    66 label *label235
+-    * op add :n 4 1
+    67 label *label236
+    68 op sub :ptr :ptr 1
+    69 jump *label237 greaterThan :ptr 256
+ 
+    73 read *tmp15 MEMORY :ptr
+    74 op max :maximum :maximum *tmp15
+    75 label *label239
+-    * op add :n 5 1
+    76 label *label240
+    77 op sub :ptr :ptr 1
+    78 jump *label241 greaterThan :ptr 256
+ 
+    82 read *tmp15 MEMORY :ptr
+    83 op max :maximum :maximum *tmp15
+    84 label *label243
+-    * op add :n 6 1
+    85 label *label244
+    86 op sub :ptr :ptr 1
+    87 jump *label245 greaterThan :ptr 256
+ 
+    91 read *tmp15 MEMORY :ptr
+    92 op max :maximum :maximum *tmp15
+    93 label *label247
+-    * op add :n 7 1
+    94 label *label248
+    95 op sub :ptr :ptr 1
+    96 jump *label249 greaterThan :ptr 256
+ 
+   100 read *tmp15 MEMORY :ptr
+   101 op max :maximum :maximum *tmp15
+   102 label *label251
+-    * op add :n 8 1
+   103 label *label252
+   104 op sub :ptr :ptr 1
+   105 jump *label253 greaterThan :ptr 256
+ 
+   109 read *tmp15 MEMORY :ptr
+   110 op max :maximum :maximum *tmp15
+   111 label *label255
+-    * op add :n 9 1
+   112 label *label256
+   113 op sub :ptr :ptr 1
+   114 jump *label257 greaterThan :ptr 256
+ 
+   118 read *tmp15 MEMORY :ptr
+   119 op max :maximum :maximum *tmp15
+   120 label *label259
+-    * op add :n 10 1
+   121 label *label260
+   122 op sub :ptr :ptr 1
+   123 jump *label261 greaterThan :ptr 256
+ 
+   127 read *tmp15 MEMORY :ptr
+   128 op max :maximum :maximum *tmp15
+   129 label *label263
+-    * op add :n 11 1
+   130 label *label264
+   131 op sub :ptr :ptr 1
+   132 jump *label265 greaterThan :ptr 256
+ 
+   136 read *tmp15 MEMORY :ptr
+   137 op max :maximum :maximum *tmp15
+   138 label *label267
+-    * op add :n 12 1
+   139 label *label268
+   140 op sub :ptr :ptr 1
+   141 jump *label269 greaterThan :ptr 256
+ 
+   145 read *tmp15 MEMORY :ptr
+   146 op max :maximum :maximum *tmp15
+   147 label *label271
+-    * op add :n 13 1
+   148 label *label272
+   149 op sub :ptr :ptr 1
+   150 jump *label273 greaterThan :ptr 256
+ 
+   154 read *tmp15 MEMORY :ptr
+   155 op max :maximum :maximum *tmp15
+   156 label *label275
+-    * op add :n 14 1
+   157 label *label276
+   158 op sub :ptr :ptr 1
+   159 jump *label277 greaterThan :ptr 256
+ 
+   163 read *tmp15 MEMORY :ptr
+   164 op max :maximum :maximum *tmp15
+   165 label *label279
+-    * op add :n 15 1
+   166 label *label280
+   167 op sub :ptr :ptr 1
+   168 jump *label281 greaterThan :ptr 256
+ 
+   172 read *tmp15 MEMORY :ptr
+   173 op max :maximum :maximum *tmp15
+   174 label *label283
+-    * op add :n 16 1
+   175 label *label284
+   176 op sub :ptr :ptr 1
+   177 jump *label285 greaterThan :ptr 256
+ 
+   181 read *tmp15 MEMORY :ptr
+   182 op max :maximum :maximum *tmp15
+   183 label *label287
+-    * op add :n 17 1
+   184 label *label288
+   185 op sub :ptr :ptr 1
+   186 jump *label289 greaterThan :ptr 256
+ 
+   190 read *tmp15 MEMORY :ptr
+   191 op max :maximum :maximum *tmp15
+   192 label *label291
+-    * op add :n 18 1
+   193 label *label292
+   194 op sub :ptr :ptr 1
+   195 jump *label293 greaterThan :ptr 256
+ 
+   199 read *tmp15 MEMORY :ptr
+   200 op max :maximum :maximum *tmp15
+   201 label *label295
+-    * op add :n 19 1
+   202 label *label296
+   203 op sub :ptr :ptr 1
+   204 jump *label297 greaterThan :ptr 256
+ 
+   208 read *tmp15 MEMORY :ptr
+   209 op max :maximum :maximum *tmp15
+   210 label *label299
+-    * op add :n 20 1
+   211 label *label300
+   212 op sub :ptr :ptr 1
+   213 jump *label301 greaterThan :ptr 256
+ 
+   217 read *tmp15 MEMORY :ptr
+   218 op max :maximum :maximum *tmp15
+   219 label *label303
+-    * op add :n 21 1
+   220 label *label304
+   221 op sub :ptr :ptr 1
+   222 jump *label305 greaterThan :ptr 256
+ 
+   226 read *tmp15 MEMORY :ptr
+   227 op max :maximum :maximum *tmp15
+   228 label *label307
+-    * op add :n 22 1
+   229 label *label308
+   230 op sub :ptr :ptr 1
+   231 jump *label309 greaterThan :ptr 256
+ 
+   235 read *tmp15 MEMORY :ptr
+   236 op max :maximum :maximum *tmp15
+   237 label *label311
+-    * op add :n 23 1
+   238 label *label312
+   239 op sub :ptr :ptr 1
+   240 jump *label313 greaterThan :ptr 256
+ 
+   244 read *tmp15 MEMORY :ptr
+   245 op max :maximum :maximum *tmp15
+   246 label *label315
+-    * op add :n 24 1
+   247 label *label316
+   248 op sub :ptr :ptr 1
+   249 jump *label317 greaterThan :ptr 256
+ 
+   253 read *tmp15 MEMORY :ptr
+   254 op max :maximum :maximum *tmp15
+   255 label *label319
+-    * op add :n 25 1
+   256 label *label320
+   257 op sub :ptr :ptr 1
+   258 jump *label321 greaterThan :ptr 256
+ 
+   262 read *tmp15 MEMORY :ptr
+   263 op max :maximum :maximum *tmp15
+   264 label *label323
+-    * op add :n 26 1
+   265 label *label324
+   266 op sub :ptr :ptr 1
+   267 jump *label325 greaterThan :ptr 256
+ 
+   271 read *tmp15 MEMORY :ptr
+   272 op max :maximum :maximum *tmp15
+   273 label *label327
+-    * op add :n 27 1
+   274 label *label328
+   275 op sub :ptr :ptr 1
+   276 jump *label329 greaterThan :ptr 256
+ 
+   280 read *tmp15 MEMORY :ptr
+   281 op max :maximum :maximum *tmp15
+   282 label *label331
+-    * op add :n 28 1
+   283 label *label4
+   284 op mul :maximum :maximum SMOOTH
+   285 label *label7
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
+ 
+   945 op sub *tmp48 :value :t
+   946 op add :value *tmp48 :h
+   947 op sub :head :head 1
+-    * jump *label209 greaterThan :head 256
+   948 label *label209
+   949 label *label210
+   950 op sub :tail :tail 1
+-    * jump *label211 greaterThan :tail 256
+   951 label *label211
+   952 label *label212
+   953 op mul *tmp56 :value :scale
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
+ 
+   944 read :h MEMORY :head
+   945 op sub *tmp48 :value :t
+   946 op add :value *tmp48 :h
+-    * op sub :head :head 1
+   947 label *label209
+   948 label *label210
+-    * op sub :tail :tail 1
+   949 label *label211
+   950 label *label212
+   951 op mul *tmp56 :value :scale
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   990 jump *label214 equal *tmp18 0
+   991 label *label9
+   992 control enabled switch1 0
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-16 instructions):
+ 
+     4 set TOTAL 1
+     5 set FREQ 1000
+     6 printflush message1
+-    * print "Item Rate Display"
+-    * print "\n"
+-    * print "[gold]Initializing...[]"
+-    * print "\n"
++    7 print "Item Rate Display\n[gold]Initializing...[]\n"
+     8 printflush message1
+     9 draw stroke 1
+    10 op mul .SHIFT POSITION 30
+ 
+   292 jump *label14 greaterThanEq 0 TOTAL
+   293 label *label35
+   294 read :m COORD :n
+-    * print "\n"
+-    * print "Coord: [gold]"
+-    * print :m
+-    * print "["
+-    * print "]"
++  295 print "\nCoord: [gold]{0}[]"
++  296 format :m
+   297 op max :maximum :maximum :m
+   298 label *label13
+   299 op add :n :n 1
+ 
+   303 label *label11
+   304 op div :scale 150 :maximum
+   305 op ceil *tmp29 :maximum
+-    * print "\n"
+-    * print "Maximum: [green]"
+-    * print *tmp29
+-    * print "["
+-    * print "]"
++  306 print "\nMaximum: [green]{0}[]\nScale: [green]{0}[]"
++  307 format *tmp29
+   308 op floor *tmp30 :scale
+-    * print "\n"
+-    * print "Scale: [green]"
+-    * print *tmp30
+-    * print "["
+-    * print "]"
++  309 format *tmp30
+   310 draw clear 0 0 80
+   311 draw color 0 80 0 255
+   312 draw rect 10 10 156 156
+ 
+   952 write :maximum COORD POSITION
+   953 op sub *tmp67 @time :start
+   954 op floor *tmp68 *tmp67
+-    * print "\n"
+-    * print "[lightgray]Loop time: "
+-    * print *tmp68
+-    * print " "
+-    * print "ms"
++  955 print "\n[lightgray]Loop time: {0} ms"
++  956 format *tmp68
+   957 op div *tmp69 @time FREQ
+   958 op ceil *tmp70 *tmp69
+   959 op mul :wait FREQ *tmp70
+
+Final code before resolving virtual instructions:
+
+set MEMORY bank1
+set COORD cell1
+set SMOOTH 3
+set POSITION 0
+set TOTAL 1
+set FREQ 1000
+printflush message1
+print "Item Rate Display\n[gold]Initializing...[]\n"
+printflush message1
+draw stroke 1 0 0 0 0 0
+op mul .SHIFT POSITION 30
+read *tmp4 MEMORY 256
+op sub :ptr *tmp4 .SHIFT
+jump *label0 greaterThanEq :ptr 256
+op add :ptr :ptr 254
+label *label0
+read :maximum MEMORY :ptr
+op sub :ptr :ptr 1
+jump *label217 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label217
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label221 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label221
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label225 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label225
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label229 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label229
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label233 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label233
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label237 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label237
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label241 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label241
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label245 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label245
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label249 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label249
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label253 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label253
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label257 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label257
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label261 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label261
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label265 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label265
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label269 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label269
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label273 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label273
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label277 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label277
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label281 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label281
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label285 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label285
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label289 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label289
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label293 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label293
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label297 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label297
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label301 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label301
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label305 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label305
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label309 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label309
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label313 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label313
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label317 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label317
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label321 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label321
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label325 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label325
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op sub :ptr :ptr 1
+jump *label329 greaterThan :ptr 256
+op sub :ptr 511 1
+label *label329
+read *tmp15 MEMORY :ptr
+op max :maximum :maximum *tmp15
+op mul :maximum :maximum SMOOTH
+sensor *tmp18 switch1 @enabled
+jump *label9 notEqual *tmp18 0
+label *label214
+print "Item Rate Display"
+set :start @time
+sensor *tmp21 COORD @dead
+jump *label10 notEqual *tmp21 0
+set :n 0
+jump *label14 greaterThanEq 0 TOTAL
+label *label35
+read :m COORD :n
+print "\nCoord: [gold]{0}[]"
+format :m
+op max :maximum :maximum :m
+op add :n :n 1
+jump *label35 lessThan :n TOTAL
+label *label14
+label *label10
+op div :scale 150 :maximum
+op ceil *tmp29 :maximum 0
+print "\nMaximum: [green]{0}[]\nScale: [green]{0}[]"
+format *tmp29
+op floor *tmp30 :scale 0
+format *tmp30
+draw clear 0 0 80 0 0 0
+draw color 0 80 0 255 0 0
+draw rect 10 10 156 156 0 0
+read *tmp32 MEMORY 256
+op sub :head *tmp32 .SHIFT
+jump *label15 greaterThanEq :head 256
+op add :head :head 254
+label *label15
+set :tail :head
+set :value 0
+set :i 0
+jump *label19 greaterThanEq 0 SMOOTH
+label *label36
+read *tmp38 MEMORY :head
+op add :value :value *tmp38
+op sub :head :head 1
+jump *label20 greaterThan :head 256
+op sub :head 511 1
+label *label20
+op add :i :i 1
+jump *label36 lessThan :i SMOOTH
+label *label19
+op mul *tmp42 :value :scale
+op add :last 10 *tmp42
+set :newMax :value
+draw color 80 255 80 255 0 0
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label41 greaterThan :head 256
+op sub :head 511 1
+label *label41
+op sub :tail :tail 1
+jump *label43 greaterThan :tail 256
+op sub :tail 511 1
+label *label43
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 159 :last 154 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label47 greaterThan :head 256
+op sub :head 511 1
+label *label47
+op sub :tail :tail 1
+jump *label49 greaterThan :tail 256
+op sub :tail 511 1
+label *label49
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 154 :last 149 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label53 greaterThan :head 256
+op sub :head 511 1
+label *label53
+op sub :tail :tail 1
+jump *label55 greaterThan :tail 256
+op sub :tail 511 1
+label *label55
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 149 :last 144 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label59 greaterThan :head 256
+op sub :head 511 1
+label *label59
+op sub :tail :tail 1
+jump *label61 greaterThan :tail 256
+op sub :tail 511 1
+label *label61
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 144 :last 139 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label65 greaterThan :head 256
+op sub :head 511 1
+label *label65
+op sub :tail :tail 1
+jump *label67 greaterThan :tail 256
+op sub :tail 511 1
+label *label67
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 139 :last 134 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label71 greaterThan :head 256
+op sub :head 511 1
+label *label71
+op sub :tail :tail 1
+jump *label73 greaterThan :tail 256
+op sub :tail 511 1
+label *label73
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 134 :last 129 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label77 greaterThan :head 256
+op sub :head 511 1
+label *label77
+op sub :tail :tail 1
+jump *label79 greaterThan :tail 256
+op sub :tail 511 1
+label *label79
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 129 :last 124 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label83 greaterThan :head 256
+op sub :head 511 1
+label *label83
+op sub :tail :tail 1
+jump *label85 greaterThan :tail 256
+op sub :tail 511 1
+label *label85
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 124 :last 119 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label89 greaterThan :head 256
+op sub :head 511 1
+label *label89
+op sub :tail :tail 1
+jump *label91 greaterThan :tail 256
+op sub :tail 511 1
+label *label91
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 119 :last 114 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label95 greaterThan :head 256
+op sub :head 511 1
+label *label95
+op sub :tail :tail 1
+jump *label97 greaterThan :tail 256
+op sub :tail 511 1
+label *label97
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 114 :last 109 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label101 greaterThan :head 256
+op sub :head 511 1
+label *label101
+op sub :tail :tail 1
+jump *label103 greaterThan :tail 256
+op sub :tail 511 1
+label *label103
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 109 :last 104 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label107 greaterThan :head 256
+op sub :head 511 1
+label *label107
+op sub :tail :tail 1
+jump *label109 greaterThan :tail 256
+op sub :tail 511 1
+label *label109
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 104 :last 99 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label113 greaterThan :head 256
+op sub :head 511 1
+label *label113
+op sub :tail :tail 1
+jump *label115 greaterThan :tail 256
+op sub :tail 511 1
+label *label115
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 99 :last 94 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label119 greaterThan :head 256
+op sub :head 511 1
+label *label119
+op sub :tail :tail 1
+jump *label121 greaterThan :tail 256
+op sub :tail 511 1
+label *label121
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 94 :last 89 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label125 greaterThan :head 256
+op sub :head 511 1
+label *label125
+op sub :tail :tail 1
+jump *label127 greaterThan :tail 256
+op sub :tail 511 1
+label *label127
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 89 :last 84 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label131 greaterThan :head 256
+op sub :head 511 1
+label *label131
+op sub :tail :tail 1
+jump *label133 greaterThan :tail 256
+op sub :tail 511 1
+label *label133
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 84 :last 79 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label137 greaterThan :head 256
+op sub :head 511 1
+label *label137
+op sub :tail :tail 1
+jump *label139 greaterThan :tail 256
+op sub :tail 511 1
+label *label139
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 79 :last 74 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label143 greaterThan :head 256
+op sub :head 511 1
+label *label143
+op sub :tail :tail 1
+jump *label145 greaterThan :tail 256
+op sub :tail 511 1
+label *label145
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 74 :last 69 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label149 greaterThan :head 256
+op sub :head 511 1
+label *label149
+op sub :tail :tail 1
+jump *label151 greaterThan :tail 256
+op sub :tail 511 1
+label *label151
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 69 :last 64 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label155 greaterThan :head 256
+op sub :head 511 1
+label *label155
+op sub :tail :tail 1
+jump *label157 greaterThan :tail 256
+op sub :tail 511 1
+label *label157
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 64 :last 59 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label161 greaterThan :head 256
+op sub :head 511 1
+label *label161
+op sub :tail :tail 1
+jump *label163 greaterThan :tail 256
+op sub :tail 511 1
+label *label163
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 59 :last 54 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label167 greaterThan :head 256
+op sub :head 511 1
+label *label167
+op sub :tail :tail 1
+jump *label169 greaterThan :tail 256
+op sub :tail 511 1
+label *label169
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 54 :last 49 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label173 greaterThan :head 256
+op sub :head 511 1
+label *label173
+op sub :tail :tail 1
+jump *label175 greaterThan :tail 256
+op sub :tail 511 1
+label *label175
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 49 :last 44 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label179 greaterThan :head 256
+op sub :head 511 1
+label *label179
+op sub :tail :tail 1
+jump *label181 greaterThan :tail 256
+op sub :tail 511 1
+label *label181
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 44 :last 39 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label185 greaterThan :head 256
+op sub :head 511 1
+label *label185
+op sub :tail :tail 1
+jump *label187 greaterThan :tail 256
+op sub :tail 511 1
+label *label187
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 39 :last 34 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label191 greaterThan :head 256
+op sub :head 511 1
+label *label191
+op sub :tail :tail 1
+jump *label193 greaterThan :tail 256
+op sub :tail 511 1
+label *label193
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 34 :last 29 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label197 greaterThan :head 256
+op sub :head 511 1
+label *label197
+op sub :tail :tail 1
+jump *label199 greaterThan :tail 256
+op sub :tail 511 1
+label *label199
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 29 :last 24 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op sub :head :head 1
+jump *label203 greaterThan :head 256
+op sub :head 511 1
+label *label203
+op sub :tail :tail 1
+jump *label205 greaterThan :tail 256
+op sub :tail 511 1
+label *label205
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 24 :last 19 :y 0 0
+set :last :y
+op max :newMax :newMax :value
+read :t MEMORY :tail
+read :h MEMORY :head
+op sub *tmp48 :value :t
+op add :value *tmp48 :h
+op mul *tmp56 :value :scale
+op add :y 10 *tmp56
+draw line 19 :last 14 :y 0 0
+op max :newMax :newMax :value
+draw color 255 255 255 255 0 0
+draw lineRect 10 10 156 156 0 0
+op max :maximum :newMax :maximum
+op mul *tmp61 3 :newMax
+jump *label29 greaterThanEq *tmp61 :maximum
+op mul :maximum 1.5 :newMax
+label *label29
+write :maximum COORD POSITION
+op sub *tmp67 @time :start
+op floor *tmp68 *tmp67 0
+print "\n[lightgray]Loop time: {0} ms"
+format *tmp68
+op div *tmp69 @time FREQ
+op ceil *tmp70 *tmp69 0
+op mul :wait FREQ *tmp70
+set :loops 0
+jump *label33 greaterThanEq @time :wait
+label *label38
+op add :loops :loops 1
+jump *label38 lessThan @time :wait
+label *label33
+drawflush display1
+print "\nLoops: "
+print :loops
+printflush message1
+sensor *tmp18 switch1 @enabled
+jump *label214 equal *tmp18 0
+label *label9
+control enabled switch1 0 0 0 0

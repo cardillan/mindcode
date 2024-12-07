@@ -1,488 +1,653 @@
-Main file: number of reported ambiguities: 5
 
 Final code before resolving virtual instructions:
 
     0:  assertflush
-    1:  set __fn3__number null
-    2:  setaddr __fn3retaddr __label6
-    3:  call __label3 __fn3retval
-        gotolabel __label6 __fn3
+    1:  set :fn3:number null
+    2:  setaddr :fn3*retaddr *label8
+    3:  call *label3 :fn3*retval
+        gotolabel *label8 :fn3
     4:  assertprints "0" "printNumber(null)"
     5:  assertflush
-    6:  set __fn3__number 1
-    7:  setaddr __fn3retaddr __label7
-    8:  call __label3 __fn3retval
-        gotolabel __label7 __fn3
+    6:  set :fn3:number 1
+    7:  setaddr :fn3*retaddr *label9
+    8:  call *label3 :fn3*retval
+        gotolabel *label9 :fn3
     9:  assertprints "1" "printNumber(1)"
    10:  assertflush
-   11:  set __fn3__number 1.5
-   12:  setaddr __fn3retaddr __label8
-   13:  call __label3 __fn3retval
-        gotolabel __label8 __fn3
+   11:  set :fn3:number 1.5
+   12:  setaddr :fn3*retaddr *label10
+   13:  call *label3 :fn3*retval
+        gotolabel *label10 :fn3
    14:  assertprints "1" "printNumber(1.5)"
    15:  assertflush
-   16:  set __fn3__number -1.5
-   17:  setaddr __fn3retaddr __label9
-   18:  call __label3 __fn3retval
-        gotolabel __label9 __fn3
+   16:  set :fn3:number -1.5
+   17:  setaddr :fn3*retaddr *label11
+   18:  call *label3 :fn3*retval
+        gotolabel *label11 :fn3
    19:  assertprints "-1" "printNumber(-1.5)"
    20:  assertflush
-   21:  set __fn3__number 1234567
-   22:  setaddr __fn3retaddr __label10
-   23:  call __label3 __fn3retval
-        gotolabel __label10 __fn3
+   21:  set :fn3:number 1234567
+   22:  setaddr :fn3*retaddr *label12
+   23:  call *label3 :fn3*retval
+        gotolabel *label12 :fn3
    24:  assertprints "1,234,567" "printNumber(1234567)"
    25:  assertflush
-   26:  set __fn3__number -1234567
-   27:  setaddr __fn3retaddr __label11
-   28:  call __label3 __fn3retval
-        gotolabel __label11 __fn3
+   26:  set :fn3:number -1234567
+   27:  setaddr :fn3*retaddr *label13
+   28:  call *label3 :fn3*retval
+        gotolabel *label13 :fn3
    29:  assertprints "-1,234,567" "printNumber(-1234567)"
    30:  assertflush
-   31:  set __fn3__number 9009099
-   32:  setaddr __fn3retaddr __label12
-   33:  call __label3 __fn3retval
-        gotolabel __label12 __fn3
+   31:  set :fn3:number 9009099
+   32:  setaddr :fn3*retaddr *label14
+   33:  call *label3 :fn3*retval
+        gotolabel *label14 :fn3
    34:  assertprints "9,009,099" "printNumber(9009099)"
    35:  assertflush
-   36:  set __fn4__n null
-   37:  setaddr __fn4retaddr __label13
-   38:  call __label4 __fn4retval
-        gotolabel __label13 __fn4
-   39:  assertprints "null" "printExactFast(null)"
-   40:  assertflush
-   41:  set __fn4__n 0
-   42:  setaddr __fn4retaddr __label14
-   43:  call __label4 __fn4retval
-        gotolabel __label14 __fn4
-   44:  assertprints "0" "printExactFast(0)"
-   45:  assertflush
-   46:  set __fn4__n 1
-   47:  setaddr __fn4retaddr __label15
-   48:  call __label4 __fn4retval
-        gotolabel __label15 __fn4
-   49:  assertprints "1" "printExactFast(1)"
-   50:  assertflush
-   51:  set __fn4__n 1.0000001
-   52:  setaddr __fn4retaddr __label16
-   53:  call __label4 __fn4retval
-        gotolabel __label16 __fn4
-   54:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
-   55:  assertflush
-   56:  set __fn4__n 3.00000007
-   57:  setaddr __fn4retaddr __label17
-   58:  call __label4 __fn4retval
-        gotolabel __label17 __fn4
-   59:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
-   60:  assertflush
-   61:  set __fn4__n 3E50
-   62:  setaddr __fn4retaddr __label18
-   63:  call __label4 __fn4retval
-        gotolabel __label18 __fn4
-   64:  assertprints "3E50" "printExactFast(3e50)"
+   36:  set :fn4:number 0b1001
+   37:  set :fn4:digits 0
+   38:  setaddr :fn4*retaddr *label15
+   39:  call *label4 :fn4*retval
+        gotolabel *label15 :fn4
+   40:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
+   41:  assertflush
+   42:  set :fn4:number 0b1010
+   43:  set :fn4:digits 6
+   44:  setaddr :fn4*retaddr *label16
+   45:  call *label4 :fn4*retval
+        gotolabel *label16 :fn4
+   46:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
+   47:  assertflush
+   48:  set :fn5:number 0xABCDEF
+   49:  set :fn5:digits 0
+   50:  setaddr :fn5*retaddr *label17
+   51:  call *label5 :fn5*retval
+        gotolabel *label17 :fn5
+   52:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+   53:  assertflush
+   54:  set :fn5:number 0x1234567890
+   55:  set :fn5:digits 0
+   56:  setaddr :fn5*retaddr *label18
+   57:  call *label5 :fn5*retval
+        gotolabel *label18 :fn5
+   58:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
+   59:  assertflush
+   60:  set :fn5:number 0xAABBCC
+   61:  set :fn5:digits 8
+   62:  setaddr :fn5*retaddr *label19
+   63:  call *label5 :fn5*retval
+        gotolabel *label19 :fn5
+   64:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
    65:  assertflush
-   66:  set __fn4__n 1.0123456789
-   67:  setaddr __fn4retaddr __label19
-   68:  call __label4 __fn4retval
-        gotolabel __label19 __fn4
-   69:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
+   66:  set :fn6:n null
+   67:  setaddr :fn6*retaddr *label20
+   68:  call *label6 :fn6*retval
+        gotolabel *label20 :fn6
+   69:  assertprints "null" "printExactFast(null)"
    70:  assertflush
-   71:  set __fn4__n 10000001E13
-   72:  setaddr __fn4retaddr __label20
-   73:  call __label4 __fn4retval
-        gotolabel __label20 __fn4
-   74:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
+   71:  set :fn6:n 0
+   72:  setaddr :fn6*retaddr *label21
+   73:  call *label6 :fn6*retval
+        gotolabel *label21 :fn6
+   74:  assertprints "0" "printExactFast(0)"
    75:  assertflush
-   76:  set __fn4__n 12345E-54
-   77:  setaddr __fn4retaddr __label21
-   78:  call __label4 __fn4retval
-        gotolabel __label21 __fn4
-   79:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+   76:  set :fn6:n 1
+   77:  setaddr :fn6*retaddr *label22
+   78:  call *label6 :fn6*retval
+        gotolabel *label22 :fn6
+   79:  assertprints "1" "printExactFast(1)"
    80:  assertflush
-   81:  set __fn4__n -12345E-54
-   82:  setaddr __fn4retaddr __label22
-   83:  call __label4 __fn4retval
-        gotolabel __label22 __fn4
-   84:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+   81:  set :fn6:n 1.0000001
+   82:  setaddr :fn6*retaddr *label23
+   83:  call *label6 :fn6*retval
+        gotolabel *label23 :fn6
+   84:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
    85:  assertflush
-   86:  set __fn5__n null
-   87:  setaddr __fn5retaddr __label23
-   88:  call __label5 __fn5retval
-        gotolabel __label23 __fn5
-   89:  assertprints "null" "printExactSlow(null)"
+   86:  set :fn6:n 3.00000007
+   87:  setaddr :fn6*retaddr *label24
+   88:  call *label6 :fn6*retval
+        gotolabel *label24 :fn6
+   89:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
    90:  assertflush
-   91:  set __fn5__n 0
-   92:  setaddr __fn5retaddr __label24
-   93:  call __label5 __fn5retval
-        gotolabel __label24 __fn5
-   94:  assertprints "0" "printExactSlow(0)"
+   91:  set :fn6:n 3E50
+   92:  setaddr :fn6*retaddr *label25
+   93:  call *label6 :fn6*retval
+        gotolabel *label25 :fn6
+   94:  assertprints "3E50" "printExactFast(3e50)"
    95:  assertflush
-   96:  set __fn5__n 1
-   97:  setaddr __fn5retaddr __label25
-   98:  call __label5 __fn5retval
-        gotolabel __label25 __fn5
-   99:  assertprints "1.000000000000000" "printExactSlow(1)"
+   96:  set :fn6:n 1.0123456789
+   97:  setaddr :fn6*retaddr *label26
+   98:  call *label6 :fn6*retval
+        gotolabel *label26 :fn6
+   99:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
   100:  assertflush
-  101:  set __fn5__n 1.0000001
-  102:  setaddr __fn5retaddr __label26
-  103:  call __label5 __fn5retval
-        gotolabel __label26 __fn5
-  104:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+  101:  set :fn6:n 10000001E13
+  102:  setaddr :fn6*retaddr *label27
+  103:  call *label6 :fn6*retval
+        gotolabel *label27 :fn6
+  104:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
   105:  assertflush
-  106:  set __fn5__n 3.00000007
-  107:  setaddr __fn5retaddr __label27
-  108:  call __label5 __fn5retval
-        gotolabel __label27 __fn5
-  109:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  106:  set :fn6:n 12345E-54
+  107:  setaddr :fn6*retaddr *label28
+  108:  call *label6 :fn6*retval
+        gotolabel *label28 :fn6
+  109:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
   110:  assertflush
-  111:  set __fn5__n 3E50
-  112:  setaddr __fn5retaddr __label28
-  113:  call __label5 __fn5retval
-        gotolabel __label28 __fn5
-  114:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  111:  set :fn6:n -12345E-54
+  112:  setaddr :fn6*retaddr *label29
+  113:  call *label6 :fn6*retval
+        gotolabel *label29 :fn6
+  114:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
   115:  assertflush
-  116:  set __fn5__n 1.0123456789
-  117:  setaddr __fn5retaddr __label29
-  118:  call __label5 __fn5retval
-        gotolabel __label29 __fn5
-  119:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  116:  set :fn7:n null
+  117:  setaddr :fn7*retaddr *label30
+  118:  call *label7 :fn7*retval
+        gotolabel *label30 :fn7
+  119:  assertprints "null" "printExactSlow(null)"
   120:  assertflush
-  121:  set __fn5__n 10000001E13
-  122:  setaddr __fn5retaddr __label30
-  123:  call __label5 __fn5retval
-        gotolabel __label30 __fn5
-  124:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  121:  set :fn7:n 0
+  122:  setaddr :fn7*retaddr *label31
+  123:  call *label7 :fn7*retval
+        gotolabel *label31 :fn7
+  124:  assertprints "0" "printExactSlow(0)"
   125:  assertflush
-  126:  set __fn5__n 12345E-54
-  127:  setaddr __fn5retaddr __label31
-  128:  call __label5 __fn5retval
-        gotolabel __label31 __fn5
-  129:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  126:  set :fn7:n 1
+  127:  setaddr :fn7*retaddr *label32
+  128:  call *label7 :fn7*retval
+        gotolabel *label32 :fn7
+  129:  assertprints "1.000000000000000" "printExactSlow(1)"
   130:  assertflush
-  131:  set __fn5__n -12345E-54
-  132:  setaddr __fn5retaddr __label32
-  133:  call __label5 __fn5retval
-        gotolabel __label32 __fn5
-  134:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-  135:  stop
-  136:  end
-        label __label3
-  137:  print "{2}"
-        label __label34
-  138:  set __fn6__number __fn3__number
-  139:  op abs __tmp0 __fn6__number 0
-  140:  op floor __tmp1 __tmp0 0
-  141:  set __fn6__n __tmp1
-  142:  op lessThan __tmp2 __fn6__number 0
-  143:  jump __label36 equal __tmp2 false
-  144:  format "-{2}"
-  145:  set __tmp3 "-{2}"
-  146:  jump __label37 always 0 0
-        label __label36
-  147:  set __tmp3 null
-        label __label37
-        label __label38
-  148:  op greaterThan __tmp4 __fn6__n 999
-  149:  jump __label40 equal __tmp4 false
-  150:  op mod __tmp5 __fn6__n 1000
-  151:  set __fn6__mod __tmp5
-  152:  op lessThan __tmp6 __fn6__mod 10
-  153:  jump __label41 equal __tmp6 false
-  154:  set __tmp7 "{2},00{1}"
-  155:  jump __label42 always 0 0
-        label __label41
-  156:  op lessThan __tmp8 __fn6__mod 100
-  157:  jump __label43 equal __tmp8 false
-  158:  set __tmp9 "{2},0{1}"
-  159:  jump __label44 always 0 0
-        label __label43
-  160:  set __tmp9 "{2},{1}"
-        label __label44
-  161:  set __tmp7 __tmp9
-        label __label42
-  162:  format __tmp7
-  163:  format __fn6__mod
-  164:  op idiv __tmp10 __fn6__n 1000
-  165:  set __fn6__n __tmp10
-        label __label39
-  166:  jump __label38 always 0 0
-        label __label40
-  167:  format __fn6__n
-        label __label35
-        label __label33
-  168:  goto __fn3retaddr __fn3
-  169:  end
-        label __label4
-        label __label46
-  170:  set __fn7__x __fn4__n
-  171:  op abs __tmp12 __fn7__x 0
-  172:  op lessThanEq __tmp13 __tmp12 0
-  173:  set __tmp11 __tmp13
-        label __label47
-  174:  jump __label48 equal __tmp11 false
-  175:  print __fn4__n
-  176:  set __tmp14 __fn4__n
-  177:  jump __label49 always 0 0
-        label __label48
-  178:  op lessThan __tmp15 __fn4__n 0
-  179:  jump __label50 equal __tmp15 false
-  180:  print "-"
-  181:  op abs __tmp17 __fn4__n 0
-  182:  set __fn4__n __tmp17
-  183:  set __tmp16 __fn4__n
-  184:  jump __label51 always 0 0
-        label __label50
-  185:  set __tmp16 null
-        label __label51
-  186:  op log10 __tmp18 __fn4__n 0
-  187:  op floor __tmp19 __tmp18 0
-  188:  set __fn4__exp __tmp19
-  189:  op mul __tmp20 -1 __fn4__exp
-  190:  op pow __tmp21 10 __tmp20
-  191:  op mul __tmp22 __fn4__n __tmp21
-  192:  set __fn4__base __tmp22
-        label __label52
-  193:  set __fn8__x __fn4__base
-  194:  op add __tmp24 __fn8__x 0.5
-  195:  op floor __tmp25 __tmp24 0
-  196:  set __tmp23 __tmp25
-        label __label53
-  197:  op sub __tmp26 __fn4__base __tmp23
-  198:  op abs __tmp27 __tmp26 0
-  199:  set __fn4__cmp __tmp27
-  200:  op lessThanEq __tmp28 __fn4__cmp 0
-  201:  jump __label54 equal __tmp28 false
-  202:  print __fn4__base
-  203:  set __tmp29 __fn4__base
-  204:  jump __label55 always 0 0
-        label __label54
-  205:  op greaterThan __tmp30 __fn4__cmp 0.00001
-  206:  jump __label56 equal __tmp30 false
-  207:  print __fn4__base
-  208:  set __tmp31 __fn4__base
-  209:  jump __label57 always 0 0
-        label __label56
-  210:  op floor __tmp32 __fn4__base 0
-  211:  print __tmp32
-  212:  print "."
-  213:  set __fn4__digit 1
-        label __label58
-  214:  jump __label60 greaterThan __fn4__digit 3
-        label __label61
-  215:  set __fn9__x __fn4__base
-  216:  op mod __tmp34 __fn9__x 1
-  217:  set __tmp33 __tmp34
-        label __label62
-  218:  op mul __tmp35 __tmp33 100000
-  219:  set __fn4__base __tmp35
-  220:  op floor __tmp36 __fn4__base 0
-  221:  set __fn4__t __tmp36
-  222:  op lessThan __tmp37 __fn4__t 10
-  223:  jump __label63 equal __tmp37 false
-  224:  print "0000"
-  225:  set __tmp38 "0000"
-  226:  jump __label64 always 0 0
-        label __label63
-  227:  op lessThan __tmp39 __fn4__t 100
-  228:  jump __label65 equal __tmp39 false
-  229:  print "000"
-  230:  set __tmp40 "000"
-  231:  jump __label66 always 0 0
-        label __label65
-  232:  op lessThan __tmp41 __fn4__t 1000
-  233:  jump __label67 equal __tmp41 false
-  234:  print "00"
-  235:  set __tmp42 "00"
-  236:  jump __label68 always 0 0
-        label __label67
-  237:  op lessThan __tmp43 __fn4__t 10000
-  238:  jump __label69 equal __tmp43 false
-  239:  print "0"
-  240:  set __tmp44 "0"
-  241:  jump __label70 always 0 0
-        label __label69
-  242:  set __tmp44 null
-        label __label70
-  243:  set __tmp42 __tmp44
-        label __label68
-  244:  set __tmp40 __tmp42
-        label __label66
-  245:  set __tmp38 __tmp40
-        label __label64
-  246:  print __fn4__t
-        label __label59
-  247:  op add __fn4__digit __fn4__digit 1
-  248:  jump __label58 always 0 0
-        label __label60
-  249:  set __tmp31 null
-        label __label57
-  250:  set __tmp29 __tmp31
-        label __label55
-  251:  op notEqual __tmp45 __fn4__exp 0
-  252:  jump __label71 equal __tmp45 false
-  253:  print "E"
-  254:  print __fn4__exp
-  255:  set __tmp46 __fn4__exp
-  256:  jump __label72 always 0 0
-        label __label71
-  257:  set __tmp46 null
-        label __label72
-  258:  set __tmp14 __tmp46
-        label __label49
-        label __label45
-  259:  goto __fn4retaddr __fn4
-  260:  end
-        label __label5
-        label __label74
-  261:  set __fn10__x __fn5__n
-  262:  op abs __tmp48 __fn10__x 0
-  263:  op lessThanEq __tmp49 __tmp48 0
-  264:  set __tmp47 __tmp49
-        label __label75
-  265:  jump __label76 equal __tmp47 false
-  266:  print __fn5__n
-  267:  set __tmp50 __fn5__n
-  268:  jump __label77 always 0 0
-        label __label76
-  269:  op lessThan __tmp51 __fn5__n 0
-  270:  jump __label78 equal __tmp51 false
-  271:  print "-"
-  272:  op abs __tmp53 __fn5__n 0
-  273:  set __fn5__n __tmp53
-  274:  set __tmp52 __fn5__n
-  275:  jump __label79 always 0 0
-        label __label78
-  276:  set __tmp52 null
-        label __label79
-  277:  op log10 __tmp54 __fn5__n 0
-  278:  op floor __tmp55 __tmp54 0
-  279:  set __fn5__exp __tmp55
-  280:  op mul __tmp56 -1 __fn5__exp
-  281:  op pow __tmp57 10 __tmp56
-  282:  op mul __tmp58 __fn5__n __tmp57
-  283:  set __fn5__base __tmp58
-  284:  op floor __tmp59 __fn5__base 0
-  285:  print __tmp59
-  286:  print "."
-  287:  set __fn5__digit 1
-        label __label80
-  288:  jump __label82 greaterThan __fn5__digit 15
-        label __label83
-  289:  set __fn11__x __fn5__base
-  290:  op mod __tmp61 __fn11__x 1
-  291:  set __tmp60 __tmp61
-        label __label84
-  292:  op mul __tmp62 __tmp60 10
-  293:  set __fn5__base __tmp62
-  294:  op floor __tmp63 __fn5__base 0
-  295:  print __tmp63
-        label __label81
-  296:  op add __fn5__digit __fn5__digit 1
-  297:  jump __label80 always 0 0
-        label __label82
-  298:  op notEqual __tmp64 __fn5__exp 0
-  299:  jump __label85 equal __tmp64 false
-  300:  print "E"
-  301:  print __fn5__exp
-  302:  set __tmp65 __fn5__exp
-  303:  jump __label86 always 0 0
-        label __label85
-  304:  set __tmp65 null
-        label __label86
-  305:  set __tmp50 __tmp65
-        label __label77
-        label __label73
-  306:  goto __fn5retaddr __fn5
-  307:  end
+  131:  set :fn7:n 1.0000001
+  132:  setaddr :fn7*retaddr *label33
+  133:  call *label7 :fn7*retval
+        gotolabel *label33 :fn7
+  134:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+  135:  assertflush
+  136:  set :fn7:n 3.00000007
+  137:  setaddr :fn7*retaddr *label34
+  138:  call *label7 :fn7*retval
+        gotolabel *label34 :fn7
+  139:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  140:  assertflush
+  141:  set :fn7:n 3E50
+  142:  setaddr :fn7*retaddr *label35
+  143:  call *label7 :fn7*retval
+        gotolabel *label35 :fn7
+  144:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  145:  assertflush
+  146:  set :fn7:n 1.0123456789
+  147:  setaddr :fn7*retaddr *label36
+  148:  call *label7 :fn7*retval
+        gotolabel *label36 :fn7
+  149:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  150:  assertflush
+  151:  set :fn7:n 10000001E13
+  152:  setaddr :fn7*retaddr *label37
+  153:  call *label7 :fn7*retval
+        gotolabel *label37 :fn7
+  154:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  155:  assertflush
+  156:  set :fn7:n 12345E-54
+  157:  setaddr :fn7*retaddr *label38
+  158:  call *label7 :fn7*retval
+        gotolabel *label38 :fn7
+  159:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  160:  assertflush
+  161:  set :fn7:n -12345E-54
+  162:  setaddr :fn7*retaddr *label39
+  163:  call *label7 :fn7*retval
+        gotolabel *label39 :fn7
+  164:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  165:  stop
+  166:  end
+        label *label3
+  167:  print "{2}"
+  168:  set :fn8:number :fn3:number
+  169:  op abs *tmp0 :fn8:number 0
+  170:  op floor *tmp1 *tmp0 0
+  171:  set :fn8:n *tmp1
+  172:  op lessThan *tmp2 :fn8:number 0
+  173:  jump *label42 equal *tmp2 false
+  174:  format "-{2}"
+  175:  set *tmp3 "-{2}"
+  176:  jump *label43 always 0 0
+        label *label42
+  177:  set *tmp3 null
+        label *label43
+        label *label44
+  178:  op greaterThan *tmp4 :fn8:n 999
+  179:  jump *label46 equal *tmp4 false
+  180:  op mod *tmp5 :fn8:n 1000
+  181:  set :fn8:mod *tmp5
+  182:  op lessThan *tmp6 :fn8:mod 10
+  183:  jump *label47 equal *tmp6 false
+  184:  set *tmp7 "{2},00{1}"
+  185:  jump *label48 always 0 0
+        label *label47
+  186:  op lessThan *tmp8 :fn8:mod 100
+  187:  jump *label49 equal *tmp8 false
+  188:  set *tmp9 "{2},0{1}"
+  189:  jump *label50 always 0 0
+        label *label49
+  190:  set *tmp9 "{2},{1}"
+        label *label50
+  191:  set *tmp7 *tmp9
+        label *label48
+  192:  format *tmp7
+  193:  format :fn8:mod
+  194:  op idiv :fn8:n :fn8:n 1000
+        label *label45
+  195:  jump *label44 always 0 0
+        label *label46
+  196:  format :fn8:n
+        label *label41
+        label *label40
+  197:  goto :fn3*retaddr :fn3
+  198:  end
+        label *label4
+  199:  print "{2}"
+  200:  set :fn9:number :fn4:number
+  201:  set :fn9:digits :fn4:digits
+  202:  op floor *tmp10 :fn9:number 0
+  203:  set :fn9:n *tmp10
+        label *label53
+  204:  op and *tmp11 :fn9:n 1
+  205:  format "{2}{1}"
+  206:  format *tmp11
+  207:  op shr :fn9:n :fn9:n 1
+  208:  op sub :fn9:digits :fn9:digits 1
+        label *label54
+  209:  op greaterThan *tmp12 :fn9:n 0
+  210:  jump *label53 notEqual *tmp12 false
+        label *label55
+        label *label56
+  211:  op greaterThan *tmp13 :fn9:digits 0
+  212:  jump *label58 equal *tmp13 false
+  213:  format "{2}0"
+  214:  set *tmp14 :fn9:digits
+  215:  op sub :fn9:digits :fn9:digits 1
+        label *label57
+  216:  jump *label56 always 0 0
+        label *label58
+  217:  format "0b"
+        label *label52
+        label *label51
+  218:  goto :fn4*retaddr :fn4
+  219:  end
+        label *label5
+  220:  print "{2}"
+  221:  set :fn10:number :fn5:number
+  222:  set :fn10:digits :fn5:digits
+  223:  op floor *tmp15 :fn10:number 0
+  224:  set :fn10:n *tmp15
+        label *label61
+  225:  op mod *tmp16 :fn10:n 16
+  226:  set :fn10:digit *tmp16
+  227:  set *tmp18 :fn10:digit
+  228:  jump *label67 lessThan *tmp18 0
+  229:  jump *label66 lessThanEq *tmp18 9
+        label *label67
+  230:  jump *label65 always 0 0
+        label *label66
+  231:  format "{2}{1}"
+  232:  format :fn10:digit
+  233:  set *tmp17 :fn10:digit
+  234:  jump *label64 always 0 0
+        label *label65
+  235:  jump *label69 equal *tmp18 10
+  236:  jump *label68 always 0 0
+        label *label69
+  237:  format "{2}A"
+  238:  set *tmp17 "{2}A"
+  239:  jump *label64 always 0 0
+        label *label68
+  240:  jump *label71 equal *tmp18 11
+  241:  jump *label70 always 0 0
+        label *label71
+  242:  format "{2}B"
+  243:  set *tmp17 "{2}B"
+  244:  jump *label64 always 0 0
+        label *label70
+  245:  jump *label73 equal *tmp18 12
+  246:  jump *label72 always 0 0
+        label *label73
+  247:  format "{2}C"
+  248:  set *tmp17 "{2}C"
+  249:  jump *label64 always 0 0
+        label *label72
+  250:  jump *label75 equal *tmp18 13
+  251:  jump *label74 always 0 0
+        label *label75
+  252:  format "{2}D"
+  253:  set *tmp17 "{2}D"
+  254:  jump *label64 always 0 0
+        label *label74
+  255:  jump *label77 equal *tmp18 14
+  256:  jump *label76 always 0 0
+        label *label77
+  257:  format "{2}E"
+  258:  set *tmp17 "{2}E"
+  259:  jump *label64 always 0 0
+        label *label76
+  260:  jump *label79 equal *tmp18 15
+  261:  jump *label78 always 0 0
+        label *label79
+  262:  format "{2}F"
+  263:  set *tmp17 "{2}F"
+  264:  jump *label64 always 0 0
+        label *label78
+  265:  set *tmp17 null
+        label *label64
+  266:  op shr :fn10:n :fn10:n 4
+  267:  op sub :fn10:digits :fn10:digits 1
+        label *label62
+  268:  op greaterThan *tmp19 :fn10:n 0
+  269:  jump *label61 notEqual *tmp19 false
+        label *label63
+        label *label80
+  270:  op greaterThan *tmp20 :fn10:digits 0
+  271:  jump *label82 equal *tmp20 false
+  272:  format "{2}0"
+  273:  set *tmp21 :fn10:digits
+  274:  op sub :fn10:digits :fn10:digits 1
+        label *label81
+  275:  jump *label80 always 0 0
+        label *label82
+  276:  format "0x"
+        label *label60
+        label *label59
+  277:  goto :fn5*retaddr :fn5
+  278:  end
+        label *label6
+  279:  set :fn11:x :fn6:n
+  280:  op abs *tmp23 :fn11:x 0
+  281:  op lessThanEq *tmp24 *tmp23 0
+  282:  set *tmp22 *tmp24
+        label *label84
+  283:  jump *label85 equal *tmp22 false
+  284:  print :fn6:n
+  285:  set *tmp25 :fn6:n
+  286:  jump *label86 always 0 0
+        label *label85
+  287:  op lessThan *tmp26 :fn6:n 0
+  288:  jump *label87 equal *tmp26 false
+  289:  print "-"
+  290:  op abs *tmp28 :fn6:n 0
+  291:  set :fn6:n *tmp28
+  292:  set *tmp27 :fn6:n
+  293:  jump *label88 always 0 0
+        label *label87
+  294:  set *tmp27 null
+        label *label88
+  295:  op log10 *tmp29 :fn6:n 0
+  296:  op floor *tmp30 *tmp29 0
+  297:  set :fn6:exp *tmp30
+  298:  op sub *tmp31 0 :fn6:exp
+  299:  op pow *tmp32 10 *tmp31
+  300:  op mul *tmp33 :fn6:n *tmp32
+  301:  set :fn6:base *tmp33
+  302:  set :fn12:x :fn6:base
+  303:  op add *tmp35 :fn12:x 0.5
+  304:  op floor *tmp36 *tmp35 0
+  305:  set *tmp34 *tmp36
+        label *label89
+  306:  op sub *tmp37 :fn6:base *tmp34
+  307:  op abs *tmp38 *tmp37 0
+  308:  set :fn6:cmp *tmp38
+  309:  op lessThanEq *tmp39 :fn6:cmp 0
+  310:  jump *label90 equal *tmp39 false
+  311:  print :fn6:base
+  312:  set *tmp40 :fn6:base
+  313:  jump *label91 always 0 0
+        label *label90
+  314:  op greaterThan *tmp41 :fn6:cmp 0.00001
+  315:  jump *label92 equal *tmp41 false
+  316:  print :fn6:base
+  317:  set *tmp42 :fn6:base
+  318:  jump *label93 always 0 0
+        label *label92
+  319:  op floor *tmp43 :fn6:base 0
+  320:  print *tmp43
+  321:  print "."
+  322:  set :fn6:digit 1
+        label *label94
+  323:  jump *label96 greaterThan :fn6:digit 3
+  324:  set :fn13:x :fn6:base
+  325:  op mod *tmp45 :fn13:x 1
+  326:  set *tmp44 *tmp45
+        label *label97
+  327:  op mul *tmp46 *tmp44 100000
+  328:  set :fn6:base *tmp46
+  329:  op floor *tmp47 :fn6:base 0
+  330:  set :fn6:t *tmp47
+  331:  op lessThan *tmp48 :fn6:t 10
+  332:  jump *label98 equal *tmp48 false
+  333:  print "0000"
+  334:  set *tmp49 "0000"
+  335:  jump *label99 always 0 0
+        label *label98
+  336:  op lessThan *tmp50 :fn6:t 100
+  337:  jump *label100 equal *tmp50 false
+  338:  print "000"
+  339:  set *tmp51 "000"
+  340:  jump *label101 always 0 0
+        label *label100
+  341:  op lessThan *tmp52 :fn6:t 1000
+  342:  jump *label102 equal *tmp52 false
+  343:  print "00"
+  344:  set *tmp53 "00"
+  345:  jump *label103 always 0 0
+        label *label102
+  346:  op lessThan *tmp54 :fn6:t 10000
+  347:  jump *label104 equal *tmp54 false
+  348:  print "0"
+  349:  set *tmp55 "0"
+  350:  jump *label105 always 0 0
+        label *label104
+  351:  set *tmp55 null
+        label *label105
+  352:  set *tmp53 *tmp55
+        label *label103
+  353:  set *tmp51 *tmp53
+        label *label101
+  354:  set *tmp49 *tmp51
+        label *label99
+  355:  print :fn6:t
+        label *label95
+  356:  op add :fn6:digit :fn6:digit 1
+  357:  jump *label94 always 0 0
+        label *label96
+  358:  set *tmp42 null
+        label *label93
+  359:  set *tmp40 *tmp42
+        label *label91
+  360:  op notEqual *tmp56 :fn6:exp 0
+  361:  jump *label106 equal *tmp56 false
+  362:  print "E"
+  363:  print :fn6:exp
+  364:  set *tmp57 :fn6:exp
+  365:  jump *label107 always 0 0
+        label *label106
+  366:  set *tmp57 null
+        label *label107
+  367:  set *tmp25 *tmp57
+        label *label86
+        label *label83
+  368:  goto :fn6*retaddr :fn6
+  369:  end
+        label *label7
+  370:  set :fn14:x :fn7:n
+  371:  op abs *tmp59 :fn14:x 0
+  372:  op lessThanEq *tmp60 *tmp59 0
+  373:  set *tmp58 *tmp60
+        label *label109
+  374:  jump *label110 equal *tmp58 false
+  375:  print :fn7:n
+  376:  set *tmp61 :fn7:n
+  377:  jump *label111 always 0 0
+        label *label110
+  378:  op lessThan *tmp62 :fn7:n 0
+  379:  jump *label112 equal *tmp62 false
+  380:  print "-"
+  381:  op abs *tmp64 :fn7:n 0
+  382:  set :fn7:n *tmp64
+  383:  set *tmp63 :fn7:n
+  384:  jump *label113 always 0 0
+        label *label112
+  385:  set *tmp63 null
+        label *label113
+  386:  op log10 *tmp65 :fn7:n 0
+  387:  op floor *tmp66 *tmp65 0
+  388:  set :fn7:exp *tmp66
+  389:  op sub *tmp67 0 :fn7:exp
+  390:  op pow *tmp68 10 *tmp67
+  391:  op mul *tmp69 :fn7:n *tmp68
+  392:  set :fn7:base *tmp69
+  393:  op floor *tmp70 :fn7:base 0
+  394:  print *tmp70
+  395:  print "."
+  396:  set :fn7:digit 1
+        label *label114
+  397:  jump *label116 greaterThan :fn7:digit 15
+  398:  set :fn15:x :fn7:base
+  399:  op mod *tmp72 :fn15:x 1
+  400:  set *tmp71 *tmp72
+        label *label117
+  401:  op mul *tmp73 *tmp71 10
+  402:  set :fn7:base *tmp73
+  403:  op floor *tmp74 :fn7:base 0
+  404:  print *tmp74
+        label *label115
+  405:  op add :fn7:digit :fn7:digit 1
+  406:  jump *label114 always 0 0
+        label *label116
+  407:  op notEqual *tmp75 :fn7:exp 0
+  408:  jump *label118 equal *tmp75 false
+  409:  print "E"
+  410:  print :fn7:exp
+  411:  set *tmp76 :fn7:exp
+  412:  jump *label119 always 0 0
+        label *label118
+  413:  set *tmp76 null
+        label *label119
+  414:  set *tmp61 *tmp76
+        label *label111
+        label *label108
+  415:  goto :fn7*retaddr :fn7
+  416:  end
 
 
 stop instruction encountered, dumping variable values:
-@counter: 136.0
-__fn10__x: -1.2345E-50
-__fn11__x: 0.015276668818842154
-__fn3__number: 9009099.0
-__fn3retaddr: 34.0
-__fn4__base: 1.2345000000000002
-__fn4__cmp: 0.23450000000000015
-__fn4__digit: 4.0
-__fn4__exp: -50.0
-__fn4__n: 1.2345E-50
-__fn4__t: 99999.0
-__fn4retaddr: 84.0
-__fn5__base: 0.15276668818842154
-__fn5__digit: 16.0
-__fn5__exp: -50.0
-__fn5__n: 1.2345E-50
-__fn5retaddr: 134.0
-__fn6__mod: 9.0
-__fn6__n: 9.0
-__fn6__number: 9009099.0
-__fn7__x: -1.2345E-50
-__fn8__x: 1.2345000000000002
-__fn9__x: 999.9999983634211
-__tmp0: 9009099.0
-__tmp1: 9009099.0
-__tmp10: 9.0
-__tmp11: 0.0
-__tmp12: 1.2345E-50
-__tmp13: 0.0
-__tmp14: -50.0
-__tmp15: 1.0
-__tmp16: 1.2345E-50
-__tmp17: 1.2345E-50
-__tmp18: -49.90850890573205
-__tmp19: -50.0
-__tmp2: 0.0
-__tmp20: 50.0
-__tmp21: 1.0E50
-__tmp22: 1.2345000000000002
-__tmp23: 1.0
-__tmp24: 1.7345000000000002
-__tmp25: 1.0
-__tmp26: 0.23450000000000015
-__tmp27: 0.23450000000000015
-__tmp28: 0.0
-__tmp29: 1.2345000000000002
-__tmp3: null
-__tmp30: 1.0
-__tmp31: 1.2345000000000002
-__tmp32: 1.0
-__tmp33: 0.9999983634211276
-__tmp34: 0.9999983634211276
-__tmp35: 99999.83634211276
-__tmp36: 99999.0
-__tmp37: 0.0
-__tmp38: null
-__tmp39: 0.0
-__tmp4: 0.0
-__tmp40: null
-__tmp41: 0.0
-__tmp42: null
-__tmp43: 0.0
-__tmp44: null
-__tmp45: 1.0
-__tmp46: -50.0
-__tmp47: 0.0
-__tmp48: 1.2345E-50
-__tmp49: 0.0
-__tmp5: 9.0
-__tmp50: -50.0
-__tmp51: 1.0
-__tmp52: 1.2345E-50
-__tmp53: 1.2345E-50
-__tmp54: -49.90850890573205
-__tmp55: -50.0
-__tmp56: 50.0
-__tmp57: 1.0E50
-__tmp58: 1.2345000000000002
-__tmp59: 1.0
-__tmp6: 1.0
-__tmp60: 0.015276668818842154
-__tmp61: 0.015276668818842154
-__tmp62: 0.15276668818842154
-__tmp63: 0.0
-__tmp64: 1.0
-__tmp65: -50.0
-__tmp7: {2},00{1}
-__tmp8: 1.0
-__tmp9: {2},0{1}
+*tmp0: 9009099.0
+*tmp1: 9009099.0
+*tmp10: 10.0
+*tmp11: 1.0
+*tmp12: 0.0
+*tmp13: 0.0
+*tmp14: 1.0
+*tmp15: 1.1189196E7
+*tmp16: 10.0
+*tmp17: {2}A
+*tmp18: 10.0
+*tmp19: 0.0
+*tmp2: 0.0
+*tmp20: 0.0
+*tmp21: 1.0
+*tmp22: 0.0
+*tmp23: 1.2345E-50
+*tmp24: 0.0
+*tmp25: -50.0
+*tmp26: 1.0
+*tmp27: 1.2345E-50
+*tmp28: 1.2345E-50
+*tmp29: -49.90850890573205
+*tmp3: null
+*tmp30: -50.0
+*tmp31: 50.0
+*tmp32: 1.0E50
+*tmp33: 1.2345000000000002
+*tmp34: 1.0
+*tmp35: 1.7345000000000002
+*tmp36: 1.0
+*tmp37: 0.23450000000000015
+*tmp38: 0.23450000000000015
+*tmp39: 0.0
+*tmp4: 0.0
+*tmp40: 1.2345000000000002
+*tmp41: 1.0
+*tmp42: 1.2345000000000002
+*tmp43: 1.0
+*tmp44: 0.9999983634211276
+*tmp45: 0.9999983634211276
+*tmp46: 99999.83634211276
+*tmp47: 99999.0
+*tmp48: 0.0
+*tmp49: null
+*tmp5: 9.0
+*tmp50: 0.0
+*tmp51: null
+*tmp52: 0.0
+*tmp53: null
+*tmp54: 0.0
+*tmp55: null
+*tmp56: 1.0
+*tmp57: -50.0
+*tmp58: 0.0
+*tmp59: 1.2345E-50
+*tmp6: 1.0
+*tmp60: 0.0
+*tmp61: -50.0
+*tmp62: 1.0
+*tmp63: 1.2345E-50
+*tmp64: 1.2345E-50
+*tmp65: -49.90850890573205
+*tmp66: -50.0
+*tmp67: 50.0
+*tmp68: 1.0E50
+*tmp69: 1.2345000000000002
+*tmp7: {2},00{1}
+*tmp70: 1.0
+*tmp71: 0.015276668818842154
+*tmp72: 0.015276668818842154
+*tmp73: 0.15276668818842154
+*tmp74: 0.0
+*tmp75: 1.0
+*tmp76: -50.0
+*tmp8: 1.0
+*tmp9: {2},0{1}
+:fn10:digit: 10.0
+:fn10:digits: 0.0
+:fn10:n: 0.0
+:fn10:number: 1.1189196E7
+:fn11:x: -1.2345E-50
+:fn12:x: 1.2345000000000002
+:fn13:x: 999.9999983634211
+:fn14:x: -1.2345E-50
+:fn15:x: 0.015276668818842154
+:fn3*retaddr: 34.0
+:fn3:number: 9009099.0
+:fn4*retaddr: 46.0
+:fn4:digits: 6.0
+:fn4:number: 10.0
+:fn5*retaddr: 64.0
+:fn5:digits: 8.0
+:fn5:number: 1.1189196E7
+:fn6*retaddr: 114.0
+:fn6:base: 1.2345000000000002
+:fn6:cmp: 0.23450000000000015
+:fn6:digit: 4.0
+:fn6:exp: -50.0
+:fn6:n: 1.2345E-50
+:fn6:t: 99999.0
+:fn7*retaddr: 164.0
+:fn7:base: 0.15276668818842154
+:fn7:digit: 16.0
+:fn7:exp: -50.0
+:fn7:n: 1.2345E-50
+:fn8:mod: 9.0
+:fn8:n: 9.0
+:fn8:number: 9009099.0
+:fn9:digits: 0.0
+:fn9:n: 0.0
+:fn9:number: 10.0
+@counter: 166.0

@@ -1,0 +1,19 @@
+     6 instructions before optimizations.
+     1 instructions eliminated by Single Step Elimination (3 iterations).
+     5 instructions after optimizations.
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+     3 read *tmp0 bank1 0
+     4 assertequals 10 *tmp0 "value from memory"
+     5 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+label *label0
+jump *label0 equal bank1 null
+write 10 bank1 0
+read *tmp0 bank1 0
+assertequals 10 *tmp0 "value from memory"
+stop

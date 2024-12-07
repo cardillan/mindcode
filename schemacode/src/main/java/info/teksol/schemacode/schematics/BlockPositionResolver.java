@@ -1,24 +1,23 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.ToolMessage;
-import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.mindustry.Position;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class BlockPositionResolver {
 
-    private final Consumer<MindcodeMessage> messageListener;
+    private final MessageConsumer messageListener;
 
     private final Set<String> circularBlocks = new HashSet<>();
 
-    public BlockPositionResolver(Consumer<MindcodeMessage> messageListener) {
+    public BlockPositionResolver(MessageConsumer messageListener) {
         this.messageListener = messageListener;
     }
 

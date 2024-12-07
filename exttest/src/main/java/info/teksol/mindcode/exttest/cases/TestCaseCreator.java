@@ -1,7 +1,7 @@
 package info.teksol.mindcode.exttest.cases;
 
-import info.teksol.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 
 public interface TestCaseCreator {
 

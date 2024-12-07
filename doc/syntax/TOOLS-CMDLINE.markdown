@@ -1,16 +1,13 @@
 # Command line tool
 
-After building the project, an executable jar file is created at `compiler\target\mindcode.jar`. In the bin 
-directory, there's a Linux script file `mindcode` and a Windows batch file `mindcode.bat`, which can be used to run the 
-command line tool.
+After building the project, an executable jar file is created at `compiler\target\mindcode.jar`. In the bin directory, there's a Linux script file `mindcode` and a Windows batch file `mindcode.bat`, which can be used to run the command line tool.
 
-* Linux `mindcode` file requires Java 16 or Java 17 executable to be on the path.
-* Windows `mindcode.bat` file requires the `JAVA_HOME` variable to point to Java 16 or Java 17 installation.
+* Linux `mindcode` file requires Java 22 executable to be on the path.
+* Windows `mindcode.bat` file requires the `JAVA_HOME` variable to point to Java 22 installation.
 
 # Using the command line tool
 
-The command line tool supports three different actions. The action is specified by the first command line argument, 
-which must be one of the following:
+The command line tool supports three different actions. The action is specified by the first command line argument, which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
 * `dm` or `decompile-mlog`: partially decompiles an mlog code into Mindcode. The resulting code needs to be manually edited to create loops and conditions present in the original mlog.
@@ -19,21 +16,23 @@ which must be one of the following:
 
 ## Input/output files
 
-All actions take the name of input file and the name of output file as an argument. When the given input or output is 
-a text file, the argument is optional and when not specified, the standard input/output is used. Use `-` to explicitly 
-specify standard input or output for input or output file.
+All actions take the name of input file and the name of output file as an argument. When the given input or output is a text file, the argument is optional and when not specified, the standard input/output is used. Use `-` to explicitly specify standard input or output for input or output file.
+
+### Input file excerpt
+
+Mindcode accepts the `--excerpt` command line option followed by a `line:column-line:column` specification of the portion of the input file to load for compiling (both line and column indexes starting at 1). For example, `--excerpt 8:5-15:17` selects text starting at line 8, column 5 and ending at line 15, column 17 from the input file. Some IDEs can be configured to produce these values corresponding to the selected text, giving teh ability to compile just the selected text using Mindcode.
+
+The `--excerpt` option is applied only to the main input file, not to the files added through the `--append` command line option or `require` directive.
 
 ### Additional input files
 
 When performing the _Compile Mindcode_ action, it is possible to use the `-a` or `--append` command line parameter to specify additional source files to be compiled along with the input file. The source files are parsed separately and error messages that may be generated during the compilation include the name of the file where the error occurred.
 
-The `--append` command-line option has the same effect as the [`require` statement](SYNTAX.markdown#libraries-and-included-files).
+The `--append` command-line option has the same effect as the [`require` statement](SYNTAX.markdown#libraries-and-external-files).
 
 ## Log file
 
-The `-l` argument can be used to specify log file, a file which receives messages generated while running the tool. 
-When such file isn't specified, the standard output is used (if standard output is already used for the output file, 
-messages are witten to the standard error instead).
+The `-l` argument can be used to specify log file, a file which receives messages generated while running the tool. When such file isn't specified, the standard output is used (if standard output is already used for the output file, messages are witten to the standard error instead).
 
 ## MLog Watcher integration
 
@@ -41,13 +40,10 @@ The command-line tool can send the compiled code directly into a processor in a 
 
 ## Clipboard integration
 
-When compiling Mindcode or building a schematic, the `-c` or `--clipboard` argument can be used. In this case, if the 
-action was successful, the output is copied to the clipboard and can be pasted directly into Mindustry:
+When compiling Mindcode or building a schematic, the `-c` or `--clipboard` argument can be used. In this case, if the action was successful, the output is copied to the clipboard and can be pasted directly into Mindustry:
 
-* _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the 
-  processor configuration screen, by using **Edit/Import from clipboard** command.
-* _Compile Schematic_ action: clipboard contains schematic encoded into Mindustry Schematic string, which can be pasted 
-  as new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
+* _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the processor configuration screen, by using **Edit/Import from clipboard** command.
+* _Compile Schematic_ action: clipboard contains schematic encoded into Mindustry Schematic string, which can be pasted as new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
 ## Running the compiled code
 
@@ -57,14 +53,11 @@ The behavior of the processor emulator can be further modified through the execu
 
 ## Compiler options
 
-Compiler options, such as target Mindustry Logic version and compiler optimizations, can be specified for _Compile 
-Mindcode_ and _Compile schema_ actions. See the command line help for more details.
+Compiler options, such as target Mindustry Logic version and compiler optimizations, can be specified for _Compile Mindcode_ and _Compile schema_ actions. See the command line help for more details.
 
 # Command line help
 
-It is possible to obtain command line help by using a `-h` or `--help` argument. A general help is displayed when no 
-action is specified, and an action-specific help is displayed when using `-h` together with action. For reference, 
-the command line help is included here.
+It is possible to obtain command line help by using a `-h` or `--help` argument. A general help is displayed when no action is specified, and an action-specific help is displayed when using `-h` together with action. For reference, the command line help is included here.
 
 ## General help
 
@@ -94,17 +87,18 @@ Actions:
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-l [LOG]]
-                [-a FILE [FILE ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-r {NONE,PASSIVE,ACTIVE}]
+usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
+                [-l [LOG]] [-a FILE [FILE ...]] [-y {STRICT,MIXED,RELAXED}]
+                [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
+                [-r {NONE,PASSIVE,ACTIVE}] [--link-guards {true,false}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [--run] [--run-steps {1..1000000000}] [--trace-execution {true,false}]
-                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
-                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
-                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}]
-                [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
                 [--err-graphics-buffer-overflow {true,false}] [-o LEVEL] [--temp-variables-elimination LEVEL]
@@ -133,16 +127,22 @@ input/output files:
   input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified
   output                 Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
+  --excerpt [EXCERPT]    Allows to specify a portion of the  input  file  as  input, parts outside the specified excerpt
+                         are ignored. The excerpt needs to  be  specified as 'line:column-line:column' (':column' may be
+                         omitted if it is equal to 1), giving  two  positions  inside the main input file separated by a
+                         dash. The start position must precede the end position.
   -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
   -a, --append FILE [FILE ...]
                          Additional Mindcode source file to  be  compiled  along  with  the  input file. Such additional
-                         files may contain common functions. More than one file may be added this way.
+                         files may contain common functions. More  than  one  file  may  be  added this way. The excerpt
+                         argument isn't applied to additional files.
 
 compiler options:
-  -t, --target {6,7s,7w,7as,7aw}
-                         selects target processor version and edition (version  6,  version 7 with standard processor or
-                         world processor, version 7 rev. A with standard processor or world processor)
+  -y, --syntax {STRICT,MIXED,RELAXED}
+                         specifies syntactic mode used to compile the source code
+  -t, --target {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}
+                         selects target processor version and edition ('w' suffix specifies the world processor)
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
   -e, --passes {1..1000}
@@ -153,6 +153,9 @@ compiler options:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
+  --link-guards {true,false}
+                         when set to true,  generates  code  to  ensure  each  declared  linked  block  is linked to the
+                         processor before the program runs
   --sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]
                          prepends the final  code  with  instructions  which  ensure  variables  are  created inside the
                          processor in a defined order. The variables are  sorted according to their categories in order,
@@ -173,6 +176,8 @@ run options:
                          is reached.
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
+  --dump-variables-on-stop {true,false}
+                         output variable values when the 'stop' instruction is encountered
   --stop-on-stop-instruction {true,false}
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
@@ -190,9 +195,9 @@ run options:
   --err-assignment-to-fixed-var {true,false}
                          stop execution on attempts to write a value to an unmodifiable built-in variable
   --err-not-an-object {true,false}
-                         stop execution when a numerical value is used instead of an object
+                         stop execution when a numeric value is used instead of an object
   --err-not-a-number {true,false}
-                         stop execution when an object is used instead of a numerical value
+                         stop execution when an object is used instead of a numeric value
   --err-invalid-content {true,false}
                          stop execution when an invalid index is used in the 'lookup' instruction
   --err-invalid-link {true,false}
@@ -289,8 +294,9 @@ named arguments:
 ## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-l [LOG]] [-a TAG [TAG ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}]
-                [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}]
+usage: mindcode cs [-h] [-c] [-l [LOG]] [-a TAG [TAG ...]] [-y {STRICT,MIXED,RELAXED}]
+                [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
+                [-r {NONE,PASSIVE,ACTIVE}] [--link-guards {true,false}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [-o LEVEL] [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
@@ -318,9 +324,10 @@ schematic creation:
                          supported
 
 compiler options:
-  -t, --target {6,7s,7w,7as,7aw}
-                         selects target processor version and edition (version  6,  version 7 with standard processor or
-                         world processor, version 7 rev. A with standard processor or world processor)
+  -y, --syntax {STRICT,MIXED,RELAXED}
+                         specifies syntactic mode used to compile the source code
+  -t, --target {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}
+                         selects target processor version and edition ('w' suffix specifies the world processor)
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
   -e, --passes {1..1000}
@@ -331,6 +338,9 @@ compiler options:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
+  --link-guards {true,false}
+                         when set to true,  generates  code  to  ensure  each  declared  linked  block  is linked to the
+                         processor before the program runs
   --sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]
                          prepends the final  code  with  instructions  which  ensure  variables  are  created inside the
                          processor in a defined order. The variables are  sorted according to their categories in order,

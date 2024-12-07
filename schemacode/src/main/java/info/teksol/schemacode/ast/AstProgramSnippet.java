@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 public interface AstProgramSnippet extends AstSchemaItem {
@@ -9,7 +9,7 @@ public interface AstProgramSnippet extends AstSchemaItem {
 
     String getProgramText(SchematicsBuilder builder);
 
-    InputPosition getInputPosition(SchematicsBuilder builder);
+    SourcePosition getSourcePosition(SchematicsBuilder builder);
 
     default int getIndent(SchematicsBuilder builder) {
         return 0;

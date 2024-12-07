@@ -1,6 +1,6 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.Tuple2;
+import info.teksol.mc.util.Tuple2;
 import info.teksol.schemacode.config.PositionArray;
 
 import java.util.HashSet;
@@ -42,20 +42,20 @@ class BridgeSolver {
 
         if (orthogonal) {
             if (!block.position().orthogonal(linked.position())) {
-                builder.error(block.inputPosition(), "Block '%s' at %s has a connection leading to %s, which is neither horizontal nor vertical.",
+                builder.error(block.sourcePosition(), "Block '%s' at %s has a connection leading to %s, which is neither horizontal nor vertical.",
                         block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
             } else if (outOfRange(block, linked)) {
-                builder.error(block.inputPosition(),"Block '%s' at %s has an out-of-range connection to %s.",
+                builder.error(block.sourcePosition(),"Block '%s' at %s has an out-of-range connection to %s.",
                         block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
             } else {
                 Block next = getLinkedBlock(linked, false);
                 if (next == block && linkBacks.add(Tuple2.of(Math.min(block.index(), linked.index()), Math.max(block.index(), linked.index())))) {
-                    builder.error(block.inputPosition(),"Two '%s' blocks at %s and %s connect to each other.",
+                    builder.error(block.sourcePosition(),"Two '%s' blocks at %s and %s connect to each other.",
                             block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
                 }
             }
         } else if (outOfRange(block, linked)) {
-            builder.error(block.inputPosition(),"Block '%s' at %s has an out-of-range connection to %s.",
+            builder.error(block.sourcePosition(),"Block '%s' at %s has an out-of-range connection to %s.",
                     block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
         }
     }
@@ -65,7 +65,7 @@ class BridgeSolver {
         if (links.size() == 0) {
             return null;
         } else if (links.size() > 1 && reportErrors) {
-            builder.error(block.inputPosition(),"Block '%s' at %s has more than one connection.", block.name(), block.position().toStringAbsolute());
+            builder.error(block.sourcePosition(),"Block '%s' at %s has more than one connection.", block.name(), block.position().toStringAbsolute());
         }
 
         Block linked = positionMap.at(links.get(0));
@@ -75,13 +75,13 @@ class BridgeSolver {
 
         if (!linked.blockType().equals(block.blockType())) {
             if (reportErrors) {
-                builder.error(block.inputPosition(),"Block '%s' at %s has a connection leading to a different block type '%s' at %s.",
+                builder.error(block.sourcePosition(),"Block '%s' at %s has a connection leading to a different block type '%s' at %s.",
                         block.name(), block.position().toStringAbsolute(), linked.name(), linked.position().toStringAbsolute());
             }
             return null;
         } else if (linked == block) {
             if (reportErrors) {
-                builder.error(block.inputPosition(),"Block '%s' at %s has a connection to self.", block.name(), block.position().toStringAbsolute());
+                builder.error(block.sourcePosition(),"Block '%s' at %s has a connection to self.", block.name(), block.position().toStringAbsolute());
             }
             return null;
         }

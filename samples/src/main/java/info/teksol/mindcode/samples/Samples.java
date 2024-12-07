@@ -14,8 +14,8 @@ public class Samples {
     public static Map<String, Sample> loadMindcodeSamples() {
         final List<String> sampleNames = List.of(
                 "control-two-units",
-                "one-thorium",
-                "many-thorium",
+                "relaxed:one-thorium",
+                "relaxed:many-thorium",
                 "heal-damaged-building",
                 "mining-drone",
                 "upgrade-conveyors",
@@ -53,7 +53,8 @@ public class Samples {
 
     private static Sample loadSample(String path, String sampleName, String extension) {
         boolean slow = sampleName.startsWith("slow:");
-        String fileName = sampleName.replace("slow:", "");
+        boolean relaxed = sampleName.startsWith("relaxed:");
+        String fileName = sampleName.replaceAll(".*:", "");
 
         URL sample = Samples.class.getClassLoader().getResource(path + fileName + extension);
         if (sample == null) {
@@ -63,7 +64,7 @@ public class Samples {
         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(sample.openStream()))) {
             final StringWriter out = new StringWriter();
             reader.transferTo(out);
-            return new Sample(fileName, out.toString(), slow);
+            return new Sample(fileName, out.toString(), slow, relaxed);
         } catch (IOException e) {
             throw new RuntimeException("Failed to read sample file: " + fileName);
         }

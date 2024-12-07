@@ -2,12 +2,18 @@
 
 require blocks;
 
-findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
-    @large-logic-display,   "Display",  out display,    true,
-    @message,               "Message",  out message,    false,
-    @switch,                "Switch",   out switch,     false,
-    @memory-bank,           "Memory",   out memory,     true,
-    @memory-cell,           "Memory",   out memory,     true
-);
+linked message1;
 
-assertEquals(message, message1, "Located message1 block");
+begin
+    var display, message, switch, memory;
+
+    findLinkedBlocks("Example program.\nTrying to locate linked blocks", message1,
+        @large-logic-display,   "Display",  out display,    true,
+        @message,               "Message",  out message,    false,
+        @switch,                "Switch",   out switch,     false,
+        @memory-bank,           "Memory",   out memory,     true,
+        @memory-cell,           "Memory",   out memory,     true
+    );
+
+    assertEquals(message, message1, "Located message1 block");
+end;

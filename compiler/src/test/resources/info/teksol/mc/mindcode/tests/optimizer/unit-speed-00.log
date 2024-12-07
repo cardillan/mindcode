@@ -1,0 +1,488 @@
+    97 instructions before optimizations.
+     6 instructions eliminated by Temp Variables Elimination.
+     6 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Single Step Elimination (4 iterations).
+     1 instructions eliminated by Expression Optimization (2 iterations).
+     7 instructions eliminated by Data Flow Optimization (9 iterations).
+     5 instructions added by Loop Optimization (2 iterations).
+     6 loops improved by Loop Optimization.
+    10 instructions eliminated by Print Merging.
+    71 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 923):
+  * Replicate loop condition at line 17:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+    Replicate loop condition at line 24:1                        cost     1, benefit       25.0, efficiency       25.0
+    Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency       25.0
+    Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency       25.0
+    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency       25.0
+
+Pass 1: speed optimization selection (cost limit 922):
+  * Replicate loop condition at line 24:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+    Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency       25.0
+    Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency       25.0
+    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency       25.0
+
+Pass 1: speed optimization selection (cost limit 921):
+  * Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+    Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency       25.0
+    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency       25.0
+
+Pass 1: speed optimization selection (cost limit 920):
+  * Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency       25.0
+
+Pass 1: speed optimization selection (cost limit 919):
+  * Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
+ 
+     1 set .SX 10
+     2 set .SY 10
+     3 set .DX 10
+-    * op sub *tmp0 @maph 10
+-    * set .DY *tmp0
++    4 op sub .DY @maph 10
+     5 op sub *tmp1 .DX .SX
+     6 op sub *tmp2 .DY .SY
+     7 op len *tmp3 *tmp1 *tmp2
+ 
+     9 op add *tmp5 *tmp4 0.5
+    10 op floor *tmp6 *tmp5
+    11 op div *tmp7 *tmp6 100
+-    * op sub *tmp8 *tmp7 2
+-    * set :distance *tmp8
++   12 op sub :distance *tmp7 2
+    13 ubind UNIT
+    14 label *label0
+    15 op equal *tmp9 @unit null
+ 
+    57 label *label11
+    58 print "Moving to destination"
+    59 printflush message1
+-    * set *tmp17 @time
+-    * set :start *tmp17
++   60 set :start @time
+    61 ucontrol move .DX .DY
+    62 label *label12
+    63 ucontrol within .DX .DY 1 *tmp18
+ 
+    67 label *label13
+    68 jump *label12 always
+    69 label *label14
+-    * set *tmp20 @time
+-    * set :finish *tmp20
++   70 set :finish @time
+    71 op sub *tmp21 .SX .DX
+    72 op abs *tmp22 *tmp21
+    73 op div *tmp23 *tmp22 2
+ 
+    76 op div *tmp26 *tmp25 2
+    77 ucontrol move *tmp23 *tmp26
+    78 ucontrol flag 0
+-    * op sub *tmp27 :finish :start
+-    * set :elapsed *tmp27
++   79 op sub :elapsed :finish :start
+    80 op div *tmp28 :distance :elapsed
+    81 op mul *tmp29 *tmp28 100000
+    82 op floor *tmp30 *tmp29
+-    * op div *tmp31 *tmp30 100
+-    * set :speed *tmp31
++   83 op div :speed *tmp30 100
+    84 label *label15
+    85 sensor *tmp32 switch1 @enabled
+    86 op equal *tmp33 *tmp32 false
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 instructions):
+ 
+    12 op sub :distance *tmp7 2
+    13 ubind UNIT
+    14 label *label0
+-    * op equal *tmp9 @unit null
+-    * jump *label2 equal *tmp9 false
++   15 jump *label2 notEqual @unit null
+    16 print UNIT
+    17 print ": no active unit found."
+    18 printflush message1
+ 
+    22 label *label2
+    23 label *label3
+    24 sensor *tmp10 switch1 @enabled
+-    * op equal *tmp11 *tmp10 false
+-    * jump *label5 equal *tmp11 false
++   25 jump *label5 notEqual *tmp10 false
+    26 print "Press button to start measuring "
+    27 print UNIT
+    28 print " speed."
+ 
+    33 control enabled switch1 false
+    34 label *label6
+    35 sensor *tmp13 @unit @controlled
+-    * op notEqual *tmp14 *tmp13 0
+-    * jump *label8 equal *tmp14 false
++   36 jump *label8 equal *tmp13 0
+    37 print "Searching free "
+    38 print UNIT
+    39 printflush message1
+ 
+    44 ucontrol flag 1
+    45 label *label9
+    46 ucontrol within .SX .SY 1 *tmp15
+-    * op equal *tmp16 *tmp15 false
+-    * jump *label11 equal *tmp16 false
++   47 jump *label11 notEqual *tmp15 false
+    48 print "Moving to start"
+    49 printflush message1
+    50 ucontrol move .SX .SY
+ 
+    57 ucontrol move .DX .DY
+    58 label *label12
+    59 ucontrol within .DX .DY 1 *tmp18
+-    * op equal *tmp19 *tmp18 false
+-    * jump *label14 equal *tmp19 false
++   60 jump *label14 notEqual *tmp18 false
+    61 ucontrol move .DX .DY
+    62 label *label13
+    63 jump *label12 always
+ 
+    78 op div :speed *tmp30 100
+    79 label *label15
+    80 sensor *tmp32 switch1 @enabled
+-    * op equal *tmp33 *tmp32 false
+-    * jump *label17 equal *tmp33 false
++   81 jump *label17 notEqual *tmp32 false
+    82 print "Measurement results ("
+    83 print UNIT
+    84 print "):"
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    73 ucontrol flag 0
+    74 op sub :elapsed :finish :start
+    75 op div *tmp28 :distance :elapsed
+-    * op mul *tmp29 *tmp28 100000
+-    * op floor *tmp30 *tmp29
++   76 op idiv *tmp30 *tmp28 0.00001
+    77 op div :speed *tmp30 100
+    78 label *label15
+    79 sensor *tmp32 switch1 @enabled
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     2 set .SY 10
+     3 set .DX 10
+     4 op sub .DY @maph 10
+-    * op sub *tmp1 .DX .SX
+-    * op sub *tmp2 .DY .SY
+-    * op len *tmp3 *tmp1 *tmp2
++    5 op sub *tmp1 10 10
++    6 op sub *tmp2 .DY 10
++    7 op len *tmp3 0 *tmp2
+     8 op mul *tmp4 100 *tmp3
+     9 op add *tmp5 *tmp4 0.5
+    10 op floor *tmp6 *tmp5
+ 
+    43 label *label8
+    44 ucontrol flag 1
+    45 label *label9
+-    * ucontrol within .SX .SY 1 *tmp15
++   46 ucontrol within 10 10 1 *tmp15
+    47 jump *label11 notEqual *tmp15 false
+    48 print "Moving to start"
+    49 printflush message1
+-    * ucontrol move .SX .SY
++   50 ucontrol move 10 10
+    51 label *label10
+    52 jump *label9 always
+    53 label *label11
+    54 print "Moving to destination"
+    55 printflush message1
+    56 set :start @time
+-    * ucontrol move .DX .DY
++   57 ucontrol move 10 .DY
+    58 label *label12
+-    * ucontrol within .DX .DY 1 *tmp18
++   59 ucontrol within 10 .DY 1 *tmp18
+    60 jump *label14 notEqual *tmp18 false
+-    * ucontrol move .DX .DY
++   61 ucontrol move 10 .DY
+    62 label *label13
+    63 jump *label12 always
+    64 label *label14
+    65 set :finish @time
+-    * op sub *tmp21 .SX .DX
+-    * op abs *tmp22 *tmp21
+-    * op div *tmp23 *tmp22 2
+-    * op sub *tmp24 .SY .DY
++   66 op sub *tmp21 10 10
++   67 op abs *tmp22 0
++   68 op div *tmp23 0 2
++   69 op sub *tmp24 10 .DY
+    70 op abs *tmp25 *tmp24
+    71 op div *tmp26 *tmp25 2
+-    * ucontrol move *tmp23 *tmp26
++   72 ucontrol move 0 *tmp26
+    73 ucontrol flag 0
+    74 op sub :elapsed :finish :start
+    75 op div *tmp28 :distance :elapsed
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
+     0 set UNIT @flare
+-    * set .SX 10
+-    * set .SY 10
+-    * set .DX 10
+     1 op sub .DY @maph 10
+-    * op sub *tmp1 10 10
+     2 op sub *tmp2 .DY 10
+     3 op len *tmp3 0 *tmp2
+     4 op mul *tmp4 100 *tmp3
+ 
+    59 jump *label12 always
+    60 label *label14
+    61 set :finish @time
+-    * op sub *tmp21 10 10
+-    * op abs *tmp22 0
+-    * op div *tmp23 0 2
+    62 op sub *tmp24 10 .DY
+    63 op abs *tmp25 *tmp24
+    64 op div *tmp26 *tmp25 2
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+     9 ubind UNIT
+    10 label *label0
+    11 jump *label2 notEqual @unit null
++   12 label *label18
+    13 print UNIT
+    14 print ": no active unit found."
+    15 printflush message1
+    16 ubind UNIT
+    17 label *label1
+-    * jump *label0 always
++   18 jump *label18 equal @unit null
+    19 label *label2
+    20 label *label3
+    21 sensor *tmp10 switch1 @enabled
+
+Modifications by Replicate loop condition at line 17:1 (+1 instructions):
+ 
+    20 label *label3
+    21 sensor *tmp10 switch1 @enabled
+    22 jump *label5 notEqual *tmp10 false
++   23 label *label19
+    24 print "Press button to start measuring "
+    25 print UNIT
+    26 print " speed."
+    27 printflush message1
+    28 label *label4
+-    * jump *label3 always
++   29 sensor *tmp10 switch1 @enabled
++   30 jump *label19 equal *tmp10 false
+    31 label *label5
+    32 control enabled switch1 false
+    33 label *label6
+
+Modifications by Replicate loop condition at line 24:1 (+1 instructions):
+ 
+    33 label *label6
+    34 sensor *tmp13 @unit @controlled
+    35 jump *label8 equal *tmp13 0
++   36 label *label20
+    37 print "Searching free "
+    38 print UNIT
+    39 printflush message1
+    40 ubind UNIT
+    41 label *label7
+-    * jump *label6 always
++   42 sensor *tmp13 @unit @controlled
++   43 jump *label20 notEqual *tmp13 0
+    44 label *label8
+    45 ucontrol flag 1
+    46 label *label9
+
+Modifications by Replicate loop condition at line 32:1 (+1 instructions):
+ 
+    46 label *label9
+    47 ucontrol within 10 10 1 *tmp15
+    48 jump *label11 notEqual *tmp15 false
++   49 label *label21
+    50 print "Moving to start"
+    51 printflush message1
+    52 ucontrol move 10 10
+    53 label *label10
+-    * jump *label9 always
++   54 ucontrol within 10 10 1 *tmp15
++   55 jump *label21 equal *tmp15 false
+    56 label *label11
+    57 print "Moving to destination"
+    58 printflush message1
+
+Modifications by Replicate loop condition at line 45:1 (+1 instructions):
+ 
+    61 label *label12
+    62 ucontrol within 10 .DY 1 *tmp18
+    63 jump *label14 notEqual *tmp18 false
++   64 label *label22
+    65 ucontrol move 10 .DY
+    66 label *label13
+-    * jump *label12 always
++   67 ucontrol within 10 .DY 1 *tmp18
++   68 jump *label22 equal *tmp18 false
+    69 label *label14
+    70 set :finish @time
+    71 op sub *tmp24 10 .DY
+
+Modifications by Replicate loop condition at line 58:1 (+1 instructions):
+ 
+    80 label *label15
+    81 sensor *tmp32 switch1 @enabled
+    82 jump *label17 notEqual *tmp32 false
++   83 label *label23
+    84 print "Measurement results ("
+    85 print UNIT
+    86 print "):"
+ 
+    99 print "\nPress button to repeat"
+   100 printflush message1
+   101 label *label16
+-    * jump *label15 always
++  102 sensor *tmp32 switch1 @enabled
++  103 jump *label23 equal *tmp32 false
+   104 label *label17
+   105 end
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   102 sensor *tmp32 switch1 @enabled
+   103 jump *label23 equal *tmp32 false
+   104 label *label17
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
+ 
+    21 sensor *tmp10 switch1 @enabled
+    22 jump *label5 notEqual *tmp10 false
+    23 label *label19
+-    * print "Press button to start measuring "
+-    * print UNIT
+-    * print " speed."
++   24 print "Press button to start measuring {0} speed."
++   25 format UNIT
+    26 printflush message1
+    27 label *label4
+    28 sensor *tmp10 switch1 @enabled
+ 
+    80 sensor *tmp32 switch1 @enabled
+    81 jump *label17 notEqual *tmp32 false
+    82 label *label23
+-    * print "Measurement results ("
+-    * print UNIT
+-    * print "):"
+-    * print "\nMap dimensions: "
+-    * print @mapw
+-    * print "x"
+-    * print @maph
+-    * print "\nElapsed time: "
+-    * print :elapsed
+-    * print "ms"
+-    * print "\nDistance travelled: "
+-    * print :distance
+-    * print "\nSpeed: "
+-    * print :speed
+-    * print "tiles/s"
+-    * print "\nPress button to repeat"
++   83 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
++   84 format UNIT
++   85 format @mapw
++   86 format @maph
++   87 format :elapsed
++   88 format :distance
++   89 format :speed
+    90 printflush message1
+    91 label *label16
+    92 sensor *tmp32 switch1 @enabled
+
+Final code before resolving virtual instructions:
+
+set UNIT @flare
+op sub .DY @maph 10
+op sub *tmp2 .DY 10
+op len *tmp3 0 *tmp2
+op mul *tmp4 100 *tmp3
+op add *tmp5 *tmp4 0.5
+op floor *tmp6 *tmp5 0
+op div *tmp7 *tmp6 100
+op sub :distance *tmp7 2
+ubind UNIT
+jump *label2 notEqual @unit null
+label *label18
+print UNIT
+print ": no active unit found."
+printflush message1
+ubind UNIT
+jump *label18 equal @unit null
+label *label2
+sensor *tmp10 switch1 @enabled
+jump *label5 notEqual *tmp10 false
+label *label19
+print "Press button to start measuring {0} speed."
+format UNIT
+printflush message1
+sensor *tmp10 switch1 @enabled
+jump *label19 equal *tmp10 false
+label *label5
+control enabled switch1 false 0 0 0
+sensor *tmp13 @unit @controlled
+jump *label8 equal *tmp13 0
+label *label20
+print "Searching free "
+print UNIT
+printflush message1
+ubind UNIT
+sensor *tmp13 @unit @controlled
+jump *label20 notEqual *tmp13 0
+label *label8
+ucontrol flag 1 0 0 0 0
+ucontrol within 10 10 1 *tmp15 0
+jump *label11 notEqual *tmp15 false
+label *label21
+print "Moving to start"
+printflush message1
+ucontrol move 10 10 0 0 0
+ucontrol within 10 10 1 *tmp15 0
+jump *label21 equal *tmp15 false
+label *label11
+print "Moving to destination"
+printflush message1
+set :start @time
+ucontrol move 10 .DY 0 0 0
+ucontrol within 10 .DY 1 *tmp18 0
+jump *label14 notEqual *tmp18 false
+label *label22
+ucontrol move 10 .DY 0 0 0
+ucontrol within 10 .DY 1 *tmp18 0
+jump *label22 equal *tmp18 false
+label *label14
+set :finish @time
+op sub *tmp24 10 .DY
+op abs *tmp25 *tmp24 0
+op div *tmp26 *tmp25 2
+ucontrol move 0 *tmp26 0 0 0
+ucontrol flag 0 0 0 0 0
+op sub :elapsed :finish :start
+op div *tmp28 :distance :elapsed
+op idiv *tmp30 *tmp28 0.00001
+op div :speed *tmp30 100
+sensor *tmp32 switch1 @enabled
+jump *label17 notEqual *tmp32 false
+label *label23
+print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
+format UNIT
+format @mapw
+format @maph
+format :elapsed
+format :distance
+format :speed
+printflush message1
+sensor *tmp32 switch1 @enabled
+jump *label23 equal *tmp32 false
+label *label17

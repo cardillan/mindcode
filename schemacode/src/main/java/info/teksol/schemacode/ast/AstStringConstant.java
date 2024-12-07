@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.SourcePosition;
 
-public record AstStringConstant(InputPosition inputPosition, String name, AstText value) implements AstDefinition {
+public record AstStringConstant(SourcePosition sourcePosition, String name, AstText value) implements AstDefinition {
 }

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.schemacode.SchematicsDecompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

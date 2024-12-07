@@ -1,6 +1,6 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.config.*;
 
 import java.util.function.Supplier;
@@ -57,8 +57,9 @@ public enum ConfigurationType {
     public static <T extends Configuration> T createEmpty(Class<T> cfgClass) {
         for (ConfigurationType configurationType : values()) {
             if (configurationType.mindustryClass == cfgClass) {
-                //noinspection unchecked
-                return (T) configurationType.initializer.get();
+                @SuppressWarnings("unchecked")
+                T result = (T) configurationType.initializer.get();
+                return result;
             }
         }
 
