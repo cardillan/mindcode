@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.7.1 - 2024-12-07
+
+### Fixed
+
+* Fixed Function Inlining optimization incorrectly processing functions with output parameters ([#183](https://github.com/cardillan/mindcode/issues/183)).
+
+### Changed
+
+* Changed the Print Merger optimization and processor emulator to correctly round numbers in print instructions in accordance with [Mindustry Logic update](https://github.com/Anuken/Mindustry-Suggestions/issues/5319))  
+
 ## 2.7.0 - 2024-11-28
 
 ### Fixed
 
-* Fixed wrong Jump Threading optimization in out-of-line functions ([#177](https://github.com/cardillan/mindcode/issues/107)).
+* Fixed wrong Jump Threading optimization in out-of-line functions ([#177](https://github.com/cardillan/mindcode/issues/177)).
 * Fixed bugs in the Data Flow Optimization:
   * The virtual `setaddr` instruction, unused due to the corresponding jump being unreachable, wouldn't be removed from code. This caused errors referencing a non-existent label.
   * Data Flow Optimization would sometimes corrupt the expected code structure when removing unneeded instructions, causing bugs or runtime errors during subsequent optimizations. 
