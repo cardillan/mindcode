@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class AstExpressionList extends AstBaseMindcodeNode {
+public class AstStatementList extends AstBaseMindcodeNode {
     private final List<AstMindcodeNode> expressions;
 
-    public AstExpressionList(InputPosition inputPosition, List<AstMindcodeNode> expressions) {
+    public AstStatementList(InputPosition inputPosition, List<AstMindcodeNode> expressions) {
         super(inputPosition);
         this.expressions = Objects.requireNonNull(expressions);
     }
@@ -23,7 +23,7 @@ public class AstExpressionList extends AstBaseMindcodeNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AstExpressionList that = (AstExpressionList) o;
+        AstStatementList that = (AstStatementList) o;
         return Objects.equals(expressions, that.expressions);
     }
 
@@ -34,7 +34,7 @@ public class AstExpressionList extends AstBaseMindcodeNode {
 
     @Override
     public String toString() {
-        return "AstExpressionList{" +
+        return "AstStatementList{" +
                "expressions=" + expressions.stream().map(Object::toString).collect(Collectors.joining("\n", "\n", "\n")) +
                '}';
     }

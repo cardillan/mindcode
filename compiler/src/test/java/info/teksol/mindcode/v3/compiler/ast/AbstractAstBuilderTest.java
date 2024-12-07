@@ -3,8 +3,8 @@ package info.teksol.mindcode.v3.compiler.ast;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.antlr.AbstractParserTest;
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpressionList;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstStatementList;
 import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
 
@@ -28,7 +28,7 @@ public class AbstractAstBuilderTest extends AbstractParserTest {
     }
 
     protected void assertBuilds(ExpectedMessages expectedMessages, String source, List<AstMindcodeNode> expected) {
-        assertBuilds(expectedMessages, source, new AstExpressionList(EMPTY, expected));
+        assertBuilds(expectedMessages, source, new AstStatementList(EMPTY, expected));
     }
 
     protected void assertBuilds(String source, List<AstMindcodeNode> expected) {

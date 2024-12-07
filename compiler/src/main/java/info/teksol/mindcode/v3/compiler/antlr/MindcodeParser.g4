@@ -1,3 +1,5 @@
+// This file contains the parser grammar for Mindcode language.
+
 parser grammar MindcodeParser;
 
 options {
@@ -5,9 +7,10 @@ options {
 }
 
 program
-    : expressionList? EOF ;
+    : statementList? EOF ;
 
-expressionList
+// List of expressions separated by semicolons
+statementList
     : (expression? SEMICOLON)+
     ;
 
@@ -21,12 +24,37 @@ expression
     : directive                                                                         # expDirective
     | REQUIRE library = IDENTIFIER                                                      # expRequireLibrary
     | REQUIRE file = STRING                                                             # expRequireFile
-    | BEGIN exp = expressionList? END                                                   # expCodeBlock
+    | PARAM name = IDENTIFIER ASSIGN value = expression                                 # expParameter
+    | CONST name = IDENTIFIER ASSIGN value = expression                                 # expConstant
+    | ALLOCATE allocations                                                              # expAllocations
+    | BEGIN exp = statementList? END                                                    # expCodeBlock
+    | inline = (INLINE | NOINLINE)? def = (VOID | DEF) name = IDENTIFIER
+        params = parameterList body = statementList? END                                # expDeclareFunction
     | END LPAREN RPAREN                                                                 # expCallEnd
     | function = IDENTIFIER args = argumentList                                         # expCallFunction
     | object = expression DOT function = IDENTIFIER args = argumentList                 # expCallMethod
     | object = expression DOT member = IDENTIFIER                                       # expMemeberAccess
     | object = expression DOT property = BUILTINIDENTIFIER                              # expPropertyAccess
+    | CASE exp = expression
+        alternatives = caseAlternatives? (ELSE elseBranch = statementList)? END         # expCaseExpression
+    | IF condition = expression THEN trueBranch = statementList?
+        elsif = elsifBranches?
+        (ELSE falseBranch = statementList)? END                                         # expIfExpression
+    | (label = IDENTIFIER COLON)? FOR control = IDENTIFIER IN range = rangeExpression
+        DO body = statementList? END                                                    # expForRangeLoop
+    | (label = IDENTIFIER COLON)? FOR init = expressionList?
+        SEMICOLON condition = expression? SEMICOLON update = expressionList?
+        DO body = statementList? END                                                    # expForIteratedLoop
+    | (label = IDENTIFIER COLON)? FOR iterators = iteratorList IN
+        values = expressionList DO body = statementList? END                            # expForEachLoop
+    | (label = IDENTIFIER COLON)?
+        WHILE condition = expression DO body = statementList? END                       # expWhileLoop
+    | (label = IDENTIFIER COLON)?
+        DO body = statementList? LOOP? WHILE condition = expression                     # expDoWhileLoop
+    | BREAK label = IDENTIFIER?                                                         # expBreak
+    | CONTINUE label = IDENTIFIER?                                                      # expContinue
+    | RETURN                                                                            # expReturn
+    | RETURN value = expression                                                         # expReturn
     | lvalue                                                                            # expLvalue
     | ENHANCEDCOMMENT formattableContents*                                              # expEnhancedComment
     | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # expFormattableLiteral
@@ -38,10 +66,6 @@ expression
     | NULL                                                                              # expNullLiteral
     | TRUE                                                                              # expBooleanLiteralTrue
     | FALSE                                                                             # expBooleanLiteralFalse
-    | (label = IDENTIFIER COLON)?
-        WHILE condition = expression DO body = expressionList? END                      # expWhileLoop
-    | (label = IDENTIFIER COLON)?
-        DO body = expressionList? LOOP? WHILE condition = expression                    # expDoWhileLoop
     | exp = lvalue postfix = (INCREMENT | DECREMENT)                                    # expPostfix
     | prefix = (INCREMENT | DECREMENT) exp = lvalue                                     # expPrefix
     | op = (BITWISE_NOT | BOOLEAN_NOT | LOGICAL_NOT | PLUS | MINUS) exp = expression    # expUnary
@@ -75,6 +99,15 @@ expression
 
 // Directives
 
+allocations
+    : (allocation COMMA)* allocation
+    ;
+
+allocation
+    : type = (HEAP | STACK)
+        IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?                 # strAllocation
+    ;
+
 directive
     : HASHSET option=directiveValue (DIRECTIVEASSIGN value = directiveValues)?          # directiveSet
     ;
@@ -106,6 +139,56 @@ argumentList
     | LPAREN (optionalArgument COMMA)+ optionalArgument RPAREN
     ;
 
+parameter
+    : modifier_in = IN?  modifier_out = OUT? arg = IDENTIFIER varargs = DOT3?
+    | modifier_out = OUT modifier_in = IN    arg = IDENTIFIER varargs = DOT3?
+    ;
+
+parameterList
+    : LPAREN RPAREN
+    | LPAREN (parameter COMMA)* parameter RPAREN
+    ;
+
+// Control statement expressions
+
+caseAlternatives
+    : caseAlternative+                                                                  # strCaseAlternatives
+    ;
+
+caseAlternative
+    : WHEN values = whenValueList THEN body = statementList?                           # strCaseAlternative
+    ;
+
+whenValueList
+    : (whenValue COMMA)* whenValue
+    ;
+
+whenValue
+    : expression                                                                        # strWhenExpression
+    | rangeExpression                                                                   # strWhenRangeExpression
+    ;
+
+elsifBranches
+    : elsifBranch+
+    ;
+
+elsifBranch
+    : ELSIF condition = expression THEN body = statementList?                           # strElsifBranch
+    ;
+
+// List of expressions separated by commas
+expressionList
+    : (expression COMMA)* expression
+    ;
+
+iteratorList
+    : (iterator COMMA)* iterator
+    ;
+
+iterator
+    : modifier = OUT? variable = IDENTIFIER                                             # strIterator
+    ;
+
 // Expression fragments
 
 // In this grammar, lvalue can always be read (and is therefore an rvalue too)
@@ -126,4 +209,9 @@ formattableContents
 formattablePlaceholder
     : EMPTYPLACEHOLDER                                                                  # fmtPlaceholderEmpty
     | VARIABLEPLACEHOLDER (id = VARIABLE)?                                              # fmtPlaceholderVariable
+    ;
+
+rangeExpression
+    : start = expression DOT2 end = expression                                          # expRangeInclusive
+    | start = expression DOT3 end = expression                                          # expRangeExclusive
     ;

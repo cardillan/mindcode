@@ -194,7 +194,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstExpressionList(EMPTY, List.of(identifier))
+                            new AstStatementList(EMPTY, List.of(identifier))
                     )
             );
         }
@@ -206,7 +206,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstExpressionList(EMPTY, List.of())
+                            new AstStatementList(EMPTY, List.of())
                     )
             );
         }
