@@ -43,22 +43,22 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rule: program">
     @Override
     public AstMindcodeNode visitProgram(ProgramContext ctx) {
-        return ctx.expressionList() == null
-                ? new AstExpressionList(pos(ctx), List.of())
-                : visit(ctx.expressionList());
+        return ctx.statementList() == null
+                ? new AstStatementList(pos(ctx), List.of())
+                : visit(ctx.statementList());
     }
     //</editor-fold>
 
     //<editor-fold desc="Rule: structures">
     @Override
-    public AstMindcodeNode visitExpressionList(MindcodeParser.ExpressionListContext ctx) {
-        return new AstExpressionList(pos(ctx), ctx.expression().stream().map(this::visit).toList());
+    public AstMindcodeNode visitStatementList(MindcodeParser.StatementListContext ctx) {
+        return new AstStatementList(pos(ctx), ctx.expression().stream().map(this::visit).toList());
     }
 
     @Override
     public AstMindcodeNode visitExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx) {
         return ctx.exp == null
-                ? new AstExpressionList(pos(ctx), List.of())
+                ? new AstStatementList(pos(ctx), List.of())
                 : visit(ctx.exp);
     }
     //</editor-fold>

@@ -337,6 +337,13 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
+        void parsesMultipleFormattables() {
+            assertParses("""
+                    $"Formattable with ${first} and ${second} interpolation";
+                    """);
+        }
+
+        @Test
         void parsesBasicFormattables() {
             assertParses("""
                     $"Formattable";

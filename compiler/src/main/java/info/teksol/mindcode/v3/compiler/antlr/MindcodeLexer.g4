@@ -1,3 +1,25 @@
+// This file contains the lexer grammar for Mindcode language.
+//
+// The grammar is straightfoward except these features:
+//
+// The DOC_COMMENT definition contains the code documentation (inspired by JavaDoc and similar mechanisms, except
+// the contents of the comments should be in Markdown). These comments are output onto the HIDDEN channel.
+// The AST tree builder accesses these comments on the hidden channel and embeds them into the relevant AST nodes
+// (constants, parameters, function declarations).
+//
+// The are several lexer modes:
+// * InDirective: a mode for parsing the contents of the #set directives. These directives allow using various
+//   forms of option and value names (e.g. #set target = 7A;). These names can't be matched by a normal Mindcode
+//   identifier, hence the separate mode. The mode ends when a semicolon is encountered.
+// * InFormattable: mode used for parsing the contents of the formattable string literal. The mode ends when
+//   encountering the closing double quote. Default mode is entered when encountering an interpolated expresson
+//   (${expression}). InFmtIdentifier mode is entered when encountering embedded variable ($variable).
+//   InFormattable mode is not reentrant - second invocation is ignored.
+// * InComment: analogous to InFormattable, but used for enhanced comments. Differences:
+//   * the mode is exited upon encountering a newline,
+//   * InCommentIdentifier mode is used to parse embedded variables instead of InFmtIdentifier mode.
+// * InFmtIdentifier, InCommentIdentifier: for parsing embedded variables within formattable strings/comments.
+
 lexer grammar MindcodeLexer;
 
 @members {
@@ -144,7 +166,7 @@ HASHSET                 : '#set' -> pushMode(InDirective) ;
 
 // Formattable literals
 FORMATTABLELITERAL      : {!inFormat}? '$"' {inFormat = true;}  -> pushMode(InFormattable) ;
-RBRACE                  : {inFormat}?  '}'  {inFormat = false;} -> popMode ;
+RBRACE                  : {inFormat}?  '}' -> popMode ;
 
 // Commented line comment, to distinguish from Enhanced comment.
 COMMENTEDCOMMENT        : '////' ~[\r\n]* -> skip ;
@@ -183,7 +205,7 @@ TEXT                    : ~[\r\n\\$"]+ ;
 
 // We would want to allow escaping only '\' and '$', but can't get it to work. Escapes will be universal and handled later.
 ESCAPESEQUENCE          : '\\' ~[\r\n"] ;
-EMPTYPLACEHOLDER        : '${'   ' '*  '}' ;
+EMPTYPLACEHOLDER        : '${' ' '* '}' ;
 INTERPOLATION           : '${' -> pushMode(DEFAULT_MODE) ;
 VARIABLEPLACEHOLDER     : '$'  -> pushMode(InFmtIdentifier);
 CLOSINGDOUBLEQUOTE      : '"' {inFormat = false;} -> type(DOUBLEQUOTE), popMode;
@@ -199,9 +221,9 @@ COMMENTTEXT             : ~[\r\n\\$"]+      -> type(TEXT);
 COMMENTESCAPESEQUENCE   : '\\' ~[\r\n"]     -> type(ESCAPESEQUENCE);
 
 // We don't want empty placeholders in enhanced comments, but the check will be done later
-COMMENTEMPTYPLACEHOLDER : '${'   ' '*  '}'  -> type(EMPTYPLACEHOLDER);
-COMMENTINTERPOLATION    : '${'              -> type(INTERPOLATION), pushMode(DEFAULT_MODE);
-COMMENTVARIABLEPHOLDER  : '$'               -> type(VARIABLEPLACEHOLDER), pushMode(InCommentIdentifier);
+COMMENTEMPTYPLACEHOLDER : '${' ' '* '}'  -> type(EMPTYPLACEHOLDER);
+COMMENTINTERPOLATION    : '${'           -> type(INTERPOLATION), pushMode(DEFAULT_MODE);
+COMMENTVARIABLEPHOLDER  : '$'            -> type(VARIABLEPLACEHOLDER), pushMode(InCommentIdentifier);
 COMMENTENDOFLINE        : [\r\n] {inFormat=false; newLines=true;} -> type(SEMICOLON), popMode;
 
 mode InFmtIdentifier;
