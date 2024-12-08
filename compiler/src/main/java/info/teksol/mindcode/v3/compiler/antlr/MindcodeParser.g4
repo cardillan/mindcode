@@ -9,28 +9,71 @@ options {
 program
     : statementList? EOF ;
 
-// List of expressions separated by semicolons
+// List of statements separated by semicolons
+// Multiple consecutive semicolons are allowed, no expression need to be present.
 statementList
-    : (expression? SEMICOLON)+
+    : (statement? SEMICOLON)+
     ;
 
-// The expresion rule is very large. Unfortunately it can't be broken down to smaller rules for two reasons:
+// List of expressions separated by commas
+// At least one expression needs to be present, multiple consecutive commas aren't allowed.
+// Used just in a few places - for each loop and C-style iteration loop
+expressionList
+    : (expression COMMA)* expression
+    ;
+
+// A statement is an expression, which provides a value, or an executable statement, which is executable, but doesn't
+// provide a value, or a declaration. Using a statement/declaration where an expression is expected is an error,
+// recognized by the grammar.
+statement
+    : expression                                                                        # expExpression
+    | directive                                                                         # expDirective
+    | REQUIRE library = IDENTIFIER                                                      # expRequireLibrary
+    | REQUIRE file = STRING                                                             # expRequireFile
+    | ALLOCATE allocations                                                              # expAllocations
+    | inline = (INLINE | NOINLINE)? type = (VOID | DEF) name = IDENTIFIER
+        params = parameterList body = statementList? END                                # expDeclareFunction
+    | PARAM name = IDENTIFIER ASSIGN value = expression                                 # expParameter
+    | CONST name = IDENTIFIER ASSIGN value = expression                                 # expConstant
+    | BEGIN exp = statementList? END                                                    # expCodeBlock
+    | (label = IDENTIFIER COLON)? FOR iterators = iteratorList IN
+        values = expressionList DO body = statementList? END                            # expForEachLoop
+    | (label = IDENTIFIER COLON)? FOR init = expressionList?
+        SEMICOLON condition = expression? SEMICOLON update = expressionList?
+        DO body = statementList? END                                                    # expForIteratedLoop
+    | (label = IDENTIFIER COLON)? FOR control = IDENTIFIER IN range = rangeExpression
+        DO body = statementList? END                                                    # expForRangeLoop
+    | (label = IDENTIFIER COLON)?
+        WHILE condition = expression DO body = statementList? END                       # expWhileLoop
+    | (label = IDENTIFIER COLON)?
+        DO body = statementList? loop = LOOP? WHILE condition = expression              # expDoWhileLoop
+    | BREAK label = IDENTIFIER?                                                         # expBreak
+    | CONTINUE label = IDENTIFIER?                                                      # expContinue
+    | RETURN                                                                            # expReturn
+    | RETURN value = expression                                                         # expReturn
+    ;
+
+// lvalue can be a target of an assignment - prefix/postfix increment/decrement and compound assignment.
+// In this grammar, lvalue can always be read (and is therefore an rvalue too).
+// For simple assignment, a generic expression can be a target, to support constructs like
+// getlink(index).enabled = true
+//
+// On top of this, lvalue can always be also read - is an expression
+lvalue
+    : id = IDENTIFIER                                                                   # expIdentifier
+    | id = EXTIDENTIFIER                                                                # expIdentifierExt
+    | builtin = BUILTINIDENTIFIER                                                       # expBuiltInIdentifier
+    | array = IDENTIFIER LBRACKET index = expression RBRACKET                           # expArrayAccess
+    ;
+
+// The expresion rule is large. Unfortunately it can't be broken down to smaller rules for two reasons:
 //
 // 1. When a child rule start with an expression (e.g. the assignment rules), factoring it out to a standalone
 //    rule makes expression and the new rule mutually recursice. ANTLR can't handle that.
 // 2. When a child rule doesn't start with an expression, but contains one, factoring it out to a standalone
 //    rule introduces ambiguities into the grammar. We wan't to prevent them if at all possible.
 expression
-    : directive                                                                         # expDirective
-    | REQUIRE library = IDENTIFIER                                                      # expRequireLibrary
-    | REQUIRE file = STRING                                                             # expRequireFile
-    | PARAM name = IDENTIFIER ASSIGN value = expression                                 # expParameter
-    | CONST name = IDENTIFIER ASSIGN value = expression                                 # expConstant
-    | ALLOCATE allocations                                                              # expAllocations
-    | BEGIN exp = statementList? END                                                    # expCodeBlock
-    | inline = (INLINE | NOINLINE)? def = (VOID | DEF) name = IDENTIFIER
-        params = parameterList body = statementList? END                                # expDeclareFunction
-    | END LPAREN RPAREN                                                                 # expCallEnd
+    : END LPAREN RPAREN                                                                 # expCallEnd
     | function = IDENTIFIER args = argumentList                                         # expCallFunction
     | object = expression DOT function = IDENTIFIER args = argumentList                 # expCallMethod
     | object = expression DOT member = IDENTIFIER                                       # expMemeberAccess
@@ -39,22 +82,7 @@ expression
         alternatives = caseAlternatives? (ELSE elseBranch = statementList)? END         # expCaseExpression
     | IF condition = expression THEN trueBranch = statementList?
         elsif = elsifBranches?
-        (ELSE falseBranch = statementList)? END                                         # expIfExpression
-    | (label = IDENTIFIER COLON)? FOR control = IDENTIFIER IN range = rangeExpression
-        DO body = statementList? END                                                    # expForRangeLoop
-    | (label = IDENTIFIER COLON)? FOR init = expressionList?
-        SEMICOLON condition = expression? SEMICOLON update = expressionList?
-        DO body = statementList? END                                                    # expForIteratedLoop
-    | (label = IDENTIFIER COLON)? FOR iterators = iteratorList IN
-        values = expressionList DO body = statementList? END                            # expForEachLoop
-    | (label = IDENTIFIER COLON)?
-        WHILE condition = expression DO body = statementList? END                       # expWhileLoop
-    | (label = IDENTIFIER COLON)?
-        DO body = statementList? LOOP? WHILE condition = expression                     # expDoWhileLoop
-    | BREAK label = IDENTIFIER?                                                         # expBreak
-    | CONTINUE label = IDENTIFIER?                                                      # expContinue
-    | RETURN                                                                            # expReturn
-    | RETURN value = expression                                                         # expReturn
+        (ELSE falseBranch = statementList?)? END                                        # expIfExpression
     | lvalue                                                                            # expLvalue
     | ENHANCEDCOMMENT formattableContents*                                              # expEnhancedComment
     | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # expFormattableLiteral
@@ -94,33 +122,61 @@ expression
                      ASSIGN_BITWISE_AND | ASSIGN_BITWISE_OR | ASSIGN_BITWISE_XOR |
                      ASSIGN_BOOLEAN_AND | ASSIGN_BOOLEAN_OR)
         value = expression                                                              # expCompoundAssignment
-    | LPAREN expression RPAREN                                                          # expParentheses
+    | LPAREN exp = expression RPAREN                                                    # expParentheses
+    ;
+
+// Formattables
+
+formattableContents
+    : TEXT                                                                              # fmtText
+    | ESCAPESEQUENCE                                                                    # fmtEscaped
+    | INTERPOLATION expression RBRACE                                                   # fmtInterpolation
+    | formattablePlaceholder                                                            # fmtPlaceholder
+    ;
+
+formattablePlaceholder
+    : EMPTYPLACEHOLDER                                                                  # fmtPlaceholderEmpty
+    | VARIABLEPLACEHOLDER (id = VARIABLE)?                                              # fmtPlaceholderVariable
     ;
 
 // Directives
 
-allocations
-    : (allocation COMMA)* allocation
-    ;
-
-allocation
-    : type = (HEAP | STACK)
-        IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?                 # strAllocation
-    ;
-
 directive
-    : HASHSET option=directiveValue (DIRECTIVEASSIGN value = directiveValues)?          # directiveSet
+    : HASHSET option=directiveValue (DIRECTIVEASSIGN value = directiveValues)?          # stmtDirectiveSet
     ;
 
 directiveValues
-    : directiveValue (DIRECTIVECOMMA directiveValue)*                                   # directiveValueList
+    : (directiveValue DIRECTIVECOMMA)* directiveValue
     ;
 
 directiveValue
     : DIRECTIVEVALUE
     ;
 
-// Function elements
+// Allocations
+
+allocations
+    : (allocation COMMA)* allocation
+    ;
+
+allocation
+    : HEAP IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?              # stmtHeapAllocation
+    | STACK IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?             # stmtStackAllocation
+    ;
+
+// Function declarations
+
+parameter
+    : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER varargs = DOT3?
+    | modifier_out = OUT modifier_in = IN    name = IDENTIFIER varargs = DOT3?
+    ;
+
+parameterList
+    : LPAREN RPAREN
+    | LPAREN (parameter COMMA)* parameter RPAREN
+    ;
+
+// Function calls
 
 argument
     : modifier_in = IN?  modifier_out = OUT? arg = expression
@@ -139,24 +195,14 @@ argumentList
     | LPAREN (optionalArgument COMMA)+ optionalArgument RPAREN
     ;
 
-parameter
-    : modifier_in = IN?  modifier_out = OUT? arg = IDENTIFIER varargs = DOT3?
-    | modifier_out = OUT modifier_in = IN    arg = IDENTIFIER varargs = DOT3?
-    ;
-
-parameterList
-    : LPAREN RPAREN
-    | LPAREN (parameter COMMA)* parameter RPAREN
-    ;
-
-// Control statement expressions
+// Case expressions
 
 caseAlternatives
-    : caseAlternative+                                                                  # strCaseAlternatives
+    : caseAlternative+
     ;
 
 caseAlternative
-    : WHEN values = whenValueList THEN body = statementList?                           # strCaseAlternative
+    : WHEN values = whenValueList THEN body = statementList?
     ;
 
 whenValueList
@@ -164,54 +210,31 @@ whenValueList
     ;
 
 whenValue
-    : expression                                                                        # strWhenExpression
-    | rangeExpression                                                                   # strWhenRangeExpression
+    : expression                                                                        # whenValueExpression
+    | rangeExpression                                                                   # whenValueRangeExpression
     ;
+
+rangeExpression
+    : firstValue = expression operator = DOT2 lastValue = expression
+    | firstValue = expression operator = DOT3 lastValue = expression
+    ;
+
+// If expressions
 
 elsifBranches
     : elsifBranch+
     ;
 
 elsifBranch
-    : ELSIF condition = expression THEN body = statementList?                           # strElsifBranch
+    : ELSIF condition = expression THEN body = statementList?
     ;
 
-// List of expressions separated by commas
-expressionList
-    : (expression COMMA)* expression
-    ;
+// Loops
 
 iteratorList
     : (iterator COMMA)* iterator
     ;
 
 iterator
-    : modifier = OUT? variable = IDENTIFIER                                             # strIterator
-    ;
-
-// Expression fragments
-
-// In this grammar, lvalue can always be read (and is therefore an rvalue too)
-lvalue
-    : id = IDENTIFIER                                                                   # expIdentifier
-    | id = EXTIDENTIFIER                                                                # expIdentifierExt
-    | builtin = BUILTINIDENTIFIER                                                       # expBuiltInIdentifier
-    | array = IDENTIFIER LBRACKET index = expression RBRACKET                           # expArrayAccess
-    ;
-
-formattableContents
-    : TEXT                                                                              # fmtText
-    | ESCAPESEQUENCE                                                                    # fmtEscaped
-    | INTERPOLATION expression RBRACE                                                   # fmtInterpolation
-    | formattablePlaceholder                                                            # fmtPlaceholder
-    ;
-
-formattablePlaceholder
-    : EMPTYPLACEHOLDER                                                                  # fmtPlaceholderEmpty
-    | VARIABLEPLACEHOLDER (id = VARIABLE)?                                              # fmtPlaceholderVariable
-    ;
-
-rangeExpression
-    : start = expression DOT2 end = expression                                          # expRangeInclusive
-    | start = expression DOT3 end = expression                                          # expRangeExclusive
+    : modifier = OUT? variable = IDENTIFIER
     ;

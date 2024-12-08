@@ -15,12 +15,14 @@ public abstract class AbstractParserTest {
     }
 
     protected MindcodeParser.ProgramContext parse(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
+        expectedMessages.setAccumulateErrors(true);
         MindcodeCompiler compiler = new MindcodeCompiler(MindcodeCompiler.CompilationPhase.PARSER, expectedMessages);
         compiler.compile(inputFiles.getMainInputFile());
 
         if (validate) {
             expectedMessages.validate();
         }
+        expectedMessages.setAccumulateErrors(false);
         return compiler.getParseTree(inputFiles.getMainInputFile());
     }
 

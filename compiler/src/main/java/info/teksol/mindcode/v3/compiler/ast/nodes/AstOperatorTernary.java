@@ -1,30 +1,32 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstOperatorTernary extends AstBaseMindcodeNode {
-    private final AstMindcodeNode condition;
-    private final AstMindcodeNode trueBranch;
-    private final AstMindcodeNode falseBranch;
+public class AstOperatorTernary extends AstExpression {
+    private final @NotNull AstExpression condition;
+    private final @NotNull AstExpression trueBranch;
+    private final @NotNull AstExpression falseBranch;
 
-    public AstOperatorTernary(InputPosition inputPosition, AstMindcodeNode condition, AstMindcodeNode trueBranch, AstMindcodeNode falseBranch) {
+    public AstOperatorTernary(@NotNull InputPosition inputPosition, @NotNull AstExpression condition,
+            @NotNull AstExpression trueBranch, @NotNull AstExpression falseBranch) {
         super(inputPosition);
         this.condition = Objects.requireNonNull(condition);
         this.trueBranch = Objects.requireNonNull(trueBranch);
         this.falseBranch = Objects.requireNonNull(falseBranch);
     }
 
-    public AstMindcodeNode getCondition() {
+    public @NotNull AstExpression getCondition() {
         return condition;
     }
 
-    public AstMindcodeNode getTrueBranch() {
+    public @NotNull AstExpression getTrueBranch() {
         return trueBranch;
     }
 
-    public AstMindcodeNode getFalseBranch() {
+    public @NotNull AstExpression getFalseBranch() {
         return falseBranch;
     }
 

@@ -218,6 +218,14 @@ public class ExpectedMessages implements Consumer<MindcodeMessage> {
         fail("Unexpected message: " + msg.formatMessage(ExpectedMessages::formatPosition));
     }
 
+    public boolean isAccumulateErrors() {
+        return accumulateErrors;
+    }
+
+    public void setAccumulateErrors(boolean accumulateErrors) {
+        this.accumulateErrors = accumulateErrors;
+    }
+
     /**
      * Verifies that all expected messages were encountered. Needs to be called at the end
      * of the test to make sure the conditions were met.

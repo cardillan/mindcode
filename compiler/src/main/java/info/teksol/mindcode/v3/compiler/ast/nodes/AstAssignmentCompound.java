@@ -6,12 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstAssignmentCompound extends AstBaseMindcodeNode {
+public class AstAssignmentCompound extends AstExpression {
     private final @NotNull Operation operation;
-    private final @NotNull AstMindcodeNode target;
-    private final @NotNull AstMindcodeNode value;
+    private final @NotNull AstExpression target;
+    private final @NotNull AstExpression value;
 
-    public AstAssignmentCompound(InputPosition inputPosition, Operation operation, AstMindcodeNode target, AstMindcodeNode value) {
+    public AstAssignmentCompound(@NotNull InputPosition inputPosition, @NotNull Operation operation,
+            @NotNull AstExpression target, @NotNull AstExpression value) {
         super(inputPosition);
         this.operation = Objects.requireNonNull(operation);
         this.target = Objects.requireNonNull(target);
@@ -22,11 +23,11 @@ public class AstAssignmentCompound extends AstBaseMindcodeNode {
         return operation;
     }
 
-    public @NotNull AstMindcodeNode getTarget() {
+    public @NotNull AstExpression getTarget() {
         return target;
     }
 
-    public @NotNull AstMindcodeNode getValue() {
+    public @NotNull AstExpression getValue() {
         return value;
     }
 

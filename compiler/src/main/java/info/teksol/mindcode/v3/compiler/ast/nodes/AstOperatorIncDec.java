@@ -1,30 +1,32 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstOperatorIncDec extends AstBaseMindcodeNode {
-    private final Type type;
-    private final Operation operation;
-    private final AstMindcodeNode operand;
+public class AstOperatorIncDec extends AstExpression {
+    private final @NotNull Type type;
+    private final @NotNull Operation operation;
+    private final @NotNull AstExpression operand;
 
-    public AstOperatorIncDec(InputPosition inputPosition, Type type, Operation operation, AstMindcodeNode operand) {
+    public AstOperatorIncDec(@NotNull InputPosition inputPosition, @NotNull Type type, @NotNull Operation operation,
+            @NotNull AstExpression operand) {
         super(inputPosition);
         this.type = Objects.requireNonNull(type);
         this.operation = Objects.requireNonNull(operation);
         this.operand = Objects.requireNonNull(operand);
     }
 
-    public Type getType() {
+    public @NotNull Type getType() {
         return type;
     }
 
-    public Operation getOperation() {
+    public @NotNull Operation getOperation() {
         return operation;
     }
 
-    public AstMindcodeNode getOperand() {
+    public @NotNull AstExpression getOperand() {
         return operand;
     }
 

@@ -31,6 +31,9 @@ do
 loop while @unit == null;
 ```
 
+> [!NOTE]
+> In version 3.0.0, the `loop` keyword became optional and is deprecated. The keyword will be removed in a future release. 
+
 ## Range Iteration Loops
 
 Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an

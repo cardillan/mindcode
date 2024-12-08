@@ -1,18 +1,19 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public abstract class AstLiteral extends AstBaseMindcodeNode {
-    protected final String literal;
+public abstract class AstLiteral extends AstExpression {
+    protected final @NotNull String literal;
 
-    public AstLiteral(InputPosition inputPosition, String literal) {
+    protected AstLiteral(@NotNull InputPosition inputPosition, @NotNull String literal) {
         super(inputPosition);
         this.literal = Objects.requireNonNull(literal);
     }
 
-    public String getLiteral() {
+    public @NotNull String getLiteral() {
         return literal;
     }
 
