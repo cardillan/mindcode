@@ -148,6 +148,141 @@ class MindcodeParserTest extends AbstractParserTest {
     }
 
     @Nested
+    class Declarations {
+        @Test
+        void parsesDeclarations() {
+            assertParses("""
+                    /** Comment 1 */
+                    param x = 10;
+                    /** Comment 2 */
+                    /** Comment 3 */
+                    const y = 10;
+                    
+                    allocate stack in cell1;
+                    allocate heap in HEAPPTR;
+                    allocate stack in cell2[10 .. 22];
+                    allocate heap in bank1[1 ... 256];
+                    allocate heap in cell1, stack in cell2[0 .. 30];
+                    allocate stack in cell1, heap in cell2[0 .. 30];
+                    """);
+        }
+
+        @Test
+        void refusesInvalidParamIdentifiers1() {
+            assertGeneratesMessages(
+                    expectedMessages().addRegex(1, 8, "Parse error: .*"),
+                    "param x.y = 10;");
+        }
+
+        @Test
+        void refusesInvalidParamIdentifiers2() {
+            assertGeneratesMessages(
+                    expectedMessages().addRegex(1, 9, "Parse error: .*"),
+                    "param a + b = 10;");
+        }
+
+        @Test
+        void refusesInvalidParamIdentifiers3() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 8, "Parse error: .*")
+                            .addRegex(1, 9, "Parse error: .*"),
+                    "param a() = 10;");
+        }
+
+        @Test
+        void refusesInvalidParamIdentifiers4() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 7, "Parse error: .*")
+                            .addRegex(1, 9, "Parse error: .*"),
+                    "param [a] = 10;");
+        }
+
+        @Test
+        void refusesInvalidConstIdentifiers1() {
+            assertGeneratesMessages(
+                    expectedMessages().addRegex(1, 8, "Parse error: .*"),
+                    "const x.y = 10;");
+        }
+
+        @Test
+        void refusesInvalidConstIdentifiers2() {
+            assertGeneratesMessages(
+                    expectedMessages().addRegex(1, 9, "Parse error: .*"),
+                    "const a + b = 10;");
+        }
+
+        @Test
+        void refusesInvalidConstIdentifiers3() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 8, "Parse error: .*")
+                            .addRegex(1, 9, "Parse error: .*"),
+                    "const a() = 10;");
+        }
+
+        @Test
+        void refusesInvalidConstIdentifiers4() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 7, "Parse error: .*")
+                            .addRegex(1, 9, "Parse error: .*"),
+                    "const [a] = 10;");
+        }
+
+        @Test
+        void refusesInvalidAllocationType() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 10, "Parse error: .*"),
+                    "allocate memory in cell1[10 .. 20];");
+        }
+
+        @Test
+        void refusesInvalidAllocationRange1() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 23, "Parse error: .*")
+                            .addRegex(1, 27, "Parse error: .*")
+                    ,
+                    "allocate heap in cell1(10 .. 20);");
+        }
+
+        @Test
+        void refusesInvalidAllocationRange2() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 29, "Parse error: .*"),
+                    "allocate heap in cell1[10 . 20];");
+        }
+
+        @Test
+        void refusesInvalidAllocationRange3() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 30, "Parse error: .*"),
+                    "allocate heap in cell1[10 .... 20];");
+        }
+
+        @Test
+        void refusesInvalidAllocationRange4() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 26, "Parse error: .*"),
+                    "allocate heap in cell1[10];");
+        }
+
+        @Test
+        void refusesInvalidAllocationRange5() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 18, "Parse error: .*"),
+                    "allocate heap in $cell1[10 .. 20];");
+        }
+    }
+
+    @Nested
     class Directives {
         @Test
         void parsesDirectives() {
@@ -373,7 +508,7 @@ class MindcodeParserTest extends AbstractParserTest {
     }
 
     @Nested
-    class Functions {
+    class FunctionCalls {
         @Test
         void parsesFunctionCalls() {
             assertParses("""
@@ -429,6 +564,68 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(1, 5, "Parse error: .*")
                             .addRegex(1, 6, "Parse error: .*"),
                     "$foo();");
+        }
+
+        @Test
+        void refusesWrongFunctionModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 8, "Parse error: .*"),
+                    "foo(in in a);");
+        }
+
+        @Test
+        void refusesWrongFunctionArguments() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 10, "Parse error: .*"),
+                    "foo(in a b);");
+        }
+    }
+
+    @Nested
+    class FunctionDeclarations {
+        @Test
+        void parsesFunctionDeclarations() {
+            assertParses("""
+                    inline def foo(x...) end;
+                    noinline def bar(x..., y...) end;
+                    void baz() x; end;
+                    void quux(in a, out b, in out c, out in d) a + b + c + d; end;
+                    """);
+        }
+
+        @Test
+        void refusesBothModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 8, "Parse error: .*"),
+                    "inline noinline def foo() end;");
+        }
+
+        @Test
+        void refusesExternalName() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 6, "Parse error: .*"),
+                    "void $foo() end;");
+        }
+
+        @Test
+        void refusesMissingParameter() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 13, "Parse error: .*"),
+                    "void foo(a, , b) end;");
+        }
+
+        @Test
+        void refusesWrongParameterModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 14, "Parse error: .*")
+                            .addRegex(1, 19, "Parse error: .*"),
+                    "void foo(out out b) end;");
         }
     }
 

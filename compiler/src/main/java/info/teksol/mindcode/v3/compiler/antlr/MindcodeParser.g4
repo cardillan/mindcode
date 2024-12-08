@@ -28,7 +28,7 @@ expression
     | CONST name = IDENTIFIER ASSIGN value = expression                                 # expConstant
     | ALLOCATE allocations                                                              # expAllocations
     | BEGIN exp = statementList? END                                                    # expCodeBlock
-    | inline = (INLINE | NOINLINE)? def = (VOID | DEF) name = IDENTIFIER
+    | inline = (INLINE | NOINLINE)? type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = statementList? END                                # expDeclareFunction
     | END LPAREN RPAREN                                                                 # expCallEnd
     | function = IDENTIFIER args = argumentList                                         # expCallFunction
@@ -104,8 +104,8 @@ allocations
     ;
 
 allocation
-    : type = (HEAP | STACK)
-        IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?                 # strAllocation
+    : HEAP IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?              # strHeapAllocation
+    | STACK IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?             # strStackAllocation
     ;
 
 directive
@@ -140,8 +140,8 @@ argumentList
     ;
 
 parameter
-    : modifier_in = IN?  modifier_out = OUT? arg = IDENTIFIER varargs = DOT3?
-    | modifier_out = OUT modifier_in = IN    arg = IDENTIFIER varargs = DOT3?
+    : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER varargs = DOT3?
+    | modifier_out = OUT modifier_in = IN    name = IDENTIFIER varargs = DOT3?
     ;
 
 parameterList
@@ -152,11 +152,11 @@ parameterList
 // Control statement expressions
 
 caseAlternatives
-    : caseAlternative+                                                                  # strCaseAlternatives
+    : caseAlternative+
     ;
 
 caseAlternative
-    : WHEN values = whenValueList THEN body = statementList?                           # strCaseAlternative
+    : WHEN values = whenValueList THEN body = statementList?
     ;
 
 whenValueList
@@ -212,6 +212,6 @@ formattablePlaceholder
     ;
 
 rangeExpression
-    : start = expression DOT2 end = expression                                          # expRangeInclusive
-    | start = expression DOT3 end = expression                                          # expRangeExclusive
+    : firstValue = expression operator = DOT2 lastValue = expression
+    | firstValue = expression operator = DOT3 lastValue = expression
     ;

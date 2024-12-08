@@ -5,6 +5,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.v3.DataType;
 import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeLexer;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser;
@@ -51,15 +52,91 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     //<editor-fold desc="Rule: structures">
     @Override
-    public AstMindcodeNode visitStatementList(MindcodeParser.StatementListContext ctx) {
+    public AstStatementList visitStatementList(MindcodeParser.StatementListContext ctx) {
         return new AstStatementList(pos(ctx), ctx.expression().stream().map(this::visit).toList());
     }
 
     @Override
     public AstMindcodeNode visitExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx) {
         return ctx.exp == null
-                ? new AstStatementList(pos(ctx), List.of())
-                : visit(ctx.exp);
+                ? new AstCodeBlock(pos(ctx), List.of())
+                : new AstCodeBlock(visitStatementList(ctx.exp));
+    }
+
+    @Override
+    public AstMindcodeNode visitExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx) {
+        return new AstCaseExpression(pos(ctx),
+                visit(ctx.exp),
+                processCaseAlternatives(ctx.alternatives),
+                visit(ctx.elseBranch));
+    }
+
+    private List<AstCaseAlternative> processCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx) {
+        return ctx.caseAlternative() != null
+                ? ctx.caseAlternative().stream().map(this::visitCaseAlternative).toList()
+                : List.of();
+    }
+
+    @Override
+    public AstCaseAlternative visitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) {
+        return new AstCaseAlternative(pos(ctx),
+                ctx.values != null
+                        ? ctx.values.whenValue().stream().map(this::visit).toList()
+                        : List.of(),
+                visit(ctx.body));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rule: declarations">
+    @Override
+    public AstMindcodeNode visitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) {
+        AstIdentifier library = createIdentifier(ctx.library);
+        return new AstRequireLibrary(pos(ctx), library);
+    }
+
+    @Override
+    public AstMindcodeNode visitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) {
+        return new AstRequireFile(pos(ctx), createLiteralString(ctx.STRING()));
+    }
+
+    @Override
+    public AstMindcodeNode visitExpParameter(MindcodeParser.ExpParameterContext ctx) {
+        return new AstParameter(pos(ctx),
+                findDocComment(ctx.getStart()),
+                createIdentifier(ctx.name),
+                visit(ctx.value));
+    }
+
+    @Override
+    public AstMindcodeNode visitExpConstant(MindcodeParser.ExpConstantContext ctx) {
+        return new AstConstant(pos(ctx),
+                findDocComment(ctx.getStart()),
+                createIdentifier(ctx.name),
+                visit(ctx.value));
+    }
+
+    @Override
+    public AstMindcodeNode visitExpAllocations(MindcodeParser.ExpAllocationsContext ctx) {
+        List<AstMindcodeNode> allocations = ctx.allocations().allocation().stream().map(this::visit).toList();
+        return allocations.size() > 1
+                ? new AstStatementList(pos(ctx), allocations)
+                : allocations.getFirst();
+    }
+
+    @Override
+    public AstMindcodeNode visitStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx) {
+        return new AstAllocation(pos(ctx),
+                AstAllocation.AllocationType.HEAP,
+                createIdentifier(ctx.id),
+                ctx.range != null ? visitRangeExpression(ctx.rangeExpression()) : null);
+    }
+
+    @Override
+    public AstMindcodeNode visitStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx) {
+        return new AstAllocation(pos(ctx),
+                AstAllocation.AllocationType.STACK,
+                createIdentifier(ctx.id),
+                ctx.range != null ? visitRangeExpression(ctx.rangeExpression()) : null);
     }
     //</editor-fold>
 
@@ -313,6 +390,14 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstRange visitRangeExpression(MindcodeParser.RangeExpressionContext ctx) {
+        return new AstRange(pos(ctx),
+                visit(ctx.firstValue),
+                visit(ctx.lastValue),
+                ctx.operator.getType() == MindcodeLexer.DOT3);
+    }
+
+    @Override
     public AstMindcodeNode visitExpTernary(MindcodeParser.ExpTernaryContext ctx) {
         return new AstOperatorTernary(pos(ctx.condition.getStart()),
                 visit(ctx.condition),
@@ -408,15 +493,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return ctx.argument() != null ? visitArgument(ctx.argument()) : new AstFunctionArgument(pos(ctx));
     }
 
-    @Override
-    public AstFunctionArgumentList visitArgumentList(MindcodeParser.ArgumentListContext ctx) {
+    public List<AstFunctionArgument> processArgumentList(MindcodeParser.ArgumentListContext ctx) {
         if (ctx.argument() != null) {
-            return new AstFunctionArgumentList(pos(ctx), List.of(visitArgument(ctx.argument())));
+            return List.of(visitArgument(ctx.argument()));
         } else if (ctx.optionalArgument() != null) {
-            final List<AstFunctionArgument> arguments = ctx.optionalArgument().stream().map(this::visitOptionalArgument).toList();
-            return new AstFunctionArgumentList(pos(ctx), arguments);
+            return ctx.optionalArgument().stream().map(this::visitOptionalArgument).toList();
         } else {
-            return new AstFunctionArgumentList(pos(ctx), List.of());
+            return List.of();
         }
     }
 
@@ -424,7 +507,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstMindcodeNode visitExpCallEnd(MindcodeParser.ExpCallEndContext ctx) {
         return new AstFunctionCall(pos(ctx), null,
                 createIdentifier(ctx.END().getSymbol()),
-                new AstFunctionArgumentList(pos(ctx.LPAREN()), List.of()));
+                List.of());
     }
 
     @Override
@@ -432,7 +515,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstFunctionCall(pos(ctx),
                 null,
                 createIdentifier(ctx.function),
-                visitArgumentList(ctx.argumentList()));
+                processArgumentList(ctx.argumentList()));
     }
 
     @Override
@@ -440,21 +523,41 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstFunctionCall(pos(ctx),
                 visit(ctx.object),
                 createIdentifier(ctx.function),
-                visitArgumentList(ctx.argumentList()));
+                processArgumentList(ctx.argumentList()));
     }
 
     //</editor-fold>
 
-    //<editor-fold desc="Rule: require">
+    //<editor-fold desc="Rule: function declarations">
     @Override
-    public AstMindcodeNode visitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) {
-        AstIdentifier library = createIdentifier(ctx.library);
-        return new AstRequireLibrary(pos(ctx), library);
+    public AstMindcodeNode visitExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx) {
+        DataType dataType = switch (ctx.type.getType()) {
+            case MindcodeLexer.VOID -> DataType.VOID;
+            case MindcodeLexer.DEF  -> DataType.VAR;
+            default -> throw new MindcodeInternalError("Unsupported type: " + ctx.type.getText());
+        };
+
+        return new AstFunctionDeclaration(pos(ctx),
+                findDocComment(ctx.getStart()),
+                createIdentifier(ctx.name),
+                dataType,
+                processParameterList(ctx.parameterList()),
+                ctx.body != null ? visit(ctx.body) : new AstStatementList(pos(ctx), List.of()),
+                ctx.INLINE() != null,
+                ctx.NOINLINE() != null);
+    }
+
+    private List<AstFunctionParameter> processParameterList(MindcodeParser.ParameterListContext ctx) {
+        return ctx.parameter() != null ? ctx.parameter().stream().map(this::visitParameter).toList() : List.of();
     }
 
     @Override
-    public AstMindcodeNode visitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) {
-        return new AstRequireFile(pos(ctx), createLiteralString(ctx.STRING()));
+    public AstFunctionParameter visitParameter(MindcodeParser.ParameterContext ctx) {
+        return new AstFunctionParameter(pos(ctx),
+                createIdentifier(ctx.name),
+                ctx.modifier_in != null,
+                ctx.modifier_out != null,
+                ctx.varargs != null);
     }
     //</editor-fold>
 
@@ -468,14 +571,22 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER);
     }
 
-    private Operation operation(Token token) {
-        return Operation.fromToken(token.getType());
+    private AstDocComment findDocComment(Token token) {
+        int tokenIndex = token.getTokenIndex();
+        List<Token> docTokens = Objects.requireNonNullElse(
+                tokenStream.getHiddenTokensToLeft(tokenIndex, Token.HIDDEN_CHANNEL), List.of());
+
+        // Note: the reduce trick to get the last item on the stream is not very effective, but we don't expect
+        // the token list to be long. The length should be at most 1 in practically all cases.
+        return docTokens.stream()
+                .reduce((first, second) -> second)
+                .filter(t -> t.getType() == MindcodeLexer.DOC_COMMENT)
+                .map(docToken -> new AstDocComment(pos(docToken), docToken.getText()))
+                .orElse(null);
     }
 
-    private String obtainDocComment(Token token) {
-        int tokenIndex = token.getTokenIndex();
-        List<Token> docComments = tokenStream.getHiddenTokensToLeft(tokenIndex, Token.HIDDEN_CHANNEL);
-        return docComments.isEmpty() ? null : docComments.getLast().getText();
+    private Operation operation(Token token) {
+        return Operation.fromToken(token.getType());
     }
 
     private InputPosition pos(ParserRuleContext ctx) {

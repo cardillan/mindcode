@@ -34,7 +34,7 @@ public class AstStatementList extends AstBaseMindcodeNode {
 
     @Override
     public String toString() {
-        return "AstStatementList{" +
+        return getClass().getSimpleName() + "{" +
                "expressions=" + expressions.stream().map(Object::toString).collect(Collectors.joining("\n", "\n", "\n")) +
                '}';
     }

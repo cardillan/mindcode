@@ -386,12 +386,19 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAllocations(MindcodeParser.AllocationsContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code strAllocation}
+	 * Visit a parse tree produced by the {@code strHeapAllocation}
 	 * labeled alternative in {@link MindcodeParser#allocation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStrAllocation(MindcodeParser.StrAllocationContext ctx);
+	T visitStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code strStackAllocation}
+	 * labeled alternative in {@link MindcodeParser#allocation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code directiveSet}
 	 * labeled alternative in {@link MindcodeParser#directive}.
@@ -443,19 +450,17 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParameterList(MindcodeParser.ParameterListContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code strCaseAlternatives}
-	 * labeled alternative in {@link MindcodeParser#caseAlternatives}.
+	 * Visit a parse tree produced by {@link MindcodeParser#caseAlternatives}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStrCaseAlternatives(MindcodeParser.StrCaseAlternativesContext ctx);
+	T visitCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code strCaseAlternative}
-	 * labeled alternative in {@link MindcodeParser#caseAlternative}.
+	 * Visit a parse tree produced by {@link MindcodeParser#caseAlternative}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStrCaseAlternative(MindcodeParser.StrCaseAlternativeContext ctx);
+	T visitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#whenValueList}.
 	 * @param ctx the parse tree
@@ -579,17 +584,9 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expRangeInclusive}
-	 * labeled alternative in {@link MindcodeParser#rangeExpression}.
+	 * Visit a parse tree produced by {@link MindcodeParser#rangeExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpRangeInclusive(MindcodeParser.ExpRangeInclusiveContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code expRangeExclusive}
-	 * labeled alternative in {@link MindcodeParser#rangeExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpRangeExclusive(MindcodeParser.ExpRangeExclusiveContext ctx);
+	T visitRangeExpression(MindcodeParser.RangeExpressionContext ctx);
 }

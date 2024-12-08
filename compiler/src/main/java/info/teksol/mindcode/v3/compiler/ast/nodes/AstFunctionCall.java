@@ -3,15 +3,16 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 import info.teksol.mindcode.InputPosition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 public class AstFunctionCall extends AstBaseMindcodeNode {
     private final AstMindcodeNode object;
     private final @NotNull AstIdentifier functionName;
-    private final @NotNull AstFunctionArgumentList arguments;
+    private final @NotNull List<@NotNull AstFunctionArgument> arguments;
 
     public AstFunctionCall(InputPosition inputPosition, AstMindcodeNode object, @NotNull AstIdentifier functionName,
-            @NotNull AstFunctionArgumentList arguments) {
+            @NotNull List<@NotNull AstFunctionArgument> arguments) {
         super(inputPosition);
         this.object = object;
         this.functionName = Objects.requireNonNull(functionName);
@@ -30,7 +31,7 @@ public class AstFunctionCall extends AstBaseMindcodeNode {
         return functionName;
     }
 
-    public @NotNull AstFunctionArgumentList getArguments() {
+    public @NotNull List<@NotNull AstFunctionArgument> getArguments() {
         return arguments;
     }
 
