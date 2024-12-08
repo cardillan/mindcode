@@ -25,13 +25,12 @@ public class MindcodeSampleParserTest extends AbstractParserTest {
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one script in " + SCRIPTS_DIRECTORY + "; found none");
 
-        return DynamicContainer.dynamicContainer("Parse tests",
+        return DynamicContainer.dynamicContainer("Samples parse tests",
                 Stream.of(files)
                         .map(File::getName)
                         .map(f -> DynamicTest.dynamicTest(f, null, () -> parseFile(f)))
         );
     }
-
 
     private void parseFile(String filename) throws IOException {
         Path path = Path.of(SCRIPTS_DIRECTORY, filename);

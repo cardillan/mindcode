@@ -1,12 +1,17 @@
 package info.teksol.mindcode.v3.compiler.ast;
 
 import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.v3.DataType;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Type;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.DECREMENT;
+import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.INCREMENT;
 
 class AstBuilderTest extends AbstractAstBuilderTest {
     private static final AstIdentifier identifier = id("identifier");
@@ -30,7 +35,19 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         return new AstQualifiedIdentifier(EMPTY, Stream.of(names).map(AstBuilderTest::id).toList());
     }
 
-    private static AstFunctionArgument arg(AstMindcodeNode expression) {
+    private static AstBuiltInIdentifier builtIn(String name) {
+        return new AstBuiltInIdentifier(EMPTY, name);
+    }
+
+    private static AstLiteralDecimal number(int number) {
+        return new AstLiteralDecimal(EMPTY, String.valueOf(number));
+    }
+
+    private static AstLiteralFloat number(double number) {
+        return new AstLiteralFloat(EMPTY, String.valueOf(number));
+    }
+
+    private static AstFunctionArgument arg(AstExpression expression) {
         return new AstFunctionArgument(EMPTY, expression, false, false);
     }
 
@@ -50,15 +67,15 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         return new AstFunctionArgument(EMPTY, id(name), true, true);
     }
 
-    private static AstFunctionArgumentList args(AstFunctionArgument... args) {
-        return new AstFunctionArgumentList(EMPTY, List.of(args));
+    private static List<AstFunctionArgument> args(AstFunctionArgument... args) {
+        return List.of(args);
     }
 
     private static AstFunctionCall call(AstIdentifier name, AstFunctionArgument... args) {
         return new AstFunctionCall(EMPTY, null, name, args(args));
     }
 
-    private static AstFunctionCall call(AstMindcodeNode object, AstIdentifier name, AstFunctionArgument... args) {
+    private static AstFunctionCall call(AstExpression object, AstIdentifier name, AstFunctionArgument... args) {
         return new AstFunctionCall(EMPTY, object, name, args(args));
     }
 
@@ -187,6 +204,13 @@ class AstBuilderTest extends AbstractAstBuilderTest {
     @Nested
     class BasicStructure {
         @Test
+        void buildsEmptyProgram() {
+            assertBuilds("",
+                    List.of()
+            );
+        }
+
+        @Test
         void buildsCodeBlocks() {
             assertBuilds("""
                             begin
@@ -194,7 +218,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstStatementList(EMPTY, List.of(identifier))
+                            new AstCodeBlock(EMPTY, List.of(identifier))
                     )
             );
         }
@@ -206,7 +230,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstStatementList(EMPTY, List.of())
+                            new AstCodeBlock(EMPTY, List.of())
                     )
             );
         }
@@ -252,11 +276,22 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(identifier)
             );
         }
+
+        @Test
+        void refusesMisplacedExpressions() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 7, "Parse error: .*"),
+                    """
+                            while const a = 10 do
+                                print(x);
+                            end;
+                            """);
+        }
     }
 
     @Nested
     class BinaryOperations {
-
         @Test
         void buildsAdditionAndBitShifts() {
             assertBuilds("""
@@ -364,6 +399,256 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstOperatorBinary(EMPTY, Operation.DIV, left, right),
                             new AstOperatorBinary(EMPTY, Operation.IDIV, left, right),
                             new AstOperatorBinary(EMPTY, Operation.MOD, left, right)
+                    )
+            );
+        }
+
+        @Test
+        void buildsCompoundExpressions() {
+            assertBuilds("""
+                            a + b * c ** d >> e;
+                            """,
+                    List.of(
+                            new AstOperatorBinary(EMPTY, Operation.SHR,
+                                    new AstOperatorBinary(EMPTY, Operation.ADD,
+                                            a,
+                                            new AstOperatorBinary(EMPTY, Operation.MUL,
+                                                    b,
+                                                    new AstOperatorBinary(EMPTY, Operation.POW, c, d)
+                                            )
+                                    ),
+                                    e)
+                    )
+            );
+        }
+
+        @Test
+        void buildsParenthesizedExpressions() {
+            assertBuilds("""
+                            (a + b) * (c - d);
+                            """,
+                    List.of(
+                            new AstOperatorBinary(EMPTY, Operation.MUL,
+                                    new AstParentheses(EMPTY,
+                                            new AstOperatorBinary(EMPTY, Operation.ADD, a, b)
+                                    ),
+                                    new AstParentheses(EMPTY,
+                                            new AstOperatorBinary(EMPTY, Operation.SUB, c, d)
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsMassivelyParenthesizedExpressions() {
+            assertBuilds("""
+                            ((((a + b))));
+                            """,
+                    List.of(
+                            new AstParentheses(EMPTY,
+                                    new AstParentheses(EMPTY,
+                                            new AstParentheses(EMPTY,
+                                                    new AstParentheses(EMPTY,
+                                                            new AstOperatorBinary(EMPTY, Operation.ADD, a, b)
+                                                    )
+                                            )
+                                    )
+                            )
+
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class CaseExpressions {
+        @Test
+        void buildsCaseExpressionWithoutElse() {
+            assertBuilds("""
+                            case identifier
+                                when 1 then a;
+                                when 2 then b;
+                            end;
+                            """,
+                    List.of(
+                            new AstCaseExpression(EMPTY,
+                                    identifier,
+                                    List.of(
+                                            new AstCaseAlternative(EMPTY, List.of(number((1))), List.of(a)),
+                                            new AstCaseAlternative(EMPTY, List.of(number((2))), List.of(b))
+                                    ),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsCaseExpressionWithElse() {
+            assertBuilds("""
+                            case identifier
+                                when 1 then a;
+                                when 2 then b;
+                                else c;
+                            end;
+                            """,
+                    List.of(
+                            new AstCaseExpression(EMPTY,
+                                    identifier,
+                                    List.of(
+                                            new AstCaseAlternative(EMPTY, List.of(number((1))), List.of(a)),
+                                            new AstCaseAlternative(EMPTY, List.of(number((2))), List.of(b))
+                                    ),
+                                    List.of(c)
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsCaseExpressionWithoutAlternatives() {
+            assertBuilds("""
+                            case identifier
+                                else c;
+                            end;
+                            """,
+                    List.of(
+                            new AstCaseExpression(EMPTY,
+                                    identifier,
+                                    List.of(),
+                                    List.of(c)
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsEmptyCaseExpression() {
+            assertBuilds("""
+                            case identifier
+                            end;
+                            """,
+                    List.of(
+                            new AstCaseExpression(EMPTY,
+                                    identifier,
+                                    List.of(),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsCaseExpressionWithSeveralValues() {
+            assertBuilds("""
+                            case identifier
+                                when 1, 2, 10 .. 20     then a;
+                                when 30 ... 50, 4**5, c then b;
+                                else c;
+                            end;
+                            """,
+                    List.of(
+                            new AstCaseExpression(EMPTY,
+                                    identifier,
+                                    List.of(
+                                            new AstCaseAlternative(EMPTY,
+                                                    List.of(
+                                                            number(1),
+                                                            number(2),
+                                                            new AstRange(EMPTY, number(10), number(20), false)
+                                                    ),
+                                                    List.of(a)),
+                                            new AstCaseAlternative(EMPTY,
+                                                    List.of(
+                                                            new AstRange(EMPTY, number(30), number(50), true),
+                                                            new AstOperatorBinary(EMPTY, Operation.POW, number(4), number(5)),
+                                                            c
+                                                    ),
+                                                    List.of(b))
+                                    ),
+                                    List.of(c)
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class Declarations {
+        @Test
+        void buildsAllocationsSeparate() {
+            assertBuilds("""
+                            allocate heap in cell1;
+                            allocate stack in cell2[0 .. 63];
+                            """,
+                    List.of(
+                            new AstAllocation(EMPTY,
+                                    AstAllocation.AllocationType.HEAP,
+                                    id("cell1"),
+                                    null),
+                            new AstAllocation(EMPTY,
+                                    AstAllocation.AllocationType.STACK,
+                                    id("cell2"),
+                                    new AstRange(EMPTY, number(0), number(63), false))
+                    )
+            );
+        }
+
+        @Test
+        void buildsAllocationsCombined() {
+            assertBuilds("""
+                            allocate heap in HEAPPTR[0 ... 64], stack in bank1;
+                            """,
+                    List.of(
+                            new AstStatementList(EMPTY,
+                                    List.of(
+                                            new AstAllocation(EMPTY,
+                                                    AstAllocation.AllocationType.HEAP,
+                                                    id("HEAPPTR"),
+                                                    new AstRange(EMPTY, number(0), number(64), true)),
+                                            new AstAllocation(EMPTY,
+                                                    AstAllocation.AllocationType.STACK,
+                                                    id("bank1"),
+                                                    null)
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsConstants() {
+            assertBuilds("""
+                            /** Comment1 */
+                            /** Comment2 */
+                            // Anything else
+                            const /** Comment3 */ MIN = 10;
+                            """,
+                    List.of(
+                            new AstConstant(EMPTY,
+                                    new AstDocComment(EMPTY, "/** Comment2 */"),
+                                    id("MIN"),
+                                    new AstLiteralDecimal(EMPTY, "10")
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsParameters() {
+            assertBuilds("""
+                            /** Comment1 */
+                            /** Comment2 */
+                            // Anything else
+                            param /** Comment3 */ MIN = 10;
+                            """,
+                    List.of(
+                            new AstParameter(EMPTY,
+                                    new AstDocComment(EMPTY, "/** Comment2 */"),
+                                    id("MIN"),
+                                    new AstLiteralDecimal(EMPTY, "10")
+                            )
                     )
             );
         }
@@ -651,6 +936,95 @@ class AstBuilderTest extends AbstractAstBuilderTest {
     }
 
     @Nested
+    class ForEachLoops {
+        @Test
+        void buildsSimpleForEachLoop() {
+            assertBuilds("""
+                            Label:
+                            for a in 10, 20, 30 do
+                                print(a);
+                            end;
+                            """,
+                    List.of(
+                            new AstForEachLoopStatement(EMPTY,
+                                    id("Label"),
+                                    List.of(new AstLoopIterator(EMPTY, a, false)),
+                                    List.of(number(10), number(20), number(30)),
+                                    List.of(call(id("print"), arg(a)))
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsMultipleIteratorsForEachLoop() {
+            assertBuilds("""
+                            Label:
+                            for a, b in 10, 20, 30, 40 do
+                                print(a + b);
+                            end;
+                            """,
+                    List.of(
+                            new AstForEachLoopStatement(EMPTY,
+                                    id("Label"),
+                                    List.of(
+                                            new AstLoopIterator(EMPTY, a, false),
+                                            new AstLoopIterator(EMPTY, b, false)
+                                    ),
+                                    List.of(number(10), number(20), number(30), number(40)),
+                                    List.of(
+                                            call(id("print"),
+                                                    arg(new AstOperatorBinary(EMPTY, Operation.ADD, a, b))
+                                            )
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsOutputIteratorsForEachLoop() {
+            assertBuilds("""
+                            Label:
+                            for out i, out j in a, b, c, d do
+                                j = i;
+                            end;
+                            """,
+                    List.of(
+                            new AstForEachLoopStatement(EMPTY,
+                                    id("Label"),
+                                    List.of(
+                                            new AstLoopIterator(EMPTY, id("i"), true),
+                                            new AstLoopIterator(EMPTY, id("j"), true)
+                                    ),
+                                    List.of(a, b, c, d),
+                                    List.of(new AstAssignmentSimple(EMPTY, id("j"), id("i"))
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsForEachLoopWithUnitTypes() {
+            assertBuilds("""
+                            for a in @mono, @poly, @mega do
+                                print(a);
+                            end;
+                            """,
+                    List.of(
+                            new AstForEachLoopStatement(EMPTY,
+                                    null,
+                                    List.of(new AstLoopIterator(EMPTY, a, false)),
+                                    List.of(builtIn("@mono"), builtIn("@poly"), builtIn("@mega")),
+                                    List.of(call(id("print"), arg(a)))
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
     class Formattables {
         @Test
         void buildsBasicFormattable() {
@@ -921,6 +1295,333 @@ class AstBuilderTest extends AbstractAstBuilderTest {
     }
 
     @Nested
+    class FunctionDeclarations {
+        @Test
+        void buildsFunctionDeclarations() {
+            assertBuilds("""
+                            /** Comment1 */
+                            def a() end;
+                            /** Comment2 */
+                            /** Comment3 */
+                            inline def b(a...) a; end;
+                            noinline void c(in a, out b, in out c, out in d) a + b; end;
+                            """,
+                    List.of(
+                            new AstFunctionDeclaration(EMPTY,
+                                    new AstDocComment(EMPTY, "/** Comment1 */"),
+                                    a,
+                                    DataType.VAR,
+                                    List.of(),
+                                    List.of(),
+                                    false,
+                                    false),
+                            new AstFunctionDeclaration(EMPTY,
+                                    new AstDocComment(EMPTY, "/** Comment3 */"),
+                                    b,
+                                    DataType.VAR,
+                                    List.of(new AstFunctionParameter(EMPTY, a, false, false, true)),
+                                    List.of(a),
+                                    true,
+                                    false),
+                            new AstFunctionDeclaration(EMPTY,
+                                    null,
+                                    c,
+                                    DataType.VOID,
+                                    List.of(
+                                            new AstFunctionParameter(EMPTY, a, true, false, false),
+                                            new AstFunctionParameter(EMPTY, b, false, true, false),
+                                            new AstFunctionParameter(EMPTY, c, true, true, false),
+                                            new AstFunctionParameter(EMPTY, d, true, true, false)
+                                    ),
+                                    List.of(new AstOperatorBinary(EMPTY, Operation.ADD, a, b)),
+                                    false,
+                                    true)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class IfExpressions {
+        @Test
+        void buildsIfExpressionWithoutElse() {
+            assertBuilds("""
+                            if a then b; end;
+                            if a then b; else end;
+                            """,
+                    List.of(
+                            new AstIfExpression(EMPTY,
+                                    new AstIfBranch(EMPTY, a, List.of(b)),
+                                    List.of(),
+                                    List.of()
+                            ),
+                            new AstIfExpression(EMPTY,
+                                    new AstIfBranch(EMPTY, a, List.of(b)),
+                                    List.of(),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsIfExpressionWithElse() {
+            assertBuilds("""
+                            if a then b; c; else d; e; end;
+                            """,
+                    List.of(
+                            new AstIfExpression(EMPTY,
+                                    new AstIfBranch(EMPTY, a, List.of(b, c)),
+                                    List.of(),
+                                    List.of(d, e)
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsIfExpressionWithElsif() {
+            assertBuilds("""
+                            if a then b; c; elsif d then e; f; end;
+                            """,
+                    List.of(
+                            new AstIfExpression(EMPTY,
+                                    new AstIfBranch(EMPTY, a, List.of(b, c)),
+                                    List.of(new AstIfBranch(EMPTY, d, List.of(e, id("f")))),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsIfExpressionWithElsifs() {
+            assertBuilds("""
+                            if a then
+                                b; c;
+                            elsif d then
+                                e; f;
+                            elsif g then
+                            end;
+                            """,
+                    List.of(
+                            new AstIfExpression(EMPTY,
+                                    new AstIfBranch(EMPTY, a, List.of(b, c)),
+                                    List.of(
+                                            new AstIfBranch(EMPTY, d, List.of(e, id("f"))),
+                                            new AstIfBranch(EMPTY, id("g"), List.of())
+                                    ),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsIfExpressionWithElsifsAndElse() {
+            assertBuilds("""
+                            if a then
+                                b; c;
+                            elsif d then
+                                e; f;
+                            elsif g then
+                                h;
+                            else
+                                i;
+                            end;
+                            """,
+                    List.of(
+                            new AstIfExpression(EMPTY,
+                                    new AstIfBranch(EMPTY, a, List.of(b, c)),
+                                    List.of(
+                                            new AstIfBranch(EMPTY, d, List.of(e, id("f"))),
+                                            new AstIfBranch(EMPTY, id("g"), List.of(id("h")))
+                                    ),
+                                    List.of(id("i"))
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class IteratedForLoops {
+        @Test
+        void buildsSimpleIteratedForLoop() {
+            assertBuilds("""
+                            Label:
+                            for a = 0; a < 10; a++ do
+                                print(a);
+                            end;
+                            """,
+                    List.of(
+                            new AstIteratedForLoopStatement(EMPTY,
+                                    id("Label"),
+                                    List.of(new AstAssignmentSimple(EMPTY, a, number(0))),
+                                    new AstOperatorBinary(EMPTY, Operation.LESS_THAN, a, number(10)),
+                                    List.of(new AstOperatorIncDec(EMPTY, Type.POSTFIX, INCREMENT, a)),
+                                    List.of(call(id("print"), arg(a)))
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsEmptyIteratedForLoop() {
+            assertBuilds("""
+                            for ;; do
+                            end;
+                            """,
+                    List.of(
+                            new AstIteratedForLoopStatement(EMPTY,
+                                    null,
+                                    List.of(),
+                                    null,
+                                    List.of(),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsComplexIteratedForLoop() {
+            assertBuilds("""
+                            for a = 0, b = 100; a < b; a++, --b do
+                                print(a + b);
+                            end;
+                            """,
+                    List.of(
+                            new AstIteratedForLoopStatement(EMPTY,
+                                    null,
+                                    List.of(
+                                            new AstAssignmentSimple(EMPTY, a, number(0)),
+                                            new AstAssignmentSimple(EMPTY, b, number(100))
+                                    ),
+                                    new AstOperatorBinary(EMPTY, Operation.LESS_THAN, a, b),
+                                    List.of(
+                                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, INCREMENT, a),
+                                            new AstOperatorIncDec(EMPTY, Type.PREFIX, DECREMENT, b)
+                                    ),
+                                    List.of(
+                                            call(id("print"), arg(new AstOperatorBinary(EMPTY, Operation.ADD, a, b)))
+                                    )
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class Literals {
+        @Test
+        void buildsLiterals() {
+            assertBuilds("""
+                            156;
+                            156.156;
+                            "156";
+                            0xFF;
+                            0b10101010;
+                            true;
+                            false;
+                            null;
+                            0;
+                            """,
+                    List.of(
+                            number(156),
+                            new AstLiteralFloat(EMPTY, "156.156"),
+                            new AstLiteralString(EMPTY, "156"),
+                            new AstLiteralHexadecimal(EMPTY, "0xFF"),
+                            new AstLiteralBinary(EMPTY, "0b10101010"),
+                            new AstLiteralBoolean(EMPTY, "true"),
+                            new AstLiteralBoolean(EMPTY, "false"),
+                            new AstLiteralNull(EMPTY, "null"),
+                            number(0)
+                    )
+            );
+        }
+
+        @Test
+        void buildsNegativeLiterals() {
+            assertBuilds("""
+                            -156;
+                            -156.156;
+                            -0xFF;
+                            -0b10101010;
+                            -0;
+                            """,
+                    List.of(
+                            new AstOperatorUnary(EMPTY, Operation.SUB, number(156)),
+                            new AstOperatorUnary(EMPTY, Operation.SUB, new AstLiteralFloat(EMPTY, "156.156")),
+                            new AstOperatorUnary(EMPTY, Operation.SUB, new AstLiteralHexadecimal(EMPTY, "0xFF")),
+                            new AstOperatorUnary(EMPTY, Operation.SUB, new AstLiteralBinary(EMPTY, "0b10101010")),
+                            new AstOperatorUnary(EMPTY, Operation.SUB, number(0))
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class RangedForLoop {
+        @Test
+        void buildsRangedForLoop() {
+            assertBuilds("""
+                            for a in 0 ... 64 do
+                                print(a);
+                            end;
+                            """,
+                    List.of(
+                            new AstRangedForLoopStatement(EMPTY,
+                                    null,
+                                    a,
+                                    new AstRange(EMPTY, number(0), number(64), true),
+                                    List.of(call(id("print"), arg(a))))
+                    )
+            );
+        }
+
+        @Test
+        void buildsRangedForLoopWithLabel() {
+            assertBuilds("""
+                            Label:
+                            for a in b + 10 .. c - 20 do
+                                a;
+                            end;
+                            """,
+                    List.of(
+                            new AstRangedForLoopStatement(EMPTY,
+                                    id("Label"),
+                                    a,
+                                    new AstRange(EMPTY,
+                                            new AstOperatorBinary(EMPTY, Operation.ADD, b, number(10)),
+                                            new AstOperatorBinary(EMPTY, Operation.SUB, c, number(20)),
+                                            false),
+                                    List.of(a)
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsRangedForLoopWithoutBody() {
+            assertBuilds("""
+                            Label:
+                            for a in b ... c do
+                            end;
+                            """,
+                    List.of(
+                            new AstRangedForLoopStatement(EMPTY,
+                                    id("Label"),
+                                    a,
+                                    new AstRange(EMPTY, b, c, true),
+                                    List.of()
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
     class Require {
         @Test
         void buildsLibraryRequire() {
@@ -1040,10 +1741,140 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             operand--;
                             """,
                     List.of(
-                            new AstOperatorIncDec(EMPTY, AstOperatorIncDec.Type.PREFIX, AstOperatorIncDec.Operation.INCREMENT, operand),
-                            new AstOperatorIncDec(EMPTY, AstOperatorIncDec.Type.PREFIX, AstOperatorIncDec.Operation.DECREMENT, operand),
-                            new AstOperatorIncDec(EMPTY, AstOperatorIncDec.Type.POSTFIX, AstOperatorIncDec.Operation.INCREMENT, operand),
-                            new AstOperatorIncDec(EMPTY, AstOperatorIncDec.Type.POSTFIX, AstOperatorIncDec.Operation.DECREMENT, operand)
+                            new AstOperatorIncDec(EMPTY, Type.PREFIX, INCREMENT, operand),
+                            new AstOperatorIncDec(EMPTY, Type.PREFIX, DECREMENT, operand),
+                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, INCREMENT, operand),
+                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, DECREMENT, operand)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class Statements {
+        @Test
+        void buildsBreakStatement() {
+            assertBuilds("""
+                            break;
+                            break label;
+                            """,
+                    List.of(
+                            new AstBreakStatement(EMPTY, null),
+                            new AstBreakStatement(EMPTY, id("label"))
+                    )
+            );
+        }
+
+        @Test
+        void buildsContinueStatement() {
+            assertBuilds("""
+                            continue;
+                            continue label;
+                            """,
+                    List.of(
+                            new AstContinueStatement(EMPTY, null),
+                            new AstContinueStatement(EMPTY, id("label"))
+                    )
+            );
+        }
+
+        @Test
+        void buildsReturnStatement() {
+            assertBuilds("""
+                            return;
+                            return a;
+                            return a();
+                            """,
+                    List.of(
+                            new AstReturnStatement(EMPTY, null),
+                            new AstReturnStatement(EMPTY, a),
+                            new AstReturnStatement(EMPTY, call(a))
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class WhileLoops {
+        @Test
+        void buildsWhileLoop() {
+            assertBuilds("""
+                            Label:
+                            while true do
+                                print(a);
+                            end;
+                            """,
+                    List.of(
+                            new AstWhileLoopStatement(EMPTY,
+                                    id("Label"),
+                                    new AstLiteralBoolean(EMPTY, "true"),
+                                    List.of(call(id("print"), arg(a))),
+                                    true
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsEmptyWhileLoop() {
+            assertBuilds("""
+                            while true do end;
+                            """,
+                    List.of(
+                            new AstWhileLoopStatement(EMPTY,
+                                    null,
+                                    new AstLiteralBoolean(EMPTY, "true"),
+                                    List.of(),
+                                    true
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsDoWhileLoop() {
+            assertBuilds("""
+                            do
+                                print(a);
+                            while true;
+                            """,
+                    List.of(
+                            new AstWhileLoopStatement(EMPTY,
+                                    null,
+                                    new AstLiteralBoolean(EMPTY, "true"),
+                                    List.of(call(id("print"), arg(a))),
+                                    false
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void reportsDoWhileLoopDeprecation() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .add(3, 1, "The 'loop' keyword is deprecated. Use just 'while' instead."),
+                    """
+                            do
+                                print(a);
+                            loop while true;
+                            """
+            );
+        }
+
+        @Test
+        void buildsEmptyDoWhileLoop() {
+            assertBuilds("""
+                            Label:
+                            do while true;
+                            """,
+                    List.of(
+                            new AstWhileLoopStatement(EMPTY,
+                                    id("Label"),
+                                    new AstLiteralBoolean(EMPTY, "true"),
+                                    List.of(),
+                                    false
+                            )
                     )
             );
         }

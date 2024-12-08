@@ -2,30 +2,32 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Operation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstOperatorBinary extends AstBaseMindcodeNode {
-    private final Operation operation;
-    private final AstMindcodeNode left;
-    private final AstMindcodeNode right;
+public class AstOperatorBinary extends AstExpression {
+    private final @NotNull Operation operation;
+    private final @NotNull AstExpression left;
+    private final @NotNull AstExpression right;
 
-    public AstOperatorBinary(InputPosition inputPosition, Operation operation, AstMindcodeNode left, AstMindcodeNode right) {
+    public AstOperatorBinary(@NotNull InputPosition inputPosition, @NotNull Operation operation,
+            @NotNull AstExpression left, @NotNull AstExpression right) {
         super(inputPosition);
         this.operation = Objects.requireNonNull(operation);
         this.left = Objects.requireNonNull(left);
         this.right = Objects.requireNonNull(right);
     }
 
-    public Operation getOperation() {
+    public @NotNull Operation getOperation() {
         return operation;
     }
 
-    public AstMindcodeNode getLeft() {
+    public @NotNull AstExpression getLeft() {
         return left;
     }
 
-    public AstMindcodeNode getRight() {
+    public @NotNull AstExpression getRight() {
         return right;
     }
 

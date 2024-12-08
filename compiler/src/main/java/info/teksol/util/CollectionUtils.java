@@ -1,5 +1,8 @@
 package info.teksol.util;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -94,5 +97,25 @@ public class CollectionUtils {
     public static <E> E removeFirstMatching(List<? extends E> list, Predicate<E> matcher) {
         int index = findFirstIndex(list, matcher);
         return index < 0 ? null : list.remove(index);
+    }
+
+    public static <E> @NotNull List<E> createList(E firstItem, List<E> otherItems) {
+        if (otherItems.isEmpty()) {
+            return List.of(firstItem);
+        } else {
+            List<E> list = new ArrayList<>(otherItems);
+            list.addFirst(firstItem);
+            return List.copyOf(list);
+        }
+    }
+
+    public static <E> @NotNull List<E> createList(List<E> otherItems, E lastItem) {
+        if (otherItems.isEmpty()) {
+            return List.of(lastItem);
+        } else {
+            List<E> list = new ArrayList<>(otherItems);
+            list.addLast(lastItem);
+            return List.copyOf(list);
+        }
     }
 }

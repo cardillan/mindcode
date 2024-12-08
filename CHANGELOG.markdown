@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
+
+## 3.0.0 - Future release
+
+### Fixed
+
+* Fixed errors when compiling empty bodies of functions and statements ([#99](https://github.com/cardillan/mindcode/issues/99)).
+* Fixed errors when compiling unary plus and minus operators ([#175](https://github.com/cardillan/mindcode/issues/175)).
+
+### Added
+
+* Added mechanism for invoking properties on expressions ([#92](https://github.com/cardillan/mindcode/issues/92)).
+* Added support for embedding expression in formattable String literals (e.g. `println($"Items: ${localItems + computeRemoteItems()}.")`).
+* Added increment/decrement operators (`++` and `--`) in both prefix and postfix form (e.g. `i++` or `--total`).
+
+### Changed
+
+* **Breaking:** statements and declaration no longer provide any value and using them where an expression providing a value is expected causes compilation errors. In the past even statements and declarations were considered expressions, albeit they always evaluated to `null`.
+* **Breaking:** functions which return a value are required to [provide the return value on all code paths](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#user-defined-functions).
+
+### Deprecated
+
+* Deprecated the `loop` keyword in [do-while loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#do-while-loops). The keyword is optional and will be removed in a future release.
+
 ## 2.7.3 - 2024-12-28
 
 ### Fixed

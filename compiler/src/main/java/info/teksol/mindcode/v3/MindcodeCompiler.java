@@ -1,6 +1,5 @@
 package info.teksol.mindcode.v3;
 
-import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
@@ -19,9 +18,9 @@ import java.util.function.Consumer;
 public class MindcodeCompiler extends AbstractMessageEmitter {
     private final CompilationPhase targetPhase;
 
-    private Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
-    private Map<InputFile, ProgramContext> parseTrees = new HashMap<>();
-    private Map<InputFile, AstMindcodeNode> syntaxTrees = new HashMap<>();
+    private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
+    private final Map<InputFile, ProgramContext> parseTrees = new HashMap<>();
+    private final Map<InputFile, AstMindcodeNode> syntaxTrees = new HashMap<>();
 
     public MindcodeCompiler(CompilationPhase targetPhase, Consumer<MindcodeMessage> messageConsumer) {
         super(messageConsumer);
@@ -53,6 +52,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
         MindcodeParser parser = new MindcodeParser(tokenStream);
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
+        parser.setErrorHandler(new MindcodeErrorStrategy(tokenStream));
         ProgramContext parseTree = parser.program();
         parseTrees.put(inputFile, parseTree);
         messageConsumer.accept(ToolMessage.info("%s: number of reported ambiguities: %d",
@@ -64,9 +64,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
         syntaxTrees.put(inputFile, syntaxTree);
         if (targetPhase == CompilationPhase.AST_BUILDER) return;
 
-
+        System.out.println("Compiling...");
     }
-
 
     public enum CompilationPhase {
         LEXER,

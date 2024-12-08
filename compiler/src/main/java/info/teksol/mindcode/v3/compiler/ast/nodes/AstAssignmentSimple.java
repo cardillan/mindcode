@@ -5,21 +5,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstAssignmentSimple extends AstBaseMindcodeNode {
-    private final @NotNull AstMindcodeNode target;
-    private final @NotNull AstMindcodeNode value;
+public class AstAssignmentSimple extends AstExpression {
+    private final @NotNull AstExpression target;
+    private final @NotNull AstExpression value;
 
-    public AstAssignmentSimple(InputPosition inputPosition, AstMindcodeNode target, AstMindcodeNode value) {
+    public AstAssignmentSimple(@NotNull InputPosition inputPosition, @NotNull AstExpression target,
+            @NotNull AstExpression value) {
         super(inputPosition);
         this.target = Objects.requireNonNull(target);
         this.value = Objects.requireNonNull(value);
     }
 
-    public @NotNull AstMindcodeNode getTarget() {
+    public @NotNull AstExpression getTarget() {
         return target;
     }
 
-    public @NotNull AstMindcodeNode getValue() {
+    public @NotNull AstExpression getValue() {
         return value;
     }
 

@@ -1,10 +1,11 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
-public class AstFormattablePlaceholder extends AstBaseMindcodeNode {
+public class AstFormattablePlaceholder extends AstExpression {
 
-    public AstFormattablePlaceholder(InputPosition inputPosition) {
+    public AstFormattablePlaceholder(@NotNull InputPosition inputPosition) {
         super(inputPosition);
     }
 

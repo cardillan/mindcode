@@ -2,24 +2,26 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Operation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstOperatorUnary extends AstBaseMindcodeNode {
-    private final Operation operation;
-    private final AstMindcodeNode operand;
+public class AstOperatorUnary extends AstExpression {
+    private final @NotNull Operation operation;
+    private final @NotNull AstExpression operand;
 
-    public AstOperatorUnary(InputPosition inputPosition, Operation operation, AstMindcodeNode operand) {
+    public AstOperatorUnary(@NotNull InputPosition inputPosition, @NotNull Operation operation,
+            @NotNull AstExpression operand) {
         super(inputPosition);
         this.operation = Objects.requireNonNull(operation);
         this.operand = Objects.requireNonNull(operand);
     }
 
-    public Operation getOperation() {
+    public @NotNull Operation getOperation() {
         return operation;
     }
 
-    public AstMindcodeNode getOperand() {
+    public @NotNull AstExpression getOperand() {
         return operand;
     }
 

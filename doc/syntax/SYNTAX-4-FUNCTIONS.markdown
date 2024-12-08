@@ -374,6 +374,44 @@ void update(message, status)
 end;
 ```
 
+Functions that do return a value must be declared using the `def` keyword, and they need to provide a return value on all possible code paths. The last statement executed on all code paths must be either an expression providing the function value, or a `return` statement providing the function value:
+
+```
+def foo(number)
+    if number < 0 then
+        println("negative");
+        return -1;         // Directly provides the return value, terminating the code path 
+    end;
+    
+    // The if expression always has a value
+    if number = 0 then
+        println("zero");
+        0;    // Provides value of the true branch
+    else
+        println("positive");
+        1;    // Provides value of the false branch
+    end;
+    
+    // At this point the return value of the function is the value of the above if expression
+end;
+```
+
+Loops are statements, not expressions and do not provide a value. Therefore, the following function will not compile:
+
+```
+def foo(count)
+    sum = 0;
+    while count > 0 do
+        sum += count--;        
+    end;
+    
+    // Error, while loop doesn't have a value
+end;
+```
+
+> [!TIP]
+> In earlier Mindcode versions, loops were considered expressions, but their value was always `null`. Thus, the above example would compile, but the return value would be `null`.
+
 As has been described above, function parameters in user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
 
 ```

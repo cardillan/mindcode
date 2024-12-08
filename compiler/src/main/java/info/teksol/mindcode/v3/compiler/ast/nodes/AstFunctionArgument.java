@@ -2,15 +2,17 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class AstFunctionArgument extends AstBaseMindcodeNode {
-    private final AstMindcodeNode expression;
+public class AstFunctionArgument extends AstFragment {
+    private final @Nullable AstExpression expression;
     private final boolean inModifier;
     private final boolean outModifier;
 
-    public AstFunctionArgument(InputPosition inputPosition, @NotNull AstMindcodeNode expression, boolean inModifier, boolean outModifier) {
+    public AstFunctionArgument(@NotNull InputPosition inputPosition, @NotNull AstExpression expression,
+            boolean inModifier, boolean outModifier) {
         super(inputPosition);
         this.expression = Objects.requireNonNull(expression);
         this.inModifier = inModifier;
@@ -24,7 +26,7 @@ public class AstFunctionArgument extends AstBaseMindcodeNode {
         this.outModifier = false;
     }
 
-    public AstMindcodeNode getExpression() {
+    public @Nullable AstExpression getExpression() {
         return expression;
     }
 

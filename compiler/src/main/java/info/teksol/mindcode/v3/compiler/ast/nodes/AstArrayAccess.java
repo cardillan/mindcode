@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstArrayAccess extends AstBaseMindcodeNode {
+public class AstArrayAccess extends AstExpression {
     private final @NotNull AstIdentifier array;
-    private final @NotNull AstMindcodeNode index;
+    private final @NotNull AstExpression index;
 
-    public AstArrayAccess(InputPosition inputPosition, @NotNull AstIdentifier array, @NotNull AstMindcodeNode index) {
+    public AstArrayAccess(@NotNull InputPosition inputPosition, @NotNull AstIdentifier array, @NotNull AstExpression index) {
         super(inputPosition);
         this.array = Objects.requireNonNull(array);
         this.index = Objects.requireNonNull(index);
@@ -19,7 +19,7 @@ public class AstArrayAccess extends AstBaseMindcodeNode {
         return array;
     }
 
-    public @NotNull AstMindcodeNode getIndex() {
+    public @NotNull AstExpression getIndex() {
         return index;
     }
 

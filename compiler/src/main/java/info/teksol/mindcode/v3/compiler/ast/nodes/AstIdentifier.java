@@ -5,17 +5,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstIdentifier extends AstBaseMindcodeNode {
+public class AstIdentifier extends AstExpression {
     private final @NotNull String name;
     private final boolean external;
 
-    public AstIdentifier(InputPosition inputPosition, @NotNull String name) {
+    public AstIdentifier(@NotNull InputPosition inputPosition, @NotNull String name) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.external = false;
     }
 
-    public AstIdentifier(InputPosition inputPosition, @NotNull String name, boolean external) {
+    public AstIdentifier(@NotNull InputPosition inputPosition, @NotNull String name, boolean external) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.external = external;

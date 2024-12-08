@@ -1,13 +1,14 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class AstBuiltInIdentifier extends AstBaseMindcodeNode {
-    private final String name;
+public class AstBuiltInIdentifier extends AstExpression {
+    private final @NotNull String name;
 
-    public AstBuiltInIdentifier(InputPosition inputPosition, String name) {
+    public AstBuiltInIdentifier(@NotNull InputPosition inputPosition, @NotNull String name) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         if (name.charAt(0) != '@') {
@@ -15,7 +16,7 @@ public class AstBuiltInIdentifier extends AstBaseMindcodeNode {
         }
     }
 
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 

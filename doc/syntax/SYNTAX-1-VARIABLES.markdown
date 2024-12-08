@@ -175,6 +175,9 @@ heap is simply a region of external memory. The heap is allocated using the foll
 allocate heap in cell4[50 ... 64];
 ```
 
+> [!NOTE]
+> When no range is given (e.g. `allocate heap in cell1`), range `0 ... 64` is assumed.
+
 This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 (note the exclusive range). If you declare more external variables than you have allocated space for, a compilation error will occur. In that case, allocate more space for the heap in your cell, or switch to a 
 Memory Bank and allocate more space to your heap.
 
@@ -241,6 +244,9 @@ Stack needs to be allocated similarly to heap:
 ```
 allocate stack in bank1[256...512];
 ```
+
+> [!NOTE]
+> When no range is given (e.g. `allocate stack in cell1`), range `0 ... 64` is assumed.
 
 When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls 
 a recursive function. If your code contains a recursive function, it won't compile unless the stack is allocated. 

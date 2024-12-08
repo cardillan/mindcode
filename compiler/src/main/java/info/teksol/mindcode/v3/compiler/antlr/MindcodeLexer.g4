@@ -1,6 +1,6 @@
 // This file contains the lexer grammar for Mindcode language.
 //
-// The grammar is straightfoward except these features:
+// The lexer grammar is straightfoward except these features:
 //
 // The DOC_COMMENT definition contains the code documentation (inspired by JavaDoc and similar mechanisms, except
 // the contents of the comments should be in Markdown). These comments are output onto the HIDDEN channel.
@@ -182,7 +182,7 @@ LINECOMMENT             : '//' ~[/\r\n] ~[\r\n]*    -> skip;
 NEWLINE                 : {newLines}? [\r\n]        -> skip;
 WHITESPACE              : [ \t]+                    -> skip;
 
-ANY : . ;
+UNKNOWN_CHAR : . ;
 
 // MODES
 
