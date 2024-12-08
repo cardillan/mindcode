@@ -665,13 +665,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrAllocation(MindcodeParser.StrAllocationContext ctx) { }
+	@Override public void enterStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStrAllocation(MindcodeParser.StrAllocationContext ctx) { }
+	@Override public void exitStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -773,25 +785,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrCaseAlternatives(MindcodeParser.StrCaseAlternativesContext ctx) { }
+	@Override public void enterCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStrCaseAlternatives(MindcodeParser.StrCaseAlternativesContext ctx) { }
+	@Override public void exitCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrCaseAlternative(MindcodeParser.StrCaseAlternativeContext ctx) { }
+	@Override public void enterCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStrCaseAlternative(MindcodeParser.StrCaseAlternativeContext ctx) { }
+	@Override public void exitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -845,13 +857,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrElsifBranch(MindcodeParser.StrElsifBranchContext ctx) { }
+	@Override public void enterElsifBranch(MindcodeParser.ElsifBranchContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStrElsifBranch(MindcodeParser.StrElsifBranchContext ctx) { }
+	@Override public void exitElsifBranch(MindcodeParser.ElsifBranchContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1013,25 +1025,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpRangeInclusive(MindcodeParser.ExpRangeInclusiveContext ctx) { }
+	@Override public void enterRangeExpression(MindcodeParser.RangeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpRangeInclusive(MindcodeParser.ExpRangeInclusiveContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpRangeExclusive(MindcodeParser.ExpRangeExclusiveContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpRangeExclusive(MindcodeParser.ExpRangeExclusiveContext ctx) { }
+	@Override public void exitRangeExpression(MindcodeParser.RangeExpressionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -9,7 +9,7 @@ public class AstMemberAccess extends AstBaseMindcodeNode {
     private final @NotNull AstMindcodeNode object;
     private final @NotNull AstMindcodeNode property;
 
-    public AstMemberAccess(InputPosition inputPosition, @NotNull AstMindcodeNode object, @NotNull AstMindcodeNode property) {
+    public AstMemberAccess(@NotNull InputPosition inputPosition, @NotNull AstMindcodeNode object, @NotNull AstMindcodeNode property) {
         super(inputPosition);
         this.object = Objects.requireNonNull(object);
         this.property = Objects.requireNonNull(property);

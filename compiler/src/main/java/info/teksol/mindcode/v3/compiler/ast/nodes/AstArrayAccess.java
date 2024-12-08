@@ -9,7 +9,7 @@ public class AstArrayAccess extends AstBaseMindcodeNode {
     private final @NotNull AstIdentifier array;
     private final @NotNull AstMindcodeNode index;
 
-    public AstArrayAccess(InputPosition inputPosition, @NotNull AstIdentifier array, @NotNull AstMindcodeNode index) {
+    public AstArrayAccess(@NotNull InputPosition inputPosition, @NotNull AstIdentifier array, @NotNull AstMindcodeNode index) {
         super(inputPosition);
         this.array = Objects.requireNonNull(array);
         this.index = Objects.requireNonNull(index);

@@ -9,13 +9,13 @@ public class AstIdentifier extends AstBaseMindcodeNode {
     private final @NotNull String name;
     private final boolean external;
 
-    public AstIdentifier(InputPosition inputPosition, @NotNull String name) {
+    public AstIdentifier(@NotNull InputPosition inputPosition, @NotNull String name) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.external = false;
     }
 
-    public AstIdentifier(InputPosition inputPosition, @NotNull String name, boolean external) {
+    public AstIdentifier(@NotNull InputPosition inputPosition, @NotNull String name, boolean external) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.external = external;

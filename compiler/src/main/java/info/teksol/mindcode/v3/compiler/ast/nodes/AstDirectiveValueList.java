@@ -1,20 +1,21 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 
 // Transient class, not part of a final tree
 public class AstDirectiveValueList extends AstBaseMindcodeNode {
-    private final List<AstDirectiveValue> values;
+    private final @NotNull List<@NotNull AstDirectiveValue> values;
 
-    public AstDirectiveValueList(InputPosition inputPosition, List<AstDirectiveValue> values) {
+    public AstDirectiveValueList(@NotNull InputPosition inputPosition, @NotNull List<@NotNull AstDirectiveValue> values) {
         super(inputPosition);
         this.values = Objects.requireNonNull(values);
     }
 
-    public List<AstDirectiveValue> getValues() {
+    public @NotNull List<@NotNull AstDirectiveValue> getValues() {
         return values;
     }
 

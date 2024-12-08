@@ -11,7 +11,8 @@ public class AstAssignmentCompound extends AstBaseMindcodeNode {
     private final @NotNull AstMindcodeNode target;
     private final @NotNull AstMindcodeNode value;
 
-    public AstAssignmentCompound(InputPosition inputPosition, Operation operation, AstMindcodeNode target, AstMindcodeNode value) {
+    public AstAssignmentCompound(@NotNull InputPosition inputPosition, @NotNull Operation operation,
+            @NotNull AstMindcodeNode target, @NotNull AstMindcodeNode value) {
         super(inputPosition);
         this.operation = Objects.requireNonNull(operation);
         this.target = Objects.requireNonNull(target);

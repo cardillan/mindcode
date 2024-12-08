@@ -1,18 +1,19 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class AstDirectiveValue extends AstBaseMindcodeNode {
-    private final String value;
+    private final @NotNull String value;
 
-    public AstDirectiveValue(InputPosition inputPosition, String value) {
+    public AstDirectiveValue(@NotNull InputPosition inputPosition, @NotNull String value) {
         super(inputPosition);
         this.value = Objects.requireNonNull(value);
     }
 
-    public String getValue() {
+    public @NotNull String getValue() {
         return value;
     }
 

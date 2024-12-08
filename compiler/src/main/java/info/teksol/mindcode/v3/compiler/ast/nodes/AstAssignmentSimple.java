@@ -9,7 +9,8 @@ public class AstAssignmentSimple extends AstBaseMindcodeNode {
     private final @NotNull AstMindcodeNode target;
     private final @NotNull AstMindcodeNode value;
 
-    public AstAssignmentSimple(InputPosition inputPosition, AstMindcodeNode target, AstMindcodeNode value) {
+    public AstAssignmentSimple(@NotNull InputPosition inputPosition, @NotNull AstMindcodeNode target,
+            @NotNull AstMindcodeNode value) {
         super(inputPosition);
         this.target = Objects.requireNonNull(target);
         this.value = Objects.requireNonNull(value);

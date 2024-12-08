@@ -1,18 +1,19 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class AstRequireFile extends AstBaseMindcodeNode {
-    private final AstLiteralString file;
+    private final @NotNull AstLiteralString file;
 
-    public AstRequireFile(InputPosition inputPosition, AstLiteralString file) {
+    public AstRequireFile(@NotNull InputPosition inputPosition, @NotNull AstLiteralString file) {
         super(inputPosition);
         this.file = Objects.requireNonNull(file);
     }
 
-    public AstLiteralString getFileName() {
+    public @NotNull AstLiteralString getFileName() {
         return file;
     }
 

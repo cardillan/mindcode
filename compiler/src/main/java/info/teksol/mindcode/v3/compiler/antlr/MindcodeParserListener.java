@@ -650,17 +650,29 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAllocations(MindcodeParser.AllocationsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code strAllocation}
+	 * Enter a parse tree produced by the {@code strHeapAllocation}
 	 * labeled alternative in {@link MindcodeParser#allocation}.
 	 * @param ctx the parse tree
 	 */
-	void enterStrAllocation(MindcodeParser.StrAllocationContext ctx);
+	void enterStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code strAllocation}
+	 * Exit a parse tree produced by the {@code strHeapAllocation}
 	 * labeled alternative in {@link MindcodeParser#allocation}.
 	 * @param ctx the parse tree
 	 */
-	void exitStrAllocation(MindcodeParser.StrAllocationContext ctx);
+	void exitStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code strStackAllocation}
+	 * labeled alternative in {@link MindcodeParser#allocation}.
+	 * @param ctx the parse tree
+	 */
+	void enterStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code strStackAllocation}
+	 * labeled alternative in {@link MindcodeParser#allocation}.
+	 * @param ctx the parse tree
+	 */
+	void exitStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code directiveSet}
 	 * labeled alternative in {@link MindcodeParser#directive}.
@@ -746,29 +758,25 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitParameterList(MindcodeParser.ParameterListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code strCaseAlternatives}
-	 * labeled alternative in {@link MindcodeParser#caseAlternatives}.
+	 * Enter a parse tree produced by {@link MindcodeParser#caseAlternatives}.
 	 * @param ctx the parse tree
 	 */
-	void enterStrCaseAlternatives(MindcodeParser.StrCaseAlternativesContext ctx);
+	void enterCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code strCaseAlternatives}
-	 * labeled alternative in {@link MindcodeParser#caseAlternatives}.
+	 * Exit a parse tree produced by {@link MindcodeParser#caseAlternatives}.
 	 * @param ctx the parse tree
 	 */
-	void exitStrCaseAlternatives(MindcodeParser.StrCaseAlternativesContext ctx);
+	void exitCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code strCaseAlternative}
-	 * labeled alternative in {@link MindcodeParser#caseAlternative}.
+	 * Enter a parse tree produced by {@link MindcodeParser#caseAlternative}.
 	 * @param ctx the parse tree
 	 */
-	void enterStrCaseAlternative(MindcodeParser.StrCaseAlternativeContext ctx);
+	void enterCaseAlternative(MindcodeParser.CaseAlternativeContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code strCaseAlternative}
-	 * labeled alternative in {@link MindcodeParser#caseAlternative}.
+	 * Exit a parse tree produced by {@link MindcodeParser#caseAlternative}.
 	 * @param ctx the parse tree
 	 */
-	void exitStrCaseAlternative(MindcodeParser.StrCaseAlternativeContext ctx);
+	void exitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#whenValueList}.
 	 * @param ctx the parse tree
@@ -814,17 +822,15 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitElsifBranches(MindcodeParser.ElsifBranchesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code strElsifBranch}
-	 * labeled alternative in {@link MindcodeParser#elsifBranch}.
+	 * Enter a parse tree produced by {@link MindcodeParser#elsifBranch}.
 	 * @param ctx the parse tree
 	 */
-	void enterStrElsifBranch(MindcodeParser.StrElsifBranchContext ctx);
+	void enterElsifBranch(MindcodeParser.ElsifBranchContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code strElsifBranch}
-	 * labeled alternative in {@link MindcodeParser#elsifBranch}.
+	 * Exit a parse tree produced by {@link MindcodeParser#elsifBranch}.
 	 * @param ctx the parse tree
 	 */
-	void exitStrElsifBranch(MindcodeParser.StrElsifBranchContext ctx);
+	void exitElsifBranch(MindcodeParser.ElsifBranchContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#expressionList}.
 	 * @param ctx the parse tree
@@ -978,27 +984,13 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expRangeInclusive}
-	 * labeled alternative in {@link MindcodeParser#rangeExpression}.
+	 * Enter a parse tree produced by {@link MindcodeParser#rangeExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpRangeInclusive(MindcodeParser.ExpRangeInclusiveContext ctx);
+	void enterRangeExpression(MindcodeParser.RangeExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expRangeInclusive}
-	 * labeled alternative in {@link MindcodeParser#rangeExpression}.
+	 * Exit a parse tree produced by {@link MindcodeParser#rangeExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpRangeInclusive(MindcodeParser.ExpRangeInclusiveContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code expRangeExclusive}
-	 * labeled alternative in {@link MindcodeParser#rangeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpRangeExclusive(MindcodeParser.ExpRangeExclusiveContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expRangeExclusive}
-	 * labeled alternative in {@link MindcodeParser#rangeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpRangeExclusive(MindcodeParser.ExpRangeExclusiveContext ctx);
+	void exitRangeExpression(MindcodeParser.RangeExpressionContext ctx);
 }

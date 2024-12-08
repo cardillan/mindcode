@@ -396,7 +396,14 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStrAllocation(MindcodeParser.StrAllocationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStrHeapAllocation(MindcodeParser.StrHeapAllocationContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStrStackAllocation(MindcodeParser.StrStackAllocationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -459,14 +466,14 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStrCaseAlternatives(MindcodeParser.StrCaseAlternativesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStrCaseAlternative(MindcodeParser.StrCaseAlternativeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -501,7 +508,7 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStrElsifBranch(MindcodeParser.StrElsifBranchContext ctx) { return visitChildren(ctx); }
+	@Override public T visitElsifBranch(MindcodeParser.ElsifBranchContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -599,12 +606,5 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpRangeInclusive(MindcodeParser.ExpRangeInclusiveContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitExpRangeExclusive(MindcodeParser.ExpRangeExclusiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRangeExpression(MindcodeParser.RangeExpressionContext ctx) { return visitChildren(ctx); }
 }
