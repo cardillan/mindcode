@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3.compiler.ast;
 
 import info.teksol.mindcode.logic.Operation;
 import info.teksol.mindcode.v3.DataType;
+import info.teksol.mindcode.v3.MindcodeCompiler.CompilationPhase;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Type;
 import org.junit.jupiter.api.Nested;
@@ -14,69 +15,10 @@ import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Opera
 import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.INCREMENT;
 
 class AstBuilderTest extends AbstractAstBuilderTest {
-    private static final AstIdentifier identifier = id("identifier");
-    private static final AstIdentifier object = id("object");
-    private static final AstIdentifier operand = id("operand");
-    private static final AstIdentifier left = id("left");
-    private static final AstIdentifier right = id("right");
-    private static final AstIdentifier a = id("a");
-    private static final AstIdentifier b = id("b");
-    private static final AstIdentifier c = id("c");
-    private static final AstIdentifier d = id("d");
-    private static final AstIdentifier e = id("e");
 
-    private static final AstFunctionArgument NONE = new AstFunctionArgument(EMPTY);
-
-    private static AstIdentifier id(String name) {
-        return new AstIdentifier(EMPTY, name);
-    }
-
-    private static AstQualifiedIdentifier id(String... names) {
-        return new AstQualifiedIdentifier(EMPTY, Stream.of(names).map(AstBuilderTest::id).toList());
-    }
-
-    private static AstBuiltInIdentifier builtIn(String name) {
-        return new AstBuiltInIdentifier(EMPTY, name);
-    }
-
-    private static AstLiteralDecimal number(int number) {
-        return new AstLiteralDecimal(EMPTY, String.valueOf(number));
-    }
-
-    private static AstLiteralFloat number(double number) {
-        return new AstLiteralFloat(EMPTY, String.valueOf(number));
-    }
-
-    private static AstFunctionArgument arg(AstExpression expression) {
-        return new AstFunctionArgument(EMPTY, expression, false, false);
-    }
-
-    private static AstFunctionArgument arg(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), false, false);
-    }
-
-    private static AstFunctionArgument argIn(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), true, false);
-    }
-
-    private static AstFunctionArgument argOut(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), false, true);
-    }
-
-    private static AstFunctionArgument argInOut(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), true, true);
-    }
-
-    private static List<AstFunctionArgument> args(AstFunctionArgument... args) {
-        return List.of(args);
-    }
-
-    private static AstFunctionCall call(AstIdentifier name, AstFunctionArgument... args) {
-        return new AstFunctionCall(EMPTY, null, name, args(args));
-    }
-
-    private static AstFunctionCall call(AstExpression object, AstIdentifier name, AstFunctionArgument... args) {
-        return new AstFunctionCall(EMPTY, object, name, args(args));
+    @Override
+    protected CompilationPhase getTargetPhase() {
+        return CompilationPhase.AST_BUILDER;
     }
 
     @Nested
@@ -1625,22 +1567,25 @@ class AstBuilderTest extends AbstractAstBuilderTest {
     class Require {
         @Test
         void buildsLibraryRequire() {
-            assertBuilds("""
-                            require blocks;
-                            """,
+            assertBuilds(
+                    expectedMessages().add("System library math: number of reported ambiguities: 0"),
+                    "require math;",
                     List.of(
-                            new AstRequireLibrary(EMPTY, new AstIdentifier(EMPTY, "blocks"))
+                            new AstRequireLibrary(EMPTY, new AstIdentifier(EMPTY, "math"))
                     )
             );
         }
 
         @Test
         void buildsFileRequire() {
-            assertBuilds("""
-                            require "file";
-                            """,
+            // If this file exists, the test will fail
+            final String fileName = "s6zoH0%IbSsQH4!MOmpu%eDO-H!#Z81dr2xSYGds6xhTzx^V#ie7UNikF$xtYUAi";
+
+            assertBuilds(
+                    expectedMessages().add(1, 1, "Error reading file '" + fileName + "'."),
+                    "require \"" + fileName + "\";",
                     List.of(
-                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, "file"))
+                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName))
                     )
             );
         }
@@ -1878,5 +1823,70 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
         }
+    }
+
+    private static final AstIdentifier identifier = id("identifier");
+    private static final AstIdentifier object = id("object");
+    private static final AstIdentifier operand = id("operand");
+    private static final AstIdentifier left = id("left");
+    private static final AstIdentifier right = id("right");
+    private static final AstIdentifier a = id("a");
+    private static final AstIdentifier b = id("b");
+    private static final AstIdentifier c = id("c");
+    private static final AstIdentifier d = id("d");
+    private static final AstIdentifier e = id("e");
+
+    private static final AstFunctionArgument NONE = new AstFunctionArgument(EMPTY);
+
+    private static AstIdentifier id(String name) {
+        return new AstIdentifier(EMPTY, name);
+    }
+
+    private static AstQualifiedIdentifier id(String... names) {
+        return new AstQualifiedIdentifier(EMPTY, Stream.of(names).map(AstBuilderTest::id).toList());
+    }
+
+    private static AstBuiltInIdentifier builtIn(String name) {
+        return new AstBuiltInIdentifier(EMPTY, name);
+    }
+
+    private static AstLiteralDecimal number(int number) {
+        return new AstLiteralDecimal(EMPTY, String.valueOf(number));
+    }
+
+    private static AstLiteralFloat number(double number) {
+        return new AstLiteralFloat(EMPTY, String.valueOf(number));
+    }
+
+    private static AstFunctionArgument arg(AstExpression expression) {
+        return new AstFunctionArgument(EMPTY, expression, false, false);
+    }
+
+    private static AstFunctionArgument arg(String name) {
+        return new AstFunctionArgument(EMPTY, id(name), false, false);
+    }
+
+    private static AstFunctionArgument argIn(String name) {
+        return new AstFunctionArgument(EMPTY, id(name), true, false);
+    }
+
+    private static AstFunctionArgument argOut(String name) {
+        return new AstFunctionArgument(EMPTY, id(name), false, true);
+    }
+
+    private static AstFunctionArgument argInOut(String name) {
+        return new AstFunctionArgument(EMPTY, id(name), true, true);
+    }
+
+    private static List<AstFunctionArgument> args(AstFunctionArgument... args) {
+        return List.of(args);
+    }
+
+    private static AstFunctionCall call(AstIdentifier name, AstFunctionArgument... args) {
+        return new AstFunctionCall(EMPTY, null, name, args(args));
+    }
+
+    private static AstFunctionCall call(AstExpression object, AstIdentifier name, AstFunctionArgument... args) {
+        return new AstFunctionCall(EMPTY, object, name, args(args));
     }
 }

@@ -1,12 +1,10 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-
-import java.util.function.Consumer;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 public abstract class BaseAstVisitor<T> extends AbstractMessageEmitter implements AstVisitor<T> {
-    public BaseAstVisitor(Consumer<MindcodeMessage> messageConsumer) {
+    public BaseAstVisitor(MessageConsumer messageConsumer) {
         super(messageConsumer);
     }
 

@@ -4,27 +4,28 @@ import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
-    private final @NotNull InputPosition inputPosition;
+    private final InputPosition inputPosition;
     protected final @Nullable AstDocComment docComment;
 
-    protected AstBaseMindcodeNode(@NotNull InputPosition inputPosition) {
+    protected AstBaseMindcodeNode(InputPosition inputPosition) {
         this.inputPosition = inputPosition;
         this.docComment = null;
     }
 
-    protected AstBaseMindcodeNode(@NotNull InputPosition inputPosition, @Nullable AstDocComment docComment) {
+    protected AstBaseMindcodeNode(InputPosition inputPosition, @Nullable AstDocComment docComment) {
         this.inputPosition = inputPosition;
         this.docComment = docComment;
     }
 
     @Override
-    public @NotNull InputPosition inputPosition() {
+    public InputPosition inputPosition() {
         return inputPosition;
     }
 
@@ -32,17 +33,17 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
         return docComment;
     }
 
-    public @NotNull List<@NotNull AstNode> getChildren() {
+    public List<AstNode> getChildren() {
         return List.of();
     }
 
     @Override
-    public @NotNull AstContextType getContextType() {
+    public AstContextType getContextType() {
         return AstContextType.NONE;
     }
 
     @Override
-    public @NotNull AstSubcontextType getSubcontextType() {
+    public AstSubcontextType getSubcontextType() {
         return AstSubcontextType.BASIC;
     }
 }

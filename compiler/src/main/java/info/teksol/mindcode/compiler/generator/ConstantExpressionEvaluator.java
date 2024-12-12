@@ -5,16 +5,15 @@ import info.teksol.emulator.MindustryString;
 import info.teksol.emulator.MindustryVariable;
 import info.teksol.evaluator.ExpressionEvaluator;
 import info.teksol.evaluator.LogicOperation;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.Operation;
 import info.teksol.mindcode.mimex.Icons;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
 
@@ -22,7 +21,7 @@ public class ConstantExpressionEvaluator extends AbstractMessageEmitter {
 
     private final Map<String, ConstantAstNode> constants = new HashMap<>();
 
-    public ConstantExpressionEvaluator(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer) {
+    public ConstantExpressionEvaluator(InstructionProcessor instructionProcessor, MessageConsumer messageConsumer) {
         super(messageConsumer);
         this.instructionProcessor = instructionProcessor;
     }

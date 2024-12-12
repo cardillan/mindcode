@@ -1,14 +1,15 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public class AstBuiltInIdentifier extends AstExpression {
-    private final @NotNull String name;
+    private final String name;
 
-    public AstBuiltInIdentifier(@NotNull InputPosition inputPosition, @NotNull String name) {
+    public AstBuiltInIdentifier(InputPosition inputPosition, String name) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         if (name.charAt(0) != '@') {
@@ -16,7 +17,7 @@ public class AstBuiltInIdentifier extends AstExpression {
         }
     }
 
-    public @NotNull String getName() {
+    public String getName() {
         return name;
     }
 

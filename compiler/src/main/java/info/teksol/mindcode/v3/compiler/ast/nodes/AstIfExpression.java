@@ -2,26 +2,27 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class AstIfExpression extends AstExpression {
-    private final @NotNull List<@NotNull AstIfBranch> ifBranches;
-    private final @NotNull List<@NotNull AstMindcodeNode> elseBranch;
+    private final List< AstIfBranch> ifBranches;
+    private final List< AstMindcodeNode> elseBranch;
 
-    public AstIfExpression(@NotNull InputPosition inputPosition, @NotNull AstIfBranch firstBranch,
-            @NotNull List<@NotNull AstIfBranch> ifBranches, @NotNull List<@NotNull AstMindcodeNode> elseBranch) {
+    public AstIfExpression(InputPosition inputPosition, AstIfBranch firstBranch,
+            List< AstIfBranch> ifBranches, List< AstMindcodeNode> elseBranch) {
         super(inputPosition);
         this.ifBranches = CollectionUtils.createList(firstBranch, ifBranches);
         this.elseBranch = elseBranch;
     }
 
-    public @NotNull List<@NotNull AstIfBranch> getIfBranches() {
+    public List< AstIfBranch> getIfBranches() {
         return ifBranches;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getElseBranch() {
+    public List< AstMindcodeNode> getElseBranch() {
         return elseBranch;
     }
 

@@ -4,19 +4,18 @@ import info.teksol.mindcode.AstElement;
 import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.v3.MessageConsumer;
 import org.intellij.lang.annotations.PrintFormat;
 
-import java.util.function.Consumer;
-
 public abstract class AbstractMessageEmitter implements MessageEmitter {
-    protected final Consumer<MindcodeMessage> messageConsumer;
+    protected final MessageConsumer messageConsumer;
 
-    public AbstractMessageEmitter(Consumer<MindcodeMessage> messageConsumer) {
+    public AbstractMessageEmitter(MessageConsumer messageConsumer) {
         this.messageConsumer = messageConsumer;
     }
 
     @Override
-    public Consumer<MindcodeMessage> getMessageConsumer() {
+    public MessageConsumer getMessageConsumer() {
         return messageConsumer;
     }
 

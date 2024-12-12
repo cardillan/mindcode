@@ -1,20 +1,21 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class AstFormattable extends AstExpression {
-    protected final @NotNull List<@NotNull AstExpression> parts;
+    protected final List< AstExpression> parts;
 
-    public AstFormattable(@NotNull InputPosition inputPosition, @NotNull List<@NotNull AstExpression> parts) {
+    public AstFormattable(InputPosition inputPosition, List< AstExpression> parts) {
         super(inputPosition);
         this.parts = List.copyOf(Objects.requireNonNull(parts));
     }
 
-    public @NotNull List<@NotNull AstExpression> getParts() {
+    public List< AstExpression> getParts() {
         return parts;
     }
 

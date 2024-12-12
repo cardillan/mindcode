@@ -1,16 +1,15 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MessageLevel;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.MemoryModel;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.MessageConsumer;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 abstract class AbstractOptimizer implements Optimizer {
     protected final Optimization optimization;
@@ -20,7 +19,7 @@ abstract class AbstractOptimizer implements Optimizer {
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
-    private Consumer<MindcodeMessage> messageRecipient = s -> {};
+    private MessageConsumer messageRecipient = s -> {};
 
     public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
         this.optimization = optimization;
@@ -65,7 +64,7 @@ abstract class AbstractOptimizer implements Optimizer {
     }
 
     @Override
-    public void setMessageRecipient(Consumer<MindcodeMessage> messageRecipient) {
+    public void setMessageRecipient(MessageConsumer messageRecipient) {
         this.messageRecipient = messageRecipient;
     }
 

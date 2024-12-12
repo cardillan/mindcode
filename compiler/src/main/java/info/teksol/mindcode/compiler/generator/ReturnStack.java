@@ -1,15 +1,14 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * Class maintaining the stack of active functions and their return variables. Used to resolve return
@@ -18,7 +17,7 @@ import java.util.function.Consumer;
 public class ReturnStack extends AbstractMessageEmitter {
     private final Deque<Return> stack = new ArrayDeque<>();
 
-    public ReturnStack(Consumer<MindcodeMessage> messageConsumer) {
+    public ReturnStack(MessageConsumer messageConsumer) {
         super(messageConsumer);
     }
 

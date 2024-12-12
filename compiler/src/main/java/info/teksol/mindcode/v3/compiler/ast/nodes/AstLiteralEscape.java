@@ -1,11 +1,12 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AstLiteralEscape extends AstLiteralString {
 
-    public AstLiteralEscape(@NotNull InputPosition inputPosition, @NotNull String literal) {
+    public AstLiteralEscape(InputPosition inputPosition, String literal) {
         super(inputPosition, literal);
     }
 

@@ -1,21 +1,22 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class AstCodeBlock extends AstExpression {
-    private final @NotNull List<@NotNull AstMindcodeNode> expressions;
+    private final List< AstMindcodeNode> expressions;
 
-    public AstCodeBlock(@NotNull InputPosition inputPosition, @NotNull List<@NotNull AstMindcodeNode> expressions) {
+    public AstCodeBlock(InputPosition inputPosition, List< AstMindcodeNode> expressions) {
         super(inputPosition);
         this.expressions = Objects.requireNonNull(expressions);
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getExpressions() {
+    public List< AstMindcodeNode> getExpressions() {
         return expressions;
     }
 

@@ -1,13 +1,13 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.AstElement;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
@@ -17,7 +17,6 @@ import org.intellij.lang.annotations.PrintFormat;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,7 +33,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     private BlockPositionMap<Block> positionMap;
 
     public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
-            Consumer<MindcodeMessage> messageConsumer, AstDefinitions astDefinitions) {
+            MessageConsumer messageConsumer, AstDefinitions astDefinitions) {
         super(messageConsumer);
         this.inputFiles = inputFiles;
         this.compilerProfile = compilerProfile;
@@ -42,7 +41,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     }
 
     public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
-            AstDefinitions definitions, Consumer<MindcodeMessage> messageListener) {
+            AstDefinitions definitions, MessageConsumer messageListener) {
         return new SchematicsBuilder(inputFiles, compilerProfile, messageListener, definitions);
     }
 

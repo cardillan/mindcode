@@ -1,19 +1,20 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class AstFunctionCall extends AstExpression {
     private final @Nullable AstExpression object;
-    private final @NotNull AstIdentifier functionName;
-    private final @NotNull List<@NotNull AstFunctionArgument> arguments;
+    private final AstIdentifier functionName;
+    private final List< AstFunctionArgument> arguments;
 
-    public AstFunctionCall(@NotNull InputPosition inputPosition, @Nullable AstExpression object, @NotNull AstIdentifier functionName,
-            @NotNull List<@NotNull AstFunctionArgument> arguments) {
+    public AstFunctionCall(InputPosition inputPosition, @Nullable AstExpression object, AstIdentifier functionName,
+            List< AstFunctionArgument> arguments) {
         super(inputPosition);
         this.object = object;
         this.functionName = Objects.requireNonNull(functionName);
@@ -28,11 +29,11 @@ public class AstFunctionCall extends AstExpression {
         return object != null;
     }
 
-    public @NotNull AstIdentifier getFunctionName() {
+    public AstIdentifier getFunctionName() {
         return functionName;
     }
 
-    public @NotNull List<@NotNull AstFunctionArgument> getArguments() {
+    public List< AstFunctionArgument> getArguments() {
         return arguments;
     }
 

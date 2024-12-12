@@ -2,32 +2,33 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Operation;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public class AstAssignmentCompound extends AstExpression {
-    private final @NotNull Operation operation;
-    private final @NotNull AstExpression target;
-    private final @NotNull AstExpression value;
+    private final Operation operation;
+    private final AstExpression target;
+    private final AstExpression value;
 
-    public AstAssignmentCompound(@NotNull InputPosition inputPosition, @NotNull Operation operation,
-            @NotNull AstExpression target, @NotNull AstExpression value) {
+    public AstAssignmentCompound(InputPosition inputPosition, Operation operation,
+            AstExpression target, AstExpression value) {
         super(inputPosition);
         this.operation = Objects.requireNonNull(operation);
         this.target = Objects.requireNonNull(target);
         this.value = Objects.requireNonNull(value);
     }
 
-    public @NotNull Operation getOperation() {
+    public Operation getOperation() {
         return operation;
     }
 
-    public @NotNull AstExpression getTarget() {
+    public AstExpression getTarget() {
         return target;
     }
 
-    public @NotNull AstExpression getValue() {
+    public AstExpression getValue() {
         return value;
     }
 

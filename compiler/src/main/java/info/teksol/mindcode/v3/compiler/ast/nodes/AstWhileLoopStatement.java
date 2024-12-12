@@ -1,19 +1,20 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class AstWhileLoopStatement extends AstLabeledStatement {
     private final @Nullable AstExpression condition;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final List< AstMindcodeNode> body;
     private final boolean entryCondition;
 
-    public AstWhileLoopStatement(@NotNull InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            @Nullable AstExpression condition, @NotNull List<@NotNull AstMindcodeNode> body, boolean entryCondition) {
+    public AstWhileLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
+            @Nullable AstExpression condition, List< AstMindcodeNode> body, boolean entryCondition) {
         super(inputPosition, loopLabel);
         this.condition = condition;
         this.body = body;
@@ -24,7 +25,7 @@ public class AstWhileLoopStatement extends AstLabeledStatement {
         return condition;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List< AstMindcodeNode> getBody() {
         return body;
     }
 

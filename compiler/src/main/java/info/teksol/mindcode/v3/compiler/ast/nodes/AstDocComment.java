@@ -1,17 +1,18 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AstDocComment extends AstDeclaration {
-    private final @NotNull String comment;
+    private final String comment;
 
-    public AstDocComment(@NotNull InputPosition inputPosition, @NotNull String comment) {
+    public AstDocComment(InputPosition inputPosition, String comment) {
         super(inputPosition);
         this.comment = comment;
     }
 
-    public @NotNull String getComment() {
+    public String getComment() {
         return comment;
     }
 

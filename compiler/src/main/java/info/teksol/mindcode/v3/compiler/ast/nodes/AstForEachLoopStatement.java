@@ -1,34 +1,35 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class AstForEachLoopStatement extends AstLabeledStatement {
-    private final @NotNull List<@NotNull AstLoopIterator> iterators;
-    private final @NotNull List<@NotNull AstExpression> values;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final List< AstLoopIterator> iterators;
+    private final List< AstExpression> values;
+    private final List< AstMindcodeNode> body;
 
-    public AstForEachLoopStatement(@NotNull InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            @NotNull List<@NotNull AstLoopIterator> iterators, @NotNull List<@NotNull AstExpression> values,
-            @NotNull List<@NotNull AstMindcodeNode> body) {
+    public AstForEachLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
+            List< AstLoopIterator> iterators, List< AstExpression> values,
+            List< AstMindcodeNode> body) {
         super(inputPosition, loopLabel);
         this.iterators = iterators;
         this.values = values;
         this.body = body;
     }
 
-    public @NotNull List<@NotNull AstLoopIterator> getIterators() {
+    public List< AstLoopIterator> getIterators() {
         return iterators;
     }
 
-    public @NotNull List<@NotNull AstExpression> getValues() {
+    public List< AstExpression> getValues() {
         return values;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List< AstMindcodeNode> getBody() {
         return body;
     }
 

@@ -1,17 +1,18 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AstParentheses extends AstExpression {
-    private final @NotNull AstExpression expression;
+    private final AstExpression expression;
 
-    public AstParentheses(@NotNull InputPosition inputPosition, @NotNull AstExpression expression) {
+    public AstParentheses(InputPosition inputPosition, AstExpression expression) {
         super(inputPosition);
         this.expression = expression;
     }
 
-    public @NotNull AstExpression getExpression() {
+    public AstExpression getExpression() {
         return expression;
     }
 

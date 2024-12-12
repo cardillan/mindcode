@@ -1,11 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.MemoryModel;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public interface Optimizer {
 
@@ -19,7 +18,7 @@ public interface Optimizer {
 
     void setMemoryModel(MemoryModel memoryModel);
 
-    void setMessageRecipient(Consumer<MindcodeMessage> messageRecipient);
+    void setMessageRecipient(MessageConsumer messageRecipient);
 
     void setDebugPrinter(DebugPrinter debugPrinter);
 

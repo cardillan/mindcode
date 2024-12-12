@@ -1,15 +1,16 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AstFunctionParameter extends AstFragment {
-    private final @NotNull AstIdentifier name;
+    private final AstIdentifier name;
     private final boolean inModifier;
     private final boolean outModifier;
     private final boolean varargs;
 
-    public AstFunctionParameter(@NotNull InputPosition inputPosition, @NotNull AstIdentifier name, boolean inModifier,
+    public AstFunctionParameter(InputPosition inputPosition, AstIdentifier name, boolean inModifier,
             boolean outModifier, boolean varargs) {
         super(inputPosition);
         this.name = name;
@@ -18,7 +19,7 @@ public class AstFunctionParameter extends AstFragment {
         this.varargs = varargs;
     }
 
-    public @NotNull AstIdentifier getName() {
+    public AstIdentifier getName() {
         return name;
     }
 

@@ -1,6 +1,6 @@
 package info.teksol.util;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,7 @@ public class CollectionUtils {
         return index < 0 ? null : list.remove(index);
     }
 
-    public static <E> @NotNull List<E> createList(E firstItem, List<E> otherItems) {
+    public static <E> @NonNull List<E> createList(E firstItem, List<E> otherItems) {
         if (otherItems.isEmpty()) {
             return List.of(firstItem);
         } else {
@@ -109,7 +109,7 @@ public class CollectionUtils {
         }
     }
 
-    public static <E> @NotNull List<E> createList(List<E> otherItems, E lastItem) {
+    public static <E> @NonNull List<E> createList(List<E> otherItems, E lastItem) {
         if (otherItems.isEmpty()) {
             return List.of(lastItem);
         } else {

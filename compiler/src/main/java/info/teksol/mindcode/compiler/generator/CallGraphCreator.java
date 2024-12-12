@@ -1,14 +1,13 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class CallGraphCreator extends AbstractMessageEmitter {
     private final InstructionProcessor instructionProcessor;
@@ -18,12 +17,12 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private LogicFunction activeFunction;
     private StackAllocation allocatedStack;
 
-    public static CallGraph createCallGraph(Seq program, Consumer<MindcodeMessage> messageConsumer,
+    public static CallGraph createCallGraph(Seq program, MessageConsumer messageConsumer,
             InstructionProcessor instructionProcessor) {
         return new CallGraphCreator(instructionProcessor, messageConsumer).buildCallGraph(program);
     }
 
-    private CallGraphCreator(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer) {
+    private CallGraphCreator(InstructionProcessor instructionProcessor, MessageConsumer messageConsumer) {
         super(messageConsumer);
         this.instructionProcessor = instructionProcessor;
         this.functionDefinitions = new FunctionDefinitions(messageConsumer);

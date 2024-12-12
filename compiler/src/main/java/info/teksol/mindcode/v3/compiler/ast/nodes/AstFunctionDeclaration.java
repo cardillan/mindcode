@@ -2,21 +2,22 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.v3.DataType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class AstFunctionDeclaration extends AstDeclaration {
-    private final @NotNull AstIdentifier name;
-    private final @NotNull DataType dataType;
-    private final @NotNull List<@NotNull AstFunctionParameter> parameters;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final AstIdentifier name;
+    private final DataType dataType;
+    private final List<AstFunctionParameter> parameters;
+    private final List<AstMindcodeNode> body;
     private final boolean inline;
     private final boolean noinline;
 
-    public AstFunctionDeclaration(@NotNull InputPosition inputPosition, @Nullable AstDocComment docComment, @NotNull AstIdentifier name,
-            @NotNull DataType dataType, @NotNull List<@NotNull AstFunctionParameter> parameters, @NotNull List<@NotNull AstMindcodeNode> body,
+    public AstFunctionDeclaration(InputPosition inputPosition, @Nullable AstDocComment docComment, AstIdentifier name,
+            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body,
             boolean inline, boolean noinline) {
         super(inputPosition, docComment);
         this.name = name;
@@ -27,19 +28,19 @@ public class AstFunctionDeclaration extends AstDeclaration {
         this.noinline = noinline;
     }
 
-    public @NotNull AstIdentifier getName() {
+    public AstIdentifier getName() {
         return name;
     }
 
-    public @NotNull DataType getDataType() {
+    public DataType getDataType() {
         return dataType;
     }
 
-    public @NotNull List<@NotNull AstFunctionParameter> getParameters() {
+    public List<AstFunctionParameter> getParameters() {
         return parameters;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List<AstMindcodeNode> getBody() {
         return body;
     }
 

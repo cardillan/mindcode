@@ -1,10 +1,9 @@
 package info.teksol.mindcode.v3.compiler.ast;
 
 import info.teksol.mindcode.v3.InputFiles;
-import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.antlr.AbstractParserTest;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstStatementList;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstModule;
 import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Assertions;
 
@@ -12,14 +11,9 @@ import java.util.List;
 
 public class AbstractAstBuilderTest extends AbstractParserTest {
 
-    protected AstMindcodeNode build(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
-        MindcodeCompiler compiler = new MindcodeCompiler(MindcodeCompiler.CompilationPhase.AST_BUILDER, expectedMessages);
-        compiler.compile(inputFiles.getMainInputFile());
-
-        if (validate) {
-            expectedMessages.validate();
-        }
-        return compiler.getSyntaxTree(inputFiles.getMainInputFile());
+    protected AstModule build(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
+        return process(expectedMessages, inputFiles, validate,
+                c -> c.getSyntaxTree(inputFiles.getMainInputFile()));
     }
 
     protected void assertBuilds(ExpectedMessages expectedMessages, String source, AstMindcodeNode expected) {
@@ -28,7 +22,7 @@ public class AbstractAstBuilderTest extends AbstractParserTest {
     }
 
     protected void assertBuilds(ExpectedMessages expectedMessages, String source, List<AstMindcodeNode> expected) {
-        assertBuilds(expectedMessages, source, new AstStatementList(EMPTY, expected));
+        assertBuilds(expectedMessages, source, new AstModule(EMPTY, expected));
     }
 
     protected void assertBuilds(String source, List<AstMindcodeNode> expected) {

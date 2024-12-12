@@ -3,12 +3,11 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.AstElement;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.v3.MessageConsumer;
 import org.intellij.lang.annotations.PrintFormat;
 
-import java.util.function.Consumer;
-
 public interface MessageEmitter {
-    Consumer<MindcodeMessage> getMessageConsumer();
+    MessageConsumer getMessageConsumer();
 
     void addMessage(MindcodeMessage message);
 

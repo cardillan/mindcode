@@ -1,26 +1,27 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AstRange extends AstExpression {
-    private final @NotNull AstExpression firstValue;
-    private final @NotNull AstExpression lastValue;
+    private final AstExpression firstValue;
+    private final AstExpression lastValue;
     private final boolean exclusive;
 
-    public AstRange(@NotNull InputPosition inputPosition, @NotNull AstExpression firstValue,
-            @NotNull AstExpression lastValue, boolean exclusive) {
+    public AstRange(InputPosition inputPosition, AstExpression firstValue,
+            AstExpression lastValue, boolean exclusive) {
         super(inputPosition);
         this.firstValue = firstValue;
         this.lastValue = lastValue;
         this.exclusive = exclusive;
     }
 
-    public @NotNull AstExpression getFirstValue() {
+    public AstExpression getFirstValue() {
         return firstValue;
     }
 
-    public @NotNull AstExpression getLastValue() {
+    public AstExpression getLastValue() {
         return lastValue;
     }
 

@@ -1,8 +1,8 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;
@@ -14,7 +14,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
@@ -25,7 +24,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     }
 
     public static AstDefinitions generate(InputFile inputFile, DefinitionsContext parseTree,
-            Consumer<MindcodeMessage> messageListener) {
+            MessageConsumer messageListener) {
         final AstSchematicsBuilder builder = new AstSchematicsBuilder(inputFile);
         final AstSchemaItem item = builder.visit(parseTree);
         return (AstDefinitions) item;

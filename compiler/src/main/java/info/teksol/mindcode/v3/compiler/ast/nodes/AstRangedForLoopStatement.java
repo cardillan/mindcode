@@ -1,33 +1,34 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class AstRangedForLoopStatement extends AstLabeledStatement {
-    private final @NotNull AstIdentifier variable;
-    private final @NotNull AstRange range;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final AstIdentifier variable;
+    private final AstRange range;
+    private final List< AstMindcodeNode> body;
 
-    public AstRangedForLoopStatement(@NotNull InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            @NotNull AstIdentifier variable, @NotNull AstRange range, @NotNull List<@NotNull AstMindcodeNode> body) {
+    public AstRangedForLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
+            AstIdentifier variable, AstRange range, List< AstMindcodeNode> body) {
         super(inputPosition, loopLabel);
         this.variable = variable;
         this.range = range;
         this.body = body;
     }
 
-    public @NotNull AstIdentifier getVariable() {
+    public AstIdentifier getVariable() {
         return variable;
     }
 
-    public @NotNull AstRange getRange() {
+    public AstRange getRange() {
         return range;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List< AstMindcodeNode> getBody() {
         return body;
     }
 

@@ -1,24 +1,23 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.instructions.BaseInstructionProcessor.InstructionProcessorParameters;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class InstructionProcessorFactory {
-    private static final Consumer<MindcodeMessage> nullMessageConsumer = msg -> {};
+    private static final MessageConsumer nullMessageConsumer = msg -> {};
 
-    public static InstructionProcessor getInstructionProcessor(Consumer<MindcodeMessage> messageConsumer, CompilerProfile profile) {
+    public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer, CompilerProfile profile) {
         return create(new InstructionProcessorParameters(messageConsumer,
                 profile.getProcessorVersion(), profile.getProcessorEdition()));
     }
 
-    public static InstructionProcessor getInstructionProcessor(Consumer<MindcodeMessage> messageConsumer,
+    public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer,
             ProcessorVersion version, ProcessorEdition edition) {
         return create(new InstructionProcessorParameters(messageConsumer, version, edition));
     }

@@ -1,15 +1,16 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public class AstReturnStatement extends AstStatement {
     private final @Nullable AstExpression returnValue;
 
-    public AstReturnStatement(@NotNull InputPosition inputPosition, @Nullable AstExpression returnValue) {
+    public AstReturnStatement(InputPosition inputPosition, @Nullable AstExpression returnValue) {
         super(inputPosition);
         this.returnValue = returnValue;
     }

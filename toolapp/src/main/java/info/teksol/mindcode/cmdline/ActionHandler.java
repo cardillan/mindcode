@@ -230,7 +230,7 @@ abstract class ActionHandler {
             try {
                 return Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
             } catch (IOException e) {
-                throw new ProcessingException(e, "Error reading file %s.", inputFile.getPath());
+                throw new ProcessingException(e, "Error reading file '%s'.", inputFile.getPath());
             }
         }
     }

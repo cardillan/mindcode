@@ -2,7 +2,6 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.Iterator;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -12,10 +11,10 @@ import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.mimex.LVar;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -89,7 +88,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private List<LogicFunctionArgument> varArgValues = null;
 
     public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
-            Consumer<MindcodeMessage> messageConsumer) {
+            MessageConsumer messageConsumer) {
         super(messageConsumer);
         this.returnStack = new ReturnStack(messageConsumer);
         this.loopStack = new LoopStack(messageConsumer);

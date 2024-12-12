@@ -8,15 +8,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface MindcodeParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#program}.
+	 * Enter a parse tree produced by {@link MindcodeParser#module}.
 	 * @param ctx the parse tree
 	 */
-	void enterProgram(MindcodeParser.ProgramContext ctx);
+	void enterModule(MindcodeParser.ModuleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#program}.
+	 * Exit a parse tree produced by {@link MindcodeParser#module}.
 	 * @param ctx the parse tree
 	 */
-	void exitProgram(MindcodeParser.ProgramContext ctx);
+	void exitModule(MindcodeParser.ModuleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#statementList}.
 	 * @param ctx the parse tree

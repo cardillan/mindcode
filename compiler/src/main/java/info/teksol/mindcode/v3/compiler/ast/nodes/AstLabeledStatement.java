@@ -1,15 +1,16 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public abstract class AstLabeledStatement extends AstStatement {
     protected final @Nullable AstIdentifier label;
 
-    protected AstLabeledStatement(@NotNull InputPosition inputPosition, @Nullable AstIdentifier label) {
+    protected AstLabeledStatement(InputPosition inputPosition, @Nullable AstIdentifier label) {
         super(inputPosition);
         this.label = label;
     }

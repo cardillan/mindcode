@@ -5,6 +5,7 @@ import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
@@ -17,7 +18,6 @@ import info.teksol.util.ExpectedMessages;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class AbstractSchematicsTest {
     protected InputFiles inputFiles = InputFiles.create();
@@ -57,7 +57,7 @@ public abstract class AbstractSchematicsTest {
      * @param methodName name of the method being tested
      * @return message listener which throws on errors
      */
-    private Consumer<MindcodeMessage> messageListener(String methodName) {
+    private MessageConsumer messageListener(String methodName) {
         return message -> {
             if (message.isError() || message.isWarning()) {
                 throw new RuntimeException("Unexpected error returned from " + methodName + ": " + message.message());

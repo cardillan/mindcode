@@ -1,21 +1,22 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class AstIteratedForLoopStatement extends AstLabeledStatement {
-    private final @NotNull List<@NotNull AstExpression> initialize;
+    private final List< AstExpression> initialize;
     private final @Nullable AstExpression condition;
-    private final @NotNull List<@NotNull AstExpression> update;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final List< AstExpression> update;
+    private final List< AstMindcodeNode> body;
 
-    public AstIteratedForLoopStatement(@NotNull InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            @NotNull List<@NotNull AstExpression> initialize, @Nullable AstExpression condition,
-            @NotNull List<@NotNull AstExpression> update, @NotNull List<@NotNull AstMindcodeNode> body) {
+    public AstIteratedForLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
+            List< AstExpression> initialize, @Nullable AstExpression condition,
+            List< AstExpression> update, List< AstMindcodeNode> body) {
         super(inputPosition, loopLabel);
         this.initialize = initialize;
         this.condition = condition;
@@ -23,7 +24,7 @@ public class AstIteratedForLoopStatement extends AstLabeledStatement {
         this.body = body;
     }
 
-    public @NotNull List<@NotNull AstExpression> getInitialize() {
+    public List< AstExpression> getInitialize() {
         return initialize;
     }
 
@@ -31,11 +32,11 @@ public class AstIteratedForLoopStatement extends AstLabeledStatement {
         return condition;
     }
 
-    public @NotNull List<@NotNull AstExpression> getUpdate() {
+    public List< AstExpression> getUpdate() {
         return update;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List< AstMindcodeNode> getBody() {
         return body;
     }
 

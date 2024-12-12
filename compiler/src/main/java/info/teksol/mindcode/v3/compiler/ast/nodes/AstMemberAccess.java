@@ -1,25 +1,26 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public class AstMemberAccess extends AstExpression {
-    private final @NotNull AstExpression object;
-    private final @NotNull AstExpression property;
+    private final AstExpression object;
+    private final AstExpression property;
 
-    public AstMemberAccess(@NotNull InputPosition inputPosition, @NotNull AstExpression object, @NotNull AstExpression property) {
+    public AstMemberAccess(InputPosition inputPosition, AstExpression object, AstExpression property) {
         super(inputPosition);
         this.object = Objects.requireNonNull(object);
         this.property = Objects.requireNonNull(property);
     }
 
-    public @NotNull AstExpression getObject() {
+    public AstExpression getObject() {
         return object;
     }
 
-    public @NotNull AstExpression getProperty() {
+    public AstExpression getProperty() {
         return property;
     }
 

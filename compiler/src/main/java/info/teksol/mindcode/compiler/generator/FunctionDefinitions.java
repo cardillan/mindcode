@@ -1,23 +1,22 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.FunctionParameter;
 import info.teksol.mindcode.ast.NoOp;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 class FunctionDefinitions extends AbstractMessageEmitter {
     private final LogicFunction main;
     private final List<LogicFunction> functionList = new ArrayList<>();
     private final Map<String, List<LogicFunction>> functionMap = new HashMap<>();
 
-    public FunctionDefinitions(Consumer<MindcodeMessage> messageConsumer) {
+    public FunctionDefinitions(MessageConsumer messageConsumer) {
         super(messageConsumer);
         main = new LogicFunction(createMain());
         functionList.add(main);

@@ -1,25 +1,26 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class AstParameter extends AstFragment {
-    private final @NotNull AstIdentifier name;
-    private final @NotNull AstExpression value;
+    private final AstIdentifier name;
+    private final AstExpression value;
 
-    public AstParameter(@NotNull InputPosition inputPosition, @Nullable AstDocComment docComment,
-            @NotNull AstIdentifier name, @NotNull AstExpression value) {
+    public AstParameter(InputPosition inputPosition, @Nullable AstDocComment docComment,
+            AstIdentifier name, AstExpression value) {
         super(inputPosition, docComment);
         this.name = name;
         this.value = value;
     }
 
-    public @NotNull AstIdentifier getName() {
+    public AstIdentifier getName() {
         return name;
     }
 
-    public @NotNull AstExpression getValue() {
+    public AstExpression getValue() {
         return value;
     }
 
