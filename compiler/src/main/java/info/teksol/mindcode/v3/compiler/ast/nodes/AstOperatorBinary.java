@@ -1,5 +1,6 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Operation;
 import org.jspecify.annotations.NullMarked;
@@ -7,6 +8,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Objects;
 
 @NullMarked
+@AstNode
 public class AstOperatorBinary extends AstExpression {
     private final Operation operation;
     private final AstExpression left;

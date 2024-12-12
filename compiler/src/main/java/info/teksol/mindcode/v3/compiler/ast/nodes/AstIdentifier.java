@@ -1,11 +1,13 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
 @NullMarked
+@AstNode
 public class AstIdentifier extends AstExpression {
     private final String name;
     private final boolean external;

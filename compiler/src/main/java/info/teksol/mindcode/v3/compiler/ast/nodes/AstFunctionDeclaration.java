@@ -1,5 +1,6 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.v3.DataType;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
+@AstNode
 public class AstFunctionDeclaration extends AstDeclaration {
     private final AstIdentifier name;
     private final DataType dataType;

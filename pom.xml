@@ -15,6 +15,7 @@
         <module>toolapp</module>
         <module>samples</module>
         <module>webapp</module>
+        <module>annotations</module>
     </modules>
 
     <name>Mindcode</name>

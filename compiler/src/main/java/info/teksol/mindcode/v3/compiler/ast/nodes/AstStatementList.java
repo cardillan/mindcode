@@ -1,5 +1,6 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
 
@@ -8,6 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @NullMarked
+@AstNode
 public class AstStatementList extends AstStatement {
     private final List< AstMindcodeNode> expressions;
 

@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mindcode-toolapp" />
         <module name="mindcode-compiler" />
+        <module name="mindcode-samples" />
+        <module name="mindcode-toolapp" />
         <module name="mindcode-schemacode" />
         <module name="mindcode-webapp" />
-        <module name="mindcode-samples" />
+        <module name="mindcode-annotations" />
         <module name="mindcode-exttest" />
       </profile>
     </annotationProcessing>

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/annotations/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/annotations/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/compiler/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/exttest/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/exttest/src/main/resources" charset="UTF-8" />

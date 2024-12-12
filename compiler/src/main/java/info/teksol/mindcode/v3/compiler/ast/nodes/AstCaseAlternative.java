@@ -1,11 +1,13 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
 @NullMarked
+@AstNode
 public class AstCaseAlternative extends AstFragment {
     private final List< AstExpression> values;
     private final List< AstMindcodeNode> body;

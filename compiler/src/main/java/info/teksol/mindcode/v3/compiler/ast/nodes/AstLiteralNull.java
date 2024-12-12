@@ -1,9 +1,11 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@AstNode
 public class AstLiteralNull extends AstLiteral {
 
     public AstLiteralNull(InputPosition inputPosition, String literal) {

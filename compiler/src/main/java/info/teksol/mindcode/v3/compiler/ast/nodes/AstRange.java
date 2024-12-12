@@ -1,9 +1,11 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@AstNode
 public class AstRange extends AstExpression {
     private final AstExpression firstValue;
     private final AstExpression lastValue;

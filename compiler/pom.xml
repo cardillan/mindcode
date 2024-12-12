@@ -94,6 +94,7 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
+                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -111,6 +112,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>info.teksol.mindcode</groupId>
+            <artifactId>mindcode-annotations</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.antlr/antlr4 -->
         <dependency>
             <groupId>org.antlr</groupId>
