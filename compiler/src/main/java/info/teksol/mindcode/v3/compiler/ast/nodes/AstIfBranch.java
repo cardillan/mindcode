@@ -1,26 +1,29 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
+@AstNode
 public class AstIfBranch extends AstFragment {
-    private final @NotNull AstExpression condition;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final AstExpression condition;
+    private final List<AstMindcodeNode> body;
 
-    public AstIfBranch(@NotNull InputPosition inputPosition, @NotNull AstExpression condition,
-            @NotNull List<@NotNull AstMindcodeNode> body) {
-        super(inputPosition);
+    public AstIfBranch(InputPosition inputPosition, AstExpression condition,
+            List<AstMindcodeNode> body) {
+        super(inputPosition, children(list(condition), body));
         this.condition = condition;
         this.body = body;
     }
 
-    public @NotNull AstExpression getCondition() {
+    public AstExpression getCondition() {
         return condition;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List<AstMindcodeNode> getBody() {
         return body;
     }
 
@@ -39,11 +42,4 @@ public class AstIfBranch extends AstFragment {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstIfBranch{" +
-               "condition=" + condition +
-               ", body=" + body +
-               '}';
-    }
 }

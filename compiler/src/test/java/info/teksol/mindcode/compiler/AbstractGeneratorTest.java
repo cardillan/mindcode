@@ -13,10 +13,10 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.util.ExpectedMessages;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -174,7 +174,7 @@ public abstract class AbstractGeneratorTest extends AbstractAstTest {
                 .setDebugLevel(3);
     }
 
-    protected InstructionProcessor createInstructionProcessor(CompilerProfile profile, Consumer<MindcodeMessage> messageConsumer) {
+    protected InstructionProcessor createInstructionProcessor(CompilerProfile profile, MessageConsumer messageConsumer) {
         return InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
     }
 

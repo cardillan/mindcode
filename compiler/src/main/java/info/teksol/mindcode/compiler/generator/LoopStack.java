@@ -1,14 +1,13 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Class maintaining the stack of active loops and their break and continue labels.
@@ -19,7 +18,7 @@ public class LoopStack extends AbstractMessageEmitter {
     private final Map<String, LogicLabel> breakMap = new HashMap<>();
     private final Map<String, LogicLabel> continueMap = new HashMap<>();
 
-    public LoopStack(Consumer<MindcodeMessage> messageConsumer) {
+    public LoopStack(MessageConsumer messageConsumer) {
         super(messageConsumer);
     }
 

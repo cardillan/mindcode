@@ -1,19 +1,22 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstRequireLibrary extends AstRequire {
-    private final @NotNull AstIdentifier library;
+    private final AstIdentifier library;
 
-    public AstRequireLibrary(@NotNull InputPosition inputPosition, @NotNull AstIdentifier library) {
-        super(inputPosition);
+    public AstRequireLibrary(InputPosition inputPosition, AstIdentifier library) {
+        super(inputPosition, library);
         this.library = Objects.requireNonNull(library);
     }
 
-    public @NotNull AstIdentifier getLibraryName() {
+    public AstIdentifier getLibrary() {
         return library;
     }
 
@@ -41,10 +44,4 @@ public class AstRequireLibrary extends AstRequire {
         return library.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "AstRequireLibrary{" +
-                "library='" + library + '\'' +
-                '}';
-    }
 }

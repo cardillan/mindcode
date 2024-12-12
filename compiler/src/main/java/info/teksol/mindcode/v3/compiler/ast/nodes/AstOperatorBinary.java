@@ -1,33 +1,36 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Operation;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode
 public class AstOperatorBinary extends AstExpression {
-    private final @NotNull Operation operation;
-    private final @NotNull AstExpression left;
-    private final @NotNull AstExpression right;
+    private final Operation operation;
+    private final AstExpression left;
+    private final AstExpression right;
 
-    public AstOperatorBinary(@NotNull InputPosition inputPosition, @NotNull Operation operation,
-            @NotNull AstExpression left, @NotNull AstExpression right) {
-        super(inputPosition);
+    public AstOperatorBinary(InputPosition inputPosition, Operation operation,
+            AstExpression left, AstExpression right) {
+        super(inputPosition, children(left, right));
         this.operation = Objects.requireNonNull(operation);
         this.left = Objects.requireNonNull(left);
         this.right = Objects.requireNonNull(right);
     }
 
-    public @NotNull Operation getOperation() {
+    public Operation getOperation() {
         return operation;
     }
 
-    public @NotNull AstExpression getLeft() {
+    public AstExpression getLeft() {
         return left;
     }
 
-    public @NotNull AstExpression getRight() {
+    public AstExpression getRight() {
         return right;
     }
 
@@ -48,12 +51,4 @@ public class AstOperatorBinary extends AstExpression {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstOperatorBinary{" +
-               "operation=" + operation +
-               ", left=" + left +
-               ", right=" + right +
-               '}';
-    }
 }

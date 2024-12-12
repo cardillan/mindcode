@@ -1,31 +1,34 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstAllocation extends AstDeclaration {
     public enum AllocationType { HEAP, STACK }
 
-    private final @NotNull AllocationType type;
-    private final @NotNull AstIdentifier memory;
+    private final AllocationType type;
+    private final AstIdentifier memory;
     private final @Nullable AstRange range;
 
-    public AstAllocation(@NotNull InputPosition inputPosition, @NotNull AllocationType type, @NotNull AstIdentifier memory,
+    public AstAllocation(InputPosition inputPosition, AllocationType type, AstIdentifier memory,
             @Nullable AstRange range) {
-        super(inputPosition);
+        super(inputPosition, children(memory, range));
         this.type = type;
         this.memory = memory;
         this.range = range;
     }
 
-    public @NotNull AllocationType getType() {
+    public AllocationType getType() {
         return type;
     }
 
-    public @NotNull AstIdentifier getMemory() {
+    public AstIdentifier getMemory() {
         return memory;
     }
 
@@ -49,12 +52,4 @@ public class AstAllocation extends AstDeclaration {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstAllocation{" +
-               "type=" + type +
-               ", memory=" + memory +
-               ", range=" + range +
-               '}';
-    }
 }

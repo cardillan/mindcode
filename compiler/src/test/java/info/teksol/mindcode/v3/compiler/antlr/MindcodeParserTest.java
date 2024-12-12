@@ -28,7 +28,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     """
             );
             long milliseconds = (System.nanoTime() - start) / 1_000_000;
-            System.out.println("Parsing time: " + milliseconds + " ms");
+            System.out.println("Complex expression parse time: " + milliseconds + " ms");
             Assertions.assertTrue(milliseconds < 10000, "Parsing took " + milliseconds + " ms; more than 10000 ms.");
         }
 

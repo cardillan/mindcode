@@ -1,12 +1,13 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public abstract class AstRequire extends AstDeclaration {
 
-    public AstRequire(@NotNull InputPosition inputPosition) {
-        super(inputPosition);
+    public AstRequire(InputPosition inputPosition, AstMindcodeNode child) {
+        super(inputPosition, children(child));
     }
 
     public abstract boolean isLibrary();

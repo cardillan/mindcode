@@ -9,7 +9,7 @@ import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -311,8 +311,7 @@ class LoopUnroller extends BaseOptimizer {
         return result;
     }
 
-    @NotNull
-    private ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, AstContext init, LogicVariable variable) {
+    private @NonNull ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, AstContext init, LogicVariable variable) {
         return contextStream(loop)
                 .filter(ix -> !ix.getAstContext().belongsTo(init))
                 .filter(ix -> ix.usesAsOutput(variable))

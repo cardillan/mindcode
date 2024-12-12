@@ -1,11 +1,14 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstFormattablePlaceholder extends AstExpression {
 
-    public AstFormattablePlaceholder(@NotNull InputPosition inputPosition) {
+    public AstFormattablePlaceholder(InputPosition inputPosition) {
         super(inputPosition);
     }
 
@@ -20,8 +23,4 @@ public class AstFormattablePlaceholder extends AstExpression {
         return 17;
     }
 
-    @Override
-    public String toString() {
-        return "AstFormattablePlaceholder{}";
-    }
 }

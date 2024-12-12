@@ -1,26 +1,29 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstAssignmentSimple extends AstExpression {
-    private final @NotNull AstExpression target;
-    private final @NotNull AstExpression value;
+    private final AstExpression target;
+    private final AstExpression value;
 
-    public AstAssignmentSimple(@NotNull InputPosition inputPosition, @NotNull AstExpression target,
-            @NotNull AstExpression value) {
-        super(inputPosition);
+    public AstAssignmentSimple(InputPosition inputPosition, AstExpression target,
+            AstExpression value) {
+        super(inputPosition, children(target, value));
         this.target = Objects.requireNonNull(target);
         this.value = Objects.requireNonNull(value);
     }
 
-    public @NotNull AstExpression getTarget() {
+    public AstExpression getTarget() {
         return target;
     }
 
-    public @NotNull AstExpression getValue() {
+    public AstExpression getValue() {
         return value;
     }
 
@@ -40,11 +43,4 @@ public class AstAssignmentSimple extends AstExpression {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstAssignmentSimple{" +
-               "target=" + target +
-               ", value=" + value +
-               '}';
-    }
 }

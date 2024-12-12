@@ -6,7 +6,7 @@ options {
     tokenVocab = 'MindcodeLexer';
 }
 
-program
+module
     : statementList? EOF ;
 
 // List of statements separated by semicolons

@@ -30,7 +30,7 @@
           <option name="encoding" value="utf-8" />
           <option name="pkg" value="" />
           <option name="language" value="" />
-          <option name="generateVisitor" value="true" />
+          <option name="generateListener" value="false" />
         </PerGrammarGenerationSettings>
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/compiler/src/main/java/info/teksol/mindcode/v3/compiler/antlr/MindcodeLexer.g4" />
@@ -39,7 +39,7 @@
           <option name="encoding" value="utf-8" />
           <option name="pkg" value="" />
           <option name="language" value="" />
-          <option name="generateVisitor" value="true" />
+          <option name="generateListener" value="false" />
         </PerGrammarGenerationSettings>
       </list>
     </option>

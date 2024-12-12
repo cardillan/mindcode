@@ -46,7 +46,7 @@ public class MindcodeParser extends Parser {
 		VARIABLEPLACEHOLDER=122, ENDOFLINE=123, VARIABLE=124, FMTENDOFLINE=125, 
 		INCMTENDOFLINE=126;
 	public static final int
-		RULE_program = 0, RULE_statementList = 1, RULE_expressionList = 2, RULE_statement = 3, 
+		RULE_module = 0, RULE_statementList = 1, RULE_expressionList = 2, RULE_statement = 3, 
 		RULE_lvalue = 4, RULE_expression = 5, RULE_formattableContents = 6, RULE_formattablePlaceholder = 7, 
 		RULE_directive = 8, RULE_directiveValues = 9, RULE_directiveValue = 10, 
 		RULE_allocations = 11, RULE_allocation = 12, RULE_parameter = 13, RULE_parameterList = 14, 
@@ -56,12 +56,12 @@ public class MindcodeParser extends Parser {
 		RULE_elsifBranch = 24, RULE_iteratorList = 25, RULE_iterator = 26;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "statementList", "expressionList", "statement", "lvalue", 
-			"expression", "formattableContents", "formattablePlaceholder", "directive", 
-			"directiveValues", "directiveValue", "allocations", "allocation", "parameter", 
-			"parameterList", "argument", "optionalArgument", "argumentList", "caseAlternatives", 
-			"caseAlternative", "whenValueList", "whenValue", "rangeExpression", "elsifBranches", 
-			"elsifBranch", "iteratorList", "iterator"
+			"module", "statementList", "expressionList", "statement", "lvalue", "expression", 
+			"formattableContents", "formattablePlaceholder", "directive", "directiveValues", 
+			"directiveValue", "allocations", "allocation", "parameter", "parameterList", 
+			"argument", "optionalArgument", "argumentList", "caseAlternatives", "caseAlternative", 
+			"whenValueList", "whenValue", "rangeExpression", "elsifBranches", "elsifBranch", 
+			"iteratorList", "iterator"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -163,33 +163,33 @@ public class MindcodeParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class ProgramContext extends ParserRuleContext {
+	public static class ModuleContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(MindcodeParser.EOF, 0); }
 		public StatementListContext statementList() {
 			return getRuleContext(StatementListContext.class,0);
 		}
-		public ProgramContext(ParserRuleContext parent, int invokingState) {
+		public ModuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_program; }
+		@Override public int getRuleIndex() { return RULE_module; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterProgram(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterModule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitProgram(this);
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitModule(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitProgram(this);
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitModule(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ProgramContext program() throws RecognitionException {
-		ProgramContext _localctx = new ProgramContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_program);
+	public final ModuleContext module() throws RecognitionException {
+		ModuleContext _localctx = new ModuleContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_module);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

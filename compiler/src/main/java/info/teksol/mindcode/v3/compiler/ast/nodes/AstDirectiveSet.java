@@ -1,27 +1,30 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
+@AstNode
 public class AstDirectiveSet extends AstDeclaration {
-    private final @NotNull AstDirectiveValue option;
-    private final @NotNull List<@NotNull AstDirectiveValue> values;
+    private final AstDirectiveValue option;
+    private final List<AstDirectiveValue> values;
 
-    public AstDirectiveSet(@NotNull InputPosition inputPosition, @NotNull AstDirectiveValue option,
-            @NotNull List<@NotNull AstDirectiveValue> values) {
-        super(inputPosition);
+    public AstDirectiveSet(InputPosition inputPosition, AstDirectiveValue option,
+            List<AstDirectiveValue> values) {
+        super(inputPosition, children(list(option), values));
         this.option = Objects.requireNonNull(option);
         this.values = Objects.requireNonNull(values);
     }
 
-    public @NotNull AstDirectiveValue getOption() {
+    public AstDirectiveValue getOption() {
         return option;
     }
 
-    public @NotNull List<@NotNull AstDirectiveValue> getValues() {
+    public List<AstDirectiveValue> getValues() {
         return values;
     }
 
@@ -41,11 +44,4 @@ public class AstDirectiveSet extends AstDeclaration {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstDirectiveSet{" +
-                "option=" + option +
-                ", values=" + values +
-                '}';
-    }
 }

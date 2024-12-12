@@ -1,19 +1,22 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode
 public class AstFunctionArgument extends AstFragment {
     private final @Nullable AstExpression expression;
     private final boolean inModifier;
     private final boolean outModifier;
 
-    public AstFunctionArgument(@NotNull InputPosition inputPosition, @NotNull AstExpression expression,
+    public AstFunctionArgument(InputPosition inputPosition, AstExpression expression,
             boolean inModifier, boolean outModifier) {
-        super(inputPosition);
+        super(inputPosition, children(expression));
         this.expression = Objects.requireNonNull(expression);
         this.inModifier = inModifier;
         this.outModifier = outModifier;
@@ -70,12 +73,4 @@ public class AstFunctionArgument extends AstFragment {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstFunctionArgument{" +
-               "expression=" + expression +
-               ", inModifier=" + inModifier +
-               ", outModifier=" + outModifier +
-               '}';
-    }
 }

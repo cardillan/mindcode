@@ -1,34 +1,37 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
+@AstNode
 public class AstForEachLoopStatement extends AstLabeledStatement {
-    private final @NotNull List<@NotNull AstLoopIterator> iterators;
-    private final @NotNull List<@NotNull AstExpression> values;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final List<AstLoopIterator> iterators;
+    private final List<AstExpression> values;
+    private final List<AstMindcodeNode> body;
 
-    public AstForEachLoopStatement(@NotNull InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            @NotNull List<@NotNull AstLoopIterator> iterators, @NotNull List<@NotNull AstExpression> values,
-            @NotNull List<@NotNull AstMindcodeNode> body) {
-        super(inputPosition, loopLabel);
+    public AstForEachLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
+            List<AstLoopIterator> iterators, List<AstExpression> values,
+            List<AstMindcodeNode> body) {
+        super(inputPosition, loopLabel, children(iterators, values, body));
         this.iterators = iterators;
         this.values = values;
         this.body = body;
     }
 
-    public @NotNull List<@NotNull AstLoopIterator> getIterators() {
+    public List<AstLoopIterator> getIterators() {
         return iterators;
     }
 
-    public @NotNull List<@NotNull AstExpression> getValues() {
+    public List<AstExpression> getValues() {
         return values;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List<AstMindcodeNode> getBody() {
         return body;
     }
 
@@ -50,13 +53,4 @@ public class AstForEachLoopStatement extends AstLabeledStatement {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstForEachLoopStatement{" +
-               "iterators=" + iterators +
-               ", values=" + values +
-               ", body=" + body +
-               ", label=" + label +
-               '}';
-    }
 }

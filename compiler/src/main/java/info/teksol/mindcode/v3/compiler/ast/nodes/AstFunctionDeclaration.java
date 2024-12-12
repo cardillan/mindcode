@@ -1,25 +1,30 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.IntRange;
 import info.teksol.mindcode.v3.DataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import info.teksol.util.CollectionUtils;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
+@AstNode
 public class AstFunctionDeclaration extends AstDeclaration {
-    private final @NotNull AstIdentifier name;
-    private final @NotNull DataType dataType;
-    private final @NotNull List<@NotNull AstFunctionParameter> parameters;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final AstIdentifier identifier;
+    private final DataType dataType;
+    private final List<AstFunctionParameter> parameters;
+    private final List<AstMindcodeNode> body;
     private final boolean inline;
     private final boolean noinline;
 
-    public AstFunctionDeclaration(@NotNull InputPosition inputPosition, @Nullable AstDocComment docComment, @NotNull AstIdentifier name,
-            @NotNull DataType dataType, @NotNull List<@NotNull AstFunctionParameter> parameters, @NotNull List<@NotNull AstMindcodeNode> body,
+    public AstFunctionDeclaration(InputPosition inputPosition, @Nullable AstDocComment docComment, AstIdentifier identifier,
+            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body,
             boolean inline, boolean noinline) {
-        super(inputPosition, docComment);
-        this.name = name;
+        super(inputPosition, children(list(identifier), parameters, body), docComment);
+        this.identifier = identifier;
         this.dataType = dataType;
         this.parameters = parameters;
         this.body = body;
@@ -27,19 +32,27 @@ public class AstFunctionDeclaration extends AstDeclaration {
         this.noinline = noinline;
     }
 
-    public @NotNull AstIdentifier getName() {
-        return name;
+    public AstIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public @NotNull DataType getDataType() {
+    public String getName() {
+        return identifier.getName();
+    }
+
+    public DataType getDataType() {
         return dataType;
     }
 
-    public @NotNull List<@NotNull AstFunctionParameter> getParameters() {
+    public List<AstFunctionParameter> getParameters() {
         return parameters;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public AstFunctionParameter getParameter(int index) {
+        return parameters.get(index);
+    }
+
+    public List<AstMindcodeNode> getBody() {
         return body;
     }
 
@@ -49,6 +62,22 @@ public class AstFunctionDeclaration extends AstDeclaration {
 
     public boolean isNoinline() {
         return noinline;
+    }
+
+    public boolean isVarargs() {
+        return !parameters.isEmpty() && parameters.getLast().isVarargs();
+    }
+
+    public IntRange getParameterCount() {
+        if (parameters.isEmpty()) {
+            return new IntRange(0, 0);
+        } else if (isVarargs()) {
+            int min = CollectionUtils.findLastIndex(parameters.subList(0, parameters.size() - 1), AstFunctionParameter::isCompulsory) + 1;
+            return new IntRange(min, Integer.MAX_VALUE);
+        } else {
+            int min = CollectionUtils.findLastIndex(parameters, AstFunctionParameter::isCompulsory) + 1;
+            return new IntRange(min, parameters.size());
+        }
     }
 
     public int computeCallSize() {
@@ -63,13 +92,13 @@ public class AstFunctionDeclaration extends AstDeclaration {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionDeclaration that = (AstFunctionDeclaration) o;
-        return inline == that.inline && noinline == that.noinline && name.equals(that.name) && dataType == that.dataType
+        return inline == that.inline && noinline == that.noinline && identifier.equals(that.identifier) && dataType == that.dataType
                && parameters.equals(that.parameters) && body.equals(that.body);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
+        int result = identifier.hashCode();
         result = 31 * result + dataType.hashCode();
         result = 31 * result + parameters.hashCode();
         result = 31 * result + body.hashCode();
@@ -78,16 +107,4 @@ public class AstFunctionDeclaration extends AstDeclaration {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstFunctionDeclaration{" +
-               "name=" + name +
-               ", dataType=" + dataType +
-               ", parameters=" + parameters +
-               ", body=" + body +
-               ", inline=" + inline +
-               ", noinline=" + noinline +
-               ", docComment=" + docComment +
-               '}';
-    }
 }

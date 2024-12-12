@@ -1,12 +1,12 @@
 package info.teksol.mindcode;
 
-import java.util.function.Consumer;
+import info.teksol.mindcode.v3.MessageConsumer;
 
-public class TranslatingMessageConsumer implements Consumer<MindcodeMessage> {
-     private final Consumer<MindcodeMessage> consumer;
+public class TranslatingMessageConsumer implements MessageConsumer {
+     private final MessageConsumer consumer;
      private final InputPositionTranslator translator;
 
-     public TranslatingMessageConsumer(Consumer<MindcodeMessage> consumer, InputPositionTranslator translator) {
+     public TranslatingMessageConsumer(MessageConsumer consumer, InputPositionTranslator translator) {
           this.consumer = consumer;
           this.translator = translator;
      }

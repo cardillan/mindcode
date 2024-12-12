@@ -1,21 +1,24 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstIdentifier extends AstExpression {
-    private final @NotNull String name;
+    private final String name;
     private final boolean external;
 
-    public AstIdentifier(@NotNull InputPosition inputPosition, @NotNull String name) {
+    public AstIdentifier(InputPosition inputPosition, String name) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.external = false;
     }
 
-    public AstIdentifier(@NotNull InputPosition inputPosition, @NotNull String name, boolean external) {
+    public AstIdentifier(InputPosition inputPosition, String name, boolean external) {
         super(inputPosition);
         this.name = Objects.requireNonNull(name);
         this.external = external;
@@ -25,7 +28,7 @@ public class AstIdentifier extends AstExpression {
         return external;
     }
 
-    public @NotNull String getName() {
+    public String getName() {
         return name;
     }
 
@@ -45,11 +48,4 @@ public class AstIdentifier extends AstExpression {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstIdentifier{" +
-               "names=" + name +
-               ", external=" + external +
-               '}';
-    }
 }

@@ -1,9 +1,10 @@
 package info.teksol.mindcode;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface AstElement {
 
-    @NotNull InputPosition inputPosition();
+    @NonNull
+    InputPosition inputPosition();
 
 }

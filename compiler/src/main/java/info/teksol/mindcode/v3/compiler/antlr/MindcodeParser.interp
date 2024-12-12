@@ -257,7 +257,7 @@ FMTENDOFLINE
 INCMTENDOFLINE
 
 rule names:
-program
+module
 statementList
 expressionList
 statement

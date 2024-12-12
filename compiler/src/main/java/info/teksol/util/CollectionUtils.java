@@ -1,6 +1,6 @@
 package info.teksol.util;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class CollectionUtils {
     }
 
     public static <E> int findLastIndex(List<? extends E> list, int startIndex, Predicate<E> matcher) {
-        if (startIndex < 0 || startIndex > list.size()) {
+        if (startIndex < 0 || startIndex >= list.size()) {
             throw new IndexOutOfBoundsException(startIndex);
         }
         for (int i = startIndex; i >= 0; i--) {
@@ -91,7 +91,7 @@ public class CollectionUtils {
     }
 
     public static <E> int findLastIndex(List<? extends E> list, Predicate<E> matcher) {
-        return findLastIndex(list, list.size() - 1, matcher);
+        return list.isEmpty() ? -1 : findLastIndex(list, list.size() - 1, matcher);
     }
 
     public static <E> E removeFirstMatching(List<? extends E> list, Predicate<E> matcher) {
@@ -99,7 +99,7 @@ public class CollectionUtils {
         return index < 0 ? null : list.remove(index);
     }
 
-    public static <E> @NotNull List<E> createList(E firstItem, List<E> otherItems) {
+    public static <E> @NonNull List<E> createList(E firstItem, List<E> otherItems) {
         if (otherItems.isEmpty()) {
             return List.of(firstItem);
         } else {
@@ -109,7 +109,7 @@ public class CollectionUtils {
         }
     }
 
-    public static <E> @NotNull List<E> createList(List<E> otherItems, E lastItem) {
+    public static <E> @NonNull List<E> createList(List<E> otherItems, E lastItem) {
         if (otherItems.isEmpty()) {
             return List.of(lastItem);
         } else {

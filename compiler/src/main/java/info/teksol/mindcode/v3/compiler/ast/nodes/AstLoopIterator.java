@@ -1,26 +1,28 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode
 public class AstLoopIterator extends AstFragment {
-    private final @UnknownNullability AstIdentifier iterator;
+    private final AstIdentifier iterator;
     private final boolean outModifier;
 
-    public AstLoopIterator(@NotNull InputPosition inputPosition, @UnknownNullability AstIdentifier iterator, boolean outModifier) {
-        super(inputPosition);
+    public AstLoopIterator(InputPosition inputPosition, AstIdentifier iterator, boolean outModifier) {
+        super(inputPosition, children(iterator));
         this.iterator = iterator;
         this.outModifier = outModifier;
     }
 
-    public @UnknownNullability AstIdentifier getIterator() {
+    public AstIdentifier getIterator() {
         return iterator;
     }
 
-    public boolean isOutModifier() {
+    public boolean hasOutModifier() {
         return outModifier;
     }
 
@@ -39,11 +41,4 @@ public class AstLoopIterator extends AstFragment {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstLoopIterator{" +
-               "iterator=" + iterator +
-               ", outModifier=" + outModifier +
-               '}';
-    }
 }
