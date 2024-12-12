@@ -1,32 +1,35 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
+@AstNode
 public class AstCaseExpression extends AstExpression {
-    private final @NotNull AstExpression expression;
-    private final @NotNull List<@NotNull AstCaseAlternative> alternatives;
-    private final @NotNull List<@NotNull AstMindcodeNode> elseBranch;
+    private final AstExpression expression;
+    private final List<AstCaseAlternative> alternatives;
+    private final List<AstMindcodeNode> elseBranch;
 
-    public AstCaseExpression(@NotNull InputPosition inputPosition, @NotNull AstExpression expression,
-            @NotNull List<@NotNull AstCaseAlternative> alternatives,@NotNull List<@NotNull AstMindcodeNode> elseBranch) {
-        super(inputPosition);
+    public AstCaseExpression(InputPosition inputPosition, AstExpression expression,
+            List<AstCaseAlternative> alternatives, List<AstMindcodeNode> elseBranch) {
+        super(inputPosition, children(list(expression), alternatives, elseBranch));
         this.expression = expression;
         this.alternatives = alternatives;
         this.elseBranch = elseBranch;
     }
 
-    public @NotNull AstExpression getExpression() {
+    public AstExpression getExpression() {
         return expression;
     }
 
-    public @NotNull List<@NotNull AstCaseAlternative> getAlternatives() {
+    public List<AstCaseAlternative> getAlternatives() {
         return alternatives;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getElseBranch() {
+    public List<AstMindcodeNode> getElseBranch() {
         return elseBranch;
     }
 
@@ -46,12 +49,4 @@ public class AstCaseExpression extends AstExpression {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstCaseExpression{" +
-               "expression=" + expression +
-               ", alternatives=" + alternatives +
-               ", elseBranch=" + elseBranch +
-               '}';
-    }
 }

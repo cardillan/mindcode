@@ -8,7 +8,7 @@ import info.teksol.mindcode.compiler.generator.*;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.util.TraceFile;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -1593,8 +1593,7 @@ class OptimizationContext {
             return instructions.isEmpty();
         }
 
-        @NotNull
-        public Iterator<LogicInstruction> iterator() {
+        public @NonNull Iterator<LogicInstruction> iterator() {
             return instructions.iterator();
         }
 
@@ -1708,8 +1707,7 @@ class OptimizationContext {
                     .toList());
         }
 
-        @NotNull
-        private Map<LogicLabel, LogicLabel> duplicateLabels() {
+        private @NonNull Map<LogicLabel, LogicLabel> duplicateLabels() {
             return Stream.concat(
                             stream()
                                     .filter(LabeledInstruction.class::isInstance)

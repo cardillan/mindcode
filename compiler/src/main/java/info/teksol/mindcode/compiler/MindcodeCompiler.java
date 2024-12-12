@@ -107,7 +107,7 @@ public class MindcodeCompiler implements Compiler<String> {
             String code = Files.readString(path, StandardCharsets.UTF_8);
             return inputFiles.registerFile(path, code);
         } catch (IOException e) {
-            error(requirement, "Error reading file %s.", path);
+            error(requirement, "Error reading file '%s'.", path);
             return null;
         }
     }
@@ -297,7 +297,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private GeneratorOutput generateCode(Seq program) {
         final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
-                messageConsumer);
+               messageConsumer);
         return generator.generate(program);
     }
 

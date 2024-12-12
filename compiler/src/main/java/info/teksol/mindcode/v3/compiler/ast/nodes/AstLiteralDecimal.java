@@ -1,11 +1,14 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstLiteralDecimal extends AstLiteralNumeric {
 
-    public AstLiteralDecimal(@NotNull InputPosition inputPosition, @NotNull String literal) {
+    public AstLiteralDecimal(InputPosition inputPosition, String literal) {
         super(inputPosition, literal);
     }
 

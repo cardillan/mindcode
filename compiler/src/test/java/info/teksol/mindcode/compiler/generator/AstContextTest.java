@@ -5,6 +5,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -250,7 +251,7 @@ class AstContextTest {
         }
 
         @Override
-        public InputPosition inputPosition() {
+        public @NonNull InputPosition inputPosition() {
             return null;
         }
 

@@ -1,17 +1,20 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstParentheses extends AstExpression {
-    private final @NotNull AstExpression expression;
+    private final AstExpression expression;
 
-    public AstParentheses(@NotNull InputPosition inputPosition, @NotNull AstExpression expression) {
-        super(inputPosition);
+    public AstParentheses(InputPosition inputPosition, AstExpression expression) {
+        super(inputPosition, children(expression));
         this.expression = expression;
     }
 
-    public @NotNull AstExpression getExpression() {
+    public AstExpression getExpression() {
         return expression;
     }
 
@@ -28,10 +31,4 @@ public class AstParentheses extends AstExpression {
         return expression.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "AstParentheses{" +
-               "expression=" + expression +
-               '}';
-    }
 }

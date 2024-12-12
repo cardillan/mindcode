@@ -1,7 +1,8 @@
 package info.teksol.mindcode;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record IntRange(int min, int max) implements Comparable<IntRange> {
 
     public IntRange {
@@ -19,7 +20,7 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
     }
 
     @Override
-    public int compareTo(@NotNull IntRange o) {
+    public int compareTo(IntRange o) {
         return min == o.min ? Integer.compare(max, o.max) : Integer.compare(min, o.min);
     }
 }

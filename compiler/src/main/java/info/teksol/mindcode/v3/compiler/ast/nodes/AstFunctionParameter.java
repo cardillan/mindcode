@@ -1,32 +1,39 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
+@AstNode
 public class AstFunctionParameter extends AstFragment {
-    private final @NotNull AstIdentifier name;
+    private final AstIdentifier identifier;
     private final boolean inModifier;
     private final boolean outModifier;
     private final boolean varargs;
 
-    public AstFunctionParameter(@NotNull InputPosition inputPosition, @NotNull AstIdentifier name, boolean inModifier,
+    public AstFunctionParameter(InputPosition inputPosition, AstIdentifier identifier, boolean inModifier,
             boolean outModifier, boolean varargs) {
-        super(inputPosition);
-        this.name = name;
+        super(inputPosition, children(identifier));
+        this.identifier = identifier;
         this.inModifier = inModifier;
         this.outModifier = outModifier;
         this.varargs = varargs;
     }
 
-    public @NotNull AstIdentifier getName() {
-        return name;
+    public AstIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public boolean isInModifier() {
+    public String getName() {
+        return identifier.getName();
+    }
+
+    public boolean hasInModifier() {
         return inModifier;
     }
 
-    public boolean isOutModifier() {
+    public boolean hasOutModifier() {
         return outModifier;
     }
 
@@ -58,30 +65,32 @@ public class AstFunctionParameter extends AstFragment {
         return isInputOutput() ? 2 : 1;
     }
 
+    public boolean matches(AstFunctionArgument argument) {
+        if (!argument.hasExpression()) {
+            return isOptional();
+        } else if (argument.hasOutModifier()) {
+            return argument.hasInModifier() ? isInputOutput() : isOutput();
+        } else {
+            // No out modifier: must be input
+            return isInput();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionParameter that = (AstFunctionParameter) o;
-        return inModifier == that.inModifier && outModifier == that.outModifier && varargs == that.varargs && name.equals(that.name);
+        return inModifier == that.inModifier && outModifier == that.outModifier && varargs == that.varargs && identifier.equals(that.identifier);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
+        int result = identifier.hashCode();
         result = 31 * result + Boolean.hashCode(inModifier);
         result = 31 * result + Boolean.hashCode(outModifier);
         result = 31 * result + Boolean.hashCode(varargs);
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstFunctionParameter{" +
-               "name=" + name +
-               ", inModifier=" + inModifier +
-               ", outModifier=" + outModifier +
-               ", varargs=" + varargs +
-               '}';
-    }
 }

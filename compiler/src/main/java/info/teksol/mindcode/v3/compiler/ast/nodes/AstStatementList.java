@@ -1,21 +1,23 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
+@NullMarked
+@AstNode
 public class AstStatementList extends AstStatement {
-    private final @NotNull List<@NotNull AstMindcodeNode> expressions;
+    private final List<AstMindcodeNode> expressions;
 
-    public AstStatementList(@NotNull InputPosition inputPosition, @NotNull List<@NotNull AstMindcodeNode> expressions) {
-        super(inputPosition);
+    public AstStatementList(InputPosition inputPosition, List<AstMindcodeNode> expressions) {
+        super(inputPosition, expressions);
         this.expressions = Objects.requireNonNull(expressions);
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getExpressions() {
+    public List<AstMindcodeNode> getExpressions() {
         return expressions;
     }
 
@@ -33,10 +35,4 @@ public class AstStatementList extends AstStatement {
         return Objects.hashCode(expressions);
     }
 
-    @Override
-    public String toString() {
-        return "AstStatementList{" +
-               "expressions=" + expressions.stream().map(Object::toString).collect(Collectors.joining("\n", "\n", "\n")) +
-               '}';
-    }
 }

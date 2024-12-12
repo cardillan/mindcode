@@ -17,13 +17,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProgram(MindcodeParser.ProgramContext ctx) { }
+	@Override public void enterModule(MindcodeParser.ModuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProgram(MindcodeParser.ProgramContext ctx) { }
+	@Override public void exitModule(MindcodeParser.ModuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

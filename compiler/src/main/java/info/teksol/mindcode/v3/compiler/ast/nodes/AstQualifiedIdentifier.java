@@ -1,18 +1,21 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NullMarked
+@AstNode
 public class AstQualifiedIdentifier extends AstExpression {
-    private final @NotNull List<@NotNull AstIdentifier> identifiers;
-    private final @NotNull String fullName;
+    private final List<AstIdentifier> identifiers;
+    private final String fullName;
 
-    public AstQualifiedIdentifier(@NotNull InputPosition inputPosition, @NotNull List<@NotNull AstIdentifier> identifiers) {
-        super(inputPosition);
+    public AstQualifiedIdentifier(InputPosition inputPosition, List<AstIdentifier> identifiers) {
+        super(inputPosition, children(identifiers));
         if (identifiers.isEmpty()) {
             throw new IllegalArgumentException("Empty identifiers");
         }
@@ -20,23 +23,23 @@ public class AstQualifiedIdentifier extends AstExpression {
         this.fullName = identifiers.stream().map(AstIdentifier::getName).collect(Collectors.joining("."));
     }
 
-    public AstQualifiedIdentifier(@NotNull InputPosition inputPosition, @NotNull AstIdentifier... identifiers) {
+    public AstQualifiedIdentifier(InputPosition inputPosition, AstIdentifier... identifiers) {
         this(inputPosition, List.of(identifiers));
     }
 
-    public AstQualifiedIdentifier(@NotNull AstIdentifier left, @NotNull AstIdentifier right) {
+    public AstQualifiedIdentifier(AstIdentifier left, AstIdentifier right) {
         this(left.inputPosition(), List.of(left, right));
     }
 
-    public AstQualifiedIdentifier(@NotNull AstQualifiedIdentifier left, @NotNull AstIdentifier right) {
+    public AstQualifiedIdentifier(AstQualifiedIdentifier left, AstIdentifier right) {
         this(left.inputPosition(), CollectionUtils.createList(left.identifiers, right));
     }
 
-    public @NotNull String getFullName() {
+    public String getFullName() {
         return fullName;
     }
 
-    public @NotNull List<@NotNull AstIdentifier> getIdentifiers() {
+    public List<AstIdentifier> getIdentifiers() {
         return identifiers;
     }
 
@@ -53,10 +56,4 @@ public class AstQualifiedIdentifier extends AstExpression {
         return identifiers.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "AstQualifiedIdentifier{" +
-               "fullName=" + fullName +
-               '}';
-    }
 }

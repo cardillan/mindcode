@@ -1,25 +1,28 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode
 public class AstArrayAccess extends AstExpression {
-    private final @NotNull AstIdentifier array;
-    private final @NotNull AstExpression index;
+    private final AstIdentifier array;
+    private final AstExpression index;
 
-    public AstArrayAccess(@NotNull InputPosition inputPosition, @NotNull AstIdentifier array, @NotNull AstExpression index) {
-        super(inputPosition);
+    public AstArrayAccess(InputPosition inputPosition, AstIdentifier array, AstExpression index) {
+        super(inputPosition, children(array, index));
         this.array = Objects.requireNonNull(array);
         this.index = Objects.requireNonNull(index);
     }
 
-    public @NotNull AstIdentifier getArray() {
+    public AstIdentifier getArray() {
         return array;
     }
 
-    public @NotNull AstExpression getIndex() {
+    public AstExpression getIndex() {
         return index;
     }
 
@@ -39,11 +42,4 @@ public class AstArrayAccess extends AstExpression {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstArrayAccess{" +
-               ", array=" + array +
-               ", index=" + index +
-               '}';
-    }
 }

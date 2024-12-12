@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
@@ -10,6 +9,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -30,7 +30,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     private final Map<Opcode, List<SampleGenerator>> opcodeSampleGenerators;
 
     BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
-            Consumer<MindcodeMessage> messageConsumer) {
+            MessageConsumer messageConsumer) {
         super(messageConsumer);
         this.astContextSupplier = astContextSupplier;
         this.instructionProcessor = InstructionProcessor;

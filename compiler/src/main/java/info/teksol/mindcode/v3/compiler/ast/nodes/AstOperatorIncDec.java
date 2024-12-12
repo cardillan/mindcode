@@ -1,32 +1,35 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstOperatorIncDec extends AstExpression {
-    private final @NotNull Type type;
-    private final @NotNull Operation operation;
-    private final @NotNull AstExpression operand;
+    private final Type type;
+    private final Operation operation;
+    private final AstExpression operand;
 
-    public AstOperatorIncDec(@NotNull InputPosition inputPosition, @NotNull Type type, @NotNull Operation operation,
-            @NotNull AstExpression operand) {
-        super(inputPosition);
+    public AstOperatorIncDec(InputPosition inputPosition, Type type, Operation operation,
+            AstExpression operand) {
+        super(inputPosition, children(operand));
         this.type = Objects.requireNonNull(type);
         this.operation = Objects.requireNonNull(operation);
         this.operand = Objects.requireNonNull(operand);
     }
 
-    public @NotNull Type getType() {
+    public Type getType() {
         return type;
     }
 
-    public @NotNull Operation getOperation() {
+    public Operation getOperation() {
         return operation;
     }
 
-    public @NotNull AstExpression getOperand() {
+    public AstExpression getOperand() {
         return operand;
     }
 
@@ -45,15 +48,6 @@ public class AstOperatorIncDec extends AstExpression {
         result = 31 * result + operation.hashCode();
         result = 31 * result + operand.hashCode();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "AstOperatorIncDec{" +
-               "type=" + type +
-               ", operation=" + operation +
-               ", operand=" + operand +
-               '}';
     }
 
     public enum Type { PREFIX, POSTFIX }

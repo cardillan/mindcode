@@ -3,13 +3,13 @@ package info.teksol.mindcode.compiler.instructions;
 import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -39,12 +39,12 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
 
     static class InstructionProcessorParameters {
-        public final Consumer<MindcodeMessage> messageConsumer;
+        public final MessageConsumer messageConsumer;
         public final ProcessorVersion version;
         public final ProcessorEdition edition;
         public final List<OpcodeVariant> opcodeVariants;
 
-        public InstructionProcessorParameters(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion version,
+        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
                 ProcessorEdition edition, List<OpcodeVariant> opcodeVariants) {
             this.messageConsumer = messageConsumer;
             this.version = version;
@@ -52,7 +52,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             this.opcodeVariants = opcodeVariants;
         }
 
-        public InstructionProcessorParameters(Consumer<MindcodeMessage> messageConsumer, ProcessorVersion version,
+        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
                 ProcessorEdition edition) {
             this(messageConsumer, version, edition, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
         }

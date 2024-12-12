@@ -4,6 +4,7 @@ import com.ibm.icu.impl.Assert;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.v3.MessageConsumer;
 import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
  * The expected messages are matched against the incoming messages in the order in which they
  * were configured. A single incoming message shouldn't be matched by more than one rule.
  */
-public class ExpectedMessages implements Consumer<MindcodeMessage> {
+public class ExpectedMessages implements MessageConsumer {
     private final List<MatchCounter> matchers;
     private final List<String> messages = new ArrayList<>();
     private boolean accumulateErrors = false;

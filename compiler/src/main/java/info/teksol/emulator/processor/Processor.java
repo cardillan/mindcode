@@ -11,7 +11,6 @@ import info.teksol.evaluator.ConditionEvaluator;
 import info.teksol.evaluator.ExpressionEvaluator;
 import info.teksol.evaluator.LogicCondition;
 import info.teksol.evaluator.LogicOperation;
-import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
@@ -19,6 +18,7 @@ import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
+import info.teksol.mindcode.v3.MessageConsumer;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.*;
@@ -49,7 +49,7 @@ public class Processor extends AbstractMessageEmitter {
     private GraphicsBuffer graphicsBuffer;
     private List<Assertion> assertions = new ArrayList<>();
 
-    public Processor(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer,
+    public Processor(InstructionProcessor instructionProcessor, MessageConsumer messageConsumer,
             Set<ExecutionFlag> flags, int traceLimit) {
         super(messageConsumer);
         this.instructionProcessor = instructionProcessor;
@@ -59,7 +59,7 @@ public class Processor extends AbstractMessageEmitter {
         this.traceLimit = traceLimit;
     }
 
-    public Processor(InstructionProcessor instructionProcessor, Consumer<MindcodeMessage> messageConsumer, int traceLimit) {
+    public Processor(InstructionProcessor instructionProcessor, MessageConsumer messageConsumer, int traceLimit) {
         this(instructionProcessor, messageConsumer, ExecutionFlag.getDefaultFlags(), traceLimit);
     }
 

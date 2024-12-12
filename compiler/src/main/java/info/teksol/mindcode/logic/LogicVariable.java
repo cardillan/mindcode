@@ -3,6 +3,7 @@ package info.teksol.mindcode.logic;
 import info.teksol.mindcode.ast.FunctionParameter;
 import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionParameter;
 
 import java.util.Objects;
 
@@ -172,6 +173,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable local(String functionName, String functionPrefix, FunctionParameter parameter) {
+        // A variable without an out modifier is input by default
+        return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, parameter.getName(),
+                parameter.isInput(), parameter.isOutput());
+    }
+
+    public static LogicVariable local(String functionName, String functionPrefix, AstFunctionParameter parameter) {
         // A variable without an out modifier is input by default
         return new LogicVariable(ArgumentType.LOCAL_VARIABLE, functionName, functionPrefix, parameter.getName(),
                 parameter.isInput(), parameter.isOutput());

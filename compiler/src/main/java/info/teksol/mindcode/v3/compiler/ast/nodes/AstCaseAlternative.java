@@ -1,26 +1,29 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
+@AstNode
 public class AstCaseAlternative extends AstFragment {
-    private final @NotNull List<@NotNull AstExpression> values;
-    private final @NotNull List<@NotNull AstMindcodeNode> body;
+    private final List<AstExpression> values;
+    private final List<AstMindcodeNode> body;
 
-    public AstCaseAlternative(@NotNull InputPosition inputPosition, @NotNull List<@NotNull AstExpression> values,
-            @NotNull List<@NotNull AstMindcodeNode> body) {
-        super(inputPosition);
+    public AstCaseAlternative(InputPosition inputPosition, List<AstExpression> values,
+            List<AstMindcodeNode> body) {
+        super(inputPosition, children(values, body));
         this.values = values;
         this.body = body;
     }
 
-    public @NotNull List<@NotNull AstExpression> getValues() {
+    public List<AstExpression> getValues() {
         return values;
     }
 
-    public @NotNull List<@NotNull AstMindcodeNode> getBody() {
+    public List<AstMindcodeNode> getBody() {
         return body;
     }
 
@@ -39,11 +42,4 @@ public class AstCaseAlternative extends AstFragment {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstCaseAlternative{" +
-               "values=" + values +
-               ", body=" + body +
-               '}';
-    }
 }

@@ -17,7 +17,7 @@ class TestRunnerTest {
 //        CompilerProfile profile = testCaseExecutor.createCompilerProfile(TEST_NUMBER);
 //        System.out.println(profile.getOptimizationLevels().entrySet().stream()
 //                .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
-//                .map(e -> e.getKey().getOptionName() + " = " + e.getValue().name().toLowerCase())
+//                .map(e -> e.getKey().getOptionName() + " = " + e.getText().name().toLowerCase())
 //                .collect(Collectors.joining(";\n#set ", "Active optimizations:\n#set ", ";\n")));
 //    }
 }

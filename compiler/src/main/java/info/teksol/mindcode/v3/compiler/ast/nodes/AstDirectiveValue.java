@@ -1,20 +1,23 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
+@AstNode(printFlat = true)
 public class AstDirectiveValue extends AstFragment {
-    private final @NotNull String value;
+    private final String text;
 
-    public AstDirectiveValue(@NotNull InputPosition inputPosition, @NotNull String value) {
+    public AstDirectiveValue(InputPosition inputPosition, String text) {
         super(inputPosition);
-        this.value = Objects.requireNonNull(value);
+        this.text = Objects.requireNonNull(text);
     }
 
-    public @NotNull String getValue() {
-        return value;
+    public String getText() {
+        return text;
     }
 
     @Override
@@ -23,18 +26,12 @@ public class AstDirectiveValue extends AstFragment {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstDirectiveValue that = (AstDirectiveValue) o;
-        return value.equals(that.value);
+        return text.equals(that.text);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return text.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "AstDirectiveValue{" +
-                "value='" + value + '\'' +
-                '}';
-    }
 }

@@ -7,10 +7,10 @@ import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.util.TraceFile;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static info.teksol.mindcode.compiler.optimization.OptimizationPhase.*;
 
@@ -23,13 +23,13 @@ public class OptimizationCoordinator {
 
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
-    private final Consumer<MindcodeMessage> messageRecipient;
+    private final MessageConsumer messageRecipient;
     private final CompilerProfile profile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
-            Consumer<MindcodeMessage> messageRecipient) {
+            MessageConsumer messageRecipient) {
         this.instructionProcessor = instructionProcessor;
         this.messageRecipient = messageRecipient;
         this.profile = profile;

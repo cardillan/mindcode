@@ -1,6 +1,9 @@
 package info.teksol.mindcode.v3.compiler.ast;
 
-import info.teksol.mindcode.*;
+import info.teksol.mindcode.CompilerMessage;
+import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.logic.Operation;
 import info.teksol.mindcode.v3.DataType;
 import info.teksol.mindcode.v3.InputFile;
@@ -16,18 +19,21 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
-    private final Consumer<MindcodeMessage> messageConsumer;
+    private final AstBuilderContext context;
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
 
-    public AstBuilder(Consumer<MindcodeMessage> messageConsumer, InputFile inputFile, CommonTokenStream tokenStream) {
-        this.messageConsumer = messageConsumer;
+    public AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream) {
+        this.context = context;
         this.inputFile = inputFile;
         this.tokenStream = tokenStream;
+    }
+
+    public AstModule build(ParseTree tree) {
+        return (AstModule) visit(tree);
     }
 
     @Override
@@ -95,7 +101,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         } else if (result instanceof AstExpression expression) {
             return expression;
         } else {
-            messageConsumer.accept(CompilerMessage.error(result.inputPosition(),
+            context.getMessageConsumer().accept(CompilerMessage.error(result.inputPosition(),
                     "Expression is required."));
             return new AstLiteralNull(result.inputPosition(), "null");
         }
@@ -108,8 +114,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     //<editor-fold desc="Rules: basics">
     @Override
-    public AstMindcodeNode visitProgram(MindcodeParser.ProgramContext ctx) {
-        return new AstStatementList(pos(ctx), processBody(ctx.statementList()));
+    public AstMindcodeNode visitModule(MindcodeParser.ModuleContext ctx) {
+        return new AstModule(pos(ctx), processBody(ctx.statementList()));
     }
 
     private List<AstExpression> processList(MindcodeParser.ExpressionListContext ctx) {
@@ -129,12 +135,16 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rules: declarations">
     @Override
     public AstRequireLibrary visitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) {
-        return new AstRequireLibrary(pos(ctx), createIdentifier(ctx.library));
+        AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), createIdentifier(ctx.library));
+        context.addRequirement(requirement);
+        return requirement;
     }
 
     @Override
     public AstRequireFile visitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) {
-        return new AstRequireFile(pos(ctx), createLiteralString(ctx.STRING()));
+        AstRequireFile requirement = new AstRequireFile(pos(ctx), createLiteralString(ctx.STRING()));
+        context.addRequirement(requirement);
+        return requirement;
     }
 
     @Override
@@ -689,7 +699,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstWhileLoopStatement visitExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx) {
         if (ctx.loop != null) {
-            messageConsumer.accept(CompilerMessage.warn(pos(ctx.loop), "The 'loop' keyword is deprecated. Use just 'while' instead."));
+            context.getMessageConsumer().accept(CompilerMessage.warn(pos(ctx.loop),
+                    "The 'loop' keyword is deprecated. Use just 'while' instead."));
         }
 
         return new AstWhileLoopStatement(pos(ctx),

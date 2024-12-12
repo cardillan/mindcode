@@ -1,22 +1,25 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
+import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
+@AstNode
 public class AstFunctionCall extends AstExpression {
     private final @Nullable AstExpression object;
-    private final @NotNull AstIdentifier functionName;
-    private final @NotNull List<@NotNull AstFunctionArgument> arguments;
+    private final AstIdentifier identifier;
+    private final List<AstFunctionArgument> arguments;
 
-    public AstFunctionCall(@NotNull InputPosition inputPosition, @Nullable AstExpression object, @NotNull AstIdentifier functionName,
-            @NotNull List<@NotNull AstFunctionArgument> arguments) {
-        super(inputPosition);
+    public AstFunctionCall(InputPosition inputPosition, @Nullable AstExpression object, AstIdentifier identifier,
+            List<AstFunctionArgument> arguments) {
+        super(inputPosition, children(list(object, identifier), arguments));
         this.object = object;
-        this.functionName = Objects.requireNonNull(functionName);
+        this.identifier = Objects.requireNonNull(identifier);
         this.arguments = Objects.requireNonNull(arguments);
     }
 
@@ -28,12 +31,20 @@ public class AstFunctionCall extends AstExpression {
         return object != null;
     }
 
-    public @NotNull AstIdentifier getFunctionName() {
-        return functionName;
+    public AstIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public @NotNull List<@NotNull AstFunctionArgument> getArguments() {
+    public String getName() {
+        return identifier.getName();
+    }
+
+    public List<AstFunctionArgument> getArguments() {
         return arguments;
+    }
+
+    public AstFunctionArgument getArgument(int index) {
+        return arguments.get(index);
     }
 
     @Override
@@ -41,23 +52,15 @@ public class AstFunctionCall extends AstExpression {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionCall that = (AstFunctionCall) o;
-        return Objects.equals(object, that.object) && functionName.equals(that.functionName) && arguments.equals(that.arguments);
+        return Objects.equals(object, that.object) && identifier.equals(that.identifier) && arguments.equals(that.arguments);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hashCode(object);
-        result = 31 * result + functionName.hashCode();
+        result = 31 * result + identifier.hashCode();
         result = 31 * result + arguments.hashCode();
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "AstFunctionCall{" +
-               "object=" + object +
-               ", functionName=" + functionName +
-               ", arguments=" + arguments +
-               '}';
-    }
 }

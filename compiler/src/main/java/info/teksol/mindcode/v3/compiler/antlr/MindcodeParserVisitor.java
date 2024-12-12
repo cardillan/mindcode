@@ -11,11 +11,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#program}.
+	 * Visit a parse tree produced by {@link MindcodeParser#module}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProgram(MindcodeParser.ProgramContext ctx);
+	T visitModule(MindcodeParser.ModuleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#statementList}.
 	 * @param ctx the parse tree

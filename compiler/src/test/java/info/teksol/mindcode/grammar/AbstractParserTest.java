@@ -3,13 +3,13 @@ package info.teksol.mindcode.grammar;
 import info.teksol.mindcode.MindcodeErrorListener;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.util.ExpectedMessages;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class AbstractParserTest {
 
@@ -17,7 +17,7 @@ public abstract class AbstractParserTest {
 
     protected ThreadLocal<Integer> parseAmbiguities = ThreadLocal.withInitial(() -> 0);
 
-    protected MindcodeParser.ProgramContext parse(Consumer<MindcodeMessage> messageConsumer, String code) {
+    protected MindcodeParser.ProgramContext parse(MessageConsumer messageConsumer, String code) {
         MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFiles.registerSource(code));
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(code));

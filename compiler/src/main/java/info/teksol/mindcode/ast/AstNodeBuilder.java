@@ -1,21 +1,24 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.*;
+import info.teksol.mindcode.CompilerMessage;
+import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mindcode.v3.MessageConsumer;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 // TODO This class throws errors. When refactoring, change it to producing CompilerMessages
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
-    private final Consumer<MindcodeMessage> messageConsumer;
+    private final MessageConsumer messageConsumer;
     private final InputFile inputFile;
     private final Map<String, Integer> heapAllocations = new HashMap<>();
     private int temp;
@@ -23,13 +26,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     private HeapAllocation allocatedHeap;
     private StackAllocation allocatedStack;
 
-    public AstNodeBuilder(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer, List<Requirement> requirements) {
+    public AstNodeBuilder(InputFile inputFile, MessageConsumer messageConsumer, List<Requirement> requirements) {
         this.inputFile = inputFile;
         this.messageConsumer = messageConsumer;
         this.requirements = requirements;
     }
 
-    public static Seq generate(InputFile inputFile, Consumer<MindcodeMessage> messageConsumer,
+    public static Seq generate(InputFile inputFile, MessageConsumer messageConsumer,
             MindcodeParser.ProgramContext program, List<Requirement> requirements) {
         final AstNodeBuilder builder = new AstNodeBuilder(inputFile, messageConsumer, requirements);
         final AstNode node = builder.visit(program);
