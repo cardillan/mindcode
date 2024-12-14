@@ -12,7 +12,7 @@ import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstModule;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -34,9 +34,9 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         this.profile = profile;
     }
 
-    public static void processDirectives(MessageConsumer messageConsumer, CompilerProfile profile, List<AstModule> program) {
+    public static void processDirectives(MessageConsumer messageConsumer, CompilerProfile profile, AstProgram program) {
         DirectiveProcessor processor = new DirectiveProcessor(profile, messageConsumer);
-        program.forEach(processor::visitNode);
+        processor.visitNode(program);
     }
 
     private void visitNode(AstMindcodeNode node) {

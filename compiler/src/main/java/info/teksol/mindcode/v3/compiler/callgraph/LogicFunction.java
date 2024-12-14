@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation;
+package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.IntRange;

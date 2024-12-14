@@ -75,19 +75,15 @@ public abstract class AbstractAstIndentedPrinter implements AstNodeVisitor<Strin
     protected void printList(List<?> list) {
         if (list.isEmpty()) {
             print("null");
-            return;
-        }
-
-        if (list.size() == 1) {
+        } else if (list.size() == 1) {
             printObject(list.getFirst());
         } else {
             open("[");
-            for (int i = 0; i < list.size(); i++) {
-                printObject(list.get(i));
-                if (i < list.size() - 1) {
-                    newLine(",");
-                }
-            }
+            printObject(list.getFirst());
+            list.subList(1, list.size()).forEach(o -> {
+                newLine(",");
+                printObject(o);
+            });
             close("]");
         }
     }

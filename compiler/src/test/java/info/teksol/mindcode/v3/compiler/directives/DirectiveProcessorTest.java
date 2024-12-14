@@ -10,6 +10,7 @@ import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstModule;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.util.ExpectedMessages;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
@@ -24,11 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @NullMarked
 class DirectiveProcessorTest {
 
-    private List<AstModule> directive(String option, String... values) {
-        return List.of(new AstModule(EMPTY,
-                List.of(new AstDirectiveSet(EMPTY,
-                        new AstDirectiveValue(EMPTY, option),
-                        Stream.of(values).map(v -> new AstDirectiveValue(EMPTY, v)).toList()))));
+    private AstProgram directive(String option, String... values) {
+        return new AstProgram(EMPTY,
+                List.of(new AstModule(EMPTY,
+                        List.of(new AstDirectiveSet(EMPTY,
+                                new AstDirectiveValue(EMPTY, option),
+                                Stream.of(values).map(v -> new AstDirectiveValue(EMPTY, v)).toList())))));
     }
 
     private void processDirective(MessageConsumer messageConsumer, CompilerProfile profile, String option, String... values) {

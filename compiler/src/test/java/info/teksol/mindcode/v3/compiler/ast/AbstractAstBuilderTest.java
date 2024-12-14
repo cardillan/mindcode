@@ -19,7 +19,7 @@ public class AbstractAstBuilderTest extends AbstractParserTest {
 
     protected AstModule build(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
         return process(expectedMessages, inputFiles, validate,
-                c -> c.getSyntaxTree(inputFiles.getMainInputFile()));
+                c -> c.getModule(inputFiles.getMainInputFile()));
     }
 
     protected void assertBuilds(ExpectedMessages expectedMessages, String source, AstMindcodeNode expected) {

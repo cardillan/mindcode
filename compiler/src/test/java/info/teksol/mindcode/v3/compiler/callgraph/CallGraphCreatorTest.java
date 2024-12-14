@@ -1,10 +1,9 @@
-package info.teksol.mindcode.v3.compiler.generation;
+package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.ast.AbstractAstBuilderTest;
 import info.teksol.util.ExpectedMessages;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,13 +19,13 @@ class CallGraphCreatorTest extends AbstractAstBuilderTest {
         return process(expectedMessages, inputFiles, true, MindcodeCompiler::getCallGraph);
     }
 
-    private LogicFunction find(CallGraph graph, String name) {
+    private info.teksol.mindcode.v3.compiler.callgraph.LogicFunction find(info.teksol.mindcode.v3.compiler.callgraph.CallGraph graph, String name) {
         return graph.getFunctions().stream().filter(f -> f.getName().equals(name)).findFirst().orElseThrow();
     }
 
-    protected void assertBuildsCallGraph(ExpectedMessages expectedMessages, String source, CallGraph expected) {
-        CallGraph actual = buildCallGraph(expectedMessages, InputFiles.fromSource(source));
-        Assertions.assertEquals(expected, actual);
+    protected void assertBuildsCallGraph(ExpectedMessages expectedMessages, String source, info.teksol.mindcode.v3.compiler.callgraph.CallGraph expected) {
+        info.teksol.mindcode.v3.compiler.callgraph.CallGraph actual = buildCallGraph(expectedMessages, InputFiles.fromSource(source));
+        assertEquals(expected, actual);
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String source) {
@@ -46,13 +45,13 @@ class CallGraphCreatorTest extends AbstractAstBuilderTest {
 
     @Test
     void detectsRecursion() {
-        CallGraph graph = buildCallGraph(expectedMessages(),
+        info.teksol.mindcode.v3.compiler.callgraph.CallGraph graph = buildCallGraph(expectedMessages(),
                 InputFiles.fromSource("""
                         def a()  a(); end;
                         a();
                         """));
 
-        LogicFunction function = find(graph, "a");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction function = find(graph, "a");
 
         assertAll(
                 () -> assertTrue(function.isUsed()),
@@ -63,15 +62,15 @@ class CallGraphCreatorTest extends AbstractAstBuilderTest {
 
     @Test
     void detectsDoubleRecursion() {
-        CallGraph graph = buildCallGraph(expectedMessages(),
+        info.teksol.mindcode.v3.compiler.callgraph.CallGraph graph = buildCallGraph(expectedMessages(),
                 InputFiles.fromSource("""
                         def a()  b(); end;
                         def b()  a(); end;
                         a();
                         """));
 
-        LogicFunction funA = find(graph, "a");
-        LogicFunction funB = find(graph, "b");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funA = find(graph, "a");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funB = find(graph, "b");
 
         assertAll(
                 () -> assertTrue(funA.isUsed()),
@@ -86,7 +85,7 @@ class CallGraphCreatorTest extends AbstractAstBuilderTest {
 
     @Test
     void detectsNonRecursiveCalls() {
-        CallGraph graph = buildCallGraph(expectedMessages(),
+        info.teksol.mindcode.v3.compiler.callgraph.CallGraph graph = buildCallGraph(expectedMessages(),
                 InputFiles.fromSource("""
                         def a()  a(); b(); c(); end;
                         def b()  b(); end;
@@ -94,9 +93,9 @@ class CallGraphCreatorTest extends AbstractAstBuilderTest {
                         a();
                         """));
 
-        LogicFunction funA = find(graph, "a");
-        LogicFunction funB = find(graph, "b");
-        LogicFunction funC = find(graph, "c");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funA = find(graph, "a");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funB = find(graph, "b");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funC = find(graph, "c");
 
         assertAll(
                 () -> assertTrue(funA.isRecursive()),
@@ -117,8 +116,8 @@ class CallGraphCreatorTest extends AbstractAstBuilderTest {
                         print(c(1));
                         """));
 
-        LogicFunction funA = find(graph, "a");
-        LogicFunction funB = find(graph, "b");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funA = find(graph, "a");
+        info.teksol.mindcode.v3.compiler.callgraph.LogicFunction funB = find(graph, "b");
         LogicFunction funC = find(graph, "c");
 
         assertAll(

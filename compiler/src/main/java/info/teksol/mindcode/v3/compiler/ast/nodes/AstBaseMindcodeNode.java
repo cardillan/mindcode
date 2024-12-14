@@ -27,14 +27,14 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
 
     protected AstBaseMindcodeNode(InputPosition inputPosition, List<AstMindcodeNode> children) {
         this.inputPosition = inputPosition;
-        this.children = children;
+        this.children = List.copyOf(children);
         this.docComment = null;
     }
 
     protected AstBaseMindcodeNode(InputPosition inputPosition, List<AstMindcodeNode> children,
             @Nullable AstDocComment docComment) {
         this.inputPosition = inputPosition;
-        this.children = children;
+        this.children = List.copyOf(children);
         this.docComment = docComment;
     }
 
