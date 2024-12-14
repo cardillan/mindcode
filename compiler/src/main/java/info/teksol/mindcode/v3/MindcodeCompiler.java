@@ -1,5 +1,7 @@
 package info.teksol.mindcode.v3;
 
+import info.teksol.generated.ast.AstIndentedPrinter;
+import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.ast.Requirement;
@@ -13,10 +15,11 @@ import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilder;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstModule;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRequire;
+import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
+import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreator;
 import info.teksol.mindcode.v3.compiler.directives.DirectiveProcessor;
-import info.teksol.mindcode.v3.compiler.generation.CallGraph;
-import info.teksol.mindcode.v3.compiler.generation.CallGraphCreator;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
@@ -39,23 +42,24 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
     private static final Map<InputFile, ParsedLibrary> LIBRARY_PARSES = new ConcurrentHashMap<>();
 
     private final CompilationPhase targetPhase;
-    private final CompilerProfile compilerProfile;
+    private final CompilerProfile profile;
     private final InputFiles inputFiles;
     private final CompilerContext context;
 
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
     private final Map<InputFile, ModuleContext> parseTrees = new HashMap<>();
-    private final Map<InputFile, AstModule> syntaxTrees = new HashMap<>();
-    private final List<AstModule> program = new ArrayList<>();
-    private CallGraph callGraph;
+    private final Map<InputFile, AstModule> modules = new HashMap<>();
+    private @Nullable AstProgram program;
+    private @Nullable CallGraph callGraph;
+    private @Nullable InstructionProcessor instructionProcessor;
 
     public MindcodeCompiler(CompilationPhase targetPhase, MessageConsumer messageConsumer,
-            CompilerProfile compilerProfile, InputFiles inputFiles) {
+            CompilerProfile profile, InputFiles inputFiles) {
         super(messageConsumer);
         this.targetPhase = targetPhase;
-        this.compilerProfile = compilerProfile;
+        this.profile = profile;
         this.inputFiles = inputFiles;
-        this.context = CompilerContext.initialize(messageConsumer, compilerProfile);
+        this.context = CompilerContext.initialize(messageConsumer, profile);
     }
 
     public CommonTokenStream getTokenStream(InputFile inputFile) {
@@ -66,22 +70,24 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
         return parseTrees.get(inputFile);
     }
 
-    public AstModule getSyntaxTree(InputFile inputFile) {
-        return syntaxTrees.get(inputFile);
+    public AstModule getModule(InputFile inputFile) {
+        return modules.get(inputFile);
     }
 
-    public List<AstModule> getProgram() {
+    public @Nullable AstProgram getProgram() {
         return program;
     }
 
     public CallGraph getCallGraph() {
-        return callGraph;
+        return Objects.requireNonNull(callGraph);
     }
 
     public void compile() {
         Queue<InputFile> files = new LinkedList<>(inputFiles.getInputFiles());
         Set<InputFile> processedFiles = new HashSet<>();
+        List<AstModule> moduleList = new ArrayList<>();
 
+        // Process all input files including files discovered through require directive.
         while (!files.isEmpty()) {
             InputFile inputFile = files.remove();
             if (processedFiles.add(inputFile)) {
@@ -92,9 +98,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
                 ModuleContext parseTree = parseTree(inputFile, tokenStream);
                 if (targetPhase == CompilationPhase.PARSER) continue;
 
-                AstModule program = new AstBuilder(context, inputFile, tokenStream).build(parseTree);
-                syntaxTrees.put(inputFile, program);
-                this.program.add(program);
+                AstModule module = new AstBuilder(context, inputFile, tokenStream).build(parseTree);
+                modules.put(inputFile, module);
+                moduleList.add(module);
 
                 context.getRequirements().stream()
                         .map(r -> processRequirement(inputFiles.getBasePath(), r))
@@ -103,11 +109,17 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
             }
         }
 
+        program = new AstProgram(new InputPosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
         if (targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
-        DirectiveProcessor.processDirectives(messageConsumer, compilerProfile, program);
+        DirectiveProcessor.processDirectives(messageConsumer, profile, program);
+        if (profile.getParseTreeLevel() > 0) {
+            debug("Parse tree:");
+            debug(new AstIndentedPrinter().print(program));
+            debug("");
+        }
 
-        InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, compilerProfile);
+        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
 
         callGraph = CallGraphCreator.createCallGraph(messageConsumer, instructionProcessor, program);
 
@@ -141,7 +153,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
     private @Nullable InputFile processRequirement(Path relativePath, AstRequire requirement) {
         if (requirement.isLibrary()) {
             return loadLibrary(requirement);
-        } else if (compilerProfile.isWebApplication()) {
+        } else if (profile.isWebApplication()) {
             error(requirement, "Loading code from external file not supported in web application.");
             return null;
         } else {
@@ -195,6 +207,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter {
         PARSER,
         AST_BUILDER,
         COMPILER,
+        OPTIMIZER,
+        ALL
         ;
 
         public boolean includes(CompilationPhase phase) {

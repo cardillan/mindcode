@@ -12,6 +12,8 @@ import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.mimex.LVar;
 import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mindcode.v3.compiler.generation.LoopStack;
+import info.teksol.mindcode.v3.compiler.generation.ReturnStack;
 
 import java.util.*;
 import java.util.function.BiFunction;

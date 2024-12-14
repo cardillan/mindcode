@@ -23,15 +23,15 @@ public class OptimizationCoordinator {
 
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
-    private final MessageConsumer messageRecipient;
+    private final MessageConsumer messageConsumer;
     private final CompilerProfile profile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
-            MessageConsumer messageRecipient) {
+            MessageConsumer messageConsumer) {
         this.instructionProcessor = instructionProcessor;
-        this.messageRecipient = messageRecipient;
+        this.messageConsumer = messageConsumer;
         this.profile = profile;
     }
 
@@ -49,7 +49,7 @@ public class OptimizationCoordinator {
             OptimizationLevel level = profile.getOptimizationLevel(optimization);
             if (level != OptimizationLevel.NONE) {
                 Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
-                optimizer.setMessageRecipient(messageRecipient);
+                optimizer.setMessageRecipient(messageConsumer);
                 optimizer.setDebugPrinter(debugPrinter);
 
                 optimizer.setLevel(level);
@@ -73,7 +73,7 @@ public class OptimizationCoordinator {
                     generatorOutput.callGraph(), generatorOutput.rootAstContext());
 
             int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-            messageRecipient.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
+            messageConsumer.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
 
             debugPrinter.registerIteration(null, "", List.copyOf(program));
 
@@ -85,21 +85,21 @@ public class OptimizationCoordinator {
                 modified = optimizePhase(ITERATED, optimizers, pass, generatorOutput);
             }
             if (modified) {
-                messageRecipient.accept(OptimizerMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
+                messageConsumer.accept(OptimizerMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
             }
             optimizePhase(FINAL, optimizers, 0, generatorOutput);
 
             optimizers.values().forEach(Optimizer::generateFinalMessages);
             int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-            messageRecipient.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
+            messageConsumer.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
 
             if (modified) {
-                messageRecipient.accept(OptimizerMessage.warn("\nOptimization passes limited at %d.",
+                messageConsumer.accept(OptimizerMessage.warn("\nOptimization passes limited at %d.",
                         profile.getOptimizationPasses()));
             }
 
             optimizationContext.removeInactiveInstructions();
-            optimizationStatistics.forEach(messageRecipient);
+            optimizationStatistics.forEach(messageConsumer);
 
             return List.copyOf(program);
         }

@@ -1,4 +1,4 @@
-package info.teksol.mindcode.compiler.generator;
+package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.util.ExpectedMessages;
@@ -19,8 +19,8 @@ public class LoopStackTest {
     void remembersLabels() {
         loopStack.enterLoop(EMPTY, null, break1, continue1);
 
-        assertEquals(break1, loopStack.getBreakLabel(null, null));
-        assertEquals(continue1, loopStack.getContinueLabel(null, null));
+        assertEquals(break1, loopStack.getBreakLabel(EMPTY, null));
+        assertEquals(continue1, loopStack.getContinueLabel(EMPTY, null));
     }
 
     @Test
@@ -29,8 +29,8 @@ public class LoopStackTest {
         loopStack.enterLoop(EMPTY, null, break2, continue2);
         loopStack.exitLoop(null);
 
-        assertEquals(break1, loopStack.getBreakLabel(null, null));
-        assertEquals(continue1, loopStack.getContinueLabel(null, null));
+        assertEquals(break1, loopStack.getBreakLabel(EMPTY, null));
+        assertEquals(continue1, loopStack.getContinueLabel(EMPTY, null));
     }
 
     @Test
@@ -38,10 +38,10 @@ public class LoopStackTest {
         loopStack.enterLoop(EMPTY, "label1", break1, continue1);
         loopStack.enterLoop(EMPTY, "label2", break2, continue2);
 
-        assertEquals(break1, loopStack.getBreakLabel(null, "label1"));
-        assertEquals(continue1, loopStack.getContinueLabel(null, "label1"));
-        assertEquals(break2, loopStack.getBreakLabel(null, "label2"));
-        assertEquals(continue2, loopStack.getContinueLabel(null, "label2"));
+        assertEquals(break1, loopStack.getBreakLabel(EMPTY, "label1"));
+        assertEquals(continue1, loopStack.getContinueLabel(EMPTY, "label1"));
+        assertEquals(break2, loopStack.getBreakLabel(EMPTY, "label2"));
+        assertEquals(continue2, loopStack.getContinueLabel(EMPTY, "label2"));
     }
 
     @Test
@@ -69,8 +69,8 @@ public class LoopStackTest {
 
     @Test
     void rejectsOutOfOrderLoopExits() {
-        loopStack.enterLoop(null, "label1", break1, continue1);
-        loopStack.enterLoop(null, "label2", break2, continue2);
+        loopStack.enterLoop(EMPTY, "label1", break1, continue1);
+        loopStack.enterLoop(EMPTY, "label2", break2, continue2);
         Assertions.assertThrows(IllegalStateException.class, () -> loopStack.exitLoop("label1"));
     }
 

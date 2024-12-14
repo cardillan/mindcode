@@ -1,4 +1,4 @@
-package info.teksol.mindcode.compiler.generator;
+package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;

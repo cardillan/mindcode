@@ -143,8 +143,7 @@ public record Configuration(
 
         @Override
         public CompilerProfile createCompilerProfile(int testCase) {
-            CompilerProfile profile = new CompilerProfile(false)
-                    .setAllOptimizationLevels(OptimizationLevel.NONE)
+            CompilerProfile profile = new CompilerProfile(false, OptimizationLevel.NONE)
                     .setOptimizationPasses(50)
                     .setRun(run);
 

@@ -10,15 +10,15 @@ import java.util.Objects;
 @NullMarked
 @AstNode
 public class AstStatementList extends AstStatement {
-    private final List<AstMindcodeNode> expressions;
+    private final List<AstMindcodeNode> statements;
 
-    public AstStatementList(InputPosition inputPosition, List<AstMindcodeNode> expressions) {
-        super(inputPosition, expressions);
-        this.expressions = Objects.requireNonNull(expressions);
+    public AstStatementList(InputPosition inputPosition, List<AstMindcodeNode> statements) {
+        super(inputPosition, statements);
+        this.statements = Objects.requireNonNull(statements);
     }
 
-    public List<AstMindcodeNode> getExpressions() {
-        return expressions;
+    public List<AstMindcodeNode> getStatements() {
+        return statements;
     }
 
     @Override
@@ -27,12 +27,12 @@ public class AstStatementList extends AstStatement {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstStatementList that = (AstStatementList) o;
-        return Objects.equals(expressions, that.expressions);
+        return Objects.equals(statements, that.statements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(expressions);
+        return Objects.hashCode(statements);
     }
 
 }

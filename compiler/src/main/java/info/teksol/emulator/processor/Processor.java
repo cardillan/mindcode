@@ -11,7 +11,6 @@ import info.teksol.evaluator.ConditionEvaluator;
 import info.teksol.evaluator.ExpressionEvaluator;
 import info.teksol.evaluator.LogicCondition;
 import info.teksol.evaluator.LogicOperation;
-import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.*;
@@ -105,9 +104,10 @@ public class Processor extends AbstractMessageEmitter {
         }
     }
 
-    private void info(@PrintFormat String format, Object... args) {
+    @Override
+    public void info(@PrintFormat String format, Object... args) {
         traceCount++;
-        messageConsumer.accept(ToolMessage.info(format, args));
+        super.info(format, args);
     }
 
     public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {

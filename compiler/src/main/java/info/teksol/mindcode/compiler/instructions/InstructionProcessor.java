@@ -9,6 +9,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * The InstructionProcessor interface is responsible for creating, manipulating, and analyzing logic instructions.
+ * It provides methods for generating instructions, managing labels and variables, and inspecting or transforming
+ * instructions to ensure compatibility, safety, and determinism. This interface forms the foundation for translating
+ * and working with Mindustry Logic operations.
+ * <p>
+ * The existing implementations are tailored to different Mindustry Logic versions. Correct implementation is chosen
+ * based on the compiler profile, and only generates mlog instructions compatible with the chosen target.
+ * <p>
+ *
+ * Variables holding instances of this interface should be named "processor".
+ */
 public interface InstructionProcessor extends MessageEmitter {
 
     ProcessorVersion getProcessorVersion();

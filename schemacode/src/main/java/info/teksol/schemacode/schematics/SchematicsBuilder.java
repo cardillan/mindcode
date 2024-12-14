@@ -45,16 +45,8 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         return new SchematicsBuilder(inputFiles, compilerProfile, messageListener, definitions);
     }
 
-    public void error(@PrintFormat String message, Object... args) {
-        addMessage(ToolMessage.error(message, args));
-    }
-
     public void warn(@PrintFormat String message, Object... args) {
         addMessage(ToolMessage.warn(message, args));
-    }
-
-    public void info(@PrintFormat String message, Object... args) {
-        addMessage(ToolMessage.info(message, args));
     }
 
     public CompilerProfile getCompilerProfile() {

@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation;
+package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstAllocation;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;

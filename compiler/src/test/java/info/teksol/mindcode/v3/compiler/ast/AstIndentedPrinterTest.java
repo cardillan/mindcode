@@ -28,7 +28,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         """,
                 """
                         AstModule {
-                            expressions = [
+                            statements = [
                                 AstFunctionCall {
                                     object = null,
                                     identifier = AstIdentifier{name = "print", external = false},
@@ -83,7 +83,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         """,
                 """
                         AstModule {
-                            expressions = [
+                            statements = [
                                 AstAllocation{type = STACK, memory = AstIdentifier{name = "bank1", external = false}, range = AstRange {
                                     firstValue = AstLiteralDecimal{literal = "0"},
                                     lastValue = AstLiteralDecimal{literal = "512"},
@@ -183,7 +183,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         """,
                 """
                         AstModule {
-                            expressions = [
+                            statements = [
                                 AstWhileLoopStatement {
                                     label = null,
                                     condition = AstLiteralBoolean{literal = "true"},
