@@ -23,6 +23,14 @@ isZero(-1e-50)            :: false
 isZero(0.01,0.01)         :: false
 nullToZero(null)          :: 0
 nullToZero(1)             :: 1
+boolean(0)                :: 0
+boolean(100)              :: 1
+boolean(-100)             :: 1
+boolean(-0.001)           :: 1
+boolean(0.0000001)        :: 0
+integer(0.9)              :: 0
+integer(-5.9)             :: -5.0
+integer(100)              :: 100
 sum(1)                    :: 1
 sum(1,2,3,4)              :: 10
 avg(1)                    :: 1

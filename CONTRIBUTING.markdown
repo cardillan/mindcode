@@ -22,7 +22,7 @@ Changes to the Mindcode compiler are more complicated. The grammar, parser and c
 
 ### System library
 
-Mindcode now provides a [system library](doc/syntax/SYNTAX.markdown), currently as an experimental feature. Contributions to the system library are welcome: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
+Mindcode now provides a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), currently as an experimental feature. Contributions to the system library are welcome: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
 
 ## Running Mindcode locally
 

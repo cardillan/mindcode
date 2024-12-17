@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed errors when compiling empty bodies of functions and statements ([#99](https://github.com/cardillan/mindcode/issues/99)).
 * Fixed errors when compiling unary plus and minus operators ([#175](https://github.com/cardillan/mindcode/issues/175)).
+* The Web Application didn't start inside Docker container.
 
 ### Added
 
@@ -21,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** statements and declaration no longer provide any value and using them where an expression providing a value is expected causes compilation errors. In the past even statements and declarations were considered expressions, albeit they always evaluated to `null`.
 * **Breaking:** functions which return a value are required to [provide the return value on all code paths](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#user-defined-functions).
+* Optimization of bitwise and boolean expressions which are incorrect for non-integers are only [performed on `advanced` level](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
 
 ### Deprecated
 

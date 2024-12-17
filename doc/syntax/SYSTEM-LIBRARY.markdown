@@ -461,6 +461,29 @@ Returns `true` if the two values differ by less than `precision`.
 Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
 and makes sure it won't be removed by the optimizer.
 
+### boolean
+
+**Definition:** `inline def boolean(x)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          1 |          1 |
+
+Converts the value of `x` to boolean values (`0` or `1`). The returning value will be `0`
+if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
+
+### integer
+
+**Definition:** `inline def integer(x)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          1 |          1 |
+
+Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
+(`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
+Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+
 ### sum
 
 **Definition:** `inline def sum(x)`

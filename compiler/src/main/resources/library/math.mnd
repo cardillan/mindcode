@@ -80,6 +80,24 @@ inline def nullToZero(_x)
     _result;
 end;
 
+/**
+ * Converts the value of `x` to boolean values (`0` or `1`). The returning value will be `0`
+ * if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
+ */
+inline def boolean(_x)
+    _x != 0;
+end;
+
+/**
+ * Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
+ * (`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
+ * Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+ */
+inline def integer(_x)
+    mlog("op", "or", out _result, in _x, 0);
+    _result;
+end;
+
 /** Returns `x`. The function is a fallback case for the generic `sum` function taking a variable number of arguments. */
 inline def sum(_x)
     _x;
