@@ -15,7 +15,7 @@ import static info.teksol.emulator.processor.ExecutionFlag.ERR_ASSIGNMENT_TO_FIX
 import static info.teksol.emulator.processor.ExecutionFlag.ERR_NOT_AN_OBJECT;
 
 public class MindustryVariable implements LogicWritable, LogicReadable {
-    // TODO Use different implementation for the compiler and remove the type from this class
+    // TODO Remove after removing the old compiler
     enum ValueType { NULL, BOOLEAN, LONG, DOUBLE, OBJECT }
 
     private final String name;

@@ -10,7 +10,7 @@ import org.intellij.lang.annotations.PrintFormat;
 //      Refactor after switching to the new compiler
 @Deprecated
 public interface MessageEmitter {
-    MessageConsumer getMessageConsumer();
+    MessageConsumer messageConsumer();
 
     void addMessage(MindcodeMessage message);
 

@@ -14,4 +14,19 @@ public class AstLiteralBinary extends AstLiteralNumeric {
             throw new IllegalArgumentException("Binary literal must start with '0b'");
         }
     }
+
+    @Override
+    public double getDoubleValue() {
+        return getLongValue();
+    }
+
+    @Override
+    public long getLongValue() {
+        return Long.parseLong(literal, 2, literal.length(), 2);
+    }
+
+    @Override
+    public AstLiteralBinary withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralBinary(inputPosition, literal);
+    }
 }

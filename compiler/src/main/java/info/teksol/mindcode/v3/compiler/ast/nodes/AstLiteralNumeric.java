@@ -13,4 +13,10 @@ public abstract class AstLiteralNumeric extends AstLiteral {
         }
     }
 
+    // TODO Warn when integer conversion produces precision loss
+    //      Determine whether something bad may happen with double literals (infinity?)
+    //      or integer literals (larger than Long.MAX_VALUE?)
+    public abstract double getDoubleValue();
+
+    public abstract long getLongValue();
 }

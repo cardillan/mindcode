@@ -14,4 +14,13 @@ public class AstLiteralNull extends AstLiteral {
             throw new IllegalArgumentException("Null literal is not 'null'");
         }
     }
+
+    public AstLiteralNull(InputPosition inputPosition) {
+        this(inputPosition, "null");
+    }
+
+    @Override
+    public AstLiteralNull withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralNull(inputPosition);
+    }
 }

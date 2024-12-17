@@ -2,7 +2,6 @@ package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 
 import java.util.ArrayList;
@@ -18,14 +17,13 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private LogicFunction activeFunction;
     private AstAllocation allocatedStack;
 
-    public static CallGraph createCallGraph(MessageConsumer messageConsumer, InstructionProcessor instructionProcessor,
-            AstProgram program) {
-        return new CallGraphCreator(instructionProcessor, messageConsumer).buildCallGraph(program);
+    public static CallGraph createCallGraph(CallGraphCreatorContext context, AstProgram program) {
+        return new CallGraphCreator(context).buildCallGraph(program);
     }
 
-    private CallGraphCreator(InstructionProcessor instructionProcessor, MessageConsumer messageConsumer) {
-        super(messageConsumer);
-        this.instructionProcessor = instructionProcessor;
+    private CallGraphCreator(CallGraphCreatorContext context) {
+        super(context.messageConsumer());
+        this.instructionProcessor = context.instructionProcessor();
         this.functionDefinitions = new FunctionDefinitions(messageConsumer);
         this.activeFunction = functionDefinitions.getMain();
     }

@@ -4,6 +4,7 @@ import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.v3.CompilationPhase;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
@@ -15,8 +16,8 @@ public abstract class AbstractParserTest {
 
     protected static final InputPosition EMPTY = InputPosition.EMPTY;
 
-    protected MindcodeCompiler.CompilationPhase getTargetPhase() {
-        return MindcodeCompiler.CompilationPhase.PARSER;
+    protected CompilationPhase getTargetPhase() {
+        return CompilationPhase.PARSER;
     }
 
     protected ProcessorVersion getProcessorVersion() {

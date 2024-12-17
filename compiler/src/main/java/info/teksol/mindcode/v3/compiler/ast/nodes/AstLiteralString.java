@@ -12,4 +12,12 @@ public class AstLiteralString extends AstLiteral {
         super(inputPosition, literal);
     }
 
+    public String getValue() {
+        return literal;
+    }
+
+    @Override
+    public AstLiteralString withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralString(inputPosition, literal);
+    }
 }

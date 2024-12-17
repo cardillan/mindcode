@@ -12,4 +12,18 @@ public class AstLiteralDecimal extends AstLiteralNumeric {
         super(inputPosition, literal);
     }
 
+    @Override
+    public double getDoubleValue() {
+        return getLongValue();
+    }
+
+    @Override
+    public long getLongValue() {
+        return Long.parseLong(literal);
+    }
+
+    @Override
+    public AstLiteralDecimal withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralDecimal(inputPosition, literal);
+    }
 }

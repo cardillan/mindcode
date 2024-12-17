@@ -75,6 +75,7 @@
                     <target>22</target>
                     <compilerArgs>
                         <arg>-proc:none</arg>
+                        <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

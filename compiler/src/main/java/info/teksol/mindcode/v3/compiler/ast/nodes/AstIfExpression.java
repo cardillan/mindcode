@@ -15,8 +15,14 @@ public class AstIfExpression extends AstExpression {
 
     public AstIfExpression(InputPosition inputPosition, AstIfBranch firstBranch,
             List<AstIfBranch> ifBranches, List<AstMindcodeNode> elseBranch) {
-        super(inputPosition, children(ifBranches, elseBranch));
+        super(inputPosition, children(list(firstBranch), ifBranches, elseBranch));
         this.ifBranches = CollectionUtils.createList(firstBranch, ifBranches);
+        this.elseBranch = elseBranch;
+    }
+
+    public AstIfExpression(InputPosition inputPosition, List<AstIfBranch> ifBranches, List<AstMindcodeNode> elseBranch) {
+        super(inputPosition, children(ifBranches, elseBranch));
+        this.ifBranches = ifBranches;
         this.elseBranch = elseBranch;
     }
 

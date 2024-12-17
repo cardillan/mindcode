@@ -19,7 +19,7 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     private boolean warningEmitted = false;
 
     DeprecatedPropertyHandler(BaseFunctionMapper functionMapper, String deprecated, PropertyHandler replacement) {
-        super(functionMapper.getMessageConsumer());
+        super(functionMapper.messageConsumer());
         this.functionMapper = functionMapper;
         this.deprecated = deprecated;
         this.replacement = replacement;
@@ -73,7 +73,7 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     @Override
     public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicFunctionArgument> arguments) {
         if (!warningEmitted) {
-            functionMapper.getMessageConsumer().accept(CompilerMessage.warn(node.inputPosition(),
+            functionMapper.messageConsumer().accept(CompilerMessage.warn(node.inputPosition(),
                     "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
                     deprecated, functionMapper.processorVersion, replacement.getName()));
             warningEmitted = true;

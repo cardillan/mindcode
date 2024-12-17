@@ -15,7 +15,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     protected final OpcodeVariant opcodeVariant;
 
     public AbstractHandler(BaseFunctionMapper functionMapper, OpcodeVariant opcodeVariant) {
-        super(functionMapper.getMessageConsumer());
+        super(functionMapper.messageConsumer());
         this.functionMapper = functionMapper;
         this.opcodeVariant = opcodeVariant;
     }

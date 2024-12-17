@@ -38,7 +38,7 @@ public class MlogDecompiler {
     public MlogDecompiler(InstructionProcessor instructionProcessor, ParsedMlog input, boolean preamble) {
         this.preamble = preamble;
         functionMapper = FunctionMapperFactory.getFunctionMapper(instructionProcessor,
-                () -> STATIC_AST_CONTEXT, instructionProcessor.getMessageConsumer());
+                () -> STATIC_AST_CONTEXT, instructionProcessor.messageConsumer());
         labels = input.labels();
         content = input.content();
         usedLabels = new HashSet<>(labels.size());

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.v3.compiler.ast;
 
+import info.teksol.mindcode.v3.CompilationPhase;
 import info.teksol.mindcode.v3.InputFiles;
-import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.antlr.AbstractParserTest;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstModule;
@@ -13,8 +13,8 @@ import java.util.List;
 public class AbstractAstBuilderTest extends AbstractParserTest {
 
     @Override
-    protected MindcodeCompiler.CompilationPhase getTargetPhase() {
-        return MindcodeCompiler.CompilationPhase.AST_BUILDER;
+    protected CompilationPhase getTargetPhase() {
+        return CompilationPhase.AST_BUILDER;
     }
 
     protected AstModule build(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {

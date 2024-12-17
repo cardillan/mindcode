@@ -8,7 +8,6 @@ import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
@@ -29,13 +28,13 @@ import java.util.function.BiConsumer;
 public class DirectiveProcessor extends AbstractMessageEmitter {
     private final CompilerProfile profile;
 
-    private DirectiveProcessor(CompilerProfile profile, MessageConsumer messageConsumer) {
-        super(messageConsumer);
-        this.profile = profile;
+    private DirectiveProcessor(DirectiveProcessorContext context) {
+        super(context.messageConsumer());
+        this.profile = context.compilerProfile();
     }
 
-    public static void processDirectives(MessageConsumer messageConsumer, CompilerProfile profile, AstProgram program) {
-        DirectiveProcessor processor = new DirectiveProcessor(profile, messageConsumer);
+    public static void processDirectives(DirectiveProcessorContext context, AstProgram program) {
+        DirectiveProcessor processor = new DirectiveProcessor(context);
         processor.visitNode(program);
     }
 
