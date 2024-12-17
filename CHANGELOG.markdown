@@ -24,7 +24,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Deprecated
 
-* Deprecated the `loop` keyword in [do-while loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#do-while-loops). The keyword is optional and will be removed in a future release.  
+* Deprecated the `loop` keyword in [do-while loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#do-while-loops). The keyword is optional and will be removed in a future release.
+
+## 2.7.2 - Future release
+
+### Fixed
+
+* The Web Application didn't start inside Docker container. 
+
+### Changed
+
+* Optimization of bitwise and boolean expressions which are incorrect for non-integers are only [performed on `advanced` level](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
 
 ## 2.7.1 - 2024-12-07
 

@@ -1,4 +1,4 @@
-Main file: number of reported ambiguities: 15
+Main file: number of reported ambiguities: 19
 Active optimizations:
     case-expression-optimization = basic,
     case-switching = basic,
@@ -21,363 +21,291 @@ Active optimizations:
     temp-variables-elimination = basic,
     unreachable-code-elimination = basic
 
-  1652 instructions before optimizations.
-   121 instructions eliminated by Temp Variables Elimination.
+  1684 instructions before optimizations.
+   126 instructions eliminated by Temp Variables Elimination.
    124 instructions eliminated by Dead Code Elimination (4 iterations).
-     3 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
-    68 instructions eliminated by Jump Optimization (6 iterations).
-    67 instructions eliminated by Single Step Elimination (4 passes, 13 iterations).
-     8 instructions modified by Expression Optimization (2 passes, 5 iterations).
-     8 instructions eliminated by If Expression Optimization (5 iterations).
-   327 instructions eliminated by Data Flow Optimization (10 passes, 35 iterations).
-    49 instructions added by Loop Unrolling (14 iterations).
-     8 loops unrolled by Loop Unrolling.
-     5 instructions added by Function Inlining (14 iterations).
-     4 function calls inlined by Function Inlining.
+     8 instructions modified by Jump Normalization (5 iterations).
+    68 instructions eliminated by Jump Optimization (5 iterations).
+    62 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
+     4 instructions modified by Expression Optimization (4 iterations).
+     8 instructions eliminated by If Expression Optimization (4 iterations).
+   309 instructions eliminated by Data Flow Optimization (7 passes, 25 iterations).
+     5 instructions added by Loop Unrolling (10 iterations).
+     6 loops unrolled by Loop Unrolling.
     11 instructions updated by JumpThreading.
      2 instructions eliminated by Unreachable Code Elimination.
-   986 instructions after optimizations.
+   990 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
-  * Unroll iteration loop at *math:78:5                          cost     0, benefit        5.0, efficiency   Infinity (-8 instructions)
-    Unroll iteration loop at *math:90:5                          cost     0, benefit        5.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:174:5                         cost   151, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost     1, benefit      425.0, efficiency      425.0
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   151, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost     1, benefit      425.0, efficiency      425.0
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
+  * Unroll iteration loop at *math:96:5                          cost     0, benefit        5.0, efficiency   Infinity (-8 instructions)
+    Unroll iteration loop at *math:108:5                         cost     0, benefit        5.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:192:5                         cost   151, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost     1, benefit      425.0, efficiency      425.0
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   151, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost     1, benefit      425.0, efficiency      425.0
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
   ! Inline function 'sign' defined at *math:24:1                 cost    14, benefit       14.0, efficiency        1.0
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   125, benefit       44.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   125, benefit       44.0, efficiency        0.4
 
 Pass 1: speed optimization selection (cost limit 0):
-  * Unroll iteration loop at *math:90:5                          cost     0, benefit        5.0, efficiency   Infinity (-9 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   151, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost     1, benefit      425.0, efficiency      425.0
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   151, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost     1, benefit      425.0, efficiency      425.0
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
+  * Unroll iteration loop at *math:108:5                         cost     0, benefit        5.0, efficiency   Infinity (-9 instructions)
+  ! Unroll iteration loop at *math:192:5                         cost   151, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost     1, benefit      425.0, efficiency      425.0
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   151, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost     1, benefit      425.0, efficiency      425.0
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
   ! Inline function 'sign' defined at *math:24:1                 cost    14, benefit       14.0, efficiency        1.0
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   125, benefit       44.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   125, benefit       44.0, efficiency        0.4
 
 Pass 1: speed optimization selection (cost limit 0):
-  ! Unroll iteration loop at *math:174:5                         cost   151, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost     1, benefit      425.0, efficiency      425.0
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   241, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   151, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost     1, benefit      425.0, efficiency      425.0
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   442, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   151, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost     1, benefit      425.0, efficiency      425.0
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   241, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   151, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost     1, benefit      425.0, efficiency      425.0
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   442, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
   ! Inline function 'sign' defined at *math:24:1                 cost    14, benefit       14.0, efficiency        1.0
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   125, benefit       44.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   125, benefit       44.0, efficiency        0.4
 
-Pass 2: speed optimization selection (cost limit 11):
-  ! Unroll iteration loop at *math:174:5                         cost   121, benefit       17.0, efficiency        0.1
-  * Unroll iteration loop at *math:192:5                         cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   121, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost     0, benefit      425.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
+Pass 2: speed optimization selection (cost limit 0):
+  ! Unroll iteration loop at *math:192:5                         cost   121, benefit       17.0, efficiency        0.1
+  * Unroll iteration loop at *math:210:5                         cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   121, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost     0, benefit      425.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
+
+Pass 2: speed optimization selection (cost limit 13):
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   121, benefit       17.0, efficiency        0.1
+  * Unroll iteration loop at *math:210:5                         cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
     Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
 
-Pass 2: speed optimization selection (cost limit 24):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   121, benefit       17.0, efficiency        0.1
-  * Unroll iteration loop at *math:192:5                         cost     0, benefit      425.0, efficiency   Infinity (-13 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
+Pass 2: speed optimization selection (cost limit 26):
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  * Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
     Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
 
-Pass 2: speed optimization selection (cost limit 37):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  * Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
+Pass 2: speed optimization selection (cost limit 13):
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  * Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7 (+7 instructions)
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+    Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
     Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
 
-Pass 2: speed optimization selection (cost limit 24):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  * Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-    Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
+Pass 2: speed optimization selection (cost limit 6):
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   277, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
 
-Pass 2: speed optimization selection (cost limit 11):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  * Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3 (-11 instructions)
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
+Pass 3: speed optimization selection (cost limit 6):
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   277, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
 
-Pass 2: speed optimization selection (cost limit 22):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  * Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2 (+13 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
-
-Pass 2: speed optimization selection (cost limit 9):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
-
-Pass 3: speed optimization selection (cost limit 17):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  * Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7 (+7 instructions)
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-    Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
-
-Pass 3: speed optimization selection (cost limit 10):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   277, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
-
-Pass 4: speed optimization selection (cost limit 10):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   277, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
-
-Pass 5: speed optimization selection (cost limit 10):
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   277, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost   235, benefit       17.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    13, benefit      425.0, efficiency       32.7
-  ! Unroll iteration loop at *math:174:5                         cost    43, benefit       17.0, efficiency        0.4
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Unroll iteration loop at *math:174:5                         cost   433, benefit       26.0, efficiency        0.1
-  ! Unroll iteration loop at *math:192:5                         cost    19, benefit      650.0, efficiency       34.2
-  ! Inline function 'median' defined at *math:118:1              cost    59, benefit       25.0, efficiency        0.4
-  ! Inline function 'median' defined at *math:135:1              cost   111, benefit       44.0, efficiency        0.4
+Pass 4: speed optimization selection (cost limit 6):
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   277, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost   235, benefit       17.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    13, benefit      425.0, efficiency       32.7
+  ! Unroll iteration loop at *math:192:5                         cost    43, benefit       17.0, efficiency        0.4
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Unroll iteration loop at *math:192:5                         cost   433, benefit       26.0, efficiency        0.1
+  ! Unroll iteration loop at *math:210:5                         cost    19, benefit      650.0, efficiency       34.2
+  ! Inline function 'sign' defined at *math:24:1                 cost    11, benefit       14.0, efficiency        1.3
+  ! Inline function 'median' defined at *math:136:1              cost    59, benefit       25.0, efficiency        0.4
+  ! Inline function 'median' defined at *math:153:1              cost   111, benefit       44.0, efficiency        0.4
 
 Final code before resolving virtual instructions:
 
@@ -390,1340 +318,1326 @@ Final code before resolving virtual instructions:
     6:  assertequals -3 -3 "round(-3.5)"
     7:  assertequals 0.5 0.5 "frac(3.5)"
     8:  assertequals -0.5 -0.5 "frac(-1.5)"
-    9:  assertequals 0 0 "sign(0)"
-   10:  assertequals 0 0 "sign(1e-7)"
-   11:  assertequals 1 1 "sign(1e-5)"
-   12:  assertequals -1 -1 "sign(-5)"
-   13:  assertequals 0 0 "signExact(0)"
-   14:  assertequals 1 1 "signExact(1e-7)"
-   15:  assertequals -1 -1 "signExact(-1e-7)"
-   16:  assertequals true true "isZero(0)"
-   17:  assertequals false false "isZero(1e-50)"
-   18:  assertequals false false "isZero(-1e-50)"
-   19:  assertequals false false "isZero(0.01,0.01)"
-   20:  op add __fn19__result null 0
-   21:  assertequals 0 __fn19__result "nullToZero(null)"
-   22:  op add __fn20__result 1 0
-   23:  assertequals 1 __fn20__result "nullToZero(1)"
-   24:  assertequals 1 1 "sum(1)"
-   25:  assertequals 10 10 "sum(1,2,3,4)"
-   26:  assertequals 1 1 "avg(1)"
-   27:  assertequals 2.5 2.5 "avg(1,2,3,4)"
-   28:  assertequals 1 1 "median(1)"
-   29:  assertequals 3 3 "median(2,4)"
-   30:  assertequals 3 3 "median(1,3,5)"
-   31:  assertequals 1 1 "median(1,1,1)"
-   32:  assertequals 1 1 "median(1,1,3)"
-   33:  assertequals 3 3 "median(1,3,3)"
-   34:  set __fn1__x1 2
-   35:  set __fn1__x2 4
-   36:  set __fn1__x3 6
-   37:  set __fn1__x4 8
-   38:  setaddr __fn1retaddr __label73
-   39:  call __label1 __fn1retval
-        gotolabel __label73 __fn1
-   40:  assertequals 5 __fn1retval "median(2,4,6,8)"
-   41:  set __fn1__x1 8
-   42:  set __fn1__x2 6
-   43:  set __fn1__x3 4
-   44:  set __fn1__x4 2
-   45:  setaddr __fn1retaddr __label74
-   46:  call __label1 __fn1retval
-        gotolabel __label74 __fn1
-   47:  assertequals 5 __fn1retval "median(8,6,4,2)"
-   48:  set __fn1__x1 4
-   49:  set __fn1__x2 8
-   50:  set __fn1__x3 2
-   51:  set __fn1__x4 6
-   52:  setaddr __fn1retaddr __label75
-   53:  call __label1 __fn1retval
-        gotolabel __label75 __fn1
-   54:  assertequals 5 __fn1retval "median(4,8,2,6)"
-   55:  set __fn1__x1 2
-   56:  set __fn1__x2 6
-   57:  set __fn1__x3 4
-   58:  set __fn1__x4 8
-   59:  setaddr __fn1retaddr __label76
-   60:  call __label1 __fn1retval
-        gotolabel __label76 __fn1
-   61:  assertequals 5 __fn1retval "median(2,6,4,8)"
-   62:  set __fn1__x1 6
-   63:  set __fn1__x2 2
-   64:  set __fn1__x3 8
-   65:  set __fn1__x4 4
-   66:  setaddr __fn1retaddr __label77
-   67:  call __label1 __fn1retval
-        gotolabel __label77 __fn1
-   68:  assertequals 5 __fn1retval "median(6,2,8,4)"
-   69:  set __fn2__x1 1
-   70:  set __fn2__x2 2
-   71:  set __fn2__x3 3
-   72:  set __fn2__x4 4
-   73:  set __fn2__x5 5
-   74:  setaddr __fn2retaddr __label78
-   75:  call __label2 __fn2retval
-        gotolabel __label78 __fn2
-   76:  assertequals 3 __fn2retval "median(1,2,3,4,5)"
-   77:  set __fn2__x1 5
-   78:  set __fn2__x2 4
-   79:  set __fn2__x4 2
-   80:  set __fn2__x5 1
-   81:  setaddr __fn2retaddr __label79
-   82:  call __label2 __fn2retval
-        gotolabel __label79 __fn2
-   83:  assertequals 3 __fn2retval "median(5,4,3,2,1)"
-   84:  set __fn2__x1 1
-   85:  set __fn2__x2 1
-   86:  set __fn2__x3 1
-   87:  set __fn2__x4 1
-   88:  setaddr __fn2retaddr __label80
-   89:  call __label2 __fn2retval
-        gotolabel __label80 __fn2
-   90:  assertequals 1 __fn2retval "median(1,1,1,1,1)"
-   91:  set __fn2__x5 5
-   92:  setaddr __fn2retaddr __label81
-   93:  call __label2 __fn2retval
-        gotolabel __label81 __fn2
-   94:  assertequals 1 __fn2retval "median(1,1,1,1,5)"
-   95:  set __fn2__x4 5
-   96:  setaddr __fn2retaddr __label82
-   97:  call __label2 __fn2retval
-        gotolabel __label82 __fn2
-   98:  assertequals 1 __fn2retval "median(1,1,1,5,5)"
-   99:  set __fn2__x3 5
-  100:  setaddr __fn2retaddr __label83
-  101:  call __label2 __fn2retval
-        gotolabel __label83 __fn2
-  102:  assertequals 5 __fn2retval "median(1,1,5,5,5)"
-  103:  set __fn2__x2 5
-  104:  setaddr __fn2retaddr __label84
+    9:  set __fn0__x 0
+   10:  setaddr __fn0retaddr __label21
+   11:  call __label0 __fn0retval
+        gotolabel __label21 __fn0
+   12:  assertequals 0 __fn0retval "sign(0)"
+   13:  set __fn0__x 0.0000001
+   14:  setaddr __fn0retaddr __label22
+   15:  call __label0 __fn0retval
+        gotolabel __label22 __fn0
+   16:  assertequals 0 __fn0retval "sign(1e-7)"
+   17:  set __fn0__x 0.00001
+   18:  setaddr __fn0retaddr __label23
+   19:  call __label0 __fn0retval
+        gotolabel __label23 __fn0
+   20:  assertequals 1 __fn0retval "sign(1e-5)"
+   21:  set __fn0__x -5
+   22:  setaddr __fn0retaddr __label24
+   23:  call __label0 __fn0retval
+        gotolabel __label24 __fn0
+   24:  assertequals -1 __fn0retval "sign(-5)"
+   25:  assertequals 0 0 "signExact(0)"
+   26:  assertequals 1 1 "signExact(1e-7)"
+   27:  assertequals -1 -1 "signExact(-1e-7)"
+   28:  assertequals true true "isZero(0)"
+   29:  assertequals false false "isZero(1e-50)"
+   30:  assertequals false false "isZero(-1e-50)"
+   31:  assertequals false false "isZero(0.01,0.01)"
+   32:  op add __fn19__result null 0
+   33:  assertequals 0 __fn19__result "nullToZero(null)"
+   34:  op add __fn20__result 1 0
+   35:  assertequals 1 __fn20__result "nullToZero(1)"
+   36:  assertequals 0 false "boolean(0)"
+   37:  assertequals 1 true "boolean(100)"
+   38:  assertequals 1 true "boolean(-100)"
+   39:  assertequals 1 true "boolean(-0.001)"
+   40:  assertequals 0 false "boolean(0.0000001)"
+   41:  op or __fn26__result 0.9 0
+   42:  assertequals 0 __fn26__result "integer(0.9)"
+   43:  op or __fn27__result -5.9 0
+   44:  assertequals -5 __fn27__result "integer(-5.9)"
+   45:  op or __fn28__result 100 0
+   46:  assertequals 100 __fn28__result "integer(100)"
+   47:  assertequals 1 1 "sum(1)"
+   48:  assertequals 10 10 "sum(1,2,3,4)"
+   49:  assertequals 1 1 "avg(1)"
+   50:  assertequals 2.5 2.5 "avg(1,2,3,4)"
+   51:  assertequals 1 1 "median(1)"
+   52:  assertequals 3 3 "median(2,4)"
+   53:  assertequals 3 3 "median(1,3,5)"
+   54:  assertequals 1 1 "median(1,1,1)"
+   55:  assertequals 1 1 "median(1,1,3)"
+   56:  assertequals 3 3 "median(1,3,3)"
+   57:  set __fn1__x1 2
+   58:  set __fn1__x2 4
+   59:  set __fn1__x3 6
+   60:  set __fn1__x4 8
+   61:  setaddr __fn1retaddr __label89
+   62:  call __label1 __fn1retval
+        gotolabel __label89 __fn1
+   63:  assertequals 5 __fn1retval "median(2,4,6,8)"
+   64:  set __fn1__x1 8
+   65:  set __fn1__x2 6
+   66:  set __fn1__x3 4
+   67:  set __fn1__x4 2
+   68:  setaddr __fn1retaddr __label90
+   69:  call __label1 __fn1retval
+        gotolabel __label90 __fn1
+   70:  assertequals 5 __fn1retval "median(8,6,4,2)"
+   71:  set __fn1__x1 4
+   72:  set __fn1__x2 8
+   73:  set __fn1__x3 2
+   74:  set __fn1__x4 6
+   75:  setaddr __fn1retaddr __label91
+   76:  call __label1 __fn1retval
+        gotolabel __label91 __fn1
+   77:  assertequals 5 __fn1retval "median(4,8,2,6)"
+   78:  set __fn1__x1 2
+   79:  set __fn1__x2 6
+   80:  set __fn1__x3 4
+   81:  set __fn1__x4 8
+   82:  setaddr __fn1retaddr __label92
+   83:  call __label1 __fn1retval
+        gotolabel __label92 __fn1
+   84:  assertequals 5 __fn1retval "median(2,6,4,8)"
+   85:  set __fn1__x1 6
+   86:  set __fn1__x2 2
+   87:  set __fn1__x3 8
+   88:  set __fn1__x4 4
+   89:  setaddr __fn1retaddr __label93
+   90:  call __label1 __fn1retval
+        gotolabel __label93 __fn1
+   91:  assertequals 5 __fn1retval "median(6,2,8,4)"
+   92:  set __fn2__x1 1
+   93:  set __fn2__x2 2
+   94:  set __fn2__x3 3
+   95:  set __fn2__x4 4
+   96:  set __fn2__x5 5
+   97:  setaddr __fn2retaddr __label94
+   98:  call __label2 __fn2retval
+        gotolabel __label94 __fn2
+   99:  assertequals 3 __fn2retval "median(1,2,3,4,5)"
+  100:  set __fn2__x1 5
+  101:  set __fn2__x2 4
+  102:  set __fn2__x4 2
+  103:  set __fn2__x5 1
+  104:  setaddr __fn2retaddr __label95
   105:  call __label2 __fn2retval
-        gotolabel __label84 __fn2
-  106:  assertequals 5 __fn2retval "median(1,5,5,5,5)"
-  107:  set __fn2__x1 5
-  108:  setaddr __fn2retaddr __label85
-  109:  call __label2 __fn2retval
-        gotolabel __label85 __fn2
-  110:  assertequals 5 __fn2retval "median(5,5,5,5,5)"
-  111:  set __fn32__bestDif 10000000000
-  112:  set __fn32__best null
-  113:  set __fn32__count 1
-  114:  setaddr __tmp108 __label93
-  115:  jump __label116 always 0 0
-        gotolabel __label93 marker2
-  116:  setaddr __tmp108 __label94
-  117:  jump __label116 always 0 0
-        gotolabel __label94 marker2
-  118:  setaddr __tmp108 __label95
-  119:  jump __label116 always 0 0
-        gotolabel __label95 marker2
-  120:  setaddr __tmp108 __label96
-  121:  jump __label116 always 0 0
-        gotolabel __label96 marker2
-  122:  setaddr __tmp108 __label97
-  123:  jump __label116 always 0 0
-        gotolabel __label97 marker2
-  124:  setaddr __tmp108 __label98
-        label __label116
-  125:  jump __label118 greaterThanEq 0 __fn32__bestDif
-  126:  set __fn32__bestDif 0
-  127:  set __fn32__best 1
-  128:  set __fn32__count 1
-  129:  jump __label119 always 0 0
-        label __label118
-  130:  jump __label120 greaterThan 0 __fn32__bestDif
-  131:  op add __fn32__best __fn32__best 1
-  132:  op add __fn32__count __fn32__count 1
-        label __label120
-        label __label119
-  133:  goto __tmp108 marker2
-        gotolabel __label98 marker2
-  134:  op div __tmp107 __fn32__best __fn32__count
-  135:  assertequals 1 __tmp107 "median(1,1,1,1,1,1)"
-  136:  set __fn35__bestDif 10000000000
-  137:  set __fn35__best null
-  138:  set __fn35__count 1
-  139:  setaddr __tmp134 __label129
-  140:  set __fn35__i 1
-  141:  jump __label127 always 0 0
-        gotolabel __label129 marker4
-  142:  setaddr __tmp134 __label130
-  143:  set __fn35__i 1
-  144:  jump __label127 always 0 0
-        gotolabel __label130 marker4
-  145:  setaddr __tmp134 __label131
-  146:  set __fn35__i 1
-  147:  jump __label127 always 0 0
-        gotolabel __label131 marker4
-  148:  setaddr __tmp134 __label132
-  149:  set __fn35__i 1
-  150:  jump __label127 always 0 0
-        gotolabel __label132 marker4
-  151:  setaddr __tmp134 __label133
-  152:  set __fn35__i 1
-  153:  jump __label127 always 0 0
-        gotolabel __label133 marker4
-  154:  setaddr __tmp134 __label134
-  155:  set __fn35__i 5
-        label __label127
-  156:  set __fn36__gt 0
-  157:  set __fn36__lt 0
-  158:  jump __label927 greaterThanEq 1 __fn35__i
-  159:  set __fn36__lt 1
-  160:  jump __label930 always 0 0
-        label __label927
-  161:  jump __label928 lessThanEq 1 __fn35__i
-  162:  set __fn36__gt 1
-        label __label928
-        label __label930
-  163:  jump __label935 greaterThanEq 1 __fn35__i
-  164:  op add __fn36__lt __fn36__lt 1
-  165:  jump __label938 always 0 0
-        label __label935
-  166:  jump __label936 lessThanEq 1 __fn35__i
-  167:  op add __fn36__gt __fn36__gt 1
-        label __label936
-        label __label938
-  168:  jump __label943 greaterThanEq 1 __fn35__i
-  169:  op add __fn36__lt __fn36__lt 1
-  170:  jump __label946 always 0 0
-        label __label943
-  171:  jump __label944 lessThanEq 1 __fn35__i
-  172:  op add __fn36__gt __fn36__gt 1
-        label __label944
-        label __label946
-  173:  jump __label951 greaterThanEq 1 __fn35__i
-  174:  op add __fn36__lt __fn36__lt 1
-  175:  jump __label954 always 0 0
-        label __label951
-  176:  jump __label952 lessThanEq 1 __fn35__i
-  177:  op add __fn36__gt __fn36__gt 1
-        label __label952
-        label __label954
-  178:  jump __label959 greaterThanEq 1 __fn35__i
-  179:  op add __fn36__lt __fn36__lt 1
-  180:  jump __label962 always 0 0
-        label __label959
-  181:  jump __label960 lessThanEq 1 __fn35__i
-  182:  op add __fn36__gt __fn36__gt 1
-        label __label960
-        label __label962
-  183:  jump __label967 greaterThanEq 5 __fn35__i
-  184:  op add __fn36__lt __fn36__lt 1
-  185:  jump __label970 always 0 0
-        label __label967
-  186:  jump __label968 lessThanEq 5 __fn35__i
-  187:  op add __fn36__gt __fn36__gt 1
-        label __label968
-        label __label970
-  188:  op sub __tmp143 __fn36__gt __fn36__lt
-  189:  op abs __fn36__dif __tmp143 0
-  190:  set __tmp148 false
-  191:  op add __tmp145 __fn36__gt __fn36__lt
-  192:  jump __label151 lessThan __tmp145 5
-  193:  op equal __tmp148 __fn36__gt __fn36__lt
-        label __label151
-  194:  jump __label152 equal __tmp148 false
-  195:  set __tmp133 __fn35__i
-  196:  jump __label125 always 0 0
-        label __label152
-  197:  jump __label154 greaterThanEq __fn36__dif __fn35__bestDif
-  198:  set __fn35__bestDif __fn36__dif
-  199:  set __fn35__best __fn35__i
-  200:  set __fn35__count 1
-  201:  jump __label155 always 0 0
-        label __label154
-  202:  jump __label156 greaterThan __fn36__dif __fn35__bestDif
-  203:  op add __fn35__best __fn35__best __fn35__i
-  204:  op add __fn35__count __fn35__count 1
-        label __label156
-        label __label155
-  205:  goto __tmp134 marker4
-        gotolabel __label134 marker4
-  206:  op div __tmp133 __fn35__best __fn35__count
-        label __label125
-  207:  assertequals 1 __tmp133 "median(1,1,1,1,1,5)"
-  208:  set __fn38__bestDif 10000000000
-  209:  set __fn38__best null
-  210:  set __fn38__count 1
-  211:  setaddr __tmp160 __label165
-  212:  set __fn38__i 1
-  213:  jump __label163 always 0 0
-        gotolabel __label165 marker6
-  214:  setaddr __tmp160 __label166
-  215:  set __fn38__i 1
-  216:  jump __label163 always 0 0
-        gotolabel __label166 marker6
-  217:  setaddr __tmp160 __label167
-  218:  set __fn38__i 1
-  219:  jump __label163 always 0 0
-        gotolabel __label167 marker6
-  220:  setaddr __tmp160 __label168
-  221:  set __fn38__i 1
-  222:  jump __label163 always 0 0
-        gotolabel __label168 marker6
-  223:  setaddr __tmp160 __label169
-  224:  set __fn38__i 5
-  225:  jump __label163 always 0 0
-        gotolabel __label169 marker6
-  226:  setaddr __tmp160 __label170
-  227:  set __fn38__i 5
-        label __label163
-  228:  set __fn39__gt 0
-  229:  set __fn39__lt 0
-  230:  setaddr __tmp162 __label176
-  231:  set __fn39__i 1
-  232:  jump __label174 always 0 0
-        gotolabel __label176 marker7
-  233:  setaddr __tmp162 __label177
-  234:  set __fn39__i 1
-  235:  jump __label174 always 0 0
-        gotolabel __label177 marker7
-  236:  setaddr __tmp162 __label178
-  237:  set __fn39__i 1
-  238:  jump __label174 always 0 0
-        gotolabel __label178 marker7
-  239:  setaddr __tmp162 __label179
-  240:  set __fn39__i 1
-  241:  jump __label174 always 0 0
-        gotolabel __label179 marker7
-  242:  setaddr __tmp162 __label180
-  243:  set __fn39__i 5
-  244:  jump __label174 always 0 0
-        gotolabel __label180 marker7
-  245:  setaddr __tmp162 __label181
-  246:  set __fn39__i 5
-        label __label174
-  247:  jump __label182 greaterThanEq __fn39__i __fn38__i
-  248:  op add __fn39__lt __fn39__lt 1
-  249:  jump __label183 always 0 0
-        label __label182
-  250:  jump __label184 lessThanEq __fn39__i __fn38__i
-  251:  op add __fn39__gt __fn39__gt 1
-        label __label184
-        label __label183
-  252:  goto __tmp162 marker7
-        gotolabel __label181 marker7
-  253:  op sub __tmp169 __fn39__gt __fn39__lt
-  254:  op abs __fn39__dif __tmp169 0
-  255:  set __tmp174 false
-  256:  op add __tmp171 __fn39__gt __fn39__lt
-  257:  jump __label187 lessThan __tmp171 5
-  258:  op equal __tmp174 __fn39__gt __fn39__lt
-        label __label187
-  259:  jump __label188 equal __tmp174 false
-  260:  set __tmp159 __fn38__i
-  261:  jump __label161 always 0 0
-        label __label188
-  262:  jump __label190 greaterThanEq __fn39__dif __fn38__bestDif
-  263:  set __fn38__bestDif __fn39__dif
-  264:  set __fn38__best __fn38__i
-  265:  set __fn38__count 1
-  266:  jump __label191 always 0 0
-        label __label190
-  267:  jump __label192 greaterThan __fn39__dif __fn38__bestDif
-  268:  op add __fn38__best __fn38__best __fn38__i
-  269:  op add __fn38__count __fn38__count 1
-        label __label192
-        label __label191
-  270:  goto __tmp160 marker6
-        gotolabel __label170 marker6
-  271:  op div __tmp159 __fn38__best __fn38__count
-        label __label161
-  272:  assertequals 1 __tmp159 "median(1,1,1,1,5,5)"
-  273:  set __fn41__bestDif 10000000000
-  274:  set __fn41__best null
-  275:  set __fn41__count 1
-  276:  setaddr __tmp186 __label201
-  277:  set __fn41__i 1
-  278:  jump __label199 always 0 0
-        gotolabel __label201 marker8
-  279:  setaddr __tmp186 __label202
-  280:  set __fn41__i 1
-  281:  jump __label199 always 0 0
-        gotolabel __label202 marker8
-  282:  setaddr __tmp186 __label203
-  283:  set __fn41__i 1
-  284:  jump __label199 always 0 0
-        gotolabel __label203 marker8
-  285:  setaddr __tmp186 __label204
-  286:  set __fn41__i 5
-  287:  jump __label199 always 0 0
-        gotolabel __label204 marker8
-  288:  setaddr __tmp186 __label205
-  289:  set __fn41__i 5
-  290:  jump __label199 always 0 0
-        gotolabel __label205 marker8
-  291:  setaddr __tmp186 __label206
-  292:  set __fn41__i 5
-        label __label199
-  293:  set __fn42__gt 0
-  294:  set __fn42__lt 0
-  295:  setaddr __tmp188 __label212
-  296:  set __fn42__i 1
-  297:  jump __label210 always 0 0
-        gotolabel __label212 marker9
-  298:  setaddr __tmp188 __label213
-  299:  set __fn42__i 1
-  300:  jump __label210 always 0 0
-        gotolabel __label213 marker9
-  301:  setaddr __tmp188 __label214
-  302:  set __fn42__i 1
-  303:  jump __label210 always 0 0
-        gotolabel __label214 marker9
-  304:  setaddr __tmp188 __label215
-  305:  set __fn42__i 5
-  306:  jump __label210 always 0 0
-        gotolabel __label215 marker9
-  307:  setaddr __tmp188 __label216
-  308:  set __fn42__i 5
-  309:  jump __label210 always 0 0
-        gotolabel __label216 marker9
-  310:  setaddr __tmp188 __label217
-  311:  set __fn42__i 5
-        label __label210
-  312:  jump __label218 greaterThanEq __fn42__i __fn41__i
-  313:  op add __fn42__lt __fn42__lt 1
-  314:  jump __label219 always 0 0
-        label __label218
-  315:  jump __label220 lessThanEq __fn42__i __fn41__i
-  316:  op add __fn42__gt __fn42__gt 1
-        label __label220
-        label __label219
-  317:  goto __tmp188 marker9
-        gotolabel __label217 marker9
-  318:  op sub __tmp195 __fn42__gt __fn42__lt
-  319:  op abs __fn42__dif __tmp195 0
-  320:  set __tmp200 false
-  321:  op add __tmp197 __fn42__gt __fn42__lt
-  322:  jump __label223 lessThan __tmp197 5
-  323:  op equal __tmp200 __fn42__gt __fn42__lt
-        label __label223
-  324:  jump __label224 equal __tmp200 false
-  325:  set __tmp185 __fn41__i
-  326:  jump __label197 always 0 0
-        label __label224
-  327:  jump __label226 greaterThanEq __fn42__dif __fn41__bestDif
-  328:  set __fn41__bestDif __fn42__dif
-  329:  set __fn41__best __fn41__i
-  330:  set __fn41__count 1
-  331:  jump __label227 always 0 0
-        label __label226
-  332:  jump __label228 greaterThan __fn42__dif __fn41__bestDif
-  333:  op add __fn41__best __fn41__best __fn41__i
-  334:  op add __fn41__count __fn41__count 1
-        label __label228
-        label __label227
-  335:  goto __tmp186 marker8
-        gotolabel __label206 marker8
-  336:  op div __tmp185 __fn41__best __fn41__count
-        label __label197
-  337:  assertequals 3 __tmp185 "median(1,1,1,5,5,5)"
-  338:  set __fn44__bestDif 10000000000
-  339:  set __fn44__best null
-  340:  set __fn44__count 1
-  341:  setaddr __tmp212 __label237
-  342:  set __fn44__i 1
-  343:  jump __label235 always 0 0
-        gotolabel __label237 marker10
-  344:  setaddr __tmp212 __label238
-  345:  set __fn44__i 1
-  346:  jump __label235 always 0 0
-        gotolabel __label238 marker10
-  347:  setaddr __tmp212 __label239
-  348:  set __fn44__i 5
-  349:  jump __label235 always 0 0
-        gotolabel __label239 marker10
-  350:  setaddr __tmp212 __label240
-  351:  set __fn44__i 5
-  352:  jump __label235 always 0 0
-        gotolabel __label240 marker10
-  353:  setaddr __tmp212 __label241
-  354:  set __fn44__i 5
-  355:  jump __label235 always 0 0
-        gotolabel __label241 marker10
-  356:  setaddr __tmp212 __label242
-  357:  set __fn44__i 5
-        label __label235
-  358:  set __fn45__gt 0
-  359:  set __fn45__lt 0
-  360:  setaddr __tmp214 __label248
-  361:  set __fn45__i 1
-  362:  jump __label246 always 0 0
-        gotolabel __label248 marker11
-  363:  setaddr __tmp214 __label249
-  364:  set __fn45__i 1
-  365:  jump __label246 always 0 0
-        gotolabel __label249 marker11
-  366:  setaddr __tmp214 __label250
-  367:  set __fn45__i 5
-  368:  jump __label246 always 0 0
-        gotolabel __label250 marker11
-  369:  setaddr __tmp214 __label251
-  370:  set __fn45__i 5
-  371:  jump __label246 always 0 0
-        gotolabel __label251 marker11
-  372:  setaddr __tmp214 __label252
-  373:  set __fn45__i 5
-  374:  jump __label246 always 0 0
-        gotolabel __label252 marker11
-  375:  setaddr __tmp214 __label253
-  376:  set __fn45__i 5
-        label __label246
-  377:  jump __label254 greaterThanEq __fn45__i __fn44__i
-  378:  op add __fn45__lt __fn45__lt 1
-  379:  jump __label255 always 0 0
-        label __label254
-  380:  jump __label256 lessThanEq __fn45__i __fn44__i
-  381:  op add __fn45__gt __fn45__gt 1
-        label __label256
-        label __label255
-  382:  goto __tmp214 marker11
-        gotolabel __label253 marker11
-  383:  op sub __tmp221 __fn45__gt __fn45__lt
-  384:  op abs __fn45__dif __tmp221 0
-  385:  set __tmp226 false
-  386:  op add __tmp223 __fn45__gt __fn45__lt
-  387:  jump __label259 lessThan __tmp223 5
-  388:  op equal __tmp226 __fn45__gt __fn45__lt
-        label __label259
-  389:  jump __label260 equal __tmp226 false
-  390:  set __tmp211 __fn44__i
-  391:  jump __label233 always 0 0
-        label __label260
-  392:  jump __label262 greaterThanEq __fn45__dif __fn44__bestDif
-  393:  set __fn44__bestDif __fn45__dif
-  394:  set __fn44__best __fn44__i
-  395:  set __fn44__count 1
-  396:  jump __label263 always 0 0
-        label __label262
-  397:  jump __label264 greaterThan __fn45__dif __fn44__bestDif
-  398:  op add __fn44__best __fn44__best __fn44__i
-  399:  op add __fn44__count __fn44__count 1
-        label __label264
-        label __label263
-  400:  goto __tmp212 marker10
-        gotolabel __label242 marker10
-  401:  op div __tmp211 __fn44__best __fn44__count
-        label __label233
-  402:  assertequals 5 __tmp211 "median(1,1,5,5,5,5)"
-  403:  set __fn47__bestDif 10000000000
-  404:  set __fn47__best null
-  405:  set __fn47__count 1
-  406:  setaddr __tmp238 __label273
-  407:  set __fn47__i 1
-  408:  jump __label271 always 0 0
-        gotolabel __label273 marker12
-  409:  setaddr __tmp238 __label274
-  410:  set __fn47__i 5
-  411:  jump __label271 always 0 0
-        gotolabel __label274 marker12
-  412:  setaddr __tmp238 __label275
-  413:  set __fn47__i 5
-  414:  jump __label271 always 0 0
-        gotolabel __label275 marker12
-  415:  setaddr __tmp238 __label276
-  416:  set __fn47__i 5
-  417:  jump __label271 always 0 0
-        gotolabel __label276 marker12
-  418:  setaddr __tmp238 __label277
-  419:  set __fn47__i 5
-  420:  jump __label271 always 0 0
-        gotolabel __label277 marker12
-  421:  setaddr __tmp238 __label278
-  422:  set __fn47__i 5
-        label __label271
-  423:  set __fn48__gt 0
-  424:  set __fn48__lt 0
-  425:  setaddr __tmp240 __label284
-  426:  set __fn48__i 1
-  427:  jump __label282 always 0 0
-        gotolabel __label284 marker13
-  428:  setaddr __tmp240 __label285
-  429:  set __fn48__i 5
-  430:  jump __label282 always 0 0
-        gotolabel __label285 marker13
-  431:  setaddr __tmp240 __label286
-  432:  set __fn48__i 5
-  433:  jump __label282 always 0 0
-        gotolabel __label286 marker13
-  434:  setaddr __tmp240 __label287
-  435:  set __fn48__i 5
-  436:  jump __label282 always 0 0
-        gotolabel __label287 marker13
-  437:  setaddr __tmp240 __label288
-  438:  set __fn48__i 5
-  439:  jump __label282 always 0 0
-        gotolabel __label288 marker13
-  440:  setaddr __tmp240 __label289
-  441:  set __fn48__i 5
-        label __label282
-  442:  jump __label290 greaterThanEq __fn48__i __fn47__i
-  443:  op add __fn48__lt __fn48__lt 1
-  444:  jump __label291 always 0 0
-        label __label290
-  445:  jump __label292 lessThanEq __fn48__i __fn47__i
-  446:  op add __fn48__gt __fn48__gt 1
-        label __label292
-        label __label291
-  447:  goto __tmp240 marker13
-        gotolabel __label289 marker13
-  448:  op sub __tmp247 __fn48__gt __fn48__lt
-  449:  op abs __fn48__dif __tmp247 0
-  450:  set __tmp252 false
-  451:  op add __tmp249 __fn48__gt __fn48__lt
-  452:  jump __label295 lessThan __tmp249 5
-  453:  op equal __tmp252 __fn48__gt __fn48__lt
-        label __label295
-  454:  jump __label296 equal __tmp252 false
-  455:  set __tmp237 __fn47__i
-  456:  jump __label269 always 0 0
-        label __label296
-  457:  jump __label298 greaterThanEq __fn48__dif __fn47__bestDif
-  458:  set __fn47__bestDif __fn48__dif
-  459:  set __fn47__best __fn47__i
-  460:  set __fn47__count 1
-  461:  jump __label299 always 0 0
-        label __label298
-  462:  jump __label300 greaterThan __fn48__dif __fn47__bestDif
-  463:  op add __fn47__best __fn47__best __fn47__i
-  464:  op add __fn47__count __fn47__count 1
-        label __label300
-        label __label299
-  465:  goto __tmp238 marker12
-        gotolabel __label278 marker12
-  466:  op div __tmp237 __fn47__best __fn47__count
-        label __label269
-  467:  assertequals 5 __tmp237 "median(1,5,5,5,5,5)"
-  468:  set __fn50__bestDif 10000000000
-  469:  set __fn50__best null
-  470:  set __fn50__count 1
-  471:  setaddr __tmp264 __label309
-  472:  jump __label332 always 0 0
-        gotolabel __label309 marker14
-  473:  setaddr __tmp264 __label310
-  474:  jump __label332 always 0 0
-        gotolabel __label310 marker14
-  475:  setaddr __tmp264 __label311
-  476:  jump __label332 always 0 0
-        gotolabel __label311 marker14
-  477:  setaddr __tmp264 __label312
-  478:  jump __label332 always 0 0
-        gotolabel __label312 marker14
-  479:  setaddr __tmp264 __label313
-  480:  jump __label332 always 0 0
-        gotolabel __label313 marker14
-  481:  setaddr __tmp264 __label314
-        label __label332
-  482:  jump __label334 greaterThanEq 0 __fn50__bestDif
-  483:  set __fn50__bestDif 0
-  484:  set __fn50__best 5
-  485:  set __fn50__count 1
-  486:  jump __label335 always 0 0
-        label __label334
-  487:  jump __label336 greaterThan 0 __fn50__bestDif
-  488:  op add __fn50__best __fn50__best 5
-  489:  op add __fn50__count __fn50__count 1
-        label __label336
-        label __label335
-  490:  goto __tmp264 marker14
-        gotolabel __label314 marker14
-  491:  op div __tmp263 __fn50__best __fn50__count
-  492:  assertequals 5 __tmp263 "median(5,5,5,5,5,5)"
-  493:  set __fn53__bestDif 10000000000
-  494:  set __fn53__best null
-  495:  set __fn53__count 1
-  496:  setaddr __tmp290 __label345
-  497:  set __fn53__i 1
-  498:  jump __label343 always 0 0
-        gotolabel __label345 marker16
-  499:  setaddr __tmp290 __label346
-  500:  set __fn53__i 2
-  501:  jump __label343 always 0 0
-        gotolabel __label346 marker16
-  502:  setaddr __tmp290 __label347
-  503:  set __fn53__i 3
-  504:  jump __label343 always 0 0
-        gotolabel __label347 marker16
-  505:  setaddr __tmp290 __label348
-  506:  set __fn53__i 4
-  507:  jump __label343 always 0 0
-        gotolabel __label348 marker16
-  508:  setaddr __tmp290 __label349
-  509:  set __fn53__i 5
-  510:  jump __label343 always 0 0
-        gotolabel __label349 marker16
-  511:  setaddr __tmp290 __label350
-  512:  set __fn53__i 6
-  513:  jump __label343 always 0 0
-        gotolabel __label350 marker16
-  514:  setaddr __tmp290 __label351
-  515:  set __fn53__i 7
-  516:  jump __label343 always 0 0
-        gotolabel __label351 marker16
-  517:  setaddr __tmp290 __label352
-  518:  set __fn53__i 8
-  519:  jump __label343 always 0 0
-        gotolabel __label352 marker16
-  520:  setaddr __tmp290 __label353
-  521:  set __fn53__i 9
-        label __label343
-  522:  set __fn54__gt 0
-  523:  set __fn54__lt 0
-  524:  jump __label688 greaterThanEq 1 __fn53__i
-  525:  set __fn54__lt 1
-  526:  jump __label691 always 0 0
-        label __label688
-  527:  jump __label689 lessThanEq 1 __fn53__i
-  528:  set __fn54__gt 1
-        label __label689
-        label __label691
-  529:  jump __label696 greaterThanEq 2 __fn53__i
-  530:  op add __fn54__lt __fn54__lt 1
-  531:  jump __label699 always 0 0
-        label __label696
-  532:  jump __label697 lessThanEq 2 __fn53__i
-  533:  op add __fn54__gt __fn54__gt 1
-        label __label697
-        label __label699
-  534:  jump __label704 greaterThanEq 3 __fn53__i
-  535:  op add __fn54__lt __fn54__lt 1
-  536:  jump __label707 always 0 0
-        label __label704
-  537:  jump __label705 lessThanEq 3 __fn53__i
-  538:  op add __fn54__gt __fn54__gt 1
-        label __label705
-        label __label707
-  539:  jump __label712 greaterThanEq 4 __fn53__i
-  540:  op add __fn54__lt __fn54__lt 1
-  541:  jump __label715 always 0 0
-        label __label712
-  542:  jump __label713 lessThanEq 4 __fn53__i
-  543:  op add __fn54__gt __fn54__gt 1
-        label __label713
-        label __label715
-  544:  jump __label720 greaterThanEq 5 __fn53__i
-  545:  op add __fn54__lt __fn54__lt 1
-  546:  jump __label723 always 0 0
-        label __label720
-  547:  jump __label721 lessThanEq 5 __fn53__i
-  548:  op add __fn54__gt __fn54__gt 1
-        label __label721
-        label __label723
-  549:  jump __label728 greaterThanEq 6 __fn53__i
-  550:  op add __fn54__lt __fn54__lt 1
-  551:  jump __label731 always 0 0
-        label __label728
-  552:  jump __label729 lessThanEq 6 __fn53__i
-  553:  op add __fn54__gt __fn54__gt 1
-        label __label729
-        label __label731
-  554:  jump __label736 greaterThanEq 7 __fn53__i
-  555:  op add __fn54__lt __fn54__lt 1
-  556:  jump __label739 always 0 0
-        label __label736
-  557:  jump __label737 lessThanEq 7 __fn53__i
-  558:  op add __fn54__gt __fn54__gt 1
-        label __label737
-        label __label739
-  559:  jump __label744 greaterThanEq 8 __fn53__i
-  560:  op add __fn54__lt __fn54__lt 1
-  561:  jump __label747 always 0 0
-        label __label744
-  562:  jump __label745 lessThanEq 8 __fn53__i
-  563:  op add __fn54__gt __fn54__gt 1
-        label __label745
-        label __label747
-  564:  jump __label752 greaterThanEq 9 __fn53__i
-  565:  op add __fn54__lt __fn54__lt 1
-  566:  jump __label755 always 0 0
-        label __label752
-  567:  jump __label753 lessThanEq 9 __fn53__i
-  568:  op add __fn54__gt __fn54__gt 1
-        label __label753
-        label __label755
-  569:  op sub __tmp299 __fn54__gt __fn54__lt
-  570:  op abs __fn54__dif __tmp299 0
-  571:  set __tmp304 false
-  572:  op add __tmp301 __fn54__gt __fn54__lt
-  573:  jump __label373 lessThan __tmp301 8
-  574:  op equal __tmp304 __fn54__gt __fn54__lt
-        label __label373
-  575:  jump __label374 equal __tmp304 false
-  576:  set __tmp289 __fn53__i
-  577:  jump __label341 always 0 0
-        label __label374
-  578:  jump __label376 greaterThanEq __fn54__dif __fn53__bestDif
-  579:  set __fn53__bestDif __fn54__dif
-  580:  set __fn53__best __fn53__i
-  581:  set __fn53__count 1
-  582:  jump __label377 always 0 0
-        label __label376
-  583:  jump __label378 greaterThan __fn54__dif __fn53__bestDif
-  584:  op add __fn53__best __fn53__best __fn53__i
-  585:  op add __fn53__count __fn53__count 1
-        label __label378
-        label __label377
-  586:  goto __tmp290 marker16
-        gotolabel __label353 marker16
-  587:  op div __tmp289 __fn53__best __fn53__count
-        label __label341
-  588:  assertequals 5 __tmp289 "median(1,2,3,4,5,6,7,8,9)"
-  589:  set __fn56__bestDif 10000000000
-  590:  set __fn56__best null
-  591:  set __fn56__count 1
-  592:  setaddr __tmp316 __label387
-  593:  set __fn56__i 9
-  594:  jump __label385 always 0 0
-        gotolabel __label387 marker18
-  595:  setaddr __tmp316 __label388
-  596:  set __fn56__i 8
-  597:  jump __label385 always 0 0
-        gotolabel __label388 marker18
-  598:  setaddr __tmp316 __label389
-  599:  set __fn56__i 7
-  600:  jump __label385 always 0 0
-        gotolabel __label389 marker18
-  601:  setaddr __tmp316 __label390
-  602:  set __fn56__i 6
-  603:  jump __label385 always 0 0
-        gotolabel __label390 marker18
-  604:  setaddr __tmp316 __label391
-  605:  set __fn56__i 5
-  606:  jump __label385 always 0 0
-        gotolabel __label391 marker18
-  607:  setaddr __tmp316 __label392
-  608:  set __fn56__i 4
-  609:  jump __label385 always 0 0
-        gotolabel __label392 marker18
-  610:  setaddr __tmp316 __label393
-  611:  set __fn56__i 3
-  612:  jump __label385 always 0 0
-        gotolabel __label393 marker18
-  613:  setaddr __tmp316 __label394
-  614:  set __fn56__i 2
-  615:  jump __label385 always 0 0
-        gotolabel __label394 marker18
-  616:  setaddr __tmp316 __label395
-  617:  set __fn56__i 1
-        label __label385
-  618:  set __fn57__gt 0
-  619:  set __fn57__lt 0
-  620:  jump __label761 greaterThanEq 9 __fn56__i
-  621:  set __fn57__lt 1
-  622:  jump __label764 always 0 0
-        label __label761
-  623:  jump __label762 lessThanEq 9 __fn56__i
-  624:  set __fn57__gt 1
-        label __label762
-        label __label764
-  625:  jump __label769 greaterThanEq 8 __fn56__i
-  626:  op add __fn57__lt __fn57__lt 1
-  627:  jump __label772 always 0 0
-        label __label769
-  628:  jump __label770 lessThanEq 8 __fn56__i
-  629:  op add __fn57__gt __fn57__gt 1
-        label __label770
-        label __label772
-  630:  jump __label777 greaterThanEq 7 __fn56__i
-  631:  op add __fn57__lt __fn57__lt 1
-  632:  jump __label780 always 0 0
+        gotolabel __label95 __fn2
+  106:  assertequals 3 __fn2retval "median(5,4,3,2,1)"
+  107:  set __fn2__x1 1
+  108:  set __fn2__x2 1
+  109:  set __fn2__x3 1
+  110:  set __fn2__x4 1
+  111:  setaddr __fn2retaddr __label96
+  112:  call __label2 __fn2retval
+        gotolabel __label96 __fn2
+  113:  assertequals 1 __fn2retval "median(1,1,1,1,1)"
+  114:  set __fn2__x5 5
+  115:  setaddr __fn2retaddr __label97
+  116:  call __label2 __fn2retval
+        gotolabel __label97 __fn2
+  117:  assertequals 1 __fn2retval "median(1,1,1,1,5)"
+  118:  set __fn2__x4 5
+  119:  setaddr __fn2retaddr __label98
+  120:  call __label2 __fn2retval
+        gotolabel __label98 __fn2
+  121:  assertequals 1 __fn2retval "median(1,1,1,5,5)"
+  122:  set __fn2__x3 5
+  123:  setaddr __fn2retaddr __label99
+  124:  call __label2 __fn2retval
+        gotolabel __label99 __fn2
+  125:  assertequals 5 __fn2retval "median(1,1,5,5,5)"
+  126:  set __fn2__x2 5
+  127:  setaddr __fn2retaddr __label100
+  128:  call __label2 __fn2retval
+        gotolabel __label100 __fn2
+  129:  assertequals 5 __fn2retval "median(1,5,5,5,5)"
+  130:  set __fn2__x1 5
+  131:  setaddr __fn2retaddr __label101
+  132:  call __label2 __fn2retval
+        gotolabel __label101 __fn2
+  133:  assertequals 5 __fn2retval "median(5,5,5,5,5)"
+  134:  set __fn40__bestDif 10000000000
+  135:  set __fn40__best null
+  136:  set __fn40__count 1
+  137:  setaddr __tmp121 __label109
+  138:  jump __label132 always 0 0
+        gotolabel __label109 marker2
+  139:  setaddr __tmp121 __label110
+  140:  jump __label132 always 0 0
+        gotolabel __label110 marker2
+  141:  setaddr __tmp121 __label111
+  142:  jump __label132 always 0 0
+        gotolabel __label111 marker2
+  143:  setaddr __tmp121 __label112
+  144:  jump __label132 always 0 0
+        gotolabel __label112 marker2
+  145:  setaddr __tmp121 __label113
+  146:  jump __label132 always 0 0
+        gotolabel __label113 marker2
+  147:  setaddr __tmp121 __label114
+        label __label132
+  148:  jump __label134 greaterThanEq 0 __fn40__bestDif
+  149:  set __fn40__bestDif 0
+  150:  set __fn40__best 1
+  151:  set __fn40__count 1
+  152:  jump __label135 always 0 0
+        label __label134
+  153:  jump __label136 greaterThan 0 __fn40__bestDif
+  154:  op add __fn40__best __fn40__best 1
+  155:  op add __fn40__count __fn40__count 1
+        label __label136
+        label __label135
+  156:  goto __tmp121 marker2
+        gotolabel __label114 marker2
+  157:  op div __tmp120 __fn40__best __fn40__count
+  158:  assertequals 1 __tmp120 "median(1,1,1,1,1,1)"
+  159:  set __fn43__bestDif 10000000000
+  160:  set __fn43__best null
+  161:  set __fn43__count 1
+  162:  setaddr __tmp147 __label145
+  163:  set __fn43__i 1
+  164:  jump __label143 always 0 0
+        gotolabel __label145 marker4
+  165:  setaddr __tmp147 __label146
+  166:  set __fn43__i 1
+  167:  jump __label143 always 0 0
+        gotolabel __label146 marker4
+  168:  setaddr __tmp147 __label147
+  169:  set __fn43__i 1
+  170:  jump __label143 always 0 0
+        gotolabel __label147 marker4
+  171:  setaddr __tmp147 __label148
+  172:  set __fn43__i 1
+  173:  jump __label143 always 0 0
+        gotolabel __label148 marker4
+  174:  setaddr __tmp147 __label149
+  175:  set __fn43__i 1
+  176:  jump __label143 always 0 0
+        gotolabel __label149 marker4
+  177:  setaddr __tmp147 __label150
+  178:  set __fn43__i 5
+        label __label143
+  179:  set __fn44__gt 0
+  180:  set __fn44__lt 0
+  181:  jump __label777 greaterThanEq 1 __fn43__i
+  182:  set __fn44__lt 1
+  183:  jump __label780 always 0 0
         label __label777
-  633:  jump __label778 lessThanEq 7 __fn56__i
-  634:  op add __fn57__gt __fn57__gt 1
+  184:  jump __label778 lessThanEq 1 __fn43__i
+  185:  set __fn44__gt 1
         label __label778
         label __label780
-  635:  jump __label785 greaterThanEq 6 __fn56__i
-  636:  op add __fn57__lt __fn57__lt 1
-  637:  jump __label788 always 0 0
+  186:  jump __label785 greaterThanEq 1 __fn43__i
+  187:  op add __fn44__lt __fn44__lt 1
+  188:  jump __label788 always 0 0
         label __label785
-  638:  jump __label786 lessThanEq 6 __fn56__i
-  639:  op add __fn57__gt __fn57__gt 1
+  189:  jump __label786 lessThanEq 1 __fn43__i
+  190:  op add __fn44__gt __fn44__gt 1
         label __label786
         label __label788
-  640:  jump __label793 greaterThanEq 5 __fn56__i
-  641:  op add __fn57__lt __fn57__lt 1
-  642:  jump __label796 always 0 0
+  191:  jump __label793 greaterThanEq 1 __fn43__i
+  192:  op add __fn44__lt __fn44__lt 1
+  193:  jump __label796 always 0 0
         label __label793
-  643:  jump __label794 lessThanEq 5 __fn56__i
-  644:  op add __fn57__gt __fn57__gt 1
+  194:  jump __label794 lessThanEq 1 __fn43__i
+  195:  op add __fn44__gt __fn44__gt 1
         label __label794
         label __label796
-  645:  jump __label801 greaterThanEq 4 __fn56__i
-  646:  op add __fn57__lt __fn57__lt 1
-  647:  jump __label804 always 0 0
+  196:  jump __label801 greaterThanEq 1 __fn43__i
+  197:  op add __fn44__lt __fn44__lt 1
+  198:  jump __label804 always 0 0
         label __label801
-  648:  jump __label802 lessThanEq 4 __fn56__i
-  649:  op add __fn57__gt __fn57__gt 1
+  199:  jump __label802 lessThanEq 1 __fn43__i
+  200:  op add __fn44__gt __fn44__gt 1
         label __label802
         label __label804
-  650:  jump __label809 greaterThanEq 3 __fn56__i
-  651:  op add __fn57__lt __fn57__lt 1
-  652:  jump __label812 always 0 0
+  201:  jump __label809 greaterThanEq 1 __fn43__i
+  202:  op add __fn44__lt __fn44__lt 1
+  203:  jump __label812 always 0 0
         label __label809
-  653:  jump __label810 lessThanEq 3 __fn56__i
-  654:  op add __fn57__gt __fn57__gt 1
+  204:  jump __label810 lessThanEq 1 __fn43__i
+  205:  op add __fn44__gt __fn44__gt 1
         label __label810
         label __label812
-  655:  jump __label817 greaterThanEq 2 __fn56__i
-  656:  op add __fn57__lt __fn57__lt 1
-  657:  jump __label820 always 0 0
+  206:  jump __label817 greaterThanEq 5 __fn43__i
+  207:  op add __fn44__lt __fn44__lt 1
+  208:  jump __label820 always 0 0
         label __label817
-  658:  jump __label818 lessThanEq 2 __fn56__i
-  659:  op add __fn57__gt __fn57__gt 1
+  209:  jump __label818 lessThanEq 5 __fn43__i
+  210:  op add __fn44__gt __fn44__gt 1
         label __label818
         label __label820
-  660:  jump __label825 greaterThanEq 1 __fn56__i
-  661:  op add __fn57__lt __fn57__lt 1
-  662:  jump __label828 always 0 0
-        label __label825
-  663:  jump __label826 lessThanEq 1 __fn56__i
-  664:  op add __fn57__gt __fn57__gt 1
-        label __label826
-        label __label828
-  665:  op sub __tmp325 __fn57__gt __fn57__lt
-  666:  op abs __fn57__dif __tmp325 0
-  667:  set __tmp330 false
-  668:  op add __tmp327 __fn57__gt __fn57__lt
-  669:  jump __label415 lessThan __tmp327 8
-  670:  op equal __tmp330 __fn57__gt __fn57__lt
+  211:  op sub __tmp156 __fn44__gt __fn44__lt
+  212:  op abs __fn44__dif __tmp156 0
+  213:  set __tmp161 false
+  214:  op add __tmp158 __fn44__gt __fn44__lt
+  215:  jump __label167 lessThan __tmp158 5
+  216:  op equal __tmp161 __fn44__gt __fn44__lt
+        label __label167
+  217:  jump __label168 equal __tmp161 false
+  218:  set __tmp146 __fn43__i
+  219:  jump __label141 always 0 0
+        label __label168
+  220:  jump __label170 greaterThanEq __fn44__dif __fn43__bestDif
+  221:  set __fn43__bestDif __fn44__dif
+  222:  set __fn43__best __fn43__i
+  223:  set __fn43__count 1
+  224:  jump __label171 always 0 0
+        label __label170
+  225:  jump __label172 greaterThan __fn44__dif __fn43__bestDif
+  226:  op add __fn43__best __fn43__best __fn43__i
+  227:  op add __fn43__count __fn43__count 1
+        label __label172
+        label __label171
+  228:  goto __tmp147 marker4
+        gotolabel __label150 marker4
+  229:  op div __tmp146 __fn43__best __fn43__count
+        label __label141
+  230:  assertequals 1 __tmp146 "median(1,1,1,1,1,5)"
+  231:  set __fn46__bestDif 10000000000
+  232:  set __fn46__best null
+  233:  set __fn46__count 1
+  234:  setaddr __tmp173 __label181
+  235:  set __fn46__i 1
+  236:  jump __label179 always 0 0
+        gotolabel __label181 marker6
+  237:  setaddr __tmp173 __label182
+  238:  set __fn46__i 1
+  239:  jump __label179 always 0 0
+        gotolabel __label182 marker6
+  240:  setaddr __tmp173 __label183
+  241:  set __fn46__i 1
+  242:  jump __label179 always 0 0
+        gotolabel __label183 marker6
+  243:  setaddr __tmp173 __label184
+  244:  set __fn46__i 1
+  245:  jump __label179 always 0 0
+        gotolabel __label184 marker6
+  246:  setaddr __tmp173 __label185
+  247:  set __fn46__i 5
+  248:  jump __label179 always 0 0
+        gotolabel __label185 marker6
+  249:  setaddr __tmp173 __label186
+  250:  set __fn46__i 5
+        label __label179
+  251:  set __fn47__gt 0
+  252:  set __fn47__lt 0
+  253:  setaddr __tmp175 __label192
+  254:  set __fn47__i 1
+  255:  jump __label190 always 0 0
+        gotolabel __label192 marker7
+  256:  setaddr __tmp175 __label193
+  257:  set __fn47__i 1
+  258:  jump __label190 always 0 0
+        gotolabel __label193 marker7
+  259:  setaddr __tmp175 __label194
+  260:  set __fn47__i 1
+  261:  jump __label190 always 0 0
+        gotolabel __label194 marker7
+  262:  setaddr __tmp175 __label195
+  263:  set __fn47__i 1
+  264:  jump __label190 always 0 0
+        gotolabel __label195 marker7
+  265:  setaddr __tmp175 __label196
+  266:  set __fn47__i 5
+  267:  jump __label190 always 0 0
+        gotolabel __label196 marker7
+  268:  setaddr __tmp175 __label197
+  269:  set __fn47__i 5
+        label __label190
+  270:  jump __label198 greaterThanEq __fn47__i __fn46__i
+  271:  op add __fn47__lt __fn47__lt 1
+  272:  jump __label199 always 0 0
+        label __label198
+  273:  jump __label200 lessThanEq __fn47__i __fn46__i
+  274:  op add __fn47__gt __fn47__gt 1
+        label __label200
+        label __label199
+  275:  goto __tmp175 marker7
+        gotolabel __label197 marker7
+  276:  op sub __tmp182 __fn47__gt __fn47__lt
+  277:  op abs __fn47__dif __tmp182 0
+  278:  set __tmp187 false
+  279:  op add __tmp184 __fn47__gt __fn47__lt
+  280:  jump __label203 lessThan __tmp184 5
+  281:  op equal __tmp187 __fn47__gt __fn47__lt
+        label __label203
+  282:  jump __label204 equal __tmp187 false
+  283:  set __tmp172 __fn46__i
+  284:  jump __label177 always 0 0
+        label __label204
+  285:  jump __label206 greaterThanEq __fn47__dif __fn46__bestDif
+  286:  set __fn46__bestDif __fn47__dif
+  287:  set __fn46__best __fn46__i
+  288:  set __fn46__count 1
+  289:  jump __label207 always 0 0
+        label __label206
+  290:  jump __label208 greaterThan __fn47__dif __fn46__bestDif
+  291:  op add __fn46__best __fn46__best __fn46__i
+  292:  op add __fn46__count __fn46__count 1
+        label __label208
+        label __label207
+  293:  goto __tmp173 marker6
+        gotolabel __label186 marker6
+  294:  op div __tmp172 __fn46__best __fn46__count
+        label __label177
+  295:  assertequals 1 __tmp172 "median(1,1,1,1,5,5)"
+  296:  set __fn49__bestDif 10000000000
+  297:  set __fn49__best null
+  298:  set __fn49__count 1
+  299:  setaddr __tmp199 __label217
+  300:  set __fn49__i 1
+  301:  jump __label215 always 0 0
+        gotolabel __label217 marker8
+  302:  setaddr __tmp199 __label218
+  303:  set __fn49__i 1
+  304:  jump __label215 always 0 0
+        gotolabel __label218 marker8
+  305:  setaddr __tmp199 __label219
+  306:  set __fn49__i 1
+  307:  jump __label215 always 0 0
+        gotolabel __label219 marker8
+  308:  setaddr __tmp199 __label220
+  309:  set __fn49__i 5
+  310:  jump __label215 always 0 0
+        gotolabel __label220 marker8
+  311:  setaddr __tmp199 __label221
+  312:  set __fn49__i 5
+  313:  jump __label215 always 0 0
+        gotolabel __label221 marker8
+  314:  setaddr __tmp199 __label222
+  315:  set __fn49__i 5
+        label __label215
+  316:  set __fn50__gt 0
+  317:  set __fn50__lt 0
+  318:  setaddr __tmp201 __label228
+  319:  set __fn50__i 1
+  320:  jump __label226 always 0 0
+        gotolabel __label228 marker9
+  321:  setaddr __tmp201 __label229
+  322:  set __fn50__i 1
+  323:  jump __label226 always 0 0
+        gotolabel __label229 marker9
+  324:  setaddr __tmp201 __label230
+  325:  set __fn50__i 1
+  326:  jump __label226 always 0 0
+        gotolabel __label230 marker9
+  327:  setaddr __tmp201 __label231
+  328:  set __fn50__i 5
+  329:  jump __label226 always 0 0
+        gotolabel __label231 marker9
+  330:  setaddr __tmp201 __label232
+  331:  set __fn50__i 5
+  332:  jump __label226 always 0 0
+        gotolabel __label232 marker9
+  333:  setaddr __tmp201 __label233
+  334:  set __fn50__i 5
+        label __label226
+  335:  jump __label234 greaterThanEq __fn50__i __fn49__i
+  336:  op add __fn50__lt __fn50__lt 1
+  337:  jump __label235 always 0 0
+        label __label234
+  338:  jump __label236 lessThanEq __fn50__i __fn49__i
+  339:  op add __fn50__gt __fn50__gt 1
+        label __label236
+        label __label235
+  340:  goto __tmp201 marker9
+        gotolabel __label233 marker9
+  341:  op sub __tmp208 __fn50__gt __fn50__lt
+  342:  op abs __fn50__dif __tmp208 0
+  343:  set __tmp213 false
+  344:  op add __tmp210 __fn50__gt __fn50__lt
+  345:  jump __label239 lessThan __tmp210 5
+  346:  op equal __tmp213 __fn50__gt __fn50__lt
+        label __label239
+  347:  jump __label240 equal __tmp213 false
+  348:  set __tmp198 __fn49__i
+  349:  jump __label213 always 0 0
+        label __label240
+  350:  jump __label242 greaterThanEq __fn50__dif __fn49__bestDif
+  351:  set __fn49__bestDif __fn50__dif
+  352:  set __fn49__best __fn49__i
+  353:  set __fn49__count 1
+  354:  jump __label243 always 0 0
+        label __label242
+  355:  jump __label244 greaterThan __fn50__dif __fn49__bestDif
+  356:  op add __fn49__best __fn49__best __fn49__i
+  357:  op add __fn49__count __fn49__count 1
+        label __label244
+        label __label243
+  358:  goto __tmp199 marker8
+        gotolabel __label222 marker8
+  359:  op div __tmp198 __fn49__best __fn49__count
+        label __label213
+  360:  assertequals 3 __tmp198 "median(1,1,1,5,5,5)"
+  361:  set __fn52__bestDif 10000000000
+  362:  set __fn52__best null
+  363:  set __fn52__count 1
+  364:  setaddr __tmp225 __label253
+  365:  set __fn52__i 1
+  366:  jump __label251 always 0 0
+        gotolabel __label253 marker10
+  367:  setaddr __tmp225 __label254
+  368:  set __fn52__i 1
+  369:  jump __label251 always 0 0
+        gotolabel __label254 marker10
+  370:  setaddr __tmp225 __label255
+  371:  set __fn52__i 5
+  372:  jump __label251 always 0 0
+        gotolabel __label255 marker10
+  373:  setaddr __tmp225 __label256
+  374:  set __fn52__i 5
+  375:  jump __label251 always 0 0
+        gotolabel __label256 marker10
+  376:  setaddr __tmp225 __label257
+  377:  set __fn52__i 5
+  378:  jump __label251 always 0 0
+        gotolabel __label257 marker10
+  379:  setaddr __tmp225 __label258
+  380:  set __fn52__i 5
+        label __label251
+  381:  set __fn53__gt 0
+  382:  set __fn53__lt 0
+  383:  setaddr __tmp227 __label264
+  384:  set __fn53__i 1
+  385:  jump __label262 always 0 0
+        gotolabel __label264 marker11
+  386:  setaddr __tmp227 __label265
+  387:  set __fn53__i 1
+  388:  jump __label262 always 0 0
+        gotolabel __label265 marker11
+  389:  setaddr __tmp227 __label266
+  390:  set __fn53__i 5
+  391:  jump __label262 always 0 0
+        gotolabel __label266 marker11
+  392:  setaddr __tmp227 __label267
+  393:  set __fn53__i 5
+  394:  jump __label262 always 0 0
+        gotolabel __label267 marker11
+  395:  setaddr __tmp227 __label268
+  396:  set __fn53__i 5
+  397:  jump __label262 always 0 0
+        gotolabel __label268 marker11
+  398:  setaddr __tmp227 __label269
+  399:  set __fn53__i 5
+        label __label262
+  400:  jump __label270 greaterThanEq __fn53__i __fn52__i
+  401:  op add __fn53__lt __fn53__lt 1
+  402:  jump __label271 always 0 0
+        label __label270
+  403:  jump __label272 lessThanEq __fn53__i __fn52__i
+  404:  op add __fn53__gt __fn53__gt 1
+        label __label272
+        label __label271
+  405:  goto __tmp227 marker11
+        gotolabel __label269 marker11
+  406:  op sub __tmp234 __fn53__gt __fn53__lt
+  407:  op abs __fn53__dif __tmp234 0
+  408:  set __tmp239 false
+  409:  op add __tmp236 __fn53__gt __fn53__lt
+  410:  jump __label275 lessThan __tmp236 5
+  411:  op equal __tmp239 __fn53__gt __fn53__lt
+        label __label275
+  412:  jump __label276 equal __tmp239 false
+  413:  set __tmp224 __fn52__i
+  414:  jump __label249 always 0 0
+        label __label276
+  415:  jump __label278 greaterThanEq __fn53__dif __fn52__bestDif
+  416:  set __fn52__bestDif __fn53__dif
+  417:  set __fn52__best __fn52__i
+  418:  set __fn52__count 1
+  419:  jump __label279 always 0 0
+        label __label278
+  420:  jump __label280 greaterThan __fn53__dif __fn52__bestDif
+  421:  op add __fn52__best __fn52__best __fn52__i
+  422:  op add __fn52__count __fn52__count 1
+        label __label280
+        label __label279
+  423:  goto __tmp225 marker10
+        gotolabel __label258 marker10
+  424:  op div __tmp224 __fn52__best __fn52__count
+        label __label249
+  425:  assertequals 5 __tmp224 "median(1,1,5,5,5,5)"
+  426:  set __fn55__bestDif 10000000000
+  427:  set __fn55__best null
+  428:  set __fn55__count 1
+  429:  setaddr __tmp251 __label289
+  430:  set __fn55__i 1
+  431:  jump __label287 always 0 0
+        gotolabel __label289 marker12
+  432:  setaddr __tmp251 __label290
+  433:  set __fn55__i 5
+  434:  jump __label287 always 0 0
+        gotolabel __label290 marker12
+  435:  setaddr __tmp251 __label291
+  436:  set __fn55__i 5
+  437:  jump __label287 always 0 0
+        gotolabel __label291 marker12
+  438:  setaddr __tmp251 __label292
+  439:  set __fn55__i 5
+  440:  jump __label287 always 0 0
+        gotolabel __label292 marker12
+  441:  setaddr __tmp251 __label293
+  442:  set __fn55__i 5
+  443:  jump __label287 always 0 0
+        gotolabel __label293 marker12
+  444:  setaddr __tmp251 __label294
+  445:  set __fn55__i 5
+        label __label287
+  446:  set __fn56__gt 0
+  447:  set __fn56__lt 0
+  448:  setaddr __tmp253 __label300
+  449:  set __fn56__i 1
+  450:  jump __label298 always 0 0
+        gotolabel __label300 marker13
+  451:  setaddr __tmp253 __label301
+  452:  set __fn56__i 5
+  453:  jump __label298 always 0 0
+        gotolabel __label301 marker13
+  454:  setaddr __tmp253 __label302
+  455:  set __fn56__i 5
+  456:  jump __label298 always 0 0
+        gotolabel __label302 marker13
+  457:  setaddr __tmp253 __label303
+  458:  set __fn56__i 5
+  459:  jump __label298 always 0 0
+        gotolabel __label303 marker13
+  460:  setaddr __tmp253 __label304
+  461:  set __fn56__i 5
+  462:  jump __label298 always 0 0
+        gotolabel __label304 marker13
+  463:  setaddr __tmp253 __label305
+  464:  set __fn56__i 5
+        label __label298
+  465:  jump __label306 greaterThanEq __fn56__i __fn55__i
+  466:  op add __fn56__lt __fn56__lt 1
+  467:  jump __label307 always 0 0
+        label __label306
+  468:  jump __label308 lessThanEq __fn56__i __fn55__i
+  469:  op add __fn56__gt __fn56__gt 1
+        label __label308
+        label __label307
+  470:  goto __tmp253 marker13
+        gotolabel __label305 marker13
+  471:  op sub __tmp260 __fn56__gt __fn56__lt
+  472:  op abs __fn56__dif __tmp260 0
+  473:  set __tmp265 false
+  474:  op add __tmp262 __fn56__gt __fn56__lt
+  475:  jump __label311 lessThan __tmp262 5
+  476:  op equal __tmp265 __fn56__gt __fn56__lt
+        label __label311
+  477:  jump __label312 equal __tmp265 false
+  478:  set __tmp250 __fn55__i
+  479:  jump __label285 always 0 0
+        label __label312
+  480:  jump __label314 greaterThanEq __fn56__dif __fn55__bestDif
+  481:  set __fn55__bestDif __fn56__dif
+  482:  set __fn55__best __fn55__i
+  483:  set __fn55__count 1
+  484:  jump __label315 always 0 0
+        label __label314
+  485:  jump __label316 greaterThan __fn56__dif __fn55__bestDif
+  486:  op add __fn55__best __fn55__best __fn55__i
+  487:  op add __fn55__count __fn55__count 1
+        label __label316
+        label __label315
+  488:  goto __tmp251 marker12
+        gotolabel __label294 marker12
+  489:  op div __tmp250 __fn55__best __fn55__count
+        label __label285
+  490:  assertequals 5 __tmp250 "median(1,5,5,5,5,5)"
+  491:  set __fn58__bestDif 10000000000
+  492:  set __fn58__best null
+  493:  set __fn58__count 1
+  494:  setaddr __tmp277 __label325
+  495:  jump __label348 always 0 0
+        gotolabel __label325 marker14
+  496:  setaddr __tmp277 __label326
+  497:  jump __label348 always 0 0
+        gotolabel __label326 marker14
+  498:  setaddr __tmp277 __label327
+  499:  jump __label348 always 0 0
+        gotolabel __label327 marker14
+  500:  setaddr __tmp277 __label328
+  501:  jump __label348 always 0 0
+        gotolabel __label328 marker14
+  502:  setaddr __tmp277 __label329
+  503:  jump __label348 always 0 0
+        gotolabel __label329 marker14
+  504:  setaddr __tmp277 __label330
+        label __label348
+  505:  jump __label350 greaterThanEq 0 __fn58__bestDif
+  506:  set __fn58__bestDif 0
+  507:  set __fn58__best 5
+  508:  set __fn58__count 1
+  509:  jump __label351 always 0 0
+        label __label350
+  510:  jump __label352 greaterThan 0 __fn58__bestDif
+  511:  op add __fn58__best __fn58__best 5
+  512:  op add __fn58__count __fn58__count 1
+        label __label352
+        label __label351
+  513:  goto __tmp277 marker14
+        gotolabel __label330 marker14
+  514:  op div __tmp276 __fn58__best __fn58__count
+  515:  assertequals 5 __tmp276 "median(5,5,5,5,5,5)"
+  516:  set __fn61__bestDif 10000000000
+  517:  set __fn61__best null
+  518:  set __fn61__count 1
+  519:  setaddr __tmp303 __label361
+  520:  set __fn61__i 1
+  521:  jump __label359 always 0 0
+        gotolabel __label361 marker16
+  522:  setaddr __tmp303 __label362
+  523:  set __fn61__i 2
+  524:  jump __label359 always 0 0
+        gotolabel __label362 marker16
+  525:  setaddr __tmp303 __label363
+  526:  set __fn61__i 3
+  527:  jump __label359 always 0 0
+        gotolabel __label363 marker16
+  528:  setaddr __tmp303 __label364
+  529:  set __fn61__i 4
+  530:  jump __label359 always 0 0
+        gotolabel __label364 marker16
+  531:  setaddr __tmp303 __label365
+  532:  set __fn61__i 5
+  533:  jump __label359 always 0 0
+        gotolabel __label365 marker16
+  534:  setaddr __tmp303 __label366
+  535:  set __fn61__i 6
+  536:  jump __label359 always 0 0
+        gotolabel __label366 marker16
+  537:  setaddr __tmp303 __label367
+  538:  set __fn61__i 7
+  539:  jump __label359 always 0 0
+        gotolabel __label367 marker16
+  540:  setaddr __tmp303 __label368
+  541:  set __fn61__i 8
+  542:  jump __label359 always 0 0
+        gotolabel __label368 marker16
+  543:  setaddr __tmp303 __label369
+  544:  set __fn61__i 9
+        label __label359
+  545:  set __fn62__gt 0
+  546:  set __fn62__lt 0
+  547:  jump __label704 greaterThanEq 1 __fn61__i
+  548:  set __fn62__lt 1
+  549:  jump __label707 always 0 0
+        label __label704
+  550:  jump __label705 lessThanEq 1 __fn61__i
+  551:  set __fn62__gt 1
+        label __label705
+        label __label707
+  552:  jump __label712 greaterThanEq 2 __fn61__i
+  553:  op add __fn62__lt __fn62__lt 1
+  554:  jump __label715 always 0 0
+        label __label712
+  555:  jump __label713 lessThanEq 2 __fn61__i
+  556:  op add __fn62__gt __fn62__gt 1
+        label __label713
+        label __label715
+  557:  jump __label720 greaterThanEq 3 __fn61__i
+  558:  op add __fn62__lt __fn62__lt 1
+  559:  jump __label723 always 0 0
+        label __label720
+  560:  jump __label721 lessThanEq 3 __fn61__i
+  561:  op add __fn62__gt __fn62__gt 1
+        label __label721
+        label __label723
+  562:  jump __label728 greaterThanEq 4 __fn61__i
+  563:  op add __fn62__lt __fn62__lt 1
+  564:  jump __label731 always 0 0
+        label __label728
+  565:  jump __label729 lessThanEq 4 __fn61__i
+  566:  op add __fn62__gt __fn62__gt 1
+        label __label729
+        label __label731
+  567:  jump __label736 greaterThanEq 5 __fn61__i
+  568:  op add __fn62__lt __fn62__lt 1
+  569:  jump __label739 always 0 0
+        label __label736
+  570:  jump __label737 lessThanEq 5 __fn61__i
+  571:  op add __fn62__gt __fn62__gt 1
+        label __label737
+        label __label739
+  572:  jump __label744 greaterThanEq 6 __fn61__i
+  573:  op add __fn62__lt __fn62__lt 1
+  574:  jump __label747 always 0 0
+        label __label744
+  575:  jump __label745 lessThanEq 6 __fn61__i
+  576:  op add __fn62__gt __fn62__gt 1
+        label __label745
+        label __label747
+  577:  jump __label752 greaterThanEq 7 __fn61__i
+  578:  op add __fn62__lt __fn62__lt 1
+  579:  jump __label755 always 0 0
+        label __label752
+  580:  jump __label753 lessThanEq 7 __fn61__i
+  581:  op add __fn62__gt __fn62__gt 1
+        label __label753
+        label __label755
+  582:  jump __label760 greaterThanEq 8 __fn61__i
+  583:  op add __fn62__lt __fn62__lt 1
+  584:  jump __label763 always 0 0
+        label __label760
+  585:  jump __label761 lessThanEq 8 __fn61__i
+  586:  op add __fn62__gt __fn62__gt 1
+        label __label761
+        label __label763
+  587:  jump __label768 greaterThanEq 9 __fn61__i
+  588:  op add __fn62__lt __fn62__lt 1
+  589:  jump __label771 always 0 0
+        label __label768
+  590:  jump __label769 lessThanEq 9 __fn61__i
+  591:  op add __fn62__gt __fn62__gt 1
+        label __label769
+        label __label771
+  592:  op sub __tmp312 __fn62__gt __fn62__lt
+  593:  op abs __fn62__dif __tmp312 0
+  594:  set __tmp317 false
+  595:  op add __tmp314 __fn62__gt __fn62__lt
+  596:  jump __label389 lessThan __tmp314 8
+  597:  op equal __tmp317 __fn62__gt __fn62__lt
+        label __label389
+  598:  jump __label390 equal __tmp317 false
+  599:  set __tmp302 __fn61__i
+  600:  jump __label357 always 0 0
+        label __label390
+  601:  jump __label392 greaterThanEq __fn62__dif __fn61__bestDif
+  602:  set __fn61__bestDif __fn62__dif
+  603:  set __fn61__best __fn61__i
+  604:  set __fn61__count 1
+  605:  jump __label393 always 0 0
+        label __label392
+  606:  jump __label394 greaterThan __fn62__dif __fn61__bestDif
+  607:  op add __fn61__best __fn61__best __fn61__i
+  608:  op add __fn61__count __fn61__count 1
+        label __label394
+        label __label393
+  609:  goto __tmp303 marker16
+        gotolabel __label369 marker16
+  610:  op div __tmp302 __fn61__best __fn61__count
+        label __label357
+  611:  assertequals 5 __tmp302 "median(1,2,3,4,5,6,7,8,9)"
+  612:  set __fn64__bestDif 10000000000
+  613:  set __fn64__best null
+  614:  set __fn64__count 1
+  615:  setaddr __tmp329 __label403
+  616:  set __fn64__i 9
+  617:  jump __label401 always 0 0
+        gotolabel __label403 marker18
+  618:  setaddr __tmp329 __label404
+  619:  set __fn64__i 8
+  620:  jump __label401 always 0 0
+        gotolabel __label404 marker18
+  621:  setaddr __tmp329 __label405
+  622:  set __fn64__i 7
+  623:  jump __label401 always 0 0
+        gotolabel __label405 marker18
+  624:  setaddr __tmp329 __label406
+  625:  set __fn64__i 6
+  626:  jump __label401 always 0 0
+        gotolabel __label406 marker18
+  627:  setaddr __tmp329 __label407
+  628:  set __fn64__i 5
+  629:  jump __label401 always 0 0
+        gotolabel __label407 marker18
+  630:  setaddr __tmp329 __label408
+  631:  set __fn64__i 4
+  632:  jump __label401 always 0 0
+        gotolabel __label408 marker18
+  633:  setaddr __tmp329 __label409
+  634:  set __fn64__i 3
+  635:  jump __label401 always 0 0
+        gotolabel __label409 marker18
+  636:  setaddr __tmp329 __label410
+  637:  set __fn64__i 2
+  638:  jump __label401 always 0 0
+        gotolabel __label410 marker18
+  639:  setaddr __tmp329 __label411
+  640:  set __fn64__i 1
+        label __label401
+  641:  set __fn65__gt 0
+  642:  set __fn65__lt 0
+  643:  setaddr __tmp331 __label417
+  644:  set __fn65__i 9
+  645:  jump __label415 always 0 0
+        gotolabel __label417 marker19
+  646:  setaddr __tmp331 __label418
+  647:  set __fn65__i 8
+  648:  jump __label415 always 0 0
+        gotolabel __label418 marker19
+  649:  setaddr __tmp331 __label419
+  650:  set __fn65__i 7
+  651:  jump __label415 always 0 0
+        gotolabel __label419 marker19
+  652:  setaddr __tmp331 __label420
+  653:  set __fn65__i 6
+  654:  jump __label415 always 0 0
+        gotolabel __label420 marker19
+  655:  setaddr __tmp331 __label421
+  656:  set __fn65__i 5
+  657:  jump __label415 always 0 0
+        gotolabel __label421 marker19
+  658:  setaddr __tmp331 __label422
+  659:  set __fn65__i 4
+  660:  jump __label415 always 0 0
+        gotolabel __label422 marker19
+  661:  setaddr __tmp331 __label423
+  662:  set __fn65__i 3
+  663:  jump __label415 always 0 0
+        gotolabel __label423 marker19
+  664:  setaddr __tmp331 __label424
+  665:  set __fn65__i 2
+  666:  jump __label415 always 0 0
+        gotolabel __label424 marker19
+  667:  setaddr __tmp331 __label425
+  668:  set __fn65__i 1
         label __label415
-  671:  jump __label416 equal __tmp330 false
-  672:  set __tmp315 __fn56__i
-  673:  jump __label383 always 0 0
-        label __label416
-  674:  jump __label418 greaterThanEq __fn57__dif __fn56__bestDif
-  675:  set __fn56__bestDif __fn57__dif
-  676:  set __fn56__best __fn56__i
-  677:  set __fn56__count 1
-  678:  jump __label419 always 0 0
-        label __label418
-  679:  jump __label420 greaterThan __fn57__dif __fn56__bestDif
-  680:  op add __fn56__best __fn56__best __fn56__i
-  681:  op add __fn56__count __fn56__count 1
-        label __label420
-        label __label419
-  682:  goto __tmp316 marker18
-        gotolabel __label395 marker18
-  683:  op div __tmp315 __fn56__best __fn56__count
-        label __label383
-  684:  assertequals 5 __tmp315 "median(9,8,7,6,5,4,3,2,1)"
-  685:  set __fn59__bestDif 10000000000
-  686:  set __fn59__best null
-  687:  set __fn59__count 1
-  688:  setaddr __tmp342 __label429
-  689:  set __fn59__i 1
-  690:  jump __label427 always 0 0
-        gotolabel __label429 marker20
-  691:  setaddr __tmp342 __label430
-  692:  set __fn59__i 3
-  693:  jump __label427 always 0 0
-        gotolabel __label430 marker20
-  694:  setaddr __tmp342 __label431
-  695:  set __fn59__i 5
-  696:  jump __label427 always 0 0
-        gotolabel __label431 marker20
-  697:  setaddr __tmp342 __label432
-  698:  set __fn59__i 7
-  699:  jump __label427 always 0 0
-        gotolabel __label432 marker20
-  700:  setaddr __tmp342 __label433
-  701:  set __fn59__i 9
-  702:  jump __label427 always 0 0
-        gotolabel __label433 marker20
-  703:  setaddr __tmp342 __label434
-  704:  set __fn59__i 2
-  705:  jump __label427 always 0 0
-        gotolabel __label434 marker20
-  706:  setaddr __tmp342 __label435
-  707:  set __fn59__i 4
-  708:  jump __label427 always 0 0
-        gotolabel __label435 marker20
-  709:  setaddr __tmp342 __label436
-  710:  set __fn59__i 6
-  711:  jump __label427 always 0 0
-        gotolabel __label436 marker20
-  712:  setaddr __tmp342 __label437
-  713:  set __fn59__i 8
+  669:  jump __label426 greaterThanEq __fn65__i __fn64__i
+  670:  op add __fn65__lt __fn65__lt 1
+  671:  jump __label427 always 0 0
+        label __label426
+  672:  jump __label428 lessThanEq __fn65__i __fn64__i
+  673:  op add __fn65__gt __fn65__gt 1
+        label __label428
         label __label427
-  714:  set __fn60__gt 0
-  715:  set __fn60__lt 0
-  716:  jump __label854 greaterThanEq 1 __fn59__i
-  717:  set __fn60__lt 1
-  718:  jump __label857 always 0 0
-        label __label854
-  719:  jump __label855 lessThanEq 1 __fn59__i
-  720:  set __fn60__gt 1
-        label __label855
-        label __label857
-  721:  jump __label862 greaterThanEq 3 __fn59__i
-  722:  op add __fn60__lt __fn60__lt 1
-  723:  jump __label865 always 0 0
-        label __label862
-  724:  jump __label863 lessThanEq 3 __fn59__i
-  725:  op add __fn60__gt __fn60__gt 1
-        label __label863
-        label __label865
-  726:  jump __label870 greaterThanEq 5 __fn59__i
-  727:  op add __fn60__lt __fn60__lt 1
-  728:  jump __label873 always 0 0
-        label __label870
-  729:  jump __label871 lessThanEq 5 __fn59__i
-  730:  op add __fn60__gt __fn60__gt 1
-        label __label871
-        label __label873
-  731:  jump __label878 greaterThanEq 7 __fn59__i
-  732:  op add __fn60__lt __fn60__lt 1
-  733:  jump __label881 always 0 0
-        label __label878
-  734:  jump __label879 lessThanEq 7 __fn59__i
-  735:  op add __fn60__gt __fn60__gt 1
-        label __label879
-        label __label881
-  736:  jump __label886 greaterThanEq 9 __fn59__i
-  737:  op add __fn60__lt __fn60__lt 1
-  738:  jump __label889 always 0 0
-        label __label886
-  739:  jump __label887 lessThanEq 9 __fn59__i
-  740:  op add __fn60__gt __fn60__gt 1
-        label __label887
-        label __label889
-  741:  jump __label894 greaterThanEq 2 __fn59__i
-  742:  op add __fn60__lt __fn60__lt 1
-  743:  jump __label897 always 0 0
-        label __label894
-  744:  jump __label895 lessThanEq 2 __fn59__i
-  745:  op add __fn60__gt __fn60__gt 1
-        label __label895
-        label __label897
-  746:  jump __label902 greaterThanEq 4 __fn59__i
-  747:  op add __fn60__lt __fn60__lt 1
-  748:  jump __label905 always 0 0
-        label __label902
-  749:  jump __label903 lessThanEq 4 __fn59__i
-  750:  op add __fn60__gt __fn60__gt 1
-        label __label903
-        label __label905
-  751:  jump __label910 greaterThanEq 6 __fn59__i
-  752:  op add __fn60__lt __fn60__lt 1
-  753:  jump __label913 always 0 0
-        label __label910
-  754:  jump __label911 lessThanEq 6 __fn59__i
-  755:  op add __fn60__gt __fn60__gt 1
-        label __label911
-        label __label913
-  756:  jump __label918 greaterThanEq 8 __fn59__i
-  757:  op add __fn60__lt __fn60__lt 1
-  758:  jump __label921 always 0 0
-        label __label918
-  759:  jump __label919 lessThanEq 8 __fn59__i
-  760:  op add __fn60__gt __fn60__gt 1
-        label __label919
-        label __label921
-  761:  op sub __tmp351 __fn60__gt __fn60__lt
-  762:  op abs __fn60__dif __tmp351 0
-  763:  set __tmp356 false
-  764:  op add __tmp353 __fn60__gt __fn60__lt
-  765:  jump __label457 lessThan __tmp353 8
-  766:  op equal __tmp356 __fn60__gt __fn60__lt
+  674:  goto __tmp331 marker19
+        gotolabel __label425 marker19
+  675:  op sub __tmp338 __fn65__gt __fn65__lt
+  676:  op abs __fn65__dif __tmp338 0
+  677:  set __tmp343 false
+  678:  op add __tmp340 __fn65__gt __fn65__lt
+  679:  jump __label431 lessThan __tmp340 8
+  680:  op equal __tmp343 __fn65__gt __fn65__lt
+        label __label431
+  681:  jump __label432 equal __tmp343 false
+  682:  set __tmp328 __fn64__i
+  683:  jump __label399 always 0 0
+        label __label432
+  684:  jump __label434 greaterThanEq __fn65__dif __fn64__bestDif
+  685:  set __fn64__bestDif __fn65__dif
+  686:  set __fn64__best __fn64__i
+  687:  set __fn64__count 1
+  688:  jump __label435 always 0 0
+        label __label434
+  689:  jump __label436 greaterThan __fn65__dif __fn64__bestDif
+  690:  op add __fn64__best __fn64__best __fn64__i
+  691:  op add __fn64__count __fn64__count 1
+        label __label436
+        label __label435
+  692:  goto __tmp329 marker18
+        gotolabel __label411 marker18
+  693:  op div __tmp328 __fn64__best __fn64__count
+        label __label399
+  694:  assertequals 5 __tmp328 "median(9,8,7,6,5,4,3,2,1)"
+  695:  set __fn67__bestDif 10000000000
+  696:  set __fn67__best null
+  697:  set __fn67__count 1
+  698:  setaddr __tmp355 __label445
+  699:  set __fn67__i 1
+  700:  jump __label443 always 0 0
+        gotolabel __label445 marker20
+  701:  setaddr __tmp355 __label446
+  702:  set __fn67__i 3
+  703:  jump __label443 always 0 0
+        gotolabel __label446 marker20
+  704:  setaddr __tmp355 __label447
+  705:  set __fn67__i 5
+  706:  jump __label443 always 0 0
+        gotolabel __label447 marker20
+  707:  setaddr __tmp355 __label448
+  708:  set __fn67__i 7
+  709:  jump __label443 always 0 0
+        gotolabel __label448 marker20
+  710:  setaddr __tmp355 __label449
+  711:  set __fn67__i 9
+  712:  jump __label443 always 0 0
+        gotolabel __label449 marker20
+  713:  setaddr __tmp355 __label450
+  714:  set __fn67__i 2
+  715:  jump __label443 always 0 0
+        gotolabel __label450 marker20
+  716:  setaddr __tmp355 __label451
+  717:  set __fn67__i 4
+  718:  jump __label443 always 0 0
+        gotolabel __label451 marker20
+  719:  setaddr __tmp355 __label452
+  720:  set __fn67__i 6
+  721:  jump __label443 always 0 0
+        gotolabel __label452 marker20
+  722:  setaddr __tmp355 __label453
+  723:  set __fn67__i 8
+        label __label443
+  724:  set __fn68__gt 0
+  725:  set __fn68__lt 0
+  726:  setaddr __tmp357 __label459
+  727:  set __fn68__i 1
+  728:  jump __label457 always 0 0
+        gotolabel __label459 marker21
+  729:  setaddr __tmp357 __label460
+  730:  set __fn68__i 3
+  731:  jump __label457 always 0 0
+        gotolabel __label460 marker21
+  732:  setaddr __tmp357 __label461
+  733:  set __fn68__i 5
+  734:  jump __label457 always 0 0
+        gotolabel __label461 marker21
+  735:  setaddr __tmp357 __label462
+  736:  set __fn68__i 7
+  737:  jump __label457 always 0 0
+        gotolabel __label462 marker21
+  738:  setaddr __tmp357 __label463
+  739:  set __fn68__i 9
+  740:  jump __label457 always 0 0
+        gotolabel __label463 marker21
+  741:  setaddr __tmp357 __label464
+  742:  set __fn68__i 2
+  743:  jump __label457 always 0 0
+        gotolabel __label464 marker21
+  744:  setaddr __tmp357 __label465
+  745:  set __fn68__i 4
+  746:  jump __label457 always 0 0
+        gotolabel __label465 marker21
+  747:  setaddr __tmp357 __label466
+  748:  set __fn68__i 6
+  749:  jump __label457 always 0 0
+        gotolabel __label466 marker21
+  750:  setaddr __tmp357 __label467
+  751:  set __fn68__i 8
         label __label457
-  767:  jump __label458 equal __tmp356 false
-  768:  set __tmp341 __fn59__i
-  769:  jump __label425 always 0 0
-        label __label458
-  770:  jump __label460 greaterThanEq __fn60__dif __fn59__bestDif
-  771:  set __fn59__bestDif __fn60__dif
-  772:  set __fn59__best __fn59__i
-  773:  set __fn59__count 1
-  774:  jump __label461 always 0 0
-        label __label460
-  775:  jump __label462 greaterThan __fn60__dif __fn59__bestDif
-  776:  op add __fn59__best __fn59__best __fn59__i
-  777:  op add __fn59__count __fn59__count 1
-        label __label462
-        label __label461
-  778:  goto __tmp342 marker20
-        gotolabel __label437 marker20
-  779:  op div __tmp341 __fn59__best __fn59__count
-        label __label425
-  780:  assertequals 5 __tmp341 "median(1,3,5,7,9,2,4,6,8)"
-  781:  set __fn62__bestDif 10000000000
-  782:  set __fn62__best null
-  783:  set __fn62__count 1
-  784:  setaddr __tmp368 __label471
-  785:  set __fn62__i 7
-  786:  jump __label469 always 0 0
-        gotolabel __label471 marker22
-  787:  setaddr __tmp368 __label472
-  788:  set __fn62__i 4
-  789:  jump __label469 always 0 0
-        gotolabel __label472 marker22
-  790:  setaddr __tmp368 __label473
-  791:  set __fn62__i 2
-  792:  jump __label469 always 0 0
-        gotolabel __label473 marker22
-  793:  setaddr __tmp368 __label474
-  794:  set __fn62__i 8
-  795:  jump __label469 always 0 0
-        gotolabel __label474 marker22
-  796:  setaddr __tmp368 __label475
-  797:  set __fn62__i 1
-  798:  jump __label469 always 0 0
-        gotolabel __label475 marker22
-  799:  setaddr __tmp368 __label476
-  800:  set __fn62__i 5
-  801:  jump __label469 always 0 0
-        gotolabel __label476 marker22
-  802:  setaddr __tmp368 __label477
-  803:  set __fn62__i 6
-  804:  jump __label469 always 0 0
-        gotolabel __label477 marker22
-  805:  setaddr __tmp368 __label478
-  806:  set __fn62__i 9
-  807:  jump __label469 always 0 0
-        gotolabel __label478 marker22
-  808:  setaddr __tmp368 __label479
-  809:  set __fn62__i 3
+  752:  jump __label468 greaterThanEq __fn68__i __fn67__i
+  753:  op add __fn68__lt __fn68__lt 1
+  754:  jump __label469 always 0 0
+        label __label468
+  755:  jump __label470 lessThanEq __fn68__i __fn67__i
+  756:  op add __fn68__gt __fn68__gt 1
+        label __label470
         label __label469
-  810:  set __fn63__gt 0
-  811:  set __fn63__lt 0
-  812:  setaddr __tmp370 __label485
-  813:  set __fn63__i 7
-  814:  jump __label483 always 0 0
-        gotolabel __label485 marker23
-  815:  setaddr __tmp370 __label486
-  816:  set __fn63__i 4
-  817:  jump __label483 always 0 0
-        gotolabel __label486 marker23
-  818:  setaddr __tmp370 __label487
-  819:  set __fn63__i 2
-  820:  jump __label483 always 0 0
-        gotolabel __label487 marker23
-  821:  setaddr __tmp370 __label488
-  822:  set __fn63__i 8
-  823:  jump __label483 always 0 0
-        gotolabel __label488 marker23
-  824:  setaddr __tmp370 __label489
-  825:  set __fn63__i 1
-  826:  jump __label483 always 0 0
-        gotolabel __label489 marker23
-  827:  setaddr __tmp370 __label490
-  828:  set __fn63__i 5
-  829:  jump __label483 always 0 0
-        gotolabel __label490 marker23
-  830:  setaddr __tmp370 __label491
-  831:  set __fn63__i 6
-  832:  jump __label483 always 0 0
-        gotolabel __label491 marker23
-  833:  setaddr __tmp370 __label492
-  834:  set __fn63__i 9
-  835:  jump __label483 always 0 0
-        gotolabel __label492 marker23
-  836:  setaddr __tmp370 __label493
-  837:  set __fn63__i 3
-        label __label483
-  838:  jump __label494 greaterThanEq __fn63__i __fn62__i
-  839:  op add __fn63__lt __fn63__lt 1
-  840:  jump __label495 always 0 0
-        label __label494
-  841:  jump __label496 lessThanEq __fn63__i __fn62__i
-  842:  op add __fn63__gt __fn63__gt 1
-        label __label496
-        label __label495
-  843:  goto __tmp370 marker23
-        gotolabel __label493 marker23
-  844:  op sub __tmp377 __fn63__gt __fn63__lt
-  845:  op abs __fn63__dif __tmp377 0
-  846:  set __tmp382 false
-  847:  op add __tmp379 __fn63__gt __fn63__lt
-  848:  jump __label499 lessThan __tmp379 8
-  849:  op equal __tmp382 __fn63__gt __fn63__lt
+  757:  goto __tmp357 marker21
+        gotolabel __label467 marker21
+  758:  op sub __tmp364 __fn68__gt __fn68__lt
+  759:  op abs __fn68__dif __tmp364 0
+  760:  set __tmp369 false
+  761:  op add __tmp366 __fn68__gt __fn68__lt
+  762:  jump __label473 lessThan __tmp366 8
+  763:  op equal __tmp369 __fn68__gt __fn68__lt
+        label __label473
+  764:  jump __label474 equal __tmp369 false
+  765:  set __tmp354 __fn67__i
+  766:  jump __label441 always 0 0
+        label __label474
+  767:  jump __label476 greaterThanEq __fn68__dif __fn67__bestDif
+  768:  set __fn67__bestDif __fn68__dif
+  769:  set __fn67__best __fn67__i
+  770:  set __fn67__count 1
+  771:  jump __label477 always 0 0
+        label __label476
+  772:  jump __label478 greaterThan __fn68__dif __fn67__bestDif
+  773:  op add __fn67__best __fn67__best __fn67__i
+  774:  op add __fn67__count __fn67__count 1
+        label __label478
+        label __label477
+  775:  goto __tmp355 marker20
+        gotolabel __label453 marker20
+  776:  op div __tmp354 __fn67__best __fn67__count
+        label __label441
+  777:  assertequals 5 __tmp354 "median(1,3,5,7,9,2,4,6,8)"
+  778:  set __fn70__bestDif 10000000000
+  779:  set __fn70__best null
+  780:  set __fn70__count 1
+  781:  setaddr __tmp381 __label487
+  782:  set __fn70__i 7
+  783:  jump __label485 always 0 0
+        gotolabel __label487 marker22
+  784:  setaddr __tmp381 __label488
+  785:  set __fn70__i 4
+  786:  jump __label485 always 0 0
+        gotolabel __label488 marker22
+  787:  setaddr __tmp381 __label489
+  788:  set __fn70__i 2
+  789:  jump __label485 always 0 0
+        gotolabel __label489 marker22
+  790:  setaddr __tmp381 __label490
+  791:  set __fn70__i 8
+  792:  jump __label485 always 0 0
+        gotolabel __label490 marker22
+  793:  setaddr __tmp381 __label491
+  794:  set __fn70__i 1
+  795:  jump __label485 always 0 0
+        gotolabel __label491 marker22
+  796:  setaddr __tmp381 __label492
+  797:  set __fn70__i 5
+  798:  jump __label485 always 0 0
+        gotolabel __label492 marker22
+  799:  setaddr __tmp381 __label493
+  800:  set __fn70__i 6
+  801:  jump __label485 always 0 0
+        gotolabel __label493 marker22
+  802:  setaddr __tmp381 __label494
+  803:  set __fn70__i 9
+  804:  jump __label485 always 0 0
+        gotolabel __label494 marker22
+  805:  setaddr __tmp381 __label495
+  806:  set __fn70__i 3
+        label __label485
+  807:  set __fn71__gt 0
+  808:  set __fn71__lt 0
+  809:  setaddr __tmp383 __label501
+  810:  set __fn71__i 7
+  811:  jump __label499 always 0 0
+        gotolabel __label501 marker23
+  812:  setaddr __tmp383 __label502
+  813:  set __fn71__i 4
+  814:  jump __label499 always 0 0
+        gotolabel __label502 marker23
+  815:  setaddr __tmp383 __label503
+  816:  set __fn71__i 2
+  817:  jump __label499 always 0 0
+        gotolabel __label503 marker23
+  818:  setaddr __tmp383 __label504
+  819:  set __fn71__i 8
+  820:  jump __label499 always 0 0
+        gotolabel __label504 marker23
+  821:  setaddr __tmp383 __label505
+  822:  set __fn71__i 1
+  823:  jump __label499 always 0 0
+        gotolabel __label505 marker23
+  824:  setaddr __tmp383 __label506
+  825:  set __fn71__i 5
+  826:  jump __label499 always 0 0
+        gotolabel __label506 marker23
+  827:  setaddr __tmp383 __label507
+  828:  set __fn71__i 6
+  829:  jump __label499 always 0 0
+        gotolabel __label507 marker23
+  830:  setaddr __tmp383 __label508
+  831:  set __fn71__i 9
+  832:  jump __label499 always 0 0
+        gotolabel __label508 marker23
+  833:  setaddr __tmp383 __label509
+  834:  set __fn71__i 3
         label __label499
-  850:  jump __label500 equal __tmp382 false
-  851:  set __tmp367 __fn62__i
-  852:  jump __label467 always 0 0
-        label __label500
-  853:  jump __label502 greaterThanEq __fn63__dif __fn62__bestDif
-  854:  set __fn62__bestDif __fn63__dif
-  855:  set __fn62__best __fn62__i
-  856:  set __fn62__count 1
-  857:  jump __label503 always 0 0
-        label __label502
-  858:  jump __label504 greaterThan __fn63__dif __fn62__bestDif
-  859:  op add __fn62__best __fn62__best __fn62__i
-  860:  op add __fn62__count __fn62__count 1
-        label __label504
-        label __label503
-  861:  goto __tmp368 marker22
-        gotolabel __label479 marker22
-  862:  op div __tmp367 __fn62__best __fn62__count
-        label __label467
-  863:  assertequals 5 __tmp367 "median(7,4,2,8,1,5,6,9,3)"
-  864:  set __fn65__bestDif 10000000000
-  865:  set __fn65__best null
-  866:  set __fn65__count 1
-  867:  setaddr __tmp394 __label513
-  868:  set __fn65__i 1
-  869:  jump __label511 always 0 0
-        gotolabel __label513 marker24
-  870:  setaddr __tmp394 __label514
-  871:  set __fn65__i 1
-  872:  jump __label511 always 0 0
-        gotolabel __label514 marker24
-  873:  setaddr __tmp394 __label515
-  874:  set __fn65__i 1
-  875:  jump __label511 always 0 0
-        gotolabel __label515 marker24
-  876:  setaddr __tmp394 __label516
-  877:  set __fn65__i 1
-  878:  jump __label511 always 0 0
-        gotolabel __label516 marker24
-  879:  setaddr __tmp394 __label517
-  880:  set __fn65__i 9
-  881:  jump __label511 always 0 0
-        gotolabel __label517 marker24
-  882:  setaddr __tmp394 __label518
-  883:  set __fn65__i 9
-  884:  jump __label511 always 0 0
-        gotolabel __label518 marker24
-  885:  setaddr __tmp394 __label519
-  886:  set __fn65__i 9
-  887:  jump __label511 always 0 0
-        gotolabel __label519 marker24
-  888:  setaddr __tmp394 __label520
-  889:  set __fn65__i 9
-  890:  jump __label511 always 0 0
-        gotolabel __label520 marker24
-  891:  setaddr __tmp394 __label521
-  892:  set __fn65__i 5
+  835:  jump __label510 greaterThanEq __fn71__i __fn70__i
+  836:  op add __fn71__lt __fn71__lt 1
+  837:  jump __label511 always 0 0
+        label __label510
+  838:  jump __label512 lessThanEq __fn71__i __fn70__i
+  839:  op add __fn71__gt __fn71__gt 1
+        label __label512
         label __label511
-  893:  set __fn66__gt 0
-  894:  set __fn66__lt 0
-  895:  setaddr __tmp396 __label527
-  896:  set __fn66__i 1
-  897:  jump __label525 always 0 0
-        gotolabel __label527 marker25
-  898:  setaddr __tmp396 __label528
-  899:  set __fn66__i 1
-  900:  jump __label525 always 0 0
-        gotolabel __label528 marker25
-  901:  setaddr __tmp396 __label529
-  902:  set __fn66__i 1
-  903:  jump __label525 always 0 0
-        gotolabel __label529 marker25
-  904:  setaddr __tmp396 __label530
-  905:  set __fn66__i 1
-  906:  jump __label525 always 0 0
-        gotolabel __label530 marker25
-  907:  setaddr __tmp396 __label531
-  908:  set __fn66__i 9
-  909:  jump __label525 always 0 0
-        gotolabel __label531 marker25
-  910:  setaddr __tmp396 __label532
-  911:  set __fn66__i 9
-  912:  jump __label525 always 0 0
-        gotolabel __label532 marker25
-  913:  setaddr __tmp396 __label533
-  914:  set __fn66__i 9
-  915:  jump __label525 always 0 0
-        gotolabel __label533 marker25
-  916:  setaddr __tmp396 __label534
-  917:  set __fn66__i 9
-  918:  jump __label525 always 0 0
-        gotolabel __label534 marker25
-  919:  setaddr __tmp396 __label535
-  920:  set __fn66__i 5
-        label __label525
-  921:  jump __label536 greaterThanEq __fn66__i __fn65__i
-  922:  op add __fn66__lt __fn66__lt 1
-  923:  jump __label537 always 0 0
-        label __label536
-  924:  jump __label538 lessThanEq __fn66__i __fn65__i
-  925:  op add __fn66__gt __fn66__gt 1
-        label __label538
-        label __label537
-  926:  goto __tmp396 marker25
-        gotolabel __label535 marker25
-  927:  op sub __tmp403 __fn66__gt __fn66__lt
-  928:  op abs __fn66__dif __tmp403 0
-  929:  set __tmp408 false
-  930:  op add __tmp405 __fn66__gt __fn66__lt
-  931:  jump __label541 lessThan __tmp405 8
-  932:  op equal __tmp408 __fn66__gt __fn66__lt
+  840:  goto __tmp383 marker23
+        gotolabel __label509 marker23
+  841:  op sub __tmp390 __fn71__gt __fn71__lt
+  842:  op abs __fn71__dif __tmp390 0
+  843:  set __tmp395 false
+  844:  op add __tmp392 __fn71__gt __fn71__lt
+  845:  jump __label515 lessThan __tmp392 8
+  846:  op equal __tmp395 __fn71__gt __fn71__lt
+        label __label515
+  847:  jump __label516 equal __tmp395 false
+  848:  set __tmp380 __fn70__i
+  849:  jump __label483 always 0 0
+        label __label516
+  850:  jump __label518 greaterThanEq __fn71__dif __fn70__bestDif
+  851:  set __fn70__bestDif __fn71__dif
+  852:  set __fn70__best __fn70__i
+  853:  set __fn70__count 1
+  854:  jump __label519 always 0 0
+        label __label518
+  855:  jump __label520 greaterThan __fn71__dif __fn70__bestDif
+  856:  op add __fn70__best __fn70__best __fn70__i
+  857:  op add __fn70__count __fn70__count 1
+        label __label520
+        label __label519
+  858:  goto __tmp381 marker22
+        gotolabel __label495 marker22
+  859:  op div __tmp380 __fn70__best __fn70__count
+        label __label483
+  860:  assertequals 5 __tmp380 "median(7,4,2,8,1,5,6,9,3)"
+  861:  set __fn73__bestDif 10000000000
+  862:  set __fn73__best null
+  863:  set __fn73__count 1
+  864:  setaddr __tmp407 __label529
+  865:  set __fn73__i 1
+  866:  jump __label527 always 0 0
+        gotolabel __label529 marker24
+  867:  setaddr __tmp407 __label530
+  868:  set __fn73__i 1
+  869:  jump __label527 always 0 0
+        gotolabel __label530 marker24
+  870:  setaddr __tmp407 __label531
+  871:  set __fn73__i 1
+  872:  jump __label527 always 0 0
+        gotolabel __label531 marker24
+  873:  setaddr __tmp407 __label532
+  874:  set __fn73__i 1
+  875:  jump __label527 always 0 0
+        gotolabel __label532 marker24
+  876:  setaddr __tmp407 __label533
+  877:  set __fn73__i 9
+  878:  jump __label527 always 0 0
+        gotolabel __label533 marker24
+  879:  setaddr __tmp407 __label534
+  880:  set __fn73__i 9
+  881:  jump __label527 always 0 0
+        gotolabel __label534 marker24
+  882:  setaddr __tmp407 __label535
+  883:  set __fn73__i 9
+  884:  jump __label527 always 0 0
+        gotolabel __label535 marker24
+  885:  setaddr __tmp407 __label536
+  886:  set __fn73__i 9
+  887:  jump __label527 always 0 0
+        gotolabel __label536 marker24
+  888:  setaddr __tmp407 __label537
+  889:  set __fn73__i 5
+        label __label527
+  890:  set __fn74__gt 0
+  891:  set __fn74__lt 0
+  892:  setaddr __tmp409 __label543
+  893:  set __fn74__i 1
+  894:  jump __label541 always 0 0
+        gotolabel __label543 marker25
+  895:  setaddr __tmp409 __label544
+  896:  set __fn74__i 1
+  897:  jump __label541 always 0 0
+        gotolabel __label544 marker25
+  898:  setaddr __tmp409 __label545
+  899:  set __fn74__i 1
+  900:  jump __label541 always 0 0
+        gotolabel __label545 marker25
+  901:  setaddr __tmp409 __label546
+  902:  set __fn74__i 1
+  903:  jump __label541 always 0 0
+        gotolabel __label546 marker25
+  904:  setaddr __tmp409 __label547
+  905:  set __fn74__i 9
+  906:  jump __label541 always 0 0
+        gotolabel __label547 marker25
+  907:  setaddr __tmp409 __label548
+  908:  set __fn74__i 9
+  909:  jump __label541 always 0 0
+        gotolabel __label548 marker25
+  910:  setaddr __tmp409 __label549
+  911:  set __fn74__i 9
+  912:  jump __label541 always 0 0
+        gotolabel __label549 marker25
+  913:  setaddr __tmp409 __label550
+  914:  set __fn74__i 9
+  915:  jump __label541 always 0 0
+        gotolabel __label550 marker25
+  916:  setaddr __tmp409 __label551
+  917:  set __fn74__i 5
         label __label541
-  933:  jump __label542 equal __tmp408 false
-  934:  set __tmp393 __fn65__i
-  935:  jump __label509 always 0 0
-        label __label542
-  936:  jump __label544 greaterThanEq __fn66__dif __fn65__bestDif
-  937:  set __fn65__bestDif __fn66__dif
-  938:  set __fn65__best __fn65__i
-  939:  set __fn65__count 1
-  940:  jump __label545 always 0 0
-        label __label544
-  941:  jump __label546 greaterThan __fn66__dif __fn65__bestDif
-  942:  op add __fn65__best __fn65__best __fn65__i
-  943:  op add __fn65__count __fn65__count 1
-        label __label546
-        label __label545
-  944:  goto __tmp394 marker24
-        gotolabel __label521 marker24
-  945:  op div __tmp393 __fn65__best __fn65__count
-        label __label509
-  946:  assertequals 5 __tmp393 "median(1,1,1,1,9,9,9,9,5)"
-  947:  stop
-  948:  end
-        label __label1
-  949:  op max __fn1__y2 __fn1__x1 __fn1__x2
-  950:  op min __fn1__y3 __fn1__x3 __fn1__x4
-  951:  jump __label554 greaterThan __fn1__y2 __fn1__y3
-  952:  op add __tmp426 __fn1__y2 __fn1__y3
-  953:  op div __fn1retval __tmp426 2
-  954:  jump __label555 always 0 0
+  918:  jump __label552 greaterThanEq __fn74__i __fn73__i
+  919:  op add __fn74__lt __fn74__lt 1
+  920:  jump __label553 always 0 0
+        label __label552
+  921:  jump __label554 lessThanEq __fn74__i __fn73__i
+  922:  op add __fn74__gt __fn74__gt 1
         label __label554
-  955:  op min __fn1__y1 __fn1__x1 __fn1__x2
-  956:  op max __fn1__y4 __fn1__x3 __fn1__x4
-  957:  jump __label556 lessThan __fn1__y1 __fn1__y4
-  958:  op add __tmp432 __fn1__y1 __fn1__y4
-  959:  op div __fn1retval __tmp432 2
-  960:  jump __label557 always 0 0
-        label __label556
-  961:  op max __tmp434 __fn1__y1 __fn1__y3
-  962:  op min __tmp435 __fn1__y2 __fn1__y4
-  963:  op add __tmp436 __tmp434 __tmp435
-  964:  op div __fn1retval __tmp436 2
+        label __label553
+  923:  goto __tmp409 marker25
+        gotolabel __label551 marker25
+  924:  op sub __tmp416 __fn74__gt __fn74__lt
+  925:  op abs __fn74__dif __tmp416 0
+  926:  set __tmp421 false
+  927:  op add __tmp418 __fn74__gt __fn74__lt
+  928:  jump __label557 lessThan __tmp418 8
+  929:  op equal __tmp421 __fn74__gt __fn74__lt
         label __label557
-        label __label555
-  965:  goto __fn1retaddr __fn1
-  966:  end
-        label __label2
-  967:  op min __fn2__y1 __fn2__x1 __fn2__x2
-  968:  op max __fn2__y2 __fn2__x1 __fn2__x2
-  969:  op min __fn2__y4 __fn2__x4 __fn2__x5
-  970:  op max __fn2__y5 __fn2__x4 __fn2__x5
-  971:  jump __label559 greaterThanEq __fn2__y4 __fn2__y1
-  972:  set __fn2__y4 __fn2__y1
-  973:  set __fn68__t __fn2__y2
-  974:  set __fn2__y2 __fn2__y5
-  975:  set __fn2__y5 __fn68__t
-        label __label559
-  976:  jump __label565 lessThanEq __fn2__x3 __fn2__y2
-  977:  op min __fn2retval __fn2__y2 __fn2__y5
-  978:  jump __label566 greaterThanEq __fn2__y2 __fn2__y4
-  979:  op min __fn2retval __fn2__x3 __fn2__y4
-  980:  jump __label566 always 0 0
-        label __label565
-  981:  op min __fn2retval __fn2__y2 __fn2__y4
-  982:  jump __label570 lessThanEq __fn2__x3 __fn2__y4
-  983:  op min __fn2retval __fn2__x3 __fn2__y5
-        label __label570
+  930:  jump __label558 equal __tmp421 false
+  931:  set __tmp406 __fn73__i
+  932:  jump __label525 always 0 0
+        label __label558
+  933:  jump __label560 greaterThanEq __fn74__dif __fn73__bestDif
+  934:  set __fn73__bestDif __fn74__dif
+  935:  set __fn73__best __fn73__i
+  936:  set __fn73__count 1
+  937:  jump __label561 always 0 0
+        label __label560
+  938:  jump __label562 greaterThan __fn74__dif __fn73__bestDif
+  939:  op add __fn73__best __fn73__best __fn73__i
+  940:  op add __fn73__count __fn73__count 1
+        label __label562
+        label __label561
+  941:  goto __tmp407 marker24
+        gotolabel __label537 marker24
+  942:  op div __tmp406 __fn73__best __fn73__count
+        label __label525
+  943:  assertequals 5 __tmp406 "median(1,1,1,1,9,9,9,9,5)"
+  944:  stop
+  945:  end
+        label __label0
+  946:  set __fn0retval 0
+  947:  jump __label566 equal __fn0__x 0
+  948:  set __fn0retval 1
+  949:  jump __label568 greaterThanEq __fn0__x 0
+  950:  set __fn0retval -1
+        label __label568
         label __label566
-  984:  goto __fn2retaddr __fn2
-  985:  end
+  951:  goto __fn0retaddr __fn0
+  952:  end
+        label __label1
+  953:  op max __fn1__y2 __fn1__x1 __fn1__x2
+  954:  op min __fn1__y3 __fn1__x3 __fn1__x4
+  955:  jump __label570 greaterThan __fn1__y2 __fn1__y3
+  956:  op add __tmp439 __fn1__y2 __fn1__y3
+  957:  op div __fn1retval __tmp439 2
+  958:  jump __label571 always 0 0
+        label __label570
+  959:  op min __fn1__y1 __fn1__x1 __fn1__x2
+  960:  op max __fn1__y4 __fn1__x3 __fn1__x4
+  961:  jump __label572 lessThan __fn1__y1 __fn1__y4
+  962:  op add __tmp445 __fn1__y1 __fn1__y4
+  963:  op div __fn1retval __tmp445 2
+  964:  jump __label573 always 0 0
+        label __label572
+  965:  op max __tmp447 __fn1__y1 __fn1__y3
+  966:  op min __tmp448 __fn1__y2 __fn1__y4
+  967:  op add __tmp449 __tmp447 __tmp448
+  968:  op div __fn1retval __tmp449 2
+        label __label573
+        label __label571
+  969:  goto __fn1retaddr __fn1
+  970:  end
+        label __label2
+  971:  op min __fn2__y1 __fn2__x1 __fn2__x2
+  972:  op max __fn2__y2 __fn2__x1 __fn2__x2
+  973:  op min __fn2__y4 __fn2__x4 __fn2__x5
+  974:  op max __fn2__y5 __fn2__x4 __fn2__x5
+  975:  jump __label575 greaterThanEq __fn2__y4 __fn2__y1
+  976:  set __fn2__y4 __fn2__y1
+  977:  set __fn76__t __fn2__y2
+  978:  set __fn2__y2 __fn2__y5
+  979:  set __fn2__y5 __fn76__t
+        label __label575
+  980:  jump __label581 lessThanEq __fn2__x3 __fn2__y2
+  981:  op min __fn2retval __fn2__y2 __fn2__y5
+  982:  jump __label582 greaterThanEq __fn2__y2 __fn2__y4
+  983:  op min __fn2retval __fn2__x3 __fn2__y4
+  984:  jump __label582 always 0 0
+        label __label581
+  985:  op min __fn2retval __fn2__y2 __fn2__y4
+  986:  jump __label586 lessThanEq __fn2__x3 __fn2__y4
+  987:  op min __fn2retval __fn2__x3 __fn2__y5
+        label __label586
+        label __label582
+  988:  goto __fn2retaddr __fn2
+  989:  end
 
 
 stop instruction encountered, dumping variable values:
-@counter: 948.0
+@counter: 945.0
+__fn0__x: -5.0
+__fn0retaddr: 24.0
+__fn0retval: -1.0
 __fn19__result: 0.0
 __fn1__x1: 6.0
 __fn1__x2: 2.0
@@ -1733,9 +1647,12 @@ __fn1__y1: 2.0
 __fn1__y2: 6.0
 __fn1__y3: 4.0
 __fn1__y4: 8.0
-__fn1retaddr: 68.0
+__fn1retaddr: 91.0
 __fn1retval: 5.0
 __fn20__result: 1.0
+__fn26__result: 0.0
+__fn27__result: -5.0
+__fn28__result: 100.0
 __fn2__x1: 5.0
 __fn2__x2: 5.0
 __fn2__x3: 5.0
@@ -1745,153 +1662,157 @@ __fn2__y1: 5.0
 __fn2__y2: 5.0
 __fn2__y4: 5.0
 __fn2__y5: 5.0
-__fn2retaddr: 110.0
+__fn2retaddr: 133.0
 __fn2retval: 5.0
-__fn32__best: 6.0
-__fn32__bestDif: 0.0
-__fn32__count: 6.0
-__fn35__best: 5.0
-__fn35__bestDif: 1.0
-__fn35__count: 5.0
-__fn35__i: 5.0
-__fn36__dif: 5.0
-__fn36__gt: 0.0
-__fn36__lt: 5.0
-__fn38__best: 4.0
-__fn38__bestDif: 2.0
-__fn38__count: 4.0
-__fn38__i: 5.0
-__fn39__dif: 4.0
-__fn39__gt: 0.0
-__fn39__i: 5.0
-__fn39__lt: 4.0
-__fn41__best: 18.0
-__fn41__bestDif: 3.0
-__fn41__count: 6.0
-__fn41__i: 5.0
-__fn42__dif: 3.0
-__fn42__gt: 0.0
-__fn42__i: 5.0
-__fn42__lt: 3.0
-__fn44__best: 20.0
-__fn44__bestDif: 2.0
-__fn44__count: 4.0
-__fn44__i: 5.0
-__fn45__dif: 2.0
-__fn45__gt: 0.0
-__fn45__i: 5.0
-__fn45__lt: 2.0
-__fn47__best: 25.0
-__fn47__bestDif: 1.0
-__fn47__count: 5.0
+__fn40__best: 6.0
+__fn40__bestDif: 0.0
+__fn40__count: 6.0
+__fn43__best: 5.0
+__fn43__bestDif: 1.0
+__fn43__count: 5.0
+__fn43__i: 5.0
+__fn44__dif: 5.0
+__fn44__gt: 0.0
+__fn44__lt: 5.0
+__fn46__best: 4.0
+__fn46__bestDif: 2.0
+__fn46__count: 4.0
+__fn46__i: 5.0
+__fn47__dif: 4.0
+__fn47__gt: 0.0
 __fn47__i: 5.0
-__fn48__dif: 1.0
-__fn48__gt: 0.0
-__fn48__i: 5.0
-__fn48__lt: 1.0
-__fn50__best: 30.0
-__fn50__bestDif: 0.0
-__fn50__count: 6.0
-__fn53__best: 4.0
-__fn53__bestDif: 2.0
-__fn53__count: 1.0
+__fn47__lt: 4.0
+__fn49__best: 18.0
+__fn49__bestDif: 3.0
+__fn49__count: 6.0
+__fn49__i: 5.0
+__fn50__dif: 3.0
+__fn50__gt: 0.0
+__fn50__i: 5.0
+__fn50__lt: 3.0
+__fn52__best: 20.0
+__fn52__bestDif: 2.0
+__fn52__count: 4.0
+__fn52__i: 5.0
+__fn53__dif: 2.0
+__fn53__gt: 0.0
 __fn53__i: 5.0
-__fn54__dif: 0.0
-__fn54__gt: 4.0
-__fn54__lt: 4.0
-__fn56__best: 6.0
-__fn56__bestDif: 2.0
-__fn56__count: 1.0
+__fn53__lt: 2.0
+__fn55__best: 25.0
+__fn55__bestDif: 1.0
+__fn55__count: 5.0
+__fn55__i: 5.0
+__fn56__dif: 1.0
+__fn56__gt: 0.0
 __fn56__i: 5.0
-__fn57__dif: 0.0
-__fn57__gt: 4.0
-__fn57__lt: 4.0
-__fn59__best: 3.0
-__fn59__bestDif: 4.0
-__fn59__count: 1.0
-__fn59__i: 5.0
-__fn60__dif: 0.0
-__fn60__gt: 4.0
-__fn60__lt: 4.0
-__fn62__best: 4.0
-__fn62__bestDif: 2.0
-__fn62__count: 1.0
-__fn62__i: 5.0
-__fn63__dif: 0.0
-__fn63__gt: 4.0
-__fn63__i: 3.0
-__fn63__lt: 4.0
-__fn65__best: 40.0
-__fn65__bestDif: 5.0
-__fn65__count: 8.0
-__fn65__i: 5.0
-__fn66__dif: 0.0
-__fn66__gt: 4.0
-__fn66__i: 5.0
-__fn66__lt: 4.0
-__fn68__t: 5.0
-__tmp107: 1.0
-__tmp108: 134.0
-__tmp133: 1.0
-__tmp134: 206.0
-__tmp143: -5.0
-__tmp145: 5.0
-__tmp148: 0.0
-__tmp159: 1.0
-__tmp160: 271.0
-__tmp162: 253.0
-__tmp169: -4.0
-__tmp171: 4.0
-__tmp174: 0.0
-__tmp185: 3.0
-__tmp186: 336.0
-__tmp188: 318.0
-__tmp195: -3.0
-__tmp197: 3.0
-__tmp200: 0.0
-__tmp211: 5.0
-__tmp212: 401.0
-__tmp214: 383.0
-__tmp221: -2.0
-__tmp223: 2.0
-__tmp226: 0.0
-__tmp237: 5.0
-__tmp238: 466.0
-__tmp240: 448.0
-__tmp247: -1.0
-__tmp249: 1.0
-__tmp252: 0.0
-__tmp263: 5.0
-__tmp264: 491.0
-__tmp289: 5.0
-__tmp290: 511.0
-__tmp299: 0.0
-__tmp301: 8.0
-__tmp304: 1.0
-__tmp315: 5.0
-__tmp316: 607.0
-__tmp325: 0.0
-__tmp327: 8.0
-__tmp330: 1.0
-__tmp341: 5.0
-__tmp342: 697.0
-__tmp351: 0.0
-__tmp353: 8.0
-__tmp356: 1.0
-__tmp367: 5.0
-__tmp368: 802.0
-__tmp370: 844.0
-__tmp377: 0.0
-__tmp379: 8.0
-__tmp382: 1.0
-__tmp393: 5.0
-__tmp394: 945.0
-__tmp396: 927.0
-__tmp403: 0.0
-__tmp405: 8.0
-__tmp408: 1.0
-__tmp426: 10.0
-__tmp432: 10.0
-__tmp434: 4.0
-__tmp435: 6.0
-__tmp436: 10.0
+__fn56__lt: 1.0
+__fn58__best: 30.0
+__fn58__bestDif: 0.0
+__fn58__count: 6.0
+__fn61__best: 4.0
+__fn61__bestDif: 2.0
+__fn61__count: 1.0
+__fn61__i: 5.0
+__fn62__dif: 0.0
+__fn62__gt: 4.0
+__fn62__lt: 4.0
+__fn64__best: 6.0
+__fn64__bestDif: 2.0
+__fn64__count: 1.0
+__fn64__i: 5.0
+__fn65__dif: 0.0
+__fn65__gt: 4.0
+__fn65__i: 1.0
+__fn65__lt: 4.0
+__fn67__best: 3.0
+__fn67__bestDif: 4.0
+__fn67__count: 1.0
+__fn67__i: 5.0
+__fn68__dif: 0.0
+__fn68__gt: 4.0
+__fn68__i: 8.0
+__fn68__lt: 4.0
+__fn70__best: 4.0
+__fn70__bestDif: 2.0
+__fn70__count: 1.0
+__fn70__i: 5.0
+__fn71__dif: 0.0
+__fn71__gt: 4.0
+__fn71__i: 3.0
+__fn71__lt: 4.0
+__fn73__best: 40.0
+__fn73__bestDif: 5.0
+__fn73__count: 8.0
+__fn73__i: 5.0
+__fn74__dif: 0.0
+__fn74__gt: 4.0
+__fn74__i: 5.0
+__fn74__lt: 4.0
+__fn76__t: 5.0
+__tmp120: 1.0
+__tmp121: 157.0
+__tmp146: 1.0
+__tmp147: 229.0
+__tmp156: -5.0
+__tmp158: 5.0
+__tmp161: 0.0
+__tmp172: 1.0
+__tmp173: 294.0
+__tmp175: 276.0
+__tmp182: -4.0
+__tmp184: 4.0
+__tmp187: 0.0
+__tmp198: 3.0
+__tmp199: 359.0
+__tmp201: 341.0
+__tmp208: -3.0
+__tmp210: 3.0
+__tmp213: 0.0
+__tmp224: 5.0
+__tmp225: 424.0
+__tmp227: 406.0
+__tmp234: -2.0
+__tmp236: 2.0
+__tmp239: 0.0
+__tmp250: 5.0
+__tmp251: 489.0
+__tmp253: 471.0
+__tmp260: -1.0
+__tmp262: 1.0
+__tmp265: 0.0
+__tmp276: 5.0
+__tmp277: 514.0
+__tmp302: 5.0
+__tmp303: 534.0
+__tmp312: 0.0
+__tmp314: 8.0
+__tmp317: 1.0
+__tmp328: 5.0
+__tmp329: 630.0
+__tmp331: 675.0
+__tmp338: 0.0
+__tmp340: 8.0
+__tmp343: 1.0
+__tmp354: 5.0
+__tmp355: 707.0
+__tmp357: 758.0
+__tmp364: 0.0
+__tmp366: 8.0
+__tmp369: 1.0
+__tmp380: 5.0
+__tmp381: 799.0
+__tmp383: 841.0
+__tmp390: 0.0
+__tmp392: 8.0
+__tmp395: 1.0
+__tmp406: 5.0
+__tmp407: 942.0
+__tmp409: 924.0
+__tmp416: 0.0
+__tmp418: 8.0
+__tmp421: 1.0
+__tmp439: 10.0
+__tmp445: 10.0
+__tmp447: 4.0
+__tmp448: 6.0
+__tmp449: 10.0

@@ -11,7 +11,6 @@
 
     <artifactId>mindcode-webapp</artifactId>
     <version>${revision}</version>
-    <packaging>jar</packaging>
 
     <name>mindcode-webapp</name>
     <description>Mindcode's web application: online compilation, storage and retrieval of your scripts</description>
@@ -161,7 +160,7 @@
                     <source>22</source>
                     <target>22</target>
                     <compilerArgs>
-                        <arg>-parameters</arg>
+                        <arg>-proc:none</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

@@ -92,7 +92,7 @@
                     <source>22</source>
                     <target>22</target>
                     <compilerArgs>
-                        <arg>-parameters</arg>
+                        <arg>-proc:full</arg>
                     </compilerArgs>
                     <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
                 </configuration>

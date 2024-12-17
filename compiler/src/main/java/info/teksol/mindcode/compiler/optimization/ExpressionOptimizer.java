@@ -68,7 +68,7 @@ class ExpressionOptimizer extends BaseOptimizer {
         if (ix.hasSecondOperand()) {
             final Tuple2<LogicValue, LogicValue> opers = extractConstantOperand(ix);
             if (opers.e1() instanceof LogicNumber num && num.isInteger()) {
-                int value = num.getIntValue();
+                long value = num.getLongValue();
                 switch (ix.getOperation()) {
                     case MUL -> {
                         if (value == 0) {
@@ -123,7 +123,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                         }
                     }
                     case BITWISE_OR, BOOLEAN_OR, LOGICAL_OR -> {
-                        if (value == 0 && ix.getOperation() != Operation.BOOLEAN_OR) {
+                        if (advanced() && value == 0 && ix.getOperation() != Operation.BOOLEAN_OR) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         } else if (value != 0 && ix.getOperation() != Operation.BITWISE_OR) {
@@ -135,7 +135,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                         if (value == 0) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
-                        } else if (ix.getOperation() == Operation.LOGICAL_AND) {
+                        } else if (advanced() && ix.getOperation() == Operation.LOGICAL_AND) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                         }
                     }
