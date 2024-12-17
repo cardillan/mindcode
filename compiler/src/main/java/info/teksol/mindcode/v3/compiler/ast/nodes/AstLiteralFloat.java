@@ -12,4 +12,18 @@ public class AstLiteralFloat extends AstLiteralNumeric {
         super(inputPosition, literal);
     }
 
+    @Override
+    public double getDoubleValue() {
+        return Double.parseDouble(literal);
+    }
+
+    @Override
+    public long getLongValue() {
+        return (long) getDoubleValue();
+    }
+
+    @Override
+    public AstLiteralFloat withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralFloat(inputPosition, literal);
+    }
 }

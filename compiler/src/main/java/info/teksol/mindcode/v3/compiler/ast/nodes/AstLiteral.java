@@ -32,4 +32,5 @@ public abstract class AstLiteral extends AstExpression {
         return literal.hashCode();
     }
 
+    public abstract AstLiteral withInputPosition(InputPosition inputPosition);
 }

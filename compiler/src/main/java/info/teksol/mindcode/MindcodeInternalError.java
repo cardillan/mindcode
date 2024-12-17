@@ -2,6 +2,12 @@ package info.teksol.mindcode;
 
 import org.intellij.lang.annotations.PrintFormat;
 
+/**
+ * Represents an internal error occurring within the Mindcode Compiler. To be thrown when
+ * an unexpected situation - and therefore a bug in Mindcode - is encountered.
+ * <p>
+ * Expected errors need to be handled properly through the standard error-reporting mechanism.
+ */
 public class MindcodeInternalError extends RuntimeException {
 
     public MindcodeInternalError(String message) {

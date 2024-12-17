@@ -11,8 +11,7 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
         this.messageConsumer = messageConsumer;
     }
 
-    @Override
-    public MessageConsumer getMessageConsumer() {
+    public MessageConsumer messageConsumer() {
         return messageConsumer;
     }
 

@@ -33,8 +33,11 @@ class DirectiveProcessorTest {
                                 Stream.of(values).map(v -> new AstDirectiveValue(EMPTY, v)).toList())))));
     }
 
+    private record Context(MessageConsumer messageConsumer, CompilerProfile compilerProfile) implements DirectiveProcessorContext {
+    }
+
     private void processDirective(MessageConsumer messageConsumer, CompilerProfile profile, String option, String... values) {
-        DirectiveProcessor.processDirectives(messageConsumer, profile, directive(option, values));
+        DirectiveProcessor.processDirectives(new Context(messageConsumer, profile), directive(option, values));
     }
 
     private void processDirective(CompilerProfile profile, String option, String... values) {

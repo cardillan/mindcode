@@ -26,14 +26,16 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
 
-    public AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream) {
+    private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream) {
         this.context = context;
         this.inputFile = inputFile;
         this.tokenStream = tokenStream;
     }
 
-    public AstModule build(ParseTree tree) {
-        return (AstModule) visit(tree);
+    public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
+            ParseTree tree) {
+        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream);
+        return (AstModule) astBuilder.visit(tree);
     }
 
     @Override
@@ -101,7 +103,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         } else if (result instanceof AstExpression expression) {
             return expression;
         } else {
-            context.getMessageConsumer().accept(CompilerMessage.error(result.inputPosition(),
+            context.messageConsumer().accept(CompilerMessage.error(result.inputPosition(),
                     "Expression is required."));
             return new AstLiteralNull(result.inputPosition(), "null");
         }
@@ -699,7 +701,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstWhileLoopStatement visitExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx) {
         if (ctx.loop != null) {
-            context.getMessageConsumer().accept(CompilerMessage.warn(pos(ctx.loop),
+            context.messageConsumer().accept(CompilerMessage.warn(pos(ctx.loop),
                     "The 'loop' keyword is deprecated. Use just 'while' instead."));
         }
 

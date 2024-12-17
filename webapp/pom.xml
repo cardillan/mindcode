@@ -130,12 +130,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.4.0</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <failOnError>false</failOnError>
-                    <followSymLinks>false</followSymLinks>
-                    <directory>${project.basedir}/tmp/samples</directory>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -161,6 +155,7 @@
                     <target>22</target>
                     <compilerArgs>
                         <arg>-proc:none</arg>
+                        <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

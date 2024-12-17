@@ -12,4 +12,8 @@ public class AstLiteralEscape extends AstLiteralString {
         super(inputPosition, literal);
     }
 
+    @Override
+    public AstLiteralEscape withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralEscape(inputPosition, literal);
+    }
 }

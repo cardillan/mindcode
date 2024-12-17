@@ -14,4 +14,17 @@ public class AstLiteralBoolean extends AstLiteral {
             throw new IllegalArgumentException("Boolean literal is not 'true' or 'false'");
         }
     }
+
+    public AstLiteralBoolean(InputPosition inputPosition, boolean value) {
+        this(inputPosition, value ? "true" : "false");
+    }
+
+    public boolean getValue() {
+        return "true".equals(getLiteral());
+    }
+
+    @Override
+    public AstLiteralBoolean withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralBoolean(inputPosition, getValue());
+    }
 }

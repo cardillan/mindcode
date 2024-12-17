@@ -3,7 +3,7 @@ package info.teksol.mindcode.webapp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Immutable;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.GeneratedValue;
@@ -26,11 +26,15 @@ public class Source {
         this.createdAt = createdAt;
     }
 
-    @PersistenceConstructor
     public Source(UUID id, String source, Instant createdAt) {
         this.id = id;
         this.source = source;
         this.createdAt = createdAt;
+    }
+
+    @PersistenceCreator
+    public static Source create(UUID id, String source, Instant createdAt) {
+        return new Source(id, source, createdAt);
     }
 
     public UUID getId() {

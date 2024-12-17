@@ -55,6 +55,14 @@ public class ExpressionEvaluator {
         return Math.abs(a - b) < 0.000001;
     }
 
+    public static boolean isTrue(double a) {
+        return Math.abs(a) >= 0.000001;
+    }
+
+    public static boolean isFalse(double a) {
+        return Math.abs(a) <= 0.000001;
+    }
+
     private static final Map<Operation, LogicOperation> OPERATIONS = createOperationsMap();
     private static final Map<Operation, Integer> ARGUMENTS = createArgumentsMap();
 
@@ -79,15 +87,15 @@ public class ExpressionEvaluator {
 
         map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
-        map.put(Operation.BITWISE_XOR,              (r, a, b) -> r.setLongValue(a.getLongValue() ^ b.getLongValue()));
-        map.put(Operation.BITWISE_NOT,              (r, a, b) -> r.setLongValue(~a.getLongValue()));
+        map.put(Operation.BITWISE_XOR,      (r, a, b) -> r.setLongValue(a.getLongValue() ^ b.getLongValue()));
+        map.put(Operation.BITWISE_NOT,      (r, a, b) -> r.setLongValue(~a.getLongValue()));
 
-        map.put(Operation.BITWISE_AND,       (r, a, b) -> r.setLongValue(a.getLongValue() & b.getLongValue()));
-        map.put(Operation.BOOLEAN_AND,         (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
+        map.put(Operation.BITWISE_AND,      (r, a, b) -> r.setLongValue(a.getLongValue() & b.getLongValue()));
+        map.put(Operation.BOOLEAN_AND,      (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
         map.put(Operation.LOGICAL_AND,      (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
 
-        map.put(Operation.BITWISE_OR,        (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
-        map.put(Operation.BOOLEAN_OR,          (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 || b.getDoubleValue() != 0));
+        map.put(Operation.BITWISE_OR,       (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
+        map.put(Operation.BOOLEAN_OR,       (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
         map.put(Operation.LOGICAL_OR,       (r, a, b) -> r.setLongValue(a.getLongValue() | b.getLongValue()));
 
         map.put(Operation.MAX,              (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));

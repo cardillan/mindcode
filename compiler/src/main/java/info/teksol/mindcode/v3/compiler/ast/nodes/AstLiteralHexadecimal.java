@@ -15,4 +15,18 @@ public class AstLiteralHexadecimal extends AstLiteralNumeric {
         }
     }
 
+    @Override
+    public double getDoubleValue() {
+        return getLongValue();
+    }
+
+    @Override
+    public long getLongValue() {
+        return Long.decode(literal);
+    }
+
+    @Override
+    public AstLiteralHexadecimal withInputPosition(InputPosition inputPosition) {
+        return new AstLiteralHexadecimal(inputPosition, literal);
+    }
 }

@@ -26,6 +26,10 @@ public class AstConstant extends AstDeclaration {
         return value;
     }
 
+    public String getConstantName() {
+        return name.getName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.v3.compiler.callgraph;
 
+import info.teksol.mindcode.v3.CompilationPhase;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.ast.AbstractAstBuilderTest;
@@ -11,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CallGraphCreatorTest extends AbstractAstBuilderTest {
 
     @Override
-    protected MindcodeCompiler.CompilationPhase getTargetPhase() {
-        return MindcodeCompiler.CompilationPhase.COMPILER;
+    protected CompilationPhase getTargetPhase() {
+        return CompilationPhase.COMPILER;
     }
 
     private CallGraph buildCallGraph(ExpectedMessages expectedMessages, InputFiles inputFiles) {
