@@ -530,18 +530,6 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expMemeberAccess}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpMemeberAccess(MindcodeParser.ExpMemeberAccessContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expMemeberAccess}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpMemeberAccess(MindcodeParser.ExpMemeberAccessContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code expBitwiseAnd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -709,6 +697,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code expMemberAccess}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expMemberAccess}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code fmtText}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.

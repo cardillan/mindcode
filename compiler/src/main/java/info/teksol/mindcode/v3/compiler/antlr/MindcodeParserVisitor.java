@@ -316,13 +316,6 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expMemeberAccess}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpMemeberAccess(MindcodeParser.ExpMemeberAccessContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code expBitwiseAnd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -420,6 +413,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expMemberAccess}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code fmtText}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
