@@ -545,18 +545,6 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpMemeberAccess(MindcodeParser.ExpMemeberAccessContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpMemeberAccess(MindcodeParser.ExpMemeberAccessContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -720,6 +708,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

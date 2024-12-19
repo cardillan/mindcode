@@ -54,11 +54,9 @@ statement
     ;
 
 // lvalue can be a target of an assignment - prefix/postfix increment/decrement and compound assignment.
-// In this grammar, lvalue can always be read (and is therefore an rvalue too).
+// In this grammar, lvalue can always be read (and is therefore an rvalue and an expression too).
 // For simple assignment, a generic expression can be a target, to support constructs like
 // getlink(index).enabled = true
-//
-// On top of this, lvalue can always be also read - is an expression
 lvalue
     : id = IDENTIFIER                                                                   # expIdentifier
     | id = EXTIDENTIFIER                                                                # expIdentifierExt
@@ -76,7 +74,7 @@ expression
     : END LPAREN RPAREN                                                                 # expCallEnd
     | function = IDENTIFIER args = argumentList                                         # expCallFunction
     | object = expression DOT function = IDENTIFIER args = argumentList                 # expCallMethod
-    | object = expression DOT member = IDENTIFIER                                       # expMemeberAccess
+    | object = expression DOT member = IDENTIFIER                                       # expMemberAccess
     | object = expression DOT property = BUILTINIDENTIFIER                              # expPropertyAccess
     | CASE exp = expression
         alternatives = caseAlternatives? (ELSE elseBranch = statementList)? END         # expCaseExpression

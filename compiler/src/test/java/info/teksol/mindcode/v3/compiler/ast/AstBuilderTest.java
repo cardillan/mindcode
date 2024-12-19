@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.DECREMENT;
 import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.INCREMENT;
@@ -656,8 +655,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             identifier,
                             new AstBuiltInIdentifier(EMPTY, "@built-in-identifier"),
-                            new AstQualifiedIdentifier(EMPTY, a, b),
-                            new AstQualifiedIdentifier(EMPTY, a, b, c)
+                            new AstMemberAccess(EMPTY, a, b),
+                            new AstMemberAccess(EMPTY, new AstMemberAccess(EMPTY, a, b), c)
                     )
             );
         }
@@ -708,7 +707,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstBuiltInIdentifier(EMPTY, "@firstItem")),
                                     new AstBuiltInIdentifier(EMPTY, "@id")),
                             new AstMemberAccess(EMPTY,
-                                    new AstQualifiedIdentifier(EMPTY, a, b, c),
+                                    new AstMemberAccess(EMPTY, new AstMemberAccess(EMPTY, a, b), c),
                                     new AstBuiltInIdentifier(EMPTY, "@id"))
                     )
             );
@@ -1214,7 +1213,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             call(a, arg(call(b)), arg(call(c))),
                             call(call(a), b),
-                            call(id("a", "b"), c),
+                            call(new AstMemberAccess(EMPTY,a, b), c),
                             new AstMemberAccess(EMPTY,
                                     call(call(a), b),
                                     new AstBuiltInIdentifier(EMPTY, "@id")),
@@ -1834,10 +1833,6 @@ class AstBuilderTest extends AbstractAstBuilderTest {
 
     private static AstIdentifier id(String name) {
         return new AstIdentifier(EMPTY, name);
-    }
-
-    private static AstQualifiedIdentifier id(String... names) {
-        return new AstQualifiedIdentifier(EMPTY, Stream.of(names).map(AstBuilderTest::id).toList());
     }
 
     private static AstBuiltInIdentifier builtIn(String name) {

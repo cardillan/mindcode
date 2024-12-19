@@ -1946,30 +1946,6 @@ public class MindcodeParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class ExpMemeberAccessContext extends ExpressionContext {
-		public ExpressionContext object;
-		public Token member;
-		public TerminalNode DOT() { return getToken(MindcodeParser.DOT, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode IDENTIFIER() { return getToken(MindcodeParser.IDENTIFIER, 0); }
-		public ExpMemeberAccessContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpMemeberAccess(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpMemeberAccess(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpMemeberAccess(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class ExpBitwiseAndContext extends ExpressionContext {
 		public ExpressionContext left;
 		public Token op;
@@ -2321,6 +2297,30 @@ public class MindcodeParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpBinaryLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpMemberAccessContext extends ExpressionContext {
+		public ExpressionContext object;
+		public Token member;
+		public TerminalNode DOT() { return getToken(MindcodeParser.DOT, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode IDENTIFIER() { return getToken(MindcodeParser.IDENTIFIER, 0); }
+		public ExpMemberAccessContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).enterExpMemberAccess(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeParserListener ) ((MindcodeParserListener)listener).exitExpMemberAccess(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeParserVisitor ) return ((MindcodeParserVisitor<? extends T>)visitor).visitExpMemberAccess(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2947,15 +2947,15 @@ public class MindcodeParser extends Parser {
 						break;
 					case 14:
 						{
-						_localctx = new ExpMemeberAccessContext(new ExpressionContext(_parentctx, _parentState));
-						((ExpMemeberAccessContext)_localctx).object = _prevctx;
+						_localctx = new ExpMemberAccessContext(new ExpressionContext(_parentctx, _parentState));
+						((ExpMemberAccessContext)_localctx).object = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(324);
 						if (!(precpred(_ctx, 32))) throw new FailedPredicateException(this, "precpred(_ctx, 32)");
 						setState(325);
 						match(DOT);
 						setState(326);
-						((ExpMemeberAccessContext)_localctx).member = match(IDENTIFIER);
+						((ExpMemberAccessContext)_localctx).member = match(IDENTIFIER);
 						}
 						break;
 					case 15:

@@ -248,15 +248,10 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstMindcodeNode visitExpMemeberAccess(MindcodeParser.ExpMemeberAccessContext ctx) {
+    public AstMindcodeNode visitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) {
         AstExpression node = visitExpression(ctx.object);
         AstIdentifier right = createIdentifier(ctx.member);
-        return switch (node) {
-            case AstIdentifier left             -> new AstQualifiedIdentifier(left, right);
-            case AstQualifiedIdentifier left    -> new AstQualifiedIdentifier(left, right);
-            case null                           -> throw new MindcodeInternalError("Unexpected null");
-            default                             -> new AstMemberAccess(pos(ctx), node, right);
-        };
+        return new AstMemberAccess(pos(ctx), node, right);
     }
 
     @Override
