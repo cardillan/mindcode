@@ -15,11 +15,9 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.tools.Diagnostic;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @SupportedAnnotationTypes({"info.teksol.annotations.AstNode", "info.teksol.annotations.BaseClass"})
@@ -194,6 +192,7 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
     }
 
     private void generateComposedVisitorClass(List<TypeElement> astNodeTypes) {
+        ClassName astBaseTypeName = ClassName.get(nodePackageName, NODE_BASE_CLASS);
         ClassName visitorInterfaceName = ClassName.get(GENERATED_PACKAGE_NAME, VISITOR_INTERFACE_NAME);
         ClassName visitorClassName = ClassName.get(GENERATED_PACKAGE_NAME, COMPOSED_VISITOR_CLASS_NAME);
         ParameterizedTypeName implementedType = ParameterizedTypeName.get(visitorInterfaceName, TypeVariableName.get("T"));
@@ -203,6 +202,32 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
                 .addAnnotation(NullMarked.class)
                 .addTypeVariable(TypeVariableName.get("T"))
                 ;
+
+        ParameterizedTypeName functionType = ParameterizedTypeName.get(ClassName.get(Function.class),
+                astBaseTypeName, TypeVariableName.get("T"));
+        visitorClassBuilder.addField(
+                FieldSpec.builder(functionType, "defaultVisitor", Modifier.PRIVATE)
+                .build());
+
+        visitorClassBuilder.addMethod(MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
+                .addCode("defaultVisitor = node -> null;")
+                .build());
+
+        visitorClassBuilder.addMethod(MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(functionType, "defaultVisitor")
+                .addCode("this.defaultVisitor = $T.requireNonNull(defaultVisitor);", Objects.class)
+                .build());
+
+        MethodSpec unhandledVisit = MethodSpec.methodBuilder("unhandledVisit")
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(astBaseTypeName, "node")
+                .returns(TypeVariableName.get("T"))
+                .addCode(CodeBlock.of("return defaultVisitor.apply(node);"))
+                .build();
+        visitorClassBuilder.addMethod(unhandledVisit);
+
 
         CodeBlock.Builder registerMethodCode = CodeBlock.builder();
 
@@ -215,7 +240,7 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
                     elementVisitorClass,
                     TypeVariableName.get("T"));
             visitorClassBuilder.addField(FieldSpec.builder(typeName, visitorFieldName, Modifier.PRIVATE)
-                    .initializer("node -> null")
+                    .initializer("this::unhandledVisit")
                     .build());
 
             MethodSpec visitMethod = MethodSpec.methodBuilder(visitFunctionName(nodeTypeElement))
