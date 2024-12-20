@@ -9,6 +9,7 @@ import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.util.ExpectedMessages;
+import info.teksol.util.StringUtils;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -91,7 +92,7 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
         processNode(node);
 
         writer.println();
-        writer.println("# " + firstUpperCase(libraryName) +  " library");
+        writer.println("# " + StringUtils.firstUpperCase(libraryName) + " library");
         writer.println();
         processModuleDoc(code);
 
@@ -112,10 +113,6 @@ public class DocGeneratorTest extends AbstractGeneratorTest {
             writer.println("## Functions");
             functions.stream().filter(function -> !function.getName().startsWith("_")).forEach(this::processFunction);
         }
-    }
-
-    private String firstUpperCase(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     private void processModuleDoc(String code) {

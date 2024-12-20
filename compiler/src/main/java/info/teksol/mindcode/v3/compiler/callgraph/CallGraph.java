@@ -1,6 +1,5 @@
 package info.teksol.mindcode.v3.compiler.callgraph;
 
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstAllocation;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 
 import java.util.List;
@@ -17,26 +16,15 @@ public final class CallGraph {
     private final FunctionDefinitions functionDefinitions;
     private final List<LogicFunction> functions;
     private final Set<String> syncedVariables;
-    private final AstAllocation allocatedStack;
 
-    CallGraph(FunctionDefinitions functionDefinitions, Set<String> syncedVariables, AstAllocation allocatedStack) {
+    CallGraph(FunctionDefinitions functionDefinitions, Set<String> syncedVariables) {
         this.functionDefinitions = Objects.requireNonNull(functionDefinitions);
         this.functions = List.copyOf(functionDefinitions.getFunctions());
         this.syncedVariables = Set.copyOf(syncedVariables);
-        this.allocatedStack = allocatedStack;
     }
 
     public static CallGraph createEmpty() {
-        return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}), Set.of(), null);
-    }
-
-    /**
-     * Returns the instance of AstAllocationStack found in the program, regardless of where in the program it was declared.
-     *
-     * @return instance of AstAllocationStack or null if it wasn't declared
-     */
-    public AstAllocation getAllocatedStack() {
-        return allocatedStack;
+        return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}), Set.of());
     }
 
     /**

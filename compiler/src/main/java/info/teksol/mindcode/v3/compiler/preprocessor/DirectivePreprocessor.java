@@ -1,6 +1,7 @@
-package info.teksol.mindcode.v3.compiler.directives;
+package info.teksol.mindcode.v3.compiler.preprocessor;
 
 import info.teksol.emulator.processor.ExecutionFlag;
+import info.teksol.generated.ast.visitors.AstDirectiveSetVisitor;
 import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
@@ -10,10 +11,10 @@ import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveValue;
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,34 +26,23 @@ import java.util.function.BiConsumer;
  * Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
  */
 @NullMarked
-public class DirectiveProcessor extends AbstractMessageEmitter {
+public class DirectivePreprocessor extends AbstractMessageEmitter implements AstDirectiveSetVisitor<@Nullable Void> {
     private final CompilerProfile profile;
 
-    private DirectiveProcessor(DirectiveProcessorContext context) {
+    public DirectivePreprocessor(PreprocessorContext context) {
         super(context.messageConsumer());
         this.profile = context.compilerProfile();
     }
 
-    public static void processDirectives(DirectiveProcessorContext context, AstProgram program) {
-        DirectiveProcessor processor = new DirectiveProcessor(context);
-        processor.visitNode(program);
-    }
-
-    private void visitNode(AstMindcodeNode node) {
-        if (node instanceof AstDirectiveSet directive) {
-            processDirective(directive);
-        } else {
-            node.getChildren().forEach(this::visitNode);
-        }
-    }
-
-    private void processDirective(AstDirectiveSet directive) {
+    @Override
+    public Void visitDirectiveSet(@NonNull AstDirectiveSet directive) {
         BiConsumer<CompilerProfile, AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
         if (handler == null) {
             error(directive.getOption(), "Unknown compiler directive '%s'.", directive.getOption().getText());
         } else {
             handler.accept(profile, directive);
         }
+        return null;
     }
 
     private void firstValueError(AstDirectiveSet node, @PrintFormat String format, Object... args) {

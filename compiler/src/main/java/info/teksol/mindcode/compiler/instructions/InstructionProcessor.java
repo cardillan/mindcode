@@ -69,6 +69,7 @@ public interface InstructionProcessor extends MessageEmitter {
     ReturnInstruction createReturn(AstContext astContext, LogicVariable stack);
     SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property);
     SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value);
+    SetInstruction createSet(AstContext astContext, LogicBuiltIn target, LogicValue value);
     SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address);
     StopInstruction createStop(AstContext astContext);
     WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index);

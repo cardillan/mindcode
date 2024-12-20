@@ -26,6 +26,10 @@ public class AstParameter extends AstDeclaration {
         return value;
     }
 
+    public String getParameterName() {
+        return name.getName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

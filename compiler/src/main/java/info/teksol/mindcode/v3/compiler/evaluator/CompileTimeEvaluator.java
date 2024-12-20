@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3.compiler.evaluator;
 import info.teksol.evaluator.ExpressionEvaluator;
 import info.teksol.evaluator.LogicOperation;
 import info.teksol.evaluator.LogicReadable;
+import info.teksol.generated.ast.visitors.AstConstantVisitor;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -16,16 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * The CompileTimeEvaluator class evaluates parts of an abstract syntax tree - represented by an AstMindcodeNode
- * class - at compile-time. This allows optimization and replacement of constant or partially constant expressions
- * with their evaluated results. It supports operations like numeric and string calculations, conditional expressions
- * and function calls of Mindustry Logic functions.
- * <p>
- * Non-deterministic operations or operations with side effects remain unevaluated.
- */
+/// The CompileTimeEvaluator class evaluates parts of an abstract syntax tree - represented by an AstMindcodeNode
+/// class - at compile-time. This allows optimization and replacement of constant or partially constant expressions
+/// with their evaluated results. It supports operations like numeric and string calculations, conditional expressions
+/// and function calls of Mindustry Logic functions.
+///
+/// Non-deterministic operations or operations with side effects remain unevaluated.
 @NullMarked
-public class CompileTimeEvaluator extends AbstractMessageEmitter {
+public class CompileTimeEvaluator extends AbstractMessageEmitter implements AstConstantVisitor<Void> {
     private final InstructionProcessor processor;
 
     private final Map<String, AstLiteral> constants = new HashMap<>();
@@ -35,17 +34,21 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         this.processor = context.instructionProcessor();
     }
 
-    /**
-     * If the node can be compile-time evaluated, returns the evaluation, otherwise returns the node itself.
-     * The evaluation can be partial, for example when the AstIfExpression node has a constant condition,
-     * it can return just the true/false branch (depending on the compile-time value of the condition)
-     * even if those branches aren't constant themselves.
-     * <p>
-     * At this moment, only numeric values and strings are handled. Built-in identifiers cannot be evaluated.
-     *
-     * @param node node to evaluate
-     * @return compile-time evaluation of the node
-     */
+    @Override
+    public Void visitConstant(AstConstant node) {
+        evaluateConstant(node);
+        return null;
+    }
+
+    /// If the node can be compile-time evaluated, returns the evaluation, otherwise returns the node itself.
+    /// The evaluation can be partial, for example when the AstIfExpression node has a constant condition,
+    /// it can return just the true/false branch (depending on the compile-time value of the condition)
+    /// even if those branches aren't constant themselves.
+    ///
+    /// At this moment, only numeric values and strings are handled. Built-in identifiers cannot be evaluated.
+    ///
+    /// @param node node to evaluate
+    /// @return compile-time evaluation of the node
     public AstMindcodeNode evaluate(AstMindcodeNode node) {
         return switch (node) {
             case AstConstant n          -> evaluateConstant(n);
@@ -59,8 +62,6 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         };
     }
 
-    // TODO When implementing namespaces, constant management will have to be moved to the
-    //      class responsible for variable management.
     private AstMindcodeNode evaluateConstant(AstConstant node) {
         AstMindcodeNode evaluated = evaluate(node.getValue());
         if (evaluated instanceof AstLiteral constant) {
@@ -82,7 +83,6 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         return numericLiteral;
     }
 
-    // TODO When implementing namespaces, variable management class will have to be queried for known constants.
     private AstMindcodeNode evaluateIdentifier(AstIdentifier node) {
         if (constants.containsKey(node.getName())) {
             return constants.get(node.getName()).withInputPosition(node.inputPosition());

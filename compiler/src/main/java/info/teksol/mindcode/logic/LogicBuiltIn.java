@@ -5,11 +5,18 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
+import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicReadable {
+    // TODO Volatile detection should be moved to InstructionProcessor
+    // @unit is volatile. It changes through the ubind instruction, but this is not known to the data flow optimizer.
+    private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second", "@minute",
+            "@waveNumber", "@waveTime", "@unit", "@links");
+
     public static final LogicBuiltIn COUNTER = create("@counter");
     public static final LogicBuiltIn UNIT = create("@unit");
 
@@ -32,12 +39,6 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
     @Override
     public boolean isConstant() {
         return canEvaluate();
-    }
-
-    @Override
-    public boolean isWritable() {
-        // Some built-ins are writable (e.g. @counter)
-        return true;
     }
 
     @Override
@@ -100,7 +101,21 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
         return new LogicBuiltIn(name);
     }
 
-    // @unit is volatile. It changes through the ubind instruction, but this is not known to the data flow optimizer.
-    private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second", "@minute",
-            "@waveNumber", "@waveTime", "@unit", "@links");
+    // NodeValue methods
+
+    @Override
+    public boolean isWritable() {
+        // Some built-ins are writable (e.g. @counter)
+        return true;
+    }
+
+    @Override
+    public void setValue(CodeBuilder codeBuilder, LogicValue value) {
+        codeBuilder.addSet(this, value);
+    }
+
+    @Override
+    public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
+        LogicValue.super.writeValue(codeBuilder, valueSetter);
+    }
 }

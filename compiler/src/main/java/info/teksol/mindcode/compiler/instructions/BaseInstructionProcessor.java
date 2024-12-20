@@ -242,6 +242,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
+    public SetInstruction createSet(AstContext astContext, LogicBuiltIn target, LogicValue value) {
+        return (SetInstruction) createInstruction(astContext, SET, target, value);
+    }
+
+    @Override
     public SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address) {
         return (SetAddressInstruction) createInstruction(astContext, SETADDR, variable, address);
     }

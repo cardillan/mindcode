@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3.compiler.callgraph;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +16,6 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private final List<LogicFunction> functions = new ArrayList<>();
     private final Set<String> syncedVariables = new HashSet<>();
     private LogicFunction activeFunction;
-    private AstAllocation allocatedStack;
 
     public static CallGraph createCallGraph(CallGraphCreatorContext context, AstProgram program) {
         return new CallGraphCreator(context).buildCallGraph(program);
@@ -40,28 +40,23 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         functions.forEach(this::validateFunction);
 
-        return new CallGraph(functionDefinitions, syncedVariables, allocatedStack);
+        return new CallGraph(functionDefinitions, syncedVariables);
     }
 
     private void visitNode(AstMindcodeNode nodeToVisit) {
         switch (nodeToVisit) {
-            case AstAllocation n when n.getType() == AstAllocation.AllocationType.STACK -> visitStackAllocation(n);
+            case AstAllocation n            -> visitAllocation(n);
             case AstFunctionDeclaration n   -> visitFunctionDeclaration(n);
             case AstFunctionCall n          -> visitFunctionCall(n);
             default                         -> nodeToVisit.getChildren().forEach(this::visitNode);
         }
     }
 
-    private void visitStackAllocation(AstAllocation node) {
-        if (allocatedStack != null) {
-            error(node.inputPosition(), "Multiple stack allocations.");
-        }
-
+    private void visitAllocation(AstAllocation node) {
         if (!activeFunction.isMain()) {
-            error(node.inputPosition(), "Stack allocation must not be declared within a function.");
+            error(node.inputPosition(), "%s allocation must not be declared within a function.",
+                    StringUtils.titleCase(node.getType().name()));
         }
-
-        allocatedStack = node;
     }
 
     private void visitFunctionDeclaration(AstFunctionDeclaration functionDeclaration) {

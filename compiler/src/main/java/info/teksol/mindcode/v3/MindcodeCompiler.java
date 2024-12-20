@@ -1,6 +1,7 @@
 package info.teksol.mindcode.v3;
 
 import info.teksol.generated.ast.AstIndentedPrinter;
+import info.teksol.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.Requirement;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -10,16 +11,19 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilder;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilderContext;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstAllocation;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstModule;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRequire;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreator;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreatorContext;
-import info.teksol.mindcode.v3.compiler.directives.DirectiveProcessor;
-import info.teksol.mindcode.v3.compiler.directives.DirectiveProcessorContext;
+import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.preprocessor.AllocationPreprocessor;
+import info.teksol.mindcode.v3.compiler.preprocessor.DirectivePreprocessor;
+import info.teksol.mindcode.v3.compiler.preprocessor.PreprocessorContext;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -28,7 +32,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @NullMarked
-public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, DirectiveProcessorContext,
+public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
         CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext {
     // MindcodeCompiler serves as a compiler context too
     private static final ThreadLocal<MindcodeCompiler> context = new ThreadLocal<>();
@@ -42,6 +46,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final CompilerProfile profile;
     private final InputFiles inputFiles;
     private @Nullable InstructionProcessor instructionProcessor;
+    private @Nullable CompileTimeEvaluator compileTimeEvaluator;
 
     // Intermediate and final results
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
@@ -49,6 +54,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
     private @Nullable AstProgram program;
+    private @Nullable AstAllocation stackAllocation;
+    private @Nullable AstAllocation heapAllocation;
     private @Nullable CallGraph callGraph;
 
     public MindcodeCompiler(CompilationPhase targetPhase, MessageConsumer messageConsumer,
@@ -93,7 +100,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         program = new AstProgram(new InputPosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
         if (targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
-        DirectiveProcessor.processDirectives(this, program);
         if (profile.getParseTreeLevel() > 0) {
             debug("Parse tree:");
             debug(new AstIndentedPrinter().print(program));
@@ -101,8 +107,33 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
+        compileTimeEvaluator = new CompileTimeEvaluator(this);
+        preprocessTree();
 
         callGraph = CallGraphCreator.createCallGraph(this, program);
+    }
+
+    /// The composed AST visitor allows us to traverse the tree just once, passing each node to the visitor
+    /// registered to handle that type of node. Currently, each type of node can be handled by at most
+    /// one visitor; if this was to change, the ComposedAstNodeVisitor (a generated class) would have to be
+    /// extended.
+    ///
+    /// Currently, these types of nodes are handled:
+    /// - AstDirectiveSet for updating compiler profile with processor directives
+    /// - AstAllocation for processing stack and heap allocations
+    /// - CompileTimeEvaluator for evaluating constants
+    ///
+    /// In the future, the following types of nodes will be handled
+    /// - variable, constant and parameter declarations (function context tracking will need to be somehow
+    ///   incorporated in this one)
+    ///
+    /// More complex tree processing is done separately - for example, call graph creation.
+    private void preprocessTree() {
+        ComposedAstNodeVisitor<@Nullable Void> visitor = new ComposedAstNodeVisitor<>();
+        visitor.registerVisitor(new DirectivePreprocessor(this));
+        visitor.registerVisitor(new AllocationPreprocessor(this));
+        visitor.registerVisitor(compileTimeEvaluator());
+        visitor.visitTree(getProgram(), (a, b) -> null);
     }
 
     // Root method for obtaining compiler contexts
@@ -153,8 +184,33 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
+    public CompileTimeEvaluator compileTimeEvaluator() {
+        return Objects.requireNonNull(compileTimeEvaluator);
+    }
+
+    @Override
     public void addRequirement(AstRequire requirement) {
         requirements.add(requirement);
+    }
+
+    @Override
+    public void setStackAllocation(AstAllocation stackAllocation) {
+        this.stackAllocation = stackAllocation;
+    }
+
+    @Override
+    public void setHeapAllocation(AstAllocation heapAllocation) {
+        this.heapAllocation = heapAllocation;
+    }
+
+    @Override
+    public @Nullable AstAllocation stackAllocation() {
+        return stackAllocation;
+    }
+
+    @Override
+    public @Nullable AstAllocation heapAllocation() {
+        return heapAllocation;
     }
 
     @Override

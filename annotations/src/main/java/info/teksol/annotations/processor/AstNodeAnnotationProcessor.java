@@ -73,6 +73,14 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
+    private String firstLowerCase(String s) {
+        return s.isEmpty() ? "" : Character.toLowerCase(s.charAt(0)) + s.substring(1);
+    }
+
+    private String firstUpperCase(String s) {
+        return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+
     private void createClass(String packageName, TypeSpec.Builder classBuilder) {
         try {
             JavaFile javaFile = JavaFile.builder(packageName, classBuilder.build()).indent("    ").build();
@@ -93,8 +101,7 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
     }
 
     private String visitorFieldName(TypeElement element) {
-        String name = elementBaseName(element);
-        return Character.toLowerCase(name.charAt(0)) + name.substring(1) + "Visitor";
+        return firstLowerCase(elementBaseName(element)) + "Visitor";
     }
 
     private void generateSingleVisitorInterfaces(List<TypeElement> astNodeTypes) {
@@ -247,11 +254,11 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
     private String getAccessorMethod(VariableElement field) {
         String name = field.getSimpleName().toString();
         if (accessorPrefixHas.contains(name)) {
-            return "has" + name.substring(0, 1).toUpperCase() + name.substring(1) + "()";
+            return "has" + firstUpperCase(name) + "()";
         } else if (field.asType().getKind() == TypeKind.BOOLEAN) {
-            return "is" + name.substring(0, 1).toUpperCase() + name.substring(1) + "()";
+            return "is" + firstUpperCase(name) + "()";
         } else {
-            return "get" + name.substring(0, 1).toUpperCase() + name.substring(1) + "()";
+            return "get" + firstUpperCase(name) + "()";
         }
     }
 

@@ -2215,7 +2215,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         public void encapsulate(Runnable expression) {
-            this.<Void>encapsulate(() -> { expression.run(); return null; });
+            this.encapsulate(() -> { expression.run(); return null; });
         }
     }
 }

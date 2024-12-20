@@ -4,8 +4,10 @@ import info.teksol.mindcode.ast.FunctionParameter;
 import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionParameter;
+import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress {
     // Looks like a variable, but translates to 0 in mlog.
@@ -66,11 +68,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     @Override
     public String format(InstructionProcessor instructionProcessor) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isWritable() {
-        return true;
     }
 
     @Override
@@ -221,5 +218,22 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     @Override
     public boolean isVolatile() {
         return volatileVar;
+    }
+
+    // NodeValue methods
+
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
+    @Override
+    public void setValue(CodeBuilder codeBuilder, LogicValue value) {
+        codeBuilder.addSet(this, value);
+    }
+
+    @Override
+    public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
+        valueSetter.accept(this);
     }
 }

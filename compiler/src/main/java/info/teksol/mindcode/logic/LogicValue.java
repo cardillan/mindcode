@@ -1,8 +1,17 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 
-public interface LogicValue extends LogicArgument {
+import java.util.function.Consumer;
+
+/// Represents a value that can be read by mlog instructions.
+///
+/// This interface extends the NodeValue interface, since it is often possible to represent the value nf an AST node
+/// as a LogicValue.
+public interface LogicValue extends LogicArgument, NodeValue {
     /**
      * Indicates that an expressions using the value can be numerically evaluated at compile time.
      * All literals can be evaluated. Built-in constants can only be evaluated if they aren't a variable
@@ -23,4 +32,26 @@ public interface LogicValue extends LogicArgument {
      * @return a text representation of the contained value
      */
     String format(InstructionProcessor instructionProcessor);
+
+    // NodeValue methods
+
+    @Override
+    default boolean isWritable() {
+        return false;
+    }
+
+    @Override
+    default LogicValue getValue(CodeBuilder codeBuilder) {
+        return this;
+    }
+
+    @Override
+    default void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
+        throw new MindcodeInternalError("Cannot modify readable value.");
+    }
+
+    @Override
+    default void setValue(CodeBuilder codeBuilder, LogicValue value) {
+        throw new MindcodeInternalError("Cannot modify readable value.");
+    }
 }

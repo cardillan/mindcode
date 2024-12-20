@@ -1,5 +1,7 @@
 package info.teksol.mindcode;
 
+import info.teksol.util.StringUtils;
+
 public enum MessageLevel {
     ERROR,
     WARNING,
@@ -17,7 +19,7 @@ public enum MessageLevel {
     }
 
     MessageLevel() {
-        title = name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+        title = StringUtils.titleCase(name());
     }
 
     public String getTitle() {
