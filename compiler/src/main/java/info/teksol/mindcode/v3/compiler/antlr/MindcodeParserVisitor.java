@@ -190,13 +190,6 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expAssignment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpAssignment(MindcodeParser.ExpAssignmentContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code expExponentiation}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

@@ -27,6 +27,11 @@ public enum LogicVoid implements LogicValue {
     }
 
     @Override
+    public boolean isLvalue() {
+        return false;
+    }
+
+    @Override
     public String toMlog() {
         return "null";
         //throw new MindcodeInternalError("void doesn't have an mlog representation.");

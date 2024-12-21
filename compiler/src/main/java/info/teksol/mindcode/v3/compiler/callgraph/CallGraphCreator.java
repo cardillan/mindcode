@@ -23,9 +23,9 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private CallGraphCreator(CallGraphCreatorContext context) {
         super(context.messageConsumer());
-        this.instructionProcessor = context.instructionProcessor();
-        this.functionDefinitions = new FunctionDefinitions(messageConsumer);
-        this.activeFunction = functionDefinitions.getMain();
+        instructionProcessor = context.instructionProcessor();
+        functionDefinitions = new FunctionDefinitions(messageConsumer);
+        activeFunction = functionDefinitions.getMain();
     }
 
     private CallGraph buildCallGraph(AstProgram program) {

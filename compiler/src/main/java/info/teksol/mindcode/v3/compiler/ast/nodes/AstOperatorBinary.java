@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.Operation;
 import org.jspecify.annotations.NullMarked;
 
@@ -51,4 +52,8 @@ public class AstOperatorBinary extends AstExpression {
         return result;
     }
 
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.OPERATOR;
+    }
 }

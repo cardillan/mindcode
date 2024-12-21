@@ -3,6 +3,8 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.IntRange;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.v3.DataType;
 import info.teksol.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
@@ -107,4 +109,13 @@ public class AstFunctionDeclaration extends AstDeclaration {
         return result;
     }
 
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.FUNCTION;
+    }
+
+    @Override
+    public AstSubcontextType getSubcontextType() {
+        return AstSubcontextType.BODY;
+    }
 }

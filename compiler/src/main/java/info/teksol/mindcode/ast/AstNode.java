@@ -1,15 +1,9 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.AstElement;
-import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.AstCommonNode;
 
 import java.util.List;
 
-public interface AstNode extends AstElement {
+public interface AstNode extends AstCommonNode {
     List<AstNode> getChildren();
-
-    AstContextType getContextType();
-
-    AstSubcontextType getSubcontextType();
 }

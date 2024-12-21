@@ -1,6 +1,7 @@
 package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -37,5 +38,10 @@ public abstract class AstLabeledStatement extends AstStatement {
     @Override
     public int hashCode() {
         return Objects.hashCode(label);
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.LOOP;
     }
 }

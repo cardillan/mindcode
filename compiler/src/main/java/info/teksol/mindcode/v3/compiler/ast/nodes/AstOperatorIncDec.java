@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.logic.Operation;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
@@ -51,5 +52,4 @@ public class AstOperatorIncDec extends AstExpression {
     }
 
     public enum Type { PREFIX, POSTFIX }
-    public enum Operation { INCREMENT, DECREMENT }
 }

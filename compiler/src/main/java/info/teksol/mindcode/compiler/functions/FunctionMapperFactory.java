@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 
 public class FunctionMapperFactory {
 
+    // TODO Perhaps the function mapper could emit its code using a CodeBuilder instance, avoiding the need
+    //      for astContextSupplier.
     public static FunctionMapper getFunctionMapper(InstructionProcessor instructionProcessor, Supplier<AstContext> astContextSupplier,
             MessageConsumer messageConsumer) {
         return new BaseFunctionMapper(instructionProcessor, astContextSupplier, messageConsumer);

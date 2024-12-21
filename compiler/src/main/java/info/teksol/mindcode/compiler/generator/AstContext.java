@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.AstCommonNode;
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -17,14 +17,14 @@ public final class AstContext {
     private final CompilerProfile profile;
     private final LogicFunction function;
     private final int level;
-    private final AstNode node;
+    private final AstCommonNode node;
     private final AstContextType contextType;
     private final AstSubcontextType subcontextType;
     private final AstContext parent;
     private double weight;
     private final List<AstContext> children;
 
-    private AstContext(CompilerProfile profile, LogicFunction function, int level, AstNode node, AstContextType contextType,
+    private AstContext(CompilerProfile profile, LogicFunction function, int level, AstCommonNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight, List<AstContext> children) {
         this.id = counter.getAndIncrement();
         this.profile = profile;
@@ -38,7 +38,7 @@ public final class AstContext {
         this.children = children;
     }
 
-    public AstContext(CompilerProfile profile, LogicFunction function, int level, AstNode node, AstContextType contextType,
+    public AstContext(CompilerProfile profile, LogicFunction function, int level, AstCommonNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight) {
         this(profile, function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
@@ -52,7 +52,7 @@ public final class AstContext {
         return createRootNode(CompilerProfile.standardOptimizations(false));
     }
 
-    public AstContext createChild(CompilerProfile profile, AstNode node, AstContextType contextType) {
+    public AstContext createChild(CompilerProfile profile, AstCommonNode node, AstContextType contextType) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, 1.0);
         children.add(child);
@@ -60,7 +60,7 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createFunctionDeclaration(CompilerProfile profile, LogicFunction function, AstNode node, AstContextType contextType, double weight) {
+    public AstContext createFunctionDeclaration(CompilerProfile profile, LogicFunction function, AstCommonNode node, AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
@@ -280,7 +280,7 @@ public final class AstContext {
         return level;
     }
 
-    public AstNode node() {
+    public AstCommonNode node() {
         return node;
     }
 

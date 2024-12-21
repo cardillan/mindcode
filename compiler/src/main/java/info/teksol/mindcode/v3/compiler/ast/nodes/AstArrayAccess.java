@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
@@ -42,4 +43,8 @@ public class AstArrayAccess extends AstExpression {
         return result;
     }
 
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.HEAP_ACCESS;
+    }
 }

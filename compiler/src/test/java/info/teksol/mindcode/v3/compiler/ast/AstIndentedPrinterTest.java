@@ -67,16 +67,14 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         allocate stack in bank1[0...512];
                         
                         def fib(n)
-                          if n <= 0 then
-                            0;
-                          else
-                            case n
-                            when 1 then
-                              1;
+                            if n <= 0 then
+                                0;
                             else
-                              fib(n - 1) + fib(n - 2);
+                                case n
+                                    when 1 then 1;
+                                    else fib(n - 1) + fib(n - 2);
+                                end;
                             end;
-                          end;
                         end;
                         
                         print(fib(5));
@@ -84,11 +82,11 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                 """
                         AstModule {
                             statements = [
-                                AstAllocation{type = STACK, memory = AstIdentifier{name = "bank1", external = false}, range = AstRange {
+                                AstAllocations{allocations = AstAllocation{type = STACK, memory = AstIdentifier{name = "bank1", external = false}, range = AstRange {
                                     firstValue = AstLiteralDecimal{literal = "0"},
                                     lastValue = AstLiteralDecimal{literal = "512"},
                                     exclusive = true
-                                }},
+                                }}},
                                 AstFunctionDeclaration {
                                     identifier = AstIdentifier{name = "fib", external = false},
                                     dataType = VAR,
@@ -205,10 +203,14 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                                     right = AstLiteralDecimal{literal = "0"}
                                                 },
                                                 body = [
-                                                    AstAssignmentSimple{target = AstArrayAccess {
-                                                        array = AstIdentifier{name = "a", external = false},
-                                                        index = AstIdentifier{name = "i", external = false}
-                                                    }, value = AstLiteralDecimal{literal = "10"}},
+                                                    AstAssignment {
+                                                        operation = null,
+                                                        target = AstArrayAccess {
+                                                            array = AstIdentifier{name = "a", external = false},
+                                                            index = AstIdentifier{name = "i", external = false}
+                                                        },
+                                                        value = AstLiteralDecimal{literal = "10"}
+                                                    },
                                                     AstBreakStatement{label = null}
                                                 ]
                                             },

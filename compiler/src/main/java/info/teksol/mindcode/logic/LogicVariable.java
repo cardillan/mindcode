@@ -227,9 +227,15 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return true;
     }
 
+    // Only user-declared variables are l-values
+    @Override
+    public boolean isLvalue() {
+        return isUserWritable();
+    }
+
     @Override
     public void setValue(CodeBuilder codeBuilder, LogicValue value) {
-        codeBuilder.addSet(this, value);
+        codeBuilder.createSet(this, value);
     }
 
     @Override

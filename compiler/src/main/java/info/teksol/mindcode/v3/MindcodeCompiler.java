@@ -1,13 +1,15 @@
 package info.teksol.mindcode.v3;
 
 import info.teksol.generated.ast.AstIndentedPrinter;
-import info.teksol.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.Requirement;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilder;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilderContext;
@@ -20,8 +22,10 @@ import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreator;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreatorContext;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluatorContext;
+import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.preprocessor.AllocationPreprocessor;
+import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import info.teksol.mindcode.v3.compiler.preprocessor.DirectivePreprocessor;
 import info.teksol.mindcode.v3.compiler.preprocessor.PreprocessorContext;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -53,14 +57,22 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, ModuleContext> parseTrees = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
-    private @Nullable AstProgram program;
+    private @Nullable AstProgram astProgram;
     private @Nullable AstAllocation stackAllocation;
     private @Nullable AstAllocation heapAllocation;
     private @Nullable CallGraph callGraph;
+    private @Nullable AstContext rootAstContext;
+    private @Nullable AstContext topAstContext;
+    private @Nullable CodeBuilder codeBuilder;
+    private @Nullable Variables variables;
+
+    // Error detection
+    private final ErrorsDetector errorsDetector;
 
     public MindcodeCompiler(CompilationPhase targetPhase, MessageConsumer messageConsumer,
             CompilerProfile profile, InputFiles inputFiles) {
-        super(messageConsumer);
+        super(new ErrorsDetector( messageConsumer));
+        this.errorsDetector = (ErrorsDetector) super.messageConsumer();
         this.targetPhase = targetPhase;
         this.profile = profile;
         this.inputFiles = inputFiles;
@@ -97,43 +109,50 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             }
         }
 
-        program = new AstProgram(new InputPosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
-        if (targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
+        astProgram = new AstProgram(new InputPosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+        if (error() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
         if (profile.getParseTreeLevel() > 0) {
             debug("Parse tree:");
-            debug(new AstIndentedPrinter().print(program));
+            debug(new AstIndentedPrinter().print(astProgram));
             debug("");
         }
 
+        DirectivePreprocessor.processDirectives(this, astProgram);
+
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
         compileTimeEvaluator = new CompileTimeEvaluator(this);
-        preprocessTree();
 
-        callGraph = CallGraphCreator.createCallGraph(this, program);
+        callGraph = CallGraphCreator.createCallGraph(this, astProgram);
+
+        if (error() || targetPhase.compareTo(CompilationPhase.CALL_GRAPH) <= 0) return;
+
+        rootAstContext = AstContext.createRootNode(profile);
+        variables = new Variables(this);
+        codeBuilder = new CodeBuilder(this);
+
+        new CodeGenerator(this).generateCode(astProgram);
     }
 
-    /// The composed AST visitor allows us to traverse the tree just once, passing each node to the visitor
-    /// registered to handle that type of node. Currently, each type of node can be handled by at most
-    /// one visitor; if this was to change, the ComposedAstNodeVisitor (a generated class) would have to be
-    /// extended.
-    ///
-    /// Currently, these types of nodes are handled:
-    /// - AstDirectiveSet for updating compiler profile with processor directives
-    /// - AstAllocation for processing stack and heap allocations
-    /// - CompileTimeEvaluator for evaluating constants
-    ///
-    /// In the future, the following types of nodes will be handled
-    /// - variable, constant and parameter declarations (function context tracking will need to be somehow
-    ///   incorporated in this one)
-    ///
-    /// More complex tree processing is done separately - for example, call graph creation.
-    private void preprocessTree() {
-        ComposedAstNodeVisitor<@Nullable Void> visitor = new ComposedAstNodeVisitor<>();
-        visitor.registerVisitor(new DirectivePreprocessor(this));
-        visitor.registerVisitor(new AllocationPreprocessor(this));
-        visitor.registerVisitor(compileTimeEvaluator());
-        visitor.visitTree(getProgram(), (a, b) -> null);
+    private boolean error() {
+        return errorsDetector.errorsDetected;
+    }
+
+    private static class ErrorsDetector implements MessageConsumer {
+        private final MessageConsumer delegate;
+        private boolean errorsDetected = false;
+
+        public ErrorsDetector(MessageConsumer messageConsumer) {
+            this.delegate = messageConsumer;
+        }
+
+        @Override
+        public void accept(MindcodeMessage mindcodeMessage) {
+            if (mindcodeMessage.isError()) {
+                errorsDetected = true;
+            }
+            delegate.accept(mindcodeMessage);
+        }
     }
 
     // Root method for obtaining compiler contexts
@@ -159,8 +178,16 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return modules.get(inputFile);
     }
 
-    public AstProgram getProgram() {
-        return Objects.requireNonNull(program);
+    public AstProgram getAstProgram() {
+        return Objects.requireNonNull(astProgram);
+    }
+
+    public AstContext getRootAstContext() {
+        return Objects.requireNonNull(rootAstContext);
+    }
+
+    public List<LogicInstruction> getInstructions() {
+        return Objects.requireNonNull(codeBuilder).getInstructions();
     }
 
     public CallGraph getCallGraph() {
@@ -216,5 +243,30 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     @Override
     public CallGraph callGraph() {
         return Objects.requireNonNull(callGraph);
+    }
+
+    @Override
+    public AstContext rootAstContext() {
+        return Objects.requireNonNull(rootAstContext);
+    }
+
+    @Override
+    public CodeBuilder codeBuilder() {
+        return Objects.requireNonNull(codeBuilder);
+    }
+
+    @Override
+    public Variables variables() {
+        return Objects.requireNonNull(variables);
+    }
+
+    @Override
+    public void setTopAstContext(AstContext topAstContext) {
+        this.topAstContext = Objects.requireNonNull(topAstContext);
+    }
+
+    @Override
+    public AstContext topAstContext() {
+        return Objects.requireNonNull(topAstContext);
     }
 }

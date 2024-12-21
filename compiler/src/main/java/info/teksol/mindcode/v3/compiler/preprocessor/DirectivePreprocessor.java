@@ -11,6 +11,8 @@ import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstDirectiveValue;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -29,9 +31,31 @@ import java.util.function.BiConsumer;
 public class DirectivePreprocessor extends AbstractMessageEmitter implements AstDirectiveSetVisitor<@Nullable Void> {
     private final CompilerProfile profile;
 
-    public DirectivePreprocessor(PreprocessorContext context) {
+    private DirectivePreprocessor(PreprocessorContext context) {
         super(context.messageConsumer());
         this.profile = context.compilerProfile();
+    }
+
+    public static void processDirectives(PreprocessorContext context, AstProgram program) {
+        DirectivePreprocessor processor = new DirectivePreprocessor(context);
+        processor.visitNode(program);
+    }
+
+    private void visitNode(AstMindcodeNode node) {
+        if (node instanceof AstDirectiveSet directive) {
+            processDirective(directive);
+        } else {
+            node.getChildren().forEach(this::visitNode);
+        }
+    }
+
+    private void processDirective(AstDirectiveSet directive) {
+        BiConsumer<CompilerProfile, AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
+        if (handler == null) {
+            error(directive.getOption(), "Unknown compiler directive '%s'.", directive.getOption().getText());
+        } else {
+            handler.accept(profile, directive);
+        }
     }
 
     @Override

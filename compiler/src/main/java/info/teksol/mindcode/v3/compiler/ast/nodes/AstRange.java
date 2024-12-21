@@ -6,6 +6,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @AstNode
+// Note: AstRange isn't a true expression, as it cannot be represented in compiled code
+// It is kept in the expression subtree because of the case statement
 public class AstRange extends AstExpression {
     private final AstExpression firstValue;
     private final AstExpression lastValue;

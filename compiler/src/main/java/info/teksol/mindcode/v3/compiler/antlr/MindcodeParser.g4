@@ -112,9 +112,8 @@ expression
     | <assoc = right> condition = expression
          QUESTION trueBranch = expression
          COLON falseBranch = expression                                                 # expTernary
-    | <assoc = right> target = expression ASSIGN value = expression                     # expAssignment
-    | <assoc = right> target = lvalue
-        operation = (ASSIGN_POW |
+    | <assoc = right> target = expression
+        operation = (ASSIGN | ASSIGN_POW |
                      ASSIGN_MUL | ASSIGN_DIV | ASSIGN_IDIV | ASSIGN_MOD |
                      ASSIGN_PLUS | ASSIGN_MINUS | ASSIGN_SHIFT_LEFT | ASSIGN_SHIFT_RIGHT |
                      ASSIGN_BITWISE_AND | ASSIGN_BITWISE_OR | ASSIGN_BITWISE_XOR |

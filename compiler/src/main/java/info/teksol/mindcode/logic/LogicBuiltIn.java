@@ -105,13 +105,19 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
 
     @Override
     public boolean isWritable() {
-        // Some built-ins are writable (e.g. @counter)
+        // @counter is writable. Some other built-ins might be as well.
+        return true;
+    }
+
+    @Override
+    public boolean isLvalue() {
+        // @counter is writable. Some other built-ins might be as well.
         return true;
     }
 
     @Override
     public void setValue(CodeBuilder codeBuilder, LogicValue value) {
-        codeBuilder.addSet(this, value);
+        codeBuilder.createSet(this, value);
     }
 
     @Override

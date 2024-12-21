@@ -14,11 +14,21 @@ import java.util.function.Consumer;
 /// in specific contexts).
 public interface NodeValue {
 
-    /// @return true if this instance is writable (can accept new values)
-    default boolean isWritable() {
-        return false;
-    }
+    /// L-values can be targets of assignments and increment/decrement operators.
+    ///
+    /// The definition is separate from LogicArgument.isWritable, because temporary variables are generally
+    /// writable, but they don't represent l-values. When they do, they need a special NodeValue implementation
+    /// to handle reading and writing values anyway.
+    ///
+    /// @return true if this instance represents an l-value
+    boolean isLvalue();
 
+    /// Returns a value represented by this instance.
+    ///
+    /// Some node values might not be R-values (formattable strings or vararg identifiers, for example.)
+    /// These values should emit errors when they're being read. They need special handling based on their
+    /// type.
+    ///
     /// @return value maintained by this instance
     LogicValue getValue(CodeBuilder codeBuilder);
 

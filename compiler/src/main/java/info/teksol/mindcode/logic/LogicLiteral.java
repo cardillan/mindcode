@@ -5,6 +5,11 @@ import info.teksol.evaluator.LogicReadable;
 public interface LogicLiteral extends LogicValue, LogicReadable {
 
     @Override
+    default boolean isLvalue() {
+        return false;
+    }
+
+    @Override
     default boolean isLiteral() {
         return true;
     }

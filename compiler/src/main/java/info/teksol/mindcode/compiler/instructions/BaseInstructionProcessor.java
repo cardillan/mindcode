@@ -37,7 +37,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private int labelIndex = 0;
     private int functionIndex = 0;
 
-
     static class InstructionProcessorParameters {
         public final MessageConsumer messageConsumer;
         public final ProcessorVersion version;
@@ -57,7 +56,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             this(messageConsumer, version, edition, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
         }
     }
-
 
     BaseInstructionProcessor(InstructionProcessorParameters parameters) {
         super(parameters.messageConsumer);
@@ -121,146 +119,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                         .collect(Collectors.toList())
         );
     }
-
-    @Override
-    public CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);
-    }
-
-    @Override
-    public CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
-        return (CallInstruction) createInstruction(astContext, CALL, address, returnValue);
-    }
-
-    @Override
-    public EndInstruction createEnd(AstContext astContext) {
-        return (EndInstruction) createInstruction(astContext, END);
-    }
-
-    @Override
-    public FormatInstruction createFormat(AstContext astContext, LogicValue what) {
-        return (FormatInstruction) createInstruction(astContext, FORMAT, what);
-    }
-
-    @Override
-    public GetlinkInstruction createGetLink(AstContext astContext, LogicVariable result, LogicValue index) {
-        return (GetlinkInstruction) createInstruction(astContext, GETLINK, result, index);
-    }
-
-    @Override
-    public GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
-        return (GotoInstruction) createInstruction(astContext, GOTO, address, marker);
-    }
-
-    @Override
-    public GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
-        return (GotoLabelInstruction) createInstruction(astContext, GOTOLABEL, label, marker);
-    }
-
-    public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return (GotoOffsetInstruction) createInstruction(astContext, GOTOOFFSET, target, value, offset, marker);
-    }
-
-    @Override
-    public JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
-        return (JumpInstruction) createInstruction(astContext, JUMP, target, condition, x, y);
-    }
-
-    @Override
-    public JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target) {
-        return (JumpInstruction) createInstruction(astContext, JUMP, target, Condition.ALWAYS);
-    }
-
-    @Override
-    public LabelInstruction createLabel(AstContext astContext, LogicLabel label) {
-        return (LabelInstruction) createInstruction(astContext, LABEL, label);
-    }
-
-    @Override
-    public LookupInstruction createLookup(AstContext astContext, LogicKeyword type, LogicVariable result, LogicValue index) {
-        return (LookupInstruction) createInstruction(astContext, LOOKUP, type, result, index);
-    }
-
-    @Override
-    public NoOpInstruction createNoOp(AstContext astContext) {
-        return (NoOpInstruction) createInstruction(astContext, NOOP);
-    }
-
-    @Override
-    public OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {
-        return (OpInstruction) createInstruction(astContext, OP, operation, target, first);
-    }
-
-    @Override
-    public OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
-        return (OpInstruction) createInstruction(astContext, OP, operation, target, first, second);
-    }
-
-    @Override
-    public PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value) {
-        return (PopInstruction) createInstruction(astContext, POP, memory, value);
-    }
-
-    @Override
-    public PrintInstruction createPrint(AstContext astContext, LogicValue what) {
-        return (PrintInstruction) createInstruction(astContext, PRINT, what);
-    }
-
-    @Override
-    public PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock) {
-        return (PrintflushInstruction) createInstruction(astContext, PRINTFLUSH, messageBlock);
-    }
-
-    @Override
-    public PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value) {
-        return (PushInstruction) createInstruction(astContext, PUSH, memory, value);
-    }
-
-    @Override
-    public ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index) {
-        return (ReadInstruction) createInstruction(astContext, READ, result, memory, index);
-    }
-
-    @Override
-    public RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
-        return (RemarkInstruction) createInstruction(astContext, REMARK, what);
-    }
-
-    @Override
-    public ReturnInstruction createReturn(AstContext astContext, LogicVariable stack) {
-        return (ReturnInstruction) createInstruction(astContext, RETURN, stack);
-    }
-
-    @Override
-    public SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
-        return (SensorInstruction) createInstruction(astContext, SENSOR, result, target, property);
-    }
-
-    @Override
-    public SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value) {
-        return (SetInstruction) createInstruction(astContext, SET, target, value);
-    }
-
-    @Override
-    public SetInstruction createSet(AstContext astContext, LogicBuiltIn target, LogicValue value) {
-        return (SetInstruction) createInstruction(astContext, SET, target, value);
-    }
-
-    @Override
-    public SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address) {
-        return (SetAddressInstruction) createInstruction(astContext, SETADDR, variable, address);
-    }
-
-    @Override
-    public StopInstruction createStop(AstContext astContext) {
-        return (StopInstruction) createInstruction(astContext, STOP);
-    }
-
-    @Override
-    public WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index) {
-        return (WriteInstruction) createInstruction(astContext, WRITE, value, memory, index);
-    }
-
 
     @Override
     public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {

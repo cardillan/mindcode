@@ -1,89 +1,81 @@
 package info.teksol.mindcode.v3.compiler.generation;
 
-import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.generated.ast.ComposedAstNodeVisitor;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.compiler.generator.AstContext;
-import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.v3.compiler.ast.nodes.AstAllocation;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
+import info.teksol.mindcode.v3.compiler.generation.handlers.*;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 @NullMarked
 public class CodeGenerator extends AbstractMessageEmitter {
     // Stateless processing instances
-    private final CompilerProfile profile;
-    private final InstructionProcessor processor;
-    private final @Nullable AstAllocation stackAllocation;
-    private final @Nullable AstAllocation heapAllocation;
-    private final CompileTimeEvaluator compileTimeEvaluator;
-    private final FunctionMapper functionMapper;
+    private final CodeGeneratorContext context;
+    private final CallGraph callGraph;
+    private final CompileTimeEvaluator evaluator;
+    private final CodeBuilder codeBuilder;
+    private final Variables variables;
 
-    private final AstContext rootAstContext;
+    private final FunctionMapper functionMapper;
+    private final ComposedAstNodeVisitor<NodeValue> nodeVisitor;
 
     // Stateful instances
-    private final CallGraph callGraph;
-    private final ReturnStack returnStack;
-    private LoopStack loopStack;
-
-    private AstContext astContext;
-    private LogicFunction currentFunction;
 
     public CodeGenerator(CodeGeneratorContext context) {
         super(context.messageConsumer());
-        profile = context.compilerProfile();
-        processor = context.instructionProcessor();
-        stackAllocation = context.stackAllocation();
-        heapAllocation = context.heapAllocation();
-        compileTimeEvaluator = context.compileTimeEvaluator();
-        functionMapper = FunctionMapperFactory.getFunctionMapper(processor, () -> astContext, messageConsumer);
-
-        rootAstContext = AstContext.createRootNode(profile);
-
+        this.context = context;
         callGraph = context.callGraph();
-        returnStack = new ReturnStack(messageConsumer);
-        loopStack = new LoopStack(messageConsumer);
+        evaluator = context.compileTimeEvaluator();
+        codeBuilder = context.codeBuilder();
+        variables = context.variables();
 
-        astContext = rootAstContext;
-        currentFunction = callGraph.getMain();
+        functionMapper = FunctionMapperFactory.getFunctionMapper(context.instructionProcessor(),
+                codeBuilder::getAstContext, messageConsumer);
+
+        nodeVisitor = new ComposedAstNodeVisitor<>(node -> { throw new MindcodeInternalError("Unhandled node " + node); });
+
+        // Registration order is unimportant as long as multiple handlers do not handle the same node
+        nodeVisitor.registerVisitor(new StatementListsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new DeclarationsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new IdentifiersHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new LiteralsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new AssignmentsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new OperatorsHandler(context, this::visit));
     }
 
-    public CodeGeneratorOutput generateCode(AstProgram program) {
-        verifyStackAllocation();
-        return new CodeGeneratorOutput(List.of(), rootAstContext);
-    }
+    public void generateCode(AstProgram program) {
+        // TODO In relaxed syntax, top context is the main body
+        //      In strict syntax, top context is the root context
+        variables.enterFunction(callGraph.getMain(), "");
+        context.setTopAstContext(codeBuilder.getAstContext());
 
-    private void verifyStackAllocation() {
-        if (stackAllocation == null) {
+        visit(program);
+
+        variables.exitFunction(callGraph.getMain());
+
+        // Check stack allocations
+        if (context.stackAllocation() == null) {
             callGraph.recursiveFunctions().filter(LogicFunction::isUsed).forEach(f -> error(f.getDeclaration(),
                     "Function '%s' is recursive and no stack was allocated.", f.getName()));
         }
+
+        // Process function declarations
     }
 
-    private void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {
-        if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
-            clearSubcontextType();
-        }
-        astContext = astContext.createSubcontext(subcontextType, multiplier);
+    private NodeValue visit(AstMindcodeNode node) {
+        codeBuilder.enterAstNode(node);
+        variables.enterAstNode();
+        NodeValue result = nodeVisitor.visit(evaluator.evaluate(node));
+        variables.exitAstNode();
+        codeBuilder.exitAstNode(node);
+        return result;
     }
-
-    private void setSubcontextType(info.teksol.mindcode.compiler.generator.LogicFunction function, AstSubcontextType subcontextType) {
-        if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
-            clearSubcontextType();
-        }
-        astContext = astContext.createSubcontext(function, subcontextType, 1.0);
-    }
-
-    private void clearSubcontextType() {
-        astContext = astContext.parent();
-    }
-
 }

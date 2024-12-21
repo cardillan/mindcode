@@ -68,7 +68,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter implements AstC
             AstLiteral result = constant instanceof IntermediateValue value ? ensureMlog(node, value) : constant;
             constants.put(node.getConstantName(), constant);
         } else {
-            error(node, "Value assigned to constant '%s' is not a constant expression.", node.getConstantName());
+            // The expression is not a constant one. The error will be reported by code generator.
         }
         return node;
     }
@@ -92,18 +92,32 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter implements AstC
     }
 
     private AstMindcodeNode evaluateUnaryOp(AstOperatorUnary node) {
-        LogicOperation eval = ExpressionEvaluator.getOperation(node.getOperation());
-        if (eval != null) {
-            ExpressionValue operand = ExpressionValue.create(processor, evaluate(node.getOperand()));
-            if (operand.isString()) {
-                error(node, "Unsupported string expression.");
-            } else if (operand.isValid()) {
-                Result result = new Result();
-                eval.execute(result, operand, operand);
-                return result.toAstMindcodeNode(node);
+        Operation operation = node.getOperation();
+        if (operation.getOperands() == 2) {
+            if (operation == Operation.ADD || operation == Operation.SUB) {
+                ExpressionValue left = ExpressionValue.zero(processor);
+                ExpressionValue right = ExpressionValue.create(processor, evaluate(node.getOperand()));
+                if (right.isString()) {
+                    error(node, "Unsupported string expression.");
+                } else if (right.isValid()) {
+                    Result result = new Result();
+                    ExpressionEvaluator.getOperation(operation).execute(result, left, right);
+                    return result.toAstMindcodeNode(node);
+                }
+            }
+        } else if (operation.isDeterministic()) {
+            LogicOperation eval = ExpressionEvaluator.getOperation(node.getOperation());
+            if (eval != null) {
+                ExpressionValue operand = ExpressionValue.create(processor, evaluate(node.getOperand()));
+                if (operand.isString()) {
+                    error(node, "Unsupported string expression.");
+                } else if (operand.isValid()) {
+                    Result result = new Result();
+                    eval.execute(result, operand, operand);
+                    return result.toAstMindcodeNode(node);
+                }
             }
         }
-
         return node;
     }
 

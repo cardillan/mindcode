@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -63,4 +64,8 @@ public class AstFunctionCall extends AstExpression {
         return result;
     }
 
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.CALL;
+    }
 }

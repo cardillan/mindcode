@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.instructions;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.ContextlessInstructionCreator;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.function.Consumer;
  *
  * Variables holding instances of this interface should be named "processor".
  */
-public interface InstructionProcessor extends MessageEmitter {
+public interface InstructionProcessor extends ContextlessInstructionCreator, MessageEmitter {
 
     ProcessorVersion getProcessorVersion();
 
@@ -45,37 +46,8 @@ public interface InstructionProcessor extends MessageEmitter {
      */
     LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
 
-    CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue);
-    CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue);
-    EndInstruction createEnd(AstContext astContext);
-    FormatInstruction createFormat(AstContext astContext, LogicValue what);
-    GetlinkInstruction createGetLink(AstContext astContext, LogicVariable result, LogicValue index);
-    GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker);
-    GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker);
-    GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker);
-    JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y);
-    JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
-    LabelInstruction createLabel(AstContext astContext, LogicLabel label);
-    LookupInstruction createLookup(AstContext astContext, LogicKeyword type, LogicVariable result, LogicValue index);
-    NoOpInstruction createNoOp(AstContext astContext);
-    OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first);
-    OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second);
-    PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value);
-    PrintInstruction createPrint(AstContext astContext, LogicValue what);
-    PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock);
-    PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value);
-    ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index);
-    RemarkInstruction createRemark(AstContext astContext, LogicValue what);
-    ReturnInstruction createReturn(AstContext astContext, LogicVariable stack);
-    SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property);
-    SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value);
-    SetInstruction createSet(AstContext astContext, LogicBuiltIn target, LogicValue value);
-    SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address);
-    StopInstruction createStop(AstContext astContext);
-    WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index);
-
-    LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments);
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
+
     LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
 
     LogicInstruction normalizeInstruction(LogicInstruction instruction);

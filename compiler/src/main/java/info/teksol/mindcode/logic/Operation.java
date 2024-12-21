@@ -112,7 +112,7 @@ public enum Operation implements LogicArgument {
     @Override
     public String toMlog() {
         if (mlog == null) {
-            throw new MindcodeInternalError("No mlog representation for operation" + this);
+            throw new MindcodeInternalError("No mlog representation for operation " + this);
         }
         return mlog;
     }

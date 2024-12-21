@@ -1,131 +1,86 @@
 package info.teksol.mindcode.v3.compiler.generation;
 
+import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.v3.ContextfulInstructionCreator;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 
-public class CodeBuilder {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CodeBuilder implements ContextfulInstructionCreator {
+    private final CompilerProfile profile;
     private final InstructionProcessor processor;
+    private final List<LogicInstruction> instructions = new ArrayList<>();
     private AstContext astContext;
 
     public CodeBuilder(CodeGeneratorContext context) {
+        profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        astContext = context.rootAstContext();
     }
 
-    public void add(LogicInstruction instruction) {
-
+    public AstContext getAstContext() {
+        return astContext;
     }
 
-    public void addCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        add(processor.createCallRecursive(astContext, stack, callAddr, retAddr, returnValue));
+    public List<LogicInstruction> getInstructions() {
+        return instructions;
     }
 
-    public void addCallStackless(LogicAddress address, LogicVariable returnValue) {
-        add(processor.createCallStackless(astContext, address, returnValue));
+    public void enterAstNode(AstMindcodeNode node) {
+        enterAstNode(node, node.getContextType());
     }
 
-    public void addEnd(AstContext astContext) {
-        add(processor.createEnd(astContext));
+    public void enterAstNode(AstMindcodeNode node, AstContextType contextType) {
+        if (node.getContextType() != AstContextType.NONE) {
+            astContext = astContext.createChild(profile, node, contextType);
+        }
     }
 
-    public void addFormat(LogicValue what) {
-        add(processor.createFormat(astContext, what));
+    public void enterFunctionAstNode(LogicFunction function, AstMindcodeNode node, double weight) {
+        astContext = astContext.createFunctionDeclaration(profile, function, node, node.getContextType(), weight);
     }
 
-    public void addGetLink(LogicVariable result, LogicValue index) {
-        add(processor.createGetLink(astContext, result, index));
+    public void exitAstNode(AstMindcodeNode node) {
+        if (node.getContextType() != AstContextType.NONE) {
+            if (astContext.subcontextType() != node.getSubcontextType() || astContext.node() != node) {
+                throw new MindcodeInternalError("Unexpected AST context " + astContext);
+            }
+            astContext = astContext.parent();
+        }
     }
 
-    public void addGoto(LogicVariable address, LogicLabel marker) {
-        add(processor.createGoto(astContext, address, marker));
+    public void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {
+        if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
+            clearSubcontextType();
+        }
+        astContext = astContext.createSubcontext(subcontextType, multiplier);
     }
 
-    public void addGotoLabel(LogicLabel label, LogicLabel marker) {
-        add(processor.createGotoLabel(astContext, label, marker));
+    public void setSubcontextType(LogicFunction function, AstSubcontextType subcontextType) {
+        if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
+            clearSubcontextType();
+        }
+        astContext = astContext.createSubcontext(function, subcontextType, 1.0);
     }
 
-    public void addGotoOffset(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        add(processor.createGotoOffset(astContext, target, value, offset, marker));
+    public void clearSubcontextType() {
+        astContext = astContext.parent();
     }
 
-    public void addJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
-        add(processor.createJump(astContext, target, condition, x, y));
-    }
-
-    public void addJumpUnconditional(LogicLabel target) {
-        add(processor.createJumpUnconditional(astContext, target));
-    }
-
-    public void addLabel(LogicLabel label) {
-        add(processor.createLabel(astContext, label));
-    }
-
-    public void addLookup(LogicKeyword type, LogicVariable result, LogicValue index) {
-        add(processor.createLookup(astContext, type, result, index));
-    }
-
-    public void addNoOp(AstContext astContext) {
-        add(processor.createNoOp(astContext));
-    }
-
-    public void addOp(Operation operation, LogicVariable target, LogicValue first) {
-        add(processor.createOp(astContext, operation, target, first));
-    }
-
-    public void addOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
-        add(processor.createOp(astContext, operation, target, first, second));
-    }
-
-    public void addPop(LogicVariable memory, LogicVariable value) {
-        add(processor.createPop(astContext, memory, value));
-    }
-
-    public void addPrint(LogicValue what) {
-        add(processor.createPrint(astContext, what));
-    }
-
-    public void addPrintflush(LogicVariable messageBlock) {
-        add(processor.createPrintflush(astContext, messageBlock));
-    }
-
-    public void addPush(LogicVariable memory, LogicVariable value) {
-        add(processor.createPush(astContext, memory, value));
-    }
-
-    public void addRead(LogicVariable result, LogicVariable memory, LogicValue index) {
-        add(processor.createRead(astContext, result, memory, index));
-    }
-
-    public void addRemark(LogicValue what) {
-        add(processor.createRemark(astContext, what));
-    }
-
-    public void addReturn(LogicVariable stack) {
-        add(processor.createReturn(astContext, stack));
-    }
-
-    public void addSensor(LogicVariable result, LogicValue target, LogicValue property) {
-        add(processor.createSensor(astContext, result, target, property));
-    }
-
-    public void addSet(LogicVariable target, LogicValue value) {
-        add(processor.createSet(astContext, target, value));
-    }
-
-    public void addSet(LogicBuiltIn target, LogicValue value) {
-        add(processor.createSet(astContext, target, value));
-    }
-
-    public void addSetAddress(LogicVariable variable, LogicLabel address) {
-        add(processor.createSetAddress(astContext, variable, address));
-    }
-
-    public void addStop(AstContext astContext) {
-        add(processor.createStop(astContext));
-    }
-
-    public void addWrite(LogicValue value, LogicVariable memory, LogicValue index) {
-        add(processor.createWrite(astContext, value, memory, index));
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+        LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
+        instructions.add(instruction);
+        return instruction;
     }
 }

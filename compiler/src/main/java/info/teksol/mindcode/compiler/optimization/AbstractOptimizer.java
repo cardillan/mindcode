@@ -4,14 +4,17 @@ import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.MemoryModel;
 import info.teksol.mindcode.compiler.generator.AstContext;
-import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.v3.ContextlessInstructionCreator;
 import info.teksol.mindcode.v3.MessageConsumer;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.List;
 
-abstract class AbstractOptimizer implements Optimizer {
+abstract class AbstractOptimizer implements Optimizer, ContextlessInstructionCreator {
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
@@ -31,6 +34,11 @@ abstract class AbstractOptimizer implements Optimizer {
         this.optimization = optimization;
         this.optimizationContext = null;
         this.instructionProcessor = null;
+    }
+
+    @Override
+    public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {
+        return instructionProcessor.createInstruction(astContext, opcode, arguments);
     }
 
     @Override
@@ -96,106 +104,6 @@ abstract class AbstractOptimizer implements Optimizer {
     //</editor-fold>
 
     //<editor-fold desc="Instruction creation">
-    protected CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
-        return instructionProcessor.createCallStackless(astContext, address, returnValue);
-    }
-
-    protected CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr, returnValue);
-    }
-
-    protected EndInstruction createEnd(AstContext astContext) {
-        return instructionProcessor.createEnd(astContext);
-    }
-
-    public FormatInstruction createFormat(AstContext astContext, LogicValue what) {
-        return instructionProcessor.createFormat(astContext, what);
-    }
-
-    protected GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
-        return instructionProcessor.createGoto(astContext, address, marker);
-    }
-
-    public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return instructionProcessor.createGotoOffset(astContext, target, value, offset, marker);
-    }
-
-    protected JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
-        return instructionProcessor.createJump(astContext, target, condition, x, y);
-    }
-
-    protected JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target) {
-        return instructionProcessor.createJumpUnconditional(astContext, target);
-    }
-
-    protected LabelInstruction createLabel(AstContext astContext, LogicLabel label) {
-        return instructionProcessor.createLabel(astContext, label);
-    }
-
-    public GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
-        return instructionProcessor.createGotoLabel(astContext, label, marker);
-    }
-
-    public NoOpInstruction createNoOp(AstContext astContext) {
-        return instructionProcessor.createNoOp(astContext);
-    }
-
-    protected OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {
-        return instructionProcessor.createOp(astContext, operation, target, first);
-    }
-
-    protected OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
-        return instructionProcessor.createOp(astContext, operation, target, first, second);
-    }
-
-    protected PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value) {
-        return instructionProcessor.createPop(astContext, memory, value);
-    }
-
-    protected PrintInstruction createPrint(AstContext astContext, LogicValue what) {
-        return instructionProcessor.createPrint(astContext, what);
-    }
-
-    protected PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock) {
-        return instructionProcessor.createPrintflush(astContext, messageBlock);
-    }
-
-    protected PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value) {
-        return instructionProcessor.createPush(astContext, memory, value);
-    }
-
-    protected ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createRead(astContext, result, memory, index);
-    }
-
-    protected RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
-        return instructionProcessor.createRemark(astContext, what);
-    }
-
-    protected ReturnInstruction createReturn(AstContext astContext, LogicVariable stack) {
-        return instructionProcessor.createReturn(astContext, stack);
-    }
-
-    protected SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
-        return instructionProcessor.createSensor(astContext, result, target, property);
-    }
-
-    protected SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value) {
-        return instructionProcessor.createSet(astContext, target, value);
-    }
-
-    protected SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address) {
-        return instructionProcessor.createSetAddress(astContext, variable, address);
-    }
-
-    protected StopInstruction createStop(AstContext astContext) {
-        return instructionProcessor.createStop(astContext);
-    }
-
-    protected WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createWrite(astContext, value, memory, index);
-    }
-
     protected <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg) {
         return instructionProcessor.replaceAllArgs(instruction, oldArg, newArg);
     }

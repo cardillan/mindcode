@@ -314,18 +314,6 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expAssignment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpAssignment(MindcodeParser.ExpAssignmentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expAssignment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpAssignment(MindcodeParser.ExpAssignmentContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code expExponentiation}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

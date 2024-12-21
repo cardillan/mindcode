@@ -5,10 +5,10 @@ import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @NullMarked
 public class LocalContext implements FunctionContext {
@@ -17,13 +17,13 @@ public class LocalContext implements FunctionContext {
     private final Map<String, NodeValue> variables = new HashMap<>();
 
     public LocalContext(LogicFunction function, String functionPrefix) {
-        this.function = function;
-        this.functionPrefix = functionPrefix;
+        this.function = Objects.requireNonNull(function);
+        this.functionPrefix = Objects.requireNonNull(functionPrefix);
         function.getParameters().forEach(p -> variables.put(p.getName(), p));
     }
 
     @Override
-    public @Nullable LogicFunction function() {
+    public LogicFunction function() {
         return function;
     }
 

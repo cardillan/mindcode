@@ -3,13 +3,16 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.mindcode.logic.LogicParameter;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstConstant;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstParameter;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -41,19 +44,26 @@ public class Variables extends AbstractMessageEmitter {
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
     private FunctionContext functionContext = new GlobalContext();
 
-    private final boolean heapAllocated;
-    private final HeapTracker heapTracker;
+    private boolean heapAllocated = false;
+    private HeapTracker heapTracker;
 
     public Variables(CodeGeneratorContext context) {
         super(context.messageConsumer());
         processor = context.instructionProcessor();
         callGraph = context.callGraph();
         heapAllocated = context.heapAllocation() != null;
-        heapTracker = createHeapTracker(context);
+        heapTracker = HeapTracker.createDefaultTracker(context);
     }
 
-    private boolean isFunction() {
-        return functionContext.function() != null;
+    public void setHeapTracker(HeapTracker heapTracker) {
+        heapAllocated = true;
+        this.heapTracker = heapTracker;
+    }
+
+    private boolean isLocalContext() {
+        LogicFunction function = functionContext.function();
+        // Under relaxed syntax, the main function isn't considered local
+        return function != null && (!function.isMain() || !RELAXED_SYNTAX);
     }
 
     private boolean isGlobalVariable(AstIdentifier identifier) {
@@ -61,7 +71,7 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     private boolean isLinkedVariable(AstIdentifier identifier) {
-        return identifier.isExternal() || processor.isGlobalName(identifier.getName());
+        return processor.isBlockName(identifier.getName());
     }
 
     private NodeValue registerGlobalVariable(AstIdentifier identifier, NodeValue variable) {
@@ -98,14 +108,14 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param constant constant declaration to process
     /// @param value compile-time value associated with the constant
-    public void createConstant(AstConstant constant, LogicLiteral value) {
-        if (isFunction()) {
-            error(constant, "Constants must be declared outside a function/a main code block.");
+    public void createConstant(AstConstant constant, LogicValue value) {
+        if (isLocalContext()) {
+            error(constant, "Constants must be declared outside a function/a main code block..");
         }
 
         if (globalVariables.containsKey(constant.getConstantName())) {
             error(constant,
-                    globalVariables.get(constant.getConstantName()).isWritable()
+                    globalVariables.get(constant.getConstantName()).isLvalue()
                             ? "Cannot redefine variable '%s' as a constant."
                             : "Multiple declarations of '%s'.",
                     constant.getConstantName());
@@ -122,13 +132,13 @@ public class Variables extends AbstractMessageEmitter {
     /// @param value value assigned to the parameter
     /// @return NodeValue instance representing the parameter's variable
     public NodeValue createParameter(AstParameter parameter, LogicValue value) {
-        if (isFunction()) {
+        if (isLocalContext()) {
             error(parameter, "Parameter must be declared outside a function/a main code block.");
         }
 
         if (globalVariables.containsKey(parameter.getParameterName())) {
             error(parameter,
-                    globalVariables.get(parameter.getParameterName()).isWritable()
+                    globalVariables.get(parameter.getParameterName()).isLvalue()
                             ? "Cannot redefine variable '%s' as a parameter."
                             : "Multiple declarations of '%s'.",
                     parameter.getParameterName());
@@ -202,73 +212,5 @@ public class Variables extends AbstractMessageEmitter {
 
     public void registerParentNodeVariable(LogicVariable variable) {
         functionContext.registerParentNodeVariable(variable);
-    }
-
-    /// Tracks heap usage. Creates heap variables and assigns indexes to them.
-    private class HeapTracker {
-        private final @Nullable LogicVariable heapMemory;
-        private final int startHeapIndex;
-        private final int endHeapIndex;
-        private int currentHeapIndex;
-
-        private HeapTracker() {
-            this.heapMemory = LogicVariable.special("heap");
-            this.startHeapIndex = 0;
-            this.endHeapIndex = Integer.MAX_VALUE;
-            this.currentHeapIndex = 0;
-        }
-
-        private HeapTracker(CodeGeneratorContext context, AstAllocation heapAllocation) {
-            if (heapAllocation.getType() != AstAllocation.AllocationType.HEAP) {
-                throw new MindcodeInternalError("Wrong allocation type.");
-            }
-
-            heapMemory = createHeapVariable(heapAllocation.getMemory());
-            AstRange range = heapAllocation.getRange();
-            if (range != null) {
-                startHeapIndex = evaluateNode(context, range.getFirstValue(), 0);
-                endHeapIndex = evaluateNode(context, range.getLastValue(), Integer.MAX_VALUE) + (range.isExclusive() ? 0 : 1);
-                currentHeapIndex = startHeapIndex;
-            } else {
-                startHeapIndex = 0;
-                endHeapIndex = 64;
-                currentHeapIndex = 0;
-            }
-        }
-
-        private ExternalVariable createVariable(AstIdentifier identifier) {
-            if (currentHeapIndex >= endHeapIndex) {
-                error(identifier, "Not enough capacity in allocated heap for '%s'.", identifier.getName());
-            }
-            return new ExternalVariable(heapMemory, LogicNumber.get(currentHeapIndex++),processor.nextTemp());
-        }
-    }
-
-    private HeapTracker createHeapTracker(CodeGeneratorContext context) {
-        AstAllocation heapAllocation = context.heapAllocation();
-        return heapAllocation == null ? new HeapTracker() : new HeapTracker(context, heapAllocation);
-    }
-
-    private int evaluateNode(CodeGeneratorContext context, @Nullable AstMindcodeNode node, int defaultValue) {
-        if (node != null) {
-            AstMindcodeNode evaluated = context.compileTimeEvaluator().evaluate(node);
-            if (evaluated instanceof LogicNumber number) {
-                return number.getIntValue();
-            } else {
-                error(node, "Heap allocation must use constant range.");
-            }
-        }
-        return defaultValue;
-    }
-
-    private LogicVariable createHeapVariable(AstIdentifier identifier) {
-        // TODO For strict syntax we'll need to resolve the identifier against declared variables
-        NodeValue heapVariable = createImplicitVariable(identifier);
-        if (heapVariable instanceof LogicVariable variable) {
-            return variable;
-        } else {
-            error(identifier, "Cannot allocate heap in '%s'.", identifier.getName());
-            return LogicVariable.special("invalid");
-        }
     }
 }

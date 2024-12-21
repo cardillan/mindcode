@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.DECREMENT;
-import static info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec.Operation.INCREMENT;
+import static info.teksol.mindcode.logic.Operation.ADD;
+import static info.teksol.mindcode.logic.Operation.SUB;
 
 class AstBuilderTest extends AbstractAstBuilderTest {
 
@@ -59,16 +59,16 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             @a = @b;
                             """,
                     List.of(
-                            new AstAssignmentSimple(EMPTY, a, b),
-                            new AstAssignmentSimple(EMPTY, a, new AstAssignmentSimple(EMPTY, b, c)),
-                            new AstAssignmentSimple(EMPTY, new AstArrayAccess(EMPTY, a, b), c),
-                            new AstAssignmentSimple(EMPTY,
+                            new AstAssignment(EMPTY, null, a, b),
+                            new AstAssignment(EMPTY, null, a, new AstAssignment(EMPTY, null, b, c)),
+                            new AstAssignment(EMPTY, null, new AstArrayAccess(EMPTY, a, b), c),
+                            new AstAssignment(EMPTY, null,
                                     new AstArrayAccess(EMPTY, a, b),
-                                    new AstAssignmentSimple(EMPTY,
+                                    new AstAssignment(EMPTY, null,
                                             new AstArrayAccess(EMPTY, a, c),
                                             d)
                             ),
-                            new AstAssignmentSimple(EMPTY,
+                            new AstAssignment(EMPTY, null,
                                     new AstBuiltInIdentifier(EMPTY, "@a"),
                                     new AstBuiltInIdentifier(EMPTY, "@b"))
                     )
@@ -85,23 +85,23 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             a &&= b ||= c;
                             """,
                     List.of(
-                            new AstAssignmentCompound(EMPTY, Operation.POW, a, b),
-                            new AstAssignmentCompound(EMPTY, Operation.MUL, a,
-                                    new AstAssignmentCompound(EMPTY, Operation.DIV, b,
-                                            new AstAssignmentCompound(EMPTY, Operation.IDIV, c,
-                                                    new AstAssignmentCompound(EMPTY, Operation.MOD, d,
+                            new AstAssignment(EMPTY, Operation.POW, a, b),
+                            new AstAssignment(EMPTY, Operation.MUL, a,
+                                    new AstAssignment(EMPTY, Operation.DIV, b,
+                                            new AstAssignment(EMPTY, Operation.IDIV, c,
+                                                    new AstAssignment(EMPTY, Operation.MOD, d,
                                                             e)))),
-                            new AstAssignmentCompound(EMPTY, Operation.ADD, a,
-                                    new AstAssignmentCompound(EMPTY, Operation.SUB, b,
-                                            new AstAssignmentCompound(EMPTY, Operation.SHL, c,
-                                                    new AstAssignmentCompound(EMPTY, Operation.SHR, d,
+                            new AstAssignment(EMPTY, ADD, a,
+                                    new AstAssignment(EMPTY, Operation.SUB, b,
+                                            new AstAssignment(EMPTY, Operation.SHL, c,
+                                                    new AstAssignment(EMPTY, Operation.SHR, d,
                                                             e)))),
-                            new AstAssignmentCompound(EMPTY, Operation.BITWISE_AND, a,
-                                    new AstAssignmentCompound(EMPTY, Operation.BITWISE_OR, b,
-                                            new AstAssignmentCompound(EMPTY, Operation.BITWISE_XOR, c,
+                            new AstAssignment(EMPTY, Operation.BITWISE_AND, a,
+                                    new AstAssignment(EMPTY, Operation.BITWISE_OR, b,
+                                            new AstAssignment(EMPTY, Operation.BITWISE_XOR, c,
                                                     d))),
-                            new AstAssignmentCompound(EMPTY, Operation.BOOLEAN_AND, a,
-                                    new AstAssignmentCompound(EMPTY, Operation.BOOLEAN_OR, b,
+                            new AstAssignment(EMPTY, Operation.BOOLEAN_AND, a,
+                                    new AstAssignment(EMPTY, Operation.BOOLEAN_OR, b,
                                             c))
                     )
             );
@@ -113,7 +113,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             a[b] += c[d];
                             """,
                     List.of(
-                            new AstAssignmentCompound(EMPTY, Operation.ADD,
+                            new AstAssignment(EMPTY, ADD,
                                     new AstArrayAccess(EMPTY, a, b),
                                     new AstArrayAccess(EMPTY, c, d)
                             )
@@ -127,7 +127,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             a += b ? c : d;
                             """,
                     List.of(
-                            new AstAssignmentCompound(EMPTY, Operation.ADD,
+                            new AstAssignment(EMPTY, ADD,
                                     a,
                                     new AstOperatorTernary(EMPTY, b, c, d)
                             )
@@ -236,7 +236,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             left>>right;
                             """,
                     List.of(
-                            new AstOperatorBinary(EMPTY, Operation.ADD, left, right),
+                            new AstOperatorBinary(EMPTY, ADD, left, right),
                             new AstOperatorBinary(EMPTY, Operation.SUB, left, right),
                             new AstOperatorBinary(EMPTY, Operation.SHL, left, right),
                             new AstOperatorBinary(EMPTY, Operation.SHR, left, right)
@@ -345,7 +345,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             """,
                     List.of(
                             new AstOperatorBinary(EMPTY, Operation.SHR,
-                                    new AstOperatorBinary(EMPTY, Operation.ADD,
+                                    new AstOperatorBinary(EMPTY, ADD,
                                             a,
                                             new AstOperatorBinary(EMPTY, Operation.MUL,
                                                     b,
@@ -365,7 +365,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstOperatorBinary(EMPTY, Operation.MUL,
                                     new AstParentheses(EMPTY,
-                                            new AstOperatorBinary(EMPTY, Operation.ADD, a, b)
+                                            new AstOperatorBinary(EMPTY, ADD, a, b)
                                     ),
                                     new AstParentheses(EMPTY,
                                             new AstOperatorBinary(EMPTY, Operation.SUB, c, d)
@@ -385,7 +385,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     new AstParentheses(EMPTY,
                                             new AstParentheses(EMPTY,
                                                     new AstParentheses(EMPTY,
-                                                            new AstOperatorBinary(EMPTY, Operation.ADD, a, b)
+                                                            new AstOperatorBinary(EMPTY, ADD, a, b)
                                                     )
                                             )
                                     )
@@ -518,14 +518,22 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             allocate stack in cell2[0 .. 63];
                             """,
                     List.of(
-                            new AstAllocation(EMPTY,
-                                    AstAllocation.AllocationType.HEAP,
-                                    id("cell1"),
-                                    null),
-                            new AstAllocation(EMPTY,
-                                    AstAllocation.AllocationType.STACK,
-                                    id("cell2"),
-                                    new AstRange(EMPTY, number(0), number(63), false))
+                            new AstAllocations(EMPTY,
+                                    List.of(
+                                            new AstAllocation(EMPTY,
+                                                    AstAllocation.AllocationType.HEAP,
+                                                    id("cell1"),
+                                                    null)
+                                    )
+                            ),
+                            new AstAllocations(EMPTY,
+                                    List.of(
+                                            new AstAllocation(EMPTY,
+                                                    AstAllocation.AllocationType.STACK,
+                                                    id("cell2"),
+                                                    new AstRange(EMPTY, number(0), number(63), false))
+                                    )
+                            )
                     )
             );
         }
@@ -536,7 +544,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             allocate heap in HEAPPTR[0 ... 64], stack in bank1;
                             """,
                     List.of(
-                            new AstStatementList(EMPTY,
+                            new AstAllocations(EMPTY,
                                     List.of(
                                             new AstAllocation(EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
@@ -909,7 +917,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     List.of(number(10), number(20), number(30), number(40)),
                                     List.of(
                                             call(id("print"),
-                                                    arg(new AstOperatorBinary(EMPTY, Operation.ADD, a, b))
+                                                    arg(new AstOperatorBinary(EMPTY, ADD, a, b))
                                             )
                                     )
                             )
@@ -933,7 +941,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstLoopIterator(EMPTY, id("j"), true)
                                     ),
                                     List.of(a, b, c, d),
-                                    List.of(new AstAssignmentSimple(EMPTY, id("j"), id("i"))
+                                    List.of(new AstAssignment(EMPTY, null, id("j"), id("i"))
                                     )
                             )
                     )
@@ -1122,7 +1130,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstFormattable(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo"),
-                                            new AstOperatorBinary(EMPTY, Operation.ADD, left, right),
+                                            new AstOperatorBinary(EMPTY, ADD, left, right),
                                             new AstLiteralString(EMPTY, "bar")
                                     )
                             )
@@ -1213,13 +1221,13 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             call(a, arg(call(b)), arg(call(c))),
                             call(call(a), b),
-                            call(new AstMemberAccess(EMPTY,a, b), c),
+                            call(new AstMemberAccess(EMPTY, a, b), c),
                             new AstMemberAccess(EMPTY,
                                     call(call(a), b),
                                     new AstBuiltInIdentifier(EMPTY, "@id")),
-                            new AstAssignmentSimple(EMPTY,
+                            new AstAssignment(EMPTY, null,
                                     d,
-                                    new AstOperatorBinary(EMPTY, Operation.ADD,
+                                    new AstOperatorBinary(EMPTY, ADD,
                                             call(a, arg(b), arg(c)),
                                             call(b, arg(c), arg(d))
                                     )
@@ -1268,7 +1276,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstFunctionParameter(EMPTY, c, true, true, false),
                                             new AstFunctionParameter(EMPTY, d, true, true, false)
                                     ),
-                                    List.of(new AstOperatorBinary(EMPTY, Operation.ADD, a, b)),
+                                    List.of(new AstOperatorBinary(EMPTY, ADD, a, b)),
                                     false,
                                     true)
                     )
@@ -1392,9 +1400,9 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstIteratedForLoopStatement(EMPTY,
                                     id("Label"),
-                                    List.of(new AstAssignmentSimple(EMPTY, a, number(0))),
+                                    List.of(new AstAssignment(EMPTY, null, a, number(0))),
                                     new AstOperatorBinary(EMPTY, Operation.LESS_THAN, a, number(10)),
-                                    List.of(new AstOperatorIncDec(EMPTY, Type.POSTFIX, INCREMENT, a)),
+                                    List.of(new AstOperatorIncDec(EMPTY, Type.POSTFIX, ADD, a)),
                                     List.of(call(id("print"), arg(a)))
                             )
                     )
@@ -1430,16 +1438,16 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstIteratedForLoopStatement(EMPTY,
                                     null,
                                     List.of(
-                                            new AstAssignmentSimple(EMPTY, a, number(0)),
-                                            new AstAssignmentSimple(EMPTY, b, number(100))
+                                            new AstAssignment(EMPTY, null, a, number(0)),
+                                            new AstAssignment(EMPTY, null, b, number(100))
                                     ),
                                     new AstOperatorBinary(EMPTY, Operation.LESS_THAN, a, b),
                                     List.of(
-                                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, INCREMENT, a),
-                                            new AstOperatorIncDec(EMPTY, Type.PREFIX, DECREMENT, b)
+                                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, ADD, a),
+                                            new AstOperatorIncDec(EMPTY, Type.PREFIX, SUB, b)
                                     ),
                                     List.of(
-                                            call(id("print"), arg(new AstOperatorBinary(EMPTY, Operation.ADD, a, b)))
+                                            call(id("print"), arg(new AstOperatorBinary(EMPTY, ADD, a, b)))
                                     )
                             )
                     )
@@ -1528,7 +1536,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     id("Label"),
                                     a,
                                     new AstRange(EMPTY,
-                                            new AstOperatorBinary(EMPTY, Operation.ADD, b, number(10)),
+                                            new AstOperatorBinary(EMPTY, ADD, b, number(10)),
                                             new AstOperatorBinary(EMPTY, Operation.SUB, c, number(20)),
                                             false),
                                     List.of(a)
@@ -1665,7 +1673,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             +operand;
                             """,
                     List.of(
-                            new AstOperatorUnary(EMPTY, Operation.ADD, operand)
+                            new AstOperatorUnary(EMPTY, ADD, operand)
                     )
             );
         }
@@ -1679,10 +1687,10 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             operand--;
                             """,
                     List.of(
-                            new AstOperatorIncDec(EMPTY, Type.PREFIX, INCREMENT, operand),
-                            new AstOperatorIncDec(EMPTY, Type.PREFIX, DECREMENT, operand),
-                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, INCREMENT, operand),
-                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, DECREMENT, operand)
+                            new AstOperatorIncDec(EMPTY, Type.PREFIX, ADD, operand),
+                            new AstOperatorIncDec(EMPTY, Type.PREFIX, SUB, operand),
+                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, ADD, operand),
+                            new AstOperatorIncDec(EMPTY, Type.POSTFIX, SUB, operand)
                     )
             );
         }

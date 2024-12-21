@@ -7,10 +7,13 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.CustomInstruction;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.mimex.LVar;
+import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import info.teksol.mindcode.v3.compiler.generation.ReturnStack;
@@ -34,7 +37,7 @@ import static info.teksol.mindcode.logic.LogicVoid.VOID;
  * <p>
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
-public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
+public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implements ContextfulInstructionCreator {
     private static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
 
     private final CompilerProfile profile;
@@ -192,102 +195,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         throw new MindcodeInternalError("Expected variable, got " + result);
     }
 
-
-    public CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr, returnValue);
-    }
-
-    public EndInstruction createEnd() {
-        return instructionProcessor.createEnd(astContext);
-    }
-
-    public FormatInstruction createFormat(LogicValue what) {
-        return instructionProcessor.createFormat(astContext, what);
-    }
-
-    public GotoInstruction createGoto(LogicVariable address, LogicLabel marker) {
-        return instructionProcessor.createGoto(astContext, address, marker);
-    }
-
-    public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return instructionProcessor.createGotoOffset(astContext, target, value, offset, marker);
-    }
-
-    public JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
-        return instructionProcessor.createJump(astContext, target, condition, x, y);
-    }
-
-    public JumpInstruction createJumpUnconditional(LogicLabel target) {
-        return instructionProcessor.createJumpUnconditional(astContext, target);
-    }
-
-    public LabelInstruction createLabel(LogicLabel label) {
-        return instructionProcessor.createLabel(astContext, label);
-    }
-
-    public GotoLabelInstruction createGotoLabel(LogicLabel label, LogicLabel marker) {
-        return instructionProcessor.createGotoLabel(astContext, label, marker);
-    }
-
-    public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {
-        return instructionProcessor.createOp(astContext, operation, target, first);
-    }
-
-    public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
-        return instructionProcessor.createOp(astContext, operation, target, first, second);
-    }
-
-    public PopInstruction createPop(LogicVariable memory, LogicVariable value) {
-        return instructionProcessor.createPop(astContext, memory, value);
-    }
-
-    public PrintInstruction createPrint(LogicValue what) {
-        return instructionProcessor.createPrint(astContext, what);
-    }
-
-    public PrintflushInstruction createPrintflush(LogicVariable messageBlock) {
-        return instructionProcessor.createPrintflush(astContext, messageBlock);
-    }
-
-    public PushInstruction createPush(LogicVariable memory, LogicVariable value) {
-        return instructionProcessor.createPush(astContext, memory, value);
-    }
-
-    public ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createRead(astContext, result, memory, index);
-    }
-
-    public RemarkInstruction createRemark(LogicValue what) {
-        return instructionProcessor.createRemark(astContext, what);
-    }
-
-    public ReturnInstruction createReturn(LogicVariable memory) {
-        return instructionProcessor.createReturn(astContext, memory);
-    }
-
-    public SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property) {
-        return instructionProcessor.createSensor(astContext, result, target, property);
-    }
-
-    public SetInstruction createSet(LogicVariable target, LogicValue value) {
-        return instructionProcessor.createSet(astContext, target, value);
-    }
-
-    // TODO bind together SetAddress, Goto and GotoLabel so that use of regular label with goto is precluded
-    public SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
-        return instructionProcessor.createSetAddress(astContext, variable, address);
-    }
-
-    public CallInstruction createCallStackless(LogicAddress value, LogicVariable returnValue) {
-        return instructionProcessor.createCallStackless(astContext, value, returnValue);
-    }
-
-    public StopInstruction createStop() {
-        return instructionProcessor.createStop(astContext);
-    }
-
-    public WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createWrite(astContext, value, memory, index);
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+        return instructionProcessor.createInstruction(astContext, opcode, arguments);
     }
 
     private LogicLabel nextLabel() {
