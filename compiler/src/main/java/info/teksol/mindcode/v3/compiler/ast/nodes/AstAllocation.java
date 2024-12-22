@@ -38,7 +38,7 @@ public class AstAllocation extends AstDeclaration {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstAllocation that = (AstAllocation) o;

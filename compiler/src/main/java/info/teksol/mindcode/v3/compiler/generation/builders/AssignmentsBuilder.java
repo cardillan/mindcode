@@ -1,10 +1,16 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstAssignmentVisitor;
 import info.teksol.generated.ast.visitors.AstOperatorIncDecVisitor;
-import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.v3.compiler.ast.nodes.*;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.logic.LogicBoolean;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstAssignment;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstLiteralDecimal;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
@@ -16,8 +22,8 @@ import static info.teksol.mindcode.logic.LogicNull.NULL;
 import static info.teksol.mindcode.logic.LogicVoid.VOID;
 
 @NullMarked
-public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisitor<NodeValue>, AstOperatorIncDecVisitor<NodeValue> {
-    public AssignmentsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+public class AssignmentsBuilder extends AbstractBuilder implements AstAssignmentVisitor<NodeValue>, AstOperatorIncDecVisitor<NodeValue> {
+    public AssignmentsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
@@ -47,10 +53,9 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
     private NodeValue applyOperation(AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,
             boolean returnPriorValue) {
         // We want to visit target first, so that heap variables are allocated left-to-right.
-        NodeValue target = visit(targetNode);
+        NodeValue target = resolveLValue(targetNode);
         NodeValue eval = visit(valueNode);
         if (!target.isLvalue()) {
-            reportError(targetNode, target);
             return NULL;
         }
 
@@ -64,7 +69,7 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
             rvalue = NULL;
         } else if (logicValue.isVolatile()) {
             // The variable which keeps the value is volatile. Preserve the value.
-            LogicVariable tmp = processor.nextTemp();
+            LogicVariable tmp = nextTemp();
             codeBuilder.createSet(tmp, logicValue);
             rvalue = tmp;
         } else {
@@ -87,7 +92,7 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
             // TODO Specific optimization for postfix operators - swap assignment and increment
             //      Also in loops
             LogicValue left = target.getValue(codeBuilder);
-            LogicVariable tmp = processor.nextTemp();
+            LogicVariable tmp = nextTemp();
             codeBuilder.createSet(tmp, left);
             result = tmp;
 
@@ -108,7 +113,7 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
                 // Assigning to a volatile variable or a complex storage: compute the value first, then use it as a result
                 // We're using a regular temp, not a node result temp, because the variable will be registered
                 // in the parent context below
-                LogicVariable tmp = processor.nextTemp();
+                LogicVariable tmp = nextTemp();
                 valueSetter.accept(tmp);
                 target.setValue(codeBuilder, tmp);
                 result = tmp;
@@ -128,7 +133,7 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
     private Consumer<LogicVariable> createValueSetter(Operation operation, LogicValue left, LogicValue rvalue) {
         if (operation == Operation.BOOLEAN_OR) {
             return variable -> {
-                final LogicVariable tmp = processor.nextTemp();
+                final LogicVariable tmp = nextTemp();
                 codeBuilder.createOp(Operation.BOOLEAN_OR, tmp, left, rvalue);
                 // Ensure the result is 0 or 1
                 codeBuilder.createOp(Operation.NOT_EQUAL, variable, tmp, LogicBoolean.FALSE);
@@ -138,25 +143,4 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
         }
     }
 
-    private void reportError(AstExpression targetNode, NodeValue target) {
-        // We're trying to report the error as well as possible
-        if (targetNode instanceof AstIdentifier identifier) {
-            // We got a read-only identifier. It can be either a constant, or a parameter
-            error(targetNode, "Assignment to constant or parameter '%s' not allowed.", identifier.getName());
-        } else {
-            switch (target) {
-                case LogicVariable v -> reportVariableError(targetNode, v);
-                case LogicLiteral l -> error(targetNode, "Variable expected.");
-                default -> error(targetNode, "Cannot assign a value to this expression.");
-            }
-        }
-    }
-
-    private void reportVariableError(AstExpression targetNode, LogicVariable variable) {
-        switch (variable.getType()) {
-            case BLOCK      -> error(targetNode, "Assignment to variable '%s' representing a linked block not allowed.", variable.getName());
-            case PARAMETER  -> error(targetNode, "Assignment to a parameter not allowed.");
-            default         -> error(targetNode, "Cannot assign a value to this expression.");
-        }
-    }
 }

@@ -6,24 +6,23 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 @AstNode
 public class AstWhileLoopStatement extends AstLabeledStatement {
-    private final @Nullable AstExpression condition;
+    private final AstExpression condition;
     private final List<AstMindcodeNode> body;
     private final boolean entryCondition;
 
     public AstWhileLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            @Nullable AstExpression condition, List<AstMindcodeNode> body, boolean entryCondition) {
+            AstExpression condition, List<AstMindcodeNode> body, boolean entryCondition) {
         super(inputPosition, loopLabel, children(list(condition), body));
         this.condition = condition;
         this.body = body;
         this.entryCondition = entryCondition;
     }
 
-    public @Nullable AstExpression getCondition() {
+    public AstExpression getCondition() {
         return condition;
     }
 
@@ -36,21 +35,20 @@ public class AstWhileLoopStatement extends AstLabeledStatement {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
         AstWhileLoopStatement that = (AstWhileLoopStatement) o;
-        return entryCondition == that.entryCondition && Objects.equals(condition, that.condition) && body.equals(that.body);
+        return entryCondition == that.entryCondition && condition.equals(that.condition) && body.equals(that.body);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(condition);
+        result = 31 * result + condition.hashCode();
         result = 31 * result + body.hashCode();
         result = 31 * result + Boolean.hashCode(entryCondition);
         return result;
     }
-
 }

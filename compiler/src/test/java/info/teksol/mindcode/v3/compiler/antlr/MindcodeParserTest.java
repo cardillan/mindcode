@@ -920,15 +920,6 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
-        void refusesWrongVariable() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 8, "Parse error: .*")
-                            .addRegex(1, 26, "Parse error: .*"),
-                    "for $i in 0 ... 10 do a; end;");
-        }
-
-        @Test
         void refusesMissingDo() {
             assertGeneratesMessages(
                     expectedMessages()

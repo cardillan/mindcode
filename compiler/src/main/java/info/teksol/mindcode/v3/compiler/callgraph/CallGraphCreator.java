@@ -4,12 +4,14 @@ import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.util.StringUtils;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@NullMarked
 public class CallGraphCreator extends AbstractMessageEmitter {
     private final InstructionProcessor instructionProcessor;
     private final FunctionDefinitions functionDefinitions;
@@ -80,12 +82,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         functionCall.getArguments().forEach(this::visitNode);
     }
 
-    /**
-     * Inspects the structure of function calls and sets function properties accordingly. Assigns a function prefix
-     * and labels to recursive and stackless functions.
-     *
-     * @param instructionProcessor processor used to obtain function prefixes and labels
-     */
+    /// Inspects the structure of function calls and sets function properties accordingly. Assigns a function prefix
+    /// and labels to recursive and stackless functions.
     void buildCallTree() {
         // Walk the call tree
         visitFunction(functionDefinitions.getMain(), 0);

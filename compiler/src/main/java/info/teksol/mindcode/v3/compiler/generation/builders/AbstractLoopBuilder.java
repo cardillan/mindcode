@@ -1,25 +1,25 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstLabeledStatement;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public abstract class BaseLoopHandler extends BaseHandler {
+public abstract class AbstractLoopBuilder extends AbstractBuilder {
     protected static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
 
-    public BaseLoopHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    protected AbstractLoopBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
-    protected LoopLabels enterLoop(InputPosition position, AstLabeledStatement loopNode) {
-        final LogicLabel continueLabel = processor.nextLabel();
-        final LogicLabel doneLabel = processor.nextLabel();
+    protected LoopLabels enterLoop(AstLabeledStatement loopNode) {
+        final LogicLabel continueLabel = nextLabel();
+        final LogicLabel doneLabel = nextLabel();
         final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
-        codeBuilder.getLoopStack().enterLoop(position, loopLabel, doneLabel, continueLabel);
+        codeBuilder.getLoopStack().enterLoop(loopNode.inputPosition(), loopLabel, doneLabel, continueLabel);
         return new LoopLabels(loopLabel, continueLabel, doneLabel);
     }
 
@@ -33,8 +33,9 @@ public abstract class BaseLoopHandler extends BaseHandler {
         return codeBuilder.getLoopStack().getContinueLabel(position, loopLabel);
     }
 
-    protected void exitLoop(LoopLabels loopLabels) {
-        codeBuilder.getLoopStack().exitLoop(loopLabels.loopLabel);
+    protected void exitLoop(AstLabeledStatement loopNode) {
+        final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
+        codeBuilder.getLoopStack().exitLoop(loopLabel);
     }
 
     protected record LoopLabels(String loopLabel, LogicLabel continueLabel, LogicLabel doneLabel) {}

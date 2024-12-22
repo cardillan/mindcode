@@ -1,34 +1,34 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.*;
 import info.teksol.mindcode.logic.LogicVoid;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class StatementListsHandler extends BaseHandler implements
+public class StatementListsBuilder extends AbstractBuilder implements
         AstCodeBlockVisitor<NodeValue>,
         AstModuleVisitor<NodeValue>,
         AstParenthesesVisitor<NodeValue>,
         AstProgramVisitor<NodeValue>,
         AstStatementListVisitor<NodeValue>
 {
-    public StatementListsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public StatementListsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
     @Override
     public NodeValue visitCodeBlock(AstCodeBlock node) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
-        return node.getExpressions().stream().map(this::visit).reduce(LogicVoid.VOID, (a, b) -> b);
+        return visitExpressions(node.getExpressions());
     }
 
     @Override
     public NodeValue visitModule(AstModule node) {
-        node.getStatements().forEach(this::visit);
+        visitStatements(node.getStatements());
         return LogicVoid.VOID;
     }
 
@@ -39,13 +39,12 @@ public class StatementListsHandler extends BaseHandler implements
 
     @Override
     public NodeValue visitProgram(AstProgram node) {
-        node.getModules().forEach(this::visitModule);
+        visitStatements(node.getModules());
         return LogicVoid.VOID;
     }
 
     @Override
     public NodeValue visitStatementList(AstStatementList node) {
-        // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
-        return node.getStatements().stream().map(this::visit).reduce(LogicVoid.VOID, (a, b) -> b);
+        return visitExpressions(node.getStatements());
     }
 }

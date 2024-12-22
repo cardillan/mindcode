@@ -7,7 +7,9 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class MindcodeErrorStrategy extends DefaultErrorStrategy {
     private final CommonTokenStream tokenStream;
 

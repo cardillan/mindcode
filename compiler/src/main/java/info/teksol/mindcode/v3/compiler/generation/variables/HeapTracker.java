@@ -25,7 +25,7 @@ public class HeapTracker extends AbstractMessageEmitter {
     }
 
     public static HeapTracker createDefaultTracker(CodeGeneratorContext context) {
-        return new HeapTracker(context, LogicVariable.special("heap"), 0, Integer.MAX_VALUE);
+        return new HeapTracker(context, LogicVariable.INVALID, 0, Integer.MAX_VALUE);
     }
 
     public static HeapTracker createTracker(CodeGeneratorContext context, LogicVariable heapMemory, int startHeapIndex, int endHeapIndex) {

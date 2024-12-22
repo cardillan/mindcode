@@ -5,20 +5,20 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.NullUnmarked;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The ExpressionValue class holds an immutable value that can be passed into expression evaluator.
  * Only nulls, numeric values and String objects are supported, and strings are contained as a plain
  * string, not wrapped into {@code MindustryString} instance.
  */
-@NullUnmarked
+@NullMarked
 class ExpressionValue implements LogicReadable {
-    private final @NonNull InstructionProcessor processor;
-    private final Object object;
-    private final Number value;
+    private final InstructionProcessor processor;
+    private final @Nullable Object object;
+    private final @Nullable Number value;
 
     /**
      * Creates an ExpressionValue instance holding compile-time value of the given AST node.
@@ -49,7 +49,7 @@ class ExpressionValue implements LogicReadable {
         return new ExpressionValue(processor, null, 0);
     }
 
-    private ExpressionValue(@NotNull InstructionProcessor processor, Object object, Number value) {
+    private ExpressionValue(InstructionProcessor processor, @Nullable Object object, @Nullable Number value) {
         this.processor = processor;
         this.object = object;
         this.value = value;
@@ -71,7 +71,7 @@ class ExpressionValue implements LogicReadable {
     }
 
     @Override
-    public Object getObject() {
+    public @Nullable Object getObject() {
         return object;
     }
 
@@ -97,7 +97,7 @@ class ExpressionValue implements LogicReadable {
     }
 
     private static class InvalidValue extends ExpressionValue {
-        public InvalidValue(@NotNull InstructionProcessor processor) {
+        public InvalidValue(InstructionProcessor processor) {
             super(processor, null, null);
         }
 

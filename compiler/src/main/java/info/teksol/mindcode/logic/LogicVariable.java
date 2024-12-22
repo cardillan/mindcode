@@ -14,6 +14,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     private static final LogicVariable UNUSED_VARIABLE = new LogicVariable(ArgumentType.TMP_VARIABLE, "0");
 
     public static final LogicVariable STACK_POINTER = LogicVariable.special("__sp");
+    public static final LogicVariable INVALID = LogicVariable.special("invalid");
     private static final String RETURN_VALUE = "retval";
     private static final String RETURN_ADDRESS = "retaddr";
 
@@ -23,6 +24,17 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     protected final boolean volatileVar;
     protected final boolean input;
     protected final boolean output;
+
+    private LogicVariable(ArgumentType argumentType, String functionPrefix, String name, String fullName,
+            boolean volatileVar, boolean input, boolean output) {
+        super(argumentType);
+        this.functionPrefix = functionPrefix;
+        this.name = name;
+        this.fullName = fullName;
+        this.volatileVar = volatileVar;
+        this.input = input;
+        this.output = output;
+    }
 
     protected LogicVariable(ArgumentType argumentType, String name, boolean volatileVar, boolean input, boolean output) {
         super(argumentType);
@@ -241,5 +253,9 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     @Override
     public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(this);
+    }
+
+    public LogicVariable withType(ArgumentType argumentType) {
+        return new LogicVariable(argumentType, functionPrefix, name, fullName, volatileVar, input, output);
     }
 }

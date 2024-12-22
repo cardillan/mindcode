@@ -1,39 +1,31 @@
 package info.teksol.mindcode.v3;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * This class hold all input files used in a compilation.
- */
+/// This class hold all input files used in a compilation.
+@NullMarked
 public class InputFiles {
     private static final Path EMPTY_PATH = Path.of("");
 
-    /**
-     * Base path of the project. Path of the source file, or empty path when compiling a String.
-     * Always absolute.
-     */
+    /// Base path of the project. Path of the source file, or empty path when compiling a String.
+    /// Always absolute.
     private final Path basePath;
 
-    /**
-     * All registered input files
-     */
+    /// All registered input files
     private final List<InputFile> inputFiles = new ArrayList<>();
 
-    /**
-     * Registered files residing on the file system.
-     */
+    /// Registered files residing on the file system.
     private final Map<Path, InputFile> standardFiles = new HashMap<>();
 
-    /**
-     * Contents of files for later retrieval.
-     */
+    /// Contents of files for later retrieval.
     private final List<String> fileContents = new ArrayList<>();
 
-    /**
-     * Count of file names used.
-     */
+    /// Count of file names used.
     private final Map<String, AtomicInteger> fileNames = new HashMap<>();
 
     private InputFiles(Path basePath) {
@@ -102,23 +94,15 @@ public class InputFiles {
         return inputFile;
     }
 
-    /**
-     * Represents an input file
-     */
+    /// Represents an input file
     public class InputFileImpl implements InputFile {
-        /**
-         * ID of the file for storing in file position
-         */
+        /// ID of the file for storing in file position
         private final int id;
 
-        /**
-         * Indicates whether this is a physical file residing on a file system
-         */
+        /// Indicates whether this is a physical file residing on a file system
         private final boolean library;
 
-        /**
-         * Path to the file
-         */
+        /// Path to the file
         private final Path path;
 
         private final String fileName;
@@ -194,7 +178,7 @@ public class InputFiles {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(@Nullable Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass() ||
                 parent() != ((InputFileImpl) o).parent() && !library) return false;

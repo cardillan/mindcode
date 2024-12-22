@@ -36,7 +36,7 @@ public class AstForEachLoopStatement extends AstLabeledStatement {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 

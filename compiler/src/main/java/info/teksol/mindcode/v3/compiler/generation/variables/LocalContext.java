@@ -7,6 +7,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -15,17 +16,24 @@ import java.util.function.Supplier;
 public class LocalContext implements FunctionContext {
     private final LogicFunction function;
     private final String functionPrefix;
+    private final List<FunctionArgument> varargs;
     private final Map<String, NodeValue> variables = new HashMap<>();
 
-    public LocalContext(LogicFunction function, String functionPrefix) {
+    public LocalContext(LogicFunction function, String functionPrefix, List<FunctionArgument> varargs) {
         this.function = Objects.requireNonNull(function);
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
+        this.varargs = Objects.requireNonNull(varargs);
         function.getParameters().forEach(p -> variables.put(p.getName(), p));
     }
 
     @Override
     public Map<String, NodeValue> variables() {
         return variables;
+    }
+
+    @Override
+    public List<FunctionArgument> getVarargs() {
+        return varargs;
     }
 
     @Override

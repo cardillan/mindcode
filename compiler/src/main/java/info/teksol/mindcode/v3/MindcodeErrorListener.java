@@ -7,11 +7,14 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
+@NullMarked
 public class MindcodeErrorListener extends BaseErrorListener {
     private final MessageConsumer messageConsumer;
     private final InputFile inputFile;
@@ -43,7 +46,7 @@ public class MindcodeErrorListener extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-            String msg, RecognitionException exception) {
+            String msg, @Nullable RecognitionException exception) {
         if (exception instanceof MissingSemicolonException ex && offendingSymbol instanceof Token token) {
             String nextToken = ex.getNextToken().getText();
             int length = token.getStopIndex() - token.getStartIndex();
@@ -65,7 +68,7 @@ public class MindcodeErrorListener extends BaseErrorListener {
         }
     }
 
-    private String getOffendingTokenText(RecognitionException ex) {
+    private @Nullable String getOffendingTokenText(@Nullable RecognitionException ex) {
         return ex != null && ex.getOffendingToken() != null ? ex.getOffendingToken().getText() : null;
     }
 }

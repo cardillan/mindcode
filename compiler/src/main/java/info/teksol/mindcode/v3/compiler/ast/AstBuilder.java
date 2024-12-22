@@ -9,6 +9,7 @@ import info.teksol.mindcode.v3.DataType;
 import info.teksol.mindcode.v3.InputFile;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeLexer;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser;
+import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.*;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParserBaseVisitor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -16,12 +17,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
+@NullMarked
 public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final AstBuilderContext context;
     private final InputFile inputFile;
@@ -36,11 +38,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
             ParseTree tree) {
         AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream);
-        return (AstModule) astBuilder.visit(tree);
+        return (AstModule) astBuilder.visitNonNull(tree);
     }
 
     @Override
-    public AstMindcodeNode visit(ParseTree tree) {
+    public @Nullable AstMindcodeNode visit(ParseTree tree) {
         if (tree instanceof ParserRuleContext ctx && ctx.exception != null) {
             throw new ParserAbort();
         }
@@ -48,6 +50,38 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     //<editor-fold desc="Helper functions">
+    private @Nullable AstMindcodeNode visitNullable(ParseTree tree) {
+        return visit(tree);
+    }
+
+    private AstMindcodeNode visitNonNull(ParseTree tree) {
+        return Objects.requireNonNull(visitNullable(tree));
+    }
+
+    private @Nullable AstExpression visitNullableExpression(ParseTree tree) {
+        AstMindcodeNode result = visitNullable(tree);
+        if (result == null) {
+            return null;
+        } else if (result instanceof AstExpression expression) {
+            return expression;
+        } else {
+            context.messageConsumer().addMessage(CompilerMessage.error(result.inputPosition(), "Expression is required."));
+            return new AstLiteralNull(result.inputPosition(), "null");
+        }
+    }
+
+    private AstExpression visitExpression(ParseTree tree) {
+        return Objects.requireNonNull(visitNullableExpression(tree));
+    }
+
+    public @Nullable AstRange visitRangeIfNonNull(@Nullable RangeExpressionContext ctx) {
+        return ctx == null ? null : visitRangeExpression(ctx);
+    }
+
+    public @Nullable AstExpression visitExpressionIfNonNull(@Nullable ParseTree node) {
+        return node == null ? null : visitNullableExpression(node);
+    }
+
     private AstLiteralString createLiteralString(TerminalNode node) {
         String literal = node.getText();
         return new AstLiteralString(pos(node), literal.substring(1, literal.length() - 1));
@@ -57,13 +91,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER);
     }
 
-    private AstIdentifier createIdentifierOrNull(Token token) {
+    private @Nullable AstIdentifier createIdentifierOrNull(@Nullable Token token) {
         return token != null
                 ? new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER)
                 : null;
     }
 
-    private AstDocComment findDocComment(Token token) {
+    private @Nullable AstDocComment findDocComment(Token token) {
         int tokenIndex = token.getTokenIndex();
         List<Token> docTokens = Objects.requireNonNullElse(
                 tokenStream.getHiddenTokensToLeft(tokenIndex, Token.HIDDEN_CHANNEL), List.of());
@@ -92,27 +126,6 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private InputPosition pos(TerminalNode node) {
         return InputPosition.create(inputFile, node.getSymbol());
     }
-
-    public AstMindcodeNode visitOrNull(ParseTree tree) {
-        return tree == null ? null : visit(tree);
-    }
-
-    public AstExpression visitExpression(ParseTree tree) {
-        AstMindcodeNode result = visit(tree);
-        if (result == null) {
-            return null;
-        } else if (result instanceof AstExpression expression) {
-            return expression;
-        } else {
-            context.messageConsumer().accept(CompilerMessage.error(result.inputPosition(),
-                    "Expression is required."));
-            return new AstLiteralNull(result.inputPosition(), "null");
-        }
-    }
-
-    public <N extends ParseTree, E extends @Nullable AstMindcodeNode> E visitIfNonNull(N node, Function<N, E> visitor) {
-        return node == null ? null : visitor.apply(node);
-    }
     //</editor-fold>
 
     //<editor-fold desc="Rules: basics">
@@ -121,16 +134,16 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstModule(pos(ctx), processBody(ctx.statementList()));
     }
 
-    private List<AstExpression> processList(MindcodeParser.ExpressionListContext ctx) {
+    private List<AstExpression> processList(@Nullable ExpressionListContext ctx) {
         return ctx != null ? ctx.expression().stream().map(this::visitExpression).toList() : List.of();
     }
 
-    private List<AstMindcodeNode> processBody(MindcodeParser.StatementListContext ctx) {
-        return ctx != null ? ctx.statement().stream().map(this::visit).toList() : List.of();
+    private List<AstMindcodeNode> processBody(@Nullable StatementListContext ctx) {
+        return ctx != null ? ctx.statement().stream().map(this::visitNonNull).toList() : List.of();
     }
 
     @Override
-    public AstStatementList visitStatementList(MindcodeParser.StatementListContext ctx) {
+    public AstStatementList visitStatementList(StatementListContext ctx) {
         return new AstStatementList(pos(ctx), processBody(ctx));
     }
     //</editor-fold>
@@ -169,7 +182,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstMindcodeNode visitExpAllocations(MindcodeParser.ExpAllocationsContext ctx) {
         List<AstAllocation> allocations = ctx.allocations().allocation().stream()
-                .map(this::visit).map(AstAllocation.class::cast).toList();
+                .map(this::visitNullable).map(AstAllocation.class::cast).toList();
         return new AstAllocations(pos(ctx), allocations);
     }
 
@@ -178,7 +191,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstAllocation(pos(ctx),
                 AstAllocation.AllocationType.HEAP,
                 createIdentifier(ctx.id),
-                visitIfNonNull(ctx.range, this::visitRangeExpression));
+                visitRangeIfNonNull(ctx.range));
     }
 
     @Override
@@ -186,7 +199,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstAllocation(pos(ctx),
                 AstAllocation.AllocationType.STACK,
                 createIdentifier(ctx.id),
-                visitIfNonNull(ctx.range, this::visitRangeExpression));
+                visitRangeIfNonNull(ctx.range));
     }
     //</editor-fold>
 
@@ -221,13 +234,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstEnhancedComment visitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) {
         // Empty placeholders aren't supported in enhanced comment
         // The check will be done in code generator
-        List<AstExpression> parts = ctx.children.stream().map(this::visitExpression).filter(Objects::nonNull).toList();
+        List<AstExpression> parts = ctx.children.stream().map(this::visitNullableExpression).filter(Objects::nonNull).toList();
         return new AstEnhancedComment(pos(ctx), parts);
     }
 
     @Override
     public AstFormattable visitExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx) {
-        List<AstExpression> parts = ctx.children.stream().map(this::visitExpression).filter(Objects::nonNull).toList();
+        List<AstExpression> parts = ctx.children.stream().map(this::visitNullableExpression).filter(Objects::nonNull).toList();
         return new AstFormattable(pos(ctx), parts);
     }
 
@@ -249,9 +262,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstMindcodeNode visitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) {
-        AstExpression node = visitExpression(ctx.object);
-        AstIdentifier right = createIdentifier(ctx.member);
-        return new AstMemberAccess(pos(ctx), node, right);
+        return new AstMemberAccess(pos(ctx),
+                visitExpression(ctx.object),
+                createIdentifier(ctx.member));
     }
 
     @Override
@@ -454,7 +467,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstRange visitRangeExpression(MindcodeParser.RangeExpressionContext ctx) {
+    public AstRange visitRangeExpression(RangeExpressionContext ctx) {
         return new AstRange(pos(ctx),
                 visitExpression(ctx.firstValue),
                 visitExpression(ctx.lastValue),
@@ -497,7 +510,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstMindcodeNode visitFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx) {
         // Just evaluate the expression
-        return visit(ctx.expression());
+        return visitNonNull(ctx.expression());
     }
     //</editor-fold>
 
@@ -557,7 +570,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstFunctionCall visitExpCallMethod(MindcodeParser.ExpCallMethodContext ctx) {
         return new AstFunctionCall(pos(ctx),
-                visitExpression(ctx.object),
+                visitNullableExpression(ctx.object),
                 createIdentifier(ctx.function),
                 processArgumentList(ctx.argumentList()));
     }
@@ -611,7 +624,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 processBody(ctx.elseBranch));
     }
 
-    private List<AstCaseAlternative> processCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx) {
+    private List<AstCaseAlternative> processCaseAlternatives(@Nullable CaseAlternativesContext ctx) {
         return ctx != null && ctx.caseAlternative() != null
                 ? ctx.caseAlternative().stream().map(this::visitCaseAlternative).toList()
                 : List.of();
@@ -629,12 +642,12 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstIfExpression visitExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx) {
         return new AstIfExpression(pos(ctx),
-                new AstIfBranch(pos(ctx),visitExpression(ctx.condition), processBody(ctx.trueBranch)),
+                new AstIfBranch(pos(ctx), visitExpression(ctx.condition), processBody(ctx.trueBranch)),
                 processElsifBranches(ctx.elsifBranches()),
                 processBody(ctx.falseBranch));
     }
 
-    private List<AstIfBranch> processElsifBranches(MindcodeParser.ElsifBranchesContext ctx) {
+    private List<AstIfBranch> processElsifBranches(@Nullable ElsifBranchesContext ctx) {
         return ctx != null && ctx.elsifBranch() != null
                 ? ctx.elsifBranch().stream().map(this::visitElsifBranch).toList()
                 : List.of();
@@ -663,7 +676,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstLoopIterator visitIterator(MindcodeParser.IteratorContext ctx) {
         return new AstLoopIterator(pos(ctx),
-                createIdentifier(ctx.variable),
+                visitExpression(ctx.variable),
                 ctx.modifier != null);
     }
 
@@ -672,7 +685,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstIteratedForLoopStatement(pos(ctx),
                 createIdentifierOrNull(ctx.label),
                 processList(ctx.init),
-                visitIfNonNull(ctx.condition, this::visitExpression),
+                visitExpressionIfNonNull(ctx.condition),
                 processList(ctx.update),
                 processBody(ctx.body));
     }
@@ -681,7 +694,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstRangedForLoopStatement visitExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx) {
         return new AstRangedForLoopStatement(pos(ctx),
                 createIdentifierOrNull(ctx.label),
-                createIdentifier(ctx.control),
+                visitExpression(ctx.control),
                 visitRangeExpression(ctx.range),
                 processBody(ctx.body));
     }
@@ -721,7 +734,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstReturnStatement visitExpReturn(MindcodeParser.ExpReturnContext ctx) {
-        return new AstReturnStatement(pos(ctx), visitIfNonNull(ctx.value, this::visitExpression));
+        return new AstReturnStatement(pos(ctx), visitExpressionIfNonNull(ctx.value));
     }
     //</editor-fold>
 

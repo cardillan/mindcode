@@ -6,11 +6,14 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
 import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@NullMarked
 public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicReadable {
     // TODO Volatile detection should be moved to InstructionProcessor
     // @unit is volatile. It changes through the ubind instruction, but this is not known to the data flow optimizer.
@@ -21,7 +24,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
     public static final LogicBuiltIn UNIT = create("@unit");
 
     private final String name;
-    private final MindustryContent object;
+    private final @Nullable MindustryContent object;
 
     private LogicBuiltIn(String name) {
         super(ArgumentType.BUILT_IN);

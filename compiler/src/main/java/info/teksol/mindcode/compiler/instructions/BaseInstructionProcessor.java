@@ -35,6 +35,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
     private int tmpIndex = 0;
     private int labelIndex = 0;
+    private int markerIndex = 0;
     private int functionIndex = 0;
 
     static class InstructionProcessorParameters {
@@ -75,6 +76,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     @Override
     public LogicLabel nextLabel() {
         return LogicLabel.symbolic(getLabelPrefix() + labelIndex++);
+    }
+
+    @Override
+    public LogicLabel nextMarker() {
+        return LogicLabel.symbolic("marker" + markerIndex++);
     }
 
     @Override

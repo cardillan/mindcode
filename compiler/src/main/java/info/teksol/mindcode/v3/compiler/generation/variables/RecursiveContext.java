@@ -16,8 +16,8 @@ public class RecursiveContext extends LocalContext {
     private final Deque<Integer> nodeStack = new ArrayDeque<>();
     private int parentIndex = 0;
 
-    public RecursiveContext(LogicFunction function, String functionPrefix) {
-        super(function, functionPrefix);
+    public RecursiveContext(LogicFunction function, String functionPrefix, List<FunctionArgument> varargs) {
+        super(function, functionPrefix, varargs);
     }
 
     @Override

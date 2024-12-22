@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class AstIfBranch extends AstFragment {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstIfBranch that = (AstIfBranch) o;

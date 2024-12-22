@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstArrayAccessVisitor;
 import info.teksol.generated.ast.visitors.AstBuiltInIdentifierVisitor;
@@ -10,7 +10,7 @@ import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstArrayAccess;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstBuiltInIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.ExternalVariable;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -21,7 +21,7 @@ import java.util.Set;
 import static info.teksol.mindcode.logic.ArgumentType.*;
 
 @NullMarked
-public class IdentifiersHandler extends BaseHandler implements
+public class IdentifiersBuilder extends AbstractBuilder implements
         AstArrayAccessVisitor<NodeValue>,
         AstBuiltInIdentifierVisitor<NodeValue>,
         AstIdentifierVisitor<NodeValue>
@@ -32,7 +32,7 @@ public class IdentifiersHandler extends BaseHandler implements
             PARAMETER,
             BLOCK);
 
-    public IdentifiersHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public IdentifiersBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
@@ -40,7 +40,7 @@ public class IdentifiersHandler extends BaseHandler implements
     public NodeValue visitArrayAccess(AstArrayAccess node) {
         LogicVariable memory = resolveMemory(node);
         NodeValue index = visit(node.getIndex());
-        return new ExternalVariable(memory, index.getValue(codeBuilder), processor.nextTemp());
+        return new ExternalVariable(memory, index.getValue(codeBuilder), standaloneTemp());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class IdentifiersHandler extends BaseHandler implements
             return variable;
         } else {
             error(node.getArray(), "'%s' is not an external memory.", node.getArray().getName());
-            return LogicVariable.special("invalid");
+            return LogicVariable.INVALID;
         }
     }
 }

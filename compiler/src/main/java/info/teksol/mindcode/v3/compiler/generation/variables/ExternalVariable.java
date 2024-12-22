@@ -3,12 +3,14 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
 /// NodeValue representation of an external variable or a dynamic memory access.
 /// This implementation uses a single temporary variable (transferVariable) to transfer values from/to
 /// external memory.
+@NullMarked
 public class ExternalVariable implements NodeValue {
     private final LogicVariable memory;
     private final LogicValue index;

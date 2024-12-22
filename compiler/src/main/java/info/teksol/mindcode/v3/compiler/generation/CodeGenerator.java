@@ -11,10 +11,12 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
-import info.teksol.mindcode.v3.compiler.generation.handlers.*;
+import info.teksol.mindcode.v3.compiler.generation.builders.*;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
 
 @NullMarked
 public class CodeGenerator extends AbstractMessageEmitter {
@@ -44,21 +46,25 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor = new ComposedAstNodeVisitor<>(node -> { throw new MindcodeInternalError("Unhandled node " + node); });
 
         // Registration order is unimportant as long as multiple handlers do not handle the same node
-        nodeVisitor.registerVisitor(new StatementListsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new DeclarationsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new IdentifiersHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new LiteralsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new AssignmentsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new OperatorsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new IfExpressionsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new BreakContinueStatementsHandler(context, this::visit));
-        nodeVisitor.registerVisitor(new WhileLoopStatementsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new AssignmentsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new BreakContinueStatementsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new CaseExpressionsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new DeclarationsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new IdentifiersBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new IfExpressionsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new LiteralsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new OperatorsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new RangedForLoopStatementsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new StatementListsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(context, this::visit));
     }
 
     public void generateCode(AstProgram program) {
         // TODO In relaxed syntax, top context is the main body
         //      In strict syntax, top context is the root context
-        variables.enterFunction(callGraph.getMain(), "");
+        variables.enterFunction(callGraph.getMain(), "", List.of());
         context.setTopAstContext(codeBuilder.getAstContext());
 
         visit(program);
@@ -84,5 +90,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
         variables.exitAstNode();
         codeBuilder.exitAstNode(node);
         return result;
+    }
+
+    @NullMarked
+    public interface AstNodeVisitor {
+        NodeValue visit(AstMindcodeNode node);
     }
 }

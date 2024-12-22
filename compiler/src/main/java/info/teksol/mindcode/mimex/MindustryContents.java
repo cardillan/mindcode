@@ -1,5 +1,8 @@
 package info.teksol.mindcode.mimex;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public class MindustryContents {
     static final Map<String, BlockType> BLOCK_MAP = new BlockTypeReader("mimex-blocks.txt").createFromResource();
     static final Map<String, Item> ITEM_MAP = new SimpleReader<>("mimex-items.txt", Item::new).createFromResource();
@@ -36,7 +40,7 @@ public class MindustryContents {
                 .flatMap(m -> m.values().stream())
                 .collect(Collectors.toMap(MindustryContent::name, t -> t));
 
-    public static MindustryContent get(String name) {
+    public static @Nullable MindustryContent get(String name) {
         return ALL_CONSTANTS.get(name);
     }
 
@@ -45,7 +49,7 @@ public class MindustryContents {
         return content == null ? -1 : content.id();
     }
 
-    public static Map<Integer, ? extends MindustryContent> getLookupMap(String type) {
+    public static @Nullable Map<Integer, ? extends MindustryContent> getLookupMap(String type) {
         return switch (type) {
             case "block"    -> BLOCK_ID_MAP;
             case "liquid"   -> LIQUID_ID_MAP;
@@ -82,7 +86,7 @@ public class MindustryContents {
         private final List<String> header;
 
         protected abstract void parseHeader();
-        protected abstract T create(String[] columns);
+        protected abstract @Nullable T create(String[] columns);
 
         protected List<T> createUnregistered() {
             return List.of();
@@ -90,7 +94,7 @@ public class MindustryContents {
 
         public AbstractReader(String resource) {
             this.resourceName = resource;
-            try (InputStream input = BlockTypeReader.class.getResourceAsStream(resource)) {
+            try (InputStream input = Objects.requireNonNull(BlockTypeReader.class.getResourceAsStream(resource))) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 lines = reader.lines()
                         .filter(l -> !l.startsWith("//") && !l.isBlank())
@@ -114,7 +118,7 @@ public class MindustryContents {
 
         public Map<String, T> createFromResource() {
             try {
-                ArrayList<T> list = new ArrayList<>(createUnregistered());
+                ArrayList<@Nullable T> list = new ArrayList<>(createUnregistered());
                 for (int i = 1; i < lines.size(); i++) {
                     String[] columns = lines.get(i).split(";", -1);
                     list.add(create(columns));
@@ -258,7 +262,7 @@ public class MindustryContents {
         }
 
         @Override
-        protected LVar create(String[] columns) {
+        protected @Nullable LVar create(String[] columns) {
             return columns[name].charAt(0) == '@' ? new LVar(
                     columns[name].substring(1),
                     columns[name],

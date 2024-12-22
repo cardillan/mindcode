@@ -44,7 +44,7 @@ statement
     | (label = IDENTIFIER COLON)? FOR init = expressionList?
         SEMICOLON condition = expression? SEMICOLON update = expressionList?
         DO body = statementList? END                                                    # expForIteratedLoop
-    | (label = IDENTIFIER COLON)? FOR control = IDENTIFIER IN range = rangeExpression
+    | (label = IDENTIFIER COLON)? FOR control = lvalue IN range = rangeExpression
         DO body = statementList? END                                                    # expForRangeLoop
     | (label = IDENTIFIER COLON)?
         WHILE condition = expression DO body = statementList? END                       # expWhileLoop
@@ -236,5 +236,5 @@ iteratorList
     ;
 
 iterator
-    : modifier = OUT? variable = IDENTIFIER
+    : modifier = OUT? variable = lvalue
     ;

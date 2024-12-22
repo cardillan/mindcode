@@ -32,6 +32,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     List<OpcodeVariant> getOpcodeVariants();
 
     LogicLabel nextLabel();
+    LogicLabel nextMarker();
     LogicVariable nextTemp();
     String nextFunctionPrefix();
     LogicVariable unusedVariable();

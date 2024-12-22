@@ -1,5 +1,9 @@
 package info.teksol.evaluator;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+@NullMarked
 public interface LogicReadable {
     /**
      * Indicates that an expressions using the value can be numerically evaluated at compile time.
@@ -14,7 +18,7 @@ public interface LogicReadable {
 
     long getLongValue();
 
-    Object getObject();
+    @Nullable Object getObject();
 
     boolean isObject();
 }

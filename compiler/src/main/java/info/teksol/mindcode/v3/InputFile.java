@@ -1,7 +1,10 @@
 package info.teksol.mindcode.v3;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.nio.file.Path;
 
+@NullMarked
 public interface InputFile {
     int getId();
 

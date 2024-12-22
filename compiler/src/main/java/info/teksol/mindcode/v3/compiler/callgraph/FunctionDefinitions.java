@@ -8,12 +8,14 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionParameter;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 class FunctionDefinitions extends AbstractMessageEmitter {
     private final LogicFunction main;
     private final List<LogicFunction> functionList = new ArrayList<>();
@@ -90,12 +92,10 @@ class FunctionDefinitions extends AbstractMessageEmitter {
         }
     }
 
-    /**
-     * If there's just one exact match to this function, it is returned. Otherwise, null is returned.
-     *
-     * @param call function call to match
-     * @return unique function exactly matching the given call
-     */
+    /// If there's just one exact match to this function, it is returned. Otherwise, null is returned.
+    ///
+    /// @param call function call to match
+    /// @return unique function exactly matching the given call
     public LogicFunction getExactMatch(AstFunctionCall call) {
         List<LogicFunction> result = getExactMatches(call);
         return result.size() == 1 ? result.getFirst() : null;

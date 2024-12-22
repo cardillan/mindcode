@@ -29,7 +29,7 @@ public enum ArgumentType {
     COMPILER,                       // Compiler support, e.g. stack pointer(s)
 
     TMP_VARIABLE,
-    AST_VARIABLE,                   // TODO remove
+    AST_VARIABLE,
     FUNCTION_RETVAL,
     FUNCTION_RETADDR,
 

@@ -13,9 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * Class maintaining the stack of active loops and their break and continue labels.
- */
+/// Class maintaining the stack of active loops and their break and continue labels.
 @NullMarked
 public class LoopStack extends AbstractMessageEmitter {
     private record LoopLabels(LogicLabel breakLabel, LogicLabel continueLabel) {

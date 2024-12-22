@@ -7,6 +7,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -20,6 +21,11 @@ public class GlobalContext implements FunctionContext {
     @Override
     public Map<String, NodeValue> variables() {
         return Map.of();
+    }
+
+    @Override
+    public List<FunctionArgument> getVarargs() {
+        return List.of();
     }
 
     @Override

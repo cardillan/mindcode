@@ -24,9 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-/**
- * Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
- */
+/// Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
 @NullMarked
 public class DirectivePreprocessor extends AbstractMessageEmitter implements AstDirectiveSetVisitor<@Nullable Void> {
     private final CompilerProfile profile;

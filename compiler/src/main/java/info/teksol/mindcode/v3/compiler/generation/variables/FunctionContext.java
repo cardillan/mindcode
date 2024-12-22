@@ -6,6 +6,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -21,6 +22,8 @@ public interface FunctionContext {
 
     /// Returns user variables registered within the function
     Map<String, NodeValue> variables();
+
+    List<FunctionArgument> getVarargs();
 
     /// Called when entering a new AST node. For tracking variables used within a node
     void enterAstNode();

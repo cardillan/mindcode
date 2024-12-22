@@ -12,10 +12,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
 
-/**
- * Class maintaining the stack of active functions and their return variables. Used to resolve return
- * statements inside inline functions, which can be nested.
- */
+/// Class maintaining the stack of active functions and their return variables. Used to resolve return
+/// statements inside inline functions, which can be nested.
 @NullMarked
 public class ReturnStack extends AbstractMessageEmitter {
     private final Deque<Return> stack = new ArrayDeque<>();
@@ -48,7 +46,7 @@ public class ReturnStack extends AbstractMessageEmitter {
     public LogicValue getReturnValue(InputPosition inputPosition) {
         if (stack.isEmpty()) {
             error(inputPosition, "Return statement outside of a function.");
-            return LogicVariable.special("invalid");
+            return LogicVariable.INVALID;
         } else {
             return stack.peek().returnValue;
         }

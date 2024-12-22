@@ -4,6 +4,7 @@ import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.logic.Operation;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -35,7 +36,7 @@ public class AstOperatorIncDec extends AstExpression {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 

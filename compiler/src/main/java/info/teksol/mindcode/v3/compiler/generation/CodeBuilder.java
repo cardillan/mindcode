@@ -9,10 +9,12 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 public class CodeBuilder extends AbstractMessageEmitter implements ContextfulInstructionCreator {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;

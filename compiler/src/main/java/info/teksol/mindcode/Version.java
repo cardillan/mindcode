@@ -11,7 +11,7 @@ public class Version {
             if (in == null) {
                 return "unknown";
             }
-            final Properties properties = new Properties();
+            Properties properties = new Properties();
             properties.load(in);
             return properties.getProperty("mindcode.version");
         } catch (IOException e) {

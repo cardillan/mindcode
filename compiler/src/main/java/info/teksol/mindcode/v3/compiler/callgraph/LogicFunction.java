@@ -7,12 +7,15 @@ import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.DataType;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 // Just "Function" would be preferred, but that conflicts with java.util.function.Function
+@NullMarked
 public class LogicFunction {
     private static final AtomicInteger functionIds = new AtomicInteger();
 
@@ -24,8 +27,8 @@ public class LogicFunction {
     private final IntRange parameterCount;
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
     private List<LogicVariable> parameters = List.of();
-    private LogicLabel label;
-    private String prefix;
+    private @Nullable LogicLabel label;
+    private String prefix = "";
     private int useCount = 0;
     private boolean inlined = false;
 
@@ -39,7 +42,7 @@ public class LogicFunction {
     private final Set<LogicFunction> indirectCalls = new HashSet<>();
 
     LogicFunction(AstFunctionDeclaration declaration) {
-        this.declaration = declaration;
+        this.declaration = Objects.requireNonNull(declaration);
         parameterCount = declaration.getParameterCount();
     }
 
@@ -77,6 +80,12 @@ public class LogicFunction {
     public boolean isVarargs() {
         List<AstFunctionParameter> parameters = getDeclaredParameters();
         return !parameters.isEmpty() && parameters.getLast().isVarargs();
+    }
+
+    public boolean isVarargs(String parameterName) {
+        List<AstFunctionParameter> parameters = getDeclaredParameters();
+        return !parameters.isEmpty() && parameters.getLast().isVarargs()
+               && parameters.getLast().getName().equals(parameterName);
     }
 
     public boolean isVoid() {
@@ -146,6 +155,13 @@ public class LogicFunction {
 
     public boolean isNotOutputFunctionParameter(LogicVariable variable) {
         return !isOutputFunctionParameter(variable);
+    }
+
+    public boolean isVarargFunctionParameter(LogicVariable variable) {
+        return variable.getType() == ArgumentType.LOCAL_VARIABLE
+               && prefix.equals(variable.getFunctionPrefix())
+               && parameterMap.containsKey(variable.getName())
+               && parameterMap.get(variable.getName()).isVarargs();
     }
 
     public IntRange getParameterCount() {
@@ -261,7 +277,7 @@ public class LogicFunction {
     /**
      * @return the label allocated for the beginning of this function
      */
-    public LogicLabel getLabel() {
+    public @Nullable LogicLabel getLabel() {
         return label;
     }
 
@@ -308,7 +324,7 @@ public class LogicFunction {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LogicFunction function = (LogicFunction) o;
@@ -321,7 +337,7 @@ public class LogicFunction {
     }
 
     public InputPosition getInputPosition() {
-        return declaration != null ? declaration.inputPosition() : null;
+        return declaration.inputPosition();
     }
 
     public String format() {

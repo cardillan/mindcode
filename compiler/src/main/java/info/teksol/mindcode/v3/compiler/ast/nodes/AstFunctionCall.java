@@ -49,7 +49,7 @@ public class AstFunctionCall extends AstExpression {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionCall that = (AstFunctionCall) o;

@@ -58,7 +58,7 @@ public class AstFunctionArgument extends AstFragment {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionArgument that = (AstFunctionArgument) o;

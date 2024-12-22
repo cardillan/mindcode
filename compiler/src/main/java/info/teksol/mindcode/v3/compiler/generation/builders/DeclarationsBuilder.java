@@ -1,11 +1,11 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.*;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.HeapTracker;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -16,7 +16,7 @@ import java.util.Set;
 import static info.teksol.mindcode.logic.ArgumentType.*;
 
 @NullMarked
-public class DeclarationsHandler extends BaseHandler implements
+public class DeclarationsBuilder extends AbstractBuilder implements
         AstAllocationsVisitor<NodeValue>,
         AstAllocationVisitor<NodeValue>,
         AstConstantVisitor<NodeValue>,
@@ -40,13 +40,13 @@ public class DeclarationsHandler extends BaseHandler implements
             PARAMETER,
             BLOCK);
 
-    public DeclarationsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public DeclarationsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
     @Override
     public NodeValue visitAllocations(AstAllocations node) {
-        node.getAllocations().forEach(this::visit);
+        visitStatements(node.getAllocations());
         return LogicVoid.VOID;
     }
 
@@ -151,7 +151,7 @@ public class DeclarationsHandler extends BaseHandler implements
             return variable;
         } else {
             error(node.getMemory(), "Cannot use '%s' as a memory for heap or stack.", node.getMemory().getName());
-            return LogicVariable.special("invalid");
+            return LogicVariable.INVALID;
         }
     }
 

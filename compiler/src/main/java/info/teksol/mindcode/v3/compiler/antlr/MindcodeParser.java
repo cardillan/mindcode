@@ -711,21 +711,21 @@ public class MindcodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExpForRangeLoopContext extends StatementContext {
 		public Token label;
-		public Token control;
+		public LvalueContext control;
 		public RangeExpressionContext range;
 		public StatementListContext body;
 		public TerminalNode FOR() { return getToken(MindcodeParser.FOR, 0); }
 		public TerminalNode IN() { return getToken(MindcodeParser.IN, 0); }
 		public TerminalNode DO() { return getToken(MindcodeParser.DO, 0); }
 		public TerminalNode END() { return getToken(MindcodeParser.END, 0); }
-		public List<TerminalNode> IDENTIFIER() { return getTokens(MindcodeParser.IDENTIFIER); }
-		public TerminalNode IDENTIFIER(int i) {
-			return getToken(MindcodeParser.IDENTIFIER, i);
+		public LvalueContext lvalue() {
+			return getRuleContext(LvalueContext.class,0);
 		}
 		public RangeExpressionContext rangeExpression() {
 			return getRuleContext(RangeExpressionContext.class,0);
 		}
 		public TerminalNode COLON() { return getToken(MindcodeParser.COLON, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(MindcodeParser.IDENTIFIER, 0); }
 		public StatementListContext statementList() {
 			return getRuleContext(StatementListContext.class,0);
 		}
@@ -1114,7 +1114,7 @@ public class MindcodeParser extends Parser {
 				setState(148);
 				match(FOR);
 				setState(149);
-				((ExpForRangeLoopContext)_localctx).control = match(IDENTIFIER);
+				((ExpForRangeLoopContext)_localctx).control = lvalue();
 				setState(150);
 				match(IN);
 				setState(151);
@@ -4620,8 +4620,10 @@ public class MindcodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class IteratorContext extends ParserRuleContext {
 		public Token modifier;
-		public Token variable;
-		public TerminalNode IDENTIFIER() { return getToken(MindcodeParser.IDENTIFIER, 0); }
+		public LvalueContext variable;
+		public LvalueContext lvalue() {
+			return getRuleContext(LvalueContext.class,0);
+		}
 		public TerminalNode OUT() { return getToken(MindcodeParser.OUT, 0); }
 		public IteratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -4660,7 +4662,7 @@ public class MindcodeParser extends Parser {
 			}
 
 			setState(522);
-			((IteratorContext)_localctx).variable = match(IDENTIFIER);
+			((IteratorContext)_localctx).variable = lvalue();
 			}
 		}
 		catch (RecognitionException re) {
@@ -4863,7 +4865,7 @@ public class MindcodeParser extends Parser {
 		"\u0090\u0091\u0005\\\u0000\u0000\u0091\u0093\u0005S\u0000\u0000\u0092"+
 		"\u0090\u0001\u0000\u0000\u0000\u0092\u0093\u0001\u0000\u0000\u0000\u0093"+
 		"\u0094\u0001\u0000\u0000\u0000\u0094\u0095\u0005\u000f\u0000\u0000\u0095"+
-		"\u0096\u0005\\\u0000\u0000\u0096\u0097\u0005\u0012\u0000\u0000\u0097\u0098"+
+		"\u0096\u0003\b\u0004\u0000\u0096\u0097\u0005\u0012\u0000\u0000\u0097\u0098"+
 		"\u0003,\u0016\u0000\u0098\u009a\u0005\b\u0000\u0000\u0099\u009b\u0003"+
 		"\u0002\u0001\u0000\u009a\u0099\u0001\u0000\u0000\u0000\u009a\u009b\u0001"+
 		"\u0000\u0000\u0000\u009b\u009c\u0001\u0000\u0000\u0000\u009c\u009d\u0005"+
@@ -5088,7 +5090,7 @@ public class MindcodeParser extends Parser {
 		"\u0000\u0204\u0202\u0001\u0000\u0000\u0000\u0205\u0206\u00034\u001a\u0000"+
 		"\u02063\u0001\u0000\u0000\u0000\u0207\u0209\u0005\u0017\u0000\u0000\u0208"+
 		"\u0207\u0001\u0000\u0000\u0000\u0208\u0209\u0001\u0000\u0000\u0000\u0209"+
-		"\u020a\u0001\u0000\u0000\u0000\u020a\u020b\u0005\\\u0000\u0000\u020b5"+
+		"\u020a\u0001\u0000\u0000\u0000\u020a\u020b\u0003\b\u0004\u0000\u020b5"+
 		"\u0001\u0000\u0000\u0000C7<AHV\\jow}\u0081\u0085\u0089\u008d\u0092\u009a"+
 		"\u00a0\u00a6\u00ac\u00b0\u00b3\u00b9\u00bd\u00c2\u00cc\u00d7\u00db\u00e3"+
 		"\u00e6\u00ea\u00ec\u00f5\u00fc\u0113\u0146\u0148\u0152\u0157\u0159\u015f"+

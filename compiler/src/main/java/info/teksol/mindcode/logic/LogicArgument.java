@@ -9,10 +9,10 @@ package info.teksol.mindcode.logic;
 /// - Value: if the argument represents a literal, value is its corresponding value. It can be a double, a text
 ///   or a specific object (e.g. @coal)
 public interface LogicArgument {
-    /** @return type of the argument */
+    /// @return type of the argument
     ArgumentType getType();
 
-    /** @return the mlog representation of the variable */
+    /// @return the mlog representation of the variable
     String toMlog();
 
     static boolean isEqual(LogicArgument a1, LogicArgument a2) {
@@ -21,6 +21,12 @@ public interface LogicArgument {
                 || a2.getType() == ArgumentType.UNSPECIFIED)
                 && a1.toMlog().equals(a2.toMlog());
     }
+
+    // TODO Create the following boolean properties
+    //      - isCompileConstant: can be evaluated at compile time (replaces LogicValue.canEvaluate)
+    //      - isRuntimeConstant: doesn't change value at runtime, e.g. @thisx or a parameter (probably replaces LogicValue.isConstant)
+    //      - isVolatile: can change value outside the program, e.g. @time, @unit
+    //      Review all other flags ad methods and try to get rid of them
 
     /// @return true if this is a literal. Built-ins aren't considered literals.
     default boolean isLiteral() {

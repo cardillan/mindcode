@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstIfExpressionVisitor;
 import info.teksol.generated.ast.visitors.AstOperatorTernaryVisitor;
@@ -9,7 +9,7 @@ import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
@@ -19,11 +19,11 @@ import java.util.List;
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 
 @NullMarked
-public class IfExpressionsHandler extends BaseHandler implements
+public class IfExpressionsBuilder extends AbstractBuilder implements
         AstIfExpressionVisitor<NodeValue>,
         AstOperatorTernaryVisitor<NodeValue>
 {
-    public IfExpressionsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public IfExpressionsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
@@ -38,11 +38,11 @@ public class IfExpressionsHandler extends BaseHandler implements
     @Override
     public NodeValue visitOperatorTernary(AstOperatorTernary node) {
         codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-        final NodeValue condition = variables.excludeVariablesFromNode(() -> visit(node.getCondition()));
+        final NodeValue condition = variables.excludeVariablesFromTracking(() -> visit(node.getCondition()));
 
         final LogicVariable tmp = nextNodeResultTemp();
-        final LogicLabel elseBranch = processor.nextLabel();
-        final LogicLabel endBranch = processor.nextLabel();
+        final LogicLabel elseBranch = nextLabel();
+        final LogicLabel endBranch = nextLabel();
 
         codeBuilder.createJump(elseBranch, Condition.EQUAL, condition.getValue(codeBuilder), FALSE);
 

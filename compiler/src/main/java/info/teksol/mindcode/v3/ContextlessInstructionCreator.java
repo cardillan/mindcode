@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import org.jspecify.annotations.NullMarked;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
@@ -11,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 ///
 /// The implementing class only needs to implement the non-specific instruction creation method. All the specific
 /// methods are inherited from the interface.
+@NullMarked
 public interface ContextlessInstructionCreator {
 
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments);

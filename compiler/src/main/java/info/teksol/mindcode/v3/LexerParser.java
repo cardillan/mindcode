@@ -6,7 +6,9 @@ import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class LexerParser {
 
     public static CommonTokenStream createTokenStream(MessageConsumer messageConsumer, InputFile inputFile) {

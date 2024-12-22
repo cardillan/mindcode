@@ -90,7 +90,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionDeclaration that = (AstFunctionDeclaration) o;

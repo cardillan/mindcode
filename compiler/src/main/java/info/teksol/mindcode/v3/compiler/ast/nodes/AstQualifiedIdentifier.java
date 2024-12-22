@@ -4,6 +4,7 @@ import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class AstQualifiedIdentifier extends AstExpression {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstQualifiedIdentifier that = (AstQualifiedIdentifier) o;

@@ -4,6 +4,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
@@ -11,6 +12,7 @@ import java.util.function.Consumer;
 ///
 /// This interface extends the NodeValue interface, since it is often possible to represent the value nf an AST node
 /// as a LogicValue.
+@NullMarked
 public interface LogicValue extends LogicArgument, NodeValue {
     /**
      * Indicates that an expressions using the value can be numerically evaluated at compile time.
@@ -34,11 +36,6 @@ public interface LogicValue extends LogicArgument, NodeValue {
     String format(InstructionProcessor instructionProcessor);
 
     // NodeValue methods
-
-    @Override
-    default boolean isWritable() {
-        return false;
-    }
 
     @Override
     default LogicValue getValue(CodeBuilder codeBuilder) {

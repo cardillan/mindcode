@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 @AstNode(printFlat = true)
@@ -13,7 +14,7 @@ public class AstFormattablePlaceholder extends AstExpression {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         return o != null && getClass() == o.getClass();
     }

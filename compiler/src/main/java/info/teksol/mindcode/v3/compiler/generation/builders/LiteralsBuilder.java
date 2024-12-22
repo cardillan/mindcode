@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.*;
 import info.teksol.mindcode.logic.LogicBoolean;
@@ -6,7 +6,7 @@ import info.teksol.mindcode.logic.LogicNull;
 import info.teksol.mindcode.logic.LogicNumber;
 import info.teksol.mindcode.logic.LogicString;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Optional;
 
 @NullMarked
-public class LiteralsHandler extends BaseHandler implements
+public class LiteralsBuilder extends AbstractBuilder implements
         AstLiteralBooleanVisitor<NodeValue>,
         AstLiteralNullVisitor<NodeValue>,
         AstLiteralBinaryVisitor<NodeValue>,
@@ -25,7 +25,7 @@ public class LiteralsHandler extends BaseHandler implements
         AstLiteralEscapeVisitor<NodeValue>
 {
 
-    public LiteralsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public LiteralsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 

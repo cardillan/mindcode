@@ -4,6 +4,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRequire;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -16,14 +17,13 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * The RequirementsProcessor class is responsible for processing and managing dependency
- * requirements in the context of a compilation. It handles loading input files and system
- * libraries, as well as reporting issues related to requirement handling.
- * <p>
- * This class extends AbstractMessageEmitter, leveraging its messaging utilities to report
- * warnings, errors, and other informational messages during the execution.
- */
+/// The RequirementsProcessor class is responsible for processing and managing dependency
+/// requirements in the context of a compilation. It handles loading input files and system
+/// libraries, as well as reporting issues related to requirement handling.
+///
+/// This class extends AbstractMessageEmitter, leveraging its messaging utilities to report
+/// warnings, errors, and other informational messages during the execution.
+@NullMarked
 public class RequirementsProcessor extends AbstractMessageEmitter {
     private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
 

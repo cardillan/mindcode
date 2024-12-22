@@ -3,22 +3,23 @@ package info.teksol.mindcode.v3.compiler.ast.nodes;
 import info.teksol.annotations.AstNode;
 import info.teksol.mindcode.InputPosition;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 @NullMarked
 @AstNode
 public class AstLoopIterator extends AstFragment {
-    private final AstIdentifier iterator;
+    private final AstExpression iterator;
     private final boolean outModifier;
 
-    public AstLoopIterator(InputPosition inputPosition, AstIdentifier iterator, boolean outModifier) {
+    public AstLoopIterator(InputPosition inputPosition, AstExpression iterator, boolean outModifier) {
         super(inputPosition, children(iterator));
         this.iterator = iterator;
         this.outModifier = outModifier;
     }
 
-    public AstIdentifier getIterator() {
+    public AstExpression getIterator() {
         return iterator;
     }
 
@@ -27,7 +28,7 @@ public class AstLoopIterator extends AstFragment {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstLoopIterator that = (AstLoopIterator) o;

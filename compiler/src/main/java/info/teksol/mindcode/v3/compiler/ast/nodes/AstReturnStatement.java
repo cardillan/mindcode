@@ -23,7 +23,7 @@ public class AstReturnStatement extends AstStatement {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstReturnStatement that = (AstReturnStatement) o;

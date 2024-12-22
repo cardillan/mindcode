@@ -7,6 +7,7 @@ import info.teksol.mindcode.logic.LogicParameter;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstConstant;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstParameter;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
@@ -14,10 +15,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 /// This class resolves source code identifiers into variables represented by NodeValue interface,
@@ -59,6 +57,19 @@ public class Variables extends AbstractMessageEmitter {
     public void setHeapTracker(HeapTracker heapTracker) {
         heapAllocated = true;
         this.heapTracker = heapTracker;
+    }
+
+    public boolean isVarargParameter(AstExpression expression) {
+        if (expression instanceof AstIdentifier identifier) {
+            LogicFunction currentFunction = functionContext.function();
+            return currentFunction != null && currentFunction.isVarargs(identifier.getName());
+        } else {
+            return false;
+        }
+    }
+
+    public List<FunctionArgument> getVarargs() {
+        return functionContext.getVarargs();
     }
 
     private boolean isLocalContext() {
@@ -181,11 +192,11 @@ public class Variables extends AbstractMessageEmitter {
     /// and restored when exiting the function processing. Non-inlined functions can't be nested.
     ///
     /// When processing the global level, no function is active. A global context is used in this case.
-    public void enterFunction(LogicFunction function, String functionPrefix) {
+    public void enterFunction(LogicFunction function, String functionPrefix, List<FunctionArgument> varargs) {
         contextStack.push(functionContext);
         functionContext = function.isRecursive()
-                ? new RecursiveContext(function, functionPrefix)
-                : new LocalContext(function, functionPrefix);
+                ? new RecursiveContext(function, functionPrefix, varargs)
+                : new LocalContext(function, functionPrefix, varargs);
     }
 
     /// Called when function processing is finished. Previous function context is restored from the stack.
@@ -228,14 +239,14 @@ public class Variables extends AbstractMessageEmitter {
     /// @param <T> type of return value
     /// @param expression expression to evaluate
     /// @return value provided by the expression
-    public <T> T excludeVariablesFromNode(Supplier<T> expression) {
+    public <T> T excludeVariablesFromTracking(Supplier<T> expression) {
         return functionContext.excludeVariablesFromNode(expression);
     }
 
     /// Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
-    /// the expression out of current node context. To be used on expressions that do not return value.
-    public void excludeVariablesFromNode(Runnable expression) {
-        excludeVariablesFromNode(() -> {
+    /// the expression out of current node context (see above). To be used on expressions that do not return value.
+    public void excludeVariablesFromTracking(Runnable expression) {
+        excludeVariablesFromTracking(() -> {
             expression.run();
             return null;
         });

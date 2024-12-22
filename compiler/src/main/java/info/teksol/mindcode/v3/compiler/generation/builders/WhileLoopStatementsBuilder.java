@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstWhileLoopStatementVisitor;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
@@ -6,7 +6,7 @@ import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVoid;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstWhileLoopStatement;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
@@ -14,9 +14,9 @@ import org.jspecify.annotations.NullMarked;
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 
 @NullMarked
-public class WhileLoopStatementsHandler extends BaseLoopHandler implements AstWhileLoopStatementVisitor<NodeValue> {
+public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements AstWhileLoopStatementVisitor<NodeValue> {
 
-    public WhileLoopStatementsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public WhileLoopStatementsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
@@ -32,42 +32,42 @@ public class WhileLoopStatementsHandler extends BaseLoopHandler implements AstWh
     }
 
     private void createDoWhileLoop(AstWhileLoopStatement node) {
-        final LogicLabel beginLabel = processor.nextLabel();
-        LoopLabels loopLabels = enterLoop(node.inputPosition(), node);
+        final LogicLabel beginLabel = nextLabel();
+        LoopLabels loopLabels = enterLoop(node);
 
         // Loop body
         codeBuilder.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         codeBuilder.createLabel(beginLabel);
-        node.getBody().forEach(this::visit);
+        visitStatements(node.getBody());
 
         // Condition
         // TODO Continue label should probably go into condition context?
         codeBuilder.createLabel(loopLabels.continueLabel());
         codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
-        final NodeValue cond = visit(node.getCondition());
-        codeBuilder.createJump(beginLabel, Condition.NOT_EQUAL, cond.getValue(codeBuilder), FALSE);
+        final NodeValue condition = visit(node.getCondition());
+        codeBuilder.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(codeBuilder), FALSE);
 
         // Exit
         codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
         codeBuilder.createLabel(loopLabels.doneLabel());
         codeBuilder.clearSubcontextType();
-        exitLoop(loopLabels);
+        exitLoop(node);
     }
 
     private void createWhileLoop(AstWhileLoopStatement node) {
-        final LogicLabel beginLabel = processor.nextLabel();
-        LoopLabels loopLabels = enterLoop(node.inputPosition(), node);
+        final LogicLabel beginLabel = nextLabel();
+        LoopLabels loopLabels = enterLoop(node);
 
         // Condition
         codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         // TODO Place continue label instead of beginLabel, drop beginLabel
         codeBuilder.createLabel(beginLabel);
-        final NodeValue cond = visit(node.getCondition());
-        codeBuilder.createJump(loopLabels .doneLabel(), Condition.EQUAL, cond.getValue(codeBuilder), FALSE);
+        final NodeValue condition = visit(node.getCondition());
+        codeBuilder.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(codeBuilder), FALSE);
 
         // Loop body
         codeBuilder.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
-        node.getBody().forEach(this::visit);
+        visitStatements(node.getBody());
 
         // Flow control
         codeBuilder.createLabel(loopLabels.continueLabel());
@@ -77,6 +77,6 @@ public class WhileLoopStatementsHandler extends BaseLoopHandler implements AstWh
         // Exit
         codeBuilder.createLabel(loopLabels.doneLabel());
         codeBuilder.clearSubcontextType();
-        exitLoop(loopLabels);
+        exitLoop(node);
     }
 }

@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation.handlers;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstOperatorBinaryVisitor;
 import info.teksol.generated.ast.visitors.AstOperatorUnaryVisitor;
@@ -6,15 +6,15 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorBinary;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorUnary;
-import info.teksol.mindcode.v3.compiler.generation.AstNodeHandler;
+import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class OperatorsHandler extends BaseHandler implements AstOperatorBinaryVisitor<NodeValue>, AstOperatorUnaryVisitor<NodeValue> {
+public class OperatorsBuilder extends AbstractBuilder implements AstOperatorBinaryVisitor<NodeValue>, AstOperatorUnaryVisitor<NodeValue> {
 
-    public OperatorsHandler(CodeGeneratorContext context, AstNodeHandler mainNodeVisitor) {
+    public OperatorsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
         super(context, mainNodeVisitor);
     }
 
@@ -26,13 +26,13 @@ public class OperatorsHandler extends BaseHandler implements AstOperatorBinaryVi
 
         switch (node.getOperation()) {
             case BOOLEAN_OR -> {
-                final LogicVariable tmp2 = processor.nextTemp();
+                final LogicVariable tmp2 = standaloneTemp();
                 codeBuilder.createOp(Operation.BOOLEAN_OR, tmp2, left.getValue(codeBuilder), right.getValue(codeBuilder));
                 // Ensure the result is 0 or 1
                 codeBuilder.createOp(Operation.NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
             case STRICT_NOT_EQUAL -> {
-                final LogicVariable tmp2 = processor.nextTemp();
+                final LogicVariable tmp2 = standaloneTemp();
                 codeBuilder.createOp(Operation.STRICT_EQUAL, tmp2, left.getValue(codeBuilder), right.getValue(codeBuilder));
                 codeBuilder.createOp(Operation.EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }

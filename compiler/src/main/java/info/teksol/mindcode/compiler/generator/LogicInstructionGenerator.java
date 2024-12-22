@@ -17,6 +17,7 @@ import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import info.teksol.mindcode.v3.compiler.generation.ReturnStack;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -196,7 +197,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
     }
 
     @Override
-    public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+    public @NonNull LogicInstruction createInstruction(@NonNull Opcode opcode, @NonNull LogicArgument... arguments) {
         return instructionProcessor.createInstruction(astContext, opcode, arguments);
     }
 
@@ -795,7 +796,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
     private LogicVariable stackName() {
         return callGraph.getAllocatedStack() != null
                 ? callGraph.getAllocatedStack().getStack()
-                : LogicVariable.special("invalid");
+                : LogicVariable.INVALID;
     }
 
     private LogicValue resolveHeapIndex(HeapAccess node) {
@@ -1127,7 +1128,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
                 if (iterator.out) {
                     if (!element.isWriteAllowed()) {
                         error(element.getInputPosition(), "Function requires 'out' argument at this position.");
-                        outValues.add(LogicVariable.special("invalid"));
+                        outValues.add(LogicVariable.INVALID);
                     } else if (element.getArgument() instanceof LogicVariable var && var.isUserWritable()) {
                         outValues.add(var);
                     } else {
@@ -1135,7 +1136,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
                             error(element.getInputPosition(), "Element assigned to '%s' is not writable.",
                                     iterator.var.getFullName());
                         }
-                        outValues.add(LogicVariable.special("invalid"));
+                        outValues.add(LogicVariable.INVALID);
                     }
                 }
                 if (iterator.in) {
@@ -1164,7 +1165,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
             if (iterator.out) {
                 if (!element.isWriteAllowed()) {
                     error(element.getInputPosition(), "Function requires 'out' argument at this position.");
-                    outValues.add(LogicVariable.special("invalid"));
+                    outValues.add(LogicVariable.INVALID);
                 } else if (element.getArgument() instanceof LogicVariable var && var.isUserWritable()) {
                     outValues.add(var);
                 } else {
@@ -1172,7 +1173,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
                         error(element.getInputPosition(), "Element assigned to '%s' is not writable.",
                                 iterator.var.getFullName());
                     }
-                    outValues.add(LogicVariable.special("invalid"));
+                    outValues.add(LogicVariable.INVALID);
                 }
             }
             if (iterator.in) {
@@ -1425,14 +1426,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
                 error(node, "%s", errorMessage != null
                         ? errorMessage
                         : "'" + identifier + "' is a constant or parameter; a variable is expected here.");
-                return LogicVariable.special("invalid");
+                return LogicVariable.INVALID;
             }
             return constant;
         }
 
         if (identifier.equals(varArgName)) {
             error(node, "Using vararg parameter '%s' is not allowed here.", identifier);
-            return LogicVariable.special("invalid");
+            return LogicVariable.INVALID;
         } if (identifier.startsWith(AstNodeBuilder.AST_PREFIX)) {
             // Encoded into a VarRef in AstNodeBuilder
             return LogicVariable.ast(identifier);
@@ -1462,7 +1463,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
                 return p;
             } else {
                 error(node, "Parameter '%s' is not a block, it cannot be used for external memory access.", identifier);
-                return LogicVariable.special("invalid");
+                return LogicVariable.INVALID;
             }
         }
 

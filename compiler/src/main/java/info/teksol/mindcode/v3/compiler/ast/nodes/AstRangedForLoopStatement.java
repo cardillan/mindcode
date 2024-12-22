@@ -10,19 +10,19 @@ import java.util.List;
 @NullMarked
 @AstNode
 public class AstRangedForLoopStatement extends AstLabeledStatement {
-    private final AstIdentifier variable;
+    private final AstExpression variable;
     private final AstRange range;
     private final List<AstMindcodeNode> body;
 
     public AstRangedForLoopStatement(InputPosition inputPosition, @Nullable AstIdentifier loopLabel,
-            AstIdentifier variable, AstRange range, List<AstMindcodeNode> body) {
+            AstExpression variable, AstRange range, List<AstMindcodeNode> body) {
         super(inputPosition, loopLabel, children(list(variable, range), body));
         this.variable = variable;
         this.range = range;
         this.body = body;
     }
 
-    public AstIdentifier getVariable() {
+    public AstExpression getVariable() {
         return variable;
     }
 
@@ -35,7 +35,7 @@ public class AstRangedForLoopStatement extends AstLabeledStatement {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 

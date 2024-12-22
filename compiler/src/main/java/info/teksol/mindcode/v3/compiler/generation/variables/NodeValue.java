@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
@@ -17,9 +18,27 @@ import java.util.function.Consumer;
 /// Instances of this class are used by the code generator to represent and pass around the individual nodes
 /// of the AST tree (excluding nodes representing fragments of larger syntactic elements, which are only used
 /// in specific contexts).
+@NullMarked
 public interface NodeValue {
 
+    /// Indicates whether an `in` modifier was used on the syntactic element this NodeValue was created from.
+    /// At this moment, only function arguments can have `in`/`out` modifiers.
+    ///
+    /// @return true if this node value represents an `in` function argument
+    default boolean hasInModifier() {
+        return true;
+    }
+
+    /// Indicates whether an `out` modifier was used on the syntactic element this NodeValue was created from.
+    /// At this moment, only function arguments can have `in`/`out` modifiers.
+    ///
+    /// @return true if this node value represents an `out` function argument
+    default boolean hasOutModifier() {
+        return true;
+    }
+
     /// L-values can be targets of assignments and increment/decrement operators.
+    /// **Temporary variables aren't l-values.**
     ///
     /// The definition is separate from LogicArgument.isWritable, because temporary variables are generally
     /// writable, but they don't represent l-values. When they do, they need a special NodeValue implementation
@@ -50,4 +69,12 @@ public interface NodeValue {
     ///
     /// @param valueSetter consumer responsible for setting the passed-in variable to the value to be written
     void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter);
+
+    // TODO Review
+    default boolean hasModifier() {
+        return hasInModifier() || hasOutModifier();
+    }
+    default boolean hasInModifierOnly() {
+        return hasInModifier() && !hasOutModifier();
+    }
 }

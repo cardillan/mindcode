@@ -6,7 +6,5 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface AstBuilderContext extends CompilerContext {
-
     void addRequirement(AstRequire requirement);
-
 }

@@ -1,11 +1,12 @@
-package info.teksol.mindcode.v3.compiler.generation;
+package info.teksol.mindcode.v3.compiler.generation.builders;
 
+import info.teksol.mindcode.v3.compiler.generation.AbstractCodeGeneratorTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-class CodeGeneratorIfExpressionsTest extends AbstractCodeGeneratorTest {
+class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
 
     @Nested
     class TernaryOperators {
