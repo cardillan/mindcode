@@ -21,6 +21,7 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
         super(context, mainNodeVisitor);
     }
 
+    @Override
     public NodeValue visitAssignment(AstAssignment node) {
         return applyOperation(node.getTarget(), node.getValue(), node.getOperation(), false);
     }
@@ -81,9 +82,10 @@ public class AssignmentsHandler extends BaseHandler implements AstAssignmentVisi
             result = target instanceof LogicVariable var && !var.isVolatile() ? var : rvalue;
         } else if (returnPriorValue) {
             // Evaluate the target and store it as a result
-            // TODO Specific optimization for this kind of code - swap assignment and increment
             // We're using a regular temp, not a node result temp, because the variable will be registered
             // in the parent context below
+            // TODO Specific optimization for postfix operators - swap assignment and increment
+            //      Also in loops
             LogicValue left = target.getValue(codeBuilder);
             LogicVariable tmp = processor.nextTemp();
             codeBuilder.createSet(tmp, left);

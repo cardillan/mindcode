@@ -7,6 +7,7 @@ import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.*;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import info.teksol.util.CollectionUtils;
 import info.teksol.util.TraceFile;
 import org.jspecify.annotations.NonNull;
 
@@ -17,9 +18,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static info.teksol.util.CollectionUtils.findFirstIndex;
-import static info.teksol.util.CollectionUtils.findLastIndex;
 
 class OptimizationContext {
     private final CompilerProfile profile;
@@ -749,7 +747,7 @@ class OptimizationContext {
      * @return index of the first instruction matching the predicate
      */
     protected int firstInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
-        return findFirstIndex(program, startIndex, matcher);
+        return CollectionUtils.indexOf(program, startIndex, matcher);
     }
 
     /**
@@ -760,7 +758,7 @@ class OptimizationContext {
      * @return index of the first instruction matching the predicate
      */
     protected int firstInstructionIndex(Predicate<LogicInstruction> matcher) {
-        return findFirstIndex(program, 0, matcher);
+        return CollectionUtils.indexOf(program, 0, matcher);
     }
 
     /**
@@ -772,7 +770,7 @@ class OptimizationContext {
      * @return index of the last instruction matching the predicate, up to the specified index
      */
     protected int lastInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
-        return findLastIndex(program, startIndex, matcher);
+        return CollectionUtils.lastIndexOf(program, startIndex, matcher);
     }
 
     /**
@@ -783,7 +781,7 @@ class OptimizationContext {
      * @return index of the last instruction matching the predicate
      */
     protected int lastInstructionIndex(Predicate<LogicInstruction> matcher) {
-        return findLastIndex(program, program.size() - 1, matcher);
+        return CollectionUtils.lastIndexOf(program, program.size() - 1, matcher);
     }
 
     /**

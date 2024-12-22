@@ -9,6 +9,11 @@ import java.util.function.Consumer;
 /// Represents a read-write or read-only value (l-value or r-value). L-values are variables, including external ones,
 /// and, in the future, array or structure elements. R-values are all l-values plus constants and parameters.
 ///
+/// Some nodes might not be even r-values (e.g. a formattable string literal). These must be specifically
+/// handled when needed (within the context on an inline function call, for example). Such implementations should
+/// emit errors when {@code getValue} is called (this will prevent the instance from being assigned to an mlog
+/// variable) and provide a different mechanism for accessing the contained information.
+///
 /// Instances of this class are used by the code generator to represent and pass around the individual nodes
 /// of the AST tree (excluding nodes representing fragments of larger syntactic elements, which are only used
 /// in specific contexts).

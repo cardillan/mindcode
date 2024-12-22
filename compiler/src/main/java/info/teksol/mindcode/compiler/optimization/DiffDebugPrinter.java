@@ -170,7 +170,7 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     protected int findInstructionIndex(List<LogicInstruction> program, int index, LogicInstruction instruction) {
-        return CollectionUtils.findFirstIndex(program, index, ix -> ix == instruction);
+        return CollectionUtils.indexOf(program, index, ix -> ix == instruction);
     }
 
     protected String printInstruction(String prefix, int index, LogicInstruction instruction) {

@@ -13,6 +13,7 @@ import info.teksol.mindcode.v3.CompilationPhase;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;
 import info.teksol.mindcode.v3.compiler.antlr.AbstractParserTest;
+import info.teksol.util.CollectionUtils;
 import info.teksol.util.ExpectedMessages;
 
 import java.util.*;
@@ -66,8 +67,14 @@ public class AbstractCodeGeneratorTest extends AbstractParserTest {
 
     // EVALUATION MECHANICS
 
-    private void evaluateResults(MindcodeCompiler compiler, List<LogicInstruction> expected, List<MindcodeMessage> messages) {
-        List<LogicInstruction> actual = compiler.getInstructions();
+    private List<LogicInstruction> removeEnd(List<LogicInstruction> instructions) {
+        int index = CollectionUtils.lastIndexOf(instructions, ix -> ix.getOpcode() != Opcode.END);
+        return index == -1 || index == instructions.size() - 1 ? instructions : instructions.subList(0, index + 1);
+    }
+
+    private void evaluateResults(MindcodeCompiler compiler, List<LogicInstruction> expected0, List<MindcodeMessage> messages) {
+        List<LogicInstruction> actual = removeEnd(compiler.getInstructions());
+        List<LogicInstruction> expected = removeEnd(expected0);
         if (actual.size() != expected.size()) {
             assertFailed(makeVarsIn(expected), actual, createDifferentCodeSizeMessage(actual, messages));
             return;

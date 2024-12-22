@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3;
 import info.teksol.generated.ast.AstIndentedPrinter;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.ast.Requirement;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
@@ -86,27 +87,31 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, profile, inputFiles);
 
         // Process all input files including files discovered through require directive.
-        while (!files.isEmpty()) {
-            InputFile inputFile = files.remove();
-            if (processedFiles.add(inputFile)) {
-                CommonTokenStream tokenStream = LexerParser.createTokenStream(messageConsumer, inputFile);
-                tokenStreams.put(inputFile, tokenStream);
-                if (targetPhase == CompilationPhase.LEXER) continue;
+        try {
+            while (!files.isEmpty()) {
+                InputFile inputFile = files.remove();
+                if (processedFiles.add(inputFile)) {
+                    CommonTokenStream tokenStream = LexerParser.createTokenStream(messageConsumer, inputFile);
+                    tokenStreams.put(inputFile, tokenStream);
+                    if (targetPhase == CompilationPhase.LEXER) continue;
 
-                ModuleContext parseTree = LexerParser.parseTree(messageConsumer, inputFile, tokenStream);
-                parseTrees.put(inputFile, parseTree);
-                if (targetPhase == CompilationPhase.PARSER) continue;
+                    ModuleContext parseTree = LexerParser.parseTree(messageConsumer, inputFile, tokenStream);
+                    parseTrees.put(inputFile, parseTree);
+                    if (targetPhase == CompilationPhase.PARSER) continue;
 
-                AstModule module = AstBuilder.build(this, inputFile, tokenStream, parseTree);
-                modules.put(inputFile, module);
-                moduleList.add(module);
+                    AstModule module = AstBuilder.build(this, inputFile, tokenStream, parseTree);
+                    modules.put(inputFile, module);
+                    moduleList.add(module);
 
-                // Requirements are added by the AstBuilder via AstBuilderContext
-                requirements.stream()
-                        .map(requirementsProcessor::processRequirement)
-                        .filter(Objects::nonNull)
-                        .forEach(files::add);
+                    // Requirements are added by the AstBuilder via AstBuilderContext
+                    requirements.stream()
+                            .map(requirementsProcessor::processRequirement)
+                            .filter(Objects::nonNull)
+                            .forEach(files::add);
+                }
             }
+        } catch (ParserAbort ignored) {
+            // The error has already been reported
         }
 
         astProgram = new AstProgram(new InputPosition(inputFiles.getMainInputFile(), 1, 1), moduleList);

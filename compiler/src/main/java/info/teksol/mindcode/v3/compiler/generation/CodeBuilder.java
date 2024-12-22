@@ -2,10 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.AstContext;
-import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
+import info.teksol.mindcode.compiler.generator.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
@@ -16,16 +13,23 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CodeBuilder implements ContextfulInstructionCreator {
+public class CodeBuilder extends AbstractMessageEmitter implements ContextfulInstructionCreator {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final List<LogicInstruction> instructions = new ArrayList<>();
     private AstContext astContext;
 
+    // Note: we'll need to save/restore loop stack when entering inline functions
+    // In LIG, the implicit stack was used to manage the state
+    private LoopStack loopStack;
+
     public CodeBuilder(CodeGeneratorContext context) {
+        super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
         astContext = context.rootAstContext();
+
+        loopStack = new LoopStack(messageConsumer);
     }
 
     public AstContext getAstContext() {
@@ -34,6 +38,10 @@ public class CodeBuilder implements ContextfulInstructionCreator {
 
     public List<LogicInstruction> getInstructions() {
         return instructions;
+    }
+
+    public LoopStack getLoopStack() {
+        return loopStack;
     }
 
     public void enterAstNode(AstMindcodeNode node) {

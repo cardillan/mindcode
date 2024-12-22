@@ -811,6 +811,16 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(1, 38, "Parse error: .*"),
                     "if a then b; else c; elsif g then d; end;");
         }
+
+        @Test
+        void refusesMissingSemicolons() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 16, "Parse error: .*")
+                            .addRegex(1, 24, "Parse error: .*")
+                            .addRegex(2, 1, "Parse error: .*"),
+                    "a = if b then c else d end;");
+        }
     }
 
     @Nested

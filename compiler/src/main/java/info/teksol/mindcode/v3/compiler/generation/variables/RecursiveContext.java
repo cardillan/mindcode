@@ -8,6 +8,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.function.Supplier;
 
 @NullMarked
 public class RecursiveContext extends LocalContext {
@@ -39,5 +40,18 @@ public class RecursiveContext extends LocalContext {
     @Override
     public void registerParentNodeVariable(LogicVariable variable) {
         nodeVariables.add(parentIndex++, variable);
+    }
+
+    @Override
+    public <T> T excludeVariablesFromNode(Supplier<T> expression) {
+        // Remember the current size and parent position
+        int previousSize = nodeVariables.size();
+        int previousParent = parentIndex;
+        T result = expression.get();
+
+        // Accommodate variables meanwhile registered in the parent
+        int newSize = previousSize + (parentIndex - previousParent);
+        nodeVariables.subList(newSize, nodeVariables.size()).clear();
+        return result;
     }
 }

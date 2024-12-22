@@ -25,6 +25,9 @@ expressionList
 // A statement is an expression, which provides a value, or an executable statement, which is executable, but doesn't
 // provide a value, or a declaration. Using a statement/declaration where an expression is expected is an error,
 // recognized by the grammar.
+//
+// Note: not sure it is a good idea to separate statements and expressions in the grammar. Sometimes we could
+// produce a better error message in the AST builder/code generator than we get from the grammar.
 statement
     : expression                                                                        # expExpression
     | directive                                                                         # expDirective

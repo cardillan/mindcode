@@ -8,12 +8,23 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 @NullMarked
 public class GlobalContext implements FunctionContext {
     @Override
     public @Nullable LogicFunction function() {
         return null;
+    }
+
+    @Override
+    public Map<String, NodeValue> variables() {
+        return Map.of();
+    }
+
+    @Override
+    public NodeValue registerFunctionVariable(AstIdentifier identifier) {
+        throw new MindcodeInternalError("Trying to register a local variable in global context:" + identifier);
     }
 
     @Override
@@ -37,12 +48,7 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public Map<String, NodeValue> variables() {
-        return Map.of();
-    }
-
-    @Override
-    public NodeValue registerFunctionVariable(AstIdentifier identifier) {
-        throw new MindcodeInternalError("Trying to register a local variable in global context:" + identifier);
+    public <T> T excludeVariablesFromNode(Supplier<T> expression) {
+        return expression.get();
     }
 }

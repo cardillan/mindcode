@@ -76,7 +76,7 @@ public class CollectionUtils {
         return in(values).negate();
     }
 
-    public static <E extends @Nullable Object> int findFirstIndex(List<? extends E> list, int startIndex, Predicate<E> matcher) {
+    public static <E extends @Nullable Object> int indexOf(List<? extends E> list, int startIndex, Predicate<E> matcher) {
         if (startIndex < 0 || startIndex > list.size()) {
             throw new IndexOutOfBoundsException(startIndex);
         }
@@ -88,7 +88,7 @@ public class CollectionUtils {
         return -1;
     }
 
-    public static <E extends @Nullable Object> int findLastIndex(List<? extends E> list, int startIndex, Predicate<E> matcher) {
+    public static <E extends @Nullable Object> int lastIndexOf(List<? extends E> list, int startIndex, Predicate<E> matcher) {
         if (startIndex < 0 || startIndex >= list.size()) {
             throw new IndexOutOfBoundsException(startIndex);
         }
@@ -100,16 +100,16 @@ public class CollectionUtils {
         return -1;
     }
 
-    public static <E extends @Nullable Object> int findFirstIndex(List<? extends E> list, Predicate<E> matcher) {
-        return findFirstIndex(list, 0, matcher);
+    public static <E extends @Nullable Object> int indexOf(List<? extends E> list, Predicate<E> matcher) {
+        return indexOf(list, 0, matcher);
     }
 
-    public static <E extends @Nullable Object> int findLastIndex(List<? extends E> list, Predicate<E> matcher) {
-        return list.isEmpty() ? -1 : findLastIndex(list, list.size() - 1, matcher);
+    public static <E extends @Nullable Object> int lastIndexOf(List<? extends E> list, Predicate<E> matcher) {
+        return list.isEmpty() ? -1 : lastIndexOf(list, list.size() - 1, matcher);
     }
 
     public static <E extends @Nullable Object> E removeFirstMatching(List<? extends E> list, Predicate<E> matcher) {
-        int index = findFirstIndex(list, matcher);
+        int index = indexOf(list, matcher);
         return index < 0 ? null : list.remove(index);
     }
 

@@ -5,6 +5,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
@@ -49,6 +50,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new LiteralsHandler(context, this::visit));
         nodeVisitor.registerVisitor(new AssignmentsHandler(context, this::visit));
         nodeVisitor.registerVisitor(new OperatorsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new IfExpressionsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new BreakContinueStatementsHandler(context, this::visit));
+        nodeVisitor.registerVisitor(new WhileLoopStatementsHandler(context, this::visit));
     }
 
     public void generateCode(AstProgram program) {
@@ -68,6 +72,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
 
         // Process function declarations
+        codeBuilder.setSubcontextType(AstSubcontextType.END, 1.0);
+        codeBuilder.createEnd();
+        codeBuilder.clearSubcontextType();
     }
 
     private NodeValue visit(AstMindcodeNode node) {

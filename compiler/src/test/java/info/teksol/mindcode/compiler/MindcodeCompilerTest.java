@@ -50,7 +50,7 @@ class MindcodeCompilerTest {
 
         assertEquals("Hello", result.getProgramOutput());
 
-        int index = CollectionUtils.findFirstIndex(result.messages(),
+        int index = CollectionUtils.indexOf(result.messages(),
                 m -> m.message().contains("Final code before resolving virtual instructions"));
         assertTrue(index >= 0, "Failed to locate code output in the log.");
 
@@ -81,7 +81,7 @@ class MindcodeCompilerTest {
 
         assertEquals("File2File1", result.getProgramOutput());
 
-        int index = CollectionUtils.findFirstIndex(result.messages(),
+        int index = CollectionUtils.indexOf(result.messages(),
                 m -> m.message().contains("Final code before resolving virtual instructions"));
         assertTrue(index >= 0, "Failed to locate code output in the log.");
 

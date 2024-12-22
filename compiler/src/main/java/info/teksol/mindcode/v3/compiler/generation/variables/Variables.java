@@ -18,6 +18,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /// This class resolves source code identifiers into variables represented by NodeValue interface,
 /// and tracks temporary variables used within AST nodes for stack management.
@@ -212,5 +213,31 @@ public class Variables extends AbstractMessageEmitter {
 
     public void registerParentNodeVariable(LogicVariable variable) {
         functionContext.registerParentNodeVariable(variable);
+    }
+
+    /// Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
+    /// the expression out of current node context. Suitable when the generated temporary variables are known
+    /// not to be used outside the context of the expression. A good example is the condition expression of the
+    /// if statement: the condition is evaluated and the result is used to choose the branch to execute, but
+    /// all this happens before either of the branches are executed and the temporary variable holding the condition
+    /// value will not be used again.
+    ///
+    /// Note: if x = a > b then ... else ... end; print(x) is not a problem, because x is a user variable and
+    /// is registered separately.
+    ///
+    /// @param <T> type of return value
+    /// @param expression expression to evaluate
+    /// @return value provided by the expression
+    public <T> T excludeVariablesFromNode(Supplier<T> expression) {
+        return functionContext.excludeVariablesFromNode(expression);
+    }
+
+    /// Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
+    /// the expression out of current node context. To be used on expressions that do not return value.
+    public void excludeVariablesFromNode(Runnable expression) {
+        excludeVariablesFromNode(() -> {
+            expression.run();
+            return null;
+        });
     }
 }

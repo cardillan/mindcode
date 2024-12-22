@@ -33,8 +33,9 @@ public class LoopStack extends AbstractMessageEmitter {
     }
 
     public void enterLoop(InputPosition position, @Nullable String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
+        // TODO Make loopLabel not-null, use empty string for missing labels
         LoopLabels loopLabels = new LoopLabels(breakLabel, continueLabel);
-        if (loopLabel != null) {
+        if (loopLabel != null && !loopLabel.isEmpty()) {
             if (map.containsKey(loopLabel)) {
                 error(position, "Loop label '%s' already in use.", loopLabel);
             } else {
@@ -59,7 +60,7 @@ public class LoopStack extends AbstractMessageEmitter {
             return LogicLabel.INVALID;
         }
 
-        if (loopLabel == null) {
+        if (loopLabel == null || loopLabel.isEmpty()) {
             return extractor.apply(stack.peek());
         } else {
             LoopLabels labels = map.get(loopLabel);
@@ -78,7 +79,7 @@ public class LoopStack extends AbstractMessageEmitter {
 
         LoopLabels labels = stack.pop();
 
-        if (loopLabel != null && !labels.equals(map.remove(loopLabel))) {
+        if (loopLabel != null && !loopLabel.isEmpty() && !labels.equals(map.remove(loopLabel))) {
             throw new IllegalStateException("exitLoop: removing non-topmost label " + loopLabel);
         }
     }

@@ -93,10 +93,10 @@ public class FunctionDeclaration extends BaseAstNode {
             return new IntRange(0, 0);
         } else if (isVarArg()) {
             int min = params.size() == 1 ? 0 :
-                    CollectionUtils.findLastIndex(params.subList(0, params.size() - 1), FunctionParameter::isCompulsory) + 1;
+                    CollectionUtils.lastIndexOf(params.subList(0, params.size() - 1), FunctionParameter::isCompulsory) + 1;
             return new IntRange(min, Integer.MAX_VALUE);
         } else {
-            int min = CollectionUtils.findLastIndex(params, FunctionParameter::isCompulsory) + 1;
+            int min = CollectionUtils.lastIndexOf(params, FunctionParameter::isCompulsory) + 1;
             return new IntRange(min, params.size());
         }
     }

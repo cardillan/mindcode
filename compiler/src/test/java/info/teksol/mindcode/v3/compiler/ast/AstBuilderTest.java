@@ -1824,6 +1824,21 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
         }
+
+
+        @Test
+        void refusesAssigningLoopsToVariables() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex("Parse error: .*").atLeast(1),
+                    """
+                            a = do
+                                print(a);
+                            while true;
+                            """
+            );
+        }
+
     }
 
     private static final AstIdentifier identifier = id("identifier");

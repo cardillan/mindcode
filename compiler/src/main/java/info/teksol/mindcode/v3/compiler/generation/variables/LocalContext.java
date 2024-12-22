@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 @NullMarked
 public class LocalContext implements FunctionContext {
@@ -20,6 +21,30 @@ public class LocalContext implements FunctionContext {
         this.function = Objects.requireNonNull(function);
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
         function.getParameters().forEach(p -> variables.put(p.getName(), p));
+    }
+
+    @Override
+    public Map<String, NodeValue> variables() {
+        return variables;
+    }
+
+    @Override
+    public NodeValue registerFunctionVariable(AstIdentifier identifier) {
+        NodeValue variable = createFunctionVariable(identifier.getName());
+        NodeValue existing = variables.put(identifier.getName(), variable);
+        if (existing != null) {
+            throw new MindcodeInternalError("Repeated registration of function variable (existing variable: %s, new variable: %s).",
+                    existing, variable);
+        }
+        return variable;
+    }
+
+    private NodeValue createFunctionVariable(String name) {
+        if (functionPrefix.isEmpty()) {
+            return LogicVariable.main(name);
+        } else {
+            return LogicVariable.local(function.getName(), functionPrefix, name);
+        }
     }
 
     @Override
@@ -48,26 +73,7 @@ public class LocalContext implements FunctionContext {
     }
 
     @Override
-    public Map<String, NodeValue> variables() {
-        return variables;
-    }
-
-    @Override
-    public NodeValue registerFunctionVariable(AstIdentifier identifier) {
-        NodeValue variable = createFunctionVariable(identifier.getName());
-        NodeValue existing = variables.put(identifier.getName(), variable);
-        if (existing != null) {
-            throw new MindcodeInternalError("Repeated registration of function variable (existing variable: %s, new variable: %s).",
-                    existing, variable);
-        }
-        return variable;
-    }
-
-    private NodeValue createFunctionVariable(String name) {
-        if (functionPrefix.isEmpty()) {
-            return LogicVariable.main(name);
-        } else {
-            return LogicVariable.local(function.getName(), functionPrefix, name);
-        }
+    public <T> T excludeVariablesFromNode(Supplier<T> expression) {
+        return expression.get();
     }
 }

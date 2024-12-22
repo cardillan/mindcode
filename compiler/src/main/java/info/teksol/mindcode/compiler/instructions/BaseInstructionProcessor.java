@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static info.teksol.mindcode.logic.Operation.ADD;
-import static info.teksol.util.CollectionUtils.findFirstIndex;
+import static info.teksol.util.CollectionUtils.indexOf;
 
 public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
@@ -404,7 +404,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
     private int getOpcodeVariantSelectorPosition(Opcode opcode, List<OpcodeVariant> opcodeVariants) {
         List<Integer> indexes = opcodeVariants.stream()
-                .map(v -> findFirstIndex(v.namedParameters(), a -> a.type().isSelector()))
+                .map(v -> indexOf(v.namedParameters(), a -> a.type().isSelector()))
                 .distinct()
                 .toList();
 

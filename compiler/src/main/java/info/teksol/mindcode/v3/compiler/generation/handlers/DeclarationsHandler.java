@@ -62,7 +62,6 @@ public class DeclarationsHandler extends BaseHandler implements
                 if (context.stackAllocation() != null) {
                     error(node, "Multiple stack allocation declarations.");
                 } else {
-                    // TODO Just for validation,
                     final Allocation allocation = resolveAllocation(node);
                     context.setStackAllocation(node);
                     if (callGraph.containsRecursiveFunction()) {
