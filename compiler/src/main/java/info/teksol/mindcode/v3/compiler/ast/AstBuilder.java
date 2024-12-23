@@ -35,8 +35,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         this.tokenStream = tokenStream;
     }
 
-    public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
-            ParseTree tree) {
+    public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream, ParseTree tree) {
         AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream);
         return (AstModule) astBuilder.visitNonNull(tree);
     }
@@ -49,7 +48,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return super.visit(tree);
     }
 
-    //<editor-fold desc="Helper functions">
+    //<editor-fold desc="Helper functions (visiting)">
     private @Nullable AstMindcodeNode visitNullable(ParseTree tree) {
         return visit(tree);
     }
@@ -58,7 +57,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return Objects.requireNonNull(visitNullable(tree));
     }
 
-    private @Nullable AstExpression visitNullableExpression(ParseTree tree) {
+    private @Nullable AstExpression visitAstExpressionNullable(ParseTree tree) {
         AstMindcodeNode result = visitNullable(tree);
         if (result == null) {
             return null;
@@ -70,28 +69,54 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         }
     }
 
-    private AstExpression visitExpression(ParseTree tree) {
-        return Objects.requireNonNull(visitNullableExpression(tree));
+    private AstExpression visitAstExpression(ParseTree tree) {
+        return Objects.requireNonNull(visitAstExpressionNullable(tree));
     }
 
-    public @Nullable AstRange visitRangeIfNonNull(@Nullable RangeExpressionContext ctx) {
-        return ctx == null ? null : visitRangeExpression(ctx);
+    public @Nullable AstRange visitAstRangeIfNonNull(@Nullable AstRangeContext ctx) {
+        return ctx == null ? null : visitAstRange(ctx);
     }
 
-    public @Nullable AstExpression visitExpressionIfNonNull(@Nullable ParseTree node) {
-        return node == null ? null : visitNullableExpression(node);
+    public @Nullable AstExpression visitAstExpressionIfNonNull(@Nullable ParseTree node) {
+        return node == null ? null : visitAstExpressionNullable(node);
     }
 
-    private AstLiteralString createLiteralString(TerminalNode node) {
+    private List<AstExpression> processExpressionList(@Nullable ExpressionListContext ctx) {
+        return ctx != null ? ctx.expression().stream().map(this::visitAstExpression).toList() : List.of();
+    }
+
+    private List<AstMindcodeNode> processBody(@Nullable AstStatementListContext ctx) {
+        return ctx != null ? ctx.statement().stream().map(this::visitNonNull).toList() : List.of();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Helper functions (other)">
+    private InputPosition pos(ParserRuleContext ctx) {
+        return InputPosition.create(inputFile, ctx.getStart());
+    }
+
+    private InputPosition pos(Token token) {
+        return InputPosition.create(inputFile, token);
+    }
+
+    private InputPosition pos(TerminalNode node) {
+        return InputPosition.create(inputFile, node.getSymbol());
+    }
+
+    private Operation operation(Token token) {
+        return Operation.fromToken(token.getType());
+    }
+
+    private AstLiteralString literalString(TerminalNode node) {
         String literal = node.getText();
         return new AstLiteralString(pos(node), literal.substring(1, literal.length() - 1));
     }
 
-    private AstIdentifier createIdentifier(Token token) {
+    private AstIdentifier identifier(Token token) {
         return new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER);
     }
 
-    private @Nullable AstIdentifier createIdentifierOrNull(@Nullable Token token) {
+    private @Nullable AstIdentifier identifierIfNonNull(@Nullable Token token) {
         return token != null
                 ? new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER)
                 : null;
@@ -110,102 +135,42 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 .map(docToken -> new AstDocComment(pos(docToken), docToken.getText()))
                 .orElse(null);
     }
-
-    private Operation operation(Token token) {
-        return Operation.fromToken(token.getType());
-    }
-
-    private InputPosition pos(ParserRuleContext ctx) {
-        return InputPosition.create(inputFile, ctx.getStart());
-    }
-
-    private InputPosition pos(Token token) {
-        return InputPosition.create(inputFile, token);
-    }
-
-    private InputPosition pos(TerminalNode node) {
-        return InputPosition.create(inputFile, node.getSymbol());
-    }
     //</editor-fold>
 
-    //<editor-fold desc="Rules: basics">
+    //<editor-fold desc="Rules: basic structures">
     @Override
-    public AstMindcodeNode visitModule(MindcodeParser.ModuleContext ctx) {
-        return new AstModule(pos(ctx), processBody(ctx.statementList()));
-    }
-
-    private List<AstExpression> processList(@Nullable ExpressionListContext ctx) {
-        return ctx != null ? ctx.expression().stream().map(this::visitExpression).toList() : List.of();
-    }
-
-    private List<AstMindcodeNode> processBody(@Nullable StatementListContext ctx) {
-        return ctx != null ? ctx.statement().stream().map(this::visitNonNull).toList() : List.of();
+    public AstModule visitAstModule(MindcodeParser.AstModuleContext ctx) {
+        return new AstModule(pos(ctx), processBody(ctx.astStatementList()));
     }
 
     @Override
-    public AstStatementList visitStatementList(StatementListContext ctx) {
+    public AstStatementList visitAstStatementList(AstStatementListContext ctx) {
         return new AstStatementList(pos(ctx), processBody(ctx));
     }
-    //</editor-fold>
 
-    //<editor-fold desc="Rules: declarations">
     @Override
-    public AstRequireLibrary visitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) {
-        AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), createIdentifier(ctx.library));
-        context.addRequirement(requirement);
-        return requirement;
+    public AstCodeBlock visitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) {
+        return new AstCodeBlock(pos(ctx), processBody(ctx.exp));
     }
 
     @Override
-    public AstRequireFile visitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) {
-        AstRequireFile requirement = new AstRequireFile(pos(ctx), createLiteralString(ctx.STRING()));
-        context.addRequirement(requirement);
-        return requirement;
-    }
-
-    @Override
-    public AstParameter visitExpParameter(MindcodeParser.ExpParameterContext ctx) {
-        return new AstParameter(pos(ctx),
-                findDocComment(ctx.getStart()),
-                createIdentifier(ctx.name),
-                visitExpression(ctx.value));
-    }
-
-    @Override
-    public AstConstant visitExpConstant(MindcodeParser.ExpConstantContext ctx) {
-        return new AstConstant(pos(ctx),
-                findDocComment(ctx.getStart()),
-                createIdentifier(ctx.name),
-                visitExpression(ctx.value));
-    }
-
-    @Override
-    public AstMindcodeNode visitExpAllocations(MindcodeParser.ExpAllocationsContext ctx) {
-        List<AstAllocation> allocations = ctx.allocations().allocation().stream()
-                .map(this::visitNullable).map(AstAllocation.class::cast).toList();
-        return new AstAllocations(pos(ctx), allocations);
-    }
-
-    @Override
-    public AstAllocation visitStmtHeapAllocation(MindcodeParser.StmtHeapAllocationContext ctx) {
-        return new AstAllocation(pos(ctx),
-                AstAllocation.AllocationType.HEAP,
-                createIdentifier(ctx.id),
-                visitRangeIfNonNull(ctx.range));
-    }
-
-    @Override
-    public AstAllocation visitStmtStackAllocation(MindcodeParser.StmtStackAllocationContext ctx) {
-        return new AstAllocation(pos(ctx),
-                AstAllocation.AllocationType.STACK,
-                createIdentifier(ctx.id),
-                visitRangeIfNonNull(ctx.range));
+    public AstMindcodeNode visitAstParentheses(MindcodeParser.AstParenthesesContext ctx) {
+        return new AstParentheses(pos(ctx), visitAstExpression(ctx.exp));
     }
     //</editor-fold>
 
     //<editor-fold desc="Rules: directives">
+    private List<AstDirectiveValue> processDirectiveValues(MindcodeParser.DirectiveValuesContext ctx) {
+        return ctx.astDirectiveValue().stream().map(this::visitAstDirectiveValue).toList();
+    }
+
     @Override
-    public AstDirectiveSet visitStmtDirectiveSet(MindcodeParser.StmtDirectiveSetContext ctx) {
+    public AstDirectiveValue visitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx) {
+        return new AstDirectiveValue(pos(ctx), ctx.DIRECTIVEVALUE().getText());
+    }
+
+    @Override
+    public AstDirectiveSet visitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx) {
         AstDirectiveValue option = new AstDirectiveValue(pos(ctx.option), ctx.option.getText());
         if (ctx.directiveValues() == null) {
             return new AstDirectiveSet(pos(ctx), option, List.of());
@@ -213,78 +178,495 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             return new AstDirectiveSet(pos(ctx), option, processDirectiveValues(ctx.directiveValues()));
         }
     }
-
-    @Override
-    public AstDirectiveValue visitDirectiveValue(MindcodeParser.DirectiveValueContext ctx) {
-        return new AstDirectiveValue(pos(ctx), ctx.DIRECTIVEVALUE().getText());
-    }
-
-    private List<AstDirectiveValue> processDirectiveValues(MindcodeParser.DirectiveValuesContext ctx) {
-        return ctx.directiveValue().stream().map(this::visitDirectiveValue).toList();
-    }
     //</editor-fold>
 
-    //<editor-fold desc="Rules: expressions">
+    //<editor-fold desc="Rules: declarations">
     @Override
-    public AstBuiltInIdentifier visitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx) {
-        return new AstBuiltInIdentifier(pos(ctx), ctx.builtin.getText());
-    }
-
-    @Override
-    public AstEnhancedComment visitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) {
+    public AstEnhancedComment visitAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx) {
         // Empty placeholders aren't supported in enhanced comment
         // The check will be done in code generator
-        List<AstExpression> parts = ctx.children.stream().map(this::visitNullableExpression).filter(Objects::nonNull).toList();
+        List<AstExpression> parts = ctx.children.stream().map(this::visitAstExpressionNullable).filter(Objects::nonNull).toList();
         return new AstEnhancedComment(pos(ctx), parts);
     }
 
     @Override
-    public AstFormattable visitExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx) {
-        List<AstExpression> parts = ctx.children.stream().map(this::visitNullableExpression).filter(Objects::nonNull).toList();
-        return new AstFormattable(pos(ctx), parts);
-    }
-
-    public AstIdentifier visitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx) {
-        return createIdentifier(ctx.id);
+    public AstMindcodeNode visitAstAllocations(MindcodeParser.AstAllocationsContext ctx) {
+        List<AstAllocation> allocations = ctx.allocations().astAllocation().stream()
+                .map(this::visitNullable).map(AstAllocation.class::cast).toList();
+        return new AstAllocations(pos(ctx), allocations);
     }
 
     @Override
-    public AstIdentifier visitExpIdentifierExt(MindcodeParser.ExpIdentifierExtContext ctx) {
-        return createIdentifier(ctx.id);
+    public AstAllocation visitAstAllocation(MindcodeParser.AstAllocationContext ctx) {
+        AstAllocation.AllocationType type = switch (ctx.type.getType()) {
+            case MindcodeLexer.HEAP  -> AstAllocation.AllocationType.HEAP;
+            case MindcodeLexer.STACK -> AstAllocation.AllocationType.STACK;
+            default -> throw new MindcodeInternalError("Unsupported allocation type: " + ctx.type.getText());
+        };
+        return new AstAllocation(pos(ctx),
+                type,
+                identifier(ctx.id),
+                visitAstRangeIfNonNull(ctx.range));
     }
 
     @Override
-    public AstMemberAccess visitExpPropertyAccess(MindcodeParser.ExpPropertyAccessContext ctx) {
+    public AstParameter visitAstParameter(MindcodeParser.AstParameterContext ctx) {
+        return new AstParameter(pos(ctx),
+                findDocComment(ctx.getStart()),
+                identifier(ctx.name),
+                visitAstExpression(ctx.value));
+    }
+
+    @Override
+    public AstConstant visitAstConstant(MindcodeParser.AstConstantContext ctx) {
+        return new AstConstant(pos(ctx),
+                findDocComment(ctx.getStart()),
+                identifier(ctx.name),
+                visitAstExpression(ctx.value));
+    }
+
+    @Override
+    public AstRequireFile visitAstRequireFile(MindcodeParser.AstRequireFileContext ctx) {
+        AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.STRING()));
+        context.addRequirement(requirement);
+        return requirement;
+    }
+
+    @Override
+    public AstRequireLibrary visitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) {
+        AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), identifier(ctx.library));
+        context.addRequirement(requirement);
+        return requirement;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: function declarations">
+    @Override
+    public AstFunctionDeclaration visitAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx) {
+        DataType dataType = switch (ctx.type.getType()) {
+            case MindcodeLexer.VOID -> DataType.VOID;
+            case MindcodeLexer.DEF  -> DataType.VAR;
+            default -> throw new MindcodeInternalError("Unsupported type: " + ctx.type.getText());
+        };
+
+        return new AstFunctionDeclaration(pos(ctx),
+                findDocComment(ctx.getStart()),
+                identifier(ctx.name),
+                dataType,
+                processParameterList(ctx.parameterList()),
+                processBody(ctx.body),
+                ctx.INLINE() != null,
+                ctx.NOINLINE() != null);
+    }
+
+    private List<AstFunctionParameter> processParameterList(MindcodeParser.ParameterListContext ctx) {
+        return ctx.astFunctionParameter() != null
+                ? ctx.astFunctionParameter().stream().map(this::visitAstFunctionParameter).toList()
+                : List.of();
+    }
+
+    @Override
+    public AstFunctionParameter visitAstFunctionParameter(MindcodeParser.AstFunctionParameterContext ctx) {
+        return new AstFunctionParameter(pos(ctx),
+                identifier(ctx.name),
+                ctx.modifier_in != null,
+                ctx.modifier_out != null,
+                ctx.varargs != null);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: statements">
+    @Override
+    public AstForEachLoopStatement visitAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx) {
+        return new AstForEachLoopStatement(pos(ctx),
+                identifierIfNonNull(ctx.label),
+                processAstLoopIteratorList(ctx.iterators),
+                processExpressionList(ctx.values),
+                processBody(ctx.body));
+    }
+
+    private List<AstLoopIterator> processAstLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) {
+        return ctx.astLoopIterator().stream().map(this::visitAstLoopIterator).toList();
+    }
+
+    @Override
+    public AstLoopIterator visitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) {
+        return new AstLoopIterator(pos(ctx),
+                visitAstExpression(ctx.variable),
+                ctx.modifier != null);
+    }
+
+    @Override
+    public AstIteratedForLoopStatement visitAstIteratedForLoopStatement(MindcodeParser.AstIteratedForLoopStatementContext ctx) {
+        return new AstIteratedForLoopStatement(pos(ctx),
+                identifierIfNonNull(ctx.label),
+                processExpressionList(ctx.init),
+                visitAstExpressionIfNonNull(ctx.condition),
+                processExpressionList(ctx.update),
+                processBody(ctx.body));
+    }
+
+    @Override
+    public AstRangedForLoopStatement visitAstRangedForLoopStatement(MindcodeParser.AstRangedForLoopStatementContext ctx) {
+        return new AstRangedForLoopStatement(pos(ctx),
+                identifierIfNonNull(ctx.label),
+                visitAstExpression(ctx.control),
+                visitAstRange(ctx.range),
+                processBody(ctx.body));
+    }
+
+    @Override
+    public AstWhileLoopStatement visitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx) {
+        if (ctx.loop != null) {
+            context.messageConsumer().accept(CompilerMessage.warn(pos(ctx.loop),
+                    "The 'loop' keyword is deprecated. Use just 'while' instead."));
+        }
+
+        return new AstWhileLoopStatement(pos(ctx),
+                identifierIfNonNull(ctx.label),
+                visitAstExpression(ctx.condition),
+                processBody(ctx.body),
+                false);
+    }
+
+    @Override
+    public AstWhileLoopStatement visitAstWhileLoopStatement(MindcodeParser.AstWhileLoopStatementContext ctx) {
+        return new AstWhileLoopStatement(pos(ctx),
+                identifierIfNonNull(ctx.label),
+                visitAstExpression(ctx.condition),
+                processBody(ctx.body),
+                true);
+    }
+
+    @Override
+    public AstBreakStatement visitAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx) {
+        return new AstBreakStatement(pos(ctx), identifierIfNonNull(ctx.label));
+    }
+
+    @Override
+    public AstContinueStatement visitAstContinueStatement(MindcodeParser.AstContinueStatementContext ctx) {
+        return new AstContinueStatement(pos(ctx), identifierIfNonNull(ctx.label));
+    }
+
+    @Override
+    public AstReturnStatement visitAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx) {
+        return new AstReturnStatement(pos(ctx), visitAstExpressionIfNonNull(ctx.value));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: lvalues">
+    public AstIdentifier visitAstIdentifier(MindcodeParser.AstIdentifierContext ctx) {
+        return identifier(ctx.id);
+    }
+
+    @Override
+    public AstIdentifier visitAstIdentifierExt(MindcodeParser.AstIdentifierExtContext ctx) {
+        return identifier(ctx.id);
+    }
+
+    @Override
+    public AstBuiltInIdentifier visitAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx) {
+        return new AstBuiltInIdentifier(pos(ctx), ctx.builtin.getText());
+    }
+
+    @Override
+    public AstArrayAccess visitAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx) {
+        return new AstArrayAccess(pos(ctx),
+                identifier(ctx.array),
+                visitAstExpression(ctx.index));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: function calls">
+    @Override
+    public AstFunctionCall visitAstFunctionCallEnd(MindcodeParser.AstFunctionCallEndContext ctx) {
+        return new AstFunctionCall(pos(ctx), null,
+                identifier(ctx.END().getSymbol()),
+                List.of());
+    }
+
+    @Override
+    public AstFunctionCall visitAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx) {
+        return new AstFunctionCall(pos(ctx),
+                null,
+                identifier(ctx.function),
+                processArgumentList(ctx.argumentList()));
+    }
+
+    @Override
+    public AstFunctionCall visitAstMethodCall(MindcodeParser.AstMethodCallContext ctx) {
+        return new AstFunctionCall(pos(ctx),
+                visitAstExpressionNullable(ctx.object),
+                identifier(ctx.function),
+                processArgumentList(ctx.argumentList()));
+    }
+
+    @Override
+    public AstFunctionArgument visitAstFunctionArgument(MindcodeParser.AstFunctionArgumentContext ctx) {
+        return new AstFunctionArgument(pos(ctx),
+                visitAstExpression(ctx.arg),
+                ctx.modifier_in != null,
+                ctx.modifier_out != null);
+    }
+
+    @Override
+    public AstFunctionArgument visitAstOptionalFunctionArgument(MindcodeParser.AstOptionalFunctionArgumentContext ctx) {
+        return ctx.astFunctionArgument() != null
+                ? visitAstFunctionArgument(ctx.astFunctionArgument())
+                : new AstFunctionArgument(pos(ctx));
+    }
+
+    public List<AstFunctionArgument> processArgumentList(MindcodeParser.ArgumentListContext ctx) {
+        if (ctx.astFunctionArgument() != null) {
+            return List.of(visitAstFunctionArgument(ctx.astFunctionArgument()));
+        } else if (ctx.astOptionalFunctionArgument() != null) {
+            return ctx.astOptionalFunctionArgument().stream().map(this::visitAstOptionalFunctionArgument).toList();
+        } else {
+            return List.of();
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: expressions/member access">
+    @Override
+    public AstMemberAccess visitAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx) {
         return new AstMemberAccess(pos(ctx),
-                visitExpression(ctx.object),
+                visitAstExpression(ctx.object),
                 new AstBuiltInIdentifier(pos(ctx.property), ctx.property.getText()));
     }
 
     @Override
-    public AstMindcodeNode visitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) {
+    public AstMindcodeNode visitAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx) {
         return new AstMemberAccess(pos(ctx),
-                visitExpression(ctx.object),
-                createIdentifier(ctx.member));
-    }
-
-    @Override
-    public AstMindcodeNode visitExpParentheses(MindcodeParser.ExpParenthesesContext ctx) {
-        return new AstParentheses(pos(ctx), visitExpression(ctx.exp));
+                visitAstExpression(ctx.object),
+                identifier(ctx.member));
     }
     //</editor-fold>
 
-    //<editor-fold desc="Rules: expressions/arrays">
+    //<editor-fold desc="Rules: expressions/control flow">
     @Override
-    public AstArrayAccess visitExpArrayAccess(MindcodeParser.ExpArrayAccessContext ctx) {
-        return new AstArrayAccess(pos(ctx),
-                createIdentifier(ctx.array),
-                visitExpression(ctx.index));
+    public AstCaseExpression visitAstCaseExpression(MindcodeParser.AstCaseExpressionContext ctx) {
+        return new AstCaseExpression(pos(ctx),
+                visitAstExpression(ctx.exp),
+                processCaseAlternatives(ctx.alternatives),
+                processBody(ctx.elseBranch));
+    }
+
+    private List<AstCaseAlternative> processCaseAlternatives(@Nullable CaseAlternativesContext ctx) {
+        return ctx != null && ctx.astCaseAlternative() != null
+                ? ctx.astCaseAlternative().stream().map(this::visitAstCaseAlternative).toList()
+                : List.of();
+    }
+
+    @Override
+    public AstCaseAlternative visitAstCaseAlternative(MindcodeParser.AstCaseAlternativeContext ctx) {
+        return new AstCaseAlternative(pos(ctx),
+                ctx.values != null
+                        ? ctx.values.whenValue().stream().map(this::visitAstExpression).toList()
+                        : List.of(),
+                processBody(ctx.body));
+    }
+
+    @Override
+    public AstIfExpression visitAstIfExpression(MindcodeParser.AstIfExpressionContext ctx) {
+        return new AstIfExpression(pos(ctx),
+                new AstIfBranch(pos(ctx), visitAstExpression(ctx.condition), processBody(ctx.trueBranch)),
+                processElsifBranches(ctx.elsifBranches()),
+                processBody(ctx.falseBranch));
+    }
+
+    private List<AstIfBranch> processElsifBranches(@Nullable ElsifBranchesContext ctx) {
+        return ctx != null && ctx.elsifBranch() != null
+                ? ctx.elsifBranch().stream().map(this::visitElsifBranch).toList()
+                : List.of();
+    }
+
+    @Override
+    public AstIfBranch visitElsifBranch(MindcodeParser.ElsifBranchContext ctx) {
+        return new AstIfBranch(pos(ctx),
+                visitAstExpression(ctx.condition),
+                processBody(ctx.body));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: expressions/literals">
+    @Override
+    public AstFormattableLiteral visitAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx) {
+        List<AstExpression> parts = ctx.children.stream().map(this::visitAstExpressionNullable).filter(Objects::nonNull).toList();
+        return new AstFormattableLiteral(pos(ctx), parts);
+    }
+
+    @Override
+    public AstLiteralString visitAstLiteralString(MindcodeParser.AstLiteralStringContext ctx) {
+        return literalString(ctx.STRING());
+    }
+
+    @Override
+    public AstLiteralBinary visitAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx) {
+        String literal = ctx.BINARY().getText();
+        return new AstLiteralBinary(pos(ctx), literal);
+    }
+
+    @Override
+    public AstLiteralHexadecimal visitAstLiteralHexadecimal(MindcodeParser.AstLiteralHexadecimalContext ctx) {
+        String literal = ctx.HEXADECIMAL().getText();
+        return new AstLiteralHexadecimal(pos(ctx), literal);
+    }
+
+    @Override
+    public AstLiteralDecimal visitAstLiteralDecimal(MindcodeParser.AstLiteralDecimalContext ctx) {
+        String literal = ctx.DECIMAL().getText();
+        return new AstLiteralDecimal(pos(ctx), literal);
+    }
+
+    @Override
+    public AstLiteralFloat visitAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx) {
+        String literal = ctx.FLOAT().getText();
+        return new AstLiteralFloat(pos(ctx), literal);
+    }
+
+    @Override
+    public AstLiteralNull visitAstLiteralNull(MindcodeParser.AstLiteralNullContext ctx) {
+        String literal = ctx.NULL().getText();
+        return new AstLiteralNull(pos(ctx), literal);
+    }
+
+    @Override
+    public AstLiteralBoolean visitAstLiteralBoolean(MindcodeParser.AstLiteralBooleanContext ctx) {
+        String literal = ctx.value.getText();
+        return new AstLiteralBoolean(pos(ctx), literal);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: expressions/operators (unary)">
+    @Override
+    public AstOperatorUnary visitAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx) {
+        return new AstOperatorUnary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.exp));
+    }
+
+    @Override
+    public AstOperatorIncDec visitAstOperatorIncDecPostfix(MindcodeParser.AstOperatorIncDecPostfixContext ctx) {
+        return new AstOperatorIncDec(pos(ctx.exp.getStart()),
+                AstOperatorIncDec.Type.POSTFIX,
+                resolveOperation(ctx.postfix),
+                visitAstExpression(ctx.exp));
+    }
+
+    @Override
+    public AstOperatorIncDec visitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx) {
+        return new AstOperatorIncDec(pos(ctx.exp.getStart()),
+                AstOperatorIncDec.Type.PREFIX,
+                resolveOperation(ctx.prefix),
+                visitAstExpression(ctx.exp));
+    }
+
+    private Operation resolveOperation(Token operatorToken) {
+        return switch (operatorToken.getType()) {
+            case MindcodeLexer.INCREMENT -> Operation.ADD;
+            case MindcodeLexer.DECREMENT -> Operation.SUB;
+            default -> throw new MindcodeInternalError("Unexpected prefix/postfix operator " + operatorToken.getText());
+        };
+
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: expressions/operators (binary)">
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+
+    @Override
+    public AstOperatorBinary visitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx) {
+        return new AstOperatorBinary(pos(ctx.op),
+                operation(ctx.op),
+                visitAstExpression(ctx.left),
+                visitAstExpression(ctx.right));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: expressions/operators (ternary)">
+    @Override
+    public AstOperatorTernary visitAstOperatorTernary(MindcodeParser.AstOperatorTernaryContext ctx) {
+        return new AstOperatorTernary(pos(ctx.condition.getStart()),
+                visitAstExpression(ctx.condition),
+                visitAstExpression(ctx.trueBranch),
+                visitAstExpression(ctx.falseBranch));
     }
     //</editor-fold>
 
     //<editor-fold desc="Rules: expressions/assignments">
     @Override
-    public AstExpression visitExpCompoundAssignment(MindcodeParser.ExpCompoundAssignmentContext ctx) {
+    public AstAssignment visitAstAssignment(MindcodeParser.AstAssignmentContext ctx) {
         int type = switch (ctx.operation.getType()) {
             case MindcodeLexer.ASSIGN              -> -1;
             case MindcodeLexer.ASSIGN_BITWISE_AND  -> MindcodeLexer.BITWISE_AND;
@@ -306,200 +688,21 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
         return new AstAssignment(pos(ctx),
                 type >= 0 ? Operation.fromToken(type) : null,
-                visitExpression(ctx.target),
-                visitExpression(ctx.value));
+                visitAstExpression(ctx.target),
+                visitAstExpression(ctx.value));
     }
     //</editor-fold>
 
-    //<editor-fold desc="Rules: expressions/literals">
+    //<editor-fold desc="Rules: formattable">
     @Override
-    public AstLiteralBinary visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) {
-        String literal = ctx.BINARY().getText();
-        return new AstLiteralBinary(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralBoolean visitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx) {
-        String literal = ctx.TRUE().getText();
-        return new AstLiteralBoolean(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralBoolean visitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx) {
-        String literal = ctx.FALSE().getText();
-        return new AstLiteralBoolean(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralDecimal visitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) {
-        String literal = ctx.DECIMAL().getText();
-        return new AstLiteralDecimal(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralFloat visitExpFloatLiteral(MindcodeParser.ExpFloatLiteralContext ctx) {
-        String literal = ctx.FLOAT().getText();
-        return new AstLiteralFloat(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralHexadecimal visitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) {
-        String literal = ctx.HEXADECIMAL().getText();
-        return new AstLiteralHexadecimal(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralNull visitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx) {
-        String literal = ctx.NULL().getText();
-        return new AstLiteralNull(pos(ctx), literal);
-    }
-
-    @Override
-    public AstLiteralString visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) {
-        return createLiteralString(ctx.STRING());
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Rules: expressions/operators">
-    @Override
-    public AstOperatorBinary visitExpAddition(MindcodeParser.ExpAdditionContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpBitShift(MindcodeParser.ExpBitShiftContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpBitwiseOr(MindcodeParser.ExpBitwiseOrContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpEqualityRelation(MindcodeParser.ExpEqualityRelationContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpExponentiation(MindcodeParser.ExpExponentiationContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpInequalityRelation(MindcodeParser.ExpInequalityRelationContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpLogicalAnd(MindcodeParser.ExpLogicalAndContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    @Override
-    public AstOperatorBinary visitExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.left),
-                visitExpression(ctx.right));
-    }
-
-    private Operation resolveOperation(Token operatorToken) {
-        return switch (operatorToken.getType()) {
-            case MindcodeLexer.INCREMENT -> Operation.ADD;
-            case MindcodeLexer.DECREMENT -> Operation.SUB;
-            default -> throw new MindcodeInternalError("Unexpected prefix/postfix operator " + operatorToken.getText());
-        };
-
-    }
-
-    @Override
-    public AstOperatorIncDec visitExpPostfix(MindcodeParser.ExpPostfixContext ctx) {
-        return new AstOperatorIncDec(pos(ctx.exp.getStart()),
-                AstOperatorIncDec.Type.POSTFIX,
-                resolveOperation(ctx.postfix),
-                visitExpression(ctx.exp));
-    }
-
-    @Override
-    public AstOperatorIncDec visitExpPrefix(MindcodeParser.ExpPrefixContext ctx) {
-        return new AstOperatorIncDec(pos(ctx.exp.getStart()),
-                AstOperatorIncDec.Type.PREFIX,
-                resolveOperation(ctx.prefix),
-                visitExpression(ctx.exp));
-    }
-
-    @Override
-    public AstRange visitRangeExpression(RangeExpressionContext ctx) {
-        return new AstRange(pos(ctx),
-                visitExpression(ctx.firstValue),
-                visitExpression(ctx.lastValue),
-                ctx.operator.getType() == MindcodeLexer.DOT3);
-    }
-
-    @Override
-    public AstOperatorTernary visitExpTernary(MindcodeParser.ExpTernaryContext ctx) {
-        return new AstOperatorTernary(pos(ctx.condition.getStart()),
-                visitExpression(ctx.condition),
-                visitExpression(ctx.trueBranch),
-                visitExpression(ctx.falseBranch));
-    }
-
-    @Override
-    public AstOperatorUnary visitExpUnary(MindcodeParser.ExpUnaryContext ctx) {
-        return new AstOperatorUnary(pos(ctx.op),
-                operation(ctx.op),
-                visitExpression(ctx.exp));
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Rules: formattableContents">
-    @Override
-    public AstLiteralString visitFmtText(MindcodeParser.FmtTextContext ctx) {
+    public AstLiteralString visitFormattableText(MindcodeParser.FormattableTextContext ctx) {
         // Can't use createLiteralString here
         // We're parsing inside a formattable string and there aren't double quotes around the token
         return new AstLiteralString(pos(ctx.TEXT()), ctx.TEXT().getText());
     }
 
     @Override
-    public AstLiteralString visitFmtEscaped(MindcodeParser.FmtEscapedContext ctx) {
+    public AstLiteralString visitFormattableEscaped(MindcodeParser.FormattableEscapedContext ctx) {
         String text = ctx.ESCAPESEQUENCE().getText();
         char escaped = text.charAt(1);
         return escaped == '\\' || escaped == '$'
@@ -508,234 +711,31 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstMindcodeNode visitFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx) {
+    public AstMindcodeNode visitFormattableInterpolation(MindcodeParser.FormattableInterpolationContext ctx) {
         // Just evaluate the expression
         return visitNonNull(ctx.expression());
     }
-    //</editor-fold>
 
-    //<editor-fold desc="Rules: formattablePlaceholder">
     @Override
-    public AstFormattablePlaceholder visitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) {
+    public AstFormattablePlaceholder visitFormattablePlaceholderEmpty(MindcodeParser.FormattablePlaceholderEmptyContext ctx) {
         return new AstFormattablePlaceholder(pos(ctx));
     }
 
     @Override
-    public AstMindcodeNode visitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) {
+    public AstMindcodeNode visitFormattablePlaceholderVariable(MindcodeParser.FormattablePlaceholderVariableContext ctx) {
         return ctx.id != null
-                ? createIdentifier(ctx.id)
+                ? identifier(ctx.id)
                 : new AstFormattablePlaceholder(pos(ctx));
     }
     //</editor-fold>
 
-    //<editor-fold desc="Rules: function calls">
+    //<editor-fold desc="Rules: fragments">
     @Override
-    public AstFunctionArgument visitArgument(MindcodeParser.ArgumentContext ctx) {
-        return new AstFunctionArgument(pos(ctx),
-                visitExpression(ctx.arg),
-                ctx.modifier_in != null,
-                ctx.modifier_out != null);
-    }
-
-    @Override
-    public AstFunctionArgument visitOptionalArgument(MindcodeParser.OptionalArgumentContext ctx) {
-        return ctx.argument() != null ? visitArgument(ctx.argument()) : new AstFunctionArgument(pos(ctx));
-    }
-
-    public List<AstFunctionArgument> processArgumentList(MindcodeParser.ArgumentListContext ctx) {
-        if (ctx.argument() != null) {
-            return List.of(visitArgument(ctx.argument()));
-        } else if (ctx.optionalArgument() != null) {
-            return ctx.optionalArgument().stream().map(this::visitOptionalArgument).toList();
-        } else {
-            return List.of();
-        }
-    }
-
-    @Override
-    public AstFunctionCall visitExpCallEnd(MindcodeParser.ExpCallEndContext ctx) {
-        return new AstFunctionCall(pos(ctx), null,
-                createIdentifier(ctx.END().getSymbol()),
-                List.of());
-    }
-
-    @Override
-    public AstFunctionCall visitExpCallFunction(MindcodeParser.ExpCallFunctionContext ctx) {
-        return new AstFunctionCall(pos(ctx),
-                null,
-                createIdentifier(ctx.function),
-                processArgumentList(ctx.argumentList()));
-    }
-
-    @Override
-    public AstFunctionCall visitExpCallMethod(MindcodeParser.ExpCallMethodContext ctx) {
-        return new AstFunctionCall(pos(ctx),
-                visitNullableExpression(ctx.object),
-                createIdentifier(ctx.function),
-                processArgumentList(ctx.argumentList()));
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="Rules: function declarations">
-    @Override
-    public AstFunctionDeclaration visitExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx) {
-        DataType dataType = switch (ctx.type.getType()) {
-            case MindcodeLexer.VOID -> DataType.VOID;
-            case MindcodeLexer.DEF  -> DataType.VAR;
-            default -> throw new MindcodeInternalError("Unsupported type: " + ctx.type.getText());
-        };
-
-        return new AstFunctionDeclaration(pos(ctx),
-                findDocComment(ctx.getStart()),
-                createIdentifier(ctx.name),
-                dataType,
-                processParameterList(ctx.parameterList()),
-                processBody(ctx.body),
-                ctx.INLINE() != null,
-                ctx.NOINLINE() != null);
-    }
-
-    private List<AstFunctionParameter> processParameterList(MindcodeParser.ParameterListContext ctx) {
-        return ctx.parameter() != null ? ctx.parameter().stream().map(this::visitParameter).toList() : List.of();
-    }
-
-    @Override
-    public AstFunctionParameter visitParameter(MindcodeParser.ParameterContext ctx) {
-        return new AstFunctionParameter(pos(ctx),
-                createIdentifier(ctx.name),
-                ctx.modifier_in != null,
-                ctx.modifier_out != null,
-                ctx.varargs != null);
+    public AstRange visitAstRange(AstRangeContext ctx) {
+        return new AstRange(pos(ctx),
+                visitAstExpression(ctx.firstValue),
+                visitAstExpression(ctx.lastValue),
+                ctx.operator.getType() == MindcodeLexer.DOT3);
     }
     //</editor-fold>
-
-    //<editor-fold desc="Rules: structures">
-    @Override
-    public AstCodeBlock visitExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx) {
-        return new AstCodeBlock(pos(ctx), processBody(ctx.exp));
-    }
-
-    @Override
-    public AstCaseExpression visitExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx) {
-        return new AstCaseExpression(pos(ctx),
-                visitExpression(ctx.exp),
-                processCaseAlternatives(ctx.alternatives),
-                processBody(ctx.elseBranch));
-    }
-
-    private List<AstCaseAlternative> processCaseAlternatives(@Nullable CaseAlternativesContext ctx) {
-        return ctx != null && ctx.caseAlternative() != null
-                ? ctx.caseAlternative().stream().map(this::visitCaseAlternative).toList()
-                : List.of();
-    }
-
-    @Override
-    public AstCaseAlternative visitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) {
-        return new AstCaseAlternative(pos(ctx),
-                ctx.values != null
-                        ? ctx.values.whenValue().stream().map(this::visitExpression).toList()
-                        : List.of(),
-                processBody(ctx.body));
-    }
-
-    @Override
-    public AstIfExpression visitExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx) {
-        return new AstIfExpression(pos(ctx),
-                new AstIfBranch(pos(ctx), visitExpression(ctx.condition), processBody(ctx.trueBranch)),
-                processElsifBranches(ctx.elsifBranches()),
-                processBody(ctx.falseBranch));
-    }
-
-    private List<AstIfBranch> processElsifBranches(@Nullable ElsifBranchesContext ctx) {
-        return ctx != null && ctx.elsifBranch() != null
-                ? ctx.elsifBranch().stream().map(this::visitElsifBranch).toList()
-                : List.of();
-    }
-
-    @Override
-    public AstIfBranch visitElsifBranch(MindcodeParser.ElsifBranchContext ctx) {
-        return new AstIfBranch(pos(ctx),
-                visitExpression(ctx.condition),
-                processBody(ctx.body));
-    }
-
-    @Override
-    public AstForEachLoopStatement visitExpForEachLoop(MindcodeParser.ExpForEachLoopContext ctx) {
-        return new AstForEachLoopStatement(pos(ctx),
-                createIdentifierOrNull(ctx.label),
-                processIteratorList(ctx.iterators),
-                processList(ctx.values),
-                processBody(ctx.body));
-    }
-
-    private List<AstLoopIterator> processIteratorList(MindcodeParser.IteratorListContext ctx) {
-        return ctx.iterator().stream().map(this::visitIterator).toList();
-    }
-
-    @Override
-    public AstLoopIterator visitIterator(MindcodeParser.IteratorContext ctx) {
-        return new AstLoopIterator(pos(ctx),
-                visitExpression(ctx.variable),
-                ctx.modifier != null);
-    }
-
-    @Override
-    public AstIteratedForLoopStatement visitExpForIteratedLoop(MindcodeParser.ExpForIteratedLoopContext ctx) {
-        return new AstIteratedForLoopStatement(pos(ctx),
-                createIdentifierOrNull(ctx.label),
-                processList(ctx.init),
-                visitExpressionIfNonNull(ctx.condition),
-                processList(ctx.update),
-                processBody(ctx.body));
-    }
-
-    @Override
-    public AstRangedForLoopStatement visitExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx) {
-        return new AstRangedForLoopStatement(pos(ctx),
-                createIdentifierOrNull(ctx.label),
-                visitExpression(ctx.control),
-                visitRangeExpression(ctx.range),
-                processBody(ctx.body));
-    }
-
-    @Override
-    public AstWhileLoopStatement visitExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx) {
-        if (ctx.loop != null) {
-            context.messageConsumer().accept(CompilerMessage.warn(pos(ctx.loop),
-                    "The 'loop' keyword is deprecated. Use just 'while' instead."));
-        }
-
-        return new AstWhileLoopStatement(pos(ctx),
-                createIdentifierOrNull(ctx.label),
-                visitExpression(ctx.condition),
-                processBody(ctx.body),
-                false);
-    }
-
-    @Override
-    public AstWhileLoopStatement visitExpWhileLoop(MindcodeParser.ExpWhileLoopContext ctx) {
-        return new AstWhileLoopStatement(pos(ctx),
-                createIdentifierOrNull(ctx.label),
-                visitExpression(ctx.condition),
-                processBody(ctx.body),
-                true);
-    }
-
-    @Override
-    public AstBreakStatement visitExpBreak(MindcodeParser.ExpBreakContext ctx) {
-        return new AstBreakStatement(pos(ctx), createIdentifierOrNull(ctx.label));
-    }
-
-    @Override
-    public AstContinueStatement visitExpContinue(MindcodeParser.ExpContinueContext ctx) {
-        return new AstContinueStatement(pos(ctx), createIdentifierOrNull(ctx.label));
-    }
-
-    @Override
-    public AstReturnStatement visitExpReturn(MindcodeParser.ExpReturnContext ctx) {
-        return new AstReturnStatement(pos(ctx), visitExpressionIfNonNull(ctx.value));
-    }
-    //</editor-fold>
-
 }

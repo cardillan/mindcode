@@ -61,7 +61,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
 
         // Obtains a LogicValue representing the assignment rvalue
         // For external variables this is the temporary variable holding the value read from memory
-        LogicValue logicValue = eval.getValue(codeBuilder);
+        LogicValue logicValue = eval.getValue(assembler);
         LogicValue rvalue;
 
         if (eval == VOID) {
@@ -70,7 +70,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         } else if (logicValue.isVolatile()) {
             // The variable which keeps the value is volatile. Preserve the value.
             LogicVariable tmp = nextTemp();
-            codeBuilder.createSet(tmp, logicValue);
+            assembler.createSet(tmp, logicValue);
             rvalue = tmp;
         } else {
             rvalue = logicValue;
@@ -80,7 +80,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
 
         if (operation == null) {
             // In direct assignment, prior value of the target is unavailable
-            target.setValue(codeBuilder, rvalue);
+            target.setValue(assembler, rvalue);
 
             // Use the variable we've just assigned to as the result, unless it is volatile - in that case,
             // use the r-value that was assigned
@@ -91,31 +91,31 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             // in the parent context below
             // TODO Specific optimization for postfix operators - swap assignment and increment
             //      Also in loops
-            LogicValue left = target.getValue(codeBuilder);
+            LogicValue left = target.getValue(assembler);
             LogicVariable tmp = nextTemp();
-            codeBuilder.createSet(tmp, left);
+            assembler.createSet(tmp, left);
             result = tmp;
 
             Consumer<LogicVariable> valueSetter = createValueSetter(operation, left, rvalue);
-            target.writeValue(codeBuilder, valueSetter);
+            target.writeValue(assembler, valueSetter);
         } else {
             // Compound assignment modifies the target. Current value is the left operator.
-            LogicValue left = target.getValue(codeBuilder);
+            LogicValue left = target.getValue(assembler);
             Consumer<LogicVariable> valueSetter = createValueSetter(operation, left, rvalue);
 
             if (target instanceof LogicVariable var && !var.isVolatile()) {
                 // We're assigning to a non-volatile variable: do the operation in one step and use the variable as result
-                target.writeValue(codeBuilder, valueSetter);
+                target.writeValue(assembler, valueSetter);
 
                 // Evaluating a non-volatile variable is a no-op effort
-                result = target.getValue(codeBuilder);
+                result = target.getValue(assembler);
             } else {
                 // Assigning to a volatile variable or a complex storage: compute the value first, then use it as a result
                 // We're using a regular temp, not a node result temp, because the variable will be registered
                 // in the parent context below
                 LogicVariable tmp = nextTemp();
                 valueSetter.accept(tmp);
-                target.setValue(codeBuilder, tmp);
+                target.setValue(assembler, tmp);
                 result = tmp;
             }
         }
@@ -134,12 +134,12 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         if (operation == Operation.BOOLEAN_OR) {
             return variable -> {
                 final LogicVariable tmp = nextTemp();
-                codeBuilder.createOp(Operation.BOOLEAN_OR, tmp, left, rvalue);
+                assembler.createOp(Operation.BOOLEAN_OR, tmp, left, rvalue);
                 // Ensure the result is 0 or 1
-                codeBuilder.createOp(Operation.NOT_EQUAL, variable, tmp, LogicBoolean.FALSE);
+                assembler.createOp(Operation.NOT_EQUAL, variable, tmp, LogicBoolean.FALSE);
             };
         } else {
-            return variable -> codeBuilder.createOp(operation, variable, left, rvalue);
+            return variable -> assembler.createOp(operation, variable, left, rvalue);
         }
     }
 

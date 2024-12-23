@@ -17,25 +17,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterModule(MindcodeParser.ModuleContext ctx) { }
+	@Override public void enterAstModule(MindcodeParser.AstModuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitModule(MindcodeParser.ModuleContext ctx) { }
+	@Override public void exitAstModule(MindcodeParser.AstModuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatementList(MindcodeParser.StatementListContext ctx) { }
+	@Override public void enterAstStatementList(MindcodeParser.AstStatementListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatementList(MindcodeParser.StatementListContext ctx) { }
+	@Override public void exitAstStatementList(MindcodeParser.AstStatementListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -53,457 +53,493 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpExpression(MindcodeParser.ExpExpressionContext ctx) { }
+	@Override public void enterAstExpression(MindcodeParser.AstExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpExpression(MindcodeParser.ExpExpressionContext ctx) { }
+	@Override public void exitAstExpression(MindcodeParser.AstExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpDirective(MindcodeParser.ExpDirectiveContext ctx) { }
+	@Override public void enterAstDirective(MindcodeParser.AstDirectiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpDirective(MindcodeParser.ExpDirectiveContext ctx) { }
+	@Override public void exitAstDirective(MindcodeParser.AstDirectiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) { }
+	@Override public void enterAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) { }
+	@Override public void exitAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) { }
+	@Override public void enterAstAllocations(MindcodeParser.AstAllocationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) { }
+	@Override public void exitAstAllocations(MindcodeParser.AstAllocationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpAllocations(MindcodeParser.ExpAllocationsContext ctx) { }
+	@Override public void enterAstConstant(MindcodeParser.AstConstantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpAllocations(MindcodeParser.ExpAllocationsContext ctx) { }
+	@Override public void exitAstConstant(MindcodeParser.AstConstantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx) { }
+	@Override public void enterAstParameter(MindcodeParser.AstParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx) { }
+	@Override public void exitAstParameter(MindcodeParser.AstParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpParameter(MindcodeParser.ExpParameterContext ctx) { }
+	@Override public void enterAstRequireFile(MindcodeParser.AstRequireFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpParameter(MindcodeParser.ExpParameterContext ctx) { }
+	@Override public void exitAstRequireFile(MindcodeParser.AstRequireFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpConstant(MindcodeParser.ExpConstantContext ctx) { }
+	@Override public void enterAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpConstant(MindcodeParser.ExpConstantContext ctx) { }
+	@Override public void exitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx) { }
+	@Override public void enterAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx) { }
+	@Override public void exitAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpForEachLoop(MindcodeParser.ExpForEachLoopContext ctx) { }
+	@Override public void enterAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpForEachLoop(MindcodeParser.ExpForEachLoopContext ctx) { }
+	@Override public void exitAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpForIteratedLoop(MindcodeParser.ExpForIteratedLoopContext ctx) { }
+	@Override public void enterAstIteratedForLoopStatement(MindcodeParser.AstIteratedForLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpForIteratedLoop(MindcodeParser.ExpForIteratedLoopContext ctx) { }
+	@Override public void exitAstIteratedForLoopStatement(MindcodeParser.AstIteratedForLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx) { }
+	@Override public void enterAstRangedForLoopStatement(MindcodeParser.AstRangedForLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx) { }
+	@Override public void exitAstRangedForLoopStatement(MindcodeParser.AstRangedForLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpWhileLoop(MindcodeParser.ExpWhileLoopContext ctx) { }
+	@Override public void enterAstWhileLoopStatement(MindcodeParser.AstWhileLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpWhileLoop(MindcodeParser.ExpWhileLoopContext ctx) { }
+	@Override public void exitAstWhileLoopStatement(MindcodeParser.AstWhileLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx) { }
+	@Override public void enterAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx) { }
+	@Override public void exitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBreak(MindcodeParser.ExpBreakContext ctx) { }
+	@Override public void enterAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBreak(MindcodeParser.ExpBreakContext ctx) { }
+	@Override public void exitAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpContinue(MindcodeParser.ExpContinueContext ctx) { }
+	@Override public void enterAstContinueStatement(MindcodeParser.AstContinueStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpContinue(MindcodeParser.ExpContinueContext ctx) { }
+	@Override public void exitAstContinueStatement(MindcodeParser.AstContinueStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpReturn(MindcodeParser.ExpReturnContext ctx) { }
+	@Override public void enterAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpReturn(MindcodeParser.ExpReturnContext ctx) { }
+	@Override public void exitAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpIdentifier(MindcodeParser.ExpIdentifierContext ctx) { }
+	@Override public void enterAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx) { }
+	@Override public void exitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpIdentifierExt(MindcodeParser.ExpIdentifierExtContext ctx) { }
+	@Override public void enterAstIdentifier(MindcodeParser.AstIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpIdentifierExt(MindcodeParser.ExpIdentifierExtContext ctx) { }
+	@Override public void exitAstIdentifier(MindcodeParser.AstIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx) { }
+	@Override public void enterAstIdentifierExt(MindcodeParser.AstIdentifierExtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx) { }
+	@Override public void exitAstIdentifierExt(MindcodeParser.AstIdentifierExtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpArrayAccess(MindcodeParser.ExpArrayAccessContext ctx) { }
+	@Override public void enterAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpArrayAccess(MindcodeParser.ExpArrayAccessContext ctx) { }
+	@Override public void exitAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx) { }
+	@Override public void enterAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx) { }
+	@Override public void exitAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx) { }
+	@Override public void enterAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx) { }
+	@Override public void exitAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpExponentiation(MindcodeParser.ExpExponentiationContext ctx) { }
+	@Override public void enterAstMethodCall(MindcodeParser.AstMethodCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpExponentiation(MindcodeParser.ExpExponentiationContext ctx) { }
+	@Override public void exitAstMethodCall(MindcodeParser.AstMethodCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx) { }
+	@Override public void enterAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx) { }
+	@Override public void exitAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpTernary(MindcodeParser.ExpTernaryContext ctx) { }
+	@Override public void enterAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpTernary(MindcodeParser.ExpTernaryContext ctx) { }
+	@Override public void exitAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpPrefix(MindcodeParser.ExpPrefixContext ctx) { }
+	@Override public void enterAstOperatorTernary(MindcodeParser.AstOperatorTernaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpPrefix(MindcodeParser.ExpPrefixContext ctx) { }
+	@Override public void exitAstOperatorTernary(MindcodeParser.AstOperatorTernaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpUnary(MindcodeParser.ExpUnaryContext ctx) { }
+	@Override public void enterAstOperatorIncDecPostfix(MindcodeParser.AstOperatorIncDecPostfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpUnary(MindcodeParser.ExpUnaryContext ctx) { }
+	@Override public void exitAstOperatorIncDecPostfix(MindcodeParser.AstOperatorIncDecPostfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) { }
+	@Override public void enterAstIfExpression(MindcodeParser.AstIfExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) { }
+	@Override public void exitAstIfExpression(MindcodeParser.AstIfExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx) { }
+	@Override public void enterAstLiteralBoolean(MindcodeParser.AstLiteralBooleanContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx) { }
+	@Override public void exitAstLiteralBoolean(MindcodeParser.AstLiteralBooleanContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx) { }
+	@Override public void enterAstLiteralNull(MindcodeParser.AstLiteralNullContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx) { }
+	@Override public void exitAstLiteralNull(MindcodeParser.AstLiteralNullContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) { }
+	@Override public void enterAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) { }
+	@Override public void exitAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpInequalityRelation(MindcodeParser.ExpInequalityRelationContext ctx) { }
+	@Override public void enterAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpInequalityRelation(MindcodeParser.ExpInequalityRelationContext ctx) { }
+	@Override public void exitAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpEqualityRelation(MindcodeParser.ExpEqualityRelationContext ctx) { }
+	@Override public void enterAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpEqualityRelation(MindcodeParser.ExpEqualityRelationContext ctx) { }
+	@Override public void exitAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpCallFunction(MindcodeParser.ExpCallFunctionContext ctx) { }
+	@Override public void enterAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpCallFunction(MindcodeParser.ExpCallFunctionContext ctx) { }
+	@Override public void exitAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBitwiseOr(MindcodeParser.ExpBitwiseOrContext ctx) { }
+	@Override public void enterAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBitwiseOr(MindcodeParser.ExpBitwiseOrContext ctx) { }
+	@Override public void exitAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpFloatLiteral(MindcodeParser.ExpFloatLiteralContext ctx) { }
+	@Override public void enterAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpFloatLiteral(MindcodeParser.ExpFloatLiteralContext ctx) { }
+	@Override public void exitAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpPostfix(MindcodeParser.ExpPostfixContext ctx) { }
+	@Override public void enterAstCaseExpression(MindcodeParser.AstCaseExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpPostfix(MindcodeParser.ExpPostfixContext ctx) { }
+	@Override public void exitAstCaseExpression(MindcodeParser.AstCaseExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstFunctionCallEnd(MindcodeParser.AstFunctionCallEndContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstFunctionCallEnd(MindcodeParser.AstFunctionCallEndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -521,277 +557,229 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx) { }
+	@Override public void enterAstLiteralDecimal(MindcodeParser.AstLiteralDecimalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx) { }
+	@Override public void exitAstLiteralDecimal(MindcodeParser.AstLiteralDecimalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx) { }
+	@Override public void enterAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx) { }
+	@Override public void exitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpCallMethod(MindcodeParser.ExpCallMethodContext ctx) { }
+	@Override public void enterAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpCallMethod(MindcodeParser.ExpCallMethodContext ctx) { }
+	@Override public void exitAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) { }
+	@Override public void enterAstLiteralHexadecimal(MindcodeParser.AstLiteralHexadecimalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) { }
+	@Override public void exitAstLiteralHexadecimal(MindcodeParser.AstLiteralHexadecimalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx) { }
+	@Override public void enterAstLiteralString(MindcodeParser.AstLiteralStringContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx) { }
+	@Override public void exitAstLiteralString(MindcodeParser.AstLiteralStringContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpAddition(MindcodeParser.ExpAdditionContext ctx) { }
+	@Override public void enterAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpAddition(MindcodeParser.ExpAdditionContext ctx) { }
+	@Override public void exitAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpPropertyAccess(MindcodeParser.ExpPropertyAccessContext ctx) { }
+	@Override public void enterAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpPropertyAccess(MindcodeParser.ExpPropertyAccessContext ctx) { }
+	@Override public void exitAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpCompoundAssignment(MindcodeParser.ExpCompoundAssignmentContext ctx) { }
+	@Override public void enterAstParentheses(MindcodeParser.AstParenthesesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpCompoundAssignment(MindcodeParser.ExpCompoundAssignmentContext ctx) { }
+	@Override public void exitAstParentheses(MindcodeParser.AstParenthesesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpLogicalAnd(MindcodeParser.ExpLogicalAndContext ctx) { }
+	@Override public void enterAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpLogicalAnd(MindcodeParser.ExpLogicalAndContext ctx) { }
+	@Override public void exitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpParentheses(MindcodeParser.ExpParenthesesContext ctx) { }
+	@Override public void enterAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpParentheses(MindcodeParser.ExpParenthesesContext ctx) { }
+	@Override public void exitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) { }
+	@Override public void enterAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) { }
+	@Override public void exitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBitShift(MindcodeParser.ExpBitShiftContext ctx) { }
+	@Override public void enterAstAssignment(MindcodeParser.AstAssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBitShift(MindcodeParser.ExpBitShiftContext ctx) { }
+	@Override public void exitAstAssignment(MindcodeParser.AstAssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpCallEnd(MindcodeParser.ExpCallEndContext ctx) { }
+	@Override public void enterFormattableText(MindcodeParser.FormattableTextContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpCallEnd(MindcodeParser.ExpCallEndContext ctx) { }
+	@Override public void exitFormattableText(MindcodeParser.FormattableTextContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx) { }
+	@Override public void enterFormattableEscaped(MindcodeParser.FormattableEscapedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx) { }
+	@Override public void exitFormattableEscaped(MindcodeParser.FormattableEscapedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { }
+	@Override public void enterFormattableInterpolation(MindcodeParser.FormattableInterpolationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { }
+	@Override public void exitFormattableInterpolation(MindcodeParser.FormattableInterpolationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) { }
+	@Override public void enterPlaceholder(MindcodeParser.PlaceholderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) { }
+	@Override public void exitPlaceholder(MindcodeParser.PlaceholderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFmtText(MindcodeParser.FmtTextContext ctx) { }
+	@Override public void enterFormattablePlaceholderEmpty(MindcodeParser.FormattablePlaceholderEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFmtText(MindcodeParser.FmtTextContext ctx) { }
+	@Override public void exitFormattablePlaceholderEmpty(MindcodeParser.FormattablePlaceholderEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFmtEscaped(MindcodeParser.FmtEscapedContext ctx) { }
+	@Override public void enterFormattablePlaceholderVariable(MindcodeParser.FormattablePlaceholderVariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFmtEscaped(MindcodeParser.FmtEscapedContext ctx) { }
+	@Override public void exitFormattablePlaceholderVariable(MindcodeParser.FormattablePlaceholderVariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx) { }
+	@Override public void enterAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStmtDirectiveSet(MindcodeParser.StmtDirectiveSetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStmtDirectiveSet(MindcodeParser.StmtDirectiveSetContext ctx) { }
+	@Override public void exitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -809,13 +797,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDirectiveValue(MindcodeParser.DirectiveValueContext ctx) { }
+	@Override public void enterAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDirectiveValue(MindcodeParser.DirectiveValueContext ctx) { }
+	@Override public void exitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -833,37 +821,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStmtHeapAllocation(MindcodeParser.StmtHeapAllocationContext ctx) { }
+	@Override public void enterAstAllocation(MindcodeParser.AstAllocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStmtHeapAllocation(MindcodeParser.StmtHeapAllocationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStmtStackAllocation(MindcodeParser.StmtStackAllocationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStmtStackAllocation(MindcodeParser.StmtStackAllocationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterParameter(MindcodeParser.ParameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitParameter(MindcodeParser.ParameterContext ctx) { }
+	@Override public void exitAstAllocation(MindcodeParser.AstAllocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -881,25 +845,37 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgument(MindcodeParser.ArgumentContext ctx) { }
+	@Override public void enterAstFunctionParameter(MindcodeParser.AstFunctionParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgument(MindcodeParser.ArgumentContext ctx) { }
+	@Override public void exitAstFunctionParameter(MindcodeParser.AstFunctionParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOptionalArgument(MindcodeParser.OptionalArgumentContext ctx) { }
+	@Override public void enterAstFunctionArgument(MindcodeParser.AstFunctionArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOptionalArgument(MindcodeParser.OptionalArgumentContext ctx) { }
+	@Override public void exitAstFunctionArgument(MindcodeParser.AstFunctionArgumentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstOptionalFunctionArgument(MindcodeParser.AstOptionalFunctionArgumentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstOptionalFunctionArgument(MindcodeParser.AstOptionalFunctionArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -929,13 +905,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) { }
+	@Override public void enterAstCaseAlternative(MindcodeParser.AstCaseAlternativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) { }
+	@Override public void exitAstCaseAlternative(MindcodeParser.AstCaseAlternativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -953,37 +929,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhenValueExpression(MindcodeParser.WhenValueExpressionContext ctx) { }
+	@Override public void enterWhenValue(MindcodeParser.WhenValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhenValueExpression(MindcodeParser.WhenValueExpressionContext ctx) { }
+	@Override public void exitWhenValue(MindcodeParser.WhenValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhenValueRangeExpression(MindcodeParser.WhenValueRangeExpressionContext ctx) { }
+	@Override public void enterAstRange(MindcodeParser.AstRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhenValueRangeExpression(MindcodeParser.WhenValueRangeExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRangeExpression(MindcodeParser.RangeExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRangeExpression(MindcodeParser.RangeExpressionContext ctx) { }
+	@Override public void exitAstRange(MindcodeParser.AstRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1013,25 +977,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIteratorList(MindcodeParser.IteratorListContext ctx) { }
+	@Override public void enterLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIteratorList(MindcodeParser.IteratorListContext ctx) { }
+	@Override public void exitLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIterator(MindcodeParser.IteratorContext ctx) { }
+	@Override public void enterAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIterator(MindcodeParser.IteratorContext ctx) { }
+	@Override public void exitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -2,7 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.Assembler;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -28,19 +28,19 @@ public class ExternalVariable implements NodeValue {
     }
 
     @Override
-    public LogicValue getValue(CodeBuilder codeBuilder) {
-        codeBuilder.createRead(transferVariable, memory, index);
+    public LogicValue getValue(Assembler assembler) {
+        assembler.createRead(transferVariable, memory, index);
         return transferVariable;
     }
 
     @Override
-    public void setValue(CodeBuilder codeBuilder, LogicValue value) {
-        codeBuilder.createWrite(value, memory, index);
+    public void setValue(Assembler assembler, LogicValue value) {
+        assembler.createWrite(value, memory, index);
     }
 
     @Override
-    public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        codeBuilder.createWrite(transferVariable, memory, index);
+        assembler.createWrite(transferVariable, memory, index);
     }
 }

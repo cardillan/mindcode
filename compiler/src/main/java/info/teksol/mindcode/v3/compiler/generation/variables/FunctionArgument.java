@@ -2,7 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.Assembler;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -35,17 +35,17 @@ public class FunctionArgument implements NodeValue {
     }
 
     @Override
-    public LogicValue getValue(CodeBuilder codeBuilder) {
-        return value.getValue(codeBuilder);
+    public LogicValue getValue(Assembler assembler) {
+        return value.getValue(assembler);
     }
 
     @Override
-    public void setValue(CodeBuilder codeBuilder, LogicValue value) {
-        this.value.setValue(codeBuilder, value);
+    public void setValue(Assembler assembler, LogicValue value) {
+        this.value.setValue(assembler, value);
     }
 
     @Override
-    public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
-        value.writeValue(codeBuilder, valueSetter);
+    public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+        value.writeValue(assembler, valueSetter);
     }
 }

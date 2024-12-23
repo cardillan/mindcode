@@ -8,7 +8,7 @@ import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstForEachLoopStatement;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstLoopIterator;
-import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.Assembler;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -87,30 +87,30 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             // Finalizing code
             // TODO This should probably be marked as AstSubcontextType.FLOW_CONTROL
-            codeBuilder.createLabel(loopLabels.doneLabel());
-            codeBuilder.clearSubcontextType();
+            assembler.createLabel(loopLabels.doneLabel());
+            assembler.clearSubcontextType();
             exitLoop(node);
         }
 
         private void createIteration() {
             // Code which sets up variables for the next iteration
             // Multiplier is set to 1: all instructions execute exactly once
-            codeBuilder.setSubcontextType(AstSubcontextType.ITR_LEADING, 1.0);
+            assembler.setSubcontextType(AstSubcontextType.ITR_LEADING, 1.0);
 
             // Setting the iterator address first. It is possible to use `continue` in a value expression
             // (why, oh why?), in which case the next iteration is performed.
             LogicLabel nextValueLabel = nextLabel();
-            codeBuilder.createSetAddress(nextAddress, nextValueLabel);
+            assembler.createSetAddress(nextAddress, nextValueLabel);
 
             // Copy values from the list to iterators
             for (Iterator iterator : iterators) {
                 NodeValue value = values.get(leadingIndex++);
-                iterator.setValue(value.getValue(codeBuilder));
+                iterator.setValue(value.getValue(assembler));
             }
 
             if (leadingIndex < values.size()) {
                 // This isn't a last iteration: jump to the loop body
-                codeBuilder.createJumpUnconditional(bodyLabel);
+                assembler.createJumpUnconditional(bodyLabel);
             } else {
                 // The last iteration: continue to the loop body directly
                 createBody();
@@ -118,13 +118,13 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             // The trailing part of the iteration setup. For the last iteration the code is generated after
             // the loop body, so that the program flow naturally exits the loop after the last iteration.
-            codeBuilder.setSubcontextType(AstSubcontextType.ITR_TRAILING, 1.0);
-            codeBuilder.createGotoLabel(nextValueLabel, marker);
+            assembler.setSubcontextType(AstSubcontextType.ITR_TRAILING, 1.0);
+            assembler.createGotoLabel(nextValueLabel, marker);
 
             // Copy iterator values back to the array - only for `out` iterators
             for (Iterator iterator : iterators) {
                 if (iterator.out) {
-                    values.get(trailingIndex).setValue(codeBuilder, iterator.getValue());
+                    values.get(trailingIndex).setValue(assembler, iterator.getValue());
                 }
                 trailingIndex++;
             }
@@ -132,18 +132,18 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         private void createBody() {
             // This is the last iteration. We'll output the loop body directly here.
-            codeBuilder.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
-            codeBuilder.createLabel(bodyLabel);
+            assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
+            assembler.createLabel(bodyLabel);
 
             visitStatements(node.getBody());
 
             // Label for continue statements
-            codeBuilder.createLabel(loopLabels.continueLabel());
+            assembler.createLabel(loopLabels.continueLabel());
 
             // Jumps to the iteration trailing block
             // On the last iteration, this jumps right to the next statement, but it can't be avoided
-            codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-            codeBuilder.createGoto(nextAddress, marker);
+            assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
+            assembler.createGoto(nextAddress, marker);
         }
     }
 
@@ -177,18 +177,18 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
-        public LogicValue getValue(CodeBuilder codeBuilder) {
-            return value().getValue(codeBuilder);
+        public LogicValue getValue(Assembler assembler) {
+            return value().getValue(assembler);
         }
 
         @Override
-        public void setValue(CodeBuilder codeBuilder, LogicValue value) {
-            verifyLValue().setValue(codeBuilder, value);
+        public void setValue(Assembler assembler, LogicValue value) {
+            verifyLValue().setValue(assembler, value);
         }
 
         @Override
-        public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
-            verifyLValue().writeValue(codeBuilder, valueSetter);
+        public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+            verifyLValue().writeValue(assembler, valueSetter);
         }
     }
 
@@ -203,11 +203,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         void setValue(LogicValue value) {
-            var.setValue(codeBuilder, value);
+            var.setValue(assembler, value);
         }
 
         LogicValue getValue() {
-            return var.getValue(codeBuilder);
+            return var.getValue(assembler);
         }
     }
 
@@ -219,17 +219,17 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
-        public LogicValue getValue(CodeBuilder codeBuilder) {
+        public LogicValue getValue(Assembler assembler) {
             return LogicVariable.INVALID;
         }
 
         @Override
-        public void setValue(CodeBuilder codeBuilder, LogicValue value) {
+        public void setValue(Assembler assembler, LogicValue value) {
             // Do nothing
         }
 
         @Override
-        public void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter) {
+        public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
             // Do nothing
         }
     }

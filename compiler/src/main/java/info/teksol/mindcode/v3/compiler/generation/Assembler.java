@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
-public class CodeBuilder extends AbstractMessageEmitter implements ContextfulInstructionCreator {
+public class Assembler extends AbstractMessageEmitter implements ContextfulInstructionCreator {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final List<LogicInstruction> instructions = new ArrayList<>();
@@ -25,7 +25,7 @@ public class CodeBuilder extends AbstractMessageEmitter implements ContextfulIns
     // In LIG, the implicit stack was used to manage the state
     private LoopStack loopStack;
 
-    public CodeBuilder(CodeGeneratorContext context) {
+    public Assembler(CodeGeneratorContext context) {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();

@@ -7,16 +7,14 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstLiteralFloat;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/**
- * return holds an intermediate result of compile-time expression evaluation.
- * The intermediate result might not have an mlog representation, and as such cannot be stored
- * in AstLiteralFloat.
- * <p>
- * Instances of this class are restricted to this package. They're converted to proper
- * AstLiteralFloat nodes before being passed outside the expression evaluator.
- * <p>
- * This class accesses the ExpressionEvaluatorContext.
- */
+/// IntermediateValue holds an intermediate result of compile-time expression evaluation.
+/// The intermediate result might not have an mlog representation, and as such cannot be stored
+/// in `AstLiteralFloat`.
+///
+/// Instances of this class are restricted to this package. They're converted to proper
+/// `AstLiteralFloat` nodes before being passed outside expression evaluator.
+///
+/// This class accesses the `ExpressionEvaluatorContext`.
 @NullMarked
 class IntermediateValue extends AstLiteralFloat {
     private final double value;

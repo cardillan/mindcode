@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 /// Convenience interface for instruction creation. To be implemented by classes which manage their AST contexts,
-/// which is therefor not provided for individual instruction creation.
+/// which is therefore not provided for individual instruction creation.
 ///
 /// The implementing class only needs to implement the non-specific instruction creation method. All the specific
 /// methods are inherited from the interface.

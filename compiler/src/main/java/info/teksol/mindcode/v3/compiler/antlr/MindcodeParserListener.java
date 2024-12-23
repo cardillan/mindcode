@@ -8,25 +8,25 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface MindcodeParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#module}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astModule}.
 	 * @param ctx the parse tree
 	 */
-	void enterModule(MindcodeParser.ModuleContext ctx);
+	void enterAstModule(MindcodeParser.AstModuleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#module}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astModule}.
 	 * @param ctx the parse tree
 	 */
-	void exitModule(MindcodeParser.ModuleContext ctx);
+	void exitAstModule(MindcodeParser.AstModuleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#statementList}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astStatementList}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatementList(MindcodeParser.StatementListContext ctx);
+	void enterAstStatementList(MindcodeParser.AstStatementListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#statementList}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astStatementList}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatementList(MindcodeParser.StatementListContext ctx);
+	void exitAstStatementList(MindcodeParser.AstStatementListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#expressionList}.
 	 * @param ctx the parse tree
@@ -38,461 +38,497 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpressionList(MindcodeParser.ExpressionListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expExpression}
+	 * Enter a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpExpression(MindcodeParser.ExpExpressionContext ctx);
+	void enterAstExpression(MindcodeParser.AstExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expExpression}
+	 * Exit a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpExpression(MindcodeParser.ExpExpressionContext ctx);
+	void exitAstExpression(MindcodeParser.AstExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expDirective}
+	 * Enter a parse tree produced by the {@code astDirective}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpDirective(MindcodeParser.ExpDirectiveContext ctx);
+	void enterAstDirective(MindcodeParser.AstDirectiveContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expDirective}
+	 * Exit a parse tree produced by the {@code astDirective}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpDirective(MindcodeParser.ExpDirectiveContext ctx);
+	void exitAstDirective(MindcodeParser.AstDirectiveContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expRequireLibrary}
+	 * Enter a parse tree produced by the {@code astEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx);
+	void enterAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expRequireLibrary}
+	 * Exit a parse tree produced by the {@code astEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx);
+	void exitAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expRequireFile}
+	 * Enter a parse tree produced by the {@code astAllocations}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpRequireFile(MindcodeParser.ExpRequireFileContext ctx);
+	void enterAstAllocations(MindcodeParser.AstAllocationsContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expRequireFile}
+	 * Exit a parse tree produced by the {@code astAllocations}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx);
+	void exitAstAllocations(MindcodeParser.AstAllocationsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expAllocations}
+	 * Enter a parse tree produced by the {@code astConstant}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpAllocations(MindcodeParser.ExpAllocationsContext ctx);
+	void enterAstConstant(MindcodeParser.AstConstantContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expAllocations}
+	 * Exit a parse tree produced by the {@code astConstant}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpAllocations(MindcodeParser.ExpAllocationsContext ctx);
+	void exitAstConstant(MindcodeParser.AstConstantContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expDeclareFunction}
+	 * Enter a parse tree produced by the {@code astParameter}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx);
+	void enterAstParameter(MindcodeParser.AstParameterContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expDeclareFunction}
+	 * Exit a parse tree produced by the {@code astParameter}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx);
+	void exitAstParameter(MindcodeParser.AstParameterContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expParameter}
+	 * Enter a parse tree produced by the {@code astRequireFile}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpParameter(MindcodeParser.ExpParameterContext ctx);
+	void enterAstRequireFile(MindcodeParser.AstRequireFileContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expParameter}
+	 * Exit a parse tree produced by the {@code astRequireFile}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpParameter(MindcodeParser.ExpParameterContext ctx);
+	void exitAstRequireFile(MindcodeParser.AstRequireFileContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expConstant}
+	 * Enter a parse tree produced by the {@code astRequireLibrary}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpConstant(MindcodeParser.ExpConstantContext ctx);
+	void enterAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expConstant}
+	 * Exit a parse tree produced by the {@code astRequireLibrary}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpConstant(MindcodeParser.ExpConstantContext ctx);
+	void exitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expCodeBlock}
+	 * Enter a parse tree produced by the {@code astFunctionDeclaration}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx);
+	void enterAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expCodeBlock}
+	 * Exit a parse tree produced by the {@code astFunctionDeclaration}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx);
+	void exitAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expForEachLoop}
+	 * Enter a parse tree produced by the {@code astForEachLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpForEachLoop(MindcodeParser.ExpForEachLoopContext ctx);
+	void enterAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expForEachLoop}
+	 * Exit a parse tree produced by the {@code astForEachLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpForEachLoop(MindcodeParser.ExpForEachLoopContext ctx);
+	void exitAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expForIteratedLoop}
+	 * Enter a parse tree produced by the {@code astIteratedForLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpForIteratedLoop(MindcodeParser.ExpForIteratedLoopContext ctx);
+	void enterAstIteratedForLoopStatement(MindcodeParser.AstIteratedForLoopStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expForIteratedLoop}
+	 * Exit a parse tree produced by the {@code astIteratedForLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpForIteratedLoop(MindcodeParser.ExpForIteratedLoopContext ctx);
+	void exitAstIteratedForLoopStatement(MindcodeParser.AstIteratedForLoopStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expForRangeLoop}
+	 * Enter a parse tree produced by the {@code astRangedForLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx);
+	void enterAstRangedForLoopStatement(MindcodeParser.AstRangedForLoopStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expForRangeLoop}
+	 * Exit a parse tree produced by the {@code astRangedForLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx);
+	void exitAstRangedForLoopStatement(MindcodeParser.AstRangedForLoopStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expWhileLoop}
+	 * Enter a parse tree produced by the {@code astWhileLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpWhileLoop(MindcodeParser.ExpWhileLoopContext ctx);
+	void enterAstWhileLoopStatement(MindcodeParser.AstWhileLoopStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expWhileLoop}
+	 * Exit a parse tree produced by the {@code astWhileLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpWhileLoop(MindcodeParser.ExpWhileLoopContext ctx);
+	void exitAstWhileLoopStatement(MindcodeParser.AstWhileLoopStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expDoWhileLoop}
+	 * Enter a parse tree produced by the {@code astDoWhileLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx);
+	void enterAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expDoWhileLoop}
+	 * Exit a parse tree produced by the {@code astDoWhileLoopStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx);
+	void exitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBreak}
+	 * Enter a parse tree produced by the {@code astBreakStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBreak(MindcodeParser.ExpBreakContext ctx);
+	void enterAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBreak}
+	 * Exit a parse tree produced by the {@code astBreakStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBreak(MindcodeParser.ExpBreakContext ctx);
+	void exitAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expContinue}
+	 * Enter a parse tree produced by the {@code astContinueStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpContinue(MindcodeParser.ExpContinueContext ctx);
+	void enterAstContinueStatement(MindcodeParser.AstContinueStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expContinue}
+	 * Exit a parse tree produced by the {@code astContinueStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpContinue(MindcodeParser.ExpContinueContext ctx);
+	void exitAstContinueStatement(MindcodeParser.AstContinueStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expReturn}
+	 * Enter a parse tree produced by the {@code astReturnStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpReturn(MindcodeParser.ExpReturnContext ctx);
+	void enterAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expReturn}
+	 * Exit a parse tree produced by the {@code astReturnStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpReturn(MindcodeParser.ExpReturnContext ctx);
+	void exitAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expIdentifier}
+	 * Enter a parse tree produced by the {@code astCodeBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astCodeBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astIdentifier}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpIdentifier(MindcodeParser.ExpIdentifierContext ctx);
+	void enterAstIdentifier(MindcodeParser.AstIdentifierContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expIdentifier}
+	 * Exit a parse tree produced by the {@code astIdentifier}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx);
+	void exitAstIdentifier(MindcodeParser.AstIdentifierContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expIdentifierExt}
+	 * Enter a parse tree produced by the {@code astIdentifierExt}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpIdentifierExt(MindcodeParser.ExpIdentifierExtContext ctx);
+	void enterAstIdentifierExt(MindcodeParser.AstIdentifierExtContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expIdentifierExt}
+	 * Exit a parse tree produced by the {@code astIdentifierExt}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpIdentifierExt(MindcodeParser.ExpIdentifierExtContext ctx);
+	void exitAstIdentifierExt(MindcodeParser.AstIdentifierExtContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBuiltInIdentifier}
+	 * Enter a parse tree produced by the {@code astBuiltInIdentifier}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx);
+	void enterAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBuiltInIdentifier}
+	 * Exit a parse tree produced by the {@code astBuiltInIdentifier}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx);
+	void exitAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expArrayAccess}
+	 * Enter a parse tree produced by the {@code astArrayAccess}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpArrayAccess(MindcodeParser.ExpArrayAccessContext ctx);
+	void enterAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expArrayAccess}
+	 * Exit a parse tree produced by the {@code astArrayAccess}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpArrayAccess(MindcodeParser.ExpArrayAccessContext ctx);
+	void exitAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBooleanLiteralTrue}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx);
+	void enterAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBooleanLiteralTrue}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx);
+	void exitAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expMultiplication}
+	 * Enter a parse tree produced by the {@code astMethodCall}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx);
+	void enterAstMethodCall(MindcodeParser.AstMethodCallContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expMultiplication}
+	 * Exit a parse tree produced by the {@code astMethodCall}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx);
+	void exitAstMethodCall(MindcodeParser.AstMethodCallContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expExponentiation}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryExp}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpExponentiation(MindcodeParser.ExpExponentiationContext ctx);
+	void enterAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expExponentiation}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryExp}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpExponentiation(MindcodeParser.ExpExponentiationContext ctx);
+	void exitAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expCaseExpression}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryEquality}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx);
+	void enterAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expCaseExpression}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryEquality}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx);
+	void exitAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expTernary}
+	 * Enter a parse tree produced by the {@code astOperatorTernary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpTernary(MindcodeParser.ExpTernaryContext ctx);
+	void enterAstOperatorTernary(MindcodeParser.AstOperatorTernaryContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expTernary}
+	 * Exit a parse tree produced by the {@code astOperatorTernary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpTernary(MindcodeParser.ExpTernaryContext ctx);
+	void exitAstOperatorTernary(MindcodeParser.AstOperatorTernaryContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expPrefix}
+	 * Enter a parse tree produced by the {@code astOperatorIncDecPostfix}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpPrefix(MindcodeParser.ExpPrefixContext ctx);
+	void enterAstOperatorIncDecPostfix(MindcodeParser.AstOperatorIncDecPostfixContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expPrefix}
+	 * Exit a parse tree produced by the {@code astOperatorIncDecPostfix}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpPrefix(MindcodeParser.ExpPrefixContext ctx);
+	void exitAstOperatorIncDecPostfix(MindcodeParser.AstOperatorIncDecPostfixContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expUnary}
+	 * Enter a parse tree produced by the {@code astIfExpression}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpUnary(MindcodeParser.ExpUnaryContext ctx);
+	void enterAstIfExpression(MindcodeParser.AstIfExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expUnary}
+	 * Exit a parse tree produced by the {@code astIfExpression}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpUnary(MindcodeParser.ExpUnaryContext ctx);
+	void exitAstIfExpression(MindcodeParser.AstIfExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expDecimalLiteral}
+	 * Enter a parse tree produced by the {@code astLiteralBoolean}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx);
+	void enterAstLiteralBoolean(MindcodeParser.AstLiteralBooleanContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expDecimalLiteral}
+	 * Exit a parse tree produced by the {@code astLiteralBoolean}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx);
+	void exitAstLiteralBoolean(MindcodeParser.AstLiteralBooleanContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expNullLiteral}
+	 * Enter a parse tree produced by the {@code astLiteralNull}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx);
+	void enterAstLiteralNull(MindcodeParser.AstLiteralNullContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expNullLiteral}
+	 * Exit a parse tree produced by the {@code astLiteralNull}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx);
+	void exitAstLiteralNull(MindcodeParser.AstLiteralNullContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expFormattableLiteral}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryInequality}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx);
+	void enterAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expFormattableLiteral}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryInequality}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx);
+	void exitAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expEnhancedComment}
+	 * Enter a parse tree produced by the {@code astOperatorUnary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx);
+	void enterAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expEnhancedComment}
+	 * Exit a parse tree produced by the {@code astOperatorUnary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx);
+	void exitAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expInequalityRelation}
+	 * Enter a parse tree produced by the {@code astLiteralBinary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpInequalityRelation(MindcodeParser.ExpInequalityRelationContext ctx);
+	void enterAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expInequalityRelation}
+	 * Exit a parse tree produced by the {@code astLiteralBinary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpInequalityRelation(MindcodeParser.ExpInequalityRelationContext ctx);
+	void exitAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expEqualityRelation}
+	 * Enter a parse tree produced by the {@code astFormattableLiteral}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpEqualityRelation(MindcodeParser.ExpEqualityRelationContext ctx);
+	void enterAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expEqualityRelation}
+	 * Exit a parse tree produced by the {@code astFormattableLiteral}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpEqualityRelation(MindcodeParser.ExpEqualityRelationContext ctx);
+	void exitAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expCallFunction}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryBitwiseAnd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpCallFunction(MindcodeParser.ExpCallFunctionContext ctx);
+	void enterAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expCallFunction}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryBitwiseAnd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpCallFunction(MindcodeParser.ExpCallFunctionContext ctx);
+	void exitAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBitwiseOr}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryBitwiseOr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBitwiseOr(MindcodeParser.ExpBitwiseOrContext ctx);
+	void enterAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBitwiseOr}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryBitwiseOr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBitwiseOr(MindcodeParser.ExpBitwiseOrContext ctx);
+	void exitAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expFloatLiteral}
+	 * Enter a parse tree produced by the {@code astCaseExpression}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpFloatLiteral(MindcodeParser.ExpFloatLiteralContext ctx);
+	void enterAstCaseExpression(MindcodeParser.AstCaseExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expFloatLiteral}
+	 * Exit a parse tree produced by the {@code astCaseExpression}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpFloatLiteral(MindcodeParser.ExpFloatLiteralContext ctx);
+	void exitAstCaseExpression(MindcodeParser.AstCaseExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expPostfix}
+	 * Enter a parse tree produced by the {@code astPropertyAccess}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpPostfix(MindcodeParser.ExpPostfixContext ctx);
+	void enterAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expPostfix}
+	 * Exit a parse tree produced by the {@code astPropertyAccess}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpPostfix(MindcodeParser.ExpPostfixContext ctx);
+	void exitAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astLiteralFloat}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astLiteralFloat}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astFunctionCallEnd}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstFunctionCallEnd(MindcodeParser.AstFunctionCallEndContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astFunctionCallEnd}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstFunctionCallEnd(MindcodeParser.AstFunctionCallEndContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code expLvalue}
 	 * labeled alternative in {@link MindcodeParser#expression}.
@@ -506,281 +542,233 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpLvalue(MindcodeParser.ExpLvalueContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expLogicalOr}
+	 * Enter a parse tree produced by the {@code astLiteralDecimal}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx);
+	void enterAstLiteralDecimal(MindcodeParser.AstLiteralDecimalContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expLogicalOr}
+	 * Exit a parse tree produced by the {@code astLiteralDecimal}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx);
+	void exitAstLiteralDecimal(MindcodeParser.AstLiteralDecimalContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBitwiseAnd}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryMul}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx);
+	void enterAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBitwiseAnd}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryMul}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx);
+	void exitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expCallMethod}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryShift}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpCallMethod(MindcodeParser.ExpCallMethodContext ctx);
+	void enterAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expCallMethod}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryShift}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpCallMethod(MindcodeParser.ExpCallMethodContext ctx);
+	void exitAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expHexadecimalLiteral}
+	 * Enter a parse tree produced by the {@code astLiteralHexadecimal}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx);
+	void enterAstLiteralHexadecimal(MindcodeParser.AstLiteralHexadecimalContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expHexadecimalLiteral}
+	 * Exit a parse tree produced by the {@code astLiteralHexadecimal}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx);
+	void exitAstLiteralHexadecimal(MindcodeParser.AstLiteralHexadecimalContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBooleanLiteralFalse}
+	 * Enter a parse tree produced by the {@code astLiteralString}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx);
+	void enterAstLiteralString(MindcodeParser.AstLiteralStringContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBooleanLiteralFalse}
+	 * Exit a parse tree produced by the {@code astLiteralString}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx);
+	void exitAstLiteralString(MindcodeParser.AstLiteralStringContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expAddition}
+	 * Enter a parse tree produced by the {@code astFunctionCall}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpAddition(MindcodeParser.ExpAdditionContext ctx);
+	void enterAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expAddition}
+	 * Exit a parse tree produced by the {@code astFunctionCall}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpAddition(MindcodeParser.ExpAdditionContext ctx);
+	void exitAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expPropertyAccess}
+	 * Enter a parse tree produced by the {@code astMemberAccess}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpPropertyAccess(MindcodeParser.ExpPropertyAccessContext ctx);
+	void enterAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expPropertyAccess}
+	 * Exit a parse tree produced by the {@code astMemberAccess}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpPropertyAccess(MindcodeParser.ExpPropertyAccessContext ctx);
+	void exitAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expCompoundAssignment}
+	 * Enter a parse tree produced by the {@code astParentheses}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpCompoundAssignment(MindcodeParser.ExpCompoundAssignmentContext ctx);
+	void enterAstParentheses(MindcodeParser.AstParenthesesContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expCompoundAssignment}
+	 * Exit a parse tree produced by the {@code astParentheses}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpCompoundAssignment(MindcodeParser.ExpCompoundAssignmentContext ctx);
+	void exitAstParentheses(MindcodeParser.AstParenthesesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expLogicalAnd}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryLogicalOr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpLogicalAnd(MindcodeParser.ExpLogicalAndContext ctx);
+	void enterAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expLogicalAnd}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryLogicalOr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpLogicalAnd(MindcodeParser.ExpLogicalAndContext ctx);
+	void exitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expParentheses}
+	 * Enter a parse tree produced by the {@code astOperatorIncDecPrefix}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpParentheses(MindcodeParser.ExpParenthesesContext ctx);
+	void enterAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expParentheses}
+	 * Exit a parse tree produced by the {@code astOperatorIncDecPrefix}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpParentheses(MindcodeParser.ExpParenthesesContext ctx);
+	void exitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expStringLiteral}
+	 * Enter a parse tree produced by the {@code astOperatorBinaryLogicalAnd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx);
+	void enterAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expStringLiteral}
+	 * Exit a parse tree produced by the {@code astOperatorBinaryLogicalAnd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx);
+	void exitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expBitShift}
+	 * Enter a parse tree produced by the {@code astAssignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpBitShift(MindcodeParser.ExpBitShiftContext ctx);
+	void enterAstAssignment(MindcodeParser.AstAssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code expBitShift}
+	 * Exit a parse tree produced by the {@code astAssignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpBitShift(MindcodeParser.ExpBitShiftContext ctx);
+	void exitAstAssignment(MindcodeParser.AstAssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expCallEnd}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpCallEnd(MindcodeParser.ExpCallEndContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expCallEnd}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpCallEnd(MindcodeParser.ExpCallEndContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code expIfExpression}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expIfExpression}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code expBinaryLiteral}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expBinaryLiteral}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code expMemberAccess}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expMemberAccess}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code fmtText}
+	 * Enter a parse tree produced by the {@code formattableText}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void enterFmtText(MindcodeParser.FmtTextContext ctx);
+	void enterFormattableText(MindcodeParser.FormattableTextContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fmtText}
+	 * Exit a parse tree produced by the {@code formattableText}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void exitFmtText(MindcodeParser.FmtTextContext ctx);
+	void exitFormattableText(MindcodeParser.FormattableTextContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code fmtEscaped}
+	 * Enter a parse tree produced by the {@code formattableEscaped}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void enterFmtEscaped(MindcodeParser.FmtEscapedContext ctx);
+	void enterFormattableEscaped(MindcodeParser.FormattableEscapedContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fmtEscaped}
+	 * Exit a parse tree produced by the {@code formattableEscaped}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void exitFmtEscaped(MindcodeParser.FmtEscapedContext ctx);
+	void exitFormattableEscaped(MindcodeParser.FormattableEscapedContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code fmtInterpolation}
+	 * Enter a parse tree produced by the {@code formattableInterpolation}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void enterFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx);
+	void enterFormattableInterpolation(MindcodeParser.FormattableInterpolationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fmtInterpolation}
+	 * Exit a parse tree produced by the {@code formattableInterpolation}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void exitFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx);
+	void exitFormattableInterpolation(MindcodeParser.FormattableInterpolationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code fmtPlaceholder}
+	 * Enter a parse tree produced by the {@code placeholder}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void enterFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx);
+	void enterPlaceholder(MindcodeParser.PlaceholderContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fmtPlaceholder}
+	 * Exit a parse tree produced by the {@code placeholder}
 	 * labeled alternative in {@link MindcodeParser#formattableContents}.
 	 * @param ctx the parse tree
 	 */
-	void exitFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx);
+	void exitPlaceholder(MindcodeParser.PlaceholderContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code fmtPlaceholderEmpty}
+	 * Enter a parse tree produced by the {@code formattablePlaceholderEmpty}
 	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 */
-	void enterFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx);
+	void enterFormattablePlaceholderEmpty(MindcodeParser.FormattablePlaceholderEmptyContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fmtPlaceholderEmpty}
+	 * Exit a parse tree produced by the {@code formattablePlaceholderEmpty}
 	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 */
-	void exitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx);
+	void exitFormattablePlaceholderEmpty(MindcodeParser.FormattablePlaceholderEmptyContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code fmtPlaceholderVariable}
+	 * Enter a parse tree produced by the {@code formattablePlaceholderVariable}
 	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 */
-	void enterFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
+	void enterFormattablePlaceholderVariable(MindcodeParser.FormattablePlaceholderVariableContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code fmtPlaceholderVariable}
+	 * Exit a parse tree produced by the {@code formattablePlaceholderVariable}
 	 * labeled alternative in {@link MindcodeParser#formattablePlaceholder}.
 	 * @param ctx the parse tree
 	 */
-	void exitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx);
+	void exitFormattablePlaceholderVariable(MindcodeParser.FormattablePlaceholderVariableContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stmtDirectiveSet}
+	 * Enter a parse tree produced by the {@code astDirectiveSet}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree
 	 */
-	void enterStmtDirectiveSet(MindcodeParser.StmtDirectiveSetContext ctx);
+	void enterAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code stmtDirectiveSet}
+	 * Exit a parse tree produced by the {@code astDirectiveSet}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree
 	 */
-	void exitStmtDirectiveSet(MindcodeParser.StmtDirectiveSetContext ctx);
+	void exitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#directiveValues}.
 	 * @param ctx the parse tree
@@ -792,15 +780,15 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitDirectiveValues(MindcodeParser.DirectiveValuesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#directiveValue}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astDirectiveValue}.
 	 * @param ctx the parse tree
 	 */
-	void enterDirectiveValue(MindcodeParser.DirectiveValueContext ctx);
+	void enterAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#directiveValue}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astDirectiveValue}.
 	 * @param ctx the parse tree
 	 */
-	void exitDirectiveValue(MindcodeParser.DirectiveValueContext ctx);
+	void exitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#allocations}.
 	 * @param ctx the parse tree
@@ -812,39 +800,15 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAllocations(MindcodeParser.AllocationsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stmtHeapAllocation}
-	 * labeled alternative in {@link MindcodeParser#allocation}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astAllocation}.
 	 * @param ctx the parse tree
 	 */
-	void enterStmtHeapAllocation(MindcodeParser.StmtHeapAllocationContext ctx);
+	void enterAstAllocation(MindcodeParser.AstAllocationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code stmtHeapAllocation}
-	 * labeled alternative in {@link MindcodeParser#allocation}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astAllocation}.
 	 * @param ctx the parse tree
 	 */
-	void exitStmtHeapAllocation(MindcodeParser.StmtHeapAllocationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code stmtStackAllocation}
-	 * labeled alternative in {@link MindcodeParser#allocation}.
-	 * @param ctx the parse tree
-	 */
-	void enterStmtStackAllocation(MindcodeParser.StmtStackAllocationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code stmtStackAllocation}
-	 * labeled alternative in {@link MindcodeParser#allocation}.
-	 * @param ctx the parse tree
-	 */
-	void exitStmtStackAllocation(MindcodeParser.StmtStackAllocationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#parameter}.
-	 * @param ctx the parse tree
-	 */
-	void enterParameter(MindcodeParser.ParameterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#parameter}.
-	 * @param ctx the parse tree
-	 */
-	void exitParameter(MindcodeParser.ParameterContext ctx);
+	void exitAstAllocation(MindcodeParser.AstAllocationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#parameterList}.
 	 * @param ctx the parse tree
@@ -856,25 +820,35 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitParameterList(MindcodeParser.ParameterListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#argument}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astFunctionParameter}.
 	 * @param ctx the parse tree
 	 */
-	void enterArgument(MindcodeParser.ArgumentContext ctx);
+	void enterAstFunctionParameter(MindcodeParser.AstFunctionParameterContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#argument}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astFunctionParameter}.
 	 * @param ctx the parse tree
 	 */
-	void exitArgument(MindcodeParser.ArgumentContext ctx);
+	void exitAstFunctionParameter(MindcodeParser.AstFunctionParameterContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#optionalArgument}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astFunctionArgument}.
 	 * @param ctx the parse tree
 	 */
-	void enterOptionalArgument(MindcodeParser.OptionalArgumentContext ctx);
+	void enterAstFunctionArgument(MindcodeParser.AstFunctionArgumentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#optionalArgument}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astFunctionArgument}.
 	 * @param ctx the parse tree
 	 */
-	void exitOptionalArgument(MindcodeParser.OptionalArgumentContext ctx);
+	void exitAstFunctionArgument(MindcodeParser.AstFunctionArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#astOptionalFunctionArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstOptionalFunctionArgument(MindcodeParser.AstOptionalFunctionArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#astOptionalFunctionArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstOptionalFunctionArgument(MindcodeParser.AstOptionalFunctionArgumentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#argumentList}.
 	 * @param ctx the parse tree
@@ -896,15 +870,15 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitCaseAlternatives(MindcodeParser.CaseAlternativesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#caseAlternative}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astCaseAlternative}.
 	 * @param ctx the parse tree
 	 */
-	void enterCaseAlternative(MindcodeParser.CaseAlternativeContext ctx);
+	void enterAstCaseAlternative(MindcodeParser.AstCaseAlternativeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#caseAlternative}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astCaseAlternative}.
 	 * @param ctx the parse tree
 	 */
-	void exitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx);
+	void exitAstCaseAlternative(MindcodeParser.AstCaseAlternativeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#whenValueList}.
 	 * @param ctx the parse tree
@@ -916,39 +890,25 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitWhenValueList(MindcodeParser.WhenValueListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code whenValueExpression}
-	 * labeled alternative in {@link MindcodeParser#whenValue}.
+	 * Enter a parse tree produced by {@link MindcodeParser#whenValue}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhenValueExpression(MindcodeParser.WhenValueExpressionContext ctx);
+	void enterWhenValue(MindcodeParser.WhenValueContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code whenValueExpression}
-	 * labeled alternative in {@link MindcodeParser#whenValue}.
+	 * Exit a parse tree produced by {@link MindcodeParser#whenValue}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhenValueExpression(MindcodeParser.WhenValueExpressionContext ctx);
+	void exitWhenValue(MindcodeParser.WhenValueContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code whenValueRangeExpression}
-	 * labeled alternative in {@link MindcodeParser#whenValue}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astRange}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhenValueRangeExpression(MindcodeParser.WhenValueRangeExpressionContext ctx);
+	void enterAstRange(MindcodeParser.AstRangeContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code whenValueRangeExpression}
-	 * labeled alternative in {@link MindcodeParser#whenValue}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astRange}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhenValueRangeExpression(MindcodeParser.WhenValueRangeExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#rangeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRangeExpression(MindcodeParser.RangeExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#rangeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRangeExpression(MindcodeParser.RangeExpressionContext ctx);
+	void exitAstRange(MindcodeParser.AstRangeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#elsifBranches}.
 	 * @param ctx the parse tree
@@ -970,23 +930,23 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitElsifBranch(MindcodeParser.ElsifBranchContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#iteratorList}.
+	 * Enter a parse tree produced by {@link MindcodeParser#loopIteratorList}.
 	 * @param ctx the parse tree
 	 */
-	void enterIteratorList(MindcodeParser.IteratorListContext ctx);
+	void enterLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#iteratorList}.
+	 * Exit a parse tree produced by {@link MindcodeParser#loopIteratorList}.
 	 * @param ctx the parse tree
 	 */
-	void exitIteratorList(MindcodeParser.IteratorListContext ctx);
+	void exitLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#iterator}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astLoopIterator}.
 	 * @param ctx the parse tree
 	 */
-	void enterIterator(MindcodeParser.IteratorContext ctx);
+	void enterAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#iterator}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astLoopIterator}.
 	 * @param ctx the parse tree
 	 */
-	void exitIterator(MindcodeParser.IteratorContext ctx);
+	void exitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx);
 }

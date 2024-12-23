@@ -27,17 +27,17 @@ public class OperatorsBuilder extends AbstractBuilder implements AstOperatorBina
         switch (node.getOperation()) {
             case BOOLEAN_OR -> {
                 final LogicVariable tmp2 = standaloneTemp();
-                codeBuilder.createOp(Operation.BOOLEAN_OR, tmp2, left.getValue(codeBuilder), right.getValue(codeBuilder));
+                assembler.createOp(Operation.BOOLEAN_OR, tmp2, left.getValue(assembler), right.getValue(assembler));
                 // Ensure the result is 0 or 1
-                codeBuilder.createOp(Operation.NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
+                assembler.createOp(Operation.NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
             case STRICT_NOT_EQUAL -> {
                 final LogicVariable tmp2 = standaloneTemp();
-                codeBuilder.createOp(Operation.STRICT_EQUAL, tmp2, left.getValue(codeBuilder), right.getValue(codeBuilder));
-                codeBuilder.createOp(Operation.EQUAL, tmp, tmp2, LogicBoolean.FALSE);
+                assembler.createOp(Operation.STRICT_EQUAL, tmp2, left.getValue(assembler), right.getValue(assembler));
+                assembler.createOp(Operation.EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
             default -> {
-                codeBuilder.createOp(node.getOperation(), tmp, left.getValue(codeBuilder), right.getValue(codeBuilder));
+                assembler.createOp(node.getOperation(), tmp, left.getValue(assembler), right.getValue(assembler));
             }
         }
         return tmp;
@@ -53,12 +53,12 @@ public class OperatorsBuilder extends AbstractBuilder implements AstOperatorBina
         }
 
         final LogicVariable tmp = nextNodeResultTemp();
-        LogicValue operandValue = operand.getValue(codeBuilder);
+        LogicValue operandValue = operand.getValue(assembler);
         switch (operation) {
-            case SUB -> codeBuilder.createOp(Operation.SUB, tmp, LogicNumber.ZERO, operandValue);
-            case BITWISE_NOT -> codeBuilder.createOp(Operation.BITWISE_NOT, tmp, operandValue);
+            case SUB -> assembler.createOp(Operation.SUB, tmp, LogicNumber.ZERO, operandValue);
+            case BITWISE_NOT -> assembler.createOp(Operation.BITWISE_NOT, tmp, operandValue);
             case BOOLEAN_NOT, LOGICAL_NOT ->
-                    codeBuilder.createOp(Operation.EQUAL, tmp, operandValue, LogicBoolean.FALSE);
+                    assembler.createOp(Operation.EQUAL, tmp, operandValue, LogicBoolean.FALSE);
             default -> throw new MindcodeInternalError("Unsupported unary operation " + operation);
         }
         return tmp;

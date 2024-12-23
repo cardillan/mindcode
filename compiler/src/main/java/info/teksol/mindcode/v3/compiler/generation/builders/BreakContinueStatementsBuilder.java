@@ -23,14 +23,14 @@ public class BreakContinueStatementsBuilder extends AbstractLoopBuilder implemen
     @Override
     public NodeValue visitBreakStatement(AstBreakStatement node) {
         final LogicLabel target = getBreakLabel(node.inputPosition(), node);
-        codeBuilder.createJumpUnconditional(target);
+        assembler.createJumpUnconditional(target);
         return LogicVoid.VOID;
     }
 
     @Override
     public NodeValue visitContinueStatement(AstContinueStatement node) {
         final LogicLabel target = getContinueLabel(node.inputPosition(), node);
-        codeBuilder.createJumpUnconditional(target);
+        assembler.createJumpUnconditional(target);
         return LogicVoid.VOID;
     }
 }

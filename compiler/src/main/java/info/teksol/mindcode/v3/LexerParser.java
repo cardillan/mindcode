@@ -3,7 +3,7 @@ package info.teksol.mindcode.v3;
 import info.teksol.mindcode.ToolMessage;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeLexer;
 import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser;
-import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
+import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.AstModuleContext;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
@@ -20,14 +20,14 @@ public class LexerParser {
         return new CommonTokenStream(lexer);
     }
 
-    public static ModuleContext parseTree(MessageConsumer messageConsumer, InputFile inputFile,
+    public static AstModuleContext parseTree(MessageConsumer messageConsumer, InputFile inputFile,
             CommonTokenStream tokenStream) {
         MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
         MindcodeParser parser = new MindcodeParser(tokenStream);
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         parser.setErrorHandler(new MindcodeErrorStrategy(tokenStream));
-        ModuleContext parseTree = parser.module();
+        AstModuleContext parseTree = parser.astModule();
         messageConsumer.accept(ToolMessage.info("%s: number of reported ambiguities: %d",
                 inputFile.getDistinctTitle(), errorListener.getAmbiguities()));
         return parseTree;

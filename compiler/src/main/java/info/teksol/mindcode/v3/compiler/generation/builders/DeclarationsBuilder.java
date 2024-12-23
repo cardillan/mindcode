@@ -52,7 +52,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitAllocation(AstAllocation node) {
-        if (codeBuilder.getAstContext().parent().contextType() != AstContextType.ROOT) {
+        if (assembler.getAstContext().parent().contextType() != AstContextType.ROOT) {
             error(node, "Heap/stack allocation must be declared at the topmost level.");
             return LogicVoid.VOID;
         }
@@ -65,7 +65,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     final Allocation allocation = resolveAllocation(node);
                     context.setStackAllocation(node);
                     if (callGraph.containsRecursiveFunction()) {
-                        codeBuilder.createSet(LogicVariable.STACK_POINTER, LogicNumber.get(allocation.start));
+                        assembler.createSet(LogicVariable.STACK_POINTER, LogicNumber.get(allocation.start));
                     }
                 }
             }
@@ -126,7 +126,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
 
         NodeValue parameter = variables.createParameter(node, parameterValue);
-        parameter.setValue(codeBuilder, parameterValue);
+        parameter.setValue(assembler, parameterValue);
         return LogicVoid.VOID;
     }
 

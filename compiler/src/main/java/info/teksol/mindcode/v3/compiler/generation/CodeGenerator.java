@@ -24,7 +24,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private final CodeGeneratorContext context;
     private final CallGraph callGraph;
     private final CompileTimeEvaluator evaluator;
-    private final CodeBuilder codeBuilder;
+    private final Assembler assembler;
     private final Variables variables;
 
     private final FunctionMapper functionMapper;
@@ -37,11 +37,11 @@ public class CodeGenerator extends AbstractMessageEmitter {
         this.context = context;
         callGraph = context.callGraph();
         evaluator = context.compileTimeEvaluator();
-        codeBuilder = context.codeBuilder();
+        assembler = context.assembler();
         variables = context.variables();
 
         functionMapper = FunctionMapperFactory.getFunctionMapper(context.instructionProcessor(),
-                codeBuilder::getAstContext, messageConsumer);
+                assembler::getAstContext, messageConsumer);
 
         nodeVisitor = new ComposedAstNodeVisitor<>(node -> { throw new MindcodeInternalError("Unhandled node " + node); });
 
@@ -65,7 +65,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         // TODO In relaxed syntax, top context is the main body
         //      In strict syntax, top context is the root context
         variables.enterFunction(callGraph.getMain(), "", List.of());
-        context.setTopAstContext(codeBuilder.getAstContext());
+        context.setTopAstContext(assembler.getAstContext());
 
         visit(program);
 
@@ -78,17 +78,17 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
 
         // Process function declarations
-        codeBuilder.setSubcontextType(AstSubcontextType.END, 1.0);
-        codeBuilder.createEnd();
-        codeBuilder.clearSubcontextType();
+        assembler.setSubcontextType(AstSubcontextType.END, 1.0);
+        assembler.createEnd();
+        assembler.clearSubcontextType();
     }
 
     private NodeValue visit(AstMindcodeNode node) {
-        codeBuilder.enterAstNode(node);
+        assembler.enterAstNode(node);
         variables.enterAstNode();
         NodeValue result = nodeVisitor.visit(evaluator.evaluate(node));
         variables.exitAstNode();
-        codeBuilder.exitAstNode(node);
+        assembler.exitAstNode(node);
         return result;
     }
 

@@ -2,7 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.Assembler;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -53,13 +53,15 @@ public interface NodeValue {
     /// These values should emit errors when they're being read. They need special handling based on their
     /// type.
     ///
+    /// @param assembler assembler instance used to produce code for obtaining the value, if needed
     /// @return value maintained by this instance
-    LogicValue getValue(CodeBuilder codeBuilder);
+    LogicValue getValue(Assembler assembler);
 
     /// Sets the l-value to the given value, creating the necessary instructions for it.
     ///
+    /// @param assembler assembler instance used to produce code for setting the value, if needed
     /// @param value value to set
-    void setValue(CodeBuilder codeBuilder, LogicValue value);
+    void setValue(Assembler assembler, LogicValue value);
 
     /// Writes the value into the l-value represented by this instance.
     ///
@@ -67,8 +69,9 @@ public interface NodeValue {
     /// to the value to be written. The method may then generate additional instructions to
     /// facilitate the write operation.
     ///
+    /// @param assembler assembler instance used to produce code for setting the value, if needed
     /// @param valueSetter consumer responsible for setting the passed-in variable to the value to be written
-    void writeValue(CodeBuilder codeBuilder, Consumer<LogicVariable> valueSetter);
+    void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter);
 
     // TODO Review
     default boolean hasModifier() {

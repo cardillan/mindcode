@@ -7,7 +7,7 @@ import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.v3.CompilationPhase;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;
-import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
+import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.AstModuleContext;
 import info.teksol.util.ExpectedMessages;
 
 import java.util.function.Function;
@@ -54,7 +54,7 @@ public abstract class AbstractParserTest {
         return resultExtractor.apply(compiler);
     }
 
-    protected ModuleContext parse(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
+    protected AstModuleContext parse(ExpectedMessages expectedMessages, InputFiles inputFiles, boolean validate) {
         return process(expectedMessages, inputFiles, validate,
                 c -> c.getParseTree(inputFiles.getMainInputFile()));
     }

@@ -8,7 +8,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRange;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
-import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.Assembler;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -38,7 +38,7 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
     protected final CodeGeneratorContext context;
     protected final InstructionProcessor processor;
     protected final CallGraph callGraph;
-    protected final CodeBuilder codeBuilder;
+    protected final Assembler assembler;
     protected final Variables variables;
 
     protected AbstractBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
@@ -48,7 +48,7 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
 
         processor = context.instructionProcessor();
         callGraph = context.callGraph();
-        codeBuilder = context.codeBuilder();
+        assembler = context.assembler();
         variables = context.variables();
     }
 
@@ -134,7 +134,7 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
         } else {
             LogicVariable tmp = processor.nextTemp().withType(argumentType);
             variables.registerNodeVariable(tmp);
-            codeBuilder.createSet(tmp, nodeValue.getValue(codeBuilder));
+            assembler.createSet(tmp, nodeValue.getValue(assembler));
             return tmp;
         }
     }

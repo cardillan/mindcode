@@ -36,21 +36,21 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         LoopLabels loopLabels = enterLoop(node);
 
         // Loop body
-        codeBuilder.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
-        codeBuilder.createLabel(beginLabel);
+        assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
+        assembler.createLabel(beginLabel);
         visitStatements(node.getBody());
 
         // Condition
         // TODO Continue label should probably go into condition context?
-        codeBuilder.createLabel(loopLabels.continueLabel());
-        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
+        assembler.createLabel(loopLabels.continueLabel());
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         final NodeValue condition = visit(node.getCondition());
-        codeBuilder.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(codeBuilder), FALSE);
+        assembler.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(assembler), FALSE);
 
         // Exit
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-        codeBuilder.createLabel(loopLabels.doneLabel());
-        codeBuilder.clearSubcontextType();
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
+        assembler.createLabel(loopLabels.doneLabel());
+        assembler.clearSubcontextType();
         exitLoop(node);
     }
 
@@ -59,24 +59,24 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         LoopLabels loopLabels = enterLoop(node);
 
         // Condition
-        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         // TODO Place continue label instead of beginLabel, drop beginLabel
-        codeBuilder.createLabel(beginLabel);
+        assembler.createLabel(beginLabel);
         final NodeValue condition = visit(node.getCondition());
-        codeBuilder.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(codeBuilder), FALSE);
+        assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
 
         // Loop body
-        codeBuilder.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
+        assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         visitStatements(node.getBody());
 
         // Flow control
-        codeBuilder.createLabel(loopLabels.continueLabel());
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-        codeBuilder.createJumpUnconditional(beginLabel);
+        assembler.createLabel(loopLabels.continueLabel());
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
+        assembler.createJumpUnconditional(beginLabel);
 
         // Exit
-        codeBuilder.createLabel(loopLabels.doneLabel());
-        codeBuilder.clearSubcontextType();
+        assembler.createLabel(loopLabels.doneLabel());
+        assembler.clearSubcontextType();
         exitLoop(node);
     }
 }

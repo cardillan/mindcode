@@ -6,12 +6,12 @@ options {
     tokenVocab = 'MindcodeLexer';
 }
 
-module
-    : statementList? EOF ;
+astModule
+    : astStatementList? EOF ;
 
 // List of statements separated by semicolons
 // Multiple consecutive semicolons are allowed, no expression need to be present.
-statementList
+astStatementList
     : (statement? SEMICOLON)+
     ;
 
@@ -29,31 +29,31 @@ expressionList
 // Note: not sure it is a good idea to separate statements and expressions in the grammar. Sometimes we could
 // produce a better error message in the AST builder/code generator than we get from the grammar.
 statement
-    : expression                                                                        # expExpression
-    | directive                                                                         # expDirective
-    | REQUIRE library = IDENTIFIER                                                      # expRequireLibrary
-    | REQUIRE file = STRING                                                             # expRequireFile
-    | ALLOCATE allocations                                                              # expAllocations
+    : expression                                                                        # astExpression
+    | directive                                                                         # astDirective
+    | ENHANCEDCOMMENT formattableContents*                                              # astEnhancedComment
+    | ALLOCATE allocations                                                              # astAllocations
+    | CONST name = IDENTIFIER ASSIGN value = expression                                 # astConstant
+    | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
+    | REQUIRE file = STRING                                                             # astRequireFile
+    | REQUIRE library = IDENTIFIER                                                      # astRequireLibrary
     | inline = (INLINE | NOINLINE)? type = (VOID | DEF) name = IDENTIFIER
-        params = parameterList body = statementList? END                                # expDeclareFunction
-    | PARAM name = IDENTIFIER ASSIGN value = expression                                 # expParameter
-    | CONST name = IDENTIFIER ASSIGN value = expression                                 # expConstant
-    | BEGIN exp = statementList? END                                                    # expCodeBlock
-    | (label = IDENTIFIER COLON)? FOR iterators = iteratorList IN
-        values = expressionList DO body = statementList? END                            # expForEachLoop
+        params = parameterList body = astStatementList? END                             # astFunctionDeclaration
+    | (label = IDENTIFIER COLON)? FOR iterators = loopIteratorList IN
+        values = expressionList DO body = astStatementList? END                         # astForEachLoopStatement
     | (label = IDENTIFIER COLON)? FOR init = expressionList?
         SEMICOLON condition = expression? SEMICOLON update = expressionList?
-        DO body = statementList? END                                                    # expForIteratedLoop
-    | (label = IDENTIFIER COLON)? FOR control = lvalue IN range = rangeExpression
-        DO body = statementList? END                                                    # expForRangeLoop
+        DO body = astStatementList? END                                                 # astIteratedForLoopStatement
+    | (label = IDENTIFIER COLON)? FOR control = lvalue IN range = astRange
+        DO body = astStatementList? END                                                 # astRangedForLoopStatement
     | (label = IDENTIFIER COLON)?
-        WHILE condition = expression DO body = statementList? END                       # expWhileLoop
+        WHILE condition = expression DO body = astStatementList? END                    # astWhileLoopStatement
     | (label = IDENTIFIER COLON)?
-        DO body = statementList? loop = LOOP? WHILE condition = expression              # expDoWhileLoop
-    | BREAK label = IDENTIFIER?                                                         # expBreak
-    | CONTINUE label = IDENTIFIER?                                                      # expContinue
-    | RETURN                                                                            # expReturn
-    | RETURN value = expression                                                         # expReturn
+        DO body = astStatementList? loop = LOOP? WHILE condition = expression           # astDoWhileLoopStatement
+    | BREAK label = IDENTIFIER?                                                         # astBreakStatement
+    | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
+    | RETURN value = expression?                                                        # astReturnStatement
+    | BEGIN exp = astStatementList? END                                                 # astCodeBlock
     ;
 
 // lvalue can be a target of an assignment - prefix/postfix increment/decrement and compound assignment.
@@ -61,10 +61,10 @@ statement
 // For simple assignment, a generic expression can be a target, to support constructs like
 // getlink(index).enabled = true
 lvalue
-    : id = IDENTIFIER                                                                   # expIdentifier
-    | id = EXTIDENTIFIER                                                                # expIdentifierExt
-    | builtin = BUILTINIDENTIFIER                                                       # expBuiltInIdentifier
-    | array = IDENTIFIER LBRACKET index = expression RBRACKET                           # expArrayAccess
+    : id = IDENTIFIER                                                                   # astIdentifier
+    | id = EXTIDENTIFIER                                                                # astIdentifierExt
+    | builtin = BUILTINIDENTIFIER                                                       # astBuiltInIdentifier
+    | array = IDENTIFIER LBRACKET index = expression RBRACKET                           # astArrayAccess
     ;
 
 // The expresion rule is large. Unfortunately it can't be broken down to smaller rules for two reasons:
@@ -74,135 +74,132 @@ lvalue
 // 2. When a child rule doesn't start with an expression, but contains one, factoring it out to a standalone
 //    rule introduces ambiguities into the grammar. We wan't to prevent them if at all possible.
 expression
-    : END LPAREN RPAREN                                                                 # expCallEnd
-    | function = IDENTIFIER args = argumentList                                         # expCallFunction
-    | object = expression DOT function = IDENTIFIER args = argumentList                 # expCallMethod
-    | object = expression DOT member = IDENTIFIER                                       # expMemberAccess
-    | object = expression DOT property = BUILTINIDENTIFIER                              # expPropertyAccess
+    : lvalue                                                                            # expLvalue
+    | END LPAREN RPAREN                                                                 # astFunctionCallEnd
+    | function = IDENTIFIER args = argumentList                                         # astFunctionCall
+    | object = expression DOT function = IDENTIFIER args = argumentList                 # astMethodCall
+    | object = expression DOT member = IDENTIFIER                                       # astMemberAccess
+    | object = expression DOT property = BUILTINIDENTIFIER                              # astPropertyAccess
     | CASE exp = expression
-        alternatives = caseAlternatives? (ELSE elseBranch = statementList)? END         # expCaseExpression
-    | IF condition = expression THEN trueBranch = statementList?
+        alternatives = caseAlternatives? (ELSE elseBranch = astStatementList)? END      # astCaseExpression
+    | IF condition = expression THEN trueBranch = astStatementList?
         elsif = elsifBranches?
-        (ELSE falseBranch = statementList?)? END                                        # expIfExpression
-    | lvalue                                                                            # expLvalue
-    | ENHANCEDCOMMENT formattableContents*                                              # expEnhancedComment
-    | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # expFormattableLiteral
-    | STRING                                                                            # expStringLiteral
-    | BINARY                                                                            # expBinaryLiteral
-    | HEXADECIMAL                                                                       # expHexadecimalLiteral
-    | DECIMAL                                                                           # expDecimalLiteral
-    | FLOAT                                                                             # expFloatLiteral
-    | NULL                                                                              # expNullLiteral
-    | TRUE                                                                              # expBooleanLiteralTrue
-    | FALSE                                                                             # expBooleanLiteralFalse
-    | exp = lvalue postfix = (INCREMENT | DECREMENT)                                    # expPostfix
-    | prefix = (INCREMENT | DECREMENT) exp = lvalue                                     # expPrefix
-    | op = (BITWISE_NOT | BOOLEAN_NOT | LOGICAL_NOT | PLUS | MINUS) exp = expression    # expUnary
-    | left = expression op = POW right = expression                                     # expExponentiation
-    | left = expression op = (MUL | DIV | IDIV | MOD) right = expression                # expMultiplication
-    | left = expression op = (PLUS | MINUS) right = expression                          # expAddition
-    | left = expression op = (SHIFT_LEFT | SHIFT_RIGHT) right = expression              # expBitShift
-    | left = expression op = BITWISE_AND right=expression                               # expBitwiseAnd
-    | left = expression op = (BITWISE_OR | BITWISE_XOR) right = expression              # expBitwiseOr
+        (ELSE falseBranch = astStatementList?)? END                                     # astIfExpression
+    | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # astFormattableLiteral
+    | STRING                                                                            # astLiteralString
+    | BINARY                                                                            # astLiteralBinary
+    | HEXADECIMAL                                                                       # astLiteralHexadecimal
+    | DECIMAL                                                                           # astLiteralDecimal
+    | FLOAT                                                                             # astLiteralFloat
+    | NULL                                                                              # astLiteralNull
+    | value = (TRUE | FALSE)                                                            # astLiteralBoolean
+    | exp = lvalue postfix = (INCREMENT | DECREMENT)                                    # astOperatorIncDecPostfix
+    | prefix = (INCREMENT | DECREMENT) exp = lvalue                                     # astOperatorIncDecPrefix
+    | op = (BITWISE_NOT | BOOLEAN_NOT | LOGICAL_NOT | PLUS | MINUS) exp = expression    # astOperatorUnary
+    | left = expression op = POW right = expression                                     # astOperatorBinaryExp
+    | left = expression op = (MUL | DIV | IDIV | MOD) right = expression                # astOperatorBinaryMul
+    | left = expression op = (PLUS | MINUS) right = expression                          # astOperatorBinaryAdd
+    | left = expression op = (SHIFT_LEFT | SHIFT_RIGHT) right = expression              # astOperatorBinaryShift
+    | left = expression op = BITWISE_AND right=expression                               # astOperatorBinaryBitwiseAnd
+    | left = expression op = (BITWISE_OR | BITWISE_XOR) right = expression              # astOperatorBinaryBitwiseOr
     | left = expression
         op = (LESS_THAN | LESS_THAN_EQUAL | GREATER_THAN_EQUAL | GREATER_THAN)
-        right = expression                                                              # expInequalityRelation
+        right = expression                                                              # astOperatorBinaryInequality
     | left = expression
         op = (NOT_EQUAL | EQUAL | STRICT_NOT_EQUAL | STRICT_EQUAL)
-        right = expression                                                              # expEqualityRelation
-    | left = expression op = (BOOLEAN_AND | LOGICAL_AND) right = expression             # expLogicalAnd
-    | left = expression op = (BOOLEAN_OR | LOGICAL_OR) right = expression               # expLogicalOr
+        right = expression                                                              # astOperatorBinaryEquality
+    | left = expression op = (BOOLEAN_AND | LOGICAL_AND) right = expression             # astOperatorBinaryLogicalAnd
+    | left = expression op = (BOOLEAN_OR | LOGICAL_OR) right = expression               # astOperatorBinaryLogicalOr
     | <assoc = right> condition = expression
          QUESTION trueBranch = expression
-         COLON falseBranch = expression                                                 # expTernary
+         COLON falseBranch = expression                                                 # astOperatorTernary
     | <assoc = right> target = expression
         operation = (ASSIGN | ASSIGN_POW |
                      ASSIGN_MUL | ASSIGN_DIV | ASSIGN_IDIV | ASSIGN_MOD |
                      ASSIGN_PLUS | ASSIGN_MINUS | ASSIGN_SHIFT_LEFT | ASSIGN_SHIFT_RIGHT |
                      ASSIGN_BITWISE_AND | ASSIGN_BITWISE_OR | ASSIGN_BITWISE_XOR |
                      ASSIGN_BOOLEAN_AND | ASSIGN_BOOLEAN_OR)
-        value = expression                                                              # expCompoundAssignment
-    | LPAREN exp = expression RPAREN                                                    # expParentheses
+        value = expression                                                              # astAssignment
+    | LPAREN exp = expression RPAREN                                                    # astParentheses
     ;
 
 // Formattables
 
 formattableContents
-    : TEXT                                                                              # fmtText
-    | ESCAPESEQUENCE                                                                    # fmtEscaped
-    | INTERPOLATION expression RBRACE                                                   # fmtInterpolation
-    | formattablePlaceholder                                                            # fmtPlaceholder
+    : TEXT                                                                              # formattableText
+    | ESCAPESEQUENCE                                                                    # formattableEscaped
+    | INTERPOLATION expression RBRACE                                                   # formattableInterpolation
+    | formattablePlaceholder                                                            # placeholder
     ;
 
 formattablePlaceholder
-    : EMPTYPLACEHOLDER                                                                  # fmtPlaceholderEmpty
-    | VARIABLEPLACEHOLDER (id = VARIABLE)?                                              # fmtPlaceholderVariable
+    : EMPTYPLACEHOLDER                                                                  # formattablePlaceholderEmpty
+    | VARIABLEPLACEHOLDER (id = VARIABLE)?                                              # formattablePlaceholderVariable
     ;
 
 // Directives
 
 directive
-    : HASHSET option=directiveValue (DIRECTIVEASSIGN value = directiveValues)?          # stmtDirectiveSet
+    : HASHSET option=astDirectiveValue (DIRECTIVEASSIGN value = directiveValues)?       # astDirectiveSet
     ;
 
 directiveValues
-    : (directiveValue DIRECTIVECOMMA)* directiveValue
+    : (astDirectiveValue DIRECTIVECOMMA)* astDirectiveValue
     ;
 
-directiveValue
+astDirectiveValue
     : DIRECTIVEVALUE
     ;
 
 // Allocations
 
 allocations
-    : (allocation COMMA)* allocation
+    : (astAllocation COMMA)* astAllocation
     ;
 
-allocation
-    : HEAP IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?              # stmtHeapAllocation
-    | STACK IN id = IDENTIFIER (LBRACKET range = rangeExpression RBRACKET)?             # stmtStackAllocation
+astAllocation
+    : type = (HEAP | STACK) IN id = IDENTIFIER (LBRACKET range = astRange RBRACKET)?
     ;
 
 // Function declarations
 
-parameter
+parameterList
+    : LPAREN RPAREN
+    | LPAREN (astFunctionParameter COMMA)* astFunctionParameter RPAREN
+    ;
+
+astFunctionParameter
     : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER varargs = DOT3?
     | modifier_out = OUT modifier_in = IN    name = IDENTIFIER varargs = DOT3?
     ;
 
-parameterList
-    : LPAREN RPAREN
-    | LPAREN (parameter COMMA)* parameter RPAREN
-    ;
-
 // Function calls
 
-argument
+astFunctionArgument
     : modifier_in = IN?  modifier_out = OUT? arg = expression
     | modifier_out = OUT modifier_in = IN    arg = expression
     ;
 
 // Optional argument can match an empty string
 // So far it doesn't seem to be a problem, and fixing it doesn't seem easy
-optionalArgument
-    : argument?
+astOptionalFunctionArgument
+    : astFunctionArgument?
     ;
 
 argumentList
     : LPAREN RPAREN
-    | LPAREN argument RPAREN
-    | LPAREN (optionalArgument COMMA)+ optionalArgument RPAREN
+    | LPAREN astFunctionArgument RPAREN
+    | LPAREN (astOptionalFunctionArgument COMMA)+ astOptionalFunctionArgument RPAREN
     ;
 
 // Case expressions
 
 caseAlternatives
-    : caseAlternative+
+    : astCaseAlternative+
     ;
 
-caseAlternative
-    : WHEN values = whenValueList THEN body = statementList?
+astCaseAlternative
+    : WHEN values = whenValueList THEN body = astStatementList?
     ;
 
 whenValueList
@@ -210,11 +207,11 @@ whenValueList
     ;
 
 whenValue
-    : expression                                                                        # whenValueExpression
-    | rangeExpression                                                                   # whenValueRangeExpression
+    : expression
+    | astRange
     ;
 
-rangeExpression
+astRange
     : firstValue = expression operator = DOT2 lastValue = expression
     | firstValue = expression operator = DOT3 lastValue = expression
     ;
@@ -226,15 +223,15 @@ elsifBranches
     ;
 
 elsifBranch
-    : ELSIF condition = expression THEN body = statementList?
+    : ELSIF condition = expression THEN body = astStatementList?
     ;
 
 // Loops
 
-iteratorList
-    : (iterator COMMA)* iterator
+loopIteratorList
+    : (astLoopIterator COMMA)* astLoopIterator
     ;
 
-iterator
+astLoopIterator
     : modifier = OUT? variable = lvalue
     ;

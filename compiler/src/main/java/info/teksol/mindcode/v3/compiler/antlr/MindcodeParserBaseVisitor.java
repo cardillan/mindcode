@@ -18,14 +18,14 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitModule(MindcodeParser.ModuleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstModule(MindcodeParser.AstModuleContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStatementList(MindcodeParser.StatementListContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstStatementList(MindcodeParser.AstStatementListContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -39,266 +39,287 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpExpression(MindcodeParser.ExpExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstExpression(MindcodeParser.AstExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpDirective(MindcodeParser.ExpDirectiveContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstDirective(MindcodeParser.AstDirectiveContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpRequireLibrary(MindcodeParser.ExpRequireLibraryContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpRequireFile(MindcodeParser.ExpRequireFileContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstAllocations(MindcodeParser.AstAllocationsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpAllocations(MindcodeParser.ExpAllocationsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstConstant(MindcodeParser.AstConstantContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpDeclareFunction(MindcodeParser.ExpDeclareFunctionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstParameter(MindcodeParser.AstParameterContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpParameter(MindcodeParser.ExpParameterContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstRequireFile(MindcodeParser.AstRequireFileContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpConstant(MindcodeParser.ExpConstantContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpCodeBlock(MindcodeParser.ExpCodeBlockContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpForEachLoop(MindcodeParser.ExpForEachLoopContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpForIteratedLoop(MindcodeParser.ExpForIteratedLoopContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstIteratedForLoopStatement(MindcodeParser.AstIteratedForLoopStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpForRangeLoop(MindcodeParser.ExpForRangeLoopContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstRangedForLoopStatement(MindcodeParser.AstRangedForLoopStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpWhileLoop(MindcodeParser.ExpWhileLoopContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstWhileLoopStatement(MindcodeParser.AstWhileLoopStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpDoWhileLoop(MindcodeParser.ExpDoWhileLoopContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBreak(MindcodeParser.ExpBreakContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpContinue(MindcodeParser.ExpContinueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstContinueStatement(MindcodeParser.AstContinueStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpReturn(MindcodeParser.ExpReturnContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpIdentifier(MindcodeParser.ExpIdentifierContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpIdentifierExt(MindcodeParser.ExpIdentifierExtContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstIdentifier(MindcodeParser.AstIdentifierContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBuiltInIdentifier(MindcodeParser.ExpBuiltInIdentifierContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstIdentifierExt(MindcodeParser.AstIdentifierExtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpArrayAccess(MindcodeParser.ExpArrayAccessContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBooleanLiteralTrue(MindcodeParser.ExpBooleanLiteralTrueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpMultiplication(MindcodeParser.ExpMultiplicationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpExponentiation(MindcodeParser.ExpExponentiationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstMethodCall(MindcodeParser.AstMethodCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpCaseExpression(MindcodeParser.ExpCaseExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpTernary(MindcodeParser.ExpTernaryContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpPrefix(MindcodeParser.ExpPrefixContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorTernary(MindcodeParser.AstOperatorTernaryContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpUnary(MindcodeParser.ExpUnaryContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorIncDecPostfix(MindcodeParser.AstOperatorIncDecPostfixContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpDecimalLiteral(MindcodeParser.ExpDecimalLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstIfExpression(MindcodeParser.AstIfExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpNullLiteral(MindcodeParser.ExpNullLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLiteralBoolean(MindcodeParser.AstLiteralBooleanContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpFormattableLiteral(MindcodeParser.ExpFormattableLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLiteralNull(MindcodeParser.AstLiteralNullContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpEnhancedComment(MindcodeParser.ExpEnhancedCommentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpInequalityRelation(MindcodeParser.ExpInequalityRelationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpEqualityRelation(MindcodeParser.ExpEqualityRelationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpCallFunction(MindcodeParser.ExpCallFunctionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBitwiseOr(MindcodeParser.ExpBitwiseOrContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpFloatLiteral(MindcodeParser.ExpFloatLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpPostfix(MindcodeParser.ExpPostfixContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstCaseExpression(MindcodeParser.AstCaseExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAstFunctionCallEnd(MindcodeParser.AstFunctionCallEndContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -312,161 +333,133 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpLogicalOr(MindcodeParser.ExpLogicalOrContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLiteralDecimal(MindcodeParser.AstLiteralDecimalContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBitwiseAnd(MindcodeParser.ExpBitwiseAndContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpCallMethod(MindcodeParser.ExpCallMethodContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpHexadecimalLiteral(MindcodeParser.ExpHexadecimalLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLiteralHexadecimal(MindcodeParser.AstLiteralHexadecimalContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBooleanLiteralFalse(MindcodeParser.ExpBooleanLiteralFalseContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLiteralString(MindcodeParser.AstLiteralStringContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpAddition(MindcodeParser.ExpAdditionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpPropertyAccess(MindcodeParser.ExpPropertyAccessContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpCompoundAssignment(MindcodeParser.ExpCompoundAssignmentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstParentheses(MindcodeParser.AstParenthesesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpLogicalAnd(MindcodeParser.ExpLogicalAndContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpParentheses(MindcodeParser.ExpParenthesesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpStringLiteral(MindcodeParser.ExpStringLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBitShift(MindcodeParser.ExpBitShiftContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstAssignment(MindcodeParser.AstAssignmentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpCallEnd(MindcodeParser.ExpCallEndContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFormattableText(MindcodeParser.FormattableTextContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpIfExpression(MindcodeParser.ExpIfExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFormattableEscaped(MindcodeParser.FormattableEscapedContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpBinaryLiteral(MindcodeParser.ExpBinaryLiteralContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFormattableInterpolation(MindcodeParser.FormattableInterpolationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpMemberAccess(MindcodeParser.ExpMemberAccessContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPlaceholder(MindcodeParser.PlaceholderContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFmtText(MindcodeParser.FmtTextContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFormattablePlaceholderEmpty(MindcodeParser.FormattablePlaceholderEmptyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFmtEscaped(MindcodeParser.FmtEscapedContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFormattablePlaceholderVariable(MindcodeParser.FormattablePlaceholderVariableContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFmtInterpolation(MindcodeParser.FmtInterpolationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitFmtPlaceholder(MindcodeParser.FmtPlaceholderContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitFmtPlaceholderEmpty(MindcodeParser.FmtPlaceholderEmptyContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitFmtPlaceholderVariable(MindcodeParser.FmtPlaceholderVariableContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitStmtDirectiveSet(MindcodeParser.StmtDirectiveSetContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -480,7 +473,7 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDirectiveValue(MindcodeParser.DirectiveValueContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -494,21 +487,7 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStmtHeapAllocation(MindcodeParser.StmtHeapAllocationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitStmtStackAllocation(MindcodeParser.StmtStackAllocationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitParameter(MindcodeParser.ParameterContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstAllocation(MindcodeParser.AstAllocationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -522,14 +501,21 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArgument(MindcodeParser.ArgumentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstFunctionParameter(MindcodeParser.AstFunctionParameterContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitOptionalArgument(MindcodeParser.OptionalArgumentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstFunctionArgument(MindcodeParser.AstFunctionArgumentContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAstOptionalFunctionArgument(MindcodeParser.AstOptionalFunctionArgumentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -550,7 +536,7 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCaseAlternative(MindcodeParser.CaseAlternativeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstCaseAlternative(MindcodeParser.AstCaseAlternativeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -564,21 +550,14 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitWhenValueExpression(MindcodeParser.WhenValueExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitWhenValue(MindcodeParser.WhenValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitWhenValueRangeExpression(MindcodeParser.WhenValueRangeExpressionContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitRangeExpression(MindcodeParser.RangeExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstRange(MindcodeParser.AstRangeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -599,12 +578,12 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIteratorList(MindcodeParser.IteratorListContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIterator(MindcodeParser.IteratorContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) { return visitChildren(ctx); }
 }

@@ -11,7 +11,7 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.ModuleContext;
+import info.teksol.mindcode.v3.compiler.antlr.MindcodeParser.AstModuleContext;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilder;
 import info.teksol.mindcode.v3.compiler.ast.AstBuilderContext;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstAllocation;
@@ -23,7 +23,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreator;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreatorContext;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluatorContext;
-import info.teksol.mindcode.v3.compiler.generation.CodeBuilder;
+import info.teksol.mindcode.v3.compiler.generation.Assembler;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
@@ -55,7 +55,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     // Intermediate and final results
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
-    private final Map<InputFile, ModuleContext> parseTrees = new HashMap<>();
+    private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
     private @Nullable AstProgram astProgram;
@@ -64,7 +64,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private @Nullable CallGraph callGraph;
     private @Nullable AstContext rootAstContext;
     private @Nullable AstContext topAstContext;
-    private @Nullable CodeBuilder codeBuilder;
+    private @Nullable Assembler assembler;
     private @Nullable Variables variables;
 
     // Error detection
@@ -95,7 +95,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                     tokenStreams.put(inputFile, tokenStream);
                     if (targetPhase == CompilationPhase.LEXER) continue;
 
-                    ModuleContext parseTree = LexerParser.parseTree(messageConsumer, inputFile, tokenStream);
+                    AstModuleContext parseTree = LexerParser.parseTree(messageConsumer, inputFile, tokenStream);
                     parseTrees.put(inputFile, parseTree);
                     if (targetPhase == CompilationPhase.PARSER) continue;
 
@@ -134,7 +134,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         rootAstContext = AstContext.createRootNode(profile);
         variables = new Variables(this);
-        codeBuilder = new CodeBuilder(this);
+        assembler = new Assembler(this);
 
         new CodeGenerator(this).generateCode(astProgram);
     }
@@ -175,7 +175,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return tokenStreams.get(inputFile);
     }
 
-    public ModuleContext getParseTree(InputFile inputFile) {
+    public AstModuleContext getParseTree(InputFile inputFile) {
         return parseTrees.get(inputFile);
     }
 
@@ -192,7 +192,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     public List<LogicInstruction> getInstructions() {
-        return Objects.requireNonNull(codeBuilder).getInstructions();
+        return Objects.requireNonNull(assembler).getInstructions();
     }
 
     public CallGraph getCallGraph() {
@@ -256,8 +256,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
-    public CodeBuilder codeBuilder() {
-        return Objects.requireNonNull(codeBuilder);
+    public Assembler assembler() {
+        return Objects.requireNonNull(assembler);
     }
 
     @Override

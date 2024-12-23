@@ -25,7 +25,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
 
         double multiplier = 1.0 / node.getAlternatives().size();
         int remain = node.getAlternatives().size();
-        codeBuilder.setSubcontextType(AstSubcontextType.INIT, 1.0);
+        assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
         LogicValue caseValue = temporaryCopy(visit(node.getExpression()), ArgumentType.AST_VARIABLE);
 
         for (AstCaseAlternative alternative : node.getAlternatives()) {
@@ -40,44 +40,44 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
                 for (AstExpression value : alternative.getValues()) {
                     if (value instanceof AstRange range) {
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
-                        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
+                        assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         LogicLabel nextExp = nextLabel();       // Next value in when list
                         NodeValue minValue = visit(range.getFirstValue());
-                        codeBuilder.createJump(nextExp, Condition.LESS_THAN, caseValue, minValue.getValue(codeBuilder));
+                        assembler.createJump(nextExp, Condition.LESS_THAN, caseValue, minValue.getValue(assembler));
                         // The max value is only evaluated when the min value lets us through
-                        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
+                        assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         NodeValue maxValue = visit(range.getLastValue());
-                        codeBuilder.createJump(bodyLabel, insideRangeCondition(range), caseValue, maxValue.getValue(codeBuilder));
-                        codeBuilder.createLabel(nextExp);
+                        assembler.createJump(bodyLabel, insideRangeCondition(range), caseValue, maxValue.getValue(assembler));
+                        assembler.createLabel(nextExp);
                     }
                     else {
-                        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
+                        assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         NodeValue whenValue = visit(value);
-                        codeBuilder.createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue.getValue(codeBuilder));
+                        assembler.createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue.getValue(assembler));
                     }
                 }
             });
 
             // No match in the "when" value list: skip to the next alternative
-            codeBuilder.createJumpUnconditional(nextAlt);
+            assembler.createJumpUnconditional(nextAlt);
 
             // Body of the alternative
-            codeBuilder.setSubcontextType(AstSubcontextType.BODY, multiplier);
-            codeBuilder.createLabel(bodyLabel);
+            assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
+            assembler.createLabel(bodyLabel);
             NodeValue bodyValue = visitExpressions(alternative.getBody());
-            codeBuilder.createSet(resultVar, bodyValue.getValue(codeBuilder));
-            codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
-            codeBuilder.createJumpUnconditional(exitLabel);
-            codeBuilder.createLabel(nextAlt);
-            codeBuilder.clearSubcontextType();
+            assembler.createSet(resultVar, bodyValue.getValue(assembler));
+            assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
+            assembler.createJumpUnconditional(exitLabel);
+            assembler.createLabel(nextAlt);
+            assembler.clearSubcontextType();
         }
 
-        codeBuilder.setSubcontextType(AstSubcontextType.ELSE, multiplier);
+        assembler.setSubcontextType(AstSubcontextType.ELSE, multiplier);
         NodeValue elseValue = visitExpressions(node.getElseBranch());
-        codeBuilder.createSet(resultVar, elseValue.getValue(codeBuilder));
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
-        codeBuilder.createLabel(exitLabel);
-        codeBuilder.clearSubcontextType();
+        assembler.createSet(resultVar, elseValue.getValue(assembler));
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
+        assembler.createLabel(exitLabel);
+        assembler.clearSubcontextType();
 
         return resultVar;
     }

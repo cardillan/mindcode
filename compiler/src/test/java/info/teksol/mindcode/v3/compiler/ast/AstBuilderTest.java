@@ -975,7 +975,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo")
                                     )
@@ -989,7 +989,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"$foo";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstIdentifier(EMPTY, "foo")
                                     )
@@ -1004,7 +1004,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo$";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo"),
                                             new AstFormattablePlaceholder(EMPTY)
@@ -1020,7 +1020,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo${ }bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo"),
                                             new AstFormattablePlaceholder(EMPTY),
@@ -1037,7 +1037,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo ${ expression } bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo "),
                                             new AstIdentifier(EMPTY, "expression"),
@@ -1054,7 +1054,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo\\bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo"),
                                             new AstLiteralString(EMPTY, "\\b"),
@@ -1071,7 +1071,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo \\${ expression } bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo "),
                                             new AstLiteralEscape(EMPTY, "$"),
@@ -1088,7 +1088,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo \\\\${ expression } bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo "),
                                             new AstLiteralEscape(EMPTY, "\\"),
@@ -1110,7 +1110,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             } bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo "),
                                             new AstIdentifier(EMPTY, "expression"),
@@ -1127,7 +1127,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             $"foo${left+right}bar";
                             """,
                     List.of(
-                            new AstFormattable(EMPTY,
+                            new AstFormattableLiteral(EMPTY,
                                     List.of(
                                             new AstLiteralString(EMPTY, "foo"),
                                             new AstOperatorBinary(EMPTY, ADD, left, right),

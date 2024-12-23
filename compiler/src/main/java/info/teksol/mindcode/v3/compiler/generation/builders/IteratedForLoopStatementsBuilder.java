@@ -23,36 +23,36 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
     @Override
     public NodeValue visitIteratedForLoopStatement(AstIteratedForLoopStatement node) {
         // Initialization
-        codeBuilder.setSubcontextType(AstSubcontextType.INIT, 1.0);
+        assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
         visitStatements(node.getInitialize());
 
         final LogicLabel beginLabel = nextLabel();
         LoopLabels loopLabels = enterLoop(node);
 
         // Condition
-        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
-        codeBuilder.createLabel(beginLabel);
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
+        assembler.createLabel(beginLabel);
         if (node.getCondition() != null) {
             final NodeValue condition = visit(node.getCondition());
-            codeBuilder.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(codeBuilder), FALSE);
+            assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
         }
 
         // Loop body
-        codeBuilder.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
+        assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         visitStatements(node.getBody());
 
         // Update
-        codeBuilder.createLabel(loopLabels.continueLabel());
-        codeBuilder.setSubcontextType(AstSubcontextType.UPDATE, LOOP_REPETITIONS);
+        assembler.createLabel(loopLabels.continueLabel());
+        assembler.setSubcontextType(AstSubcontextType.UPDATE, LOOP_REPETITIONS);
         visitStatements(node.getUpdate());
 
         // Flow control
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-        codeBuilder.createJumpUnconditional(beginLabel);
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
+        assembler.createJumpUnconditional(beginLabel);
 
         // Exit
-        codeBuilder.createLabel(loopLabels.doneLabel());
-        codeBuilder.clearSubcontextType();
+        assembler.createLabel(loopLabels.doneLabel());
+        assembler.clearSubcontextType();
         exitLoop(node);
 
         return LogicVoid.VOID;

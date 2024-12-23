@@ -22,7 +22,7 @@ public interface CodeGeneratorContext extends CompileTimeEvaluatorContext {
     @Nullable AstAllocation heapAllocation();
     CallGraph callGraph();
     AstContext rootAstContext();
-    CodeBuilder codeBuilder();
+    Assembler assembler();
     Variables variables();
 
     void setTopAstContext(AstContext topAstContext);

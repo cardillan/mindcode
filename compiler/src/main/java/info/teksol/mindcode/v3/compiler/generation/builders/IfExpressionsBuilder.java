@@ -37,29 +37,29 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitOperatorTernary(AstOperatorTernary node) {
-        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
         final NodeValue condition = variables.excludeVariablesFromTracking(() -> visit(node.getCondition()));
 
         final LogicVariable tmp = nextNodeResultTemp();
         final LogicLabel elseBranch = nextLabel();
         final LogicLabel endBranch = nextLabel();
 
-        codeBuilder.createJump(elseBranch, Condition.EQUAL, condition.getValue(codeBuilder), FALSE);
+        assembler.createJump(elseBranch, Condition.EQUAL, condition.getValue(assembler), FALSE);
 
-        codeBuilder.setSubcontextType(AstSubcontextType.BODY, 0.5);
+        assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
         final NodeValue trueBranch = visit(node.getTrueBranch());
-        codeBuilder.createSet(tmp, trueBranch.getValue(codeBuilder));
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
-        codeBuilder.createJumpUnconditional(endBranch);
-        codeBuilder.createLabel(elseBranch);
+        assembler.createSet(tmp, trueBranch.getValue(assembler));
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
+        assembler.createJumpUnconditional(endBranch);
+        assembler.createLabel(elseBranch);
 
-        codeBuilder.setSubcontextType(AstSubcontextType.BODY, 0.5);
+        assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
         final NodeValue falseBranch = visit(node.getFalseBranch());
-        codeBuilder.createSet(tmp, falseBranch.getValue(codeBuilder));
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
-        codeBuilder.createLabel(endBranch);
+        assembler.createSet(tmp, falseBranch.getValue(assembler));
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
+        assembler.createLabel(endBranch);
 
-        codeBuilder.clearSubcontextType();
+        assembler.clearSubcontextType();
         return tmp;
     }
 

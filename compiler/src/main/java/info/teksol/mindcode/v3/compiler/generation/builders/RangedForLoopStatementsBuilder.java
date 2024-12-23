@@ -31,7 +31,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
                 ? (int) (upperValue.getDoubleValue() - lowerValue.getDoubleValue()) : LOOP_REPETITIONS;
 
         // Initialization
-        codeBuilder.setSubcontextType(AstSubcontextType.INIT, multiplier);
+        assembler.setSubcontextType(AstSubcontextType.INIT, multiplier);
 
         // Encapsulate both: they're evaluated just here and not propagated anywhere
         NodeValue lowerValue = variables.excludeVariablesFromTracking(() -> visit(node.getRange().getFirstValue()));
@@ -43,34 +43,34 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         // Condition for variable exceeding the upper bound of the range
         Condition condition = outsideRangeCondition(node.getRange());
         NodeValue loopControlVariable = resolveLValue(node.getVariable());
-        loopControlVariable.setValue(codeBuilder, lowerValue.getValue(codeBuilder));
+        loopControlVariable.setValue(assembler, lowerValue.getValue(assembler));
 
         final LogicLabel beginLabel = nextLabel();
         LoopLabels loopLabels = enterLoop(node);
 
         // Condition
-        codeBuilder.setSubcontextType(AstSubcontextType.CONDITION, multiplier);
-        codeBuilder.createLabel(beginLabel);
-        codeBuilder.createJump(loopLabels.doneLabel(), condition, loopControlVariable.getValue(codeBuilder), fixedUpperBound);
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, multiplier);
+        assembler.createLabel(beginLabel);
+        assembler.createJump(loopLabels.doneLabel(), condition, loopControlVariable.getValue(assembler), fixedUpperBound);
 
         // Loop body
-        codeBuilder.setSubcontextType(AstSubcontextType.BODY, multiplier);
+        assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
         visitStatements(node.getBody());
 
         // Update
-        codeBuilder.createLabel(loopLabels.continueLabel());
-        codeBuilder.setSubcontextType(AstSubcontextType.UPDATE, multiplier);
-        LogicValue oldValue = loopControlVariable.getValue(codeBuilder);
-        loopControlVariable.writeValue(codeBuilder,
-                tmp -> codeBuilder.createOp(Operation.ADD, tmp, oldValue, LogicNumber.ONE));
+        assembler.createLabel(loopLabels.continueLabel());
+        assembler.setSubcontextType(AstSubcontextType.UPDATE, multiplier);
+        LogicValue oldValue = loopControlVariable.getValue(assembler);
+        loopControlVariable.writeValue(assembler,
+                tmp -> assembler.createOp(Operation.ADD, tmp, oldValue, LogicNumber.ONE));
 
         // Flow control
-        codeBuilder.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
-        codeBuilder.createJumpUnconditional(beginLabel);
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
+        assembler.createJumpUnconditional(beginLabel);
 
         // Exit
-        codeBuilder.createLabel(loopLabels.doneLabel());
-        codeBuilder.clearSubcontextType();
+        assembler.createLabel(loopLabels.doneLabel());
+        assembler.clearSubcontextType();
         exitLoop(node);
 
         return LogicVoid.VOID;

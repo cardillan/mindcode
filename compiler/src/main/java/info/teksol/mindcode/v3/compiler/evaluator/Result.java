@@ -4,10 +4,8 @@ import info.teksol.evaluator.LogicWritable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import org.jspecify.annotations.NullMarked;
 
-/**
- * The Result class represents a container for a single value that accept either a boolean,
- * long, double, or null. This class is used as an intermediary for compile-time evaluation.
- */
+/// This class represents a container for a single value that accept either a boolean,
+/// long, double, or null. This class is used as an intermediary for compile-time evaluation.
 @NullMarked
 class Result implements LogicWritable {
     private enum ValueType {NULL, BOOLEAN, LONG, DOUBLE}

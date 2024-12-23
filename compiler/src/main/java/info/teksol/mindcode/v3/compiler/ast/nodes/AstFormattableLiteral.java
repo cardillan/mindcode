@@ -10,10 +10,10 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstFormattable extends AstExpression {
+public class AstFormattableLiteral extends AstExpression {
     protected final List<AstExpression> parts;
 
-    public AstFormattable(InputPosition inputPosition, List<AstExpression> parts) {
+    public AstFormattableLiteral(InputPosition inputPosition, List<AstExpression> parts) {
         super(inputPosition, children(parts));
         this.parts = List.copyOf(Objects.requireNonNull(parts));
     }
@@ -27,7 +27,7 @@ public class AstFormattable extends AstExpression {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AstFormattable that = (AstFormattable) o;
+        AstFormattableLiteral that = (AstFormattableLiteral) o;
         return Objects.equals(parts, that.parts);
     }
 
