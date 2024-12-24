@@ -16,8 +16,8 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 @NullMarked
 public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstIteratedForLoopStatementVisitor<NodeValue> {
 
-    public IteratedForLoopStatementsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public IteratedForLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
         if (node.getCondition() != null) {
-            final NodeValue condition = visit(node.getCondition());
+            final NodeValue condition = evaluate(node.getCondition());
             assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
         }
 

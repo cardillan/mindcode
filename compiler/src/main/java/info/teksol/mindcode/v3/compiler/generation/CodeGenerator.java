@@ -46,19 +46,19 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor = new ComposedAstNodeVisitor<>(node -> { throw new MindcodeInternalError("Unhandled node " + node); });
 
         // Registration order is unimportant as long as multiple handlers do not handle the same node
-        nodeVisitor.registerVisitor(new AssignmentsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new BreakContinueStatementsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new CaseExpressionsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new DeclarationsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new IdentifiersBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new IfExpressionsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new LiteralsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new OperatorsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new RangedForLoopStatementsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new StatementListsBuilder(context, this::visit));
-        nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(context, this::visit));
+        nodeVisitor.registerVisitor(new AssignmentsBuilder(this, context));
+        nodeVisitor.registerVisitor(new BreakContinueStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new CaseExpressionsBuilder(this, context));
+        nodeVisitor.registerVisitor(new DeclarationsBuilder(this, context));
+        nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new IdentifiersBuilder(this, context));
+        nodeVisitor.registerVisitor(new IfExpressionsBuilder(this, context));
+        nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new LiteralsBuilder(this, context));
+        nodeVisitor.registerVisitor(new OperatorsBuilder(this, context));
+        nodeVisitor.registerVisitor(new RangedForLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new StatementListsBuilder(this, context));
+        nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(this, context));
     }
 
     public void generateCode(AstProgram program) {
@@ -67,7 +67,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         variables.enterFunction(callGraph.getMain(), "", List.of());
         context.setTopAstContext(assembler.getAstContext());
 
-        visit(program);
+        visit(program, false);
 
         variables.exitFunction(callGraph.getMain());
 
@@ -83,7 +83,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.clearSubcontextType();
     }
 
-    private NodeValue visit(AstMindcodeNode node) {
+    public NodeValue visit(AstMindcodeNode node, boolean evaluate) {
         assembler.enterAstNode(node);
         variables.enterAstNode();
         NodeValue result = nodeVisitor.visit(evaluator.evaluate(node));
@@ -94,6 +94,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     @NullMarked
     public interface AstNodeVisitor {
-        NodeValue visit(AstMindcodeNode node);
+        NodeValue visit(AstMindcodeNode node, boolean evaluate);
     }
 }

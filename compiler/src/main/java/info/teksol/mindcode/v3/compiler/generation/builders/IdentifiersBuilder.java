@@ -10,6 +10,7 @@ import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstArrayAccess;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstBuiltInIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.ExternalVariable;
@@ -32,14 +33,14 @@ public class IdentifiersBuilder extends AbstractBuilder implements
             PARAMETER,
             BLOCK);
 
-    public IdentifiersBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public IdentifiersBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
     public NodeValue visitArrayAccess(AstArrayAccess node) {
         LogicVariable memory = resolveMemory(node);
-        NodeValue index = visit(node.getIndex());
+        NodeValue index = evaluate(node.getIndex());
         return new ExternalVariable(memory, index.getValue(assembler), standaloneTemp());
     }
 
@@ -54,7 +55,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     }
 
     private LogicVariable resolveMemory(AstArrayAccess node) {
-        NodeValue memory = visit(node.getArray());
+        NodeValue memory = evaluate(node.getArray());
         if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
             if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
                 error(node.getArray(), "Cannot use value assigned to parameter '%s' to access external memory.", parameter.getName());

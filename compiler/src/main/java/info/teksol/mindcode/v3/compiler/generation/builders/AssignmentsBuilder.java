@@ -10,6 +10,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstAssignment;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstLiteralDecimal;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -23,8 +24,8 @@ import static info.teksol.mindcode.logic.LogicVoid.VOID;
 
 @NullMarked
 public class AssignmentsBuilder extends AbstractBuilder implements AstAssignmentVisitor<NodeValue>, AstOperatorIncDecVisitor<NodeValue> {
-    public AssignmentsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public AssignmentsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             boolean returnPriorValue) {
         // We want to visit target first, so that heap variables are allocated left-to-right.
         NodeValue target = resolveLValue(targetNode);
-        NodeValue eval = visit(valueNode);
+        NodeValue eval = evaluate(valueNode);
         if (!target.isLvalue()) {
             return NULL;
         }

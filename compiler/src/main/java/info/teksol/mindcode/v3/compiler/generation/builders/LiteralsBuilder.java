@@ -6,6 +6,7 @@ import info.teksol.mindcode.logic.LogicNull;
 import info.teksol.mindcode.logic.LogicNumber;
 import info.teksol.mindcode.logic.LogicString;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -25,8 +26,8 @@ public class LiteralsBuilder extends AbstractBuilder implements
         AstLiteralEscapeVisitor<NodeValue>
 {
 
-    public LiteralsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public LiteralsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override

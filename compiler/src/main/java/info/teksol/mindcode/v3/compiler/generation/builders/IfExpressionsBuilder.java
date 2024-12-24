@@ -9,6 +9,7 @@ import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -23,8 +24,8 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
         AstIfExpressionVisitor<NodeValue>,
         AstOperatorTernaryVisitor<NodeValue>
 {
-    public IfExpressionsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public IfExpressionsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
     @Override
     public NodeValue visitOperatorTernary(AstOperatorTernary node) {
         assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-        final NodeValue condition = variables.excludeVariablesFromTracking(() -> visit(node.getCondition()));
+        final NodeValue condition = variables.excludeVariablesFromTracking(() -> evaluate(node.getCondition()));
 
         final LogicVariable tmp = nextNodeResultTemp();
         final LogicLabel elseBranch = nextLabel();
@@ -47,14 +48,14 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
         assembler.createJump(elseBranch, Condition.EQUAL, condition.getValue(assembler), FALSE);
 
         assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        final NodeValue trueBranch = visit(node.getTrueBranch());
+        final NodeValue trueBranch = evaluate(node.getTrueBranch());
         assembler.createSet(tmp, trueBranch.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
         assembler.createJumpUnconditional(endBranch);
         assembler.createLabel(elseBranch);
 
         assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        final NodeValue falseBranch = visit(node.getFalseBranch());
+        final NodeValue falseBranch = evaluate(node.getFalseBranch());
         assembler.createSet(tmp, falseBranch.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
         assembler.createLabel(endBranch);

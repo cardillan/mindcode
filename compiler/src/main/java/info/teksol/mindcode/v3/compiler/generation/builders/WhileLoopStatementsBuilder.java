@@ -16,8 +16,8 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 @NullMarked
 public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements AstWhileLoopStatementVisitor<NodeValue> {
 
-    public WhileLoopStatementsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public WhileLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         // TODO Continue label should probably go into condition context?
         assembler.createLabel(loopLabels.continueLabel());
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
-        final NodeValue condition = visit(node.getCondition());
+        final NodeValue condition = evaluate(node.getCondition());
         assembler.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(assembler), FALSE);
 
         // Exit
@@ -62,7 +62,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         // TODO Place continue label instead of beginLabel, drop beginLabel
         assembler.createLabel(beginLabel);
-        final NodeValue condition = visit(node.getCondition());
+        final NodeValue condition = evaluate(node.getCondition());
         assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
 
         // Loop body

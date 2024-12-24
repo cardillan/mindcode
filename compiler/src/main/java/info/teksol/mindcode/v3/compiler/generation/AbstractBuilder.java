@@ -1,4 +1,4 @@
-package info.teksol.mindcode.v3.compiler.generation.builders;
+package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -8,9 +8,6 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRange;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
-import info.teksol.mindcode.v3.compiler.generation.Assembler;
-import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
-import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
@@ -31,9 +28,8 @@ import java.util.List;
 /// Foremost, there's a `visit(AstMindcodeNode node)` method, which is used to evaluate a child node using
 /// all registered builders (potentially including the current one).
 @NullMarked
-abstract class AbstractBuilder extends AbstractMessageEmitter {
-    /// The node visitor dispatcher
-    private final CodeGenerator.AstNodeVisitor mainNodeVisitor;
+public abstract class AbstractBuilder extends AbstractMessageEmitter {
+    private final CodeGenerator codeGenerator;
 
     protected final CodeGeneratorContext context;
     protected final InstructionProcessor processor;
@@ -41,9 +37,9 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
     protected final Assembler assembler;
     protected final Variables variables;
 
-    protected AbstractBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
+    protected AbstractBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(context.messageConsumer());
-        this.mainNodeVisitor = mainNodeVisitor;
+        this.codeGenerator = codeGenerator;
         this.context = context;
 
         processor = context.instructionProcessor();
@@ -52,36 +48,54 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
         variables = context.variables();
     }
 
-    /// Evaluates the node using the main visitor.
-    protected NodeValue visit(AstMindcodeNode node) {
-        return mainNodeVisitor.visit(node);
+    /// Processes the node by passing it to the proper builder according to node type. The builder creates
+    /// code from the AST node and provides a `NodeValue` instance representing the output value of the node.
+    ///
+    /// @param node node to process
+    /// @param evaluate when `true`, the caller is interested in the result produced by the node
+    /// @return a `NodeValue` instance representing the value of the node. When `evaluate` is `false`, the returned
+    ///         instance might not represent the actual value of the node.
+    protected NodeValue process(AstMindcodeNode node, boolean evaluate) {
+        return codeGenerator.visit(node, evaluate);
     }
 
-    /// Visits a body of statements, disregarding the resulting values.
+    /// Evaluates the node by passing it to the proper builder according to node type. The builder creates
+    /// code from the AST node and provides a `NodeValue` instance representing the output value of the node.
+    ///
+    /// @param node node to process
+    /// @return a `NodeValue` instance representing the value of the node
+
+    protected NodeValue evaluate(AstMindcodeNode node) {
+        return codeGenerator.visit(node, true);
+    }
+
+    /// Processes the node by passing it to the proper builder according to node type, ignoring the resulting value
+    /// of the node. To be called when the resulting value of the node is not needed for further processing
+    /// (e.g. expressions but the last one in a statement list, init or update clause of the for statement, or
+    /// the function body of a `void` function).
+    ///
+    /// @param node node to process
+    protected void compile(AstMindcodeNode node) {
+        codeGenerator.visit(node, false);
+    }
+
+    /// Visits a body of statements, disregarding the resulting values of all nodes.
     protected void visitStatements(List<? extends AstMindcodeNode> body) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
-        body.forEach(this::visit);
+        body.forEach(this::compile);
     }
 
-    ///  Evaluates a body of statements/expressions, returning the NodeValue of the last expression
+    ///  Evaluates a body of statements/expressions, returning the `NodeValue` of the last expression
     /// (which represents the resulting value of the entire body).
     protected NodeValue visitExpressions(List<? extends AstMindcodeNode> expressions) {
-        // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
-        return expressions.stream().map(this::visit).reduce(LogicVoid.VOID, (a, b) -> b);
-    }
-
-    /// Some handlers create a separate stateful class for building code. This is a base class for these
-    /// stateful classes, providing the `visit` method directly for better code compatibility.
-    protected abstract class StructureBuilder<T extends AstMindcodeNode> {
-        protected final T node;
-
-        public StructureBuilder(T node) {
-            this.node = node;
+        if (expressions.isEmpty()) {
+            return LogicVoid.VOID;
         }
 
-        protected NodeValue visit(AstMindcodeNode node) {
-            return mainNodeVisitor.visit(node);
+        for (int i = 0; i < expressions.size() - 1; i++) {
+            compile(expressions.get(i));
         }
+        return evaluate(expressions.getLast());
     }
 
     /// Tries to resolve given expression as an l-value. Reports an appropriate error when the expression
@@ -93,9 +107,12 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
     ///
     /// @return a NodeValue representing the l-value, or `LogicVariable.INVALID`.
     protected NodeValue resolveLValue(AstExpression targetNode) {
-        return resolveLValue(targetNode, visit(targetNode));
+        return resolveLValue(targetNode, evaluate(targetNode));
     }
 
+    /// Tries to resolve an expression, which vas already processed, as an l-value. To be used when the node value
+    /// needs to be read first (and therefore the node needs to be evaluated), and then a value needs to be written
+    /// - for example an in out function argument.
     protected NodeValue resolveLValue(AstExpression targetNode, NodeValue target) {
         if (target.isLvalue()) {
             return target;
@@ -123,7 +140,7 @@ abstract class AbstractBuilder extends AbstractMessageEmitter {
         }
     }
 
-    /// Stores the current value of nodeValue to a temp variable. If the node value is a literal,
+    /// Stores the current value of nodeValue to a temp variable for later use. If the node value is a literal,
     /// returns the literal directly, as it cannot be changed.
     ///
     /// @param nodeValue the value to protect

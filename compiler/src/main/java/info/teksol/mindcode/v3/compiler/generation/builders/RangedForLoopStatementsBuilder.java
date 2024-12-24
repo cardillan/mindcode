@@ -15,8 +15,8 @@ import org.jspecify.annotations.NullMarked;
 public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstRangedForLoopStatementVisitor<NodeValue> {
     private final CompileTimeEvaluator compileTimeEvaluator;
 
-    public RangedForLoopStatementsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public RangedForLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
         compileTimeEvaluator = context.compileTimeEvaluator();
     }
 
@@ -34,8 +34,8 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         assembler.setSubcontextType(AstSubcontextType.INIT, multiplier);
 
         // Encapsulate both: they're evaluated just here and not propagated anywhere
-        NodeValue lowerValue = variables.excludeVariablesFromTracking(() -> visit(node.getRange().getFirstValue()));
-        NodeValue upperValue = variables.excludeVariablesFromTracking(() -> visit(node.getRange().getLastValue()));
+        NodeValue lowerValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getFirstValue()));
+        NodeValue upperValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getLastValue()));
 
         // Store the upper value in a temporary variable registered in parent.
         LogicValue fixedUpperBound = temporaryCopy(upperValue, ArgumentType.TMP_VARIABLE);

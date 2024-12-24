@@ -7,6 +7,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstCaseAlternative;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstCaseExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRange;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -14,8 +15,8 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseExpressionVisitor<NodeValue> {
-    public CaseExpressionsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public CaseExpressionsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
         double multiplier = 1.0 / node.getAlternatives().size();
         int remain = node.getAlternatives().size();
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
-        LogicValue caseValue = temporaryCopy(visit(node.getExpression()), ArgumentType.AST_VARIABLE);
+        LogicValue caseValue = temporaryCopy(evaluate(node.getExpression()), ArgumentType.AST_VARIABLE);
 
         for (AstCaseAlternative alternative : node.getAlternatives()) {
             LogicLabel nextAlt = nextLabel();         // Next alternative
@@ -42,17 +43,17 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         LogicLabel nextExp = nextLabel();       // Next value in when list
-                        NodeValue minValue = visit(range.getFirstValue());
+                        NodeValue minValue = evaluate(range.getFirstValue());
                         assembler.createJump(nextExp, Condition.LESS_THAN, caseValue, minValue.getValue(assembler));
                         // The max value is only evaluated when the min value lets us through
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
-                        NodeValue maxValue = visit(range.getLastValue());
+                        NodeValue maxValue = evaluate(range.getLastValue());
                         assembler.createJump(bodyLabel, insideRangeCondition(range), caseValue, maxValue.getValue(assembler));
                         assembler.createLabel(nextExp);
                     }
                     else {
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
-                        NodeValue whenValue = visit(value);
+                        NodeValue whenValue = evaluate(value);
                         assembler.createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue.getValue(assembler));
                     }
                 }

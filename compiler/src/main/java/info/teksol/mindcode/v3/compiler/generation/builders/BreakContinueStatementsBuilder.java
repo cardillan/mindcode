@@ -16,8 +16,8 @@ public class BreakContinueStatementsBuilder extends AbstractLoopBuilder implemen
         AstBreakStatementVisitor<NodeValue>,
         AstContinueStatementVisitor<NodeValue>
 {
-    public BreakContinueStatementsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public BreakContinueStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override

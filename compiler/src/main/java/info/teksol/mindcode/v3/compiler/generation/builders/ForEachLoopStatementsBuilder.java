@@ -8,9 +8,7 @@ import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstForEachLoopStatement;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstLoopIterator;
-import info.teksol.mindcode.v3.compiler.generation.Assembler;
-import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
-import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.generation.*;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -24,19 +22,19 @@ import static info.teksol.mindcode.logic.LogicVoid.VOID;
 @NullMarked
 public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements AstForEachLoopStatementVisitor<NodeValue> {
 
-    public ForEachLoopStatementsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public ForEachLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
     public NodeValue visitForEachLoopStatement(AstForEachLoopStatement node) {
         if (!node.getValues().isEmpty()) {
-            new ForEachLoopBuilder(node).build();
+            new ForEachLoopBuilder(this, node).build();
         }
         return VOID;
     }
 
-    private class ForEachLoopBuilder extends StructureBuilder<AstForEachLoopStatement> {
+    private class ForEachLoopBuilder extends AbstractIndependentBuilder<AstForEachLoopStatement> {
         private final List<NodeValue> values;
         private final List<Iterator> iterators;
         private final LogicLabel bodyLabel = nextLabel();
@@ -48,8 +46,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private int leadingIndex = 0;
         private int trailingIndex = 0;
 
-        public ForEachLoopBuilder(AstForEachLoopStatement node) {
-            super(node);
+        public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
+            super(builder, node);
             values = new ArrayList<>(node.getValues().size() + variables.getVarargs().size());
             iterators = node.getIterators().stream().map(this::processIterator).toList();
 
@@ -159,7 +157,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         private NodeValue value() {
             if (nodeValue == null) {
-                nodeValue = visit(expression);
+                nodeValue = evaluate(expression);
             }
             return nodeValue;
         }

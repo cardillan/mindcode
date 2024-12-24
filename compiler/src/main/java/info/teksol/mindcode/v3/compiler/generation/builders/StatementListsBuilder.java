@@ -3,6 +3,7 @@ package info.teksol.mindcode.v3.compiler.generation.builders;
 import info.teksol.generated.ast.visitors.*;
 import info.teksol.mindcode.logic.LogicVoid;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -16,8 +17,8 @@ public class StatementListsBuilder extends AbstractBuilder implements
         AstProgramVisitor<NodeValue>,
         AstStatementListVisitor<NodeValue>
 {
-    public StatementListsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public StatementListsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class StatementListsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitParentheses(AstParentheses node) {
-        return visit(node.getExpression());
+        return evaluate(node.getExpression());
     }
 
     @Override

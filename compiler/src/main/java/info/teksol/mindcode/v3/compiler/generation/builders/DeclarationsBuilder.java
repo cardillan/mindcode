@@ -5,6 +5,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
+import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.HeapTracker;
@@ -40,8 +41,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             PARAMETER,
             BLOCK);
 
-    public DeclarationsBuilder(CodeGeneratorContext context, CodeGenerator.AstNodeVisitor mainNodeVisitor) {
-        super(context, mainNodeVisitor);
+    public DeclarationsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+        super(codeGenerator, context);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitConstant(AstConstant node) {
-        NodeValue nodeValue = visit(node.getValue());
+        NodeValue nodeValue = evaluate(node.getValue());
         if (nodeValue instanceof LogicValue value && isNonvolatileConstant(value)) {
             variables.createConstant(node, value);
         } else {
@@ -116,7 +117,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitParameter(AstParameter node) {
-        NodeValue nodeValue = visit(node.getValue());
+        NodeValue nodeValue = evaluate(node.getValue());
         LogicValue parameterValue;
         if (nodeValue instanceof LogicValue value && isNonvolatileConstant(value)) {
             parameterValue = value;
@@ -143,7 +144,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private LogicVariable resolveMemory(AstAllocation node) {
-        NodeValue memory = visit(node.getMemory());
+        NodeValue memory = evaluate(node.getMemory());
         if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
             if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
                 error(node.getMemory(), "Cannot use value assigned to parameter '%s' as a memory for heap or stack.", parameter.getName());
@@ -175,7 +176,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         if (range != null) {
             AstMindcodeNode element = first ? range.getFirstValue() : range.getLastValue();
             int correction = !first && range.isExclusive() ? -1 : 0;
-            NodeValue value = visit(element);
+            NodeValue value = evaluate(element);
             if (!(value instanceof LogicNumber number)) {
                 error(element, "Heap/stack declaration must specify constant range.");
             } else if (!number.isInteger()) {
