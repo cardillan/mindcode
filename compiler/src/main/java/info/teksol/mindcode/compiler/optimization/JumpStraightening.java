@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mindcode.v3.AstContext;
 
 /**
  * This optimizer detects situations where a conditional jump skips a following, unconditional one and replaces it

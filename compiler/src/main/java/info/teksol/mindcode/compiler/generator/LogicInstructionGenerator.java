@@ -13,6 +13,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.mimex.LVar;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.generation.LoopStack;

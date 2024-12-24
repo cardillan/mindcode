@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.Test;
 

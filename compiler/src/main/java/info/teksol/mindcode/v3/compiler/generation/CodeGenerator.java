@@ -78,6 +78,41 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
 
         // Process function declarations
+        appendFunctionDeclarations();
+    }
+
+    private void appendFunctionDeclarations() {
+        emitEnd();
+
+//        for (LogicFunction function : callGraph.getFunctions()) {
+//            if (function.isInline() || !function.isUsed()) {
+//                continue;
+//            }
+//
+//            assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getUseCount());
+//            currentFunction = function;
+//            functionPrefix = function.getPrefix();
+//            functionContext = new LogicInstructionGenerator.LocalContext();
+//            emit(createLabel(function.getLabel()));
+//            final LogicValue returnValue = function.isVoid() ? VOID : LogicVariable.fnRetVal(function);
+//            returnStack.enterFunction(nextLabel(), returnValue);
+//
+//            if (function.isRecursive()) {
+//                appendRecursiveFunctionDeclaration(function);
+//            } else {
+//                appendStacklessFunctionDeclaration(function);
+//            }
+//
+//            emitEnd();
+//            exitAstNode(function.getDeclaration());
+//
+//            functionPrefix = "";
+//            returnStack.exitFunction();
+//            currentFunction = callGraph.getMain();
+//        }
+    }
+
+    private void emitEnd() {
         assembler.setSubcontextType(AstSubcontextType.END, 1.0);
         assembler.createEnd();
         assembler.clearSubcontextType();

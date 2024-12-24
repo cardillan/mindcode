@@ -1,9 +1,12 @@
-package info.teksol.mindcode.compiler.generator;
+package info.teksol.mindcode.v3;
 
 import info.teksol.mindcode.AstCommonNode;
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.*;
@@ -60,7 +63,7 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createFunctionDeclaration(CompilerProfile profile, LogicFunction function, AstCommonNode node, AstContextType contextType, double weight) {
+    public AstContext createFunctionDeclaration(CompilerProfile profile, info.teksol.mindcode.compiler.generator.LogicFunction function, AstCommonNode node, AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);

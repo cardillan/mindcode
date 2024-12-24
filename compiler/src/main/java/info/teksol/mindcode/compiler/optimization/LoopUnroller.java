@@ -3,12 +3,12 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.emulator.MindustryVariable;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.AstContext;
 import org.jspecify.annotations.NonNull;
 
 import java.util.*;

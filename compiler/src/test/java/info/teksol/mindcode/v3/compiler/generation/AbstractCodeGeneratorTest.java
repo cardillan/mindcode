@@ -2,13 +2,13 @@ package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.CustomInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.CompilationPhase;
 import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.mindcode.v3.MindcodeCompiler;

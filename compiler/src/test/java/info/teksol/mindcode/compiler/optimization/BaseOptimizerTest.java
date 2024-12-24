@@ -3,7 +3,6 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
@@ -14,6 +13,7 @@ import info.teksol.mindcode.compiler.optimization.BaseOptimizerTest.DummyOptimiz
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.util.TraceFile;
 import org.junit.jupiter.api.Test;
 

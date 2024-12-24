@@ -4,7 +4,6 @@ import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
@@ -13,6 +12,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.util.ExpectedMessages;
 

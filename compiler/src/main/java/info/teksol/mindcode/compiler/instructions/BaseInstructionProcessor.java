@@ -5,10 +5,10 @@ import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.math.BigDecimal;

@@ -2,11 +2,15 @@ package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.*;
+import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import org.jspecify.annotations.NullMarked;

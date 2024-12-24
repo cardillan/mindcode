@@ -1,8 +1,8 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.MessageEmitter;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.ContextlessInstructionCreator;
 
 import java.util.List;

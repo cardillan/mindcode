@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.AstContext;
 
 public interface LogicInstruction extends MlogInstruction {
 

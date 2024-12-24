@@ -1,11 +1,11 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.InputFile;
 
 import java.text.DecimalFormat;

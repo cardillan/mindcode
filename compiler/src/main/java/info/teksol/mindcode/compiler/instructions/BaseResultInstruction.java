@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.v3.AstContext;
 
 import java.util.ArrayList;
 import java.util.List;

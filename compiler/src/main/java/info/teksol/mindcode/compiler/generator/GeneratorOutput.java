@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.v3.AstContext;
 
 import java.util.List;
 

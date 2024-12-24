@@ -4,11 +4,11 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.MessageConsumer;
 
 import java.util.*;

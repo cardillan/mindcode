@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MessageLevel;
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -10,6 +9,7 @@ import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicNumber;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.AstContext;
 
 import java.util.List;
 import java.util.NavigableMap;

@@ -1,9 +1,9 @@
 package info.teksol.decompiler;
 
-import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.v3.AstContext;
 
 import java.util.*;
 import java.util.stream.Collectors;
