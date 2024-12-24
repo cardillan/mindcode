@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CallGraphCreatorTest extends AbstractGeneratorTest {
     private static final InputPosition POS = InputPosition.EMPTY;
 
-    private static LogicFunction find(CallGraph graph, String name) {
+    private static LogicFunctionV2 find(CallGraph graph, String name) {
         return graph.getFunctions().stream().filter(f -> f.getName().equals(name)).findFirst().orElseThrow();
     }
 
@@ -50,7 +50,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        LogicFunction function = find(graph, "a");
+        LogicFunctionV2 function = find(graph, "a");
 
         assertAll(
                 () -> assertTrue(function.isUsed()),
@@ -72,8 +72,8 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        LogicFunction funA = find(graph, "a");
-        LogicFunction funB = find(graph, "b");
+        LogicFunctionV2 funA = find(graph, "a");
+        LogicFunctionV2 funB = find(graph, "b");
 
         assertAll(
                 () -> assertTrue(funA.isUsed()),
@@ -100,9 +100,9 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        LogicFunction funA = find(graph, "a");
-        LogicFunction funB = find(graph, "b");
-        LogicFunction funC = find(graph, "c");
+        LogicFunctionV2 funA = find(graph, "a");
+        LogicFunctionV2 funB = find(graph, "b");
+        LogicFunctionV2 funC = find(graph, "c");
 
         assertAll(
                 () -> assertTrue(funA.isRecursive()),
@@ -127,9 +127,9 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        LogicFunction funA = find(graph, "a");
-        LogicFunction funB = find(graph, "b");
-        LogicFunction funC = find(graph, "c");
+        LogicFunctionV2 funA = find(graph, "a");
+        LogicFunctionV2 funB = find(graph, "b");
+        LogicFunctionV2 funC = find(graph, "c");
 
         assertAll(
                 () -> assertFalse(funC.isRecursive()),

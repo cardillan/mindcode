@@ -3,7 +3,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 @NullMarked
 public class GlobalContext implements FunctionContext {
     @Override
-    public @Nullable LogicFunction function() {
+    public @Nullable LogicFunctionV3 function() {
         return null;
     }
 

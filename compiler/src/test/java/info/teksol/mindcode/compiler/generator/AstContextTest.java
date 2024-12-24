@@ -22,8 +22,8 @@ class AstContextTest {
             false, false, false, "test1",List.of(), new NoOp());
     private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration( null, null,
             false, false, false, "test2",List.of(), new NoOp());
-    private LogicFunction function1;
-    private LogicFunction function2;
+    private LogicFunctionV2 function1;
+    private LogicFunctionV2 function2;
     private AstContext context;
 
     @BeforeEach

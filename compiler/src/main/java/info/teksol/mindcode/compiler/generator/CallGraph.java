@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  */
 public final class CallGraph {
     private final FunctionDefinitions functionDefinitions;
-    private final List<LogicFunction> functions;
+    private final List<LogicFunctionV2> functions;
     private final Set<String> syncedVariables;
     private final StackAllocation allocatedStack;
 
@@ -44,22 +44,22 @@ public final class CallGraph {
      *
      * @return instance representing main body
      */
-    public LogicFunction getMain() {
+    public LogicFunctionV2 getMain() {
         return functionDefinitions.getMain();
     }
 
     /**
      * @return list of all existing functions
      */
-    public List<LogicFunction> getFunctions() {
+    public List<LogicFunctionV2> getFunctions() {
         return functions;
     }
 
-    public List<LogicFunction> getExactMatches(FunctionCall call) {
+    public List<LogicFunctionV2> getExactMatches(FunctionCall call) {
         return functionDefinitions.getExactMatches(call);
     }
 
-    public List<LogicFunction> getLooseMatches(FunctionCall call) {
+    public List<LogicFunctionV2> getLooseMatches(FunctionCall call) {
         return functionDefinitions.getLooseMatches(call);
     }
 
@@ -79,8 +79,8 @@ public final class CallGraph {
      *
      * @return a stream of active, recursive functions.
      */
-    public Stream<LogicFunction> recursiveFunctions() {
-        return functions.stream().filter(LogicFunction::isUsed).filter(LogicFunction::isRecursive);
+    public Stream<LogicFunctionV2> recursiveFunctions() {
+        return functions.stream().filter(LogicFunctionV2::isUsed).filter(LogicFunctionV2::isRecursive);
     }
 
     public Set<String> getSyncedVariables() {

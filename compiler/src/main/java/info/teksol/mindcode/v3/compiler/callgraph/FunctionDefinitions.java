@@ -9,6 +9,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionParameter;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,28 +18,28 @@ import java.util.Map;
 
 @NullMarked
 class FunctionDefinitions extends AbstractMessageEmitter {
-    private final LogicFunction main;
-    private final List<LogicFunction> functionList = new ArrayList<>();
-    private final Map<String, List<LogicFunction>> functionMap = new HashMap<>();
+    private final LogicFunctionV3 main;
+    private final List<LogicFunctionV3> functionList = new ArrayList<>();
+    private final Map<String, List<LogicFunctionV3>> functionMap = new HashMap<>();
 
     public FunctionDefinitions(MessageConsumer messageConsumer) {
         super(messageConsumer);
-        main = new LogicFunction(createMain());
+        main = new LogicFunctionV3(createMain());
         functionList.add(main);
     }
 
-    public LogicFunction addFunctionDeclaration(AstFunctionDeclaration declaration) {
-        LogicFunction current = new LogicFunction(declaration);
+    public LogicFunctionV3 addFunctionDeclaration(AstFunctionDeclaration declaration) {
+        LogicFunctionV3 current = new LogicFunctionV3(declaration);
         functionList.add(current);
 
-        List<LogicFunction> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());
+        List<LogicFunctionV3> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());
         functions.stream().filter(f -> conflicts(current, f)).forEach(f -> reportConflict(current, f));
 
         functions.add(current);
         return current;
     }
 
-    private boolean conflicts(LogicFunction f1, LogicFunction f2) {
+    private boolean conflicts(LogicFunctionV3 f1, LogicFunctionV3 f2) {
         if (!f1.getParameterCount().overlaps(f2.getParameterCount())) {
             return false;
         }
@@ -60,27 +61,27 @@ class FunctionDefinitions extends AbstractMessageEmitter {
         return p1.isInput() && p2.isInput() || p1.isOutput() && p2.isOutput();
     }
 
-    private void reportConflict(LogicFunction current, LogicFunction previous) {
+    private void reportConflict(LogicFunctionV3 current, LogicFunctionV3 previous) {
         String defined = previous.getInputPosition().inputFile() == current.getInputPosition().inputFile()
                 ? "" :  " defined in " + previous.getInputPosition().inputFile().getPath();
         error(current.getInputPosition(), "Function '%s' conflicts with function '%s'%s.",
                 current.format(), previous.format(), defined);
     }
 
-    public LogicFunction getMain() {
+    public LogicFunctionV3 getMain() {
         return main;
     }
 
-    public List<LogicFunction> getFunctions() {
+    public List<LogicFunctionV3> getFunctions() {
         return functionList;
     }
 
-    public List<LogicFunction> getLooseMatches(AstFunctionCall call) {
+    public List<LogicFunctionV3> getLooseMatches(AstFunctionCall call) {
         return functionMap.getOrDefault(call.getName(), List.of());
     }
 
-    public List<LogicFunction> getExactMatches(AstFunctionCall call) {
-        List<LogicFunction> list = functionMap.getOrDefault(call.getName(), List.of())
+    public List<LogicFunctionV3> getExactMatches(AstFunctionCall call) {
+        List<LogicFunctionV3> list = functionMap.getOrDefault(call.getName(), List.of())
                 .stream()
                 .filter(f -> f.exactMatch(call))
                 .toList();
@@ -96,8 +97,8 @@ class FunctionDefinitions extends AbstractMessageEmitter {
     ///
     /// @param call function call to match
     /// @return unique function exactly matching the given call
-    public LogicFunction getExactMatch(AstFunctionCall call) {
-        List<LogicFunction> result = getExactMatches(call);
+    public @Nullable LogicFunctionV3 getExactMatch(AstFunctionCall call) {
+        List<LogicFunctionV3> result = getExactMatches(call);
         return result.size() == 1 ? result.getFirst() : null;
     }
 

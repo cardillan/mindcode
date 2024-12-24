@@ -1,6 +1,7 @@
 package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
+import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.util.StringUtils;
@@ -15,9 +16,9 @@ import java.util.Set;
 public class CallGraphCreator extends AbstractMessageEmitter {
     private final InstructionProcessor instructionProcessor;
     private final FunctionDefinitions functionDefinitions;
-    private final List<LogicFunction> functions = new ArrayList<>();
+    private final List<LogicFunctionV3> functions = new ArrayList<>();
     private final Set<String> syncedVariables = new HashSet<>();
-    private LogicFunction activeFunction;
+    private LogicFunctionV3 activeFunction;
 
     public static CallGraph createCallGraph(CallGraphCreatorContext context, AstProgram program) {
         return new CallGraphCreator(context).buildCallGraph(program);
@@ -62,7 +63,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void visitFunctionDeclaration(AstFunctionDeclaration functionDeclaration) {
-        LogicFunction previousFunction = activeFunction;
+        LogicFunctionV3 previousFunction = activeFunction;
         activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration);
         functionDeclaration.getBody().forEach(this::visitNode);
         activeFunction = previousFunction;
@@ -102,7 +103,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         functions.stream().filter(f -> !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
-    private void setupOutOfLineFunction(LogicFunction function) {
+    private void setupOutOfLineFunction(LogicFunctionV3 function) {
         function.setLabel(instructionProcessor.nextLabel());
         function.setPrefix(instructionProcessor.nextFunctionPrefix());
         function.createParameters();
@@ -118,9 +119,10 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     // The call stack will be as deep as the deepest nesting level of function calls
     // We expect the number to be rather small (Certainly under 10), so the list is quite appropriate here
-    private final List<LogicFunction> callStack = new ArrayList<>();
+    private final List<LogicFunctionV3> callStack = new ArrayList<>();
 
-    private void visitFunction(LogicFunction function, int count) {
+    private void visitFunction(LogicFunction aFunction, int count) {
+        LogicFunctionV3 function = (LogicFunctionV3) aFunction;
         function.markUsage(count);
 
         int index = callStack.indexOf(function);
@@ -128,8 +130,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         if (index >= 0) {
             // Detected a cycle in the call graph starting at index. Mark all calls on the cycle as recursive, stop DFS
             // We know function is now at the beginning and also at the end of the cycle in callStack
-            LogicFunction caller = function;
-            for (LogicFunction nextCallee : callStack.subList(index + 1, callStack.size())) {
+            LogicFunctionV3 caller = function;
+            for (LogicFunctionV3 nextCallee : callStack.subList(index + 1, callStack.size())) {
                 caller.addRecursiveCall(nextCallee);
                 caller = nextCallee;
             }
@@ -140,7 +142,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         callStack.removeLast();
     }
 
-    private void validateFunction(LogicFunction function) {
+    private void validateFunction(LogicFunctionV3 function) {
         if (function.getDeclaration().isInline() && function.isRecursive()) {
             error(function.getInputPosition(), "Recursive function '%s' declared 'inline'.", function.getName());
         }

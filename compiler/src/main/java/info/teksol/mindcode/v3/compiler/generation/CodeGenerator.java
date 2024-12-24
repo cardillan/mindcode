@@ -9,7 +9,7 @@ import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
-import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.generation.builders.*;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
@@ -73,7 +73,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         // Check stack allocations
         if (context.stackAllocation() == null) {
-            callGraph.recursiveFunctions().filter(LogicFunction::isUsed).forEach(f -> error(f.getDeclaration(),
+            callGraph.recursiveFunctions().filter(LogicFunctionV3::isUsed).forEach(f -> error(f.getDeclaration(),
                     "Function '%s' is recursive and no stack was allocated.", f.getName()));
         }
 

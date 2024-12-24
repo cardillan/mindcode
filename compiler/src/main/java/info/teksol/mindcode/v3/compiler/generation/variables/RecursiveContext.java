@@ -1,7 +1,7 @@
 package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayDeque;
@@ -16,7 +16,7 @@ public class RecursiveContext extends LocalContext {
     private final Deque<Integer> nodeStack = new ArrayDeque<>();
     private int parentIndex = 0;
 
-    public RecursiveContext(LogicFunction function, String functionPrefix, List<FunctionArgument> varargs) {
+    public RecursiveContext(LogicFunctionV3 function, String functionPrefix, List<FunctionArgument> varargs) {
         super(function, functionPrefix, varargs);
     }
 

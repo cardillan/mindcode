@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 @NullMarked
 public final class CallGraph {
     private final FunctionDefinitions functionDefinitions;
-    private final List<LogicFunction> functions;
+    private final List<LogicFunctionV3> functions;
     private final Set<String> syncedVariables;
 
     CallGraph(FunctionDefinitions functionDefinitions, Set<String> syncedVariables) {
@@ -30,20 +30,20 @@ public final class CallGraph {
     /// Returns the representation of the main function, that is the main program body.
     ///
     /// @return instance representing main body
-    public LogicFunction getMain() {
+    public LogicFunctionV3 getMain() {
         return functionDefinitions.getMain();
     }
 
     /// @return list of all existing functions
-    public List<LogicFunction> getFunctions() {
+    public List<LogicFunctionV3> getFunctions() {
         return functions;
     }
 
-    public List<LogicFunction> getExactMatches(AstFunctionCall call) {
+    public List<LogicFunctionV3> getExactMatches(AstFunctionCall call) {
         return functionDefinitions.getExactMatches(call);
     }
 
-    public List<LogicFunction> getLooseMatches(AstFunctionCall call) {
+    public List<LogicFunctionV3> getLooseMatches(AstFunctionCall call) {
         return functionDefinitions.getLooseMatches(call);
     }
 
@@ -53,12 +53,12 @@ public final class CallGraph {
     ///
     /// @return true if there's a recursive function
     public boolean containsRecursiveFunction() {
-        return functions.stream().filter(LogicFunction::isUsed).anyMatch(LogicFunction::isRecursive);
+        return functions.stream().filter(LogicFunctionV3::isUsed).anyMatch(LogicFunctionV3::isRecursive);
     }
 
     /// @return a stream of active, recursive functions.
-    public Stream<LogicFunction> recursiveFunctions() {
-        return functions.stream().filter(LogicFunction::isUsed).filter(LogicFunction::isRecursive);
+    public Stream<LogicFunctionV3> recursiveFunctions() {
+        return functions.stream().filter(LogicFunctionV3::isUsed).filter(LogicFunctionV3::isRecursive);
     }
 
     public Set<String> getSyncedVariables() {

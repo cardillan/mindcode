@@ -3,7 +3,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
@@ -14,12 +14,12 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class LocalContext implements FunctionContext {
-    private final LogicFunction function;
+    private final LogicFunctionV3 function;
     private final String functionPrefix;
     private final List<FunctionArgument> varargs;
     private final Map<String, NodeValue> variables = new HashMap<>();
 
-    public LocalContext(LogicFunction function, String functionPrefix, List<FunctionArgument> varargs) {
+    public LocalContext(LogicFunctionV3 function, String functionPrefix, List<FunctionArgument> varargs) {
         this.function = Objects.requireNonNull(function);
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
         this.varargs = Objects.requireNonNull(varargs);
@@ -56,7 +56,7 @@ public class LocalContext implements FunctionContext {
     }
 
     @Override
-    public LogicFunction function() {
+    public LogicFunctionV3 function() {
         return function;
     }
 

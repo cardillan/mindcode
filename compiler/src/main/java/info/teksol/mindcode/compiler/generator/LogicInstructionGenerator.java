@@ -75,7 +75,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
     private NodeContext parentContext = new NodeContext(null);
 
     // Function definition being presently compiled (including inlined functions)
-    private LogicFunction currentFunction;
+    private LogicFunctionV2 currentFunction;
 
     // Prefix for local variables (depends on function being processed)
     private String functionPrefix = "";
@@ -152,7 +152,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         astContext = astContext.createSubcontext(subcontextType, multiplier);
     }
 
-    private void setSubcontextType(LogicFunction function, AstSubcontextType subcontextType) {
+    private void setSubcontextType(LogicFunctionV2 function, AstSubcontextType subcontextType) {
         if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
             clearSubcontextType();
         }
@@ -298,7 +298,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
     private void appendFunctionDeclarations() {
         emitEnd();
 
-        for (LogicFunction function : callGraph.getFunctions()) {
+        for (LogicFunctionV2 function : callGraph.getFunctions()) {
             if (function.isInline() || !function.isUsed()) {
                 continue;
             }
@@ -327,7 +327,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
 
     }
 
-    private void appendRecursiveFunctionDeclaration(LogicFunction function) {
+    private void appendRecursiveFunctionDeclaration(LogicFunctionV2 function) {
         // Register all input parameters for stack storage
         function.getParameters().forEach(functionContext::registerVariable);
 
@@ -340,7 +340,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         emit(createReturn(stackName()));
     }
 
-    private void appendStacklessFunctionDeclaration(LogicFunction function) {
+    private void appendStacklessFunctionDeclaration(LogicFunctionV2 function) {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
         if (!function.isVoid()) {
@@ -423,7 +423,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
 
     private LogicValue handleFunctionCall(FunctionCall call, List<LogicFunctionArgument> arguments) {
         final String functionName = call.getFunctionName();
-        List<LogicFunction> exactMatches = callGraph.getExactMatches(call);
+        List<LogicFunctionV2> exactMatches = callGraph.getExactMatches(call);
 
         // Try built-in function if there's not an exact match
         if (!exactMatches.isEmpty()) {
@@ -441,7 +441,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
             }
 
             // We know there wasn't an exact match. Try loose matches to obtain better error messages
-            List<LogicFunction> looseMatches = callGraph.getLooseMatches(call);
+            List<LogicFunctionV2> looseMatches = callGraph.getLooseMatches(call);
             return switch (looseMatches.size()) {
                 case 0  -> {
                     error(call,"Unknown function '%s'.", functionName);
@@ -458,7 +458,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         }
     }
 
-    private void validateUserFunctionArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private void validateUserFunctionArguments(LogicFunctionV2 function, List<LogicFunctionArgument> arguments) {
         if (function.getDeclaredParameters().size() < arguments.size()) {
             // This needs to be checked beforehand
             throw new MindcodeInternalError("Argument size mismatch.");
@@ -496,7 +496,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         }
     }
 
-    private List<LogicFunctionArgument> addOptionalArguments(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private List<LogicFunctionArgument> addOptionalArguments(LogicFunctionV2 function, List<LogicFunctionArgument> arguments) {
         List<FunctionParameter> parameters = function.getDeclaredParameters();
         if (arguments.size() >= parameters.size()) {
             return arguments;
@@ -514,7 +514,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         return result;
     }
 
-    private LogicValue handleUserFunctionCall(LogicFunction function, FunctionCall call, List<LogicFunctionArgument> callArguments) {
+    private LogicValue handleUserFunctionCall(LogicFunctionV2 function, FunctionCall call, List<LogicFunctionArgument> callArguments) {
         String functionName = call.getFunctionName();
 
         List<LogicFunctionArgument> arguments = addOptionalArguments(function, callArguments);
@@ -553,9 +553,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         }
     }
 
-    private LogicValue handleInlineFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private LogicValue handleInlineFunctionCall(LogicFunctionV2 function, List<LogicFunctionArgument> arguments) {
         // Switching to inline function context -- save/restore old one
-        final LogicFunction previousFunction = currentFunction;
+        final LogicFunctionV2 previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
         final LoopStack previousLoopStack = loopStack;
         final String previousVarArgName = varArgName;
@@ -604,7 +604,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         return returnValue;
     }
 
-    private LogicValue handleStacklessFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private LogicValue handleStacklessFunctionCall(LogicFunctionV2 function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, arguments);
         final boolean isVoid = function.isVoid();
@@ -666,7 +666,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         return new ArrayList<>(variables);
     }
 
-    private LogicValue handleRecursiveFunctionCall(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private LogicValue handleRecursiveFunctionCall(LogicFunctionV2 function, List<LogicFunctionArgument> arguments) {
         setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
         boolean recursiveCall = currentFunction.isRecursiveCall(function);
         List<LogicVariable> variables = recursiveCall ? getStackVariables(function, arguments) : List.of();
@@ -700,9 +700,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         return new ArrayList<>(result);
     }
 
-    private void setupFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments) {
+    private void setupFunctionParameters(LogicFunctionV2 function, List<LogicFunctionArgument> arguments) {
         // Make sure parameter names are formed using function name
-        LogicFunction previousFunction = currentFunction;
+        LogicFunctionV2 previousFunction = currentFunction;
         currentFunction = function;
 
         // Setup variables representing function parameters with values from this call
@@ -722,7 +722,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         currentFunction = previousFunction;
     }
 
-    private void retrieveFunctionParameters(LogicFunction function, List<LogicFunctionArgument> arguments, boolean recursiveCall) {
+    private void retrieveFunctionParameters(LogicFunctionV2 function, List<LogicFunctionArgument> arguments, boolean recursiveCall) {
         // Filter variables representing input parameters
         Predicate<LogicFunctionArgument> predicate =
                 a -> a.value() instanceof LogicVariable variable && function.isOutputFunctionParameter(variable);
@@ -734,7 +734,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
                 : 0;
 
         // Make sure parameter names are formed using function name
-        LogicFunction previousFunction = currentFunction;
+        LogicFunctionV2 previousFunction = currentFunction;
         currentFunction = function;
 
         List<LogicInstruction> finalizers = new ArrayList<>();
@@ -772,7 +772,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         currentFunction = previousFunction;
     }
 
-    private LogicValue passReturnValue(LogicFunction function) {
+    private LogicValue passReturnValue(LogicFunctionV2 function) {
         if (function.isVoid()) {
             return VOID;
         } else if (currentFunction.isRepeatedCall(function)) {

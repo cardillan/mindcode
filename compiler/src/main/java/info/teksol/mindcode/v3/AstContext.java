@@ -63,7 +63,7 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createFunctionDeclaration(CompilerProfile profile, info.teksol.mindcode.compiler.generator.LogicFunction function, AstCommonNode node, AstContextType contextType, double weight) {
+    public AstContext createFunctionDeclaration(CompilerProfile profile, LogicFunction function, AstCommonNode node, AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);

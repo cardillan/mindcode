@@ -11,7 +11,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstParameter;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
-import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import org.jspecify.annotations.NullMarked;
 
@@ -61,7 +61,7 @@ public class Variables extends AbstractMessageEmitter {
 
     public boolean isVarargParameter(AstExpression expression) {
         if (expression instanceof AstIdentifier identifier) {
-            LogicFunction currentFunction = functionContext.function();
+            LogicFunctionV3 currentFunction = functionContext.function();
             return currentFunction != null && currentFunction.isVarargs(identifier.getName());
         } else {
             return false;
@@ -73,7 +73,7 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     private boolean isLocalContext() {
-        LogicFunction function = functionContext.function();
+        LogicFunctionV3 function = functionContext.function();
         // Under relaxed syntax, the main function isn't considered local
         return function != null && (!function.isMain() || !RELAXED_SYNTAX);
     }
@@ -192,7 +192,7 @@ public class Variables extends AbstractMessageEmitter {
     /// and restored when exiting the function processing. Non-inlined functions can't be nested.
     ///
     /// When processing the global level, no function is active. A global context is used in this case.
-    public void enterFunction(LogicFunction function, String functionPrefix, List<FunctionArgument> varargs) {
+    public void enterFunction(LogicFunctionV3 function, String functionPrefix, List<FunctionArgument> varargs) {
         contextStack.push(functionContext);
         functionContext = function.isRecursive()
                 ? new RecursiveContext(function, functionPrefix, varargs)
@@ -200,7 +200,7 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     /// Called when function processing is finished. Previous function context is restored from the stack.
-    public void exitFunction(LogicFunction function) {
+    public void exitFunction(LogicFunctionV3 function) {
         if (function != functionContext.function()) {
             throw new MindcodeInternalError("Wrong exitFunction order.");
         }

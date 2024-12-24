@@ -5,7 +5,7 @@ import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
+import info.teksol.mindcode.compiler.generator.LogicFunctionV2;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
@@ -60,7 +60,7 @@ public class Assembler extends AbstractMessageEmitter implements ContextfulInstr
         }
     }
 
-    public void enterFunctionAstNode(LogicFunction function, AstMindcodeNode node, double weight) {
+    public void enterFunctionAstNode(LogicFunctionV2 function, AstMindcodeNode node, double weight) {
         astContext = astContext.createFunctionDeclaration(profile, function, node, node.getContextType(), weight);
     }
 
@@ -80,7 +80,7 @@ public class Assembler extends AbstractMessageEmitter implements ContextfulInstr
         astContext = astContext.createSubcontext(subcontextType, multiplier);
     }
 
-    public void setSubcontextType(LogicFunction function, AstSubcontextType subcontextType) {
+    public void setSubcontextType(LogicFunctionV2 function, AstSubcontextType subcontextType) {
         if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
             clearSubcontextType();
         }

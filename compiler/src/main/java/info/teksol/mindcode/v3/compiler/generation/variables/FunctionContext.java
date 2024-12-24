@@ -2,7 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -15,7 +15,8 @@ import java.util.function.Supplier;
 @NullMarked
 public interface FunctionContext {
     /// @return function associated with the context, or null if in global context
-    @Nullable LogicFunction function();
+    @Nullable
+    LogicFunctionV3 function();
 
     /// Registers a new function variable.
     NodeValue registerFunctionVariable(AstIdentifier identifier);

@@ -12,9 +12,9 @@ import java.util.Set;
 public class CallGraphCreator extends AbstractMessageEmitter {
     private final InstructionProcessor instructionProcessor;
     private final FunctionDefinitions functionDefinitions;
-    private final List<LogicFunction> functions = new ArrayList<>();
+    private final List<LogicFunctionV2> functions = new ArrayList<>();
     private final Set<String> syncedVariables = new HashSet<>();
-    private LogicFunction activeFunction;
+    private LogicFunctionV2 activeFunction;
     private StackAllocation allocatedStack;
 
     public static CallGraph createCallGraph(Seq program, MessageConsumer messageConsumer,
@@ -66,7 +66,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
-        LogicFunction previousFunction = activeFunction;
+        LogicFunctionV2 previousFunction = activeFunction;
         activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration);
         visitNode(functionDeclaration.getBody());
         activeFunction = previousFunction;
@@ -110,7 +110,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         functions.stream().filter(f -> !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
-    private void setupOutOfLineFunction(LogicFunction function) {
+    private void setupOutOfLineFunction(LogicFunctionV2 function) {
         function.setLabel(instructionProcessor.nextLabel());
         function.setPrefix(instructionProcessor.nextFunctionPrefix());
         function.createParameters();
@@ -126,9 +126,10 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     // The call stack will be as deep as the deepest nesting level of function calls
     // We expect the number to be rather small (Certainly under 10), so the list is quite appropriate here
-    private final List<LogicFunction> callStack = new ArrayList<>();
+    private final List<LogicFunctionV2> callStack = new ArrayList<>();
 
-    private void visitFunction(LogicFunction function, int count) {
+    private void visitFunction(LogicFunction aFunction, int count) {
+        LogicFunctionV2 function = (LogicFunctionV2) aFunction;
         function.markUsage(count);
 
         int index = callStack.indexOf(function);
@@ -136,8 +137,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         if (index >= 0) {
             // Detected a cycle in the call graph starting at index. Mark all calls on the cycle as recursive, stop DFS
             // We know function is now at the beginning and also at the end of the cycle in callStack
-            LogicFunction caller = function;
-            for (LogicFunction nextCallee : callStack.subList(index + 1, callStack.size())) {
+            LogicFunctionV2 caller = function;
+            for (LogicFunctionV2 nextCallee : callStack.subList(index + 1, callStack.size())) {
                 caller.addRecursiveCall(nextCallee);
                 caller = nextCallee;
             }
@@ -148,7 +149,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         callStack.removeLast();
     }
 
-    private void validateFunction(LogicFunction function) {
+    private void validateFunction(LogicFunctionV2 function) {
         if (function.getDeclaration().isInline() && function.isRecursive()) {
             error(function.getInputPosition(), "Recursive function '%s' declared 'inline'.", function.getName());
         }

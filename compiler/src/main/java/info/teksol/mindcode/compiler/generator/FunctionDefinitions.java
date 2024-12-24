@@ -12,28 +12,28 @@ import java.util.List;
 import java.util.Map;
 
 class FunctionDefinitions extends AbstractMessageEmitter {
-    private final LogicFunction main;
-    private final List<LogicFunction> functionList = new ArrayList<>();
-    private final Map<String, List<LogicFunction>> functionMap = new HashMap<>();
+    private final LogicFunctionV2 main;
+    private final List<LogicFunctionV2> functionList = new ArrayList<>();
+    private final Map<String, List<LogicFunctionV2>> functionMap = new HashMap<>();
 
     public FunctionDefinitions(MessageConsumer messageConsumer) {
         super(messageConsumer);
-        main = new LogicFunction(createMain());
+        main = new LogicFunctionV2(createMain());
         functionList.add(main);
     }
 
-    public LogicFunction addFunctionDeclaration(FunctionDeclaration declaration) {
-        LogicFunction current = new LogicFunction(declaration);
+    public LogicFunctionV2 addFunctionDeclaration(FunctionDeclaration declaration) {
+        LogicFunctionV2 current = new LogicFunctionV2(declaration);
         functionList.add(current);
 
-        List<LogicFunction> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());
+        List<LogicFunctionV2> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());
         functions.stream().filter(f -> conflicts(current, f)).forEach(f -> reportConflict(current, f));
 
         functions.add(current);
         return current;
     }
 
-    private boolean conflicts(LogicFunction f1, LogicFunction f2) {
+    private boolean conflicts(LogicFunctionV2 f1, LogicFunctionV2 f2) {
         if (!f1.getParameterCount().overlaps(f2.getParameterCount())) {
             return false;
         }
@@ -62,20 +62,20 @@ class FunctionDefinitions extends AbstractMessageEmitter {
                 current.format(), previous.format(), defined);
     }
 
-    public LogicFunction getMain() {
+    public LogicFunctionV2 getMain() {
         return main;
     }
 
-    public List<LogicFunction> getFunctions() {
+    public List<LogicFunctionV2> getFunctions() {
         return functionList;
     }
 
-    public List<LogicFunction> getLooseMatches(FunctionCall call) {
+    public List<LogicFunctionV2> getLooseMatches(FunctionCall call) {
         return functionMap.getOrDefault(call.getFunctionName(), List.of());
     }
 
-    public List<LogicFunction> getExactMatches(FunctionCall call) {
-        List<LogicFunction> list = functionMap.getOrDefault(call.getFunctionName(), List.of())
+    public List<LogicFunctionV2> getExactMatches(FunctionCall call) {
+        List<LogicFunctionV2> list = functionMap.getOrDefault(call.getFunctionName(), List.of())
                 .stream()
                 .filter(f -> f.exactMatch(call))
                 .toList();
@@ -93,8 +93,8 @@ class FunctionDefinitions extends AbstractMessageEmitter {
      * @param call function call to match
      * @return unique function exactly matching the given call
      */
-    public LogicFunction getExactMatch(FunctionCall call) {
-        List<LogicFunction> result = getExactMatches(call);
+    public LogicFunctionV2 getExactMatch(FunctionCall call) {
+        List<LogicFunctionV2> result = getExactMatches(call);
         return result.size() == 1 ? result.getFirst() : null;
     }
 
