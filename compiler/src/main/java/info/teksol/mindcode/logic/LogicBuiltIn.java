@@ -5,7 +5,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.mimex.MindustryContent;
 import info.teksol.mindcode.mimex.MindustryContents;
-import info.teksol.mindcode.v3.compiler.generation.Assembler;
+import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -119,12 +119,12 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
     }
 
     @Override
-    public void setValue(Assembler assembler, LogicValue value) {
+    public void setValue(CodeAssembler assembler, LogicValue value) {
         assembler.createSet(this, value);
     }
 
     @Override
-    public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         LogicValue.super.writeValue(assembler, valueSetter);
     }
 }

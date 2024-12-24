@@ -175,17 +175,17 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
-        public LogicValue getValue(Assembler assembler) {
+        public LogicValue getValue(CodeAssembler assembler) {
             return value().getValue(assembler);
         }
 
         @Override
-        public void setValue(Assembler assembler, LogicValue value) {
+        public void setValue(CodeAssembler assembler, LogicValue value) {
             verifyLValue().setValue(assembler, value);
         }
 
         @Override
-        public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+        public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
             verifyLValue().writeValue(assembler, valueSetter);
         }
     }
@@ -217,17 +217,17 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
-        public LogicValue getValue(Assembler assembler) {
+        public LogicValue getValue(CodeAssembler assembler) {
             return LogicVariable.INVALID;
         }
 
         @Override
-        public void setValue(Assembler assembler, LogicValue value) {
+        public void setValue(CodeAssembler assembler, LogicValue value) {
             // Do nothing
         }
 
         @Override
-        public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+        public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
             // Do nothing
         }
     }

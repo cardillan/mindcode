@@ -34,8 +34,9 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     protected final CodeGeneratorContext context;
     protected final InstructionProcessor processor;
     protected final CallGraph callGraph;
-    protected final Assembler assembler;
+    protected final CodeAssembler assembler;
     protected final Variables variables;
+    protected final ReturnStack returnStack;
 
     protected AbstractBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(context.messageConsumer());
@@ -46,6 +47,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         callGraph = context.callGraph();
         assembler = context.assembler();
         variables = context.variables();
+        returnStack = context.returnStack();
     }
 
     /// Processes the node by passing it to the proper builder according to node type. The builder creates
@@ -80,13 +82,18 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     }
 
     /// Visits a body of statements, disregarding the resulting values of all nodes.
-    protected void visitStatements(List<? extends AstMindcodeNode> body) {
+    ///
+    /// @return `LogicVoid.VOID`
+    protected NodeValue visitStatements(List<? extends AstMindcodeNode> body) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
         body.forEach(this::compile);
+        return LogicVoid.VOID;
     }
 
     ///  Evaluates a body of statements/expressions, returning the `NodeValue` of the last expression
     /// (which represents the resulting value of the entire body).
+    ///
+    /// @return the value of the last expression in the list
     protected NodeValue visitExpressions(List<? extends AstMindcodeNode> expressions) {
         if (expressions.isEmpty()) {
             return LogicVoid.VOID;

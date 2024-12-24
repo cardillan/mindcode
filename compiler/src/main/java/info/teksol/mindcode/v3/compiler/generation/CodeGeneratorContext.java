@@ -16,13 +16,13 @@ public interface CodeGeneratorContext extends CompileTimeEvaluatorContext {
     CompilerProfile compilerProfile();
     InstructionProcessor instructionProcessor();
     CompileTimeEvaluator compileTimeEvaluator();
-    void setStackAllocation(AstAllocation stackAllocation);
+    ReturnStack returnStack();
+    StackTracker stackTracker();
     void setHeapAllocation(AstAllocation heapAllocation);
-    @Nullable AstAllocation stackAllocation();
     @Nullable AstAllocation heapAllocation();
     CallGraph callGraph();
     AstContext rootAstContext();
-    Assembler assembler();
+    CodeAssembler assembler();
     Variables variables();
 
     void setTopAstContext(AstContext topAstContext);

@@ -2,7 +2,7 @@ package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.IntRange;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
@@ -278,8 +278,8 @@ public class LogicFunctionV3 implements LogicFunction {
     /**
      * @return the label allocated for the beginning of this function
      */
-    public @Nullable LogicLabel getLabel() {
-        return label;
+    public LogicLabel getLabel() {
+        return Objects.requireNonNullElseGet(label, () -> { throw new MindcodeInternalError("Label not set");} );
     }
 
     /**

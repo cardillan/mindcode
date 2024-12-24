@@ -1,4 +1,4 @@
-package info.teksol.mindcode.compiler.generator;
+package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.InputPosition;
 import info.teksol.mindcode.IntRange;
@@ -55,8 +55,6 @@ public interface LogicFunction {
     void markUsage(int count);
 
     void setInlined();
-
-    void setLabel(LogicLabel label);
 
     void setPrefix(String prefix);
 }

@@ -22,9 +22,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreator;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraphCreatorContext;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluatorContext;
-import info.teksol.mindcode.v3.compiler.generation.Assembler;
-import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
-import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.generation.*;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import info.teksol.mindcode.v3.compiler.preprocessor.DirectivePreprocessor;
 import info.teksol.mindcode.v3.compiler.preprocessor.PreprocessorContext;
@@ -57,13 +55,14 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
+    private final ReturnStack returnStack;
+    private final StackTracker stackTracker;
     private @Nullable AstProgram astProgram;
-    private @Nullable AstAllocation stackAllocation;
     private @Nullable AstAllocation heapAllocation;
     private @Nullable CallGraph callGraph;
     private @Nullable AstContext rootAstContext;
     private @Nullable AstContext topAstContext;
-    private @Nullable Assembler assembler;
+    private @Nullable CodeAssembler assembler;
     private @Nullable Variables variables;
 
     // Error detection
@@ -76,7 +75,12 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         this.targetPhase = targetPhase;
         this.profile = profile;
         this.inputFiles = inputFiles;
+        returnStack = new ReturnStack(messageConsumer);
+        stackTracker = new StackTracker(messageConsumer);
+
         context.set(this);
+
+        // Default return stack
     }
 
     public void compile() {
@@ -133,7 +137,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         rootAstContext = AstContext.createRootNode(profile);
         variables = new Variables(this);
-        assembler = new Assembler(this);
+        assembler = new CodeAssembler(this);
 
         new CodeGenerator(this).generateCode(astProgram);
     }
@@ -225,18 +229,18 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
-    public void setStackAllocation(AstAllocation stackAllocation) {
-        this.stackAllocation = stackAllocation;
-    }
-
-    @Override
     public void setHeapAllocation(AstAllocation heapAllocation) {
         this.heapAllocation = heapAllocation;
     }
 
     @Override
-    public @Nullable AstAllocation stackAllocation() {
-        return stackAllocation;
+    public ReturnStack returnStack() {
+        return returnStack;
+    }
+
+    @Override
+    public StackTracker stackTracker() {
+        return stackTracker;
     }
 
     @Override
@@ -255,7 +259,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
-    public Assembler assembler() {
+    public CodeAssembler assembler() {
         return Objects.requireNonNull(assembler);
     }
 

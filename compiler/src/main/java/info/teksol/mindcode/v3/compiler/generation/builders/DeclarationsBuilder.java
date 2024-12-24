@@ -60,11 +60,11 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         switch (node.getType()) {
             case STACK -> {
-                if (context.stackAllocation() != null) {
+                if (context.stackTracker().isValid()) {
                     error(node, "Multiple stack allocation declarations.");
                 } else {
                     final Allocation allocation = resolveAllocation(node);
-                    context.setStackAllocation(node);
+                    context.stackTracker().setStackMemory(allocation.memory);
                     if (callGraph.containsRecursiveFunction()) {
                         assembler.createSet(LogicVariable.STACK_POINTER, LogicNumber.get(allocation.start));
                     }
@@ -111,7 +111,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitFunctionDeclaration(AstFunctionDeclaration node) {
-        // Ignored - processed elsewhere
+        // Function declarations are processed out of line
         return LogicVoid.VOID;
     }
 

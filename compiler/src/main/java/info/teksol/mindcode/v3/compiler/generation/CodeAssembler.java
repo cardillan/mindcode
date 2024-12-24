@@ -13,29 +13,44 @@ import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
-public class Assembler extends AbstractMessageEmitter implements ContextfulInstructionCreator {
+public class CodeAssembler extends AbstractMessageEmitter implements ContextfulInstructionCreator {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final List<LogicInstruction> instructions = new ArrayList<>();
     private AstContext astContext;
 
+    /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
+    private boolean active = true;
+
     // Note: we'll need to save/restore loop stack when entering inline functions
     // In LIG, the implicit stack was used to manage the state
     private LoopStack loopStack;
 
-    public Assembler(CodeGeneratorContext context) {
+    public CodeAssembler(CodeGeneratorContext context) {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
         astContext = context.rootAstContext();
 
         loopStack = new LoopStack(messageConsumer);
+    }
+
+    /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
+    public boolean isActive() {
+        return active;
+    }
+
+    /// Activates/deactivates assembler status. An inactive assembler ignores generated instructions. This is
+    /// useful to compile unreachable code (e.g. unused function) to validate syntax, but avoid generating code.
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public AstContext getAstContext() {
@@ -60,7 +75,7 @@ public class Assembler extends AbstractMessageEmitter implements ContextfulInstr
         }
     }
 
-    public void enterFunctionAstNode(LogicFunctionV2 function, AstMindcodeNode node, double weight) {
+    public void enterFunctionAstNode(LogicFunction function, AstMindcodeNode node, double weight) {
         astContext = astContext.createFunctionDeclaration(profile, function, node, node.getContextType(), weight);
     }
 
@@ -94,7 +109,17 @@ public class Assembler extends AbstractMessageEmitter implements ContextfulInstr
     @Override
     public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
         LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
-        instructions.add(instruction);
+        if (active) {
+            instructions.add(instruction);
+        }
         return instruction;
+    }
+
+    public void createCompilerEnd() {
+        if (active) {
+            setSubcontextType(AstSubcontextType.END, 1.0);
+            createEnd();
+            clearSubcontextType();
+        }
     }
 }

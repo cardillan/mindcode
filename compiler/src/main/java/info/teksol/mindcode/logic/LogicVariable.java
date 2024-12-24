@@ -1,10 +1,10 @@
 package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.ast.FunctionParameter;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionParameter;
-import info.teksol.mindcode.v3.compiler.generation.Assembler;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
+import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -246,12 +246,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public void setValue(Assembler assembler, LogicValue value) {
+    public void setValue(CodeAssembler assembler, LogicValue value) {
         assembler.createSet(this, value);
     }
 
     @Override
-    public void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(this);
     }
 

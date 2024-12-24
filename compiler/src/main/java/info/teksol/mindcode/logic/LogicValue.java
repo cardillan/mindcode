@@ -2,7 +2,7 @@ package info.teksol.mindcode.logic;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.v3.compiler.generation.Assembler;
+import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
 
@@ -38,17 +38,17 @@ public interface LogicValue extends LogicArgument, NodeValue {
     // NodeValue methods
 
     @Override
-    default LogicValue getValue(Assembler assembler) {
+    default LogicValue getValue(CodeAssembler assembler) {
         return this;
     }
 
     @Override
-    default void writeValue(Assembler assembler, Consumer<LogicVariable> valueSetter) {
+    default void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Cannot modify readable value.");
     }
 
     @Override
-    default void setValue(Assembler assembler, LogicValue value) {
+    default void setValue(CodeAssembler assembler, LogicValue value) {
         throw new MindcodeInternalError("Cannot modify readable value.");
     }
 }

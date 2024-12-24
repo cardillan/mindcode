@@ -3,13 +3,13 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.GotoInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.v3.AstContext;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.ArrayList;
 import java.util.List;

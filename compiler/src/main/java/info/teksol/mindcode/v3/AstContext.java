@@ -6,8 +6,8 @@ import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

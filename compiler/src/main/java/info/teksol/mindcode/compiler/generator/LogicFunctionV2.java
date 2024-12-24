@@ -6,6 +6,7 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -281,7 +282,6 @@ public class LogicFunctionV2 implements LogicFunction {
         useCount += count;
     }
 
-    @Override
     public void setLabel(LogicLabel label) {
         this.label = label;
     }

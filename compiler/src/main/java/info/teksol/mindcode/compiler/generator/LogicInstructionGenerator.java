@@ -16,6 +16,7 @@ import info.teksol.mindcode.mimex.LVar;
 import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.ContextfulInstructionCreator;
 import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import info.teksol.mindcode.v3.compiler.generation.ReturnStack;
 import org.jspecify.annotations.NonNull;

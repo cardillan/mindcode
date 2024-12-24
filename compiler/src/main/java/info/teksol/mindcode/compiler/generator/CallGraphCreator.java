@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.ArrayList;
 import java.util.HashSet;

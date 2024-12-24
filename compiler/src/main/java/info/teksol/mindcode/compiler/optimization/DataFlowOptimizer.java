@@ -4,13 +4,13 @@ import info.teksol.mindcode.MessageLevel;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstContextType;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.AstContext;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.*;
 import java.util.function.Function;

@@ -5,7 +5,6 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
@@ -24,13 +23,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private final CodeGeneratorContext context;
     private final CallGraph callGraph;
     private final CompileTimeEvaluator evaluator;
-    private final Assembler assembler;
+    private final CodeAssembler assembler;
     private final Variables variables;
 
     private final FunctionMapper functionMapper;
     private final ComposedAstNodeVisitor<NodeValue> nodeVisitor;
-
-    // Stateful instances
+    private final FunctionDeclarationsBuilder functionCompiler;
 
     public CodeGenerator(CodeGeneratorContext context) {
         super(context.messageConsumer());
@@ -59,6 +57,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new RangedForLoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new StatementListsBuilder(this, context));
         nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(this, context));
+
+        functionCompiler = new FunctionDeclarationsBuilder(this, context);
     }
 
     public void generateCode(AstProgram program) {
@@ -72,50 +72,16 @@ public class CodeGenerator extends AbstractMessageEmitter {
         variables.exitFunction(callGraph.getMain());
 
         // Check stack allocations
-        if (context.stackAllocation() == null) {
+        if (!context.stackTracker().isValid()) {
             callGraph.recursiveFunctions().filter(LogicFunctionV3::isUsed).forEach(f -> error(f.getDeclaration(),
                     "Function '%s' is recursive and no stack was allocated.", f.getName()));
         }
 
+        // Separate main program from function declarations
+        assembler.createCompilerEnd();
+
         // Process function declarations
-        appendFunctionDeclarations();
-    }
-
-    private void appendFunctionDeclarations() {
-        emitEnd();
-
-//        for (LogicFunction function : callGraph.getFunctions()) {
-//            if (function.isInline() || !function.isUsed()) {
-//                continue;
-//            }
-//
-//            assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getUseCount());
-//            currentFunction = function;
-//            functionPrefix = function.getPrefix();
-//            functionContext = new LogicInstructionGenerator.LocalContext();
-//            emit(createLabel(function.getLabel()));
-//            final LogicValue returnValue = function.isVoid() ? VOID : LogicVariable.fnRetVal(function);
-//            returnStack.enterFunction(nextLabel(), returnValue);
-//
-//            if (function.isRecursive()) {
-//                appendRecursiveFunctionDeclaration(function);
-//            } else {
-//                appendStacklessFunctionDeclaration(function);
-//            }
-//
-//            emitEnd();
-//            exitAstNode(function.getDeclaration());
-//
-//            functionPrefix = "";
-//            returnStack.exitFunction();
-//            currentFunction = callGraph.getMain();
-//        }
-    }
-
-    private void emitEnd() {
-        assembler.setSubcontextType(AstSubcontextType.END, 1.0);
-        assembler.createEnd();
-        assembler.clearSubcontextType();
+        callGraph.getFunctions().forEach(functionCompiler::compileFunction);
     }
 
     public NodeValue visit(AstMindcodeNode node, boolean evaluate) {
@@ -127,8 +93,4 @@ public class CodeGenerator extends AbstractMessageEmitter {
         return result;
     }
 
-    @NullMarked
-    public interface AstNodeVisitor {
-        NodeValue visit(AstMindcodeNode node, boolean evaluate);
-    }
 }

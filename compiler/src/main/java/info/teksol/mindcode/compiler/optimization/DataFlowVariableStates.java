@@ -3,12 +3,12 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

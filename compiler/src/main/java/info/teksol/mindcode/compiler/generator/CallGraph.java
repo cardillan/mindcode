@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.FunctionCall;
 import info.teksol.mindcode.ast.StackAllocation;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.List;
 import java.util.Objects;

@@ -5,6 +5,7 @@ import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.FunctionParameter;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mindcode.v3.compiler.callgraph.LogicFunction;
 
 import java.util.ArrayList;
 import java.util.HashMap;

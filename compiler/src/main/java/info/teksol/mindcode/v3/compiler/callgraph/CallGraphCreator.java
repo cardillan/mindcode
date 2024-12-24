@@ -1,7 +1,6 @@
 package info.teksol.mindcode.v3.compiler.callgraph;
 
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.compiler.generator.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.util.StringUtils;
@@ -14,7 +13,7 @@ import java.util.Set;
 
 @NullMarked
 public class CallGraphCreator extends AbstractMessageEmitter {
-    private final InstructionProcessor instructionProcessor;
+    private final InstructionProcessor processor;
     private final FunctionDefinitions functionDefinitions;
     private final List<LogicFunctionV3> functions = new ArrayList<>();
     private final Set<String> syncedVariables = new HashSet<>();
@@ -26,7 +25,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private CallGraphCreator(CallGraphCreatorContext context) {
         super(context.messageConsumer());
-        instructionProcessor = context.instructionProcessor();
+        processor = context.instructionProcessor();
         functionDefinitions = new FunctionDefinitions(messageConsumer);
         activeFunction = functionDefinitions.getMain();
     }
@@ -104,8 +103,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void setupOutOfLineFunction(LogicFunctionV3 function) {
-        function.setLabel(instructionProcessor.nextLabel());
-        function.setPrefix(instructionProcessor.nextFunctionPrefix());
+        function.setLabel(processor.nextLabel());
+        function.setPrefix(processor.nextFunctionPrefix());
         function.createParameters();
     }
 
@@ -153,13 +152,13 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         function.getDeclaredParameters().stream()
                 .map(AstFunctionParameter::getName)
-                .filter(instructionProcessor::isBlockName)
+                .filter(processor::isBlockName)
                 .forEach(name -> error(function.getInputPosition(),
                         "Parameter '%s' of function '%s' uses name reserved for linked blocks.", name, function.getName()));
 
         function.getDeclaredParameters().stream()
                 .map(AstFunctionParameter::getName)
-                .filter(instructionProcessor::isGlobalName)
+                .filter(processor::isGlobalName)
                 .forEach(name -> error(function.getInputPosition(),
                         "Parameter '%s' of function '%s' uses name reserved for global variables.", name, function.getName()));
     }
