@@ -45,14 +45,10 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
     }
 
     protected List<FunctionArgument> processArguments(AstFunctionCall call) {
-        return processArguments(call.getArguments());
-    }
-
-    protected List<FunctionArgument> processArguments(List<AstFunctionArgument> declaredArguments) {
         // Do not track temporary variables created by evaluating function parameter expressions.
         // They'll be used solely to pass values to actual function parameters and won't be used subsequently
-        // TODO What if there's a nested call to a recursive function - `foo(foo(x))`? Hm?
-        return variables.excludeVariablesFromTracking(() -> declaredArguments.stream()
+        // TODO What if there's a nested call to a recursive function - `foo(foo(1, 2), foo(3, 4))`? Hm?
+        return variables.excludeVariablesFromTracking(() -> call.getArguments().stream()
                 .<FunctionArgument>mapMulti((argument, consumer) -> {
                     if (variables.isVarargParameter(argument.getExpression())) {
                         variables.getVarargs().forEach(consumer);

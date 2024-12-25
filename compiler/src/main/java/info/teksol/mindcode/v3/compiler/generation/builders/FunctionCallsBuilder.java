@@ -21,6 +21,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     private final Lazy<BuiltinFunctionVarargsBuilder> varargsBuilder;
     private final Lazy<BuiltinFunctionMlogBuilder> mlogBuilder;
     private final Lazy<BuiltinFunctionTextOutputBuilder> textBuilder;
+    private final Lazy<StandardFunctionCallsBuilder> callBuilder;
 
     public FunctionCallsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
@@ -28,6 +29,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         varargsBuilder = new Lazy<>(() -> new BuiltinFunctionVarargsBuilder(this));
         mlogBuilder = new Lazy<>(() -> new BuiltinFunctionMlogBuilder(this));
         textBuilder = new Lazy<>(() -> new BuiltinFunctionTextOutputBuilder(this));
+        callBuilder = new Lazy<>(() -> new StandardFunctionCallsBuilder(this));
     }
 
     @Override
@@ -58,15 +60,11 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
             case "print"        -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT);
             case "println"      -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN);
             case "remark"       -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK);
-            default             -> handleStandardFunctionCall(call);
+            default             -> callBuilder.get().handleStandardFunctionCall(call);
         };
     }
 
     private NodeValue handleMethodCall(AstFunctionCall node) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private NodeValue handleStandardFunctionCall(AstFunctionCall call) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

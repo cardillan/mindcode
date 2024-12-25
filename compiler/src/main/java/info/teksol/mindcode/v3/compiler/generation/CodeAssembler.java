@@ -20,9 +20,10 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @NullMarked
-public class CodeAssembler extends AbstractMessageEmitter implements ContextfulInstructionCreator {
+public class CodeAssembler extends AbstractMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final List<LogicInstruction> instructions = new ArrayList<>();
@@ -42,6 +43,13 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         astContext = context.rootAstContext();
 
         loopStack = new LoopStack(messageConsumer);
+    }
+
+    @Override
+    public void accept(LogicInstruction logicInstruction) {
+        if (active) {
+            instructions.add(logicInstruction);
+        }
     }
 
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.

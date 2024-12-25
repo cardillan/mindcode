@@ -23,7 +23,7 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
     public NodeValue handleLength(AstFunctionCall call) {
         if (validateStandardFunctionArguments(call, 3)) {
             assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-            List<FunctionArgument> arguments = processArguments(call.getArguments());
+            List<FunctionArgument> arguments = processArguments(call);
             assembler.clearSubcontextType();
             return LogicNumber.get(arguments.size());
         } else {

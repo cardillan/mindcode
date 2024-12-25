@@ -2,8 +2,6 @@ package info.teksol.mindcode.v3.compiler.generation;
 
 import info.teksol.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.functions.FunctionMapper;
-import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstProgram;
@@ -26,7 +24,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private final CodeAssembler assembler;
     private final Variables variables;
 
-    private final FunctionMapper functionMapper;
     private final ComposedAstNodeVisitor<NodeValue> nodeVisitor;
     private final FunctionDeclarationsBuilder functionCompiler;
 
@@ -37,9 +34,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
         evaluator = context.compileTimeEvaluator();
         assembler = context.assembler();
         variables = context.variables();
-
-        functionMapper = FunctionMapperFactory.getFunctionMapper(context.instructionProcessor(),
-                assembler::getAstContext, messageConsumer);
 
         nodeVisitor = new ComposedAstNodeVisitor<>(node -> { throw new MindcodeInternalError("Unhandled node " + node); });
 
