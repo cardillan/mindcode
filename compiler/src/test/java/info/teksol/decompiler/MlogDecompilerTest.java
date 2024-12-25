@@ -33,7 +33,7 @@ class MlogDecompilerTest {
     @Test
     void decompilesDrawflush() {
         assertEquals("""
-                            display1.drawflush();
+                            drawflush(display1);
                         """,
                 decompile("""
                         drawflush display1
@@ -185,7 +185,7 @@ class MlogDecompilerTest {
                             flag(rand(1000));
                             goto label9;
                         // label11:
-                            message1.printflush();
+                            printflush(message1);
                             goto label13;
                         // label9:
                             __fn0retval = min(max((y + __tmp32), SW_Y), NE_Y);
@@ -220,7 +220,7 @@ class MlogDecompilerTest {
                             print("\\nUpgrades: ");
                             print(TOTAL);
                             print("\\n");
-                            message1.printflush();
+                            printflush(message1);
                             x = x + dx;
                         if !((x > NE_X) | (x < SW_X)) then goto label20;
                             dx = -1 * dx;

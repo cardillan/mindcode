@@ -65,6 +65,9 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     public String decompile(MlogInstruction instruction) {
         List<SampleGenerator> generators = opcodeSampleGenerators.getOrDefault(instruction.getOpcode(), List.of());
         for (SampleGenerator generator : generators) {
+            // Force function call syntax for these instructions
+            if (instruction.getArgs().size() == 1 && generator instanceof StandardPropertyHandler) continue;
+
             String code = generator.decompile(instruction);
             if (code != null) {
                 return code;

@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 * Changed Mindcode to recognize new properties supported in Mindustry Version 8: `@currentAmmoType`, `@armor`, `@velocityX`, `@velocityY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight` and `@solid` ([#187](https://github.com/cardillan/mindcode/issues/187)).
+* The decompiler now produces a function call syntax instead of method call syntax for `printflush` and `drawflush` instructions.
 
 ## 2.7.1 - 2024-12-07
 
