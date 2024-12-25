@@ -51,11 +51,19 @@ public class MlogDecompiler {
             collapseExpressions();
 
             if (preamble) {
-                output.append("// This is an mlog code partially decompiled into Mindcode.\n");
-                output.append("// NOTE: This code cannot be directly compiled by Mindcode as is!\n");
-                output.append("// All the labels, if and goto statements need to be manually revised\n");
-                output.append("// and rewritten into loops, conditional statements and functions.\n");
-                output.append("\n");
+                output.append("""
+                        // This is an mlog code partially decompiled into Mindcode.
+                        //
+                        // NOTE: This code cannot be directly compiled by Mindcode as is!
+                        // All the labels, if and goto statements need to be manually revised
+                        // and rewritten into loops, conditional statements and functions.
+                        
+                        // The following directive instructs Mindcode to process code specific
+                        // to World processor in the Mindustry Logic version 8. It is not necessary
+                        // if you haven't decompiled World processor specific instructions.
+                        #set target = ML8A;
+
+                        """);
             }
 
             for (Object o : content) {
