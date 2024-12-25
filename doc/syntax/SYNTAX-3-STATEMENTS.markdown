@@ -33,8 +33,7 @@ loop while @unit == null;
 
 ## Range Iteration Loops
 
-Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an
-inclusive range (the `do` keyword separating the condition from the loop body is optional):
+Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an inclusive range:
 
 ```
 for n in 14 .. 18 do

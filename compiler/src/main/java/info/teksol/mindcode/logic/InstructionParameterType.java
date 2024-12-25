@@ -127,7 +127,10 @@ public enum InstructionParameterType {
                     "@neoplasm", "@arkycite", "@ozone", "@hydrogen", "@nitrogen", "@cyanogen",
                     "@progress", "@speed", "@color"),
             specificVersions(V7A, MAX,
-                    "@id")
+                    "@id"),
+            specificVersions(V8A, MAX,
+                    "@currentAmmoType", "@armor", "@velocityX", "@velocityY",
+                    "@cameraX", "@cameraY", "@cameraWidth", "@cameraHeight", "@solid")
     ),
 
     /** For the SET MARKER instruction */

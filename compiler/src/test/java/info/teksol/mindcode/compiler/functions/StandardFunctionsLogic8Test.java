@@ -15,6 +15,23 @@ public class StandardFunctionsLogic8Test extends AbstractGeneratorTest {
     }
 
     @Test
+    void recognizesNewProperties() {
+        assertGeneratesMessages(ExpectedMessages.none(),
+                """
+                        a = getlink(0);
+                        print(a.@currentAmmoType);
+                        print(a.@armor);
+                        print(a.@velocityX);
+                        print(a.@velocityY);
+                        print(a.@cameraX);
+                        print(a.@cameraY);
+                        print(a.@cameraWidth);
+                        print(a.@cameraHeight);
+                        """);
+    }
+
+
+    @Test
     void generatesNewDrawInstructions() {
         assertCompilesTo("""
                         drawPrint(10, 10, topRight);
@@ -59,7 +76,6 @@ public class StandardFunctionsLogic8Test extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
-
 
     @Test
     void generatesPlaysound() {

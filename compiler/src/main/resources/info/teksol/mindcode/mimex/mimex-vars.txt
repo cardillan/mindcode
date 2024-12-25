@@ -629,3 +629,11 @@ null;global;true;true;0.0
 @unitCount;global;false;true;56.0
 @itemCount;global;false;true;22.0
 @liquidCount;global;false;true;11.0
+@currentAmmoType;global;true;true;0.0
+@armor;global;true;true;0.0
+@velocityX;global;true;true;0.0
+@velocityY;global;true;true;0.0
+@cameraX;global;true;true;0.0
+@cameraY;global;true;true;0.0
+@cameraWidth;global;true;true;0.0
+@cameraHeight;global;true;true;0.0

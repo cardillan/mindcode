@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.7.2 - 2024-12-25
+
+### Fixed
+
+* Fixed the documentation stating that `do` in loops is optional ([#191](https://github.com/cardillan/mindcode/issues/191)).
+
+### Changed
+
+* Changed Mindcode to recognize new properties supported in Mindustry Version 8: `@currentAmmoType`, `@armor`, `@velocityX`, `@velocityY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight` and `@solid` ([#187](https://github.com/cardillan/mindcode/issues/187)).
+
 ## 2.7.1 - 2024-12-07
 
 ### Fixed
