@@ -34,7 +34,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         return VOID;
     }
 
-    private class ForEachLoopBuilder extends AbstractIndependentBuilder<AstForEachLoopStatement> {
+    private class ForEachLoopBuilder extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
         private final List<NodeValue> values;
         private final List<Iterator> iterators;
         private final LogicLabel bodyLabel = nextLabel();
@@ -133,7 +133,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
             assembler.createLabel(bodyLabel);
 
-            visitStatements(node.getBody());
+            visitBody(node.getBody());
 
             // Label for continue statements
             assembler.createLabel(loopLabels.continueLabel());

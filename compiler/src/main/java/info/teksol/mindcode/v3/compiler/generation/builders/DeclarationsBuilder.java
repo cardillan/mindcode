@@ -8,6 +8,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.generation.variables.FormattableContent;
 import info.teksol.mindcode.v3.compiler.generation.variables.HeapTracker;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
@@ -47,7 +48,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitAllocations(AstAllocations node) {
-        visitStatements(node.getAllocations());
+        visitBody(node.getAllocations());
         return LogicVoid.VOID;
     }
 
@@ -88,8 +89,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     @Override
     public NodeValue visitConstant(AstConstant node) {
         NodeValue nodeValue = evaluate(node.getValue());
-        if (nodeValue instanceof LogicValue value && isNonvolatileConstant(value)) {
-            variables.createConstant(node, value);
+        if (nodeValue instanceof LogicValue value && isNonvolatileConstant(value) || nodeValue instanceof FormattableContent) {
+            variables.createConstant(node, nodeValue);
         } else {
             error(node.getValue(), "Value assigned to constant '%s' is not a constant expression.", node.getConstantName());
             variables.createConstant(node, LogicNull.NULL);

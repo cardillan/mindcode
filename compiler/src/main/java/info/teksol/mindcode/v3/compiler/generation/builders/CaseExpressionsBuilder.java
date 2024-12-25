@@ -65,7 +65,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
             // Body of the alternative
             assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
             assembler.createLabel(bodyLabel);
-            NodeValue bodyValue = visitExpressions(alternative.getBody());
+            NodeValue bodyValue = evaluateBody(alternative.getBody());
             assembler.createSet(resultVar, bodyValue.getValue(assembler));
             assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
             assembler.createJumpUnconditional(exitLabel);
@@ -74,7 +74,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
         }
 
         assembler.setSubcontextType(AstSubcontextType.ELSE, multiplier);
-        NodeValue elseValue = visitExpressions(node.getElseBranch());
+        NodeValue elseValue = evaluateBody(node.getElseBranch());
         assembler.createSet(resultVar, elseValue.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         assembler.createLabel(exitLabel);

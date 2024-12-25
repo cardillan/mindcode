@@ -24,12 +24,12 @@ public class StatementListsBuilder extends AbstractBuilder implements
     @Override
     public NodeValue visitCodeBlock(AstCodeBlock node) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
-        return visitExpressions(node.getExpressions());
+        return evaluateBody(node.getExpressions());
     }
 
     @Override
     public NodeValue visitModule(AstModule node) {
-        visitStatements(node.getStatements());
+        visitBody(node.getStatements());
         return LogicVoid.VOID;
     }
 
@@ -40,12 +40,12 @@ public class StatementListsBuilder extends AbstractBuilder implements
 
     @Override
     public NodeValue visitProgram(AstProgram node) {
-        visitStatements(node.getModules());
+        visitBody(node.getModules());
         return LogicVoid.VOID;
     }
 
     @Override
     public NodeValue visitStatementList(AstStatementList node) {
-        return visitExpressions(node.getStatements());
+        return evaluateBody(node.getStatements());
     }
 }

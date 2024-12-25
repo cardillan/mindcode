@@ -55,7 +55,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
-        visitStatements(node.getBody());
+        visitBody(node.getBody());
 
         // Update
         assembler.createLabel(loopLabels.continueLabel());

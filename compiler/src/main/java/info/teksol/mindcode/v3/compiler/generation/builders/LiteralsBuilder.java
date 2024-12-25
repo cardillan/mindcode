@@ -9,25 +9,41 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.generation.variables.FormattableContent;
+import info.teksol.mindcode.v3.compiler.generation.variables.MissingValue;
 import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.Optional;
 
 @NullMarked
 public class LiteralsBuilder extends AbstractBuilder implements
-        AstLiteralBooleanVisitor<NodeValue>,
-        AstLiteralNullVisitor<NodeValue>,
+        AstFormattableLiteralVisitor<NodeValue>,
+        AstFormattablePlaceholderVisitor<NodeValue>,
         AstLiteralBinaryVisitor<NodeValue>,
+        AstLiteralBooleanVisitor<NodeValue>,
         AstLiteralDecimalVisitor<NodeValue>,
+        AstLiteralEscapeVisitor<NodeValue>,
         AstLiteralFloatVisitor<NodeValue>,
         AstLiteralHexadecimalVisitor<NodeValue>,
-        AstLiteralStringVisitor<NodeValue>,
-        AstLiteralEscapeVisitor<NodeValue>
+        AstLiteralNullVisitor<NodeValue>,
+        AstLiteralStringVisitor<NodeValue>
 {
 
     public LiteralsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
+    }
+
+    @Override
+    public NodeValue visitFormattableLiteral(AstFormattableLiteral node) {
+        List<NodeValue> parts = evaluateExpressions(node.getParts());
+        return new FormattableContent(node.inputPosition(), parts);
+    }
+
+    @Override
+    public NodeValue visitFormattablePlaceholder(AstFormattablePlaceholder node) {
+        return MissingValue.FORMATTABLE_PLACEHOLDER;
     }
 
     @Override

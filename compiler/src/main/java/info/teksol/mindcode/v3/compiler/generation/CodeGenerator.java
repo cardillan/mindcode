@@ -49,6 +49,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new CaseExpressionsBuilder(this, context));
         nodeVisitor.registerVisitor(new DeclarationsBuilder(this, context));
         nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new FunctionCallsBuilder(this, context));
         nodeVisitor.registerVisitor(new IdentifiersBuilder(this, context));
         nodeVisitor.registerVisitor(new IfExpressionsBuilder(this, context));
         nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(this, context));

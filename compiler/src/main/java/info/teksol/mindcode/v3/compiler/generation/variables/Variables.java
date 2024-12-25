@@ -14,6 +14,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -59,7 +60,7 @@ public class Variables extends AbstractMessageEmitter {
         this.heapTracker = heapTracker;
     }
 
-    public boolean isVarargParameter(AstExpression expression) {
+    public boolean isVarargParameter(@Nullable AstExpression expression) {
         if (expression instanceof AstIdentifier identifier) {
             LogicFunctionV3 currentFunction = functionContext.function();
             return currentFunction != null && currentFunction.isVarargs(identifier.getName());
@@ -120,7 +121,7 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param constant constant declaration to process
     /// @param value compile-time value associated with the constant
-    public void createConstant(AstConstant constant, LogicValue value) {
+    public void createConstant(AstConstant constant, NodeValue value) {
         if (isLocalContext()) {
             error(constant, "Constants must be declared outside a function/a main code block..");
         }

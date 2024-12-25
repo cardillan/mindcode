@@ -80,5 +80,23 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             memory[0] = 1;
                             """);
         }
+
+        @Test
+        void refusesAssigningFormattables() {
+            assertGeneratesMessages(
+                    expectedMessages().add("A formattable string literal can only be used as a first argument to the print or remark function."),
+                    """
+                            a = $"Hello";
+                            """);
+        }
+
+        @Test
+        void refusesFormattablesAsParameters() {
+            assertGeneratesMessages(
+                    expectedMessages().add("Value assigned to parameter 'a' is not a constant expression."),
+                    """
+                            param a = $"Hello";
+                            """);
+        }
     }
 }

@@ -219,7 +219,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter implements AstC
     }
 
     private AstMindcodeNode evaluateFunctionCall(AstFunctionCall node) {
-        Operation operation = Operation.fromMindcode(node.getName());
+        Operation operation = Operation.fromMindcode(node.getFunctionName());
         LogicOperation eval = info.teksol.evaluator.ExpressionEvaluator.getOperation(operation);
         int numArgs = info.teksol.evaluator.ExpressionEvaluator.getNumberOfArguments(operation);
         if (eval != null && numArgs == node.getArguments().size()) {

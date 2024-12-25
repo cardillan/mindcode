@@ -55,8 +55,8 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     private void appendRecursiveFunctionDeclaration(LogicFunctionV3 function) {
         NodeValue nodeValue = function.isVoid()
-                ? visitStatements(function.getBody())
-                : visitExpressions(function.getBody());
+                ? visitBody(function.getBody())
+                : evaluateBody(function.getBody());
 
         if (!function.isVoid()) {
             assembler.createSet(LogicVariable.fnRetVal(function),  nodeValue.getValue(assembler));
@@ -68,8 +68,8 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     private void appendStacklessFunctionDeclaration(LogicFunctionV3 function) {
         NodeValue nodeValue = function.isVoid()
-                ? visitStatements(function.getBody())
-                : visitExpressions(function.getBody());
+                ? visitBody(function.getBody())
+                : evaluateBody(function.getBody());
 
         if (!function.isVoid()) {
             assembler.createSet(LogicVariable.fnRetVal(function),  nodeValue.getValue(assembler));

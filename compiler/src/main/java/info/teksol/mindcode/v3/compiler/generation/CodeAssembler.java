@@ -6,8 +6,10 @@ import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.generator.LogicFunctionV2;
+import info.teksol.mindcode.compiler.instructions.CustomInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.v3.AstContext;
@@ -120,6 +122,13 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
             setSubcontextType(AstSubcontextType.END, 1.0);
             createEnd();
             clearSubcontextType();
+        }
+    }
+
+    public void createCustomInstruction(boolean safe, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+        if (active) {
+            CustomInstruction customInstruction = new CustomInstruction(astContext, safe, opcode, args, params);
+            instructions.add(customInstruction);
         }
     }
 }

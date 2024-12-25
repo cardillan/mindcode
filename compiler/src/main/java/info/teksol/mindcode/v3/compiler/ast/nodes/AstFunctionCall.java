@@ -36,7 +36,7 @@ public class AstFunctionCall extends AstExpression {
         return identifier;
     }
 
-    public String getName() {
+    public String getFunctionName() {
         return identifier.getName();
     }
 

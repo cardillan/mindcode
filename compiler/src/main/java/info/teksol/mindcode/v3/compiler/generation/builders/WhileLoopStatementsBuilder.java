@@ -38,7 +38,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
-        visitStatements(node.getBody());
+        visitBody(node.getBody());
 
         // Condition
         // TODO Continue label should probably go into condition context?
@@ -67,7 +67,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
-        visitStatements(node.getBody());
+        visitBody(node.getBody());
 
         // Flow control
         assembler.createLabel(loopLabels.continueLabel());

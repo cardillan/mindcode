@@ -77,11 +77,11 @@ class FunctionDefinitions extends AbstractMessageEmitter {
     }
 
     public List<LogicFunctionV3> getLooseMatches(AstFunctionCall call) {
-        return functionMap.getOrDefault(call.getName(), List.of());
+        return functionMap.getOrDefault(call.getFunctionName(), List.of());
     }
 
     public List<LogicFunctionV3> getExactMatches(AstFunctionCall call) {
-        List<LogicFunctionV3> list = functionMap.getOrDefault(call.getName(), List.of())
+        List<LogicFunctionV3> list = functionMap.getOrDefault(call.getFunctionName(), List.of())
                 .stream()
                 .filter(f -> f.exactMatch(call))
                 .toList();

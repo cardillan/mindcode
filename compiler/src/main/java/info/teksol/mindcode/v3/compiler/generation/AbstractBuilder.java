@@ -50,6 +50,18 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         returnStack = context.returnStack();
     }
 
+    protected AbstractBuilder(AbstractBuilder builder) {
+        super(builder.context.messageConsumer());
+        this.codeGenerator = builder.codeGenerator;
+        this.context = builder.context;
+
+        processor = context.instructionProcessor();
+        callGraph = context.callGraph();
+        assembler = context.assembler();
+        variables = context.variables();
+        returnStack = context.returnStack();
+    }
+
     /// Processes the node by passing it to the proper builder according to node type. The builder creates
     /// code from the AST node and provides a `NodeValue` instance representing the output value of the node.
     ///
@@ -84,7 +96,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// Visits a body of statements, disregarding the resulting values of all nodes.
     ///
     /// @return `LogicVoid.VOID`
-    protected NodeValue visitStatements(List<? extends AstMindcodeNode> body) {
+    protected NodeValue visitBody(List<? extends AstMindcodeNode> body) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
         body.forEach(this::compile);
         return LogicVoid.VOID;
@@ -94,7 +106,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// (which represents the resulting value of the entire body).
     ///
     /// @return the value of the last expression in the list
-    protected NodeValue visitExpressions(List<? extends AstMindcodeNode> expressions) {
+    protected NodeValue evaluateBody(List<? extends AstMindcodeNode> expressions) {
         if (expressions.isEmpty()) {
             return LogicVoid.VOID;
         }
@@ -103,6 +115,13 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
             compile(expressions.get(i));
         }
         return evaluate(expressions.getLast());
+    }
+
+    ///  Evaluates a every expression in the list, returning a list of evaluated values.
+    ///
+    /// @return the value of all expressions in list
+    protected List<NodeValue> evaluateExpressions(List<? extends AstMindcodeNode> expressions) {
+        return expressions.stream().map(this::evaluate).toList();
     }
 
     /// Tries to resolve given expression as an l-value. Reports an appropriate error when the expression

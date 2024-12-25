@@ -24,7 +24,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
     public NodeValue visitIteratedForLoopStatement(AstIteratedForLoopStatement node) {
         // Initialization
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
-        visitStatements(node.getInitialize());
+        visitBody(node.getInitialize());
 
         final LogicLabel beginLabel = nextLabel();
         LoopLabels loopLabels = enterLoop(node);
@@ -39,12 +39,12 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
-        visitStatements(node.getBody());
+        visitBody(node.getBody());
 
         // Update
         assembler.createLabel(loopLabels.continueLabel());
         assembler.setSubcontextType(AstSubcontextType.UPDATE, LOOP_REPETITIONS);
-        visitStatements(node.getUpdate());
+        visitBody(node.getUpdate());
 
         // Flow control
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);

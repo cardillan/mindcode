@@ -71,7 +71,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private void visitFunctionCall(AstFunctionCall functionCall) {
         activeFunction.addCall(functionCall);
 
-        if (functionCall.getName().equals("sync")
+        if (functionCall.getFunctionName().equals("sync")
                 && functionCall.getArguments().size() == 1
                 && functionCall.getArgument(0).getExpression() instanceof AstIdentifier var
                 && var.getName().equals(var.getName().toUpperCase())) {
