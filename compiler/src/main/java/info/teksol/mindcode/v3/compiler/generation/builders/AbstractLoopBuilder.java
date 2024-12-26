@@ -20,23 +20,23 @@ public abstract class AbstractLoopBuilder extends AbstractBuilder {
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
-        assembler.getLoopStack().enterLoop(loopNode.inputPosition(), loopLabel, doneLabel, continueLabel);
+        variables.getLoopStack().enterLoop(loopNode.inputPosition(), loopLabel, doneLabel, continueLabel);
         return new LoopLabels(loopLabel, continueLabel, doneLabel);
     }
 
     protected LogicLabel getBreakLabel(InputPosition position, AstLabeledStatement loopNode) {
         final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
-        return assembler.getLoopStack().getBreakLabel(position, loopLabel);
+        return variables.getLoopStack().getBreakLabel(position, loopLabel);
     }
 
     protected LogicLabel getContinueLabel(InputPosition position, AstLabeledStatement loopNode) {
         final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
-        return assembler.getLoopStack().getContinueLabel(position, loopLabel);
+        return variables.getLoopStack().getContinueLabel(position, loopLabel);
     }
 
     protected void exitLoop(AstLabeledStatement loopNode) {
         final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
-        assembler.getLoopStack().exitLoop(loopLabel);
+        variables.getLoopStack().exitLoop(loopLabel);
     }
 
     protected record LoopLabels(String loopLabel, LogicLabel continueLabel, LogicLabel doneLabel) {}

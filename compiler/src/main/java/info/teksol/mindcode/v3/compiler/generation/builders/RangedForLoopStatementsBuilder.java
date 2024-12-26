@@ -57,8 +57,11 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
         visitBody(node.getBody());
 
-        // Update
+        // Continue label
+        // The label needs to be part of loop body so that it gets copied on loop unrolling
         assembler.createLabel(loopLabels.continueLabel());
+
+        // Update
         assembler.setSubcontextType(AstSubcontextType.UPDATE, multiplier);
         LogicValue oldValue = loopControlVariable.getValue(assembler);
         loopControlVariable.writeValue(assembler,

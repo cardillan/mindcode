@@ -3,9 +3,10 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
+import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -14,17 +15,24 @@ import java.util.function.Supplier;
 /// (outside any function), local context (within main body or non-recursive function) and recursive context.
 @NullMarked
 public interface FunctionContext {
-    /// @return function associated with the context, or null if in global context
-    @Nullable
+    /// Provides current function. Must not be called in global context.
+    ///
+    /// @return function associated with the context
     LogicFunctionV3 function();
 
     /// Registers a new function variable.
     NodeValue registerFunctionVariable(AstIdentifier identifier);
 
+    ///  Provides a loop stack for this function
+    LoopStack loopStack();
+
     /// Returns user variables registered within the function
     Map<String, NodeValue> variables();
 
     List<FunctionArgument> getVarargs();
+
+    /// Returns all function variables (user and compiler generated) active at this moment.
+    Collection<NodeValue> getActiveVariables();
 
     /// Called when entering a new AST node. For tracking variables used within a node
     void enterAstNode();

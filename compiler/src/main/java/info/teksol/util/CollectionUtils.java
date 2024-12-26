@@ -108,7 +108,7 @@ public class CollectionUtils {
         return list.isEmpty() ? -1 : lastIndexOf(list, list.size() - 1, matcher);
     }
 
-    public static <E extends @Nullable Object> E removeFirstMatching(List<? extends E> list, Predicate<E> matcher) {
+    public static <E extends @Nullable Object> @Nullable E removeFirstMatching(List<? extends E> list, Predicate<E> matcher) {
         int index = indexOf(list, matcher);
         return index < 0 ? null : list.remove(index);
     }

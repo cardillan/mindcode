@@ -2,28 +2,31 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.v3.MessageConsumer;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
+import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 
 @NullMarked
 public class LocalContext implements FunctionContext {
     private final LogicFunctionV3 function;
-    private final String functionPrefix;
     private final List<FunctionArgument> varargs;
     private final Map<String, NodeValue> variables = new HashMap<>();
+    private final LoopStack loopStack;
 
-    public LocalContext(LogicFunctionV3 function, String functionPrefix, List<FunctionArgument> varargs) {
+    public LocalContext(MessageConsumer messageConsumer, LogicFunctionV3 function, List<FunctionArgument> varargs) {
         this.function = Objects.requireNonNull(function);
-        this.functionPrefix = Objects.requireNonNull(functionPrefix);
         this.varargs = Objects.requireNonNull(varargs);
+        this.loopStack = new LoopStack(messageConsumer);
         function.getParameters().forEach(p -> variables.put(p.getName(), p));
+    }
+
+    public LoopStack loopStack() {
+        return loopStack;
     }
 
     @Override
@@ -34,6 +37,11 @@ public class LocalContext implements FunctionContext {
     @Override
     public List<FunctionArgument> getVarargs() {
         return varargs;
+    }
+
+    @Override
+    public Collection<NodeValue> getActiveVariables() {
+        return variables.values();
     }
 
     @Override
@@ -48,10 +56,10 @@ public class LocalContext implements FunctionContext {
     }
 
     private NodeValue createFunctionVariable(String name) {
-        if (functionPrefix.isEmpty()) {
+        if (function.isMain()) {
             return LogicVariable.main(name);
         } else {
-            return LogicVariable.local(function.getName(), functionPrefix, name);
+            return LogicVariable.local(function.getName(), function.getPrefix(), name);
         }
     }
 

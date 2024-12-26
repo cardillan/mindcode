@@ -1,17 +1,24 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
 import info.teksol.mindcode.CompilerMessage;
-import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.InstructionParameterType;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.NamedParameter;
+import info.teksol.mindcode.logic.OpcodeVariant;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import info.teksol.util.CollectionUtils;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
+@NullMarked
 class DeprecatedPropertyHandler extends AbstractMessageEmitter implements PropertyHandler {
     private final BaseFunctionMapper functionMapper;
     private final PropertyHandler replacement;
@@ -36,7 +43,7 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     }
 
     @Override
-    public String decompile(MlogInstruction instruction) {
+    public @Nullable String decompile(MlogInstruction instruction) {
         return null;
     }
 
@@ -71,13 +78,13 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     }
 
     @Override
-    public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, LogicValue target, List<LogicFunctionArgument> arguments) {
+    public LogicValue handleProperty(AstFunctionCall node, NodeValue target, List<FunctionArgument> arguments) {
         if (!warningEmitted) {
             functionMapper.messageConsumer().accept(CompilerMessage.warn(node.inputPosition(),
                     "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",
                     deprecated, functionMapper.processorVersion, replacement.getName()));
             warningEmitted = true;
         }
-        return replacement.handleProperty(node, program, target, arguments);
+        return replacement.handleProperty(node, target, arguments);
     }
 }

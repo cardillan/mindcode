@@ -405,7 +405,7 @@ public class MindustryOpcodeVariants {
     }
 
     public static NamedParameter op(String name) {
-        return new NamedParameter(InstructionParameterType.OPERATION, name);
+        return new NamedParameter(InstructionParameterType.OPERATION, name, Operation.fromMlog(name));
     }
 
     public static NamedParameter ore(String name) {

@@ -41,8 +41,11 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         visitBody(node.getBody());
 
-        // Update
+        // Continue label
+        // The label needs to be part of loop body so that it gets copied on loop unrolling
         assembler.createLabel(loopLabels.continueLabel());
+
+        // Update
         assembler.setSubcontextType(AstSubcontextType.UPDATE, LOOP_REPETITIONS);
         visitBody(node.getUpdate());
 

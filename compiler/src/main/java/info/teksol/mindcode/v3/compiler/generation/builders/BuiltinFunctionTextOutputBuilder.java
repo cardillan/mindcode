@@ -31,17 +31,17 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             return LogicVoid.VOID;
         }
 
-        validateStandardFunctionArguments(call.getArguments());
-        if (call.getArguments().isEmpty()) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<FunctionArgument> arguments = processArguments(call);
+        FunctionArgument.validateAsInput(messageConsumer(), arguments);
+
+        if (arguments.isEmpty()) {
             error(call, "Not enough arguments to the '%s' function (expected 1 or more, found %d).",
                     call.getFunctionName(), call.getArguments().size());
             return LogicVoid.VOID;
         }
 
-        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        final List<FunctionArgument> arguments = processArguments(call);
-
-        if (!arguments.isEmpty() && arguments.getFirst().getArgumentValue() instanceof LogicString str) {
+        if (arguments.getFirst().getArgumentValue() instanceof LogicString str) {
             long placeholders = PLACEHOLDER_MATCHER.matcher(str.format(processor)).results().count();
             if (placeholders == 0) {
                 warn(call, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
@@ -64,7 +64,9 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
     }
 
     public NodeValue handleTextOutput(AstFunctionCall call, Formatter formatter) {
-        validateStandardFunctionArguments(call.getArguments());
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+        FunctionArgument.validateAsInput(messageConsumer(), arguments);
 
         if (call.getArguments().isEmpty()) {
             if (formatter.requiresParameter()) {
@@ -76,13 +78,10 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             return LogicVoid.VOID;
         }
 
-        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        List<FunctionArgument> args = processArguments(call);
-
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-        NodeValue result = args.getFirst().getArgumentValue() instanceof FormattableContent formattable
-                ? createFormattableOutput(formattable.inputPosition(), formatter, formattable.getParts(),args.subList(1, args.size()))
-                : createPlainOutput(formatter, args);
+        NodeValue result = arguments.getFirst().getArgumentValue() instanceof FormattableContent formattable
+                ? createFormattableOutput(formattable.inputPosition(), formatter, formattable.getParts(),arguments.subList(1, arguments.size()))
+                : createPlainOutput(formatter, arguments);
 
         if (formatter.createsNewLine()) {
             formatter.createInstruction(assembler, LogicString.NEW_LINE);

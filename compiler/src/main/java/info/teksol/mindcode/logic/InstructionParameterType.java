@@ -254,7 +254,7 @@ public enum InstructionParameterType {
     }
 
     /**
-     * @return true if this parameter can write to a variable
+     * @return true if this parameter is unused
      */
     public boolean isUnused() {
         return (flags & Flags.UNUSED) != 0;

@@ -28,6 +28,11 @@ public class MissingValue implements NodeValue {
     }
 
     @Override
+    public boolean isComplex() {
+        return false;
+    }
+
+    @Override
     public boolean isLvalue() {
         return true;
     }

@@ -1,13 +1,13 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
-import info.teksol.mindcode.ast.FunctionCall;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.LogicFunctionArgument;
-import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.function.Consumer;
 
+@NullMarked
 interface FunctionHandler extends SampleGenerator {
-    LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments);
+    NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments);
 }

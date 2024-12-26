@@ -1,26 +1,29 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.ast.FunctionCall;
+import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.AstContext;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public class BaseFunctionMapper extends AbstractMessageEmitter implements FunctionMapper {
     private final AstContext staticAstContext = AstContext.createStaticRootNode();
-    final Supplier<AstContext> astContextSupplier;
-    final InstructionProcessor instructionProcessor;
+    final InstructionProcessor processor;
+    final CodeAssembler assembler;
     final ProcessorVersion processorVersion;
     final ProcessorEdition processorEdition;
     private final Map<String, PropertyHandler> propertyMap;
@@ -29,14 +32,12 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
     private final Map<Opcode, List<SampleGenerator>> opcodeSampleGenerators;
 
-    BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
-            MessageConsumer messageConsumer) {
-        super(messageConsumer);
-        this.astContextSupplier = astContextSupplier;
-        this.instructionProcessor = InstructionProcessor;
-
-        processorVersion = instructionProcessor.getProcessorVersion();
-        processorEdition = instructionProcessor.getProcessorEdition();
+    public BaseFunctionMapper(FunctionMapperContext context) {
+        super(context.messageConsumer());
+        processor = context.instructionProcessor();
+        assembler = context.assembler();
+        processorVersion = processor.getProcessorVersion();
+        processorEdition = processor.getProcessorEdition();
         propertyMap = createPropertyMap();
         functionMap = createFunctionMap();
 
@@ -50,19 +51,18 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     }
 
     @Override
-    public LogicValue handleProperty(AstNode node, Consumer<LogicInstruction> program, String propertyName, LogicValue target,
-            List<LogicFunctionArgument> arguments) {
-        PropertyHandler handler = propertyMap.get(propertyName);
-        return handler == null ? null : handler.handleProperty(node, program, target, arguments);
+    public @Nullable NodeValue handleProperty(AstFunctionCall call, NodeValue target, List<FunctionArgument> arguments) {
+        PropertyHandler handler = propertyMap.get(call.getFunctionName());
+        return handler == null ? null : handler.handleProperty(call, target, arguments);
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, String functionName, List<LogicFunctionArgument> arguments) {
-        FunctionHandler handler = functionMap.get(functionName);
-        return handler == null ? null : handler.handleFunction(call, program, arguments);
+    public @Nullable NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+        FunctionHandler handler = functionMap.get(call.getFunctionName());
+        return handler == null ? null : handler.handleFunction(call, arguments);
     }
 
-    public String decompile(MlogInstruction instruction) {
+    public @Nullable String decompile(MlogInstruction instruction) {
         List<SampleGenerator> generators = opcodeSampleGenerators.getOrDefault(instruction.getOpcode(), List.of());
         for (SampleGenerator generator : generators) {
             String code = generator.decompile(instruction);
@@ -79,7 +79,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         return Stream.concat(
                 sampleGenerators.stream().map(
                         s -> new FunctionSample(
-                                instructionProcessor.getOpcodeVariants().indexOf(s.getOpcodeVariant()),
+                                processor.getOpcodeVariants().indexOf(s.getOpcodeVariant()),
                                 s.getName(),
                                 s.generateSampleCall(),
                                 s.generateSampleInstruction(),
@@ -87,42 +87,32 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
                                 s.getNote()
                         )
                 ),
-                sampleGenerators.stream().filter(s -> s.generateSecondarySampleCall() != null).map(
-                        s -> new FunctionSample(
-                                instructionProcessor.getOpcodeVariants().indexOf(s.getOpcodeVariant()),
-                                s.getName(),
-                                s.generateSecondarySampleCall(),
-                                s.generateSampleInstruction(),
-                                s.getOpcodeVariant().edition(),
-                                s.getNote()
+                sampleGenerators.stream()
+                        .map(s -> Tuple2.<SampleGenerator, @Nullable String>of(s, s.generateSecondarySampleCall()))
+                        .filter(t -> t.e2() != null)
+                        .map(t -> new FunctionSample(
+                                        processor.getOpcodeVariants().indexOf(t.e1().getOpcodeVariant()),
+                                        t.e1().getName(),
+                                        t.e2(),
+                                        t.e1().generateSampleInstruction(),
+                                        t.e1().getOpcodeVariant().edition(),
+                                        t.e1().getNote()
+                                )
                         )
-                )
         ).collect(Collectors.toList());
     }
 
-    LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
-        return instructionProcessor.createInstruction(astContextSupplier.get(), opcode, args);
-    }
-
     LogicInstruction createSampleInstruction(Opcode opcode, List<LogicArgument> args) {
-        return instructionProcessor.createInstructionUnchecked(staticAstContext, opcode, args);
+        return processor.createInstructionUnchecked(staticAstContext, opcode, args);
     }
 
-    static LogicKeyword toKeyword(LogicValue arg) {
-        // Syntactically, instruction keywords are just identifiers.
-        // To convert it to keyword, we use the plain variable name.
-        return switch (arg) {
-            case LogicVariable lv -> LogicKeyword.create(lv.getName());
-            case LogicBoolean lb  -> LogicKeyword.create(lb.toMlog()); // Handles the case where true/false are used as a selector or keyword
-            default -> throw new MindcodeInternalError("Unexpected type of argument " + arg);
-        };
-    }
-
-    static LogicKeyword toKeywordOptional(LogicValue arg) {
-        return switch (arg) {
-            case LogicVariable lv -> LogicKeyword.create(lv.getName());
-            case LogicBoolean lb  -> LogicKeyword.create(lb.toMlog()); // Handles the case where true/false are used as a selector or keyword
-            default               -> LogicKeyword.create(""); // A keyword that cannot exist
+    static LogicKeyword toKeyword(FunctionArgument argument) {
+            // Syntactically, instruction keywords are just identifiers.
+            // To convert it to keyword, we use the plain variable name.
+        return switch (argument.getArgumentValue()) {
+            case LogicVariable var -> LogicKeyword.create(var.getName());
+            case LogicBoolean bool -> LogicKeyword.create(bool.toMlog());
+            default -> LogicKeyword.create("");
         };
     }
 
@@ -136,7 +126,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     ///////////////////////////////////////////////////////////////
 
     private Map<String, PropertyHandler> createPropertyMap() {
-        Map<String, PropertyHandler> map = instructionProcessor.getOpcodeVariants().stream()
+        Map<String, PropertyHandler> map = processor.getOpcodeVariants().stream()
                 .filter(v -> v.functionMapping() == FunctionMapping.PROP || v.functionMapping() == FunctionMapping.BOTH)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
                 .map(this::createPropertyHandler)
@@ -176,7 +166,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     ///////////////////////////////////////////////////////////////
 
     private Map<String, FunctionHandler> createFunctionMap() {
-        Map<String, List<FunctionHandler>> functionGroups = instructionProcessor.getOpcodeVariants().stream()
+        Map<String, List<FunctionHandler>> functionGroups = processor.getOpcodeVariants().stream()
                 .filter(v -> v.functionMapping() == FunctionMapping.FUNC || v.functionMapping() == FunctionMapping.BOTH)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
                 .map(this::createFunctionHandler)
@@ -204,8 +194,8 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         }
 
         List<NamedParameter> arguments = opcodeVariant.namedParameters();
-        Optional<NamedParameter> selector = arguments.stream().filter(a -> a.type().isFunctionName()).findFirst();
-        String name = functionName(opcodeVariant, selector.orElse(null));
+        NamedParameter selector = arguments.stream().filter(a -> a.type().isFunctionName()).findFirst().orElse(null);
+        String name = functionName(opcodeVariant, selector);
         final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType::isOutput).count();
         final int results = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType.RESULT::equals).count();
         final int unused  = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType::isUnused).count();
@@ -218,7 +208,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         }
 
         // Number of function parameters: selectors and results are not in parameter list
-        int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused;
+        int numArgs = arguments.size() - results - (selector == null ? 0 : 1) - unused;
 
         // Optional parameters are output arguments at the end of the argument list
         int optional = 0;
@@ -237,9 +227,9 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         return new StandardFunctionHandler(this, name, opcodeVariant, minArgs, numArgs, results > 0);
     }
 
-    private String functionName(OpcodeVariant opcodeVariant, NamedParameter selector) {
+    private String functionName(OpcodeVariant opcodeVariant, @Nullable NamedParameter selector) {
         return switch (opcodeVariant.opcode()) {
-            case DRAW   -> switch (selector.name()) {
+            case DRAW   -> switch (Objects.requireNonNull(selector).name()) {
                     case "print" -> "drawPrint";
                     default      -> selector.name();
             };
@@ -264,7 +254,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
             }
 
             Map<String, FunctionHandler> keywordMap = functions.stream()
-                    .collect(Collectors.toMap(f -> ((SelectorFunction) f).getKeyword(), f -> f));
+                    .collect(Collectors.toMap(f -> ((SelectorFunction) f).getSelector().name(), f -> f));
 
             String name = functions.getFirst().getName();
             OpcodeVariant opcodeVariant = functions.getFirst().getOpcodeVariant();

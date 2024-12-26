@@ -199,7 +199,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
     }
 
     @Override
-    public @NonNull LogicInstruction createInstruction(@NonNull Opcode opcode, @NonNull LogicArgument... arguments) {
+    public @NonNull LogicInstruction createInstruction(@NonNull Opcode opcode, @NonNull List<LogicArgument> arguments) {
         return instructionProcessor.createInstruction(astContext, opcode, arguments);
     }
 

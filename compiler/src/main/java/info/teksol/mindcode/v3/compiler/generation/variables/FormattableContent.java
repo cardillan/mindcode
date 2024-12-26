@@ -30,6 +30,12 @@ public class FormattableContent implements NodeValue {
     }
 
     @Override
+    public boolean isComplex() {
+        // This class can never be used in a context where isComplex matters.
+        throw new MindcodeInternalError("Unsupported for FormattableContent.");
+    }
+
+    @Override
     public boolean isLvalue() {
         return false;
     }
@@ -42,11 +48,11 @@ public class FormattableContent implements NodeValue {
 
     @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
-        throw new MindcodeInternalError("Cannot modify readable value.");
+        throw new MindcodeInternalError("Unsupported for FormattableContent.");
     }
 
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-        throw new MindcodeInternalError("Cannot modify readable value.");
+        throw new MindcodeInternalError("Unsupported for FormattableContent.");
     }
 }

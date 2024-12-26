@@ -33,7 +33,7 @@ public class LogicDisplay extends MindustryBlock {
 
     private void draw(GraphicsBuffer graphicsBuffer, DrawInstruction instruction) {
         // TODO Execute the instruction
-        // TODO Use the transformation matrix from GraphicsBuffer
+        //      Use the transformation matrix from GraphicsBuffer
     }
 
     public List<byte[]> getRenderedImages() {

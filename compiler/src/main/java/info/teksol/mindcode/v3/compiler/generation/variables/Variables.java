@@ -13,6 +13,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstParameter;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -61,12 +62,19 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     public boolean isVarargParameter(@Nullable AstExpression expression) {
-        if (expression instanceof AstIdentifier identifier) {
-            LogicFunctionV3 currentFunction = functionContext.function();
-            return currentFunction != null && currentFunction.isVarargs(identifier.getName());
-        } else {
-            return false;
-        }
+        return expression instanceof AstIdentifier id && currentFunction().isVarargs(id.getName());
+    }
+
+    public LogicFunctionV3 currentFunction() {
+        return functionContext.function();
+    }
+
+    public Collection<NodeValue> getActiveVariables() {
+        return functionContext.getActiveVariables();
+    }
+
+    public LoopStack getLoopStack() {
+        return functionContext.loopStack();
     }
 
     public List<FunctionArgument> getVarargs() {
@@ -76,7 +84,7 @@ public class Variables extends AbstractMessageEmitter {
     private boolean isLocalContext() {
         LogicFunctionV3 function = functionContext.function();
         // Under relaxed syntax, the main function isn't considered local
-        return function != null && (!function.isMain() || !RELAXED_SYNTAX);
+        return !function.isMain() || !RELAXED_SYNTAX;
     }
 
     private boolean isGlobalVariable(AstIdentifier identifier) {
@@ -193,11 +201,11 @@ public class Variables extends AbstractMessageEmitter {
     /// and restored when exiting the function processing. Non-inlined functions can't be nested.
     ///
     /// When processing the global level, no function is active. A global context is used in this case.
-    public void enterFunction(LogicFunctionV3 function, String functionPrefix, List<FunctionArgument> varargs) {
+    public void enterFunction(LogicFunctionV3 function, List<FunctionArgument> varargs) {
         contextStack.push(functionContext);
         functionContext = function.isRecursive()
-                ? new RecursiveContext(function, functionPrefix, varargs)
-                : new LocalContext(function, functionPrefix, varargs);
+                ? new RecursiveContext(messageConsumer, function, varargs)
+                : new LocalContext(messageConsumer, function, varargs);
     }
 
     /// Called when function processing is finished. Previous function context is restored from the stack.

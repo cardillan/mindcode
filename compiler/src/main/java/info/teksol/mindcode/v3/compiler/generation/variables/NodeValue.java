@@ -20,22 +20,13 @@ import java.util.function.Consumer;
 /// in specific contexts).
 @NullMarked
 public interface NodeValue {
+    // FINISH Add copyFrom and createTemp methods
+    //        Will need access to variables(?) for creating the temps
+    //        Maybe move temps from variables to assembler...
 
-    /// Indicates whether an `in` modifier was used on the syntactic element this NodeValue was created from.
-    /// At this moment, only function arguments can have `in`/`out` modifiers.
-    ///
-    /// @return true if this node value represents an `in` function argument
-    default boolean hasInModifier() {
-        return true;
-    }
-
-    /// Indicates whether an `out` modifier was used on the syntactic element this NodeValue was created from.
-    /// At this moment, only function arguments can have `in`/`out` modifiers.
-    ///
-    /// @return true if this node value represents an `out` function argument
-    default boolean hasOutModifier() {
-        return true;
-    }
+    /// Indicates the value is complex, i.e. doesn't represent a simple mlog variable. This means specific code
+    /// needs to be generated to read/write the value. An example is an external memory element.
+    boolean isComplex();
 
     /// L-values can be targets of assignments and increment/decrement operators.
     /// **Temporary variables aren't l-values.**
@@ -72,12 +63,4 @@ public interface NodeValue {
     /// @param assembler assembler instance used to produce code for setting the value, if needed
     /// @param valueSetter consumer responsible for setting the passed-in variable to the value to be written
     void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter);
-
-    // TODO Review
-    default boolean hasModifier() {
-        return hasInModifier() || hasOutModifier();
-    }
-    default boolean hasInModifierOnly() {
-        return hasInModifier() && !hasOutModifier();
-    }
 }

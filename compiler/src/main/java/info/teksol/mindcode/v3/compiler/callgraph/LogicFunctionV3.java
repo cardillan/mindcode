@@ -27,6 +27,8 @@ public class LogicFunctionV3 implements LogicFunction {
     private final AstFunctionDeclaration declaration;
     private final IntRange parameterCount;
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
+
+    // FINISH parameters should be NodeValues; add copyFrom method to NodeValue
     private List<LogicVariable> parameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";
@@ -45,6 +47,27 @@ public class LogicFunctionV3 implements LogicFunction {
     LogicFunctionV3(AstFunctionDeclaration declaration) {
         this.declaration = Objects.requireNonNull(declaration);
         parameterCount = declaration.getParameterCount();
+    }
+
+    private LogicFunctionV3(LogicFunctionV3 other, String prefix) {
+        this.prefix = prefix;
+
+        declaration = other.declaration;
+        parameterCount = other.parameterCount;
+        useCount = other.useCount;
+        inlined = true;
+
+        functionCalls.addAll(other.functionCalls);
+        callCardinality.putAll(other.callCardinality);
+        directCalls.addAll(other.directCalls);
+        recursiveCalls.addAll(other.recursiveCalls);
+        indirectCalls.addAll(other.indirectCalls);
+
+        createParameters();
+    }
+
+    public LogicFunctionV3 inlineForCall(String prefix) {
+        return new LogicFunctionV3(this, prefix);
     }
 
     void addCall(AstFunctionCall call) {
@@ -114,7 +137,7 @@ public class LogicFunctionV3 implements LogicFunction {
     /**
      * @return list of parameters of the function
      */
-    List<AstFunctionParameter> getDeclaredParameters() {
+    public List<AstFunctionParameter> getDeclaredParameters() {
         return declaration.getParameters();
     }
 

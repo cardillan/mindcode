@@ -4,13 +4,16 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.OpcodeVariant;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+@NullMarked
 interface SampleGenerator {
     String getName();
 
-    String decompile(MlogInstruction instruction);
+    @Nullable String decompile(MlogInstruction instruction);
 
     OpcodeVariant getOpcodeVariant();
 
@@ -26,7 +29,7 @@ interface SampleGenerator {
         return "";
     }
 
-    default String generateSecondarySampleCall() {
+    default @Nullable String generateSecondarySampleCall() {
         return null;
     }
 

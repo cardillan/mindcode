@@ -40,7 +40,7 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         List<LogicArgument> arguments = new ArrayList<>();
         List<InstructionParameterType> parameters = new ArrayList<>();
         for (FunctionArgument arg : args.subList(1, args.size())) {
-            if (!arg.isSpecified()) {
+            if (!arg.hasValue()) {
                 error(arg.inputPosition(), "All arguments to the '%s' function need to be specified.", call.getFunctionName());
             } else if (arg.getArgumentValue() instanceof LogicString str) {
                 if (arg.hasOutModifier()) {

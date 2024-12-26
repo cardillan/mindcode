@@ -1,35 +1,46 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.ast.FunctionCall;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.LogicFunctionArgument;
-import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicNull;
 import info.teksol.mindcode.logic.NamedParameter;
 import info.teksol.mindcode.logic.OpcodeVariant;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 // Chooses a function handler based on the first argument value
-class MultiplexedFunctionHandler extends AbstractFunctionHandler {
+@NullMarked
+class MultiplexedFunctionHandler extends AbstractHandler implements FunctionHandler {
+    private final NamedParameter namedParameter;
     private final Map<String, FunctionHandler> functions;
 
     MultiplexedFunctionHandler(BaseFunctionMapper functionMapper, Map<String, FunctionHandler> functions,
             String name, OpcodeVariant opcodeVariant) {
-        super(functionMapper, name, opcodeVariant, 0);
+        super(functionMapper, name, opcodeVariant, 0, false);
         this.functions = functions;
+        namedParameter = opcodeVariant.namedParameters().stream().filter(p -> p.type().isSelector())
+                .findFirst().orElseThrow();
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
-        // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
-        FunctionHandler handler = functions.get(BaseFunctionMapper.toKeywordOptional(arguments.getFirst().value()).getKeyword());
-        if (handler == null) {
-            throw new MindcodeInternalError("Unhandled type of " + getOpcode() + " in " + arguments);
+    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+        String keyword = validateKeyword(namedParameter, arguments.getFirst()).getKeyword();
+        if (keyword.isEmpty()) {
+            // Keyword was not recognized and the error has already been reported
+            return LogicNull.NULL;
         }
-        return handler.handleFunction(call, program, arguments);
+
+        FunctionHandler handler = functions.get(keyword);
+        if (handler == null) {
+            throw new MindcodeInternalError("No function for keyword " + keyword);
+        }
+
+        return handler.handleFunction(call, arguments);
     }
 
     @Override

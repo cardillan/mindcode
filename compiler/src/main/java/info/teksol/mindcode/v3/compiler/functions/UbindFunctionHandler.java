@@ -1,30 +1,30 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
-import info.teksol.mindcode.ast.FunctionCall;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.LogicBuiltIn;
+import info.teksol.mindcode.logic.NamedParameter;
+import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.OpcodeVariant;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.function.Consumer;
 
-class UbindFunctionHandler extends AbstractFunctionHandler {
-    private final BaseFunctionMapper functionMapper;
+@NullMarked
+class UbindFunctionHandler extends AbstractHandler implements FunctionHandler {
 
     UbindFunctionHandler(BaseFunctionMapper functionMapper, String name, OpcodeVariant opcodeVariant) {
-        super(functionMapper, name, opcodeVariant, 1);
-        this.functionMapper = functionMapper;
+        super(functionMapper, name, opcodeVariant, 1, false);
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
+    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         validateArguments(call, arguments);
-        program.accept(functionMapper.createInstruction(Opcode.UBIND, arguments.getFirst().value()));
+        assembler().createInstruction(Opcode.UBIND, validateInput(
+                        opcodeVariant.namedParameters().getFirst(),
+                        arguments.getFirst()).getValue(assembler()));
         return LogicBuiltIn.UNIT;
-    }
-
-    @Override
-    protected boolean validateArguments(FunctionCall call, List<LogicFunctionArgument> arguments) {
-        return super.validateArguments(call, arguments) && validateStandardArgumentModifiers(arguments);
     }
 
     @Override

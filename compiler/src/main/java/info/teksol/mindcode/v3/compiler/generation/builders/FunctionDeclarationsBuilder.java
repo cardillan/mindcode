@@ -32,7 +32,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             function.setPrefix(processor.nextFunctionPrefix());
         }
 
-        variables.enterFunction(function, function.getPrefix(), List.of());
+        variables.enterFunction(function, List.of());
         assembler.setActive(function.isUsed());
         assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getUseCount());
         assembler.createLabel(function.getLabel());
@@ -63,7 +63,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
 
         assembler.createLabel(returnStack.getReturnLabel(function.getInputPosition()));
-        assembler.createReturn(context.stackTracker().getStackMemory(function.getDeclaration()));
+        assembler.createReturn(context.stackTracker().getStackMemory());
     }
 
     private void appendStacklessFunctionDeclaration(LogicFunctionV3 function) {

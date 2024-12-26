@@ -4,9 +4,10 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
+import info.teksol.mindcode.v3.compiler.generation.LoopStack;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -14,8 +15,13 @@ import java.util.function.Supplier;
 @NullMarked
 public class GlobalContext implements FunctionContext {
     @Override
-    public @Nullable LogicFunctionV3 function() {
-        return null;
+    public LoopStack loopStack() {
+        throw new MindcodeInternalError("Loop stack not available in global context.");
+    }
+
+    @Override
+    public LogicFunctionV3 function() {
+        throw new MindcodeInternalError("Function not available in global context");
     }
 
     @Override
@@ -25,6 +31,11 @@ public class GlobalContext implements FunctionContext {
 
     @Override
     public List<FunctionArgument> getVarargs() {
+        return List.of();
+    }
+
+    @Override
+    public Collection<NodeValue> getActiveVariables() {
         return List.of();
     }
 

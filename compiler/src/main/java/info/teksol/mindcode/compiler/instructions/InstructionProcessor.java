@@ -5,6 +5,7 @@ import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.ContextlessInstructionCreator;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +40,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
 
+    Collection<String> getParameterValues(InstructionParameterType type);
+
     /**
      * Creates a sample logic instruction from given opcode variant.
      *
@@ -46,8 +49,6 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
      * @return instruction having all arguments set to opcode variant defaults
      */
     LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
-
-    LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
 
     LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
 

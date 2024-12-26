@@ -74,20 +74,20 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             loopLabels = enterLoop(node);
         }
 
-        private Iterator processIterator(AstLoopIterator it) {
-            return new Iterator(it.hasOutModifier(), resolveLValue(it.getIterator()));
-        }
-
         private void build() {
             while (leadingIndex < values.size()) {
                 createIteration();
             }
 
             // Finalizing code
-            // TODO This should probably be marked as AstSubcontextType.FLOW_CONTROL
+            assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
             assembler.createLabel(loopLabels.doneLabel());
             assembler.clearSubcontextType();
             exitLoop(node);
+        }
+
+        private Iterator processIterator(AstLoopIterator it) {
+            return new Iterator(it.hasOutModifier(), resolveLValue(it.getIterator()));
         }
 
         private void createIteration() {
@@ -95,7 +95,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Multiplier is set to 1: all instructions execute exactly once
             assembler.setSubcontextType(AstSubcontextType.ITR_LEADING, 1.0);
 
-            // Setting the iterator address first. It is possible to use `continue` in a value expression
+            // Setting the iterator address first. It is possible to use `continue` in the value list
             // (why, oh why?), in which case the next iteration is performed.
             LogicLabel nextValueLabel = nextLabel();
             assembler.createSetAddress(nextAddress, nextValueLabel);
@@ -135,7 +135,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             visitBody(node.getBody());
 
-            // Label for continue statements
+            // Continue label
+            // The label needs to be part of loop body so that it gets copied on loop unrolling
             assembler.createLabel(loopLabels.continueLabel());
 
             // Jumps to the iteration trailing block
@@ -167,6 +168,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 resolvedLValue = resolveLValue(expression, value());
             }
             return resolvedLValue;
+        }
+
+        @Override
+        public boolean isComplex() {
+            return value().isComplex();
         }
 
         @Override
@@ -211,6 +217,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
     private static final InactiveValue INACTIVE_VALUE = new InactiveValue();
     private static class InactiveValue implements NodeValue {
+        @Override
+        public boolean isComplex() {
+            return false;
+        }
+
         @Override
         public boolean isLvalue() {
             return true;

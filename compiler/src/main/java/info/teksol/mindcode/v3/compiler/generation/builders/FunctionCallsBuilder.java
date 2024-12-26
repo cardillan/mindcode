@@ -60,7 +60,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
             case "print"        -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT);
             case "println"      -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN);
             case "remark"       -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK);
-            default             -> callBuilder.get().handleStandardFunctionCall(call);
+            default             -> callBuilder.get().handleFunctionCall(call);
         };
     }
 

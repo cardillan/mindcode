@@ -22,6 +22,7 @@ public class ReturnStack extends AbstractMessageEmitter {
         super(messageConsumer);
     }
 
+    // FINISH returnValue will be NodeValue
     public void enterFunction(LogicLabel returnLabel, LogicValue returnValue) {
         stack.push(new Return(returnLabel, returnValue));
     }

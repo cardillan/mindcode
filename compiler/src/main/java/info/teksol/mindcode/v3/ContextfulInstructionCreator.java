@@ -4,6 +4,8 @@ import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
 import static info.teksol.mindcode.logic.Opcode.*;
 
 /// Convenience interface for instruction creation. To be implemented by classes which manage their AST contexts,
@@ -14,7 +16,11 @@ import static info.teksol.mindcode.logic.Opcode.*;
 @NullMarked
 public interface ContextfulInstructionCreator {
 
-    LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments);
+    LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
+
+    default LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+        return createInstruction(opcode, List.of(arguments));
+    }
 
     default CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
         return (CallRecInstruction) createInstruction(CALLREC, stack, callAddr, retAddr, returnValue);
@@ -76,8 +82,8 @@ public interface ContextfulInstructionCreator {
         return (OpInstruction) createInstruction(OP, operation, target, first, second);
     }
 
-    default PopInstruction createPop(LogicVariable memory, LogicVariable value) {
-        return (PopInstruction) createInstruction(POP, memory, value);
+    default PopInstruction createPop(LogicVariable stack, LogicVariable value) {
+        return (PopInstruction) createInstruction(POP, stack, value);
     }
 
     default PrintInstruction createPrint(LogicValue what) {
@@ -88,8 +94,8 @@ public interface ContextfulInstructionCreator {
         return (PrintflushInstruction) createInstruction(PRINTFLUSH, messageBlock);
     }
 
-    default PushInstruction createPush(LogicVariable memory, LogicVariable value) {
-        return (PushInstruction) createInstruction(PUSH, memory, value);
+    default PushInstruction createPush(LogicVariable stack, LogicVariable value) {
+        return (PushInstruction) createInstruction(PUSH, stack, value);
     }
 
     default ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index) {

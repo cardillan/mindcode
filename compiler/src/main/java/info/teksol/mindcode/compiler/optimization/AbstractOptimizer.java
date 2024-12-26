@@ -37,7 +37,7 @@ abstract class AbstractOptimizer implements Optimizer, ContextlessInstructionCre
     }
 
     @Override
-    public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {
+    public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
         return instructionProcessor.createInstruction(astContext, opcode, arguments);
     }
 

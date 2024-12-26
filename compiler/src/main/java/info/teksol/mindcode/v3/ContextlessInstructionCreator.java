@@ -4,6 +4,8 @@ import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
 import static info.teksol.mindcode.logic.Opcode.*;
 
 /// Convenience interface for instruction creation. To be implemented by classes which don't manage AST contexts,
@@ -14,7 +16,11 @@ import static info.teksol.mindcode.logic.Opcode.*;
 @NullMarked
 public interface ContextlessInstructionCreator {
 
-    LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments);
+    LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
+
+    default LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {
+        return createInstruction(astContext, opcode, List.of(arguments));
+    }
 
     default CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
         return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);

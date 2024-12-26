@@ -31,7 +31,7 @@ public class LoopStack extends AbstractMessageEmitter {
     }
 
     public void enterLoop(InputPosition position, @Nullable String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
-        // TODO Make loopLabel not-null, use empty string for missing labels
+        // FINISH Make loopLabel not-null, use empty string for missing labels
         LoopLabels loopLabels = new LoopLabels(breakLabel, continueLabel);
         if (loopLabel != null && !loopLabel.isEmpty()) {
             if (map.containsKey(loopLabel)) {

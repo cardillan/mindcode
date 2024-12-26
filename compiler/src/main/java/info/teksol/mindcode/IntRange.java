@@ -19,6 +19,14 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
         return value >= min && value <= max;
     }
 
+    public int size() {
+        return max - min + 1;
+    }
+
+    public String getRangeString() {
+        return min == max ? String.valueOf(min) : min + " to " + max;
+    }
+
     @Override
     public int compareTo(IntRange o) {
         return min == o.min ? Integer.compare(max, o.max) : Integer.compare(min, o.min);

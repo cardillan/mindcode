@@ -1,23 +1,77 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
+import info.teksol.mindcode.IntRange;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.MlogInstruction;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
 import info.teksol.util.CollectionUtils;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class AbstractHandler extends AbstractMessageEmitter implements SampleGenerator {
+@NullMarked
+public abstract class AbstractHandler extends AbstractMessageEmitter implements FunctionHandler, PropertyHandler, SampleGenerator {
     protected final BaseFunctionMapper functionMapper;
     protected final OpcodeVariant opcodeVariant;
+    protected final @Nullable CodeAssembler assembler;
+    protected final String name;
+    protected final IntRange argumentCount;
+    protected final boolean hasResult;
 
-    public AbstractHandler(BaseFunctionMapper functionMapper, OpcodeVariant opcodeVariant) {
+    public AbstractHandler(BaseFunctionMapper functionMapper, String name, OpcodeVariant opcodeVariant,
+            int minArgs, int numArgs, boolean hasResult) {
         super(functionMapper.messageConsumer());
         this.functionMapper = functionMapper;
+        this.name = name;
         this.opcodeVariant = opcodeVariant;
+        this.assembler = functionMapper.assembler;
+        this.argumentCount = new IntRange(minArgs, numArgs);
+        this.hasResult = hasResult;
+    }
+
+    public AbstractHandler(BaseFunctionMapper functionMapper, String name, OpcodeVariant opcodeVariant,
+            int numArgs, boolean hasResult) {
+        this(functionMapper, name, opcodeVariant, numArgs, numArgs, hasResult);
+    }
+
+    public CodeAssembler assembler() {
+        return Objects.requireNonNull(assembler);
+    }
+
+    protected boolean validateArguments(AstFunctionCall call, List<FunctionArgument> arguments) {
+        if (!argumentCount.contains(arguments.size())) {
+            error(call, "Function '%s': wrong number of arguments (expected %s, found %d)",
+                    name, argumentCount.getRangeString(), arguments.size());
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public OpcodeVariant getOpcodeVariant() {
+        return opcodeVariant;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" + "opcodeVariant=" + opcodeVariant + ", name=" + name + ", argumentCount=" + argumentCount + '}';
     }
 
     @Override
@@ -34,7 +88,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     }
 
     @Override
-    public String generateSecondarySampleCall() {
+    public @Nullable String generateSecondarySampleCall() {
         return generateSecondaryCall(new ArrayList<>(opcodeVariant.namedParameters()), true);
     }
 
@@ -54,11 +108,11 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         return str.toString();
     }
 
-    protected String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
+    protected @Nullable String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
         return null;
     }
 
-    public String decompile(MlogInstruction instruction) {
+    public @Nullable String decompile(MlogInstruction instruction) {
         if (instruction.getOpcode() == opcodeVariant.opcode() && opcodeVariant.namedParameters().size() <= instruction.getArgs().size()) {
             List<NamedParameter> arguments = new ArrayList<>();
             for (int i = 0; i < opcodeVariant.namedParameters().size(); i++) {
@@ -77,58 +131,123 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         return null;
     }
 
-    protected boolean validateStandardArgumentModifiers(List<LogicFunctionArgument> declaredArguments) {
-        boolean valid = true;
+    protected boolean isGlobalVariable(FunctionArgument argument) {
+        return argument.getArgumentValue() instanceof LogicVariable variable && variable.isGlobalVariable();
+    }
 
-        for (LogicFunctionArgument argument : declaredArguments) {
-            if (!argument.hasValue()) {
-                error(argument.pos(), "Parameter corresponding to this argument isn't optional, a value must be provided.");
-                valid = false;
+    protected LogicKeyword validateKeyword(NamedParameter parameter, FunctionArgument argument) {
+        Collection<String> parameterValues = functionMapper.processor.getParameterValues(parameter.type());
+
+        if (argument.getArgumentValue() instanceof LogicVariable variable && variable.isUserVariable()) {
+            if (argument.hasInModifier() || argument.hasOutModifier()) {
+                error(argument.inputPosition(), "Parameter '%s' is an mlog keyword, no 'in' or 'out' modifiers allowed.", parameter.name());
             }
-            if (argument.outModifier()) {
-                error(argument.pos(), "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.");
-                valid = false;
+
+            if (!parameterValues.contains(variable.getName())) {
+                error(argument.inputPosition(),
+                        "Invalid value '%s' for parameter '%s': allowed values are '%s'.", variable.getName(),
+                        parameter.name(), String.join("', '", parameterValues));
             }
-        }
 
-        return valid;
+            return LogicKeyword.create(variable.getName());
+        } else {
+            error(argument.inputPosition(),
+                    "Invalid or unspecified value for parameter '%s': allowed values are '%s'.",
+                    parameter.name(), String.join("', '", parameterValues));
+            return LogicKeyword.create("");
+        }
     }
 
-    protected LogicValue requireNoModifiers(NamedParameter parameter, LogicFunctionArgument argument) {
+    protected FunctionArgument validateInput(NamedParameter parameter, FunctionArgument argument) {
         if (!argument.hasValue()) {
-            error(argument.pos(), "Parameter '%s' isn't optional, a value must be provided.", parameter.name());
+            error(argument.inputPosition(), "Parameter '%s' isn't optional, a value must be provided.", parameter.name());
         }
-        if (argument.inModifier() || argument.outModifier()) {
-            error(argument.pos(), "Parameter '%s' is an mlog keyword, no 'in' or 'out' modifiers allowed.", parameter.name());
+        if (argument.hasOutModifier()) {
+            error(argument.inputPosition(), "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.name());
         }
-        return argument.value();
+        return argument;
     }
 
-    protected LogicValue requireNoOutModifier(NamedParameter parameter, LogicFunctionArgument argument) {
-        if (!argument.hasValue()) {
-            error(argument.pos(), "Parameter '%s' isn't optional, a value must be provided.", parameter.name());
-        }
-        if (argument.outModifier()) {
-            error(argument.pos(), "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.name());
-        }
-        return argument.value();
-    }
-
-    protected LogicValue requireOutModifier(NamedParameter parameter, LogicFunctionArgument argument) {
-        if (argument.inModifier()) {
-            error(argument.pos(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.name());
+    protected FunctionArgument validateOutput(NamedParameter parameter, FunctionArgument argument) {
+        if (argument.hasInModifier()) {
+            error(argument.inputPosition(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.name());
         }
         if (argument.hasValue()) {
-            if (!argument.outModifier()) {
-                warn(argument.pos(), "Parameter '%s' is output and 'out' modifier was not used, assuming 'out'. " +
-                        "Omitting 'out' modifiers is deprecated.", parameter.name());
+            if (!argument.hasOutModifier()) {
+                error(argument.inputPosition(), "Parameter '%s' is output and 'out' modifier was not used.", parameter.name());
             }
-            if (!argument.value().isUserVariable()) {
-                error(argument.pos(), "Argument assigned to output parameter '%s' is not writable.", parameter.name());
+            if (!argument.isLvalue()) {
+                error(argument.inputPosition(), "Argument assigned to output parameter '%s' is not writable.", parameter.name());
             }
-            return argument.value();
-        } else {
-            return functionMapper.instructionProcessor.nextTemp();
         }
+        return argument;
+    }
+
+    @Override
+    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+        return handleCall(call, null, arguments);
+    }
+
+    @Override
+    public LogicValue handleProperty(AstFunctionCall call, NodeValue target, List<FunctionArgument> arguments) {
+        return handleCall(call, target, arguments);
+    }
+
+    private LogicValue handleCall(AstFunctionCall call, @Nullable NodeValue target, List<FunctionArgument> arguments) {
+        if (!validateArguments(call, arguments)) {
+            return LogicNull.NULL;
+        }
+
+        LogicValue result = hasResult ? functionMapper.processor.nextTemp() : LogicVoid.VOID;
+        CodeAssembler assembler = assembler();
+
+        // List of instruction arguments, must accommodate LogicKeywords
+        List<LogicArgument> ixArgs = new ArrayList<>();
+        List<FunctionArgument> outputs = new ArrayList<>();
+        int argIndex = 0;
+
+        for (NamedParameter p : opcodeVariant.namedParameters()) {
+            // Function call was validated, meaning all mandatory parameters have corresponding arguments
+
+            if (p.type().isGlobal() && !isGlobalVariable(arguments.get(argIndex))) {
+                error(arguments.get(argIndex).inputPosition(), "A global variable is required in a call to '%s'.", name);
+            }
+
+            if (p.type() == InstructionParameterType.RESULT) {
+                ixArgs.add(result);
+            } else if (p.type() == InstructionParameterType.BLOCK && target != null) {
+                // Target is not null on property (method) calls only.
+                ixArgs.add(target.getValue(assembler()));
+            } else if (p.type().isSelector() && !p.type().isFunctionName()) {
+                // Selector that IS NOT a function name is taken from the argument list
+                ixArgs.add(validateKeyword(p, arguments.get(argIndex++)));
+            } else if (p.type().isSelector()) {
+                // Selector that IS a function name isn't in an argument list and must be filled in
+                ixArgs.add(p.keyword());
+            } else if (p.type().isUnused()) {
+                // Unused inputs must be filled with defaults
+                // Generate new temporary variable for unused outputs (will be replaced by the temp optimizer)
+                ixArgs.add(p.type().isOutput() ? functionMapper.processor.nextTemp() : p.keyword());
+            } else if (p.type().isInput()) {
+                // Input argument - take it as it is
+                ixArgs.add(validateInput(p, arguments.get(argIndex++)).getValue(assembler));
+            } else if (p.type().isOutput()) {
+                if (argIndex >= arguments.size() || !arguments.get(argIndex).hasValue()) {
+                    // Optional arguments are always output; generate temporary variable for them
+                    ixArgs.add(functionMapper.processor.nextTemp());
+                } else {
+                    ixArgs.add(validateOutput(p, arguments.get(argIndex)).getTargetVariable(assembler));
+                    outputs.add(arguments.get(argIndex++));
+                }
+            } else {
+                // Nether input nor output???
+                ixArgs.add(validateKeyword(p, arguments.get(argIndex++)));
+                throw new MindcodeInternalError("Internal error.");
+            }
+        }
+
+        assembler.createInstruction(getOpcode(), ixArgs);
+        outputs.forEach(argument -> argument.storeValue(assembler));
+        return result;
     }
 }

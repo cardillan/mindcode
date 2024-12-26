@@ -331,8 +331,7 @@ class LoopUnroller extends BaseOptimizer {
         // Set address
         // Jump to body (except the last iteration)
         // Go to next iteration
-        // TODO: needs better calculation to take account of multiple iterators/output iterators
-        //       Perhaps LogicFunction.callSize()?
+        // TODO needs better calculation to take account of multiple iterators/output iterators
         int savings = (3 * loops - 1);
 
         int size = body.stream().mapToInt(LogicInstruction::getRealSize).sum();

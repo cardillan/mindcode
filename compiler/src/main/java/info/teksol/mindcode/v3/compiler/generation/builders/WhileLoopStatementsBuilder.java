@@ -40,9 +40,11 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.createLabel(beginLabel);
         visitBody(node.getBody());
 
-        // Condition
-        // TODO Continue label should probably go into condition context?
+        // Continue label
+        // The label needs to be part of loop body so that it gets copied on loop unrolling
         assembler.createLabel(loopLabels.continueLabel());
+
+        // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         final NodeValue condition = evaluate(node.getCondition());
         assembler.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(assembler), FALSE);
@@ -60,7 +62,6 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
 
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
-        // TODO Place continue label instead of beginLabel, drop beginLabel
         assembler.createLabel(beginLabel);
         final NodeValue condition = evaluate(node.getCondition());
         assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
@@ -69,8 +70,13 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         visitBody(node.getBody());
 
-        // Flow control
+        // Continue label
+        // The label needs to be part of loop body so that it gets copied on loop unrolling
+        // The label cannot be placed in front of the entry condition, as the entry condition might
+        // get moved to the end of the loop
         assembler.createLabel(loopLabels.continueLabel());
+
+        // Flow control
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
         assembler.createJumpUnconditional(beginLabel);
 

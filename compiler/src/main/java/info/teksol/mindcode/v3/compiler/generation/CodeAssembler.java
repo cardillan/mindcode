@@ -5,7 +5,6 @@ import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
-import info.teksol.mindcode.compiler.generator.LogicFunctionV2;
 import info.teksol.mindcode.compiler.instructions.CustomInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -32,17 +31,11 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
     private boolean active = true;
 
-    // Note: we'll need to save/restore loop stack when entering inline functions
-    // In LIG, the implicit stack was used to manage the state
-    private LoopStack loopStack;
-
     public CodeAssembler(CodeGeneratorContext context) {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
         astContext = context.rootAstContext();
-
-        loopStack = new LoopStack(messageConsumer);
     }
 
     @Override
@@ -69,10 +62,6 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     public List<LogicInstruction> getInstructions() {
         return instructions;
-    }
-
-    public LoopStack getLoopStack() {
-        return loopStack;
     }
 
     public void enterAstNode(AstMindcodeNode node) {
@@ -105,7 +94,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         astContext = astContext.createSubcontext(subcontextType, multiplier);
     }
 
-    public void setSubcontextType(LogicFunctionV2 function, AstSubcontextType subcontextType) {
+    public void setSubcontextType(LogicFunction function, AstSubcontextType subcontextType) {
         if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
             clearSubcontextType();
         }
@@ -117,7 +106,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     }
 
     @Override
-    public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+    public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
         LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
         if (active) {
             instructions.add(instruction);

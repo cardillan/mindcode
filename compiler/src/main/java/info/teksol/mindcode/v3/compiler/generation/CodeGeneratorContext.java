@@ -7,12 +7,13 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstAllocation;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluatorContext;
+import info.teksol.mindcode.v3.compiler.functions.FunctionMapperContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public interface CodeGeneratorContext extends CompileTimeEvaluatorContext {
+public interface CodeGeneratorContext extends CompileTimeEvaluatorContext, FunctionMapperContext {
     CompilerProfile compilerProfile();
     InstructionProcessor instructionProcessor();
     CompileTimeEvaluator compileTimeEvaluator();

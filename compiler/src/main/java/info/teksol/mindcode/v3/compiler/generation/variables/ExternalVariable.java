@@ -23,6 +23,11 @@ public class ExternalVariable implements NodeValue {
     }
 
     @Override
+    public boolean isComplex() {
+        return true;
+    }
+
+    @Override
     public boolean isLvalue() {
         return true;
     }

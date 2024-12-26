@@ -41,7 +41,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     public NodeValue visitArrayAccess(AstArrayAccess node) {
         LogicVariable memory = resolveMemory(node);
         NodeValue index = evaluate(node.getIndex());
-        return new ExternalVariable(memory, index.getValue(assembler), standaloneTemp());
+        return new ExternalVariable(memory, index.getValue(assembler), unprotectedTemp());
     }
 
     @Override

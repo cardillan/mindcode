@@ -186,7 +186,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// The variable will **NOT** be pushed on the stack for recursive calls.
     ///
     /// @return a temporary variable for use strictly within the current AST node
-    protected LogicVariable standaloneTemp() {
+    protected LogicVariable unprotectedTemp() {
         return processor.nextTemp();
     }
 

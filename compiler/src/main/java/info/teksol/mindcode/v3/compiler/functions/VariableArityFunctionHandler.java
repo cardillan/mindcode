@@ -1,35 +1,29 @@
 package info.teksol.mindcode.v3.compiler.functions;
 
-import info.teksol.mindcode.ast.FunctionCall;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.LogicFunctionArgument;
-import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.NamedParameter;
 import info.teksol.mindcode.logic.OpcodeVariant;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
+import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
+import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.function.Consumer;
 
-/**
- * Handles multiple arguments to the function, creating one instruction per passed argument.
- */
-class VariableArityFunctionHandler extends AbstractFunctionHandler {
-    private final BaseFunctionMapper functionMapper;
+/// Handles multiple arguments to the function, creating one instruction per passed argument.
+@NullMarked
+class VariableArityFunctionHandler extends AbstractHandler implements FunctionHandler {
 
     VariableArityFunctionHandler(BaseFunctionMapper functionMapper, String name, OpcodeVariant opcodeVariant) {
-        super(functionMapper, name, opcodeVariant, 1);
-        this.functionMapper = functionMapper;
+        super(functionMapper, name, opcodeVariant, 1, false);
     }
 
     @Override
-    public LogicValue handleFunction(FunctionCall call, Consumer<LogicInstruction> program, List<LogicFunctionArgument> arguments) {
-        arguments.forEach(arg -> program.accept(functionMapper.createInstruction(opcodeVariant.opcode(), arg.value())));
-        return arguments.getLast().value();
-    }
-
-    @Override
-    protected boolean validateArguments(FunctionCall call, List<LogicFunctionArgument> arguments) {
-        return super.validateArguments(call, arguments) && validateStandardArgumentModifiers(arguments);
+    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+        CodeAssembler assembler = assembler();
+        arguments.forEach(arg -> assembler.createInstruction(opcodeVariant.opcode(),
+                validateInput(opcodeVariant.namedParameters().getFirst(), arg).getValue(assembler)));
+        return arguments.getLast();
     }
 
     @Override

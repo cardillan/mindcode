@@ -715,6 +715,14 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(1, 10, "Parse error: .*"),
                     "foo(in a b);");
         }
+
+        @Test
+        void refusesModifiersWithoutArguments() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 7, "Parse error: .*"),
+                    "foo(in, out);");
+        }
     }
 
     @Nested

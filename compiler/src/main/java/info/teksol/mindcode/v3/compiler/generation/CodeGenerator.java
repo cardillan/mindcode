@@ -59,7 +59,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     public void generateCode(AstProgram program) {
         // TODO In relaxed syntax, top context is the main body
         //      In strict syntax, top context is the root context
-        variables.enterFunction(callGraph.getMain(), "", List.of());
+        variables.enterFunction(callGraph.getMain(), List.of());
         context.setTopAstContext(assembler.getAstContext());
 
         visit(program, false);

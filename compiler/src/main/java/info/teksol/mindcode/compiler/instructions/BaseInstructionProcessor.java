@@ -127,11 +127,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {
-        return createInstruction(astContext, opcode, List.of(arguments));
-    }
-
-    @Override
     public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
         return validate(createInstructionUnchecked(astContext, opcode, arguments));
     }
@@ -375,6 +370,10 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
 
+    public Collection<String> getParameterValues(InstructionParameterType type) {
+        return validArgumentValues.get(type);
+    }
+
     protected <T extends LogicInstruction> T validate(T instruction) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(instruction.getOpcode(), instruction.getArgs());
         if (opcodeVariant == null) {
@@ -439,7 +438,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             }
         }
 
-        return Map.copyOf(map);
+        return Collections.unmodifiableMap(map);
     }
 
     private Collection<String> createAllowedValues(InstructionParameterType type) {

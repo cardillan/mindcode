@@ -51,4 +51,9 @@ public interface LogicValue extends LogicArgument, NodeValue {
     default void setValue(CodeAssembler assembler, LogicValue value) {
         throw new MindcodeInternalError("Cannot modify readable value.");
     }
+
+    @Override
+    default boolean isComplex() {
+        return false;
+    }
 }

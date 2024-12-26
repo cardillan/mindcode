@@ -27,13 +27,13 @@ public class OperatorsBuilder extends AbstractBuilder implements AstOperatorBina
 
         switch (node.getOperation()) {
             case BOOLEAN_OR -> {
-                final LogicVariable tmp2 = standaloneTemp();
+                final LogicVariable tmp2 = unprotectedTemp();
                 assembler.createOp(Operation.BOOLEAN_OR, tmp2, left.getValue(assembler), right.getValue(assembler));
                 // Ensure the result is 0 or 1
                 assembler.createOp(Operation.NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
             case STRICT_NOT_EQUAL -> {
-                final LogicVariable tmp2 = standaloneTemp();
+                final LogicVariable tmp2 = unprotectedTemp();
                 assembler.createOp(Operation.STRICT_EQUAL, tmp2, left.getValue(assembler), right.getValue(assembler));
                 assembler.createOp(Operation.EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
