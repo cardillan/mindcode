@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 /// function argument can be written to and the writes are ignored. Instance representing a placeholder
 /// can't be written to.
 @NullMarked
-public class MissingValue implements NodeValue {
+public class MissingValue implements ValueStore {
     public static final MissingValue UNSPECIFIED_FUNCTION_ARGUMENT = new MissingValue(true);
     public static final MissingValue FORMATTABLE_PLACEHOLDER = new MissingValue(false);
 

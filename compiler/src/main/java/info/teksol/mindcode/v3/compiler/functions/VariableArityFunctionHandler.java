@@ -5,7 +5,7 @@ import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,7 +19,7 @@ class VariableArityFunctionHandler extends AbstractHandler implements FunctionHa
     }
 
     @Override
-    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+    public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         CodeAssembler assembler = assembler();
         arguments.forEach(arg -> assembler.createInstruction(opcodeVariant.opcode(),
                 validateInput(opcodeVariant.namedParameters().getFirst(), arg).getValue(assembler)));

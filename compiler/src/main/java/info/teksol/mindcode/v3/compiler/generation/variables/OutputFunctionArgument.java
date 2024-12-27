@@ -17,7 +17,7 @@ import java.util.Objects;
 public class OutputFunctionArgument extends InputFunctionArgument {
     private final LogicVariable transferVariable;
 
-    public OutputFunctionArgument(AstFunctionArgument argument, NodeValue value, @Nullable LogicVariable transferVariable) {
+    public OutputFunctionArgument(AstFunctionArgument argument, ValueStore value, @Nullable LogicVariable transferVariable) {
         super(argument, value);
         this.transferVariable = Objects.requireNonNullElse(transferVariable, LogicVariable.INVALID);
 
@@ -40,22 +40,6 @@ public class OutputFunctionArgument extends InputFunctionArgument {
             return transferVariable;
         } else {
             return value.getValue(assembler);
-        }
-    }
-
-    @Override
-    public LogicValue getTargetVariable(CodeAssembler assembler) {
-        if (value.isComplex()) {
-            return transferVariable;
-        } else {
-            return value.getValue(assembler);
-        }
-    }
-
-    @Override
-    public void storeValue(CodeAssembler assembler) {
-        if (value.isComplex()) {
-            value.setValue(assembler, transferVariable);
         }
     }
 }

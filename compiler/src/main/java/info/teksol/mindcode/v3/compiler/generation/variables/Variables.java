@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
-/// This class resolves source code identifiers into variables represented by NodeValue interface,
+/// This class resolves source code identifiers into variables represented by ValueStore interface,
 /// and tracks temporary variables used within AST nodes for stack management.
 ///
 /// Types of source code identifiers:
@@ -41,7 +41,7 @@ public class Variables extends AbstractMessageEmitter {
 
     private final InstructionProcessor processor;
     private final CallGraph callGraph;
-    private final Map<String, NodeValue> globalVariables = new HashMap<>();
+    private final Map<String, ValueStore> globalVariables = new HashMap<>();
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
     private FunctionContext functionContext = new GlobalContext();
 
@@ -69,7 +69,7 @@ public class Variables extends AbstractMessageEmitter {
         return functionContext.function();
     }
 
-    public Collection<NodeValue> getActiveVariables() {
+    public Collection<ValueStore> getActiveVariables() {
         return functionContext.getActiveVariables();
     }
 
@@ -95,8 +95,8 @@ public class Variables extends AbstractMessageEmitter {
         return processor.isBlockName(identifier.getName());
     }
 
-    private NodeValue registerGlobalVariable(AstIdentifier identifier, NodeValue variable) {
-        NodeValue existing = globalVariables.put(identifier.getName(), variable);
+    private ValueStore registerGlobalVariable(AstIdentifier identifier, ValueStore variable) {
+        ValueStore existing = globalVariables.put(identifier.getName(), variable);
         if (existing != null) {
             throw new MindcodeInternalError("Repeated registration of global variable (existing variable: %s, new variable: %s).",
                     existing, variable);
@@ -108,8 +108,8 @@ public class Variables extends AbstractMessageEmitter {
     ///  the correct variable type and put it into the correct variable list.
     ///
     /// @param identifier variable identifier
-    /// @return NodeValue instance representing the variable
-    private NodeValue createImplicitVariable(AstIdentifier identifier) {
+    /// @return ValueStore instance representing the variable
+    private ValueStore createImplicitVariable(AstIdentifier identifier) {
         String name = identifier.getName();
         if (identifier.isExternal()) {
             if (!heapAllocated) {
@@ -129,7 +129,7 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param constant constant declaration to process
     /// @param value compile-time value associated with the constant
-    public void createConstant(AstConstant constant, NodeValue value) {
+    public void createConstant(AstConstant constant, ValueStore value) {
         if (isLocalContext()) {
             error(constant, "Constants must be declared outside a function/a main code block..");
         }
@@ -151,8 +151,8 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param parameter parameter declaration to process.
     /// @param value value assigned to the parameter
-    /// @return NodeValue instance representing the parameter's variable
-    public NodeValue createParameter(AstParameter parameter, LogicValue value) {
+    /// @return ValueStore instance representing the parameter's variable
+    public ValueStore createParameter(AstParameter parameter, LogicValue value) {
         if (isLocalContext()) {
             error(parameter, "Parameter must be declared outside a function/a main code block.");
         }
@@ -178,7 +178,7 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param identifier variable identifier
     /// @return Value instance containing the variable
-    public NodeValue resolveVariable(AstIdentifier identifier) {
+    public ValueStore resolveVariable(AstIdentifier identifier) {
         // Look for local variables first
         if (functionContext.variables().containsKey(identifier.getName())) {
             return functionContext.variables().get(identifier.getName());

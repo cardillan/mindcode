@@ -8,7 +8,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstRange;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
 
@@ -19,9 +19,9 @@ import java.util.List;
 /// same AST Node type. No checks are made to enforce this constraint. Unhandled node types cause errors
 /// when encountered.
 ///
-/// Individual builders implement a specific interface(s) from the `SingleAstNodeVisitor<NodeValue>`
+/// Individual builders implement a specific interface(s) from the `SingleAstNodeVisitor<ValueStore>`
 /// class hierarchy. When registered, builders are automatically assigned to handle AST nodes corresponding
-/// to the interfaces they implement. Each builder returns a NodeValue instance representing the value
+/// to the interfaces they implement. Each builder returns a ValueStore instance representing the value
 /// of the node. Nodes not having any value should be evaluated to `LogicVoid.VOID`.
 ///
 /// This class provides some methods that are useful to more than one builder.
@@ -63,23 +63,23 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     }
 
     /// Processes the node by passing it to the proper builder according to node type. The builder creates
-    /// code from the AST node and provides a `NodeValue` instance representing the output value of the node.
+    /// code from the AST node and provides a `ValueStore` instance representing the output value of the node.
     ///
     /// @param node node to process
     /// @param evaluate when `true`, the caller is interested in the result produced by the node
-    /// @return a `NodeValue` instance representing the value of the node. When `evaluate` is `false`, the returned
+    /// @return a `ValueStore` instance representing the value of the node. When `evaluate` is `false`, the returned
     ///         instance might not represent the actual value of the node.
-    protected NodeValue process(AstMindcodeNode node, boolean evaluate) {
+    protected ValueStore process(AstMindcodeNode node, boolean evaluate) {
         return codeGenerator.visit(node, evaluate);
     }
 
     /// Evaluates the node by passing it to the proper builder according to node type. The builder creates
-    /// code from the AST node and provides a `NodeValue` instance representing the output value of the node.
+    /// code from the AST node and provides a `ValueStore` instance representing the output value of the node.
     ///
     /// @param node node to process
-    /// @return a `NodeValue` instance representing the value of the node
+    /// @return a `ValueStore` instance representing the value of the node
 
-    protected NodeValue evaluate(AstMindcodeNode node) {
+    protected ValueStore evaluate(AstMindcodeNode node) {
         return codeGenerator.visit(node, true);
     }
 
@@ -96,17 +96,17 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// Visits a body of statements, disregarding the resulting values of all nodes.
     ///
     /// @return `LogicVoid.VOID`
-    protected NodeValue visitBody(List<? extends AstMindcodeNode> body) {
+    protected ValueStore visitBody(List<? extends AstMindcodeNode> body) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
         body.forEach(this::compile);
         return LogicVoid.VOID;
     }
 
-    ///  Evaluates a body of statements/expressions, returning the `NodeValue` of the last expression
+    ///  Evaluates a body of statements/expressions, returning the `ValueStore` of the last expression
     /// (which represents the resulting value of the entire body).
     ///
     /// @return the value of the last expression in the list
-    protected NodeValue evaluateBody(List<? extends AstMindcodeNode> expressions) {
+    protected ValueStore evaluateBody(List<? extends AstMindcodeNode> expressions) {
         if (expressions.isEmpty()) {
             return LogicVoid.VOID;
         }
@@ -120,7 +120,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     ///  Evaluates a every expression in the list, returning a list of evaluated values.
     ///
     /// @return the value of all expressions in list
-    protected List<NodeValue> evaluateExpressions(List<? extends AstMindcodeNode> expressions) {
+    protected List<ValueStore> evaluateExpressions(List<? extends AstMindcodeNode> expressions) {
         return expressions.stream().map(this::evaluate).toList();
     }
 
@@ -131,15 +131,15 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// can be tested by comparing the returned value to `LogicVariable.INVALID`, or, preferably, by calling
     /// `isLValue()` on the returned instance, which will return `false`.
     ///
-    /// @return a NodeValue representing the l-value, or `LogicVariable.INVALID`.
-    protected NodeValue resolveLValue(AstExpression targetNode) {
+    /// @return a ValueStore representing the l-value, or `LogicVariable.INVALID`.
+    protected ValueStore resolveLValue(AstExpression targetNode) {
         return resolveLValue(targetNode, evaluate(targetNode));
     }
 
     /// Tries to resolve an expression, which vas already processed, as an l-value. To be used when the node value
     /// needs to be read first (and therefore the node needs to be evaluated), and then a value needs to be written
     /// - for example an in out function argument.
-    protected NodeValue resolveLValue(AstExpression targetNode, NodeValue target) {
+    protected ValueStore resolveLValue(AstExpression targetNode, ValueStore target) {
         if (target.isLvalue()) {
             return target;
         } else {
@@ -166,18 +166,18 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         }
     }
 
-    /// Stores the current value of nodeValue to a temp variable for later use. If the node value is a literal,
+    /// Stores the current value of valueStore to a temp variable for later use. If the node value is a literal,
     /// returns the literal directly, as it cannot be changed.
     ///
-    /// @param nodeValue the value to protect
+    /// @param valueStore the value to protect
     /// @return an independent copy of the current value of the node
-    protected LogicValue temporaryCopy(NodeValue nodeValue, ArgumentType argumentType) {
-        if (nodeValue instanceof LogicValue value && value.isConstant()) {
+    protected LogicValue temporaryCopy(ValueStore valueStore, ArgumentType argumentType) {
+        if (valueStore instanceof LogicValue value && value.isConstant()) {
             return value;
         } else {
             LogicVariable tmp = processor.nextTemp().withType(argumentType);
             variables.registerNodeVariable(tmp);
-            assembler.createSet(tmp, nodeValue.getValue(assembler));
+            assembler.createSet(tmp, valueStore.getValue(assembler));
             return tmp;
         }
     }

@@ -25,7 +25,7 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public Map<String, NodeValue> variables() {
+    public Map<String, ValueStore> variables() {
         return Map.of();
     }
 
@@ -35,12 +35,12 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public Collection<NodeValue> getActiveVariables() {
+    public Collection<ValueStore> getActiveVariables() {
         return List.of();
     }
 
     @Override
-    public NodeValue registerFunctionVariable(AstIdentifier identifier) {
+    public ValueStore registerFunctionVariable(AstIdentifier identifier) {
         throw new MindcodeInternalError("Trying to register a local variable in global context:" + identifier);
     }
 

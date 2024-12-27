@@ -3,17 +3,17 @@ package info.teksol.mindcode.logic;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
 /// Represents a value that can be read by mlog instructions.
 ///
-/// This interface extends the NodeValue interface, since it is often possible to represent the value nf an AST node
+/// This interface extends the ValueStore interface, since it is often possible to represent the value of an AST node
 /// as a LogicValue.
 @NullMarked
-public interface LogicValue extends LogicArgument, NodeValue {
+public interface LogicValue extends LogicArgument, ValueStore {
     /**
      * Indicates that an expressions using the value can be numerically evaluated at compile time.
      * All literals can be evaluated. Built-in constants can only be evaluated if they aren't a variable
@@ -35,7 +35,7 @@ public interface LogicValue extends LogicArgument, NodeValue {
      */
     String format(InstructionProcessor instructionProcessor);
 
-    // NodeValue methods
+    // ValueStore methods
 
     @Override
     default LogicValue getValue(CodeAssembler assembler) {

@@ -14,7 +14,7 @@ import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.ExternalVariable;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
@@ -23,9 +23,9 @@ import static info.teksol.mindcode.logic.ArgumentType.*;
 
 @NullMarked
 public class IdentifiersBuilder extends AbstractBuilder implements
-        AstArrayAccessVisitor<NodeValue>,
-        AstBuiltInIdentifierVisitor<NodeValue>,
-        AstIdentifierVisitor<NodeValue>
+        AstArrayAccessVisitor<ValueStore>,
+        AstBuiltInIdentifierVisitor<ValueStore>,
+        AstIdentifierVisitor<ValueStore>
 {
     private static final Set<ArgumentType> memoryExpressionTypes = Set.of(
             GLOBAL_VARIABLE,
@@ -38,24 +38,24 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public NodeValue visitArrayAccess(AstArrayAccess node) {
+    public ValueStore visitArrayAccess(AstArrayAccess node) {
         LogicVariable memory = resolveMemory(node);
-        NodeValue index = evaluate(node.getIndex());
+        ValueStore index = evaluate(node.getIndex());
         return new ExternalVariable(memory, index.getValue(assembler), unprotectedTemp());
     }
 
     @Override
-    public NodeValue visitBuiltInIdentifier(AstBuiltInIdentifier node) {
+    public ValueStore visitBuiltInIdentifier(AstBuiltInIdentifier node) {
         return LogicBuiltIn.create(node.getName());
     }
 
     @Override
-    public NodeValue visitIdentifier(AstIdentifier identifier) {
+    public ValueStore visitIdentifier(AstIdentifier identifier) {
         return variables.resolveVariable(identifier);
     }
 
     private LogicVariable resolveMemory(AstArrayAccess node) {
-        NodeValue memory = evaluate(node.getArray());
+        ValueStore memory = evaluate(node.getArray());
         if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
             if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
                 error(node.getArray(), "Cannot use value assigned to parameter '%s' to access external memory.", parameter.getName());

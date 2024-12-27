@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class LocalContext implements FunctionContext {
     private final LogicFunctionV3 function;
     private final List<FunctionArgument> varargs;
-    private final Map<String, NodeValue> variables = new HashMap<>();
+    private final Map<String, ValueStore> variables = new HashMap<>();
     private final LoopStack loopStack;
 
     public LocalContext(MessageConsumer messageConsumer, LogicFunctionV3 function, List<FunctionArgument> varargs) {
@@ -30,7 +30,7 @@ public class LocalContext implements FunctionContext {
     }
 
     @Override
-    public Map<String, NodeValue> variables() {
+    public Map<String, ValueStore> variables() {
         return variables;
     }
 
@@ -40,14 +40,14 @@ public class LocalContext implements FunctionContext {
     }
 
     @Override
-    public Collection<NodeValue> getActiveVariables() {
+    public Collection<ValueStore> getActiveVariables() {
         return variables.values();
     }
 
     @Override
-    public NodeValue registerFunctionVariable(AstIdentifier identifier) {
-        NodeValue variable = createFunctionVariable(identifier.getName());
-        NodeValue existing = variables.put(identifier.getName(), variable);
+    public ValueStore registerFunctionVariable(AstIdentifier identifier) {
+        ValueStore variable = createFunctionVariable(identifier.getName());
+        ValueStore existing = variables.put(identifier.getName(), variable);
         if (existing != null) {
             throw new MindcodeInternalError("Repeated registration of function variable (existing variable: %s, new variable: %s).",
                     existing, variable);
@@ -55,7 +55,7 @@ public class LocalContext implements FunctionContext {
         return variable;
     }
 
-    private NodeValue createFunctionVariable(String name) {
+    private ValueStore createFunctionVariable(String name) {
         if (function.isMain()) {
             return LogicVariable.main(name);
         } else {

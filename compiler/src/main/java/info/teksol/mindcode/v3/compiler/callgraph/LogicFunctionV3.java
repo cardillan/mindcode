@@ -28,7 +28,7 @@ public class LogicFunctionV3 implements LogicFunction {
     private final IntRange parameterCount;
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
 
-    // FINISH parameters should be NodeValues; add copyFrom method to NodeValue
+    // FINISH parameters should be ValueStores; add copyFrom method to ValueStore
     private List<LogicVariable> parameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";

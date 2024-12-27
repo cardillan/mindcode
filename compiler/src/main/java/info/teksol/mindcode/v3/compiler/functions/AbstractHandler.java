@@ -9,7 +9,7 @@ import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -184,16 +184,16 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     }
 
     @Override
-    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+    public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         return handleCall(call, null, arguments);
     }
 
     @Override
-    public LogicValue handleProperty(AstFunctionCall call, NodeValue target, List<FunctionArgument> arguments) {
+    public LogicValue handleProperty(AstFunctionCall call, ValueStore target, List<FunctionArgument> arguments) {
         return handleCall(call, target, arguments);
     }
 
-    private LogicValue handleCall(AstFunctionCall call, @Nullable NodeValue target, List<FunctionArgument> arguments) {
+    private LogicValue handleCall(AstFunctionCall call, @Nullable ValueStore target, List<FunctionArgument> arguments) {
         if (!validateArguments(call, arguments)) {
             return LogicNull.NULL;
         }
@@ -236,7 +236,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
                     // Optional arguments are always output; generate temporary variable for them
                     ixArgs.add(functionMapper.processor.nextTemp());
                 } else {
-                    ixArgs.add(validateOutput(p, arguments.get(argIndex)).getTargetVariable(assembler));
+                    ixArgs.add(validateOutput(p, arguments.get(argIndex)).getWriteVariable(assembler));
                     outputs.add(arguments.get(argIndex++));
                 }
             } else {

@@ -10,7 +10,7 @@ import info.teksol.mindcode.logic.NamedParameter;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -78,7 +78,7 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     }
 
     @Override
-    public LogicValue handleProperty(AstFunctionCall node, NodeValue target, List<FunctionArgument> arguments) {
+    public LogicValue handleProperty(AstFunctionCall node, ValueStore target, List<FunctionArgument> arguments) {
         if (!warningEmitted) {
             functionMapper.messageConsumer().accept(CompilerMessage.warn(node.inputPosition(),
                     "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.",

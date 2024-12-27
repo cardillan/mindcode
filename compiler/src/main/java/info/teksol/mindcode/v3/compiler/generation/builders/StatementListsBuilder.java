@@ -6,46 +6,46 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class StatementListsBuilder extends AbstractBuilder implements
-        AstCodeBlockVisitor<NodeValue>,
-        AstModuleVisitor<NodeValue>,
-        AstParenthesesVisitor<NodeValue>,
-        AstProgramVisitor<NodeValue>,
-        AstStatementListVisitor<NodeValue>
+        AstCodeBlockVisitor<ValueStore>,
+        AstModuleVisitor<ValueStore>,
+        AstParenthesesVisitor<ValueStore>,
+        AstProgramVisitor<ValueStore>,
+        AstStatementListVisitor<ValueStore>
 {
     public StatementListsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
     @Override
-    public NodeValue visitCodeBlock(AstCodeBlock node) {
+    public ValueStore visitCodeBlock(AstCodeBlock node) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
         return evaluateBody(node.getExpressions());
     }
 
     @Override
-    public NodeValue visitModule(AstModule node) {
+    public ValueStore visitModule(AstModule node) {
         visitBody(node.getStatements());
         return LogicVoid.VOID;
     }
 
     @Override
-    public NodeValue visitParentheses(AstParentheses node) {
+    public ValueStore visitParentheses(AstParentheses node) {
         return evaluate(node.getExpression());
     }
 
     @Override
-    public NodeValue visitProgram(AstProgram node) {
+    public ValueStore visitProgram(AstProgram node) {
         visitBody(node.getModules());
         return LogicVoid.VOID;
     }
 
     @Override
-    public NodeValue visitStatementList(AstStatementList node) {
+    public ValueStore visitStatementList(AstStatementList node) {
         return evaluateBody(node.getStatements());
     }
 }

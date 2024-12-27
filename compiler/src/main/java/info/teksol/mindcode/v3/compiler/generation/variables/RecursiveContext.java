@@ -31,8 +31,8 @@ public class RecursiveContext extends LocalContext {
     }
 
     @Override
-    public Collection<NodeValue> getActiveVariables() {
-        Set<NodeValue> result = new HashSet<>(super.getActiveVariables());
+    public Collection<ValueStore> getActiveVariables() {
+        Set<ValueStore> result = new HashSet<>(super.getActiveVariables());
         result.addAll(nodeVariables);
         return result;
     }

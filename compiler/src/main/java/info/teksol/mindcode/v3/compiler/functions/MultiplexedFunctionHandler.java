@@ -6,7 +6,7 @@ import info.teksol.mindcode.logic.NamedParameter;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -28,7 +28,7 @@ class MultiplexedFunctionHandler extends AbstractHandler implements FunctionHand
     }
 
     @Override
-    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+    public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         String keyword = validateKeyword(namedParameter, arguments.getFirst()).getKeyword();
         if (keyword.isEmpty()) {
             // Keyword was not recognized and the error has already been reported

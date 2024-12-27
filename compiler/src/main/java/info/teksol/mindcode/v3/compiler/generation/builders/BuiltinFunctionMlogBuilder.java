@@ -5,7 +5,7 @@ import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         super(builder);
     }
 
-    public NodeValue handleMlog(AstFunctionCall call, boolean safe) {
+    public ValueStore handleMlog(AstFunctionCall call, boolean safe) {
         if (call.getArguments().isEmpty()) {
             error(call, "Not enough arguments to the '%s' function (expected 1 or more, found %d).",
                     call.getFunctionName(), call.getArguments().size());

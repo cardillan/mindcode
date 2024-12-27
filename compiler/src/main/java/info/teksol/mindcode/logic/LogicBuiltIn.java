@@ -104,7 +104,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
         return new LogicBuiltIn(name);
     }
 
-    // NodeValue methods
+    // ValueStore methods
 
     @Override
     public boolean isWritable() {

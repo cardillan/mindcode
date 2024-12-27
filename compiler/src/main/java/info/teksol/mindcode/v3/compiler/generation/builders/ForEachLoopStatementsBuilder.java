@@ -9,7 +9,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstExpression;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstForEachLoopStatement;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstLoopIterator;
 import info.teksol.mindcode.v3.compiler.generation.*;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -20,14 +20,14 @@ import java.util.function.Consumer;
 import static info.teksol.mindcode.logic.LogicVoid.VOID;
 
 @NullMarked
-public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements AstForEachLoopStatementVisitor<NodeValue> {
+public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements AstForEachLoopStatementVisitor<ValueStore> {
 
     public ForEachLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
     @Override
-    public NodeValue visitForEachLoopStatement(AstForEachLoopStatement node) {
+    public ValueStore visitForEachLoopStatement(AstForEachLoopStatement node) {
         if (!node.getValues().isEmpty()) {
             new ForEachLoopBuilder(this, node).build();
         }
@@ -35,7 +35,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     }
 
     private class ForEachLoopBuilder extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
-        private final List<NodeValue> values;
+        private final List<ValueStore> values;
         private final List<Iterator> iterators;
         private final LogicLabel bodyLabel = nextLabel();
         private final LogicLabel marker = nextMarker();
@@ -56,7 +56,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 if (variables.isVarargParameter(expression)) {
                     values.addAll(variables.getVarargs());
                 } else {
-                    values.add(new DeferredNodeValue(expression));
+                    values.add(new DeferredValueStore(expression));
                 }
             }
 
@@ -102,7 +102,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             // Copy values from the list to iterators
             for (Iterator iterator : iterators) {
-                NodeValue value = values.get(leadingIndex++);
+                ValueStore value = values.get(leadingIndex++);
                 iterator.setValue(value.getValue(assembler));
             }
 
@@ -146,24 +146,24 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
     }
 
-    /// A NodeValue based on AstExpression which is only evaluated when actually accessed.
-    private class DeferredNodeValue implements NodeValue {
+    /// A ValueStore based on AstExpression which is only evaluated when actually accessed.
+    private class DeferredValueStore implements ValueStore {
         private final AstExpression expression;
-        private @Nullable NodeValue nodeValue;
-        private @Nullable NodeValue resolvedLValue;
+        private @Nullable ValueStore valueStore;
+        private @Nullable ValueStore resolvedLValue;
 
-        public DeferredNodeValue(AstExpression expression) {
+        public DeferredValueStore(AstExpression expression) {
             this.expression = expression;
         }
 
-        private NodeValue value() {
-            if (nodeValue == null) {
-                nodeValue = evaluate(expression);
+        private ValueStore value() {
+            if (valueStore == null) {
+                valueStore = evaluate(expression);
             }
-            return nodeValue;
+            return valueStore;
         }
 
-        private NodeValue verifyLValue() {
+        private ValueStore verifyLValue() {
             if (resolvedLValue == null) {
                 resolvedLValue = resolveLValue(expression, value());
             }
@@ -194,14 +194,24 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
             verifyLValue().writeValue(assembler, valueSetter);
         }
+
+        @Override
+        public LogicValue getWriteVariable(CodeAssembler assembler) {
+            return value().getWriteVariable(assembler);
+        }
+
+        @Override
+        public void storeValue(CodeAssembler assembler) {
+            value().storeValue(assembler);
+        }
     }
 
     ///  Represents an iterator variable in the loop
     private final class Iterator {
         public final boolean out;
-        private final NodeValue var;
+        private final ValueStore var;
 
-        private Iterator(boolean out, NodeValue var) {
+        private Iterator(boolean out, ValueStore var) {
             this.out = out;
             this.var = var;
         }
@@ -215,8 +225,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
     }
 
-    private static final InactiveValue INACTIVE_VALUE = new InactiveValue();
-    private static class InactiveValue implements NodeValue {
+    private static final InactiveValueStore INACTIVE_VALUE = new InactiveValueStore();
+    private static class InactiveValueStore implements ValueStore {
         @Override
         public boolean isComplex() {
             return false;

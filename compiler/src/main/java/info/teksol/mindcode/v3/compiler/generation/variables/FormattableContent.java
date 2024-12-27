@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @NullMarked
-public class FormattableContent implements NodeValue {
+public class FormattableContent implements ValueStore {
     private final InputPosition inputPosition;
-    private final List<NodeValue> parts;
+    private final List<ValueStore> parts;
 
-    public FormattableContent(InputPosition inputPosition, List<NodeValue> parts) {
+    public FormattableContent(InputPosition inputPosition, List<ValueStore> parts) {
         this.inputPosition = inputPosition;
         this.parts = parts;
     }
@@ -25,7 +25,7 @@ public class FormattableContent implements NodeValue {
         return inputPosition;
     }
 
-    public List<NodeValue> getParts() {
+    public List<ValueStore> getParts() {
         return parts;
     }
 

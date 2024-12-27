@@ -2,9 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation.variables;
 
 import info.teksol.mindcode.CompilerMessage;
 import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.v3.MessageConsumer;
-import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 /// if one was provided in the function call, plus information about possible `in`/`out` modifiers
 /// used at the call site.
 @NullMarked
-public interface FunctionArgument extends NodeValue {
+public interface FunctionArgument extends ValueStore {
 
     ///@return the position of the argument in the source code
     InputPosition inputPosition();
@@ -25,7 +23,7 @@ public interface FunctionArgument extends NodeValue {
     /// placeholder is used.
     ///
     /// @return the value of this argument
-    NodeValue getArgumentValue();
+    ValueStore getArgumentValue();
 
     /// @return `true` if the `in` modifier was used with this argument
     boolean hasInModifier();
@@ -35,13 +33,6 @@ public interface FunctionArgument extends NodeValue {
 
     /// @return `true` if the argument is effectively output
     boolean isOutput();
-
-    /// Provides a variable to be passed as an output variable to an instruction.
-    /// The value will be subsequently written
-    LogicValue getTargetVariable(CodeAssembler assembler);
-
-    /// Writes the resulting value
-    void storeValue(CodeAssembler assembler);
 
     /// Validates function arguments in calls to functions that only have input parameters
     default boolean validateAsInput(MessageConsumer messageConsumer) {

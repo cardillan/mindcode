@@ -7,7 +7,7 @@ import info.teksol.mindcode.logic.Operation;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
         super(builder);
     }
 
-    public NodeValue handleLength(AstFunctionCall call) {
+    public ValueStore handleLength(AstFunctionCall call) {
         if (call.getArguments().size() != 1) {
             error(call, "Function '%s': wrong number of arguments (expected 1, found %d).",
                     call.getFunctionName(), call.getArguments().size());
@@ -32,7 +32,7 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
         return LogicNumber.get(arguments.size());
     }
 
-    public NodeValue handleMinMax(AstFunctionCall call) {
+    public ValueStore handleMinMax(AstFunctionCall call) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<FunctionArgument> arguments = processArguments(call);
         FunctionArgument.validateAsInput(messageConsumer(), arguments);

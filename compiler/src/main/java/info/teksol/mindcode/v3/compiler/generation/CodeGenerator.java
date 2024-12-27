@@ -9,7 +9,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import info.teksol.mindcode.v3.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mindcode.v3.compiler.generation.builders.*;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
 
@@ -24,7 +24,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private final CodeAssembler assembler;
     private final Variables variables;
 
-    private final ComposedAstNodeVisitor<NodeValue> nodeVisitor;
+    private final ComposedAstNodeVisitor<ValueStore> nodeVisitor;
     private final FunctionDeclarationsBuilder functionCompiler;
 
     public CodeGenerator(CodeGeneratorContext context) {
@@ -79,10 +79,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
         callGraph.getFunctions().forEach(functionCompiler::compileFunction);
     }
 
-    public NodeValue visit(AstMindcodeNode node, boolean evaluate) {
+    public ValueStore visit(AstMindcodeNode node, boolean evaluate) {
         assembler.enterAstNode(node);
         variables.enterAstNode();
-        NodeValue result = nodeVisitor.visit(evaluator.evaluate(node));
+        ValueStore result = nodeVisitor.visit(evaluator.evaluate(node));
         variables.exitAstNode();
         assembler.exitAstNode(node);
         return result;

@@ -8,14 +8,14 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.util.Lazy;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class FunctionCallsBuilder extends AbstractBuilder implements
-        AstFunctionCallVisitor<NodeValue>,
-        AstEnhancedCommentVisitor<NodeValue>
+        AstFunctionCallVisitor<ValueStore>,
+        AstEnhancedCommentVisitor<ValueStore>
 {
     private final Lazy<BuiltinFunctionAssertsBuilder> assertsBuilder;
     private final Lazy<BuiltinFunctionVarargsBuilder> varargsBuilder;
@@ -33,7 +33,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public NodeValue visitFunctionCall(AstFunctionCall node) {
+    public ValueStore visitFunctionCall(AstFunctionCall node) {
         if (node.hasObject()) {
             return handleMethodCall(node);
         } else {
@@ -42,12 +42,12 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public NodeValue visitEnhancedComment(AstEnhancedComment comment) {
+    public ValueStore visitEnhancedComment(AstEnhancedComment comment) {
         textBuilder.get().handleEnhancedComment(comment);
         return LogicVoid.VOID;
     }
 
-    private NodeValue handleFunctionCall(AstFunctionCall call) {
+    private ValueStore handleFunctionCall(AstFunctionCall call) {
         // Solve special cases
         return switch (call.getFunctionName()) {
             case "assertEquals" -> assertsBuilder.get().handleAssertEquals(call);
@@ -64,7 +64,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         };
     }
 
-    private NodeValue handleMethodCall(AstFunctionCall node) {
+    private ValueStore handleMethodCall(AstFunctionCall node) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

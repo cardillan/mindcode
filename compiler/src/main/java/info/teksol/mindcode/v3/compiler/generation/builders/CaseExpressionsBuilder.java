@@ -10,17 +10,17 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstRange;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseExpressionVisitor<NodeValue> {
+public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseExpressionVisitor<ValueStore> {
     public CaseExpressionsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
     @Override
-    public NodeValue visitCaseExpression(AstCaseExpression node) {
+    public ValueStore visitCaseExpression(AstCaseExpression node) {
         LogicVariable resultVar = nextNodeResultTemp();
         LogicLabel exitLabel = nextLabel();
 
@@ -43,17 +43,17 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         LogicLabel nextExp = nextLabel();       // Next value in when list
-                        NodeValue minValue = evaluate(range.getFirstValue());
+                        ValueStore minValue = evaluate(range.getFirstValue());
                         assembler.createJump(nextExp, Condition.LESS_THAN, caseValue, minValue.getValue(assembler));
                         // The max value is only evaluated when the min value lets us through
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
-                        NodeValue maxValue = evaluate(range.getLastValue());
+                        ValueStore maxValue = evaluate(range.getLastValue());
                         assembler.createJump(bodyLabel, insideRangeCondition(range), caseValue, maxValue.getValue(assembler));
                         assembler.createLabel(nextExp);
                     }
                     else {
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
-                        NodeValue whenValue = evaluate(value);
+                        ValueStore whenValue = evaluate(value);
                         assembler.createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue.getValue(assembler));
                     }
                 }
@@ -65,7 +65,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
             // Body of the alternative
             assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
             assembler.createLabel(bodyLabel);
-            NodeValue bodyValue = evaluateBody(alternative.getBody());
+            ValueStore bodyValue = evaluateBody(alternative.getBody());
             assembler.createSet(resultVar, bodyValue.getValue(assembler));
             assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
             assembler.createJumpUnconditional(exitLabel);
@@ -74,7 +74,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
         }
 
         assembler.setSubcontextType(AstSubcontextType.ELSE, multiplier);
-        NodeValue elseValue = evaluateBody(node.getElseBranch());
+        ValueStore elseValue = evaluateBody(node.getElseBranch());
         assembler.createSet(resultVar, elseValue.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         assembler.createLabel(exitLabel);

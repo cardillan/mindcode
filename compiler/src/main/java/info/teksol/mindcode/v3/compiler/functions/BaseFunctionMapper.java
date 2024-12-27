@@ -11,7 +11,7 @@ import info.teksol.mindcode.v3.AstContext;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -51,13 +51,13 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     }
 
     @Override
-    public @Nullable NodeValue handleProperty(AstFunctionCall call, NodeValue target, List<FunctionArgument> arguments) {
+    public @Nullable ValueStore handleProperty(AstFunctionCall call, ValueStore target, List<FunctionArgument> arguments) {
         PropertyHandler handler = propertyMap.get(call.getFunctionName());
         return handler == null ? null : handler.handleProperty(call, target, arguments);
     }
 
     @Override
-    public @Nullable NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+    public @Nullable ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         FunctionHandler handler = functionMap.get(call.getFunctionName());
         return handler == null ? null : handler.handleFunction(call, arguments);
     }

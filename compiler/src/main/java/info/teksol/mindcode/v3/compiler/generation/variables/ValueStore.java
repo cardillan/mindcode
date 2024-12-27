@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 /// of the AST tree (excluding nodes representing fragments of larger syntactic elements, which are only used
 /// in specific contexts).
 @NullMarked
-public interface NodeValue {
+public interface ValueStore {
     // FINISH Add copyFrom and createTemp methods
     //        Will need access to variables(?) for creating the temps
     //        Maybe move temps from variables to assembler...
@@ -32,7 +32,7 @@ public interface NodeValue {
     /// **Temporary variables aren't l-values.**
     ///
     /// The definition is separate from LogicArgument.isWritable, because temporary variables are generally
-    /// writable, but they don't represent l-values. When they do, they need a special NodeValue implementation
+    /// writable, but they don't represent l-values. When they do, they need a special ValueStore implementation
     /// to handle reading and writing values anyway.
     ///
     /// @return true if this instance represents an l-value
@@ -63,4 +63,33 @@ public interface NodeValue {
     /// @param assembler assembler instance used to produce code for setting the value, if needed
     /// @param valueSetter consumer responsible for setting the passed-in variable to the value to be written
     void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter);
+
+    /// Returns a variable for two-phased writes. In the first phase, the variable provided by this
+    /// method is set to the desired value. In the second phase, the value is transferred to the
+    /// final location.
+    ///
+    /// Code builders using the two-phase write must ensure the write variable will not get overwritten
+    /// by other code in between.
+    ///
+    /// The default implementation is adequate for simple values (mlog variables).
+    ///
+    /// @param assembler assembler instance used to produce code for setting the value, if needed
+    /// @return variable to use for writes
+    default LogicValue getWriteVariable(CodeAssembler assembler) {
+        return getValue(assembler);
+    }
+
+    /// Performs the second phase of a two-phase write. In the first phase, the variable provided by
+    /// `writeValue` method was set to the desired value. In the second phase, the value is transferred to the
+    /// final location. If the final location is identical with the write variable, the implementation
+    /// of this method may be empty.
+    ///
+    /// Code builders using the two-phase write must ensure the write variable will not get overwritten
+    /// by other code in between.
+    ///
+    /// The default implementation is adequate for simple values (mlog variables).
+    ///
+    /// @param assembler assembler instance used to produce code for setting the value, if needed
+    default void storeValue(CodeAssembler assembler) {
+    }
 }

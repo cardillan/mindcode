@@ -7,11 +7,11 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
-/// NodeValue representation of an external variable or a dynamic memory access.
+/// ValueStore representation of an external variable or a dynamic memory access.
 /// This implementation uses a single temporary variable (transferVariable) to transfer values from/to
 /// external memory.
 @NullMarked
-public class ExternalVariable implements NodeValue {
+public class ExternalVariable implements ValueStore {
     private final LogicVariable memory;
     private final LogicValue index;
     private final LogicVariable transferVariable;
@@ -46,6 +46,16 @@ public class ExternalVariable implements NodeValue {
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
+        assembler.createWrite(transferVariable, memory, index);
+    }
+
+    @Override
+    public LogicValue getWriteVariable(CodeAssembler assembler) {
+        return transferVariable;
+    }
+
+    @Override
+    public void storeValue(CodeAssembler assembler) {
         assembler.createWrite(transferVariable, memory, index);
     }
 }

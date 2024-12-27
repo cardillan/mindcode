@@ -21,18 +21,18 @@ public interface FunctionContext {
     LogicFunctionV3 function();
 
     /// Registers a new function variable.
-    NodeValue registerFunctionVariable(AstIdentifier identifier);
+    ValueStore registerFunctionVariable(AstIdentifier identifier);
 
     ///  Provides a loop stack for this function
     LoopStack loopStack();
 
     /// Returns user variables registered within the function
-    Map<String, NodeValue> variables();
+    Map<String, ValueStore> variables();
 
     List<FunctionArgument> getVarargs();
 
     /// Returns all function variables (user and compiler generated) active at this moment.
-    Collection<NodeValue> getActiveVariables();
+    Collection<ValueStore> getActiveVariables();
 
     /// Called when entering a new AST node. For tracking variables used within a node
     void enterAstNode();

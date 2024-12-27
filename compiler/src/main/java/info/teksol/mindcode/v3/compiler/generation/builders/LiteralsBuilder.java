@@ -11,7 +11,7 @@ import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
 import info.teksol.mindcode.v3.compiler.generation.variables.FormattableContent;
 import info.teksol.mindcode.v3.compiler.generation.variables.MissingValue;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,16 +19,16 @@ import java.util.Optional;
 
 @NullMarked
 public class LiteralsBuilder extends AbstractBuilder implements
-        AstFormattableLiteralVisitor<NodeValue>,
-        AstFormattablePlaceholderVisitor<NodeValue>,
-        AstLiteralBinaryVisitor<NodeValue>,
-        AstLiteralBooleanVisitor<NodeValue>,
-        AstLiteralDecimalVisitor<NodeValue>,
-        AstLiteralEscapeVisitor<NodeValue>,
-        AstLiteralFloatVisitor<NodeValue>,
-        AstLiteralHexadecimalVisitor<NodeValue>,
-        AstLiteralNullVisitor<NodeValue>,
-        AstLiteralStringVisitor<NodeValue>
+        AstFormattableLiteralVisitor<ValueStore>,
+        AstFormattablePlaceholderVisitor<ValueStore>,
+        AstLiteralBinaryVisitor<ValueStore>,
+        AstLiteralBooleanVisitor<ValueStore>,
+        AstLiteralDecimalVisitor<ValueStore>,
+        AstLiteralEscapeVisitor<ValueStore>,
+        AstLiteralFloatVisitor<ValueStore>,
+        AstLiteralHexadecimalVisitor<ValueStore>,
+        AstLiteralNullVisitor<ValueStore>,
+        AstLiteralStringVisitor<ValueStore>
 {
 
     public LiteralsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
@@ -36,55 +36,55 @@ public class LiteralsBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public NodeValue visitFormattableLiteral(AstFormattableLiteral node) {
-        List<NodeValue> parts = evaluateExpressions(node.getParts());
+    public ValueStore visitFormattableLiteral(AstFormattableLiteral node) {
+        List<ValueStore> parts = evaluateExpressions(node.getParts());
         return new FormattableContent(node.inputPosition(), parts);
     }
 
     @Override
-    public NodeValue visitFormattablePlaceholder(AstFormattablePlaceholder node) {
+    public ValueStore visitFormattablePlaceholder(AstFormattablePlaceholder node) {
         return MissingValue.FORMATTABLE_PLACEHOLDER;
     }
 
     @Override
-    public NodeValue visitLiteralBinary(AstLiteralBinary node) {
+    public ValueStore visitLiteralBinary(AstLiteralBinary node) {
         String literal = node.getLiteral();
         return LogicNumber.get(literal, Long.parseLong(literal, 2, literal.length(), 2));
     }
 
     @Override
-    public NodeValue visitLiteralBoolean(AstLiteralBoolean node) {
+    public ValueStore visitLiteralBoolean(AstLiteralBoolean node) {
         return node.getValue() ? LogicBoolean.TRUE : LogicBoolean.FALSE;
     }
 
     @Override
-    public NodeValue visitLiteralDecimal(AstLiteralDecimal node) {
+    public ValueStore visitLiteralDecimal(AstLiteralDecimal node) {
         return visitNumericLiteral(node);
     }
 
     @Override
-    public NodeValue visitLiteralEscape(AstLiteralEscape node) {
+    public ValueStore visitLiteralEscape(AstLiteralEscape node) {
         return LogicString.create(node.getValue());
     }
 
     @Override
-    public NodeValue visitLiteralFloat(AstLiteralFloat node) {
+    public ValueStore visitLiteralFloat(AstLiteralFloat node) {
         return visitNumericLiteral(node);
     }
 
     @Override
-    public NodeValue visitLiteralHexadecimal(AstLiteralHexadecimal node) {
+    public ValueStore visitLiteralHexadecimal(AstLiteralHexadecimal node) {
         String literal = node.getLiteral();
         return LogicNumber.get(literal, Long.decode(literal));
     }
 
     @Override
-    public NodeValue visitLiteralNull(AstLiteralNull node) {
+    public ValueStore visitLiteralNull(AstLiteralNull node) {
         return LogicNull.NULL;
     }
 
     @Override
-    public NodeValue visitLiteralString(AstLiteralString node) {
+    public ValueStore visitLiteralString(AstLiteralString node) {
         return LogicString.create(node.getValue());
     }
 

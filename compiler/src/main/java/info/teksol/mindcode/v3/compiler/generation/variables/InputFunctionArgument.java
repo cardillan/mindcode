@@ -12,9 +12,9 @@ import java.util.function.Consumer;
 @NullMarked
 public class InputFunctionArgument implements FunctionArgument {
     protected final AstFunctionArgument argument;
-    protected final NodeValue value;
+    protected final ValueStore value;
 
-    public InputFunctionArgument(AstFunctionArgument argument, NodeValue value) {
+    public InputFunctionArgument(AstFunctionArgument argument, ValueStore value) {
         this.argument = argument;
         this.value = value;
     }
@@ -26,7 +26,7 @@ public class InputFunctionArgument implements FunctionArgument {
 
     /// Provides the value of the underlying argument
     @Override
-    public NodeValue getArgumentValue() {
+    public ValueStore getArgumentValue() {
         return value;
     }
 
@@ -76,14 +76,12 @@ public class InputFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public LogicValue getTargetVariable(CodeAssembler assembler) {
-        // Is only used with function output arguments
-        return LogicVariable.INVALID;
+    public LogicValue getWriteVariable(CodeAssembler assembler) {
+        return value.getWriteVariable(assembler);
     }
 
-    /// Creates code to store output value after instruction call is finished.
     @Override
     public void storeValue(CodeAssembler assembler) {
-        // Do nothing - this instance represents an input argument
+        value.storeValue(assembler);
     }
 }

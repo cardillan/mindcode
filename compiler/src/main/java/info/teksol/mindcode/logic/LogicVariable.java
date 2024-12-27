@@ -232,7 +232,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return volatileVar;
     }
 
-    // NodeValue methods
+    // ValueStore methods
 
     @Override
     public boolean isWritable() {

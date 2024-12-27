@@ -28,7 +28,7 @@ public class MissingFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public NodeValue getArgumentValue() {
+    public ValueStore getArgumentValue() {
         return LogicVariable.INVALID;
     }
 
@@ -78,7 +78,7 @@ public class MissingFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public LogicVariable getTargetVariable(CodeAssembler assembler) {
+    public LogicVariable getWriteVariable(CodeAssembler assembler) {
         return LogicVariable.INVALID;
     }
 

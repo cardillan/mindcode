@@ -6,7 +6,7 @@ import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,7 +19,7 @@ class UbindFunctionHandler extends AbstractHandler implements FunctionHandler {
     }
 
     @Override
-    public NodeValue handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+    public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         validateArguments(call, arguments);
         assembler().createInstruction(Opcode.UBIND, validateInput(
                         opcodeVariant.namedParameters().getFirst(),

@@ -12,7 +12,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -21,15 +21,15 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 
 @NullMarked
 public class IfExpressionsBuilder extends AbstractBuilder implements
-        AstIfExpressionVisitor<NodeValue>,
-        AstOperatorTernaryVisitor<NodeValue>
+        AstIfExpressionVisitor<ValueStore>,
+        AstOperatorTernaryVisitor<ValueStore>
 {
     public IfExpressionsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
     @Override
-    public NodeValue visitIfExpression(AstIfExpression node) {
+    public ValueStore visitIfExpression(AstIfExpression node) {
         // TODO In the past, elsif branches were emulated as nested else if expressions.
         //      Code optimizers might therefore have problems if we encoded elsif branches more effectively.
         //      Change the implementation to a more efficient one and update the optimizers.
@@ -37,9 +37,9 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public NodeValue visitOperatorTernary(AstOperatorTernary node) {
+    public ValueStore visitOperatorTernary(AstOperatorTernary node) {
         assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-        final NodeValue condition = variables.excludeVariablesFromTracking(() -> evaluate(node.getCondition()));
+        final ValueStore condition = variables.excludeVariablesFromTracking(() -> evaluate(node.getCondition()));
 
         final LogicVariable tmp = nextNodeResultTemp();
         final LogicLabel elseBranch = nextLabel();
@@ -48,14 +48,14 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
         assembler.createJump(elseBranch, Condition.EQUAL, condition.getValue(assembler), FALSE);
 
         assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        final NodeValue trueBranch = evaluate(node.getTrueBranch());
+        final ValueStore trueBranch = evaluate(node.getTrueBranch());
         assembler.createSet(tmp, trueBranch.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
         assembler.createJumpUnconditional(endBranch);
         assembler.createLabel(elseBranch);
 
         assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        final NodeValue falseBranch = evaluate(node.getFalseBranch());
+        final ValueStore falseBranch = evaluate(node.getFalseBranch());
         assembler.createSet(tmp, falseBranch.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
         assembler.createLabel(endBranch);

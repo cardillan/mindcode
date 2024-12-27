@@ -7,7 +7,7 @@ import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
         super(builder);
     }
 
-    public NodeValue handleAssertEquals(AstFunctionCall call) {
+    public ValueStore handleAssertEquals(AstFunctionCall call) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = processArguments(call);
 
@@ -35,7 +35,7 @@ public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
         return LogicVoid.VOID;
     }
 
-    public NodeValue handleAssertPrints(AstFunctionCall call) {
+    public ValueStore handleAssertPrints(AstFunctionCall call) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         if (call.getArguments().size() != 3) {
             // Validate all arguments we got and produce messages

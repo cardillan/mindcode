@@ -13,7 +13,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstOperatorIncDec;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -23,18 +23,18 @@ import static info.teksol.mindcode.logic.LogicNull.NULL;
 import static info.teksol.mindcode.logic.LogicVoid.VOID;
 
 @NullMarked
-public class AssignmentsBuilder extends AbstractBuilder implements AstAssignmentVisitor<NodeValue>, AstOperatorIncDecVisitor<NodeValue> {
+public class AssignmentsBuilder extends AbstractBuilder implements AstAssignmentVisitor<ValueStore>, AstOperatorIncDecVisitor<ValueStore> {
     public AssignmentsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
     @Override
-    public NodeValue visitAssignment(AstAssignment node) {
+    public ValueStore visitAssignment(AstAssignment node) {
         return applyOperation(node.getTarget(), node.getValue(), node.getOperation(), false);
     }
 
     @Override
-    public NodeValue visitOperatorIncDec(AstOperatorIncDec node) {
+    public ValueStore visitOperatorIncDec(AstOperatorIncDec node) {
         // The other operand for increment/decrement is literal one. We're creating it here so that it gets
         // a valid input position.
         return applyOperation(node.getOperand(),
@@ -51,11 +51,11 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
     ///
     /// @return an instance holding the prior and current value of the modified target (prior is used for
     ///         postfix operators only)
-    private NodeValue applyOperation(AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,
+    private ValueStore applyOperation(AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,
             boolean returnPriorValue) {
         // We want to visit target first, so that heap variables are allocated left-to-right.
-        NodeValue target = resolveLValue(targetNode);
-        NodeValue eval = evaluate(valueNode);
+        ValueStore target = resolveLValue(targetNode);
+        ValueStore eval = evaluate(valueNode);
         if (!target.isLvalue()) {
             return NULL;
         }

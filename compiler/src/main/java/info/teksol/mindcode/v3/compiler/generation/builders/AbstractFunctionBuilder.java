@@ -48,7 +48,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
 
     private FunctionArgument convertArgument(AstFunctionArgument argument) {
         if (argument.hasExpression()) {
-            final NodeValue value = evaluate(Objects.requireNonNull(argument.getExpression()));
+            final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
             if (value == LogicVoid.VOID) {
                 warn(argument, "Expression doesn't have any value. Using no-value expressions in function calls is deprecated.");
             }

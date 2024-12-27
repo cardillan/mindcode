@@ -8,20 +8,20 @@ import info.teksol.mindcode.logic.LogicVoid;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIteratedForLoopStatement;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 
 @NullMarked
-public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstIteratedForLoopStatementVisitor<NodeValue> {
+public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstIteratedForLoopStatementVisitor<ValueStore> {
 
     public IteratedForLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
     @Override
-    public NodeValue visitIteratedForLoopStatement(AstIteratedForLoopStatement node) {
+    public ValueStore visitIteratedForLoopStatement(AstIteratedForLoopStatement node) {
         // Initialization
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
         visitBody(node.getInitialize());
@@ -33,7 +33,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
         if (node.getCondition() != null) {
-            final NodeValue condition = evaluate(node.getCondition());
+            final ValueStore condition = evaluate(node.getCondition());
             assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
         }
 

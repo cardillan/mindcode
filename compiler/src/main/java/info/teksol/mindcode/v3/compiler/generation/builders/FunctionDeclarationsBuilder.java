@@ -8,7 +8,7 @@ import info.teksol.mindcode.v3.compiler.callgraph.LogicFunctionV3;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -54,12 +54,12 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void appendRecursiveFunctionDeclaration(LogicFunctionV3 function) {
-        NodeValue nodeValue = function.isVoid()
+        ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
                 : evaluateBody(function.getBody());
 
         if (!function.isVoid()) {
-            assembler.createSet(LogicVariable.fnRetVal(function),  nodeValue.getValue(assembler));
+            assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
         }
 
         assembler.createLabel(returnStack.getReturnLabel(function.getInputPosition()));
@@ -67,12 +67,12 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void appendStacklessFunctionDeclaration(LogicFunctionV3 function) {
-        NodeValue nodeValue = function.isVoid()
+        ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
                 : evaluateBody(function.getBody());
 
         if (!function.isVoid()) {
-            assembler.createSet(LogicVariable.fnRetVal(function),  nodeValue.getValue(assembler));
+            assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
         }
 
         assembler.createLabel(returnStack.getReturnLabel(function.getInputPosition()));

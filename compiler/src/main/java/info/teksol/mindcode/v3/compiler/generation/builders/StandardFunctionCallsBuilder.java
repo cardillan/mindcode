@@ -13,7 +13,7 @@ import info.teksol.mindcode.v3.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.StackTracker;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -31,17 +31,17 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         stackTracker = context.stackTracker();
     }
 
-    public NodeValue handleFunctionCall(AstFunctionCall call) {
+    public ValueStore handleFunctionCall(AstFunctionCall call) {
         // Evaluate function arguments and create value list
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<FunctionArgument> arguments = processArguments(call);
 
-        NodeValue result = processFunctionCall(call, arguments);
+        ValueStore result = processFunctionCall(call, arguments);
         assembler.clearSubcontextType();
         return result;
     }
 
-    private NodeValue processFunctionCall(AstFunctionCall call, List<FunctionArgument> arguments) {
+    private ValueStore processFunctionCall(AstFunctionCall call, List<FunctionArgument> arguments) {
         List<LogicFunctionV3> exactMatches = callGraph.getExactMatches(call);
         if (!exactMatches.isEmpty()) {
             // There are user functions exactly matching the call. Process them.
@@ -55,7 +55,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
     }
 
-    private NodeValue processMatchedFunctionCalls(AstFunctionCall call, List<FunctionArgument> arguments,
+    private ValueStore processMatchedFunctionCalls(AstFunctionCall call, List<FunctionArgument> arguments,
             List<LogicFunctionV3> matches) {
         if (matches.size() == 1) {
             // Exactly one match by name: process the function
@@ -149,7 +149,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final LogicLabel returnLabel = nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
 
-        NodeValue result = evaluateBody(function.getBody());
+        ValueStore result = evaluateBody(function.getBody());
         if (!function.isVoid()) {
             returnValue.setValue(assembler, result.getValue(assembler));
         }
@@ -237,7 +237,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     /// @param parameter parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced input argument
     private boolean misplacedInput(LogicFunctionV3 function, FunctionArgument argument, LogicVariable functionParameter) {
-        // FINISH When function parameters become NodeValues, the isInputFunctionParameter
+        // FINISH When function parameters become ValueStores, the isInputFunctionParameter
         //        will be called directly without casting
         return functionParameter.isInput()
                && argument.getArgumentValue() instanceof LogicVariable variable
@@ -249,7 +249,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
 
         // List of values to be passed to parameters
-        Queue<@NonNull NodeValue> argumentValues = new ArrayDeque<>(arguments.size());
+        Queue<@NonNull ValueStore> argumentValues = new ArrayDeque<>(arguments.size());
         int limit = Math.min(arguments.size(), function.getDeclaredParameters().size());
 
         for (int index = 0; index < limit; index++) {
@@ -293,7 +293,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     /// @param parameter parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced output argument
     private boolean misplacedOutput(LogicFunctionV3 function, FunctionArgument argument, LogicVariable functionParameter) {
-        // FINISH When function parameters become NodeValues, the isOutputFunctionParameter
+        // FINISH When function parameters become ValueStores, the isOutputFunctionParameter
         //        will be called directly without casting
         return argument.isOutput()
                && argument.getArgumentValue() instanceof LogicVariable variable
@@ -304,7 +304,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private void retrieveFunctionParameters(LogicFunctionV3 function, List<FunctionArgument> arguments,
             boolean recursiveCall) {
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        List<Tuple2<NodeValue, LogicVariable>> finalizers = new ArrayList<>();
+        List<Tuple2<ValueStore, LogicVariable>> finalizers = new ArrayList<>();
 
         // Setup variables representing function parameters with values from this call
         for (int i = 0; i < arguments.size(); i++) {

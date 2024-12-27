@@ -10,7 +10,7 @@ import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import info.teksol.mindcode.v3.compiler.generation.variables.FormattableContent;
 import info.teksol.mindcode.v3.compiler.generation.variables.FunctionArgument;
 import info.teksol.mindcode.v3.compiler.generation.variables.MissingValue;
-import info.teksol.mindcode.v3.compiler.generation.variables.NodeValue;
+import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         super(builder);
     }
 
-    public NodeValue handlePrintf(AstFunctionCall call) {
+    public ValueStore handlePrintf(AstFunctionCall call) {
         if (!processor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))) {
             error("The printf function requires target ML8A or higher.");
             return LogicVoid.VOID;
@@ -63,7 +63,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return arguments.isEmpty() ? LogicNull.NULL : arguments.getLast();
     }
 
-    public NodeValue handleTextOutput(AstFunctionCall call, Formatter formatter) {
+    public ValueStore handleTextOutput(AstFunctionCall call, Formatter formatter) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = processArguments(call);
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
@@ -79,7 +79,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         }
 
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-        NodeValue result = arguments.getFirst().getArgumentValue() instanceof FormattableContent formattable
+        ValueStore result = arguments.getFirst().getArgumentValue() instanceof FormattableContent formattable
                 ? createFormattableOutput(formattable.inputPosition(), formatter, formattable.getParts(),arguments.subList(1, arguments.size()))
                 : createPlainOutput(formatter, arguments);
 
@@ -93,16 +93,16 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
     public void handleEnhancedComment(AstEnhancedComment comment) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        List<NodeValue> parts = evaluateExpressions(comment.getParts());
+        List<ValueStore> parts = evaluateExpressions(comment.getParts());
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         createFormattableOutput(comment.inputPosition(), Formatter.REMARK, parts, List.of());
         assembler.clearSubcontextType();
     }
 
-    private NodeValue createFormattableOutput(InputPosition inputPosition, Formatter formatter,
-            List<NodeValue> parts, List<FunctionArgument> arguments) {
+    private ValueStore createFormattableOutput(InputPosition inputPosition, Formatter formatter,
+            List<ValueStore> parts, List<FunctionArgument> arguments) {
         int index = 0;
-        for (NodeValue part : parts) {
+        for (ValueStore part : parts) {
             if (part == MissingValue.FORMATTABLE_PLACEHOLDER) {
                 if (index == arguments.size()) {
                     error(inputPosition, "Not enough arguments for formattable placeholders.");
@@ -122,7 +122,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return LogicVoid.VOID;
     }
 
-    private NodeValue createPlainOutput(Formatter formatter, List<FunctionArgument> arguments) {
+    private ValueStore createPlainOutput(Formatter formatter, List<FunctionArgument> arguments) {
         // The non-formattable variant of the call
         // Just output an instruction for every argument
         arguments.forEach(argument -> formatter.createInstruction(assembler, argument.getValue(assembler)));
