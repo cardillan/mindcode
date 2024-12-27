@@ -305,4 +305,41 @@ class FunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         }
     }
 
+    @Nested
+    class MethodCalls {
+        @Test
+        void compilesSimpleMethodCall() {
+            assertCompiles("""
+                            message1.printflush();
+                            """,
+                    createInstruction(PRINTFLUSH, "message1")
+            );
+        }
+
+        @Test
+        void compilesChainedMethodCall() {
+            assertCompiles("""
+                            getlink(1).printflush();
+                            """,
+                    createInstruction(GETLINK, var(0), "1"),
+                    createInstruction(PRINTFLUSH, var(0))
+            );
+        }
+
+        @Test
+        void reportsUnknownMethods() {
+            assertGeneratesMessages(expectedMessages().add("Undefined function 'fluffyBunny'."),
+                            """
+                            cell1.fluffyBunny(Hohoho);
+                            """);
+        }
+
+        @Test
+        void reportsWrongArguments() {
+            assertGeneratesMessages(expectedMessages().add("Function 'printflush': wrong number of arguments (expected 0, found 1)."),
+                            """
+                            message1.printflush("Yadada");
+                            """);
+        }
+    }
 }

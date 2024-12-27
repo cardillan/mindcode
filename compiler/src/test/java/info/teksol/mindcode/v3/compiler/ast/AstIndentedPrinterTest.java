@@ -199,7 +199,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                             ifBranches = AstIfBranch {
                                                 condition = AstOperatorBinary {
                                                     operation = STRICT_EQUAL,
-                                                    left = AstMemberAccess{object = AstBuiltInIdentifier{name = "@unit"}, property = AstBuiltInIdentifier{name = "@dead"}},
+                                                    left = AstPropertyAccess{object = AstBuiltInIdentifier{name = "@unit"}, property = AstBuiltInIdentifier{name = "@dead"}},
                                                     right = AstLiteralDecimal{literal = "0"}
                                                 },
                                                 body = [

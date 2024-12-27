@@ -429,8 +429,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     //<editor-fold desc="Rules: expressions/member access">
     @Override
-    public AstMemberAccess visitAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx) {
-        return new AstMemberAccess(pos(ctx),
+    public AstPropertyAccess visitAstPropertyAccess(MindcodeParser.AstPropertyAccessContext ctx) {
+        return new AstPropertyAccess(pos(ctx),
                 visitAstExpression(ctx.object),
                 new AstBuiltInIdentifier(pos(ctx.property), ctx.property.getText()));
     }

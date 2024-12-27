@@ -31,6 +31,22 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         stackTracker = context.stackTracker();
     }
 
+    public ValueStore handleMethodCall(AstFunctionCall call) {
+        // Evaluate target and function arguments and create value list
+        ValueStore target = evaluate(Objects.requireNonNull(call.getObject()));
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<FunctionArgument> arguments = processArguments(call);
+
+        ValueStore result = functionMapper.handleProperty(call, target, arguments);
+        assembler.clearSubcontextType();
+        if (result == null) {
+            error(call.getIdentifier(), "Undefined function '%s'.", call.getFunctionName());
+            return LogicNull.NULL;
+        } else {
+            return result;
+        }
+    }
+
     public ValueStore handleFunctionCall(AstFunctionCall call) {
         // Evaluate function arguments and create value list
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);

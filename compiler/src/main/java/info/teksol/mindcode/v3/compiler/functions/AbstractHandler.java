@@ -51,7 +51,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
     protected boolean validateArguments(AstFunctionCall call, List<FunctionArgument> arguments) {
         if (!argumentCount.contains(arguments.size())) {
-            error(call, "Function '%s': wrong number of arguments (expected %s, found %d)",
+            error(call, "Function '%s': wrong number of arguments (expected %s, found %d).",
                     name, argumentCount.getRangeString(), arguments.size());
             return false;
         } else {

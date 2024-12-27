@@ -706,15 +706,15 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             a.b.c.@id;
                             """,
                     List.of(
-                            new AstMemberAccess(EMPTY,
+                            new AstPropertyAccess(EMPTY,
                                     identifier,
                                     new AstBuiltInIdentifier(EMPTY, "@type")),
-                            new AstMemberAccess(EMPTY,
-                                    new AstMemberAccess(EMPTY,
+                            new AstPropertyAccess(EMPTY,
+                                    new AstPropertyAccess(EMPTY,
                                             identifier,
                                             new AstBuiltInIdentifier(EMPTY, "@firstItem")),
                                     new AstBuiltInIdentifier(EMPTY, "@id")),
-                            new AstMemberAccess(EMPTY,
+                            new AstPropertyAccess(EMPTY,
                                     new AstMemberAccess(EMPTY, new AstMemberAccess(EMPTY, a, b), c),
                                     new AstBuiltInIdentifier(EMPTY, "@id"))
                     )
@@ -1222,7 +1222,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             call(a, arg(call(b)), arg(call(c))),
                             call(call(a), b),
                             call(new AstMemberAccess(EMPTY, a, b), c),
-                            new AstMemberAccess(EMPTY,
+                            new AstPropertyAccess(EMPTY,
                                     call(call(a), b),
                                     new AstBuiltInIdentifier(EMPTY, "@id")),
                             new AstAssignment(EMPTY, null,

@@ -10,36 +10,36 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstMemberAccess extends AstExpression {
+public class AstPropertyAccess extends AstExpression {
     private final AstExpression object;
-    private final AstIdentifier member;
+    private final AstBuiltInIdentifier property;
 
-    public AstMemberAccess(InputPosition inputPosition, AstExpression object, AstIdentifier member) {
-        super(inputPosition, children(object, member));
+    public AstPropertyAccess(InputPosition inputPosition, AstExpression object, AstBuiltInIdentifier property) {
+        super(inputPosition, children(object, property));
         this.object = Objects.requireNonNull(object);
-        this.member = Objects.requireNonNull(member);
+        this.property = Objects.requireNonNull(property);
     }
 
     public AstExpression getObject() {
         return object;
     }
 
-    public AstIdentifier getMember() {
-        return member;
+    public AstBuiltInIdentifier getProperty() {
+        return property;
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        AstMemberAccess that = (AstMemberAccess) o;
-        return object.equals(that.object) && member.equals(that.member);
+        AstPropertyAccess that = (AstPropertyAccess) o;
+        return object.equals(that.object) && property.equals(that.property);
     }
 
     @Override
     public int hashCode() {
         int result = object.hashCode();
-        result = 31 * result + member.hashCode();
+        result = 31 * result + property.hashCode();
         return result;
     }
 

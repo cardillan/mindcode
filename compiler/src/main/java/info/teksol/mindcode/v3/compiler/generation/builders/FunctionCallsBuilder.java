@@ -64,8 +64,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         };
     }
 
-    private ValueStore handleMethodCall(AstFunctionCall node) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private ValueStore handleMethodCall(AstFunctionCall call) {
+        return callBuilder.get().handleMethodCall(call);
     }
-
 }
