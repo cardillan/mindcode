@@ -337,6 +337,28 @@ over the entire area of a small display.
 
 To use the Math library, use the `require math;` statement.
 
+## Constants
+
+### PI
+
+**Definition:** `const PI = 3.141592653589793;`
+
+The value that is closer than any other to _pi_ (&pi;), the ratio of the circumference
+of a circle to its diameter. Provides better precision than `@pi`, and is compile-time
+evaluated when possible.
+
+### DEG_TO_RAD
+
+**Definition:** `const DEG_TO_RAD = 0.017453292519943295;`
+
+Constant by which to multiply an angular value in degrees to obtain an  angular value in radians.
+
+### RAD_TO_DEG
+
+**Definition:** `const RAD_TO_DEG = 57.29577951308232;`
+
+Constant by which to multiply an angular value in radians to obtain an angular value in degrees.
+
 ## Functions
 
 ### distance

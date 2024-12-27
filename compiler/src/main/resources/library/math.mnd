@@ -1,7 +1,20 @@
-// Mindcode system library for Mindustry Logic version 8
+// Mindcode system library
 // Math functions
 //
 //* To use the Math library, use the `require math;` statement.
+
+/**
+ * The value that is closer than any other to _pi_ (&pi;), the ratio of the circumference
+ * of a circle to its diameter. Provides better precision than `@pi`, and is compile-time
+ * evaluated when possible.
+ */
+const PI = 3.141592653589793;
+
+/** Constant by which to multiply an angular value in degrees to obtain an  angular value in radians. */
+const DEG_TO_RAD = 0.017453292519943295;
+
+/** Constant by which to multiply an angular value in radians to obtain an angular value in degrees. */
+const RAD_TO_DEG = 57.29577951308232;
 
 /**
  * Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).

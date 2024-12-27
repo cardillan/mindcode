@@ -8,6 +8,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class ExpressionEvaluator {
+    public static final double doubleDegRad = 0.017453292519943295;
+    public static final double doubleRadDeg = 57.29577951308232;
 
     public static LogicOperation getOperation(Operation operation) {
         return OPERATIONS.get(operation);
@@ -101,13 +103,13 @@ public class ExpressionEvaluator {
         map.put(Operation.SQRT,             (r, a, b) -> r.setDoubleValue(Math.sqrt(a.getDoubleValue())));
         map.put(Operation.RAND,             (r, a, b) -> r.setDoubleValue(rnd.nextDouble() * a.getDoubleValue()));
 
-        map.put(Operation.SIN,              (r, a, b) -> r.setDoubleValue(Math.sin(a.getDoubleValue())));
-        map.put(Operation.COS,              (r, a, b) -> r.setDoubleValue(Math.cos(a.getDoubleValue())));
-        map.put(Operation.TAN,              (r, a, b) -> r.setDoubleValue(Math.tan(a.getDoubleValue())));
+        map.put(Operation.SIN,              (r, a, b) -> r.setDoubleValue(Math.sin(a.getDoubleValue() * doubleDegRad)));
+        map.put(Operation.COS,              (r, a, b) -> r.setDoubleValue(Math.cos(a.getDoubleValue() * doubleDegRad)));
+        map.put(Operation.TAN,              (r, a, b) -> r.setDoubleValue(Math.tan(a.getDoubleValue() * doubleDegRad)));
 
-        map.put(Operation.ASIN,             (r, a, b) -> r.setDoubleValue(Math.asin(a.getDoubleValue())));
-        map.put(Operation.ACOS,             (r, a, b) -> r.setDoubleValue(Math.acos(a.getDoubleValue())));
-        map.put(Operation.ATAN,             (r, a, b) -> r.setDoubleValue(Math.atan(a.getDoubleValue())));
+        map.put(Operation.ASIN,             (r, a, b) -> r.setDoubleValue(Math.asin(a.getDoubleValue() * doubleRadDeg)));
+        map.put(Operation.ACOS,             (r, a, b) -> r.setDoubleValue(Math.acos(a.getDoubleValue() * doubleRadDeg)));
+        map.put(Operation.ATAN,             (r, a, b) -> r.setDoubleValue(Math.atan(a.getDoubleValue() * doubleRadDeg)));
 
         return map;
     }

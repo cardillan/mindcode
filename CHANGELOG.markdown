@@ -2,10 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.7.2 - 2024-12-25
+## 2.7.2 - 2024-12-27
 
 ### Fixed
 
+* Fixed wrong compile-time evaluation of trigonometric functions (radians were assumed instead of degrees used by Mindustry - [#192](https://github.com/cardillan/mindcode/issues/192).
 * Fixed the documentation stating that `do` in loops is optional ([#191](https://github.com/cardillan/mindcode/issues/191)).
 * Fixed decompiler output missing the `#set target` directive ([#188](https://github.com/cardillan/mindcode/issues/188)).
 
