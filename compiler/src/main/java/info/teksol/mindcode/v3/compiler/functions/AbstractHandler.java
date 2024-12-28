@@ -146,14 +146,15 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
             if (!parameterValues.contains(variable.getName())) {
                 error(argument.inputPosition(),
                         "Invalid value '%s' for parameter '%s': allowed values are '%s'.", variable.getName(),
-                        parameter.name(), String.join("', '", parameterValues));
+                        parameter.type().getTypeName(), String.join("', '", parameterValues));
+                return LogicKeyword.create("");
             }
 
             return LogicKeyword.create(variable.getName());
         } else {
             error(argument.inputPosition(),
                     "Invalid or unspecified value for parameter '%s': allowed values are '%s'.",
-                    parameter.name(), String.join("', '", parameterValues));
+                    parameter.type().getTypeName(), String.join("', '", parameterValues));
             return LogicKeyword.create("");
         }
     }

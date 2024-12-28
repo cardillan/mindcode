@@ -303,6 +303,15 @@ class FunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(WRITE, var(5), "bank1", "0")
             );
         }
+
+        @Test
+        void reportsWrongKeywords() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Invalid value 'building' for parameter 'layer': allowed values are 'floor', 'ore', 'block'."),
+                    """
+                            setblock(building, @core-nucleus, x, y, 0, 0);
+                            """);
+        }
     }
 
     @Nested
@@ -329,7 +338,7 @@ class FunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsUnknownMethods() {
             assertGeneratesMessages(expectedMessages().add("Undefined function 'fluffyBunny'."),
-                            """
+                    """
                             cell1.fluffyBunny(Hohoho);
                             """);
         }
@@ -337,7 +346,7 @@ class FunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsWrongArguments() {
             assertGeneratesMessages(expectedMessages().add("Function 'printflush': wrong number of arguments (expected 0, found 1)."),
-                            """
+                    """
                             message1.printflush("Yadada");
                             """);
         }

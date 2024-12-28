@@ -8,7 +8,7 @@ import static info.teksol.mindcode.logic.ProcessorVersion.*;
 
 public enum InstructionParameterType {
     /** Alignment for the DRAW PRINT instruction. */
-    ALIGNMENT       (Flags.KEYWORD, "center", "top", "bottom", "left", "right",
+    ALIGNMENT       ("alignment", Flags.KEYWORD, "center", "top", "bottom", "left", "right",
             "topLeft", "topRight", "bottomLeft", "bottomRight"),
 
     /** Input parameter accepting blocks (buildings). */
@@ -42,7 +42,7 @@ public enum InstructionParameterType {
     GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
 
     /** A const parameter. Specifies group of buildings to locate. */
-    GROUP           (Flags.KEYWORD,
+    GROUP           ("blockGroup", Flags.KEYWORD,
             allVersions(
                     "core", "storage", "generator", "turret", "factory", "repair", "battery", "reactor"),
             specificVersion(V6,
@@ -59,7 +59,7 @@ public enum InstructionParameterType {
     LABEL           (Flags.INPUT),
 
     /** Layer in getBlock instruction. */
-    LAYER           (Flags.KEYWORD, "floor", "ore", "block", "building"),
+    LAYER           ("layer", Flags.KEYWORD, "floor", "ore", "block", "building"),
 
     /** Selector for the ULOCATE instruction. No Flags.FUNCTION! */
     LOCATE          (Flags.SELECTOR),
@@ -68,10 +68,10 @@ public enum InstructionParameterType {
      * A const parameter. Specifies lookup category. The entire instruction is only available in V7;
      * the parameter keywords therefore aren't version specific.
      */
-    LOOKUP          (Flags.KEYWORD, "block", "unit", "item", "liquid"),
+    LOOKUP          ("itemType", Flags.KEYWORD, "block", "unit", "item", "liquid"),
 
     /** Type of message in MESSAGE instruction */
-    MAKE_MARKER     (Flags.KEYWORD, "shapeText", "point", "shape", "text", "line", "texture", "quad"),
+    MAKE_MARKER     ("markerType", Flags.KEYWORD, "shapeText", "point", "shape", "text", "line", "texture", "quad"),
 
     /** Type of message in MESSAGE instruction */
     MESSAGE         (Flags.SELECTOR),
@@ -80,7 +80,7 @@ public enum InstructionParameterType {
     OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
 
     /** Input parameter accepting ore type. */
-    ORE             (Flags.INPUT,
+    ORE             ("oreType", Flags.INPUT,
             allVersions(
                     "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
                     "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
@@ -93,10 +93,10 @@ public enum InstructionParameterType {
     OUTPUT          (Flags.OUTPUT),
 
     /** A const parameter. Specifies properties of units searchable by radar. */
-    RADAR           (Flags.KEYWORD, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
+    RADAR           ("category", Flags.KEYWORD, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
 
     /** A const parameter. Specifies property to sort radar outputs by. */
-    RADAR_SORT      (Flags.KEYWORD, "distance", "health", "shield", "armor", "maxHealth"),
+    RADAR_SORT      ("sortBy", Flags.KEYWORD, "distance", "health", "shield", "armor", "maxHealth"),
 
     /** Output parameter. Maps to the return value of a function. */
     RESULT          (Flags.OUTPUT),
@@ -108,7 +108,7 @@ public enum InstructionParameterType {
     SCOPE           (Flags.SELECTOR),
 
     /** Input parameter accepting property id. */
-    SENSOR          (Flags.INPUT,
+    SENSOR          ("property", Flags.INPUT,
             allVersions(
                     "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
                     "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
@@ -137,10 +137,10 @@ public enum InstructionParameterType {
     SET_MARKER      (Flags.SELECTOR),
 
     /** Settable layer in SETBLOCK instruction */
-    SETTABLE_LAYER  (Flags.SELECTOR),
+    SETTABLE_LAYER  ("layer", Flags.SELECTOR, "floor", "ore", "block"),
 
     /** Sound to play */
-    SOUND           (Flags.INPUT, "@sfx-artillery", "@sfx-bang", "@sfx-beam", "@sfx-bigshot", "@sfx-bioLoop",
+    SOUND           ("sound", Flags.INPUT, "@sfx-artillery", "@sfx-bang", "@sfx-beam", "@sfx-bigshot", "@sfx-bioLoop",
             "@sfx-blaster", "@sfx-bolt", "@sfx-boom", "@sfx-break", "@sfx-build", "@sfx-buttonClick", "@sfx-cannon", "@sfx-click",
             "@sfx-combustion", "@sfx-conveyor", "@sfx-corexplode", "@sfx-cutter", "@sfx-door", "@sfx-drill", "@sfx-drillCharge",
             "@sfx-drillImpact", "@sfx-dullExplosion", "@sfx-electricHum", "@sfx-explosion", "@sfx-explosionbig", "@sfx-extractLoop",
@@ -156,11 +156,11 @@ public enum InstructionParameterType {
             "@sfx-tractorbeam", "@sfx-wave", "@sfx-wind", "@sfx-wind2", "@sfx-wind3", "@sfx-windhowl"),
 
     /** Unit status in STATUS instruction. */
-    STATUS          (Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
+    STATUS          ("status", Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
             "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
 
     /** Input parameter accepting unit type. */
-    UNIT            (Flags.INPUT,
+    UNIT            ("unitType", Flags.INPUT,
             allVersions(
                     "@dagger", "@mace", "@fortress", "@scepter", "@reign",
                     "@nova", "@pulsar", "@quasar", "@vela", "@corvus",
@@ -189,26 +189,34 @@ public enum InstructionParameterType {
     /** An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. */
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
-    WEATHER         (Flags.INPUT, "@snowing", "@rain", "@sandstorm", "@sporestorm", "@fog", "@suspend-particles"),
+    WEATHER         ("weather", Flags.INPUT, "@snowing", "@rain", "@sandstorm", "@sporestorm", "@fog", "@suspend-particles"),
 
     ;
 
+    private final String typeName;
     private final int flags;
     private final List<ParameterValues> allowedValues;
 
     InstructionParameterType(int flags) {
+        this.typeName = name();
         this.flags = flags;
         this.allowedValues = List.of();
     }
 
-    InstructionParameterType(int flags, String... keywords) {
+    InstructionParameterType(String typeName, int flags, String... keywords) {
+        this.typeName = typeName;
         this.flags = flags;
         this.allowedValues = List.of(allVersions(keywords));
     }
 
-    InstructionParameterType(int flags, ParameterValues... keywords) {
+    InstructionParameterType(String typeName, int flags, ParameterValues... keywords) {
+        this.typeName = typeName;
         this.flags = flags;
         this.allowedValues = List.of(keywords);
+    }
+
+    public String getTypeName() {
+        return typeName;
     }
 
     /**
