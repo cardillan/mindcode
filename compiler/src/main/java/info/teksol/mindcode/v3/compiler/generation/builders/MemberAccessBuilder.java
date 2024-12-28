@@ -3,6 +3,8 @@ package info.teksol.mindcode.v3.compiler.generation.builders;
 import info.teksol.generated.ast.visitors.AstMemberAccessVisitor;
 import info.teksol.generated.ast.visitors.AstPropertyAccessVisitor;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstMemberAccess;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstPropertyAccess;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
@@ -15,8 +17,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class MemberAccessBuilder extends AbstractBuilder implements
         AstMemberAccessVisitor<ValueStore>,
-        AstPropertyAccessVisitor<ValueStore>
-{
+        AstPropertyAccessVisitor<ValueStore> {
 
     public MemberAccessBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
@@ -24,23 +25,31 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitMemberAccess(AstMemberAccess node) {
-        ValueStore object = evaluate(node.getObject());
-
-        if (object instanceof LogicVariable target) {
-            return new Property(target, node.getMember().getName(), unprotectedTemp());
+        LogicVariable target = resolveAnyVariable(node.getObject(), "Cannot invoke properties on this expression.");
+        String propertyName = node.getMember().getName();
+        if (validateProperty(propertyName)) {
+            return new Property(target, propertyName, unprotectedTemp());
         } else {
+            error(node.getMember(), "Unknown property '%s'.", propertyName);
             return LogicVariable.INVALID;
         }
     }
 
+    private boolean validateProperty(String propertyName) {
+        return processor.getOpcodeVariants().stream().anyMatch(v -> isPropertyOpcode(v, propertyName));
+    }
+
+    private boolean isPropertyOpcode(OpcodeVariant variant, String propertyName) {
+        return variant.opcode() == Opcode.CONTROL
+               && variant.namedParameters().getFirst().name().equals(propertyName)
+               && variant.namedParameters().size() == 3;
+    }
+
     @Override
     public ValueStore visitPropertyAccess(AstPropertyAccess node) {
-        ValueStore target = evaluate(node.getObject());
+        LogicVariable target = resolveAnyVariable(node.getObject(), "Cannot invoke properties on this expression.");
         final LogicVariable resultVar = nextNodeResultTemp();
-
-        assembler.createSensor(resultVar, target.getValue(assembler),
-                evaluate(node.getProperty()).getValue(assembler));
-
+        assembler.createSensor(resultVar, target, evaluate(node.getProperty()).getValue(assembler));
         return resultVar;
     }
 }

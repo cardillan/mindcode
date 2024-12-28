@@ -10,13 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed errors when compiling empty bodies of functions and statements ([#99](https://github.com/cardillan/mindcode/issues/99)).
 * Fixed errors when compiling unary plus and minus operators ([#175](https://github.com/cardillan/mindcode/issues/175)).
+* Fixed wrong definition of `control color` instruction in targets ML7 and higher ([#194](https://github.com/cardillan/mindcode/issues/194)).
 * The Web Application didn't start inside Docker container.
 
 ### Added
 
 * Added mechanism for invoking properties on expressions ([#92](https://github.com/cardillan/mindcode/issues/92)).
 * Added support for embedding expression in formattable String literals (e.g. `println($"Items: ${localItems + computeRemoteItems()}.")`).
-* Added increment/decrement operators (`++` and `--`) in both prefix and postfix form (e.g. `i++` or `--total`).
+* Added increment/decrement operators (`++` and `--`) in both prefix and postfix form (e.g. `i++`, `--total`).
+* Added support for using external variables and properties wherever "normal" variables can be used (e.g. as output arguments to function calls).
 
 ### Changed
 

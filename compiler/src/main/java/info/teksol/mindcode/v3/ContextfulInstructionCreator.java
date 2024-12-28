@@ -30,6 +30,10 @@ public interface ContextfulInstructionCreator {
         return (CallInstruction) createInstruction(CALL, address, returnValue);
     }
 
+    default ControlInstruction createControl(LogicKeyword property, LogicVariable target, LogicValue value) {
+        return (ControlInstruction) createInstruction(CONTROL, property, target, value);
+    }
+
     default EndInstruction createEnd() {
         return (EndInstruction) createInstruction(END);
     }

@@ -142,7 +142,7 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public String toString() {
-        return "BaseInstruction{" +
+        return getClass().getSimpleName() + "{" +
                 "astContext.id: " + astContext.id +
                 ", opcode='" + opcode + '\'' +
                 ", args=" + args +

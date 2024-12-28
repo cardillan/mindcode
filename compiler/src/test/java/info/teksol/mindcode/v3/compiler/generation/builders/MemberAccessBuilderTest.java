@@ -48,6 +48,35 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "amount", var(0))
             );
         }
+
+        @Test
+        void compilesComplexPropertyAccess() {
+            assertCompiles("""
+                            id = vault1.@firstItem.@id;
+                            """,
+                    createInstruction(SENSOR, var(0), "vault1", "@firstItem"),
+                    createInstruction(SENSOR, var(1), var(0), "@id"),
+                    createInstruction(SET, "id", var(1))
+            );
+        }
     }
 
+    @Nested
+    class Errors {
+        @Test
+        void refusesUnknownProperty() {
+            assertGeneratesMessages(expectedMessages().add("Unknown property 'foo'."),
+                    """
+                            a = vault1.foo;
+                            """);
+        }
+
+        @Test
+        void refusesInvalidExpression() {
+            assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
+                    """
+                            $"alora".enabled = true;
+                            """);
+        }
+    }
 }

@@ -64,7 +64,8 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, PROP, Opcode.CONTROL,    bctrl("shootp"),    block("block"), in("unit"), in("shoot"));
         add(list, V6,  V6,  S, PROP, Opcode.CONTROL,    bctrl("configure"), block("block"), in("value"));
         add(list, V7,  MAX, S, PROP, Opcode.CONTROL,    bctrl("config"),    block("block"), in("value"));
-        add(list, V6,  MAX, S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("r"), in("g"), in("b"));
+        add(list, V6,  V6,  S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("r"), in("g"), in("b"));
+        add(list, V7,  MAX, S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("packedColor"));
 
         add(list, V6,  MAX, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), block("turret"), in("order"), res("result"));
 

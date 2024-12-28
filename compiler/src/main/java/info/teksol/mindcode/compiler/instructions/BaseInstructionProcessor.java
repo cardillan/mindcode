@@ -138,6 +138,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return switch (opcode) {
             case CALL       -> new CallInstruction(astContext, arguments, params);
             case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
+            case CONTROL    -> new ControlInstruction(astContext, arguments, params);
             case DRAW       -> new DrawInstruction(astContext, arguments, params);
             case DRAWFLUSH  -> new DrawflushInstruction(astContext, arguments, params);
             case END        -> new EndInstruction(astContext);

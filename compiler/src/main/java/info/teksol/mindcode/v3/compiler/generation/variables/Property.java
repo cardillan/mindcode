@@ -1,6 +1,9 @@
 package info.teksol.mindcode.v3.compiler.generation.variables;
 
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.LogicBuiltIn;
+import info.teksol.mindcode.logic.LogicKeyword;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.v3.compiler.generation.CodeAssembler;
 import org.jspecify.annotations.NullMarked;
 
@@ -36,13 +39,13 @@ public class Property implements ValueStore {
 
     @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
-        assembler.createInstruction(Opcode.CONTROL, LogicKeyword.create(propertyName), target, value);
+        assembler.createControl(LogicKeyword.create(propertyName), target, value);
     }
 
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        assembler.createInstruction(Opcode.CONTROL, LogicKeyword.create(propertyName), target, transferVariable);
+        assembler.createControl(LogicKeyword.create(propertyName), target, transferVariable);
     }
 
     @Override
@@ -52,6 +55,6 @@ public class Property implements ValueStore {
 
     @Override
     public void storeValue(CodeAssembler assembler) {
-        assembler.createInstruction(Opcode.CONTROL, LogicKeyword.create(propertyName), target, transferVariable);
+        assembler.createControl(LogicKeyword.create(propertyName), target, transferVariable);
     }
 }

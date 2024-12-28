@@ -10,6 +10,7 @@ import info.teksol.mindcode.v3.compiler.ast.nodes.AstRange;
 import info.teksol.mindcode.v3.compiler.callgraph.CallGraph;
 import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.mindcode.v3.compiler.generation.variables.Variables;
+import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -60,6 +61,16 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         assembler = context.assembler();
         variables = context.variables();
         returnStack = context.returnStack();
+    }
+
+    protected LogicVariable resolveAnyVariable(AstMindcodeNode node, @PrintFormat String message, Object... args) {
+        ValueStore valueStore = process(node, false);
+        if (valueStore instanceof LogicVariable variable) {
+            return variable;
+        } else {
+            error(node, message, args);
+            return LogicVariable.INVALID;
+        }
     }
 
     /// Processes the node by passing it to the proper builder according to node type. The builder creates

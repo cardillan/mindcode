@@ -81,7 +81,8 @@ Control a building.
 |`block.config(value)`|`control config block value 0 0 0`|
 |`block.configure = value`<br/>Deprecated. Use `config` instead.|`control config block value 0 0 0`|
 |`block.config = value`|`control config block value 0 0 0`|
-|`block.color(r, g, b)`|`control color block r g b 0`|
+|`block.color(packedColor)`|`control color block packedColor 0 0 0`|
+|`block.color = packedColor`|`control color block packedColor 0 0 0`|
 
 ## Instruction `radar`
 

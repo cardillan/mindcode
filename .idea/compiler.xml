@@ -12,7 +12,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mindcode-annotations" target="22" />
       <module name="mindcode-mindcode" target="17" />
     </bytecodeTargetLevel>
   </component>
