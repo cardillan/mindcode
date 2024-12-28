@@ -684,7 +684,7 @@ class DataFlowVariableStates {
          * @return true if the expression reads the value of given variable
          */
         public boolean dependsOn(LogicVariable variable) {
-            return isExpression() && instruction.inputArgumentsStream().anyMatch(variable::equals);
+            return isExpression() && instruction.usesAsInput(variable);
         }
 
         /**

@@ -104,4 +104,19 @@ public interface MlogInstruction {
     default Stream<LogicArgument> inputOutputArgumentsStream() {
         return getTypedArguments().stream().filter(TypedArgument::isInputOrOutput).map(TypedArgument::argument);
     }
+
+    ///  @return true if the instruction uses the given argument
+    default boolean uses(LogicArgument arg) {
+        return getArgs().contains(arg);
+    }
+
+    ///  @return true if the instruction uses the given argument as an input argument
+    default boolean usesAsInput(LogicArgument arg) {
+        return arg != null && inputArgumentsStream().anyMatch(arg::equals);
+    }
+
+    ///  @return true if the instruction uses the given argument as an output argument
+    default boolean usesAsOutput(LogicArgument arg) {
+        return arg != null && outputArgumentsStream().anyMatch(arg::equals);
+    }
 }

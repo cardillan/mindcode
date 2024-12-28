@@ -1,10 +1,12 @@
 set _display null
 sensor __fn0_type null @type
+jump 5 notEqual __fn0_type @logic-display
 set __tmp3 80
-jump 7 equal __fn0_type @logic-display
-set __tmp3 null
-jump 7 notEqual __fn0_type @large-logic-display
+jump 9 always 0 0
+jump 8 notEqual __fn0_type @large-logic-display
 set __tmp3 176
+jump 9 always 0 0
+set __tmp3 null
 print __tmp3
 print "\n"
 draw rotate 0 0 90 0 0 0
@@ -28,54 +30,54 @@ draw translate 0 -176 0 0 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
 sensor __tmp6 null @type
-jump 34 notEqual __tmp6 @logic-display
+jump 36 notEqual __tmp6 @logic-display
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
-jump 39 always 0 0
-jump 38 notEqual __tmp6 @large-logic-display
+jump 41 always 0 0
+jump 40 notEqual __tmp6 @large-logic-display
 draw rotate 0 0 90 0 0 0
 draw translate 0 -176 0 0 0 0
-jump 39 always 0 0
+jump 41 always 0 0
 stop
 sensor __tmp8 null @type
-jump 44 notEqual __tmp8 @logic-display
+jump 46 notEqual __tmp8 @logic-display
 draw rotate 0 0 270 0 0 0
 draw translate -80 0 0 0 0 0
-jump 49 always 0 0
-jump 48 notEqual __tmp8 @large-logic-display
+jump 51 always 0 0
+jump 50 notEqual __tmp8 @large-logic-display
 draw rotate 0 0 270 0 0 0
 draw translate -176 0 0 0 0 0
-jump 49 always 0 0
+jump 51 always 0 0
 stop
 sensor __tmp10 null @type
-jump 54 notEqual __tmp10 @logic-display
+jump 56 notEqual __tmp10 @logic-display
 draw rotate 0 0 180 0 0 0
 draw translate -80 -80 0 0 0 0
-jump 59 always 0 0
-jump 58 notEqual __tmp10 @large-logic-display
+jump 61 always 0 0
+jump 60 notEqual __tmp10 @large-logic-display
 draw rotate 0 0 180 0 0 0
 draw translate -176 -176 0 0 0 0
-jump 59 always 0 0
+jump 61 always 0 0
 stop
 sensor __tmp12 null @type
-jump 64 notEqual __tmp12 @logic-display
+jump 66 notEqual __tmp12 @logic-display
 draw scale 1 -1 0 0 0 0
 draw translate 0 -80 0 0 0 0
-jump 69 always 0 0
-jump 68 notEqual __tmp12 @large-logic-display
+jump 71 always 0 0
+jump 70 notEqual __tmp12 @large-logic-display
 draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
-jump 69 always 0 0
+jump 71 always 0 0
 stop
 sensor __tmp14 null @type
-jump 74 notEqual __tmp14 @logic-display
+jump 76 notEqual __tmp14 @logic-display
 draw scale -1 1 0 0 0 0
 draw translate -80 0 0 0 0 0
-jump 79 always 0 0
-jump 78 notEqual __tmp14 @large-logic-display
+jump 81 always 0 0
+jump 80 notEqual __tmp14 @large-logic-display
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-jump 79 always 0 0
+jump 81 always 0 0
 stop
 draw scale 2.2 2.2 0 0 0 0
 draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0

@@ -25,111 +25,114 @@ Active optimizations:
      1 instructions eliminated by Temp Variables Elimination.
      5 instructions eliminated by Case Expression Optimization.
     15 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Jump Optimization (4 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
-     2 instructions eliminated by If Expression Optimization (3 iterations).
-     7 instructions eliminated by Data Flow Optimization (5 iterations).
-    10 instructions eliminated by Jump Straightening (4 iterations).
-    82 instructions after optimizations.
+     2 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by If Expression Optimization (2 iterations).
+     7 instructions eliminated by Data Flow Optimization (4 iterations).
+    10 instructions eliminated by Jump Straightening (3 iterations).
+    84 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
     0:  set _display null
     1:  sensor __fn0_type null @type
-    2:  set __tmp3 80
-    3:  jump __label3 equal __fn0_type @logic-display
-    4:  set __tmp3 null
-    5:  jump __label5 notEqual __fn0_type @large-logic-display
+    2:  jump __label2 notEqual __fn0_type @logic-display
+    3:  set __tmp3 80
+    4:  jump __label3 always 0 0
+        label __label2
+    5:  jump __label4 notEqual __fn0_type @large-logic-display
     6:  set __tmp3 176
+    7:  jump __label5 always 0 0
+        label __label4
+    8:  set __tmp3 null
         label __label5
         label __label3
-    7:  print __tmp3
-    8:  print "\n"
-    9:  draw rotate 0 0 90 0 0 0
-   10:  draw translate 0 -80 0 0 0 0
-   11:  draw rotate 0 0 270 0 0 0
-   12:  draw translate -80 0 0 0 0 0
-   13:  draw rotate 0 0 180 0 0 0
-   14:  draw translate -80 -80 0 0 0 0
-   15:  draw scale 1 -1 0 0 0 0
-   16:  draw translate 0 -80 0 0 0 0
-   17:  draw scale -1 1 0 0 0 0
-   18:  draw translate -80 0 0 0 0 0
-   19:  draw rotate 0 0 90 0 0 0
-   20:  draw translate 0 -176 0 0 0 0
-   21:  draw rotate 0 0 270 0 0 0
-   22:  draw translate -176 0 0 0 0 0
-   23:  draw rotate 0 0 180 0 0 0
-   24:  draw translate -176 -176 0 0 0 0
-   25:  draw scale 1 -1 0 0 0 0
-   26:  draw translate 0 -176 0 0 0 0
-   27:  draw scale -1 1 0 0 0 0
-   28:  draw translate -176 0 0 0 0 0
-   29:  sensor __tmp6 null @type
-   30:  jump __label29 notEqual __tmp6 @logic-display
-   31:  draw rotate 0 0 90 0 0 0
-   32:  draw translate 0 -80 0 0 0 0
-   33:  jump __label28 always 0 0
+    9:  print __tmp3
+   10:  print "\n"
+   11:  draw rotate 0 0 90 0 0 0
+   12:  draw translate 0 -80 0 0 0 0
+   13:  draw rotate 0 0 270 0 0 0
+   14:  draw translate -80 0 0 0 0 0
+   15:  draw rotate 0 0 180 0 0 0
+   16:  draw translate -80 -80 0 0 0 0
+   17:  draw scale 1 -1 0 0 0 0
+   18:  draw translate 0 -80 0 0 0 0
+   19:  draw scale -1 1 0 0 0 0
+   20:  draw translate -80 0 0 0 0 0
+   21:  draw rotate 0 0 90 0 0 0
+   22:  draw translate 0 -176 0 0 0 0
+   23:  draw rotate 0 0 270 0 0 0
+   24:  draw translate -176 0 0 0 0 0
+   25:  draw rotate 0 0 180 0 0 0
+   26:  draw translate -176 -176 0 0 0 0
+   27:  draw scale 1 -1 0 0 0 0
+   28:  draw translate 0 -176 0 0 0 0
+   29:  draw scale -1 1 0 0 0 0
+   30:  draw translate -176 0 0 0 0 0
+   31:  sensor __tmp6 null @type
+   32:  jump __label29 notEqual __tmp6 @logic-display
+   33:  draw rotate 0 0 90 0 0 0
+   34:  draw translate 0 -80 0 0 0 0
+   35:  jump __label28 always 0 0
         label __label29
-   34:  jump __label33 notEqual __tmp6 @large-logic-display
-   35:  draw rotate 0 0 90 0 0 0
-   36:  draw translate 0 -176 0 0 0 0
-   37:  jump __label28 always 0 0
+   36:  jump __label33 notEqual __tmp6 @large-logic-display
+   37:  draw rotate 0 0 90 0 0 0
+   38:  draw translate 0 -176 0 0 0 0
+   39:  jump __label28 always 0 0
         label __label33
-   38:  stop
+   40:  stop
         label __label28
-   39:  sensor __tmp8 null @type
-   40:  jump __label40 notEqual __tmp8 @logic-display
-   41:  draw rotate 0 0 270 0 0 0
-   42:  draw translate -80 0 0 0 0 0
-   43:  jump __label39 always 0 0
+   41:  sensor __tmp8 null @type
+   42:  jump __label40 notEqual __tmp8 @logic-display
+   43:  draw rotate 0 0 270 0 0 0
+   44:  draw translate -80 0 0 0 0 0
+   45:  jump __label39 always 0 0
         label __label40
-   44:  jump __label44 notEqual __tmp8 @large-logic-display
-   45:  draw rotate 0 0 270 0 0 0
-   46:  draw translate -176 0 0 0 0 0
-   47:  jump __label39 always 0 0
+   46:  jump __label44 notEqual __tmp8 @large-logic-display
+   47:  draw rotate 0 0 270 0 0 0
+   48:  draw translate -176 0 0 0 0 0
+   49:  jump __label39 always 0 0
         label __label44
-   48:  stop
+   50:  stop
         label __label39
-   49:  sensor __tmp10 null @type
-   50:  jump __label51 notEqual __tmp10 @logic-display
-   51:  draw rotate 0 0 180 0 0 0
-   52:  draw translate -80 -80 0 0 0 0
-   53:  jump __label50 always 0 0
+   51:  sensor __tmp10 null @type
+   52:  jump __label51 notEqual __tmp10 @logic-display
+   53:  draw rotate 0 0 180 0 0 0
+   54:  draw translate -80 -80 0 0 0 0
+   55:  jump __label50 always 0 0
         label __label51
-   54:  jump __label55 notEqual __tmp10 @large-logic-display
-   55:  draw rotate 0 0 180 0 0 0
-   56:  draw translate -176 -176 0 0 0 0
-   57:  jump __label50 always 0 0
+   56:  jump __label55 notEqual __tmp10 @large-logic-display
+   57:  draw rotate 0 0 180 0 0 0
+   58:  draw translate -176 -176 0 0 0 0
+   59:  jump __label50 always 0 0
         label __label55
-   58:  stop
+   60:  stop
         label __label50
-   59:  sensor __tmp12 null @type
-   60:  jump __label62 notEqual __tmp12 @logic-display
-   61:  draw scale 1 -1 0 0 0 0
-   62:  draw translate 0 -80 0 0 0 0
-   63:  jump __label61 always 0 0
+   61:  sensor __tmp12 null @type
+   62:  jump __label62 notEqual __tmp12 @logic-display
+   63:  draw scale 1 -1 0 0 0 0
+   64:  draw translate 0 -80 0 0 0 0
+   65:  jump __label61 always 0 0
         label __label62
-   64:  jump __label66 notEqual __tmp12 @large-logic-display
-   65:  draw scale 1 -1 0 0 0 0
-   66:  draw translate 0 -176 0 0 0 0
-   67:  jump __label61 always 0 0
+   66:  jump __label66 notEqual __tmp12 @large-logic-display
+   67:  draw scale 1 -1 0 0 0 0
+   68:  draw translate 0 -176 0 0 0 0
+   69:  jump __label61 always 0 0
         label __label66
-   68:  stop
+   70:  stop
         label __label61
-   69:  sensor __tmp14 null @type
-   70:  jump __label73 notEqual __tmp14 @logic-display
-   71:  draw scale -1 1 0 0 0 0
-   72:  draw translate -80 0 0 0 0 0
-   73:  jump __label72 always 0 0
+   71:  sensor __tmp14 null @type
+   72:  jump __label73 notEqual __tmp14 @logic-display
+   73:  draw scale -1 1 0 0 0 0
+   74:  draw translate -80 0 0 0 0 0
+   75:  jump __label72 always 0 0
         label __label73
-   74:  jump __label77 notEqual __tmp14 @large-logic-display
-   75:  draw scale -1 1 0 0 0 0
-   76:  draw translate -176 0 0 0 0 0
-   77:  jump __label72 always 0 0
+   76:  jump __label77 notEqual __tmp14 @large-logic-display
+   77:  draw scale -1 1 0 0 0 0
+   78:  draw translate -176 0 0 0 0 0
+   79:  jump __label72 always 0 0
         label __label77
-   78:  stop
+   80:  stop
         label __label72
-   79:  draw scale 2.2 2.2 0 0 0 0
-   80:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
-   81:  end
+   81:  draw scale 2.2 2.2 0 0 0 0
+   82:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
+   83:  end

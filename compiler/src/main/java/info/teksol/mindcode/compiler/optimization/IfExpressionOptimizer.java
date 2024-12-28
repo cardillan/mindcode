@@ -4,10 +4,7 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
-import info.teksol.mindcode.logic.Condition;
-import info.teksol.mindcode.logic.LogicBoolean;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
@@ -44,6 +41,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
         boolean canMoveForward = true;
 
         // Can we rearrange branches?
+        // Both branches set the same variable to some value as the last statement
         // Expensive tests last
         if (lastTrue instanceof LogicResultInstruction resTrue && lastFalse instanceof LogicResultInstruction resFalse
                 && resTrue.getResult().equals(resFalse.getResult())
@@ -56,7 +54,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
             // Only if the temporary variable is not reused anywhere
             if (resVar.isTemporaryVariable()
                     && isReplaceable(instructionAfter = instructionAfter(ifExpression), resVar)
-                    && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(resVar::equals)) == 1) {
+                    && instructionCount(ix -> ix.usesAsInput(resVar)) == 1) {
                 if (instructionAfter instanceof SetInstruction finalSet) {
                     resTrue = replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
                     resFalse = replaceInstruction(resFalse, resFalse.withResult(finalSet.getResult()));
@@ -74,19 +72,21 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 falseBranch = contextInstructions(ifExpression.child(3));
             }
 
-            if (canMoveForward) {
+            if (advanced() && canMoveForward) {
                 LogicVariable updatedResVar = resTrue.getResult();
 
-                // Do not perform the optimization if the condition depends on the resulting variable
-                if (condition.stream().noneMatch(ix -> ix.inputArgumentsStream().anyMatch(updatedResVar::equals))) {
-                    if (invertedJump != null && trueBranch.realSize() == 1 && !isVolatile(resTrue)) {
+                boolean globalSafe = !updatedResVar.isGlobalVariable()
+                                     || containsNoCall(condition) && containsNoCall(trueBranch) && containsNoCall(falseBranch);
+
+                if (globalSafe && condition.stream().noneMatch(ix -> ix.usesAsInput(updatedResVar))) {
+                    if (invertedJump != null && trueBranch.realSize() == 1 && !isVolatile(resTrue) && isSafe(falseBranch, updatedResVar)) {
                         moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
                         swappable = false;
-                    } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse)) {
+                    } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse) && isSafe(trueBranch, updatedResVar)) {
                         moveFalseBranch(condition, trueBranch, falseBranch, jump);
                         swappable = false;
                     } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse()
-                            && !isVolatile(resTrue)) {
+                               && !isVolatile(resTrue) && isSafe(falseBranch, updatedResVar)) {
                         moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
                         swappable = false;
                     }
@@ -99,10 +99,46 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
     }
 
+    private boolean containsNoCall(LogicList list) {
+        return list.stream().noneMatch(ix -> ix.getOpcode() == Opcode.CALL || ix.getOpcode() == Opcode.CALLREC);
+    }
+
+    /// Returns true if the other branch in the forward assignment optimization is safe:
+    /// - the result variable is used only in the last statement,
+    /// - the last statement is not self-modifying.
+    ///
+    /// If the result variable is a FUNCTION_RETVAL one, the optimization is applied nevertheless.
+    /// Assignments to these variables are part of compiler-generated logic, and these are safe
+    /// in this optimization. Currently on experimental level.
+    private boolean isSafe(LogicList branch, LogicVariable resultVariable) {
+        if (experimental() && resultVariable.getType() == ArgumentType.FUNCTION_RETVAL) {
+            return true;
+        }
+
+        LogicInstruction last = getLastRealInstruction(branch);
+        if (!(last instanceof LogicResultInstruction res) || !res.getResult().equals(resultVariable) || res.isUpdating()) {
+            // We do allow self-modifying operations on function return values
+            // They are the result of applying additional operations to the result
+            // of the previous call in recursive functions
+            return false;
+        }
+
+        for (LogicInstruction ix : branch) {
+            if (ix == last) {
+                break;
+            }
+            if (ix.usesAsInput(resultVariable)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private boolean isReplaceable(LogicInstruction instruction, LogicVariable resVar) {
         return instruction instanceof SetInstruction set && set.getValue().equals(resVar)
                || experimental()
-                  && instruction.inputArgumentsStream().anyMatch(resVar::equals)
+                  && instruction.usesAsInput(resVar)
                   && instruction.getOpcode() != Opcode.JUMP
                   && instruction.getOpcode() != Opcode.SETADDR;
     }
@@ -136,7 +172,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
                 && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
                 && jump.getY().equals(LogicBoolean.FALSE)
-                && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(op.getResult()::equals)) == 1) {
+                && instructionCount(ix -> ix.usesAsInput(op.getResult())) == 1) {
 
             return createJump(jump.getAstContext(), jump.getTarget(), op.getOperation().toCondition(), op.getX(), op.getY());
         } else {

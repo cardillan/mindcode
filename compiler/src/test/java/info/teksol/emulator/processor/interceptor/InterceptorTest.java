@@ -2,7 +2,6 @@ package info.teksol.emulator.processor.interceptor;
 
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 public class InterceptorTest extends AbstractInterceptorTest {
@@ -99,36 +98,16 @@ public class InterceptorTest extends AbstractInterceptorTest {
 
     @Test
     void solveCurrentProblem() {
-        testCode(createTestCompiler(createCompilerProfile()
-                        .setProcessorVersion(ProcessorVersion.MAX)
-                        .setAllOptimizationLevels(OptimizationLevel.NONE)
-                        .decode("57340723201")
-                ),
-                """
-                        inline def frac(_x)
-                            _x % 1;
+        testCode("""
+                        Y1 = rand(0);
+                        DIR1 = @thisx;
+                        if DIR1 == 1 then
+                            Y1 = Y1 + 1;
+                        else
+                            Y1 = Y1 - 1;
                         end;
-                        
-                        void printExactSlow(_n)
-                            if _n < 0 then
-                                print("-");
-                                _n = abs(_n);
-                             end;
-                            _exp = floor(log10(_n));
-                            _base = _n * 10 ** -_exp;
-                            print(floor(_base), ".");
-                        
-                            for _digit in 1 .. 15 do
-                                _base = frac(_base) * 10;
-                                print(floor(_base));
-                            end;
-                        
-                            if _exp != 0 then
-                                print("E", _exp);
-                            end;
-                        end;
-                        
-                        assertPrints("-1.234500000000000E-50", printExactSlow(-1.2345e-50), "printExactSlow(-1.2345e-50)");
-                        """);
+                        print(Y1);
+                        """,
+                "1");
     }
 }

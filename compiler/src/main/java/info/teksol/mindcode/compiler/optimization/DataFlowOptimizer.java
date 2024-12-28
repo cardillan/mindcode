@@ -166,7 +166,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             if (canEliminate(set, set.getResult()) && set.getValue().isTemporaryVariable()) {
                 VariableValue val = variableStates.findVariableValue(set.getValue());
                 if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
-                    if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
+                    if (op.usesAsInput(set.getResult())) {
                         OpInstruction newInstruction = op.withContext(set.getAstContext()).withResult(set.getResult());
                         OpInstruction normalized = normalize(newInstruction);
                         replaceInstruction(index, normalized, variableStates);

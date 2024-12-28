@@ -270,11 +270,17 @@ Execution speed:
 
 The execution time is the same. However, one less instruction is generated.
 
-The forward assignment optimization can be done if at least one of the branches consist of just one instruction, and
-both branches produce a value which is then used. Depending on the type of condition and the branch sizes,
-either true branch or false branch can get eliminated this way. Average execution time remains the same, although in
-some cases the number of executed instructions per branch can change by one (total number of instructions executed
-by both branches remains the same).
+The forward assignment optimization is performed when these conditions are met:
+* optimization level is `advanced`,
+* both branches assign a value to the same variable (resulting variable) as the last statement,
+* the resulting variable is not global (global variables can be modified or used in function calls),
+* the resulting variable is not used in the condition in any way,
+* at least one branch consists of just one instruction which sets the resulting variable (this is the branch to be moved),
+* the other branch doesn't use the resulting variable anywhere except the last statement,
+* the last statement of the other branch doesn't depend on the resulting variable.
+
+Depending on the type of condition and the branch sizes, either true branch or false branch can get eliminated this way. Average execution time remains the same, although in
+some cases the number of executed instructions per branch can change by one (total number of instructions executed by both branches remains the same).
 
 ### Compound condition elimination
 
@@ -306,8 +312,7 @@ end
 
 ### Chained if-else statements
 
-The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression.
-Optimizations of these nested statements work as expected:
+The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 
 ```
 y = if x < 0 then

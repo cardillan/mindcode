@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.7.3 - 2024-12-28
+
+### Fixed
+
+* Fixed If Expression optimization wrongly applying forward assignment to some instructions. This particular optimization was also moved to the `advanced` optimization level. ([#193](https://github.com/cardillan/mindcode/issues/193)).
+
 ## 2.7.2 - 2024-12-27
 
 ### Fixed
 
-* Fixed wrong compile-time evaluation of trigonometric functions (radians were assumed instead of degrees used by Mindustry - [#192](https://github.com/cardillan/mindcode/issues/192).
+* Fixed wrong compile-time evaluation of trigonometric functions (radians were assumed instead of degrees used by Mindustry - [#192](https://github.com/cardillan/mindcode/issues/192)).
 * Fixed the documentation stating that `do` in loops is optional ([#191](https://github.com/cardillan/mindcode/issues/191)).
 * Fixed decompiler output missing the `#set target` directive ([#188](https://github.com/cardillan/mindcode/issues/188)).
 

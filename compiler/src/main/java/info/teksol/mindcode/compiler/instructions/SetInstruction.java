@@ -37,4 +37,10 @@ public class SetInstruction extends BaseResultInstruction {
     public final LogicValue getValue() {
         return (LogicValue) getArg(1);
     }
+
+    @Override
+    public boolean isUpdating() {
+        // SET instruction is not self-modifying, even when it assigns the same value to self.
+        return false;
+    }
 }

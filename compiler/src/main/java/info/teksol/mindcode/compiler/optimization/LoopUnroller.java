@@ -163,7 +163,7 @@ class LoopUnroller extends BaseOptimizer {
             if (initialValue != null && initialValue.getConstantValue() instanceof LogicLiteral initLiteral && initLiteral.isNumericLiteral()) {
                 // List of instructions that will be duplicated
                 List<LogicInstruction> loopIxs = iterationContexts.stream().flatMap(LogicList::stream).toList();
-                List<LogicInstruction> controlIxs = loopIxs.stream().filter(ix -> ix.outputArgumentsStream().anyMatch(a -> a.equals(controlVariable))).toList();
+                List<LogicInstruction> controlIxs = loopIxs.stream().filter(ix -> ix.usesAsOutput(controlVariable)).toList();
 
                 // Real size of one unrolled iteration. We ignore loop control updates (jump is already removed)
                 // Loop control updates will only be removed by Data Flow Optimization later on.
@@ -315,7 +315,7 @@ class LoopUnroller extends BaseOptimizer {
     private ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, AstContext init, LogicVariable variable) {
         return contextStream(loop)
                 .filter(ix -> !ix.getAstContext().belongsTo(init))
-                .filter(ix -> ix.outputArgumentsStream().anyMatch(a -> a.equals(variable)))
+                .filter(ix -> ix.usesAsOutput(variable))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

@@ -303,4 +303,28 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(LABEL, var(1001))
         );
     }
+
+    @Test
+    void recognizesSelfModifyingInstructions() {
+        assertCompilesTo("""
+                        Y1 = rand(0);
+                        DIR1 = @thisx;
+                        if DIR1 == 1 then
+                            Y1 = Y1 + 1;
+                        else
+                            Y1 = Y1 - 1;
+                        end;
+                        print(Y1);
+                        """,
+                createInstruction(OP, "rand", "Y1", "0"),
+                createInstruction(SET, "DIR1", "@thisx"),
+                createInstruction(JUMP, var(1000), "notEqual", "DIR1", "1"),
+                createInstruction(OP, "add", "Y1", "Y1", "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "sub", "Y1", "Y1", "1"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "Y1")
+        );
+    }
 }
