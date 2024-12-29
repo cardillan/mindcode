@@ -1469,6 +1469,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             false;
                             null;
                             0;
+                            %00ff00ff;
+                            %ff00ff;
                             """,
                     List.of(
                             number(156),
@@ -1479,7 +1481,9 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstLiteralBoolean(EMPTY, "true"),
                             new AstLiteralBoolean(EMPTY, "false"),
                             new AstLiteralNull(EMPTY, "null"),
-                            number(0)
+                            number(0),
+                            new AstLiteralColor(EMPTY, "%00ff00ff"),
+                            new AstLiteralColor(EMPTY, "%ff00ff")
                     )
             );
         }
@@ -1501,6 +1505,18 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstOperatorUnary(EMPTY, Operation.SUB, number(0))
                     )
             );
+        }
+
+        @Test
+        void refusesInvalidColorLiterals() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .add("Invalid format of color literal (supported formats are %rrggbb or %rrggbbaa).").repeat(3),
+                    """
+                            %12345;
+                            %1234567;
+                            %123456789;
+                            """);
         }
     }
 

@@ -379,6 +379,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstParentheses(MindcodeParser.AstParenthesesContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astLiteralColor}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstLiteralColor(MindcodeParser.AstLiteralColorContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astOperatorBinaryLogicalOr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

@@ -10,6 +10,7 @@ public enum CompilationPhase {
     CALL_GRAPH,
     COMPILER,
     OPTIMIZER,
+    EMULATOR,
     ALL;
 
     public boolean includes(CompilationPhase phase) {

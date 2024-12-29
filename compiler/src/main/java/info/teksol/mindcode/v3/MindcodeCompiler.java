@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3;
 
 import info.teksol.generated.ast.AstIndentedPrinter;
 import info.teksol.mindcode.InputPosition;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.MindcodeMessage;
 import info.teksol.mindcode.ParserAbort;
 import info.teksol.mindcode.ast.Requirement;
@@ -140,6 +141,56 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         assembler = new CodeAssembler(this);
 
         new CodeGenerator(this).generateCode(astProgram);
+
+        if (assembler.isInternalError() && !error()) {
+            throw new MindcodeInternalError("Internal error encountered.");
+        }
+        if (error() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
+
+//        // OPTIMIZE
+//        final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
+//                ? new DiffDebugPrinter(profile.getDebugLevel()) : new NullDebugPrinter();
+//        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer);
+//        optimizer.setDebugPrinter(debugPrinter);
+//        GeneratorOutput output = new GeneratorOutput(callGraph, assembler.getInstructions(), rootAstContext);
+//        List<LogicInstruction> result = optimizer.optimize(output);
+//        debugPrinter.print(this::debug);
+//
+//
+//        long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
+//
+//        // Sort variables
+//        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(instructionProcessor, profile);
+//        List<LogicInstruction> instructions = resolver.sortVariables(optimized);
+//
+//        // Print unresolved code
+//        if (profile.getFinalCodeOutput() != null) {
+//            debug("\nFinal code before resolving virtual instructions:\n");
+//            debug(LogicInstructionPrinter.toString(profile.getFinalCodeOutput(), instructionProcessor, instructions));
+//        }
+//
+//        // Label resolving
+//        List<LogicInstruction> result = resolver.resolveLabels(instructions);
+//
+//        // RUN if requested
+//        // Timing output
+//        final info.teksol.mindcode.compiler.MindcodeCompiler.RunResults runResults;
+//        if (profile.isRun()) {
+//            long runStart = System.nanoTime();
+//            runResults = run(result);
+//            long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
+//            timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
+//                    parseTime, compileTime, optimizeTime, runTime);
+//        } else {
+//            runResults = new info.teksol.mindcode.compiler.MindcodeCompiler.RunResults(null, List.of(), null,0);
+//            timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+//                    parseTime, compileTime, optimizeTime);
+//        }
+//
+//        String output = LogicInstructionPrinter.toString(instructionProcessor, result);
+//
+//        return new CompilerOutput<>(output, messages, runResults.exception, runResults.assertions(),
+//                runResults.textBuffer(), runResults.steps());
     }
 
     private boolean error() {

@@ -154,6 +154,7 @@ BUILTINIDENTIFIER       : AT Letter
 // Literals
 
 STRING                  : '"' ~[\r\n"]* '"' ;
+COLOR                   : '%'  HexDigit+ ;
 BINARY                  : '0b' BinDigit+ ;
 HEXADECIMAL             : '0x' HexDigit+ ;
 DECIMAL                 : DecDigit+ ;

@@ -1,6 +1,7 @@
 package info.teksol.evaluator;
 
 import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.v3.Color;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -20,23 +21,14 @@ public class ExpressionEvaluator {
     }
 
     public static void evaluatePackColor(LogicWritable target, LogicReadable r, LogicReadable g, LogicReadable b, LogicReadable a) {
-        double result = toDoubleBits(clamp(r.getDoubleValue()), clamp(g.getDoubleValue()), clamp(b.getDoubleValue()),
+        double result = Color.toDoubleBits(clamp(r.getDoubleValue()), clamp(g.getDoubleValue()), clamp(b.getDoubleValue()),
                 clamp(a.getDoubleValue()));
 
         target.setDoubleValue(result);
     }
 
-
     private static float clamp(double value){
         return Math.max(Math.min((float)value, 1f), 0f);
-    }
-
-    public static double toDoubleBits(float r, float g, float b, float a){
-        return Double.longBitsToDouble(rgba8888(r, g, b, a) & 0x00000000_ffffffffL);
-    }
-
-    private static int rgba8888(float r, float g, float b, float a){
-        return ((int)(r * 255) << 24) | ((int)(g * 255) << 16) | ((int)(b * 255) << 8) | (int)(a * 255);
     }
 
     public static boolean equals(LogicReadable a, LogicReadable b) {

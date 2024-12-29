@@ -1,10 +1,7 @@
 package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.*;
-import info.teksol.mindcode.logic.LogicBoolean;
-import info.teksol.mindcode.logic.LogicNull;
-import info.teksol.mindcode.logic.LogicNumber;
-import info.teksol.mindcode.logic.LogicString;
+import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.*;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
@@ -23,6 +20,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
         AstFormattablePlaceholderVisitor<ValueStore>,
         AstLiteralBinaryVisitor<ValueStore>,
         AstLiteralBooleanVisitor<ValueStore>,
+        AstLiteralColorVisitor<ValueStore>,
         AstLiteralDecimalVisitor<ValueStore>,
         AstLiteralEscapeVisitor<ValueStore>,
         AstLiteralFloatVisitor<ValueStore>,
@@ -55,6 +53,11 @@ public class LiteralsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitLiteralBoolean(AstLiteralBoolean node) {
         return node.getValue() ? LogicBoolean.TRUE : LogicBoolean.FALSE;
+    }
+
+    @Override
+    public ValueStore visitLiteralColor(AstLiteralColor node) {
+        return LogicColor.create(node.getLiteral());
     }
 
     @Override

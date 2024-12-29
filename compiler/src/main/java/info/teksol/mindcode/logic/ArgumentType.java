@@ -6,6 +6,7 @@ public enum ArgumentType {
 
     // Literals
     NULL_LITERAL,
+    COLOR_LITERAL,
     BOOLEAN_LITERAL,
     NUMERIC_LITERAL,
     STRING_LITERAL,

@@ -638,6 +638,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstParentheses(MindcodeParser.AstParenthesesContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astLiteralColor}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstLiteralColor(MindcodeParser.AstLiteralColorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astLiteralColor}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstLiteralColor(MindcodeParser.AstLiteralColorContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astOperatorBinaryLogicalOr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

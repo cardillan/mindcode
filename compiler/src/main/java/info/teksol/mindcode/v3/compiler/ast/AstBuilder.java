@@ -502,6 +502,23 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstMindcodeNode visitAstLiteralColor(AstLiteralColorContext ctx) {
+        String literal = ctx.COLOR().getText();
+        if (literal.length() != 7 && literal.length() != 9) {
+            context.messageConsumer().addMessage(CompilerMessage.error(pos(ctx), "Invalid format of color literal (supported formats are %%rrggbb or %%rrggbbaa)."));
+            if (literal.length() < 9) {
+                // pad with zeroes
+                return new AstLiteralColor(pos(ctx), literal + "%00000000".substring(literal.length(), 9));
+            } else {
+                // trim to size
+                return new AstLiteralColor(pos(ctx), literal.substring(0, 9));
+            }
+        } else {
+            return new AstLiteralColor(pos(ctx), literal);
+        }
+    }
+
+    @Override
     public AstLiteralBinary visitAstLiteralBinary(MindcodeParser.AstLiteralBinaryContext ctx) {
         String literal = ctx.BINARY().getText();
         return new AstLiteralBinary(pos(ctx), literal);

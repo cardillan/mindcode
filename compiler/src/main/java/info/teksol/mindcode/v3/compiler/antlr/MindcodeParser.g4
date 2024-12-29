@@ -87,6 +87,7 @@ expression
         (ELSE falseBranch = astStatementList?)? END                                     # astIfExpression
     | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # astFormattableLiteral
     | STRING                                                                            # astLiteralString
+    | COLOR                                                                             # astLiteralColor
     | BINARY                                                                            # astLiteralBinary
     | HEXADECIMAL                                                                       # astLiteralHexadecimal
     | DECIMAL                                                                           # astLiteralDecimal
