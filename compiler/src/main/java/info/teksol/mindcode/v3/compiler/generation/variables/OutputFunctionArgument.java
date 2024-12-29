@@ -10,11 +10,14 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 // A FunctionArgument representing and output argument to a function call or instruction.
 // Provides mechanism to update the value with the output from the function/instruction.
 @NullMarked
 public class OutputFunctionArgument extends InputFunctionArgument {
+    /// Used only for passing the output argument into mlog instructions.
+    /// For user function calls, setValue/writeValue are used.
     private final LogicVariable transferVariable;
 
     public OutputFunctionArgument(AstFunctionArgument argument, ValueStore value, @Nullable LogicVariable transferVariable) {
@@ -40,6 +43,32 @@ public class OutputFunctionArgument extends InputFunctionArgument {
             return transferVariable;
         } else {
             return value.getValue(assembler);
+        }
+    }
+
+
+    @Override
+    public void setValue(CodeAssembler assembler, LogicValue newValue) {
+        value.setValue(assembler, newValue);
+    }
+
+    @Override
+    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+        value.writeValue(assembler, valueSetter);
+    }
+
+
+    @Override
+    public LogicValue getWriteVariable(CodeAssembler assembler) {
+        return value.isComplex() ? transferVariable : value.getWriteVariable(assembler);
+    }
+
+    @Override
+    public void storeValue(CodeAssembler assembler) {
+        if (value.isComplex()) {
+            value.setValue(assembler, transferVariable);
+        } else {
+            value.storeValue(assembler);
         }
     }
 }

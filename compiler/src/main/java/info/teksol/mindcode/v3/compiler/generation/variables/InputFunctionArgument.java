@@ -66,22 +66,23 @@ public class InputFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
-        this.value.setValue(assembler, value);
+    public void setValue(CodeAssembler assembler, LogicValue newValue) {
+        assembler.setInternalError();
     }
 
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-        value.writeValue(assembler, valueSetter);
+        assembler.setInternalError();
     }
 
     @Override
     public LogicValue getWriteVariable(CodeAssembler assembler) {
-        return value.getWriteVariable(assembler);
+        assembler.setInternalError();
+        return LogicVariable.INVALID;
     }
 
     @Override
     public void storeValue(CodeAssembler assembler) {
-        value.storeValue(assembler);
+        assembler.setInternalError();
     }
 }

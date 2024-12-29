@@ -75,7 +75,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         this.targetPhase = targetPhase;
         this.profile = profile;
         this.inputFiles = inputFiles;
-        returnStack = new ReturnStack(messageConsumer);
+        returnStack = new ReturnStack();
         stackTracker = new StackTracker(messageConsumer);
 
         context.set(this);

@@ -74,7 +74,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isConstant() {
-        return false;
+        return getType() == ArgumentType.BLOCK;
     }
 
     @Override

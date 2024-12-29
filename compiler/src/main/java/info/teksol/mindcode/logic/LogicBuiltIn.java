@@ -41,6 +41,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
 
     @Override
     public boolean isConstant() {
+        // FINISH Use just !isVolatile(). Make sure isConstant() is correctly used throughout the code base.
         return canEvaluate();
     }
 
@@ -60,7 +61,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicR
     }
 
     @Override
-    public MindustryContent getObject() {
+    public @Nullable MindustryContent getObject() {
         return object;
     }
 

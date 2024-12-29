@@ -15,8 +15,10 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("""
                             cell1[a] = cell2[b];
                             """,
-                    createInstruction(READ, var(1), "cell2", "b"),
-                    createInstruction(WRITE, var(1), "cell1", "a")
+                    createInstruction(SET, var(0), "a"),
+                    createInstruction(SET, var(2), "b"),
+                    createInstruction(READ, var(3), "cell2", var(2)),
+                    createInstruction(WRITE, var(3), "cell1", var(0))
             );
         }
 
@@ -27,9 +29,12 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             a[a[x]] = a[x];
                             """,
                     createInstruction(SET, "a", "cell1"),
-                    createInstruction(READ, var(0), "a", "x"),
-                    createInstruction(READ, var(2), "a", "x"),
-                    createInstruction(WRITE, var(2), "a", var(0))
+                    createInstruction(SET, var(0), "x"),
+                    createInstruction(READ, var(1), "a", var(0)),
+                    createInstruction(SET, var(2), var(1)),
+                    createInstruction(SET, var(4), "x"),
+                    createInstruction(READ, var(5), "a", var(4)),
+                    createInstruction(WRITE, var(5), "a", var(2))
             );
         }
 
@@ -38,13 +43,16 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("""
                             cell1[a] += cell1[b] += cell1[c];
                             """,
-                    createInstruction(READ, var(2), "cell1", "c"),
-                    createInstruction(READ, var(1), "cell1", "b"),
-                    createInstruction(OP, "add", var(3), var(1), var(2)),
-                    createInstruction(WRITE, var(3), "cell1", "b"),
-                    createInstruction(READ, var(0), "cell1", "a"),
-                    createInstruction(OP, "add", var(4), var(0), var(3)),
-                    createInstruction(WRITE, var(4), "cell1", "a")
+                    createInstruction(SET, var(0), "a"),
+                    createInstruction(SET, var(2), "b"),
+                    createInstruction(SET, var(4), "c"),
+                    createInstruction(READ, var(5), "cell1", var(4)),
+                    createInstruction(READ, var(3), "cell1", var(2)),
+                    createInstruction(OP, "add", var(6), var(3), var(5)),
+                    createInstruction(WRITE, var(6), "cell1", var(2)),
+                    createInstruction(READ, var(1), "cell1", var(0)),
+                    createInstruction(OP, "add", var(7), var(1), var(6)),
+                    createInstruction(WRITE, var(7), "cell1", var(0))
             );
         }
 
@@ -53,9 +61,10 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("""
                             a = cell1[b] = @time;
                             """,
-                    createInstruction(SET, var(1), "@time"),
-                    createInstruction(WRITE, var(1), "cell1", "b"),
-                    createInstruction(SET, "a", var(1))
+                    createInstruction(SET, var(0), "b"),
+                    createInstruction(SET, var(2), "@time"),
+                    createInstruction(WRITE, var(2), "cell1", var(0)),
+                    createInstruction(SET, "a", var(2))
             );
         }
 

@@ -55,7 +55,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
 
             if (argument.isOutput()) {
                 // Only provide the transfer variable when needed - for complex values
-                return new OutputFunctionArgument(argument, resolveLValue(argument.getExpression()),
+                return new OutputFunctionArgument(argument, resolveLValue(argument.getExpression(), value),
                         value.isComplex() ? nextTemp() : null);
             } else {
                 return new InputFunctionArgument(argument, value);

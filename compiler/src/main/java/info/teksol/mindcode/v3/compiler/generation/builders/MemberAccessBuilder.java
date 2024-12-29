@@ -2,6 +2,7 @@ package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstMemberAccessVisitor;
 import info.teksol.generated.ast.visitors.AstPropertyAccessVisitor;
+import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.OpcodeVariant;
@@ -28,7 +29,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
         LogicVariable target = resolveAnyVariable(node.getObject(), "Cannot invoke properties on this expression.");
         String propertyName = node.getMember().getName();
         if (validateProperty(propertyName)) {
-            return new Property(target, propertyName, unprotectedTemp());
+            return new Property(defensiveCopy(target, ArgumentType.TMP_VARIABLE), propertyName, unprotectedTemp());
         } else {
             error(node.getMember(), "Unknown property '%s'.", propertyName);
             return LogicVariable.INVALID;

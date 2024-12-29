@@ -38,7 +38,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         ValueStore upperValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getLastValue()));
 
         // Store the upper value in a temporary variable registered in parent.
-        LogicValue fixedUpperBound = temporaryCopy(upperValue, ArgumentType.TMP_VARIABLE);
+        LogicValue fixedUpperBound = defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
 
         // Condition for variable exceeding the upper bound of the range
         Condition condition = outsideRangeCondition(node.getRange());

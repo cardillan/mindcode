@@ -164,15 +164,40 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("""
                             cell1[a] = cell2[b]++ * --cell3[c];
                             """,
-                    createInstruction(READ, var(1), "cell2", "b"),
-                    createInstruction(SET, var(2), var(1)),
-                    createInstruction(OP, "add", var(1), var(1), "1"),
-                    createInstruction(WRITE, var(1), "cell2", "b"),
-                    createInstruction(READ, var(3), "cell3", "c"),
-                    createInstruction(OP, "sub", var(4), var(3), "1"),
-                    createInstruction(WRITE, var(4), "cell3", "c"),
-                    createInstruction(OP, "mul", var(5), var(2), var(4)),
-                    createInstruction(WRITE, var(5), "cell1", "a")
+                    createInstruction(SET, var(0), "a"),
+                    createInstruction(SET, var(2), "b"),
+                    createInstruction(READ, var(3), "cell2", var(2)),
+                    createInstruction(SET, var(4), var(3)),
+                    createInstruction(OP, "add", var(3), var(3), "1"),
+                    createInstruction(WRITE, var(3), "cell2", var(2)),
+                    createInstruction(SET, var(5), "c"),
+                    createInstruction(READ, var(6), "cell3", var(5)),
+                    createInstruction(OP, "sub", var(7), var(6), "1"),
+                    createInstruction(WRITE, var(7), "cell3", var(5)),
+                    createInstruction(OP, "mul", var(8), var(4), var(7)),
+                    createInstruction(WRITE, var(8), "cell1", var(0))
+            );
+        }
+
+        @Test
+        void compilesArrayAccessPrefixPostfixIndexExpressions() {
+            assertCompiles("""
+                            cell1[a++]++;
+                            cell2[--a]--;
+                            """,
+                    createInstruction(SET, var(0), "a"),
+                    createInstruction(OP, "add", "a", "a", "1"),
+                    createInstruction(SET, var(1), var(0)),
+                    createInstruction(READ, var(2), "cell1", var(1)),
+                    createInstruction(SET, var(3), var(2)),
+                    createInstruction(OP, "add", var(2), var(2), "1"),
+                    createInstruction(WRITE, var(2), "cell1", var(1)),
+                    createInstruction(OP, "sub", "a", "a", "1"),
+                    createInstruction(SET, var(4), "a"),
+                    createInstruction(READ, var(5), "cell2", var(4)),
+                    createInstruction(SET, var(6), var(5)),
+                    createInstruction(OP, "sub", var(5), var(5), "1"),
+                    createInstruction(WRITE, var(5), "cell2", var(4))
             );
         }
 

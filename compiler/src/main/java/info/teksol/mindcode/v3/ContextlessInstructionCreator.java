@@ -30,7 +30,7 @@ public interface ContextlessInstructionCreator {
         return (CallInstruction) createInstruction(astContext, CALL, address, returnValue);
     }
 
-    default ControlInstruction createControl(AstContext astContext, LogicKeyword property, LogicVariable target, LogicValue value) {
+    default ControlInstruction createControl(AstContext astContext, LogicKeyword property, LogicValue target, LogicValue value) {
         return (ControlInstruction) createInstruction(astContext, CONTROL, property, target, value);
     }
 

@@ -3,10 +3,7 @@ package info.teksol.mindcode.v3.compiler.generation.builders;
 import info.teksol.generated.ast.visitors.AstArrayAccessVisitor;
 import info.teksol.generated.ast.visitors.AstBuiltInIdentifierVisitor;
 import info.teksol.generated.ast.visitors.AstIdentifierVisitor;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.LogicBuiltIn;
-import info.teksol.mindcode.logic.LogicParameter;
-import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstArrayAccess;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstBuiltInIdentifier;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstIdentifier;
@@ -40,8 +37,8 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitArrayAccess(AstArrayAccess node) {
         LogicVariable memory = resolveMemory(node);
-        ValueStore index = evaluate(node.getIndex());
-        return new ExternalVariable(memory, index.getValue(assembler), unprotectedTemp());
+        LogicValue index = defensiveCopy(evaluate(node.getIndex()), TMP_VARIABLE);
+        return new ExternalVariable(memory, index, unprotectedTemp());
     }
 
     @Override

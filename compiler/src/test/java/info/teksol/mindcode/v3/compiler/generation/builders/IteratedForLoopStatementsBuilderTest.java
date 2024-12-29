@@ -44,5 +44,26 @@ class IteratedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, var(1003))
             );
         }
+
+        @Test
+        void compilesForLoopWithMemoryAccess() {
+            assertCompiles("""
+                            for i = 0; i < 10; i++ do
+                                cell1[i] = i;
+                            end;
+                            """,
+                    createInstruction(SET, "i", "0"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(OP, "lessThan", var(0), "i", "10"),
+                    createInstruction(JUMP, var(1003), "equal", var(0), "false"),
+                    createInstruction(SET, var(1), "i"),
+                    createInstruction(WRITE, "i", "cell1", var(1)),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(SET, var(3), "i"),
+                    createInstruction(OP, "add", "i", "i", "1"),
+                    createInstruction(JUMP, var(1001), "always"),
+                    createInstruction(LABEL, var(1003))
+            );
+        }
     }
 }

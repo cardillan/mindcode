@@ -27,6 +27,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     private final InstructionProcessor processor;
     private final List<LogicInstruction> instructions = new ArrayList<>();
     private AstContext astContext;
+    private boolean internalError = false;
 
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
     private boolean active = true;
@@ -38,11 +39,34 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         astContext = context.rootAstContext();
     }
 
-    @Override
-    public void accept(LogicInstruction logicInstruction) {
+    /// This is the sole method that adds an instruction to the list.
+    private LogicInstruction addInstruction(LogicInstruction instruction) {
         if (active) {
-            instructions.add(logicInstruction);
+            instructions.add(instruction);
         }
+        return instruction;
+    }
+
+    /// Sets internal error indication.
+    ///
+    /// Internal errors may arise from compiling invalid source code. In such case it is possible that
+    /// unsupported methods may get called (such as writing a value into input argument of a function).
+    ///
+    /// When other errors are encountered and reported when compiling source code, it is assumed that
+    /// all internal errors arose due to the errors in the source code. However, when internal errors
+    /// are indicated without a syntax error being reported, it means we have an internal error.
+    /// Produced code is probably invalid and must not be published.
+    public void setInternalError() {
+        internalError = true;
+    }
+
+    public boolean isInternalError() {
+        return internalError;
+    }
+
+    @Override
+    public void accept(LogicInstruction instruction) {
+        addInstruction(instruction);
     }
 
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
@@ -107,11 +131,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     @Override
     public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
-        LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
-        if (active) {
-            instructions.add(instruction);
-        }
-        return instruction;
+        return addInstruction(processor.createInstruction(astContext, opcode, arguments));
     }
 
     public void createCompilerEnd() {
@@ -123,9 +143,6 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     }
 
     public void createCustomInstruction(boolean safe, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
-        if (active) {
-            CustomInstruction customInstruction = new CustomInstruction(astContext, safe, opcode, args, params);
-            instructions.add(customInstruction);
-        }
+        addInstruction(new CustomInstruction(astContext, safe, opcode, args, params));
     }
 }

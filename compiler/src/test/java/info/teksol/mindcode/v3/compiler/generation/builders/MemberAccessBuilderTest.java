@@ -35,6 +35,26 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(CONTROL, "enabled", "switch1", "__fn1_value")
             );
         }
+
+        @Test
+        void compilesMemberAccessAsUnchangedOutputArgument() {
+            assertCompiles("""
+                            void foo(out value)
+                                value = false;
+                                A = switch2;
+                            end;
+                            
+                            A = switch1;
+                            foo(out A.enabled);
+                            """,
+                    createInstruction(SET, "A", "switch1"),
+                    createInstruction(SET, var(0), "A"),
+                    createInstruction(SET, "__fn1_value", "false"),
+                    createInstruction(SET, "A", "switch2"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(CONTROL, "enabled", var(0), "__fn1_value")
+            );
+        }
     }
 
     @Nested

@@ -1,12 +1,9 @@
 package info.teksol.mindcode.v3.compiler.generation;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.v3.MessageConsumer;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -15,16 +12,11 @@ import java.util.Objects;
 /// Class maintaining the stack of active functions and their return variables. Used to resolve return
 /// statements inside inline functions, which can be nested.
 @NullMarked
-public class ReturnStack extends AbstractMessageEmitter {
-    private final Deque<Return> stack = new ArrayDeque<>();
+public class ReturnStack {
+    private final Deque<ReturnRecord> stack = new ArrayDeque<>();
 
-    public ReturnStack(MessageConsumer messageConsumer) {
-        super(messageConsumer);
-    }
-
-    // FINISH returnValue will be ValueStore
     public void enterFunction(LogicLabel returnLabel, LogicValue returnValue) {
-        stack.push(new Return(returnLabel, returnValue));
+        stack.push(new ReturnRecord(returnLabel, returnValue));
     }
 
     public void exitFunction() {
@@ -35,28 +27,19 @@ public class ReturnStack extends AbstractMessageEmitter {
         stack.pop();
     }
 
-    public LogicLabel getReturnLabel(InputPosition inputPosition) {
-        if (stack.isEmpty()) {
-            error(inputPosition, "Return statement outside of a function.");
-            return LogicLabel.INVALID;
-        } else {
-            return stack.peek().returnLabel;
-        }
+    public @Nullable ReturnRecord getReturnRecord() {
+        return stack.peek();
     }
 
-    public LogicValue getReturnValue(InputPosition inputPosition) {
-        if (stack.isEmpty()) {
-            error(inputPosition, "Return statement outside of a function.");
-            return LogicVariable.INVALID;
-        } else {
-            return stack.peek().returnValue;
-        }
+    public LogicLabel getReturnLabel() {
+        return stack.isEmpty() ? LogicLabel.INVALID : Objects.requireNonNull(stack.peek()).label();
     }
 
-    private record Return(LogicLabel returnLabel, LogicValue returnValue) {
-        private Return {
-            Objects.requireNonNull(returnLabel);
-            Objects.requireNonNull(returnValue);
+    // TODO returnValue will be ValueStore
+    public record ReturnRecord(LogicLabel label, LogicValue value) {
+        public ReturnRecord {
+            Objects.requireNonNull(label);
+            Objects.requireNonNull(value);
         }
     }
 }

@@ -27,7 +27,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
         double multiplier = 1.0 / node.getAlternatives().size();
         int remain = node.getAlternatives().size();
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
-        LogicValue caseValue = temporaryCopy(evaluate(node.getExpression()), ArgumentType.AST_VARIABLE);
+        LogicValue caseValue = defensiveCopy(evaluate(node.getExpression()), ArgumentType.AST_VARIABLE);
 
         for (AstCaseAlternative alternative : node.getAlternatives()) {
             LogicLabel nextAlt = nextLabel();         // Next alternative

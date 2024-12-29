@@ -11,11 +11,11 @@ import java.util.function.Consumer;
 
 @NullMarked
 public class Property implements ValueStore {
-    private final LogicVariable target;
+    private final LogicValue target;
     private final String propertyName;
     private final LogicVariable transferVariable;
 
-    public Property(LogicVariable target, String propertyName, LogicVariable transferVariable) {
+    public Property(LogicValue target, String propertyName, LogicVariable transferVariable) {
         this.target = target;
         this.propertyName = propertyName;
         this.transferVariable = transferVariable;

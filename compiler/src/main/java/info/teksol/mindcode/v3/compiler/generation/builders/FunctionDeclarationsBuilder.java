@@ -62,7 +62,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
         }
 
-        assembler.createLabel(returnStack.getReturnLabel(function.getInputPosition()));
+        assembler.createLabel(returnStack.getReturnRecord().label());
         assembler.createReturn(context.stackTracker().getStackMemory());
     }
 
@@ -75,7 +75,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
         }
 
-        assembler.createLabel(returnStack.getReturnLabel(function.getInputPosition()));
+        assembler.createLabel(returnStack.getReturnRecord().label());
 
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels

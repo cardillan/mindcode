@@ -2,20 +2,26 @@ package info.teksol.mindcode.v3.compiler.generation.builders;
 
 import info.teksol.generated.ast.visitors.AstEnhancedCommentVisitor;
 import info.teksol.generated.ast.visitors.AstFunctionCallVisitor;
+import info.teksol.generated.ast.visitors.AstReturnStatementVisitor;
+import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.logic.LogicVoid;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstEnhancedComment;
 import info.teksol.mindcode.v3.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mindcode.v3.compiler.ast.nodes.AstReturnStatement;
 import info.teksol.mindcode.v3.compiler.generation.AbstractBuilder;
 import info.teksol.mindcode.v3.compiler.generation.CodeGenerator;
 import info.teksol.mindcode.v3.compiler.generation.CodeGeneratorContext;
+import info.teksol.mindcode.v3.compiler.generation.ReturnStack;
 import info.teksol.mindcode.v3.compiler.generation.variables.ValueStore;
 import info.teksol.util.Lazy;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class FunctionCallsBuilder extends AbstractBuilder implements
+        AstEnhancedCommentVisitor<ValueStore>,
         AstFunctionCallVisitor<ValueStore>,
-        AstEnhancedCommentVisitor<ValueStore>
+        AstReturnStatementVisitor<ValueStore>
 {
     private final Lazy<BuiltinFunctionAssertsBuilder> assertsBuilder;
     private final Lazy<BuiltinFunctionVarargsBuilder> varargsBuilder;
@@ -33,6 +39,12 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     }
 
     @Override
+    public ValueStore visitEnhancedComment(AstEnhancedComment comment) {
+        textBuilder.get().handleEnhancedComment(comment);
+        return LogicVoid.VOID;
+    }
+
+    @Override
     public ValueStore visitFunctionCall(AstFunctionCall node) {
         if (node.hasObject()) {
             return handleMethodCall(node);
@@ -42,8 +54,34 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public ValueStore visitEnhancedComment(AstEnhancedComment comment) {
-        textBuilder.get().handleEnhancedComment(comment);
+    public ValueStore visitReturnStatement(AstReturnStatement node) {
+        ReturnStack.ReturnRecord returnRecord = returnStack.getReturnRecord();
+        if (returnRecord == null) {
+            error(node, "Return statement outside of a function.");
+            return LogicVoid.VOID;
+        }
+
+        if (returnRecord.value() instanceof LogicVariable target) {
+            if (node.getReturnValue() == null) {
+                error(node, "Missing return value in 'return' statement.");
+            } else {
+                final ValueStore expression = evaluate(node.getReturnValue());
+                if (expression == LogicVoid.VOID) {
+                    warn(node.getReturnValue(), "Expression doesn't have any value. Using no-value expressions in return statements is deprecated.");
+                }
+                returnRecord.value().setValue(assembler, expression.getValue(assembler));
+            }
+            assembler.createJumpUnconditional(returnRecord.label());
+        } else if (returnRecord.value() instanceof LogicVoid) {
+            if (node.getReturnValue() != null) {
+                error(node, "Cannot return a value from a 'void' function.");
+                // Process the expression anyway to locate errors in it
+                evaluate(node.getReturnValue());
+            }
+            assembler.createJumpUnconditional(returnRecord.label());
+        } else {
+            throw new MindcodeInternalError("Unexpected function return value holder " + returnRecord.value());
+        }
         return LogicVoid.VOID;
     }
 

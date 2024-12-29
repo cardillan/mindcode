@@ -98,7 +98,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
     public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
             MessageConsumer messageConsumer) {
         super(messageConsumer);
-        this.returnStack = new ReturnStack(messageConsumer);
+        this.returnStack = new ReturnStack();
         this.loopStack = new LoopStack(messageConsumer);
         this.instructionProcessor = instructionProcessor;
         this.functionMapper = FunctionMapperFactory.getFunctionMapper(instructionProcessor,
@@ -337,7 +337,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         if (!function.isVoid()) {
             emit(createSet(LogicVariable.fnRetVal(function), body));
         }
-        emit(createLabel(returnStack.getReturnLabel(function.getInputPosition())));
+        emit(createLabel(returnStack.getReturnLabel()));
         emit(createReturn(stackName()));
     }
 
@@ -347,7 +347,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
         if (!function.isVoid()) {
             emit(createSet(LogicVariable.fnRetVal(function), body));
         }
-        emit(createLabel(returnStack.getReturnLabel(function.getInputPosition())));
+        emit(createLabel(returnStack.getReturnLabel()));
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         emit(createGoto(LogicVariable.fnRetAddr(functionPrefix), LogicLabel.symbolic(functionPrefix)));
@@ -1687,8 +1687,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> implem
 
     @Override
     public LogicValue visitReturnStatement(ReturnStatement node) {
-        final LogicValue retval = returnStack.getReturnValue(node.inputPosition());
-        final LogicLabel label = returnStack.getReturnLabel(node.inputPosition());
+        ReturnStack.ReturnRecord returnRecord = returnStack.getReturnRecord();
+        if (returnRecord == null) {
+            error(node, "Return statement outside of a function.");
+            return LogicVoid.VOID;
+        }
+
+        final LogicValue retval = returnRecord.value();
+        final LogicLabel label = returnRecord.label();
         if (retval instanceof LogicVariable target) {
             if (node.getRetval() instanceof VoidLiteral) {
                 error(node, "Missing return value in 'return' statement.");

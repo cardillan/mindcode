@@ -177,12 +177,13 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         }
     }
 
-    /// Stores the current value of valueStore to a temp variable for later use. If the node value is a literal,
-    /// returns the literal directly, as it cannot be changed.
+    /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
+    /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
+    /// directly, as it cannot be changed.
     ///
-    /// @param valueStore the value to protect
-    /// @return an independent copy of the current value of the node
-    protected LogicValue temporaryCopy(ValueStore valueStore, ArgumentType argumentType) {
+    /// @param valueStore the value to use
+    /// @return a LogicValue capturing the current value of the valueStore
+    protected LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
         if (valueStore instanceof LogicValue value && value.isConstant()) {
             return value;
         } else {
