@@ -1,0 +1,272 @@
+    44 instructions before optimizations.
+     5 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Dead Code Elimination (3 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
+     3 instructions modified by Loop Optimization (3 iterations).
+     3 loops improved by Loop Optimization.
+     1 instructions eliminated by Jump Straightening (4 iterations).
+    26 instructions after optimizations.
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
+ 
+    18 op lessThanEq __tmp7 a item
+    19 jump __label6 equal __tmp7 false
+    20 jump __label5 always
+-    * set __tmp8 null
+    21 jump __label7 always
+    22 label __label6
+-    * set __tmp8 null
+    23 label __label7
+    24 op add __tmp9 j 1
+    25 set __tmp10 __tmp9
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
+ 
+     5 label __label0
+     6 jump __label2 greaterThanEq i __tmp0
+     7 set __tmp1 i
+-    * read __tmp2 ARRAY __tmp1
+-    * set item __tmp2
+-    * op sub __tmp3 i 1
+-    * set j __tmp3
++    8 read item ARRAY __tmp1
++    9 op sub j i 1
+    10 label __label3
+    11 op greaterThanEq __tmp4 j 0
+    12 jump __label5 equal __tmp4 false
+    13 set __tmp5 j
+-    * read __tmp6 ARRAY __tmp5
+-    * set a __tmp6
++   14 read a ARRAY __tmp5
+    15 op lessThanEq __tmp7 a item
+    16 jump __label6 equal __tmp7 false
+    17 jump __label5 always
+    18 jump __label7 always
+    19 label __label6
+    20 label __label7
+-    * op add __tmp9 j 1
+-    * set __tmp10 __tmp9
++   21 op add __tmp10 j 1
+    22 write a ARRAY __tmp10
+    23 op sub j j 1
+    24 label __label4
+    25 jump __label3 always
+    26 label __label5
+-    * op add __tmp12 j 1
+-    * set __tmp13 __tmp12
++   27 op add __tmp13 j 1
+    28 write item ARRAY __tmp13
+    29 label __label1
+    30 op add i i 1
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+     8 read item ARRAY __tmp1
+     9 op sub j i 1
+    10 label __label3
+-    * op greaterThanEq __tmp4 j 0
+-    * jump __label5 equal __tmp4 false
++   11 jump __label5 lessThan j 0
+    12 set __tmp5 j
+    13 read a ARRAY __tmp5
+-    * op lessThanEq __tmp7 a item
+-    * jump __label6 equal __tmp7 false
++   14 jump __label6 greaterThan a item
+    15 jump __label5 always
+    16 jump __label7 always
+    17 label __label6
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    13 read a ARRAY __tmp5
+    14 jump __label6 greaterThan a item
+    15 jump __label5 always
+-    * jump __label7 always
+    16 label __label6
+    17 label __label7
+    18 op add __tmp10 j 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     3 set __tmp0 SIZE
+     4 set i 1
+     5 label __label0
+-    * jump __label2 greaterThanEq i __tmp0
++    6 jump __label2 greaterThanEq i SIZE
+     7 set __tmp1 i
+-    * read item ARRAY __tmp1
++    8 read item ARRAY i
+     9 op sub j i 1
+    10 label __label3
+    11 jump __label5 lessThan j 0
+    12 set __tmp5 j
+-    * read a ARRAY __tmp5
++   13 read a ARRAY j
+    14 jump __label6 greaterThan a item
+    15 jump __label5 always
+    16 label __label6
+ 
+    30 set __tmp15 SIZE
+    31 set i 0
+    32 label __label8
+-    * jump __label10 greaterThanEq i __tmp15
++   33 jump __label10 greaterThanEq i SIZE
+    34 set __tmp16 i
+    35 set __tmp18 i
+-    * read __tmp17 FINAL __tmp16
+-    * read __tmp19 ARRAY __tmp18
++   36 read __tmp17 FINAL i
++   37 read __tmp19 ARRAY i
+    38 assertequals __tmp17 __tmp19 "unexpected value"
+    39 label __label9
+    40 op add i i 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6 instructions):
+     0 set SIZE 128
+     1 set ARRAY bank2
+     2 set FINAL bank3
+-    * set __tmp0 SIZE
+     3 set i 1
+     4 label __label0
+     5 jump __label2 greaterThanEq i SIZE
+-    * set __tmp1 i
+     6 read item ARRAY i
+     7 op sub j i 1
+     8 label __label3
+     9 jump __label5 lessThan j 0
+-    * set __tmp5 j
+    10 read a ARRAY j
+    11 jump __label6 greaterThan a item
+    12 jump __label5 always
+ 
+    24 op add i i 1
+    25 jump __label0 always
+    26 label __label2
+-    * set __tmp15 SIZE
+    27 set i 0
+    28 label __label8
+    29 jump __label10 greaterThanEq i SIZE
+-    * set __tmp16 i
+-    * set __tmp18 i
+    30 read __tmp17 FINAL i
+    31 read __tmp19 ARRAY i
+    32 assertequals __tmp17 __tmp19 "unexpected value"
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+     3 set i 1
+     4 label __label0
+     5 jump __label2 greaterThanEq i SIZE
++    6 label __label11
+     7 read item ARRAY i
+     8 op sub j i 1
+     9 label __label3
+    10 jump __label5 lessThan j 0
++   11 label __label12
+    12 read a ARRAY j
+    13 jump __label6 greaterThan a item
+    14 jump __label5 always
+ 
+    18 write a ARRAY __tmp10
+    19 op sub j j 1
+    20 label __label4
+-    * jump __label3 always
++   21 jump __label12 greaterThanEq j 0
+    22 label __label5
+    23 op add __tmp13 j 1
+    24 write item ARRAY __tmp13
+    25 label __label1
+    26 op add i i 1
+-    * jump __label0 always
++   27 jump __label11 lessThan i SIZE
+    28 label __label2
+    29 set i 0
+    30 label __label8
+    31 jump __label10 greaterThanEq i SIZE
++   32 label __label13
+    33 read __tmp17 FINAL i
+    34 read __tmp19 ARRAY i
+    35 assertequals __tmp17 __tmp19 "unexpected value"
+    36 label __label9
+    37 op add i i 1
+-    * jump __label8 always
++   38 jump __label13 lessThan i SIZE
+    39 label __label10
+    40 stop
+    41 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+     2 set FINAL bank3
+     3 set i 1
+     4 label __label0
+-    * jump __label2 greaterThanEq i SIZE
++    5 jump __label2 greaterThanEq 1 SIZE
+     6 label __label11
+     7 read item ARRAY i
+     8 op sub j i 1
+ 
+    28 label __label2
+    29 set i 0
+    30 label __label8
+-    * jump __label10 greaterThanEq i SIZE
++   31 jump __label10 greaterThanEq 0 SIZE
+    32 label __label13
+    33 read __tmp17 FINAL i
+    34 read __tmp19 ARRAY i
+
+Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
+ 
+    10 jump __label5 lessThan j 0
+    11 label __label12
+    12 read a ARRAY j
+-    * jump __label6 greaterThan a item
+-    * jump __label5 always
++   13 jump __label5 lessThanEq a item
+    14 label __label6
+    15 label __label7
+    16 op add __tmp10 j 1
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    37 jump __label13 lessThan i SIZE
+    38 label __label10
+    39 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set SIZE 128
+set ARRAY bank2
+set FINAL bank3
+set i 1
+jump __label2 greaterThanEq 1 SIZE
+label __label11
+read item ARRAY i
+op sub j i 1
+jump __label5 lessThan j 0
+label __label12
+read a ARRAY j
+jump __label5 lessThanEq a item
+op add __tmp10 j 1
+write a ARRAY __tmp10
+op sub j j 1
+jump __label12 greaterThanEq j 0
+label __label5
+op add __tmp13 j 1
+write item ARRAY __tmp13
+op add i i 1
+jump __label11 lessThan i SIZE
+label __label2
+set i 0
+jump __label10 greaterThanEq 0 SIZE
+label __label13
+read __tmp17 FINAL i
+read __tmp19 ARRAY i
+assertequals __tmp17 __tmp19 "unexpected value"
+op add i i 1
+jump __label13 lessThan i SIZE
+label __label10
+stop

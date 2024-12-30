@@ -1,7 +1,7 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.mindustry.Direction;

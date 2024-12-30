@@ -1,6 +1,6 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.Tuple2;
+import info.teksol.mc.util.Tuple2;
 import info.teksol.schemacode.config.PositionArray;
 
 import java.util.HashSet;

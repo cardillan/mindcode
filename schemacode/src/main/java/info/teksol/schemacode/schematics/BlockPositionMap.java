@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.ToolMessage;
-import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.util.Tuple2;
 import info.teksol.schemacode.mindustry.Position;
 
 import java.util.*;

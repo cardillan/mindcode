@@ -260,7 +260,7 @@ processors know to avoid them. Typical code might look like this:
 def myFindFreeUnit(unit_type, mark_flag)
     do
         ubind(unit_type);
-    loop while @unit.flag !== 0;      
+    while @unit.flag !== 0;      
 
     // If no unit was found, @unit would be null and so would be @unit.flag. 
     // The strict comparison (!==) ensures the loop will only end when a live unit with zero flag is found  

@@ -256,7 +256,7 @@ Do-while loops therefore always execute at least once:
 ```
 do
     ubind(@poly)
-loop while @unit == null
+while @unit == null
 ```
 
 ### Operators

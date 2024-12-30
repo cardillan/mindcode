@@ -1,8 +1,8 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.v3.InputFile;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.InputFiles;
 import info.teksol.schemacode.ast.MultipartPositionTranslator.Part;
 import org.junit.jupiter.api.Test;
 

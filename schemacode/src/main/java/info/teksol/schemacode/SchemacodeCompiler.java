@@ -1,12 +1,11 @@
 package info.teksol.schemacode;
 
-import info.teksol.mindcode.MindcodeErrorListener;
-import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.v3.InputFile;
-import info.teksol.mindcode.v3.InputFiles;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.ast.AstSchematicsBuilder;
 import info.teksol.schemacode.grammar.SchemacodeLexer;
@@ -35,7 +34,7 @@ public class SchemacodeCompiler {
      */
     static DefinitionsContext parseSchematics(MessageConsumer messageConsumer, InputFiles inputFiles) {
         InputFile inputFile = inputFiles.getMainInputFile();
-        final MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
+        final SchemacodeErrorListener errorListener = new SchemacodeErrorListener(messageConsumer, inputFile);
 
         final SchemacodeLexer lexer = new SchemacodeLexer(CharStreams.fromString(inputFile.getCode()));
         lexer.removeErrorListeners();

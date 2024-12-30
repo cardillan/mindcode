@@ -1,6 +1,6 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.mindcode.mimex.UnitCommand;
+import info.teksol.mc.mindcode.logic.mimex.UnitCommand;
 import info.teksol.schemacode.config.Configuration;
 
 import java.util.Objects;

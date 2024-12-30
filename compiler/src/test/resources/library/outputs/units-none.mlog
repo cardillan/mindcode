@@ -136,30 +136,32 @@ set __fn3__message _message
 set __fn3__preface _preface
 set __fn3__unit_type _unit_type
 set __fn3__initial_flag _initial_flag
-jump 165 equal true false
+jump 167 equal true false
 ubind __fn3__unit_type
 op equal __tmp44 @unit null
-jump 149 equal __tmp44 false
+jump 150 equal __tmp44 false
 print __fn3__preface
 print "No unit of type "
 print __fn3__unit_type
-print " found."
+print " "
+print "found."
 printflush __fn3__message
 set __tmp45 null
-jump 164 always 0 0
+jump 166 always 0 0
 sensor __tmp46 @unit @controlled
 op notEqual __tmp47 __tmp46 0
-jump 159 equal __tmp47 false
+jump 161 equal __tmp47 false
 print __fn3__preface
 print "Looking for a free "
 print __fn3__unit_type
-print "..."
+print "."
+print ".."
 printflush __fn3__message
 set __tmp48 null
-jump 163 always 0 0
+jump 165 always 0 0
 ucontrol flag __fn3__initial_flag 0 0 0 0
 set __tmp43 @unit
-jump 166 always 0 0
+jump 168 always 0 0
 set __tmp48 null
 set __tmp45 __tmp48
 jump 138 always 0 0

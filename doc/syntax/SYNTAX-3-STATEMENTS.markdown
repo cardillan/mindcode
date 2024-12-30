@@ -28,7 +28,7 @@ Similar to while loops, except the condition is placed at the end of the loop. D
 ```
 do
     ubind(@poly);
-loop while @unit == null;
+while @unit == null;
 ```
 
 > [!NOTE]

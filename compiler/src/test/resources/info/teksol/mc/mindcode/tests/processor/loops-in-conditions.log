@@ -1,0 +1,561 @@
+    40 instructions before optimizations.
+     1 instructions eliminated by Dead Code Elimination (3 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+     1 instructions eliminated by Jump Optimization (4 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     1 instructions modified by If Expression Optimization (3 iterations).
+    39 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
+     2 instructions eliminated by Loop Optimization (3 iterations).
+     2 loops improved by Loop Optimization.
+    18 instructions added by Loop Unrolling (5 iterations).
+     2 loops unrolled by Loop Unrolling.
+     2 instructions eliminated by Print Merging.
+     8 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 973):
+  * Unroll loop at line 3:5                                      cost     0, benefit      200.0, efficiency   Infinity (-5 instructions)
+    Unroll loop at line 3:5                                      cost     4, benefit      400.0, efficiency      100.0
+
+Pass 1: speed optimization selection (cost limit 978):
+  * Unroll loop at line 3:5                                      cost     4, benefit      400.0, efficiency      100.0 (-5 instructions)
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
+ 
+    43 set __fn0_result __tmp6
+    44 print "|"
+    45 print __fn0_result
+-    * set __tmp0 __fn0_result
+    46 label __label0
+    47 assertprints "6|28|Less|0" "loops in conditions"
+    48 stop
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    32 jump __label5 always
+    33 set __tmp3 null
+    34 label __label5
+-    * op lessThan __tmp5 __tmp1 __tmp3
+-    * jump __label9 equal __tmp5 false
++   35 jump __label9 greaterThanEq __tmp1 __tmp3
+    36 print "Less"
+    37 set __tmp6 0
+    38 jump __label10 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+     0 assertflush
+     1 set __fn1_n 4
+     2 set __fn1_c 0
+-    * set __tmp2 __fn1_n
++    3 set __tmp2 4
+     4 set __fn1_i 0
+     5 label __label2
+-    * jump __label4 greaterThanEq __fn1_i __tmp2
++    6 jump __label4 greaterThanEq __fn1_i __fn1_n
+     7 op add __fn1_c __fn1_c __fn1_i
+     8 label __label3
+     9 op add __fn1_i __fn1_i 1
+ 
+    13 print "|"
+    14 set __tmp1 __fn1_c
+    15 jump __label1 always
+-    * set __tmp1 null
+    16 label __label1
+    17 set __fn2_n 8
+    18 set __fn2_c 0
+-    * set __tmp4 __fn2_n
++   19 set __tmp4 8
+    20 set __fn2_i 0
+    21 label __label6
+-    * jump __label8 greaterThanEq __fn2_i __tmp4
++   22 jump __label8 greaterThanEq __fn2_i __fn2_n
+    23 op add __fn2_c __fn2_c __fn2_i
+    24 label __label7
+    25 op add __fn2_i __fn2_i 1
+ 
+    29 print "|"
+    30 set __tmp3 __fn2_c
+    31 jump __label5 always
+-    * set __tmp3 null
+    32 label __label5
+-    * jump __label9 greaterThanEq __tmp1 __tmp3
++   33 jump __label9 greaterThanEq __fn1_c __fn2_c
+    34 print "Less"
+    35 set __tmp6 0
+    36 jump __label10 always
+ 
+    39 label __label10
+    40 set __fn0_result __tmp6
+    41 print "|"
+-    * print __fn0_result
++   42 print __tmp6
+    43 label __label0
+    44 assertprints "6|28|Less|0" "loops in conditions"
+    45 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+     0 assertflush
+     1 set __fn1_n 4
+     2 set __fn1_c 0
+-    * set __tmp2 4
+     3 set __fn1_i 0
+     4 label __label2
+-    * jump __label4 greaterThanEq __fn1_i __fn1_n
++    5 jump __label4 greaterThanEq __fn1_i 4
+     6 op add __fn1_c __fn1_c __fn1_i
+     7 label __label3
+     8 op add __fn1_i __fn1_i 1
+ 
+    10 label __label4
+    11 print __fn1_c
+    12 print "|"
+-    * set __tmp1 __fn1_c
+    13 jump __label1 always
+    14 label __label1
+    15 set __fn2_n 8
+    16 set __fn2_c 0
+-    * set __tmp4 8
+    17 set __fn2_i 0
+    18 label __label6
+-    * jump __label8 greaterThanEq __fn2_i __fn2_n
++   19 jump __label8 greaterThanEq __fn2_i 8
+    20 op add __fn2_c __fn2_c __fn2_i
+    21 label __label7
+    22 op add __fn2_i __fn2_i 1
+ 
+    24 label __label8
+    25 print __fn2_c
+    26 print "|"
+-    * set __tmp3 __fn2_c
+    27 jump __label5 always
+    28 label __label5
+    29 jump __label9 greaterThanEq __fn1_c __fn2_c
+ 
+    33 label __label9
+    34 set __tmp6 1
+    35 label __label10
+-    * set __fn0_result __tmp6
+    36 print "|"
+    37 print __tmp6
+    38 label __label0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+     0 assertflush
+-    * set __fn1_n 4
+     1 set __fn1_c 0
+     2 set __fn1_i 0
+     3 label __label2
+ 
+    11 print "|"
+    12 jump __label1 always
+    13 label __label1
+-    * set __fn2_n 8
+    14 set __fn2_c 0
+    15 set __fn2_i 0
+    16 label __label6
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+     1 set __fn1_c 0
+     2 set __fn1_i 0
+     3 label __label2
+-    * jump __label4 greaterThanEq __fn1_i 4
++    4 label __label11
+     5 op add __fn1_c __fn1_c __fn1_i
+     6 label __label3
+     7 op add __fn1_i __fn1_i 1
+-    * jump __label2 always
++    8 jump __label11 lessThan __fn1_i 4
+     9 label __label4
+    10 print __fn1_c
+    11 print "|"
+ 
+    14 set __fn2_c 0
+    15 set __fn2_i 0
+    16 label __label6
+-    * jump __label8 greaterThanEq __fn2_i 8
++   17 label __label12
+    18 op add __fn2_c __fn2_c __fn2_i
+    19 label __label7
+    20 op add __fn2_i __fn2_i 1
+-    * jump __label6 always
++   21 jump __label12 lessThan __fn2_i 8
+    22 label __label8
+    23 print __fn2_c
+    24 print "|"
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1:
+     0 assertflush
++    1 set __tmp6 1
+     2 set __fn1_c 0
+     3 set __fn1_i 0
+     4 label __label2
+ 
+    25 print "|"
+    26 jump __label5 always
+    27 label __label5
+-    * jump __label9 greaterThanEq __fn1_c __fn2_c
++   28 jump __label10 greaterThanEq __fn1_c __fn2_c
+    29 print "Less"
+    30 set __tmp6 0
+    31 jump __label10 always
+-    * label __label9
+-    * set __tmp6 1
+    32 label __label10
+    33 print "|"
+    34 print __tmp6
+
+Modifications by Unroll loop at line 3:5 (+5 instructions):
+     0 assertflush
+     1 set __tmp6 1
+     2 set __fn1_c 0
+-    * set __fn1_i 0
+-    * label __label2
+-    * label __label11
+-    * op add __fn1_c __fn1_c __fn1_i
+-    * label __label3
+-    * op add __fn1_i __fn1_i 1
+-    * jump __label11 lessThan __fn1_i 4
+-    * label __label4
++    3 set __fn1_i 0
++    4 label __label13
++    5 label __label14
++    6 op add __fn1_c __fn1_c __fn1_i
++    7 label __label15
++    8 op add __fn1_i __fn1_i 1
++    9 label __label16
++   10 op add __fn1_c __fn1_c __fn1_i
++   11 label __label17
++   12 op add __fn1_i __fn1_i 1
++   13 label __label18
++   14 op add __fn1_c __fn1_c __fn1_i
++   15 label __label19
++   16 op add __fn1_i __fn1_i 1
++   17 label __label20
++   18 op add __fn1_c __fn1_c __fn1_i
++   19 label __label21
++   20 op add __fn1_i __fn1_i 1
++   21 label __label4
+    22 print __fn1_c
+    23 print "|"
+    24 jump __label1 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     3 set __fn1_i 0
+     4 label __label13
+     5 label __label14
+-    * op add __fn1_c __fn1_c __fn1_i
++    6 op add __fn1_c 0 0
+     7 label __label15
+-    * op add __fn1_i __fn1_i 1
++    8 op add __fn1_i 0 1
+     9 label __label16
+-    * op add __fn1_c __fn1_c __fn1_i
++   10 op add __fn1_c 0 1
+    11 label __label17
+-    * op add __fn1_i __fn1_i 1
++   12 op add __fn1_i 1 1
+    13 label __label18
+-    * op add __fn1_c __fn1_c __fn1_i
++   14 op add __fn1_c 1 2
+    15 label __label19
+-    * op add __fn1_i __fn1_i 1
++   16 op add __fn1_i 2 1
+    17 label __label20
+-    * op add __fn1_c __fn1_c __fn1_i
++   18 op add __fn1_c 3 3
+    19 label __label21
+-    * op add __fn1_i __fn1_i 1
++   20 op add __fn1_i 3 1
+    21 label __label4
+-    * print __fn1_c
++   22 print 6
+    23 print "|"
+    24 jump __label1 always
+    25 label __label1
+ 
+    36 print "|"
+    37 jump __label5 always
+    38 label __label5
+-    * jump __label10 greaterThanEq __fn1_c __fn2_c
++   39 jump __label10 greaterThanEq 6 __fn2_c
+    40 print "Less"
+    41 set __tmp6 0
+    42 jump __label10 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
+     0 assertflush
+     1 set __tmp6 1
+-    * set __fn1_c 0
+-    * set __fn1_i 0
+     2 label __label13
+     3 label __label14
+-    * op add __fn1_c 0 0
+     4 label __label15
+-    * op add __fn1_i 0 1
+     5 label __label16
+-    * op add __fn1_c 0 1
+     6 label __label17
+-    * op add __fn1_i 1 1
+     7 label __label18
+-    * op add __fn1_c 1 2
+     8 label __label19
+-    * op add __fn1_i 2 1
+     9 label __label20
+-    * op add __fn1_c 3 3
+    10 label __label21
+-    * op add __fn1_i 3 1
+    11 label __label4
+    12 print 6
+    13 print "|"
+
+Modifications by Unroll loop at line 3:5 (+13 instructions):
+ 
+    14 jump __label1 always
+    15 label __label1
+    16 set __fn2_c 0
+-    * set __fn2_i 0
+-    * label __label6
+-    * label __label12
+-    * op add __fn2_c __fn2_c __fn2_i
+-    * label __label7
+-    * op add __fn2_i __fn2_i 1
+-    * jump __label12 lessThan __fn2_i 8
+-    * label __label8
++   17 set __fn2_i 0
++   18 label __label22
++   19 label __label23
++   20 op add __fn2_c __fn2_c __fn2_i
++   21 label __label24
++   22 op add __fn2_i __fn2_i 1
++   23 label __label25
++   24 op add __fn2_c __fn2_c __fn2_i
++   25 label __label26
++   26 op add __fn2_i __fn2_i 1
++   27 label __label27
++   28 op add __fn2_c __fn2_c __fn2_i
++   29 label __label28
++   30 op add __fn2_i __fn2_i 1
++   31 label __label29
++   32 op add __fn2_c __fn2_c __fn2_i
++   33 label __label30
++   34 op add __fn2_i __fn2_i 1
++   35 label __label31
++   36 op add __fn2_c __fn2_c __fn2_i
++   37 label __label32
++   38 op add __fn2_i __fn2_i 1
++   39 label __label33
++   40 op add __fn2_c __fn2_c __fn2_i
++   41 label __label34
++   42 op add __fn2_i __fn2_i 1
++   43 label __label35
++   44 op add __fn2_c __fn2_c __fn2_i
++   45 label __label36
++   46 op add __fn2_i __fn2_i 1
++   47 label __label37
++   48 op add __fn2_c __fn2_c __fn2_i
++   49 label __label38
++   50 op add __fn2_i __fn2_i 1
++   51 label __label8
+    52 print __fn2_c
+    53 print "|"
+    54 jump __label5 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    17 set __fn2_i 0
+    18 label __label22
+    19 label __label23
+-    * op add __fn2_c __fn2_c __fn2_i
++   20 op add __fn2_c 0 0
+    21 label __label24
+-    * op add __fn2_i __fn2_i 1
++   22 op add __fn2_i 0 1
+    23 label __label25
+-    * op add __fn2_c __fn2_c __fn2_i
++   24 op add __fn2_c 0 1
+    25 label __label26
+-    * op add __fn2_i __fn2_i 1
++   26 op add __fn2_i 1 1
+    27 label __label27
+-    * op add __fn2_c __fn2_c __fn2_i
++   28 op add __fn2_c 1 2
+    29 label __label28
+-    * op add __fn2_i __fn2_i 1
++   30 op add __fn2_i 2 1
+    31 label __label29
+-    * op add __fn2_c __fn2_c __fn2_i
++   32 op add __fn2_c 3 3
+    33 label __label30
+-    * op add __fn2_i __fn2_i 1
++   34 op add __fn2_i 3 1
+    35 label __label31
+-    * op add __fn2_c __fn2_c __fn2_i
++   36 op add __fn2_c 6 4
+    37 label __label32
+-    * op add __fn2_i __fn2_i 1
++   38 op add __fn2_i 4 1
+    39 label __label33
+-    * op add __fn2_c __fn2_c __fn2_i
++   40 op add __fn2_c 10 5
+    41 label __label34
+-    * op add __fn2_i __fn2_i 1
++   42 op add __fn2_i 5 1
+    43 label __label35
+-    * op add __fn2_c __fn2_c __fn2_i
++   44 op add __fn2_c 15 6
+    45 label __label36
+-    * op add __fn2_i __fn2_i 1
++   46 op add __fn2_i 6 1
+    47 label __label37
+-    * op add __fn2_c __fn2_c __fn2_i
++   48 op add __fn2_c 21 7
+    49 label __label38
+-    * op add __fn2_i __fn2_i 1
++   50 op add __fn2_i 7 1
+    51 label __label8
+-    * print __fn2_c
++   52 print 28
+    53 print "|"
+    54 jump __label5 always
+    55 label __label5
+-    * jump __label10 greaterThanEq 6 __fn2_c
++   56 jump __label10 greaterThanEq 6 28
+    57 print "Less"
+    58 set __tmp6 0
+    59 jump __label10 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+ 
+    13 print "|"
+    14 jump __label1 always
+    15 label __label1
+-    * set __fn2_c 0
+-    * set __fn2_i 0
+    16 label __label22
+    17 label __label23
+-    * op add __fn2_c 0 0
+    18 label __label24
+-    * op add __fn2_i 0 1
+    19 label __label25
+-    * op add __fn2_c 0 1
+    20 label __label26
+-    * op add __fn2_i 1 1
+    21 label __label27
+-    * op add __fn2_c 1 2
+    22 label __label28
+-    * op add __fn2_i 2 1
+    23 label __label29
+-    * op add __fn2_c 3 3
+    24 label __label30
+-    * op add __fn2_i 3 1
+    25 label __label31
+-    * op add __fn2_c 6 4
+    26 label __label32
+-    * op add __fn2_i 4 1
+    27 label __label33
+-    * op add __fn2_c 10 5
+    28 label __label34
+-    * op add __fn2_i 5 1
+    29 label __label35
+-    * op add __fn2_c 15 6
+    30 label __label36
+-    * op add __fn2_i 6 1
+    31 label __label37
+-    * op add __fn2_c 21 7
+    32 label __label38
+-    * op add __fn2_i 7 1
+    33 label __label8
+    34 print 28
+    35 print "|"
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+ 
+    35 print "|"
+    36 jump __label5 always
+    37 label __label5
+-    * jump __label10 greaterThanEq 6 28
+    38 print "Less"
+    39 set __tmp6 0
+    40 jump __label10 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-3 instructions):
+ 
+    11 label __label4
+    12 print 6
+    13 print "|"
+-    * jump __label1 always
+    14 label __label1
+    15 label __label22
+    16 label __label23
+ 
+    32 label __label8
+    33 print 28
+    34 print "|"
+-    * jump __label5 always
+    35 label __label5
+    36 print "Less"
+    37 set __tmp6 0
+-    * jump __label10 always
+    38 label __label10
+    39 print "|"
+    40 print __tmp6
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+     0 assertflush
+-    * set __tmp6 1
+     1 label __label13
+     2 label __label14
+     3 label __label15
+ 
+    36 set __tmp6 0
+    37 label __label10
+    38 print "|"
+-    * print __tmp6
++   39 print 0
+    40 label __label0
+    41 assertprints "6|28|Less|0" "loops in conditions"
+    42 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
+ 
+    33 print "|"
+    34 label __label5
+    35 print "Less"
+-    * set __tmp6 0
+    36 label __label10
+    37 print "|"
+    38 print 0
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    39 label __label0
+    40 assertprints "6|28|Less|0" "loops in conditions"
+    41 stop
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
+ 
+    30 label __label38
+    31 label __label8
+    32 print 28
+-    * print "|"
+    33 label __label5
+-    * print "Less"
+    34 label __label10
+-    * print "|"
++   35 print "|Less|"
+    36 print 0
+    37 label __label0
+    38 assertprints "6|28|Less|0" "loops in conditions"
+
+Final code before resolving virtual instructions:
+
+assertflush
+print 6
+print "|"
+print 28
+print "|Less|"
+print 0
+assertprints "6|28|Less|0" "loops in conditions"
+stop

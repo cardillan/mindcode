@@ -1,4 +1,3 @@
-#set target = ML8A;
 require math;
 
 assertEquals(5, distance(1,1,4,5), "distance(1,1,4,5)");

@@ -19,6 +19,27 @@ const DISPLAY_SIZE_SMALL =  80;
 const DISPLAY_SIZE_LARGE = 176;
 
 /**
+ * Unpacks numeric value created by the `packcolor` instruction (or a corresponding color literal) into
+ * individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
+ * all four color channels.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `packedColor`: color value to unpack
+ * - `r`: variable to receive the value corresponding to the red channel
+ * - `g`: variable to receive the value corresponding to the green channel
+ * - `b`: variable to receive the value corresponding to the blue channel
+ * - `a`: variable to receive the value corresponding to the alpha channel
+ */
+void unpackcolor(_packedColor, out _r, out _g, out _b, out _a)
+    _bits = _packedColor / %00000001;
+    _r = (_bits & (0xFF << 24)) / (255 << 24);
+    _g = (_bits & (0xFF << 16)) / (255 << 16);
+    _b = (_bits & (0xFF <<  8)) / (255 <<  8);
+    _a = (_bits & (0xFF <<  0)) / (255 <<  0);
+end;
+
+/**
  * Returns the actual display size based on the type of display passed in as an argument.
  * When the passed-in argument is not a display, the processor is stopped.
  */

@@ -1,23 +1,23 @@
 assertflush
 print "{2}"
-op floor __fn6__n 0 0
-format __fn6__n
+op floor __fn27__n 0 0
+format __fn27__n
 assertprints "0" "printNumber(null)"
 assertflush
 print "{2}"
-op floor __fn6__n 1 0
-format __fn6__n
+op floor __fn27__n 1 0
+format __fn27__n
 assertprints "1" "printNumber(1)"
 assertflush
 print "{2}"
-op floor __fn6__n 1.5 0
-format __fn6__n
+op floor __fn27__n 1.5 0
+format __fn27__n
 assertprints "1" "printNumber(1.5)"
 assertflush
 print "{2}"
-op floor __fn6__n 1.5 0
+op floor __fn27__n 1.5 0
 format "-{2}"
-format __fn6__n
+format __fn27__n
 assertprints "-1" "printNumber(-1.5)"
 assertflush
 print "{2}"

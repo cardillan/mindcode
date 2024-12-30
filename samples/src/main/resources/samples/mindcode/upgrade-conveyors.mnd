@@ -123,7 +123,7 @@ def replace(x, y, oldType, newType)
         // for the unit to finish building the block
         do
             getBlock(x, y, out type);
-        loop while type != newType;
+        while type != newType;
         TOTAL += 1;
     end;
 end;

@@ -74,6 +74,6 @@ inline void findLinkedBlocks(_title, _message, _linkMap...)
             if _required then _foundAll &= _variable; end;
         end;
         printflush(_message);
-    loop while !_foundAll;
+    while !_foundAll;
 end;
 

@@ -1,13 +1,13 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.AstElement;
-import info.teksol.mindcode.ToolMessage;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.AbstractMessageEmitter;
-import info.teksol.mindcode.mimex.BlockType;
-import info.teksol.mindcode.mimex.Icons;
-import info.teksol.mindcode.v3.InputFiles;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mc.common.AstElement;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.Icons;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;

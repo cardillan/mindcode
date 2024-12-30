@@ -1,0 +1,237 @@
+    29 instructions before optimizations.
+     1 instructions eliminated by Dead Code Elimination (3 iterations).
+     1 instructions eliminated by Single Step Elimination (4 iterations).
+    11 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     2 instructions eliminated by Loop Unrolling (3 iterations).
+     1 loops unrolled by Loop Unrolling.
+    14 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 976):
+  * Unroll iteration loop at line 6:5                            cost     0, benefit       11.0, efficiency   Infinity (-9 instructions)
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
+ 
+    29 print __fn0_b
+    30 print __fn0_c
+    31 print __fn0_d
+-    * set __tmp0 __fn0_d
+    32 label __label0
+    33 assertprints "1248" "sort variables"
+    34 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+     1 assertflush
+     2 set __fn0_step p
+     3 setaddr __tmp1 __label4
+-    * set __fn0_i __fn0_a
+     4 jump __label1 always
+     5 gotolabel __label4 marker0
+     6 set __fn0_a __fn0_i
+     7 setaddr __tmp1 __label5
+-    * set __fn0_i __fn0_b
+     8 jump __label1 always
+     9 gotolabel __label5 marker0
+    10 set __fn0_b __fn0_i
+    11 setaddr __tmp1 __label6
+-    * set __fn0_i __fn0_c
+    12 jump __label1 always
+    13 gotolabel __label6 marker0
+    14 set __fn0_c __fn0_i
+    15 setaddr __tmp1 __label7
+-    * set __fn0_i __fn0_d
+    16 label __label1
+    17 set __fn0_i __fn0_step
+    18 op mul __fn0_step __fn0_step 2
+
+Modifications by Unroll iteration loop at line 6:5 (-2 instructions):
+     0 set p 1
+     1 assertflush
+     2 set __fn0_step p
+-    * setaddr __tmp1 __label4
+-    * jump __label1 always
+-    * gotolabel __label4 marker0
+-    * set __fn0_a __fn0_i
+-    * setaddr __tmp1 __label5
+-    * jump __label1 always
+-    * gotolabel __label5 marker0
+-    * set __fn0_b __fn0_i
+-    * setaddr __tmp1 __label6
+-    * jump __label1 always
+-    * gotolabel __label6 marker0
+-    * set __fn0_c __fn0_i
+-    * setaddr __tmp1 __label7
+-    * label __label1
+-    * set __fn0_i __fn0_step
+-    * op mul __fn0_step __fn0_step 2
+-    * label __label2
+-    * goto __tmp1 marker0
+-    * gotolabel __label7 marker0
+-    * set __fn0_d __fn0_i
+-    * label __label3
++    3 label __label8
++    4 set __fn0_i __fn0_step
++    5 op mul __fn0_step __fn0_step 2
++    6 label __label9
++    7 set __fn0_a __fn0_i
++    8 label __label12
++    9 set __fn0_i __fn0_step
++   10 op mul __fn0_step __fn0_step 2
++   11 label __label13
++   12 set __fn0_b __fn0_i
++   13 label __label16
++   14 set __fn0_i __fn0_step
++   15 op mul __fn0_step __fn0_step 2
++   16 label __label17
++   17 set __fn0_c __fn0_i
++   18 label __label20
++   19 set __fn0_i __fn0_step
++   20 op mul __fn0_step __fn0_step 2
++   21 label __label21
++   22 set __fn0_d __fn0_i
++   23 label __label3
+    24 print __fn0_a
+    25 print __fn0_b
+    26 print __fn0_c
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     1 assertflush
+     2 set __fn0_step p
+     3 label __label8
+-    * set __fn0_i __fn0_step
+-    * op mul __fn0_step __fn0_step 2
++    4 set __fn0_i p
++    5 op mul __fn0_step p 2
+     6 label __label9
+     7 set __fn0_a __fn0_i
+     8 label __label12
+ 
+    17 set __fn0_c __fn0_i
+    18 label __label20
+    19 set __fn0_i __fn0_step
+-    * op mul __fn0_step __fn0_step 2
+    20 label __label21
+    21 set __fn0_d __fn0_i
+    22 label __label3
+    23 print __fn0_a
+    24 print __fn0_b
+    25 print __fn0_c
+-    * print __fn0_d
++   26 print __fn0_i
+    27 label __label0
+    28 assertprints "1248" "sort variables"
+    29 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+     0 set p 1
+     1 assertflush
+-    * set __fn0_step p
+     2 label __label8
+     3 set __fn0_i p
+     4 op mul __fn0_step p 2
+     5 label __label9
+-    * set __fn0_a __fn0_i
++    6 set __fn0_a p
+     7 label __label12
+     8 set __fn0_i __fn0_step
+-    * op mul __fn0_step __fn0_step 2
++    9 op mul __fn0_step p 4
+    10 label __label13
+    11 set __fn0_b __fn0_i
+    12 label __label16
+ 
+    17 label __label20
+    18 set __fn0_i __fn0_step
+    19 label __label21
+-    * set __fn0_d __fn0_i
++   20 set __fn0_d __fn0_step
+    21 label __label3
+    22 print __fn0_a
+    23 print __fn0_b
+    24 print __fn0_c
+-    * print __fn0_i
++   25 print __fn0_step
+    26 label __label0
+    27 assertprints "1248" "sort variables"
+    28 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
+     0 set p 1
+     1 assertflush
+     2 label __label8
+-    * set __fn0_i p
+     3 op mul __fn0_step p 2
+     4 label __label9
+     5 set __fn0_a p
+ 
+    10 set __fn0_b __fn0_i
+    11 label __label16
+    12 set __fn0_i __fn0_step
+-    * op mul __fn0_step __fn0_step 2
++   13 op mul __fn0_step p 8
+    14 label __label17
+    15 set __fn0_c __fn0_i
+    16 label __label20
+-    * set __fn0_i __fn0_step
+    17 label __label21
+-    * set __fn0_d __fn0_step
+    18 label __label3
+-    * print __fn0_a
++   19 print p
+    20 print __fn0_b
+    21 print __fn0_c
+    22 print __fn0_step
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
+ 
+     2 label __label8
+     3 op mul __fn0_step p 2
+     4 label __label9
+-    * set __fn0_a p
+     5 label __label12
+     6 set __fn0_i __fn0_step
+     7 op mul __fn0_step p 4
+ 
+    17 label __label3
+    18 print p
+    19 print __fn0_b
+-    * print __fn0_c
++   20 print __fn0_i
+    21 print __fn0_step
+    22 label __label0
+    23 assertprints "1248" "sort variables"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
+ 
+    11 set __fn0_i __fn0_step
+    12 op mul __fn0_step p 8
+    13 label __label17
+-    * set __fn0_c __fn0_i
+    14 label __label20
+    15 label __label21
+    16 label __label3
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    21 label __label0
+    22 assertprints "1248" "sort variables"
+    23 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set p 1
+assertflush
+op mul __fn0_step p 2
+set __fn0_i __fn0_step
+op mul __fn0_step p 4
+set __fn0_b __fn0_i
+set __fn0_i __fn0_step
+op mul __fn0_step p 8
+print p
+print __fn0_b
+print __fn0_i
+print __fn0_step
+assertprints "1248" "sort variables"
+stop

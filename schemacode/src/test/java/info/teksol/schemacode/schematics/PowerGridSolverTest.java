@@ -1,9 +1,9 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
-import info.teksol.util.ExpectedMessages;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.exttest;
 
-import info.teksol.emulator.processor.ExecutionException;
-import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mc.emulator.processor.ExecutionException;
+import info.teksol.mc.profile.CompilerProfile;
 
 public record ErrorResult(String testCaseId, CompilerProfile profile, String unexpectedMessages,
                           ExecutionException executionException, String failedTests) {

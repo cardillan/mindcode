@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 @SupportedAnnotationTypes({"info.teksol.annotations.AstNode", "info.teksol.annotations.BaseClass"})
 @SupportedSourceVersion(SourceVersion.RELEASE_22)
 public class AstNodeAnnotationProcessor extends AbstractProcessor {
-    private static final String GENERATED_PACKAGE_NAME = "info.teksol.generated.ast";
-    private static final String GENERATED_PACKAGE_NAME_VISITORS = "info.teksol.generated.ast.visitors";
+    private static final String GENERATED_PACKAGE_NAME = "info.teksol.mc.generated.ast";
+    private static final String GENERATED_PACKAGE_NAME_VISITORS = "info.teksol.mc.generated.ast.visitors";
     private static final String NODE_BASE_CLASS = "AstMindcodeNode";
 
     private static final String VISITOR_ROOT_INTERFACE_NAME = "SingleAstNodeVisitor";

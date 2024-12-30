@@ -150,10 +150,10 @@ control = """
     const RUNNING_TEXT = "Rendering...\n-------------------------\n";
     const FINISHED_TEXT = "Finished.\n-------------------------\n";
 
-    do text1 = ""; loop while bank1 == null;
-    do text1 = ""; loop while message1 == null;
-    do text1 = ""; loop while message2 == null;
-    do text1 = ""; loop while message3 == null;
+    do text1 = ""; while bank1 == null;
+    do text1 = ""; while message1 == null;
+    do text1 = ""; while message2 == null;
+    do text1 = ""; while message3 == null;
 
     memory = bank1;
 
@@ -384,7 +384,7 @@ control = """
                 do
                     // Mindcode doesn't allow empty loop body
                     null;
-                loop while memory[i] > 0;
+                while memory[i] > 0;
             end;
 
             CHANGE = false;

@@ -1,6 +1,6 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.config.*;
 
 import java.util.function.Supplier;

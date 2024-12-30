@@ -1,9 +1,9 @@
 package info.teksol.mindcode.exttest;
 
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.util.StringUtils;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.util.StringUtils;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.io.PrintWriter;

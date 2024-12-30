@@ -1,8 +1,8 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.util.Tuple2;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.schematics.Block;

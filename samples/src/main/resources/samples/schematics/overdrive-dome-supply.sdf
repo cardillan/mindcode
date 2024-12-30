@@ -120,7 +120,7 @@ program = """
     printflush(message1);
     do
         CORE = ulocate(building, core, false);
-    loop while CORE == null;
+    while CORE == null;
 
     CORE_X = CORE.@x;
     CORE_Y = CORE.@y;
@@ -239,7 +239,7 @@ program = """
                     occupied += 1;
                 end;
                 ubind(type);
-            loop while @unit != firstUnit and firstUnit.@dead == 0;
+            while @unit != firstUnit and firstUnit.@dead == 0;
         end;
 
         if output then
@@ -279,7 +279,7 @@ program = """
                 end;
             end;
             ubind(TYPE);
-        loop while @unit != firstUnit and firstUnit.@dead == 0;
+        while @unit != firstUnit and firstUnit.@dead == 0;
         return count;
     end;
 
@@ -302,7 +302,7 @@ program = """
                     return @unit;
                 end;
                 ubind(TYPE);
-            loop while @unit != firstUnit and firstUnit.@dead == 0;
+            while @unit != firstUnit and firstUnit.@dead == 0;
         end;
 
         // No additional unit of this type is available - reinitialize

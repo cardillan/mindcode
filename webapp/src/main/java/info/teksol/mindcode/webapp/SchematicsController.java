@@ -1,11 +1,11 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.samples.Sample;
 import info.teksol.mindcode.samples.Samples;
-import info.teksol.mindcode.v3.InputFiles;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

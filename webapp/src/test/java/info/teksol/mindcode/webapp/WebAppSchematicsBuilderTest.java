@@ -1,9 +1,9 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.v3.InputFile;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;

@@ -1,9 +1,9 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.mindcode.compiler.CompilerFacade;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
@@ -159,14 +159,17 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 builder.info("Compiling %s", processor.program().getProgramId(builder));
                 CompilerProfile compilerProfile = builder.getCompilerProfile();
                 compilerProfile.setPositionTranslator(processor.program().createPositionTranslator(builder));
-                CompilerOutput<String> output = CompilerFacade.compile(builder.getInputFiles(), fileToCompile, compilerProfile);
-                output.messages().forEach(builder::addMessage);
-                if (output.hasErrors()) {
+                List<MindcodeMessage> messages = new ArrayList<>();
+                MindcodeCompiler compiler = new MindcodeCompiler(messages::add, compilerProfile, builder.getInputFiles());
+                compiler.compile(fileToCompile);
+
+                messages.forEach(builder::addMessage);
+                if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                     builder.error(processor, "Compile errors in Mindcode source code.");
                     yield "";
                 }
 
-                String mlog = output.output();
+                String mlog = compiler.getOutput();
                 builder.storeMlogToCache(mindcode, mlog);
                 yield mlog;
             }

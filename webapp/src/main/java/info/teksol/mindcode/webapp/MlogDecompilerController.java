@@ -1,7 +1,7 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.decompiler.MlogDecompiler;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -144,35 +144,35 @@ all-sources:
     samples: 2000
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-04.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-04.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-18.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-18.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-26.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-26.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-28.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-28.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-31.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-31.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-31b.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-31b.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-45.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-45.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\emulator\processor\euler\project-euler-97.mnd"
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-97.mnd"
     samples: 500
     defaults: run-test
 

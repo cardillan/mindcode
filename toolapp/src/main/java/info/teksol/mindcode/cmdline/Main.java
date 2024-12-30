@@ -1,7 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.Version;
-import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mc.Version;
+import info.teksol.mc.profile.CompilerProfile;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.DefaultSettings;
 import net.sourceforge.argparse4j.impl.Arguments;

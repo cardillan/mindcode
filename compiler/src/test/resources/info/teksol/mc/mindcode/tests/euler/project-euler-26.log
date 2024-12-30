@@ -1,0 +1,3923 @@
+    54 instructions before optimizations.
+     1 instructions eliminated by Temp Variables Elimination.
+     6 instructions eliminated by Dead Code Elimination (3 iterations).
+     5 instructions eliminated by Jump Optimization (3 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+   105 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
+     4 instructions modified by Loop Optimization (2 iterations).
+     4 loops improved by Loop Optimization.
+   587 instructions added by Loop Unrolling (5 iterations).
+     1 loops unrolled by Loop Unrolling.
+   520 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 966):
+  * Replicate loop condition at line 17:5                        cost     1, benefit      625.0, efficiency      625.0 (+1 instructions)
+    Replicate loop condition at line 18:5                        cost     1, benefit      625.0, efficiency      625.0
+    Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency      254.1
+
+Pass 1: speed optimization selection (cost limit 965):
+  * Replicate loop condition at line 18:5                        cost     1, benefit      625.0, efficiency      625.0 (+1 instructions)
+    Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency      254.1
+
+Pass 1: speed optimization selection (cost limit 964):
+  * Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency      254.1 (+485 instructions)
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
+ 
+    24 jump __label10 equal __tmp5 false
+    25 set __tmp0 0
+    26 jump __label3 always
+-    * set __tmp6 null
+    27 jump __label11 always
+    28 label __label10
+-    * set __tmp6 null
+    29 label __label11
+    30 set __fn0_power 1
+    31 set __fn0_i 1
+ 
+    38 jump __label15 equal __tmp9 false
+    39 set __tmp0 __fn0_i
+    40 jump __label3 always
+-    * set __tmp10 null
+    41 jump __label16 always
+    42 label __label15
+-    * set __tmp10 null
+    43 label __label16
+    44 label __label13
+    45 op add __fn0_i __fn0_i 1
+ 
+    54 jump __label17 equal __tmp11 false
+    55 set maxlen len
+    56 set maxnum d
+-    * set __tmp12 maxnum
+    57 jump __label18 always
+    58 label __label17
+-    * set __tmp12 null
+    59 label __label18
+    60 label __label1
+    61 op add d d 1
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+ 
+    32 label __label12
+    33 jump __label14 greaterThanEq __fn0_i 100
+    34 op mul __tmp7 __fn0_power 10
+-    * op mod __tmp8 __tmp7 __fn0_n
+-    * set __fn0_power __tmp8
++   35 op mod __fn0_power __tmp7 __fn0_n
+    36 op equal __tmp9 __fn0_power 1
+    37 jump __label15 equal __tmp9 false
+    38 set __tmp0 __fn0_i
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
+ 
+     6 set __fn0_n __fn0_d
+     7 label __label4
+     8 op mod __tmp1 __fn0_n 5
+-    * op equal __tmp2 __tmp1 0
+-    * jump __label6 equal __tmp2 false
++    9 jump __label6 notEqual __tmp1 0
+    10 op div __fn0_n __fn0_n 5
+    11 label __label5
+    12 jump __label4 always
+    13 label __label6
+    14 label __label7
+    15 op mod __tmp3 __fn0_n 2
+-    * op equal __tmp4 __tmp3 0
+-    * jump __label9 equal __tmp4 false
++   16 jump __label9 notEqual __tmp3 0
+    17 op div __fn0_n __fn0_n 2
+    18 label __label8
+    19 jump __label7 always
+    20 label __label9
+-    * op lessThan __tmp5 __fn0_n 2
+-    * jump __label10 equal __tmp5 false
++   21 jump __label10 greaterThanEq __fn0_n 2
+    22 set __tmp0 0
+    23 jump __label3 always
+    24 jump __label11 always
+ 
+    30 jump __label14 greaterThanEq __fn0_i 100
+    31 op mul __tmp7 __fn0_power 10
+    32 op mod __fn0_power __tmp7 __fn0_n
+-    * op equal __tmp9 __fn0_power 1
+-    * jump __label15 equal __tmp9 false
++   33 jump __label15 notEqual __fn0_power 1
+    34 set __tmp0 __fn0_i
+    35 jump __label3 always
+    36 jump __label16 always
+ 
+    45 set __tmp0 null
+    46 label __label3
+    47 set len __tmp0
+-    * op greaterThan __tmp11 len maxlen
+-    * jump __label17 equal __tmp11 false
++   48 jump __label17 lessThanEq len maxlen
+    49 set maxlen len
+    50 set maxnum d
+    51 jump __label18 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-3 instructions):
+ 
+    21 jump __label10 greaterThanEq __fn0_n 2
+    22 set __tmp0 0
+    23 jump __label3 always
+-    * jump __label11 always
+    24 label __label10
+    25 label __label11
+    26 set __fn0_power 1
+ 
+    32 jump __label15 notEqual __fn0_power 1
+    33 set __tmp0 __fn0_i
+    34 jump __label3 always
+-    * jump __label16 always
+    35 label __label15
+    36 label __label16
+    37 label __label13
+ 
+    46 jump __label17 lessThanEq len maxlen
+    47 set maxlen len
+    48 set maxnum d
+-    * jump __label18 always
+    49 label __label17
+    50 label __label18
+    51 label __label1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     3 label __label0
+     4 jump __label2 greaterThan d 100
+     5 set __fn0_d d
+-    * set __fn0_n __fn0_d
++    6 set __fn0_n d
+     7 label __label4
+     8 op mod __tmp1 __fn0_n 5
+     9 jump __label6 notEqual __tmp1 0
+ 
+    40 label __label14
+    41 print "Power of ten limit reached."
+    42 end
+-    * set __tmp0 null
+    43 label __label3
+    44 set len __tmp0
+-    * jump __label17 lessThanEq len maxlen
+-    * set maxlen len
++   45 jump __label17 lessThanEq __tmp0 maxlen
++   46 set maxlen __tmp0
+    47 set maxnum d
+    48 label __label17
+    49 label __label18
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+     2 set d 2
+     3 label __label0
+     4 jump __label2 greaterThan d 100
+-    * set __fn0_d d
+     5 set __fn0_n d
+     6 label __label4
+     7 op mod __tmp1 __fn0_n 5
+ 
+    40 print "Power of ten limit reached."
+    41 end
+    42 label __label3
+-    * set len __tmp0
+    43 jump __label17 lessThanEq __tmp0 maxlen
+    44 set maxlen __tmp0
+    45 set maxnum d
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+     1 set maxnum 0
+     2 set d 2
+     3 label __label0
+-    * jump __label2 greaterThan d 100
++    4 label __label19
+     5 set __fn0_n d
+     6 label __label4
+     7 op mod __tmp1 __fn0_n 5
+ 
+    25 set __fn0_power 1
+    26 set __fn0_i 1
+    27 label __label12
+-    * jump __label14 greaterThanEq __fn0_i 100
++   28 label __label20
+    29 op mul __tmp7 __fn0_power 10
+    30 op mod __fn0_power __tmp7 __fn0_n
+    31 jump __label15 notEqual __fn0_power 1
+ 
+    35 label __label16
+    36 label __label13
+    37 op add __fn0_i __fn0_i 1
+-    * jump __label12 always
++   38 jump __label20 lessThan __fn0_i 100
+    39 label __label14
+    40 print "Power of ten limit reached."
+    41 end
+ 
+    47 label __label18
+    48 label __label1
+    49 op add d d 1
+-    * jump __label0 always
++   50 jump __label19 lessThanEq d 100
+    51 label __label2
+    52 assertequals 97 maxnum "Project Euler 26"
+    53 stop
+
+Modifications by Replicate loop condition at line 17:5 (+1 instructions):
+ 
+     6 label __label4
+     7 op mod __tmp1 __fn0_n 5
+     8 jump __label6 notEqual __tmp1 0
++    9 label __label21
+    10 op div __fn0_n __fn0_n 5
+    11 label __label5
+-    * jump __label4 always
++   12 op mod __tmp1 __fn0_n 5
++   13 jump __label21 equal __tmp1 0
+    14 label __label6
+    15 label __label7
+    16 op mod __tmp3 __fn0_n 2
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     4 label __label19
+     5 set __fn0_n d
+     6 label __label4
+-    * op mod __tmp1 __fn0_n 5
++    7 op mod __tmp1 d 5
+     8 jump __label6 notEqual __tmp1 0
+     9 label __label21
+    10 op div __fn0_n __fn0_n 5
+
+Modifications by Replicate loop condition at line 18:5 (+1 instructions):
+ 
+    15 label __label7
+    16 op mod __tmp3 __fn0_n 2
+    17 jump __label9 notEqual __tmp3 0
++   18 label __label22
+    19 op div __fn0_n __fn0_n 2
+    20 label __label8
+-    * jump __label7 always
++   21 op mod __tmp3 __fn0_n 2
++   22 jump __label22 equal __tmp3 0
+    23 label __label9
+    24 jump __label10 greaterThanEq __fn0_n 2
+    25 set __tmp0 0
+
+Modifications by Unroll loop at line 24:5 (+587 instructions):
+ 
+    27 label __label10
+    28 label __label11
+    29 set __fn0_power 1
+-    * set __fn0_i 1
+-    * label __label12
+-    * label __label20
+-    * op mul __tmp7 __fn0_power 10
+-    * op mod __fn0_power __tmp7 __fn0_n
+-    * jump __label15 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
+-    * jump __label3 always
+-    * label __label15
+-    * label __label16
+-    * label __label13
+-    * op add __fn0_i __fn0_i 1
+-    * jump __label20 lessThan __fn0_i 100
+-    * label __label14
++   30 set __fn0_i 1
++   31 label __label23
++   32 label __label24
++   33 op mul __tmp7 __fn0_power 10
++   34 op mod __fn0_power __tmp7 __fn0_n
++   35 jump __label25 notEqual __fn0_power 1
++   36 set __tmp0 __fn0_i
++   37 jump __label3 always
++   38 label __label25
++   39 label __label26
++   40 label __label27
++   41 op add __fn0_i __fn0_i 1
++   42 label __label28
++   43 op mul __tmp7 __fn0_power 10
++   44 op mod __fn0_power __tmp7 __fn0_n
++   45 jump __label29 notEqual __fn0_power 1
++   46 set __tmp0 __fn0_i
++   47 jump __label3 always
++   48 label __label29
++   49 label __label30
++   50 label __label31
++   51 op add __fn0_i __fn0_i 1
++   52 label __label32
++   53 op mul __tmp7 __fn0_power 10
++   54 op mod __fn0_power __tmp7 __fn0_n
++   55 jump __label33 notEqual __fn0_power 1
++   56 set __tmp0 __fn0_i
++   57 jump __label3 always
++   58 label __label33
++   59 label __label34
++   60 label __label35
++   61 op add __fn0_i __fn0_i 1
++   62 label __label36
++   63 op mul __tmp7 __fn0_power 10
++   64 op mod __fn0_power __tmp7 __fn0_n
++   65 jump __label37 notEqual __fn0_power 1
++   66 set __tmp0 __fn0_i
++   67 jump __label3 always
++   68 label __label37
++   69 label __label38
++   70 label __label39
++   71 op add __fn0_i __fn0_i 1
++   72 label __label40
++   73 op mul __tmp7 __fn0_power 10
++   74 op mod __fn0_power __tmp7 __fn0_n
++   75 jump __label41 notEqual __fn0_power 1
++   76 set __tmp0 __fn0_i
++   77 jump __label3 always
++   78 label __label41
++   79 label __label42
++   80 label __label43
++   81 op add __fn0_i __fn0_i 1
++   82 label __label44
++   83 op mul __tmp7 __fn0_power 10
++   84 op mod __fn0_power __tmp7 __fn0_n
++   85 jump __label45 notEqual __fn0_power 1
++   86 set __tmp0 __fn0_i
++   87 jump __label3 always
++   88 label __label45
++   89 label __label46
++   90 label __label47
++   91 op add __fn0_i __fn0_i 1
++   92 label __label48
++   93 op mul __tmp7 __fn0_power 10
++   94 op mod __fn0_power __tmp7 __fn0_n
++   95 jump __label49 notEqual __fn0_power 1
++   96 set __tmp0 __fn0_i
++   97 jump __label3 always
++   98 label __label49
++   99 label __label50
++  100 label __label51
++  101 op add __fn0_i __fn0_i 1
++  102 label __label52
++  103 op mul __tmp7 __fn0_power 10
++  104 op mod __fn0_power __tmp7 __fn0_n
++  105 jump __label53 notEqual __fn0_power 1
++  106 set __tmp0 __fn0_i
++  107 jump __label3 always
++  108 label __label53
++  109 label __label54
++  110 label __label55
++  111 op add __fn0_i __fn0_i 1
++  112 label __label56
++  113 op mul __tmp7 __fn0_power 10
++  114 op mod __fn0_power __tmp7 __fn0_n
++  115 jump __label57 notEqual __fn0_power 1
++  116 set __tmp0 __fn0_i
++  117 jump __label3 always
++  118 label __label57
++  119 label __label58
++  120 label __label59
++  121 op add __fn0_i __fn0_i 1
++  122 label __label60
++  123 op mul __tmp7 __fn0_power 10
++  124 op mod __fn0_power __tmp7 __fn0_n
++  125 jump __label61 notEqual __fn0_power 1
++  126 set __tmp0 __fn0_i
++  127 jump __label3 always
++  128 label __label61
++  129 label __label62
++  130 label __label63
++  131 op add __fn0_i __fn0_i 1
++  132 label __label64
++  133 op mul __tmp7 __fn0_power 10
++  134 op mod __fn0_power __tmp7 __fn0_n
++  135 jump __label65 notEqual __fn0_power 1
++  136 set __tmp0 __fn0_i
++  137 jump __label3 always
++  138 label __label65
++  139 label __label66
++  140 label __label67
++  141 op add __fn0_i __fn0_i 1
++  142 label __label68
++  143 op mul __tmp7 __fn0_power 10
++  144 op mod __fn0_power __tmp7 __fn0_n
++  145 jump __label69 notEqual __fn0_power 1
++  146 set __tmp0 __fn0_i
++  147 jump __label3 always
++  148 label __label69
++  149 label __label70
++  150 label __label71
++  151 op add __fn0_i __fn0_i 1
++  152 label __label72
++  153 op mul __tmp7 __fn0_power 10
++  154 op mod __fn0_power __tmp7 __fn0_n
++  155 jump __label73 notEqual __fn0_power 1
++  156 set __tmp0 __fn0_i
++  157 jump __label3 always
++  158 label __label73
++  159 label __label74
++  160 label __label75
++  161 op add __fn0_i __fn0_i 1
++  162 label __label76
++  163 op mul __tmp7 __fn0_power 10
++  164 op mod __fn0_power __tmp7 __fn0_n
++  165 jump __label77 notEqual __fn0_power 1
++  166 set __tmp0 __fn0_i
++  167 jump __label3 always
++  168 label __label77
++  169 label __label78
++  170 label __label79
++  171 op add __fn0_i __fn0_i 1
++  172 label __label80
++  173 op mul __tmp7 __fn0_power 10
++  174 op mod __fn0_power __tmp7 __fn0_n
++  175 jump __label81 notEqual __fn0_power 1
++  176 set __tmp0 __fn0_i
++  177 jump __label3 always
++  178 label __label81
++  179 label __label82
++  180 label __label83
++  181 op add __fn0_i __fn0_i 1
++  182 label __label84
++  183 op mul __tmp7 __fn0_power 10
++  184 op mod __fn0_power __tmp7 __fn0_n
++  185 jump __label85 notEqual __fn0_power 1
++  186 set __tmp0 __fn0_i
++  187 jump __label3 always
++  188 label __label85
++  189 label __label86
++  190 label __label87
++  191 op add __fn0_i __fn0_i 1
++  192 label __label88
++  193 op mul __tmp7 __fn0_power 10
++  194 op mod __fn0_power __tmp7 __fn0_n
++  195 jump __label89 notEqual __fn0_power 1
++  196 set __tmp0 __fn0_i
++  197 jump __label3 always
++  198 label __label89
++  199 label __label90
++  200 label __label91
++  201 op add __fn0_i __fn0_i 1
++  202 label __label92
++  203 op mul __tmp7 __fn0_power 10
++  204 op mod __fn0_power __tmp7 __fn0_n
++  205 jump __label93 notEqual __fn0_power 1
++  206 set __tmp0 __fn0_i
++  207 jump __label3 always
++  208 label __label93
++  209 label __label94
++  210 label __label95
++  211 op add __fn0_i __fn0_i 1
++  212 label __label96
++  213 op mul __tmp7 __fn0_power 10
++  214 op mod __fn0_power __tmp7 __fn0_n
++  215 jump __label97 notEqual __fn0_power 1
++  216 set __tmp0 __fn0_i
++  217 jump __label3 always
++  218 label __label97
++  219 label __label98
++  220 label __label99
++  221 op add __fn0_i __fn0_i 1
++  222 label __label100
++  223 op mul __tmp7 __fn0_power 10
++  224 op mod __fn0_power __tmp7 __fn0_n
++  225 jump __label101 notEqual __fn0_power 1
++  226 set __tmp0 __fn0_i
++  227 jump __label3 always
++  228 label __label101
++  229 label __label102
++  230 label __label103
++  231 op add __fn0_i __fn0_i 1
++  232 label __label104
++  233 op mul __tmp7 __fn0_power 10
++  234 op mod __fn0_power __tmp7 __fn0_n
++  235 jump __label105 notEqual __fn0_power 1
++  236 set __tmp0 __fn0_i
++  237 jump __label3 always
++  238 label __label105
++  239 label __label106
++  240 label __label107
++  241 op add __fn0_i __fn0_i 1
++  242 label __label108
++  243 op mul __tmp7 __fn0_power 10
++  244 op mod __fn0_power __tmp7 __fn0_n
++  245 jump __label109 notEqual __fn0_power 1
++  246 set __tmp0 __fn0_i
++  247 jump __label3 always
++  248 label __label109
++  249 label __label110
++  250 label __label111
++  251 op add __fn0_i __fn0_i 1
++  252 label __label112
++  253 op mul __tmp7 __fn0_power 10
++  254 op mod __fn0_power __tmp7 __fn0_n
++  255 jump __label113 notEqual __fn0_power 1
++  256 set __tmp0 __fn0_i
++  257 jump __label3 always
++  258 label __label113
++  259 label __label114
++  260 label __label115
++  261 op add __fn0_i __fn0_i 1
++  262 label __label116
++  263 op mul __tmp7 __fn0_power 10
++  264 op mod __fn0_power __tmp7 __fn0_n
++  265 jump __label117 notEqual __fn0_power 1
++  266 set __tmp0 __fn0_i
++  267 jump __label3 always
++  268 label __label117
++  269 label __label118
++  270 label __label119
++  271 op add __fn0_i __fn0_i 1
++  272 label __label120
++  273 op mul __tmp7 __fn0_power 10
++  274 op mod __fn0_power __tmp7 __fn0_n
++  275 jump __label121 notEqual __fn0_power 1
++  276 set __tmp0 __fn0_i
++  277 jump __label3 always
++  278 label __label121
++  279 label __label122
++  280 label __label123
++  281 op add __fn0_i __fn0_i 1
++  282 label __label124
++  283 op mul __tmp7 __fn0_power 10
++  284 op mod __fn0_power __tmp7 __fn0_n
++  285 jump __label125 notEqual __fn0_power 1
++  286 set __tmp0 __fn0_i
++  287 jump __label3 always
++  288 label __label125
++  289 label __label126
++  290 label __label127
++  291 op add __fn0_i __fn0_i 1
++  292 label __label128
++  293 op mul __tmp7 __fn0_power 10
++  294 op mod __fn0_power __tmp7 __fn0_n
++  295 jump __label129 notEqual __fn0_power 1
++  296 set __tmp0 __fn0_i
++  297 jump __label3 always
++  298 label __label129
++  299 label __label130
++  300 label __label131
++  301 op add __fn0_i __fn0_i 1
++  302 label __label132
++  303 op mul __tmp7 __fn0_power 10
++  304 op mod __fn0_power __tmp7 __fn0_n
++  305 jump __label133 notEqual __fn0_power 1
++  306 set __tmp0 __fn0_i
++  307 jump __label3 always
++  308 label __label133
++  309 label __label134
++  310 label __label135
++  311 op add __fn0_i __fn0_i 1
++  312 label __label136
++  313 op mul __tmp7 __fn0_power 10
++  314 op mod __fn0_power __tmp7 __fn0_n
++  315 jump __label137 notEqual __fn0_power 1
++  316 set __tmp0 __fn0_i
++  317 jump __label3 always
++  318 label __label137
++  319 label __label138
++  320 label __label139
++  321 op add __fn0_i __fn0_i 1
++  322 label __label140
++  323 op mul __tmp7 __fn0_power 10
++  324 op mod __fn0_power __tmp7 __fn0_n
++  325 jump __label141 notEqual __fn0_power 1
++  326 set __tmp0 __fn0_i
++  327 jump __label3 always
++  328 label __label141
++  329 label __label142
++  330 label __label143
++  331 op add __fn0_i __fn0_i 1
++  332 label __label144
++  333 op mul __tmp7 __fn0_power 10
++  334 op mod __fn0_power __tmp7 __fn0_n
++  335 jump __label145 notEqual __fn0_power 1
++  336 set __tmp0 __fn0_i
++  337 jump __label3 always
++  338 label __label145
++  339 label __label146
++  340 label __label147
++  341 op add __fn0_i __fn0_i 1
++  342 label __label148
++  343 op mul __tmp7 __fn0_power 10
++  344 op mod __fn0_power __tmp7 __fn0_n
++  345 jump __label149 notEqual __fn0_power 1
++  346 set __tmp0 __fn0_i
++  347 jump __label3 always
++  348 label __label149
++  349 label __label150
++  350 label __label151
++  351 op add __fn0_i __fn0_i 1
++  352 label __label152
++  353 op mul __tmp7 __fn0_power 10
++  354 op mod __fn0_power __tmp7 __fn0_n
++  355 jump __label153 notEqual __fn0_power 1
++  356 set __tmp0 __fn0_i
++  357 jump __label3 always
++  358 label __label153
++  359 label __label154
++  360 label __label155
++  361 op add __fn0_i __fn0_i 1
++  362 label __label156
++  363 op mul __tmp7 __fn0_power 10
++  364 op mod __fn0_power __tmp7 __fn0_n
++  365 jump __label157 notEqual __fn0_power 1
++  366 set __tmp0 __fn0_i
++  367 jump __label3 always
++  368 label __label157
++  369 label __label158
++  370 label __label159
++  371 op add __fn0_i __fn0_i 1
++  372 label __label160
++  373 op mul __tmp7 __fn0_power 10
++  374 op mod __fn0_power __tmp7 __fn0_n
++  375 jump __label161 notEqual __fn0_power 1
++  376 set __tmp0 __fn0_i
++  377 jump __label3 always
++  378 label __label161
++  379 label __label162
++  380 label __label163
++  381 op add __fn0_i __fn0_i 1
++  382 label __label164
++  383 op mul __tmp7 __fn0_power 10
++  384 op mod __fn0_power __tmp7 __fn0_n
++  385 jump __label165 notEqual __fn0_power 1
++  386 set __tmp0 __fn0_i
++  387 jump __label3 always
++  388 label __label165
++  389 label __label166
++  390 label __label167
++  391 op add __fn0_i __fn0_i 1
++  392 label __label168
++  393 op mul __tmp7 __fn0_power 10
++  394 op mod __fn0_power __tmp7 __fn0_n
++  395 jump __label169 notEqual __fn0_power 1
++  396 set __tmp0 __fn0_i
++  397 jump __label3 always
++  398 label __label169
++  399 label __label170
++  400 label __label171
++  401 op add __fn0_i __fn0_i 1
++  402 label __label172
++  403 op mul __tmp7 __fn0_power 10
++  404 op mod __fn0_power __tmp7 __fn0_n
++  405 jump __label173 notEqual __fn0_power 1
++  406 set __tmp0 __fn0_i
++  407 jump __label3 always
++  408 label __label173
++  409 label __label174
++  410 label __label175
++  411 op add __fn0_i __fn0_i 1
++  412 label __label176
++  413 op mul __tmp7 __fn0_power 10
++  414 op mod __fn0_power __tmp7 __fn0_n
++  415 jump __label177 notEqual __fn0_power 1
++  416 set __tmp0 __fn0_i
++  417 jump __label3 always
++  418 label __label177
++  419 label __label178
++  420 label __label179
++  421 op add __fn0_i __fn0_i 1
++  422 label __label180
++  423 op mul __tmp7 __fn0_power 10
++  424 op mod __fn0_power __tmp7 __fn0_n
++  425 jump __label181 notEqual __fn0_power 1
++  426 set __tmp0 __fn0_i
++  427 jump __label3 always
++  428 label __label181
++  429 label __label182
++  430 label __label183
++  431 op add __fn0_i __fn0_i 1
++  432 label __label184
++  433 op mul __tmp7 __fn0_power 10
++  434 op mod __fn0_power __tmp7 __fn0_n
++  435 jump __label185 notEqual __fn0_power 1
++  436 set __tmp0 __fn0_i
++  437 jump __label3 always
++  438 label __label185
++  439 label __label186
++  440 label __label187
++  441 op add __fn0_i __fn0_i 1
++  442 label __label188
++  443 op mul __tmp7 __fn0_power 10
++  444 op mod __fn0_power __tmp7 __fn0_n
++  445 jump __label189 notEqual __fn0_power 1
++  446 set __tmp0 __fn0_i
++  447 jump __label3 always
++  448 label __label189
++  449 label __label190
++  450 label __label191
++  451 op add __fn0_i __fn0_i 1
++  452 label __label192
++  453 op mul __tmp7 __fn0_power 10
++  454 op mod __fn0_power __tmp7 __fn0_n
++  455 jump __label193 notEqual __fn0_power 1
++  456 set __tmp0 __fn0_i
++  457 jump __label3 always
++  458 label __label193
++  459 label __label194
++  460 label __label195
++  461 op add __fn0_i __fn0_i 1
++  462 label __label196
++  463 op mul __tmp7 __fn0_power 10
++  464 op mod __fn0_power __tmp7 __fn0_n
++  465 jump __label197 notEqual __fn0_power 1
++  466 set __tmp0 __fn0_i
++  467 jump __label3 always
++  468 label __label197
++  469 label __label198
++  470 label __label199
++  471 op add __fn0_i __fn0_i 1
++  472 label __label200
++  473 op mul __tmp7 __fn0_power 10
++  474 op mod __fn0_power __tmp7 __fn0_n
++  475 jump __label201 notEqual __fn0_power 1
++  476 set __tmp0 __fn0_i
++  477 jump __label3 always
++  478 label __label201
++  479 label __label202
++  480 label __label203
++  481 op add __fn0_i __fn0_i 1
++  482 label __label204
++  483 op mul __tmp7 __fn0_power 10
++  484 op mod __fn0_power __tmp7 __fn0_n
++  485 jump __label205 notEqual __fn0_power 1
++  486 set __tmp0 __fn0_i
++  487 jump __label3 always
++  488 label __label205
++  489 label __label206
++  490 label __label207
++  491 op add __fn0_i __fn0_i 1
++  492 label __label208
++  493 op mul __tmp7 __fn0_power 10
++  494 op mod __fn0_power __tmp7 __fn0_n
++  495 jump __label209 notEqual __fn0_power 1
++  496 set __tmp0 __fn0_i
++  497 jump __label3 always
++  498 label __label209
++  499 label __label210
++  500 label __label211
++  501 op add __fn0_i __fn0_i 1
++  502 label __label212
++  503 op mul __tmp7 __fn0_power 10
++  504 op mod __fn0_power __tmp7 __fn0_n
++  505 jump __label213 notEqual __fn0_power 1
++  506 set __tmp0 __fn0_i
++  507 jump __label3 always
++  508 label __label213
++  509 label __label214
++  510 label __label215
++  511 op add __fn0_i __fn0_i 1
++  512 label __label216
++  513 op mul __tmp7 __fn0_power 10
++  514 op mod __fn0_power __tmp7 __fn0_n
++  515 jump __label217 notEqual __fn0_power 1
++  516 set __tmp0 __fn0_i
++  517 jump __label3 always
++  518 label __label217
++  519 label __label218
++  520 label __label219
++  521 op add __fn0_i __fn0_i 1
++  522 label __label220
++  523 op mul __tmp7 __fn0_power 10
++  524 op mod __fn0_power __tmp7 __fn0_n
++  525 jump __label221 notEqual __fn0_power 1
++  526 set __tmp0 __fn0_i
++  527 jump __label3 always
++  528 label __label221
++  529 label __label222
++  530 label __label223
++  531 op add __fn0_i __fn0_i 1
++  532 label __label224
++  533 op mul __tmp7 __fn0_power 10
++  534 op mod __fn0_power __tmp7 __fn0_n
++  535 jump __label225 notEqual __fn0_power 1
++  536 set __tmp0 __fn0_i
++  537 jump __label3 always
++  538 label __label225
++  539 label __label226
++  540 label __label227
++  541 op add __fn0_i __fn0_i 1
++  542 label __label228
++  543 op mul __tmp7 __fn0_power 10
++  544 op mod __fn0_power __tmp7 __fn0_n
++  545 jump __label229 notEqual __fn0_power 1
++  546 set __tmp0 __fn0_i
++  547 jump __label3 always
++  548 label __label229
++  549 label __label230
++  550 label __label231
++  551 op add __fn0_i __fn0_i 1
++  552 label __label232
++  553 op mul __tmp7 __fn0_power 10
++  554 op mod __fn0_power __tmp7 __fn0_n
++  555 jump __label233 notEqual __fn0_power 1
++  556 set __tmp0 __fn0_i
++  557 jump __label3 always
++  558 label __label233
++  559 label __label234
++  560 label __label235
++  561 op add __fn0_i __fn0_i 1
++  562 label __label236
++  563 op mul __tmp7 __fn0_power 10
++  564 op mod __fn0_power __tmp7 __fn0_n
++  565 jump __label237 notEqual __fn0_power 1
++  566 set __tmp0 __fn0_i
++  567 jump __label3 always
++  568 label __label237
++  569 label __label238
++  570 label __label239
++  571 op add __fn0_i __fn0_i 1
++  572 label __label240
++  573 op mul __tmp7 __fn0_power 10
++  574 op mod __fn0_power __tmp7 __fn0_n
++  575 jump __label241 notEqual __fn0_power 1
++  576 set __tmp0 __fn0_i
++  577 jump __label3 always
++  578 label __label241
++  579 label __label242
++  580 label __label243
++  581 op add __fn0_i __fn0_i 1
++  582 label __label244
++  583 op mul __tmp7 __fn0_power 10
++  584 op mod __fn0_power __tmp7 __fn0_n
++  585 jump __label245 notEqual __fn0_power 1
++  586 set __tmp0 __fn0_i
++  587 jump __label3 always
++  588 label __label245
++  589 label __label246
++  590 label __label247
++  591 op add __fn0_i __fn0_i 1
++  592 label __label248
++  593 op mul __tmp7 __fn0_power 10
++  594 op mod __fn0_power __tmp7 __fn0_n
++  595 jump __label249 notEqual __fn0_power 1
++  596 set __tmp0 __fn0_i
++  597 jump __label3 always
++  598 label __label249
++  599 label __label250
++  600 label __label251
++  601 op add __fn0_i __fn0_i 1
++  602 label __label252
++  603 op mul __tmp7 __fn0_power 10
++  604 op mod __fn0_power __tmp7 __fn0_n
++  605 jump __label253 notEqual __fn0_power 1
++  606 set __tmp0 __fn0_i
++  607 jump __label3 always
++  608 label __label253
++  609 label __label254
++  610 label __label255
++  611 op add __fn0_i __fn0_i 1
++  612 label __label256
++  613 op mul __tmp7 __fn0_power 10
++  614 op mod __fn0_power __tmp7 __fn0_n
++  615 jump __label257 notEqual __fn0_power 1
++  616 set __tmp0 __fn0_i
++  617 jump __label3 always
++  618 label __label257
++  619 label __label258
++  620 label __label259
++  621 op add __fn0_i __fn0_i 1
++  622 label __label260
++  623 op mul __tmp7 __fn0_power 10
++  624 op mod __fn0_power __tmp7 __fn0_n
++  625 jump __label261 notEqual __fn0_power 1
++  626 set __tmp0 __fn0_i
++  627 jump __label3 always
++  628 label __label261
++  629 label __label262
++  630 label __label263
++  631 op add __fn0_i __fn0_i 1
++  632 label __label264
++  633 op mul __tmp7 __fn0_power 10
++  634 op mod __fn0_power __tmp7 __fn0_n
++  635 jump __label265 notEqual __fn0_power 1
++  636 set __tmp0 __fn0_i
++  637 jump __label3 always
++  638 label __label265
++  639 label __label266
++  640 label __label267
++  641 op add __fn0_i __fn0_i 1
++  642 label __label268
++  643 op mul __tmp7 __fn0_power 10
++  644 op mod __fn0_power __tmp7 __fn0_n
++  645 jump __label269 notEqual __fn0_power 1
++  646 set __tmp0 __fn0_i
++  647 jump __label3 always
++  648 label __label269
++  649 label __label270
++  650 label __label271
++  651 op add __fn0_i __fn0_i 1
++  652 label __label272
++  653 op mul __tmp7 __fn0_power 10
++  654 op mod __fn0_power __tmp7 __fn0_n
++  655 jump __label273 notEqual __fn0_power 1
++  656 set __tmp0 __fn0_i
++  657 jump __label3 always
++  658 label __label273
++  659 label __label274
++  660 label __label275
++  661 op add __fn0_i __fn0_i 1
++  662 label __label276
++  663 op mul __tmp7 __fn0_power 10
++  664 op mod __fn0_power __tmp7 __fn0_n
++  665 jump __label277 notEqual __fn0_power 1
++  666 set __tmp0 __fn0_i
++  667 jump __label3 always
++  668 label __label277
++  669 label __label278
++  670 label __label279
++  671 op add __fn0_i __fn0_i 1
++  672 label __label280
++  673 op mul __tmp7 __fn0_power 10
++  674 op mod __fn0_power __tmp7 __fn0_n
++  675 jump __label281 notEqual __fn0_power 1
++  676 set __tmp0 __fn0_i
++  677 jump __label3 always
++  678 label __label281
++  679 label __label282
++  680 label __label283
++  681 op add __fn0_i __fn0_i 1
++  682 label __label284
++  683 op mul __tmp7 __fn0_power 10
++  684 op mod __fn0_power __tmp7 __fn0_n
++  685 jump __label285 notEqual __fn0_power 1
++  686 set __tmp0 __fn0_i
++  687 jump __label3 always
++  688 label __label285
++  689 label __label286
++  690 label __label287
++  691 op add __fn0_i __fn0_i 1
++  692 label __label288
++  693 op mul __tmp7 __fn0_power 10
++  694 op mod __fn0_power __tmp7 __fn0_n
++  695 jump __label289 notEqual __fn0_power 1
++  696 set __tmp0 __fn0_i
++  697 jump __label3 always
++  698 label __label289
++  699 label __label290
++  700 label __label291
++  701 op add __fn0_i __fn0_i 1
++  702 label __label292
++  703 op mul __tmp7 __fn0_power 10
++  704 op mod __fn0_power __tmp7 __fn0_n
++  705 jump __label293 notEqual __fn0_power 1
++  706 set __tmp0 __fn0_i
++  707 jump __label3 always
++  708 label __label293
++  709 label __label294
++  710 label __label295
++  711 op add __fn0_i __fn0_i 1
++  712 label __label296
++  713 op mul __tmp7 __fn0_power 10
++  714 op mod __fn0_power __tmp7 __fn0_n
++  715 jump __label297 notEqual __fn0_power 1
++  716 set __tmp0 __fn0_i
++  717 jump __label3 always
++  718 label __label297
++  719 label __label298
++  720 label __label299
++  721 op add __fn0_i __fn0_i 1
++  722 label __label300
++  723 op mul __tmp7 __fn0_power 10
++  724 op mod __fn0_power __tmp7 __fn0_n
++  725 jump __label301 notEqual __fn0_power 1
++  726 set __tmp0 __fn0_i
++  727 jump __label3 always
++  728 label __label301
++  729 label __label302
++  730 label __label303
++  731 op add __fn0_i __fn0_i 1
++  732 label __label304
++  733 op mul __tmp7 __fn0_power 10
++  734 op mod __fn0_power __tmp7 __fn0_n
++  735 jump __label305 notEqual __fn0_power 1
++  736 set __tmp0 __fn0_i
++  737 jump __label3 always
++  738 label __label305
++  739 label __label306
++  740 label __label307
++  741 op add __fn0_i __fn0_i 1
++  742 label __label308
++  743 op mul __tmp7 __fn0_power 10
++  744 op mod __fn0_power __tmp7 __fn0_n
++  745 jump __label309 notEqual __fn0_power 1
++  746 set __tmp0 __fn0_i
++  747 jump __label3 always
++  748 label __label309
++  749 label __label310
++  750 label __label311
++  751 op add __fn0_i __fn0_i 1
++  752 label __label312
++  753 op mul __tmp7 __fn0_power 10
++  754 op mod __fn0_power __tmp7 __fn0_n
++  755 jump __label313 notEqual __fn0_power 1
++  756 set __tmp0 __fn0_i
++  757 jump __label3 always
++  758 label __label313
++  759 label __label314
++  760 label __label315
++  761 op add __fn0_i __fn0_i 1
++  762 label __label316
++  763 op mul __tmp7 __fn0_power 10
++  764 op mod __fn0_power __tmp7 __fn0_n
++  765 jump __label317 notEqual __fn0_power 1
++  766 set __tmp0 __fn0_i
++  767 jump __label3 always
++  768 label __label317
++  769 label __label318
++  770 label __label319
++  771 op add __fn0_i __fn0_i 1
++  772 label __label320
++  773 op mul __tmp7 __fn0_power 10
++  774 op mod __fn0_power __tmp7 __fn0_n
++  775 jump __label321 notEqual __fn0_power 1
++  776 set __tmp0 __fn0_i
++  777 jump __label3 always
++  778 label __label321
++  779 label __label322
++  780 label __label323
++  781 op add __fn0_i __fn0_i 1
++  782 label __label324
++  783 op mul __tmp7 __fn0_power 10
++  784 op mod __fn0_power __tmp7 __fn0_n
++  785 jump __label325 notEqual __fn0_power 1
++  786 set __tmp0 __fn0_i
++  787 jump __label3 always
++  788 label __label325
++  789 label __label326
++  790 label __label327
++  791 op add __fn0_i __fn0_i 1
++  792 label __label328
++  793 op mul __tmp7 __fn0_power 10
++  794 op mod __fn0_power __tmp7 __fn0_n
++  795 jump __label329 notEqual __fn0_power 1
++  796 set __tmp0 __fn0_i
++  797 jump __label3 always
++  798 label __label329
++  799 label __label330
++  800 label __label331
++  801 op add __fn0_i __fn0_i 1
++  802 label __label332
++  803 op mul __tmp7 __fn0_power 10
++  804 op mod __fn0_power __tmp7 __fn0_n
++  805 jump __label333 notEqual __fn0_power 1
++  806 set __tmp0 __fn0_i
++  807 jump __label3 always
++  808 label __label333
++  809 label __label334
++  810 label __label335
++  811 op add __fn0_i __fn0_i 1
++  812 label __label336
++  813 op mul __tmp7 __fn0_power 10
++  814 op mod __fn0_power __tmp7 __fn0_n
++  815 jump __label337 notEqual __fn0_power 1
++  816 set __tmp0 __fn0_i
++  817 jump __label3 always
++  818 label __label337
++  819 label __label338
++  820 label __label339
++  821 op add __fn0_i __fn0_i 1
++  822 label __label340
++  823 op mul __tmp7 __fn0_power 10
++  824 op mod __fn0_power __tmp7 __fn0_n
++  825 jump __label341 notEqual __fn0_power 1
++  826 set __tmp0 __fn0_i
++  827 jump __label3 always
++  828 label __label341
++  829 label __label342
++  830 label __label343
++  831 op add __fn0_i __fn0_i 1
++  832 label __label344
++  833 op mul __tmp7 __fn0_power 10
++  834 op mod __fn0_power __tmp7 __fn0_n
++  835 jump __label345 notEqual __fn0_power 1
++  836 set __tmp0 __fn0_i
++  837 jump __label3 always
++  838 label __label345
++  839 label __label346
++  840 label __label347
++  841 op add __fn0_i __fn0_i 1
++  842 label __label348
++  843 op mul __tmp7 __fn0_power 10
++  844 op mod __fn0_power __tmp7 __fn0_n
++  845 jump __label349 notEqual __fn0_power 1
++  846 set __tmp0 __fn0_i
++  847 jump __label3 always
++  848 label __label349
++  849 label __label350
++  850 label __label351
++  851 op add __fn0_i __fn0_i 1
++  852 label __label352
++  853 op mul __tmp7 __fn0_power 10
++  854 op mod __fn0_power __tmp7 __fn0_n
++  855 jump __label353 notEqual __fn0_power 1
++  856 set __tmp0 __fn0_i
++  857 jump __label3 always
++  858 label __label353
++  859 label __label354
++  860 label __label355
++  861 op add __fn0_i __fn0_i 1
++  862 label __label356
++  863 op mul __tmp7 __fn0_power 10
++  864 op mod __fn0_power __tmp7 __fn0_n
++  865 jump __label357 notEqual __fn0_power 1
++  866 set __tmp0 __fn0_i
++  867 jump __label3 always
++  868 label __label357
++  869 label __label358
++  870 label __label359
++  871 op add __fn0_i __fn0_i 1
++  872 label __label360
++  873 op mul __tmp7 __fn0_power 10
++  874 op mod __fn0_power __tmp7 __fn0_n
++  875 jump __label361 notEqual __fn0_power 1
++  876 set __tmp0 __fn0_i
++  877 jump __label3 always
++  878 label __label361
++  879 label __label362
++  880 label __label363
++  881 op add __fn0_i __fn0_i 1
++  882 label __label364
++  883 op mul __tmp7 __fn0_power 10
++  884 op mod __fn0_power __tmp7 __fn0_n
++  885 jump __label365 notEqual __fn0_power 1
++  886 set __tmp0 __fn0_i
++  887 jump __label3 always
++  888 label __label365
++  889 label __label366
++  890 label __label367
++  891 op add __fn0_i __fn0_i 1
++  892 label __label368
++  893 op mul __tmp7 __fn0_power 10
++  894 op mod __fn0_power __tmp7 __fn0_n
++  895 jump __label369 notEqual __fn0_power 1
++  896 set __tmp0 __fn0_i
++  897 jump __label3 always
++  898 label __label369
++  899 label __label370
++  900 label __label371
++  901 op add __fn0_i __fn0_i 1
++  902 label __label372
++  903 op mul __tmp7 __fn0_power 10
++  904 op mod __fn0_power __tmp7 __fn0_n
++  905 jump __label373 notEqual __fn0_power 1
++  906 set __tmp0 __fn0_i
++  907 jump __label3 always
++  908 label __label373
++  909 label __label374
++  910 label __label375
++  911 op add __fn0_i __fn0_i 1
++  912 label __label376
++  913 op mul __tmp7 __fn0_power 10
++  914 op mod __fn0_power __tmp7 __fn0_n
++  915 jump __label377 notEqual __fn0_power 1
++  916 set __tmp0 __fn0_i
++  917 jump __label3 always
++  918 label __label377
++  919 label __label378
++  920 label __label379
++  921 op add __fn0_i __fn0_i 1
++  922 label __label380
++  923 op mul __tmp7 __fn0_power 10
++  924 op mod __fn0_power __tmp7 __fn0_n
++  925 jump __label381 notEqual __fn0_power 1
++  926 set __tmp0 __fn0_i
++  927 jump __label3 always
++  928 label __label381
++  929 label __label382
++  930 label __label383
++  931 op add __fn0_i __fn0_i 1
++  932 label __label384
++  933 op mul __tmp7 __fn0_power 10
++  934 op mod __fn0_power __tmp7 __fn0_n
++  935 jump __label385 notEqual __fn0_power 1
++  936 set __tmp0 __fn0_i
++  937 jump __label3 always
++  938 label __label385
++  939 label __label386
++  940 label __label387
++  941 op add __fn0_i __fn0_i 1
++  942 label __label388
++  943 op mul __tmp7 __fn0_power 10
++  944 op mod __fn0_power __tmp7 __fn0_n
++  945 jump __label389 notEqual __fn0_power 1
++  946 set __tmp0 __fn0_i
++  947 jump __label3 always
++  948 label __label389
++  949 label __label390
++  950 label __label391
++  951 op add __fn0_i __fn0_i 1
++  952 label __label392
++  953 op mul __tmp7 __fn0_power 10
++  954 op mod __fn0_power __tmp7 __fn0_n
++  955 jump __label393 notEqual __fn0_power 1
++  956 set __tmp0 __fn0_i
++  957 jump __label3 always
++  958 label __label393
++  959 label __label394
++  960 label __label395
++  961 op add __fn0_i __fn0_i 1
++  962 label __label396
++  963 op mul __tmp7 __fn0_power 10
++  964 op mod __fn0_power __tmp7 __fn0_n
++  965 jump __label397 notEqual __fn0_power 1
++  966 set __tmp0 __fn0_i
++  967 jump __label3 always
++  968 label __label397
++  969 label __label398
++  970 label __label399
++  971 op add __fn0_i __fn0_i 1
++  972 label __label400
++  973 op mul __tmp7 __fn0_power 10
++  974 op mod __fn0_power __tmp7 __fn0_n
++  975 jump __label401 notEqual __fn0_power 1
++  976 set __tmp0 __fn0_i
++  977 jump __label3 always
++  978 label __label401
++  979 label __label402
++  980 label __label403
++  981 op add __fn0_i __fn0_i 1
++  982 label __label404
++  983 op mul __tmp7 __fn0_power 10
++  984 op mod __fn0_power __tmp7 __fn0_n
++  985 jump __label405 notEqual __fn0_power 1
++  986 set __tmp0 __fn0_i
++  987 jump __label3 always
++  988 label __label405
++  989 label __label406
++  990 label __label407
++  991 op add __fn0_i __fn0_i 1
++  992 label __label408
++  993 op mul __tmp7 __fn0_power 10
++  994 op mod __fn0_power __tmp7 __fn0_n
++  995 jump __label409 notEqual __fn0_power 1
++  996 set __tmp0 __fn0_i
++  997 jump __label3 always
++  998 label __label409
++  999 label __label410
++ 1000 label __label411
++ 1001 op add __fn0_i __fn0_i 1
++ 1002 label __label412
++ 1003 op mul __tmp7 __fn0_power 10
++ 1004 op mod __fn0_power __tmp7 __fn0_n
++ 1005 jump __label413 notEqual __fn0_power 1
++ 1006 set __tmp0 __fn0_i
++ 1007 jump __label3 always
++ 1008 label __label413
++ 1009 label __label414
++ 1010 label __label415
++ 1011 op add __fn0_i __fn0_i 1
++ 1012 label __label416
++ 1013 op mul __tmp7 __fn0_power 10
++ 1014 op mod __fn0_power __tmp7 __fn0_n
++ 1015 jump __label417 notEqual __fn0_power 1
++ 1016 set __tmp0 __fn0_i
++ 1017 jump __label3 always
++ 1018 label __label417
++ 1019 label __label418
++ 1020 label __label419
++ 1021 op add __fn0_i __fn0_i 1
++ 1022 label __label14
+  1023 print "Power of ten limit reached."
+  1024 end
+  1025 label __label3
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    30 set __fn0_i 1
+    31 label __label23
+    32 label __label24
+-    * op mul __tmp7 __fn0_power 10
+-    * op mod __fn0_power __tmp7 __fn0_n
++   33 op mul __tmp7 1 10
++   34 op mod __fn0_power 10 __fn0_n
+    35 jump __label25 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   36 set __tmp0 1
+    37 jump __label3 always
+    38 label __label25
+    39 label __label26
+    40 label __label27
+-    * op add __fn0_i __fn0_i 1
++   41 op add __fn0_i 1 1
+    42 label __label28
+    43 op mul __tmp7 __fn0_power 10
+    44 op mod __fn0_power __tmp7 __fn0_n
+    45 jump __label29 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   46 set __tmp0 2
+    47 jump __label3 always
+    48 label __label29
+    49 label __label30
+    50 label __label31
+-    * op add __fn0_i __fn0_i 1
++   51 op add __fn0_i 2 1
+    52 label __label32
+    53 op mul __tmp7 __fn0_power 10
+    54 op mod __fn0_power __tmp7 __fn0_n
+    55 jump __label33 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   56 set __tmp0 3
+    57 jump __label3 always
+    58 label __label33
+    59 label __label34
+    60 label __label35
+-    * op add __fn0_i __fn0_i 1
++   61 op add __fn0_i 3 1
+    62 label __label36
+    63 op mul __tmp7 __fn0_power 10
+    64 op mod __fn0_power __tmp7 __fn0_n
+    65 jump __label37 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   66 set __tmp0 4
+    67 jump __label3 always
+    68 label __label37
+    69 label __label38
+    70 label __label39
+-    * op add __fn0_i __fn0_i 1
++   71 op add __fn0_i 4 1
+    72 label __label40
+    73 op mul __tmp7 __fn0_power 10
+    74 op mod __fn0_power __tmp7 __fn0_n
+    75 jump __label41 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   76 set __tmp0 5
+    77 jump __label3 always
+    78 label __label41
+    79 label __label42
+    80 label __label43
+-    * op add __fn0_i __fn0_i 1
++   81 op add __fn0_i 5 1
+    82 label __label44
+    83 op mul __tmp7 __fn0_power 10
+    84 op mod __fn0_power __tmp7 __fn0_n
+    85 jump __label45 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   86 set __tmp0 6
+    87 jump __label3 always
+    88 label __label45
+    89 label __label46
+    90 label __label47
+-    * op add __fn0_i __fn0_i 1
++   91 op add __fn0_i 6 1
+    92 label __label48
+    93 op mul __tmp7 __fn0_power 10
+    94 op mod __fn0_power __tmp7 __fn0_n
+    95 jump __label49 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++   96 set __tmp0 7
+    97 jump __label3 always
+    98 label __label49
+    99 label __label50
+   100 label __label51
+-    * op add __fn0_i __fn0_i 1
++  101 op add __fn0_i 7 1
+   102 label __label52
+   103 op mul __tmp7 __fn0_power 10
+   104 op mod __fn0_power __tmp7 __fn0_n
+   105 jump __label53 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  106 set __tmp0 8
+   107 jump __label3 always
+   108 label __label53
+   109 label __label54
+   110 label __label55
+-    * op add __fn0_i __fn0_i 1
++  111 op add __fn0_i 8 1
+   112 label __label56
+   113 op mul __tmp7 __fn0_power 10
+   114 op mod __fn0_power __tmp7 __fn0_n
+   115 jump __label57 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  116 set __tmp0 9
+   117 jump __label3 always
+   118 label __label57
+   119 label __label58
+   120 label __label59
+-    * op add __fn0_i __fn0_i 1
++  121 op add __fn0_i 9 1
+   122 label __label60
+   123 op mul __tmp7 __fn0_power 10
+   124 op mod __fn0_power __tmp7 __fn0_n
+   125 jump __label61 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  126 set __tmp0 10
+   127 jump __label3 always
+   128 label __label61
+   129 label __label62
+   130 label __label63
+-    * op add __fn0_i __fn0_i 1
++  131 op add __fn0_i 10 1
+   132 label __label64
+   133 op mul __tmp7 __fn0_power 10
+   134 op mod __fn0_power __tmp7 __fn0_n
+   135 jump __label65 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  136 set __tmp0 11
+   137 jump __label3 always
+   138 label __label65
+   139 label __label66
+   140 label __label67
+-    * op add __fn0_i __fn0_i 1
++  141 op add __fn0_i 11 1
+   142 label __label68
+   143 op mul __tmp7 __fn0_power 10
+   144 op mod __fn0_power __tmp7 __fn0_n
+   145 jump __label69 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  146 set __tmp0 12
+   147 jump __label3 always
+   148 label __label69
+   149 label __label70
+   150 label __label71
+-    * op add __fn0_i __fn0_i 1
++  151 op add __fn0_i 12 1
+   152 label __label72
+   153 op mul __tmp7 __fn0_power 10
+   154 op mod __fn0_power __tmp7 __fn0_n
+   155 jump __label73 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  156 set __tmp0 13
+   157 jump __label3 always
+   158 label __label73
+   159 label __label74
+   160 label __label75
+-    * op add __fn0_i __fn0_i 1
++  161 op add __fn0_i 13 1
+   162 label __label76
+   163 op mul __tmp7 __fn0_power 10
+   164 op mod __fn0_power __tmp7 __fn0_n
+   165 jump __label77 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  166 set __tmp0 14
+   167 jump __label3 always
+   168 label __label77
+   169 label __label78
+   170 label __label79
+-    * op add __fn0_i __fn0_i 1
++  171 op add __fn0_i 14 1
+   172 label __label80
+   173 op mul __tmp7 __fn0_power 10
+   174 op mod __fn0_power __tmp7 __fn0_n
+   175 jump __label81 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  176 set __tmp0 15
+   177 jump __label3 always
+   178 label __label81
+   179 label __label82
+   180 label __label83
+-    * op add __fn0_i __fn0_i 1
++  181 op add __fn0_i 15 1
+   182 label __label84
+   183 op mul __tmp7 __fn0_power 10
+   184 op mod __fn0_power __tmp7 __fn0_n
+   185 jump __label85 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  186 set __tmp0 16
+   187 jump __label3 always
+   188 label __label85
+   189 label __label86
+   190 label __label87
+-    * op add __fn0_i __fn0_i 1
++  191 op add __fn0_i 16 1
+   192 label __label88
+   193 op mul __tmp7 __fn0_power 10
+   194 op mod __fn0_power __tmp7 __fn0_n
+   195 jump __label89 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  196 set __tmp0 17
+   197 jump __label3 always
+   198 label __label89
+   199 label __label90
+   200 label __label91
+-    * op add __fn0_i __fn0_i 1
++  201 op add __fn0_i 17 1
+   202 label __label92
+   203 op mul __tmp7 __fn0_power 10
+   204 op mod __fn0_power __tmp7 __fn0_n
+   205 jump __label93 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  206 set __tmp0 18
+   207 jump __label3 always
+   208 label __label93
+   209 label __label94
+   210 label __label95
+-    * op add __fn0_i __fn0_i 1
++  211 op add __fn0_i 18 1
+   212 label __label96
+   213 op mul __tmp7 __fn0_power 10
+   214 op mod __fn0_power __tmp7 __fn0_n
+   215 jump __label97 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  216 set __tmp0 19
+   217 jump __label3 always
+   218 label __label97
+   219 label __label98
+   220 label __label99
+-    * op add __fn0_i __fn0_i 1
++  221 op add __fn0_i 19 1
+   222 label __label100
+   223 op mul __tmp7 __fn0_power 10
+   224 op mod __fn0_power __tmp7 __fn0_n
+   225 jump __label101 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  226 set __tmp0 20
+   227 jump __label3 always
+   228 label __label101
+   229 label __label102
+   230 label __label103
+-    * op add __fn0_i __fn0_i 1
++  231 op add __fn0_i 20 1
+   232 label __label104
+   233 op mul __tmp7 __fn0_power 10
+   234 op mod __fn0_power __tmp7 __fn0_n
+   235 jump __label105 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  236 set __tmp0 21
+   237 jump __label3 always
+   238 label __label105
+   239 label __label106
+   240 label __label107
+-    * op add __fn0_i __fn0_i 1
++  241 op add __fn0_i 21 1
+   242 label __label108
+   243 op mul __tmp7 __fn0_power 10
+   244 op mod __fn0_power __tmp7 __fn0_n
+   245 jump __label109 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  246 set __tmp0 22
+   247 jump __label3 always
+   248 label __label109
+   249 label __label110
+   250 label __label111
+-    * op add __fn0_i __fn0_i 1
++  251 op add __fn0_i 22 1
+   252 label __label112
+   253 op mul __tmp7 __fn0_power 10
+   254 op mod __fn0_power __tmp7 __fn0_n
+   255 jump __label113 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  256 set __tmp0 23
+   257 jump __label3 always
+   258 label __label113
+   259 label __label114
+   260 label __label115
+-    * op add __fn0_i __fn0_i 1
++  261 op add __fn0_i 23 1
+   262 label __label116
+   263 op mul __tmp7 __fn0_power 10
+   264 op mod __fn0_power __tmp7 __fn0_n
+   265 jump __label117 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  266 set __tmp0 24
+   267 jump __label3 always
+   268 label __label117
+   269 label __label118
+   270 label __label119
+-    * op add __fn0_i __fn0_i 1
++  271 op add __fn0_i 24 1
+   272 label __label120
+   273 op mul __tmp7 __fn0_power 10
+   274 op mod __fn0_power __tmp7 __fn0_n
+   275 jump __label121 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  276 set __tmp0 25
+   277 jump __label3 always
+   278 label __label121
+   279 label __label122
+   280 label __label123
+-    * op add __fn0_i __fn0_i 1
++  281 op add __fn0_i 25 1
+   282 label __label124
+   283 op mul __tmp7 __fn0_power 10
+   284 op mod __fn0_power __tmp7 __fn0_n
+   285 jump __label125 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  286 set __tmp0 26
+   287 jump __label3 always
+   288 label __label125
+   289 label __label126
+   290 label __label127
+-    * op add __fn0_i __fn0_i 1
++  291 op add __fn0_i 26 1
+   292 label __label128
+   293 op mul __tmp7 __fn0_power 10
+   294 op mod __fn0_power __tmp7 __fn0_n
+   295 jump __label129 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  296 set __tmp0 27
+   297 jump __label3 always
+   298 label __label129
+   299 label __label130
+   300 label __label131
+-    * op add __fn0_i __fn0_i 1
++  301 op add __fn0_i 27 1
+   302 label __label132
+   303 op mul __tmp7 __fn0_power 10
+   304 op mod __fn0_power __tmp7 __fn0_n
+   305 jump __label133 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  306 set __tmp0 28
+   307 jump __label3 always
+   308 label __label133
+   309 label __label134
+   310 label __label135
+-    * op add __fn0_i __fn0_i 1
++  311 op add __fn0_i 28 1
+   312 label __label136
+   313 op mul __tmp7 __fn0_power 10
+   314 op mod __fn0_power __tmp7 __fn0_n
+   315 jump __label137 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  316 set __tmp0 29
+   317 jump __label3 always
+   318 label __label137
+   319 label __label138
+   320 label __label139
+-    * op add __fn0_i __fn0_i 1
++  321 op add __fn0_i 29 1
+   322 label __label140
+   323 op mul __tmp7 __fn0_power 10
+   324 op mod __fn0_power __tmp7 __fn0_n
+   325 jump __label141 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  326 set __tmp0 30
+   327 jump __label3 always
+   328 label __label141
+   329 label __label142
+   330 label __label143
+-    * op add __fn0_i __fn0_i 1
++  331 op add __fn0_i 30 1
+   332 label __label144
+   333 op mul __tmp7 __fn0_power 10
+   334 op mod __fn0_power __tmp7 __fn0_n
+   335 jump __label145 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  336 set __tmp0 31
+   337 jump __label3 always
+   338 label __label145
+   339 label __label146
+   340 label __label147
+-    * op add __fn0_i __fn0_i 1
++  341 op add __fn0_i 31 1
+   342 label __label148
+   343 op mul __tmp7 __fn0_power 10
+   344 op mod __fn0_power __tmp7 __fn0_n
+   345 jump __label149 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  346 set __tmp0 32
+   347 jump __label3 always
+   348 label __label149
+   349 label __label150
+   350 label __label151
+-    * op add __fn0_i __fn0_i 1
++  351 op add __fn0_i 32 1
+   352 label __label152
+   353 op mul __tmp7 __fn0_power 10
+   354 op mod __fn0_power __tmp7 __fn0_n
+   355 jump __label153 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  356 set __tmp0 33
+   357 jump __label3 always
+   358 label __label153
+   359 label __label154
+   360 label __label155
+-    * op add __fn0_i __fn0_i 1
++  361 op add __fn0_i 33 1
+   362 label __label156
+   363 op mul __tmp7 __fn0_power 10
+   364 op mod __fn0_power __tmp7 __fn0_n
+   365 jump __label157 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  366 set __tmp0 34
+   367 jump __label3 always
+   368 label __label157
+   369 label __label158
+   370 label __label159
+-    * op add __fn0_i __fn0_i 1
++  371 op add __fn0_i 34 1
+   372 label __label160
+   373 op mul __tmp7 __fn0_power 10
+   374 op mod __fn0_power __tmp7 __fn0_n
+   375 jump __label161 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  376 set __tmp0 35
+   377 jump __label3 always
+   378 label __label161
+   379 label __label162
+   380 label __label163
+-    * op add __fn0_i __fn0_i 1
++  381 op add __fn0_i 35 1
+   382 label __label164
+   383 op mul __tmp7 __fn0_power 10
+   384 op mod __fn0_power __tmp7 __fn0_n
+   385 jump __label165 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  386 set __tmp0 36
+   387 jump __label3 always
+   388 label __label165
+   389 label __label166
+   390 label __label167
+-    * op add __fn0_i __fn0_i 1
++  391 op add __fn0_i 36 1
+   392 label __label168
+   393 op mul __tmp7 __fn0_power 10
+   394 op mod __fn0_power __tmp7 __fn0_n
+   395 jump __label169 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  396 set __tmp0 37
+   397 jump __label3 always
+   398 label __label169
+   399 label __label170
+   400 label __label171
+-    * op add __fn0_i __fn0_i 1
++  401 op add __fn0_i 37 1
+   402 label __label172
+   403 op mul __tmp7 __fn0_power 10
+   404 op mod __fn0_power __tmp7 __fn0_n
+   405 jump __label173 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  406 set __tmp0 38
+   407 jump __label3 always
+   408 label __label173
+   409 label __label174
+   410 label __label175
+-    * op add __fn0_i __fn0_i 1
++  411 op add __fn0_i 38 1
+   412 label __label176
+   413 op mul __tmp7 __fn0_power 10
+   414 op mod __fn0_power __tmp7 __fn0_n
+   415 jump __label177 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  416 set __tmp0 39
+   417 jump __label3 always
+   418 label __label177
+   419 label __label178
+   420 label __label179
+-    * op add __fn0_i __fn0_i 1
++  421 op add __fn0_i 39 1
+   422 label __label180
+   423 op mul __tmp7 __fn0_power 10
+   424 op mod __fn0_power __tmp7 __fn0_n
+   425 jump __label181 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  426 set __tmp0 40
+   427 jump __label3 always
+   428 label __label181
+   429 label __label182
+   430 label __label183
+-    * op add __fn0_i __fn0_i 1
++  431 op add __fn0_i 40 1
+   432 label __label184
+   433 op mul __tmp7 __fn0_power 10
+   434 op mod __fn0_power __tmp7 __fn0_n
+   435 jump __label185 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  436 set __tmp0 41
+   437 jump __label3 always
+   438 label __label185
+   439 label __label186
+   440 label __label187
+-    * op add __fn0_i __fn0_i 1
++  441 op add __fn0_i 41 1
+   442 label __label188
+   443 op mul __tmp7 __fn0_power 10
+   444 op mod __fn0_power __tmp7 __fn0_n
+   445 jump __label189 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  446 set __tmp0 42
+   447 jump __label3 always
+   448 label __label189
+   449 label __label190
+   450 label __label191
+-    * op add __fn0_i __fn0_i 1
++  451 op add __fn0_i 42 1
+   452 label __label192
+   453 op mul __tmp7 __fn0_power 10
+   454 op mod __fn0_power __tmp7 __fn0_n
+   455 jump __label193 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  456 set __tmp0 43
+   457 jump __label3 always
+   458 label __label193
+   459 label __label194
+   460 label __label195
+-    * op add __fn0_i __fn0_i 1
++  461 op add __fn0_i 43 1
+   462 label __label196
+   463 op mul __tmp7 __fn0_power 10
+   464 op mod __fn0_power __tmp7 __fn0_n
+   465 jump __label197 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  466 set __tmp0 44
+   467 jump __label3 always
+   468 label __label197
+   469 label __label198
+   470 label __label199
+-    * op add __fn0_i __fn0_i 1
++  471 op add __fn0_i 44 1
+   472 label __label200
+   473 op mul __tmp7 __fn0_power 10
+   474 op mod __fn0_power __tmp7 __fn0_n
+   475 jump __label201 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  476 set __tmp0 45
+   477 jump __label3 always
+   478 label __label201
+   479 label __label202
+   480 label __label203
+-    * op add __fn0_i __fn0_i 1
++  481 op add __fn0_i 45 1
+   482 label __label204
+   483 op mul __tmp7 __fn0_power 10
+   484 op mod __fn0_power __tmp7 __fn0_n
+   485 jump __label205 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  486 set __tmp0 46
+   487 jump __label3 always
+   488 label __label205
+   489 label __label206
+   490 label __label207
+-    * op add __fn0_i __fn0_i 1
++  491 op add __fn0_i 46 1
+   492 label __label208
+   493 op mul __tmp7 __fn0_power 10
+   494 op mod __fn0_power __tmp7 __fn0_n
+   495 jump __label209 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  496 set __tmp0 47
+   497 jump __label3 always
+   498 label __label209
+   499 label __label210
+   500 label __label211
+-    * op add __fn0_i __fn0_i 1
++  501 op add __fn0_i 47 1
+   502 label __label212
+   503 op mul __tmp7 __fn0_power 10
+   504 op mod __fn0_power __tmp7 __fn0_n
+   505 jump __label213 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  506 set __tmp0 48
+   507 jump __label3 always
+   508 label __label213
+   509 label __label214
+   510 label __label215
+-    * op add __fn0_i __fn0_i 1
++  511 op add __fn0_i 48 1
+   512 label __label216
+   513 op mul __tmp7 __fn0_power 10
+   514 op mod __fn0_power __tmp7 __fn0_n
+   515 jump __label217 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  516 set __tmp0 49
+   517 jump __label3 always
+   518 label __label217
+   519 label __label218
+   520 label __label219
+-    * op add __fn0_i __fn0_i 1
++  521 op add __fn0_i 49 1
+   522 label __label220
+   523 op mul __tmp7 __fn0_power 10
+   524 op mod __fn0_power __tmp7 __fn0_n
+   525 jump __label221 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  526 set __tmp0 50
+   527 jump __label3 always
+   528 label __label221
+   529 label __label222
+   530 label __label223
+-    * op add __fn0_i __fn0_i 1
++  531 op add __fn0_i 50 1
+   532 label __label224
+   533 op mul __tmp7 __fn0_power 10
+   534 op mod __fn0_power __tmp7 __fn0_n
+   535 jump __label225 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  536 set __tmp0 51
+   537 jump __label3 always
+   538 label __label225
+   539 label __label226
+   540 label __label227
+-    * op add __fn0_i __fn0_i 1
++  541 op add __fn0_i 51 1
+   542 label __label228
+   543 op mul __tmp7 __fn0_power 10
+   544 op mod __fn0_power __tmp7 __fn0_n
+   545 jump __label229 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  546 set __tmp0 52
+   547 jump __label3 always
+   548 label __label229
+   549 label __label230
+   550 label __label231
+-    * op add __fn0_i __fn0_i 1
++  551 op add __fn0_i 52 1
+   552 label __label232
+   553 op mul __tmp7 __fn0_power 10
+   554 op mod __fn0_power __tmp7 __fn0_n
+   555 jump __label233 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  556 set __tmp0 53
+   557 jump __label3 always
+   558 label __label233
+   559 label __label234
+   560 label __label235
+-    * op add __fn0_i __fn0_i 1
++  561 op add __fn0_i 53 1
+   562 label __label236
+   563 op mul __tmp7 __fn0_power 10
+   564 op mod __fn0_power __tmp7 __fn0_n
+   565 jump __label237 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  566 set __tmp0 54
+   567 jump __label3 always
+   568 label __label237
+   569 label __label238
+   570 label __label239
+-    * op add __fn0_i __fn0_i 1
++  571 op add __fn0_i 54 1
+   572 label __label240
+   573 op mul __tmp7 __fn0_power 10
+   574 op mod __fn0_power __tmp7 __fn0_n
+   575 jump __label241 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  576 set __tmp0 55
+   577 jump __label3 always
+   578 label __label241
+   579 label __label242
+   580 label __label243
+-    * op add __fn0_i __fn0_i 1
++  581 op add __fn0_i 55 1
+   582 label __label244
+   583 op mul __tmp7 __fn0_power 10
+   584 op mod __fn0_power __tmp7 __fn0_n
+   585 jump __label245 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  586 set __tmp0 56
+   587 jump __label3 always
+   588 label __label245
+   589 label __label246
+   590 label __label247
+-    * op add __fn0_i __fn0_i 1
++  591 op add __fn0_i 56 1
+   592 label __label248
+   593 op mul __tmp7 __fn0_power 10
+   594 op mod __fn0_power __tmp7 __fn0_n
+   595 jump __label249 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  596 set __tmp0 57
+   597 jump __label3 always
+   598 label __label249
+   599 label __label250
+   600 label __label251
+-    * op add __fn0_i __fn0_i 1
++  601 op add __fn0_i 57 1
+   602 label __label252
+   603 op mul __tmp7 __fn0_power 10
+   604 op mod __fn0_power __tmp7 __fn0_n
+   605 jump __label253 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  606 set __tmp0 58
+   607 jump __label3 always
+   608 label __label253
+   609 label __label254
+   610 label __label255
+-    * op add __fn0_i __fn0_i 1
++  611 op add __fn0_i 58 1
+   612 label __label256
+   613 op mul __tmp7 __fn0_power 10
+   614 op mod __fn0_power __tmp7 __fn0_n
+   615 jump __label257 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  616 set __tmp0 59
+   617 jump __label3 always
+   618 label __label257
+   619 label __label258
+   620 label __label259
+-    * op add __fn0_i __fn0_i 1
++  621 op add __fn0_i 59 1
+   622 label __label260
+   623 op mul __tmp7 __fn0_power 10
+   624 op mod __fn0_power __tmp7 __fn0_n
+   625 jump __label261 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  626 set __tmp0 60
+   627 jump __label3 always
+   628 label __label261
+   629 label __label262
+   630 label __label263
+-    * op add __fn0_i __fn0_i 1
++  631 op add __fn0_i 60 1
+   632 label __label264
+   633 op mul __tmp7 __fn0_power 10
+   634 op mod __fn0_power __tmp7 __fn0_n
+   635 jump __label265 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  636 set __tmp0 61
+   637 jump __label3 always
+   638 label __label265
+   639 label __label266
+   640 label __label267
+-    * op add __fn0_i __fn0_i 1
++  641 op add __fn0_i 61 1
+   642 label __label268
+   643 op mul __tmp7 __fn0_power 10
+   644 op mod __fn0_power __tmp7 __fn0_n
+   645 jump __label269 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  646 set __tmp0 62
+   647 jump __label3 always
+   648 label __label269
+   649 label __label270
+   650 label __label271
+-    * op add __fn0_i __fn0_i 1
++  651 op add __fn0_i 62 1
+   652 label __label272
+   653 op mul __tmp7 __fn0_power 10
+   654 op mod __fn0_power __tmp7 __fn0_n
+   655 jump __label273 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  656 set __tmp0 63
+   657 jump __label3 always
+   658 label __label273
+   659 label __label274
+   660 label __label275
+-    * op add __fn0_i __fn0_i 1
++  661 op add __fn0_i 63 1
+   662 label __label276
+   663 op mul __tmp7 __fn0_power 10
+   664 op mod __fn0_power __tmp7 __fn0_n
+   665 jump __label277 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  666 set __tmp0 64
+   667 jump __label3 always
+   668 label __label277
+   669 label __label278
+   670 label __label279
+-    * op add __fn0_i __fn0_i 1
++  671 op add __fn0_i 64 1
+   672 label __label280
+   673 op mul __tmp7 __fn0_power 10
+   674 op mod __fn0_power __tmp7 __fn0_n
+   675 jump __label281 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  676 set __tmp0 65
+   677 jump __label3 always
+   678 label __label281
+   679 label __label282
+   680 label __label283
+-    * op add __fn0_i __fn0_i 1
++  681 op add __fn0_i 65 1
+   682 label __label284
+   683 op mul __tmp7 __fn0_power 10
+   684 op mod __fn0_power __tmp7 __fn0_n
+   685 jump __label285 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  686 set __tmp0 66
+   687 jump __label3 always
+   688 label __label285
+   689 label __label286
+   690 label __label287
+-    * op add __fn0_i __fn0_i 1
++  691 op add __fn0_i 66 1
+   692 label __label288
+   693 op mul __tmp7 __fn0_power 10
+   694 op mod __fn0_power __tmp7 __fn0_n
+   695 jump __label289 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  696 set __tmp0 67
+   697 jump __label3 always
+   698 label __label289
+   699 label __label290
+   700 label __label291
+-    * op add __fn0_i __fn0_i 1
++  701 op add __fn0_i 67 1
+   702 label __label292
+   703 op mul __tmp7 __fn0_power 10
+   704 op mod __fn0_power __tmp7 __fn0_n
+   705 jump __label293 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  706 set __tmp0 68
+   707 jump __label3 always
+   708 label __label293
+   709 label __label294
+   710 label __label295
+-    * op add __fn0_i __fn0_i 1
++  711 op add __fn0_i 68 1
+   712 label __label296
+   713 op mul __tmp7 __fn0_power 10
+   714 op mod __fn0_power __tmp7 __fn0_n
+   715 jump __label297 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  716 set __tmp0 69
+   717 jump __label3 always
+   718 label __label297
+   719 label __label298
+   720 label __label299
+-    * op add __fn0_i __fn0_i 1
++  721 op add __fn0_i 69 1
+   722 label __label300
+   723 op mul __tmp7 __fn0_power 10
+   724 op mod __fn0_power __tmp7 __fn0_n
+   725 jump __label301 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  726 set __tmp0 70
+   727 jump __label3 always
+   728 label __label301
+   729 label __label302
+   730 label __label303
+-    * op add __fn0_i __fn0_i 1
++  731 op add __fn0_i 70 1
+   732 label __label304
+   733 op mul __tmp7 __fn0_power 10
+   734 op mod __fn0_power __tmp7 __fn0_n
+   735 jump __label305 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  736 set __tmp0 71
+   737 jump __label3 always
+   738 label __label305
+   739 label __label306
+   740 label __label307
+-    * op add __fn0_i __fn0_i 1
++  741 op add __fn0_i 71 1
+   742 label __label308
+   743 op mul __tmp7 __fn0_power 10
+   744 op mod __fn0_power __tmp7 __fn0_n
+   745 jump __label309 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  746 set __tmp0 72
+   747 jump __label3 always
+   748 label __label309
+   749 label __label310
+   750 label __label311
+-    * op add __fn0_i __fn0_i 1
++  751 op add __fn0_i 72 1
+   752 label __label312
+   753 op mul __tmp7 __fn0_power 10
+   754 op mod __fn0_power __tmp7 __fn0_n
+   755 jump __label313 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  756 set __tmp0 73
+   757 jump __label3 always
+   758 label __label313
+   759 label __label314
+   760 label __label315
+-    * op add __fn0_i __fn0_i 1
++  761 op add __fn0_i 73 1
+   762 label __label316
+   763 op mul __tmp7 __fn0_power 10
+   764 op mod __fn0_power __tmp7 __fn0_n
+   765 jump __label317 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  766 set __tmp0 74
+   767 jump __label3 always
+   768 label __label317
+   769 label __label318
+   770 label __label319
+-    * op add __fn0_i __fn0_i 1
++  771 op add __fn0_i 74 1
+   772 label __label320
+   773 op mul __tmp7 __fn0_power 10
+   774 op mod __fn0_power __tmp7 __fn0_n
+   775 jump __label321 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  776 set __tmp0 75
+   777 jump __label3 always
+   778 label __label321
+   779 label __label322
+   780 label __label323
+-    * op add __fn0_i __fn0_i 1
++  781 op add __fn0_i 75 1
+   782 label __label324
+   783 op mul __tmp7 __fn0_power 10
+   784 op mod __fn0_power __tmp7 __fn0_n
+   785 jump __label325 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  786 set __tmp0 76
+   787 jump __label3 always
+   788 label __label325
+   789 label __label326
+   790 label __label327
+-    * op add __fn0_i __fn0_i 1
++  791 op add __fn0_i 76 1
+   792 label __label328
+   793 op mul __tmp7 __fn0_power 10
+   794 op mod __fn0_power __tmp7 __fn0_n
+   795 jump __label329 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  796 set __tmp0 77
+   797 jump __label3 always
+   798 label __label329
+   799 label __label330
+   800 label __label331
+-    * op add __fn0_i __fn0_i 1
++  801 op add __fn0_i 77 1
+   802 label __label332
+   803 op mul __tmp7 __fn0_power 10
+   804 op mod __fn0_power __tmp7 __fn0_n
+   805 jump __label333 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  806 set __tmp0 78
+   807 jump __label3 always
+   808 label __label333
+   809 label __label334
+   810 label __label335
+-    * op add __fn0_i __fn0_i 1
++  811 op add __fn0_i 78 1
+   812 label __label336
+   813 op mul __tmp7 __fn0_power 10
+   814 op mod __fn0_power __tmp7 __fn0_n
+   815 jump __label337 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  816 set __tmp0 79
+   817 jump __label3 always
+   818 label __label337
+   819 label __label338
+   820 label __label339
+-    * op add __fn0_i __fn0_i 1
++  821 op add __fn0_i 79 1
+   822 label __label340
+   823 op mul __tmp7 __fn0_power 10
+   824 op mod __fn0_power __tmp7 __fn0_n
+   825 jump __label341 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  826 set __tmp0 80
+   827 jump __label3 always
+   828 label __label341
+   829 label __label342
+   830 label __label343
+-    * op add __fn0_i __fn0_i 1
++  831 op add __fn0_i 80 1
+   832 label __label344
+   833 op mul __tmp7 __fn0_power 10
+   834 op mod __fn0_power __tmp7 __fn0_n
+   835 jump __label345 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  836 set __tmp0 81
+   837 jump __label3 always
+   838 label __label345
+   839 label __label346
+   840 label __label347
+-    * op add __fn0_i __fn0_i 1
++  841 op add __fn0_i 81 1
+   842 label __label348
+   843 op mul __tmp7 __fn0_power 10
+   844 op mod __fn0_power __tmp7 __fn0_n
+   845 jump __label349 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  846 set __tmp0 82
+   847 jump __label3 always
+   848 label __label349
+   849 label __label350
+   850 label __label351
+-    * op add __fn0_i __fn0_i 1
++  851 op add __fn0_i 82 1
+   852 label __label352
+   853 op mul __tmp7 __fn0_power 10
+   854 op mod __fn0_power __tmp7 __fn0_n
+   855 jump __label353 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  856 set __tmp0 83
+   857 jump __label3 always
+   858 label __label353
+   859 label __label354
+   860 label __label355
+-    * op add __fn0_i __fn0_i 1
++  861 op add __fn0_i 83 1
+   862 label __label356
+   863 op mul __tmp7 __fn0_power 10
+   864 op mod __fn0_power __tmp7 __fn0_n
+   865 jump __label357 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  866 set __tmp0 84
+   867 jump __label3 always
+   868 label __label357
+   869 label __label358
+   870 label __label359
+-    * op add __fn0_i __fn0_i 1
++  871 op add __fn0_i 84 1
+   872 label __label360
+   873 op mul __tmp7 __fn0_power 10
+   874 op mod __fn0_power __tmp7 __fn0_n
+   875 jump __label361 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  876 set __tmp0 85
+   877 jump __label3 always
+   878 label __label361
+   879 label __label362
+   880 label __label363
+-    * op add __fn0_i __fn0_i 1
++  881 op add __fn0_i 85 1
+   882 label __label364
+   883 op mul __tmp7 __fn0_power 10
+   884 op mod __fn0_power __tmp7 __fn0_n
+   885 jump __label365 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  886 set __tmp0 86
+   887 jump __label3 always
+   888 label __label365
+   889 label __label366
+   890 label __label367
+-    * op add __fn0_i __fn0_i 1
++  891 op add __fn0_i 86 1
+   892 label __label368
+   893 op mul __tmp7 __fn0_power 10
+   894 op mod __fn0_power __tmp7 __fn0_n
+   895 jump __label369 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  896 set __tmp0 87
+   897 jump __label3 always
+   898 label __label369
+   899 label __label370
+   900 label __label371
+-    * op add __fn0_i __fn0_i 1
++  901 op add __fn0_i 87 1
+   902 label __label372
+   903 op mul __tmp7 __fn0_power 10
+   904 op mod __fn0_power __tmp7 __fn0_n
+   905 jump __label373 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  906 set __tmp0 88
+   907 jump __label3 always
+   908 label __label373
+   909 label __label374
+   910 label __label375
+-    * op add __fn0_i __fn0_i 1
++  911 op add __fn0_i 88 1
+   912 label __label376
+   913 op mul __tmp7 __fn0_power 10
+   914 op mod __fn0_power __tmp7 __fn0_n
+   915 jump __label377 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  916 set __tmp0 89
+   917 jump __label3 always
+   918 label __label377
+   919 label __label378
+   920 label __label379
+-    * op add __fn0_i __fn0_i 1
++  921 op add __fn0_i 89 1
+   922 label __label380
+   923 op mul __tmp7 __fn0_power 10
+   924 op mod __fn0_power __tmp7 __fn0_n
+   925 jump __label381 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  926 set __tmp0 90
+   927 jump __label3 always
+   928 label __label381
+   929 label __label382
+   930 label __label383
+-    * op add __fn0_i __fn0_i 1
++  931 op add __fn0_i 90 1
+   932 label __label384
+   933 op mul __tmp7 __fn0_power 10
+   934 op mod __fn0_power __tmp7 __fn0_n
+   935 jump __label385 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  936 set __tmp0 91
+   937 jump __label3 always
+   938 label __label385
+   939 label __label386
+   940 label __label387
+-    * op add __fn0_i __fn0_i 1
++  941 op add __fn0_i 91 1
+   942 label __label388
+   943 op mul __tmp7 __fn0_power 10
+   944 op mod __fn0_power __tmp7 __fn0_n
+   945 jump __label389 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  946 set __tmp0 92
+   947 jump __label3 always
+   948 label __label389
+   949 label __label390
+   950 label __label391
+-    * op add __fn0_i __fn0_i 1
++  951 op add __fn0_i 92 1
+   952 label __label392
+   953 op mul __tmp7 __fn0_power 10
+   954 op mod __fn0_power __tmp7 __fn0_n
+   955 jump __label393 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  956 set __tmp0 93
+   957 jump __label3 always
+   958 label __label393
+   959 label __label394
+   960 label __label395
+-    * op add __fn0_i __fn0_i 1
++  961 op add __fn0_i 93 1
+   962 label __label396
+   963 op mul __tmp7 __fn0_power 10
+   964 op mod __fn0_power __tmp7 __fn0_n
+   965 jump __label397 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  966 set __tmp0 94
+   967 jump __label3 always
+   968 label __label397
+   969 label __label398
+   970 label __label399
+-    * op add __fn0_i __fn0_i 1
++  971 op add __fn0_i 94 1
+   972 label __label400
+   973 op mul __tmp7 __fn0_power 10
+   974 op mod __fn0_power __tmp7 __fn0_n
+   975 jump __label401 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  976 set __tmp0 95
+   977 jump __label3 always
+   978 label __label401
+   979 label __label402
+   980 label __label403
+-    * op add __fn0_i __fn0_i 1
++  981 op add __fn0_i 95 1
+   982 label __label404
+   983 op mul __tmp7 __fn0_power 10
+   984 op mod __fn0_power __tmp7 __fn0_n
+   985 jump __label405 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  986 set __tmp0 96
+   987 jump __label3 always
+   988 label __label405
+   989 label __label406
+   990 label __label407
+-    * op add __fn0_i __fn0_i 1
++  991 op add __fn0_i 96 1
+   992 label __label408
+   993 op mul __tmp7 __fn0_power 10
+   994 op mod __fn0_power __tmp7 __fn0_n
+   995 jump __label409 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++  996 set __tmp0 97
+   997 jump __label3 always
+   998 label __label409
+   999 label __label410
+  1000 label __label411
+-    * op add __fn0_i __fn0_i 1
++ 1001 op add __fn0_i 97 1
+  1002 label __label412
+  1003 op mul __tmp7 __fn0_power 10
+  1004 op mod __fn0_power __tmp7 __fn0_n
+  1005 jump __label413 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++ 1006 set __tmp0 98
+  1007 jump __label3 always
+  1008 label __label413
+  1009 label __label414
+  1010 label __label415
+-    * op add __fn0_i __fn0_i 1
++ 1011 op add __fn0_i 98 1
+  1012 label __label416
+  1013 op mul __tmp7 __fn0_power 10
+  1014 op mod __fn0_power __tmp7 __fn0_n
+  1015 jump __label417 notEqual __fn0_power 1
+-    * set __tmp0 __fn0_i
++ 1016 set __tmp0 99
+  1017 jump __label3 always
+  1018 label __label417
+  1019 label __label418
+  1020 label __label419
+-    * op add __fn0_i __fn0_i 1
++ 1021 op add __fn0_i 99 1
+  1022 label __label14
+  1023 print "Power of ten limit reached."
+  1024 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-102 instructions):
+ 
+    26 jump __label3 always
+    27 label __label10
+    28 label __label11
+-    * set __fn0_power 1
+-    * set __fn0_i 1
+    29 label __label23
+    30 label __label24
+-    * op mul __tmp7 1 10
+    31 op mod __fn0_power 10 __fn0_n
+    32 jump __label25 notEqual __fn0_power 1
+    33 set __tmp0 1
+ 
+    35 label __label25
+    36 label __label26
+    37 label __label27
+-    * op add __fn0_i 1 1
+    38 label __label28
+    39 op mul __tmp7 __fn0_power 10
+    40 op mod __fn0_power __tmp7 __fn0_n
+ 
+    44 label __label29
+    45 label __label30
+    46 label __label31
+-    * op add __fn0_i 2 1
+    47 label __label32
+    48 op mul __tmp7 __fn0_power 10
+    49 op mod __fn0_power __tmp7 __fn0_n
+ 
+    53 label __label33
+    54 label __label34
+    55 label __label35
+-    * op add __fn0_i 3 1
+    56 label __label36
+    57 op mul __tmp7 __fn0_power 10
+    58 op mod __fn0_power __tmp7 __fn0_n
+ 
+    62 label __label37
+    63 label __label38
+    64 label __label39
+-    * op add __fn0_i 4 1
+    65 label __label40
+    66 op mul __tmp7 __fn0_power 10
+    67 op mod __fn0_power __tmp7 __fn0_n
+ 
+    71 label __label41
+    72 label __label42
+    73 label __label43
+-    * op add __fn0_i 5 1
+    74 label __label44
+    75 op mul __tmp7 __fn0_power 10
+    76 op mod __fn0_power __tmp7 __fn0_n
+ 
+    80 label __label45
+    81 label __label46
+    82 label __label47
+-    * op add __fn0_i 6 1
+    83 label __label48
+    84 op mul __tmp7 __fn0_power 10
+    85 op mod __fn0_power __tmp7 __fn0_n
+ 
+    89 label __label49
+    90 label __label50
+    91 label __label51
+-    * op add __fn0_i 7 1
+    92 label __label52
+    93 op mul __tmp7 __fn0_power 10
+    94 op mod __fn0_power __tmp7 __fn0_n
+ 
+    98 label __label53
+    99 label __label54
+   100 label __label55
+-    * op add __fn0_i 8 1
+   101 label __label56
+   102 op mul __tmp7 __fn0_power 10
+   103 op mod __fn0_power __tmp7 __fn0_n
+ 
+   107 label __label57
+   108 label __label58
+   109 label __label59
+-    * op add __fn0_i 9 1
+   110 label __label60
+   111 op mul __tmp7 __fn0_power 10
+   112 op mod __fn0_power __tmp7 __fn0_n
+ 
+   116 label __label61
+   117 label __label62
+   118 label __label63
+-    * op add __fn0_i 10 1
+   119 label __label64
+   120 op mul __tmp7 __fn0_power 10
+   121 op mod __fn0_power __tmp7 __fn0_n
+ 
+   125 label __label65
+   126 label __label66
+   127 label __label67
+-    * op add __fn0_i 11 1
+   128 label __label68
+   129 op mul __tmp7 __fn0_power 10
+   130 op mod __fn0_power __tmp7 __fn0_n
+ 
+   134 label __label69
+   135 label __label70
+   136 label __label71
+-    * op add __fn0_i 12 1
+   137 label __label72
+   138 op mul __tmp7 __fn0_power 10
+   139 op mod __fn0_power __tmp7 __fn0_n
+ 
+   143 label __label73
+   144 label __label74
+   145 label __label75
+-    * op add __fn0_i 13 1
+   146 label __label76
+   147 op mul __tmp7 __fn0_power 10
+   148 op mod __fn0_power __tmp7 __fn0_n
+ 
+   152 label __label77
+   153 label __label78
+   154 label __label79
+-    * op add __fn0_i 14 1
+   155 label __label80
+   156 op mul __tmp7 __fn0_power 10
+   157 op mod __fn0_power __tmp7 __fn0_n
+ 
+   161 label __label81
+   162 label __label82
+   163 label __label83
+-    * op add __fn0_i 15 1
+   164 label __label84
+   165 op mul __tmp7 __fn0_power 10
+   166 op mod __fn0_power __tmp7 __fn0_n
+ 
+   170 label __label85
+   171 label __label86
+   172 label __label87
+-    * op add __fn0_i 16 1
+   173 label __label88
+   174 op mul __tmp7 __fn0_power 10
+   175 op mod __fn0_power __tmp7 __fn0_n
+ 
+   179 label __label89
+   180 label __label90
+   181 label __label91
+-    * op add __fn0_i 17 1
+   182 label __label92
+   183 op mul __tmp7 __fn0_power 10
+   184 op mod __fn0_power __tmp7 __fn0_n
+ 
+   188 label __label93
+   189 label __label94
+   190 label __label95
+-    * op add __fn0_i 18 1
+   191 label __label96
+   192 op mul __tmp7 __fn0_power 10
+   193 op mod __fn0_power __tmp7 __fn0_n
+ 
+   197 label __label97
+   198 label __label98
+   199 label __label99
+-    * op add __fn0_i 19 1
+   200 label __label100
+   201 op mul __tmp7 __fn0_power 10
+   202 op mod __fn0_power __tmp7 __fn0_n
+ 
+   206 label __label101
+   207 label __label102
+   208 label __label103
+-    * op add __fn0_i 20 1
+   209 label __label104
+   210 op mul __tmp7 __fn0_power 10
+   211 op mod __fn0_power __tmp7 __fn0_n
+ 
+   215 label __label105
+   216 label __label106
+   217 label __label107
+-    * op add __fn0_i 21 1
+   218 label __label108
+   219 op mul __tmp7 __fn0_power 10
+   220 op mod __fn0_power __tmp7 __fn0_n
+ 
+   224 label __label109
+   225 label __label110
+   226 label __label111
+-    * op add __fn0_i 22 1
+   227 label __label112
+   228 op mul __tmp7 __fn0_power 10
+   229 op mod __fn0_power __tmp7 __fn0_n
+ 
+   233 label __label113
+   234 label __label114
+   235 label __label115
+-    * op add __fn0_i 23 1
+   236 label __label116
+   237 op mul __tmp7 __fn0_power 10
+   238 op mod __fn0_power __tmp7 __fn0_n
+ 
+   242 label __label117
+   243 label __label118
+   244 label __label119
+-    * op add __fn0_i 24 1
+   245 label __label120
+   246 op mul __tmp7 __fn0_power 10
+   247 op mod __fn0_power __tmp7 __fn0_n
+ 
+   251 label __label121
+   252 label __label122
+   253 label __label123
+-    * op add __fn0_i 25 1
+   254 label __label124
+   255 op mul __tmp7 __fn0_power 10
+   256 op mod __fn0_power __tmp7 __fn0_n
+ 
+   260 label __label125
+   261 label __label126
+   262 label __label127
+-    * op add __fn0_i 26 1
+   263 label __label128
+   264 op mul __tmp7 __fn0_power 10
+   265 op mod __fn0_power __tmp7 __fn0_n
+ 
+   269 label __label129
+   270 label __label130
+   271 label __label131
+-    * op add __fn0_i 27 1
+   272 label __label132
+   273 op mul __tmp7 __fn0_power 10
+   274 op mod __fn0_power __tmp7 __fn0_n
+ 
+   278 label __label133
+   279 label __label134
+   280 label __label135
+-    * op add __fn0_i 28 1
+   281 label __label136
+   282 op mul __tmp7 __fn0_power 10
+   283 op mod __fn0_power __tmp7 __fn0_n
+ 
+   287 label __label137
+   288 label __label138
+   289 label __label139
+-    * op add __fn0_i 29 1
+   290 label __label140
+   291 op mul __tmp7 __fn0_power 10
+   292 op mod __fn0_power __tmp7 __fn0_n
+ 
+   296 label __label141
+   297 label __label142
+   298 label __label143
+-    * op add __fn0_i 30 1
+   299 label __label144
+   300 op mul __tmp7 __fn0_power 10
+   301 op mod __fn0_power __tmp7 __fn0_n
+ 
+   305 label __label145
+   306 label __label146
+   307 label __label147
+-    * op add __fn0_i 31 1
+   308 label __label148
+   309 op mul __tmp7 __fn0_power 10
+   310 op mod __fn0_power __tmp7 __fn0_n
+ 
+   314 label __label149
+   315 label __label150
+   316 label __label151
+-    * op add __fn0_i 32 1
+   317 label __label152
+   318 op mul __tmp7 __fn0_power 10
+   319 op mod __fn0_power __tmp7 __fn0_n
+ 
+   323 label __label153
+   324 label __label154
+   325 label __label155
+-    * op add __fn0_i 33 1
+   326 label __label156
+   327 op mul __tmp7 __fn0_power 10
+   328 op mod __fn0_power __tmp7 __fn0_n
+ 
+   332 label __label157
+   333 label __label158
+   334 label __label159
+-    * op add __fn0_i 34 1
+   335 label __label160
+   336 op mul __tmp7 __fn0_power 10
+   337 op mod __fn0_power __tmp7 __fn0_n
+ 
+   341 label __label161
+   342 label __label162
+   343 label __label163
+-    * op add __fn0_i 35 1
+   344 label __label164
+   345 op mul __tmp7 __fn0_power 10
+   346 op mod __fn0_power __tmp7 __fn0_n
+ 
+   350 label __label165
+   351 label __label166
+   352 label __label167
+-    * op add __fn0_i 36 1
+   353 label __label168
+   354 op mul __tmp7 __fn0_power 10
+   355 op mod __fn0_power __tmp7 __fn0_n
+ 
+   359 label __label169
+   360 label __label170
+   361 label __label171
+-    * op add __fn0_i 37 1
+   362 label __label172
+   363 op mul __tmp7 __fn0_power 10
+   364 op mod __fn0_power __tmp7 __fn0_n
+ 
+   368 label __label173
+   369 label __label174
+   370 label __label175
+-    * op add __fn0_i 38 1
+   371 label __label176
+   372 op mul __tmp7 __fn0_power 10
+   373 op mod __fn0_power __tmp7 __fn0_n
+ 
+   377 label __label177
+   378 label __label178
+   379 label __label179
+-    * op add __fn0_i 39 1
+   380 label __label180
+   381 op mul __tmp7 __fn0_power 10
+   382 op mod __fn0_power __tmp7 __fn0_n
+ 
+   386 label __label181
+   387 label __label182
+   388 label __label183
+-    * op add __fn0_i 40 1
+   389 label __label184
+   390 op mul __tmp7 __fn0_power 10
+   391 op mod __fn0_power __tmp7 __fn0_n
+ 
+   395 label __label185
+   396 label __label186
+   397 label __label187
+-    * op add __fn0_i 41 1
+   398 label __label188
+   399 op mul __tmp7 __fn0_power 10
+   400 op mod __fn0_power __tmp7 __fn0_n
+ 
+   404 label __label189
+   405 label __label190
+   406 label __label191
+-    * op add __fn0_i 42 1
+   407 label __label192
+   408 op mul __tmp7 __fn0_power 10
+   409 op mod __fn0_power __tmp7 __fn0_n
+ 
+   413 label __label193
+   414 label __label194
+   415 label __label195
+-    * op add __fn0_i 43 1
+   416 label __label196
+   417 op mul __tmp7 __fn0_power 10
+   418 op mod __fn0_power __tmp7 __fn0_n
+ 
+   422 label __label197
+   423 label __label198
+   424 label __label199
+-    * op add __fn0_i 44 1
+   425 label __label200
+   426 op mul __tmp7 __fn0_power 10
+   427 op mod __fn0_power __tmp7 __fn0_n
+ 
+   431 label __label201
+   432 label __label202
+   433 label __label203
+-    * op add __fn0_i 45 1
+   434 label __label204
+   435 op mul __tmp7 __fn0_power 10
+   436 op mod __fn0_power __tmp7 __fn0_n
+ 
+   440 label __label205
+   441 label __label206
+   442 label __label207
+-    * op add __fn0_i 46 1
+   443 label __label208
+   444 op mul __tmp7 __fn0_power 10
+   445 op mod __fn0_power __tmp7 __fn0_n
+ 
+   449 label __label209
+   450 label __label210
+   451 label __label211
+-    * op add __fn0_i 47 1
+   452 label __label212
+   453 op mul __tmp7 __fn0_power 10
+   454 op mod __fn0_power __tmp7 __fn0_n
+ 
+   458 label __label213
+   459 label __label214
+   460 label __label215
+-    * op add __fn0_i 48 1
+   461 label __label216
+   462 op mul __tmp7 __fn0_power 10
+   463 op mod __fn0_power __tmp7 __fn0_n
+ 
+   467 label __label217
+   468 label __label218
+   469 label __label219
+-    * op add __fn0_i 49 1
+   470 label __label220
+   471 op mul __tmp7 __fn0_power 10
+   472 op mod __fn0_power __tmp7 __fn0_n
+ 
+   476 label __label221
+   477 label __label222
+   478 label __label223
+-    * op add __fn0_i 50 1
+   479 label __label224
+   480 op mul __tmp7 __fn0_power 10
+   481 op mod __fn0_power __tmp7 __fn0_n
+ 
+   485 label __label225
+   486 label __label226
+   487 label __label227
+-    * op add __fn0_i 51 1
+   488 label __label228
+   489 op mul __tmp7 __fn0_power 10
+   490 op mod __fn0_power __tmp7 __fn0_n
+ 
+   494 label __label229
+   495 label __label230
+   496 label __label231
+-    * op add __fn0_i 52 1
+   497 label __label232
+   498 op mul __tmp7 __fn0_power 10
+   499 op mod __fn0_power __tmp7 __fn0_n
+ 
+   503 label __label233
+   504 label __label234
+   505 label __label235
+-    * op add __fn0_i 53 1
+   506 label __label236
+   507 op mul __tmp7 __fn0_power 10
+   508 op mod __fn0_power __tmp7 __fn0_n
+ 
+   512 label __label237
+   513 label __label238
+   514 label __label239
+-    * op add __fn0_i 54 1
+   515 label __label240
+   516 op mul __tmp7 __fn0_power 10
+   517 op mod __fn0_power __tmp7 __fn0_n
+ 
+   521 label __label241
+   522 label __label242
+   523 label __label243
+-    * op add __fn0_i 55 1
+   524 label __label244
+   525 op mul __tmp7 __fn0_power 10
+   526 op mod __fn0_power __tmp7 __fn0_n
+ 
+   530 label __label245
+   531 label __label246
+   532 label __label247
+-    * op add __fn0_i 56 1
+   533 label __label248
+   534 op mul __tmp7 __fn0_power 10
+   535 op mod __fn0_power __tmp7 __fn0_n
+ 
+   539 label __label249
+   540 label __label250
+   541 label __label251
+-    * op add __fn0_i 57 1
+   542 label __label252
+   543 op mul __tmp7 __fn0_power 10
+   544 op mod __fn0_power __tmp7 __fn0_n
+ 
+   548 label __label253
+   549 label __label254
+   550 label __label255
+-    * op add __fn0_i 58 1
+   551 label __label256
+   552 op mul __tmp7 __fn0_power 10
+   553 op mod __fn0_power __tmp7 __fn0_n
+ 
+   557 label __label257
+   558 label __label258
+   559 label __label259
+-    * op add __fn0_i 59 1
+   560 label __label260
+   561 op mul __tmp7 __fn0_power 10
+   562 op mod __fn0_power __tmp7 __fn0_n
+ 
+   566 label __label261
+   567 label __label262
+   568 label __label263
+-    * op add __fn0_i 60 1
+   569 label __label264
+   570 op mul __tmp7 __fn0_power 10
+   571 op mod __fn0_power __tmp7 __fn0_n
+ 
+   575 label __label265
+   576 label __label266
+   577 label __label267
+-    * op add __fn0_i 61 1
+   578 label __label268
+   579 op mul __tmp7 __fn0_power 10
+   580 op mod __fn0_power __tmp7 __fn0_n
+ 
+   584 label __label269
+   585 label __label270
+   586 label __label271
+-    * op add __fn0_i 62 1
+   587 label __label272
+   588 op mul __tmp7 __fn0_power 10
+   589 op mod __fn0_power __tmp7 __fn0_n
+ 
+   593 label __label273
+   594 label __label274
+   595 label __label275
+-    * op add __fn0_i 63 1
+   596 label __label276
+   597 op mul __tmp7 __fn0_power 10
+   598 op mod __fn0_power __tmp7 __fn0_n
+ 
+   602 label __label277
+   603 label __label278
+   604 label __label279
+-    * op add __fn0_i 64 1
+   605 label __label280
+   606 op mul __tmp7 __fn0_power 10
+   607 op mod __fn0_power __tmp7 __fn0_n
+ 
+   611 label __label281
+   612 label __label282
+   613 label __label283
+-    * op add __fn0_i 65 1
+   614 label __label284
+   615 op mul __tmp7 __fn0_power 10
+   616 op mod __fn0_power __tmp7 __fn0_n
+ 
+   620 label __label285
+   621 label __label286
+   622 label __label287
+-    * op add __fn0_i 66 1
+   623 label __label288
+   624 op mul __tmp7 __fn0_power 10
+   625 op mod __fn0_power __tmp7 __fn0_n
+ 
+   629 label __label289
+   630 label __label290
+   631 label __label291
+-    * op add __fn0_i 67 1
+   632 label __label292
+   633 op mul __tmp7 __fn0_power 10
+   634 op mod __fn0_power __tmp7 __fn0_n
+ 
+   638 label __label293
+   639 label __label294
+   640 label __label295
+-    * op add __fn0_i 68 1
+   641 label __label296
+   642 op mul __tmp7 __fn0_power 10
+   643 op mod __fn0_power __tmp7 __fn0_n
+ 
+   647 label __label297
+   648 label __label298
+   649 label __label299
+-    * op add __fn0_i 69 1
+   650 label __label300
+   651 op mul __tmp7 __fn0_power 10
+   652 op mod __fn0_power __tmp7 __fn0_n
+ 
+   656 label __label301
+   657 label __label302
+   658 label __label303
+-    * op add __fn0_i 70 1
+   659 label __label304
+   660 op mul __tmp7 __fn0_power 10
+   661 op mod __fn0_power __tmp7 __fn0_n
+ 
+   665 label __label305
+   666 label __label306
+   667 label __label307
+-    * op add __fn0_i 71 1
+   668 label __label308
+   669 op mul __tmp7 __fn0_power 10
+   670 op mod __fn0_power __tmp7 __fn0_n
+ 
+   674 label __label309
+   675 label __label310
+   676 label __label311
+-    * op add __fn0_i 72 1
+   677 label __label312
+   678 op mul __tmp7 __fn0_power 10
+   679 op mod __fn0_power __tmp7 __fn0_n
+ 
+   683 label __label313
+   684 label __label314
+   685 label __label315
+-    * op add __fn0_i 73 1
+   686 label __label316
+   687 op mul __tmp7 __fn0_power 10
+   688 op mod __fn0_power __tmp7 __fn0_n
+ 
+   692 label __label317
+   693 label __label318
+   694 label __label319
+-    * op add __fn0_i 74 1
+   695 label __label320
+   696 op mul __tmp7 __fn0_power 10
+   697 op mod __fn0_power __tmp7 __fn0_n
+ 
+   701 label __label321
+   702 label __label322
+   703 label __label323
+-    * op add __fn0_i 75 1
+   704 label __label324
+   705 op mul __tmp7 __fn0_power 10
+   706 op mod __fn0_power __tmp7 __fn0_n
+ 
+   710 label __label325
+   711 label __label326
+   712 label __label327
+-    * op add __fn0_i 76 1
+   713 label __label328
+   714 op mul __tmp7 __fn0_power 10
+   715 op mod __fn0_power __tmp7 __fn0_n
+ 
+   719 label __label329
+   720 label __label330
+   721 label __label331
+-    * op add __fn0_i 77 1
+   722 label __label332
+   723 op mul __tmp7 __fn0_power 10
+   724 op mod __fn0_power __tmp7 __fn0_n
+ 
+   728 label __label333
+   729 label __label334
+   730 label __label335
+-    * op add __fn0_i 78 1
+   731 label __label336
+   732 op mul __tmp7 __fn0_power 10
+   733 op mod __fn0_power __tmp7 __fn0_n
+ 
+   737 label __label337
+   738 label __label338
+   739 label __label339
+-    * op add __fn0_i 79 1
+   740 label __label340
+   741 op mul __tmp7 __fn0_power 10
+   742 op mod __fn0_power __tmp7 __fn0_n
+ 
+   746 label __label341
+   747 label __label342
+   748 label __label343
+-    * op add __fn0_i 80 1
+   749 label __label344
+   750 op mul __tmp7 __fn0_power 10
+   751 op mod __fn0_power __tmp7 __fn0_n
+ 
+   755 label __label345
+   756 label __label346
+   757 label __label347
+-    * op add __fn0_i 81 1
+   758 label __label348
+   759 op mul __tmp7 __fn0_power 10
+   760 op mod __fn0_power __tmp7 __fn0_n
+ 
+   764 label __label349
+   765 label __label350
+   766 label __label351
+-    * op add __fn0_i 82 1
+   767 label __label352
+   768 op mul __tmp7 __fn0_power 10
+   769 op mod __fn0_power __tmp7 __fn0_n
+ 
+   773 label __label353
+   774 label __label354
+   775 label __label355
+-    * op add __fn0_i 83 1
+   776 label __label356
+   777 op mul __tmp7 __fn0_power 10
+   778 op mod __fn0_power __tmp7 __fn0_n
+ 
+   782 label __label357
+   783 label __label358
+   784 label __label359
+-    * op add __fn0_i 84 1
+   785 label __label360
+   786 op mul __tmp7 __fn0_power 10
+   787 op mod __fn0_power __tmp7 __fn0_n
+ 
+   791 label __label361
+   792 label __label362
+   793 label __label363
+-    * op add __fn0_i 85 1
+   794 label __label364
+   795 op mul __tmp7 __fn0_power 10
+   796 op mod __fn0_power __tmp7 __fn0_n
+ 
+   800 label __label365
+   801 label __label366
+   802 label __label367
+-    * op add __fn0_i 86 1
+   803 label __label368
+   804 op mul __tmp7 __fn0_power 10
+   805 op mod __fn0_power __tmp7 __fn0_n
+ 
+   809 label __label369
+   810 label __label370
+   811 label __label371
+-    * op add __fn0_i 87 1
+   812 label __label372
+   813 op mul __tmp7 __fn0_power 10
+   814 op mod __fn0_power __tmp7 __fn0_n
+ 
+   818 label __label373
+   819 label __label374
+   820 label __label375
+-    * op add __fn0_i 88 1
+   821 label __label376
+   822 op mul __tmp7 __fn0_power 10
+   823 op mod __fn0_power __tmp7 __fn0_n
+ 
+   827 label __label377
+   828 label __label378
+   829 label __label379
+-    * op add __fn0_i 89 1
+   830 label __label380
+   831 op mul __tmp7 __fn0_power 10
+   832 op mod __fn0_power __tmp7 __fn0_n
+ 
+   836 label __label381
+   837 label __label382
+   838 label __label383
+-    * op add __fn0_i 90 1
+   839 label __label384
+   840 op mul __tmp7 __fn0_power 10
+   841 op mod __fn0_power __tmp7 __fn0_n
+ 
+   845 label __label385
+   846 label __label386
+   847 label __label387
+-    * op add __fn0_i 91 1
+   848 label __label388
+   849 op mul __tmp7 __fn0_power 10
+   850 op mod __fn0_power __tmp7 __fn0_n
+ 
+   854 label __label389
+   855 label __label390
+   856 label __label391
+-    * op add __fn0_i 92 1
+   857 label __label392
+   858 op mul __tmp7 __fn0_power 10
+   859 op mod __fn0_power __tmp7 __fn0_n
+ 
+   863 label __label393
+   864 label __label394
+   865 label __label395
+-    * op add __fn0_i 93 1
+   866 label __label396
+   867 op mul __tmp7 __fn0_power 10
+   868 op mod __fn0_power __tmp7 __fn0_n
+ 
+   872 label __label397
+   873 label __label398
+   874 label __label399
+-    * op add __fn0_i 94 1
+   875 label __label400
+   876 op mul __tmp7 __fn0_power 10
+   877 op mod __fn0_power __tmp7 __fn0_n
+ 
+   881 label __label401
+   882 label __label402
+   883 label __label403
+-    * op add __fn0_i 95 1
+   884 label __label404
+   885 op mul __tmp7 __fn0_power 10
+   886 op mod __fn0_power __tmp7 __fn0_n
+ 
+   890 label __label405
+   891 label __label406
+   892 label __label407
+-    * op add __fn0_i 96 1
+   893 label __label408
+   894 op mul __tmp7 __fn0_power 10
+   895 op mod __fn0_power __tmp7 __fn0_n
+ 
+   899 label __label409
+   900 label __label410
+   901 label __label411
+-    * op add __fn0_i 97 1
+   902 label __label412
+   903 op mul __tmp7 __fn0_power 10
+   904 op mod __fn0_power __tmp7 __fn0_n
+ 
+   908 label __label413
+   909 label __label414
+   910 label __label415
+-    * op add __fn0_i 98 1
+   911 label __label416
+   912 op mul __tmp7 __fn0_power 10
+   913 op mod __fn0_power __tmp7 __fn0_n
+ 
+   917 label __label417
+   918 label __label418
+   919 label __label419
+-    * op add __fn0_i 99 1
+   920 label __label14
+   921 print "Power of ten limit reached."
+   922 end
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   932 label __label2
+   933 assertequals 97 maxnum "Project Euler 26"
+   934 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set maxlen 0
+set maxnum 0
+set d 2
+label __label19
+set __fn0_n d
+op mod __tmp1 d 5
+jump __label6 notEqual __tmp1 0
+label __label21
+op div __fn0_n __fn0_n 5
+op mod __tmp1 __fn0_n 5
+jump __label21 equal __tmp1 0
+label __label6
+op mod __tmp3 __fn0_n 2
+jump __label9 notEqual __tmp3 0
+label __label22
+op div __fn0_n __fn0_n 2
+op mod __tmp3 __fn0_n 2
+jump __label22 equal __tmp3 0
+label __label9
+jump __label10 greaterThanEq __fn0_n 2
+set __tmp0 0
+jump __label3 always 0 0
+label __label10
+op mod __fn0_power 10 __fn0_n
+jump __label25 notEqual __fn0_power 1
+set __tmp0 1
+jump __label3 always 0 0
+label __label25
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label29 notEqual __fn0_power 1
+set __tmp0 2
+jump __label3 always 0 0
+label __label29
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label33 notEqual __fn0_power 1
+set __tmp0 3
+jump __label3 always 0 0
+label __label33
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label37 notEqual __fn0_power 1
+set __tmp0 4
+jump __label3 always 0 0
+label __label37
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label41 notEqual __fn0_power 1
+set __tmp0 5
+jump __label3 always 0 0
+label __label41
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label45 notEqual __fn0_power 1
+set __tmp0 6
+jump __label3 always 0 0
+label __label45
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label49 notEqual __fn0_power 1
+set __tmp0 7
+jump __label3 always 0 0
+label __label49
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label53 notEqual __fn0_power 1
+set __tmp0 8
+jump __label3 always 0 0
+label __label53
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label57 notEqual __fn0_power 1
+set __tmp0 9
+jump __label3 always 0 0
+label __label57
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label61 notEqual __fn0_power 1
+set __tmp0 10
+jump __label3 always 0 0
+label __label61
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label65 notEqual __fn0_power 1
+set __tmp0 11
+jump __label3 always 0 0
+label __label65
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label69 notEqual __fn0_power 1
+set __tmp0 12
+jump __label3 always 0 0
+label __label69
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label73 notEqual __fn0_power 1
+set __tmp0 13
+jump __label3 always 0 0
+label __label73
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label77 notEqual __fn0_power 1
+set __tmp0 14
+jump __label3 always 0 0
+label __label77
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label81 notEqual __fn0_power 1
+set __tmp0 15
+jump __label3 always 0 0
+label __label81
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label85 notEqual __fn0_power 1
+set __tmp0 16
+jump __label3 always 0 0
+label __label85
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label89 notEqual __fn0_power 1
+set __tmp0 17
+jump __label3 always 0 0
+label __label89
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label93 notEqual __fn0_power 1
+set __tmp0 18
+jump __label3 always 0 0
+label __label93
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label97 notEqual __fn0_power 1
+set __tmp0 19
+jump __label3 always 0 0
+label __label97
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label101 notEqual __fn0_power 1
+set __tmp0 20
+jump __label3 always 0 0
+label __label101
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label105 notEqual __fn0_power 1
+set __tmp0 21
+jump __label3 always 0 0
+label __label105
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label109 notEqual __fn0_power 1
+set __tmp0 22
+jump __label3 always 0 0
+label __label109
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label113 notEqual __fn0_power 1
+set __tmp0 23
+jump __label3 always 0 0
+label __label113
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label117 notEqual __fn0_power 1
+set __tmp0 24
+jump __label3 always 0 0
+label __label117
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label121 notEqual __fn0_power 1
+set __tmp0 25
+jump __label3 always 0 0
+label __label121
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label125 notEqual __fn0_power 1
+set __tmp0 26
+jump __label3 always 0 0
+label __label125
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label129 notEqual __fn0_power 1
+set __tmp0 27
+jump __label3 always 0 0
+label __label129
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label133 notEqual __fn0_power 1
+set __tmp0 28
+jump __label3 always 0 0
+label __label133
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label137 notEqual __fn0_power 1
+set __tmp0 29
+jump __label3 always 0 0
+label __label137
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label141 notEqual __fn0_power 1
+set __tmp0 30
+jump __label3 always 0 0
+label __label141
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label145 notEqual __fn0_power 1
+set __tmp0 31
+jump __label3 always 0 0
+label __label145
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label149 notEqual __fn0_power 1
+set __tmp0 32
+jump __label3 always 0 0
+label __label149
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label153 notEqual __fn0_power 1
+set __tmp0 33
+jump __label3 always 0 0
+label __label153
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label157 notEqual __fn0_power 1
+set __tmp0 34
+jump __label3 always 0 0
+label __label157
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label161 notEqual __fn0_power 1
+set __tmp0 35
+jump __label3 always 0 0
+label __label161
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label165 notEqual __fn0_power 1
+set __tmp0 36
+jump __label3 always 0 0
+label __label165
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label169 notEqual __fn0_power 1
+set __tmp0 37
+jump __label3 always 0 0
+label __label169
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label173 notEqual __fn0_power 1
+set __tmp0 38
+jump __label3 always 0 0
+label __label173
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label177 notEqual __fn0_power 1
+set __tmp0 39
+jump __label3 always 0 0
+label __label177
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label181 notEqual __fn0_power 1
+set __tmp0 40
+jump __label3 always 0 0
+label __label181
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label185 notEqual __fn0_power 1
+set __tmp0 41
+jump __label3 always 0 0
+label __label185
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label189 notEqual __fn0_power 1
+set __tmp0 42
+jump __label3 always 0 0
+label __label189
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label193 notEqual __fn0_power 1
+set __tmp0 43
+jump __label3 always 0 0
+label __label193
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label197 notEqual __fn0_power 1
+set __tmp0 44
+jump __label3 always 0 0
+label __label197
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label201 notEqual __fn0_power 1
+set __tmp0 45
+jump __label3 always 0 0
+label __label201
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label205 notEqual __fn0_power 1
+set __tmp0 46
+jump __label3 always 0 0
+label __label205
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label209 notEqual __fn0_power 1
+set __tmp0 47
+jump __label3 always 0 0
+label __label209
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label213 notEqual __fn0_power 1
+set __tmp0 48
+jump __label3 always 0 0
+label __label213
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label217 notEqual __fn0_power 1
+set __tmp0 49
+jump __label3 always 0 0
+label __label217
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label221 notEqual __fn0_power 1
+set __tmp0 50
+jump __label3 always 0 0
+label __label221
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label225 notEqual __fn0_power 1
+set __tmp0 51
+jump __label3 always 0 0
+label __label225
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label229 notEqual __fn0_power 1
+set __tmp0 52
+jump __label3 always 0 0
+label __label229
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label233 notEqual __fn0_power 1
+set __tmp0 53
+jump __label3 always 0 0
+label __label233
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label237 notEqual __fn0_power 1
+set __tmp0 54
+jump __label3 always 0 0
+label __label237
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label241 notEqual __fn0_power 1
+set __tmp0 55
+jump __label3 always 0 0
+label __label241
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label245 notEqual __fn0_power 1
+set __tmp0 56
+jump __label3 always 0 0
+label __label245
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label249 notEqual __fn0_power 1
+set __tmp0 57
+jump __label3 always 0 0
+label __label249
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label253 notEqual __fn0_power 1
+set __tmp0 58
+jump __label3 always 0 0
+label __label253
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label257 notEqual __fn0_power 1
+set __tmp0 59
+jump __label3 always 0 0
+label __label257
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label261 notEqual __fn0_power 1
+set __tmp0 60
+jump __label3 always 0 0
+label __label261
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label265 notEqual __fn0_power 1
+set __tmp0 61
+jump __label3 always 0 0
+label __label265
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label269 notEqual __fn0_power 1
+set __tmp0 62
+jump __label3 always 0 0
+label __label269
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label273 notEqual __fn0_power 1
+set __tmp0 63
+jump __label3 always 0 0
+label __label273
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label277 notEqual __fn0_power 1
+set __tmp0 64
+jump __label3 always 0 0
+label __label277
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label281 notEqual __fn0_power 1
+set __tmp0 65
+jump __label3 always 0 0
+label __label281
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label285 notEqual __fn0_power 1
+set __tmp0 66
+jump __label3 always 0 0
+label __label285
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label289 notEqual __fn0_power 1
+set __tmp0 67
+jump __label3 always 0 0
+label __label289
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label293 notEqual __fn0_power 1
+set __tmp0 68
+jump __label3 always 0 0
+label __label293
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label297 notEqual __fn0_power 1
+set __tmp0 69
+jump __label3 always 0 0
+label __label297
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label301 notEqual __fn0_power 1
+set __tmp0 70
+jump __label3 always 0 0
+label __label301
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label305 notEqual __fn0_power 1
+set __tmp0 71
+jump __label3 always 0 0
+label __label305
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label309 notEqual __fn0_power 1
+set __tmp0 72
+jump __label3 always 0 0
+label __label309
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label313 notEqual __fn0_power 1
+set __tmp0 73
+jump __label3 always 0 0
+label __label313
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label317 notEqual __fn0_power 1
+set __tmp0 74
+jump __label3 always 0 0
+label __label317
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label321 notEqual __fn0_power 1
+set __tmp0 75
+jump __label3 always 0 0
+label __label321
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label325 notEqual __fn0_power 1
+set __tmp0 76
+jump __label3 always 0 0
+label __label325
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label329 notEqual __fn0_power 1
+set __tmp0 77
+jump __label3 always 0 0
+label __label329
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label333 notEqual __fn0_power 1
+set __tmp0 78
+jump __label3 always 0 0
+label __label333
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label337 notEqual __fn0_power 1
+set __tmp0 79
+jump __label3 always 0 0
+label __label337
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label341 notEqual __fn0_power 1
+set __tmp0 80
+jump __label3 always 0 0
+label __label341
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label345 notEqual __fn0_power 1
+set __tmp0 81
+jump __label3 always 0 0
+label __label345
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label349 notEqual __fn0_power 1
+set __tmp0 82
+jump __label3 always 0 0
+label __label349
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label353 notEqual __fn0_power 1
+set __tmp0 83
+jump __label3 always 0 0
+label __label353
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label357 notEqual __fn0_power 1
+set __tmp0 84
+jump __label3 always 0 0
+label __label357
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label361 notEqual __fn0_power 1
+set __tmp0 85
+jump __label3 always 0 0
+label __label361
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label365 notEqual __fn0_power 1
+set __tmp0 86
+jump __label3 always 0 0
+label __label365
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label369 notEqual __fn0_power 1
+set __tmp0 87
+jump __label3 always 0 0
+label __label369
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label373 notEqual __fn0_power 1
+set __tmp0 88
+jump __label3 always 0 0
+label __label373
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label377 notEqual __fn0_power 1
+set __tmp0 89
+jump __label3 always 0 0
+label __label377
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label381 notEqual __fn0_power 1
+set __tmp0 90
+jump __label3 always 0 0
+label __label381
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label385 notEqual __fn0_power 1
+set __tmp0 91
+jump __label3 always 0 0
+label __label385
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label389 notEqual __fn0_power 1
+set __tmp0 92
+jump __label3 always 0 0
+label __label389
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label393 notEqual __fn0_power 1
+set __tmp0 93
+jump __label3 always 0 0
+label __label393
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label397 notEqual __fn0_power 1
+set __tmp0 94
+jump __label3 always 0 0
+label __label397
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label401 notEqual __fn0_power 1
+set __tmp0 95
+jump __label3 always 0 0
+label __label401
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label405 notEqual __fn0_power 1
+set __tmp0 96
+jump __label3 always 0 0
+label __label405
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label409 notEqual __fn0_power 1
+set __tmp0 97
+jump __label3 always 0 0
+label __label409
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label413 notEqual __fn0_power 1
+set __tmp0 98
+jump __label3 always 0 0
+label __label413
+op mul __tmp7 __fn0_power 10
+op mod __fn0_power __tmp7 __fn0_n
+jump __label417 notEqual __fn0_power 1
+set __tmp0 99
+jump __label3 always 0 0
+label __label417
+print "Power of ten limit reached."
+end
+label __label3
+jump __label17 lessThanEq __tmp0 maxlen
+set maxlen __tmp0
+set maxnum d
+label __label17
+op add d d 1
+jump __label19 lessThanEq d 100
+assertequals 97 maxnum "Project Euler 26"
+stop

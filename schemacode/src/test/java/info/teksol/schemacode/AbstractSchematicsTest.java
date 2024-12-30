@@ -1,11 +1,12 @@
 package info.teksol.schemacode;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.MindcodeMessage;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.mimex.BlockType;
-import info.teksol.mindcode.v3.InputFiles;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.messages.ExpectedMessages;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
@@ -14,7 +15,6 @@ import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Block;
 import info.teksol.schemacode.schematics.Schematic;
-import info.teksol.util.ExpectedMessages;
 
 import java.util.ArrayList;
 import java.util.List;

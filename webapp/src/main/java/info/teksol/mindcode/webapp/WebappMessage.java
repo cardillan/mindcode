@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.MindcodeMessage;
+import info.teksol.mc.messages.MindcodeMessage;
 
 public final class WebappMessage {
     private final String prefix;

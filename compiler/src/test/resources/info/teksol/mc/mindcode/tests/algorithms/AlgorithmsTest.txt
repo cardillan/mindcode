@@ -1,0 +1,10 @@
+Name                                     Ambiguities   Instructions    Steps   Coverage   Source CRC         Compiled CRC    
+compute-recursive-fibonacci.mnd:                   0             31     2476      96.7%   BDE1C81A7769E0CB   911BA1C749B11F99
+compute-sum-of-primes.mnd:                         0            440     1890      99.7%   B6615E97E02F94A9   BD5C4474F738008A
+memory-read-write.mnd:                             0              4        4     100.0%   D9539CC21D8111B7   CB446C6AC6A1C72E
+sorting with bubble-sort.mnd:                      0             26    15476     100.0%   09F1B1A6B8B97AF2   EDDB118325E2281C
+sorting with heap-sort.mnd:                        0             53    64558     100.0%   0CEFC91051987EFB   14F1BB3BEBE582E8
+sorting with insert-sort.mnd:                      0             26    26063     100.0%   0AF6F57A5EBA45E2   1CDBD277B8556AF7
+sorting with quick-sort.mnd:                       0             66    48456      98.4%   8909AE66C1E5A20F   A1FC3692EDB80A1E
+sorting with select-sort.mnd:                      0             30    35279     100.0%   3F4EE1C8DB9B8B18   DD9BE3E10DD04F70
+storage-display.mnd:                               0            653      824      25.5%   F7D56DB08E60751D   08D6878AC148FEA1

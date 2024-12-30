@@ -133,19 +133,19 @@ set __fn0__variable memory
 set __fn0__required true
 print "\n"
 print __fn0__name
-print ": "
+print ":"
+print " "
 print __fn0__variable
 jump 142 equal __fn0__required false
-op and __tmp13 __fn0__foundAll __fn0__variable
-set __fn0__foundAll __tmp13
+op and __fn0__foundAll __fn0__foundAll __fn0__variable
 set __tmp12 __fn0__foundAll
 jump 143 always 0 0
 set __tmp12 null
 set @counter __tmp11
 set memory __fn0__variable
 printflush __fn0__message
-op equal __tmp14 __fn0__foundAll false
-jump 2 notEqual __tmp14 false
+op equal __tmp13 __fn0__foundAll false
+jump 2 notEqual __tmp13 false
 assertequals message message1 "Located message1 block"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

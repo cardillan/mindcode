@@ -1,12 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.emulator.processor.ExecutionFlag;
+import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.*;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.*;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.jupiter.api.Test;

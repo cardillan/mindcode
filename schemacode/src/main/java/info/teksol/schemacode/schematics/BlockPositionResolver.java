@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mindcode.ToolMessage;
-import info.teksol.mindcode.mimex.BlockType;
-import info.teksol.mindcode.v3.MessageConsumer;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.mindustry.Position;

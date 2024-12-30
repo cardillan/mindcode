@@ -1,8 +1,8 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.InputPositionTranslator;
-import info.teksol.mindcode.v3.InputFile;
+import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.messages.InputPositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;

@@ -1,13 +1,12 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.emulator.processor.ExecutionFlag;
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.ToolMessage;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.InputPosition;
+import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerFacade;
-import info.teksol.mindcode.compiler.CompilerOutput;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.v3.InputFiles;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -20,7 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class CompileMindcodeAction extends ActionHandler {
 
@@ -129,52 +127,52 @@ public class CompileMindcodeAction extends ActionHandler {
         final InputFiles inputFiles = InputFiles.create(basePath);
         inputs.forEach(file -> readFile(inputFiles, file));
 
-        final CompilerOutput<String> result = CompilerFacade.compile(inputFiles, compilerProfile);
-
         final File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
         final File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
-        final Function<InputPosition, String> positionFormatter = InputPosition::formatForIde;
+        final PositionFormatter positionFormatter = InputPosition::formatForIde;
 
-        if (!result.hasErrors()) {
-            writeOutput(output, result.output());
+        ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
+        MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, compilerProfile, inputFiles);
+        compiler.compile();
+
+        if (!messageLogger.hasErrors()) {
+            writeOutput(output, compiler.getOutput());
 
             if (arguments.getBoolean("clipboard")) {
-                writeToClipboard(result.output());
-                result.addMessage(ToolMessage.info("\nCompiled mlog code was copied to the clipboard."));
+                writeToClipboard(compiler.getOutput());
+                messageLogger.info("\nCompiled mlog code was copied to the clipboard.");
             }
 
             if (arguments.getBoolean("watcher")) {
                 int port = arguments.getInt("watcher_port");
                 int timeout = arguments.getInt("watcher_timeout");
-                MlogWatcherClient.sendMlog(port, timeout, result, result.output());
+                MlogWatcherClient.sendMlog(port, timeout, messageLogger, compiler.getOutput());
             }
 
             if (compilerProfile.isRun()) {
-                result.addMessage(ToolMessage.info(""));
-                result.addMessage(ToolMessage.info("Program output (%,d steps):", result.steps()));
-                if (result.hasProgramOutput()) {
-                    result.addMessage(ToolMessage.info(result.getProgramOutput()));
+                messageLogger.info("");
+                messageLogger.info("Program output (%,d steps):", compiler.getSteps());
+                if (!compiler.getTextBuffer().isEmpty()) {
+                    messageLogger.info(compiler.getTextBuffer().getFormattedOutput());
                 } else {
-                    result.addMessage(ToolMessage.info("The program didn't generate any output."));
+                    messageLogger.info("The program didn't generate any output.");
                 }
-                if (!result.assertions().isEmpty()) {
-                    result.addMessage(ToolMessage.info("The program generated the following assertions:"));
-                    result.assertions().forEach(a -> result.addMessage(a.createMessage()));
+                if (!compiler.getAssertions().isEmpty()) {
+                    messageLogger.info("The program generated the following assertions:");
+                    compiler.getAssertions().forEach(a -> messageLogger.addMessage(a.createMessage()));
                 }
-                if (result.executionException() != null) {
-                    result.addMessage(ToolMessage.error(result.executionException().getMessage()));
+                if (compiler.getExecutionException() != null) {
+                    messageLogger.error(compiler.getExecutionException().getMessage());
                 }
             }
+        }
 
-            outputMessages(result, output, logFile, positionFormatter);
-        } else {
-            // Errors: print just them into stderr
-            List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));
+        if (!isStdInOut(logFile)) {
+            List<String> errors = messageLogger.getMessages().stream().map(m -> m.formatMessage(positionFormatter)).toList();
+            writeOutput(logFile, errors, true);
+        }
 
-            errors.forEach(System.err::println);
-            if (!isStdInOut(logFile)) {
-                writeOutput(logFile, errors, true);
-            }
+        if (messageLogger.hasErrors()) {
             System.exit(1);
         }
     }

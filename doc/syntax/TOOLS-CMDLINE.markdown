@@ -99,12 +99,12 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-r {NONE,PASSIVE,ACTIVE}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [--run] [--run-steps {1..1000000000}] [--trace-execution {true,false}]
-                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
-                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
-                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}]
-                [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
                 [--err-graphics-buffer-overflow {true,false}] [-o LEVEL] [--temp-variables-elimination LEVEL]
@@ -173,6 +173,8 @@ run options:
                          is reached.
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
+  --dump-variables-on-stop {true,false}
+                         output variable values when the 'stop' instruction is encountered
   --stop-on-stop-instruction {true,false}
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}

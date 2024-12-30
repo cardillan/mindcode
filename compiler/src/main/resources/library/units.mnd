@@ -34,7 +34,7 @@ def findFreeUnit(_unit_type, _initial_flag)
 
         // Try the next one. If it is the same as the first one, we've seen them all
         ubind(_unit_type);
-    loop while _first_unit != @unit;
+    while _first_unit != @unit;
 
     return null;
 end;
@@ -77,7 +77,7 @@ def findClosestUnit(_x, _y, _unit_type, _initial_flag)
 
             // Try the next one. If it is the same as the first one, we've seen them all
             ubind(_unit_type);
-        loop while _first_unit != @unit;
+        while _first_unit != @unit;
 
         // No free unit at all
         if _best_unit == null then

@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.mindcode.InputPosition;
+import info.teksol.mc.common.InputPosition;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.mindustry.UnitCommandConfiguration;
 

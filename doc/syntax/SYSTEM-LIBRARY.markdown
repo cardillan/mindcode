@@ -138,6 +138,28 @@ Length of the side of the drawing area of the `large-logic-display` block.
 
 ## Functions
 
+### unpackcolor
+
+**Definition:** `void unpackcolor(packedColor, out r, out g, out b, out a)`
+
+| Optimization goal:             |      Speed |       Size |
+|------------------------------- |-----------:|-----------:|
+| Inlined function               |          9 |          9 |
+| Function body                  |         10 |         10 |
+| Function call                  |          8 |          8 |
+
+Unpacks numeric value created by the `packcolor` instruction (or a corresponding color literal) into
+individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
+all four color channels.
+
+**Inputs and outputs:**
+
+- `packedColor`: color value to unpack
+- `r`: variable to receive the value corresponding to the red channel
+- `g`: variable to receive the value corresponding to the green channel
+- `b`: variable to receive the value corresponding to the blue channel
+- `a`: variable to receive the value corresponding to the alpha channel
+
 ### displaySize
 
 **Definition:** `def displaySize(display)`

@@ -1,0 +1,1456 @@
+   307 instructions before optimizations.
+    30 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Case Expression Optimization.
+    50 instructions eliminated by Dead Code Elimination (5 iterations).
+     9 instructions eliminated by Jump Normalization (3 iterations).
+    17 instructions eliminated by Jump Optimization (3 iterations).
+    22 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     2 instructions eliminated by Expression Optimization (2 iterations).
+     9 instructions eliminated by Data Flow Optimization (7 iterations).
+     1 instructions added by Loop Optimization (2 iterations).
+     1 loops improved by Loop Optimization.
+     3 instructions eliminated by Jump Straightening (3 iterations).
+     4 instructions updated by JumpThreading.
+     2 instructions eliminated by Unreachable Code Elimination.
+    20 instructions eliminated by Print Merging.
+   143 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 835):
+  * Replicate loop condition at line 69:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+    16 getlink __tmp1 n
+    17 set block __tmp1
+    18 sensor __tmp3 block @type
+-    * set __tmp4 __tmp3
+-    * jump __label8 equal __tmp4 @memory-cell
++   19 jump __label8 equal __tmp3 @memory-cell
+    20 jump __label7 always
+    21 label __label8
+    22 set MEMORY block
+ 
+    24 set __tmp2 lastCell
+    25 jump __label6 always
+    26 label __label7
+-    * jump __label10 equal __tmp4 @memory-bank
++   27 jump __label10 equal __tmp3 @memory-bank
+    28 jump __label9 always
+    29 label __label10
+    30 set MEMORY block
+ 
+    32 set __tmp2 lastCell
+    33 jump __label6 always
+    34 label __label9
+-    * jump __label12 equal __tmp4 @plastanium-conveyor
++   35 jump __label12 equal __tmp3 @plastanium-conveyor
+    36 jump __label11 always
+    37 label __label12
+    38 set CONV4 CONV3
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-30 instructions):
+ 
+    21 label __label8
+    22 set MEMORY block
+    23 set lastCell 63
+-    * set __tmp2 lastCell
+    24 jump __label6 always
+    25 label __label7
+    26 jump __label10 equal __tmp3 @memory-bank
+ 
+    28 label __label10
+    29 set MEMORY block
+    30 set lastCell 511
+-    * set __tmp2 lastCell
+    31 jump __label6 always
+    32 label __label9
+    33 jump __label12 equal __tmp3 @plastanium-conveyor
+ 
+    38 set CONV2 CONV1
+    39 set CONV1 block
+    40 op add LINKED LINKED 1
+-    * set __tmp2 LINKED
+    41 jump __label6 always
+    42 label __label11
+-    * set __tmp2 null
+    43 label __label6
+    44 label __label4
+    45 op greaterThan __tmp5 n 0
+ 
+    56 print LINKED
+    57 print ")"
+    58 printflush message1
+-    * set __tmp7 null
+    59 jump __label14 always
+    60 label __label13
+    61 op greaterThan __tmp8 LINKED 4
+ 
+    84 label __label18
+    85 set __tmp9 __tmp11
+    86 label __label16
+-    * set __tmp7 __tmp9
+    87 label __label14
+    88 label __label1
+    89 jump __label0 always
+ 
+   134 label __label24
+   135 set __tmp28 null
+   136 label __label25
+-    * set __tmp25 __tmp28
+   137 jump __label23 always
+   138 label __label22
+-    * set __tmp25 null
+   139 label __label23
+   140 jump __label26 equal true false
+   141 sensor __tmp30 CONV2 @totalItems
+ 
+   148 label __label28
+   149 set __tmp32 null
+   150 label __label29
+-    * set __tmp29 __tmp32
+   151 jump __label27 always
+   152 label __label26
+-    * set __tmp29 null
+   153 label __label27
+   154 jump __label30 equal true false
+   155 sensor __tmp34 CONV3 @totalItems
+ 
+   162 label __label32
+   163 set __tmp36 null
+   164 label __label33
+-    * set __tmp33 __tmp36
+   165 jump __label31 always
+   166 label __label30
+-    * set __tmp33 null
+   167 label __label31
+   168 jump __label34 equal true false
+   169 sensor __tmp38 CONV4 @totalItems
+ 
+   176 label __label36
+   177 set __tmp40 null
+   178 label __label37
+-    * set __tmp37 __tmp40
+   179 jump __label35 always
+   180 label __label34
+-    * set __tmp37 null
+   181 label __label35
+   182 op greaterThan __tmp41 batches limit
+   183 jump __label38 equal __tmp41 false
+ 
+   200 set BATCH __tmp54
+   201 op mul __tmp55 BATCH 10
+   202 set BATCH_TXT __tmp55
+-    * set __tmp52 BATCH_TXT
+   203 jump __label41 always
+   204 label __label40
+-    * set __tmp52 null
+   205 label __label41
+   206 op add limit limit BATCH
+-    * set __tmp42 limit
+   207 jump __label39 always
+   208 label __label38
+-    * set __tmp42 null
+   209 label __label39
+   210 op mul __tmp57 batches 10
+   211 set total __tmp57
+ 
+   238 label __label44
+   239 set __tmp61 null
+   240 label __label45
+-    * set __tmp58 __tmp61
+   241 jump __label43 always
+   242 label __label42
+-    * set __tmp58 null
+   243 label __label43
+   244 jump __label46 equal true false
+   245 sensor __tmp63 CONV2 @totalItems
+ 
+   252 label __label48
+   253 set __tmp65 null
+   254 label __label49
+-    * set __tmp62 __tmp65
+   255 jump __label47 always
+   256 label __label46
+-    * set __tmp62 null
+   257 label __label47
+   258 jump __label50 equal true false
+   259 sensor __tmp67 CONV3 @totalItems
+ 
+   266 label __label52
+   267 set __tmp69 null
+   268 label __label53
+-    * set __tmp66 __tmp69
+   269 jump __label51 always
+   270 label __label50
+-    * set __tmp66 null
+   271 label __label51
+   272 jump __label54 equal true false
+   273 sensor __tmp71 CONV4 @totalItems
+ 
+   280 label __label56
+   281 set __tmp73 null
+   282 label __label57
+-    * set __tmp70 __tmp73
+   283 jump __label55 always
+   284 label __label54
+-    * set __tmp70 null
+   285 label __label55
+   286 op sub __tmp74 @time startTime
+   287 op floor __tmp75 __tmp74
+ 
+   300 set ratePerMin 0
+   301 set __tmp84 @time
+   302 set startTime __tmp84
+-    * set __tmp77 startTime
+   303 jump __label59 always
+   304 label __label58
+-    * set __tmp77 null
+   305 label __label59
+   306 print "Batch size: [green]"
+   307 print BATCH_TXT
+ 
+   324 op notEqual __tmp88 LINKS @links
+   325 jump __label60 equal __tmp88 false
+   326 end
+-    * set __tmp89 null
+   327 jump __label61 always
+   328 label __label60
+-    * set __tmp89 null
+   329 label __label61
+   330 label __label20
+   331 jump __label19 always
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-18 instructions):
+ 
+    69 print LINKED
+    70 print ")"
+    71 printflush message1
+-    * set __tmp9 null
+    72 jump __label16 always
+    73 label __label15
+    74 op equal __tmp10 MEMORY null
+ 
+    81 jump __label2 always
+    82 set __tmp11 null
+    83 label __label18
+-    * set __tmp9 __tmp11
+    84 label __label16
+    85 label __label14
+    86 label __label1
+ 
+   127 op lessThan __tmp27 a1 b1
+   128 jump __label24 equal __tmp27 false
+   129 op add batches batches 1
+-    * set __tmp28 batches
+   130 jump __label25 always
+   131 label __label24
+-    * set __tmp28 null
+   132 label __label25
+   133 jump __label23 always
+   134 label __label22
+ 
+   139 op lessThan __tmp31 a2 b2
+   140 jump __label28 equal __tmp31 false
+   141 op add batches batches 1
+-    * set __tmp32 batches
+   142 jump __label29 always
+   143 label __label28
+-    * set __tmp32 null
+   144 label __label29
+   145 jump __label27 always
+   146 label __label26
+ 
+   151 op lessThan __tmp35 a3 b3
+   152 jump __label32 equal __tmp35 false
+   153 op add batches batches 1
+-    * set __tmp36 batches
+   154 jump __label33 always
+   155 label __label32
+-    * set __tmp36 null
+   156 label __label33
+   157 jump __label31 always
+   158 label __label30
+ 
+   163 op lessThan __tmp39 a4 b4
+   164 jump __label36 equal __tmp39 false
+   165 op add batches batches 1
+-    * set __tmp40 batches
+   166 jump __label37 always
+   167 label __label36
+-    * set __tmp40 null
+   168 label __label37
+   169 jump __label35 always
+   170 label __label34
+ 
+   223 op lessThan __tmp60 b1 a1
+   224 jump __label44 equal __tmp60 false
+   225 op add batches batches 1
+-    * set __tmp61 batches
+   226 jump __label45 always
+   227 label __label44
+-    * set __tmp61 null
+   228 label __label45
+   229 jump __label43 always
+   230 label __label42
+ 
+   235 op lessThan __tmp64 b2 a2
+   236 jump __label48 equal __tmp64 false
+   237 op add batches batches 1
+-    * set __tmp65 batches
+   238 jump __label49 always
+   239 label __label48
+-    * set __tmp65 null
+   240 label __label49
+   241 jump __label47 always
+   242 label __label46
+ 
+   247 op lessThan __tmp68 b3 a3
+   248 jump __label52 equal __tmp68 false
+   249 op add batches batches 1
+-    * set __tmp69 batches
+   250 jump __label53 always
+   251 label __label52
+-    * set __tmp69 null
+   252 label __label53
+   253 jump __label51 always
+   254 label __label50
+ 
+   259 op lessThan __tmp72 b4 a4
+   260 jump __label56 equal __tmp72 false
+   261 op add batches batches 1
+-    * set __tmp73 batches
+   262 jump __label57 always
+   263 label __label56
+-    * set __tmp73 null
+   264 label __label57
+   265 jump __label55 always
+   266 label __label54
+
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
+ 
+    75 jump __label17 equal __tmp10 false
+    76 print "Item Counter\n[salmon]No memory attached."
+    77 printflush message1
+-    * set __tmp11 null
+    78 jump __label18 always
+    79 label __label17
+    80 jump __label2 always
+-    * set __tmp11 null
+    81 label __label18
+    82 label __label16
+    83 label __label14
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-30 instructions):
+ 
+     8 set CONV1 CONV2
+     9 set MEMORY CONV1
+    10 set LINKED 0
+-    * set __tmp0 @links
+-    * set LINKS __tmp0
++   11 set LINKS @links
+    12 set n LINKS
+    13 label __label3
+    14 op sub n n 1
+-    * getlink __tmp1 n
+-    * set block __tmp1
++   15 getlink block n
+    16 sensor __tmp3 block @type
+    17 jump __label8 equal __tmp3 @memory-cell
+    18 jump __label7 always
+ 
+    84 label __label2
+    85 set BATCH_DURATION 2000
+    86 op idiv __tmp12 MIN_BATCH 10
+-    * op max __tmp13 __tmp12 1
+-    * set EFF_MIN_BATCH __tmp13
++   87 op max EFF_MIN_BATCH __tmp12 1
+    88 op idiv __tmp14 MAX_BATCH 10
+-    * op max __tmp15 __tmp14 MIN_BATCH
+-    * set EFF_MAX_BATCH __tmp15
++   89 op max EFF_MAX_BATCH __tmp14 MIN_BATCH
+    90 set BATCH_STEP 1
+    91 set BATCH EFF_MIN_BATCH
+-    * op mul __tmp16 BATCH 10
+-    * set BATCH_TXT __tmp16
+-    * read __tmp17 MEMORY 0
+-    * set total __tmp17
+-    * op idiv __tmp18 total 10
+-    * set batches __tmp18
+-    * op add __tmp19 batches BATCH
+-    * set limit __tmp19
++   92 op mul BATCH_TXT BATCH 10
++   93 read total MEMORY 0
++   94 op idiv batches total 10
++   95 op add limit batches BATCH
+    96 control enabled switch1 0
+    97 set b4 0
+    98 set b3 b4
+ 
+   103 set a2 a3
+   104 set a1 a2
+   105 set ratePerMin 0
+-    * set __tmp21 @time
+-    * set startTime __tmp21
++  106 set startTime @time
+   107 label __label19
+   108 sensor __tmp22 switch1 @enabled
+   109 op equal __tmp23 __tmp22 0
+   110 jump __label21 equal __tmp23 false
+-    * set __tmp24 @time
+-    * set start __tmp24
++  111 set start @time
+   112 jump __label22 equal true false
+-    * sensor __tmp26 CONV1 @totalItems
+-    * set a1 __tmp26
++  113 sensor a1 CONV1 @totalItems
+   114 op lessThan __tmp27 a1 b1
+   115 jump __label24 equal __tmp27 false
+   116 op add batches batches 1
+ 
+   121 label __label22
+   122 label __label23
+   123 jump __label26 equal true false
+-    * sensor __tmp30 CONV2 @totalItems
+-    * set a2 __tmp30
++  124 sensor a2 CONV2 @totalItems
+   125 op lessThan __tmp31 a2 b2
+   126 jump __label28 equal __tmp31 false
+   127 op add batches batches 1
+ 
+   132 label __label26
+   133 label __label27
+   134 jump __label30 equal true false
+-    * sensor __tmp34 CONV3 @totalItems
+-    * set a3 __tmp34
++  135 sensor a3 CONV3 @totalItems
+   136 op lessThan __tmp35 a3 b3
+   137 jump __label32 equal __tmp35 false
+   138 op add batches batches 1
+ 
+   143 label __label30
+   144 label __label31
+   145 jump __label34 equal true false
+-    * sensor __tmp38 CONV4 @totalItems
+-    * set a4 __tmp38
++  146 sensor a4 CONV4 @totalItems
+   147 op lessThan __tmp39 a4 b4
+   148 jump __label36 equal __tmp39 false
+   149 op add batches batches 1
+ 
+   155 label __label35
+   156 op greaterThan __tmp41 batches limit
+   157 jump __label38 equal __tmp41 false
+-    * op sub __tmp43 @time startTime
+-    * set duration __tmp43
+-    * set __tmp44 @time
+-    * set startTime __tmp44
+-    * op div __tmp45 BATCH duration
+-    * set rate __tmp45
++  158 op sub duration @time startTime
++  159 set startTime @time
++  160 op div rate BATCH duration
+   161 set __tmp46 lastCell
+   162 op mul __tmp48 rate 166.66666666666666
+   163 write __tmp48 MEMORY __tmp46
+   164 op mul __tmp49 rate 600000
+-    * op floor __tmp50 __tmp49
+-    * set ratePerMin __tmp50
++  165 op floor ratePerMin __tmp49
+   166 op lessThanEq __tmp51 duration BATCH_DURATION
+   167 jump __label40 equal __tmp51 false
+   168 op add __tmp53 BATCH BATCH_STEP
+-    * op min __tmp54 __tmp53 EFF_MAX_BATCH
+-    * set BATCH __tmp54
+-    * op mul __tmp55 BATCH 10
+-    * set BATCH_TXT __tmp55
++  169 op min BATCH __tmp53 EFF_MAX_BATCH
++  170 op mul BATCH_TXT BATCH 10
+   171 jump __label41 always
+   172 label __label40
+   173 label __label41
+ 
+   175 jump __label39 always
+   176 label __label38
+   177 label __label39
+-    * op mul __tmp57 batches 10
+-    * set total __tmp57
++  178 op mul total batches 10
+   179 write total MEMORY 0
+   180 print "Item Counter                  "
+   181 print "\n"
+ 
+   195 print "] items/min"
+   196 print "\n"
+   197 jump __label42 equal true false
+-    * sensor __tmp59 CONV1 @totalItems
+-    * set b1 __tmp59
++  198 sensor b1 CONV1 @totalItems
+   199 op lessThan __tmp60 b1 a1
+   200 jump __label44 equal __tmp60 false
+   201 op add batches batches 1
+ 
+   206 label __label42
+   207 label __label43
+   208 jump __label46 equal true false
+-    * sensor __tmp63 CONV2 @totalItems
+-    * set b2 __tmp63
++  209 sensor b2 CONV2 @totalItems
+   210 op lessThan __tmp64 b2 a2
+   211 jump __label48 equal __tmp64 false
+   212 op add batches batches 1
+ 
+   217 label __label46
+   218 label __label47
+   219 jump __label50 equal true false
+-    * sensor __tmp67 CONV3 @totalItems
+-    * set b3 __tmp67
++  220 sensor b3 CONV3 @totalItems
+   221 op lessThan __tmp68 b3 a3
+   222 jump __label52 equal __tmp68 false
+   223 op add batches batches 1
+ 
+   228 label __label50
+   229 label __label51
+   230 jump __label54 equal true false
+-    * sensor __tmp71 CONV4 @totalItems
+-    * set b4 __tmp71
++  231 sensor b4 CONV4 @totalItems
+   232 op lessThan __tmp72 b4 a4
+   233 jump __label56 equal __tmp72 false
+   234 op add batches batches 1
+ 
+   239 label __label54
+   240 label __label55
+   241 op sub __tmp74 @time startTime
+-    * op floor __tmp75 __tmp74
+-    * set elapsed __tmp75
++  242 op floor elapsed __tmp74
+   243 op greaterThanEq __tmp76 elapsed 10000
+   244 jump __label58 equal __tmp76 false
+   245 op idiv __tmp78 BATCH 5
+-    * op max __tmp79 __tmp78 EFF_MIN_BATCH
+-    * set BATCH __tmp79
+-    * op mul __tmp80 BATCH 10
+-    * set BATCH_TXT __tmp80
+-    * op add __tmp81 batches BATCH
+-    * set limit __tmp81
++  246 op max BATCH __tmp78 EFF_MIN_BATCH
++  247 op mul BATCH_TXT BATCH 10
++  248 op add limit batches BATCH
+   249 set __tmp82 lastCell
+   250 write 0 MEMORY __tmp82
+   251 set ratePerMin 0
+-    * set __tmp84 @time
+-    * set startTime __tmp84
++  252 set startTime @time
+   253 jump __label59 always
+   254 label __label58
+   255 label __label59
+
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 instructions):
+ 
+     1 set MAX_BATCH 1000
+     2 set lastCell 0
+     3 label __label0
+-    * jump __label2 equal true false
+     4 set CONV4 null
+     5 set CONV3 CONV4
+     6 set CONV2 CONV3
+ 
+   108 op equal __tmp23 __tmp22 0
+   109 jump __label21 equal __tmp23 false
+   110 set start @time
+-    * jump __label22 equal true false
+   111 sensor a1 CONV1 @totalItems
+   112 op lessThan __tmp27 a1 b1
+   113 jump __label24 equal __tmp27 false
+ 
+   118 jump __label23 always
+   119 label __label22
+   120 label __label23
+-    * jump __label26 equal true false
+   121 sensor a2 CONV2 @totalItems
+   122 op lessThan __tmp31 a2 b2
+   123 jump __label28 equal __tmp31 false
+ 
+   128 jump __label27 always
+   129 label __label26
+   130 label __label27
+-    * jump __label30 equal true false
+   131 sensor a3 CONV3 @totalItems
+   132 op lessThan __tmp35 a3 b3
+   133 jump __label32 equal __tmp35 false
+ 
+   138 jump __label31 always
+   139 label __label30
+   140 label __label31
+-    * jump __label34 equal true false
+   141 sensor a4 CONV4 @totalItems
+   142 op lessThan __tmp39 a4 b4
+   143 jump __label36 equal __tmp39 false
+ 
+   189 print "["
+   190 print "] items/min"
+   191 print "\n"
+-    * jump __label42 equal true false
+   192 sensor b1 CONV1 @totalItems
+   193 op lessThan __tmp60 b1 a1
+   194 jump __label44 equal __tmp60 false
+ 
+   199 jump __label43 always
+   200 label __label42
+   201 label __label43
+-    * jump __label46 equal true false
+   202 sensor b2 CONV2 @totalItems
+   203 op lessThan __tmp64 b2 a2
+   204 jump __label48 equal __tmp64 false
+ 
+   209 jump __label47 always
+   210 label __label46
+   211 label __label47
+-    * jump __label50 equal true false
+   212 sensor b3 CONV3 @totalItems
+   213 op lessThan __tmp68 b3 a3
+   214 jump __label52 equal __tmp68 false
+ 
+   219 jump __label51 always
+   220 label __label50
+   221 label __label51
+-    * jump __label54 equal true false
+   222 sensor b4 CONV4 @totalItems
+   223 op lessThan __tmp72 b4 a4
+   224 jump __label56 equal __tmp72 false
+
+Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-3 instructions):
+ 
+    13 op sub n n 1
+    14 getlink block n
+    15 sensor __tmp3 block @type
+-    * jump __label8 equal __tmp3 @memory-cell
+-    * jump __label7 always
++   16 jump __label7 notEqual __tmp3 @memory-cell
+    17 label __label8
+    18 set MEMORY block
+    19 set lastCell 63
+    20 jump __label6 always
+    21 label __label7
+-    * jump __label10 equal __tmp3 @memory-bank
+-    * jump __label9 always
++   22 jump __label9 notEqual __tmp3 @memory-bank
+    23 label __label10
+    24 set MEMORY block
+    25 set lastCell 511
+    26 jump __label6 always
+    27 label __label9
+-    * jump __label12 equal __tmp3 @plastanium-conveyor
+-    * jump __label11 always
++   28 jump __label11 notEqual __tmp3 @plastanium-conveyor
+    29 label __label12
+    30 set CONV4 CONV3
+    31 set CONV3 CONV2
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-17 instructions):
+ 
+    36 label __label11
+    37 label __label6
+    38 label __label4
+-    * op greaterThan __tmp5 n 0
+-    * jump __label3 notEqual __tmp5 false
++   39 jump __label3 greaterThan n 0
+    40 label __label5
+-    * op equal __tmp6 LINKED 0
+-    * jump __label13 equal __tmp6 false
++   41 jump __label13 notEqual LINKED 0
+    42 print "Item Counter"
+    43 print "\n"
+    44 print "[salmon]No plastanium conveyor attached (maximum: "
+ 
+    50 printflush message1
+    51 jump __label14 always
+    52 label __label13
+-    * op greaterThan __tmp8 LINKED 4
+-    * jump __label15 equal __tmp8 false
++   53 jump __label15 lessThanEq LINKED 4
+    54 print "Item Counter"
+    55 print "\n"
+    56 print "[salmon]Too many plastanium conveyors attached (maximum: "
+ 
+    62 printflush message1
+    63 jump __label16 always
+    64 label __label15
+-    * op equal __tmp10 MEMORY null
+-    * jump __label17 equal __tmp10 false
++   65 jump __label17 notEqual MEMORY null
+    66 print "Item Counter\n[salmon]No memory attached."
+    67 printflush message1
+    68 jump __label18 always
+ 
+    98 set startTime @time
+    99 label __label19
+   100 sensor __tmp22 switch1 @enabled
+-    * op equal __tmp23 __tmp22 0
+-    * jump __label21 equal __tmp23 false
++  101 jump __label21 notEqual __tmp22 0
+   102 set start @time
+   103 sensor a1 CONV1 @totalItems
+-    * op lessThan __tmp27 a1 b1
+-    * jump __label24 equal __tmp27 false
++  104 jump __label24 greaterThanEq a1 b1
+   105 op add batches batches 1
+   106 jump __label25 always
+   107 label __label24
+ 
+   110 label __label22
+   111 label __label23
+   112 sensor a2 CONV2 @totalItems
+-    * op lessThan __tmp31 a2 b2
+-    * jump __label28 equal __tmp31 false
++  113 jump __label28 greaterThanEq a2 b2
+   114 op add batches batches 1
+   115 jump __label29 always
+   116 label __label28
+ 
+   119 label __label26
+   120 label __label27
+   121 sensor a3 CONV3 @totalItems
+-    * op lessThan __tmp35 a3 b3
+-    * jump __label32 equal __tmp35 false
++  122 jump __label32 greaterThanEq a3 b3
+   123 op add batches batches 1
+   124 jump __label33 always
+   125 label __label32
+ 
+   128 label __label30
+   129 label __label31
+   130 sensor a4 CONV4 @totalItems
+-    * op lessThan __tmp39 a4 b4
+-    * jump __label36 equal __tmp39 false
++  131 jump __label36 greaterThanEq a4 b4
+   132 op add batches batches 1
+   133 jump __label37 always
+   134 label __label36
+ 
+   136 jump __label35 always
+   137 label __label34
+   138 label __label35
+-    * op greaterThan __tmp41 batches limit
+-    * jump __label38 equal __tmp41 false
++  139 jump __label38 lessThanEq batches limit
+   140 op sub duration @time startTime
+   141 set startTime @time
+   142 op div rate BATCH duration
+ 
+   145 write __tmp48 MEMORY __tmp46
+   146 op mul __tmp49 rate 600000
+   147 op floor ratePerMin __tmp49
+-    * op lessThanEq __tmp51 duration BATCH_DURATION
+-    * jump __label40 equal __tmp51 false
++  148 jump __label40 greaterThan duration BATCH_DURATION
+   149 op add __tmp53 BATCH BATCH_STEP
+   150 op min BATCH __tmp53 EFF_MAX_BATCH
+   151 op mul BATCH_TXT BATCH 10
+ 
+   176 print "] items/min"
+   177 print "\n"
+   178 sensor b1 CONV1 @totalItems
+-    * op lessThan __tmp60 b1 a1
+-    * jump __label44 equal __tmp60 false
++  179 jump __label44 greaterThanEq b1 a1
+   180 op add batches batches 1
+   181 jump __label45 always
+   182 label __label44
+ 
+   185 label __label42
+   186 label __label43
+   187 sensor b2 CONV2 @totalItems
+-    * op lessThan __tmp64 b2 a2
+-    * jump __label48 equal __tmp64 false
++  188 jump __label48 greaterThanEq b2 a2
+   189 op add batches batches 1
+   190 jump __label49 always
+   191 label __label48
+ 
+   194 label __label46
+   195 label __label47
+   196 sensor b3 CONV3 @totalItems
+-    * op lessThan __tmp68 b3 a3
+-    * jump __label52 equal __tmp68 false
++  197 jump __label52 greaterThanEq b3 a3
+   198 op add batches batches 1
+   199 jump __label53 always
+   200 label __label52
+ 
+   203 label __label50
+   204 label __label51
+   205 sensor b4 CONV4 @totalItems
+-    * op lessThan __tmp72 b4 a4
+-    * jump __label56 equal __tmp72 false
++  206 jump __label56 greaterThanEq b4 a4
+   207 op add batches batches 1
+   208 jump __label57 always
+   209 label __label56
+ 
+   213 label __label55
+   214 op sub __tmp74 @time startTime
+   215 op floor elapsed __tmp74
+-    * op greaterThanEq __tmp76 elapsed 10000
+-    * jump __label58 equal __tmp76 false
++  216 jump __label58 lessThan elapsed 10000
+   217 op idiv __tmp78 BATCH 5
+   218 op max BATCH __tmp78 EFF_MIN_BATCH
+   219 op mul BATCH_TXT BATCH 10
+ 
+   243 print " "
+   244 print "ms"
+   245 printflush message1
+-    * op notEqual __tmp88 LINKS @links
+-    * jump __label60 equal __tmp88 false
++  246 jump __label60 equal LINKS @links
+   247 end
+   248 jump __label61 always
+   249 label __label60
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-21 instructions):
+ 
+    32 set CONV2 CONV1
+    33 set CONV1 block
+    34 op add LINKED LINKED 1
+-    * jump __label6 always
+    35 label __label11
+    36 label __label6
+    37 label __label4
+ 
+   102 sensor a1 CONV1 @totalItems
+   103 jump __label24 greaterThanEq a1 b1
+   104 op add batches batches 1
+-    * jump __label25 always
+   105 label __label24
+   106 label __label25
+-    * jump __label23 always
+   107 label __label22
+   108 label __label23
+   109 sensor a2 CONV2 @totalItems
+   110 jump __label28 greaterThanEq a2 b2
+   111 op add batches batches 1
+-    * jump __label29 always
+   112 label __label28
+   113 label __label29
+-    * jump __label27 always
+   114 label __label26
+   115 label __label27
+   116 sensor a3 CONV3 @totalItems
+   117 jump __label32 greaterThanEq a3 b3
+   118 op add batches batches 1
+-    * jump __label33 always
+   119 label __label32
+   120 label __label33
+-    * jump __label31 always
+   121 label __label30
+   122 label __label31
+   123 sensor a4 CONV4 @totalItems
+   124 jump __label36 greaterThanEq a4 b4
+   125 op add batches batches 1
+-    * jump __label37 always
+   126 label __label36
+   127 label __label37
+-    * jump __label35 always
+   128 label __label34
+   129 label __label35
+   130 jump __label38 lessThanEq batches limit
+ 
+   140 op add __tmp53 BATCH BATCH_STEP
+   141 op min BATCH __tmp53 EFF_MAX_BATCH
+   142 op mul BATCH_TXT BATCH 10
+-    * jump __label41 always
+   143 label __label40
+   144 label __label41
+   145 op add limit limit BATCH
+-    * jump __label39 always
+   146 label __label38
+   147 label __label39
+   148 op mul total batches 10
+ 
+   167 sensor b1 CONV1 @totalItems
+   168 jump __label44 greaterThanEq b1 a1
+   169 op add batches batches 1
+-    * jump __label45 always
+   170 label __label44
+   171 label __label45
+-    * jump __label43 always
+   172 label __label42
+   173 label __label43
+   174 sensor b2 CONV2 @totalItems
+   175 jump __label48 greaterThanEq b2 a2
+   176 op add batches batches 1
+-    * jump __label49 always
+   177 label __label48
+   178 label __label49
+-    * jump __label47 always
+   179 label __label46
+   180 label __label47
+   181 sensor b3 CONV3 @totalItems
+   182 jump __label52 greaterThanEq b3 a3
+   183 op add batches batches 1
+-    * jump __label53 always
+   184 label __label52
+   185 label __label53
+-    * jump __label51 always
+   186 label __label50
+   187 label __label51
+   188 sensor b4 CONV4 @totalItems
+   189 jump __label56 greaterThanEq b4 a4
+   190 op add batches batches 1
+-    * jump __label57 always
+   191 label __label56
+   192 label __label57
+-    * jump __label55 always
+   193 label __label54
+   194 label __label55
+   195 op sub __tmp74 @time startTime
+ 
+   203 write 0 MEMORY __tmp82
+   204 set ratePerMin 0
+   205 set startTime @time
+-    * jump __label59 always
+   206 label __label58
+   207 label __label59
+   208 print "Batch size: [green]"
+ 
+   225 printflush message1
+   226 jump __label60 equal LINKS @links
+   227 end
+-    * jump __label61 always
+   228 label __label60
+   229 label __label61
+   230 label __label20
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+   134 set __tmp46 lastCell
+   135 op mul __tmp48 rate 166.66666666666666
+   136 write __tmp48 MEMORY __tmp46
+-    * op mul __tmp49 rate 600000
+-    * op floor ratePerMin __tmp49
++  137 op idiv ratePerMin rate 0.0000016666666666666667
+   138 jump __label40 greaterThan duration BATCH_DURATION
+   139 op add __tmp53 BATCH BATCH_STEP
+   140 op min BATCH __tmp53 EFF_MAX_BATCH
+ 
+   215 print "] ms"
+   216 print "\n"
+   217 op sub __tmp85 @time start
+-    * op div __tmp86 __tmp85 2
+-    * op floor __tmp87 __tmp86
++  218 op idiv __tmp87 __tmp85 2
+   219 print "[lightgray]Loop time: "
+   220 print __tmp87
+   221 print " "
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     2 set lastCell 0
+     3 label __label0
+     4 set CONV4 null
+-    * set CONV3 CONV4
+-    * set CONV2 CONV3
+-    * set CONV1 CONV2
+-    * set MEMORY CONV1
++    5 set CONV3 null
++    6 set CONV2 CONV4
++    7 set CONV1 CONV3
++    8 set MEMORY CONV2
+     9 set LINKED 0
+    10 set LINKS @links
+    11 set n LINKS
+ 
+    80 op max EFF_MAX_BATCH __tmp14 MIN_BATCH
+    81 set BATCH_STEP 1
+    82 set BATCH EFF_MIN_BATCH
+-    * op mul BATCH_TXT BATCH 10
++   83 op mul BATCH_TXT EFF_MIN_BATCH 10
+    84 read total MEMORY 0
+    85 op idiv batches total 10
+-    * op add limit batches BATCH
++   86 op add limit batches EFF_MIN_BATCH
+    87 control enabled switch1 0
+    88 set b4 0
+-    * set b3 b4
+-    * set b2 b3
+-    * set b1 b2
+-    * set a4 b1
+-    * set a3 a4
+-    * set a2 a3
+-    * set a1 a2
++   89 set b3 0
++   90 set b2 b4
++   91 set b1 b3
++   92 set a4 b2
++   93 set a3 b1
++   94 set a2 a4
++   95 set a1 a3
+    96 set ratePerMin 0
+    97 set startTime @time
+    98 label __label19
+ 
+   133 op div rate BATCH duration
+   134 set __tmp46 lastCell
+   135 op mul __tmp48 rate 166.66666666666666
+-    * write __tmp48 MEMORY __tmp46
++  136 write __tmp48 MEMORY lastCell
+   137 op idiv ratePerMin rate 0.0000016666666666666667
+-    * jump __label40 greaterThan duration BATCH_DURATION
+-    * op add __tmp53 BATCH BATCH_STEP
++  138 jump __label40 greaterThan duration 2000
++  139 op add __tmp53 BATCH 1
+   140 op min BATCH __tmp53 EFF_MAX_BATCH
+   141 op mul BATCH_TXT BATCH 10
+   142 label __label40
+ 
+   199 op mul BATCH_TXT BATCH 10
+   200 op add limit batches BATCH
+   201 set __tmp82 lastCell
+-    * write 0 MEMORY __tmp82
++  202 write 0 MEMORY lastCell
+   203 set ratePerMin 0
+   204 set startTime @time
+   205 label __label58
+ 
+   230 label __label21
+   231 control enabled switch1 0
+   232 set __tmp91 lastCell
+-    * write 0 MEMORY __tmp91
++  233 write 0 MEMORY lastCell
+   234 write 0 MEMORY 0
+   235 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+ 
+     3 label __label0
+     4 set CONV4 null
+     5 set CONV3 null
+-    * set CONV2 CONV4
+-    * set CONV1 CONV3
+-    * set MEMORY CONV2
++    6 set CONV2 null
++    7 set CONV1 null
++    8 set MEMORY CONV4
+     9 set LINKED 0
+    10 set LINKS @links
+    11 set n LINKS
+ 
+    73 label __label1
+    74 jump __label0 always
+    75 label __label2
+-    * set BATCH_DURATION 2000
+    76 op idiv __tmp12 MIN_BATCH 10
+    77 op max EFF_MIN_BATCH __tmp12 1
+    78 op idiv __tmp14 MAX_BATCH 10
+    79 op max EFF_MAX_BATCH __tmp14 MIN_BATCH
+-    * set BATCH_STEP 1
+    80 set BATCH EFF_MIN_BATCH
+    81 op mul BATCH_TXT EFF_MIN_BATCH 10
+    82 read total MEMORY 0
+ 
+    85 control enabled switch1 0
+    86 set b4 0
+    87 set b3 0
+-    * set b2 b4
+-    * set b1 b3
+-    * set a4 b2
+-    * set a3 b1
+-    * set a2 a4
+-    * set a1 a3
++   88 set b2 0
++   89 set b1 0
++   90 set a4 b4
++   91 set a3 b3
++   92 set a2 b2
++   93 set a1 b1
+    94 set ratePerMin 0
+    95 set startTime @time
+    96 label __label19
+ 
+   129 op sub duration @time startTime
+   130 set startTime @time
+   131 op div rate BATCH duration
+-    * set __tmp46 lastCell
+   132 op mul __tmp48 rate 166.66666666666666
+   133 write __tmp48 MEMORY lastCell
+   134 op idiv ratePerMin rate 0.0000016666666666666667
+ 
+   195 op max BATCH __tmp78 EFF_MIN_BATCH
+   196 op mul BATCH_TXT BATCH 10
+   197 op add limit batches BATCH
+-    * set __tmp82 lastCell
+   198 write 0 MEMORY lastCell
+   199 set ratePerMin 0
+   200 set startTime @time
+ 
+   225 jump __label19 always
+   226 label __label21
+   227 control enabled switch1 0
+-    * set __tmp91 lastCell
+   228 write 0 MEMORY lastCell
+   229 write 0 MEMORY 0
+   230 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
+ 
+     5 set CONV3 null
+     6 set CONV2 null
+     7 set CONV1 null
+-    * set MEMORY CONV4
++    8 set MEMORY null
+     9 set LINKED 0
+    10 set LINKS @links
+    11 set n LINKS
+ 
+    87 set b3 0
+    88 set b2 0
+    89 set b1 0
+-    * set a4 b4
+-    * set a3 b3
+-    * set a2 b2
+-    * set a1 b1
++   90 set a4 0
++   91 set a3 0
++   92 set a2 0
++   93 set a1 0
+    94 set ratePerMin 0
+    95 set startTime @time
+    96 label __label19
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-4 instructions):
+ 
+    87 set b3 0
+    88 set b2 0
+    89 set b1 0
+-    * set a4 0
+-    * set a3 0
+-    * set a2 0
+-    * set a1 0
+    90 set ratePerMin 0
+    91 set startTime @time
+    92 label __label19
+
+Modifications by Replicate loop condition at line 69:1 (+1 instructions):
+ 
+    92 label __label19
+    93 sensor __tmp22 switch1 @enabled
+    94 jump __label21 notEqual __tmp22 0
++   95 label __label62
+    96 set start @time
+    97 sensor a1 CONV1 @totalItems
+    98 jump __label24 greaterThanEq a1 b1
+ 
+   219 label __label60
+   220 label __label61
+   221 label __label20
+-    * jump __label19 always
++  222 sensor __tmp22 switch1 @enabled
++  223 jump __label62 equal __tmp22 0
+   224 label __label21
+   225 control enabled switch1 0
+   226 write 0 MEMORY lastCell
+
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+    47 print LINKED
+    48 print ")"
+    49 printflush message1
+-    * jump __label14 always
++   50 jump __label0 always
+    51 label __label13
+    52 jump __label15 lessThanEq LINKED 4
+    53 print "Item Counter"
+ 
+    59 print LINKED
+    60 print ")"
+    61 printflush message1
+-    * jump __label16 always
++   62 jump __label0 always
+    63 label __label15
+-    * jump __label17 notEqual MEMORY null
++   64 jump __label2 notEqual MEMORY null
+    65 print "Item Counter\n[salmon]No memory attached."
+    66 printflush message1
+-    * jump __label18 always
++   67 jump __label0 always
+    68 label __label17
+    69 jump __label2 always
+    70 label __label18
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
+ 
+    65 print "Item Counter\n[salmon]No memory attached."
+    66 printflush message1
+    67 jump __label0 always
+-    * label __label17
+-    * jump __label2 always
+-    * label __label18
+-    * label __label16
+-    * label __label14
+-    * label __label1
+-    * jump __label0 always
+    68 label __label2
+    69 op idiv __tmp12 MIN_BATCH 10
+    70 op max EFF_MIN_BATCH __tmp12 1
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   218 control enabled switch1 0
+   219 write 0 MEMORY lastCell
+   220 write 0 MEMORY 0
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
+ 
+    38 jump __label3 greaterThan n 0
+    39 label __label5
+    40 jump __label13 notEqual LINKED 0
+-    * print "Item Counter"
+-    * print "\n"
++   41 print "Item Counter\n"
+    42 print "[salmon]No plastanium conveyor attached (maximum: "
+    43 print 4
+-    * print ","
+-    * print " found: "
++   44 print ", found: "
+    45 print LINKED
+    46 print ")"
+    47 printflush message1
+    48 jump __label0 always
+    49 label __label13
+    50 jump __label15 lessThanEq LINKED 4
+-    * print "Item Counter"
+-    * print "\n"
++   51 print "Item Counter\n"
+    52 print "[salmon]Too many plastanium conveyors attached (maximum: "
+    53 print 4
+-    * print ","
+-    * print " found: "
++   54 print ", found: "
+    55 print LINKED
+    56 print ")"
+    57 printflush message1
+ 
+   129 label __label39
+   130 op mul total batches 10
+   131 write total MEMORY 0
+-    * print "Item Counter                  "
+-    * print "\n"
++  132 print "Item Counter                  \n"
+   133 print "Monitoring [green]"
+   134 print LINKED
+-    * print "["
+-    * print "] conveyors"
+-    * print "\n"
+-    * print "Total items: [gold]"
++  135 print "[] conveyors\nTotal items: [gold]"
+   136 print total
+-    * print "["
+-    * print "]"
+-    * print "\n"
+-    * print "Rate: [green]"
++  137 print "[]\nRate: [green]"
+   138 print ratePerMin
+-    * print "["
+-    * print "] items/min"
+-    * print "\n"
++  139 print "[] items/min\n"
+   140 sensor b1 CONV1 @totalItems
+   141 jump __label44 greaterThanEq b1 a1
+   142 op add batches batches 1
+ 
+   179 label __label59
+   180 print "Batch size: [green]"
+   181 print BATCH_TXT
+-    * print "["
+-    * print "]"
+-    * print "\n"
+-    * print "Batch time: [gold]"
++  182 print "[]\nBatch time: [gold]"
+   183 print elapsed
+-    * print "["
+-    * print "] ms"
+-    * print "\n"
+   184 op sub __tmp85 @time start
+   185 op idiv __tmp87 __tmp85 2
+-    * print "[lightgray]Loop time: "
++  186 print "[] ms\n[lightgray]Loop time: "
+   187 print __tmp87
+-    * print " "
+-    * print "ms"
++  188 print " ms"
+   189 printflush message1
+   190 jump __label60 equal LINKS @links
+   191 end
+
+Final code before resolving virtual instructions:
+
+set MIN_BATCH 10
+set MAX_BATCH 1000
+set lastCell 0
+label __label0
+set CONV4 null
+set CONV3 null
+set CONV2 null
+set CONV1 null
+set MEMORY null
+set LINKED 0
+set LINKS @links
+set n LINKS
+label __label3
+op sub n n 1
+getlink block n
+sensor __tmp3 block @type
+jump __label7 notEqual __tmp3 @memory-cell
+set MEMORY block
+set lastCell 63
+jump __label6 always 0 0
+label __label7
+jump __label9 notEqual __tmp3 @memory-bank
+set MEMORY block
+set lastCell 511
+jump __label6 always 0 0
+label __label9
+jump __label11 notEqual __tmp3 @plastanium-conveyor
+set CONV4 CONV3
+set CONV3 CONV2
+set CONV2 CONV1
+set CONV1 block
+op add LINKED LINKED 1
+label __label11
+label __label6
+jump __label3 greaterThan n 0
+jump __label13 notEqual LINKED 0
+print "Item Counter\n"
+print "[salmon]No plastanium conveyor attached (maximum: "
+print 4
+print ", found: "
+print LINKED
+print ")"
+printflush message1
+jump __label0 always 0 0
+label __label13
+jump __label15 lessThanEq LINKED 4
+print "Item Counter\n"
+print "[salmon]Too many plastanium conveyors attached (maximum: "
+print 4
+print ", found: "
+print LINKED
+print ")"
+printflush message1
+jump __label0 always 0 0
+label __label15
+jump __label2 notEqual MEMORY null
+print "Item Counter\n[salmon]No memory attached."
+printflush message1
+jump __label0 always 0 0
+label __label2
+op idiv __tmp12 MIN_BATCH 10
+op max EFF_MIN_BATCH __tmp12 1
+op idiv __tmp14 MAX_BATCH 10
+op max EFF_MAX_BATCH __tmp14 MIN_BATCH
+set BATCH EFF_MIN_BATCH
+op mul BATCH_TXT EFF_MIN_BATCH 10
+read total MEMORY 0
+op idiv batches total 10
+op add limit batches EFF_MIN_BATCH
+control enabled switch1 0 0 0 0
+set b4 0
+set b3 0
+set b2 0
+set b1 0
+set ratePerMin 0
+set startTime @time
+sensor __tmp22 switch1 @enabled
+jump __label21 notEqual __tmp22 0
+label __label62
+set start @time
+sensor a1 CONV1 @totalItems
+jump __label24 greaterThanEq a1 b1
+op add batches batches 1
+label __label24
+sensor a2 CONV2 @totalItems
+jump __label28 greaterThanEq a2 b2
+op add batches batches 1
+label __label28
+sensor a3 CONV3 @totalItems
+jump __label32 greaterThanEq a3 b3
+op add batches batches 1
+label __label32
+sensor a4 CONV4 @totalItems
+jump __label36 greaterThanEq a4 b4
+op add batches batches 1
+label __label36
+jump __label38 lessThanEq batches limit
+op sub duration @time startTime
+set startTime @time
+op div rate BATCH duration
+op mul __tmp48 rate 166.66666666666666
+write __tmp48 MEMORY lastCell
+op idiv ratePerMin rate 0.0000016666666666666667
+jump __label40 greaterThan duration 2000
+op add __tmp53 BATCH 1
+op min BATCH __tmp53 EFF_MAX_BATCH
+op mul BATCH_TXT BATCH 10
+label __label40
+op add limit limit BATCH
+label __label38
+op mul total batches 10
+write total MEMORY 0
+print "Item Counter                  \n"
+print "Monitoring [green]"
+print LINKED
+print "[] conveyors\nTotal items: [gold]"
+print total
+print "[]\nRate: [green]"
+print ratePerMin
+print "[] items/min\n"
+sensor b1 CONV1 @totalItems
+jump __label44 greaterThanEq b1 a1
+op add batches batches 1
+label __label44
+sensor b2 CONV2 @totalItems
+jump __label48 greaterThanEq b2 a2
+op add batches batches 1
+label __label48
+sensor b3 CONV3 @totalItems
+jump __label52 greaterThanEq b3 a3
+op add batches batches 1
+label __label52
+sensor b4 CONV4 @totalItems
+jump __label56 greaterThanEq b4 a4
+op add batches batches 1
+label __label56
+op sub __tmp74 @time startTime
+op floor elapsed __tmp74 0
+jump __label58 lessThan elapsed 10000
+op idiv __tmp78 BATCH 5
+op max BATCH __tmp78 EFF_MIN_BATCH
+op mul BATCH_TXT BATCH 10
+op add limit batches BATCH
+write 0 MEMORY lastCell
+set ratePerMin 0
+set startTime @time
+label __label58
+print "Batch size: [green]"
+print BATCH_TXT
+print "[]\nBatch time: [gold]"
+print elapsed
+op sub __tmp85 @time start
+op idiv __tmp87 __tmp85 2
+print "[] ms\n[lightgray]Loop time: "
+print __tmp87
+print " ms"
+printflush message1
+jump __label60 equal LINKS @links
+end
+label __label60
+sensor __tmp22 switch1 @enabled
+jump __label62 equal __tmp22 0
+label __label21
+control enabled switch1 0 0 0 0
+write 0 MEMORY lastCell
+write 0 MEMORY 0

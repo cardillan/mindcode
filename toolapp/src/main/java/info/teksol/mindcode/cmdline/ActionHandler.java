@@ -1,13 +1,15 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.emulator.processor.ExecutionFlag;
-import info.teksol.mindcode.InputPosition;
-import info.teksol.mindcode.compiler.*;
-import info.teksol.mindcode.compiler.optimization.Optimization;
-import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.v3.InputFiles;
+import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.*;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -23,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 abstract class ActionHandler {
@@ -72,9 +73,9 @@ abstract class ActionHandler {
 
         compiler.addArgument("--sort-variables")
                 .help("prepends the final code with instructions which ensure variables are created inside the processor" +
-                        " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
-                        " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
-                        " specifying any category, " + SortCategory.usefulCategories()  + " are used.")
+                      " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
+                      " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
+                      " specifying any category, " + SortCategory.usefulCategories() + " are used.")
                 .type(Arguments.caseInsensitiveEnumType(SortCategory.class))
                 .nargs("*")
                 .setDefault(List.of(SortCategory.NONE));
@@ -245,6 +246,7 @@ abstract class ActionHandler {
         }
     }
 
+    // MUSTDO Review
     static void writeOutput(File outputFile, List<String> data, boolean useErrorOutput) {
         if (isStdInOut(outputFile)) {
             data.forEach(useErrorOutput ? System.err::println : System.out::println);
@@ -275,7 +277,7 @@ abstract class ActionHandler {
         c.setContents(data, data);
     }
 
-    static void outputMessages(CompilerOutput<?> result, File outputFile, File logFile, Function<InputPosition, String> positionFormatter) {
+    static void outputMessages(CompilerOutput<?> result, File outputFile, File logFile, PositionFormatter positionFormatter) {
         // If mlog gets written to stdout, write log to stderr
         if (isStdInOut(logFile)) {
             boolean alwaysErr = isStdInOut(outputFile);
@@ -288,5 +290,14 @@ abstract class ActionHandler {
                     .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
         }
 
+    }
+
+    static ConsoleMessageLogger createMessageLogger(File outputFile, File logFile, PositionFormatter positionFormatter) {
+        if (isStdInOut(logFile)) {
+            // If mlog gets written to stdout, write log to stderr
+            return new ConsoleMessageLogger(positionFormatter, MessageLevel.DEBUG, isStdInOut(outputFile));
+        } else {
+            return new ConsoleMessageLogger(positionFormatter, MessageLevel.INFO, isStdInOut(outputFile));
+        }
     }
 }

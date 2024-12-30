@@ -1,0 +1,4175 @@
+   603 instructions before optimizations.
+    60 instructions eliminated by Temp Variables Elimination.
+    15 instructions eliminated by Dead Code Elimination (3 iterations).
+    26 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
+    87 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+     3 instructions modified by Expression Optimization (4 iterations).
+    12 instructions modified by If Expression Optimization (4 iterations).
+   291 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+    39 instructions eliminated by Print Merging.
+    85 instructions after optimizations.
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-15 instructions):
+ 
+    49 print __tmp8
+    50 print __tmp12
+    51 assertprints __fn0_expected __fn0_title
+-    * set __tmp0 null
+    52 label __label0
+    53 set __fn5_title "comparison 2"
+    54 set __fn5_a null
+ 
+   101 print __tmp22
+   102 print __tmp26
+   103 assertprints __fn5_expected __fn5_title
+-    * set __tmp14 null
+   104 label __label13
+   105 set __fn10_title "comparison 3"
+   106 set __fn10_a null
+ 
+   153 print __tmp36
+   154 print __tmp40
+   155 assertprints __fn10_expected __fn10_title
+-    * set __tmp28 null
+   156 label __label26
+   157 set __fn15_title "comparison 4"
+   158 set __fn15_a @coal
+ 
+   205 print __tmp50
+   206 print __tmp54
+   207 assertprints __fn15_expected __fn15_title
+-    * set __tmp42 null
+   208 label __label39
+   209 set __fn20_title "comparison 5"
+   210 set __fn20_a @coal
+ 
+   257 print __tmp64
+   258 print __tmp68
+   259 assertprints __fn20_expected __fn20_title
+-    * set __tmp56 null
+   260 label __label52
+   261 set __fn25_title "comparison 6"
+   262 set __fn25_a @coal
+ 
+   309 print __tmp78
+   310 print __tmp82
+   311 assertprints __fn25_expected __fn25_title
+-    * set __tmp70 null
+   312 label __label65
+   313 set __fn30_title "comparison 7"
+   314 set __fn30_a @coal
+ 
+   361 print __tmp92
+   362 print __tmp96
+   363 assertprints __fn30_expected __fn30_title
+-    * set __tmp84 null
+   364 label __label78
+   365 set __fn35_title "comparison 8"
+   366 set __fn35_a A
+ 
+   413 print __tmp106
+   414 print __tmp110
+   415 assertprints __fn35_expected __fn35_title
+-    * set __tmp98 null
+   416 label __label91
+   417 set __fn40_title "comparison 9"
+   418 set __fn40_a A
+ 
+   465 print __tmp120
+   466 print __tmp124
+   467 assertprints __fn40_expected __fn40_title
+-    * set __tmp112 null
+   468 label __label104
+   469 set __fn45_title "comparison 10"
+   470 set __fn45_a A
+ 
+   517 print __tmp134
+   518 print __tmp138
+   519 assertprints __fn45_expected __fn45_title
+-    * set __tmp126 null
+   520 label __label117
+   521 set __fn50_title "comparison 11"
+   522 set __fn50_a "A"
+ 
+   569 print __tmp148
+   570 print __tmp152
+   571 assertprints __fn50_expected __fn50_title
+-    * set __tmp140 null
+   572 label __label130
+   573 set __fn55_title "comparison 12"
+   574 set __fn55_a "A"
+ 
+   621 print __tmp162
+   622 print __tmp166
+   623 assertprints __fn55_expected __fn55_title
+-    * set __tmp154 null
+   624 label __label143
+   625 set __fn60_title "comparison 13"
+   626 set __fn60_a "A"
+ 
+   673 print __tmp176
+   674 print __tmp180
+   675 assertprints __fn60_expected __fn60_title
+-    * set __tmp168 null
+   676 label __label156
+   677 set __fn65_title "comparison 14"
+   678 set __fn65_a "A"
+ 
+   725 print __tmp190
+   726 print __tmp194
+   727 assertprints __fn65_expected __fn65_title
+-    * set __tmp182 null
+   728 label __label169
+   729 set __fn70_title "comparison 15"
+   730 set __fn70_a "A"
+ 
+   777 print __tmp204
+   778 print __tmp208
+   779 assertprints __fn70_expected __fn70_title
+-    * set __tmp196 null
+   780 label __label182
+   781 stop
+   782 end
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-60 instructions):
+ 
+     3 set __fn0_b 0
+     4 set __fn0_expected "TFFT"
+     5 assertflush
+-    * op equal __tmp1 __fn0_a __fn0_b
+-    * set __fn1_b __tmp1
++    6 op equal __fn1_b __fn0_a __fn0_b
+     7 jump __label2 equal __fn1_b false
+     8 set __tmp3 "T"
+     9 jump __label3 always
+ 
+    12 label __label3
+    13 set __tmp2 __tmp3
+    14 label __label1
+-    * op notEqual __tmp4 __fn0_a __fn0_b
+-    * set __fn2_b __tmp4
++   15 op notEqual __fn2_b __fn0_a __fn0_b
+    16 jump __label5 equal __fn2_b false
+    17 set __tmp6 "T"
+    18 jump __label6 always
+ 
+    21 label __label6
+    22 set __tmp5 __tmp6
+    23 label __label4
+-    * op strictEqual __tmp7 __fn0_a __fn0_b
+-    * set __fn3_b __tmp7
++   24 op strictEqual __fn3_b __fn0_a __fn0_b
+    25 jump __label8 equal __fn3_b false
+    26 set __tmp9 "T"
+    27 jump __label9 always
+ 
+    31 set __tmp8 __tmp9
+    32 label __label7
+    33 op strictEqual __tmp11 __fn0_a __fn0_b
+-    * op equal __tmp10 __tmp11 false
+-    * set __fn4_b __tmp10
++   34 op equal __fn4_b __tmp11 false
+    35 jump __label11 equal __fn4_b false
+    36 set __tmp13 "T"
+    37 jump __label12 always
+ 
+    51 set __fn5_b 1
+    52 set __fn5_expected "FTFT"
+    53 assertflush
+-    * op equal __tmp15 __fn5_a __fn5_b
+-    * set __fn6_b __tmp15
++   54 op equal __fn6_b __fn5_a __fn5_b
+    55 jump __label15 equal __fn6_b false
+    56 set __tmp17 "T"
+    57 jump __label16 always
+ 
+    60 label __label16
+    61 set __tmp16 __tmp17
+    62 label __label14
+-    * op notEqual __tmp18 __fn5_a __fn5_b
+-    * set __fn7_b __tmp18
++   63 op notEqual __fn7_b __fn5_a __fn5_b
+    64 jump __label18 equal __fn7_b false
+    65 set __tmp20 "T"
+    66 jump __label19 always
+ 
+    69 label __label19
+    70 set __tmp19 __tmp20
+    71 label __label17
+-    * op strictEqual __tmp21 __fn5_a __fn5_b
+-    * set __fn8_b __tmp21
++   72 op strictEqual __fn8_b __fn5_a __fn5_b
+    73 jump __label21 equal __fn8_b false
+    74 set __tmp23 "T"
+    75 jump __label22 always
+ 
+    79 set __tmp22 __tmp23
+    80 label __label20
+    81 op strictEqual __tmp25 __fn5_a __fn5_b
+-    * op equal __tmp24 __tmp25 false
+-    * set __fn9_b __tmp24
++   82 op equal __fn9_b __tmp25 false
+    83 jump __label24 equal __fn9_b false
+    84 set __tmp27 "T"
+    85 jump __label25 always
+ 
+    99 set __fn10_b 2
+   100 set __fn10_expected "FTFT"
+   101 assertflush
+-    * op equal __tmp29 __fn10_a __fn10_b
+-    * set __fn11_b __tmp29
++  102 op equal __fn11_b __fn10_a __fn10_b
+   103 jump __label28 equal __fn11_b false
+   104 set __tmp31 "T"
+   105 jump __label29 always
+ 
+   108 label __label29
+   109 set __tmp30 __tmp31
+   110 label __label27
+-    * op notEqual __tmp32 __fn10_a __fn10_b
+-    * set __fn12_b __tmp32
++  111 op notEqual __fn12_b __fn10_a __fn10_b
+   112 jump __label31 equal __fn12_b false
+   113 set __tmp34 "T"
+   114 jump __label32 always
+ 
+   117 label __label32
+   118 set __tmp33 __tmp34
+   119 label __label30
+-    * op strictEqual __tmp35 __fn10_a __fn10_b
+-    * set __fn13_b __tmp35
++  120 op strictEqual __fn13_b __fn10_a __fn10_b
+   121 jump __label34 equal __fn13_b false
+   122 set __tmp37 "T"
+   123 jump __label35 always
+ 
+   127 set __tmp36 __tmp37
+   128 label __label33
+   129 op strictEqual __tmp39 __fn10_a __fn10_b
+-    * op equal __tmp38 __tmp39 false
+-    * set __fn14_b __tmp38
++  130 op equal __fn14_b __tmp39 false
+   131 jump __label37 equal __fn14_b false
+   132 set __tmp41 "T"
+   133 jump __label38 always
+ 
+   147 set __fn15_b 0
+   148 set __fn15_expected "FTFT"
+   149 assertflush
+-    * op equal __tmp43 __fn15_a __fn15_b
+-    * set __fn16_b __tmp43
++  150 op equal __fn16_b __fn15_a __fn15_b
+   151 jump __label41 equal __fn16_b false
+   152 set __tmp45 "T"
+   153 jump __label42 always
+ 
+   156 label __label42
+   157 set __tmp44 __tmp45
+   158 label __label40
+-    * op notEqual __tmp46 __fn15_a __fn15_b
+-    * set __fn17_b __tmp46
++  159 op notEqual __fn17_b __fn15_a __fn15_b
+   160 jump __label44 equal __fn17_b false
+   161 set __tmp48 "T"
+   162 jump __label45 always
+ 
+   165 label __label45
+   166 set __tmp47 __tmp48
+   167 label __label43
+-    * op strictEqual __tmp49 __fn15_a __fn15_b
+-    * set __fn18_b __tmp49
++  168 op strictEqual __fn18_b __fn15_a __fn15_b
+   169 jump __label47 equal __fn18_b false
+   170 set __tmp51 "T"
+   171 jump __label48 always
+ 
+   175 set __tmp50 __tmp51
+   176 label __label46
+   177 op strictEqual __tmp53 __fn15_a __fn15_b
+-    * op equal __tmp52 __tmp53 false
+-    * set __fn19_b __tmp52
++  178 op equal __fn19_b __tmp53 false
+   179 jump __label50 equal __fn19_b false
+   180 set __tmp55 "T"
+   181 jump __label51 always
+ 
+   195 set __fn20_b 1
+   196 set __fn20_expected "TFFT"
+   197 assertflush
+-    * op equal __tmp57 __fn20_a __fn20_b
+-    * set __fn21_b __tmp57
++  198 op equal __fn21_b __fn20_a __fn20_b
+   199 jump __label54 equal __fn21_b false
+   200 set __tmp59 "T"
+   201 jump __label55 always
+ 
+   204 label __label55
+   205 set __tmp58 __tmp59
+   206 label __label53
+-    * op notEqual __tmp60 __fn20_a __fn20_b
+-    * set __fn22_b __tmp60
++  207 op notEqual __fn22_b __fn20_a __fn20_b
+   208 jump __label57 equal __fn22_b false
+   209 set __tmp62 "T"
+   210 jump __label58 always
+ 
+   213 label __label58
+   214 set __tmp61 __tmp62
+   215 label __label56
+-    * op strictEqual __tmp63 __fn20_a __fn20_b
+-    * set __fn23_b __tmp63
++  216 op strictEqual __fn23_b __fn20_a __fn20_b
+   217 jump __label60 equal __fn23_b false
+   218 set __tmp65 "T"
+   219 jump __label61 always
+ 
+   223 set __tmp64 __tmp65
+   224 label __label59
+   225 op strictEqual __tmp67 __fn20_a __fn20_b
+-    * op equal __tmp66 __tmp67 false
+-    * set __fn24_b __tmp66
++  226 op equal __fn24_b __tmp67 false
+   227 jump __label63 equal __fn24_b false
+   228 set __tmp69 "T"
+   229 jump __label64 always
+ 
+   243 set __fn25_b 2
+   244 set __fn25_expected "FTFT"
+   245 assertflush
+-    * op equal __tmp71 __fn25_a __fn25_b
+-    * set __fn26_b __tmp71
++  246 op equal __fn26_b __fn25_a __fn25_b
+   247 jump __label67 equal __fn26_b false
+   248 set __tmp73 "T"
+   249 jump __label68 always
+ 
+   252 label __label68
+   253 set __tmp72 __tmp73
+   254 label __label66
+-    * op notEqual __tmp74 __fn25_a __fn25_b
+-    * set __fn27_b __tmp74
++  255 op notEqual __fn27_b __fn25_a __fn25_b
+   256 jump __label70 equal __fn27_b false
+   257 set __tmp76 "T"
+   258 jump __label71 always
+ 
+   261 label __label71
+   262 set __tmp75 __tmp76
+   263 label __label69
+-    * op strictEqual __tmp77 __fn25_a __fn25_b
+-    * set __fn28_b __tmp77
++  264 op strictEqual __fn28_b __fn25_a __fn25_b
+   265 jump __label73 equal __fn28_b false
+   266 set __tmp79 "T"
+   267 jump __label74 always
+ 
+   271 set __tmp78 __tmp79
+   272 label __label72
+   273 op strictEqual __tmp81 __fn25_a __fn25_b
+-    * op equal __tmp80 __tmp81 false
+-    * set __fn29_b __tmp80
++  274 op equal __fn29_b __tmp81 false
+   275 jump __label76 equal __fn29_b false
+   276 set __tmp83 "T"
+   277 jump __label77 always
+ 
+   291 set __fn30_b @lead
+   292 set __fn30_expected "FTFT"
+   293 assertflush
+-    * op equal __tmp85 __fn30_a __fn30_b
+-    * set __fn31_b __tmp85
++  294 op equal __fn31_b __fn30_a __fn30_b
+   295 jump __label80 equal __fn31_b false
+   296 set __tmp87 "T"
+   297 jump __label81 always
+ 
+   300 label __label81
+   301 set __tmp86 __tmp87
+   302 label __label79
+-    * op notEqual __tmp88 __fn30_a __fn30_b
+-    * set __fn32_b __tmp88
++  303 op notEqual __fn32_b __fn30_a __fn30_b
+   304 jump __label83 equal __fn32_b false
+   305 set __tmp90 "T"
+   306 jump __label84 always
+ 
+   309 label __label84
+   310 set __tmp89 __tmp90
+   311 label __label82
+-    * op strictEqual __tmp91 __fn30_a __fn30_b
+-    * set __fn33_b __tmp91
++  312 op strictEqual __fn33_b __fn30_a __fn30_b
+   313 jump __label86 equal __fn33_b false
+   314 set __tmp93 "T"
+   315 jump __label87 always
+ 
+   319 set __tmp92 __tmp93
+   320 label __label85
+   321 op strictEqual __tmp95 __fn30_a __fn30_b
+-    * op equal __tmp94 __tmp95 false
+-    * set __fn34_b __tmp94
++  322 op equal __fn34_b __tmp95 false
+   323 jump __label89 equal __fn34_b false
+   324 set __tmp97 "T"
+   325 jump __label90 always
+ 
+   339 set __fn35_b A
+   340 set __fn35_expected "TFTF"
+   341 assertflush
+-    * op equal __tmp99 __fn35_a __fn35_b
+-    * set __fn36_b __tmp99
++  342 op equal __fn36_b __fn35_a __fn35_b
+   343 jump __label93 equal __fn36_b false
+   344 set __tmp101 "T"
+   345 jump __label94 always
+ 
+   348 label __label94
+   349 set __tmp100 __tmp101
+   350 label __label92
+-    * op notEqual __tmp102 __fn35_a __fn35_b
+-    * set __fn37_b __tmp102
++  351 op notEqual __fn37_b __fn35_a __fn35_b
+   352 jump __label96 equal __fn37_b false
+   353 set __tmp104 "T"
+   354 jump __label97 always
+ 
+   357 label __label97
+   358 set __tmp103 __tmp104
+   359 label __label95
+-    * op strictEqual __tmp105 __fn35_a __fn35_b
+-    * set __fn38_b __tmp105
++  360 op strictEqual __fn38_b __fn35_a __fn35_b
+   361 jump __label99 equal __fn38_b false
+   362 set __tmp107 "T"
+   363 jump __label100 always
+ 
+   367 set __tmp106 __tmp107
+   368 label __label98
+   369 op strictEqual __tmp109 __fn35_a __fn35_b
+-    * op equal __tmp108 __tmp109 false
+-    * set __fn39_b __tmp108
++  370 op equal __fn39_b __tmp109 false
+   371 jump __label102 equal __fn39_b false
+   372 set __tmp111 "T"
+   373 jump __label103 always
+ 
+   387 set __fn40_b 0
+   388 set __fn40_expected "TFTF"
+   389 assertflush
+-    * op equal __tmp113 __fn40_a __fn40_b
+-    * set __fn41_b __tmp113
++  390 op equal __fn41_b __fn40_a __fn40_b
+   391 jump __label106 equal __fn41_b false
+   392 set __tmp115 "T"
+   393 jump __label107 always
+ 
+   396 label __label107
+   397 set __tmp114 __tmp115
+   398 label __label105
+-    * op notEqual __tmp116 __fn40_a __fn40_b
+-    * set __fn42_b __tmp116
++  399 op notEqual __fn42_b __fn40_a __fn40_b
+   400 jump __label109 equal __fn42_b false
+   401 set __tmp118 "T"
+   402 jump __label110 always
+ 
+   405 label __label110
+   406 set __tmp117 __tmp118
+   407 label __label108
+-    * op strictEqual __tmp119 __fn40_a __fn40_b
+-    * set __fn43_b __tmp119
++  408 op strictEqual __fn43_b __fn40_a __fn40_b
+   409 jump __label112 equal __fn43_b false
+   410 set __tmp121 "T"
+   411 jump __label113 always
+ 
+   415 set __tmp120 __tmp121
+   416 label __label111
+   417 op strictEqual __tmp123 __fn40_a __fn40_b
+-    * op equal __tmp122 __tmp123 false
+-    * set __fn44_b __tmp122
++  418 op equal __fn44_b __tmp123 false
+   419 jump __label115 equal __fn44_b false
+   420 set __tmp125 "T"
+   421 jump __label116 always
+ 
+   435 set __fn45_b 1
+   436 set __fn45_expected "FTFT"
+   437 assertflush
+-    * op equal __tmp127 __fn45_a __fn45_b
+-    * set __fn46_b __tmp127
++  438 op equal __fn46_b __fn45_a __fn45_b
+   439 jump __label119 equal __fn46_b false
+   440 set __tmp129 "T"
+   441 jump __label120 always
+ 
+   444 label __label120
+   445 set __tmp128 __tmp129
+   446 label __label118
+-    * op notEqual __tmp130 __fn45_a __fn45_b
+-    * set __fn47_b __tmp130
++  447 op notEqual __fn47_b __fn45_a __fn45_b
+   448 jump __label122 equal __fn47_b false
+   449 set __tmp132 "T"
+   450 jump __label123 always
+ 
+   453 label __label123
+   454 set __tmp131 __tmp132
+   455 label __label121
+-    * op strictEqual __tmp133 __fn45_a __fn45_b
+-    * set __fn48_b __tmp133
++  456 op strictEqual __fn48_b __fn45_a __fn45_b
+   457 jump __label125 equal __fn48_b false
+   458 set __tmp135 "T"
+   459 jump __label126 always
+ 
+   463 set __tmp134 __tmp135
+   464 label __label124
+   465 op strictEqual __tmp137 __fn45_a __fn45_b
+-    * op equal __tmp136 __tmp137 false
+-    * set __fn49_b __tmp136
++  466 op equal __fn49_b __tmp137 false
+   467 jump __label128 equal __fn49_b false
+   468 set __tmp139 "T"
+   469 jump __label129 always
+ 
+   483 set __fn50_b 0
+   484 set __fn50_expected "FTFT"
+   485 assertflush
+-    * op equal __tmp141 __fn50_a __fn50_b
+-    * set __fn51_b __tmp141
++  486 op equal __fn51_b __fn50_a __fn50_b
+   487 jump __label132 equal __fn51_b false
+   488 set __tmp143 "T"
+   489 jump __label133 always
+ 
+   492 label __label133
+   493 set __tmp142 __tmp143
+   494 label __label131
+-    * op notEqual __tmp144 __fn50_a __fn50_b
+-    * set __fn52_b __tmp144
++  495 op notEqual __fn52_b __fn50_a __fn50_b
+   496 jump __label135 equal __fn52_b false
+   497 set __tmp146 "T"
+   498 jump __label136 always
+ 
+   501 label __label136
+   502 set __tmp145 __tmp146
+   503 label __label134
+-    * op strictEqual __tmp147 __fn50_a __fn50_b
+-    * set __fn53_b __tmp147
++  504 op strictEqual __fn53_b __fn50_a __fn50_b
+   505 jump __label138 equal __fn53_b false
+   506 set __tmp149 "T"
+   507 jump __label139 always
+ 
+   511 set __tmp148 __tmp149
+   512 label __label137
+   513 op strictEqual __tmp151 __fn50_a __fn50_b
+-    * op equal __tmp150 __tmp151 false
+-    * set __fn54_b __tmp150
++  514 op equal __fn54_b __tmp151 false
+   515 jump __label141 equal __fn54_b false
+   516 set __tmp153 "T"
+   517 jump __label142 always
+ 
+   531 set __fn55_b 1
+   532 set __fn55_expected "TFFT"
+   533 assertflush
+-    * op equal __tmp155 __fn55_a __fn55_b
+-    * set __fn56_b __tmp155
++  534 op equal __fn56_b __fn55_a __fn55_b
+   535 jump __label145 equal __fn56_b false
+   536 set __tmp157 "T"
+   537 jump __label146 always
+ 
+   540 label __label146
+   541 set __tmp156 __tmp157
+   542 label __label144
+-    * op notEqual __tmp158 __fn55_a __fn55_b
+-    * set __fn57_b __tmp158
++  543 op notEqual __fn57_b __fn55_a __fn55_b
+   544 jump __label148 equal __fn57_b false
+   545 set __tmp160 "T"
+   546 jump __label149 always
+ 
+   549 label __label149
+   550 set __tmp159 __tmp160
+   551 label __label147
+-    * op strictEqual __tmp161 __fn55_a __fn55_b
+-    * set __fn58_b __tmp161
++  552 op strictEqual __fn58_b __fn55_a __fn55_b
+   553 jump __label151 equal __fn58_b false
+   554 set __tmp163 "T"
+   555 jump __label152 always
+ 
+   559 set __tmp162 __tmp163
+   560 label __label150
+   561 op strictEqual __tmp165 __fn55_a __fn55_b
+-    * op equal __tmp164 __tmp165 false
+-    * set __fn59_b __tmp164
++  562 op equal __fn59_b __tmp165 false
+   563 jump __label154 equal __fn59_b false
+   564 set __tmp167 "T"
+   565 jump __label155 always
+ 
+   579 set __fn60_b 2
+   580 set __fn60_expected "FTFT"
+   581 assertflush
+-    * op equal __tmp169 __fn60_a __fn60_b
+-    * set __fn61_b __tmp169
++  582 op equal __fn61_b __fn60_a __fn60_b
+   583 jump __label158 equal __fn61_b false
+   584 set __tmp171 "T"
+   585 jump __label159 always
+ 
+   588 label __label159
+   589 set __tmp170 __tmp171
+   590 label __label157
+-    * op notEqual __tmp172 __fn60_a __fn60_b
+-    * set __fn62_b __tmp172
++  591 op notEqual __fn62_b __fn60_a __fn60_b
+   592 jump __label161 equal __fn62_b false
+   593 set __tmp174 "T"
+   594 jump __label162 always
+ 
+   597 label __label162
+   598 set __tmp173 __tmp174
+   599 label __label160
+-    * op strictEqual __tmp175 __fn60_a __fn60_b
+-    * set __fn63_b __tmp175
++  600 op strictEqual __fn63_b __fn60_a __fn60_b
+   601 jump __label164 equal __fn63_b false
+   602 set __tmp177 "T"
+   603 jump __label165 always
+ 
+   607 set __tmp176 __tmp177
+   608 label __label163
+   609 op strictEqual __tmp179 __fn60_a __fn60_b
+-    * op equal __tmp178 __tmp179 false
+-    * set __fn64_b __tmp178
++  610 op equal __fn64_b __tmp179 false
+   611 jump __label167 equal __fn64_b false
+   612 set __tmp181 "T"
+   613 jump __label168 always
+ 
+   627 set __fn65_b "B"
+   628 set __fn65_expected "FTFT"
+   629 assertflush
+-    * op equal __tmp183 __fn65_a __fn65_b
+-    * set __fn66_b __tmp183
++  630 op equal __fn66_b __fn65_a __fn65_b
+   631 jump __label171 equal __fn66_b false
+   632 set __tmp185 "T"
+   633 jump __label172 always
+ 
+   636 label __label172
+   637 set __tmp184 __tmp185
+   638 label __label170
+-    * op notEqual __tmp186 __fn65_a __fn65_b
+-    * set __fn67_b __tmp186
++  639 op notEqual __fn67_b __fn65_a __fn65_b
+   640 jump __label174 equal __fn67_b false
+   641 set __tmp188 "T"
+   642 jump __label175 always
+ 
+   645 label __label175
+   646 set __tmp187 __tmp188
+   647 label __label173
+-    * op strictEqual __tmp189 __fn65_a __fn65_b
+-    * set __fn68_b __tmp189
++  648 op strictEqual __fn68_b __fn65_a __fn65_b
+   649 jump __label177 equal __fn68_b false
+   650 set __tmp191 "T"
+   651 jump __label178 always
+ 
+   655 set __tmp190 __tmp191
+   656 label __label176
+   657 op strictEqual __tmp193 __fn65_a __fn65_b
+-    * op equal __tmp192 __tmp193 false
+-    * set __fn69_b __tmp192
++  658 op equal __fn69_b __tmp193 false
+   659 jump __label180 equal __fn69_b false
+   660 set __tmp195 "T"
+   661 jump __label181 always
+ 
+   675 set __fn70_b "A"
+   676 set __fn70_expected "TFTF"
+   677 assertflush
+-    * op equal __tmp197 __fn70_a __fn70_b
+-    * set __fn71_b __tmp197
++  678 op equal __fn71_b __fn70_a __fn70_b
+   679 jump __label184 equal __fn71_b false
+   680 set __tmp199 "T"
+   681 jump __label185 always
+ 
+   684 label __label185
+   685 set __tmp198 __tmp199
+   686 label __label183
+-    * op notEqual __tmp200 __fn70_a __fn70_b
+-    * set __fn72_b __tmp200
++  687 op notEqual __fn72_b __fn70_a __fn70_b
+   688 jump __label187 equal __fn72_b false
+   689 set __tmp202 "T"
+   690 jump __label188 always
+ 
+   693 label __label188
+   694 set __tmp201 __tmp202
+   695 label __label186
+-    * op strictEqual __tmp203 __fn70_a __fn70_b
+-    * set __fn73_b __tmp203
++  696 op strictEqual __fn73_b __fn70_a __fn70_b
+   697 jump __label190 equal __fn73_b false
+   698 set __tmp205 "T"
+   699 jump __label191 always
+ 
+   703 set __tmp204 __tmp205
+   704 label __label189
+   705 op strictEqual __tmp207 __fn70_a __fn70_b
+-    * op equal __tmp206 __tmp207 false
+-    * set __fn74_b __tmp206
++  706 op equal __fn74_b __tmp207 false
+   707 jump __label193 equal __fn74_b false
+   708 set __tmp209 "T"
+   709 jump __label194 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-12 instructions):
+ 
+     3 set __fn0_b 0
+     4 set __fn0_expected "TFFT"
+     5 assertflush
+-    * op equal __fn1_b __fn0_a __fn0_b
+-    * jump __label2 equal __fn1_b false
++    6 op equal __fn1_b null 0
++    7 jump __label2 equal true false
+     8 set __tmp3 "T"
+     9 jump __label3 always
+    10 label __label2
+-    * set __tmp3 "F"
+    11 label __label3
+-    * set __tmp2 __tmp3
++   12 set __tmp2 "T"
+    13 label __label1
+-    * op notEqual __fn2_b __fn0_a __fn0_b
+-    * jump __label5 equal __fn2_b false
+-    * set __tmp6 "T"
++   14 op notEqual __fn2_b null 0
++   15 jump __label5 equal false false
+    16 jump __label6 always
+    17 label __label5
+    18 set __tmp6 "F"
+    19 label __label6
+-    * set __tmp5 __tmp6
++   20 set __tmp5 "F"
+    21 label __label4
+-    * op strictEqual __fn3_b __fn0_a __fn0_b
+-    * jump __label8 equal __fn3_b false
+-    * set __tmp9 "T"
++   22 op strictEqual __fn3_b null 0
++   23 jump __label8 equal false false
+    24 jump __label9 always
+    25 label __label8
+    26 set __tmp9 "F"
+    27 label __label9
+-    * set __tmp8 __tmp9
++   28 set __tmp8 "F"
+    29 label __label7
+-    * op strictEqual __tmp11 __fn0_a __fn0_b
+-    * op equal __fn4_b __tmp11 false
+-    * jump __label11 equal __fn4_b false
++   30 op strictEqual __tmp11 null 0
++   31 op equal __fn4_b false false
++   32 jump __label11 equal true false
+    33 set __tmp13 "T"
+    34 jump __label12 always
+    35 label __label11
+-    * set __tmp13 "F"
+    36 label __label12
+-    * set __tmp12 __tmp13
++   37 set __tmp12 "T"
+    38 label __label10
+-    * print __tmp2
+-    * print __tmp5
+-    * print __tmp8
+-    * print __tmp12
+-    * assertprints __fn0_expected __fn0_title
++   39 print __tmp3
++   40 print __tmp6
++   41 print __tmp9
++   42 print __tmp13
++   43 assertprints "TFFT" "comparison 1"
+    44 label __label0
+    45 set __fn5_title "comparison 2"
+    46 set __fn5_a null
+    47 set __fn5_b 1
+    48 set __fn5_expected "FTFT"
+    49 assertflush
+-    * op equal __fn6_b __fn5_a __fn5_b
+-    * jump __label15 equal __fn6_b false
+-    * set __tmp17 "T"
++   50 op equal __fn6_b null 1
++   51 jump __label15 equal false false
+    52 jump __label16 always
+    53 label __label15
+    54 set __tmp17 "F"
+    55 label __label16
+-    * set __tmp16 __tmp17
++   56 set __tmp16 "F"
+    57 label __label14
+-    * op notEqual __fn7_b __fn5_a __fn5_b
+-    * jump __label18 equal __fn7_b false
++   58 op notEqual __fn7_b null 1
++   59 jump __label18 equal true false
+    60 set __tmp20 "T"
+    61 jump __label19 always
+    62 label __label18
+-    * set __tmp20 "F"
+    63 label __label19
+-    * set __tmp19 __tmp20
++   64 set __tmp19 "T"
+    65 label __label17
+-    * op strictEqual __fn8_b __fn5_a __fn5_b
+-    * jump __label21 equal __fn8_b false
+-    * set __tmp23 "T"
++   66 op strictEqual __fn8_b null 1
++   67 jump __label21 equal false false
+    68 jump __label22 always
+    69 label __label21
+    70 set __tmp23 "F"
+    71 label __label22
+-    * set __tmp22 __tmp23
++   72 set __tmp22 "F"
+    73 label __label20
+-    * op strictEqual __tmp25 __fn5_a __fn5_b
+-    * op equal __fn9_b __tmp25 false
+-    * jump __label24 equal __fn9_b false
++   74 op strictEqual __tmp25 null 1
++   75 op equal __fn9_b false false
++   76 jump __label24 equal true false
+    77 set __tmp27 "T"
+    78 jump __label25 always
+    79 label __label24
+-    * set __tmp27 "F"
+    80 label __label25
+-    * set __tmp26 __tmp27
++   81 set __tmp26 "T"
+    82 label __label23
+-    * print __tmp16
+-    * print __tmp19
+-    * print __tmp22
+-    * print __tmp26
+-    * assertprints __fn5_expected __fn5_title
++   83 print __tmp17
++   84 print __tmp20
++   85 print __tmp23
++   86 print __tmp27
++   87 assertprints "FTFT" "comparison 2"
+    88 label __label13
+    89 set __fn10_title "comparison 3"
+    90 set __fn10_a null
+    91 set __fn10_b 2
+    92 set __fn10_expected "FTFT"
+    93 assertflush
+-    * op equal __fn11_b __fn10_a __fn10_b
+-    * jump __label28 equal __fn11_b false
+-    * set __tmp31 "T"
++   94 op equal __fn11_b null 2
++   95 jump __label28 equal false false
+    96 jump __label29 always
+    97 label __label28
+    98 set __tmp31 "F"
+    99 label __label29
+-    * set __tmp30 __tmp31
++  100 set __tmp30 "F"
+   101 label __label27
+-    * op notEqual __fn12_b __fn10_a __fn10_b
+-    * jump __label31 equal __fn12_b false
++  102 op notEqual __fn12_b null 2
++  103 jump __label31 equal true false
+   104 set __tmp34 "T"
+   105 jump __label32 always
+   106 label __label31
+-    * set __tmp34 "F"
+   107 label __label32
+-    * set __tmp33 __tmp34
++  108 set __tmp33 "T"
+   109 label __label30
+-    * op strictEqual __fn13_b __fn10_a __fn10_b
+-    * jump __label34 equal __fn13_b false
+-    * set __tmp37 "T"
++  110 op strictEqual __fn13_b null 2
++  111 jump __label34 equal false false
+   112 jump __label35 always
+   113 label __label34
+   114 set __tmp37 "F"
+   115 label __label35
+-    * set __tmp36 __tmp37
++  116 set __tmp36 "F"
+   117 label __label33
+-    * op strictEqual __tmp39 __fn10_a __fn10_b
+-    * op equal __fn14_b __tmp39 false
+-    * jump __label37 equal __fn14_b false
++  118 op strictEqual __tmp39 null 2
++  119 op equal __fn14_b false false
++  120 jump __label37 equal true false
+   121 set __tmp41 "T"
+   122 jump __label38 always
+   123 label __label37
+-    * set __tmp41 "F"
+   124 label __label38
+-    * set __tmp40 __tmp41
++  125 set __tmp40 "T"
+   126 label __label36
+-    * print __tmp30
+-    * print __tmp33
+-    * print __tmp36
+-    * print __tmp40
+-    * assertprints __fn10_expected __fn10_title
++  127 print __tmp31
++  128 print __tmp34
++  129 print __tmp37
++  130 print __tmp41
++  131 assertprints "FTFT" "comparison 3"
+   132 label __label26
+   133 set __fn15_title "comparison 4"
+   134 set __fn15_a @coal
+   135 set __fn15_b 0
+   136 set __fn15_expected "FTFT"
+   137 assertflush
+-    * op equal __fn16_b __fn15_a __fn15_b
++  138 op equal __fn16_b @coal 0
+   139 jump __label41 equal __fn16_b false
+   140 set __tmp45 "T"
+   141 jump __label42 always
+ 
+   144 label __label42
+   145 set __tmp44 __tmp45
+   146 label __label40
+-    * op notEqual __fn17_b __fn15_a __fn15_b
++  147 op notEqual __fn17_b @coal 0
+   148 jump __label44 equal __fn17_b false
+   149 set __tmp48 "T"
+   150 jump __label45 always
+ 
+   153 label __label45
+   154 set __tmp47 __tmp48
+   155 label __label43
+-    * op strictEqual __fn18_b __fn15_a __fn15_b
++  156 op strictEqual __fn18_b @coal 0
+   157 jump __label47 equal __fn18_b false
+   158 set __tmp51 "T"
+   159 jump __label48 always
+ 
+   162 label __label48
+   163 set __tmp50 __tmp51
+   164 label __label46
+-    * op strictEqual __tmp53 __fn15_a __fn15_b
+-    * op equal __fn19_b __tmp53 false
++  165 op strictEqual __tmp53 @coal 0
++  166 op equal __fn19_b __fn18_b false
+   167 jump __label50 equal __fn19_b false
+   168 set __tmp55 "T"
+   169 jump __label51 always
+ 
+   172 label __label51
+   173 set __tmp54 __tmp55
+   174 label __label49
+-    * print __tmp44
+-    * print __tmp47
+-    * print __tmp50
+-    * print __tmp54
+-    * assertprints __fn15_expected __fn15_title
++  175 print __tmp45
++  176 print __tmp48
++  177 print __tmp51
++  178 print __tmp55
++  179 assertprints "FTFT" "comparison 4"
+   180 label __label39
+   181 set __fn20_title "comparison 5"
+   182 set __fn20_a @coal
+   183 set __fn20_b 1
+   184 set __fn20_expected "TFFT"
+   185 assertflush
+-    * op equal __fn21_b __fn20_a __fn20_b
++  186 op equal __fn21_b @coal 1
+   187 jump __label54 equal __fn21_b false
+   188 set __tmp59 "T"
+   189 jump __label55 always
+ 
+   192 label __label55
+   193 set __tmp58 __tmp59
+   194 label __label53
+-    * op notEqual __fn22_b __fn20_a __fn20_b
++  195 op notEqual __fn22_b @coal 1
+   196 jump __label57 equal __fn22_b false
+   197 set __tmp62 "T"
+   198 jump __label58 always
+ 
+   201 label __label58
+   202 set __tmp61 __tmp62
+   203 label __label56
+-    * op strictEqual __fn23_b __fn20_a __fn20_b
++  204 op strictEqual __fn23_b @coal 1
+   205 jump __label60 equal __fn23_b false
+   206 set __tmp65 "T"
+   207 jump __label61 always
+ 
+   210 label __label61
+   211 set __tmp64 __tmp65
+   212 label __label59
+-    * op strictEqual __tmp67 __fn20_a __fn20_b
+-    * op equal __fn24_b __tmp67 false
++  213 op strictEqual __tmp67 @coal 1
++  214 op equal __fn24_b __fn23_b false
+   215 jump __label63 equal __fn24_b false
+   216 set __tmp69 "T"
+   217 jump __label64 always
+ 
+   220 label __label64
+   221 set __tmp68 __tmp69
+   222 label __label62
+-    * print __tmp58
+-    * print __tmp61
+-    * print __tmp64
+-    * print __tmp68
+-    * assertprints __fn20_expected __fn20_title
++  223 print __tmp59
++  224 print __tmp62
++  225 print __tmp65
++  226 print __tmp69
++  227 assertprints "TFFT" "comparison 5"
+   228 label __label52
+   229 set __fn25_title "comparison 6"
+   230 set __fn25_a @coal
+   231 set __fn25_b 2
+   232 set __fn25_expected "FTFT"
+   233 assertflush
+-    * op equal __fn26_b __fn25_a __fn25_b
++  234 op equal __fn26_b @coal 2
+   235 jump __label67 equal __fn26_b false
+   236 set __tmp73 "T"
+   237 jump __label68 always
+ 
+   240 label __label68
+   241 set __tmp72 __tmp73
+   242 label __label66
+-    * op notEqual __fn27_b __fn25_a __fn25_b
++  243 op notEqual __fn27_b @coal 2
+   244 jump __label70 equal __fn27_b false
+   245 set __tmp76 "T"
+   246 jump __label71 always
+ 
+   249 label __label71
+   250 set __tmp75 __tmp76
+   251 label __label69
+-    * op strictEqual __fn28_b __fn25_a __fn25_b
++  252 op strictEqual __fn28_b @coal 2
+   253 jump __label73 equal __fn28_b false
+   254 set __tmp79 "T"
+   255 jump __label74 always
+ 
+   258 label __label74
+   259 set __tmp78 __tmp79
+   260 label __label72
+-    * op strictEqual __tmp81 __fn25_a __fn25_b
+-    * op equal __fn29_b __tmp81 false
++  261 op strictEqual __tmp81 @coal 2
++  262 op equal __fn29_b __fn28_b false
+   263 jump __label76 equal __fn29_b false
+   264 set __tmp83 "T"
+   265 jump __label77 always
+ 
+   268 label __label77
+   269 set __tmp82 __tmp83
+   270 label __label75
+-    * print __tmp72
+-    * print __tmp75
+-    * print __tmp78
+-    * print __tmp82
+-    * assertprints __fn25_expected __fn25_title
++  271 print __tmp73
++  272 print __tmp76
++  273 print __tmp79
++  274 print __tmp83
++  275 assertprints "FTFT" "comparison 6"
+   276 label __label65
+   277 set __fn30_title "comparison 7"
+   278 set __fn30_a @coal
+   279 set __fn30_b @lead
+   280 set __fn30_expected "FTFT"
+   281 assertflush
+-    * op equal __fn31_b __fn30_a __fn30_b
++  282 op equal __fn31_b @coal @lead
+   283 jump __label80 equal __fn31_b false
+   284 set __tmp87 "T"
+   285 jump __label81 always
+ 
+   288 label __label81
+   289 set __tmp86 __tmp87
+   290 label __label79
+-    * op notEqual __fn32_b __fn30_a __fn30_b
++  291 op notEqual __fn32_b @coal @lead
+   292 jump __label83 equal __fn32_b false
+   293 set __tmp90 "T"
+   294 jump __label84 always
+ 
+   297 label __label84
+   298 set __tmp89 __tmp90
+   299 label __label82
+-    * op strictEqual __fn33_b __fn30_a __fn30_b
++  300 op strictEqual __fn33_b @coal @lead
+   301 jump __label86 equal __fn33_b false
+   302 set __tmp93 "T"
+   303 jump __label87 always
+ 
+   306 label __label87
+   307 set __tmp92 __tmp93
+   308 label __label85
+-    * op strictEqual __tmp95 __fn30_a __fn30_b
+-    * op equal __fn34_b __tmp95 false
++  309 op strictEqual __tmp95 @coal @lead
++  310 op equal __fn34_b __fn33_b false
+   311 jump __label89 equal __fn34_b false
+   312 set __tmp97 "T"
+   313 jump __label90 always
+ 
+   316 label __label90
+   317 set __tmp96 __tmp97
+   318 label __label88
+-    * print __tmp86
+-    * print __tmp89
+-    * print __tmp92
+-    * print __tmp96
+-    * assertprints __fn30_expected __fn30_title
++  319 print __tmp87
++  320 print __tmp90
++  321 print __tmp93
++  322 print __tmp97
++  323 assertprints "FTFT" "comparison 7"
+   324 label __label78
+   325 set __fn35_title "comparison 8"
+   326 set __fn35_a A
+   327 set __fn35_b A
+   328 set __fn35_expected "TFTF"
+   329 assertflush
+-    * op equal __fn36_b __fn35_a __fn35_b
++  330 op equal __fn36_b A A
+   331 jump __label93 equal __fn36_b false
+   332 set __tmp101 "T"
+   333 jump __label94 always
+ 
+   336 label __label94
+   337 set __tmp100 __tmp101
+   338 label __label92
+-    * op notEqual __fn37_b __fn35_a __fn35_b
++  339 op notEqual __fn37_b A A
+   340 jump __label96 equal __fn37_b false
+   341 set __tmp104 "T"
+   342 jump __label97 always
+ 
+   345 label __label97
+   346 set __tmp103 __tmp104
+   347 label __label95
+-    * op strictEqual __fn38_b __fn35_a __fn35_b
++  348 op strictEqual __fn38_b A A
+   349 jump __label99 equal __fn38_b false
+   350 set __tmp107 "T"
+   351 jump __label100 always
+ 
+   354 label __label100
+   355 set __tmp106 __tmp107
+   356 label __label98
+-    * op strictEqual __tmp109 __fn35_a __fn35_b
+-    * op equal __fn39_b __tmp109 false
++  357 op strictEqual __tmp109 A A
++  358 op equal __fn39_b __fn38_b false
+   359 jump __label102 equal __fn39_b false
+   360 set __tmp111 "T"
+   361 jump __label103 always
+ 
+   364 label __label103
+   365 set __tmp110 __tmp111
+   366 label __label101
+-    * print __tmp100
+-    * print __tmp103
+-    * print __tmp106
+-    * print __tmp110
+-    * assertprints __fn35_expected __fn35_title
++  367 print __tmp101
++  368 print __tmp104
++  369 print __tmp107
++  370 print __tmp111
++  371 assertprints "TFTF" "comparison 8"
+   372 label __label91
+   373 set __fn40_title "comparison 9"
+   374 set __fn40_a A
+   375 set __fn40_b 0
+   376 set __fn40_expected "TFTF"
+   377 assertflush
+-    * op equal __fn41_b __fn40_a __fn40_b
++  378 op equal __fn41_b A 0
+   379 jump __label106 equal __fn41_b false
+   380 set __tmp115 "T"
+   381 jump __label107 always
+ 
+   384 label __label107
+   385 set __tmp114 __tmp115
+   386 label __label105
+-    * op notEqual __fn42_b __fn40_a __fn40_b
++  387 op notEqual __fn42_b A 0
+   388 jump __label109 equal __fn42_b false
+   389 set __tmp118 "T"
+   390 jump __label110 always
+ 
+   393 label __label110
+   394 set __tmp117 __tmp118
+   395 label __label108
+-    * op strictEqual __fn43_b __fn40_a __fn40_b
++  396 op strictEqual __fn43_b A 0
+   397 jump __label112 equal __fn43_b false
+   398 set __tmp121 "T"
+   399 jump __label113 always
+ 
+   402 label __label113
+   403 set __tmp120 __tmp121
+   404 label __label111
+-    * op strictEqual __tmp123 __fn40_a __fn40_b
+-    * op equal __fn44_b __tmp123 false
++  405 op strictEqual __tmp123 A 0
++  406 op equal __fn44_b __fn43_b false
+   407 jump __label115 equal __fn44_b false
+   408 set __tmp125 "T"
+   409 jump __label116 always
+ 
+   412 label __label116
+   413 set __tmp124 __tmp125
+   414 label __label114
+-    * print __tmp114
+-    * print __tmp117
+-    * print __tmp120
+-    * print __tmp124
+-    * assertprints __fn40_expected __fn40_title
++  415 print __tmp115
++  416 print __tmp118
++  417 print __tmp121
++  418 print __tmp125
++  419 assertprints "TFTF" "comparison 9"
+   420 label __label104
+   421 set __fn45_title "comparison 10"
+   422 set __fn45_a A
+   423 set __fn45_b 1
+   424 set __fn45_expected "FTFT"
+   425 assertflush
+-    * op equal __fn46_b __fn45_a __fn45_b
++  426 op equal __fn46_b A 1
+   427 jump __label119 equal __fn46_b false
+   428 set __tmp129 "T"
+   429 jump __label120 always
+ 
+   432 label __label120
+   433 set __tmp128 __tmp129
+   434 label __label118
+-    * op notEqual __fn47_b __fn45_a __fn45_b
++  435 op notEqual __fn47_b A 1
+   436 jump __label122 equal __fn47_b false
+   437 set __tmp132 "T"
+   438 jump __label123 always
+ 
+   441 label __label123
+   442 set __tmp131 __tmp132
+   443 label __label121
+-    * op strictEqual __fn48_b __fn45_a __fn45_b
++  444 op strictEqual __fn48_b A 1
+   445 jump __label125 equal __fn48_b false
+   446 set __tmp135 "T"
+   447 jump __label126 always
+ 
+   450 label __label126
+   451 set __tmp134 __tmp135
+   452 label __label124
+-    * op strictEqual __tmp137 __fn45_a __fn45_b
+-    * op equal __fn49_b __tmp137 false
++  453 op strictEqual __tmp137 A 1
++  454 op equal __fn49_b __fn48_b false
+   455 jump __label128 equal __fn49_b false
+   456 set __tmp139 "T"
+   457 jump __label129 always
+ 
+   460 label __label129
+   461 set __tmp138 __tmp139
+   462 label __label127
+-    * print __tmp128
+-    * print __tmp131
+-    * print __tmp134
+-    * print __tmp138
+-    * assertprints __fn45_expected __fn45_title
++  463 print __tmp129
++  464 print __tmp132
++  465 print __tmp135
++  466 print __tmp139
++  467 assertprints "FTFT" "comparison 10"
+   468 label __label117
+   469 set __fn50_title "comparison 11"
+   470 set __fn50_a "A"
+   471 set __fn50_b 0
+   472 set __fn50_expected "FTFT"
+   473 assertflush
+-    * op equal __fn51_b __fn50_a __fn50_b
++  474 op equal __fn51_b "A" 0
+   475 jump __label132 equal __fn51_b false
+   476 set __tmp143 "T"
+   477 jump __label133 always
+ 
+   480 label __label133
+   481 set __tmp142 __tmp143
+   482 label __label131
+-    * op notEqual __fn52_b __fn50_a __fn50_b
++  483 op notEqual __fn52_b "A" 0
+   484 jump __label135 equal __fn52_b false
+   485 set __tmp146 "T"
+   486 jump __label136 always
+ 
+   489 label __label136
+   490 set __tmp145 __tmp146
+   491 label __label134
+-    * op strictEqual __fn53_b __fn50_a __fn50_b
++  492 op strictEqual __fn53_b "A" 0
+   493 jump __label138 equal __fn53_b false
+   494 set __tmp149 "T"
+   495 jump __label139 always
+ 
+   498 label __label139
+   499 set __tmp148 __tmp149
+   500 label __label137
+-    * op strictEqual __tmp151 __fn50_a __fn50_b
+-    * op equal __fn54_b __tmp151 false
++  501 op strictEqual __tmp151 "A" 0
++  502 op equal __fn54_b __fn53_b false
+   503 jump __label141 equal __fn54_b false
+   504 set __tmp153 "T"
+   505 jump __label142 always
+ 
+   508 label __label142
+   509 set __tmp152 __tmp153
+   510 label __label140
+-    * print __tmp142
+-    * print __tmp145
+-    * print __tmp148
+-    * print __tmp152
+-    * assertprints __fn50_expected __fn50_title
++  511 print __tmp143
++  512 print __tmp146
++  513 print __tmp149
++  514 print __tmp153
++  515 assertprints "FTFT" "comparison 11"
+   516 label __label130
+   517 set __fn55_title "comparison 12"
+   518 set __fn55_a "A"
+   519 set __fn55_b 1
+   520 set __fn55_expected "TFFT"
+   521 assertflush
+-    * op equal __fn56_b __fn55_a __fn55_b
++  522 op equal __fn56_b "A" 1
+   523 jump __label145 equal __fn56_b false
+   524 set __tmp157 "T"
+   525 jump __label146 always
+ 
+   528 label __label146
+   529 set __tmp156 __tmp157
+   530 label __label144
+-    * op notEqual __fn57_b __fn55_a __fn55_b
++  531 op notEqual __fn57_b "A" 1
+   532 jump __label148 equal __fn57_b false
+   533 set __tmp160 "T"
+   534 jump __label149 always
+ 
+   537 label __label149
+   538 set __tmp159 __tmp160
+   539 label __label147
+-    * op strictEqual __fn58_b __fn55_a __fn55_b
++  540 op strictEqual __fn58_b "A" 1
+   541 jump __label151 equal __fn58_b false
+   542 set __tmp163 "T"
+   543 jump __label152 always
+ 
+   546 label __label152
+   547 set __tmp162 __tmp163
+   548 label __label150
+-    * op strictEqual __tmp165 __fn55_a __fn55_b
+-    * op equal __fn59_b __tmp165 false
++  549 op strictEqual __tmp165 "A" 1
++  550 op equal __fn59_b __fn58_b false
+   551 jump __label154 equal __fn59_b false
+   552 set __tmp167 "T"
+   553 jump __label155 always
+ 
+   556 label __label155
+   557 set __tmp166 __tmp167
+   558 label __label153
+-    * print __tmp156
+-    * print __tmp159
+-    * print __tmp162
+-    * print __tmp166
+-    * assertprints __fn55_expected __fn55_title
++  559 print __tmp157
++  560 print __tmp160
++  561 print __tmp163
++  562 print __tmp167
++  563 assertprints "TFFT" "comparison 12"
+   564 label __label143
+   565 set __fn60_title "comparison 13"
+   566 set __fn60_a "A"
+   567 set __fn60_b 2
+   568 set __fn60_expected "FTFT"
+   569 assertflush
+-    * op equal __fn61_b __fn60_a __fn60_b
++  570 op equal __fn61_b "A" 2
+   571 jump __label158 equal __fn61_b false
+   572 set __tmp171 "T"
+   573 jump __label159 always
+ 
+   576 label __label159
+   577 set __tmp170 __tmp171
+   578 label __label157
+-    * op notEqual __fn62_b __fn60_a __fn60_b
++  579 op notEqual __fn62_b "A" 2
+   580 jump __label161 equal __fn62_b false
+   581 set __tmp174 "T"
+   582 jump __label162 always
+ 
+   585 label __label162
+   586 set __tmp173 __tmp174
+   587 label __label160
+-    * op strictEqual __fn63_b __fn60_a __fn60_b
++  588 op strictEqual __fn63_b "A" 2
+   589 jump __label164 equal __fn63_b false
+   590 set __tmp177 "T"
+   591 jump __label165 always
+ 
+   594 label __label165
+   595 set __tmp176 __tmp177
+   596 label __label163
+-    * op strictEqual __tmp179 __fn60_a __fn60_b
+-    * op equal __fn64_b __tmp179 false
++  597 op strictEqual __tmp179 "A" 2
++  598 op equal __fn64_b __fn63_b false
+   599 jump __label167 equal __fn64_b false
+   600 set __tmp181 "T"
+   601 jump __label168 always
+ 
+   604 label __label168
+   605 set __tmp180 __tmp181
+   606 label __label166
+-    * print __tmp170
+-    * print __tmp173
+-    * print __tmp176
+-    * print __tmp180
+-    * assertprints __fn60_expected __fn60_title
++  607 print __tmp171
++  608 print __tmp174
++  609 print __tmp177
++  610 print __tmp181
++  611 assertprints "FTFT" "comparison 13"
+   612 label __label156
+   613 set __fn65_title "comparison 14"
+   614 set __fn65_a "A"
+   615 set __fn65_b "B"
+   616 set __fn65_expected "FTFT"
+   617 assertflush
+-    * op equal __fn66_b __fn65_a __fn65_b
++  618 op equal __fn66_b "A" "B"
+   619 jump __label171 equal __fn66_b false
+   620 set __tmp185 "T"
+   621 jump __label172 always
+ 
+   624 label __label172
+   625 set __tmp184 __tmp185
+   626 label __label170
+-    * op notEqual __fn67_b __fn65_a __fn65_b
++  627 op notEqual __fn67_b "A" "B"
+   628 jump __label174 equal __fn67_b false
+   629 set __tmp188 "T"
+   630 jump __label175 always
+ 
+   633 label __label175
+   634 set __tmp187 __tmp188
+   635 label __label173
+-    * op strictEqual __fn68_b __fn65_a __fn65_b
++  636 op strictEqual __fn68_b "A" "B"
+   637 jump __label177 equal __fn68_b false
+   638 set __tmp191 "T"
+   639 jump __label178 always
+ 
+   642 label __label178
+   643 set __tmp190 __tmp191
+   644 label __label176
+-    * op strictEqual __tmp193 __fn65_a __fn65_b
+-    * op equal __fn69_b __tmp193 false
++  645 op strictEqual __tmp193 "A" "B"
++  646 op equal __fn69_b __fn68_b false
+   647 jump __label180 equal __fn69_b false
+   648 set __tmp195 "T"
+   649 jump __label181 always
+ 
+   652 label __label181
+   653 set __tmp194 __tmp195
+   654 label __label179
+-    * print __tmp184
+-    * print __tmp187
+-    * print __tmp190
+-    * print __tmp194
+-    * assertprints __fn65_expected __fn65_title
++  655 print __tmp185
++  656 print __tmp188
++  657 print __tmp191
++  658 print __tmp195
++  659 assertprints "FTFT" "comparison 14"
+   660 label __label169
+   661 set __fn70_title "comparison 15"
+   662 set __fn70_a "A"
+   663 set __fn70_b "A"
+   664 set __fn70_expected "TFTF"
+   665 assertflush
+-    * op equal __fn71_b __fn70_a __fn70_b
++  666 op equal __fn71_b "A" "A"
+   667 jump __label184 equal __fn71_b false
+   668 set __tmp199 "T"
+   669 jump __label185 always
+ 
+   672 label __label185
+   673 set __tmp198 __tmp199
+   674 label __label183
+-    * op notEqual __fn72_b __fn70_a __fn70_b
++  675 op notEqual __fn72_b "A" "A"
+   676 jump __label187 equal __fn72_b false
+   677 set __tmp202 "T"
+   678 jump __label188 always
+ 
+   681 label __label188
+   682 set __tmp201 __tmp202
+   683 label __label186
+-    * op strictEqual __fn73_b __fn70_a __fn70_b
++  684 op strictEqual __fn73_b "A" "A"
+   685 jump __label190 equal __fn73_b false
+   686 set __tmp205 "T"
+   687 jump __label191 always
+ 
+   690 label __label191
+   691 set __tmp204 __tmp205
+   692 label __label189
+-    * op strictEqual __tmp207 __fn70_a __fn70_b
+-    * op equal __fn74_b __tmp207 false
++  693 op strictEqual __tmp207 "A" "A"
++  694 op equal __fn74_b __fn73_b false
+   695 jump __label193 equal __fn74_b false
+   696 set __tmp209 "T"
+   697 jump __label194 always
+ 
+   700 label __label194
+   701 set __tmp208 __tmp209
+   702 label __label192
+-    * print __tmp198
+-    * print __tmp201
+-    * print __tmp204
+-    * print __tmp208
+-    * assertprints __fn70_expected __fn70_title
++  703 print __tmp199
++  704 print __tmp202
++  705 print __tmp205
++  706 print __tmp209
++  707 assertprints "TFTF" "comparison 15"
+   708 label __label182
+   709 stop
+   710 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-147 instructions):
+     0 set A 0
+-    * set __fn0_title "comparison 1"
+-    * set __fn0_a null
+-    * set __fn0_b 0
+-    * set __fn0_expected "TFFT"
+     1 assertflush
+-    * op equal __fn1_b null 0
+     2 jump __label2 equal true false
+     3 set __tmp3 "T"
+     4 jump __label3 always
+     5 label __label2
+     6 label __label3
+-    * set __tmp2 "T"
+     7 label __label1
+-    * op notEqual __fn2_b null 0
+     8 jump __label5 equal false false
+     9 jump __label6 always
+    10 label __label5
+    11 set __tmp6 "F"
+    12 label __label6
+-    * set __tmp5 "F"
+    13 label __label4
+-    * op strictEqual __fn3_b null 0
+    14 jump __label8 equal false false
+    15 jump __label9 always
+    16 label __label8
+    17 set __tmp9 "F"
+    18 label __label9
+-    * set __tmp8 "F"
+    19 label __label7
+-    * op strictEqual __tmp11 null 0
+-    * op equal __fn4_b false false
+    20 jump __label11 equal true false
+    21 set __tmp13 "T"
+    22 jump __label12 always
+    23 label __label11
+    24 label __label12
+-    * set __tmp12 "T"
+    25 label __label10
+-    * print __tmp3
+-    * print __tmp6
+-    * print __tmp9
+-    * print __tmp13
++   26 print "T"
++   27 print "F"
++   28 print "F"
++   29 print "T"
+    30 assertprints "TFFT" "comparison 1"
+    31 label __label0
+-    * set __fn5_title "comparison 2"
+-    * set __fn5_a null
+-    * set __fn5_b 1
+-    * set __fn5_expected "FTFT"
+    32 assertflush
+-    * op equal __fn6_b null 1
+    33 jump __label15 equal false false
+    34 jump __label16 always
+    35 label __label15
+    36 set __tmp17 "F"
+    37 label __label16
+-    * set __tmp16 "F"
+    38 label __label14
+-    * op notEqual __fn7_b null 1
+    39 jump __label18 equal true false
+    40 set __tmp20 "T"
+    41 jump __label19 always
+    42 label __label18
+    43 label __label19
+-    * set __tmp19 "T"
+    44 label __label17
+-    * op strictEqual __fn8_b null 1
+    45 jump __label21 equal false false
+    46 jump __label22 always
+    47 label __label21
+    48 set __tmp23 "F"
+    49 label __label22
+-    * set __tmp22 "F"
+    50 label __label20
+-    * op strictEqual __tmp25 null 1
+-    * op equal __fn9_b false false
+    51 jump __label24 equal true false
+    52 set __tmp27 "T"
+    53 jump __label25 always
+    54 label __label24
+    55 label __label25
+-    * set __tmp26 "T"
+    56 label __label23
+-    * print __tmp17
+-    * print __tmp20
+-    * print __tmp23
+-    * print __tmp27
++   57 print "F"
++   58 print "T"
++   59 print "F"
++   60 print "T"
+    61 assertprints "FTFT" "comparison 2"
+    62 label __label13
+-    * set __fn10_title "comparison 3"
+-    * set __fn10_a null
+-    * set __fn10_b 2
+-    * set __fn10_expected "FTFT"
+    63 assertflush
+-    * op equal __fn11_b null 2
+    64 jump __label28 equal false false
+    65 jump __label29 always
+    66 label __label28
+    67 set __tmp31 "F"
+    68 label __label29
+-    * set __tmp30 "F"
+    69 label __label27
+-    * op notEqual __fn12_b null 2
+    70 jump __label31 equal true false
+    71 set __tmp34 "T"
+    72 jump __label32 always
+    73 label __label31
+    74 label __label32
+-    * set __tmp33 "T"
+    75 label __label30
+-    * op strictEqual __fn13_b null 2
+    76 jump __label34 equal false false
+    77 jump __label35 always
+    78 label __label34
+    79 set __tmp37 "F"
+    80 label __label35
+-    * set __tmp36 "F"
+    81 label __label33
+-    * op strictEqual __tmp39 null 2
+-    * op equal __fn14_b false false
+    82 jump __label37 equal true false
+    83 set __tmp41 "T"
+    84 jump __label38 always
+    85 label __label37
+    86 label __label38
+-    * set __tmp40 "T"
+    87 label __label36
+-    * print __tmp31
+-    * print __tmp34
+-    * print __tmp37
+-    * print __tmp41
++   88 print "F"
++   89 print "T"
++   90 print "F"
++   91 print "T"
+    92 assertprints "FTFT" "comparison 3"
+    93 label __label26
+-    * set __fn15_title "comparison 4"
+-    * set __fn15_a @coal
+-    * set __fn15_b 0
+-    * set __fn15_expected "FTFT"
+    94 assertflush
+    95 op equal __fn16_b @coal 0
+-    * jump __label41 equal __fn16_b false
+-    * set __tmp45 "T"
++   96 jump __label41 equal false false
+    97 jump __label42 always
+    98 label __label41
+    99 set __tmp45 "F"
+   100 label __label42
+-    * set __tmp44 __tmp45
++  101 set __tmp44 "F"
+   102 label __label40
+   103 op notEqual __fn17_b @coal 0
+-    * jump __label44 equal __fn17_b false
++  104 jump __label44 equal true false
+   105 set __tmp48 "T"
+   106 jump __label45 always
+   107 label __label44
+-    * set __tmp48 "F"
+   108 label __label45
+-    * set __tmp47 __tmp48
++  109 set __tmp47 "T"
+   110 label __label43
+   111 op strictEqual __fn18_b @coal 0
+-    * jump __label47 equal __fn18_b false
+-    * set __tmp51 "T"
++  112 jump __label47 equal false false
+   113 jump __label48 always
+   114 label __label47
+   115 set __tmp51 "F"
+   116 label __label48
+-    * set __tmp50 __tmp51
++  117 set __tmp50 "F"
+   118 label __label46
+-    * op strictEqual __tmp53 @coal 0
+-    * op equal __fn19_b __fn18_b false
+-    * jump __label50 equal __fn19_b false
++  119 op equal __fn19_b false false
++  120 jump __label50 equal true false
+   121 set __tmp55 "T"
+   122 jump __label51 always
+   123 label __label50
+-    * set __tmp55 "F"
+   124 label __label51
+-    * set __tmp54 __tmp55
++  125 set __tmp54 "T"
+   126 label __label49
+-    * print __tmp45
+-    * print __tmp48
+-    * print __tmp51
+-    * print __tmp55
++  127 print "F"
++  128 print "T"
++  129 print "F"
++  130 print "T"
+   131 assertprints "FTFT" "comparison 4"
+   132 label __label39
+-    * set __fn20_title "comparison 5"
+-    * set __fn20_a @coal
+-    * set __fn20_b 1
+-    * set __fn20_expected "TFFT"
+   133 assertflush
+   134 op equal __fn21_b @coal 1
+-    * jump __label54 equal __fn21_b false
++  135 jump __label54 equal true false
+   136 set __tmp59 "T"
+   137 jump __label55 always
+   138 label __label54
+-    * set __tmp59 "F"
+   139 label __label55
+-    * set __tmp58 __tmp59
++  140 set __tmp58 "T"
+   141 label __label53
+   142 op notEqual __fn22_b @coal 1
+-    * jump __label57 equal __fn22_b false
+-    * set __tmp62 "T"
++  143 jump __label57 equal false false
+   144 jump __label58 always
+   145 label __label57
+   146 set __tmp62 "F"
+   147 label __label58
+-    * set __tmp61 __tmp62
++  148 set __tmp61 "F"
+   149 label __label56
+   150 op strictEqual __fn23_b @coal 1
+-    * jump __label60 equal __fn23_b false
+-    * set __tmp65 "T"
++  151 jump __label60 equal false false
+   152 jump __label61 always
+   153 label __label60
+   154 set __tmp65 "F"
+   155 label __label61
+-    * set __tmp64 __tmp65
++  156 set __tmp64 "F"
+   157 label __label59
+-    * op strictEqual __tmp67 @coal 1
+-    * op equal __fn24_b __fn23_b false
+-    * jump __label63 equal __fn24_b false
++  158 op equal __fn24_b false false
++  159 jump __label63 equal true false
+   160 set __tmp69 "T"
+   161 jump __label64 always
+   162 label __label63
+-    * set __tmp69 "F"
+   163 label __label64
+-    * set __tmp68 __tmp69
++  164 set __tmp68 "T"
+   165 label __label62
+-    * print __tmp59
+-    * print __tmp62
+-    * print __tmp65
+-    * print __tmp69
++  166 print "T"
++  167 print "F"
++  168 print "F"
++  169 print "T"
+   170 assertprints "TFFT" "comparison 5"
+   171 label __label52
+-    * set __fn25_title "comparison 6"
+-    * set __fn25_a @coal
+-    * set __fn25_b 2
+-    * set __fn25_expected "FTFT"
+   172 assertflush
+   173 op equal __fn26_b @coal 2
+-    * jump __label67 equal __fn26_b false
+-    * set __tmp73 "T"
++  174 jump __label67 equal false false
+   175 jump __label68 always
+   176 label __label67
+   177 set __tmp73 "F"
+   178 label __label68
+-    * set __tmp72 __tmp73
++  179 set __tmp72 "F"
+   180 label __label66
+   181 op notEqual __fn27_b @coal 2
+-    * jump __label70 equal __fn27_b false
++  182 jump __label70 equal true false
+   183 set __tmp76 "T"
+   184 jump __label71 always
+   185 label __label70
+-    * set __tmp76 "F"
+   186 label __label71
+-    * set __tmp75 __tmp76
++  187 set __tmp75 "T"
+   188 label __label69
+   189 op strictEqual __fn28_b @coal 2
+-    * jump __label73 equal __fn28_b false
+-    * set __tmp79 "T"
++  190 jump __label73 equal false false
+   191 jump __label74 always
+   192 label __label73
+   193 set __tmp79 "F"
+   194 label __label74
+-    * set __tmp78 __tmp79
++  195 set __tmp78 "F"
+   196 label __label72
+-    * op strictEqual __tmp81 @coal 2
+-    * op equal __fn29_b __fn28_b false
+-    * jump __label76 equal __fn29_b false
++  197 op equal __fn29_b false false
++  198 jump __label76 equal true false
+   199 set __tmp83 "T"
+   200 jump __label77 always
+   201 label __label76
+-    * set __tmp83 "F"
+   202 label __label77
+-    * set __tmp82 __tmp83
++  203 set __tmp82 "T"
+   204 label __label75
+-    * print __tmp73
+-    * print __tmp76
+-    * print __tmp79
+-    * print __tmp83
++  205 print "F"
++  206 print "T"
++  207 print "F"
++  208 print "T"
+   209 assertprints "FTFT" "comparison 6"
+   210 label __label65
+-    * set __fn30_title "comparison 7"
+-    * set __fn30_a @coal
+-    * set __fn30_b @lead
+-    * set __fn30_expected "FTFT"
+   211 assertflush
+   212 op equal __fn31_b @coal @lead
+-    * jump __label80 equal __fn31_b false
+-    * set __tmp87 "T"
++  213 jump __label80 equal false false
+   214 jump __label81 always
+   215 label __label80
+   216 set __tmp87 "F"
+   217 label __label81
+-    * set __tmp86 __tmp87
++  218 set __tmp86 "F"
+   219 label __label79
+   220 op notEqual __fn32_b @coal @lead
+-    * jump __label83 equal __fn32_b false
++  221 jump __label83 equal true false
+   222 set __tmp90 "T"
+   223 jump __label84 always
+   224 label __label83
+-    * set __tmp90 "F"
+   225 label __label84
+-    * set __tmp89 __tmp90
++  226 set __tmp89 "T"
+   227 label __label82
+   228 op strictEqual __fn33_b @coal @lead
+-    * jump __label86 equal __fn33_b false
+-    * set __tmp93 "T"
++  229 jump __label86 equal false false
+   230 jump __label87 always
+   231 label __label86
+   232 set __tmp93 "F"
+   233 label __label87
+-    * set __tmp92 __tmp93
++  234 set __tmp92 "F"
+   235 label __label85
+-    * op strictEqual __tmp95 @coal @lead
+-    * op equal __fn34_b __fn33_b false
+-    * jump __label89 equal __fn34_b false
++  236 op equal __fn34_b false false
++  237 jump __label89 equal true false
+   238 set __tmp97 "T"
+   239 jump __label90 always
+   240 label __label89
+-    * set __tmp97 "F"
+   241 label __label90
+-    * set __tmp96 __tmp97
++  242 set __tmp96 "T"
+   243 label __label88
+-    * print __tmp87
+-    * print __tmp90
+-    * print __tmp93
+-    * print __tmp97
++  244 print "F"
++  245 print "T"
++  246 print "F"
++  247 print "T"
+   248 assertprints "FTFT" "comparison 7"
+   249 label __label78
+-    * set __fn35_title "comparison 8"
+-    * set __fn35_a A
+-    * set __fn35_b A
+-    * set __fn35_expected "TFTF"
+   250 assertflush
+   251 op equal __fn36_b A A
+   252 jump __label93 equal __fn36_b false
+ 
+   255 label __label93
+   256 set __tmp101 "F"
+   257 label __label94
+-    * set __tmp100 __tmp101
+   258 label __label92
+   259 op notEqual __fn37_b A A
+   260 jump __label96 equal __fn37_b false
+ 
+   263 label __label96
+   264 set __tmp104 "F"
+   265 label __label97
+-    * set __tmp103 __tmp104
+   266 label __label95
+   267 op strictEqual __fn38_b A A
+   268 jump __label99 equal __fn38_b false
+ 
+   271 label __label99
+   272 set __tmp107 "F"
+   273 label __label100
+-    * set __tmp106 __tmp107
+   274 label __label98
+-    * op strictEqual __tmp109 A A
+   275 op equal __fn39_b __fn38_b false
+   276 jump __label102 equal __fn39_b false
+   277 set __tmp111 "T"
+ 
+   279 label __label102
+   280 set __tmp111 "F"
+   281 label __label103
+-    * set __tmp110 __tmp111
+   282 label __label101
+   283 print __tmp101
+   284 print __tmp104
+ 
+   286 print __tmp111
+   287 assertprints "TFTF" "comparison 8"
+   288 label __label91
+-    * set __fn40_title "comparison 9"
+-    * set __fn40_a A
+-    * set __fn40_b 0
+-    * set __fn40_expected "TFTF"
+   289 assertflush
+   290 op equal __fn41_b A 0
+   291 jump __label106 equal __fn41_b false
+ 
+   294 label __label106
+   295 set __tmp115 "F"
+   296 label __label107
+-    * set __tmp114 __tmp115
+   297 label __label105
+   298 op notEqual __fn42_b A 0
+   299 jump __label109 equal __fn42_b false
+ 
+   302 label __label109
+   303 set __tmp118 "F"
+   304 label __label110
+-    * set __tmp117 __tmp118
+   305 label __label108
+   306 op strictEqual __fn43_b A 0
+   307 jump __label112 equal __fn43_b false
+ 
+   310 label __label112
+   311 set __tmp121 "F"
+   312 label __label113
+-    * set __tmp120 __tmp121
+   313 label __label111
+-    * op strictEqual __tmp123 A 0
+   314 op equal __fn44_b __fn43_b false
+   315 jump __label115 equal __fn44_b false
+   316 set __tmp125 "T"
+ 
+   318 label __label115
+   319 set __tmp125 "F"
+   320 label __label116
+-    * set __tmp124 __tmp125
+   321 label __label114
+   322 print __tmp115
+   323 print __tmp118
+ 
+   325 print __tmp125
+   326 assertprints "TFTF" "comparison 9"
+   327 label __label104
+-    * set __fn45_title "comparison 10"
+-    * set __fn45_a A
+-    * set __fn45_b 1
+-    * set __fn45_expected "FTFT"
+   328 assertflush
+   329 op equal __fn46_b A 1
+   330 jump __label119 equal __fn46_b false
+ 
+   333 label __label119
+   334 set __tmp129 "F"
+   335 label __label120
+-    * set __tmp128 __tmp129
+   336 label __label118
+   337 op notEqual __fn47_b A 1
+   338 jump __label122 equal __fn47_b false
+ 
+   341 label __label122
+   342 set __tmp132 "F"
+   343 label __label123
+-    * set __tmp131 __tmp132
+   344 label __label121
+   345 op strictEqual __fn48_b A 1
+   346 jump __label125 equal __fn48_b false
+ 
+   349 label __label125
+   350 set __tmp135 "F"
+   351 label __label126
+-    * set __tmp134 __tmp135
+   352 label __label124
+-    * op strictEqual __tmp137 A 1
+   353 op equal __fn49_b __fn48_b false
+   354 jump __label128 equal __fn49_b false
+   355 set __tmp139 "T"
+ 
+   357 label __label128
+   358 set __tmp139 "F"
+   359 label __label129
+-    * set __tmp138 __tmp139
+   360 label __label127
+   361 print __tmp129
+   362 print __tmp132
+ 
+   364 print __tmp139
+   365 assertprints "FTFT" "comparison 10"
+   366 label __label117
+-    * set __fn50_title "comparison 11"
+-    * set __fn50_a "A"
+-    * set __fn50_b 0
+-    * set __fn50_expected "FTFT"
+   367 assertflush
+   368 op equal __fn51_b "A" 0
+-    * jump __label132 equal __fn51_b false
+-    * set __tmp143 "T"
++  369 jump __label132 equal false false
+   370 jump __label133 always
+   371 label __label132
+   372 set __tmp143 "F"
+   373 label __label133
+-    * set __tmp142 __tmp143
++  374 set __tmp142 "F"
+   375 label __label131
+   376 op notEqual __fn52_b "A" 0
+-    * jump __label135 equal __fn52_b false
++  377 jump __label135 equal true false
+   378 set __tmp146 "T"
+   379 jump __label136 always
+   380 label __label135
+-    * set __tmp146 "F"
+   381 label __label136
+-    * set __tmp145 __tmp146
++  382 set __tmp145 "T"
+   383 label __label134
+   384 op strictEqual __fn53_b "A" 0
+-    * jump __label138 equal __fn53_b false
+-    * set __tmp149 "T"
++  385 jump __label138 equal false false
+   386 jump __label139 always
+   387 label __label138
+   388 set __tmp149 "F"
+   389 label __label139
+-    * set __tmp148 __tmp149
++  390 set __tmp148 "F"
+   391 label __label137
+-    * op strictEqual __tmp151 "A" 0
+-    * op equal __fn54_b __fn53_b false
+-    * jump __label141 equal __fn54_b false
++  392 op equal __fn54_b false false
++  393 jump __label141 equal true false
+   394 set __tmp153 "T"
+   395 jump __label142 always
+   396 label __label141
+-    * set __tmp153 "F"
+   397 label __label142
+-    * set __tmp152 __tmp153
++  398 set __tmp152 "T"
+   399 label __label140
+-    * print __tmp143
+-    * print __tmp146
+-    * print __tmp149
+-    * print __tmp153
++  400 print "F"
++  401 print "T"
++  402 print "F"
++  403 print "T"
+   404 assertprints "FTFT" "comparison 11"
+   405 label __label130
+-    * set __fn55_title "comparison 12"
+-    * set __fn55_a "A"
+-    * set __fn55_b 1
+-    * set __fn55_expected "TFFT"
+   406 assertflush
+   407 op equal __fn56_b "A" 1
+-    * jump __label145 equal __fn56_b false
++  408 jump __label145 equal true false
+   409 set __tmp157 "T"
+   410 jump __label146 always
+   411 label __label145
+-    * set __tmp157 "F"
+   412 label __label146
+-    * set __tmp156 __tmp157
++  413 set __tmp156 "T"
+   414 label __label144
+   415 op notEqual __fn57_b "A" 1
+-    * jump __label148 equal __fn57_b false
+-    * set __tmp160 "T"
++  416 jump __label148 equal false false
+   417 jump __label149 always
+   418 label __label148
+   419 set __tmp160 "F"
+   420 label __label149
+-    * set __tmp159 __tmp160
++  421 set __tmp159 "F"
+   422 label __label147
+   423 op strictEqual __fn58_b "A" 1
+-    * jump __label151 equal __fn58_b false
+-    * set __tmp163 "T"
++  424 jump __label151 equal false false
+   425 jump __label152 always
+   426 label __label151
+   427 set __tmp163 "F"
+   428 label __label152
+-    * set __tmp162 __tmp163
++  429 set __tmp162 "F"
+   430 label __label150
+-    * op strictEqual __tmp165 "A" 1
+-    * op equal __fn59_b __fn58_b false
+-    * jump __label154 equal __fn59_b false
++  431 op equal __fn59_b false false
++  432 jump __label154 equal true false
+   433 set __tmp167 "T"
+   434 jump __label155 always
+   435 label __label154
+-    * set __tmp167 "F"
+   436 label __label155
+-    * set __tmp166 __tmp167
++  437 set __tmp166 "T"
+   438 label __label153
+-    * print __tmp157
+-    * print __tmp160
+-    * print __tmp163
+-    * print __tmp167
++  439 print "T"
++  440 print "F"
++  441 print "F"
++  442 print "T"
+   443 assertprints "TFFT" "comparison 12"
+   444 label __label143
+-    * set __fn60_title "comparison 13"
+-    * set __fn60_a "A"
+-    * set __fn60_b 2
+-    * set __fn60_expected "FTFT"
+   445 assertflush
+   446 op equal __fn61_b "A" 2
+-    * jump __label158 equal __fn61_b false
+-    * set __tmp171 "T"
++  447 jump __label158 equal false false
+   448 jump __label159 always
+   449 label __label158
+   450 set __tmp171 "F"
+   451 label __label159
+-    * set __tmp170 __tmp171
++  452 set __tmp170 "F"
+   453 label __label157
+   454 op notEqual __fn62_b "A" 2
+-    * jump __label161 equal __fn62_b false
++  455 jump __label161 equal true false
+   456 set __tmp174 "T"
+   457 jump __label162 always
+   458 label __label161
+-    * set __tmp174 "F"
+   459 label __label162
+-    * set __tmp173 __tmp174
++  460 set __tmp173 "T"
+   461 label __label160
+   462 op strictEqual __fn63_b "A" 2
+-    * jump __label164 equal __fn63_b false
+-    * set __tmp177 "T"
++  463 jump __label164 equal false false
+   464 jump __label165 always
+   465 label __label164
+   466 set __tmp177 "F"
+   467 label __label165
+-    * set __tmp176 __tmp177
++  468 set __tmp176 "F"
+   469 label __label163
+-    * op strictEqual __tmp179 "A" 2
+-    * op equal __fn64_b __fn63_b false
+-    * jump __label167 equal __fn64_b false
++  470 op equal __fn64_b false false
++  471 jump __label167 equal true false
+   472 set __tmp181 "T"
+   473 jump __label168 always
+   474 label __label167
+-    * set __tmp181 "F"
+   475 label __label168
+-    * set __tmp180 __tmp181
++  476 set __tmp180 "T"
+   477 label __label166
+-    * print __tmp171
+-    * print __tmp174
+-    * print __tmp177
+-    * print __tmp181
++  478 print "F"
++  479 print "T"
++  480 print "F"
++  481 print "T"
+   482 assertprints "FTFT" "comparison 13"
+   483 label __label156
+-    * set __fn65_title "comparison 14"
+-    * set __fn65_a "A"
+-    * set __fn65_b "B"
+-    * set __fn65_expected "FTFT"
+   484 assertflush
+   485 op equal __fn66_b "A" "B"
+-    * jump __label171 equal __fn66_b false
+-    * set __tmp185 "T"
++  486 jump __label171 equal false false
+   487 jump __label172 always
+   488 label __label171
+   489 set __tmp185 "F"
+   490 label __label172
+-    * set __tmp184 __tmp185
++  491 set __tmp184 "F"
+   492 label __label170
+   493 op notEqual __fn67_b "A" "B"
+-    * jump __label174 equal __fn67_b false
++  494 jump __label174 equal true false
+   495 set __tmp188 "T"
+   496 jump __label175 always
+   497 label __label174
+-    * set __tmp188 "F"
+   498 label __label175
+-    * set __tmp187 __tmp188
++  499 set __tmp187 "T"
+   500 label __label173
+   501 op strictEqual __fn68_b "A" "B"
+-    * jump __label177 equal __fn68_b false
+-    * set __tmp191 "T"
++  502 jump __label177 equal false false
+   503 jump __label178 always
+   504 label __label177
+   505 set __tmp191 "F"
+   506 label __label178
+-    * set __tmp190 __tmp191
++  507 set __tmp190 "F"
+   508 label __label176
+-    * op strictEqual __tmp193 "A" "B"
+-    * op equal __fn69_b __fn68_b false
+-    * jump __label180 equal __fn69_b false
++  509 op equal __fn69_b false false
++  510 jump __label180 equal true false
+   511 set __tmp195 "T"
+   512 jump __label181 always
+   513 label __label180
+-    * set __tmp195 "F"
+   514 label __label181
+-    * set __tmp194 __tmp195
++  515 set __tmp194 "T"
+   516 label __label179
+-    * print __tmp185
+-    * print __tmp188
+-    * print __tmp191
+-    * print __tmp195
++  517 print "F"
++  518 print "T"
++  519 print "F"
++  520 print "T"
+   521 assertprints "FTFT" "comparison 14"
+   522 label __label169
+-    * set __fn70_title "comparison 15"
+-    * set __fn70_a "A"
+-    * set __fn70_b "A"
+-    * set __fn70_expected "TFTF"
+   523 assertflush
+   524 op equal __fn71_b "A" "A"
+-    * jump __label184 equal __fn71_b false
++  525 jump __label184 equal true false
+   526 set __tmp199 "T"
+   527 jump __label185 always
+   528 label __label184
+-    * set __tmp199 "F"
+   529 label __label185
+-    * set __tmp198 __tmp199
++  530 set __tmp198 "T"
+   531 label __label183
+   532 op notEqual __fn72_b "A" "A"
+-    * jump __label187 equal __fn72_b false
+-    * set __tmp202 "T"
++  533 jump __label187 equal false false
+   534 jump __label188 always
+   535 label __label187
+   536 set __tmp202 "F"
+   537 label __label188
+-    * set __tmp201 __tmp202
++  538 set __tmp201 "F"
+   539 label __label186
+   540 op strictEqual __fn73_b "A" "A"
+-    * jump __label190 equal __fn73_b false
++  541 jump __label190 equal true false
+   542 set __tmp205 "T"
+   543 jump __label191 always
+   544 label __label190
+-    * set __tmp205 "F"
+   545 label __label191
+-    * set __tmp204 __tmp205
++  546 set __tmp204 "T"
+   547 label __label189
+-    * op strictEqual __tmp207 "A" "A"
+-    * op equal __fn74_b __fn73_b false
+-    * jump __label193 equal __fn74_b false
+-    * set __tmp209 "T"
++  548 op equal __fn74_b true false
++  549 jump __label193 equal false false
+   550 jump __label194 always
+   551 label __label193
+   552 set __tmp209 "F"
+   553 label __label194
+-    * set __tmp208 __tmp209
++  554 set __tmp208 "F"
+   555 label __label192
+-    * print __tmp199
+-    * print __tmp202
+-    * print __tmp205
+-    * print __tmp209
++  556 print "T"
++  557 print "F"
++  558 print "T"
++  559 print "F"
+   560 assertprints "TFTF" "comparison 15"
+   561 label __label182
+   562 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-120 instructions):
+     0 set A 0
+     1 assertflush
+     2 jump __label2 equal true false
+-    * set __tmp3 "T"
+     3 jump __label3 always
+     4 label __label2
+     5 label __label3
+ 
+     7 jump __label5 equal false false
+     8 jump __label6 always
+     9 label __label5
+-    * set __tmp6 "F"
+    10 label __label6
+    11 label __label4
+    12 jump __label8 equal false false
+    13 jump __label9 always
+    14 label __label8
+-    * set __tmp9 "F"
+    15 label __label9
+    16 label __label7
+    17 jump __label11 equal true false
+-    * set __tmp13 "T"
+    18 jump __label12 always
+    19 label __label11
+    20 label __label12
+ 
+    29 jump __label15 equal false false
+    30 jump __label16 always
+    31 label __label15
+-    * set __tmp17 "F"
+    32 label __label16
+    33 label __label14
+    34 jump __label18 equal true false
+-    * set __tmp20 "T"
+    35 jump __label19 always
+    36 label __label18
+    37 label __label19
+ 
+    39 jump __label21 equal false false
+    40 jump __label22 always
+    41 label __label21
+-    * set __tmp23 "F"
+    42 label __label22
+    43 label __label20
+    44 jump __label24 equal true false
+-    * set __tmp27 "T"
+    45 jump __label25 always
+    46 label __label24
+    47 label __label25
+ 
+    56 jump __label28 equal false false
+    57 jump __label29 always
+    58 label __label28
+-    * set __tmp31 "F"
+    59 label __label29
+    60 label __label27
+    61 jump __label31 equal true false
+-    * set __tmp34 "T"
+    62 jump __label32 always
+    63 label __label31
+    64 label __label32
+ 
+    66 jump __label34 equal false false
+    67 jump __label35 always
+    68 label __label34
+-    * set __tmp37 "F"
+    69 label __label35
+    70 label __label33
+    71 jump __label37 equal true false
+-    * set __tmp41 "T"
+    72 jump __label38 always
+    73 label __label37
+    74 label __label38
+ 
+    80 assertprints "FTFT" "comparison 3"
+    81 label __label26
+    82 assertflush
+-    * op equal __fn16_b @coal 0
+    83 jump __label41 equal false false
+    84 jump __label42 always
+    85 label __label41
+-    * set __tmp45 "F"
+    86 label __label42
+-    * set __tmp44 "F"
+    87 label __label40
+-    * op notEqual __fn17_b @coal 0
+    88 jump __label44 equal true false
+-    * set __tmp48 "T"
+    89 jump __label45 always
+    90 label __label44
+    91 label __label45
+-    * set __tmp47 "T"
+    92 label __label43
+-    * op strictEqual __fn18_b @coal 0
+    93 jump __label47 equal false false
+    94 jump __label48 always
+    95 label __label47
+-    * set __tmp51 "F"
+    96 label __label48
+-    * set __tmp50 "F"
+    97 label __label46
+-    * op equal __fn19_b false false
+    98 jump __label50 equal true false
+-    * set __tmp55 "T"
+    99 jump __label51 always
+   100 label __label50
+   101 label __label51
+-    * set __tmp54 "T"
+   102 label __label49
+   103 print "F"
+   104 print "T"
+ 
+   107 assertprints "FTFT" "comparison 4"
+   108 label __label39
+   109 assertflush
+-    * op equal __fn21_b @coal 1
+   110 jump __label54 equal true false
+-    * set __tmp59 "T"
+   111 jump __label55 always
+   112 label __label54
+   113 label __label55
+-    * set __tmp58 "T"
+   114 label __label53
+-    * op notEqual __fn22_b @coal 1
+   115 jump __label57 equal false false
+   116 jump __label58 always
+   117 label __label57
+-    * set __tmp62 "F"
+   118 label __label58
+-    * set __tmp61 "F"
+   119 label __label56
+-    * op strictEqual __fn23_b @coal 1
+   120 jump __label60 equal false false
+   121 jump __label61 always
+   122 label __label60
+-    * set __tmp65 "F"
+   123 label __label61
+-    * set __tmp64 "F"
+   124 label __label59
+-    * op equal __fn24_b false false
+   125 jump __label63 equal true false
+-    * set __tmp69 "T"
+   126 jump __label64 always
+   127 label __label63
+   128 label __label64
+-    * set __tmp68 "T"
+   129 label __label62
+   130 print "T"
+   131 print "F"
+ 
+   134 assertprints "TFFT" "comparison 5"
+   135 label __label52
+   136 assertflush
+-    * op equal __fn26_b @coal 2
+   137 jump __label67 equal false false
+   138 jump __label68 always
+   139 label __label67
+-    * set __tmp73 "F"
+   140 label __label68
+-    * set __tmp72 "F"
+   141 label __label66
+-    * op notEqual __fn27_b @coal 2
+   142 jump __label70 equal true false
+-    * set __tmp76 "T"
+   143 jump __label71 always
+   144 label __label70
+   145 label __label71
+-    * set __tmp75 "T"
+   146 label __label69
+-    * op strictEqual __fn28_b @coal 2
+   147 jump __label73 equal false false
+   148 jump __label74 always
+   149 label __label73
+-    * set __tmp79 "F"
+   150 label __label74
+-    * set __tmp78 "F"
+   151 label __label72
+-    * op equal __fn29_b false false
+   152 jump __label76 equal true false
+-    * set __tmp83 "T"
+   153 jump __label77 always
+   154 label __label76
+   155 label __label77
+-    * set __tmp82 "T"
+   156 label __label75
+   157 print "F"
+   158 print "T"
+ 
+   161 assertprints "FTFT" "comparison 6"
+   162 label __label65
+   163 assertflush
+-    * op equal __fn31_b @coal @lead
+   164 jump __label80 equal false false
+   165 jump __label81 always
+   166 label __label80
+-    * set __tmp87 "F"
+   167 label __label81
+-    * set __tmp86 "F"
+   168 label __label79
+-    * op notEqual __fn32_b @coal @lead
+   169 jump __label83 equal true false
+-    * set __tmp90 "T"
+   170 jump __label84 always
+   171 label __label83
+   172 label __label84
+-    * set __tmp89 "T"
+   173 label __label82
+-    * op strictEqual __fn33_b @coal @lead
+   174 jump __label86 equal false false
+   175 jump __label87 always
+   176 label __label86
+-    * set __tmp93 "F"
+   177 label __label87
+-    * set __tmp92 "F"
+   178 label __label85
+-    * op equal __fn34_b false false
+   179 jump __label89 equal true false
+-    * set __tmp97 "T"
+   180 jump __label90 always
+   181 label __label89
+   182 label __label90
+-    * set __tmp96 "T"
+   183 label __label88
+   184 print "F"
+   185 print "T"
+ 
+   305 assertprints "FTFT" "comparison 10"
+   306 label __label117
+   307 assertflush
+-    * op equal __fn51_b "A" 0
+   308 jump __label132 equal false false
+   309 jump __label133 always
+   310 label __label132
+-    * set __tmp143 "F"
+   311 label __label133
+-    * set __tmp142 "F"
+   312 label __label131
+-    * op notEqual __fn52_b "A" 0
+   313 jump __label135 equal true false
+-    * set __tmp146 "T"
+   314 jump __label136 always
+   315 label __label135
+   316 label __label136
+-    * set __tmp145 "T"
+   317 label __label134
+-    * op strictEqual __fn53_b "A" 0
+   318 jump __label138 equal false false
+   319 jump __label139 always
+   320 label __label138
+-    * set __tmp149 "F"
+   321 label __label139
+-    * set __tmp148 "F"
+   322 label __label137
+-    * op equal __fn54_b false false
+   323 jump __label141 equal true false
+-    * set __tmp153 "T"
+   324 jump __label142 always
+   325 label __label141
+   326 label __label142
+-    * set __tmp152 "T"
+   327 label __label140
+   328 print "F"
+   329 print "T"
+ 
+   332 assertprints "FTFT" "comparison 11"
+   333 label __label130
+   334 assertflush
+-    * op equal __fn56_b "A" 1
+   335 jump __label145 equal true false
+-    * set __tmp157 "T"
+   336 jump __label146 always
+   337 label __label145
+   338 label __label146
+-    * set __tmp156 "T"
+   339 label __label144
+-    * op notEqual __fn57_b "A" 1
+   340 jump __label148 equal false false
+   341 jump __label149 always
+   342 label __label148
+-    * set __tmp160 "F"
+   343 label __label149
+-    * set __tmp159 "F"
+   344 label __label147
+-    * op strictEqual __fn58_b "A" 1
+   345 jump __label151 equal false false
+   346 jump __label152 always
+   347 label __label151
+-    * set __tmp163 "F"
+   348 label __label152
+-    * set __tmp162 "F"
+   349 label __label150
+-    * op equal __fn59_b false false
+   350 jump __label154 equal true false
+-    * set __tmp167 "T"
+   351 jump __label155 always
+   352 label __label154
+   353 label __label155
+-    * set __tmp166 "T"
+   354 label __label153
+   355 print "T"
+   356 print "F"
+ 
+   359 assertprints "TFFT" "comparison 12"
+   360 label __label143
+   361 assertflush
+-    * op equal __fn61_b "A" 2
+   362 jump __label158 equal false false
+   363 jump __label159 always
+   364 label __label158
+-    * set __tmp171 "F"
+   365 label __label159
+-    * set __tmp170 "F"
+   366 label __label157
+-    * op notEqual __fn62_b "A" 2
+   367 jump __label161 equal true false
+-    * set __tmp174 "T"
+   368 jump __label162 always
+   369 label __label161
+   370 label __label162
+-    * set __tmp173 "T"
+   371 label __label160
+-    * op strictEqual __fn63_b "A" 2
+   372 jump __label164 equal false false
+   373 jump __label165 always
+   374 label __label164
+-    * set __tmp177 "F"
+   375 label __label165
+-    * set __tmp176 "F"
+   376 label __label163
+-    * op equal __fn64_b false false
+   377 jump __label167 equal true false
+-    * set __tmp181 "T"
+   378 jump __label168 always
+   379 label __label167
+   380 label __label168
+-    * set __tmp180 "T"
+   381 label __label166
+   382 print "F"
+   383 print "T"
+ 
+   386 assertprints "FTFT" "comparison 13"
+   387 label __label156
+   388 assertflush
+-    * op equal __fn66_b "A" "B"
+   389 jump __label171 equal false false
+   390 jump __label172 always
+   391 label __label171
+-    * set __tmp185 "F"
+   392 label __label172
+-    * set __tmp184 "F"
+   393 label __label170
+-    * op notEqual __fn67_b "A" "B"
+   394 jump __label174 equal true false
+-    * set __tmp188 "T"
+   395 jump __label175 always
+   396 label __label174
+   397 label __label175
+-    * set __tmp187 "T"
+   398 label __label173
+-    * op strictEqual __fn68_b "A" "B"
+   399 jump __label177 equal false false
+   400 jump __label178 always
+   401 label __label177
+-    * set __tmp191 "F"
+   402 label __label178
+-    * set __tmp190 "F"
+   403 label __label176
+-    * op equal __fn69_b false false
+   404 jump __label180 equal true false
+-    * set __tmp195 "T"
+   405 jump __label181 always
+   406 label __label180
+   407 label __label181
+-    * set __tmp194 "T"
+   408 label __label179
+   409 print "F"
+   410 print "T"
+ 
+   413 assertprints "FTFT" "comparison 14"
+   414 label __label169
+   415 assertflush
+-    * op equal __fn71_b "A" "A"
+   416 jump __label184 equal true false
+-    * set __tmp199 "T"
+   417 jump __label185 always
+   418 label __label184
+   419 label __label185
+-    * set __tmp198 "T"
+   420 label __label183
+-    * op notEqual __fn72_b "A" "A"
+   421 jump __label187 equal false false
+   422 jump __label188 always
+   423 label __label187
+-    * set __tmp202 "F"
+   424 label __label188
+-    * set __tmp201 "F"
+   425 label __label186
+-    * op strictEqual __fn73_b "A" "A"
+   426 jump __label190 equal true false
+-    * set __tmp205 "T"
+   427 jump __label191 always
+   428 label __label190
+   429 label __label191
+-    * set __tmp204 "T"
+   430 label __label189
+-    * op equal __fn74_b true false
+   431 jump __label193 equal false false
+   432 jump __label194 always
+   433 label __label193
+-    * set __tmp209 "F"
+   434 label __label194
+-    * set __tmp208 "F"
+   435 label __label192
+   436 print "T"
+   437 print "F"
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1:
+ 
+   189 label __label78
+   190 assertflush
+   191 op equal __fn36_b A A
+-    * jump __label93 equal __fn36_b false
++  192 set __tmp101 "F"
++  193 jump __label94 equal __fn36_b false
+   194 set __tmp101 "T"
+   195 jump __label94 always
+-    * label __label93
+-    * set __tmp101 "F"
+   196 label __label94
+   197 label __label92
+   198 op notEqual __fn37_b A A
+-    * jump __label96 equal __fn37_b false
++  199 set __tmp104 "F"
++  200 jump __label97 equal __fn37_b false
+   201 set __tmp104 "T"
+   202 jump __label97 always
+-    * label __label96
+-    * set __tmp104 "F"
+   203 label __label97
+   204 label __label95
+   205 op strictEqual __fn38_b A A
+-    * jump __label99 equal __fn38_b false
++  206 set __tmp107 "F"
++  207 jump __label100 equal __fn38_b false
+   208 set __tmp107 "T"
+   209 jump __label100 always
+-    * label __label99
+-    * set __tmp107 "F"
+   210 label __label100
+   211 label __label98
+   212 op equal __fn39_b __fn38_b false
+-    * jump __label102 equal __fn39_b false
++  213 set __tmp111 "F"
++  214 jump __label103 equal __fn39_b false
+   215 set __tmp111 "T"
+   216 jump __label103 always
+-    * label __label102
+-    * set __tmp111 "F"
+   217 label __label103
+   218 label __label101
+   219 print __tmp101
+ 
+   224 label __label91
+   225 assertflush
+   226 op equal __fn41_b A 0
+-    * jump __label106 equal __fn41_b false
++  227 set __tmp115 "F"
++  228 jump __label107 equal __fn41_b false
+   229 set __tmp115 "T"
+   230 jump __label107 always
+-    * label __label106
+-    * set __tmp115 "F"
+   231 label __label107
+   232 label __label105
+   233 op notEqual __fn42_b A 0
+-    * jump __label109 equal __fn42_b false
++  234 set __tmp118 "F"
++  235 jump __label110 equal __fn42_b false
+   236 set __tmp118 "T"
+   237 jump __label110 always
+-    * label __label109
+-    * set __tmp118 "F"
+   238 label __label110
+   239 label __label108
+   240 op strictEqual __fn43_b A 0
+-    * jump __label112 equal __fn43_b false
++  241 set __tmp121 "F"
++  242 jump __label113 equal __fn43_b false
+   243 set __tmp121 "T"
+   244 jump __label113 always
+-    * label __label112
+-    * set __tmp121 "F"
+   245 label __label113
+   246 label __label111
+   247 op equal __fn44_b __fn43_b false
+-    * jump __label115 equal __fn44_b false
++  248 set __tmp125 "F"
++  249 jump __label116 equal __fn44_b false
+   250 set __tmp125 "T"
+   251 jump __label116 always
+-    * label __label115
+-    * set __tmp125 "F"
+   252 label __label116
+   253 label __label114
+   254 print __tmp115
+ 
+   259 label __label104
+   260 assertflush
+   261 op equal __fn46_b A 1
+-    * jump __label119 equal __fn46_b false
++  262 set __tmp129 "F"
++  263 jump __label120 equal __fn46_b false
+   264 set __tmp129 "T"
+   265 jump __label120 always
+-    * label __label119
+-    * set __tmp129 "F"
+   266 label __label120
+   267 label __label118
+   268 op notEqual __fn47_b A 1
+-    * jump __label122 equal __fn47_b false
++  269 set __tmp132 "F"
++  270 jump __label123 equal __fn47_b false
+   271 set __tmp132 "T"
+   272 jump __label123 always
+-    * label __label122
+-    * set __tmp132 "F"
+   273 label __label123
+   274 label __label121
+   275 op strictEqual __fn48_b A 1
+-    * jump __label125 equal __fn48_b false
++  276 set __tmp135 "F"
++  277 jump __label126 equal __fn48_b false
+   278 set __tmp135 "T"
+   279 jump __label126 always
+-    * label __label125
+-    * set __tmp135 "F"
+   280 label __label126
+   281 label __label124
+   282 op equal __fn49_b __fn48_b false
+-    * jump __label128 equal __fn49_b false
++  283 set __tmp139 "F"
++  284 jump __label129 equal __fn49_b false
+   285 set __tmp139 "T"
+   286 jump __label129 always
+-    * label __label128
+-    * set __tmp139 "F"
+   287 label __label129
+   288 label __label127
+   289 print __tmp129
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 instructions):
+     0 set A 0
+     1 assertflush
+-    * jump __label2 equal true false
+     2 jump __label3 always
+     3 label __label2
+     4 label __label3
+     5 label __label1
+-    * jump __label5 equal false false
++    6 jump __label5 always
+     7 jump __label6 always
+     8 label __label5
+     9 label __label6
+    10 label __label4
+-    * jump __label8 equal false false
++   11 jump __label8 always
+    12 jump __label9 always
+    13 label __label8
+    14 label __label9
+    15 label __label7
+-    * jump __label11 equal true false
+    16 jump __label12 always
+    17 label __label11
+    18 label __label12
+ 
+    24 assertprints "TFFT" "comparison 1"
+    25 label __label0
+    26 assertflush
+-    * jump __label15 equal false false
++   27 jump __label15 always
+    28 jump __label16 always
+    29 label __label15
+    30 label __label16
+    31 label __label14
+-    * jump __label18 equal true false
+    32 jump __label19 always
+    33 label __label18
+    34 label __label19
+    35 label __label17
+-    * jump __label21 equal false false
++   36 jump __label21 always
+    37 jump __label22 always
+    38 label __label21
+    39 label __label22
+    40 label __label20
+-    * jump __label24 equal true false
+    41 jump __label25 always
+    42 label __label24
+    43 label __label25
+ 
+    49 assertprints "FTFT" "comparison 2"
+    50 label __label13
+    51 assertflush
+-    * jump __label28 equal false false
++   52 jump __label28 always
+    53 jump __label29 always
+    54 label __label28
+    55 label __label29
+    56 label __label27
+-    * jump __label31 equal true false
+    57 jump __label32 always
+    58 label __label31
+    59 label __label32
+    60 label __label30
+-    * jump __label34 equal false false
++   61 jump __label34 always
+    62 jump __label35 always
+    63 label __label34
+    64 label __label35
+    65 label __label33
+-    * jump __label37 equal true false
+    66 jump __label38 always
+    67 label __label37
+    68 label __label38
+ 
+    74 assertprints "FTFT" "comparison 3"
+    75 label __label26
+    76 assertflush
+-    * jump __label41 equal false false
++   77 jump __label41 always
+    78 jump __label42 always
+    79 label __label41
+    80 label __label42
+    81 label __label40
+-    * jump __label44 equal true false
+    82 jump __label45 always
+    83 label __label44
+    84 label __label45
+    85 label __label43
+-    * jump __label47 equal false false
++   86 jump __label47 always
+    87 jump __label48 always
+    88 label __label47
+    89 label __label48
+    90 label __label46
+-    * jump __label50 equal true false
+    91 jump __label51 always
+    92 label __label50
+    93 label __label51
+ 
+    99 assertprints "FTFT" "comparison 4"
+   100 label __label39
+   101 assertflush
+-    * jump __label54 equal true false
+   102 jump __label55 always
+   103 label __label54
+   104 label __label55
+   105 label __label53
+-    * jump __label57 equal false false
++  106 jump __label57 always
+   107 jump __label58 always
+   108 label __label57
+   109 label __label58
+   110 label __label56
+-    * jump __label60 equal false false
++  111 jump __label60 always
+   112 jump __label61 always
+   113 label __label60
+   114 label __label61
+   115 label __label59
+-    * jump __label63 equal true false
+   116 jump __label64 always
+   117 label __label63
+   118 label __label64
+ 
+   124 assertprints "TFFT" "comparison 5"
+   125 label __label52
+   126 assertflush
+-    * jump __label67 equal false false
++  127 jump __label67 always
+   128 jump __label68 always
+   129 label __label67
+   130 label __label68
+   131 label __label66
+-    * jump __label70 equal true false
+   132 jump __label71 always
+   133 label __label70
+   134 label __label71
+   135 label __label69
+-    * jump __label73 equal false false
++  136 jump __label73 always
+   137 jump __label74 always
+   138 label __label73
+   139 label __label74
+   140 label __label72
+-    * jump __label76 equal true false
+   141 jump __label77 always
+   142 label __label76
+   143 label __label77
+ 
+   149 assertprints "FTFT" "comparison 6"
+   150 label __label65
+   151 assertflush
+-    * jump __label80 equal false false
++  152 jump __label80 always
+   153 jump __label81 always
+   154 label __label80
+   155 label __label81
+   156 label __label79
+-    * jump __label83 equal true false
+   157 jump __label84 always
+   158 label __label83
+   159 label __label84
+   160 label __label82
+-    * jump __label86 equal false false
++  161 jump __label86 always
+   162 jump __label87 always
+   163 label __label86
+   164 label __label87
+   165 label __label85
+-    * jump __label89 equal true false
+   166 jump __label90 always
+   167 label __label89
+   168 label __label90
+ 
+   279 assertprints "FTFT" "comparison 10"
+   280 label __label117
+   281 assertflush
+-    * jump __label132 equal false false
++  282 jump __label132 always
+   283 jump __label133 always
+   284 label __label132
+   285 label __label133
+   286 label __label131
+-    * jump __label135 equal true false
+   287 jump __label136 always
+   288 label __label135
+   289 label __label136
+   290 label __label134
+-    * jump __label138 equal false false
++  291 jump __label138 always
+   292 jump __label139 always
+   293 label __label138
+   294 label __label139
+   295 label __label137
+-    * jump __label141 equal true false
+   296 jump __label142 always
+   297 label __label141
+   298 label __label142
+ 
+   304 assertprints "FTFT" "comparison 11"
+   305 label __label130
+   306 assertflush
+-    * jump __label145 equal true false
+   307 jump __label146 always
+   308 label __label145
+   309 label __label146
+   310 label __label144
+-    * jump __label148 equal false false
++  311 jump __label148 always
+   312 jump __label149 always
+   313 label __label148
+   314 label __label149
+   315 label __label147
+-    * jump __label151 equal false false
++  316 jump __label151 always
+   317 jump __label152 always
+   318 label __label151
+   319 label __label152
+   320 label __label150
+-    * jump __label154 equal true false
+   321 jump __label155 always
+   322 label __label154
+   323 label __label155
+ 
+   329 assertprints "TFFT" "comparison 12"
+   330 label __label143
+   331 assertflush
+-    * jump __label158 equal false false
++  332 jump __label158 always
+   333 jump __label159 always
+   334 label __label158
+   335 label __label159
+   336 label __label157
+-    * jump __label161 equal true false
+   337 jump __label162 always
+   338 label __label161
+   339 label __label162
+   340 label __label160
+-    * jump __label164 equal false false
++  341 jump __label164 always
+   342 jump __label165 always
+   343 label __label164
+   344 label __label165
+   345 label __label163
+-    * jump __label167 equal true false
+   346 jump __label168 always
+   347 label __label167
+   348 label __label168
+ 
+   354 assertprints "FTFT" "comparison 13"
+   355 label __label156
+   356 assertflush
+-    * jump __label171 equal false false
++  357 jump __label171 always
+   358 jump __label172 always
+   359 label __label171
+   360 label __label172
+   361 label __label170
+-    * jump __label174 equal true false
+   362 jump __label175 always
+   363 label __label174
+   364 label __label175
+   365 label __label173
+-    * jump __label177 equal false false
++  366 jump __label177 always
+   367 jump __label178 always
+   368 label __label177
+   369 label __label178
+   370 label __label176
+-    * jump __label180 equal true false
+   371 jump __label181 always
+   372 label __label180
+   373 label __label181
+ 
+   379 assertprints "FTFT" "comparison 14"
+   380 label __label169
+   381 assertflush
+-    * jump __label184 equal true false
+   382 jump __label185 always
+   383 label __label184
+   384 label __label185
+   385 label __label183
+-    * jump __label187 equal false false
++  386 jump __label187 always
+   387 jump __label188 always
+   388 label __label187
+   389 label __label188
+   390 label __label186
+-    * jump __label190 equal true false
+   391 jump __label191 always
+   392 label __label190
+   393 label __label191
+   394 label __label189
+-    * jump __label193 equal false false
++  395 jump __label193 always
+   396 jump __label194 always
+   397 label __label193
+   398 label __label194
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-60 instructions):
+     0 set A 0
+     1 assertflush
+-    * jump __label3 always
+     2 label __label2
+     3 label __label3
+     4 label __label1
+     5 jump __label5 always
+-    * jump __label6 always
+     6 label __label5
+     7 label __label6
+     8 label __label4
+     9 jump __label8 always
+-    * jump __label9 always
+    10 label __label8
+    11 label __label9
+    12 label __label7
+-    * jump __label12 always
+    13 label __label11
+    14 label __label12
+    15 label __label10
+ 
+    21 label __label0
+    22 assertflush
+    23 jump __label15 always
+-    * jump __label16 always
+    24 label __label15
+    25 label __label16
+    26 label __label14
+-    * jump __label19 always
+    27 label __label18
+    28 label __label19
+    29 label __label17
+    30 jump __label21 always
+-    * jump __label22 always
+    31 label __label21
+    32 label __label22
+    33 label __label20
+-    * jump __label25 always
+    34 label __label24
+    35 label __label25
+    36 label __label23
+ 
+    42 label __label13
+    43 assertflush
+    44 jump __label28 always
+-    * jump __label29 always
+    45 label __label28
+    46 label __label29
+    47 label __label27
+-    * jump __label32 always
+    48 label __label31
+    49 label __label32
+    50 label __label30
+    51 jump __label34 always
+-    * jump __label35 always
+    52 label __label34
+    53 label __label35
+    54 label __label33
+-    * jump __label38 always
+    55 label __label37
+    56 label __label38
+    57 label __label36
+ 
+    63 label __label26
+    64 assertflush
+    65 jump __label41 always
+-    * jump __label42 always
+    66 label __label41
+    67 label __label42
+    68 label __label40
+-    * jump __label45 always
+    69 label __label44
+    70 label __label45
+    71 label __label43
+    72 jump __label47 always
+-    * jump __label48 always
+    73 label __label47
+    74 label __label48
+    75 label __label46
+-    * jump __label51 always
+    76 label __label50
+    77 label __label51
+    78 label __label49
+ 
+    83 assertprints "FTFT" "comparison 4"
+    84 label __label39
+    85 assertflush
+-    * jump __label55 always
+    86 label __label54
+    87 label __label55
+    88 label __label53
+    89 jump __label57 always
+-    * jump __label58 always
+    90 label __label57
+    91 label __label58
+    92 label __label56
+    93 jump __label60 always
+-    * jump __label61 always
+    94 label __label60
+    95 label __label61
+    96 label __label59
+-    * jump __label64 always
+    97 label __label63
+    98 label __label64
+    99 label __label62
+ 
+   105 label __label52
+   106 assertflush
+   107 jump __label67 always
+-    * jump __label68 always
+   108 label __label67
+   109 label __label68
+   110 label __label66
+-    * jump __label71 always
+   111 label __label70
+   112 label __label71
+   113 label __label69
+   114 jump __label73 always
+-    * jump __label74 always
+   115 label __label73
+   116 label __label74
+   117 label __label72
+-    * jump __label77 always
+   118 label __label76
+   119 label __label77
+   120 label __label75
+ 
+   126 label __label65
+   127 assertflush
+   128 jump __label80 always
+-    * jump __label81 always
+   129 label __label80
+   130 label __label81
+   131 label __label79
+-    * jump __label84 always
+   132 label __label83
+   133 label __label84
+   134 label __label82
+   135 jump __label86 always
+-    * jump __label87 always
+   136 label __label86
+   137 label __label87
+   138 label __label85
+-    * jump __label90 always
+   139 label __label89
+   140 label __label90
+   141 label __label88
+ 
+   150 set __tmp101 "F"
+   151 jump __label94 equal __fn36_b false
+   152 set __tmp101 "T"
+-    * jump __label94 always
+   153 label __label94
+   154 label __label92
+   155 op notEqual __fn37_b A A
+   156 set __tmp104 "F"
+   157 jump __label97 equal __fn37_b false
+   158 set __tmp104 "T"
+-    * jump __label97 always
+   159 label __label97
+   160 label __label95
+   161 op strictEqual __fn38_b A A
+   162 set __tmp107 "F"
+   163 jump __label100 equal __fn38_b false
+   164 set __tmp107 "T"
+-    * jump __label100 always
+   165 label __label100
+   166 label __label98
+   167 op equal __fn39_b __fn38_b false
+   168 set __tmp111 "F"
+   169 jump __label103 equal __fn39_b false
+   170 set __tmp111 "T"
+-    * jump __label103 always
+   171 label __label103
+   172 label __label101
+   173 print __tmp101
+ 
+   181 set __tmp115 "F"
+   182 jump __label107 equal __fn41_b false
+   183 set __tmp115 "T"
+-    * jump __label107 always
+   184 label __label107
+   185 label __label105
+   186 op notEqual __fn42_b A 0
+   187 set __tmp118 "F"
+   188 jump __label110 equal __fn42_b false
+   189 set __tmp118 "T"
+-    * jump __label110 always
+   190 label __label110
+   191 label __label108
+   192 op strictEqual __fn43_b A 0
+   193 set __tmp121 "F"
+   194 jump __label113 equal __fn43_b false
+   195 set __tmp121 "T"
+-    * jump __label113 always
+   196 label __label113
+   197 label __label111
+   198 op equal __fn44_b __fn43_b false
+   199 set __tmp125 "F"
+   200 jump __label116 equal __fn44_b false
+   201 set __tmp125 "T"
+-    * jump __label116 always
+   202 label __label116
+   203 label __label114
+   204 print __tmp115
+ 
+   212 set __tmp129 "F"
+   213 jump __label120 equal __fn46_b false
+   214 set __tmp129 "T"
+-    * jump __label120 always
+   215 label __label120
+   216 label __label118
+   217 op notEqual __fn47_b A 1
+   218 set __tmp132 "F"
+   219 jump __label123 equal __fn47_b false
+   220 set __tmp132 "T"
+-    * jump __label123 always
+   221 label __label123
+   222 label __label121
+   223 op strictEqual __fn48_b A 1
+   224 set __tmp135 "F"
+   225 jump __label126 equal __fn48_b false
+   226 set __tmp135 "T"
+-    * jump __label126 always
+   227 label __label126
+   228 label __label124
+   229 op equal __fn49_b __fn48_b false
+   230 set __tmp139 "F"
+   231 jump __label129 equal __fn49_b false
+   232 set __tmp139 "T"
+-    * jump __label129 always
+   233 label __label129
+   234 label __label127
+   235 print __tmp129
+ 
+   240 label __label117
+   241 assertflush
+   242 jump __label132 always
+-    * jump __label133 always
+   243 label __label132
+   244 label __label133
+   245 label __label131
+-    * jump __label136 always
+   246 label __label135
+   247 label __label136
+   248 label __label134
+   249 jump __label138 always
+-    * jump __label139 always
+   250 label __label138
+   251 label __label139
+   252 label __label137
+-    * jump __label142 always
+   253 label __label141
+   254 label __label142
+   255 label __label140
+ 
+   260 assertprints "FTFT" "comparison 11"
+   261 label __label130
+   262 assertflush
+-    * jump __label146 always
+   263 label __label145
+   264 label __label146
+   265 label __label144
+   266 jump __label148 always
+-    * jump __label149 always
+   267 label __label148
+   268 label __label149
+   269 label __label147
+   270 jump __label151 always
+-    * jump __label152 always
+   271 label __label151
+   272 label __label152
+   273 label __label150
+-    * jump __label155 always
+   274 label __label154
+   275 label __label155
+   276 label __label153
+ 
+   282 label __label143
+   283 assertflush
+   284 jump __label158 always
+-    * jump __label159 always
+   285 label __label158
+   286 label __label159
+   287 label __label157
+-    * jump __label162 always
+   288 label __label161
+   289 label __label162
+   290 label __label160
+   291 jump __label164 always
+-    * jump __label165 always
+   292 label __label164
+   293 label __label165
+   294 label __label163
+-    * jump __label168 always
+   295 label __label167
+   296 label __label168
+   297 label __label166
+ 
+   303 label __label156
+   304 assertflush
+   305 jump __label171 always
+-    * jump __label172 always
+   306 label __label171
+   307 label __label172
+   308 label __label170
+-    * jump __label175 always
+   309 label __label174
+   310 label __label175
+   311 label __label173
+   312 jump __label177 always
+-    * jump __label178 always
+   313 label __label177
+   314 label __label178
+   315 label __label176
+-    * jump __label181 always
+   316 label __label180
+   317 label __label181
+   318 label __label179
+ 
+   323 assertprints "FTFT" "comparison 14"
+   324 label __label169
+   325 assertflush
+-    * jump __label185 always
+   326 label __label184
+   327 label __label185
+   328 label __label183
+   329 jump __label187 always
+-    * jump __label188 always
+   330 label __label187
+   331 label __label188
+   332 label __label186
+-    * jump __label191 always
+   333 label __label190
+   334 label __label191
+   335 label __label189
+   336 jump __label193 always
+-    * jump __label194 always
+   337 label __label193
+   338 label __label194
+   339 label __label192
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 2 (-24 instructions):
+ 
+     2 label __label2
+     3 label __label3
+     4 label __label1
+-    * jump __label5 always
+     5 label __label5
+     6 label __label6
+     7 label __label4
+-    * jump __label8 always
+     8 label __label8
+     9 label __label9
+    10 label __label7
+ 
+    18 assertprints "TFFT" "comparison 1"
+    19 label __label0
+    20 assertflush
+-    * jump __label15 always
+    21 label __label15
+    22 label __label16
+    23 label __label14
+    24 label __label18
+    25 label __label19
+    26 label __label17
+-    * jump __label21 always
+    27 label __label21
+    28 label __label22
+    29 label __label20
+ 
+    37 assertprints "FTFT" "comparison 2"
+    38 label __label13
+    39 assertflush
+-    * jump __label28 always
+    40 label __label28
+    41 label __label29
+    42 label __label27
+    43 label __label31
+    44 label __label32
+    45 label __label30
+-    * jump __label34 always
+    46 label __label34
+    47 label __label35
+    48 label __label33
+ 
+    56 assertprints "FTFT" "comparison 3"
+    57 label __label26
+    58 assertflush
+-    * jump __label41 always
+    59 label __label41
+    60 label __label42
+    61 label __label40
+    62 label __label44
+    63 label __label45
+    64 label __label43
+-    * jump __label47 always
+    65 label __label47
+    66 label __label48
+    67 label __label46
+ 
+    78 label __label54
+    79 label __label55
+    80 label __label53
+-    * jump __label57 always
+    81 label __label57
+    82 label __label58
+    83 label __label56
+-    * jump __label60 always
+    84 label __label60
+    85 label __label61
+    86 label __label59
+ 
+    94 assertprints "TFFT" "comparison 5"
+    95 label __label52
+    96 assertflush
+-    * jump __label67 always
+    97 label __label67
+    98 label __label68
+    99 label __label66
+   100 label __label70
+   101 label __label71
+   102 label __label69
+-    * jump __label73 always
+   103 label __label73
+   104 label __label74
+   105 label __label72
+ 
+   113 assertprints "FTFT" "comparison 6"
+   114 label __label65
+   115 assertflush
+-    * jump __label80 always
+   116 label __label80
+   117 label __label81
+   118 label __label79
+   119 label __label83
+   120 label __label84
+   121 label __label82
+-    * jump __label86 always
+   122 label __label86
+   123 label __label87
+   124 label __label85
+ 
+   225 assertprints "FTFT" "comparison 10"
+   226 label __label117
+   227 assertflush
+-    * jump __label132 always
+   228 label __label132
+   229 label __label133
+   230 label __label131
+   231 label __label135
+   232 label __label136
+   233 label __label134
+-    * jump __label138 always
+   234 label __label138
+   235 label __label139
+   236 label __label137
+ 
+   247 label __label145
+   248 label __label146
+   249 label __label144
+-    * jump __label148 always
+   250 label __label148
+   251 label __label149
+   252 label __label147
+-    * jump __label151 always
+   253 label __label151
+   254 label __label152
+   255 label __label150
+ 
+   263 assertprints "TFFT" "comparison 12"
+   264 label __label143
+   265 assertflush
+-    * jump __label158 always
+   266 label __label158
+   267 label __label159
+   268 label __label157
+   269 label __label161
+   270 label __label162
+   271 label __label160
+-    * jump __label164 always
+   272 label __label164
+   273 label __label165
+   274 label __label163
+ 
+   282 assertprints "FTFT" "comparison 13"
+   283 label __label156
+   284 assertflush
+-    * jump __label171 always
+   285 label __label171
+   286 label __label172
+   287 label __label170
+   288 label __label174
+   289 label __label175
+   290 label __label173
+-    * jump __label177 always
+   291 label __label177
+   292 label __label178
+   293 label __label176
+ 
+   304 label __label184
+   305 label __label185
+   306 label __label183
+-    * jump __label187 always
+   307 label __label187
+   308 label __label188
+   309 label __label186
+   310 label __label190
+   311 label __label191
+   312 label __label189
+-    * jump __label193 always
+   313 label __label193
+   314 label __label194
+   315 label __label192
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+   132 assertprints "FTFT" "comparison 7"
+   133 label __label78
+   134 assertflush
+-    * op equal __fn36_b A A
++  135 set __fn36_b true
+   136 set __tmp101 "F"
+   137 jump __label94 equal __fn36_b false
+   138 set __tmp101 "T"
+   139 label __label94
+   140 label __label92
+-    * op notEqual __fn37_b A A
++  141 set __fn37_b false
+   142 set __tmp104 "F"
+   143 jump __label97 equal __fn37_b false
+   144 set __tmp104 "T"
+   145 label __label97
+   146 label __label95
+-    * op strictEqual __fn38_b A A
++  147 set __fn38_b true
+   148 set __tmp107 "F"
+   149 jump __label100 equal __fn38_b false
+   150 set __tmp107 "T"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4 instructions):
+ 
+   133 label __label78
+   134 assertflush
+   135 set __fn36_b true
+-    * set __tmp101 "F"
+-    * jump __label94 equal __fn36_b false
++  136 jump __label94 equal true false
+   137 set __tmp101 "T"
+   138 label __label94
+   139 label __label92
+   140 set __fn37_b false
+   141 set __tmp104 "F"
+-    * jump __label97 equal __fn37_b false
+-    * set __tmp104 "T"
++  142 jump __label97 equal false false
+   143 label __label97
+   144 label __label95
+   145 set __fn38_b true
+-    * set __tmp107 "F"
+-    * jump __label100 equal __fn38_b false
++  146 jump __label100 equal true false
+   147 set __tmp107 "T"
+   148 label __label100
+   149 label __label98
+-    * op equal __fn39_b __fn38_b false
++  150 op equal __fn39_b true false
+   151 set __tmp111 "F"
+-    * jump __label103 equal __fn39_b false
+-    * set __tmp111 "T"
++  152 jump __label103 equal false false
+   153 label __label103
+   154 label __label101
+-    * print __tmp101
+-    * print __tmp104
+-    * print __tmp107
+-    * print __tmp111
++  155 print "T"
++  156 print "F"
++  157 print "T"
++  158 print "F"
+   159 assertprints "TFTF" "comparison 8"
+   160 label __label91
+   161 assertflush
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-8 instructions):
+ 
+   132 assertprints "FTFT" "comparison 7"
+   133 label __label78
+   134 assertflush
+-    * set __fn36_b true
+   135 jump __label94 equal true false
+-    * set __tmp101 "T"
+   136 label __label94
+   137 label __label92
+-    * set __fn37_b false
+-    * set __tmp104 "F"
+   138 jump __label97 equal false false
+   139 label __label97
+   140 label __label95
+-    * set __fn38_b true
+   141 jump __label100 equal true false
+-    * set __tmp107 "T"
+   142 label __label100
+   143 label __label98
+-    * op equal __fn39_b true false
+-    * set __tmp111 "F"
+   144 jump __label103 equal false false
+   145 label __label103
+   146 label __label101
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-2 instructions):
+ 
+   132 assertprints "FTFT" "comparison 7"
+   133 label __label78
+   134 assertflush
+-    * jump __label94 equal true false
+   135 label __label94
+   136 label __label92
+-    * jump __label97 equal false false
++  137 jump __label97 always
+   138 label __label97
+   139 label __label95
+-    * jump __label100 equal true false
+   140 label __label100
+   141 label __label98
+-    * jump __label103 equal false false
++  142 jump __label103 always
+   143 label __label103
+   144 label __label101
+   145 print "T"
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
+ 
+   134 assertflush
+   135 label __label94
+   136 label __label92
+-    * jump __label97 always
+   137 label __label97
+   138 label __label95
+   139 label __label100
+   140 label __label98
+-    * jump __label103 always
+   141 label __label103
+   142 label __label101
+   143 print "T"
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   304 assertprints "TFTF" "comparison 15"
+   305 label __label182
+   306 stop
+-    * end
+
+Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
+ 
+    11 label __label11
+    12 label __label12
+    13 label __label10
+-    * print "T"
+-    * print "F"
+-    * print "F"
+-    * print "T"
++   14 print "TFFT"
+    15 assertprints "TFFT" "comparison 1"
+    16 label __label0
+    17 assertflush
+ 
+    27 label __label24
+    28 label __label25
+    29 label __label23
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   30 print "FTFT"
+    31 assertprints "FTFT" "comparison 2"
+    32 label __label13
+    33 assertflush
+ 
+    43 label __label37
+    44 label __label38
+    45 label __label36
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   46 print "FTFT"
+    47 assertprints "FTFT" "comparison 3"
+    48 label __label26
+    49 assertflush
+ 
+    59 label __label50
+    60 label __label51
+    61 label __label49
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   62 print "FTFT"
+    63 assertprints "FTFT" "comparison 4"
+    64 label __label39
+    65 assertflush
+ 
+    75 label __label63
+    76 label __label64
+    77 label __label62
+-    * print "T"
+-    * print "F"
+-    * print "F"
+-    * print "T"
++   78 print "TFFT"
+    79 assertprints "TFFT" "comparison 5"
+    80 label __label52
+    81 assertflush
+ 
+    91 label __label76
+    92 label __label77
+    93 label __label75
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   94 print "FTFT"
+    95 assertprints "FTFT" "comparison 6"
+    96 label __label65
+    97 assertflush
+ 
+   107 label __label89
+   108 label __label90
+   109 label __label88
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++  110 print "FTFT"
+   111 assertprints "FTFT" "comparison 7"
+   112 label __label78
+   113 assertflush
+ 
+   119 label __label98
+   120 label __label103
+   121 label __label101
+-    * print "T"
+-    * print "F"
+-    * print "T"
+-    * print "F"
++  122 print "TFTF"
+   123 assertprints "TFTF" "comparison 8"
+   124 label __label91
+   125 assertflush
+ 
+   197 label __label141
+   198 label __label142
+   199 label __label140
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++  200 print "FTFT"
+   201 assertprints "FTFT" "comparison 11"
+   202 label __label130
+   203 assertflush
+ 
+   213 label __label154
+   214 label __label155
+   215 label __label153
+-    * print "T"
+-    * print "F"
+-    * print "F"
+-    * print "T"
++  216 print "TFFT"
+   217 assertprints "TFFT" "comparison 12"
+   218 label __label143
+   219 assertflush
+ 
+   229 label __label167
+   230 label __label168
+   231 label __label166
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++  232 print "FTFT"
+   233 assertprints "FTFT" "comparison 13"
+   234 label __label156
+   235 assertflush
+ 
+   245 label __label180
+   246 label __label181
+   247 label __label179
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++  248 print "FTFT"
+   249 assertprints "FTFT" "comparison 14"
+   250 label __label169
+   251 assertflush
+ 
+   261 label __label193
+   262 label __label194
+   263 label __label192
+-    * print "T"
+-    * print "F"
+-    * print "T"
+-    * print "F"
++  264 print "TFTF"
+   265 assertprints "TFTF" "comparison 15"
+   266 label __label182
+   267 stop
+
+Final code before resolving virtual instructions:
+
+set A 0
+assertflush
+print "TFFT"
+assertprints "TFFT" "comparison 1"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 2"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 3"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 4"
+assertflush
+print "TFFT"
+assertprints "TFFT" "comparison 5"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 6"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 7"
+assertflush
+print "TFTF"
+assertprints "TFTF" "comparison 8"
+assertflush
+op equal __fn41_b A 0
+set __tmp115 "F"
+jump __label107 equal __fn41_b false
+set __tmp115 "T"
+label __label107
+op notEqual __fn42_b A 0
+set __tmp118 "F"
+jump __label110 equal __fn42_b false
+set __tmp118 "T"
+label __label110
+op strictEqual __fn43_b A 0
+set __tmp121 "F"
+jump __label113 equal __fn43_b false
+set __tmp121 "T"
+label __label113
+op equal __fn44_b __fn43_b false
+set __tmp125 "F"
+jump __label116 equal __fn44_b false
+set __tmp125 "T"
+label __label116
+print __tmp115
+print __tmp118
+print __tmp121
+print __tmp125
+assertprints "TFTF" "comparison 9"
+assertflush
+op equal __fn46_b A 1
+set __tmp129 "F"
+jump __label120 equal __fn46_b false
+set __tmp129 "T"
+label __label120
+op notEqual __fn47_b A 1
+set __tmp132 "F"
+jump __label123 equal __fn47_b false
+set __tmp132 "T"
+label __label123
+op strictEqual __fn48_b A 1
+set __tmp135 "F"
+jump __label126 equal __fn48_b false
+set __tmp135 "T"
+label __label126
+op equal __fn49_b __fn48_b false
+set __tmp139 "F"
+jump __label129 equal __fn49_b false
+set __tmp139 "T"
+label __label129
+print __tmp129
+print __tmp132
+print __tmp135
+print __tmp139
+assertprints "FTFT" "comparison 10"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 11"
+assertflush
+print "TFFT"
+assertprints "TFFT" "comparison 12"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 13"
+assertflush
+print "FTFT"
+assertprints "FTFT" "comparison 14"
+assertflush
+print "TFTF"
+assertprints "TFTF" "comparison 15"
+stop

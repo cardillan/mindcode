@@ -1,0 +1,128 @@
+// Item counter. Can handle 3 plastanium conveyors at once, according to tests at 60 FPS.
+
+// Runtime parameters
+param MIN_BATCH = 10;
+param MAX_BATCH = 1000;
+
+// Hard constraint to max. number of conveyors to monitor
+// This implementation's speed doesn't depend on number of conveyors linked at runtime
+const MAX_LINKED = 4;
+
+lastCell = 0;
+while true do
+    MEMORY = CONV1 = CONV2 = CONV3 = CONV4 = null;
+    LINKED = 0;
+    LINKS = @links;
+    n = LINKS;
+    do
+        n -= 1;
+        block = getlink(n);
+        case block.@type
+            when @memory-cell then
+                MEMORY = block;
+                lastCell = 63;
+            when @memory-bank then
+                MEMORY = block;
+                lastCell = 511;
+            when @plastanium-conveyor then
+                CONV4 = CONV3;
+                CONV3 = CONV2;
+                CONV2 = CONV1;
+                CONV1 = block;
+                LINKED += 1;
+        end;
+    while n > 0;
+
+    if LINKED == 0 then
+        print($"Item Counter\n[salmon]No plastanium conveyor attached (maximum: $MAX_LINKED, found: $LINKED)");
+        printflush(message1);
+    elsif LINKED > MAX_LINKED then
+        print($"Item Counter\n[salmon]Too many plastanium conveyors attached (maximum: $MAX_LINKED, found: $LINKED)");
+        printflush(message1);
+    elsif MEMORY == null then
+        print("Item Counter\n[salmon]No memory attached.");
+        printflush(message1);
+    else
+        break;
+    end;
+end;
+
+// Global initialization
+BATCH_DURATION = 2000;                      // We aim for a batch to be completed in about 2 seconds
+EFF_MIN_BATCH = max(MIN_BATCH \ 10, 1);         // Sanitize EFF_MIN_BATCH and EFF_MAX_BATCH
+EFF_MAX_BATCH = max(MAX_BATCH \ 10, MIN_BATCH); // Also, we measure batches in tens of items
+BATCH_STEP = 1;                             // Batch size increase
+BATCH = EFF_MIN_BATCH;                          // Current batch size
+BATCH_TXT = BATCH * 10;
+
+// Progress init
+total = MEMORY[0];                          // Restore totals from memory (dubious - will be reset when switch is activated anyway)
+batches = total \ 10;                       // Number of completed batches
+limit = batches + BATCH;                    // Next rate measurement
+
+// Loop init
+switch1.enabled = 0;
+a1 = a2 = a3 = a4 = b1 = b2 = b3 = b4 = 0;  // Current and previous states per conveyor
+ratePerMin = 0;                             // Current rate
+startTime = @time;                          // Batch start time
+
+while switch1.@enabled == 0 do
+    start = @time;
+    // a is current, b is previous
+    // Compile-time evaluation will remove instructions where MAX_LINKED is exceeded
+    if MAX_LINKED > 0 then a1 = CONV1.@totalItems; if a1 < b1 then batches += 1; end; end;
+    if MAX_LINKED > 1 then a2 = CONV2.@totalItems; if a2 < b2 then batches += 1; end; end;
+    if MAX_LINKED > 2 then a3 = CONV3.@totalItems; if a3 < b3 then batches += 1; end; end;
+    if MAX_LINKED > 3 then a4 = CONV4.@totalItems; if a4 < b4 then batches += 1; end; end;
+
+    // Evaluate batches
+    if batches > limit then
+        duration = @time - startTime;
+        startTime = @time;
+        rate = BATCH / duration;                            // 10 items/ms
+        MEMORY[lastCell] = rate * (10000 / 60);             // items/tick
+        ratePerMin = floor(rate * 600000);                  // items/min
+        if duration <= BATCH_DURATION then                  // too fast, increase batch size
+            BATCH = min(BATCH + BATCH_STEP, EFF_MAX_BATCH);
+            BATCH_TXT = BATCH * 10;
+        end;
+        limit += BATCH;                                     // Next limit
+    end;
+
+    // Write it
+    MEMORY[0] = total = batches * 10;
+
+    print($"Item Counter                  \n");
+    print($"Monitoring [green]$LINKED[] conveyors\n");
+    print($"Total items: [gold]$total[]\n");
+    print($"Rate: [green]$ratePerMin[] items/min\n");
+
+    // b is current, a is previous
+    if MAX_LINKED > 0 then b1 = CONV1.@totalItems; if b1 < a1 then batches += 1; end; end;
+    if MAX_LINKED > 1 then b2 = CONV2.@totalItems; if b2 < a2 then batches += 1; end; end;
+    if MAX_LINKED > 2 then b3 = CONV3.@totalItems; if b3 < a3 then batches += 1; end; end;
+    if MAX_LINKED > 3 then b4 = CONV4.@totalItems; if b4 < a4 then batches += 1; end; end;
+
+    elapsed = floor(@time - startTime);
+    if elapsed >= 10000 then
+        // Batch didn't complete in 10 seconds: rate is effectively zero
+        BATCH = max(BATCH \ 5, EFF_MIN_BATCH);      // Shrink batch
+        BATCH_TXT = BATCH * 10;
+        limit = batches + BATCH;                // Reset rate measurement
+        MEMORY[lastCell] = 0;
+        ratePerMin = 0;
+        startTime = @time;
+    end;
+
+    println($"Batch size: [green]$BATCH_TXT[]");
+    println($"Batch time: [gold]$elapsed[] ms");
+    print($"[lightgray]Loop time: $ ms", floor((@time - start) / 2));
+    printflush(message1);
+
+    if LINKS != @links then
+        end();
+    end;
+end;
+switch1.enabled = 0;
+MEMORY[lastCell] = 0;
+MEMORY[0] = 0;

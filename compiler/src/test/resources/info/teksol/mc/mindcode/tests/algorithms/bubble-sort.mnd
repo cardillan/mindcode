@@ -1,0 +1,27 @@
+allocate stack in bank1[0...512];
+param ARRAY = bank2;
+param FINAL = bank3;
+
+inline def testAndSwap(i, j, sorted)
+    if (a = ARRAY[i]) > (b = ARRAY[j]) then
+        ARRAY[i] = b;
+        ARRAY[j] = a;
+        false;
+    else
+        sorted;
+    end;
+end;
+
+n = SIZE;
+do
+    n -= 1;
+    sorted = true;
+    for i in 0 ... n do
+        sorted = testAndSwap(i, i + 1, sorted);
+    end;
+while !sorted;
+
+for i in 0 ... SIZE do
+    assertEquals(FINAL[i], ARRAY[i], "unexpected value");
+end;
+stopProcessor();
