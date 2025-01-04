@@ -171,16 +171,16 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesFetch() {
         assertCompilesTo("""
-                        result = fetch(unitCount, team);
+                        result = fetch(unitCount, team, type);
                         result = fetch(playerCount, team);
                         result = fetch(coreCount, team);
                         result = fetch(buildCount, team, type);
-                        result = fetch(unit, team, index);
+                        result = fetch(unit, team, index, type);
                         result = fetch(player, team, index);
                         result = fetch(core, team, index);
                         result = fetch(build, team, index, type);
                         """,
-                createInstruction(FETCH, "unitCount", var(0), "team"),
+                createInstruction(FETCH, "unitCount", var(0), "team", "0", "type"),
                 createInstruction(SET, "result", var(0)),
                 createInstruction(FETCH, "playerCount", var(1), "team"),
                 createInstruction(SET, "result", var(1)),
@@ -188,7 +188,7 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                 createInstruction(SET, "result", var(2)),
                 createInstruction(FETCH, "buildCount", var(3), "team", "0", "type"),
                 createInstruction(SET, "result", var(3)),
-                createInstruction(FETCH, "unit", var(4), "team", "index"),
+                createInstruction(FETCH, "unit", var(4), "team", "index", "type"),
                 createInstruction(SET, "result", var(4)),
                 createInstruction(FETCH, "player", var(5), "team", "index"),
                 createInstruction(SET, "result", var(5)),

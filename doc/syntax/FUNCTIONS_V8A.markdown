@@ -411,11 +411,11 @@ Lookup units, cores, players or buildings by index. Indices start at 0 and end a
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = fetch(unitCount, team)`|`fetch unitCount result team 0 0`|
+|`result = fetch(unitCount, team, type)`|`fetch unitCount result team 0 type`|
 |`result = fetch(playerCount, team)`|`fetch playerCount result team 0 0`|
 |`result = fetch(coreCount, team)`|`fetch coreCount result team 0 0`|
 |`result = fetch(buildCount, team, type)`|`fetch buildCount result team 0 type`|
-|`result = fetch(unit, team, index)`|`fetch unit result team index 0`|
+|`result = fetch(unit, team, index, type)`|`fetch unit result team index type`|
 |`result = fetch(player, team, index)`|`fetch player result team index 0`|
 |`result = fetch(core, team, index)`|`fetch core result team index 0`|
 |`result = fetch(build, team, index, type)`|`fetch build result team index type`|

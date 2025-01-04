@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * Fixed wrong definition of `control color` instruction ([#194](https://github.com/cardillan/mindcode/issues/194)).
+* Fixed wrong definition of `fetch unit` and `fetch unitCount` instructions ([#197](https://github.com/cardillan/mindcode/issues/197)).
 * Fixed wrong expression optimization of `op sub` instruction ([#198](https://github.com/cardillan/mindcode/issues/198)).
 
 ## 2.7.3 - 2024-12-28

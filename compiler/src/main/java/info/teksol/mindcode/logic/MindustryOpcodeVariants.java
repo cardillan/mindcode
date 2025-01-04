@@ -260,11 +260,11 @@ public class MindustryOpcodeVariants {
 
         add(list, V7,  MAX, W, FUNC, Opcode.SETRATE, in("ipt"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unitCount"),   res("result"), in("team"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unitCount"),   res("result"), in("team"), unused("0"), in("type"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("playerCount"), res("result"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("coreCount"),   res("result"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("buildCount"),  res("result"), in("team"), unused("0"), in("type"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unit"),        res("result"), in("team"), in("index"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unit"),        res("result"), in("team"), in("index"), in("type"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("player"),      res("result"), in("team"), in("index"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("core"),        res("result"), in("team"), in("index"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("build"),       res("result"), in("team"), in("index"), in("type"));
