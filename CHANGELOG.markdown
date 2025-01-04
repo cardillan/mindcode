@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.7.4 - 2025-01-04
+
+### Fixed
+
+* Fixed wrong expression optimization of OP SUB instruction ([#198](https://github.com/cardillan/mindcode/issues/198)).
+
 ## 2.7.3 - 2024-12-28
 
 ### Fixed

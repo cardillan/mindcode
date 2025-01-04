@@ -260,7 +260,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
 
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(SET, tmp1, b),
+                        createInstruction(OP, Operation.SUB, tmp1, P0, b),
                         createInstruction(END)
                 )
         );

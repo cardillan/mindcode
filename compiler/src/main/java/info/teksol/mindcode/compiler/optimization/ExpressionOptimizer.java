@@ -105,8 +105,14 @@ class ExpressionOptimizer extends BaseOptimizer {
                             return;
                         }
                     }
-                    case ADD, SUB, BITWISE_XOR -> {
-                        if (value == 0) {
+                    case SUB -> {
+                        if (value == 0 && opers.e1() == ix.getY()) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
+                            return;
+                        }
+                    }
+                    case ADD, BITWISE_XOR -> {
+                        if (value == 0 && (advanced() || ix.getOperation() != Operation.BITWISE_XOR)) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         }
