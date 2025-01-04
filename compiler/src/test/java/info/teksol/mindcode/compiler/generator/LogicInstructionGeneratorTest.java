@@ -771,13 +771,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void compilesMultiParameterControlInstruction() {
         assertCompilesTo("""
                         turret.shoot(leader.@shootX, leader.@shootY, leader.@shooting);
-                        turret.color(14, 15, 16);
+                        turret.color(0);
                         """,
                 createInstruction(SENSOR, var(0), "leader", "@shootX"),
                 createInstruction(SENSOR, var(1), "leader", "@shootY"),
                 createInstruction(SENSOR, var(2), "leader", "@shooting"),
                 createInstruction(CONTROL, "shoot", "turret", var(0), var(1), var(2)),
-                createInstruction(CONTROL, "color", "turret", "14", "15", "16"),
+                createInstruction(CONTROL, "color", "turret", "0"),
                 createInstruction(END)
         );
     }
