@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.0.0 - Future release
+## 3.0.0-preview1 - 2025-01-17 
 
 ### Fixed
 
@@ -59,7 +59,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Changed the mechanism of mlog variable names generation.
 * Optimization of bitwise and boolean expressions which are incorrect for non-integers are only [performed on `advanced` level](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
 * Any compile-time constant expression can be used as a value for a [program parameter](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
-
 
 ## 2.7.4 - 2025-01-04
 
