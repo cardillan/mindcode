@@ -60,6 +60,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Optimization of bitwise and boolean expressions which are incorrect for non-integers are only [performed on `advanced` level](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
 * Any compile-time constant expression can be used as a value for a [program parameter](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
 
+
+## 2.7.4 - 2025-01-04
+
+### Fixed
+
+* Fixed wrong definition of `control color` instruction ([#194](https://github.com/cardillan/mindcode/issues/194)).
+* Fixed wrong definition of `fetch unit` and `fetch unitCount` instructions ([#197](https://github.com/cardillan/mindcode/issues/197)).
+* Fixed wrong expression optimization of `op sub` instruction ([#198](https://github.com/cardillan/mindcode/issues/198)).
+
 ## 2.7.3 - 2024-12-28
 
 ### Fixed
