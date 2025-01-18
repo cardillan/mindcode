@@ -19,7 +19,7 @@ public interface LogicValue extends LogicArgument, ValueStore {
     /// All literals can be evaluated. Built-in constants can only be evaluated if they aren't a variable
     /// (e.g. @coal can be evaluated, but @thisx cannot).
     ///
-    /// @return true if the expression can be evaluated.
+    /// @return true if the expression can be evaluated
     boolean canEvaluate();
 
     /// @return true if the value is a compile-time constant

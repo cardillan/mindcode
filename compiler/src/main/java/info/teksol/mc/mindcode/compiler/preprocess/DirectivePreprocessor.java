@@ -184,6 +184,18 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
     }
 
+    private void setPrintUnresolved(CompilerProfile compilerProfile, AstDirectiveSet node) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            FinalCodeOutput finalCodeOutput = FinalCodeOutput.byName(strValue);
+            if (finalCodeOutput != null) {
+                profile.setFinalCodeOutput(finalCodeOutput);
+            } else {
+                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+            }
+        }
+    }
+
     private void setProfile(CompilerProfile compilerProfile, AstDirectiveSet node) {
         if (validateSingleValue(node)) {
             String strValue = node.getValues().getFirst().getText();
@@ -276,6 +288,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("link-guards", this::setLinkGuards);
         map.put("optimization", this::setAllOptimizationsLevel);
         map.put("passes", this::setOptimizationPasses);
+        map.put("print-unresolved", this::setPrintUnresolved);
         map.put("profile", this::setProfile);
         map.put("remarks", this::setRemarks);
         map.put("sort-variables", this::setSortVariables);

@@ -170,6 +170,10 @@ public class LogicInstructionLabelResolver {
             }
         }
 
+        if (activeLabel != null) {
+            result.add(activeLabel);
+            result.add(instructionProcessor.createEnd(activeLabel.getAstContext()));
+        }
         return result;
     }
 

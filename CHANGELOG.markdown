@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.0.0-preview2 - Future release
 
+### Fixed
+
 * Fixed functions called using varargs potentially not recognized as used ([#203](https://github.com/cardillan/mindcode/issues/203)).
 * Fixed incorrect implementation of the strict equality operator ([#206](https://github.com/cardillan/mindcode/issues/206)).
 * Fixed wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
+* Fixed compiler errors when placing enhanced comments into loops.
 
 ## 3.0.0-preview1 - 2025-01-17 
 

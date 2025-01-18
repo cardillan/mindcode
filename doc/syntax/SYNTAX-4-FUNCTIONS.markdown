@@ -405,7 +405,7 @@ begin
 end;
 ```
 
-If the enhanced comment is used at the end of a line containing a statement, the generated output is moved in front of the statement:
+If the enhanced comment is used at the end of a line containing a complete statement, the generated output is moved in front of the first such statement:
 
 ```
 param MIN = 10;       /// Minimal value

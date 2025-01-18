@@ -1,8 +1,29 @@
 package info.teksol.mc.profile;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum FinalCodeOutput {
     PLAIN,
     FLAT_AST,
     DEEP_AST,
-    SOURCE
+    SOURCE,
+    ;
+
+    private static final Map<String, FinalCodeOutput> VALUE_MAP = createValueMap();
+
+    private static Map<String, FinalCodeOutput> createValueMap() {
+        return Stream.of(FinalCodeOutput.values())
+                .collect(Collectors.toMap(e -> e.name().toLowerCase(),
+                        e -> e));
+    }
+
+    public static FinalCodeOutput byName(String level) {
+        return VALUE_MAP.get(level.toLowerCase());
+    }
+
+    public static FinalCodeOutput byName(String level, FinalCodeOutput defaultValue) {
+        return VALUE_MAP.getOrDefault(level.toLowerCase(), defaultValue);
+    }
 }

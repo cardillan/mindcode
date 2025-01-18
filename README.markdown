@@ -1,5 +1,5 @@
 <div markdown="1" align="center">
-   <img width="25%" src="logo.png">
+   <img width="100%" src="wide-logo.png">
 
 # Mindcode: a high-level compiler for mlog
 

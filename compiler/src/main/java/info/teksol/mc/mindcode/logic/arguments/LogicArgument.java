@@ -28,11 +28,6 @@ public interface LogicArgument {
     //      - isVolatile: can change value outside the program, e.g. @time, @unit
     //      Review all other flags ad methods and try to get rid of them
 
-    /// @return true if this is a literal. Built-ins aren't considered literals.
-    default boolean isLiteral() {
-        return false;
-    }
-
     /// @return true if this is a numeric literal.
     default boolean isNumericLiteral() {
         return false;

@@ -2,8 +2,6 @@ package info.teksol.mc.util;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -36,14 +34,13 @@ public abstract class TraceFile implements AutoCloseable {
     }
 
     private static class TraceFileActive extends TraceFile {
-        // Indentation cache
-        private final List<String> indents  = new ArrayList<>(List.of(""));
+        private final Indenter indenter = new Indenter("    ");
 
         private final boolean trace;
         private final boolean debugPrint;
         private final boolean systemOut;
         private final PrintStream stream;
-        private int indent = 0;
+        private int level = 0;
 
         private TraceFileActive(String mindcodeTraceFile, boolean trace, boolean debugPrint, boolean systemOut) {
             System.err.println("OPTIMIZATION TRACING IS ACTIVE");
@@ -60,16 +57,13 @@ public abstract class TraceFile implements AutoCloseable {
 
         public void indentInc() {
             if (trace) {
-                indent++;
-                if (indent >= indents.size()) {
-                    indents.add(indents.get(indent - 1) + "    ");
-                }
+                level++;
             }
         }
 
         public void indentDec() {
-            if (indent > 0) {
-                indent--;
+            if (level > 0) {
+                level--;
             }
         }
 
@@ -88,10 +82,10 @@ public abstract class TraceFile implements AutoCloseable {
         public void trace(String text) {
             if (trace) {
                 if (systemOut) {
-                    System.out.print(indents.get(indent));
+                    System.out.print(indenter.getIndent(level));
                     System.out.println(text);
                 }
-                stream.print(indents.get(indent));
+                stream.print(indenter.getIndent(level));
                 stream.println(text);
             }
         }
