@@ -119,7 +119,7 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 * **Explicit variable declarations.** All variables must be declared before being used, even variables representing linked blocks. The variables are valid in the code block in which they were declared.
 
 > [!TIP]
-> At this moment, several code blocks can exist in the global scope. THey are compiled in the order in which they're encountered in the program.
+> At this moment, several code blocks can exist in the global scope. They are compiled in the order in which they're encountered in the program.
 
 The requirement to declare variables explicitly helps to identify misspelled variable names, as unknown variable names cause compilation errors, and cases when a single variable is used for multiple different purposes, as repeated variable declarations also cause compilation errors.
 

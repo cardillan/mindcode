@@ -39,7 +39,7 @@ The most important recent changes to Mindcode include:
 * Mindcode syntax
   * Expressions in string interpolation: `print($"Sum: ${a + b}.");`
   * Support for color literals: `%00ffff80`
-  * Prefix/postfix increment/decrement operators: `i++, --j`
+  * Prefix/postfix increment/decrement operators: `i++`, `--j`
   * Redefined [strict and relaxed syntax modes](/doc/syntax/SYNTAX.markdown#strict-syntax) 
   * Optional variable declaration (compulsory in strict syntax)
 

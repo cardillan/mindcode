@@ -991,7 +991,7 @@ end
 
 ### List iteration loop with modifications
 
-For [list iteration loops with modifications](SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list), the output loop control variable is completely replaced with the variable assigned to it for the iteration. This helps in some more complicated cases where the Data FLow Optimization alone wasn't able to do the substitution on its own.
+For [list iteration loops with modifications](SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list), the output loop control variable is completely replaced with the variable assigned to it for the iteration. This helps in some more complicated cases where the Data Flow Optimization alone wasn't able to do the substitution on its own.
 
 ## Function Inlining
 

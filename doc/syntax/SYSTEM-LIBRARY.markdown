@@ -438,7 +438,7 @@ Returns the sign of the number. The return value is `0` precisely when `x == 0`
 |------------------------------- |-----------:|-----------:|
 | Inlined function               |          3 |          3 |
 
-Returns the sign of the number. The return value is `0` when the value of `x` is exactly zero.
+Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
 
 ### isZero
 
@@ -448,7 +448,7 @@ Returns the sign of the number. The return value is `0` when the value of `x` is
 |------------------------------- |-----------:|-----------:|
 | Inlined function               |          2 |          2 |
 
-Returns `true` when `x` is precisely zero.
+Returns `true` when `x` is null or precisely zero.
 
 ### isZero
 
@@ -458,7 +458,7 @@ Returns `true` when `x` is precisely zero.
 |------------------------------- |-----------:|-----------:|
 | Inlined function               |          2 |          2 |
 
-Returns `true` when the absolute value of x is less than `precision`.
+Returns `true` when `x` is null or its absolute value is less than `precision`.
 
 ### isEqual
 
@@ -471,7 +471,7 @@ Returns `true` when the absolute value of x is less than `precision`.
 Returns `true` if the two values differ by less than `precision`.
 
 > [!NOTE]
-> The equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`. `===` and `!==`
+> The non-strict equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`,
 > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows
 > to compare values using different precision.
 

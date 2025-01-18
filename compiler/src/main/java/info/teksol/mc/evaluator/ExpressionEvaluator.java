@@ -39,7 +39,10 @@ public class ExpressionEvaluator {
     }
 
     public static boolean strictEquals(LogicReadable a, LogicReadable b) {
-        return (a.isObject() == b.isObject()) && equals(a, b);
+        return (a.isObject() == b.isObject()) && (a.isObject()
+                ? Objects.equals(a.getObject(), b.getObject())
+                : a.getDoubleValue() == b.getDoubleValue()
+        );
     }
 
     public static boolean equals(double a, double b) {

@@ -49,11 +49,11 @@ Furthermore, due to [numeric conversion](SYNTAX-1-VARIABLES.markdown#numeric-con
 
 ## Strict equality operation
 
-Mindustry Logic provides one strict equality operator: `strictEqual`.
+Mindustry Logic provides one strict equality operator: `strictEqual`. This operator compares the values according to these rules:
 
-When performing strict equality operations, the two values are considered different if one is numeric and the other is not. When both values are numeric, or both values are non-numeric, they are compared using standard comparison rules described above.
-
-The main benefit of strict comparison is that it evaluates `null` as different from zero.
+1. If one value is numeric and the other is non-numeric, the values are considered non-equal. This comparison distinguishes `null` from zero (unlike both `equal` and `notEqual`).
+2. If both values are numeric, they are considered equal if their numerical values match exactly. This comparison recognizes two values as different even if their difference is smaller than `0.000001`  (unlike both `equal` and `notEqual`).
+3. If both values are non-numeric, they are considered equal if they have the same value.
 
 ## Relational operations
 
@@ -268,7 +268,8 @@ Relational operators compare values of their operands using Mindustry Logic [equ
 
 These are boolean operators and as such are guaranteed to always return `0` or `1`.
 
-Depending on their exact use, both `===` and `!==` may require one or two instructions in mlog. Mindcode optimizations strive to rearrange the code to use the shorter variant when possible.
+> [!TIP]
+> When possible, prefer `==` and `!=` operators to `===` and `!==`. Depending on their exact use, both `===` and `!==` may require one or two instructions in mlog. Mindcode optimizations strive to rearrange the code to use the shorter variant when possible, but sometimes doesn't succeed.
 
 This table lists some examples of comparing various values for equality:
 
@@ -277,6 +278,7 @@ This table lists some examples of comparing various values for equality:
 | `null`  |   `0`   |  `true`  | `false`  |  `false`  |  `true`   |
 | `null`  |   `1`   | `false`  |  `true`  |  `false`  |  `true`   |
 | `null`  |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
+| `1e-8`  | `2e-8`  |  `true`  | `false`  |  `false`  |  `true`   |
 | `@coal` |   `0`   | `false`  |  `true`  |  `false`  |  `true`   |
 | `@coal` |   `1`   |  `true`  | `false`  |  `false`  |  `true`   |
 | `@coal` |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
@@ -295,16 +297,24 @@ inline def eval(b)
 end;
 
 inline def compare(a, b)
-    println($"|$a|$b|$|$|$|$|", eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
+    println($"|`$a`|`$b`|`$`|`$`|`$`|`$`|", eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
 end;
+
+inline def compare(stra, strb, a, b)
+    println($"|`$stra`|`$strb`|`$`|`$`|`$`|`$`|", eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
+end;
+
+println("|   `a`   |   `b`   | `a == b` | `a != b` | `a === b` | `a !== b` |");
+println("|:-------:|:-------:|:--------:|:--------:|:---------:|:---------:|");
 
 compare(null, 0);
 compare(null, 1);
 compare(null, 2);
-compare(@coal, 0);
-compare(@coal, 1);
-compare(@coal, 2);
-compare(@coal, @lead);
+compare("1e-8", "2e-8", 1e-8, 2e-8);
+compare("@coal", 0, @coal, 0);
+compare("@coal", 1, @coal, 1);
+compare("@coal", 2, @coal, 2);
+compare("@coal", "@lead", @coal, @lead);
 compare("A", 0);
 compare("A", 1);
 compare("A", 2);
@@ -312,8 +322,6 @@ compare("A", "B");
 compare("A", "A");
 printflush(message1);
 ```
-
-[Run the code in Mindcode web app](https://mindcode.herokuapp.com/?run=true&mindcode=inline%20def%20eval%28b%29%0A%20%20%20%20b%20%3F%20%22true%22%20%3A%20%22false%22%3B%0Aend%3B%0A%0Ainline%20def%20compare%28a%2C%20b%29%0A%20%20%20%20println%28%24%22%7C%24a%7C%24b%7C%24%7C%24%7C%24%7C%24%7C%22%2C%20eval%28a%20%3D%3D%20b%29%2C%20eval%28a%20%21%3D%20b%29%2C%20eval%28a%20%3D%3D%3D%20b%29%2C%20eval%28a%20%21%3D%3D%20b%29%29%3B%0Aend%3B%0A%0Acompare%28null%2C%200%29%3B%0Acompare%28null%2C%201%29%3B%0Acompare%28null%2C%202%29%3B%0Acompare%28%40coal%2C%200%29%3B%0Acompare%28%40coal%2C%201%29%3B%0Acompare%28%40coal%2C%202%29%3B%0Acompare%28%40coal%2C%20%40lead%29%3B%0Acompare%28%22A%22%2C%200%29%3B%0Acompare%28%22A%22%2C%201%29%3B%0Acompare%28%22A%22%2C%202%29%3B%0Acompare%28%22A%22%2C%20%22B%22%29%3B%0Acompare%28%22A%22%2C%20%22A%22%29%3B%0Aprintflush%28message1%29%3B%0A)
 
 </details>
 
