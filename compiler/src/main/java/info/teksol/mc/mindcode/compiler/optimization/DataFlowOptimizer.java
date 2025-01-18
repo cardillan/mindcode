@@ -555,8 +555,6 @@ class DataFlowOptimizer extends BaseOptimizer {
                     if (!wasBody) {
                         // There wasn't a body context before this flow control context. This means the flow context
                         // was preceded by a body that has been since removed, and is unreachable.
-//                        //                                                     ~~~~~~~~~~~~~~~~~~~   HAHAHA!
-//                        bodies++;
                         branchedStates.newBranch(localContext, "[entering flow control]", false);
                     }
                     branchedStates.processContext(localContext, child, modifyInstructions);

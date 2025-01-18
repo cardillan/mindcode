@@ -57,7 +57,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private ValueStore processFunctionCall(AstFunctionCall call, List<FunctionArgument> arguments) {
-        List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call);
+        List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call, arguments);
         if (!exactMatches.isEmpty()) {
             // There are user functions exactly matching the call. Process them.
             return processMatchedFunctionCalls(call, arguments, exactMatches);
@@ -108,6 +108,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         validateUserFunctionArguments(function, arguments.subList(0, Math.min(parameterCount, arguments.size())));
 
         if (function.isInline()) {
+            // MUSTDO review
             //return processInLocalScope(() -> handleInlineFunctionCall(function, arguments));
             return handleInlineFunctionCall(function, arguments);
         } else if (!function.isRecursive()) {

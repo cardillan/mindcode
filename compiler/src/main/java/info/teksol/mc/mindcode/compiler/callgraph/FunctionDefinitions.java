@@ -76,32 +76,41 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
         return functionList;
     }
 
+    public List<MindcodeFunction> getFunctions(String name) {
+        return functionMap.getOrDefault(name, List.of());
+    }
+
     public List<MindcodeFunction> getLooseMatches(AstFunctionCall call) {
         return functionMap.getOrDefault(call.getFunctionName(), List.of());
     }
 
-    public List<MindcodeFunction> getExactMatches(AstFunctionCall call) {
+    public List<MindcodeFunction> getExactMatches(AstFunctionCall call, int callArgumentCount) {
+        if (call.hasObject()) {
+            // Can't match anything
+            return List.of();
+        }
+
         List<MindcodeFunction> list = functionMap.getOrDefault(call.getFunctionName(), List.of())
                 .stream()
-                .filter(f -> f.exactMatch(call))
+                .filter(f -> f.exactMatch(call, callArgumentCount))
                 .toList();
 
         if (list.size() == 2 && list.get(0).isVarargs() != list.get(1).isVarargs()) {
+            // When vararg and non-vararg is matched, return only the non-vararg version
             return List.of(list.get(list.getFirst().isVarargs() ? 1 : 0));
         } else {
             return list;
         }
     }
 
-    /// If there's just one exact match to this function, it is returned. Otherwise, null is returned.
+    /// Returns all functions matching the call.
     ///
     /// @param call function call to match
     /// @return unique function exactly matching the given call
-    public @Nullable MindcodeFunction getExactMatch(AstFunctionCall call) {
-        List<MindcodeFunction> result = getExactMatches(call);
+    public @Nullable MindcodeFunction getExactMatch(AstFunctionCall call, int callArgumentCount) {
+        List<MindcodeFunction> result = getExactMatches(call, callArgumentCount);
         return result.size() == 1 ? result.getFirst() : null;
     }
-
 
     private static AstFunctionDeclaration createMain() {
         return new AstFunctionDeclaration(SourcePosition.EMPTY,

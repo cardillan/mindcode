@@ -69,7 +69,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     /// and labels to recursive and stackless functions.
     void buildCallTree() {
         // Walk the call tree
-        visitFunction(functionDefinitions.getMain(), 0);
+        visitFunction(functionDefinitions.getMain(), 1);
 
         // 1st level of indirect calls
         functions.forEach(outer ->
@@ -104,7 +104,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private final List<MindcodeFunction> callStack = new ArrayList<>();
 
     private void visitFunction(MindcodeFunction function, int count) {
-        function.markUsage(count);
+        function.updatePlacement(count);
 
         int index = callStack.indexOf(function);
         callStack.add(function);
@@ -118,7 +118,9 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             }
         } else {
             // Visit all children
-            function.getCallCardinality().forEach(this::visitFunction);
+            // If a function is declared inline, its call count
+            int multiplier = function.getDeclaration().isInline() ? count : 1;
+            function.getCallCardinality().forEach((f, calls) -> visitFunction(f, multiplier * calls));
         }
         callStack.removeLast();
     }

@@ -132,4 +132,88 @@ class CallGraphCreatorTest extends AbstractTestBase {
                 () -> assertFalse(funC.isRepeatedCall(funB))
         );
     }
+
+    @Test
+    void computersReferencesCorrectly() {
+        CallGraph graph = buildCallGraph(expectedMessages(),
+                InputFiles.fromSource("""
+                        void foo() bar(); bar(); end;
+                        void bar() baz(); baz(); end;
+                        void baz() println("Called"); end;
+                        foo();
+                        """));
+
+        MindcodeFunction foo = find(graph, "foo");
+        MindcodeFunction bar = find(graph, "bar");
+        MindcodeFunction baz = find(graph, "baz");
+
+        assertAll(
+                () -> assertEquals(1, foo.getPlacementCount(), "foo use count not correct"),
+                () -> assertEquals(2, bar.getPlacementCount(), "bar use count not correct"),
+                () -> assertEquals(2, baz.getPlacementCount(), "baz use count not correct")
+        );
+    }
+
+    @Test
+    void computersReferencesCorrectlyForInlineFunctions1() {
+        CallGraph graph = buildCallGraph(expectedMessages(),
+                InputFiles.fromSource("""
+                        inline void foo() bar(); bar(); end;
+                        inline void bar() baz(); baz(); end;
+                        inline void baz() println("Called"); end;
+                        foo();
+                        """));
+
+        MindcodeFunction foo = find(graph, "foo");
+        MindcodeFunction bar = find(graph, "bar");
+        MindcodeFunction baz = find(graph, "baz");
+
+        assertAll(
+                () -> assertEquals(1, foo.getPlacementCount(), "foo use count not correct"),
+                () -> assertEquals(2, bar.getPlacementCount(), "bar use count not correct"),
+                () -> assertEquals(4, baz.getPlacementCount(), "baz use count not correct")
+        );
+    }
+
+    @Test
+    void computersReferencesCorrectlyForInlineFunctions2() {
+        CallGraph graph = buildCallGraph(expectedMessages(),
+                InputFiles.fromSource("""
+                        void foo() bar(); bar(); end;
+                        inline void bar() baz(); baz(); end;
+                        inline void baz() println("Called"); end;
+                        foo(); foo();
+                        """));
+
+        MindcodeFunction foo = find(graph, "foo");
+        MindcodeFunction bar = find(graph, "bar");
+        MindcodeFunction baz = find(graph, "baz");
+
+        assertAll(
+                () -> assertEquals(2, foo.getPlacementCount(), "foo use count not correct"),
+                () -> assertEquals(2, bar.getPlacementCount(), "bar use count not correct"),
+                () -> assertEquals(4, baz.getPlacementCount(), "baz use count not correct")
+        );
+    }
+
+    @Test
+    void computersReferencesCorrectlyForInlineFunctions3() {
+        CallGraph graph = buildCallGraph(expectedMessages(),
+                InputFiles.fromSource("""
+                        inline void foo() bar(); bar(); end;
+                        void bar() baz(); baz(); end;
+                        inline void baz() println("Called"); end;
+                        foo(); foo();
+                        """));
+
+        MindcodeFunction foo = find(graph, "foo");
+        MindcodeFunction bar = find(graph, "bar");
+        MindcodeFunction baz = find(graph, "baz");
+
+        assertAll(
+                () -> assertEquals(2, foo.getPlacementCount(), "foo use count not correct"),
+                () -> assertEquals(4, bar.getPlacementCount(), "bar use count not correct"),
+                () -> assertEquals(2, baz.getPlacementCount(), "baz use count not correct")
+        );
+    }
 }

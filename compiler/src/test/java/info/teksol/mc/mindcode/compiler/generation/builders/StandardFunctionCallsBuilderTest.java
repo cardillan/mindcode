@@ -2263,8 +2263,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                                 c = a + b;
                             end;
                             
-                            foo(1, 2, out result);      // No error, places the sum into result
-                            foo(1, 2);                  // Also no error, the third argument to bar is optional
+                            foo(1, 2, out result);
+                            foo(1, 2);
                             """,
                     createInstruction(SET, ":fn0:a", "1"),
                     createInstruction(SET, ":fn0:b", "2"),
@@ -2278,7 +2278,13 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SETADDR, ":fn0*retaddr", var(1004)),
                     createInstruction(CALL, var(1000), ":fn0*retval"),
                     createInstruction(GOTOLABEL, var(1004), ":fn0"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(LABEL, var(1003)),
+                    createInstruction(END),
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(OP, "add", var(0), ":fn0:a", ":fn0:b"),
+                    createInstruction(SET, ":fn0:c", var(0)),
+                    createInstruction(LABEL, var(1005)),
+                    createInstruction(GOTO, ":fn0*retaddr", ":fn0")
             );
         }
     }

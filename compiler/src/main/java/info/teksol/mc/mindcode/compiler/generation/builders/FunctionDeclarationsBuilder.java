@@ -37,7 +37,8 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     private void generateCodeForFunction(MindcodeFunction function) {
         enterFunction(function, List.of());
         assembler.setActive(function.isUsed());
-        assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getUseCount());
+        // TODO: replace getPlacementCount() with proper weight computation
+        assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getPlacementCount());
         if (function.getLabel() != null) {
             assembler.createLabel(function.getLabel());
         }

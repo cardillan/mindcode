@@ -13,6 +13,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // Just "Function" would be preferred, but that conflicts with java.util.function.Function
 @NullMarked
@@ -31,7 +32,7 @@ public class MindcodeFunction {
     private List<LogicVariable> parameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";
-    private int useCount = 0;
+    private int placementCount = 0;
     private boolean inlined = false;
 
     // All calls in this function, including unresolved ones
@@ -53,7 +54,7 @@ public class MindcodeFunction {
 
         declaration = other.declaration;
         parameterCount = other.parameterCount;
-        useCount = other.useCount;
+        placementCount = other.placementCount;
         inlined = true;
 
         functionCalls.addAll(other.functionCalls);
@@ -75,26 +76,30 @@ public class MindcodeFunction {
     }
 
     void initializeCalls(FunctionDefinitions functions) {
-        List<MindcodeFunction> calls = functionCalls.stream().map(functions::getExactMatch).filter(Objects::nonNull).toList();
+        List<MindcodeFunction> calls = functionCalls.stream().flatMap(call -> getPossibleCalls(functions, call)).toList();
         directCalls.addAll(calls);
 
         Map<MindcodeFunction, Long> cardinality = calls.stream().collect(Collectors.groupingBy(f -> f, Collectors.counting()));
         cardinality.forEach((function, count) -> callCardinality.put(function, count.intValue()));
     }
 
-    /**
-     * @return true if this is the main function
-     */
+    /// Creates a list of possible calls from this function
+    Stream<MindcodeFunction> getPossibleCalls(FunctionDefinitions functions, AstFunctionCall call) {
+        // When creating the function call graph, we can't match functions exactly from within the
+        return isVarargs()
+                ? functions.getFunctions(call.getFunctionName()).stream()
+                : Stream.of(call).map(c -> functions.getExactMatch(c, -1)).filter(Objects::nonNull);
+    }
+
+    /// @return true if this is the main function
     public boolean isMain() {
         return declaration.getName().isEmpty();
     }
 
-    /**
-     * @return true if this function should be inlined
-     */
+    /// @return true if this function should be inlined
     public boolean isInline() {
         // Automatically inline all non-recursive functions called just once
-        return !isRecursive() && !declaration.isNoinline() && (inlined || declaration.isInline() || getUseCount() == 1);
+        return !isRecursive() && !declaration.isNoinline() && (inlined || declaration.isInline() || getPlacementCount() == 1);
     }
 
     public boolean isNoinline() {
@@ -120,23 +125,17 @@ public class MindcodeFunction {
         return declaration;
     }
 
-    /**
-     * @return the body of the function from function declaration
-     */
+    /// @return the body of the function from function declaration
     public List<AstMindcodeNode> getBody() {
         return declaration.getBody();
     }
 
-    /**
-     * @return name of the function
-     */
+    /// @return name of the function
     public String getName() {
         return declaration.getName();
     }
 
-    /**
-     * @return list of parameters of the function
-     */
+    /// @return list of parameters of the function
     public List<AstFunctionParameter> getDeclaredParameters() {
         return declaration.getParameters();
     }
@@ -149,16 +148,12 @@ public class MindcodeFunction {
         return parameterMap.get(name);
     }
 
-    /**
-     * @return list of parameters of the function as LogicVariable
-     */
+    /// @return list of parameters of the function as LogicVariable
     public List<LogicVariable> getParameters() {
         return parameters;
     }
 
-    /**
-     * @return function parameter at given index
-     */
+    /// @return function parameter at given index
     public LogicVariable getParameter(int index) {
         return parameters.get(index);
     }
@@ -208,71 +203,46 @@ public class MindcodeFunction {
         return callCardinality;
     }
 
-    /**
-     * @return true if the function is used (is reachable from main program body)
-     */
+    /// @return true if the function is used (is reachable from main program body)
     public boolean isUsed() {
-        return useCount > 0;
+        return placementCount > 0;
     }
 
-    /**
-     * @return the number of places the function is called from
-     */
-    public int getUseCount() {
-        return useCount;
+    /// @return the number of places the function is called from
+    public int getPlacementCount() {
+        return placementCount;
     }
 
-    /**
-     * @return true if the function is recursive
-     */
+    /// @return true if the function is recursive
     public boolean isRecursive() {
         return !recursiveCalls.isEmpty();
     }
 
-    /**
-     * Determines whether the call to calledFunction from this function is (potentially) recursive, that is
-     * it can lead to another invocation of this function. If it is, the local context of the function needs
-     * to be saved and restored using stack.
-     *
-     * @param calledFunction name of the function being called from this function
-     * @return true if this function call might be recursive
-     */
+    /// Determines whether the call to calledFunction from this function is (potentially) recursive, that is
+    /// it can lead to another invocation of this function. If it is, the local context of the function needs
+    /// to be saved and restored using stack.
+    ///
+    /// @param calledFunction name of the function being called from this function
+    /// @return true if this function call might be recursive
     public boolean isRecursiveCall(MindcodeFunction calledFunction) {
         return recursiveCalls.contains(calledFunction);
     }
 
-    /**
-     * Computes a match score for the function call. The score is constructed in such a way that a function
-     * which matches the call perfectly has the highest score. Score can be negative as well, only the total magnitude
-     * is important.
-     *
-     * @param call call to evaluate
-     * @return score describing how well the call matches
-     */
-    public int matchScore(AstFunctionCall call) {
-        int count = 0;
-        boolean isVarArgs = isVarargs();
-        int size = getStandardParameterCount();
-        for (int i = 0; i < call.getArguments().size(); i++) {
-            AstFunctionArgument argument = call.getArgument(i);
-            if (i < size) {
-                // Matching a standard parameter has a higher score
-                count += declaration.getParameter(i).matches(argument) ? 2 : -1;
-            } else {
-                count += (isVarArgs && argument.hasExpression()) ? 1 : -1;
-            }
-        }
-        return count;
-    }
+    /// Determines whether this function call exactly matches this function.
+    ///
+    /// @param call function call to inspect
+    /// @return true if the call is an exact match to this function
+    public boolean exactMatch(AstFunctionCall call, int callArgumentCount) {
+        int arguments = callArgumentCount < 0 ? call.getArguments().size() : callArgumentCount;
 
-    public boolean exactMatch(AstFunctionCall call) {
-        if (!parameterCount.contains(call.getArguments().size())) {
+        if (!parameterCount.contains(arguments)) {
             return false;
         }
 
+        int limit = Math.min(arguments, call.getArguments().size());
         boolean isVarArgs = isVarargs();
         int size = getStandardParameterCount();
-        for (int i = 0; i < call.getArguments().size(); i++) {
+        for (int i = 0; i < limit; i++) {
             AstFunctionArgument argument = call.getArgument(i);
             if (i < size) {
                 if (!declaration.getParameter(i).matches(argument)) return false;
@@ -284,30 +254,24 @@ public class MindcodeFunction {
         return true;
     }
 
-    /**
-     * Determines whether the called function is called more than once from this function. If it is, the
-     * returned value from each call needs to be stored in a unique variable, otherwise subsequent calls
-     * might overwrite the returned value from previous call.
-     *
-     * @param calledFunction name of the function being called from this function
-     * @return true if the function is called more than once from this function
-     */
+    /// Determines whether the called function is called more than once from this function. If it is, the
+    /// returned value from each call needs to be stored in a unique variable, otherwise subsequent calls
+    /// might overwrite the returned value from previous call.
+    ///
+    /// @param calledFunction function being called from this function
+    /// @return true if the function is called more than once from this function
     public boolean isRepeatedCall(MindcodeFunction calledFunction) {
         return indirectCalls.contains(calledFunction)
                 ? getCallCardinality().getOrDefault(calledFunction, 0) > 0
                 : getCallCardinality().getOrDefault(calledFunction, 0) > 1;
     }
 
-    /**
-     * @return the label allocated for the beginning of this function (null for inline functions)
-     */
+    /// @return the label allocated for the beginning of this function (null for inline functions)
     public @Nullable LogicLabel getLabel() {
         return label;
     }
 
-    /**
-     * @return the local prefix allocated for local variables of this function
-     */
+    /// @return the local prefix allocated for local variables of this function
     public String getPrefix() {
         return prefix;
     }
@@ -322,9 +286,8 @@ public class MindcodeFunction {
         recursiveCalls.add(calledFunction);
     }
 
-    // Increase usage count of this function
-    public void markUsage(int count) {
-        useCount += count;
+    public void updatePlacement(int count) {
+        placementCount += count;
     }
 
     public void setLabel(LogicLabel label) {

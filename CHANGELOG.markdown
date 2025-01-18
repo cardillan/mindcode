@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.0.0-preview2 - Future release
+
+* Fixed functions called using varargs potentially not recognized as used  ([#203](https://github.com/cardillan/mindcode/issues/203)).
+* Fixed wrong reference counting for inline functions   ([#207](https://github.com/cardillan/mindcode/issues/207)).
+
 ## 3.0.0-preview1 - 2025-01-17 
 
 ### Fixed
