@@ -206,7 +206,7 @@ public class DocGeneratorTest {
                 if (!declaration.isNoinline()) {
                     writer.printf("| %-30s | %10s | %10s |%n", "Inlined function", speed, size);
                 } else {
-                    // TODO Implement if noinline function is ever added to the library
+                    // Implement if noinline function is ever added to the library
                     throw new UnsupportedOperationException("Size calculation for noinline functions is not supported");
                 }
                 if (!declaration.isInline()) {

@@ -215,8 +215,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case CallRecInstruction ix -> {
                 consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
-                // TODO Replace with consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
+                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
             }
             case ReturnRecInstruction ix -> {
                 LogicVariable retAddr = nextTemp();

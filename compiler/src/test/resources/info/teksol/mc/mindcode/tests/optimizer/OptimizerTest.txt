@@ -15,7 +15,7 @@ level-display-water-cryo-00.mnd:                   83   3B59D99D61A51686   E8AFD
 level-meter-00.mnd:                               154   C7BCD2A84C470E15   226F163131A18433
 mass-driver-monitor-00.mnd:                       184   6E6F762403154535   FD834356086CB3BA
 mass-driver-monitor-surge-alloy-00.mnd:            93   84BE8CA14CE3386F   A3CA6136F6212DFD
-reactor-control-00.mnd:                           369   C63FCD0C8803B53A   8E556662DBBD4E1C
+reactor-control-00.mnd:                           369   0B5F71D4A736D2F1   8E556662DBBD4E1C
 reactor-control-battery-level-00.mnd:             578   BEBDD58A4C35FD11   D18185E084EB0BF2
 regulator-00.mnd:                                 142   F49BECB5341151DD   336A3A683C42A07B
 remote-vault-00.mnd:                               68   9EA444978E177496   5B693A206F892FA5

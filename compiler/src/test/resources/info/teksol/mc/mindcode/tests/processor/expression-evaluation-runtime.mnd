@@ -1,6 +1,15 @@
-// Make sure possible future optimizations won't use constant expression evaluation 
+require math;
+
+void assertEqualsRound(expected, actual, title)
+    assertEquals(expected, round(actual * 1e8) / 1e8, title);
+end;
+
+param NULL = null;
+param zero = 0;
+
+// Make sure possible future optimizations won't use constant expression evaluation
 // and remove instructions we want to test
-noinline def d(n) n; end;
+inline def d(n) zero + n; end;
 
 assertEquals(5,             2 +  d(3),                  "add");
 assertEquals(1,             7 -  d(6),                  "sub");
@@ -33,8 +42,8 @@ assertEquals(false,         1 >  d(2),                  "greaterThan 2");
 assertEquals(true,          1 >= d(1),                  "greaterThanEq 1");
 assertEquals(false,         1 >= d(2),                  "greaterThanEq 2");
 
-assertEquals(false,         0    === d(null),           "strictEqual 1");
-assertEquals(true,          null === d(null),           "strictEqual 2");
+assertEquals(false,         0    === NULL,              "strictEqual 1");
+assertEquals(true,          null === NULL,              "strictEqual 2");
 
 assertEquals(4,             1 << d(2),                  "shl");
 assertEquals(2,             9 >> d(2),                  "shr");
@@ -42,7 +51,7 @@ assertEquals(2,             9 >> d(2),                  "shr");
 assertEquals(3,             1 |  d(2),                  "or");
 assertEquals(2,             3 &  d(2),                  "and");
 assertEquals(1,             3 ^  d(2),                  "xor");
- 
+
 // Small values work because long is signed
 assertEquals(-1,            ~d(0),                      "not 1");
 assertEquals(-65536,        ~d(65535),                  "not 2");
@@ -63,6 +72,16 @@ assertEquals(4,             sqrt(d(16)),                "sqrt");
 
 assertEquals(45,            angle(1, d(1)),             "angle");
 assertEquals(90,            angleDiff(45, d(135)),      "angleDiff");
+
+assertEquals(5,             len(3, 4),                  "len");
+
+assertEqualsRound(1,        sin(90),                    "sin");
+assertEqualsRound(-1,       cos(180),                   "cos");
+assertEqualsRound(1,        tan(45),                    "tan");
+
+assertEqualsRound(90,       asin(1),                    "asin");
+assertEqualsRound(0,        acos(1),                    "acos");
+assertEqualsRound(45,       atan(1),                    "atan");
 
 // Mindcode extensions
 assertEquals(-8,            -d(8),                      "unary minus");
@@ -86,7 +105,5 @@ a = 3; assertEquals(    1,  a ^= d(2),                  "^=");
 a = 1; assertEquals(false,  a &&= d(0),                 "&&=");
 a = 1; assertEquals( true,  a &&= d(2),                 "&&=");
 a = 0; assertEquals( true,  a ||= d(2),                 "||=");
-
-// TODO: add angle, len, trig functions. Rand??
 
 stopProcessor();

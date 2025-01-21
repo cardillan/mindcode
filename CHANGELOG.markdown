@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed incorrect implementation of the strict equality operator ([#206](https://github.com/cardillan/mindcode/issues/206)).
 * Fixed wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
 * Fixed compiler errors when placing enhanced comments into loops.
+* Fixed wrong compile-time and emulator evaluation of `asin`, `acos` and `atan` functions ([#209](https://github.com/cardillan/mindcode/issues/209)).
 
 ### Miscellaneous
 

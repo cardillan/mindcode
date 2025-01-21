@@ -55,9 +55,6 @@
 // Two large batteries per reactor should be linked to the internal battery, perhaps by using a surge tower.
 // Nothing else must be attached to those batteries - use plastanium walls to prevent accidental connections.
 
-// TODO check blast compound and cryofluid level in individual reactors to detect possible misconfiguration of bridge conduits/conveyors.
-
-
 // System configuration
 param PLANT_PROTECTION      = 1;        // If internal battery level gets too low, output to base is switched off
 param FAST_START            = 1;        // Starts as many reactors at once as possible during startup

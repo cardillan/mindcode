@@ -130,7 +130,6 @@ public interface ContextfulInstructionCreator {
         return (SetInstruction) createInstruction(SET, target, value);
     }
 
-    // TODO bind together SetAddress, Goto and GotoLabel so that use of regular label with goto is precluded
     default SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
         return (SetAddressInstruction) createInstruction(SETADDR, variable, address);
     }

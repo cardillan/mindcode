@@ -1,1548 +1,2049 @@
-   402 instructions before optimizations.
-   101 instructions eliminated by Data Flow Optimization (22 iterations).
-     1 instructions eliminated by Unreachable Code Elimination.
-   300 instructions after optimizations.
+   372 instructions before optimizations.
+    63 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions modified by Expression Optimization (3 iterations).
+   180 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+    11 instructions added by Function Inlining (4 iterations).
+     6 function calls inlined by Function Inlining.
+   139 instructions after optimizations.
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
- 
-     2 call *label0 :fn0*retval
-     3 label *label1
-     4 set *tmp0 :fn0*retval
--    * op add *tmp1 2 *tmp0
-+    5 op add *tmp1 2 :fn0*retval
-     6 assertequals 5 *tmp1 "add"
-     7 set :fn0:n 6
-     8 setaddr :fn0*retaddr *label2
-     9 call *label0 :fn0*retval
-    10 label *label2
-    11 set *tmp2 :fn0*retval
--    * op sub *tmp3 7 *tmp2
-+   12 op sub *tmp3 7 :fn0*retval
-    13 assertequals 1 *tmp3 "sub"
-    14 set :fn0:n 2
-    15 setaddr :fn0*retaddr *label3
-    16 call *label0 :fn0*retval
-    17 label *label3
-    18 set *tmp4 :fn0*retval
--    * op mul *tmp5 3 *tmp4
-+   19 op mul *tmp5 3 :fn0*retval
-    20 assertequals 6 *tmp5 "mul"
-    21 set :fn0:n 4
-    22 setaddr :fn0*retaddr *label4
-    23 call *label0 :fn0*retval
-    24 label *label4
-    25 set *tmp6 :fn0*retval
--    * op div *tmp7 6 *tmp6
-+   26 op div *tmp7 6 :fn0*retval
-    27 assertequals 1.5 *tmp7 "div"
-    28 set :fn0:n 100000
-    29 setaddr :fn0*retaddr *label5
-    30 call *label0 :fn0*retval
-    31 label *label5
-    32 set *tmp8 :fn0*retval
--    * op div *tmp9 1 *tmp8
-+   33 op div *tmp9 1 :fn0*retval
-    34 assertequals 0.00001 *tmp9 "div exp"
-    35 set :fn0:n 4
-    36 setaddr :fn0*retaddr *label6
-    37 call *label0 :fn0*retval
-    38 label *label6
-    39 set *tmp10 :fn0*retval
--    * op idiv *tmp11 6 *tmp10
-+   40 op idiv *tmp11 6 :fn0*retval
-    41 assertequals 1 *tmp11 "idiv"
-    42 set :fn0:n 4
-    43 setaddr :fn0*retaddr *label7
-    44 call *label0 :fn0*retval
-    45 label *label7
-    46 set *tmp12 :fn0*retval
--    * op mod *tmp13 6 *tmp12
-+   47 op mod *tmp13 6 :fn0*retval
-    48 assertequals 2 *tmp13 "mod"
-    49 set :fn0:n 4
-    50 setaddr :fn0*retaddr *label8
-    51 call *label0 :fn0*retval
-    52 label *label8
-    53 set *tmp14 :fn0*retval
--    * op pow *tmp15 2 *tmp14
-+   54 op pow *tmp15 2 :fn0*retval
-    55 assertequals 16 *tmp15 "pow"
-    56 set :fn0:n 5
-    57 setaddr :fn0*retaddr *label9
-    58 call *label0 :fn0*retval
-    59 label *label9
-    60 set *tmp16 :fn0*retval
--    * op equal *tmp17 5 *tmp16
-+   61 op equal *tmp17 5 :fn0*retval
-    62 assertequals true *tmp17 "equal 1"
-    63 set :fn0:n 6
-    64 setaddr :fn0*retaddr *label10
-    65 call *label0 :fn0*retval
-    66 label *label10
-    67 set *tmp18 :fn0*retval
--    * op equal *tmp19 5 *tmp18
-+   68 op equal *tmp19 5 :fn0*retval
-    69 assertequals false *tmp19 "equal 2"
-    70 set :fn0:n null
-    71 setaddr :fn0*retaddr *label11
-    72 call *label0 :fn0*retval
-    73 label *label11
-    74 set *tmp20 :fn0*retval
--    * op equal *tmp21 0 *tmp20
-+   75 op equal *tmp21 0 :fn0*retval
-    76 assertequals true *tmp21 "equal null"
-    77 set :fn0:n 5
-    78 setaddr :fn0*retaddr *label12
-    79 call *label0 :fn0*retval
-    80 label *label12
-    81 set *tmp22 :fn0*retval
--    * op notEqual *tmp23 5 *tmp22
-+   82 op notEqual *tmp23 5 :fn0*retval
-    83 assertequals false *tmp23 "notEqual 1"
-    84 set :fn0:n 6
-    85 setaddr :fn0*retaddr *label13
-    86 call *label0 :fn0*retval
-    87 label *label13
-    88 set *tmp24 :fn0*retval
--    * op notEqual *tmp25 5 *tmp24
-+   89 op notEqual *tmp25 5 :fn0*retval
-    90 assertequals true *tmp25 "notEqual 2"
-    91 set :fn0:n null
-    92 setaddr :fn0*retaddr *label14
-    93 call *label0 :fn0*retval
-    94 label *label14
-    95 set *tmp26 :fn0*retval
--    * op notEqual *tmp27 0 *tmp26
-+   96 op notEqual *tmp27 0 :fn0*retval
-    97 assertequals false *tmp27 "notEqual null"
-    98 set :fn0:n 0
-    99 setaddr :fn0*retaddr *label15
-   100 call *label0 :fn0*retval
-   101 label *label15
-   102 set *tmp28 :fn0*retval
--    * op land *tmp29 1 *tmp28
-+  103 op land *tmp29 1 :fn0*retval
-   104 assertequals false *tmp29 "land 1"
-   105 set :fn0:n 2
-   106 setaddr :fn0*retaddr *label16
-   107 call *label0 :fn0*retval
-   108 label *label16
-   109 set *tmp30 :fn0*retval
--    * op land *tmp31 1 *tmp30
-+  110 op land *tmp31 1 :fn0*retval
-   111 assertequals true *tmp31 "land 2"
-   112 set :fn0:n 1
-   113 setaddr :fn0*retaddr *label17
-   114 call *label0 :fn0*retval
-   115 label *label17
-   116 set *tmp32 :fn0*retval
--    * op lessThan *tmp33 0 *tmp32
-+  117 op lessThan *tmp33 0 :fn0*retval
-   118 assertequals true *tmp33 "lessThan 1"
-   119 set :fn0:n 0
-   120 setaddr :fn0*retaddr *label18
-   121 call *label0 :fn0*retval
-   122 label *label18
-   123 set *tmp34 :fn0*retval
--    * op lessThan *tmp35 1 *tmp34
-+  124 op lessThan *tmp35 1 :fn0*retval
-   125 assertequals false *tmp35 "lessThan 2"
-   126 set :fn0:n 1
-   127 setaddr :fn0*retaddr *label19
-   128 call *label0 :fn0*retval
-   129 label *label19
-   130 set *tmp36 :fn0*retval
--    * op lessThanEq *tmp37 1 *tmp36
-+  131 op lessThanEq *tmp37 1 :fn0*retval
-   132 assertequals true *tmp37 "lessThanEq 1"
-   133 set :fn0:n 0
-   134 setaddr :fn0*retaddr *label20
-   135 call *label0 :fn0*retval
-   136 label *label20
-   137 set *tmp38 :fn0*retval
--    * op lessThanEq *tmp39 1 *tmp38
-+  138 op lessThanEq *tmp39 1 :fn0*retval
-   139 assertequals false *tmp39 "lessThanEq 2"
-   140 set :fn0:n 1
-   141 setaddr :fn0*retaddr *label21
-   142 call *label0 :fn0*retval
-   143 label *label21
-   144 set *tmp40 :fn0*retval
--    * op greaterThan *tmp41 2 *tmp40
-+  145 op greaterThan *tmp41 2 :fn0*retval
-   146 assertequals true *tmp41 "greaterThan 1"
-   147 set :fn0:n 2
-   148 setaddr :fn0*retaddr *label22
-   149 call *label0 :fn0*retval
-   150 label *label22
-   151 set *tmp42 :fn0*retval
--    * op greaterThan *tmp43 1 *tmp42
-+  152 op greaterThan *tmp43 1 :fn0*retval
-   153 assertequals false *tmp43 "greaterThan 2"
-   154 set :fn0:n 1
-   155 setaddr :fn0*retaddr *label23
-   156 call *label0 :fn0*retval
-   157 label *label23
-   158 set *tmp44 :fn0*retval
--    * op greaterThanEq *tmp45 1 *tmp44
-+  159 op greaterThanEq *tmp45 1 :fn0*retval
-   160 assertequals true *tmp45 "greaterThanEq 1"
-   161 set :fn0:n 2
-   162 setaddr :fn0*retaddr *label24
-   163 call *label0 :fn0*retval
-   164 label *label24
-   165 set *tmp46 :fn0*retval
--    * op greaterThanEq *tmp47 1 *tmp46
-+  166 op greaterThanEq *tmp47 1 :fn0*retval
-   167 assertequals false *tmp47 "greaterThanEq 2"
-   168 set :fn0:n null
-   169 setaddr :fn0*retaddr *label25
-   170 call *label0 :fn0*retval
-   171 label *label25
-   172 set *tmp48 :fn0*retval
--    * op strictEqual *tmp49 0 *tmp48
-+  173 op strictEqual *tmp49 0 :fn0*retval
-   174 assertequals false *tmp49 "strictEqual 1"
-   175 set :fn0:n null
-   176 setaddr :fn0*retaddr *label26
-   177 call *label0 :fn0*retval
-   178 label *label26
-   179 set *tmp50 :fn0*retval
--    * op strictEqual *tmp51 null *tmp50
-+  180 op strictEqual *tmp51 null :fn0*retval
-   181 assertequals true *tmp51 "strictEqual 2"
-   182 set :fn0:n 2
-   183 setaddr :fn0*retaddr *label27
-   184 call *label0 :fn0*retval
-   185 label *label27
-   186 set *tmp52 :fn0*retval
--    * op shl *tmp53 1 *tmp52
-+  187 op shl *tmp53 1 :fn0*retval
-   188 assertequals 4 *tmp53 "shl"
-   189 set :fn0:n 2
-   190 setaddr :fn0*retaddr *label28
-   191 call *label0 :fn0*retval
-   192 label *label28
-   193 set *tmp54 :fn0*retval
--    * op shr *tmp55 9 *tmp54
-+  194 op shr *tmp55 9 :fn0*retval
-   195 assertequals 2 *tmp55 "shr"
-   196 set :fn0:n 2
-   197 setaddr :fn0*retaddr *label29
-   198 call *label0 :fn0*retval
-   199 label *label29
-   200 set *tmp56 :fn0*retval
--    * op or *tmp57 1 *tmp56
-+  201 op or *tmp57 1 :fn0*retval
-   202 assertequals 3 *tmp57 "or"
-   203 set :fn0:n 2
-   204 setaddr :fn0*retaddr *label30
-   205 call *label0 :fn0*retval
-   206 label *label30
-   207 set *tmp58 :fn0*retval
--    * op and *tmp59 3 *tmp58
-+  208 op and *tmp59 3 :fn0*retval
-   209 assertequals 2 *tmp59 "and"
-   210 set :fn0:n 2
-   211 setaddr :fn0*retaddr *label31
-   212 call *label0 :fn0*retval
-   213 label *label31
-   214 set *tmp60 :fn0*retval
--    * op xor *tmp61 3 *tmp60
-+  215 op xor *tmp61 3 :fn0*retval
-   216 assertequals 1 *tmp61 "xor"
-   217 set :fn0:n 0
-   218 setaddr :fn0*retaddr *label32
-   219 call *label0 :fn0*retval
-   220 label *label32
-   221 set *tmp62 :fn0*retval
--    * op not *tmp63 *tmp62
-+  222 op not *tmp63 :fn0*retval
-   223 assertequals -1 *tmp63 "not 1"
-   224 set :fn0:n 65535
-   225 setaddr :fn0*retaddr *label33
-   226 call *label0 :fn0*retval
-   227 label *label33
-   228 set *tmp64 :fn0*retval
--    * op not *tmp65 *tmp64
-+  229 op not *tmp65 :fn0*retval
-   230 assertequals -65536 *tmp65 "not 2"
-   231 set :a 0xabcdefabcdef
--    * op add *tmp66 :a 1
--    * op sub *tmp67 0 *tmp66
--    * set :fn0:n :a
-+  232 op add *tmp66 0xabcdefabcdef 1
-+  233 op sub *tmp67 0 188900977659376
-+  234 set :fn0:n 0xabcdefabcdef
-   235 setaddr :fn0*retaddr *label34
-   236 call *label0 :fn0*retval
-   237 label *label34
-   238 set *tmp68 :fn0*retval
--    * op not *tmp69 *tmp68
--    * assertequals *tmp67 *tmp69 "not 3"
-+  239 op not *tmp69 :fn0*retval
-+  240 assertequals -188900977659376 *tmp69 "not 3"
-   241 set :fn0:n 4
-   242 setaddr :fn0*retaddr *label35
-   243 call *label0 :fn0*retval
-   244 label *label35
-   245 set *tmp70 :fn0*retval
--    * op max *tmp71 2 *tmp70
-+  246 op max *tmp71 2 :fn0*retval
-   247 assertequals 4 *tmp71 "max"
-   248 set :fn0:n 4
-   249 setaddr :fn0*retaddr *label36
-   250 call *label0 :fn0*retval
-   251 label *label36
-   252 set *tmp72 :fn0*retval
--    * op min *tmp73 2 *tmp72
-+  253 op min *tmp73 2 :fn0*retval
-   254 assertequals 2 *tmp73 "min"
-   255 set :fn0:n -2
-   256 setaddr :fn0*retaddr *label37
-   257 call *label0 :fn0*retval
-   258 label *label37
-   259 set *tmp74 :fn0*retval
--    * op abs *tmp75 *tmp74
-+  260 op abs *tmp75 :fn0*retval
-   261 assertequals 2 *tmp75 "abs"
-   262 set :fn0:n 2.718281828459045
-   263 setaddr :fn0*retaddr *label38
-   264 call *label0 :fn0*retval
-   265 label *label38
-   266 set *tmp76 :fn0*retval
--    * op log *tmp77 *tmp76
-+  267 op log *tmp77 :fn0*retval
-   268 assertequals 1 *tmp77 "log"
-   269 set :fn0:n 10
-   270 setaddr :fn0*retaddr *label39
-   271 call *label0 :fn0*retval
-   272 label *label39
-   273 set *tmp78 :fn0*retval
--    * op log10 *tmp79 *tmp78
-+  274 op log10 *tmp79 :fn0*retval
-   275 assertequals 1 *tmp79 "log10"
-   276 set :fn0:n 2.5
-   277 setaddr :fn0*retaddr *label40
-   278 call *label0 :fn0*retval
-   279 label *label40
-   280 set *tmp80 :fn0*retval
--    * op floor *tmp81 *tmp80
-+  281 op floor *tmp81 :fn0*retval
-   282 assertequals 2 *tmp81 "floor"
-   283 set :fn0:n 2.5
-   284 setaddr :fn0*retaddr *label41
-   285 call *label0 :fn0*retval
-   286 label *label41
-   287 set *tmp82 :fn0*retval
--    * op ceil *tmp83 *tmp82
-+  288 op ceil *tmp83 :fn0*retval
-   289 assertequals 3 *tmp83 "ceil"
-   290 set :fn0:n 16
-   291 setaddr :fn0*retaddr *label42
-   292 call *label0 :fn0*retval
-   293 label *label42
-   294 set *tmp84 :fn0*retval
--    * op sqrt *tmp85 *tmp84
-+  295 op sqrt *tmp85 :fn0*retval
-   296 assertequals 4 *tmp85 "sqrt"
-   297 set :fn0:n 1
-   298 setaddr :fn0*retaddr *label43
-   299 call *label0 :fn0*retval
-   300 label *label43
-   301 set *tmp86 :fn0*retval
--    * op angle *tmp87 1 *tmp86
-+  302 op angle *tmp87 1 :fn0*retval
-   303 assertequals 45 *tmp87 "angle"
-   304 set :fn0:n 135
-   305 setaddr :fn0*retaddr *label44
-   306 call *label0 :fn0*retval
-   307 label *label44
-   308 set *tmp88 :fn0*retval
--    * op angleDiff *tmp89 45 *tmp88
-+  309 op angleDiff *tmp89 45 :fn0*retval
-   310 assertequals 90 *tmp89 "angleDiff"
-   311 set :fn0:n 8
-   312 setaddr :fn0*retaddr *label45
-   313 call *label0 :fn0*retval
-   314 label *label45
-   315 set *tmp90 :fn0*retval
--    * op sub *tmp91 0 *tmp90
-+  316 op sub *tmp91 0 :fn0*retval
-   317 assertequals -8 *tmp91 "unary minus"
-   318 set :fn0:n 0
-   319 setaddr :fn0*retaddr *label46
-   320 call *label0 :fn0*retval
-   321 label *label46
-   322 set *tmp92 :fn0*retval
--    * op equal *tmp93 *tmp92 false
-+  323 op equal *tmp93 :fn0*retval false
-   324 assertequals 1 *tmp93 "boolean negation 1"
-   325 set :fn0:n 1
-   326 setaddr :fn0*retaddr *label47
-   327 call *label0 :fn0*retval
-   328 label *label47
-   329 set *tmp94 :fn0*retval
--    * op equal *tmp95 *tmp94 false
-+  330 op equal *tmp95 :fn0*retval false
-   331 assertequals 0 *tmp95 "boolean negation 2"
-   332 set :fn0:n 2
-   333 setaddr :fn0*retaddr *label48
-   334 call *label0 :fn0*retval
-   335 label *label48
-   336 set *tmp96 :fn0*retval
--    * op equal *tmp97 *tmp96 false
-+  337 op equal *tmp97 :fn0*retval false
-   338 assertequals 0 *tmp97 "boolean negation 3"
-   339 set :a 2
-   340 set :fn0:n 4
- 
-   342 call *label0 :fn0*retval
-   343 label *label49
-   344 set *tmp98 :fn0*retval
--    * op pow :a :a *tmp98
-+  345 op pow :a 2 :fn0*retval
-   346 assertequals 16 :a "**="
-   347 set :a 2
-   348 set :fn0:n 4
- 
-   350 call *label0 :fn0*retval
-   351 label *label50
-   352 set *tmp99 :fn0*retval
--    * op mul :a :a *tmp99
-+  353 op mul :a 2 :fn0*retval
-   354 assertequals 8 :a "*="
-   355 set :a 6
-   356 set :fn0:n 4
- 
-   358 call *label0 :fn0*retval
-   359 label *label51
-   360 set *tmp100 :fn0*retval
--    * op div :a :a *tmp100
-+  361 op div :a 6 :fn0*retval
-   362 assertequals 1.5 :a "/="
-   363 set :a 6
-   364 set :fn0:n 4
- 
-   366 call *label0 :fn0*retval
-   367 label *label52
-   368 set *tmp101 :fn0*retval
--    * op idiv :a :a *tmp101
-+  369 op idiv :a 6 :fn0*retval
-   370 assertequals 1 :a "\="
-   371 set :a 6
-   372 set :fn0:n 4
- 
-   374 call *label0 :fn0*retval
-   375 label *label53
-   376 set *tmp102 :fn0*retval
--    * op mod :a :a *tmp102
-+  377 op mod :a 6 :fn0*retval
-   378 assertequals 2 :a "%="
-   379 set :a 4
-   380 set :fn0:n 2
- 
-   382 call *label0 :fn0*retval
-   383 label *label54
-   384 set *tmp103 :fn0*retval
--    * op add :a :a *tmp103
-+  385 op add :a 4 :fn0*retval
-   386 assertequals 6 :a "+="
-   387 set :a 4
-   388 set :fn0:n 2
- 
-   390 call *label0 :fn0*retval
-   391 label *label55
-   392 set *tmp104 :fn0*retval
--    * op sub :a :a *tmp104
-+  393 op sub :a 4 :fn0*retval
-   394 assertequals 2 :a "-="
-   395 set :a 1
-   396 set :fn0:n 2
- 
-   398 call *label0 :fn0*retval
-   399 label *label56
-   400 set *tmp105 :fn0*retval
--    * op shl :a :a *tmp105
-+  401 op shl :a 1 :fn0*retval
-   402 assertequals 4 :a "<<="
-   403 set :a 9
-   404 set :fn0:n 2
- 
-   406 call *label0 :fn0*retval
-   407 label *label57
-   408 set *tmp106 :fn0*retval
--    * op shr :a :a *tmp106
-+  409 op shr :a 9 :fn0*retval
-   410 assertequals 2 :a ">>="
-   411 set :a 1
-   412 set :fn0:n 2
- 
-   414 call *label0 :fn0*retval
-   415 label *label58
-   416 set *tmp107 :fn0*retval
--    * op or :a :a *tmp107
-+  417 op or :a 1 :fn0*retval
-   418 assertequals 3 :a "|="
-   419 set :a 3
-   420 set :fn0:n 2
- 
-   422 call *label0 :fn0*retval
-   423 label *label59
-   424 set *tmp108 :fn0*retval
--    * op and :a :a *tmp108
-+  425 op and :a 3 :fn0*retval
-   426 assertequals 2 :a "&="
-   427 set :a 3
-   428 set :fn0:n 2
- 
-   430 call *label0 :fn0*retval
-   431 label *label60
-   432 set *tmp109 :fn0*retval
--    * op xor :a :a *tmp109
-+  433 op xor :a 3 :fn0*retval
-   434 assertequals 1 :a "^="
-   435 set :a 1
-   436 set :fn0:n 0
- 
-   438 call *label0 :fn0*retval
-   439 label *label61
-   440 set *tmp110 :fn0*retval
--    * op land :a :a *tmp110
-+  441 op land :a 1 :fn0*retval
-   442 assertequals false :a "&&="
-   443 set :a 1
-   444 set :fn0:n 2
- 
-   446 call *label0 :fn0*retval
-   447 label *label62
-   448 set *tmp111 :fn0*retval
--    * op land :a :a *tmp111
-+  449 op land :a 1 :fn0*retval
-   450 assertequals true :a "&&="
-   451 set :a 0
--    * set :fn0:n 2
-   452 setaddr :fn0*retaddr *label63
-   453 call *label0 :fn0*retval
-   454 label *label63
-   455 set *tmp112 :fn0*retval
--    * op or *tmp113 :a *tmp112
-+  456 op or *tmp113 0 :fn0*retval
-   457 op notEqual :a *tmp113 false
-   458 assertequals true :a "||="
-   459 stop
+Pass 1: speed optimization selection (cost limit 828):
+  * Inline function 'assertEqualsRound' defined at line 3:1      cost    19, benefit       27.0, efficiency        1.4 (-31 instructions)
+    Inline function call at line 78:1                            cost     4, benefit        4.5, efficiency        1.1
+    Inline function call at line 79:1                            cost     4, benefit        4.5, efficiency        1.1
+    Inline function call at line 80:1                            cost     4, benefit        4.5, efficiency        1.1
+    Inline function call at line 82:1                            cost     4, benefit        4.5, efficiency        1.1
+    Inline function call at line 83:1                            cost     4, benefit        4.5, efficiency        1.1
+    Inline function call at line 84:1                            cost     4, benefit        4.5, efficiency        1.1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-82 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-63 instructions):
+     0 set NULL null
+     1 set zero 0
+     2 set :fn4:n 3
+-    * op add *tmp1 zero :fn4:n
+-    * set *tmp0 *tmp1
++    3 op add *tmp0 zero :fn4:n
+     4 label *label4
+     5 op add *tmp2 2 *tmp0
+     6 assertequals 5 *tmp2 "add"
+     7 set :fn5:n 6
+-    * op add *tmp4 zero :fn5:n
+-    * set *tmp3 *tmp4
++    8 op add *tmp3 zero :fn5:n
+     9 label *label5
+    10 op sub *tmp5 7 *tmp3
+    11 assertequals 1 *tmp5 "sub"
+    12 set :fn6:n 2
+-    * op add *tmp7 zero :fn6:n
+-    * set *tmp6 *tmp7
++   13 op add *tmp6 zero :fn6:n
+    14 label *label6
+    15 op mul *tmp8 3 *tmp6
+    16 assertequals 6 *tmp8 "mul"
+    17 set :fn7:n 4
+-    * op add *tmp10 zero :fn7:n
+-    * set *tmp9 *tmp10
++   18 op add *tmp9 zero :fn7:n
+    19 label *label7
+    20 op div *tmp11 6 *tmp9
+    21 assertequals 1.5 *tmp11 "div"
+    22 set :fn8:n 100000
+-    * op add *tmp13 zero :fn8:n
+-    * set *tmp12 *tmp13
++   23 op add *tmp12 zero :fn8:n
+    24 label *label8
+    25 op div *tmp14 1 *tmp12
+    26 assertequals 0.00001 *tmp14 "div exp"
+    27 set :fn9:n 4
+-    * op add *tmp16 zero :fn9:n
+-    * set *tmp15 *tmp16
++   28 op add *tmp15 zero :fn9:n
+    29 label *label9
+    30 op idiv *tmp17 6 *tmp15
+    31 assertequals 1 *tmp17 "idiv"
+    32 set :fn10:n 4
+-    * op add *tmp19 zero :fn10:n
+-    * set *tmp18 *tmp19
++   33 op add *tmp18 zero :fn10:n
+    34 label *label10
+    35 op mod *tmp20 6 *tmp18
+    36 assertequals 2 *tmp20 "mod"
+    37 set :fn11:n 4
+-    * op add *tmp22 zero :fn11:n
+-    * set *tmp21 *tmp22
++   38 op add *tmp21 zero :fn11:n
+    39 label *label11
+    40 op pow *tmp23 2 *tmp21
+    41 assertequals 16 *tmp23 "pow"
+    42 set :fn12:n 5
+-    * op add *tmp25 zero :fn12:n
+-    * set *tmp24 *tmp25
++   43 op add *tmp24 zero :fn12:n
+    44 label *label12
+    45 op equal *tmp26 5 *tmp24
+    46 assertequals true *tmp26 "equal 1"
+    47 set :fn13:n 6
+-    * op add *tmp28 zero :fn13:n
+-    * set *tmp27 *tmp28
++   48 op add *tmp27 zero :fn13:n
+    49 label *label13
+    50 op equal *tmp29 5 *tmp27
+    51 assertequals false *tmp29 "equal 2"
+    52 set :fn14:n null
+-    * op add *tmp31 zero :fn14:n
+-    * set *tmp30 *tmp31
++   53 op add *tmp30 zero :fn14:n
+    54 label *label14
+    55 op equal *tmp32 0 *tmp30
+    56 assertequals true *tmp32 "equal null"
+    57 set :fn15:n 5
+-    * op add *tmp34 zero :fn15:n
+-    * set *tmp33 *tmp34
++   58 op add *tmp33 zero :fn15:n
+    59 label *label15
+    60 op notEqual *tmp35 5 *tmp33
+    61 assertequals false *tmp35 "notEqual 1"
+    62 set :fn16:n 6
+-    * op add *tmp37 zero :fn16:n
+-    * set *tmp36 *tmp37
++   63 op add *tmp36 zero :fn16:n
+    64 label *label16
+    65 op notEqual *tmp38 5 *tmp36
+    66 assertequals true *tmp38 "notEqual 2"
+    67 set :fn17:n null
+-    * op add *tmp40 zero :fn17:n
+-    * set *tmp39 *tmp40
++   68 op add *tmp39 zero :fn17:n
+    69 label *label17
+    70 op notEqual *tmp41 0 *tmp39
+    71 assertequals false *tmp41 "notEqual null"
+    72 set :fn18:n 0
+-    * op add *tmp43 zero :fn18:n
+-    * set *tmp42 *tmp43
++   73 op add *tmp42 zero :fn18:n
+    74 label *label18
+    75 op land *tmp44 1 *tmp42
+    76 assertequals false *tmp44 "land 1"
+    77 set :fn19:n 2
+-    * op add *tmp46 zero :fn19:n
+-    * set *tmp45 *tmp46
++   78 op add *tmp45 zero :fn19:n
+    79 label *label19
+    80 op land *tmp47 1 *tmp45
+    81 assertequals true *tmp47 "land 2"
+    82 set :fn20:n 1
+-    * op add *tmp49 zero :fn20:n
+-    * set *tmp48 *tmp49
++   83 op add *tmp48 zero :fn20:n
+    84 label *label20
+    85 op lessThan *tmp50 0 *tmp48
+    86 assertequals true *tmp50 "lessThan 1"
+    87 set :fn21:n 0
+-    * op add *tmp52 zero :fn21:n
+-    * set *tmp51 *tmp52
++   88 op add *tmp51 zero :fn21:n
+    89 label *label21
+    90 op lessThan *tmp53 1 *tmp51
+    91 assertequals false *tmp53 "lessThan 2"
+    92 set :fn22:n 1
+-    * op add *tmp55 zero :fn22:n
+-    * set *tmp54 *tmp55
++   93 op add *tmp54 zero :fn22:n
+    94 label *label22
+    95 op lessThanEq *tmp56 1 *tmp54
+    96 assertequals true *tmp56 "lessThanEq 1"
+    97 set :fn23:n 0
+-    * op add *tmp58 zero :fn23:n
+-    * set *tmp57 *tmp58
++   98 op add *tmp57 zero :fn23:n
+    99 label *label23
+   100 op lessThanEq *tmp59 1 *tmp57
+   101 assertequals false *tmp59 "lessThanEq 2"
+   102 set :fn24:n 1
+-    * op add *tmp61 zero :fn24:n
+-    * set *tmp60 *tmp61
++  103 op add *tmp60 zero :fn24:n
+   104 label *label24
+   105 op greaterThan *tmp62 2 *tmp60
+   106 assertequals true *tmp62 "greaterThan 1"
+   107 set :fn25:n 2
+-    * op add *tmp64 zero :fn25:n
+-    * set *tmp63 *tmp64
++  108 op add *tmp63 zero :fn25:n
+   109 label *label25
+   110 op greaterThan *tmp65 1 *tmp63
+   111 assertequals false *tmp65 "greaterThan 2"
+   112 set :fn26:n 1
+-    * op add *tmp67 zero :fn26:n
+-    * set *tmp66 *tmp67
++  113 op add *tmp66 zero :fn26:n
+   114 label *label26
+   115 op greaterThanEq *tmp68 1 *tmp66
+   116 assertequals true *tmp68 "greaterThanEq 1"
+   117 set :fn27:n 2
+-    * op add *tmp70 zero :fn27:n
+-    * set *tmp69 *tmp70
++  118 op add *tmp69 zero :fn27:n
+   119 label *label27
+   120 op greaterThanEq *tmp71 1 *tmp69
+   121 assertequals false *tmp71 "greaterThanEq 2"
  
-     1 setaddr :fn0*retaddr *label1
-     2 call *label0 :fn0*retval
-     3 label *label1
--    * set *tmp0 :fn0*retval
-     4 op add *tmp1 2 :fn0*retval
-     5 assertequals 5 *tmp1 "add"
-     6 set :fn0:n 6
-     7 setaddr :fn0*retaddr *label2
-     8 call *label0 :fn0*retval
-     9 label *label2
--    * set *tmp2 :fn0*retval
-    10 op sub *tmp3 7 :fn0*retval
-    11 assertequals 1 *tmp3 "sub"
-    12 set :fn0:n 2
-    13 setaddr :fn0*retaddr *label3
-    14 call *label0 :fn0*retval
-    15 label *label3
--    * set *tmp4 :fn0*retval
-    16 op mul *tmp5 3 :fn0*retval
-    17 assertequals 6 *tmp5 "mul"
-    18 set :fn0:n 4
-    19 setaddr :fn0*retaddr *label4
-    20 call *label0 :fn0*retval
-    21 label *label4
--    * set *tmp6 :fn0*retval
-    22 op div *tmp7 6 :fn0*retval
-    23 assertequals 1.5 *tmp7 "div"
-    24 set :fn0:n 100000
-    25 setaddr :fn0*retaddr *label5
-    26 call *label0 :fn0*retval
-    27 label *label5
--    * set *tmp8 :fn0*retval
-    28 op div *tmp9 1 :fn0*retval
-    29 assertequals 0.00001 *tmp9 "div exp"
-    30 set :fn0:n 4
-    31 setaddr :fn0*retaddr *label6
-    32 call *label0 :fn0*retval
-    33 label *label6
--    * set *tmp10 :fn0*retval
-    34 op idiv *tmp11 6 :fn0*retval
-    35 assertequals 1 *tmp11 "idiv"
-    36 set :fn0:n 4
-    37 setaddr :fn0*retaddr *label7
-    38 call *label0 :fn0*retval
-    39 label *label7
--    * set *tmp12 :fn0*retval
-    40 op mod *tmp13 6 :fn0*retval
-    41 assertequals 2 *tmp13 "mod"
-    42 set :fn0:n 4
-    43 setaddr :fn0*retaddr *label8
-    44 call *label0 :fn0*retval
-    45 label *label8
--    * set *tmp14 :fn0*retval
-    46 op pow *tmp15 2 :fn0*retval
-    47 assertequals 16 *tmp15 "pow"
-    48 set :fn0:n 5
-    49 setaddr :fn0*retaddr *label9
-    50 call *label0 :fn0*retval
-    51 label *label9
--    * set *tmp16 :fn0*retval
-    52 op equal *tmp17 5 :fn0*retval
-    53 assertequals true *tmp17 "equal 1"
-    54 set :fn0:n 6
-    55 setaddr :fn0*retaddr *label10
-    56 call *label0 :fn0*retval
-    57 label *label10
--    * set *tmp18 :fn0*retval
-    58 op equal *tmp19 5 :fn0*retval
-    59 assertequals false *tmp19 "equal 2"
-    60 set :fn0:n null
-    61 setaddr :fn0*retaddr *label11
-    62 call *label0 :fn0*retval
-    63 label *label11
--    * set *tmp20 :fn0*retval
-    64 op equal *tmp21 0 :fn0*retval
-    65 assertequals true *tmp21 "equal null"
-    66 set :fn0:n 5
-    67 setaddr :fn0*retaddr *label12
-    68 call *label0 :fn0*retval
-    69 label *label12
--    * set *tmp22 :fn0*retval
-    70 op notEqual *tmp23 5 :fn0*retval
-    71 assertequals false *tmp23 "notEqual 1"
-    72 set :fn0:n 6
-    73 setaddr :fn0*retaddr *label13
-    74 call *label0 :fn0*retval
-    75 label *label13
--    * set *tmp24 :fn0*retval
-    76 op notEqual *tmp25 5 :fn0*retval
-    77 assertequals true *tmp25 "notEqual 2"
-    78 set :fn0:n null
-    79 setaddr :fn0*retaddr *label14
-    80 call *label0 :fn0*retval
-    81 label *label14
--    * set *tmp26 :fn0*retval
-    82 op notEqual *tmp27 0 :fn0*retval
-    83 assertequals false *tmp27 "notEqual null"
-    84 set :fn0:n 0
-    85 setaddr :fn0*retaddr *label15
-    86 call *label0 :fn0*retval
-    87 label *label15
--    * set *tmp28 :fn0*retval
-    88 op land *tmp29 1 :fn0*retval
-    89 assertequals false *tmp29 "land 1"
-    90 set :fn0:n 2
-    91 setaddr :fn0*retaddr *label16
-    92 call *label0 :fn0*retval
-    93 label *label16
--    * set *tmp30 :fn0*retval
-    94 op land *tmp31 1 :fn0*retval
-    95 assertequals true *tmp31 "land 2"
-    96 set :fn0:n 1
-    97 setaddr :fn0*retaddr *label17
-    98 call *label0 :fn0*retval
-    99 label *label17
--    * set *tmp32 :fn0*retval
-   100 op lessThan *tmp33 0 :fn0*retval
-   101 assertequals true *tmp33 "lessThan 1"
-   102 set :fn0:n 0
-   103 setaddr :fn0*retaddr *label18
-   104 call *label0 :fn0*retval
-   105 label *label18
--    * set *tmp34 :fn0*retval
-   106 op lessThan *tmp35 1 :fn0*retval
-   107 assertequals false *tmp35 "lessThan 2"
-   108 set :fn0:n 1
-   109 setaddr :fn0*retaddr *label19
-   110 call *label0 :fn0*retval
-   111 label *label19
--    * set *tmp36 :fn0*retval
-   112 op lessThanEq *tmp37 1 :fn0*retval
-   113 assertequals true *tmp37 "lessThanEq 1"
-   114 set :fn0:n 0
-   115 setaddr :fn0*retaddr *label20
-   116 call *label0 :fn0*retval
-   117 label *label20
--    * set *tmp38 :fn0*retval
-   118 op lessThanEq *tmp39 1 :fn0*retval
-   119 assertequals false *tmp39 "lessThanEq 2"
-   120 set :fn0:n 1
-   121 setaddr :fn0*retaddr *label21
-   122 call *label0 :fn0*retval
-   123 label *label21
--    * set *tmp40 :fn0*retval
-   124 op greaterThan *tmp41 2 :fn0*retval
-   125 assertequals true *tmp41 "greaterThan 1"
-   126 set :fn0:n 2
-   127 setaddr :fn0*retaddr *label22
-   128 call *label0 :fn0*retval
-   129 label *label22
--    * set *tmp42 :fn0*retval
-   130 op greaterThan *tmp43 1 :fn0*retval
-   131 assertequals false *tmp43 "greaterThan 2"
-   132 set :fn0:n 1
-   133 setaddr :fn0*retaddr *label23
-   134 call *label0 :fn0*retval
-   135 label *label23
--    * set *tmp44 :fn0*retval
-   136 op greaterThanEq *tmp45 1 :fn0*retval
-   137 assertequals true *tmp45 "greaterThanEq 1"
-   138 set :fn0:n 2
-   139 setaddr :fn0*retaddr *label24
-   140 call *label0 :fn0*retval
-   141 label *label24
--    * set *tmp46 :fn0*retval
-   142 op greaterThanEq *tmp47 1 :fn0*retval
-   143 assertequals false *tmp47 "greaterThanEq 2"
-   144 set :fn0:n null
-   145 setaddr :fn0*retaddr *label25
-   146 call *label0 :fn0*retval
-   147 label *label25
--    * set *tmp48 :fn0*retval
-   148 op strictEqual *tmp49 0 :fn0*retval
-   149 assertequals false *tmp49 "strictEqual 1"
-   150 set :fn0:n null
-   151 setaddr :fn0*retaddr *label26
-   152 call *label0 :fn0*retval
-   153 label *label26
--    * set *tmp50 :fn0*retval
-   154 op strictEqual *tmp51 null :fn0*retval
-   155 assertequals true *tmp51 "strictEqual 2"
-   156 set :fn0:n 2
-   157 setaddr :fn0*retaddr *label27
-   158 call *label0 :fn0*retval
-   159 label *label27
--    * set *tmp52 :fn0*retval
-   160 op shl *tmp53 1 :fn0*retval
-   161 assertequals 4 *tmp53 "shl"
-   162 set :fn0:n 2
-   163 setaddr :fn0*retaddr *label28
-   164 call *label0 :fn0*retval
-   165 label *label28
--    * set *tmp54 :fn0*retval
-   166 op shr *tmp55 9 :fn0*retval
-   167 assertequals 2 *tmp55 "shr"
-   168 set :fn0:n 2
-   169 setaddr :fn0*retaddr *label29
-   170 call *label0 :fn0*retval
-   171 label *label29
--    * set *tmp56 :fn0*retval
-   172 op or *tmp57 1 :fn0*retval
-   173 assertequals 3 *tmp57 "or"
-   174 set :fn0:n 2
-   175 setaddr :fn0*retaddr *label30
-   176 call *label0 :fn0*retval
-   177 label *label30
--    * set *tmp58 :fn0*retval
-   178 op and *tmp59 3 :fn0*retval
-   179 assertequals 2 *tmp59 "and"
-   180 set :fn0:n 2
-   181 setaddr :fn0*retaddr *label31
-   182 call *label0 :fn0*retval
-   183 label *label31
--    * set *tmp60 :fn0*retval
-   184 op xor *tmp61 3 :fn0*retval
-   185 assertequals 1 *tmp61 "xor"
-   186 set :fn0:n 0
-   187 setaddr :fn0*retaddr *label32
-   188 call *label0 :fn0*retval
-   189 label *label32
--    * set *tmp62 :fn0*retval
-   190 op not *tmp63 :fn0*retval
-   191 assertequals -1 *tmp63 "not 1"
-   192 set :fn0:n 65535
-   193 setaddr :fn0*retaddr *label33
-   194 call *label0 :fn0*retval
-   195 label *label33
--    * set *tmp64 :fn0*retval
-   196 op not *tmp65 :fn0*retval
-   197 assertequals -65536 *tmp65 "not 2"
--    * set :a 0xabcdefabcdef
--    * op add *tmp66 0xabcdefabcdef 1
--    * op sub *tmp67 0 188900977659376
-   198 set :fn0:n 0xabcdefabcdef
-   199 setaddr :fn0*retaddr *label34
-   200 call *label0 :fn0*retval
-   201 label *label34
--    * set *tmp68 :fn0*retval
-   202 op not *tmp69 :fn0*retval
-   203 assertequals -188900977659376 *tmp69 "not 3"
-   204 set :fn0:n 4
-   205 setaddr :fn0*retaddr *label35
-   206 call *label0 :fn0*retval
-   207 label *label35
--    * set *tmp70 :fn0*retval
-   208 op max *tmp71 2 :fn0*retval
-   209 assertequals 4 *tmp71 "max"
-   210 set :fn0:n 4
-   211 setaddr :fn0*retaddr *label36
-   212 call *label0 :fn0*retval
-   213 label *label36
--    * set *tmp72 :fn0*retval
-   214 op min *tmp73 2 :fn0*retval
-   215 assertequals 2 *tmp73 "min"
-   216 set :fn0:n -2
-   217 setaddr :fn0*retaddr *label37
-   218 call *label0 :fn0*retval
-   219 label *label37
--    * set *tmp74 :fn0*retval
-   220 op abs *tmp75 :fn0*retval
-   221 assertequals 2 *tmp75 "abs"
-   222 set :fn0:n 2.718281828459045
-   223 setaddr :fn0*retaddr *label38
-   224 call *label0 :fn0*retval
-   225 label *label38
--    * set *tmp76 :fn0*retval
-   226 op log *tmp77 :fn0*retval
-   227 assertequals 1 *tmp77 "log"
-   228 set :fn0:n 10
-   229 setaddr :fn0*retaddr *label39
-   230 call *label0 :fn0*retval
-   231 label *label39
--    * set *tmp78 :fn0*retval
-   232 op log10 *tmp79 :fn0*retval
-   233 assertequals 1 *tmp79 "log10"
-   234 set :fn0:n 2.5
-   235 setaddr :fn0*retaddr *label40
-   236 call *label0 :fn0*retval
-   237 label *label40
--    * set *tmp80 :fn0*retval
-   238 op floor *tmp81 :fn0*retval
-   239 assertequals 2 *tmp81 "floor"
-   240 set :fn0:n 2.5
-   241 setaddr :fn0*retaddr *label41
-   242 call *label0 :fn0*retval
-   243 label *label41
--    * set *tmp82 :fn0*retval
-   244 op ceil *tmp83 :fn0*retval
-   245 assertequals 3 *tmp83 "ceil"
-   246 set :fn0:n 16
-   247 setaddr :fn0*retaddr *label42
-   248 call *label0 :fn0*retval
-   249 label *label42
--    * set *tmp84 :fn0*retval
-   250 op sqrt *tmp85 :fn0*retval
-   251 assertequals 4 *tmp85 "sqrt"
-   252 set :fn0:n 1
-   253 setaddr :fn0*retaddr *label43
-   254 call *label0 :fn0*retval
-   255 label *label43
--    * set *tmp86 :fn0*retval
-   256 op angle *tmp87 1 :fn0*retval
-   257 assertequals 45 *tmp87 "angle"
-   258 set :fn0:n 135
-   259 setaddr :fn0*retaddr *label44
-   260 call *label0 :fn0*retval
-   261 label *label44
--    * set *tmp88 :fn0*retval
-   262 op angleDiff *tmp89 45 :fn0*retval
-   263 assertequals 90 *tmp89 "angleDiff"
-   264 set :fn0:n 8
-   265 setaddr :fn0*retaddr *label45
-   266 call *label0 :fn0*retval
-   267 label *label45
--    * set *tmp90 :fn0*retval
-   268 op sub *tmp91 0 :fn0*retval
-   269 assertequals -8 *tmp91 "unary minus"
-   270 set :fn0:n 0
-   271 setaddr :fn0*retaddr *label46
-   272 call *label0 :fn0*retval
-   273 label *label46
--    * set *tmp92 :fn0*retval
-   274 op equal *tmp93 :fn0*retval false
-   275 assertequals 1 *tmp93 "boolean negation 1"
-   276 set :fn0:n 1
-   277 setaddr :fn0*retaddr *label47
-   278 call *label0 :fn0*retval
-   279 label *label47
--    * set *tmp94 :fn0*retval
-   280 op equal *tmp95 :fn0*retval false
-   281 assertequals 0 *tmp95 "boolean negation 2"
-   282 set :fn0:n 2
-   283 setaddr :fn0*retaddr *label48
-   284 call *label0 :fn0*retval
-   285 label *label48
--    * set *tmp96 :fn0*retval
-   286 op equal *tmp97 :fn0*retval false
-   287 assertequals 0 *tmp97 "boolean negation 3"
+   124 op strictEqual *tmp73 null NULL
+   125 assertequals true *tmp73 "strictEqual 2"
+   126 set :fn28:n 2
+-    * op add *tmp75 zero :fn28:n
+-    * set *tmp74 *tmp75
++  127 op add *tmp74 zero :fn28:n
+   128 label *label28
+   129 op shl *tmp76 1 *tmp74
+   130 assertequals 4 *tmp76 "shl"
+   131 set :fn29:n 2
+-    * op add *tmp78 zero :fn29:n
+-    * set *tmp77 *tmp78
++  132 op add *tmp77 zero :fn29:n
+   133 label *label29
+   134 op shr *tmp79 9 *tmp77
+   135 assertequals 2 *tmp79 "shr"
+   136 set :fn30:n 2
+-    * op add *tmp81 zero :fn30:n
+-    * set *tmp80 *tmp81
++  137 op add *tmp80 zero :fn30:n
+   138 label *label30
+   139 op or *tmp82 1 *tmp80
+   140 assertequals 3 *tmp82 "or"
+   141 set :fn31:n 2
+-    * op add *tmp84 zero :fn31:n
+-    * set *tmp83 *tmp84
++  142 op add *tmp83 zero :fn31:n
+   143 label *label31
+   144 op and *tmp85 3 *tmp83
+   145 assertequals 2 *tmp85 "and"
+   146 set :fn32:n 2
+-    * op add *tmp87 zero :fn32:n
+-    * set *tmp86 *tmp87
++  147 op add *tmp86 zero :fn32:n
+   148 label *label32
+   149 op xor *tmp88 3 *tmp86
+   150 assertequals 1 *tmp88 "xor"
+   151 set :fn33:n 0
+-    * op add *tmp90 zero :fn33:n
+-    * set *tmp89 *tmp90
++  152 op add *tmp89 zero :fn33:n
+   153 label *label33
+   154 op not *tmp91 *tmp89
+   155 assertequals -1 *tmp91 "not 1"
+   156 set :fn34:n 65535
+-    * op add *tmp93 zero :fn34:n
+-    * set *tmp92 *tmp93
++  157 op add *tmp92 zero :fn34:n
+   158 label *label34
+   159 op not *tmp94 *tmp92
+   160 assertequals -65536 *tmp94 "not 2"
+ 
+   162 op add *tmp95 :a 1
+   163 op sub *tmp96 0 *tmp95
+   164 set :fn35:n :a
+-    * op add *tmp98 zero :fn35:n
+-    * set *tmp97 *tmp98
++  165 op add *tmp97 zero :fn35:n
+   166 label *label35
+   167 op not *tmp99 *tmp97
+   168 assertequals *tmp96 *tmp99 "not 3"
+   169 set :fn36:n 4
+-    * op add *tmp101 zero :fn36:n
+-    * set *tmp100 *tmp101
++  170 op add *tmp100 zero :fn36:n
+   171 label *label36
+   172 op max *tmp102 2 *tmp100
+   173 assertequals 4 *tmp102 "max"
+   174 set :fn37:n 4
+-    * op add *tmp104 zero :fn37:n
+-    * set *tmp103 *tmp104
++  175 op add *tmp103 zero :fn37:n
+   176 label *label37
+   177 op min *tmp105 2 *tmp103
+   178 assertequals 2 *tmp105 "min"
+   179 set :fn38:n -2
+-    * op add *tmp107 zero :fn38:n
+-    * set *tmp106 *tmp107
++  180 op add *tmp106 zero :fn38:n
+   181 label *label38
+   182 op abs *tmp108 *tmp106
+   183 assertequals 2 *tmp108 "abs"
+   184 set :fn39:n 2.718281828459045
+-    * op add *tmp110 zero :fn39:n
+-    * set *tmp109 *tmp110
++  185 op add *tmp109 zero :fn39:n
+   186 label *label39
+   187 op log *tmp111 *tmp109
+   188 assertequals 1 *tmp111 "log"
+   189 set :fn40:n 10
+-    * op add *tmp113 zero :fn40:n
+-    * set *tmp112 *tmp113
++  190 op add *tmp112 zero :fn40:n
+   191 label *label40
+   192 op log10 *tmp114 *tmp112
+   193 assertequals 1 *tmp114 "log10"
+   194 set :fn41:n 2.5
+-    * op add *tmp116 zero :fn41:n
+-    * set *tmp115 *tmp116
++  195 op add *tmp115 zero :fn41:n
+   196 label *label41
+   197 op floor *tmp117 *tmp115
+   198 assertequals 2 *tmp117 "floor"
+   199 set :fn42:n 2.5
+-    * op add *tmp119 zero :fn42:n
+-    * set *tmp118 *tmp119
++  200 op add *tmp118 zero :fn42:n
+   201 label *label42
+   202 op ceil *tmp120 *tmp118
+   203 assertequals 3 *tmp120 "ceil"
+   204 set :fn43:n 16
+-    * op add *tmp122 zero :fn43:n
+-    * set *tmp121 *tmp122
++  205 op add *tmp121 zero :fn43:n
+   206 label *label43
+   207 op sqrt *tmp123 *tmp121
+   208 assertequals 4 *tmp123 "sqrt"
+   209 set :fn44:n 1
+-    * op add *tmp125 zero :fn44:n
+-    * set *tmp124 *tmp125
++  210 op add *tmp124 zero :fn44:n
+   211 label *label44
+   212 op angle *tmp126 1 *tmp124
+   213 assertequals 45 *tmp126 "angle"
+   214 set :fn45:n 135
+-    * op add *tmp128 zero :fn45:n
+-    * set *tmp127 *tmp128
++  215 op add *tmp127 zero :fn45:n
+   216 label *label45
+   217 op angleDiff *tmp129 45 *tmp127
+   218 assertequals 90 *tmp129 "angleDiff"
+ 
+   254 call *label3 :fn3*retval
+   255 label *label51
+   256 set :fn46:n 8
+-    * op add *tmp131 zero :fn46:n
+-    * set *tmp130 *tmp131
++  257 op add *tmp130 zero :fn46:n
+   258 label *label52
+   259 op sub *tmp132 0 *tmp130
+   260 assertequals -8 *tmp132 "unary minus"
+   261 set :fn47:n 0
+-    * op add *tmp134 zero :fn47:n
+-    * set *tmp133 *tmp134
++  262 op add *tmp133 zero :fn47:n
+   263 label *label53
+   264 op equal *tmp135 *tmp133 false
+   265 assertequals 1 *tmp135 "boolean negation 1"
+   266 set :fn48:n 1
+-    * op add *tmp137 zero :fn48:n
+-    * set *tmp136 *tmp137
++  267 op add *tmp136 zero :fn48:n
+   268 label *label54
+   269 op equal *tmp138 *tmp136 false
+   270 assertequals 0 *tmp138 "boolean negation 2"
+   271 set :fn49:n 2
+-    * op add *tmp140 zero :fn49:n
+-    * set *tmp139 *tmp140
++  272 op add *tmp139 zero :fn49:n
+   273 label *label55
+   274 op equal *tmp141 *tmp139 false
+   275 assertequals 0 *tmp141 "boolean negation 3"
+   276 set :a 2
+   277 set :fn50:n 4
+-    * op add *tmp143 zero :fn50:n
+-    * set *tmp142 *tmp143
++  278 op add *tmp142 zero :fn50:n
+   279 label *label56
+   280 op pow :a :a *tmp142
+   281 assertequals 16 :a "**="
+   282 set :a 2
+   283 set :fn51:n 4
+-    * op add *tmp145 zero :fn51:n
+-    * set *tmp144 *tmp145
++  284 op add *tmp144 zero :fn51:n
+   285 label *label57
+   286 op mul :a :a *tmp144
+   287 assertequals 8 :a "*="
+   288 set :a 6
+   289 set :fn52:n 4
+-    * op add *tmp147 zero :fn52:n
+-    * set *tmp146 *tmp147
++  290 op add *tmp146 zero :fn52:n
+   291 label *label58
+   292 op div :a :a *tmp146
+   293 assertequals 1.5 :a "/="
+   294 set :a 6
+   295 set :fn53:n 4
+-    * op add *tmp149 zero :fn53:n
+-    * set *tmp148 *tmp149
++  296 op add *tmp148 zero :fn53:n
+   297 label *label59
+   298 op idiv :a :a *tmp148
+   299 assertequals 1 :a "\="
+   300 set :a 6
+   301 set :fn54:n 4
+-    * op add *tmp151 zero :fn54:n
+-    * set *tmp150 *tmp151
++  302 op add *tmp150 zero :fn54:n
+   303 label *label60
+   304 op mod :a :a *tmp150
+   305 assertequals 2 :a "%="
+   306 set :a 4
+   307 set :fn55:n 2
+-    * op add *tmp153 zero :fn55:n
+-    * set *tmp152 *tmp153
++  308 op add *tmp152 zero :fn55:n
+   309 label *label61
+   310 op add :a :a *tmp152
+   311 assertequals 6 :a "+="
+   312 set :a 4
+   313 set :fn56:n 2
+-    * op add *tmp155 zero :fn56:n
+-    * set *tmp154 *tmp155
++  314 op add *tmp154 zero :fn56:n
+   315 label *label62
+   316 op sub :a :a *tmp154
+   317 assertequals 2 :a "-="
+   318 set :a 1
+   319 set :fn57:n 2
+-    * op add *tmp157 zero :fn57:n
+-    * set *tmp156 *tmp157
++  320 op add *tmp156 zero :fn57:n
+   321 label *label63
+   322 op shl :a :a *tmp156
+   323 assertequals 4 :a "<<="
+   324 set :a 9
+   325 set :fn58:n 2
+-    * op add *tmp159 zero :fn58:n
+-    * set *tmp158 *tmp159
++  326 op add *tmp158 zero :fn58:n
+   327 label *label64
+   328 op shr :a :a *tmp158
+   329 assertequals 2 :a ">>="
+   330 set :a 1
+   331 set :fn59:n 2
+-    * op add *tmp161 zero :fn59:n
+-    * set *tmp160 *tmp161
++  332 op add *tmp160 zero :fn59:n
+   333 label *label65
+   334 op or :a :a *tmp160
+   335 assertequals 3 :a "|="
+   336 set :a 3
+   337 set :fn60:n 2
+-    * op add *tmp163 zero :fn60:n
+-    * set *tmp162 *tmp163
++  338 op add *tmp162 zero :fn60:n
+   339 label *label66
+   340 op and :a :a *tmp162
+   341 assertequals 2 :a "&="
+   342 set :a 3
+   343 set :fn61:n 2
+-    * op add *tmp165 zero :fn61:n
+-    * set *tmp164 *tmp165
++  344 op add *tmp164 zero :fn61:n
+   345 label *label67
+   346 op xor :a :a *tmp164
+   347 assertequals 1 :a "^="
+   348 set :a 1
+   349 set :fn62:n 0
+-    * op add *tmp167 zero :fn62:n
+-    * set *tmp166 *tmp167
++  350 op add *tmp166 zero :fn62:n
+   351 label *label68
+   352 op land :a :a *tmp166
+   353 assertequals false :a "&&="
+   354 set :a 1
+   355 set :fn63:n 2
+-    * op add *tmp169 zero :fn63:n
+-    * set *tmp168 *tmp169
++  356 op add *tmp168 zero :fn63:n
+   357 label *label69
+   358 op land :a :a *tmp168
+   359 assertequals true :a "&&="
+   360 set :a 0
+   361 set :fn64:n 2
+-    * op add *tmp171 zero :fn64:n
+-    * set *tmp170 *tmp171
++  362 op add *tmp170 zero :fn64:n
+   363 label *label70
+   364 op or *tmp172 :a *tmp170
+   365 op notEqual :a *tmp172 false
+ 
+   367 stop
+   368 end
+   369 label *label3
+-    * op mul *tmp173 :fn3:actual 100000000
+-    * set :fn65:x *tmp173
++  370 op mul :fn65:x :fn3:actual 100000000
+   371 op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp176 *tmp175
+-    * set *tmp174 *tmp176
++  372 op floor *tmp174 *tmp175
+   373 label *label72
+   374 op div *tmp177 *tmp174 100000000
+   375 assertequals :fn3:expected *tmp177 :fn3:title
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set NULL null
+     1 set zero 0
+     2 set :fn4:n 3
+-    * op add *tmp0 zero :fn4:n
++    3 op add *tmp0 zero 3
+     4 label *label4
+     5 op add *tmp2 2 *tmp0
+     6 assertequals 5 *tmp2 "add"
+     7 set :fn5:n 6
+-    * op add *tmp3 zero :fn5:n
++    8 op add *tmp3 zero 6
+     9 label *label5
+    10 op sub *tmp5 7 *tmp3
+    11 assertequals 1 *tmp5 "sub"
+    12 set :fn6:n 2
+-    * op add *tmp6 zero :fn6:n
++   13 op add *tmp6 zero 2
+    14 label *label6
+    15 op mul *tmp8 3 *tmp6
+    16 assertequals 6 *tmp8 "mul"
+    17 set :fn7:n 4
+-    * op add *tmp9 zero :fn7:n
++   18 op add *tmp9 zero 4
+    19 label *label7
+    20 op div *tmp11 6 *tmp9
+    21 assertequals 1.5 *tmp11 "div"
+    22 set :fn8:n 100000
+-    * op add *tmp12 zero :fn8:n
++   23 op add *tmp12 zero 100000
+    24 label *label8
+    25 op div *tmp14 1 *tmp12
+    26 assertequals 0.00001 *tmp14 "div exp"
+    27 set :fn9:n 4
+-    * op add *tmp15 zero :fn9:n
++   28 op add *tmp15 zero 4
+    29 label *label9
+    30 op idiv *tmp17 6 *tmp15
+    31 assertequals 1 *tmp17 "idiv"
+    32 set :fn10:n 4
+-    * op add *tmp18 zero :fn10:n
++   33 op add *tmp18 zero 4
+    34 label *label10
+    35 op mod *tmp20 6 *tmp18
+    36 assertequals 2 *tmp20 "mod"
+    37 set :fn11:n 4
+-    * op add *tmp21 zero :fn11:n
++   38 op add *tmp21 zero 4
+    39 label *label11
+    40 op pow *tmp23 2 *tmp21
+    41 assertequals 16 *tmp23 "pow"
+    42 set :fn12:n 5
+-    * op add *tmp24 zero :fn12:n
++   43 op add *tmp24 zero 5
+    44 label *label12
+    45 op equal *tmp26 5 *tmp24
+    46 assertequals true *tmp26 "equal 1"
+    47 set :fn13:n 6
+-    * op add *tmp27 zero :fn13:n
++   48 op add *tmp27 zero 6
+    49 label *label13
+    50 op equal *tmp29 5 *tmp27
+    51 assertequals false *tmp29 "equal 2"
+    52 set :fn14:n null
+-    * op add *tmp30 zero :fn14:n
++   53 op add *tmp30 zero null
+    54 label *label14
+    55 op equal *tmp32 0 *tmp30
+    56 assertequals true *tmp32 "equal null"
+    57 set :fn15:n 5
+-    * op add *tmp33 zero :fn15:n
++   58 op add *tmp33 zero 5
+    59 label *label15
+    60 op notEqual *tmp35 5 *tmp33
+    61 assertequals false *tmp35 "notEqual 1"
+    62 set :fn16:n 6
+-    * op add *tmp36 zero :fn16:n
++   63 op add *tmp36 zero 6
+    64 label *label16
+    65 op notEqual *tmp38 5 *tmp36
+    66 assertequals true *tmp38 "notEqual 2"
+    67 set :fn17:n null
+-    * op add *tmp39 zero :fn17:n
++   68 op add *tmp39 zero null
+    69 label *label17
+    70 op notEqual *tmp41 0 *tmp39
+    71 assertequals false *tmp41 "notEqual null"
+    72 set :fn18:n 0
+-    * op add *tmp42 zero :fn18:n
++   73 op add *tmp42 zero 0
+    74 label *label18
+    75 op land *tmp44 1 *tmp42
+    76 assertequals false *tmp44 "land 1"
+    77 set :fn19:n 2
+-    * op add *tmp45 zero :fn19:n
++   78 op add *tmp45 zero 2
+    79 label *label19
+    80 op land *tmp47 1 *tmp45
+    81 assertequals true *tmp47 "land 2"
+    82 set :fn20:n 1
+-    * op add *tmp48 zero :fn20:n
++   83 op add *tmp48 zero 1
+    84 label *label20
+    85 op lessThan *tmp50 0 *tmp48
+    86 assertequals true *tmp50 "lessThan 1"
+    87 set :fn21:n 0
+-    * op add *tmp51 zero :fn21:n
++   88 op add *tmp51 zero 0
+    89 label *label21
+    90 op lessThan *tmp53 1 *tmp51
+    91 assertequals false *tmp53 "lessThan 2"
+    92 set :fn22:n 1
+-    * op add *tmp54 zero :fn22:n
++   93 op add *tmp54 zero 1
+    94 label *label22
+    95 op lessThanEq *tmp56 1 *tmp54
+    96 assertequals true *tmp56 "lessThanEq 1"
+    97 set :fn23:n 0
+-    * op add *tmp57 zero :fn23:n
++   98 op add *tmp57 zero 0
+    99 label *label23
+   100 op lessThanEq *tmp59 1 *tmp57
+   101 assertequals false *tmp59 "lessThanEq 2"
+   102 set :fn24:n 1
+-    * op add *tmp60 zero :fn24:n
++  103 op add *tmp60 zero 1
+   104 label *label24
+   105 op greaterThan *tmp62 2 *tmp60
+   106 assertequals true *tmp62 "greaterThan 1"
+   107 set :fn25:n 2
+-    * op add *tmp63 zero :fn25:n
++  108 op add *tmp63 zero 2
+   109 label *label25
+   110 op greaterThan *tmp65 1 *tmp63
+   111 assertequals false *tmp65 "greaterThan 2"
+   112 set :fn26:n 1
+-    * op add *tmp66 zero :fn26:n
++  113 op add *tmp66 zero 1
+   114 label *label26
+   115 op greaterThanEq *tmp68 1 *tmp66
+   116 assertequals true *tmp68 "greaterThanEq 1"
+   117 set :fn27:n 2
+-    * op add *tmp69 zero :fn27:n
++  118 op add *tmp69 zero 2
+   119 label *label27
+   120 op greaterThanEq *tmp71 1 *tmp69
+   121 assertequals false *tmp71 "greaterThanEq 2"
+ 
+   124 op strictEqual *tmp73 null NULL
+   125 assertequals true *tmp73 "strictEqual 2"
+   126 set :fn28:n 2
+-    * op add *tmp74 zero :fn28:n
++  127 op add *tmp74 zero 2
+   128 label *label28
+   129 op shl *tmp76 1 *tmp74
+   130 assertequals 4 *tmp76 "shl"
+   131 set :fn29:n 2
+-    * op add *tmp77 zero :fn29:n
++  132 op add *tmp77 zero 2
+   133 label *label29
+   134 op shr *tmp79 9 *tmp77
+   135 assertequals 2 *tmp79 "shr"
+   136 set :fn30:n 2
+-    * op add *tmp80 zero :fn30:n
++  137 op add *tmp80 zero 2
+   138 label *label30
+   139 op or *tmp82 1 *tmp80
+   140 assertequals 3 *tmp82 "or"
+   141 set :fn31:n 2
+-    * op add *tmp83 zero :fn31:n
++  142 op add *tmp83 zero 2
+   143 label *label31
+   144 op and *tmp85 3 *tmp83
+   145 assertequals 2 *tmp85 "and"
+   146 set :fn32:n 2
+-    * op add *tmp86 zero :fn32:n
++  147 op add *tmp86 zero 2
+   148 label *label32
+   149 op xor *tmp88 3 *tmp86
+   150 assertequals 1 *tmp88 "xor"
+   151 set :fn33:n 0
+-    * op add *tmp89 zero :fn33:n
++  152 op add *tmp89 zero 0
+   153 label *label33
+   154 op not *tmp91 *tmp89
+   155 assertequals -1 *tmp91 "not 1"
+   156 set :fn34:n 65535
+-    * op add *tmp92 zero :fn34:n
++  157 op add *tmp92 zero 65535
+   158 label *label34
+   159 op not *tmp94 *tmp92
+   160 assertequals -65536 *tmp94 "not 2"
+   161 set :a 0xabcdefabcdef
+-    * op add *tmp95 :a 1
+-    * op sub *tmp96 0 *tmp95
+-    * set :fn35:n :a
+-    * op add *tmp97 zero :fn35:n
++  162 op add *tmp95 0xabcdefabcdef 1
++  163 op sub *tmp96 0 188900977659376
++  164 set :fn35:n 0xabcdefabcdef
++  165 op add *tmp97 zero :a
+   166 label *label35
+   167 op not *tmp99 *tmp97
+-    * assertequals *tmp96 *tmp99 "not 3"
++  168 assertequals -188900977659376 *tmp99 "not 3"
+   169 set :fn36:n 4
+-    * op add *tmp100 zero :fn36:n
++  170 op add *tmp100 zero 4
+   171 label *label36
+   172 op max *tmp102 2 *tmp100
+   173 assertequals 4 *tmp102 "max"
+   174 set :fn37:n 4
+-    * op add *tmp103 zero :fn37:n
++  175 op add *tmp103 zero 4
+   176 label *label37
+   177 op min *tmp105 2 *tmp103
+   178 assertequals 2 *tmp105 "min"
+   179 set :fn38:n -2
+-    * op add *tmp106 zero :fn38:n
++  180 op add *tmp106 zero -2
+   181 label *label38
+   182 op abs *tmp108 *tmp106
+   183 assertequals 2 *tmp108 "abs"
+   184 set :fn39:n 2.718281828459045
+-    * op add *tmp109 zero :fn39:n
++  185 op add *tmp109 zero 2.718281828459045
+   186 label *label39
+   187 op log *tmp111 *tmp109
+   188 assertequals 1 *tmp111 "log"
+   189 set :fn40:n 10
+-    * op add *tmp112 zero :fn40:n
++  190 op add *tmp112 zero 10
+   191 label *label40
+   192 op log10 *tmp114 *tmp112
+   193 assertequals 1 *tmp114 "log10"
+   194 set :fn41:n 2.5
+-    * op add *tmp115 zero :fn41:n
++  195 op add *tmp115 zero 2.5
+   196 label *label41
+   197 op floor *tmp117 *tmp115
+   198 assertequals 2 *tmp117 "floor"
+   199 set :fn42:n 2.5
+-    * op add *tmp118 zero :fn42:n
++  200 op add *tmp118 zero 2.5
+   201 label *label42
+   202 op ceil *tmp120 *tmp118
+   203 assertequals 3 *tmp120 "ceil"
+   204 set :fn43:n 16
+-    * op add *tmp121 zero :fn43:n
++  205 op add *tmp121 zero 16
+   206 label *label43
+   207 op sqrt *tmp123 *tmp121
+   208 assertequals 4 *tmp123 "sqrt"
+   209 set :fn44:n 1
+-    * op add *tmp124 zero :fn44:n
++  210 op add *tmp124 zero 1
+   211 label *label44
+   212 op angle *tmp126 1 *tmp124
+   213 assertequals 45 *tmp126 "angle"
+   214 set :fn45:n 135
+-    * op add *tmp127 zero :fn45:n
++  215 op add *tmp127 zero 135
+   216 label *label45
+   217 op angleDiff *tmp129 45 *tmp127
+   218 assertequals 90 *tmp129 "angleDiff"
+ 
+   254 call *label3 :fn3*retval
+   255 label *label51
+   256 set :fn46:n 8
+-    * op add *tmp130 zero :fn46:n
++  257 op add *tmp130 zero 8
+   258 label *label52
+   259 op sub *tmp132 0 *tmp130
+   260 assertequals -8 *tmp132 "unary minus"
+   261 set :fn47:n 0
+-    * op add *tmp133 zero :fn47:n
++  262 op add *tmp133 zero 0
+   263 label *label53
+   264 op equal *tmp135 *tmp133 false
+   265 assertequals 1 *tmp135 "boolean negation 1"
+   266 set :fn48:n 1
+-    * op add *tmp136 zero :fn48:n
++  267 op add *tmp136 zero 1
+   268 label *label54
+   269 op equal *tmp138 *tmp136 false
+   270 assertequals 0 *tmp138 "boolean negation 2"
+   271 set :fn49:n 2
+-    * op add *tmp139 zero :fn49:n
++  272 op add *tmp139 zero 2
+   273 label *label55
+   274 op equal *tmp141 *tmp139 false
+   275 assertequals 0 *tmp141 "boolean negation 3"
+   276 set :a 2
+   277 set :fn50:n 4
+-    * op add *tmp142 zero :fn50:n
++  278 op add *tmp142 zero 4
+   279 label *label56
+-    * op pow :a :a *tmp142
++  280 op pow :a 2 *tmp142
+   281 assertequals 16 :a "**="
+   282 set :a 2
+   283 set :fn51:n 4
+-    * op add *tmp144 zero :fn51:n
++  284 op add *tmp144 zero 4
+   285 label *label57
+-    * op mul :a :a *tmp144
++  286 op mul :a 2 *tmp144
+   287 assertequals 8 :a "*="
+   288 set :a 6
+   289 set :fn52:n 4
+-    * op add *tmp146 zero :fn52:n
++  290 op add *tmp146 zero 4
+   291 label *label58
+-    * op div :a :a *tmp146
++  292 op div :a 6 *tmp146
+   293 assertequals 1.5 :a "/="
+   294 set :a 6
+   295 set :fn53:n 4
+-    * op add *tmp148 zero :fn53:n
++  296 op add *tmp148 zero 4
+   297 label *label59
+-    * op idiv :a :a *tmp148
++  298 op idiv :a 6 *tmp148
+   299 assertequals 1 :a "\="
+   300 set :a 6
+   301 set :fn54:n 4
+-    * op add *tmp150 zero :fn54:n
++  302 op add *tmp150 zero 4
+   303 label *label60
+-    * op mod :a :a *tmp150
++  304 op mod :a 6 *tmp150
+   305 assertequals 2 :a "%="
+   306 set :a 4
+   307 set :fn55:n 2
+-    * op add *tmp152 zero :fn55:n
++  308 op add *tmp152 zero 2
+   309 label *label61
+-    * op add :a :a *tmp152
++  310 op add :a 4 *tmp152
+   311 assertequals 6 :a "+="
+   312 set :a 4
+   313 set :fn56:n 2
+-    * op add *tmp154 zero :fn56:n
++  314 op add *tmp154 zero 2
+   315 label *label62
+-    * op sub :a :a *tmp154
++  316 op sub :a 4 *tmp154
+   317 assertequals 2 :a "-="
+   318 set :a 1
+   319 set :fn57:n 2
+-    * op add *tmp156 zero :fn57:n
++  320 op add *tmp156 zero 2
+   321 label *label63
+-    * op shl :a :a *tmp156
++  322 op shl :a 1 *tmp156
+   323 assertequals 4 :a "<<="
+   324 set :a 9
+   325 set :fn58:n 2
+-    * op add *tmp158 zero :fn58:n
++  326 op add *tmp158 zero 2
+   327 label *label64
+-    * op shr :a :a *tmp158
++  328 op shr :a 9 *tmp158
+   329 assertequals 2 :a ">>="
+   330 set :a 1
+   331 set :fn59:n 2
+-    * op add *tmp160 zero :fn59:n
++  332 op add *tmp160 zero 2
+   333 label *label65
+-    * op or :a :a *tmp160
++  334 op or :a 1 *tmp160
+   335 assertequals 3 :a "|="
+   336 set :a 3
+   337 set :fn60:n 2
+-    * op add *tmp162 zero :fn60:n
++  338 op add *tmp162 zero 2
+   339 label *label66
+-    * op and :a :a *tmp162
++  340 op and :a 3 *tmp162
+   341 assertequals 2 :a "&="
+   342 set :a 3
+   343 set :fn61:n 2
+-    * op add *tmp164 zero :fn61:n
++  344 op add *tmp164 zero 2
+   345 label *label67
+-    * op xor :a :a *tmp164
++  346 op xor :a 3 *tmp164
+   347 assertequals 1 :a "^="
+   348 set :a 1
+   349 set :fn62:n 0
+-    * op add *tmp166 zero :fn62:n
++  350 op add *tmp166 zero 0
+   351 label *label68
+-    * op land :a :a *tmp166
++  352 op land :a 1 *tmp166
+   353 assertequals false :a "&&="
+   354 set :a 1
+   355 set :fn63:n 2
+-    * op add *tmp168 zero :fn63:n
++  356 op add *tmp168 zero 2
+   357 label *label69
+-    * op land :a :a *tmp168
++  358 op land :a 1 *tmp168
+   359 assertequals true :a "&&="
+   360 set :a 0
+   361 set :fn64:n 2
+-    * op add *tmp170 zero :fn64:n
++  362 op add *tmp170 zero 2
+   363 label *label70
+-    * op or *tmp172 :a *tmp170
++  364 op or *tmp172 0 *tmp170
+   365 op notEqual :a *tmp172 false
+   366 assertequals true :a "||="
+   367 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-78 instructions):
+     0 set NULL null
+     1 set zero 0
+-    * set :fn4:n 3
+     2 op add *tmp0 zero 3
+     3 label *label4
+-    * op add *tmp2 2 *tmp0
++    4 op add *tmp2 zero 5
+     5 assertequals 5 *tmp2 "add"
+-    * set :fn5:n 6
+     6 op add *tmp3 zero 6
+     7 label *label5
+-    * op sub *tmp5 7 *tmp3
++    8 op sub *tmp5 1 zero
+     9 assertequals 1 *tmp5 "sub"
+-    * set :fn6:n 2
+    10 op add *tmp6 zero 2
+    11 label *label6
+    12 op mul *tmp8 3 *tmp6
+    13 assertequals 6 *tmp8 "mul"
+-    * set :fn7:n 4
+    14 op add *tmp9 zero 4
+    15 label *label7
+    16 op div *tmp11 6 *tmp9
+    17 assertequals 1.5 *tmp11 "div"
+-    * set :fn8:n 100000
+    18 op add *tmp12 zero 100000
+    19 label *label8
+    20 op div *tmp14 1 *tmp12
+    21 assertequals 0.00001 *tmp14 "div exp"
+-    * set :fn9:n 4
+    22 op add *tmp15 zero 4
+    23 label *label9
+-    * op idiv *tmp17 6 *tmp15
++   24 op idiv *tmp17 6 *tmp9
+    25 assertequals 1 *tmp17 "idiv"
+-    * set :fn10:n 4
+    26 op add *tmp18 zero 4
+    27 label *label10
+-    * op mod *tmp20 6 *tmp18
++   28 op mod *tmp20 6 *tmp9
+    29 assertequals 2 *tmp20 "mod"
+-    * set :fn11:n 4
+    30 op add *tmp21 zero 4
+    31 label *label11
+-    * op pow *tmp23 2 *tmp21
++   32 op pow *tmp23 2 *tmp9
+    33 assertequals 16 *tmp23 "pow"
+-    * set :fn12:n 5
+    34 op add *tmp24 zero 5
+    35 label *label12
+    36 op equal *tmp26 5 *tmp24
+    37 assertequals true *tmp26 "equal 1"
+-    * set :fn13:n 6
+    38 op add *tmp27 zero 6
+    39 label *label13
+-    * op equal *tmp29 5 *tmp27
++   40 op equal *tmp29 5 *tmp3
+    41 assertequals false *tmp29 "equal 2"
+-    * set :fn14:n null
+    42 op add *tmp30 zero null
+    43 label *label14
+    44 op equal *tmp32 0 *tmp30
+    45 assertequals true *tmp32 "equal null"
+-    * set :fn15:n 5
+    46 op add *tmp33 zero 5
+    47 label *label15
+-    * op notEqual *tmp35 5 *tmp33
++   48 op notEqual *tmp35 5 *tmp24
+    49 assertequals false *tmp35 "notEqual 1"
+-    * set :fn16:n 6
+    50 op add *tmp36 zero 6
+    51 label *label16
+-    * op notEqual *tmp38 5 *tmp36
++   52 op notEqual *tmp38 5 *tmp3
+    53 assertequals true *tmp38 "notEqual 2"
+-    * set :fn17:n null
+    54 op add *tmp39 zero null
+    55 label *label17
+-    * op notEqual *tmp41 0 *tmp39
++   56 op notEqual *tmp41 0 *tmp30
+    57 assertequals false *tmp41 "notEqual null"
+-    * set :fn18:n 0
+    58 op add *tmp42 zero 0
+    59 label *label18
+    60 op land *tmp44 1 *tmp42
+    61 assertequals false *tmp44 "land 1"
+-    * set :fn19:n 2
+    62 op add *tmp45 zero 2
+    63 label *label19
+-    * op land *tmp47 1 *tmp45
++   64 op land *tmp47 1 *tmp6
+    65 assertequals true *tmp47 "land 2"
+-    * set :fn20:n 1
+    66 op add *tmp48 zero 1
+    67 label *label20
+    68 op lessThan *tmp50 0 *tmp48
+    69 assertequals true *tmp50 "lessThan 1"
+-    * set :fn21:n 0
+    70 op add *tmp51 zero 0
+    71 label *label21
+-    * op lessThan *tmp53 1 *tmp51
++   72 op lessThan *tmp53 1 *tmp42
+    73 assertequals false *tmp53 "lessThan 2"
+-    * set :fn22:n 1
+    74 op add *tmp54 zero 1
+    75 label *label22
+-    * op lessThanEq *tmp56 1 *tmp54
++   76 op lessThanEq *tmp56 1 *tmp48
+    77 assertequals true *tmp56 "lessThanEq 1"
+-    * set :fn23:n 0
+    78 op add *tmp57 zero 0
+    79 label *label23
+-    * op lessThanEq *tmp59 1 *tmp57
++   80 op lessThanEq *tmp59 1 *tmp42
+    81 assertequals false *tmp59 "lessThanEq 2"
+-    * set :fn24:n 1
+    82 op add *tmp60 zero 1
+    83 label *label24
+-    * op greaterThan *tmp62 2 *tmp60
++   84 op greaterThan *tmp62 2 *tmp48
+    85 assertequals true *tmp62 "greaterThan 1"
+-    * set :fn25:n 2
+    86 op add *tmp63 zero 2
+    87 label *label25
+-    * op greaterThan *tmp65 1 *tmp63
++   88 op greaterThan *tmp65 1 *tmp6
+    89 assertequals false *tmp65 "greaterThan 2"
+-    * set :fn26:n 1
+    90 op add *tmp66 zero 1
+    91 label *label26
+-    * op greaterThanEq *tmp68 1 *tmp66
++   92 op greaterThanEq *tmp68 1 *tmp48
+    93 assertequals true *tmp68 "greaterThanEq 1"
+-    * set :fn27:n 2
+    94 op add *tmp69 zero 2
+    95 label *label27
+-    * op greaterThanEq *tmp71 1 *tmp69
++   96 op greaterThanEq *tmp71 1 *tmp6
+    97 assertequals false *tmp71 "greaterThanEq 2"
+    98 op strictEqual *tmp72 0 NULL
+    99 assertequals false *tmp72 "strictEqual 1"
+   100 op strictEqual *tmp73 null NULL
+   101 assertequals true *tmp73 "strictEqual 2"
+-    * set :fn28:n 2
+   102 op add *tmp74 zero 2
+   103 label *label28
+-    * op shl *tmp76 1 *tmp74
++  104 op shl *tmp76 1 *tmp6
+   105 assertequals 4 *tmp76 "shl"
+-    * set :fn29:n 2
+   106 op add *tmp77 zero 2
+   107 label *label29
+-    * op shr *tmp79 9 *tmp77
++  108 op shr *tmp79 9 *tmp6
+   109 assertequals 2 *tmp79 "shr"
+-    * set :fn30:n 2
+   110 op add *tmp80 zero 2
+   111 label *label30
+-    * op or *tmp82 1 *tmp80
++  112 op or *tmp82 1 *tmp6
+   113 assertequals 3 *tmp82 "or"
+-    * set :fn31:n 2
+   114 op add *tmp83 zero 2
+   115 label *label31
+-    * op and *tmp85 3 *tmp83
++  116 op and *tmp85 3 *tmp6
+   117 assertequals 2 *tmp85 "and"
+-    * set :fn32:n 2
+   118 op add *tmp86 zero 2
+   119 label *label32
+-    * op xor *tmp88 3 *tmp86
++  120 op xor *tmp88 3 *tmp6
+   121 assertequals 1 *tmp88 "xor"
+-    * set :fn33:n 0
+   122 op add *tmp89 zero 0
+   123 label *label33
+-    * op not *tmp91 *tmp89
++  124 op not *tmp91 *tmp42
+   125 assertequals -1 *tmp91 "not 1"
+-    * set :fn34:n 65535
+   126 op add *tmp92 zero 65535
+   127 label *label34
+   128 op not *tmp94 *tmp92
+   129 assertequals -65536 *tmp94 "not 2"
+   130 set :a 0xabcdefabcdef
+-    * op add *tmp95 0xabcdefabcdef 1
+-    * op sub *tmp96 0 188900977659376
+-    * set :fn35:n 0xabcdefabcdef
+-    * op add *tmp97 zero :a
++  131 op add *tmp97 zero 0xabcdefabcdef
+   132 label *label35
+   133 op not *tmp99 *tmp97
+   134 assertequals -188900977659376 *tmp99 "not 3"
+-    * set :fn36:n 4
+   135 op add *tmp100 zero 4
+   136 label *label36
+-    * op max *tmp102 2 *tmp100
++  137 op max *tmp102 2 *tmp9
+   138 assertequals 4 *tmp102 "max"
+-    * set :fn37:n 4
+   139 op add *tmp103 zero 4
+   140 label *label37
+-    * op min *tmp105 2 *tmp103
++  141 op min *tmp105 2 *tmp9
+   142 assertequals 2 *tmp105 "min"
+-    * set :fn38:n -2
+   143 op add *tmp106 zero -2
+   144 label *label38
+   145 op abs *tmp108 *tmp106
+   146 assertequals 2 *tmp108 "abs"
+-    * set :fn39:n 2.718281828459045
+   147 op add *tmp109 zero 2.718281828459045
+   148 label *label39
+   149 op log *tmp111 *tmp109
+   150 assertequals 1 *tmp111 "log"
+-    * set :fn40:n 10
+   151 op add *tmp112 zero 10
+   152 label *label40
+   153 op log10 *tmp114 *tmp112
+   154 assertequals 1 *tmp114 "log10"
+-    * set :fn41:n 2.5
+   155 op add *tmp115 zero 2.5
+   156 label *label41
+   157 op floor *tmp117 *tmp115
+   158 assertequals 2 *tmp117 "floor"
+-    * set :fn42:n 2.5
+   159 op add *tmp118 zero 2.5
+   160 label *label42
+-    * op ceil *tmp120 *tmp118
++  161 op ceil *tmp120 *tmp115
+   162 assertequals 3 *tmp120 "ceil"
+-    * set :fn43:n 16
+   163 op add *tmp121 zero 16
+   164 label *label43
+   165 op sqrt *tmp123 *tmp121
+   166 assertequals 4 *tmp123 "sqrt"
+-    * set :fn44:n 1
+   167 op add *tmp124 zero 1
+   168 label *label44
+-    * op angle *tmp126 1 *tmp124
++  169 op angle *tmp126 1 *tmp48
+   170 assertequals 45 *tmp126 "angle"
+-    * set :fn45:n 135
+   171 op add *tmp127 zero 135
+   172 label *label45
+   173 op angleDiff *tmp129 45 *tmp127
+ 
+   209 setaddr :fn3*retaddr *label51
+   210 call *label3 :fn3*retval
+   211 label *label51
+-    * set :fn46:n 8
+   212 op add *tmp130 zero 8
+   213 label *label52
+-    * op sub *tmp132 0 *tmp130
++  214 op sub *tmp132 -8 zero
+   215 assertequals -8 *tmp132 "unary minus"
+-    * set :fn47:n 0
+   216 op add *tmp133 zero 0
+   217 label *label53
+-    * op equal *tmp135 *tmp133 false
++  218 op equal *tmp135 *tmp42 false
+   219 assertequals 1 *tmp135 "boolean negation 1"
+-    * set :fn48:n 1
+   220 op add *tmp136 zero 1
+   221 label *label54
+-    * op equal *tmp138 *tmp136 false
++  222 op equal *tmp138 *tmp48 false
+   223 assertequals 0 *tmp138 "boolean negation 2"
+-    * set :fn49:n 2
+   224 op add *tmp139 zero 2
+   225 label *label55
+-    * op equal *tmp141 *tmp139 false
++  226 op equal *tmp141 *tmp6 false
+   227 assertequals 0 *tmp141 "boolean negation 3"
 -    * set :a 2
-   288 set :fn0:n 4
-   289 setaddr :fn0*retaddr *label49
-   290 call *label0 :fn0*retval
-   291 label *label49
--    * set *tmp98 :fn0*retval
-   292 op pow :a 2 :fn0*retval
-   293 assertequals 16 :a "**="
+-    * set :fn50:n 4
+   228 op add *tmp142 zero 4
+   229 label *label56
+-    * op pow :a 2 *tmp142
+-    * assertequals 16 :a "**="
 -    * set :a 2
-   294 set :fn0:n 4
-   295 setaddr :fn0*retaddr *label50
-   296 call *label0 :fn0*retval
-   297 label *label50
--    * set *tmp99 :fn0*retval
-   298 op mul :a 2 :fn0*retval
-   299 assertequals 8 :a "*="
+-    * set :fn51:n 4
++  230 op pow :a 2 *tmp9
++  231 assertequals 16 *tmp23 "**="
+   232 op add *tmp144 zero 4
+   233 label *label57
+-    * op mul :a 2 *tmp144
++  234 op mul :a 2 *tmp9
+   235 assertequals 8 :a "*="
 -    * set :a 6
-   300 set :fn0:n 4
-   301 setaddr :fn0*retaddr *label51
-   302 call *label0 :fn0*retval
-   303 label *label51
--    * set *tmp100 :fn0*retval
-   304 op div :a 6 :fn0*retval
-   305 assertequals 1.5 :a "/="
+-    * set :fn52:n 4
+   236 op add *tmp146 zero 4
+   237 label *label58
+-    * op div :a 6 *tmp146
+-    * assertequals 1.5 :a "/="
 -    * set :a 6
-   306 set :fn0:n 4
-   307 setaddr :fn0*retaddr *label52
-   308 call *label0 :fn0*retval
-   309 label *label52
--    * set *tmp101 :fn0*retval
-   310 op idiv :a 6 :fn0*retval
-   311 assertequals 1 :a "\="
+-    * set :fn53:n 4
++  238 op div :a 6 *tmp9
++  239 assertequals 1.5 *tmp11 "/="
+   240 op add *tmp148 zero 4
+   241 label *label59
+-    * op idiv :a 6 *tmp148
+-    * assertequals 1 :a "\="
 -    * set :a 6
-   312 set :fn0:n 4
-   313 setaddr :fn0*retaddr *label53
-   314 call *label0 :fn0*retval
-   315 label *label53
--    * set *tmp102 :fn0*retval
-   316 op mod :a 6 :fn0*retval
-   317 assertequals 2 :a "%="
+-    * set :fn54:n 4
++  242 op idiv :a 6 *tmp9
++  243 assertequals 1 *tmp17 "\="
+   244 op add *tmp150 zero 4
+   245 label *label60
+-    * op mod :a 6 *tmp150
+-    * assertequals 2 :a "%="
 -    * set :a 4
-   318 set :fn0:n 2
-   319 setaddr :fn0*retaddr *label54
-   320 call *label0 :fn0*retval
-   321 label *label54
--    * set *tmp103 :fn0*retval
-   322 op add :a 4 :fn0*retval
-   323 assertequals 6 :a "+="
+-    * set :fn55:n 2
++  246 op mod :a 6 *tmp9
++  247 assertequals 2 *tmp20 "%="
+   248 op add *tmp152 zero 2
+   249 label *label61
+-    * op add :a 4 *tmp152
++  250 op add :a 4 *tmp6
+   251 assertequals 6 :a "+="
 -    * set :a 4
-   324 set :fn0:n 2
-   325 setaddr :fn0*retaddr *label55
-   326 call *label0 :fn0*retval
-   327 label *label55
--    * set *tmp104 :fn0*retval
-   328 op sub :a 4 :fn0*retval
-   329 assertequals 2 :a "-="
+-    * set :fn56:n 2
+   252 op add *tmp154 zero 2
+   253 label *label62
+-    * op sub :a 4 *tmp154
++  254 op sub :a 4 *tmp6
+   255 assertequals 2 :a "-="
 -    * set :a 1
-   330 set :fn0:n 2
-   331 setaddr :fn0*retaddr *label56
-   332 call *label0 :fn0*retval
-   333 label *label56
--    * set *tmp105 :fn0*retval
-   334 op shl :a 1 :fn0*retval
-   335 assertequals 4 :a "<<="
+-    * set :fn57:n 2
+   256 op add *tmp156 zero 2
+   257 label *label63
+-    * op shl :a 1 *tmp156
+-    * assertequals 4 :a "<<="
 -    * set :a 9
-   336 set :fn0:n 2
-   337 setaddr :fn0*retaddr *label57
-   338 call *label0 :fn0*retval
-   339 label *label57
--    * set *tmp106 :fn0*retval
-   340 op shr :a 9 :fn0*retval
-   341 assertequals 2 :a ">>="
+-    * set :fn58:n 2
++  258 op shl :a 1 *tmp6
++  259 assertequals 4 *tmp76 "<<="
+   260 op add *tmp158 zero 2
+   261 label *label64
+-    * op shr :a 9 *tmp158
+-    * assertequals 2 :a ">>="
 -    * set :a 1
-   342 set :fn0:n 2
-   343 setaddr :fn0*retaddr *label58
-   344 call *label0 :fn0*retval
-   345 label *label58
--    * set *tmp107 :fn0*retval
-   346 op or :a 1 :fn0*retval
-   347 assertequals 3 :a "|="
+-    * set :fn59:n 2
++  262 op shr :a 9 *tmp6
++  263 assertequals 2 *tmp79 ">>="
+   264 op add *tmp160 zero 2
+   265 label *label65
+-    * op or :a 1 *tmp160
+-    * assertequals 3 :a "|="
 -    * set :a 3
-   348 set :fn0:n 2
-   349 setaddr :fn0*retaddr *label59
-   350 call *label0 :fn0*retval
-   351 label *label59
--    * set *tmp108 :fn0*retval
-   352 op and :a 3 :fn0*retval
-   353 assertequals 2 :a "&="
+-    * set :fn60:n 2
++  266 op or :a 1 *tmp6
++  267 assertequals 3 *tmp82 "|="
+   268 op add *tmp162 zero 2
+   269 label *label66
+-    * op and :a 3 *tmp162
+-    * assertequals 2 :a "&="
 -    * set :a 3
--    * set :fn0:n 2
-   354 setaddr :fn0*retaddr *label60
-   355 call *label0 :fn0*retval
-   356 label *label60
--    * set *tmp109 :fn0*retval
-   357 op xor :a 3 :fn0*retval
-   358 assertequals 1 :a "^="
+-    * set :fn61:n 2
++  270 op and :a 3 *tmp6
++  271 assertequals 2 *tmp85 "&="
+   272 op add *tmp164 zero 2
+   273 label *label67
+-    * op xor :a 3 *tmp164
+-    * assertequals 1 :a "^="
 -    * set :a 1
-   359 set :fn0:n 0
-   360 setaddr :fn0*retaddr *label61
-   361 call *label0 :fn0*retval
-   362 label *label61
--    * set *tmp110 :fn0*retval
-   363 op land :a 1 :fn0*retval
-   364 assertequals false :a "&&="
+-    * set :fn62:n 0
++  274 op xor :a 3 *tmp6
++  275 assertequals 1 *tmp88 "^="
+   276 op add *tmp166 zero 0
+   277 label *label68
+-    * op land :a 1 *tmp166
+-    * assertequals false :a "&&="
 -    * set :a 1
-   365 set :fn0:n 2
-   366 setaddr :fn0*retaddr *label62
-   367 call *label0 :fn0*retval
-   368 label *label62
--    * set *tmp111 :fn0*retval
-   369 op land :a 1 :fn0*retval
-   370 assertequals true :a "&&="
+-    * set :fn63:n 2
++  278 op land :a 1 *tmp42
++  279 assertequals false *tmp44 "&&="
+   280 op add *tmp168 zero 2
+   281 label *label69
+-    * op land :a 1 *tmp168
+-    * assertequals true :a "&&="
 -    * set :a 0
-   371 setaddr :fn0*retaddr *label63
-   372 call *label0 :fn0*retval
-   373 label *label63
--    * set *tmp112 :fn0*retval
-   374 op or *tmp113 0 :fn0*retval
-   375 op notEqual :a *tmp113 false
-   376 assertequals true :a "||="
+-    * set :fn64:n 2
++  282 op land :a 1 *tmp6
++  283 assertequals true *tmp47 "&&="
+   284 op add *tmp170 zero 2
+   285 label *label70
+-    * op or *tmp172 0 *tmp170
++  286 op or *tmp172 0 *tmp6
+   287 op notEqual :a *tmp172 false
+   288 assertequals true :a "||="
+   289 stop
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-57 instructions):
+     0 set NULL null
+     1 set zero 0
+-    * op add *tmp0 zero 3
+     2 label *label4
+     3 op add *tmp2 zero 5
+     4 assertequals 5 *tmp2 "add"
  
-   345 label *label58
-   346 op or :a 1 :fn0*retval
-   347 assertequals 3 :a "|="
--    * set :fn0:n 2
-   348 setaddr :fn0*retaddr *label59
-   349 call *label0 :fn0*retval
-   350 label *label59
+    18 label *label8
+    19 op div *tmp14 1 *tmp12
+    20 assertequals 0.00001 *tmp14 "div exp"
+-    * op add *tmp15 zero 4
+    21 label *label9
+    22 op idiv *tmp17 6 *tmp9
+    23 assertequals 1 *tmp17 "idiv"
+-    * op add *tmp18 zero 4
+    24 label *label10
+    25 op mod *tmp20 6 *tmp9
+    26 assertequals 2 *tmp20 "mod"
+-    * op add *tmp21 zero 4
+    27 label *label11
+    28 op pow *tmp23 2 *tmp9
+    29 assertequals 16 *tmp23 "pow"
+    30 op add *tmp24 zero 5
+    31 label *label12
+-    * op equal *tmp26 5 *tmp24
++   32 op equal *tmp26 5 *tmp2
+    33 assertequals true *tmp26 "equal 1"
+-    * op add *tmp27 zero 6
+    34 label *label13
+    35 op equal *tmp29 5 *tmp3
+    36 assertequals false *tmp29 "equal 2"
+ 
+    38 label *label14
+    39 op equal *tmp32 0 *tmp30
+    40 assertequals true *tmp32 "equal null"
+-    * op add *tmp33 zero 5
+    41 label *label15
+-    * op notEqual *tmp35 5 *tmp24
++   42 op notEqual *tmp35 5 *tmp2
+    43 assertequals false *tmp35 "notEqual 1"
+-    * op add *tmp36 zero 6
+    44 label *label16
+    45 op notEqual *tmp38 5 *tmp3
+    46 assertequals true *tmp38 "notEqual 2"
+-    * op add *tmp39 zero null
+    47 label *label17
+    48 op notEqual *tmp41 0 *tmp30
+    49 assertequals false *tmp41 "notEqual null"
+ 
+    51 label *label18
+    52 op land *tmp44 1 *tmp42
+    53 assertequals false *tmp44 "land 1"
+-    * op add *tmp45 zero 2
+    54 label *label19
+    55 op land *tmp47 1 *tmp6
+    56 assertequals true *tmp47 "land 2"
+ 
+    58 label *label20
+    59 op lessThan *tmp50 0 *tmp48
+    60 assertequals true *tmp50 "lessThan 1"
+-    * op add *tmp51 zero 0
+    61 label *label21
+    62 op lessThan *tmp53 1 *tmp42
+    63 assertequals false *tmp53 "lessThan 2"
+-    * op add *tmp54 zero 1
+    64 label *label22
+    65 op lessThanEq *tmp56 1 *tmp48
+    66 assertequals true *tmp56 "lessThanEq 1"
+-    * op add *tmp57 zero 0
+    67 label *label23
+    68 op lessThanEq *tmp59 1 *tmp42
+    69 assertequals false *tmp59 "lessThanEq 2"
+-    * op add *tmp60 zero 1
+    70 label *label24
+    71 op greaterThan *tmp62 2 *tmp48
+    72 assertequals true *tmp62 "greaterThan 1"
+-    * op add *tmp63 zero 2
+    73 label *label25
+    74 op greaterThan *tmp65 1 *tmp6
+    75 assertequals false *tmp65 "greaterThan 2"
+-    * op add *tmp66 zero 1
+    76 label *label26
+    77 op greaterThanEq *tmp68 1 *tmp48
+    78 assertequals true *tmp68 "greaterThanEq 1"
+-    * op add *tmp69 zero 2
+    79 label *label27
+    80 op greaterThanEq *tmp71 1 *tmp6
+    81 assertequals false *tmp71 "greaterThanEq 2"
+ 
+    83 assertequals false *tmp72 "strictEqual 1"
+    84 op strictEqual *tmp73 null NULL
+    85 assertequals true *tmp73 "strictEqual 2"
+-    * op add *tmp74 zero 2
+    86 label *label28
+    87 op shl *tmp76 1 *tmp6
+    88 assertequals 4 *tmp76 "shl"
+-    * op add *tmp77 zero 2
+    89 label *label29
+    90 op shr *tmp79 9 *tmp6
+    91 assertequals 2 *tmp79 "shr"
+-    * op add *tmp80 zero 2
+    92 label *label30
+    93 op or *tmp82 1 *tmp6
+    94 assertequals 3 *tmp82 "or"
+-    * op add *tmp83 zero 2
+    95 label *label31
+    96 op and *tmp85 3 *tmp6
+    97 assertequals 2 *tmp85 "and"
+-    * op add *tmp86 zero 2
+    98 label *label32
+    99 op xor *tmp88 3 *tmp6
+   100 assertequals 1 *tmp88 "xor"
+-    * op add *tmp89 zero 0
+   101 label *label33
+   102 op not *tmp91 *tmp42
+   103 assertequals -1 *tmp91 "not 1"
+ 
+   105 label *label34
+   106 op not *tmp94 *tmp92
+   107 assertequals -65536 *tmp94 "not 2"
+-    * set :a 0xabcdefabcdef
+   108 op add *tmp97 zero 0xabcdefabcdef
+   109 label *label35
+   110 op not *tmp99 *tmp97
+   111 assertequals -188900977659376 *tmp99 "not 3"
+-    * op add *tmp100 zero 4
+   112 label *label36
+   113 op max *tmp102 2 *tmp9
+   114 assertequals 4 *tmp102 "max"
+-    * op add *tmp103 zero 4
+   115 label *label37
+   116 op min *tmp105 2 *tmp9
+   117 assertequals 2 *tmp105 "min"
+ 
+   131 label *label41
+   132 op floor *tmp117 *tmp115
+   133 assertequals 2 *tmp117 "floor"
+-    * op add *tmp118 zero 2.5
+   134 label *label42
+   135 op ceil *tmp120 *tmp115
+   136 assertequals 3 *tmp120 "ceil"
+ 
+   138 label *label43
+   139 op sqrt *tmp123 *tmp121
+   140 assertequals 4 *tmp123 "sqrt"
+-    * op add *tmp124 zero 1
+   141 label *label44
+   142 op angle *tmp126 1 *tmp48
+   143 assertequals 45 *tmp126 "angle"
+ 
+   182 setaddr :fn3*retaddr *label51
+   183 call *label3 :fn3*retval
+   184 label *label51
+-    * op add *tmp130 zero 8
+   185 label *label52
+   186 op sub *tmp132 -8 zero
+   187 assertequals -8 *tmp132 "unary minus"
+-    * op add *tmp133 zero 0
+   188 label *label53
+   189 op equal *tmp135 *tmp42 false
+   190 assertequals 1 *tmp135 "boolean negation 1"
+-    * op add *tmp136 zero 1
+   191 label *label54
+   192 op equal *tmp138 *tmp48 false
+   193 assertequals 0 *tmp138 "boolean negation 2"
+-    * op add *tmp139 zero 2
+   194 label *label55
+   195 op equal *tmp141 *tmp6 false
+   196 assertequals 0 *tmp141 "boolean negation 3"
+-    * op add *tmp142 zero 4
+   197 label *label56
+-    * op pow :a 2 *tmp9
+   198 assertequals 16 *tmp23 "**="
+-    * op add *tmp144 zero 4
+   199 label *label57
+   200 op mul :a 2 *tmp9
+   201 assertequals 8 :a "*="
+-    * op add *tmp146 zero 4
+   202 label *label58
+-    * op div :a 6 *tmp9
+   203 assertequals 1.5 *tmp11 "/="
+-    * op add *tmp148 zero 4
+   204 label *label59
+-    * op idiv :a 6 *tmp9
+   205 assertequals 1 *tmp17 "\="
+-    * op add *tmp150 zero 4
+   206 label *label60
+-    * op mod :a 6 *tmp9
+   207 assertequals 2 *tmp20 "%="
+-    * op add *tmp152 zero 2
+   208 label *label61
+-    * op add :a 4 *tmp6
++  209 op add :a zero 6
+   210 assertequals 6 :a "+="
+-    * op add *tmp154 zero 2
+   211 label *label62
+-    * op sub :a 4 *tmp6
++  212 op sub :a 2 zero
+   213 assertequals 2 :a "-="
+-    * op add *tmp156 zero 2
+   214 label *label63
+-    * op shl :a 1 *tmp6
+   215 assertequals 4 *tmp76 "<<="
+-    * op add *tmp158 zero 2
+   216 label *label64
+-    * op shr :a 9 *tmp6
+   217 assertequals 2 *tmp79 ">>="
+-    * op add *tmp160 zero 2
+   218 label *label65
+-    * op or :a 1 *tmp6
+   219 assertequals 3 *tmp82 "|="
+-    * op add *tmp162 zero 2
+   220 label *label66
+-    * op and :a 3 *tmp6
+   221 assertequals 2 *tmp85 "&="
+-    * op add *tmp164 zero 2
+   222 label *label67
+-    * op xor :a 3 *tmp6
+   223 assertequals 1 *tmp88 "^="
+-    * op add *tmp166 zero 0
+   224 label *label68
+-    * op land :a 1 *tmp42
+   225 assertequals false *tmp44 "&&="
+-    * op add *tmp168 zero 2
+   226 label *label69
+-    * op land :a 1 *tmp6
+   227 assertequals true *tmp47 "&&="
+-    * op add *tmp170 zero 2
+   228 label *label70
+   229 op or *tmp172 0 *tmp6
+   230 op notEqual :a *tmp172 false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
  
-   339 label *label57
-   340 op shr :a 9 :fn0*retval
-   341 assertequals 2 :a ">>="
--    * set :fn0:n 2
-   342 setaddr :fn0*retaddr *label58
-   343 call *label0 :fn0*retval
-   344 label *label58
+    27 label *label11
+    28 op pow *tmp23 2 *tmp9
+    29 assertequals 16 *tmp23 "pow"
+-    * op add *tmp24 zero 5
+    30 label *label12
+    31 op equal *tmp26 5 *tmp2
+    32 assertequals true *tmp26 "equal 1"
+ 
+   206 assertequals 2 *tmp20 "%="
+   207 label *label61
+   208 op add :a zero 6
+-    * assertequals 6 :a "+="
++  209 assertequals 6 *tmp3 "+="
+   210 label *label62
+   211 op sub :a 2 zero
+   212 assertequals 2 :a "-="
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
  
-   333 label *label56
-   334 op shl :a 1 :fn0*retval
-   335 assertequals 4 :a "<<="
--    * set :fn0:n 2
-   336 setaddr :fn0*retaddr *label57
-   337 call *label0 :fn0*retval
-   338 label *label57
+   205 label *label60
+   206 assertequals 2 *tmp20 "%="
+   207 label *label61
+-    * op add :a zero 6
+   208 assertequals 6 *tmp3 "+="
+   209 label *label62
+   210 op sub :a 2 zero
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
+Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 instructions):
  
-   327 label *label55
-   328 op sub :a 4 :fn0*retval
-   329 assertequals 2 :a "-="
--    * set :fn0:n 2
-   330 setaddr :fn0*retaddr *label56
-   331 call *label0 :fn0*retval
-   332 label *label56
+   148 set :fn3:expected 1
+   149 set :fn3:actual 1
+   150 set :fn3:title "sin"
+-    * setaddr :fn3*retaddr *label46
+-    * call *label3 :fn3*retval
+-    * label *label46
++  151 label *label73
++  152 op mul :fn65:x :fn3:actual 100000000
++  153 op add *tmp175 :fn65:x 0.5
++  154 op floor *tmp174 *tmp175
++  155 label *label74
++  156 op div *tmp177 *tmp174 100000000
++  157 assertequals :fn3:expected *tmp177 :fn3:title
++  158 label *label75
+   159 set :fn3:expected -1
+   160 set :fn3:actual -1
+   161 set :fn3:title "cos"
+-    * setaddr :fn3*retaddr *label47
+-    * call *label3 :fn3*retval
+-    * label *label47
++  162 label *label76
++  163 op mul :fn65:x :fn3:actual 100000000
++  164 op add *tmp175 :fn65:x 0.5
++  165 op floor *tmp174 *tmp175
++  166 label *label77
++  167 op div *tmp177 *tmp174 100000000
++  168 assertequals :fn3:expected *tmp177 :fn3:title
++  169 label *label78
+   170 set :fn3:expected 1
+   171 set :fn3:actual 0.9999999999999999
+   172 set :fn3:title "tan"
+-    * setaddr :fn3*retaddr *label48
+-    * call *label3 :fn3*retval
+-    * label *label48
++  173 label *label79
++  174 op mul :fn65:x :fn3:actual 100000000
++  175 op add *tmp175 :fn65:x 0.5
++  176 op floor *tmp174 *tmp175
++  177 label *label80
++  178 op div *tmp177 *tmp174 100000000
++  179 assertequals :fn3:expected *tmp177 :fn3:title
++  180 label *label81
+   181 set :fn3:expected 90
+   182 set :fn3:actual 90
+   183 set :fn3:title "asin"
+-    * setaddr :fn3*retaddr *label49
+-    * call *label3 :fn3*retval
+-    * label *label49
++  184 label *label82
++  185 op mul :fn65:x :fn3:actual 100000000
++  186 op add *tmp175 :fn65:x 0.5
++  187 op floor *tmp174 *tmp175
++  188 label *label83
++  189 op div *tmp177 *tmp174 100000000
++  190 assertequals :fn3:expected *tmp177 :fn3:title
++  191 label *label84
+   192 set :fn3:expected 0
+   193 set :fn3:actual 0
+   194 set :fn3:title "acos"
+-    * setaddr :fn3*retaddr *label50
+-    * call *label3 :fn3*retval
+-    * label *label50
++  195 label *label85
++  196 op mul :fn65:x :fn3:actual 100000000
++  197 op add *tmp175 :fn65:x 0.5
++  198 op floor *tmp174 *tmp175
++  199 label *label86
++  200 op div *tmp177 *tmp174 100000000
++  201 assertequals :fn3:expected *tmp177 :fn3:title
++  202 label *label87
+   203 set :fn3:expected 45
+   204 set :fn3:actual 45
+   205 set :fn3:title "atan"
+-    * setaddr :fn3*retaddr *label51
+-    * call *label3 :fn3*retval
+-    * label *label51
++  206 label *label88
++  207 op mul :fn65:x :fn3:actual 100000000
++  208 op add *tmp175 :fn65:x 0.5
++  209 op floor *tmp174 *tmp175
++  210 label *label89
++  211 op div *tmp177 *tmp174 100000000
++  212 assertequals :fn3:expected *tmp177 :fn3:title
++  213 label *label90
+   214 label *label52
+   215 op sub *tmp132 -8 zero
+   216 assertequals -8 *tmp132 "unary minus"
+ 
+   259 assertequals true :a "||="
+   260 stop
+   261 end
+-    * label *label3
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
+-    * label *label72
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
+-    * label *label71
+-    * return :fn3*retaddr
+-    * end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 7 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   321 label *label54
-   322 op add :a 4 :fn0*retval
-   323 assertequals 6 :a "+="
--    * set :fn0:n 2
-   324 setaddr :fn0*retaddr *label55
-   325 call *label0 :fn0*retval
-   326 label *label55
+   149 set :fn3:actual 1
+   150 set :fn3:title "sin"
+   151 label *label73
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
++  152 op mul :fn65:x 1 100000000
++  153 op add *tmp175 100000000 0.5
++  154 op floor *tmp174 100000000.5
+   155 label *label74
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
++  156 op div *tmp177 100000000 100000000
++  157 assertequals 1 1 "sin"
+   158 label *label75
+   159 set :fn3:expected -1
+   160 set :fn3:actual -1
+   161 set :fn3:title "cos"
+   162 label *label76
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
++  163 op mul :fn65:x -1 100000000
++  164 op add *tmp175 -100000000 0.5
++  165 op floor *tmp174 -99999999.5
+   166 label *label77
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
++  167 op div *tmp177 -100000000 100000000
++  168 assertequals -1 -1 "cos"
+   169 label *label78
+   170 set :fn3:expected 1
+   171 set :fn3:actual 0.9999999999999999
+   172 set :fn3:title "tan"
+   173 label *label79
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
++  174 op mul :fn65:x 0.9999999999999999 100000000
++  175 op add *tmp175 99999999.99999999 0.5
++  176 op floor *tmp174 100000000.49999999
+   177 label *label80
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
++  178 op div *tmp177 100000000 100000000
++  179 assertequals 1 1 "tan"
+   180 label *label81
+   181 set :fn3:expected 90
+   182 set :fn3:actual 90
+   183 set :fn3:title "asin"
+   184 label *label82
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
++  185 op mul :fn65:x 90 100000000
++  186 op add *tmp175 9000000000 0.5
++  187 op floor *tmp174 9000000000.5
+   188 label *label83
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
++  189 op div *tmp177 9000000000 100000000
++  190 assertequals 90 90 "asin"
+   191 label *label84
+   192 set :fn3:expected 0
+   193 set :fn3:actual 0
+   194 set :fn3:title "acos"
+   195 label *label85
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
++  196 op mul :fn65:x 0 100000000
++  197 op add *tmp175 0 0.5
++  198 op floor *tmp174 0.5
+   199 label *label86
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
++  200 op div *tmp177 0 100000000
++  201 assertequals 0 0 "acos"
+   202 label *label87
+   203 set :fn3:expected 45
+   204 set :fn3:actual 45
+   205 set :fn3:title "atan"
+   206 label *label88
+-    * op mul :fn65:x :fn3:actual 100000000
+-    * op add *tmp175 :fn65:x 0.5
+-    * op floor *tmp174 *tmp175
++  207 op mul :fn65:x 45 100000000
++  208 op add *tmp175 4500000000 0.5
++  209 op floor *tmp174 4500000000.5
+   210 label *label89
+-    * op div *tmp177 *tmp174 100000000
+-    * assertequals :fn3:expected *tmp177 :fn3:title
++  211 op div *tmp177 4500000000 100000000
++  212 assertequals 45 45 "atan"
+   213 label *label90
+   214 label *label52
+   215 op sub *tmp132 -8 zero
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 8 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-42 instructions):
  
-   309 label *label52
-   310 op idiv :a 6 :fn0*retval
-   311 assertequals 1 :a "\="
--    * set :fn0:n 4
-   312 setaddr :fn0*retaddr *label53
-   313 call *label0 :fn0*retval
-   314 label *label53
+   145 op angleDiff *tmp129 45 *tmp127
+   146 assertequals 90 *tmp129 "angleDiff"
+   147 assertequals 5 5 "len"
+-    * set :fn3:expected 1
+-    * set :fn3:actual 1
+-    * set :fn3:title "sin"
+   148 label *label73
+-    * op mul :fn65:x 1 100000000
+-    * op add *tmp175 100000000 0.5
+-    * op floor *tmp174 100000000.5
+   149 label *label74
+-    * op div *tmp177 100000000 100000000
+   150 assertequals 1 1 "sin"
+   151 label *label75
+-    * set :fn3:expected -1
+-    * set :fn3:actual -1
+-    * set :fn3:title "cos"
+   152 label *label76
+-    * op mul :fn65:x -1 100000000
+-    * op add *tmp175 -100000000 0.5
+-    * op floor *tmp174 -99999999.5
+   153 label *label77
+-    * op div *tmp177 -100000000 100000000
+   154 assertequals -1 -1 "cos"
+   155 label *label78
+-    * set :fn3:expected 1
+-    * set :fn3:actual 0.9999999999999999
+-    * set :fn3:title "tan"
+   156 label *label79
+-    * op mul :fn65:x 0.9999999999999999 100000000
+-    * op add *tmp175 99999999.99999999 0.5
+-    * op floor *tmp174 100000000.49999999
+   157 label *label80
+-    * op div *tmp177 100000000 100000000
+   158 assertequals 1 1 "tan"
+   159 label *label81
+-    * set :fn3:expected 90
+-    * set :fn3:actual 90
+-    * set :fn3:title "asin"
+   160 label *label82
+-    * op mul :fn65:x 90 100000000
+-    * op add *tmp175 9000000000 0.5
+-    * op floor *tmp174 9000000000.5
+   161 label *label83
+-    * op div *tmp177 9000000000 100000000
+   162 assertequals 90 90 "asin"
+   163 label *label84
+-    * set :fn3:expected 0
+-    * set :fn3:actual 0
+-    * set :fn3:title "acos"
+   164 label *label85
+-    * op mul :fn65:x 0 100000000
+-    * op add *tmp175 0 0.5
+-    * op floor *tmp174 0.5
+   165 label *label86
+-    * op div *tmp177 0 100000000
+   166 assertequals 0 0 "acos"
+   167 label *label87
+-    * set :fn3:expected 45
+-    * set :fn3:actual 45
+-    * set :fn3:title "atan"
+   168 label *label88
+-    * op mul :fn65:x 45 100000000
+-    * op add *tmp175 4500000000 0.5
+-    * op floor *tmp174 4500000000.5
+   169 label *label89
+-    * op div *tmp177 4500000000 100000000
+   170 assertequals 45 45 "atan"
+   171 label *label90
+   172 label *label52
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 9 (-1 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-   303 label *label51
-   304 op div :a 6 :fn0*retval
-   305 assertequals 1.5 :a "/="
--    * set :fn0:n 4
-   306 setaddr :fn0*retaddr *label52
-   307 call *label0 :fn0*retval
-   308 label *label52
+    46 label *label17
+    47 op notEqual *tmp41 0 *tmp30
+    48 assertequals false *tmp41 "notEqual null"
+-    * op add *tmp42 zero 0
++   49 set *tmp42 zero
+    50 label *label18
+    51 op land *tmp44 1 *tmp42
+    52 assertequals false *tmp44 "land 1"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 10 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-   297 label *label50
-   298 op mul :a 2 :fn0*retval
-   299 assertequals 8 :a "*="
--    * set :fn0:n 4
-   300 setaddr :fn0*retaddr *label51
-   301 call *label0 :fn0*retval
-   302 label *label51
+    48 assertequals false *tmp41 "notEqual null"
+    49 set *tmp42 zero
+    50 label *label18
+-    * op land *tmp44 1 *tmp42
++   51 op land *tmp44 1 zero
+    52 assertequals false *tmp44 "land 1"
+    53 label *label19
+    54 op land *tmp47 1 *tmp6
+ 
+    58 op lessThan *tmp50 0 *tmp48
+    59 assertequals true *tmp50 "lessThan 1"
+    60 label *label21
+-    * op lessThan *tmp53 1 *tmp42
++   61 op lessThan *tmp53 1 zero
+    62 assertequals false *tmp53 "lessThan 2"
+    63 label *label22
+    64 op lessThanEq *tmp56 1 *tmp48
+    65 assertequals true *tmp56 "lessThanEq 1"
+    66 label *label23
+-    * op lessThanEq *tmp59 1 *tmp42
++   67 op lessThanEq *tmp59 1 zero
+    68 assertequals false *tmp59 "lessThanEq 2"
+    69 label *label24
+    70 op greaterThan *tmp62 2 *tmp48
+ 
+    98 op xor *tmp88 3 *tmp6
+    99 assertequals 1 *tmp88 "xor"
+   100 label *label33
+-    * op not *tmp91 *tmp42
++  101 op not *tmp91 zero
+   102 assertequals -1 *tmp91 "not 1"
+   103 op add *tmp92 zero 65535
+   104 label *label34
+ 
+   173 op sub *tmp132 -8 zero
+   174 assertequals -8 *tmp132 "unary minus"
+   175 label *label53
+-    * op equal *tmp135 *tmp42 false
++  176 op equal *tmp135 zero false
+   177 assertequals 1 *tmp135 "boolean negation 1"
+   178 label *label54
+   179 op equal *tmp138 *tmp48 false
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 11 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
  
-   291 label *label49
-   292 op pow :a 2 :fn0*retval
-   293 assertequals 16 :a "**="
--    * set :fn0:n 4
-   294 setaddr :fn0*retaddr *label50
-   295 call *label0 :fn0*retval
-   296 label *label50
+    46 label *label17
+    47 op notEqual *tmp41 0 *tmp30
+    48 assertequals false *tmp41 "notEqual null"
+-    * set *tmp42 zero
+    49 label *label18
+    50 op land *tmp44 1 zero
+    51 assertequals false *tmp44 "land 1"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 12 (-1 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   237 label *label40
-   238 op floor *tmp81 :fn0*retval
-   239 assertequals 2 *tmp81 "floor"
--    * set :fn0:n 2.5
-   240 setaddr :fn0*retaddr *label41
-   241 call *label0 :fn0*retval
-   242 label *label41
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 13 (-1 instructions):
- 
-   207 label *label35
-   208 op max *tmp71 2 :fn0*retval
-   209 assertequals 4 *tmp71 "max"
--    * set :fn0:n 4
-   210 setaddr :fn0*retaddr *label36
-   211 call *label0 :fn0*retval
-   212 label *label36
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 14 (-1 instructions):
- 
-   177 label *label30
-   178 op and *tmp59 3 :fn0*retval
-   179 assertequals 2 *tmp59 "and"
--    * set :fn0:n 2
-   180 setaddr :fn0*retaddr *label31
-   181 call *label0 :fn0*retval
-   182 label *label31
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 15 (-1 instructions):
- 
-   171 label *label29
-   172 op or *tmp57 1 :fn0*retval
-   173 assertequals 3 *tmp57 "or"
--    * set :fn0:n 2
-   174 setaddr :fn0*retaddr *label30
-   175 call *label0 :fn0*retval
-   176 label *label30
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 16 (-1 instructions):
- 
-   165 label *label28
-   166 op shr *tmp55 9 :fn0*retval
-   167 assertequals 2 *tmp55 "shr"
--    * set :fn0:n 2
-   168 setaddr :fn0*retaddr *label29
-   169 call *label0 :fn0*retval
-   170 label *label29
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 17 (-1 instructions):
- 
-   159 label *label27
-   160 op shl *tmp53 1 :fn0*retval
-   161 assertequals 4 *tmp53 "shl"
--    * set :fn0:n 2
-   162 setaddr :fn0*retaddr *label28
-   163 call *label0 :fn0*retval
-   164 label *label28
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 18 (-1 instructions):
- 
-   147 label *label25
-   148 op strictEqual *tmp49 0 :fn0*retval
-   149 assertequals false *tmp49 "strictEqual 1"
--    * set :fn0:n null
-   150 setaddr :fn0*retaddr *label26
-   151 call *label0 :fn0*retval
-   152 label *label26
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 19 (-1 instructions):
- 
-    39 label *label7
-    40 op mod *tmp13 6 :fn0*retval
-    41 assertequals 2 *tmp13 "mod"
--    * set :fn0:n 4
-    42 setaddr :fn0*retaddr *label8
-    43 call *label0 :fn0*retval
-    44 label *label8
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 20 (-1 instructions):
- 
-    33 label *label6
-    34 op idiv *tmp11 6 :fn0*retval
-    35 assertequals 1 *tmp11 "idiv"
--    * set :fn0:n 4
-    36 setaddr :fn0*retaddr *label7
-    37 call *label0 :fn0*retval
-    38 label *label7
-
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
- 
-   362 set :fn0*retval :fn0:n
-   363 label *label64
-   364 return :fn0*retaddr
+   215 op notEqual :a *tmp172 false
+   216 assertequals true :a "||="
+   217 stop
 -    * end
 
 Final code before resolving virtual instructions:
 
-set :fn0:n 3
-setaddr :fn0*retaddr *label1
-call *label0 :fn0*retval
-label *label1
-op add *tmp1 2 :fn0*retval
-assertequals 5 *tmp1 "add"
-set :fn0:n 6
-setaddr :fn0*retaddr *label2
-call *label0 :fn0*retval
-label *label2
-op sub *tmp3 7 :fn0*retval
-assertequals 1 *tmp3 "sub"
-set :fn0:n 2
-setaddr :fn0*retaddr *label3
-call *label0 :fn0*retval
-label *label3
-op mul *tmp5 3 :fn0*retval
-assertequals 6 *tmp5 "mul"
-set :fn0:n 4
-setaddr :fn0*retaddr *label4
-call *label0 :fn0*retval
-label *label4
-op div *tmp7 6 :fn0*retval
-assertequals 1.5 *tmp7 "div"
-set :fn0:n 100000
-setaddr :fn0*retaddr *label5
-call *label0 :fn0*retval
-label *label5
-op div *tmp9 1 :fn0*retval
-assertequals 0.00001 *tmp9 "div exp"
-set :fn0:n 4
-setaddr :fn0*retaddr *label6
-call *label0 :fn0*retval
-label *label6
-op idiv *tmp11 6 :fn0*retval
-assertequals 1 *tmp11 "idiv"
-setaddr :fn0*retaddr *label7
-call *label0 :fn0*retval
-label *label7
-op mod *tmp13 6 :fn0*retval
-assertequals 2 *tmp13 "mod"
-setaddr :fn0*retaddr *label8
-call *label0 :fn0*retval
-label *label8
-op pow *tmp15 2 :fn0*retval
-assertequals 16 *tmp15 "pow"
-set :fn0:n 5
-setaddr :fn0*retaddr *label9
-call *label0 :fn0*retval
-label *label9
-op equal *tmp17 5 :fn0*retval
-assertequals true *tmp17 "equal 1"
-set :fn0:n 6
-setaddr :fn0*retaddr *label10
-call *label0 :fn0*retval
-label *label10
-op equal *tmp19 5 :fn0*retval
-assertequals false *tmp19 "equal 2"
-set :fn0:n null
-setaddr :fn0*retaddr *label11
-call *label0 :fn0*retval
-label *label11
-op equal *tmp21 0 :fn0*retval
-assertequals true *tmp21 "equal null"
-set :fn0:n 5
-setaddr :fn0*retaddr *label12
-call *label0 :fn0*retval
-label *label12
-op notEqual *tmp23 5 :fn0*retval
-assertequals false *tmp23 "notEqual 1"
-set :fn0:n 6
-setaddr :fn0*retaddr *label13
-call *label0 :fn0*retval
-label *label13
-op notEqual *tmp25 5 :fn0*retval
-assertequals true *tmp25 "notEqual 2"
-set :fn0:n null
-setaddr :fn0*retaddr *label14
-call *label0 :fn0*retval
-label *label14
-op notEqual *tmp27 0 :fn0*retval
-assertequals false *tmp27 "notEqual null"
-set :fn0:n 0
-setaddr :fn0*retaddr *label15
-call *label0 :fn0*retval
-label *label15
-op land *tmp29 1 :fn0*retval
-assertequals false *tmp29 "land 1"
-set :fn0:n 2
-setaddr :fn0*retaddr *label16
-call *label0 :fn0*retval
-label *label16
-op land *tmp31 1 :fn0*retval
-assertequals true *tmp31 "land 2"
-set :fn0:n 1
-setaddr :fn0*retaddr *label17
-call *label0 :fn0*retval
-label *label17
-op lessThan *tmp33 0 :fn0*retval
-assertequals true *tmp33 "lessThan 1"
-set :fn0:n 0
-setaddr :fn0*retaddr *label18
-call *label0 :fn0*retval
-label *label18
-op lessThan *tmp35 1 :fn0*retval
-assertequals false *tmp35 "lessThan 2"
-set :fn0:n 1
-setaddr :fn0*retaddr *label19
-call *label0 :fn0*retval
-label *label19
-op lessThanEq *tmp37 1 :fn0*retval
-assertequals true *tmp37 "lessThanEq 1"
-set :fn0:n 0
-setaddr :fn0*retaddr *label20
-call *label0 :fn0*retval
-label *label20
-op lessThanEq *tmp39 1 :fn0*retval
-assertequals false *tmp39 "lessThanEq 2"
-set :fn0:n 1
-setaddr :fn0*retaddr *label21
-call *label0 :fn0*retval
-label *label21
-op greaterThan *tmp41 2 :fn0*retval
-assertequals true *tmp41 "greaterThan 1"
-set :fn0:n 2
-setaddr :fn0*retaddr *label22
-call *label0 :fn0*retval
-label *label22
-op greaterThan *tmp43 1 :fn0*retval
-assertequals false *tmp43 "greaterThan 2"
-set :fn0:n 1
-setaddr :fn0*retaddr *label23
-call *label0 :fn0*retval
-label *label23
-op greaterThanEq *tmp45 1 :fn0*retval
-assertequals true *tmp45 "greaterThanEq 1"
-set :fn0:n 2
-setaddr :fn0*retaddr *label24
-call *label0 :fn0*retval
-label *label24
-op greaterThanEq *tmp47 1 :fn0*retval
-assertequals false *tmp47 "greaterThanEq 2"
-set :fn0:n null
-setaddr :fn0*retaddr *label25
-call *label0 :fn0*retval
-label *label25
-op strictEqual *tmp49 0 :fn0*retval
-assertequals false *tmp49 "strictEqual 1"
-setaddr :fn0*retaddr *label26
-call *label0 :fn0*retval
-label *label26
-op strictEqual *tmp51 null :fn0*retval
-assertequals true *tmp51 "strictEqual 2"
-set :fn0:n 2
-setaddr :fn0*retaddr *label27
-call *label0 :fn0*retval
-label *label27
-op shl *tmp53 1 :fn0*retval
-assertequals 4 *tmp53 "shl"
-setaddr :fn0*retaddr *label28
-call *label0 :fn0*retval
-label *label28
-op shr *tmp55 9 :fn0*retval
-assertequals 2 *tmp55 "shr"
-setaddr :fn0*retaddr *label29
-call *label0 :fn0*retval
-label *label29
-op or *tmp57 1 :fn0*retval
-assertequals 3 *tmp57 "or"
-setaddr :fn0*retaddr *label30
-call *label0 :fn0*retval
-label *label30
-op and *tmp59 3 :fn0*retval
-assertequals 2 *tmp59 "and"
-setaddr :fn0*retaddr *label31
-call *label0 :fn0*retval
-label *label31
-op xor *tmp61 3 :fn0*retval
-assertequals 1 *tmp61 "xor"
-set :fn0:n 0
-setaddr :fn0*retaddr *label32
-call *label0 :fn0*retval
-label *label32
-op not *tmp63 :fn0*retval 0
-assertequals -1 *tmp63 "not 1"
-set :fn0:n 65535
-setaddr :fn0*retaddr *label33
-call *label0 :fn0*retval
-label *label33
-op not *tmp65 :fn0*retval 0
-assertequals -65536 *tmp65 "not 2"
-set :fn0:n 0xabcdefabcdef
-setaddr :fn0*retaddr *label34
-call *label0 :fn0*retval
-label *label34
-op not *tmp69 :fn0*retval 0
-assertequals -188900977659376 *tmp69 "not 3"
-set :fn0:n 4
-setaddr :fn0*retaddr *label35
-call *label0 :fn0*retval
-label *label35
-op max *tmp71 2 :fn0*retval
-assertequals 4 *tmp71 "max"
-setaddr :fn0*retaddr *label36
-call *label0 :fn0*retval
-label *label36
-op min *tmp73 2 :fn0*retval
-assertequals 2 *tmp73 "min"
-set :fn0:n -2
-setaddr :fn0*retaddr *label37
-call *label0 :fn0*retval
-label *label37
-op abs *tmp75 :fn0*retval 0
-assertequals 2 *tmp75 "abs"
-set :fn0:n 2.718281828459045
-setaddr :fn0*retaddr *label38
-call *label0 :fn0*retval
-label *label38
-op log *tmp77 :fn0*retval 0
-assertequals 1 *tmp77 "log"
-set :fn0:n 10
-setaddr :fn0*retaddr *label39
-call *label0 :fn0*retval
-label *label39
-op log10 *tmp79 :fn0*retval 0
-assertequals 1 *tmp79 "log10"
-set :fn0:n 2.5
-setaddr :fn0*retaddr *label40
-call *label0 :fn0*retval
-label *label40
-op floor *tmp81 :fn0*retval 0
-assertequals 2 *tmp81 "floor"
-setaddr :fn0*retaddr *label41
-call *label0 :fn0*retval
-label *label41
-op ceil *tmp83 :fn0*retval 0
-assertequals 3 *tmp83 "ceil"
-set :fn0:n 16
-setaddr :fn0*retaddr *label42
-call *label0 :fn0*retval
-label *label42
-op sqrt *tmp85 :fn0*retval 0
-assertequals 4 *tmp85 "sqrt"
-set :fn0:n 1
-setaddr :fn0*retaddr *label43
-call *label0 :fn0*retval
-label *label43
-op angle *tmp87 1 :fn0*retval
-assertequals 45 *tmp87 "angle"
-set :fn0:n 135
-setaddr :fn0*retaddr *label44
-call *label0 :fn0*retval
-label *label44
-op angleDiff *tmp89 45 :fn0*retval
-assertequals 90 *tmp89 "angleDiff"
-set :fn0:n 8
-setaddr :fn0*retaddr *label45
-call *label0 :fn0*retval
-label *label45
-op sub *tmp91 0 :fn0*retval
-assertequals -8 *tmp91 "unary minus"
-set :fn0:n 0
-setaddr :fn0*retaddr *label46
-call *label0 :fn0*retval
-label *label46
-op equal *tmp93 :fn0*retval false
-assertequals 1 *tmp93 "boolean negation 1"
-set :fn0:n 1
-setaddr :fn0*retaddr *label47
-call *label0 :fn0*retval
-label *label47
-op equal *tmp95 :fn0*retval false
-assertequals 0 *tmp95 "boolean negation 2"
-set :fn0:n 2
-setaddr :fn0*retaddr *label48
-call *label0 :fn0*retval
-label *label48
-op equal *tmp97 :fn0*retval false
-assertequals 0 *tmp97 "boolean negation 3"
-set :fn0:n 4
-setaddr :fn0*retaddr *label49
-call *label0 :fn0*retval
-label *label49
-op pow :a 2 :fn0*retval
-assertequals 16 :a "**="
-setaddr :fn0*retaddr *label50
-call *label0 :fn0*retval
-label *label50
-op mul :a 2 :fn0*retval
+set NULL null
+set zero 0
+op add *tmp2 zero 5
+assertequals 5 *tmp2 "add"
+op add *tmp3 zero 6
+op sub *tmp5 1 zero
+assertequals 1 *tmp5 "sub"
+op add *tmp6 zero 2
+op mul *tmp8 3 *tmp6
+assertequals 6 *tmp8 "mul"
+op add *tmp9 zero 4
+op div *tmp11 6 *tmp9
+assertequals 1.5 *tmp11 "div"
+op add *tmp12 zero 100000
+op div *tmp14 1 *tmp12
+assertequals 0.00001 *tmp14 "div exp"
+op idiv *tmp17 6 *tmp9
+assertequals 1 *tmp17 "idiv"
+op mod *tmp20 6 *tmp9
+assertequals 2 *tmp20 "mod"
+op pow *tmp23 2 *tmp9
+assertequals 16 *tmp23 "pow"
+op equal *tmp26 5 *tmp2
+assertequals true *tmp26 "equal 1"
+op equal *tmp29 5 *tmp3
+assertequals false *tmp29 "equal 2"
+op add *tmp30 zero null
+op equal *tmp32 0 *tmp30
+assertequals true *tmp32 "equal null"
+op notEqual *tmp35 5 *tmp2
+assertequals false *tmp35 "notEqual 1"
+op notEqual *tmp38 5 *tmp3
+assertequals true *tmp38 "notEqual 2"
+op notEqual *tmp41 0 *tmp30
+assertequals false *tmp41 "notEqual null"
+op land *tmp44 1 zero
+assertequals false *tmp44 "land 1"
+op land *tmp47 1 *tmp6
+assertequals true *tmp47 "land 2"
+op add *tmp48 zero 1
+op lessThan *tmp50 0 *tmp48
+assertequals true *tmp50 "lessThan 1"
+op lessThan *tmp53 1 zero
+assertequals false *tmp53 "lessThan 2"
+op lessThanEq *tmp56 1 *tmp48
+assertequals true *tmp56 "lessThanEq 1"
+op lessThanEq *tmp59 1 zero
+assertequals false *tmp59 "lessThanEq 2"
+op greaterThan *tmp62 2 *tmp48
+assertequals true *tmp62 "greaterThan 1"
+op greaterThan *tmp65 1 *tmp6
+assertequals false *tmp65 "greaterThan 2"
+op greaterThanEq *tmp68 1 *tmp48
+assertequals true *tmp68 "greaterThanEq 1"
+op greaterThanEq *tmp71 1 *tmp6
+assertequals false *tmp71 "greaterThanEq 2"
+op strictEqual *tmp72 0 NULL
+assertequals false *tmp72 "strictEqual 1"
+op strictEqual *tmp73 null NULL
+assertequals true *tmp73 "strictEqual 2"
+op shl *tmp76 1 *tmp6
+assertequals 4 *tmp76 "shl"
+op shr *tmp79 9 *tmp6
+assertequals 2 *tmp79 "shr"
+op or *tmp82 1 *tmp6
+assertequals 3 *tmp82 "or"
+op and *tmp85 3 *tmp6
+assertequals 2 *tmp85 "and"
+op xor *tmp88 3 *tmp6
+assertequals 1 *tmp88 "xor"
+op not *tmp91 zero 0
+assertequals -1 *tmp91 "not 1"
+op add *tmp92 zero 65535
+op not *tmp94 *tmp92 0
+assertequals -65536 *tmp94 "not 2"
+op add *tmp97 zero 0xabcdefabcdef
+op not *tmp99 *tmp97 0
+assertequals -188900977659376 *tmp99 "not 3"
+op max *tmp102 2 *tmp9
+assertequals 4 *tmp102 "max"
+op min *tmp105 2 *tmp9
+assertequals 2 *tmp105 "min"
+op add *tmp106 zero -2
+op abs *tmp108 *tmp106 0
+assertequals 2 *tmp108 "abs"
+op add *tmp109 zero 2.718281828459045
+op log *tmp111 *tmp109 0
+assertequals 1 *tmp111 "log"
+op add *tmp112 zero 10
+op log10 *tmp114 *tmp112 0
+assertequals 1 *tmp114 "log10"
+op add *tmp115 zero 2.5
+op floor *tmp117 *tmp115 0
+assertequals 2 *tmp117 "floor"
+op ceil *tmp120 *tmp115 0
+assertequals 3 *tmp120 "ceil"
+op add *tmp121 zero 16
+op sqrt *tmp123 *tmp121 0
+assertequals 4 *tmp123 "sqrt"
+op angle *tmp126 1 *tmp48
+assertequals 45 *tmp126 "angle"
+op add *tmp127 zero 135
+op angleDiff *tmp129 45 *tmp127
+assertequals 90 *tmp129 "angleDiff"
+assertequals 5 5 "len"
+assertequals 1 1 "sin"
+assertequals -1 -1 "cos"
+assertequals 1 1 "tan"
+assertequals 90 90 "asin"
+assertequals 0 0 "acos"
+assertequals 45 45 "atan"
+op sub *tmp132 -8 zero
+assertequals -8 *tmp132 "unary minus"
+op equal *tmp135 zero false
+assertequals 1 *tmp135 "boolean negation 1"
+op equal *tmp138 *tmp48 false
+assertequals 0 *tmp138 "boolean negation 2"
+op equal *tmp141 *tmp6 false
+assertequals 0 *tmp141 "boolean negation 3"
+assertequals 16 *tmp23 "**="
+op mul :a 2 *tmp9
 assertequals 8 :a "*="
-setaddr :fn0*retaddr *label51
-call *label0 :fn0*retval
-label *label51
-op div :a 6 :fn0*retval
-assertequals 1.5 :a "/="
-setaddr :fn0*retaddr *label52
-call *label0 :fn0*retval
-label *label52
-op idiv :a 6 :fn0*retval
-assertequals 1 :a "\="
-setaddr :fn0*retaddr *label53
-call *label0 :fn0*retval
-label *label53
-op mod :a 6 :fn0*retval
-assertequals 2 :a "%="
-set :fn0:n 2
-setaddr :fn0*retaddr *label54
-call *label0 :fn0*retval
-label *label54
-op add :a 4 :fn0*retval
-assertequals 6 :a "+="
-setaddr :fn0*retaddr *label55
-call *label0 :fn0*retval
-label *label55
-op sub :a 4 :fn0*retval
+assertequals 1.5 *tmp11 "/="
+assertequals 1 *tmp17 "\="
+assertequals 2 *tmp20 "%="
+assertequals 6 *tmp3 "+="
+op sub :a 2 zero
 assertequals 2 :a "-="
-setaddr :fn0*retaddr *label56
-call *label0 :fn0*retval
-label *label56
-op shl :a 1 :fn0*retval
-assertequals 4 :a "<<="
-setaddr :fn0*retaddr *label57
-call *label0 :fn0*retval
-label *label57
-op shr :a 9 :fn0*retval
-assertequals 2 :a ">>="
-setaddr :fn0*retaddr *label58
-call *label0 :fn0*retval
-label *label58
-op or :a 1 :fn0*retval
-assertequals 3 :a "|="
-setaddr :fn0*retaddr *label59
-call *label0 :fn0*retval
-label *label59
-op and :a 3 :fn0*retval
-assertequals 2 :a "&="
-setaddr :fn0*retaddr *label60
-call *label0 :fn0*retval
-label *label60
-op xor :a 3 :fn0*retval
-assertequals 1 :a "^="
-set :fn0:n 0
-setaddr :fn0*retaddr *label61
-call *label0 :fn0*retval
-label *label61
-op land :a 1 :fn0*retval
-assertequals false :a "&&="
-set :fn0:n 2
-setaddr :fn0*retaddr *label62
-call *label0 :fn0*retval
-label *label62
-op land :a 1 :fn0*retval
-assertequals true :a "&&="
-setaddr :fn0*retaddr *label63
-call *label0 :fn0*retval
-label *label63
-op or *tmp113 0 :fn0*retval
-op notEqual :a *tmp113 false
+assertequals 4 *tmp76 "<<="
+assertequals 2 *tmp79 ">>="
+assertequals 3 *tmp82 "|="
+assertequals 2 *tmp85 "&="
+assertequals 1 *tmp88 "^="
+assertequals false *tmp44 "&&="
+assertequals true *tmp47 "&&="
+op or *tmp172 0 *tmp6
+op notEqual :a *tmp172 false
 assertequals true :a "||="
 stop
-end
-label *label0
-set :fn0*retval :fn0:n
-return :fn0*retaddr
