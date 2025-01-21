@@ -15,7 +15,7 @@
     60 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 918):
-  * Unroll iteration loop at line 4:1                            cost     0, benefit       23.0, efficiency   Infinity (-19 instructions)
+  * Unroll iteration loop at line 4:1                            cost     0, benefit       31.0, efficiency   Infinity (-19 instructions)
     Optimize return at line 14:9                                 cost     2, benefit       13.0, efficiency        6.5
 
 Pass 1: speed optimization selection (cost limit 937):

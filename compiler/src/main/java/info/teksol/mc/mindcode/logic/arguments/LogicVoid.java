@@ -21,11 +21,6 @@ public enum LogicVoid implements LogicValue {
     }
 
     @Override
-    public boolean canEvaluate() {
-        return false;
-    }
-
-    @Override
     public boolean isConstant() {
         return false;
     }

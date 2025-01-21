@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.emulator.MindustryVariable;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstForEachLoopStatement;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -318,6 +319,23 @@ class LoopUnroller extends BaseOptimizer {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    private int computeSavedInstructions(AstContext loop, int iterations) {
+        if (loop.node() instanceof AstForEachLoopStatement forEachLoop) {
+            // Assignments potentially saved
+            int assignments = forEachLoop.getIterators().stream().mapToInt(it -> it.hasOutModifier() ? 2 : 1).sum();
+
+            // Instructions saved per loop:
+            // Set address
+            // Set iterator(s)
+            // Jump to body (except the last iteration)
+            // Go to next iteration
+            // Read out iterator(s)
+            return iterations * (assignments + 3) - 1;
+        } else {
+            throw new MindcodeInternalError("Expected AstForEachLoopStatement, got " + loop);
+        }
+    }
+
     private OptimizationAction findPossibleIterationUnrolling(AstContext loop, int costLimit) {
         if (!hasSupportedIterationStructure(loop)) {
             return null;
@@ -327,13 +345,7 @@ class LoopUnroller extends BaseOptimizer {
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
         int loops = leading.size();
-        // Instructions saved per loop:
-        // Set address
-        // Jump to body (except the last iteration)
-        // Go to next iteration
-        // TODO needs better calculation to take account of multiple iterators/output iterators
-        int savings = (3 * loops - 1);
-
+        int savings = computeSavedInstructions(loop, loops);
         int size = body.stream().mapToInt(LogicInstruction::getRealSize).sum();
 
         // Optimization cost could actually get negative

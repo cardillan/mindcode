@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -55,6 +56,17 @@ class FunctionInliner extends BaseOptimizer {
     }
 
 
+    private double computeInliningBenefit(AstContext call) {
+        if (call.node() instanceof AstFunctionCall functionCall) {
+            int arguments = functionCall.getArguments().stream()
+                    .mapToInt(arg -> arg.hasExpression() ? arg.isInput() && arg.isOutput() ? 2 : 1 : 0).sum();
+
+            // We assume that only half of the arguments will be successfully removed by the inlining.
+            return call.totalWeight() * (3.0 + arguments / 2.0);
+        } else {
+            throw new MindcodeInternalError("Expected AstFunctionCall node, got " + call);
+        }
+    }
 
     private OptimizationAction findPossibleInlining(AstContext context, int costLimit) {
         if (context.function() == null) {
@@ -69,9 +81,7 @@ class FunctionInliner extends BaseOptimizer {
         List<AstContext> calls = contexts(
                 c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
-        // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
-        // TODO: compute benefits for input and output parameters separately
-        double benefit = calls.stream().mapToDouble(AstContext::totalWeight).sum() * (3d + function.getStandardParameterCount() / 2d);
+        double benefit = calls.stream().mapToDouble(this::computeInliningBenefit).sum();
 
         // Cost: body size minus one (return) times number of calls minus body size (we'll remove the original)
         LogicList body = stripReturnInstructions(contextInstructions(context));
@@ -166,13 +176,11 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
 
-        // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
-        double benefit = call.totalWeight() * (3d + function.getStandardParameterCount() / 2d);
+        double benefit = computeInliningBenefit(call);
 
         // Need to find the function body
         LogicList body = stripReturnInstructions(
-                contextInstructions(
-                        context(c ->call.function().equals(c.function())
+                contextInstructions(context(c -> call.function().equals(c.function())
                                 && c.matches(AstContextType.FUNCTION, BODY)
                         )
                 )

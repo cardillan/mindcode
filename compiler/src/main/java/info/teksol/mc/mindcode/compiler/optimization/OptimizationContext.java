@@ -389,7 +389,7 @@ class OptimizationContext {
     public LogicValue resolveValue(DataFlowVariableStates.VariableStates variableStates, LogicValue value) {
         if (variableStates != null && value instanceof LogicVariable v && !staleVariables.contains(v)) {
             var newValue = variableStates.findVariableValue(v);
-            if (newValue != null && newValue.getConstantValue() != null && newValue.getConstantValue().isConstant()) {
+            if (newValue != null && newValue.getConstantValue() != null) {
                 return newValue.getConstantValue();
             }
         }

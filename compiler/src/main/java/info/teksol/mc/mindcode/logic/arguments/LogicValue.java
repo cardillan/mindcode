@@ -15,13 +15,6 @@ import java.util.function.Consumer;
 /// as a LogicValue.
 @NullMarked
 public interface LogicValue extends LogicArgument, ValueStore {
-    /// Indicates that an expressions using the value can be numerically evaluated at compile time.
-    /// All literals can be evaluated. Built-in constants can only be evaluated if they aren't a variable
-    /// (e.g. @coal can be evaluated, but @thisx cannot).
-    ///
-    /// @return true if the expression can be evaluated
-    boolean canEvaluate();
-
     /// @return true if the value is a compile-time constant
     boolean isConstant();
 

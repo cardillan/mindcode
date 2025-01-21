@@ -312,7 +312,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return defaultValue;
     }
 
-    public boolean isNonvolatileConstant(LogicValue value) {
+    private boolean isNonvolatileConstant(LogicValue value) {
         return constantExpressionTypes.contains(value.getType()) && !value.isVolatile();
     }
 

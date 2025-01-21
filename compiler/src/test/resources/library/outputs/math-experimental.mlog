@@ -7,10 +7,22 @@ assertequals 3 3 "round(2.5)"
 assertequals -3 -3 "round(-3.5)"
 assertequals 0.5 0.5 "frac(3.5)"
 assertequals -0.5 -0.5 "frac(-1.5)"
-assertequals 0 0 "sign(0)"
-assertequals 0 0 "sign(1e-7)"
-assertequals 1 1 "sign(1e-5)"
-assertequals -1 -1 "sign(-5)"
+set :fn0:x 0
+set :fn0*retaddr 12
+jump 951 always 0 0
+assertequals 0 :fn0*retval "sign(0)"
+set :fn0:x 0.0000001
+set :fn0*retaddr 16
+jump 951 always 0 0
+assertequals 0 :fn0*retval "sign(1e-7)"
+set :fn0:x 0.00001
+set :fn0*retaddr 20
+jump 951 always 0 0
+assertequals 1 :fn0*retval "sign(1e-5)"
+set :fn0:x -5
+set :fn0*retaddr 24
+jump 951 always 0 0
+assertequals -1 :fn0*retval "sign(-5)"
 assertequals 0 0 "signExact(0)"
 assertequals 1 1 "signExact(1e-7)"
 assertequals -1 -1 "signExact(-1e-7)"
@@ -52,99 +64,99 @@ set :fn1:x1 2
 set :fn1:x2 4
 set :fn1:x3 6
 set :fn1:x4 8
-set :fn1*retaddr 56
-jump 952 always 0 0
+set :fn1*retaddr 68
+jump 957 always 0 0
 assertequals 5 :fn1*retval "median(2,4,6,8)"
 set :fn1:x1 8
 set :fn1:x2 6
 set :fn1:x3 4
 set :fn1:x4 2
-set :fn1*retaddr 63
-jump 952 always 0 0
+set :fn1*retaddr 75
+jump 957 always 0 0
 assertequals 5 :fn1*retval "median(8,6,4,2)"
 set :fn1:x1 4
 set :fn1:x2 8
 set :fn1:x3 2
 set :fn1:x4 6
-set :fn1*retaddr 70
-jump 952 always 0 0
+set :fn1*retaddr 82
+jump 957 always 0 0
 assertequals 5 :fn1*retval "median(4,8,2,6)"
 set :fn1:x1 2
 set :fn1:x2 6
 set :fn1:x3 4
 set :fn1:x4 8
-set :fn1*retaddr 77
-jump 952 always 0 0
+set :fn1*retaddr 89
+jump 957 always 0 0
 assertequals 5 :fn1*retval "median(2,6,4,8)"
 set :fn1:x1 6
 set :fn1:x2 2
 set :fn1:x3 8
 set :fn1:x4 4
-set :fn1*retaddr 84
-jump 952 always 0 0
+set :fn1*retaddr 96
+jump 957 always 0 0
 assertequals 5 :fn1*retval "median(6,2,8,4)"
 set :fn2:x1 1
 set :fn2:x2 2
 set :fn2:x3 3
 set :fn2:x4 4
 set :fn2:x5 5
-set :fn2*retaddr 92
-jump 969 always 0 0
+set :fn2*retaddr 104
+jump 974 always 0 0
 assertequals 3 :fn2*retval "median(1,2,3,4,5)"
 set :fn2:x1 5
 set :fn2:x2 4
 set :fn2:x4 2
 set :fn2:x5 1
-set :fn2*retaddr 99
-jump 969 always 0 0
+set :fn2*retaddr 111
+jump 974 always 0 0
 assertequals 3 :fn2*retval "median(5,4,3,2,1)"
 set :fn2:x1 1
 set :fn2:x2 1
 set :fn2:x3 1
 set :fn2:x4 1
-set :fn2*retaddr 106
-jump 969 always 0 0
+set :fn2*retaddr 118
+jump 974 always 0 0
 assertequals 1 :fn2*retval "median(1,1,1,1,1)"
 set :fn2:x5 5
-set :fn2*retaddr 110
-jump 969 always 0 0
+set :fn2*retaddr 122
+jump 974 always 0 0
 assertequals 1 :fn2*retval "median(1,1,1,1,5)"
 set :fn2:x4 5
-set :fn2*retaddr 114
-jump 969 always 0 0
+set :fn2*retaddr 126
+jump 974 always 0 0
 assertequals 1 :fn2*retval "median(1,1,1,5,5)"
 set :fn2:x3 5
-set :fn2*retaddr 118
-jump 969 always 0 0
+set :fn2*retaddr 130
+jump 974 always 0 0
 assertequals 5 :fn2*retval "median(1,1,5,5,5)"
 set :fn2:x2 5
-set :fn2*retaddr 122
-jump 969 always 0 0
+set :fn2*retaddr 134
+jump 974 always 0 0
 assertequals 5 :fn2*retval "median(1,5,5,5,5)"
 set :fn2:x1 5
-set :fn2*retaddr 126
-jump 969 always 0 0
+set :fn2*retaddr 138
+jump 974 always 0 0
 assertequals 5 :fn2*retval "median(5,5,5,5,5)"
 set :fn45:bestDif 10000000000
 set :fn45:best null
 set :fn45:count 1
-set *tmp140 132
-jump 141 always 0 0
-set *tmp140 134
-jump 141 always 0 0
-set *tmp140 136
-jump 141 always 0 0
-set *tmp140 138
-jump 141 always 0 0
-set *tmp140 140
-jump 141 always 0 0
+set *tmp140 144
+jump 153 always 0 0
+set *tmp140 146
+jump 153 always 0 0
+set *tmp140 148
+jump 153 always 0 0
 set *tmp140 150
-jump 146 greaterThanEq 0 :fn45:bestDif
+jump 153 always 0 0
+set *tmp140 152
+jump 153 always 0 0
+set *tmp140 162
+jump 158 greaterThanEq 0 :fn45:bestDif
 set :fn45:bestDif 0
 set :fn45:best 1
 set :fn45:count 1
 set @counter *tmp140
-jump 149 greaterThan 0 :fn45:bestDif
+jump 161 greaterThan 0 :fn45:bestDif
 op add :fn45:best :fn45:best 1
 op add :fn45:count :fn45:count 1
 set @counter *tmp140
@@ -153,70 +165,70 @@ assertequals 1 *tmp139 "median(1,1,1,1,1,1)"
 set :fn48:bestDif 10000000000
 set :fn48:best null
 set :fn48:count 1
-set *tmp162 158
-set :fn48:i 1
-jump 172 always 0 0
-set *tmp162 161
-set :fn48:i 1
-jump 172 always 0 0
-set *tmp162 164
-set :fn48:i 1
-jump 172 always 0 0
-set *tmp162 167
-set :fn48:i 1
-jump 172 always 0 0
 set *tmp162 170
 set :fn48:i 1
-jump 172 always 0 0
-set *tmp162 222
+jump 184 always 0 0
+set *tmp162 173
+set :fn48:i 1
+jump 184 always 0 0
+set *tmp162 176
+set :fn48:i 1
+jump 184 always 0 0
+set *tmp162 179
+set :fn48:i 1
+jump 184 always 0 0
+set *tmp162 182
+set :fn48:i 1
+jump 184 always 0 0
+set *tmp162 234
 set :fn48:i 5
 set :fn49:lt 0
 set :fn49:gt 0
-jump 177 greaterThanEq 1 :fn48:i
+jump 189 greaterThanEq 1 :fn48:i
 set :fn49:lt 1
-jump 179 always 0 0
-jump 179 lessThanEq 1 :fn48:i
+jump 191 always 0 0
+jump 191 lessThanEq 1 :fn48:i
 set :fn49:gt 1
-jump 182 greaterThanEq 1 :fn48:i
+jump 194 greaterThanEq 1 :fn48:i
 op add :fn49:lt :fn49:lt 1
-jump 184 always 0 0
-jump 184 lessThanEq 1 :fn48:i
+jump 196 always 0 0
+jump 196 lessThanEq 1 :fn48:i
 op add :fn49:gt :fn49:gt 1
-jump 187 greaterThanEq 1 :fn48:i
+jump 199 greaterThanEq 1 :fn48:i
 op add :fn49:lt :fn49:lt 1
-jump 189 always 0 0
-jump 189 lessThanEq 1 :fn48:i
+jump 201 always 0 0
+jump 201 lessThanEq 1 :fn48:i
 op add :fn49:gt :fn49:gt 1
-jump 192 greaterThanEq 1 :fn48:i
+jump 204 greaterThanEq 1 :fn48:i
 op add :fn49:lt :fn49:lt 1
-jump 194 always 0 0
-jump 194 lessThanEq 1 :fn48:i
+jump 206 always 0 0
+jump 206 lessThanEq 1 :fn48:i
 op add :fn49:gt :fn49:gt 1
-jump 197 greaterThanEq 1 :fn48:i
+jump 209 greaterThanEq 1 :fn48:i
 op add :fn49:lt :fn49:lt 1
-jump 199 always 0 0
-jump 199 lessThanEq 1 :fn48:i
+jump 211 always 0 0
+jump 211 lessThanEq 1 :fn48:i
 op add :fn49:gt :fn49:gt 1
-jump 202 greaterThanEq 5 :fn48:i
+jump 214 greaterThanEq 5 :fn48:i
 op add :fn49:lt :fn49:lt 1
-jump 204 always 0 0
-jump 204 lessThanEq 5 :fn48:i
+jump 216 always 0 0
+jump 216 lessThanEq 5 :fn48:i
 op add :fn49:gt :fn49:gt 1
 op sub *tmp169 :fn49:gt :fn49:lt
 op abs :fn49:dif *tmp169 0
 set *tmp174 false
 op add *tmp171 :fn49:gt :fn49:lt
-jump 210 lessThan *tmp171 5
+jump 222 lessThan *tmp171 5
 op equal *tmp174 :fn49:gt :fn49:lt
-jump 213 equal *tmp174 false
+jump 225 equal *tmp174 false
 set *tmp161 :fn48:i
-jump 223 always 0 0
-jump 218 greaterThanEq :fn49:dif :fn48:bestDif
+jump 235 always 0 0
+jump 230 greaterThanEq :fn49:dif :fn48:bestDif
 set :fn48:bestDif :fn49:dif
 set :fn48:best :fn48:i
 set :fn48:count 1
 set @counter *tmp162
-jump 221 greaterThan :fn49:dif :fn48:bestDif
+jump 233 greaterThan :fn49:dif :fn48:bestDif
 op add :fn48:best :fn48:best :fn48:i
 op add :fn48:count :fn48:count 1
 set @counter *tmp162
@@ -225,63 +237,63 @@ assertequals 1 *tmp161 "median(1,1,1,1,1,5)"
 set :fn51:bestDif 10000000000
 set :fn51:best null
 set :fn51:count 1
-set *tmp184 230
-set :fn51:i 1
-jump 244 always 0 0
-set *tmp184 233
-set :fn51:i 1
-jump 244 always 0 0
-set *tmp184 236
-set :fn51:i 1
-jump 244 always 0 0
-set *tmp184 239
-set :fn51:i 1
-jump 244 always 0 0
 set *tmp184 242
+set :fn51:i 1
+jump 256 always 0 0
+set *tmp184 245
+set :fn51:i 1
+jump 256 always 0 0
+set *tmp184 248
+set :fn51:i 1
+jump 256 always 0 0
+set *tmp184 251
+set :fn51:i 1
+jump 256 always 0 0
+set *tmp184 254
 set :fn51:i 5
-jump 244 always 0 0
-set *tmp184 287
+jump 256 always 0 0
+set *tmp184 299
 set :fn51:i 5
 set :fn52:lt 0
 set :fn52:gt 0
-set *tmp186 249
-set :fn52:i 1
-jump 263 always 0 0
-set *tmp186 252
-set :fn52:i 1
-jump 263 always 0 0
-set *tmp186 255
-set :fn52:i 1
-jump 263 always 0 0
-set *tmp186 258
-set :fn52:i 1
-jump 263 always 0 0
 set *tmp186 261
+set :fn52:i 1
+jump 275 always 0 0
+set *tmp186 264
+set :fn52:i 1
+jump 275 always 0 0
+set *tmp186 267
+set :fn52:i 1
+jump 275 always 0 0
+set *tmp186 270
+set :fn52:i 1
+jump 275 always 0 0
+set *tmp186 273
 set :fn52:i 5
-jump 263 always 0 0
-set *tmp186 269
+jump 275 always 0 0
+set *tmp186 281
 set :fn52:i 5
-jump 266 greaterThanEq :fn52:i :fn51:i
+jump 278 greaterThanEq :fn52:i :fn51:i
 op add :fn52:lt :fn52:lt 1
 set @counter *tmp186
-jump 268 lessThanEq :fn52:i :fn51:i
+jump 280 lessThanEq :fn52:i :fn51:i
 op add :fn52:gt :fn52:gt 1
 set @counter *tmp186
 op sub *tmp191 :fn52:gt :fn52:lt
 op abs :fn52:dif *tmp191 0
 set *tmp196 false
 op add *tmp193 :fn52:gt :fn52:lt
-jump 275 lessThan *tmp193 5
+jump 287 lessThan *tmp193 5
 op equal *tmp196 :fn52:gt :fn52:lt
-jump 278 equal *tmp196 false
+jump 290 equal *tmp196 false
 set *tmp183 :fn51:i
-jump 288 always 0 0
-jump 283 greaterThanEq :fn52:dif :fn51:bestDif
+jump 300 always 0 0
+jump 295 greaterThanEq :fn52:dif :fn51:bestDif
 set :fn51:bestDif :fn52:dif
 set :fn51:best :fn51:i
 set :fn51:count 1
 set @counter *tmp184
-jump 286 greaterThan :fn52:dif :fn51:bestDif
+jump 298 greaterThan :fn52:dif :fn51:bestDif
 op add :fn51:best :fn51:best :fn51:i
 op add :fn51:count :fn51:count 1
 set @counter *tmp184
@@ -290,63 +302,63 @@ assertequals 1 *tmp183 "median(1,1,1,1,5,5)"
 set :fn54:bestDif 10000000000
 set :fn54:best null
 set :fn54:count 1
-set *tmp206 295
-set :fn54:i 1
-jump 309 always 0 0
-set *tmp206 298
-set :fn54:i 1
-jump 309 always 0 0
-set *tmp206 301
-set :fn54:i 1
-jump 309 always 0 0
-set *tmp206 304
-set :fn54:i 5
-jump 309 always 0 0
 set *tmp206 307
+set :fn54:i 1
+jump 321 always 0 0
+set *tmp206 310
+set :fn54:i 1
+jump 321 always 0 0
+set *tmp206 313
+set :fn54:i 1
+jump 321 always 0 0
+set *tmp206 316
 set :fn54:i 5
-jump 309 always 0 0
-set *tmp206 352
+jump 321 always 0 0
+set *tmp206 319
+set :fn54:i 5
+jump 321 always 0 0
+set *tmp206 364
 set :fn54:i 5
 set :fn55:lt 0
 set :fn55:gt 0
-set *tmp208 314
-set :fn55:i 1
-jump 328 always 0 0
-set *tmp208 317
-set :fn55:i 1
-jump 328 always 0 0
-set *tmp208 320
-set :fn55:i 1
-jump 328 always 0 0
-set *tmp208 323
-set :fn55:i 5
-jump 328 always 0 0
 set *tmp208 326
+set :fn55:i 1
+jump 340 always 0 0
+set *tmp208 329
+set :fn55:i 1
+jump 340 always 0 0
+set *tmp208 332
+set :fn55:i 1
+jump 340 always 0 0
+set *tmp208 335
 set :fn55:i 5
-jump 328 always 0 0
-set *tmp208 334
+jump 340 always 0 0
+set *tmp208 338
 set :fn55:i 5
-jump 331 greaterThanEq :fn55:i :fn54:i
+jump 340 always 0 0
+set *tmp208 346
+set :fn55:i 5
+jump 343 greaterThanEq :fn55:i :fn54:i
 op add :fn55:lt :fn55:lt 1
 set @counter *tmp208
-jump 333 lessThanEq :fn55:i :fn54:i
+jump 345 lessThanEq :fn55:i :fn54:i
 op add :fn55:gt :fn55:gt 1
 set @counter *tmp208
 op sub *tmp213 :fn55:gt :fn55:lt
 op abs :fn55:dif *tmp213 0
 set *tmp218 false
 op add *tmp215 :fn55:gt :fn55:lt
-jump 340 lessThan *tmp215 5
+jump 352 lessThan *tmp215 5
 op equal *tmp218 :fn55:gt :fn55:lt
-jump 343 equal *tmp218 false
+jump 355 equal *tmp218 false
 set *tmp205 :fn54:i
-jump 353 always 0 0
-jump 348 greaterThanEq :fn55:dif :fn54:bestDif
+jump 365 always 0 0
+jump 360 greaterThanEq :fn55:dif :fn54:bestDif
 set :fn54:bestDif :fn55:dif
 set :fn54:best :fn54:i
 set :fn54:count 1
 set @counter *tmp206
-jump 351 greaterThan :fn55:dif :fn54:bestDif
+jump 363 greaterThan :fn55:dif :fn54:bestDif
 op add :fn54:best :fn54:best :fn54:i
 op add :fn54:count :fn54:count 1
 set @counter *tmp206
@@ -355,63 +367,63 @@ assertequals 3 *tmp205 "median(1,1,1,5,5,5)"
 set :fn57:bestDif 10000000000
 set :fn57:best null
 set :fn57:count 1
-set *tmp228 360
-set :fn57:i 1
-jump 374 always 0 0
-set *tmp228 363
-set :fn57:i 1
-jump 374 always 0 0
-set *tmp228 366
-set :fn57:i 5
-jump 374 always 0 0
-set *tmp228 369
-set :fn57:i 5
-jump 374 always 0 0
 set *tmp228 372
+set :fn57:i 1
+jump 386 always 0 0
+set *tmp228 375
+set :fn57:i 1
+jump 386 always 0 0
+set *tmp228 378
 set :fn57:i 5
-jump 374 always 0 0
-set *tmp228 417
+jump 386 always 0 0
+set *tmp228 381
+set :fn57:i 5
+jump 386 always 0 0
+set *tmp228 384
+set :fn57:i 5
+jump 386 always 0 0
+set *tmp228 429
 set :fn57:i 5
 set :fn58:lt 0
 set :fn58:gt 0
-set *tmp230 379
-set :fn58:i 1
-jump 393 always 0 0
-set *tmp230 382
-set :fn58:i 1
-jump 393 always 0 0
-set *tmp230 385
-set :fn58:i 5
-jump 393 always 0 0
-set *tmp230 388
-set :fn58:i 5
-jump 393 always 0 0
 set *tmp230 391
+set :fn58:i 1
+jump 405 always 0 0
+set *tmp230 394
+set :fn58:i 1
+jump 405 always 0 0
+set *tmp230 397
 set :fn58:i 5
-jump 393 always 0 0
-set *tmp230 399
+jump 405 always 0 0
+set *tmp230 400
 set :fn58:i 5
-jump 396 greaterThanEq :fn58:i :fn57:i
+jump 405 always 0 0
+set *tmp230 403
+set :fn58:i 5
+jump 405 always 0 0
+set *tmp230 411
+set :fn58:i 5
+jump 408 greaterThanEq :fn58:i :fn57:i
 op add :fn58:lt :fn58:lt 1
 set @counter *tmp230
-jump 398 lessThanEq :fn58:i :fn57:i
+jump 410 lessThanEq :fn58:i :fn57:i
 op add :fn58:gt :fn58:gt 1
 set @counter *tmp230
 op sub *tmp235 :fn58:gt :fn58:lt
 op abs :fn58:dif *tmp235 0
 set *tmp240 false
 op add *tmp237 :fn58:gt :fn58:lt
-jump 405 lessThan *tmp237 5
+jump 417 lessThan *tmp237 5
 op equal *tmp240 :fn58:gt :fn58:lt
-jump 408 equal *tmp240 false
+jump 420 equal *tmp240 false
 set *tmp227 :fn57:i
-jump 418 always 0 0
-jump 413 greaterThanEq :fn58:dif :fn57:bestDif
+jump 430 always 0 0
+jump 425 greaterThanEq :fn58:dif :fn57:bestDif
 set :fn57:bestDif :fn58:dif
 set :fn57:best :fn57:i
 set :fn57:count 1
 set @counter *tmp228
-jump 416 greaterThan :fn58:dif :fn57:bestDif
+jump 428 greaterThan :fn58:dif :fn57:bestDif
 op add :fn57:best :fn57:best :fn57:i
 op add :fn57:count :fn57:count 1
 set @counter *tmp228
@@ -420,63 +432,63 @@ assertequals 5 *tmp227 "median(1,1,5,5,5,5)"
 set :fn60:bestDif 10000000000
 set :fn60:best null
 set :fn60:count 1
-set *tmp250 425
-set :fn60:i 1
-jump 439 always 0 0
-set *tmp250 428
-set :fn60:i 5
-jump 439 always 0 0
-set *tmp250 431
-set :fn60:i 5
-jump 439 always 0 0
-set *tmp250 434
-set :fn60:i 5
-jump 439 always 0 0
 set *tmp250 437
+set :fn60:i 1
+jump 451 always 0 0
+set *tmp250 440
 set :fn60:i 5
-jump 439 always 0 0
-set *tmp250 482
+jump 451 always 0 0
+set *tmp250 443
+set :fn60:i 5
+jump 451 always 0 0
+set *tmp250 446
+set :fn60:i 5
+jump 451 always 0 0
+set *tmp250 449
+set :fn60:i 5
+jump 451 always 0 0
+set *tmp250 494
 set :fn60:i 5
 set :fn61:lt 0
 set :fn61:gt 0
-set *tmp252 444
-set :fn61:i 1
-jump 458 always 0 0
-set *tmp252 447
-set :fn61:i 5
-jump 458 always 0 0
-set *tmp252 450
-set :fn61:i 5
-jump 458 always 0 0
-set *tmp252 453
-set :fn61:i 5
-jump 458 always 0 0
 set *tmp252 456
+set :fn61:i 1
+jump 470 always 0 0
+set *tmp252 459
 set :fn61:i 5
-jump 458 always 0 0
-set *tmp252 464
+jump 470 always 0 0
+set *tmp252 462
 set :fn61:i 5
-jump 461 greaterThanEq :fn61:i :fn60:i
+jump 470 always 0 0
+set *tmp252 465
+set :fn61:i 5
+jump 470 always 0 0
+set *tmp252 468
+set :fn61:i 5
+jump 470 always 0 0
+set *tmp252 476
+set :fn61:i 5
+jump 473 greaterThanEq :fn61:i :fn60:i
 op add :fn61:lt :fn61:lt 1
 set @counter *tmp252
-jump 463 lessThanEq :fn61:i :fn60:i
+jump 475 lessThanEq :fn61:i :fn60:i
 op add :fn61:gt :fn61:gt 1
 set @counter *tmp252
 op sub *tmp257 :fn61:gt :fn61:lt
 op abs :fn61:dif *tmp257 0
 set *tmp262 false
 op add *tmp259 :fn61:gt :fn61:lt
-jump 470 lessThan *tmp259 5
+jump 482 lessThan *tmp259 5
 op equal *tmp262 :fn61:gt :fn61:lt
-jump 473 equal *tmp262 false
+jump 485 equal *tmp262 false
 set *tmp249 :fn60:i
-jump 483 always 0 0
-jump 478 greaterThanEq :fn61:dif :fn60:bestDif
+jump 495 always 0 0
+jump 490 greaterThanEq :fn61:dif :fn60:bestDif
 set :fn60:bestDif :fn61:dif
 set :fn60:best :fn60:i
 set :fn60:count 1
 set @counter *tmp250
-jump 481 greaterThan :fn61:dif :fn60:bestDif
+jump 493 greaterThan :fn61:dif :fn60:bestDif
 op add :fn60:best :fn60:best :fn60:i
 op add :fn60:count :fn60:count 1
 set @counter *tmp250
@@ -485,23 +497,23 @@ assertequals 5 *tmp249 "median(1,5,5,5,5,5)"
 set :fn63:bestDif 10000000000
 set :fn63:best null
 set :fn63:count 1
-set *tmp272 489
-jump 498 always 0 0
-set *tmp272 491
-jump 498 always 0 0
-set *tmp272 493
-jump 498 always 0 0
-set *tmp272 495
-jump 498 always 0 0
-set *tmp272 497
-jump 498 always 0 0
+set *tmp272 501
+jump 510 always 0 0
+set *tmp272 503
+jump 510 always 0 0
+set *tmp272 505
+jump 510 always 0 0
 set *tmp272 507
-jump 503 greaterThanEq 0 :fn63:bestDif
+jump 510 always 0 0
+set *tmp272 509
+jump 510 always 0 0
+set *tmp272 519
+jump 515 greaterThanEq 0 :fn63:bestDif
 set :fn63:bestDif 0
 set :fn63:best 5
 set :fn63:count 1
 set @counter *tmp272
-jump 506 greaterThan 0 :fn63:bestDif
+jump 518 greaterThan 0 :fn63:bestDif
 op add :fn63:best :fn63:best 5
 op add :fn63:count :fn63:count 1
 set @counter *tmp272
@@ -510,94 +522,94 @@ assertequals 5 *tmp271 "median(5,5,5,5,5,5)"
 set :fn66:bestDif 10000000000
 set :fn66:best null
 set :fn66:count 1
-set *tmp294 515
-set :fn66:i 1
-jump 538 always 0 0
-set *tmp294 518
-set :fn66:i 2
-jump 538 always 0 0
-set *tmp294 521
-set :fn66:i 3
-jump 538 always 0 0
-set *tmp294 524
-set :fn66:i 4
-jump 538 always 0 0
 set *tmp294 527
-set :fn66:i 5
-jump 538 always 0 0
+set :fn66:i 1
+jump 550 always 0 0
 set *tmp294 530
-set :fn66:i 6
-jump 538 always 0 0
+set :fn66:i 2
+jump 550 always 0 0
 set *tmp294 533
-set :fn66:i 7
-jump 538 always 0 0
+set :fn66:i 3
+jump 550 always 0 0
 set *tmp294 536
+set :fn66:i 4
+jump 550 always 0 0
+set *tmp294 539
+set :fn66:i 5
+jump 550 always 0 0
+set *tmp294 542
+set :fn66:i 6
+jump 550 always 0 0
+set *tmp294 545
+set :fn66:i 7
+jump 550 always 0 0
+set *tmp294 548
 set :fn66:i 8
-jump 538 always 0 0
-set *tmp294 603
+jump 550 always 0 0
+set *tmp294 615
 set :fn66:i 9
 set :fn67:lt 0
 set :fn67:gt 0
-jump 543 greaterThanEq 1 :fn66:i
+jump 555 greaterThanEq 1 :fn66:i
 set :fn67:lt 1
-jump 545 always 0 0
-jump 545 lessThanEq 1 :fn66:i
+jump 557 always 0 0
+jump 557 lessThanEq 1 :fn66:i
 set :fn67:gt 1
-jump 548 greaterThanEq 2 :fn66:i
+jump 560 greaterThanEq 2 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 550 always 0 0
-jump 550 lessThanEq 2 :fn66:i
+jump 562 always 0 0
+jump 562 lessThanEq 2 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 553 greaterThanEq 3 :fn66:i
+jump 565 greaterThanEq 3 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 555 always 0 0
-jump 555 lessThanEq 3 :fn66:i
+jump 567 always 0 0
+jump 567 lessThanEq 3 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 558 greaterThanEq 4 :fn66:i
+jump 570 greaterThanEq 4 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 560 always 0 0
-jump 560 lessThanEq 4 :fn66:i
+jump 572 always 0 0
+jump 572 lessThanEq 4 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 563 greaterThanEq 5 :fn66:i
+jump 575 greaterThanEq 5 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 565 always 0 0
-jump 565 lessThanEq 5 :fn66:i
+jump 577 always 0 0
+jump 577 lessThanEq 5 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 568 greaterThanEq 6 :fn66:i
+jump 580 greaterThanEq 6 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 570 always 0 0
-jump 570 lessThanEq 6 :fn66:i
+jump 582 always 0 0
+jump 582 lessThanEq 6 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 573 greaterThanEq 7 :fn66:i
+jump 585 greaterThanEq 7 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 575 always 0 0
-jump 575 lessThanEq 7 :fn66:i
+jump 587 always 0 0
+jump 587 lessThanEq 7 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 578 greaterThanEq 8 :fn66:i
+jump 590 greaterThanEq 8 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 580 always 0 0
-jump 580 lessThanEq 8 :fn66:i
+jump 592 always 0 0
+jump 592 lessThanEq 8 :fn66:i
 op add :fn67:gt :fn67:gt 1
-jump 583 greaterThanEq 9 :fn66:i
+jump 595 greaterThanEq 9 :fn66:i
 op add :fn67:lt :fn67:lt 1
-jump 585 always 0 0
-jump 585 lessThanEq 9 :fn66:i
+jump 597 always 0 0
+jump 597 lessThanEq 9 :fn66:i
 op add :fn67:gt :fn67:gt 1
 op sub *tmp301 :fn67:gt :fn67:lt
 op abs :fn67:dif *tmp301 0
 set *tmp306 false
 op add *tmp303 :fn67:gt :fn67:lt
-jump 591 lessThan *tmp303 8
+jump 603 lessThan *tmp303 8
 op equal *tmp306 :fn67:gt :fn67:lt
-jump 594 equal *tmp306 false
+jump 606 equal *tmp306 false
 set *tmp293 :fn66:i
-jump 604 always 0 0
-jump 599 greaterThanEq :fn67:dif :fn66:bestDif
+jump 616 always 0 0
+jump 611 greaterThanEq :fn67:dif :fn66:bestDif
 set :fn66:bestDif :fn67:dif
 set :fn66:best :fn66:i
 set :fn66:count 1
 set @counter *tmp294
-jump 602 greaterThan :fn67:dif :fn66:bestDif
+jump 614 greaterThan :fn67:dif :fn66:bestDif
 op add :fn66:best :fn66:best :fn66:i
 op add :fn66:count :fn66:count 1
 set @counter *tmp294
@@ -606,94 +618,81 @@ assertequals 5 *tmp293 "median(1,2,3,4,5,6,7,8,9)"
 set :fn69:bestDif 10000000000
 set :fn69:best null
 set :fn69:count 1
-set *tmp316 611
-set :fn69:i 9
-jump 634 always 0 0
-set *tmp316 614
-set :fn69:i 8
-jump 634 always 0 0
-set *tmp316 617
-set :fn69:i 7
-jump 634 always 0 0
-set *tmp316 620
-set :fn69:i 6
-jump 634 always 0 0
 set *tmp316 623
-set :fn69:i 5
-jump 634 always 0 0
+set :fn69:i 9
+jump 646 always 0 0
 set *tmp316 626
-set :fn69:i 4
-jump 634 always 0 0
+set :fn69:i 8
+jump 646 always 0 0
 set *tmp316 629
-set :fn69:i 3
-jump 634 always 0 0
+set :fn69:i 7
+jump 646 always 0 0
 set *tmp316 632
+set :fn69:i 6
+jump 646 always 0 0
+set *tmp316 635
+set :fn69:i 5
+jump 646 always 0 0
+set *tmp316 638
+set :fn69:i 4
+jump 646 always 0 0
+set *tmp316 641
+set :fn69:i 3
+jump 646 always 0 0
+set *tmp316 644
 set :fn69:i 2
-jump 634 always 0 0
-set *tmp316 699
+jump 646 always 0 0
+set *tmp316 698
 set :fn69:i 1
 set :fn70:lt 0
 set :fn70:gt 0
-jump 639 greaterThanEq 9 :fn69:i
-set :fn70:lt 1
-jump 641 always 0 0
-jump 641 lessThanEq 9 :fn69:i
-set :fn70:gt 1
-jump 644 greaterThanEq 8 :fn69:i
+set *tmp318 651
+set :fn70:i 9
+jump 674 always 0 0
+set *tmp318 654
+set :fn70:i 8
+jump 674 always 0 0
+set *tmp318 657
+set :fn70:i 7
+jump 674 always 0 0
+set *tmp318 660
+set :fn70:i 6
+jump 674 always 0 0
+set *tmp318 663
+set :fn70:i 5
+jump 674 always 0 0
+set *tmp318 666
+set :fn70:i 4
+jump 674 always 0 0
+set *tmp318 669
+set :fn70:i 3
+jump 674 always 0 0
+set *tmp318 672
+set :fn70:i 2
+jump 674 always 0 0
+set *tmp318 680
+set :fn70:i 1
+jump 677 greaterThanEq :fn70:i :fn69:i
 op add :fn70:lt :fn70:lt 1
-jump 646 always 0 0
-jump 646 lessThanEq 8 :fn69:i
+set @counter *tmp318
+jump 679 lessThanEq :fn70:i :fn69:i
 op add :fn70:gt :fn70:gt 1
-jump 649 greaterThanEq 7 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 651 always 0 0
-jump 651 lessThanEq 7 :fn69:i
-op add :fn70:gt :fn70:gt 1
-jump 654 greaterThanEq 6 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 656 always 0 0
-jump 656 lessThanEq 6 :fn69:i
-op add :fn70:gt :fn70:gt 1
-jump 659 greaterThanEq 5 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 661 always 0 0
-jump 661 lessThanEq 5 :fn69:i
-op add :fn70:gt :fn70:gt 1
-jump 664 greaterThanEq 4 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 666 always 0 0
-jump 666 lessThanEq 4 :fn69:i
-op add :fn70:gt :fn70:gt 1
-jump 669 greaterThanEq 3 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 671 always 0 0
-jump 671 lessThanEq 3 :fn69:i
-op add :fn70:gt :fn70:gt 1
-jump 674 greaterThanEq 2 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 676 always 0 0
-jump 676 lessThanEq 2 :fn69:i
-op add :fn70:gt :fn70:gt 1
-jump 679 greaterThanEq 1 :fn69:i
-op add :fn70:lt :fn70:lt 1
-jump 681 always 0 0
-jump 681 lessThanEq 1 :fn69:i
-op add :fn70:gt :fn70:gt 1
+set @counter *tmp318
 op sub *tmp323 :fn70:gt :fn70:lt
 op abs :fn70:dif *tmp323 0
 set *tmp328 false
 op add *tmp325 :fn70:gt :fn70:lt
-jump 687 lessThan *tmp325 8
+jump 686 lessThan *tmp325 8
 op equal *tmp328 :fn70:gt :fn70:lt
-jump 690 equal *tmp328 false
+jump 689 equal *tmp328 false
 set *tmp315 :fn69:i
-jump 700 always 0 0
-jump 695 greaterThanEq :fn70:dif :fn69:bestDif
+jump 699 always 0 0
+jump 694 greaterThanEq :fn70:dif :fn69:bestDif
 set :fn69:bestDif :fn70:dif
 set :fn69:best :fn69:i
 set :fn69:count 1
 set @counter *tmp316
-jump 698 greaterThan :fn70:dif :fn69:bestDif
+jump 697 greaterThan :fn70:dif :fn69:bestDif
 op add :fn69:best :fn69:best :fn69:i
 op add :fn69:count :fn69:count 1
 set @counter *tmp316
@@ -702,81 +701,81 @@ assertequals 5 *tmp315 "median(9,8,7,6,5,4,3,2,1)"
 set :fn72:bestDif 10000000000
 set :fn72:best null
 set :fn72:count 1
-set *tmp338 707
+set *tmp338 706
 set :fn72:i 1
-jump 730 always 0 0
-set *tmp338 710
+jump 729 always 0 0
+set *tmp338 709
 set :fn72:i 3
-jump 730 always 0 0
-set *tmp338 713
+jump 729 always 0 0
+set *tmp338 712
 set :fn72:i 5
-jump 730 always 0 0
-set *tmp338 716
+jump 729 always 0 0
+set *tmp338 715
 set :fn72:i 7
-jump 730 always 0 0
-set *tmp338 719
+jump 729 always 0 0
+set *tmp338 718
 set :fn72:i 9
-jump 730 always 0 0
-set *tmp338 722
+jump 729 always 0 0
+set *tmp338 721
 set :fn72:i 2
-jump 730 always 0 0
-set *tmp338 725
+jump 729 always 0 0
+set *tmp338 724
 set :fn72:i 4
-jump 730 always 0 0
-set *tmp338 728
+jump 729 always 0 0
+set *tmp338 727
 set :fn72:i 6
-jump 730 always 0 0
-set *tmp338 782
+jump 729 always 0 0
+set *tmp338 781
 set :fn72:i 8
 set :fn73:lt 0
 set :fn73:gt 0
-set *tmp340 735
+set *tmp340 734
 set :fn73:i 1
-jump 758 always 0 0
-set *tmp340 738
+jump 757 always 0 0
+set *tmp340 737
 set :fn73:i 3
-jump 758 always 0 0
-set *tmp340 741
+jump 757 always 0 0
+set *tmp340 740
 set :fn73:i 5
-jump 758 always 0 0
-set *tmp340 744
+jump 757 always 0 0
+set *tmp340 743
 set :fn73:i 7
-jump 758 always 0 0
-set *tmp340 747
+jump 757 always 0 0
+set *tmp340 746
 set :fn73:i 9
-jump 758 always 0 0
-set *tmp340 750
+jump 757 always 0 0
+set *tmp340 749
 set :fn73:i 2
-jump 758 always 0 0
-set *tmp340 753
+jump 757 always 0 0
+set *tmp340 752
 set :fn73:i 4
-jump 758 always 0 0
-set *tmp340 756
+jump 757 always 0 0
+set *tmp340 755
 set :fn73:i 6
-jump 758 always 0 0
-set *tmp340 764
+jump 757 always 0 0
+set *tmp340 763
 set :fn73:i 8
-jump 761 greaterThanEq :fn73:i :fn72:i
+jump 760 greaterThanEq :fn73:i :fn72:i
 op add :fn73:lt :fn73:lt 1
 set @counter *tmp340
-jump 763 lessThanEq :fn73:i :fn72:i
+jump 762 lessThanEq :fn73:i :fn72:i
 op add :fn73:gt :fn73:gt 1
 set @counter *tmp340
 op sub *tmp345 :fn73:gt :fn73:lt
 op abs :fn73:dif *tmp345 0
 set *tmp350 false
 op add *tmp347 :fn73:gt :fn73:lt
-jump 770 lessThan *tmp347 8
+jump 769 lessThan *tmp347 8
 op equal *tmp350 :fn73:gt :fn73:lt
-jump 773 equal *tmp350 false
+jump 772 equal *tmp350 false
 set *tmp337 :fn72:i
-jump 783 always 0 0
-jump 778 greaterThanEq :fn73:dif :fn72:bestDif
+jump 782 always 0 0
+jump 777 greaterThanEq :fn73:dif :fn72:bestDif
 set :fn72:bestDif :fn73:dif
 set :fn72:best :fn72:i
 set :fn72:count 1
 set @counter *tmp338
-jump 781 greaterThan :fn73:dif :fn72:bestDif
+jump 780 greaterThan :fn73:dif :fn72:bestDif
 op add :fn72:best :fn72:best :fn72:i
 op add :fn72:count :fn72:count 1
 set @counter *tmp338
@@ -785,81 +784,81 @@ assertequals 5 *tmp337 "median(1,3,5,7,9,2,4,6,8)"
 set :fn75:bestDif 10000000000
 set :fn75:best null
 set :fn75:count 1
-set *tmp360 790
+set *tmp360 789
 set :fn75:i 7
-jump 813 always 0 0
-set *tmp360 793
+jump 812 always 0 0
+set *tmp360 792
 set :fn75:i 4
-jump 813 always 0 0
-set *tmp360 796
+jump 812 always 0 0
+set *tmp360 795
 set :fn75:i 2
-jump 813 always 0 0
-set *tmp360 799
+jump 812 always 0 0
+set *tmp360 798
 set :fn75:i 8
-jump 813 always 0 0
-set *tmp360 802
+jump 812 always 0 0
+set *tmp360 801
 set :fn75:i 1
-jump 813 always 0 0
-set *tmp360 805
+jump 812 always 0 0
+set *tmp360 804
 set :fn75:i 5
-jump 813 always 0 0
-set *tmp360 808
+jump 812 always 0 0
+set *tmp360 807
 set :fn75:i 6
-jump 813 always 0 0
-set *tmp360 811
+jump 812 always 0 0
+set *tmp360 810
 set :fn75:i 9
-jump 813 always 0 0
-set *tmp360 865
+jump 812 always 0 0
+set *tmp360 864
 set :fn75:i 3
 set :fn76:lt 0
 set :fn76:gt 0
-set *tmp362 818
+set *tmp362 817
 set :fn76:i 7
-jump 841 always 0 0
-set *tmp362 821
+jump 840 always 0 0
+set *tmp362 820
 set :fn76:i 4
-jump 841 always 0 0
-set *tmp362 824
+jump 840 always 0 0
+set *tmp362 823
 set :fn76:i 2
-jump 841 always 0 0
-set *tmp362 827
+jump 840 always 0 0
+set *tmp362 826
 set :fn76:i 8
-jump 841 always 0 0
-set *tmp362 830
+jump 840 always 0 0
+set *tmp362 829
 set :fn76:i 1
-jump 841 always 0 0
-set *tmp362 833
+jump 840 always 0 0
+set *tmp362 832
 set :fn76:i 5
-jump 841 always 0 0
-set *tmp362 836
+jump 840 always 0 0
+set *tmp362 835
 set :fn76:i 6
-jump 841 always 0 0
-set *tmp362 839
+jump 840 always 0 0
+set *tmp362 838
 set :fn76:i 9
-jump 841 always 0 0
-set *tmp362 847
+jump 840 always 0 0
+set *tmp362 846
 set :fn76:i 3
-jump 844 greaterThanEq :fn76:i :fn75:i
+jump 843 greaterThanEq :fn76:i :fn75:i
 op add :fn76:lt :fn76:lt 1
 set @counter *tmp362
-jump 846 lessThanEq :fn76:i :fn75:i
+jump 845 lessThanEq :fn76:i :fn75:i
 op add :fn76:gt :fn76:gt 1
 set @counter *tmp362
 op sub *tmp367 :fn76:gt :fn76:lt
 op abs :fn76:dif *tmp367 0
 set *tmp372 false
 op add *tmp369 :fn76:gt :fn76:lt
-jump 853 lessThan *tmp369 8
+jump 852 lessThan *tmp369 8
 op equal *tmp372 :fn76:gt :fn76:lt
-jump 856 equal *tmp372 false
+jump 855 equal *tmp372 false
 set *tmp359 :fn75:i
-jump 866 always 0 0
-jump 861 greaterThanEq :fn76:dif :fn75:bestDif
+jump 865 always 0 0
+jump 860 greaterThanEq :fn76:dif :fn75:bestDif
 set :fn75:bestDif :fn76:dif
 set :fn75:best :fn75:i
 set :fn75:count 1
 set @counter *tmp360
-jump 864 greaterThan :fn76:dif :fn75:bestDif
+jump 863 greaterThan :fn76:dif :fn75:bestDif
 op add :fn75:best :fn75:best :fn75:i
 op add :fn75:count :fn75:count 1
 set @counter *tmp360
@@ -868,81 +867,81 @@ assertequals 5 *tmp359 "median(7,4,2,8,1,5,6,9,3)"
 set :fn78:bestDif 10000000000
 set :fn78:best null
 set :fn78:count 1
-set *tmp382 873
+set *tmp382 872
 set :fn78:i 1
-jump 896 always 0 0
-set *tmp382 876
+jump 895 always 0 0
+set *tmp382 875
 set :fn78:i 1
-jump 896 always 0 0
-set *tmp382 879
+jump 895 always 0 0
+set *tmp382 878
 set :fn78:i 1
-jump 896 always 0 0
-set *tmp382 882
+jump 895 always 0 0
+set *tmp382 881
 set :fn78:i 1
-jump 896 always 0 0
-set *tmp382 885
+jump 895 always 0 0
+set *tmp382 884
 set :fn78:i 9
-jump 896 always 0 0
-set *tmp382 888
+jump 895 always 0 0
+set *tmp382 887
 set :fn78:i 9
-jump 896 always 0 0
-set *tmp382 891
+jump 895 always 0 0
+set *tmp382 890
 set :fn78:i 9
-jump 896 always 0 0
-set *tmp382 894
+jump 895 always 0 0
+set *tmp382 893
 set :fn78:i 9
-jump 896 always 0 0
-set *tmp382 948
+jump 895 always 0 0
+set *tmp382 947
 set :fn78:i 5
 set :fn79:lt 0
 set :fn79:gt 0
-set *tmp384 901
+set *tmp384 900
 set :fn79:i 1
-jump 924 always 0 0
-set *tmp384 904
+jump 923 always 0 0
+set *tmp384 903
 set :fn79:i 1
-jump 924 always 0 0
-set *tmp384 907
+jump 923 always 0 0
+set *tmp384 906
 set :fn79:i 1
-jump 924 always 0 0
-set *tmp384 910
+jump 923 always 0 0
+set *tmp384 909
 set :fn79:i 1
-jump 924 always 0 0
-set *tmp384 913
+jump 923 always 0 0
+set *tmp384 912
 set :fn79:i 9
-jump 924 always 0 0
-set *tmp384 916
+jump 923 always 0 0
+set *tmp384 915
 set :fn79:i 9
-jump 924 always 0 0
-set *tmp384 919
+jump 923 always 0 0
+set *tmp384 918
 set :fn79:i 9
-jump 924 always 0 0
-set *tmp384 922
+jump 923 always 0 0
+set *tmp384 921
 set :fn79:i 9
-jump 924 always 0 0
-set *tmp384 930
+jump 923 always 0 0
+set *tmp384 929
 set :fn79:i 5
-jump 927 greaterThanEq :fn79:i :fn78:i
+jump 926 greaterThanEq :fn79:i :fn78:i
 op add :fn79:lt :fn79:lt 1
 set @counter *tmp384
-jump 929 lessThanEq :fn79:i :fn78:i
+jump 928 lessThanEq :fn79:i :fn78:i
 op add :fn79:gt :fn79:gt 1
 set @counter *tmp384
 op sub *tmp389 :fn79:gt :fn79:lt
 op abs :fn79:dif *tmp389 0
 set *tmp394 false
 op add *tmp391 :fn79:gt :fn79:lt
-jump 936 lessThan *tmp391 8
+jump 935 lessThan *tmp391 8
 op equal *tmp394 :fn79:gt :fn79:lt
-jump 939 equal *tmp394 false
+jump 938 equal *tmp394 false
 set *tmp381 :fn78:i
-jump 949 always 0 0
-jump 944 greaterThanEq :fn79:dif :fn78:bestDif
+jump 948 always 0 0
+jump 943 greaterThanEq :fn79:dif :fn78:bestDif
 set :fn78:bestDif :fn79:dif
 set :fn78:best :fn78:i
 set :fn78:count 1
 set @counter *tmp382
-jump 947 greaterThan :fn79:dif :fn78:bestDif
+jump 946 greaterThan :fn79:dif :fn78:bestDif
 op add :fn78:best :fn78:best :fn78:i
 op add :fn78:count :fn78:count 1
 set @counter *tmp382
@@ -950,15 +949,21 @@ op div *tmp381 :fn78:best :fn78:count
 assertequals 5 *tmp381 "median(1,1,1,1,9,9,9,9,5)"
 stop
 end
+set :fn0*retval 0
+jump 956 equal :fn0:x 0
+set :fn0*retval 1
+jump 956 greaterThanEq :fn0:x 0
+set :fn0*retval -1
+set @counter :fn0*retaddr
 op max :fn1:y2 :fn1:x1 :fn1:x2
 op min :fn1:y3 :fn1:x3 :fn1:x4
-jump 958 greaterThan :fn1:y2 :fn1:y3
+jump 963 greaterThan :fn1:y2 :fn1:y3
 op add *tmp410 :fn1:y2 :fn1:y3
 op div :fn1*retval *tmp410 2
 set @counter :fn1*retaddr
 op min :fn1:y1 :fn1:x1 :fn1:x2
 op max :fn1:y4 :fn1:x3 :fn1:x4
-jump 964 lessThan :fn1:y1 :fn1:y4
+jump 969 lessThan :fn1:y1 :fn1:y4
 op add *tmp416 :fn1:y1 :fn1:y4
 op div :fn1*retval *tmp416 2
 set @counter :fn1*retaddr
@@ -971,18 +976,18 @@ op min :fn2:y1 :fn2:x1 :fn2:x2
 op max :fn2:y2 :fn2:x1 :fn2:x2
 op min :fn2:y4 :fn2:x4 :fn2:x5
 op max :fn2:y5 :fn2:x4 :fn2:x5
-jump 978 greaterThanEq :fn2:y4 :fn2:y1
+jump 983 greaterThanEq :fn2:y4 :fn2:y1
 set :fn2:y4 :fn2:y1
 set :fn81:t :fn2:y2
 set :fn2:y2 :fn2:y5
 set :fn2:y5 :fn81:t
-jump 983 lessThanEq :fn2:x3 :fn2:y2
+jump 988 lessThanEq :fn2:x3 :fn2:y2
 op min :fn2*retval :fn2:y2 :fn2:y5
-jump 986 greaterThanEq :fn2:y2 :fn2:y4
+jump 991 greaterThanEq :fn2:y2 :fn2:y4
 op min :fn2*retval :fn2:x3 :fn2:y4
 set @counter :fn2*retaddr
 op min :fn2*retval :fn2:y2 :fn2:y4
-jump 986 lessThanEq :fn2:x3 :fn2:y4
+jump 991 lessThanEq :fn2:x3 :fn2:y4
 op min :fn2*retval :fn2:x3 :fn2:y5
 set @counter :fn2*retaddr
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

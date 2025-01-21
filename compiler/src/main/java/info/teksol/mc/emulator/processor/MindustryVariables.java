@@ -69,7 +69,7 @@ public class MindustryVariables {
 
     public List<MindustryVariable> getAllVariables() {
         return variables.values().stream()
-                .filter(v -> !v.isConstant())
+                .filter(v -> !v.isMlogConstant())
                 .sorted(Comparator.comparing(MindustryVariable::getName))
                 .toList();
     }

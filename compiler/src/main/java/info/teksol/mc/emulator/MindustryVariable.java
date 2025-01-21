@@ -15,7 +15,7 @@ import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_NOT_AN_OBJECT;
 
 public class MindustryVariable implements LogicWritable, LogicReadable {
     private final String name;
-    private final boolean constant;
+    private final boolean mlogConstant;
     private final boolean counter;
 
     // Actual value of the variable. Variables are created as null objects.
@@ -23,10 +23,10 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     private MindustryObject object;
     private double numericValue;
 
-    private MindustryVariable(String name, boolean constant, boolean counter, boolean isObject,
+    private MindustryVariable(String name, boolean mlogConstant, boolean counter, boolean isObject,
             MindustryObject object, double numericValue) {
         this.name = Objects.requireNonNull(name);
-        this.constant = constant;
+        this.mlogConstant = mlogConstant;
         this.counter = counter;
         this.isObject = isObject;
         this.object = object;
@@ -77,8 +77,8 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return name;
     }
 
-    public boolean isConstant() {
-        return constant;
+    public boolean isMlogConstant() {
+        return mlogConstant;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     }
 
     private void verifyModification() {
-        if (constant) {
+        if (mlogConstant) {
             throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot modify a value of '%s'.", name);
         }
     }

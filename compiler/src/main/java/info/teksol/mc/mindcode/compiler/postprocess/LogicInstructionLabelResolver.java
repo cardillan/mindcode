@@ -6,13 +6,14 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SortCategory;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
-// TODO Rename class
+@NullMarked
 public class LogicInstructionLabelResolver {
     private final CompilerProfile profile;
     private final InstructionProcessor instructionProcessor;

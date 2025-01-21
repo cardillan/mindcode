@@ -20,17 +20,19 @@ public class ExpressionEvaluator {
     }
 
     public static void evaluatePackColor(LogicWritable target, LogicReadable r, LogicReadable g, LogicReadable b, LogicReadable a) {
-        double result = Color.toDoubleBits(clamp01(r.getDoubleValue()), clamp01(g.getDoubleValue()), clamp01(b.getDoubleValue()),
-                clamp01(a.getDoubleValue()));
-
-        target.setDoubleValue(result);
+        target.setDoubleValue(Color.toDoubleBitsClamped(
+                clamp01(r.getDoubleValue()),
+                clamp01(g.getDoubleValue()),
+                clamp01(b.getDoubleValue()),
+                clamp01(a.getDoubleValue()))
+        );
     }
 
     public static boolean invalid(double d) {
         return Double.isNaN(d) || Double.isInfinite(d);
     }
 
-    public static float clamp01(double value){
+    public static float clamp01(double value) {
         return Math.max(Math.min((float)value, 1f), 0f);
     }
 
@@ -141,8 +143,6 @@ public class ExpressionEvaluator {
         map.put(Operation.COS,          1);
         map.put(Operation.TAN,          1);
 
-        // TODO: these functions are only available in Mindustry Logic 7
-        // Shouldn't be evaluated when compiling for V6.
         map.put(Operation.ASIN,         1);
         map.put(Operation.ACOS,         1);
         map.put(Operation.ATAN,         1);

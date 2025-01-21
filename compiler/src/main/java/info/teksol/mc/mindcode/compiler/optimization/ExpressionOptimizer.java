@@ -242,10 +242,9 @@ class ExpressionOptimizer extends BaseOptimizer {
             float g = clamp01(((LogicLiteral) ix.getG()).getDoubleValue());
             float b = clamp01(((LogicLiteral) ix.getB()).getDoubleValue());
             float a = clamp01(((LogicLiteral) ix.getA()).getDoubleValue());
-            String literal = Color.toColorLiteral(r, g, b, a);
             LogicColor color = LogicColor.create(SourcePosition.EMPTY,
-                    Color.toDoubleBits(r, g, b, a),
-                    Color.toColorLiteral(r, g, b, a));
+                    Color.toDoubleBitsClamped(r, g, b, a),
+                    Color.toColorLiteralClamped(r, g, b, a));
             logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), color));
         }
     }

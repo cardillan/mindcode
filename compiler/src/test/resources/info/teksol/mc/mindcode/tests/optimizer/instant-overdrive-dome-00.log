@@ -1,15 +1,15 @@
   1428 instructions before optimizations.
     52 instructions eliminated by Temp Variables Elimination.
    262 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
-     3 instructions eliminated by Jump Normalization (3 passes, 5 iterations).
+     6 instructions eliminated by Jump Normalization (3 passes, 5 iterations).
     71 instructions eliminated by Jump Optimization (2 passes, 5 iterations).
-   104 instructions eliminated by Single Step Elimination (4 passes, 9 iterations).
-     2 instructions modified by Expression Optimization (4 iterations).
+   113 instructions eliminated by Single Step Elimination (4 passes, 9 iterations).
+     5 instructions modified by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (4 iterations).
-    93 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
+   105 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      2 instructions added by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
-   133 instructions added by Loop Unrolling (7 iterations).
+   157 instructions added by Loop Unrolling (7 iterations).
      1 loops unrolled by Loop Unrolling.
     17 instructions eliminated by Jump Straightening (5 iterations).
     15 instructions updated by JumpThreading.
@@ -20,17 +20,14 @@
 Pass 1: speed optimization selection (cost limit 207):
   * Replicate loop condition at line 44:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
     Replicate loop condition at line 127:1                       cost     1, benefit       25.0, efficiency       25.0
-  ! Unroll iteration loop at line 177:9                          cost   209, benefit      275.0, efficiency        1.3
+    Unroll iteration loop at line 177:9                          cost   205, benefit      375.0, efficiency        1.8
 
 Pass 1: speed optimization selection (cost limit 206):
   * Replicate loop condition at line 127:1                       cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
-  ! Unroll iteration loop at line 177:9                          cost   209, benefit      275.0, efficiency        1.3
+    Unroll iteration loop at line 177:9                          cost   205, benefit      375.0, efficiency        1.8
 
 Pass 1: speed optimization selection (cost limit 205):
-  ! Unroll iteration loop at line 177:9                          cost   209, benefit      275.0, efficiency        1.3
-
-Pass 2: speed optimization selection (cost limit 235):
-  * Unroll iteration loop at line 177:9                          cost   177, benefit      275.0, efficiency        1.6 (+129 instructions)
+  * Unroll iteration loop at line 177:9                          cost   205, benefit      375.0, efficiency        1.8 (+153 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-166 instructions):
  
@@ -4558,7 +4555,622 @@ Modifications by Replicate loop condition at line 127:1 (+1 instructions):
   1207 label *label135
   1208 end
 
-Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 instructions):
+Modifications by Unroll iteration loop at line 177:9 (+157 instructions):
+ 
+    96 jump *label6 always
+    97 label *label27
+    98 label *label28
+-    * setaddr *tmp33 *label32
+-    * set :fn0:type @flare
+-    * jump *label29 always
+-    * multilabel *label32 marker0
+-    * setaddr *tmp33 *label33
+-    * set :fn0:type @poly
+-    * jump *label29 always
+-    * multilabel *label33 marker0
+-    * setaddr *tmp33 *label34
+-    * set :fn0:type @mega
+-    * jump *label29 always
+-    * multilabel *label34 marker0
+-    * setaddr *tmp33 *label35
+-    * set :fn0:type @mono
+-    * label *label29
+-    * jump *label36 equal :fn0:type UNIT_TYPE
+-    * remark "chooseUnitType: $type"
+-    * set :fn3:needed 0
+-    * set :fn3:occupied 0
+-    * set :fn3:free 0
+-    * ubind :fn0:type
+-    * set :fn3:firstUnit @unit
+-    * jump *label39 equal :fn3:firstUnit null
+-    * set *tmp48 2
+-    * set :fn4:unit @unit
+-    * sensor *tmp45 :fn4:unit @speed
+-    * op div :fn4:travel_time 0 *tmp45
+-    * op greaterThanEq *tmp40 :fn4:travel_time 47
+-    * jump *label41 always
+-    * label *label41
+-    * jump *label43 equal *tmp40 false
+-    * set *tmp48 4
+-    * jump *label43 always
+-    * label *label43
+-    * set :fn3:needed *tmp48
+-    * label *label44
+-    * sensor *tmp49 @unit @controlled
+-    * op equal *tmp50 *tmp49 0
+-    * sensor *tmp51 @unit @controller
+-    * op equal *tmp52 *tmp51 @this
+-    * op or *tmp53 *tmp50 *tmp52
+-    * jump *label47 equal *tmp53 false
+-    * op add :fn3:free :fn3:free 1
+-    * jump *label49 lessThan :fn3:free *tmp48
+-    * set *tmp36 true
+-    * jump *label38 always
+-    * label *label49
+-    * label *label50
+-    * jump *label48 always
+-    * label *label47
+-    * op add :fn3:occupied :fn3:occupied 1
+-    * label *label48
+-    * ubind :fn0:type
+-    * label *label45
+-    * op notEqual *tmp57 @unit :fn3:firstUnit
+-    * sensor *tmp58 :fn3:firstUnit @dead
+-    * op equal *tmp59 *tmp58 0
+-    * op land *tmp60 *tmp57 *tmp59
+-    * jump *label44 notEqual *tmp60 false
+-    * label *label46
+-    * label *label39
+-    * label *label40
+-    * jump *label51 equal true false
+-    * print :fn0:type
+-    * print ":"
+-    * print " occupied: "
+-    * print :fn3:occupied
+-    * print ","
+-    * print " free: "
+-    * print :fn3:free
+-    * jump *label53 lessThanEq :fn3:needed 0
+-    * print ", needed: "
+-    * print :fn3:needed
+-    * label *label53
+-    * label *label54
+-    * print "\n"
+-    * label *label51
+-    * label *label52
+-    * set *tmp36 false
+-    * jump *label38 always
+-    * label *label38
+-    * jump *label55 equal *tmp36 false
+-    * printflush null
+-    * set *tmp3 :fn0:type
+-    * jump *label6 always
+-    * label *label55
+-    * label *label56
+-    * label *label36
+-    * label *label37
+-    * label *label30
+-    * multijump *tmp33 0 0 marker0
+-    * multilabel *label35 marker0
+-    * label *label31
++   99 set :fn0:type @flare
++  100 label *label322
++  101 jump *label341 equal :fn0:type UNIT_TYPE
++  102 remark "chooseUnitType: $type"
++  103 set :fn3:needed 0
++  104 set :fn3:occupied 0
++  105 set :fn3:free 0
++  106 ubind :fn0:type
++  107 set :fn3:firstUnit @unit
++  108 jump *label332 equal :fn3:firstUnit null
++  109 set *tmp48 2
++  110 set :fn4:unit @unit
++  111 sensor *tmp45 :fn4:unit @speed
++  112 op div :fn4:travel_time 0 *tmp45
++  113 op greaterThanEq *tmp40 :fn4:travel_time 47
++  114 jump *label323 always
++  115 label *label323
++  116 jump *label324 equal *tmp40 false
++  117 set *tmp48 4
++  118 jump *label324 always
++  119 label *label324
++  120 set :fn3:needed *tmp48
++  121 label *label325
++  122 sensor *tmp49 @unit @controlled
++  123 op equal *tmp50 *tmp49 0
++  124 sensor *tmp51 @unit @controller
++  125 op equal *tmp52 *tmp51 @this
++  126 op or *tmp53 *tmp50 *tmp52
++  127 jump *label328 equal *tmp53 false
++  128 op add :fn3:free :fn3:free 1
++  129 jump *label326 lessThan :fn3:free *tmp48
++  130 set *tmp36 true
++  131 jump *label338 always
++  132 label *label326
++  133 label *label327
++  134 jump *label329 always
++  135 label *label328
++  136 op add :fn3:occupied :fn3:occupied 1
++  137 label *label329
++  138 ubind :fn0:type
++  139 label *label330
++  140 op notEqual *tmp57 @unit :fn3:firstUnit
++  141 sensor *tmp58 :fn3:firstUnit @dead
++  142 op equal *tmp59 *tmp58 0
++  143 op land *tmp60 *tmp57 *tmp59
++  144 jump *label325 notEqual *tmp60 false
++  145 label *label331
++  146 label *label332
++  147 label *label333
++  148 jump *label336 equal true false
++  149 print :fn0:type
++  150 print ":"
++  151 print " occupied: "
++  152 print :fn3:occupied
++  153 print ","
++  154 print " free: "
++  155 print :fn3:free
++  156 jump *label334 lessThanEq :fn3:needed 0
++  157 print ", needed: "
++  158 print :fn3:needed
++  159 label *label334
++  160 label *label335
++  161 print "\n"
++  162 label *label336
++  163 label *label337
++  164 set *tmp36 false
++  165 jump *label338 always
++  166 label *label338
++  167 jump *label339 equal *tmp36 false
++  168 printflush null
++  169 set *tmp3 :fn0:type
++  170 jump *label6 always
++  171 label *label339
++  172 label *label340
++  173 label *label341
++  174 label *label342
++  175 label *label343
++  176 set :fn0:type @poly
++  177 label *label346
++  178 jump *label365 equal :fn0:type UNIT_TYPE
++  179 remark "chooseUnitType: $type"
++  180 set :fn3:needed 0
++  181 set :fn3:occupied 0
++  182 set :fn3:free 0
++  183 ubind :fn0:type
++  184 set :fn3:firstUnit @unit
++  185 jump *label356 equal :fn3:firstUnit null
++  186 set *tmp48 2
++  187 set :fn4:unit @unit
++  188 sensor *tmp45 :fn4:unit @speed
++  189 op div :fn4:travel_time 0 *tmp45
++  190 op greaterThanEq *tmp40 :fn4:travel_time 47
++  191 jump *label347 always
++  192 label *label347
++  193 jump *label348 equal *tmp40 false
++  194 set *tmp48 4
++  195 jump *label348 always
++  196 label *label348
++  197 set :fn3:needed *tmp48
++  198 label *label349
++  199 sensor *tmp49 @unit @controlled
++  200 op equal *tmp50 *tmp49 0
++  201 sensor *tmp51 @unit @controller
++  202 op equal *tmp52 *tmp51 @this
++  203 op or *tmp53 *tmp50 *tmp52
++  204 jump *label352 equal *tmp53 false
++  205 op add :fn3:free :fn3:free 1
++  206 jump *label350 lessThan :fn3:free *tmp48
++  207 set *tmp36 true
++  208 jump *label362 always
++  209 label *label350
++  210 label *label351
++  211 jump *label353 always
++  212 label *label352
++  213 op add :fn3:occupied :fn3:occupied 1
++  214 label *label353
++  215 ubind :fn0:type
++  216 label *label354
++  217 op notEqual *tmp57 @unit :fn3:firstUnit
++  218 sensor *tmp58 :fn3:firstUnit @dead
++  219 op equal *tmp59 *tmp58 0
++  220 op land *tmp60 *tmp57 *tmp59
++  221 jump *label349 notEqual *tmp60 false
++  222 label *label355
++  223 label *label356
++  224 label *label357
++  225 jump *label360 equal true false
++  226 print :fn0:type
++  227 print ":"
++  228 print " occupied: "
++  229 print :fn3:occupied
++  230 print ","
++  231 print " free: "
++  232 print :fn3:free
++  233 jump *label358 lessThanEq :fn3:needed 0
++  234 print ", needed: "
++  235 print :fn3:needed
++  236 label *label358
++  237 label *label359
++  238 print "\n"
++  239 label *label360
++  240 label *label361
++  241 set *tmp36 false
++  242 jump *label362 always
++  243 label *label362
++  244 jump *label363 equal *tmp36 false
++  245 printflush null
++  246 set *tmp3 :fn0:type
++  247 jump *label6 always
++  248 label *label363
++  249 label *label364
++  250 label *label365
++  251 label *label366
++  252 label *label367
++  253 set :fn0:type @mega
++  254 label *label370
++  255 jump *label389 equal :fn0:type UNIT_TYPE
++  256 remark "chooseUnitType: $type"
++  257 set :fn3:needed 0
++  258 set :fn3:occupied 0
++  259 set :fn3:free 0
++  260 ubind :fn0:type
++  261 set :fn3:firstUnit @unit
++  262 jump *label380 equal :fn3:firstUnit null
++  263 set *tmp48 2
++  264 set :fn4:unit @unit
++  265 sensor *tmp45 :fn4:unit @speed
++  266 op div :fn4:travel_time 0 *tmp45
++  267 op greaterThanEq *tmp40 :fn4:travel_time 47
++  268 jump *label371 always
++  269 label *label371
++  270 jump *label372 equal *tmp40 false
++  271 set *tmp48 4
++  272 jump *label372 always
++  273 label *label372
++  274 set :fn3:needed *tmp48
++  275 label *label373
++  276 sensor *tmp49 @unit @controlled
++  277 op equal *tmp50 *tmp49 0
++  278 sensor *tmp51 @unit @controller
++  279 op equal *tmp52 *tmp51 @this
++  280 op or *tmp53 *tmp50 *tmp52
++  281 jump *label376 equal *tmp53 false
++  282 op add :fn3:free :fn3:free 1
++  283 jump *label374 lessThan :fn3:free *tmp48
++  284 set *tmp36 true
++  285 jump *label386 always
++  286 label *label374
++  287 label *label375
++  288 jump *label377 always
++  289 label *label376
++  290 op add :fn3:occupied :fn3:occupied 1
++  291 label *label377
++  292 ubind :fn0:type
++  293 label *label378
++  294 op notEqual *tmp57 @unit :fn3:firstUnit
++  295 sensor *tmp58 :fn3:firstUnit @dead
++  296 op equal *tmp59 *tmp58 0
++  297 op land *tmp60 *tmp57 *tmp59
++  298 jump *label373 notEqual *tmp60 false
++  299 label *label379
++  300 label *label380
++  301 label *label381
++  302 jump *label384 equal true false
++  303 print :fn0:type
++  304 print ":"
++  305 print " occupied: "
++  306 print :fn3:occupied
++  307 print ","
++  308 print " free: "
++  309 print :fn3:free
++  310 jump *label382 lessThanEq :fn3:needed 0
++  311 print ", needed: "
++  312 print :fn3:needed
++  313 label *label382
++  314 label *label383
++  315 print "\n"
++  316 label *label384
++  317 label *label385
++  318 set *tmp36 false
++  319 jump *label386 always
++  320 label *label386
++  321 jump *label387 equal *tmp36 false
++  322 printflush null
++  323 set *tmp3 :fn0:type
++  324 jump *label6 always
++  325 label *label387
++  326 label *label388
++  327 label *label389
++  328 label *label390
++  329 label *label391
++  330 set :fn0:type @mono
++  331 label *label394
++  332 jump *label413 equal :fn0:type UNIT_TYPE
++  333 remark "chooseUnitType: $type"
++  334 set :fn3:needed 0
++  335 set :fn3:occupied 0
++  336 set :fn3:free 0
++  337 ubind :fn0:type
++  338 set :fn3:firstUnit @unit
++  339 jump *label404 equal :fn3:firstUnit null
++  340 set *tmp48 2
++  341 set :fn4:unit @unit
++  342 sensor *tmp45 :fn4:unit @speed
++  343 op div :fn4:travel_time 0 *tmp45
++  344 op greaterThanEq *tmp40 :fn4:travel_time 47
++  345 jump *label395 always
++  346 label *label395
++  347 jump *label396 equal *tmp40 false
++  348 set *tmp48 4
++  349 jump *label396 always
++  350 label *label396
++  351 set :fn3:needed *tmp48
++  352 label *label397
++  353 sensor *tmp49 @unit @controlled
++  354 op equal *tmp50 *tmp49 0
++  355 sensor *tmp51 @unit @controller
++  356 op equal *tmp52 *tmp51 @this
++  357 op or *tmp53 *tmp50 *tmp52
++  358 jump *label400 equal *tmp53 false
++  359 op add :fn3:free :fn3:free 1
++  360 jump *label398 lessThan :fn3:free *tmp48
++  361 set *tmp36 true
++  362 jump *label410 always
++  363 label *label398
++  364 label *label399
++  365 jump *label401 always
++  366 label *label400
++  367 op add :fn3:occupied :fn3:occupied 1
++  368 label *label401
++  369 ubind :fn0:type
++  370 label *label402
++  371 op notEqual *tmp57 @unit :fn3:firstUnit
++  372 sensor *tmp58 :fn3:firstUnit @dead
++  373 op equal *tmp59 *tmp58 0
++  374 op land *tmp60 *tmp57 *tmp59
++  375 jump *label397 notEqual *tmp60 false
++  376 label *label403
++  377 label *label404
++  378 label *label405
++  379 jump *label408 equal true false
++  380 print :fn0:type
++  381 print ":"
++  382 print " occupied: "
++  383 print :fn3:occupied
++  384 print ","
++  385 print " free: "
++  386 print :fn3:free
++  387 jump *label406 lessThanEq :fn3:needed 0
++  388 print ", needed: "
++  389 print :fn3:needed
++  390 label *label406
++  391 label *label407
++  392 print "\n"
++  393 label *label408
++  394 label *label409
++  395 set *tmp36 false
++  396 jump *label410 always
++  397 label *label410
++  398 jump *label411 equal *tmp36 false
++  399 printflush null
++  400 set *tmp3 :fn0:type
++  401 jump *label6 always
++  402 label *label411
++  403 label *label412
++  404 label *label413
++  405 label *label414
++  406 label *label415
++  407 label *label31
+   408 printflush message1
+   409 label *label8
+   410 jump *label7 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    98 label *label28
+    99 set :fn0:type @flare
+   100 label *label322
+-    * jump *label341 equal :fn0:type UNIT_TYPE
++  101 jump *label341 equal @flare UNIT_TYPE
+   102 remark "chooseUnitType: $type"
+   103 set :fn3:needed 0
+   104 set :fn3:occupied 0
+   105 set :fn3:free 0
+-    * ubind :fn0:type
++  106 ubind @flare
+   107 set :fn3:firstUnit @unit
+   108 jump *label332 equal :fn3:firstUnit null
+   109 set *tmp48 2
+ 
+   135 label *label328
+   136 op add :fn3:occupied :fn3:occupied 1
+   137 label *label329
+-    * ubind :fn0:type
++  138 ubind @flare
+   139 label *label330
+   140 op notEqual *tmp57 @unit :fn3:firstUnit
+   141 sensor *tmp58 :fn3:firstUnit @dead
+ 
+   146 label *label332
+   147 label *label333
+   148 jump *label336 equal true false
+-    * print :fn0:type
++  149 print @flare
+   150 print ":"
+   151 print " occupied: "
+   152 print :fn3:occupied
+ 
+   166 label *label338
+   167 jump *label339 equal *tmp36 false
+   168 printflush null
+-    * set *tmp3 :fn0:type
++  169 set *tmp3 @flare
+   170 jump *label6 always
+   171 label *label339
+   172 label *label340
+ 
+   175 label *label343
+   176 set :fn0:type @poly
+   177 label *label346
+-    * jump *label365 equal :fn0:type UNIT_TYPE
++  178 jump *label365 equal @poly UNIT_TYPE
+   179 remark "chooseUnitType: $type"
+   180 set :fn3:needed 0
+   181 set :fn3:occupied 0
+   182 set :fn3:free 0
+-    * ubind :fn0:type
++  183 ubind @poly
+   184 set :fn3:firstUnit @unit
+   185 jump *label356 equal :fn3:firstUnit null
+   186 set *tmp48 2
+ 
+   212 label *label352
+   213 op add :fn3:occupied :fn3:occupied 1
+   214 label *label353
+-    * ubind :fn0:type
++  215 ubind @poly
+   216 label *label354
+   217 op notEqual *tmp57 @unit :fn3:firstUnit
+   218 sensor *tmp58 :fn3:firstUnit @dead
+ 
+   223 label *label356
+   224 label *label357
+   225 jump *label360 equal true false
+-    * print :fn0:type
++  226 print @poly
+   227 print ":"
+   228 print " occupied: "
+   229 print :fn3:occupied
+ 
+   243 label *label362
+   244 jump *label363 equal *tmp36 false
+   245 printflush null
+-    * set *tmp3 :fn0:type
++  246 set *tmp3 @poly
+   247 jump *label6 always
+   248 label *label363
+   249 label *label364
+ 
+   252 label *label367
+   253 set :fn0:type @mega
+   254 label *label370
+-    * jump *label389 equal :fn0:type UNIT_TYPE
++  255 jump *label389 equal @mega UNIT_TYPE
+   256 remark "chooseUnitType: $type"
+   257 set :fn3:needed 0
+   258 set :fn3:occupied 0
+   259 set :fn3:free 0
+-    * ubind :fn0:type
++  260 ubind @mega
+   261 set :fn3:firstUnit @unit
+   262 jump *label380 equal :fn3:firstUnit null
+   263 set *tmp48 2
+ 
+   289 label *label376
+   290 op add :fn3:occupied :fn3:occupied 1
+   291 label *label377
+-    * ubind :fn0:type
++  292 ubind @mega
+   293 label *label378
+   294 op notEqual *tmp57 @unit :fn3:firstUnit
+   295 sensor *tmp58 :fn3:firstUnit @dead
+ 
+   300 label *label380
+   301 label *label381
+   302 jump *label384 equal true false
+-    * print :fn0:type
++  303 print @mega
+   304 print ":"
+   305 print " occupied: "
+   306 print :fn3:occupied
+ 
+   320 label *label386
+   321 jump *label387 equal *tmp36 false
+   322 printflush null
+-    * set *tmp3 :fn0:type
++  323 set *tmp3 @mega
+   324 jump *label6 always
+   325 label *label387
+   326 label *label388
+ 
+   329 label *label391
+   330 set :fn0:type @mono
+   331 label *label394
+-    * jump *label413 equal :fn0:type UNIT_TYPE
++  332 jump *label413 equal @mono UNIT_TYPE
+   333 remark "chooseUnitType: $type"
+   334 set :fn3:needed 0
+   335 set :fn3:occupied 0
+   336 set :fn3:free 0
+-    * ubind :fn0:type
++  337 ubind @mono
+   338 set :fn3:firstUnit @unit
+   339 jump *label404 equal :fn3:firstUnit null
+   340 set *tmp48 2
+ 
+   366 label *label400
+   367 op add :fn3:occupied :fn3:occupied 1
+   368 label *label401
+-    * ubind :fn0:type
++  369 ubind @mono
+   370 label *label402
+   371 op notEqual *tmp57 @unit :fn3:firstUnit
+   372 sensor *tmp58 :fn3:firstUnit @dead
+ 
+   377 label *label404
+   378 label *label405
+   379 jump *label408 equal true false
+-    * print :fn0:type
++  380 print @mono
+   381 print ":"
+   382 print " occupied: "
+   383 print :fn3:occupied
+ 
+   397 label *label410
+   398 jump *label411 equal *tmp36 false
+   399 printflush null
+-    * set *tmp3 :fn0:type
++  400 set *tmp3 @mono
+   401 jump *label6 always
+   402 label *label411
+   403 label *label412
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
+ 
+    96 jump *label6 always
+    97 label *label27
+    98 label *label28
+-    * set :fn0:type @flare
+    99 label *label322
+   100 jump *label341 equal @flare UNIT_TYPE
+   101 remark "chooseUnitType: $type"
+ 
+   172 label *label341
+   173 label *label342
+   174 label *label343
+-    * set :fn0:type @poly
+   175 label *label346
+   176 jump *label365 equal @poly UNIT_TYPE
+   177 remark "chooseUnitType: $type"
+ 
+   248 label *label365
+   249 label *label366
+   250 label *label367
+-    * set :fn0:type @mega
+   251 label *label370
+   252 jump *label389 equal @mega UNIT_TYPE
+   253 remark "chooseUnitType: $type"
+ 
+   324 label *label389
+   325 label *label390
+   326 label *label391
+-    * set :fn0:type @mono
+   327 label *label394
+   328 jump *label413 equal @mono UNIT_TYPE
+   329 remark "chooseUnitType: $type"
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 instructions):
  
     72 label *label18
     73 label *label11
@@ -4568,24 +5180,48 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 ins
     76 print ":"
     77 print " occupied: "
  
-   157 label *label46
-   158 label *label39
-   159 label *label40
--    * jump *label51 equal true false
-   160 print :fn0:type
-   161 print ":"
-   162 print " occupied: "
+   143 label *label331
+   144 label *label332
+   145 label *label333
+-    * jump *label336 equal true false
+   146 print @flare
+   147 print ":"
+   148 print " occupied: "
  
-  1173 label *label308
-  1174 label *label301
-  1175 label *label302
+   218 label *label355
+   219 label *label356
+   220 label *label357
+-    * jump *label360 equal true false
+   221 print @poly
+   222 print ":"
+   223 print " occupied: "
+ 
+   293 label *label379
+   294 label *label380
+   295 label *label381
+-    * jump *label384 equal true false
+   296 print @mega
+   297 print ":"
+   298 print " occupied: "
+ 
+   368 label *label403
+   369 label *label404
+   370 label *label405
+-    * jump *label408 equal true false
+   371 print @mono
+   372 print ":"
+   373 print " occupied: "
+ 
+  1382 label *label308
+  1383 label *label301
+  1384 label *label302
 -    * jump *label313 equal false false
-+ 1176 jump *label313 always
-  1177 print UNIT_TYPE
-  1178 print ":"
-  1179 print " occupied: "
++ 1385 jump *label313 always
+  1386 print UNIT_TYPE
+  1387 print ":"
+  1388 print " occupied: "
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-18 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-27 instructions):
  
     38 sensor *tmp13 :fn2:unit @speed
     39 op div :fn2:travel_time 0 *tmp13
@@ -4607,117 +5243,177 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     90 jump *label27 equal *tmp4 false
     91 set *tmp3 UNIT_TYPE
  
-   120 sensor *tmp45 :fn4:unit @speed
-   121 op div :fn4:travel_time 0 *tmp45
-   122 op greaterThanEq *tmp40 :fn4:travel_time 47
--    * jump *label41 always
-   123 label *label41
-   124 jump *label43 equal *tmp40 false
-   125 set *tmp48 4
--    * jump *label43 always
-   126 label *label43
-   127 set :fn3:needed *tmp48
-   128 label *label44
+   106 sensor *tmp45 :fn4:unit @speed
+   107 op div :fn4:travel_time 0 *tmp45
+   108 op greaterThanEq *tmp40 :fn4:travel_time 47
+-    * jump *label323 always
+   109 label *label323
+   110 jump *label324 equal *tmp40 false
+   111 set *tmp48 4
+-    * jump *label324 always
+   112 label *label324
+   113 set :fn3:needed *tmp48
+   114 label *label325
  
-   168 label *label51
-   169 label *label52
-   170 set *tmp36 false
--    * jump *label38 always
-   171 label *label38
-   172 jump *label55 equal *tmp36 false
-   173 printflush null
+   154 label *label336
+   155 label *label337
+   156 set *tmp36 false
+-    * jump *label338 always
+   157 label *label338
+   158 jump *label339 equal *tmp36 false
+   159 printflush null
  
-   260 label *label68
-   261 ucontrol flag 1
-   262 set *tmp79 @unit
+   178 sensor *tmp45 :fn4:unit @speed
+   179 op div :fn4:travel_time 0 *tmp45
+   180 op greaterThanEq *tmp40 :fn4:travel_time 47
+-    * jump *label347 always
+   181 label *label347
+   182 jump *label348 equal *tmp40 false
+   183 set *tmp48 4
+-    * jump *label348 always
+   184 label *label348
+   185 set :fn3:needed *tmp48
+   186 label *label349
+ 
+   226 label *label360
+   227 label *label361
+   228 set *tmp36 false
+-    * jump *label362 always
+   229 label *label362
+   230 jump *label363 equal *tmp36 false
+   231 printflush null
+ 
+   250 sensor *tmp45 :fn4:unit @speed
+   251 op div :fn4:travel_time 0 *tmp45
+   252 op greaterThanEq *tmp40 :fn4:travel_time 47
+-    * jump *label371 always
+   253 label *label371
+   254 jump *label372 equal *tmp40 false
+   255 set *tmp48 4
+-    * jump *label372 always
+   256 label *label372
+   257 set :fn3:needed *tmp48
+   258 label *label373
+ 
+   298 label *label384
+   299 label *label385
+   300 set *tmp36 false
+-    * jump *label386 always
+   301 label *label386
+   302 jump *label387 equal *tmp36 false
+   303 printflush null
+ 
+   322 sensor *tmp45 :fn4:unit @speed
+   323 op div :fn4:travel_time 0 *tmp45
+   324 op greaterThanEq *tmp40 :fn4:travel_time 47
+-    * jump *label395 always
+   325 label *label395
+   326 jump *label396 equal *tmp40 false
+   327 set *tmp48 4
+-    * jump *label396 always
+   328 label *label396
+   329 set :fn3:needed *tmp48
+   330 label *label397
+ 
+   370 label *label408
+   371 label *label409
+   372 set *tmp36 false
+-    * jump *label410 always
+   373 label *label410
+   374 jump *label411 equal *tmp36 false
+   375 printflush null
+ 
+   460 label *label68
+   461 ucontrol flag 1
+   462 set *tmp79 @unit
 -    * jump *label67 always
-   263 label *label67
-   264 set .UNIT_S1 *tmp79
-   265 jump *label82 equal .UNIT_P1 null
+   463 label *label67
+   464 set .UNIT_S1 *tmp79
+   465 jump *label82 equal .UNIT_P1 null
  
-   298 label *label81
-   299 ucontrol flag 1
-   300 set *tmp99 @unit
+   498 label *label81
+   499 ucontrol flag 1
+   500 set *tmp99 @unit
 -    * jump *label80 always
-   301 label *label80
-   302 set .UNIT_P1 *tmp99
-   303 sensor *tmp119 *tmp79 @firstItem
+   501 label *label80
+   502 set .UNIT_P1 *tmp99
+   503 sensor *tmp119 *tmp79 @firstItem
  
-   336 sensor *tmp144 .UNIT_S1 @speed
-   337 op div :fn10:travel_time *tmp143 *tmp144
-   338 op greaterThanEq *tmp139 :fn10:travel_time 47
+   536 sensor *tmp144 .UNIT_S1 @speed
+   537 op div :fn10:travel_time *tmp143 *tmp144
+   538 op greaterThanEq *tmp139 :fn10:travel_time 47
 -    * jump *label100 always
-   339 label *label100
-   340 jump *label101 equal *tmp139 false
-   341 jump *label105 equal .UNIT_S2 null
+   539 label *label100
+   540 jump *label101 equal *tmp139 false
+   541 jump *label105 equal .UNIT_S2 null
  
-   374 label *label104
-   375 ucontrol flag 1
-   376 set *tmp148 @unit
+   574 label *label104
+   575 ucontrol flag 1
+   576 set *tmp148 @unit
 -    * jump *label103 always
-   377 label *label103
-   378 set .UNIT_S2 *tmp148
-   379 jump *label118 equal .UNIT_P2 null
+   577 label *label103
+   578 set .UNIT_S2 *tmp148
+   579 jump *label118 equal .UNIT_P2 null
  
-   412 label *label117
-   413 ucontrol flag 1
-   414 set *tmp168 @unit
+   612 label *label117
+   613 ucontrol flag 1
+   614 set *tmp168 @unit
 -    * jump *label116 always
-   415 label *label116
-   416 set .UNIT_P2 *tmp168
-   417 sensor *tmp188 .UNIT_S1 @firstItem
+   615 label *label116
+   616 set .UNIT_P2 *tmp168
+   617 sensor *tmp188 .UNIT_S1 @firstItem
  
-   629 print :fn16:msg
-   630 label *label175
-   631 set *tmp217 @unit
+   829 print :fn16:msg
+   830 label *label175
+   831 set *tmp217 @unit
 -    * jump *label139 always
-   632 label *label139
-   633 set .UNIT_S1 *tmp217
-   634 jump *label176 equal *tmp139 false
+   832 label *label139
+   833 set .UNIT_S1 *tmp217
+   834 jump *label176 equal *tmp139 false
  
-   774 print :fn18:msg
-   775 label *label214
-   776 set *tmp284 @unit
+   974 print :fn18:msg
+   975 label *label214
+   976 set *tmp284 @unit
 -    * jump *label178 always
-   777 label *label178
-   778 set .UNIT_S2 *tmp284
-   779 jump *label215 equal .SUPPLY_S_FIRST false
+   977 label *label178
+   978 set .UNIT_S2 *tmp284
+   979 jump *label215 equal .SUPPLY_S_FIRST false
  
-   944 print :fn21:msg
-   945 label *label256
-   946 set *tmp358 @unit
+  1144 print :fn21:msg
+  1145 label *label256
+  1146 set *tmp358 @unit
 -    * jump *label220 always
-   947 label *label220
-   948 set .UNIT_P1 *tmp358
-   949 jump *label257 equal *tmp139 false
+  1147 label *label220
+  1148 set .UNIT_P1 *tmp358
+  1149 jump *label257 equal *tmp139 false
  
-  1089 print :fn23:msg
-  1090 label *label295
-  1091 set *tmp425 @unit
+  1289 print :fn23:msg
+  1290 label *label295
+  1291 set *tmp425 @unit
 -    * jump *label259 always
-  1092 label *label259
-  1093 set .UNIT_P2 *tmp425
-  1094 jump *label296 equal .SUPPLY_P_FIRST false
+  1292 label *label259
+  1293 set .UNIT_P2 *tmp425
+  1294 jump *label296 equal .SUPPLY_P_FIRST false
  
-  1124 sensor *tmp510 :fn26:unit @speed
-  1125 op div :fn26:travel_time *tmp143 *tmp510
-  1126 op greaterThanEq *tmp505 :fn26:travel_time 47
+  1324 sensor *tmp510 :fn26:unit @speed
+  1325 op div :fn26:travel_time *tmp143 *tmp510
+  1326 op greaterThanEq *tmp505 :fn26:travel_time 47
 -    * jump *label303 always
-  1127 label *label303
-  1128 jump *label305 equal *tmp505 false
-  1129 set *tmp513 4
+  1327 label *label303
+  1328 jump *label305 equal *tmp505 false
+  1329 set *tmp513 4
 -    * jump *label305 always
-  1130 label *label305
-  1131 set :fn25:needed *tmp513
-  1132 label *label306
+  1330 label *label305
+  1331 set :fn25:needed *tmp513
+  1332 label *label306
  
-  1173 label *label313
-  1174 label *label314
-  1175 set *tmp501 false
+  1373 label *label313
+  1374 label *label314
+  1375 set *tmp501 false
 -    * jump *label300 always
-  1176 label *label300
-  1177 jump *label317 equal *tmp501 false
-  1178 end
+  1376 label *label300
+  1377 jump *label317 equal *tmp501 false
+  1378 end
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -4730,14 +5426,41 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
     41 label *label13
     42 jump *label15 equal *tmp8 false
  
-   118 set *tmp48 2
-   119 set :fn4:unit @unit
-   120 sensor *tmp45 :fn4:unit @speed
+   104 set *tmp48 2
+   105 set :fn4:unit @unit
+   106 sensor *tmp45 :fn4:unit @speed
 -    * op div :fn4:travel_time 0 *tmp45
-+  121 set :fn4:travel_time 0
-   122 op greaterThanEq *tmp40 :fn4:travel_time 47
-   123 label *label41
-   124 jump *label43 equal *tmp40 false
++  107 set :fn4:travel_time 0
+   108 op greaterThanEq *tmp40 :fn4:travel_time 47
+   109 label *label323
+   110 jump *label324 equal *tmp40 false
+ 
+   176 set *tmp48 2
+   177 set :fn4:unit @unit
+   178 sensor *tmp45 :fn4:unit @speed
+-    * op div :fn4:travel_time 0 *tmp45
++  179 set :fn4:travel_time 0
+   180 op greaterThanEq *tmp40 :fn4:travel_time 47
+   181 label *label347
+   182 jump *label348 equal *tmp40 false
+ 
+   248 set *tmp48 2
+   249 set :fn4:unit @unit
+   250 sensor *tmp45 :fn4:unit @speed
+-    * op div :fn4:travel_time 0 *tmp45
++  251 set :fn4:travel_time 0
+   252 op greaterThanEq *tmp40 :fn4:travel_time 47
+   253 label *label371
+   254 jump *label372 equal *tmp40 false
+ 
+   320 set *tmp48 2
+   321 set :fn4:unit @unit
+   322 sensor *tmp45 :fn4:unit @speed
+-    * op div :fn4:travel_time 0 *tmp45
++  323 set :fn4:travel_time 0
+   324 op greaterThanEq *tmp40 :fn4:travel_time 47
+   325 label *label395
+   326 jump *label396 equal *tmp40 false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
  
@@ -4766,48 +5489,123 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
     56 jump *label10 always
     57 label *label21
  
-   119 set :fn4:unit @unit
-   120 sensor *tmp45 :fn4:unit @speed
-   121 set :fn4:travel_time 0
+   105 set :fn4:unit @unit
+   106 sensor *tmp45 :fn4:unit @speed
+   107 set :fn4:travel_time 0
 -    * op greaterThanEq *tmp40 :fn4:travel_time 47
-+  122 op greaterThanEq *tmp40 0 47
-   123 label *label41
--    * jump *label43 equal *tmp40 false
-+  124 jump *label43 equal false false
-   125 set *tmp48 4
-   126 label *label43
++  108 op greaterThanEq *tmp40 0 47
+   109 label *label323
+-    * jump *label324 equal *tmp40 false
++  110 jump *label324 equal false false
+   111 set *tmp48 4
+   112 label *label324
 -    * set :fn3:needed *tmp48
-+  127 set :fn3:needed 2
-   128 label *label44
-   129 sensor *tmp49 @unit @controlled
-   130 op equal *tmp50 *tmp49 0
++  113 set :fn3:needed 2
+   114 label *label325
+   115 sensor *tmp49 @unit @controlled
+   116 op equal *tmp50 *tmp49 0
  
-   133 op or *tmp53 *tmp50 *tmp52
-   134 jump *label47 equal *tmp53 false
-   135 op add :fn3:free :fn3:free 1
--    * jump *label49 lessThan :fn3:free *tmp48
-+  136 jump *label49 lessThan :fn3:free 2
-   137 set *tmp36 true
-   138 jump *label38 always
-   139 label *label49
+   119 op or *tmp53 *tmp50 *tmp52
+   120 jump *label328 equal *tmp53 false
+   121 op add :fn3:free :fn3:free 1
+-    * jump *label326 lessThan :fn3:free *tmp48
++  122 jump *label326 lessThan :fn3:free 2
+   123 set *tmp36 true
+   124 jump *label338 always
+   125 label *label326
  
-  1113 op greaterThan *tmp498 :unitCheck @time
-  1114 op land *tmp499 *tmp497 *tmp498
-  1115 jump *label298 equal *tmp499 false
+   177 set :fn4:unit @unit
+   178 sensor *tmp45 :fn4:unit @speed
+   179 set :fn4:travel_time 0
+-    * op greaterThanEq *tmp40 :fn4:travel_time 47
++  180 op greaterThanEq *tmp40 0 47
+   181 label *label347
+-    * jump *label348 equal *tmp40 false
++  182 jump *label348 equal false false
+   183 set *tmp48 4
+   184 label *label348
+-    * set :fn3:needed *tmp48
++  185 set :fn3:needed 2
+   186 label *label349
+   187 sensor *tmp49 @unit @controlled
+   188 op equal *tmp50 *tmp49 0
+ 
+   191 op or *tmp53 *tmp50 *tmp52
+   192 jump *label352 equal *tmp53 false
+   193 op add :fn3:free :fn3:free 1
+-    * jump *label350 lessThan :fn3:free *tmp48
++  194 jump *label350 lessThan :fn3:free 2
+   195 set *tmp36 true
+   196 jump *label362 always
+   197 label *label350
+ 
+   249 set :fn4:unit @unit
+   250 sensor *tmp45 :fn4:unit @speed
+   251 set :fn4:travel_time 0
+-    * op greaterThanEq *tmp40 :fn4:travel_time 47
++  252 op greaterThanEq *tmp40 0 47
+   253 label *label371
+-    * jump *label372 equal *tmp40 false
++  254 jump *label372 equal false false
+   255 set *tmp48 4
+   256 label *label372
+-    * set :fn3:needed *tmp48
++  257 set :fn3:needed 2
+   258 label *label373
+   259 sensor *tmp49 @unit @controlled
+   260 op equal *tmp50 *tmp49 0
+ 
+   263 op or *tmp53 *tmp50 *tmp52
+   264 jump *label376 equal *tmp53 false
+   265 op add :fn3:free :fn3:free 1
+-    * jump *label374 lessThan :fn3:free *tmp48
++  266 jump *label374 lessThan :fn3:free 2
+   267 set *tmp36 true
+   268 jump *label386 always
+   269 label *label374
+ 
+   321 set :fn4:unit @unit
+   322 sensor *tmp45 :fn4:unit @speed
+   323 set :fn4:travel_time 0
+-    * op greaterThanEq *tmp40 :fn4:travel_time 47
++  324 op greaterThanEq *tmp40 0 47
+   325 label *label395
+-    * jump *label396 equal *tmp40 false
++  326 jump *label396 equal false false
+   327 set *tmp48 4
+   328 label *label396
+-    * set :fn3:needed *tmp48
++  329 set :fn3:needed 2
+   330 label *label397
+   331 sensor *tmp49 @unit @controlled
+   332 op equal *tmp50 *tmp49 0
+ 
+   335 op or *tmp53 *tmp50 *tmp52
+   336 jump *label400 equal *tmp53 false
+   337 op add :fn3:free :fn3:free 1
+-    * jump *label398 lessThan :fn3:free *tmp48
++  338 jump *label398 lessThan :fn3:free 2
+   339 set *tmp36 true
+   340 jump *label410 always
+   341 label *label398
+ 
+  1313 op greaterThan *tmp498 :unitCheck @time
+  1314 op land *tmp499 *tmp497 *tmp498
+  1315 jump *label298 equal *tmp499 false
 -    * set :fn25:needed 0
-  1116 set :fn25:occupied 0
-  1117 set :fn25:free 0
-  1118 ubind UNIT_TYPE
+  1316 set :fn25:occupied 0
+  1317 set :fn25:free 0
+  1318 ubind UNIT_TYPE
  
-  1127 jump *label305 equal *tmp505 false
-  1128 set *tmp513 4
-  1129 label *label305
+  1327 jump *label305 equal *tmp505 false
+  1328 set *tmp513 4
+  1329 label *label305
 -    * set :fn25:needed *tmp513
-  1130 label *label306
-  1131 sensor *tmp514 @unit @controlled
-  1132 op equal *tmp515 *tmp514 0
+  1330 label *label306
+  1331 sensor *tmp514 @unit @controlled
+  1332 op equal *tmp515 *tmp514 0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-8 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-20 instructions):
  
     33 ubind UNIT_TYPE
     34 set :fn1:firstUnit @unit
@@ -4824,595 +5622,65 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-8
     41 set :fn1:needed 2
     42 label *label16
  
-   111 ubind :fn0:type
-   112 set :fn3:firstUnit @unit
-   113 jump *label39 equal :fn3:firstUnit null
+    97 ubind @flare
+    98 set :fn3:firstUnit @unit
+    99 jump *label332 equal :fn3:firstUnit null
 -    * set *tmp48 2
-   114 set :fn4:unit @unit
-   115 sensor *tmp45 :fn4:unit @speed
+   100 set :fn4:unit @unit
+   101 sensor *tmp45 :fn4:unit @speed
 -    * set :fn4:travel_time 0
 -    * op greaterThanEq *tmp40 0 47
-   116 label *label41
-   117 jump *label43 equal false false
+   102 label *label323
+   103 jump *label324 equal false false
 -    * set *tmp48 4
-   118 label *label43
-   119 set :fn3:needed 2
-   120 label *label44
-
-Modifications by Unroll iteration loop at line 177:9 (+133 instructions):
+   104 label *label324
+   105 set :fn3:needed 2
+   106 label *label325
  
-    88 jump *label6 always
-    89 label *label27
-    90 label *label28
--    * setaddr *tmp33 *label32
--    * set :fn0:type @flare
--    * jump *label29 always
--    * multilabel *label32 marker0
--    * setaddr *tmp33 *label33
--    * set :fn0:type @poly
--    * jump *label29 always
--    * multilabel *label33 marker0
--    * setaddr *tmp33 *label34
--    * set :fn0:type @mega
--    * jump *label29 always
--    * multilabel *label34 marker0
--    * setaddr *tmp33 *label35
--    * set :fn0:type @mono
--    * label *label29
--    * jump *label36 equal :fn0:type UNIT_TYPE
--    * remark "chooseUnitType: $type"
--    * set :fn3:needed 0
--    * set :fn3:occupied 0
--    * set :fn3:free 0
--    * ubind :fn0:type
--    * set :fn3:firstUnit @unit
--    * jump *label39 equal :fn3:firstUnit null
--    * set :fn4:unit @unit
--    * sensor *tmp45 :fn4:unit @speed
--    * label *label41
--    * jump *label43 equal false false
--    * label *label43
--    * set :fn3:needed 2
--    * label *label44
--    * sensor *tmp49 @unit @controlled
--    * op equal *tmp50 *tmp49 0
--    * sensor *tmp51 @unit @controller
--    * op equal *tmp52 *tmp51 @this
--    * op or *tmp53 *tmp50 *tmp52
--    * jump *label47 equal *tmp53 false
--    * op add :fn3:free :fn3:free 1
--    * jump *label49 lessThan :fn3:free 2
--    * set *tmp36 true
--    * jump *label38 always
--    * label *label49
--    * label *label50
--    * jump *label48 always
--    * label *label47
--    * op add :fn3:occupied :fn3:occupied 1
--    * label *label48
--    * ubind :fn0:type
--    * label *label45
--    * op notEqual *tmp57 @unit :fn3:firstUnit
--    * sensor *tmp58 :fn3:firstUnit @dead
--    * op equal *tmp59 *tmp58 0
--    * op land *tmp60 *tmp57 *tmp59
--    * jump *label44 notEqual *tmp60 false
--    * label *label46
--    * label *label39
--    * label *label40
--    * print :fn0:type
--    * print ":"
--    * print " occupied: "
--    * print :fn3:occupied
--    * print ","
--    * print " free: "
--    * print :fn3:free
--    * jump *label53 lessThanEq :fn3:needed 0
--    * print ", needed: "
--    * print :fn3:needed
--    * label *label53
--    * label *label54
--    * print "\n"
--    * label *label51
--    * label *label52
--    * set *tmp36 false
--    * label *label38
--    * jump *label55 equal *tmp36 false
--    * printflush null
--    * set *tmp3 :fn0:type
--    * jump *label6 always
--    * label *label55
--    * label *label56
--    * label *label36
--    * label *label37
--    * label *label30
--    * multijump *tmp33 0 0 marker0
--    * multilabel *label35 marker0
--    * label *label31
-+   91 set :fn0:type @flare
-+   92 label *label322
-+   93 jump *label341 equal :fn0:type UNIT_TYPE
-+   94 remark "chooseUnitType: $type"
-+   95 set :fn3:needed 0
-+   96 set :fn3:occupied 0
-+   97 set :fn3:free 0
-+   98 ubind :fn0:type
-+   99 set :fn3:firstUnit @unit
-+  100 jump *label332 equal :fn3:firstUnit null
-+  101 set :fn4:unit @unit
-+  102 sensor *tmp45 :fn4:unit @speed
-+  103 label *label323
-+  104 jump *label324 equal false false
-+  105 label *label324
-+  106 set :fn3:needed 2
-+  107 label *label325
-+  108 sensor *tmp49 @unit @controlled
-+  109 op equal *tmp50 *tmp49 0
-+  110 sensor *tmp51 @unit @controller
-+  111 op equal *tmp52 *tmp51 @this
-+  112 op or *tmp53 *tmp50 *tmp52
-+  113 jump *label328 equal *tmp53 false
-+  114 op add :fn3:free :fn3:free 1
-+  115 jump *label326 lessThan :fn3:free 2
-+  116 set *tmp36 true
-+  117 jump *label338 always
-+  118 label *label326
-+  119 label *label327
-+  120 jump *label329 always
-+  121 label *label328
-+  122 op add :fn3:occupied :fn3:occupied 1
-+  123 label *label329
-+  124 ubind :fn0:type
-+  125 label *label330
-+  126 op notEqual *tmp57 @unit :fn3:firstUnit
-+  127 sensor *tmp58 :fn3:firstUnit @dead
-+  128 op equal *tmp59 *tmp58 0
-+  129 op land *tmp60 *tmp57 *tmp59
-+  130 jump *label325 notEqual *tmp60 false
-+  131 label *label331
-+  132 label *label332
-+  133 label *label333
-+  134 print :fn0:type
-+  135 print ":"
-+  136 print " occupied: "
-+  137 print :fn3:occupied
-+  138 print ","
-+  139 print " free: "
-+  140 print :fn3:free
-+  141 jump *label334 lessThanEq :fn3:needed 0
-+  142 print ", needed: "
-+  143 print :fn3:needed
-+  144 label *label334
-+  145 label *label335
-+  146 print "\n"
-+  147 label *label336
-+  148 label *label337
-+  149 set *tmp36 false
-+  150 label *label338
-+  151 jump *label339 equal *tmp36 false
-+  152 printflush null
-+  153 set *tmp3 :fn0:type
-+  154 jump *label6 always
-+  155 label *label339
-+  156 label *label340
-+  157 label *label341
-+  158 label *label342
-+  159 label *label343
-+  160 set :fn0:type @poly
-+  161 label *label346
-+  162 jump *label365 equal :fn0:type UNIT_TYPE
-+  163 remark "chooseUnitType: $type"
-+  164 set :fn3:needed 0
-+  165 set :fn3:occupied 0
-+  166 set :fn3:free 0
-+  167 ubind :fn0:type
-+  168 set :fn3:firstUnit @unit
-+  169 jump *label356 equal :fn3:firstUnit null
-+  170 set :fn4:unit @unit
-+  171 sensor *tmp45 :fn4:unit @speed
-+  172 label *label347
-+  173 jump *label348 equal false false
-+  174 label *label348
-+  175 set :fn3:needed 2
-+  176 label *label349
-+  177 sensor *tmp49 @unit @controlled
-+  178 op equal *tmp50 *tmp49 0
-+  179 sensor *tmp51 @unit @controller
-+  180 op equal *tmp52 *tmp51 @this
-+  181 op or *tmp53 *tmp50 *tmp52
-+  182 jump *label352 equal *tmp53 false
-+  183 op add :fn3:free :fn3:free 1
-+  184 jump *label350 lessThan :fn3:free 2
-+  185 set *tmp36 true
-+  186 jump *label362 always
-+  187 label *label350
-+  188 label *label351
-+  189 jump *label353 always
-+  190 label *label352
-+  191 op add :fn3:occupied :fn3:occupied 1
-+  192 label *label353
-+  193 ubind :fn0:type
-+  194 label *label354
-+  195 op notEqual *tmp57 @unit :fn3:firstUnit
-+  196 sensor *tmp58 :fn3:firstUnit @dead
-+  197 op equal *tmp59 *tmp58 0
-+  198 op land *tmp60 *tmp57 *tmp59
-+  199 jump *label349 notEqual *tmp60 false
-+  200 label *label355
-+  201 label *label356
-+  202 label *label357
-+  203 print :fn0:type
-+  204 print ":"
-+  205 print " occupied: "
-+  206 print :fn3:occupied
-+  207 print ","
-+  208 print " free: "
-+  209 print :fn3:free
-+  210 jump *label358 lessThanEq :fn3:needed 0
-+  211 print ", needed: "
-+  212 print :fn3:needed
-+  213 label *label358
-+  214 label *label359
-+  215 print "\n"
-+  216 label *label360
-+  217 label *label361
-+  218 set *tmp36 false
-+  219 label *label362
-+  220 jump *label363 equal *tmp36 false
-+  221 printflush null
-+  222 set *tmp3 :fn0:type
-+  223 jump *label6 always
-+  224 label *label363
-+  225 label *label364
-+  226 label *label365
-+  227 label *label366
-+  228 label *label367
-+  229 set :fn0:type @mega
-+  230 label *label370
-+  231 jump *label389 equal :fn0:type UNIT_TYPE
-+  232 remark "chooseUnitType: $type"
-+  233 set :fn3:needed 0
-+  234 set :fn3:occupied 0
-+  235 set :fn3:free 0
-+  236 ubind :fn0:type
-+  237 set :fn3:firstUnit @unit
-+  238 jump *label380 equal :fn3:firstUnit null
-+  239 set :fn4:unit @unit
-+  240 sensor *tmp45 :fn4:unit @speed
-+  241 label *label371
-+  242 jump *label372 equal false false
-+  243 label *label372
-+  244 set :fn3:needed 2
-+  245 label *label373
-+  246 sensor *tmp49 @unit @controlled
-+  247 op equal *tmp50 *tmp49 0
-+  248 sensor *tmp51 @unit @controller
-+  249 op equal *tmp52 *tmp51 @this
-+  250 op or *tmp53 *tmp50 *tmp52
-+  251 jump *label376 equal *tmp53 false
-+  252 op add :fn3:free :fn3:free 1
-+  253 jump *label374 lessThan :fn3:free 2
-+  254 set *tmp36 true
-+  255 jump *label386 always
-+  256 label *label374
-+  257 label *label375
-+  258 jump *label377 always
-+  259 label *label376
-+  260 op add :fn3:occupied :fn3:occupied 1
-+  261 label *label377
-+  262 ubind :fn0:type
-+  263 label *label378
-+  264 op notEqual *tmp57 @unit :fn3:firstUnit
-+  265 sensor *tmp58 :fn3:firstUnit @dead
-+  266 op equal *tmp59 *tmp58 0
-+  267 op land *tmp60 *tmp57 *tmp59
-+  268 jump *label373 notEqual *tmp60 false
-+  269 label *label379
-+  270 label *label380
-+  271 label *label381
-+  272 print :fn0:type
-+  273 print ":"
-+  274 print " occupied: "
-+  275 print :fn3:occupied
-+  276 print ","
-+  277 print " free: "
-+  278 print :fn3:free
-+  279 jump *label382 lessThanEq :fn3:needed 0
-+  280 print ", needed: "
-+  281 print :fn3:needed
-+  282 label *label382
-+  283 label *label383
-+  284 print "\n"
-+  285 label *label384
-+  286 label *label385
-+  287 set *tmp36 false
-+  288 label *label386
-+  289 jump *label387 equal *tmp36 false
-+  290 printflush null
-+  291 set *tmp3 :fn0:type
-+  292 jump *label6 always
-+  293 label *label387
-+  294 label *label388
-+  295 label *label389
-+  296 label *label390
-+  297 label *label391
-+  298 set :fn0:type @mono
-+  299 label *label394
-+  300 jump *label413 equal :fn0:type UNIT_TYPE
-+  301 remark "chooseUnitType: $type"
-+  302 set :fn3:needed 0
-+  303 set :fn3:occupied 0
-+  304 set :fn3:free 0
-+  305 ubind :fn0:type
-+  306 set :fn3:firstUnit @unit
-+  307 jump *label404 equal :fn3:firstUnit null
-+  308 set :fn4:unit @unit
-+  309 sensor *tmp45 :fn4:unit @speed
-+  310 label *label395
-+  311 jump *label396 equal false false
-+  312 label *label396
-+  313 set :fn3:needed 2
-+  314 label *label397
-+  315 sensor *tmp49 @unit @controlled
-+  316 op equal *tmp50 *tmp49 0
-+  317 sensor *tmp51 @unit @controller
-+  318 op equal *tmp52 *tmp51 @this
-+  319 op or *tmp53 *tmp50 *tmp52
-+  320 jump *label400 equal *tmp53 false
-+  321 op add :fn3:free :fn3:free 1
-+  322 jump *label398 lessThan :fn3:free 2
-+  323 set *tmp36 true
-+  324 jump *label410 always
-+  325 label *label398
-+  326 label *label399
-+  327 jump *label401 always
-+  328 label *label400
-+  329 op add :fn3:occupied :fn3:occupied 1
-+  330 label *label401
-+  331 ubind :fn0:type
-+  332 label *label402
-+  333 op notEqual *tmp57 @unit :fn3:firstUnit
-+  334 sensor *tmp58 :fn3:firstUnit @dead
-+  335 op equal *tmp59 *tmp58 0
-+  336 op land *tmp60 *tmp57 *tmp59
-+  337 jump *label397 notEqual *tmp60 false
-+  338 label *label403
-+  339 label *label404
-+  340 label *label405
-+  341 print :fn0:type
-+  342 print ":"
-+  343 print " occupied: "
-+  344 print :fn3:occupied
-+  345 print ","
-+  346 print " free: "
-+  347 print :fn3:free
-+  348 jump *label406 lessThanEq :fn3:needed 0
-+  349 print ", needed: "
-+  350 print :fn3:needed
-+  351 label *label406
-+  352 label *label407
-+  353 print "\n"
-+  354 label *label408
-+  355 label *label409
-+  356 set *tmp36 false
-+  357 label *label410
-+  358 jump *label411 equal *tmp36 false
-+  359 printflush null
-+  360 set *tmp3 :fn0:type
-+  361 jump *label6 always
-+  362 label *label411
-+  363 label *label412
-+  364 label *label413
-+  365 label *label414
-+  366 label *label415
-+  367 label *label31
-   368 printflush message1
-   369 label *label8
-   370 jump *label7 always
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+   165 ubind @poly
+   166 set :fn3:firstUnit @unit
+   167 jump *label356 equal :fn3:firstUnit null
+-    * set *tmp48 2
+   168 set :fn4:unit @unit
+   169 sensor *tmp45 :fn4:unit @speed
+-    * set :fn4:travel_time 0
+-    * op greaterThanEq *tmp40 0 47
+   170 label *label347
+   171 jump *label348 equal false false
+-    * set *tmp48 4
+   172 label *label348
+   173 set :fn3:needed 2
+   174 label *label349
  
-    90 label *label28
-    91 set :fn0:type @flare
-    92 label *label322
--    * jump *label341 equal :fn0:type UNIT_TYPE
-+   93 jump *label341 equal @flare UNIT_TYPE
-    94 remark "chooseUnitType: $type"
-    95 set :fn3:needed 0
-    96 set :fn3:occupied 0
-    97 set :fn3:free 0
--    * ubind :fn0:type
-+   98 ubind @flare
-    99 set :fn3:firstUnit @unit
-   100 jump *label332 equal :fn3:firstUnit null
-   101 set :fn4:unit @unit
+   233 ubind @mega
+   234 set :fn3:firstUnit @unit
+   235 jump *label380 equal :fn3:firstUnit null
+-    * set *tmp48 2
+   236 set :fn4:unit @unit
+   237 sensor *tmp45 :fn4:unit @speed
+-    * set :fn4:travel_time 0
+-    * op greaterThanEq *tmp40 0 47
+   238 label *label371
+   239 jump *label372 equal false false
+-    * set *tmp48 4
+   240 label *label372
+   241 set :fn3:needed 2
+   242 label *label373
  
-   121 label *label328
-   122 op add :fn3:occupied :fn3:occupied 1
-   123 label *label329
--    * ubind :fn0:type
-+  124 ubind @flare
-   125 label *label330
-   126 op notEqual *tmp57 @unit :fn3:firstUnit
-   127 sensor *tmp58 :fn3:firstUnit @dead
- 
-   131 label *label331
-   132 label *label332
-   133 label *label333
--    * print :fn0:type
-+  134 print @flare
-   135 print ":"
-   136 print " occupied: "
-   137 print :fn3:occupied
- 
-   150 label *label338
-   151 jump *label339 equal *tmp36 false
-   152 printflush null
--    * set *tmp3 :fn0:type
-+  153 set *tmp3 @flare
-   154 jump *label6 always
-   155 label *label339
-   156 label *label340
- 
-   159 label *label343
-   160 set :fn0:type @poly
-   161 label *label346
--    * jump *label365 equal :fn0:type UNIT_TYPE
-+  162 jump *label365 equal @poly UNIT_TYPE
-   163 remark "chooseUnitType: $type"
-   164 set :fn3:needed 0
-   165 set :fn3:occupied 0
-   166 set :fn3:free 0
--    * ubind :fn0:type
-+  167 ubind @poly
-   168 set :fn3:firstUnit @unit
-   169 jump *label356 equal :fn3:firstUnit null
-   170 set :fn4:unit @unit
- 
-   190 label *label352
-   191 op add :fn3:occupied :fn3:occupied 1
-   192 label *label353
--    * ubind :fn0:type
-+  193 ubind @poly
-   194 label *label354
-   195 op notEqual *tmp57 @unit :fn3:firstUnit
-   196 sensor *tmp58 :fn3:firstUnit @dead
- 
-   200 label *label355
-   201 label *label356
-   202 label *label357
--    * print :fn0:type
-+  203 print @poly
-   204 print ":"
-   205 print " occupied: "
-   206 print :fn3:occupied
- 
-   219 label *label362
-   220 jump *label363 equal *tmp36 false
-   221 printflush null
--    * set *tmp3 :fn0:type
-+  222 set *tmp3 @poly
-   223 jump *label6 always
-   224 label *label363
-   225 label *label364
- 
-   228 label *label367
-   229 set :fn0:type @mega
-   230 label *label370
--    * jump *label389 equal :fn0:type UNIT_TYPE
-+  231 jump *label389 equal @mega UNIT_TYPE
-   232 remark "chooseUnitType: $type"
-   233 set :fn3:needed 0
-   234 set :fn3:occupied 0
-   235 set :fn3:free 0
--    * ubind :fn0:type
-+  236 ubind @mega
-   237 set :fn3:firstUnit @unit
-   238 jump *label380 equal :fn3:firstUnit null
-   239 set :fn4:unit @unit
- 
-   259 label *label376
-   260 op add :fn3:occupied :fn3:occupied 1
-   261 label *label377
--    * ubind :fn0:type
-+  262 ubind @mega
-   263 label *label378
-   264 op notEqual *tmp57 @unit :fn3:firstUnit
-   265 sensor *tmp58 :fn3:firstUnit @dead
- 
-   269 label *label379
-   270 label *label380
-   271 label *label381
--    * print :fn0:type
-+  272 print @mega
-   273 print ":"
-   274 print " occupied: "
-   275 print :fn3:occupied
- 
-   288 label *label386
-   289 jump *label387 equal *tmp36 false
-   290 printflush null
--    * set *tmp3 :fn0:type
-+  291 set *tmp3 @mega
-   292 jump *label6 always
-   293 label *label387
-   294 label *label388
- 
-   297 label *label391
-   298 set :fn0:type @mono
-   299 label *label394
--    * jump *label413 equal :fn0:type UNIT_TYPE
-+  300 jump *label413 equal @mono UNIT_TYPE
-   301 remark "chooseUnitType: $type"
-   302 set :fn3:needed 0
-   303 set :fn3:occupied 0
-   304 set :fn3:free 0
--    * ubind :fn0:type
-+  305 ubind @mono
-   306 set :fn3:firstUnit @unit
-   307 jump *label404 equal :fn3:firstUnit null
-   308 set :fn4:unit @unit
- 
-   328 label *label400
-   329 op add :fn3:occupied :fn3:occupied 1
-   330 label *label401
--    * ubind :fn0:type
-+  331 ubind @mono
-   332 label *label402
-   333 op notEqual *tmp57 @unit :fn3:firstUnit
-   334 sensor *tmp58 :fn3:firstUnit @dead
- 
-   338 label *label403
-   339 label *label404
-   340 label *label405
--    * print :fn0:type
-+  341 print @mono
-   342 print ":"
-   343 print " occupied: "
-   344 print :fn3:occupied
- 
-   357 label *label410
-   358 jump *label411 equal *tmp36 false
-   359 printflush null
--    * set *tmp3 :fn0:type
-+  360 set *tmp3 @mono
-   361 jump *label6 always
-   362 label *label411
-   363 label *label412
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4 instructions):
- 
-    88 jump *label6 always
-    89 label *label27
-    90 label *label28
--    * set :fn0:type @flare
-    91 label *label322
-    92 jump *label341 equal @flare UNIT_TYPE
-    93 remark "chooseUnitType: $type"
- 
-   156 label *label341
-   157 label *label342
-   158 label *label343
--    * set :fn0:type @poly
-   159 label *label346
-   160 jump *label365 equal @poly UNIT_TYPE
-   161 remark "chooseUnitType: $type"
- 
-   224 label *label365
-   225 label *label366
-   226 label *label367
--    * set :fn0:type @mega
-   227 label *label370
-   228 jump *label389 equal @mega UNIT_TYPE
-   229 remark "chooseUnitType: $type"
- 
-   292 label *label389
-   293 label *label390
-   294 label *label391
--    * set :fn0:type @mono
-   295 label *label394
-   296 jump *label413 equal @mono UNIT_TYPE
-   297 remark "chooseUnitType: $type"
+   301 ubind @mono
+   302 set :fn3:firstUnit @unit
+   303 jump *label404 equal :fn3:firstUnit null
+-    * set *tmp48 2
+   304 set :fn4:unit @unit
+   305 sensor *tmp45 :fn4:unit @speed
+-    * set :fn4:travel_time 0
+-    * op greaterThanEq *tmp40 0 47
+   306 label *label395
+   307 jump *label396 equal false false
+-    * set *tmp48 4
+   308 label *label396
+   309 set :fn3:needed 2
+   310 label *label397
 
 Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1:
  

@@ -647,12 +647,13 @@ class DataFlowVariableStates {
         private final LogicInstruction instruction;
 
         public VariableValue(LogicVariable variable, LogicValue constantValue) {
-            if (!constantValue.isConstant()) {
-                throw new IllegalArgumentException("Non-constant value " + constantValue);
-            }
             this.variable = Objects.requireNonNull(variable);
             this.constantValue = Objects.requireNonNull(constantValue);
             this.instruction = null;
+
+            if (!constantValue.isConstant()) {
+                throw new IllegalArgumentException("Non-constant value " + constantValue);
+            }
         }
 
         public VariableValue(LogicVariable variable, LogicInstruction instruction) {

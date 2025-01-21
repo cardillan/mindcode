@@ -14,16 +14,16 @@
     39 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 906):
-  * Unroll iteration loop at *blocks:57:9                        cost     0, benefit      350.0, efficiency   Infinity (-10 instructions)
-    Unroll iteration loop at *blocks:66:13                       cost     6, benefit     8750.0, efficiency     1458.3
-    Unroll iteration loop at *blocks:75:9                        cost    21, benefit      350.0, efficiency       16.7
+  * Unroll iteration loop at *blocks:57:9                        cost     0, benefit      975.0, efficiency   Infinity (-10 instructions)
+    Unroll iteration loop at *blocks:66:13                       cost     0, benefit    24375.0, efficiency   Infinity
+    Unroll iteration loop at *blocks:75:9                        cost     0, benefit      975.0, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 916):
-  * Unroll iteration loop at *blocks:66:13                       cost     6, benefit     8750.0, efficiency     1458.3 (-3 instructions)
-    Unroll iteration loop at *blocks:75:9                        cost    21, benefit      350.0, efficiency       16.7
+  * Unroll iteration loop at *blocks:66:13                       cost     0, benefit    24375.0, efficiency   Infinity (-3 instructions)
+    Unroll iteration loop at *blocks:75:9                        cost     0, benefit      975.0, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 919):
-  * Unroll iteration loop at *blocks:75:9                        cost    21, benefit      350.0, efficiency       16.7 (+5 instructions)
+  * Unroll iteration loop at *blocks:75:9                        cost     0, benefit      975.0, efficiency   Infinity (+5 instructions)
 
 Final code before resolving virtual instructions:
 

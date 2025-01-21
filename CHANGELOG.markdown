@@ -13,11 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
 * Fixed compiler errors when placing enhanced comments into loops.
 * Fixed wrong compile-time and emulator evaluation of `asin`, `acos` and `atan` functions ([#209](https://github.com/cardillan/mindcode/issues/209)).
+* Fixed compile-time evaluation potentially processing functions not available in current target. The only affected target was 6, where non-existent functions `asin`, `acos` and `atan` could be compile-time evaluated instead of reported as non-existent.  
+
+### Changed
+
+* More precise calculations of optimization benefits in loop unrolling and call inlining.
 
 ### Miscellaneous
 
 * Renamed virtual instructions to better match their actual use.
-* For-each loop reworked to use MultiJump/MultiLabel instructions instead of (former) goto. Goto was renamed to Return, as it is now used solely for returning from stackless calls. Markers are no longer used with Return to bind it with possible return targets. 
+* For-each loop reworked to use MultiJump/MultiLabel instructions instead of (former) goto. Goto was renamed to Return, as it is now used solely for returning from stackless calls. Markers are no longer used with Return to bind it with possible return targets.
 
 ## 3.0.0-preview1 - 2025-01-17 
 

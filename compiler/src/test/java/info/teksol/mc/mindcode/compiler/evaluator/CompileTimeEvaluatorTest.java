@@ -159,8 +159,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesInvalidStringOperation() {
-        assertGeneratesMessages(
-                expectedMessages().add("Unsupported string expression."),
+        assertGeneratesMessage(
+                "Unsupported string expression.",
                 """
                         a = "A" - "B";
                         print(a);
@@ -170,8 +170,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesPartialStringConcatenation() {
-        assertGeneratesMessages(
-                expectedMessages().add("Unsupported string expression."),
+        assertGeneratesMessage(
+                "Unsupported string expression.",
                 """
                         a = "A" + B;
                         print(a);
@@ -181,8 +181,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesStringFunction() {
-        assertGeneratesMessages(
-                expectedMessages().add("Unsupported string expression."),
+        assertGeneratesMessage(
+                "Unsupported string expression.",
                 """
                         a = max("A", "B");
                         print(a);
@@ -191,9 +191,22 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void refusesAsinAcosAtanInVersion6() {
+        assertGeneratesMessages(expectedMessages()
+                        .add("Unknown function 'asin'.")
+                        .add("Unknown function 'acos'.")
+                        .add("Unknown function 'atan'."),
+                """
+                        #set target = 6;
+                        print(asin(0) + acos(0) + atan(0));
+                        """
+        );
+    }
+
+    @Test
     void refusesPartialStringFunction() {
-        assertGeneratesMessages(
-                expectedMessages().add("Unsupported string expression."),
+        assertGeneratesMessage(
+                "Unsupported string expression.",
                 """
                         a = max("A", 0);
                         print(a);
@@ -203,8 +216,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesUnaryStringFunction() {
-        assertGeneratesMessages(
-                expectedMessages().add("Unsupported string expression."),
+        assertGeneratesMessage(
+                "Unsupported string expression.",
                 """
                         a = not "A";
                         print(a);

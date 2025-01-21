@@ -12,6 +12,8 @@ import org.jspecify.annotations.Nullable;
 /// The ExpressionValue class holds an immutable value that can be passed to expression evaluator.
 /// Only nulls, numeric values and String objects are supported, and strings are contained as a plain
 /// string, not wrapped into `MindustryString` instance.
+///
+/// The class is not used outside the compile time evaluator.
 @NullMarked
 class ExpressionValue implements LogicReadable {
     private final InstructionProcessor processor;

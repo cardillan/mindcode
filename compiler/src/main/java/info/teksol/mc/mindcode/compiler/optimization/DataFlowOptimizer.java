@@ -821,7 +821,6 @@ class DataFlowOptimizer extends BaseOptimizer {
     }
 
     // Try to evaluate the instruction
-    // We're not evaluating PackColor, because the result cannot be converted to an mlog representation.
     private LogicValue evaluateInstruction(LogicInstruction instruction, Map<LogicVariable, LogicValue> valueReplacements) {
         return switch (instruction) {
             case SetInstruction set when set.getValue() instanceof LogicLiteral literal -> literal;

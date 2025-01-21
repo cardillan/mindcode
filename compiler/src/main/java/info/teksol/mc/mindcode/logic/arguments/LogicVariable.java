@@ -106,11 +106,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public boolean canEvaluate() {
-        return true;
-    }
-
-    @Override
     public boolean isConstant() {
         return getType() == ArgumentType.BLOCK;
     }

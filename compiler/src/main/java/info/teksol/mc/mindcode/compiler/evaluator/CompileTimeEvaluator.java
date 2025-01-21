@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -235,6 +236,10 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         }
 
         Operation operation = Operation.fromMindcode(node.getFunctionName());
+        if (operation == null || !processor.isSupported(Opcode.OP, List.of(operation))) {
+            return node;
+        }
+
         LogicOperation eval = ExpressionEvaluator.getOperation(operation);
         int numArgs = ExpressionEvaluator.getNumberOfArguments(operation);
         if (eval != null && numArgs == node.getArguments().size()) {
