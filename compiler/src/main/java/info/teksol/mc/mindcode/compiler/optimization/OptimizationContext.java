@@ -217,7 +217,7 @@ class OptimizationContext {
                 unreachableInstructions.clear(index);
                 LogicInstruction ix = program.get(index);
                 switch (ix.getOpcode()) {
-                    case END, RETURN -> {
+                    case END, RETURN, RETURNREC -> {
                         continue MainLoop;
                     }
                     case JUMP -> {
@@ -237,19 +237,10 @@ class OptimizationContext {
                         heads.offer(findLabelIndex(call.getRetAddr()));
                         continue MainLoop;
                     }
-                    case GOTO -> {
-                         GotoInstruction gotoIx = (GotoInstruction) ix;
+                    case MULTIJUMP -> {
+                        MultiJumpInstruction gotoIx = (MultiJumpInstruction) ix;
                         for (int i = 0; i < program.size(); i++) {
-                            if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(gotoIx.getMarker())) {
-                                heads.offer(i);
-                            }
-                        }
-                        continue MainLoop;
-                    }
-                    case GOTOOFFSET -> {
-                        GotoOffsetInstruction gotoIx = (GotoOffsetInstruction) ix;
-                        for (int i = 0; i < program.size(); i++) {
-                            if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(ix.getMarker())) {
+                            if (program.get(i) instanceof MultiLabelInstruction gli && gli.getMarker().equals(ix.getMarker())) {
                                 heads.offer(i);
                             }
                         }
@@ -440,12 +431,13 @@ class OptimizationContext {
     private void addLabelReferences(LogicInstruction instruction) {
         final Function<LogicLabel, List<LogicInstruction>> mappingFunction = v -> new ArrayList<>();
         switch (instruction) {
-            case JumpInstruction ix         -> labelReferences.computeIfAbsent(ix.getTarget(), mappingFunction).add(ix);
-            case SetAddressInstruction ix   -> labelReferences.computeIfAbsent(ix.getLabel(), mappingFunction).add(ix);
-            case GotoInstruction ix         -> labelReferences.computeIfAbsent(ix.getMarker(), mappingFunction).add(ix);
-            case CallInstruction ix         -> labelReferences.computeIfAbsent(ix.getCallAddr(), mappingFunction).add(ix);
-            case GotoOffsetInstruction ix -> {
-                labelReferences.computeIfAbsent(ix.getTarget(), mappingFunction).add(ix);
+            case JumpInstruction ix       -> labelReferences.computeIfAbsent(ix.getTarget(), mappingFunction).add(ix);
+            case SetAddressInstruction ix -> labelReferences.computeIfAbsent(ix.getLabel(), mappingFunction).add(ix);
+            case CallInstruction ix       -> labelReferences.computeIfAbsent(ix.getCallAddr(), mappingFunction).add(ix);
+            case MultiJumpInstruction ix  -> {
+                if (ix.getTarget() instanceof LogicLabel label) {
+                    labelReferences.computeIfAbsent(label, mappingFunction).add(ix);
+                }
                 labelReferences.computeIfAbsent(ix.getMarker(), mappingFunction).add(ix);
             }
             case CallRecInstruction ix -> {
@@ -458,12 +450,13 @@ class OptimizationContext {
 
     private void removeLabelReferences(LogicInstruction instruction) {
         switch (instruction) {
-            case JumpInstruction ix         -> clearReferences(ix.getTarget(), ix);
-            case SetAddressInstruction ix   -> clearReferences(ix.getLabel(), ix);
-            case GotoInstruction ix         -> clearReferences(ix.getMarker(), ix);
-            case CallInstruction ix         -> clearReferences(ix.getCallAddr(), ix);
-            case GotoOffsetInstruction ix -> {
-                clearReferences(ix.getTarget(), ix);
+            case JumpInstruction ix       -> clearReferences(ix.getTarget(), ix);
+            case SetAddressInstruction ix -> clearReferences(ix.getLabel(), ix);
+            case CallInstruction ix       -> clearReferences(ix.getCallAddr(), ix);
+            case MultiJumpInstruction ix  -> {
+                if (ix.getTarget() instanceof LogicLabel label) {
+                    clearReferences(label, ix);
+                }
                 clearReferences(ix.getMarker(), ix);
             }
             case CallRecInstruction ix -> {
@@ -483,9 +476,9 @@ class OptimizationContext {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 switch (it.next()) {
-                    case LabelInstruction l     when hasNoReferences(l.getLabel()) -> it.remove();
-                    case GotoLabelInstruction g when hasNoReferences(g.getLabel()) && hasNoReferences(g.getMarker()) -> it.remove();
-                    case NoOpInstruction noop   -> it.remove();
+                    case LabelInstruction l      when hasNoReferences(l.getLabel()) -> it.remove();
+                    case MultiLabelInstruction g when hasNoReferences(g.getLabel()) && hasNoReferences(g.getMarker()) -> it.remove();
+                    case NoOpInstruction noop -> it.remove();
                     default -> { }
                 }
             }
@@ -908,12 +901,12 @@ class OptimizationContext {
 
         // No end/return instructions
         // All jump/goto instructions from this context must target only local labels
-        return codeBlock.stream()
-                .noneMatch(ix -> ix instanceof ReturnInstruction ||
-                        ix instanceof EndInstruction && !ix.getAstContext().matches(AstSubcontextType.END))
+        return codeBlock.stream().noneMatch(ix -> ix instanceof ReturnRecInstruction
+                    || ix instanceof ReturnInstruction
+                    || ix instanceof EndInstruction && !ix.getAstContext().matches(AstSubcontextType.END))
                 && codeBlock.stream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction || ix instanceof GotoLabelInstruction)
-                .allMatch(ix -> getPossibleTargetLabels(ix).allMatch(localLabels::contains));
+                    .filter(ix -> ix instanceof JumpInstruction || ix instanceof ReturnInstruction || ix instanceof MultiLabelInstruction)
+                    .allMatch(ix -> getPossibleTargetLabels(ix).allMatch(localLabels::contains));
     }
 
     /**
@@ -930,17 +923,16 @@ class OptimizationContext {
     private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
         return switch (instruction) {
             case JumpInstruction ix         -> Stream.of(ix.getTarget());
-            case GotoInstruction ix         -> markedLabels(ix);
-            case GotoOffsetInstruction ix   -> markedLabels(ix);
+            case MultiJumpInstruction ix    -> markedLabels(ix);
             default                         -> Stream.empty();
         };
     }
 
     private Stream<LogicLabel> markedLabels(LogicInstruction instruction) {
         return instructionStream()
-                .filter(in -> in instanceof GotoLabelInstruction gl && gl.matches(instruction))
-                .map(GotoLabelInstruction.class::cast)
-                .map(GotoLabelInstruction::getLabel);
+                .filter(in -> in instanceof MultiLabelInstruction gl && gl.matches(instruction))
+                .map(MultiLabelInstruction.class::cast)
+                .map(MultiLabelInstruction::getLabel);
     }
     //</editor-fold>
 
@@ -1725,13 +1717,9 @@ class OptimizationContext {
                                     .map(LabeledInstruction.class::cast)
                                     .map(LabeledInstruction::getLabel),
                             stream()
-                                    .filter(GotoLabelInstruction.class::isInstance)
-                                    .map(GotoLabelInstruction.class::cast)
-                                    .map(GotoLabelInstruction::getMarker)
-                                    // TODO STACKLESS_CALL We no longer need to track relationship between return from the stackless call and callee
-                                    //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
-                                    //      Then remove the exception for functionPrefix
-                                    .filter(l -> !l.toMlog().startsWith(instructionProcessor.getFunctionPrefix()))
+                                    .filter(MultiLabelInstruction.class::isInstance)
+                                    .map(MultiLabelInstruction.class::cast)
+                                    .map(MultiLabelInstruction::getMarker)
                                     .distinct()
                     )
                     .collect(Collectors.toMap(l -> l, l -> instructionProcessor.nextLabel()));

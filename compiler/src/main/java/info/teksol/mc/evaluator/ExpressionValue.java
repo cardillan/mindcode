@@ -20,7 +20,7 @@ public class ExpressionValue implements LogicWritable {
 
     @Override
     public void setDoubleValue(double value) {
-        if (invalid(value)) {
+        if (ExpressionEvaluator.invalid(value)) {
             literal = LogicNull.NULL;
         } else {
             Optional<String> strValue = instructionProcessor.mlogFormat(SourcePosition.EMPTY, value, false);
@@ -40,9 +40,5 @@ public class ExpressionValue implements LogicWritable {
 
     public LogicLiteral getLiteral() {
         return literal;
-    }
-
-    public static boolean invalid(double d) {
-        return Double.isNaN(d) || Double.isInfinite(d);
     }
 }

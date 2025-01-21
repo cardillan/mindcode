@@ -10,8 +10,7 @@ import info.teksol.mc.profile.SortCategory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.OP;
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.PACKCOLOR;
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 // TODO Rename class
 public class LogicInstructionLabelResolver {
@@ -207,14 +206,18 @@ public class LogicInstructionLabelResolver {
         final List<LogicInstruction> result = new ArrayList<>();
 
         for (final LogicInstruction instruction : program) {
-            if (instruction instanceof GotoOffsetInstruction ix) {
-                if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
+            if (instruction instanceof MultiJumpInstruction ix) {
+                if (ix.getTarget() instanceof LogicVariable var) {
+                    LogicInstruction newInstruction = instructionProcessor.createInstruction(ix.getAstContext(),
+                            SET, LogicBuiltIn.COUNTER, var);
+                    result.add(newInstruction);
+                } else if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
                     int offset = label.getAddress() - ix.getOffset().getIntValue();
                     LogicInstruction newInstruction = instructionProcessor.createInstruction(ix.getAstContext(),
                             OP, Operation.ADD, LogicBuiltIn.COUNTER, ix.getValue(), LogicNumber.create(offset));
                     result.add(newInstruction);
                 } else {
-                    throw new MindcodeInternalError("GotoOffset target '%s' is not a label.", ix.getTarget());
+                    throw new MindcodeInternalError("MultiJump target '%s' is not a label.", ix.getTarget());
                 }
             } else if (instruction.getArgs().stream().anyMatch(a -> a.getType() == ArgumentType.LABEL)) {
                 List<LogicArgument> newArgs = instruction.getArgs().stream().map(this::resolveLabel).toList();

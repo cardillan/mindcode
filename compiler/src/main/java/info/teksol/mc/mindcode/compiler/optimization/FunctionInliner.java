@@ -7,9 +7,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
-import info.teksol.mc.mindcode.logic.instructions.GotoInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
+import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,7 @@ class FunctionInliner extends BaseOptimizer {
 
         if (index <= 0) {
             return null;
-        } else if (!(body.get(index) instanceof GotoInstruction)) {
+        } else if (!(body.get(index) instanceof ReturnInstruction)) {
             throw new MindcodeInternalError("Unexpected function body structure.");
         }
 

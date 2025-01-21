@@ -14,13 +14,13 @@ Final code before resolving virtual instructions:
     5:  set :fn0:display display1
     6:  setaddr :fn0*retaddr *label6
     7:  call *label0 :fn0*retval
-        gotolabel *label6 :fn0
+        label *label6
     8:  set *tmp0 :fn0*retval
     9:  assertequals 176 *tmp0 "large display size"
    10:  set :fn0:display display5
    11:  setaddr :fn0*retaddr *label7
    12:  call *label0 :fn0*retval
-        gotolabel *label7 :fn0
+        label *label7
    13:  set *tmp1 :fn0*retval
    14:  assertequals 80 *tmp1 "small display size"
    15:  set :x %336699cc
@@ -227,5 +227,5 @@ Final code before resolving virtual instructions:
         label *label63
   159:  set :fn0*retval *tmp28
         label *label61
-  160:  goto :fn0*retaddr :fn0
+  160:  return :fn0*retaddr
   161:  end

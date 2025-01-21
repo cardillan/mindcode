@@ -137,36 +137,36 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         List<InstructionParameterType> params = getParameters(opcode, arguments);
 
         return switch (opcode) {
-            case CALL       -> new CallInstruction(astContext, arguments, params);
-            case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
-            case CONTROL    -> new ControlInstruction(astContext, arguments, params);
-            case DRAW       -> new DrawInstruction(astContext, arguments, params);
-            case DRAWFLUSH  -> new DrawflushInstruction(astContext, arguments, params);
-            case END        -> new EndInstruction(astContext);
-            case FORMAT     -> new FormatInstruction(astContext, arguments, params);
-            case GETLINK    -> new GetlinkInstruction(astContext, arguments, params);
-            case GOTO       -> new GotoInstruction(astContext, arguments, params);
-            case GOTOLABEL  -> new GotoLabelInstruction(astContext, arguments, params);
-            case GOTOOFFSET -> new GotoOffsetInstruction(astContext, arguments, params);
-            case JUMP       -> new JumpInstruction(astContext, arguments, params);
-            case LABEL      -> new LabelInstruction(astContext, arguments, params);
-            case LOOKUP     -> new LookupInstruction(astContext, arguments, params);
-            case NOOP       -> new NoOpInstruction(astContext);
-            case OP         -> new OpInstruction(astContext, arguments, params);
-            case PACKCOLOR  -> new PackColorInstruction(astContext, arguments, params);
-            case POP        -> new PopInstruction(astContext, arguments, params);
-            case PRINT      -> new PrintInstruction(astContext, arguments, params);
-            case PRINTFLUSH -> new PrintflushInstruction(astContext, arguments, params);
-            case PUSH       -> new PushInstruction(astContext, arguments, params);
-            case READ       -> new ReadInstruction(astContext, arguments, params);
-            case REMARK     -> new RemarkInstruction(astContext, arguments, params);
-            case RETURN     -> new ReturnInstruction(astContext, arguments, params);
-            case SENSOR     -> new SensorInstruction(astContext, arguments, params);
-            case SET        -> new SetInstruction(astContext, arguments, params);
-            case SETADDR    -> new SetAddressInstruction(astContext, arguments, params);
-            case STOP       -> new StopInstruction(astContext);
-            case WRITE      -> new WriteInstruction(astContext, arguments, params);
-            default         -> createGenericInstruction(astContext, opcode, arguments, params);
+            case CALL        -> new CallInstruction(astContext, arguments, params);
+            case CALLREC     -> new CallRecInstruction(astContext, arguments, params);
+            case CONTROL     -> new ControlInstruction(astContext, arguments, params);
+            case DRAW        -> new DrawInstruction(astContext, arguments, params);
+            case DRAWFLUSH   -> new DrawflushInstruction(astContext, arguments, params);
+            case END         -> new EndInstruction(astContext);
+            case FORMAT      -> new FormatInstruction(astContext, arguments, params);
+            case GETLINK     -> new GetlinkInstruction(astContext, arguments, params);
+            case JUMP        -> new JumpInstruction(astContext, arguments, params);
+            case LABEL       -> new LabelInstruction(astContext, arguments, params);
+            case LOOKUP      -> new LookupInstruction(astContext, arguments, params);
+            case MULTIJUMP   -> new MultiJumpInstruction(astContext, arguments, params);
+            case MULTILABEL  -> new MultiLabelInstruction(astContext, arguments, params);
+            case NOOP        -> new NoOpInstruction(astContext);
+            case OP          -> new OpInstruction(astContext, arguments, params);
+            case PACKCOLOR   -> new PackColorInstruction(astContext, arguments, params);
+            case POP         -> new PopInstruction(astContext, arguments, params);
+            case PRINT       -> new PrintInstruction(astContext, arguments, params);
+            case PRINTFLUSH  -> new PrintflushInstruction(astContext, arguments, params);
+            case PUSH        -> new PushInstruction(astContext, arguments, params);
+            case READ        -> new ReadInstruction(astContext, arguments, params);
+            case REMARK      -> new RemarkInstruction(astContext, arguments, params);
+            case RETURN      -> new ReturnInstruction(astContext, arguments, params);
+            case RETURNREC   -> new ReturnRecInstruction(astContext, arguments, params);
+            case SENSOR      -> new SensorInstruction(astContext, arguments, params);
+            case SET         -> new SetInstruction(astContext, arguments, params);
+            case SETADDR     -> new SetAddressInstruction(astContext, arguments, params);
+            case STOP        -> new StopInstruction(astContext);
+            case WRITE       -> new WriteInstruction(astContext, arguments, params);
+            default          ->  createGenericInstruction(astContext, opcode, arguments, params);
         };
     }
 
@@ -202,7 +202,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
         switch (instruction) {
             case NoOpInstruction ix -> { }
-            case GotoLabelInstruction ix -> { }
+            case MultiLabelInstruction ix -> { }
             case LabelInstruction ix -> { }
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
@@ -215,9 +215,10 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case CallRecInstruction ix -> {
                 consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                // TODO Replace with consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
             }
-            case ReturnInstruction ix -> {
+            case ReturnRecInstruction ix -> {
                 LogicVariable retAddr = nextTemp();
                 consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
                 consumer.accept(createRead(astContext, retAddr, ix.getStack(), stackPointer()));
@@ -229,11 +230,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case SetAddressInstruction ix -> {
                 consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()));
             }
-            case GotoInstruction ix -> {
+            case ReturnInstruction ix -> {
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
             }
             default -> {
-                // GotoOffsetInstruction is handled by LabelResolver, as the actual label value needs to be known
+                // MultiJumpInstruction is handled by LabelResolver, as the actual label value needs to be known
                 consumer.accept(instruction);
             }
         }

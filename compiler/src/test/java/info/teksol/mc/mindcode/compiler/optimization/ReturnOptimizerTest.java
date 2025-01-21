@@ -51,7 +51,7 @@ class ReturnOptimizerTest extends AbstractOptimizerTest<ReturnOptimizer> {
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1004), "greaterThanEq", ":fn0:n", "2"),
                 createInstruction(SET, ":fn0*retval", ":fn0:n"),
-                createInstruction(RETURN, "cell1"),
+                createInstruction(RETURNREC, "cell1"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(PUSH, "cell1", ":fn0:n"),
                 createInstruction(OP, "sub", ":fn0:n", ":fn0:n", "1"),
@@ -65,7 +65,7 @@ class ReturnOptimizerTest extends AbstractOptimizerTest<ReturnOptimizer> {
                 createInstruction(LABEL, var(1007)),
                 createInstruction(POP, "cell1", var(4)),
                 createInstruction(OP, "add", ":fn0*retval", var(4), ":fn0*retval"),
-                createInstruction(RETURN, "cell1")
+                createInstruction(RETURNREC, "cell1")
         );
     }
 }

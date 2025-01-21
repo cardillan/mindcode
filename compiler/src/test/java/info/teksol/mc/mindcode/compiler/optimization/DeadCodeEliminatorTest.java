@@ -240,19 +240,18 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         foo(2);
                         foo(4);
                         """,
-                createInstruction(SET, "__fn0_n", "2"),
-                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                createInstruction(CALL, var(1000), "__fn0retval"),
-                createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                createInstruction(SET, "__fn0_n", "4"),
-                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
-                createInstruction(CALL, var(1000), "__fn0retval"),
-                createInstruction(GOTOLABEL, var(1002), "__fn0"),
+                createInstruction(SET, ":fn0:n", "2"),
+                createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                createInstruction(CALL, var(1000), ":fn0*retval"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, ":fn0:n", "4"),
+                createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                createInstruction(CALL, var(1000), ":fn0*retval"),
+                createInstruction(LABEL, var(1002)),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, "__fn0_n"),
-                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
-                createInstruction(END)
+                createInstruction(PRINT, ":fn0:n"),
+                createInstruction(RETURN, ":fn0*retaddr")
         );
     }
 

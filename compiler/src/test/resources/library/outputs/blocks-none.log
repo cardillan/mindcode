@@ -12,7 +12,7 @@ Final code before resolving virtual instructions:
     6:  set :fn0:variable :display
     7:  set :fn0:required true
     8:  jump *label5 always 0 0
-        gotolabel *label8 marker0
+        multilabel *label8 marker0
     9:  set :display :fn0:variable
    10:  setaddr *tmp0 *label9
    11:  set :fn0:requested @message
@@ -20,7 +20,7 @@ Final code before resolving virtual instructions:
    13:  set :fn0:variable :message
    14:  set :fn0:required false
    15:  jump *label5 always 0 0
-        gotolabel *label9 marker0
+        multilabel *label9 marker0
    16:  set :message :fn0:variable
    17:  setaddr *tmp0 *label10
    18:  set :fn0:requested @switch
@@ -28,7 +28,7 @@ Final code before resolving virtual instructions:
    20:  set :fn0:variable :switch
    21:  set :fn0:required false
    22:  jump *label5 always 0 0
-        gotolabel *label10 marker0
+        multilabel *label10 marker0
    23:  set :switch :fn0:variable
    24:  setaddr *tmp0 *label11
    25:  set :fn0:requested @memory-bank
@@ -36,7 +36,7 @@ Final code before resolving virtual instructions:
    27:  set :fn0:variable :memory
    28:  set :fn0:required true
    29:  jump *label5 always 0 0
-        gotolabel *label11 marker0
+        multilabel *label11 marker0
    30:  set :memory :fn0:variable
    31:  setaddr *tmp0 *label12
    32:  set :fn0:requested @memory-cell
@@ -46,8 +46,8 @@ Final code before resolving virtual instructions:
         label *label5
    36:  set :fn0:variable null
         label *label6
-   37:  goto *tmp0 marker0
-        gotolabel *label12 marker0
+   37:  multijump *tmp0 0 0 marker0
+        multilabel *label12 marker0
    38:  set :memory :fn0:variable
         label *label7
    39:  print :fn0:title
@@ -68,7 +68,7 @@ Final code before resolving virtual instructions:
    53:  set :fn0:variable :display
    54:  set :fn0:required true
    55:  jump *label16 always 0 0
-        gotolabel *label19 marker1
+        multilabel *label19 marker1
    56:  set :display :fn0:variable
    57:  setaddr *tmp4 *label20
    58:  set :fn0:requested @message
@@ -76,7 +76,7 @@ Final code before resolving virtual instructions:
    60:  set :fn0:variable :message
    61:  set :fn0:required false
    62:  jump *label16 always 0 0
-        gotolabel *label20 marker1
+        multilabel *label20 marker1
    63:  set :message :fn0:variable
    64:  setaddr *tmp4 *label21
    65:  set :fn0:requested @switch
@@ -84,7 +84,7 @@ Final code before resolving virtual instructions:
    67:  set :fn0:variable :switch
    68:  set :fn0:required false
    69:  jump *label16 always 0 0
-        gotolabel *label21 marker1
+        multilabel *label21 marker1
    70:  set :switch :fn0:variable
    71:  setaddr *tmp4 *label22
    72:  set :fn0:requested @memory-bank
@@ -92,7 +92,7 @@ Final code before resolving virtual instructions:
    74:  set :fn0:variable :memory
    75:  set :fn0:required true
    76:  jump *label16 always 0 0
-        gotolabel *label22 marker1
+        multilabel *label22 marker1
    77:  set :memory :fn0:variable
    78:  setaddr *tmp4 *label23
    79:  set :fn0:requested @memory-cell
@@ -117,8 +117,8 @@ Final code before resolving virtual instructions:
    94:  set *tmp6 null
         label *label25
         label *label17
-   95:  goto *tmp4 marker1
-        gotolabel *label23 marker1
+   95:  multijump *tmp4 0 0 marker1
+        multilabel *label23 marker1
    96:  set :memory :fn0:variable
         label *label18
         label *label14
@@ -131,7 +131,7 @@ Final code before resolving virtual instructions:
   102:  set :fn0:variable :display
   103:  set :fn0:required true
   104:  jump *label28 always 0 0
-        gotolabel *label31 marker2
+        multilabel *label31 marker2
   105:  set :display :fn0:variable
   106:  setaddr *tmp9 *label32
   107:  set :fn0:requested @message
@@ -139,7 +139,7 @@ Final code before resolving virtual instructions:
   109:  set :fn0:variable :message
   110:  set :fn0:required false
   111:  jump *label28 always 0 0
-        gotolabel *label32 marker2
+        multilabel *label32 marker2
   112:  set :message :fn0:variable
   113:  setaddr *tmp9 *label33
   114:  set :fn0:requested @switch
@@ -147,7 +147,7 @@ Final code before resolving virtual instructions:
   116:  set :fn0:variable :switch
   117:  set :fn0:required false
   118:  jump *label28 always 0 0
-        gotolabel *label33 marker2
+        multilabel *label33 marker2
   119:  set :switch :fn0:variable
   120:  setaddr *tmp9 *label34
   121:  set :fn0:requested @memory-bank
@@ -155,7 +155,7 @@ Final code before resolving virtual instructions:
   123:  set :fn0:variable :memory
   124:  set :fn0:required true
   125:  jump *label28 always 0 0
-        gotolabel *label34 marker2
+        multilabel *label34 marker2
   126:  set :memory :fn0:variable
   127:  setaddr *tmp9 *label35
   128:  set :fn0:requested @memory-cell
@@ -176,8 +176,8 @@ Final code before resolving virtual instructions:
   141:  set *tmp10 null
         label *label37
         label *label29
-  142:  goto *tmp9 marker2
-        gotolabel *label35 marker2
+  142:  multijump *tmp9 0 0 marker2
+        multilabel *label35 marker2
   143:  set :memory :fn0:variable
         label *label30
   144:  printflush :fn0:message

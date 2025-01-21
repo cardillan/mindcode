@@ -49,7 +49,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(SET, var(2), "__fn0retval"),
                 createInstruction(SET, "__fn0retval", var(2)),
-                createInstruction(RETURN, "bank1"),
+                createInstruction(RETURNREC, "bank1"),
                 createInstruction(END)
         );
     }
@@ -81,7 +81,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(POP, "bank1", "__fn0_x"),
                 createInstruction(SET, "__fn0retval", "__fn0_x"),
-                createInstruction(RETURN, "bank1"),
+                createInstruction(RETURNREC, "bank1"),
                 createInstruction(END)
         );
     }
@@ -123,7 +123,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(POP, "bank1", "__fn0_y"),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(RETURN, "bank1"),
+                createInstruction(RETURNREC, "bank1"),
                 createInstruction(END)
         );
     }
@@ -169,7 +169,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(LABEL, var(1007)),
                 createInstruction(SET, var(3), "__fn0retval"),
                 createInstruction(SET, "__fn0retval", var(3)),
-                createInstruction(RETURN, "bank1"),
+                createInstruction(RETURNREC, "bank1"),
                 createInstruction(END)
         );
     }
@@ -210,7 +210,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(POP, "bank1", "__fn0_x"),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(RETURN, "bank1"),
+                createInstruction(RETURNREC, "bank1"),
                 createInstruction(END)
         );
     }
@@ -257,7 +257,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(RETURN, "bank1"),
+                createInstruction(RETURNREC, "bank1"),
                 createInstruction(END)
         );
     }
@@ -327,7 +327,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(SET, var(3), "null"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(SET, ":fn0*retval", var(3)),
-                createInstruction(RETURN, "bank1")
+                createInstruction(RETURNREC, "bank1")
         );
     }
 }

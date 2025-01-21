@@ -97,7 +97,7 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
     }
 
     @Test
-    void propagatesGoto() {
+    void propagatesReturn() {
         assertCompilesTo("""
                         def foo(n)
                             if n > 10 then
@@ -109,38 +109,37 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                         print(foo(2));
                         print(foo(3));
                         """,
-                createInstruction(SET, "__fn0_n", "2"),
-                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                createInstruction(CALL, var(1000), "__fn0retval"),
-                createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                createInstruction(SET, var(0), "__fn0retval"),
+                createInstruction(SET, ":fn0:n", "2"),
+                createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                createInstruction(CALL, var(1000), ":fn0*retval"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, var(0), ":fn0*retval"),
                 createInstruction(PRINT, var(0)),
-                createInstruction(SET, "__fn0_n", "3"),
-                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
-                createInstruction(CALL, var(1000), "__fn0retval"),
-                createInstruction(GOTOLABEL, var(1002), "__fn0"),
-                createInstruction(SET, var(1), "__fn0retval"),
+                createInstruction(SET, ":fn0:n", "3"),
+                createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                createInstruction(CALL, var(1000), ":fn0*retval"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, var(1), ":fn0*retval"),
                 createInstruction(PRINT, var(1)),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1004), "lessThanEq", "__fn0_n", "10"),
-                createInstruction(SET, "__fn0retval", "2"),
-                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(JUMP, var(1004), "lessThanEq", ":fn0:n", "10"),
+                createInstruction(SET, ":fn0*retval", "2"),
+                createInstruction(RETURN, ":fn0*retaddr"),
                 createInstruction(SET, var(3), "null"),
                 createInstruction(JUMP, var(1005), "always"),
                 createInstruction(LABEL, var(1004)),
-                createInstruction(SET, "__fn0retval", "0"),
-                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(SET, ":fn0*retval", "0"),
+                createInstruction(RETURN, ":fn0*retaddr"),
                 createInstruction(SET, var(3), "null"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(SET, "__fn0retval", var(3)),
-                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
-                createInstruction(END)
+                createInstruction(SET, ":fn0*retval", var(3)),
+                createInstruction(RETURN, ":fn0*retaddr")
         );
     }
 
     @Test
-    void propagatesGotoOnlyToUnconditionalJump() {
+    void propagatesReturnOnlyToUnconditionalJump() {
         assertCompilesTo("""
                         #set optimization = advanced;
                         noinline def foo(x2, x3, x4, x5)
@@ -152,28 +151,28 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                         end;
                         print(foo(2, 3, 4, 5));
                         """,
-                createInstruction(SET, "__fn0_x2", "2"),
-                createInstruction(SET, "__fn0_x3", "3"),
-                createInstruction(SET, "__fn0_x4", "4"),
-                createInstruction(SET, "__fn0_x5", "5"),
-                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                createInstruction(CALL, var(1000), "__fn0retval"),
-                createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(SET, ":fn0:x2", "2"),
+                createInstruction(SET, ":fn0:x3", "3"),
+                createInstruction(SET, ":fn0:x4", "4"),
+                createInstruction(SET, ":fn0:x5", "5"),
+                createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                createInstruction(CALL, var(1000), ":fn0*retval"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, ":fn0*retval"),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1003), "lessThanEq", "__fn0_x3", "__fn0_x2"),
-                createInstruction(OP, "min", "__fn0retval", "__fn0_x2", "__fn0_x5"),
-                createInstruction(JUMP, var(1004), "greaterThanEq", "__fn0_x2", "__fn0_x4"),
-                createInstruction(OP, "min", "__fn0retval", "__fn0_x3", "__fn0_x4"),
-                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(JUMP, var(1003), "lessThanEq", ":fn0:x3", ":fn0:x2"),
+                createInstruction(OP, "min", ":fn0*retval", ":fn0:x2", ":fn0:x5"),
+                createInstruction(JUMP, var(1004), "greaterThanEq", ":fn0:x2", ":fn0:x4"),
+                createInstruction(OP, "min", ":fn0*retval", ":fn0:x3", ":fn0:x4"),
+                createInstruction(RETURN, ":fn0*retaddr"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(OP, "min", "__fn0retval", "__fn0_x2", "__fn0_x4"),
-                createInstruction(JUMP, var(1008), "lessThanEq", "__fn0_x3", "__fn0_x4"),
-                createInstruction(OP, "min", "__fn0retval", "__fn0_x3", "__fn0_x5"),
+                createInstruction(OP, "min", ":fn0*retval", ":fn0:x2", ":fn0:x4"),
+                createInstruction(JUMP, var(1008), "lessThanEq", ":fn0:x3", ":fn0:x4"),
+                createInstruction(OP, "min", ":fn0*retval", ":fn0:x3", ":fn0:x5"),
                 createInstruction(LABEL, var(1008)),
                 createInstruction(LABEL, var(1004)),
-                createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                createInstruction(RETURN, ":fn0*retaddr")
         );
     }
 }

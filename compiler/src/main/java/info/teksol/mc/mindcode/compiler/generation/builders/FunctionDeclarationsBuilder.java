@@ -5,7 +5,6 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
@@ -68,8 +67,8 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
         }
 
-        assembler.createLabel(returnStack.getReturnRecord().label());
-        assembler.createReturn(context.stackTracker().getStackMemory());
+        assembler.createLabel(returnStack.getReturnLabel());
+        assembler.createReturnRec(context.stackTracker().getStackMemory());
     }
 
     private void appendStacklessFunctionDeclaration(MindcodeFunction function) {
@@ -81,11 +80,9 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
         }
 
-        assembler.createLabel(returnStack.getReturnRecord().label());
+        assembler.createLabel(returnStack.getReturnLabel());
 
-        // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
-        //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         String functionPrefix = function.getPrefix();
-        assembler.createGoto(LogicVariable.fnRetAddr(functionPrefix), LogicLabel.symbolic(functionPrefix));
+        assembler.createReturn(LogicVariable.fnRetAddr(functionPrefix));
     }
 }

@@ -89,7 +89,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     19 label *label5
 -    * set :fn0*retval *tmp2
     20 label *label3
-    21 return bank1
+    21 returnrec bank1
     22 end
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
@@ -100,7 +100,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
 -    * jump *label5 always
     18 label *label5
     19 label *label3
-    20 return bank1
+    20 returnrec bank1
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
  
@@ -110,13 +110,13 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-
 -    * set :fn0*retval :fn0*retval
     17 label *label5
     18 label *label3
-    19 return bank1
+    19 returnrec bank1
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
     17 label *label5
     18 label *label3
-    19 return bank1
+    19 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
@@ -131,7 +131,7 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
 -    * pop bank1 :fn0:n
     15 label *label5
     16 label *label3
-    17 return bank1
+    17 returnrec bank1
 
 Final code before resolving virtual instructions:
 
@@ -151,4 +151,4 @@ op sub :fn0:n :fn0:n 1
 callrec bank1 *label0 *label6 :fn0*retval
 label *label6
 label *label5
-return bank1
+returnrec bank1

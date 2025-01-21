@@ -189,7 +189,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 }
 
                 // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
-                // evaluated in the scope containing the node. However, the expression needs to be evaluated
+                // resolved in the scope containing the node. However, the expression needs to be evaluated
                 // in local scope, as all executable code must be placed there.
                 ValueStore value = processInLocalScope( () -> evaluate(specification.getExpression()));
                 // Produces warning when the variable is a linked block

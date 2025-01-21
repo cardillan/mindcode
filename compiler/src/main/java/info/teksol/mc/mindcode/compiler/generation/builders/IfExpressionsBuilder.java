@@ -90,7 +90,6 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
     // Some constructs may produce VOID, but we want if statement branches to default to null,
     // because VOID gets mishandled in optimization
     // TODO Remove after introducing types, as if expressions will get a type, possibly VOID
-    // MUSTDO Raise errors when VOIDs enter actual code, verify results
     private LogicValue handleVoid(LogicValue value) {
         return value == LogicVoid.VOID ? LogicNull.NULL : value;
     }

@@ -164,7 +164,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
 +   39 op idiv :fn0:bitIndex :fn2:i 2
     40 setaddr :fn0*retaddr *label15
     41 call *label0 :fn0*retval
-    42 gotolabel *label15 :fn0
+    42 label *label15
  
     48 label *label16
     49 label *label17
@@ -174,7 +174,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
 +   51 op idiv :fn0:bitIndex :fn2:i 2
     52 setaddr :fn0*retaddr *label18
     53 call *label0 :fn0*retval
-    54 gotolabel *label18 :fn0
+    54 label *label18
  
     74 stop
     75 end
@@ -189,7 +189,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
 -    * set :fn0*retval *tmp24
 +   81 op and :fn0*retval *tmp21 *tmp23
     82 label *label23
-    83 goto :fn0*retaddr :fn0
+    83 return :fn0*retaddr
     84 end
     85 label *label1
 -    * op idiv *tmp25 :fn1:n 2
@@ -197,7 +197,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
 +   86 op idiv :fn0:bitIndex :fn1:n 2
     87 setaddr :fn0*retaddr *label25
     88 call *label0 :fn0*retval
-    89 gotolabel *label25 :fn0
+    89 label *label25
 -    * op equal *tmp26 :fn0*retval false
 -    * set :fn1:result *tmp26
 +   90 op equal :fn1:result :fn0*retval false
@@ -241,7 +241,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
     37 op idiv :fn0:bitIndex :fn2:i 2
     38 setaddr :fn0*retaddr *label15
     39 call *label0 :fn0*retval
-    40 gotolabel *label15 :fn0
+    40 label *label15
     41 set *tmp10 :fn0*retval
 -    * op equal *tmp11 *tmp10 false
 -    * jump *label16 equal *tmp11 false
@@ -251,7 +251,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
     45 label *label16
  
     50 call *label0 :fn0*retval
-    51 gotolabel *label18 :fn0
+    51 label *label18
     52 set *tmp14 :fn0*retval
 -    * op equal *tmp15 *tmp14 false
 -    * jump *label19 equal *tmp15 false
@@ -335,7 +335,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    9 set :fn1:maximum 500
     10 setaddr :fn1*retaddr *label6
     11 call *label1 :fn1*retval
-    12 gotolabel *label6 :fn1
+    12 label *label6
     13 set *tmp4 :fn1*retval
 -    * jump *label7 equal *tmp4 false
 +   14 jump *label7 equal :fn1*retval false
@@ -348,7 +348,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   20 set :fn1:maximum 500
     21 setaddr :fn1*retaddr *label9
     22 call *label1 :fn1*retval
-    23 gotolabel *label9 :fn1
+    23 label *label9
     24 set *tmp6 :fn1*retval
 -    * jump *label10 equal *tmp6 false
 +   25 jump *label10 equal :fn1*retval false
@@ -364,7 +364,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     35 op idiv :fn0:bitIndex :fn2:i 2
     36 setaddr :fn0*retaddr *label15
     37 call *label0 :fn0*retval
-    38 gotolabel *label15 :fn0
+    38 label *label15
     39 set *tmp10 :fn0*retval
 -    * jump *label16 notEqual *tmp10 false
 +   40 jump *label16 notEqual :fn0*retval false
@@ -373,7 +373,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     43 label *label17
  
     47 call *label0 :fn0*retval
-    48 gotolabel *label18 :fn0
+    48 label *label18
     49 set *tmp14 :fn0*retval
 -    * jump *label19 notEqual *tmp14 false
 -    * jump *label21 greaterThan :fn2:i :fn2:maximum
@@ -416,7 +416,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
  
      7 setaddr :fn1*retaddr *label6
      8 call *label1 :fn1*retval
-     9 gotolabel *label6 :fn1
+     9 label *label6
 -    * set *tmp4 :fn1*retval
     10 jump *label7 equal :fn1*retval false
     11 op add :fn2:sum :fn2:sum :fn2:i
@@ -424,7 +424,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
  
     17 setaddr :fn1*retaddr *label9
     18 call *label1 :fn1*retval
-    19 gotolabel *label9 :fn1
+    19 label *label9
 -    * set *tmp6 :fn1*retval
     20 jump *label10 equal :fn1*retval false
     21 op add :fn2:sum :fn2:sum :fn2:i
@@ -432,7 +432,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
  
     31 setaddr :fn0*retaddr *label15
     32 call *label0 :fn0*retval
-    33 gotolabel *label15 :fn0
+    33 label *label15
 -    * set *tmp10 :fn0*retval
     34 jump *label16 notEqual :fn0*retval false
     35 op add :fn2:sum :fn2:sum :fn2:i
@@ -440,7 +440,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
  
     40 setaddr :fn0*retaddr *label18
     41 call *label0 :fn0*retval
-    42 gotolabel *label18 :fn0
+    42 label *label18
 -    * set *tmp14 :fn0*retval
     43 jump *label19 notEqual :fn0*retval false
     44 jump *label21 greaterThan :fn2:i 500
@@ -519,7 +519,7 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
     31 op idiv :fn0:bitIndex :fn2:i 2
 -    * setaddr :fn0*retaddr *label15
 -    * call *label0 :fn0*retval
--    * gotolabel *label15 :fn0
+-    * label *label15
 +   32 label *label35
 +   33 op idiv *tmp20 :fn0:bitIndex 48
 +   34 op mod *tmp22 :fn0:bitIndex 48
@@ -535,7 +535,7 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
     44 op idiv :fn0:bitIndex :fn2:i 2
 -    * setaddr :fn0*retaddr *label18
 -    * call *label0 :fn0*retval
--    * gotolabel *label18 :fn0
+-    * label *label18
 +   45 label *label37
 +   46 op idiv *tmp20 :fn0:bitIndex 48
 +   47 op mod *tmp22 :fn0:bitIndex 48
@@ -557,13 +557,13 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
 -    * read *tmp21 BITMAP *tmp20
 -    * op and :fn0*retval *tmp21 *tmp23
 -    * label *label23
--    * goto :fn0*retaddr :fn0
+-    * return :fn0*retaddr
 -    * end
     67 label *label1
     68 op idiv :fn0:bitIndex :fn1:n 2
 -    * setaddr :fn0*retaddr *label25
 -    * call *label0 :fn0*retval
--    * gotolabel *label25 :fn0
+-    * label *label25
 +   69 label *label39
 +   70 op idiv *tmp20 :fn0:bitIndex 48
 +   71 op mod *tmp22 :fn0:bitIndex 48
@@ -582,7 +582,7 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
      6 set :fn1:maximum 500
 -    * setaddr :fn1*retaddr *label6
 -    * call *label1 :fn1*retval
--    * gotolabel *label6 :fn1
+-    * label *label6
 +    7 label *label41
 +    8 op idiv :fn0:bitIndex :fn1:n 2
 +    9 label *label42
@@ -624,7 +624,7 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
     45 set :fn1:maximum 500
 -    * setaddr :fn1*retaddr *label9
 -    * call *label1 :fn1*retval
--    * gotolabel *label9 :fn1
+-    * label *label9
 +   46 label *label52
 +   47 op idiv :fn0:bitIndex :fn1:n 2
 +   48 label *label53
@@ -696,7 +696,7 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
 -    * label *label27
 -    * set :fn1*retval :fn1:result
 -    * label *label24
--    * goto :fn1*retaddr :fn1
+-    * return :fn1*retaddr
 -    * end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:

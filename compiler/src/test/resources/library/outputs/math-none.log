@@ -64,25 +64,25 @@ Final code before resolving virtual instructions:
    51:  set :fn0:x 0
    52:  setaddr :fn0*retaddr *label12
    53:  call *label0 :fn0*retval
-        gotolabel *label12 :fn0
+        label *label12
    54:  set *tmp27 :fn0*retval
    55:  assertequals 0 *tmp27 "sign(0)"
    56:  set :fn0:x 0.0000001
    57:  setaddr :fn0*retaddr *label13
    58:  call *label0 :fn0*retval
-        gotolabel *label13 :fn0
+        label *label13
    59:  set *tmp28 :fn0*retval
    60:  assertequals 0 *tmp28 "sign(1e-7)"
    61:  set :fn0:x 0.00001
    62:  setaddr :fn0*retaddr *label14
    63:  call *label0 :fn0*retval
-        gotolabel *label14 :fn0
+        label *label14
    64:  set *tmp29 :fn0*retval
    65:  assertequals 1 *tmp29 "sign(1e-5)"
    66:  set :fn0:x -5
    67:  setaddr :fn0*retaddr *label15
    68:  call *label0 :fn0*retval
-        gotolabel *label15 :fn0
+        label *label15
    69:  set *tmp30 :fn0*retval
    70:  assertequals -1 *tmp30 "sign(-5)"
    71:  set :fn12:x 0
@@ -192,14 +192,14 @@ Final code before resolving virtual instructions:
   157:  setaddr *tmp73 *label38
   158:  set :fn30:i 3
   159:  jump *label35 always 0 0
-        gotolabel *label38 marker0
+        multilabel *label38 marker0
   160:  setaddr *tmp73 *label39
   161:  set :fn30:i 4
         label *label35
   162:  op add :fn30:sum :fn30:sum :fn30:i
         label *label36
-  163:  goto *tmp73 marker0
-        gotolabel *label39 marker0
+  163:  multijump *tmp73 0 0 marker0
+        multilabel *label39 marker0
         label *label37
   164:  set *tmp71 :fn30:sum
         label *label34
@@ -215,14 +215,14 @@ Final code before resolving virtual instructions:
   173:  setaddr *tmp77 *label45
   174:  set :fn32:i 3
   175:  jump *label42 always 0 0
-        gotolabel *label45 marker1
+        multilabel *label45 marker1
   176:  setaddr *tmp77 *label46
   177:  set :fn32:i 4
         label *label42
   178:  op add :fn32:sum :fn32:sum :fn32:i
         label *label43
-  179:  goto *tmp77 marker1
-        gotolabel *label46 marker1
+  179:  multijump *tmp77 0 0 marker1
+        multilabel *label46 marker1
         label *label44
   180:  op add *tmp78 2 2
   181:  op div *tmp79 :fn32:sum *tmp78
@@ -332,7 +332,7 @@ Final code before resolving virtual instructions:
   273:  set :fn1:x4 8
   274:  setaddr :fn1*retaddr *label58
   275:  call *label1 :fn1*retval
-        gotolabel *label58 :fn1
+        label *label58
   276:  set *tmp125 :fn1*retval
   277:  assertequals 5 *tmp125 "median(2,4,6,8)"
   278:  set :fn1:x1 8
@@ -341,7 +341,7 @@ Final code before resolving virtual instructions:
   281:  set :fn1:x4 2
   282:  setaddr :fn1*retaddr *label59
   283:  call *label1 :fn1*retval
-        gotolabel *label59 :fn1
+        label *label59
   284:  set *tmp126 :fn1*retval
   285:  assertequals 5 *tmp126 "median(8,6,4,2)"
   286:  set :fn1:x1 4
@@ -350,7 +350,7 @@ Final code before resolving virtual instructions:
   289:  set :fn1:x4 6
   290:  setaddr :fn1*retaddr *label60
   291:  call *label1 :fn1*retval
-        gotolabel *label60 :fn1
+        label *label60
   292:  set *tmp127 :fn1*retval
   293:  assertequals 5 *tmp127 "median(4,8,2,6)"
   294:  set :fn1:x1 2
@@ -359,7 +359,7 @@ Final code before resolving virtual instructions:
   297:  set :fn1:x4 8
   298:  setaddr :fn1*retaddr *label61
   299:  call *label1 :fn1*retval
-        gotolabel *label61 :fn1
+        label *label61
   300:  set *tmp128 :fn1*retval
   301:  assertequals 5 *tmp128 "median(2,6,4,8)"
   302:  set :fn1:x1 6
@@ -368,7 +368,7 @@ Final code before resolving virtual instructions:
   305:  set :fn1:x4 4
   306:  setaddr :fn1*retaddr *label62
   307:  call *label1 :fn1*retval
-        gotolabel *label62 :fn1
+        label *label62
   308:  set *tmp129 :fn1*retval
   309:  assertequals 5 *tmp129 "median(6,2,8,4)"
   310:  set :fn2:x1 1
@@ -378,7 +378,7 @@ Final code before resolving virtual instructions:
   314:  set :fn2:x5 5
   315:  setaddr :fn2*retaddr *label63
   316:  call *label2 :fn2*retval
-        gotolabel *label63 :fn2
+        label *label63
   317:  set *tmp130 :fn2*retval
   318:  assertequals 3 *tmp130 "median(1,2,3,4,5)"
   319:  set :fn2:x1 5
@@ -388,7 +388,7 @@ Final code before resolving virtual instructions:
   323:  set :fn2:x5 1
   324:  setaddr :fn2*retaddr *label64
   325:  call *label2 :fn2*retval
-        gotolabel *label64 :fn2
+        label *label64
   326:  set *tmp131 :fn2*retval
   327:  assertequals 3 *tmp131 "median(5,4,3,2,1)"
   328:  set :fn2:x1 1
@@ -398,7 +398,7 @@ Final code before resolving virtual instructions:
   332:  set :fn2:x5 1
   333:  setaddr :fn2*retaddr *label65
   334:  call *label2 :fn2*retval
-        gotolabel *label65 :fn2
+        label *label65
   335:  set *tmp132 :fn2*retval
   336:  assertequals 1 *tmp132 "median(1,1,1,1,1)"
   337:  set :fn2:x1 1
@@ -408,7 +408,7 @@ Final code before resolving virtual instructions:
   341:  set :fn2:x5 5
   342:  setaddr :fn2*retaddr *label66
   343:  call *label2 :fn2*retval
-        gotolabel *label66 :fn2
+        label *label66
   344:  set *tmp133 :fn2*retval
   345:  assertequals 1 *tmp133 "median(1,1,1,1,5)"
   346:  set :fn2:x1 1
@@ -418,7 +418,7 @@ Final code before resolving virtual instructions:
   350:  set :fn2:x5 5
   351:  setaddr :fn2*retaddr *label67
   352:  call *label2 :fn2*retval
-        gotolabel *label67 :fn2
+        label *label67
   353:  set *tmp134 :fn2*retval
   354:  assertequals 1 *tmp134 "median(1,1,1,5,5)"
   355:  set :fn2:x1 1
@@ -428,7 +428,7 @@ Final code before resolving virtual instructions:
   359:  set :fn2:x5 5
   360:  setaddr :fn2*retaddr *label68
   361:  call *label2 :fn2*retval
-        gotolabel *label68 :fn2
+        label *label68
   362:  set *tmp135 :fn2*retval
   363:  assertequals 5 *tmp135 "median(1,1,5,5,5)"
   364:  set :fn2:x1 1
@@ -438,7 +438,7 @@ Final code before resolving virtual instructions:
   368:  set :fn2:x5 5
   369:  setaddr :fn2*retaddr *label69
   370:  call *label2 :fn2*retval
-        gotolabel *label69 :fn2
+        label *label69
   371:  set *tmp136 :fn2*retval
   372:  assertequals 5 *tmp136 "median(1,5,5,5,5)"
   373:  set :fn2:x1 5
@@ -448,7 +448,7 @@ Final code before resolving virtual instructions:
   377:  set :fn2:x5 5
   378:  setaddr :fn2*retaddr *label70
   379:  call *label2 :fn2*retval
-        gotolabel *label70 :fn2
+        label *label70
   380:  set *tmp137 :fn2*retval
   381:  assertequals 5 *tmp137 "median(5,5,5,5,5)"
   382:  set :fn45:bestDif 10000000000
@@ -457,23 +457,23 @@ Final code before resolving virtual instructions:
   385:  setaddr *tmp140 *label76
   386:  set :fn45:i 1
   387:  jump *label73 always 0 0
-        gotolabel *label76 marker2
+        multilabel *label76 marker2
   388:  setaddr *tmp140 *label77
   389:  set :fn45:i 1
   390:  jump *label73 always 0 0
-        gotolabel *label77 marker2
+        multilabel *label77 marker2
   391:  setaddr *tmp140 *label78
   392:  set :fn45:i 1
   393:  jump *label73 always 0 0
-        gotolabel *label78 marker2
+        multilabel *label78 marker2
   394:  setaddr *tmp140 *label79
   395:  set :fn45:i 1
   396:  jump *label73 always 0 0
-        gotolabel *label79 marker2
+        multilabel *label79 marker2
   397:  setaddr *tmp140 *label80
   398:  set :fn45:i 1
   399:  jump *label73 always 0 0
-        gotolabel *label80 marker2
+        multilabel *label80 marker2
   400:  setaddr *tmp140 *label81
   401:  set :fn45:i 1
         label *label73
@@ -483,23 +483,23 @@ Final code before resolving virtual instructions:
   405:  setaddr *tmp142 *label86
   406:  set :fn46:i 1
   407:  jump *label83 always 0 0
-        gotolabel *label86 marker3
+        multilabel *label86 marker3
   408:  setaddr *tmp142 *label87
   409:  set :fn46:i 1
   410:  jump *label83 always 0 0
-        gotolabel *label87 marker3
+        multilabel *label87 marker3
   411:  setaddr *tmp142 *label88
   412:  set :fn46:i 1
   413:  jump *label83 always 0 0
-        gotolabel *label88 marker3
+        multilabel *label88 marker3
   414:  setaddr *tmp142 *label89
   415:  set :fn46:i 1
   416:  jump *label83 always 0 0
-        gotolabel *label89 marker3
+        multilabel *label89 marker3
   417:  setaddr *tmp142 *label90
   418:  set :fn46:i 1
   419:  jump *label83 always 0 0
-        gotolabel *label90 marker3
+        multilabel *label90 marker3
   420:  setaddr *tmp142 *label91
   421:  set :fn46:i 1
         label *label83
@@ -520,8 +520,8 @@ Final code before resolving virtual instructions:
   433:  set *tmp144 *tmp146
         label *label93
         label *label84
-  434:  goto *tmp142 marker3
-        gotolabel *label91 marker3
+  434:  multijump *tmp142 0 0 marker3
+        multilabel *label91 marker3
         label *label85
   435:  op sub *tmp147 :fn46:gt :fn46:lt
   436:  op abs *tmp148 *tmp147 0
@@ -567,8 +567,8 @@ Final code before resolving virtual instructions:
   468:  set *tmp156 *tmp158
         label *label101
         label *label74
-  469:  goto *tmp140 marker2
-        gotolabel *label81 marker2
+  469:  multijump *tmp140 0 0 marker2
+        multilabel *label81 marker2
         label *label75
   470:  op div *tmp159 :fn45:best :fn45:count
   471:  set *tmp139 *tmp159
@@ -582,23 +582,23 @@ Final code before resolving virtual instructions:
   477:  setaddr *tmp162 *label109
   478:  set :fn48:i 1
   479:  jump *label106 always 0 0
-        gotolabel *label109 marker4
+        multilabel *label109 marker4
   480:  setaddr *tmp162 *label110
   481:  set :fn48:i 1
   482:  jump *label106 always 0 0
-        gotolabel *label110 marker4
+        multilabel *label110 marker4
   483:  setaddr *tmp162 *label111
   484:  set :fn48:i 1
   485:  jump *label106 always 0 0
-        gotolabel *label111 marker4
+        multilabel *label111 marker4
   486:  setaddr *tmp162 *label112
   487:  set :fn48:i 1
   488:  jump *label106 always 0 0
-        gotolabel *label112 marker4
+        multilabel *label112 marker4
   489:  setaddr *tmp162 *label113
   490:  set :fn48:i 1
   491:  jump *label106 always 0 0
-        gotolabel *label113 marker4
+        multilabel *label113 marker4
   492:  setaddr *tmp162 *label114
   493:  set :fn48:i 5
         label *label106
@@ -608,23 +608,23 @@ Final code before resolving virtual instructions:
   497:  setaddr *tmp164 *label119
   498:  set :fn49:i 1
   499:  jump *label116 always 0 0
-        gotolabel *label119 marker5
+        multilabel *label119 marker5
   500:  setaddr *tmp164 *label120
   501:  set :fn49:i 1
   502:  jump *label116 always 0 0
-        gotolabel *label120 marker5
+        multilabel *label120 marker5
   503:  setaddr *tmp164 *label121
   504:  set :fn49:i 1
   505:  jump *label116 always 0 0
-        gotolabel *label121 marker5
+        multilabel *label121 marker5
   506:  setaddr *tmp164 *label122
   507:  set :fn49:i 1
   508:  jump *label116 always 0 0
-        gotolabel *label122 marker5
+        multilabel *label122 marker5
   509:  setaddr *tmp164 *label123
   510:  set :fn49:i 1
   511:  jump *label116 always 0 0
-        gotolabel *label123 marker5
+        multilabel *label123 marker5
   512:  setaddr *tmp164 *label124
   513:  set :fn49:i 5
         label *label116
@@ -645,8 +645,8 @@ Final code before resolving virtual instructions:
   525:  set *tmp166 *tmp168
         label *label126
         label *label117
-  526:  goto *tmp164 marker5
-        gotolabel *label124 marker5
+  526:  multijump *tmp164 0 0 marker5
+        multilabel *label124 marker5
         label *label118
   527:  op sub *tmp169 :fn49:gt :fn49:lt
   528:  op abs *tmp170 *tmp169 0
@@ -692,8 +692,8 @@ Final code before resolving virtual instructions:
   560:  set *tmp178 *tmp180
         label *label134
         label *label107
-  561:  goto *tmp162 marker4
-        gotolabel *label114 marker4
+  561:  multijump *tmp162 0 0 marker4
+        multilabel *label114 marker4
         label *label108
   562:  op div *tmp181 :fn48:best :fn48:count
   563:  set *tmp161 *tmp181
@@ -707,23 +707,23 @@ Final code before resolving virtual instructions:
   569:  setaddr *tmp184 *label142
   570:  set :fn51:i 1
   571:  jump *label139 always 0 0
-        gotolabel *label142 marker6
+        multilabel *label142 marker6
   572:  setaddr *tmp184 *label143
   573:  set :fn51:i 1
   574:  jump *label139 always 0 0
-        gotolabel *label143 marker6
+        multilabel *label143 marker6
   575:  setaddr *tmp184 *label144
   576:  set :fn51:i 1
   577:  jump *label139 always 0 0
-        gotolabel *label144 marker6
+        multilabel *label144 marker6
   578:  setaddr *tmp184 *label145
   579:  set :fn51:i 1
   580:  jump *label139 always 0 0
-        gotolabel *label145 marker6
+        multilabel *label145 marker6
   581:  setaddr *tmp184 *label146
   582:  set :fn51:i 5
   583:  jump *label139 always 0 0
-        gotolabel *label146 marker6
+        multilabel *label146 marker6
   584:  setaddr *tmp184 *label147
   585:  set :fn51:i 5
         label *label139
@@ -733,23 +733,23 @@ Final code before resolving virtual instructions:
   589:  setaddr *tmp186 *label152
   590:  set :fn52:i 1
   591:  jump *label149 always 0 0
-        gotolabel *label152 marker7
+        multilabel *label152 marker7
   592:  setaddr *tmp186 *label153
   593:  set :fn52:i 1
   594:  jump *label149 always 0 0
-        gotolabel *label153 marker7
+        multilabel *label153 marker7
   595:  setaddr *tmp186 *label154
   596:  set :fn52:i 1
   597:  jump *label149 always 0 0
-        gotolabel *label154 marker7
+        multilabel *label154 marker7
   598:  setaddr *tmp186 *label155
   599:  set :fn52:i 1
   600:  jump *label149 always 0 0
-        gotolabel *label155 marker7
+        multilabel *label155 marker7
   601:  setaddr *tmp186 *label156
   602:  set :fn52:i 5
   603:  jump *label149 always 0 0
-        gotolabel *label156 marker7
+        multilabel *label156 marker7
   604:  setaddr *tmp186 *label157
   605:  set :fn52:i 5
         label *label149
@@ -770,8 +770,8 @@ Final code before resolving virtual instructions:
   617:  set *tmp188 *tmp190
         label *label159
         label *label150
-  618:  goto *tmp186 marker7
-        gotolabel *label157 marker7
+  618:  multijump *tmp186 0 0 marker7
+        multilabel *label157 marker7
         label *label151
   619:  op sub *tmp191 :fn52:gt :fn52:lt
   620:  op abs *tmp192 *tmp191 0
@@ -817,8 +817,8 @@ Final code before resolving virtual instructions:
   652:  set *tmp200 *tmp202
         label *label167
         label *label140
-  653:  goto *tmp184 marker6
-        gotolabel *label147 marker6
+  653:  multijump *tmp184 0 0 marker6
+        multilabel *label147 marker6
         label *label141
   654:  op div *tmp203 :fn51:best :fn51:count
   655:  set *tmp183 *tmp203
@@ -832,23 +832,23 @@ Final code before resolving virtual instructions:
   661:  setaddr *tmp206 *label175
   662:  set :fn54:i 1
   663:  jump *label172 always 0 0
-        gotolabel *label175 marker8
+        multilabel *label175 marker8
   664:  setaddr *tmp206 *label176
   665:  set :fn54:i 1
   666:  jump *label172 always 0 0
-        gotolabel *label176 marker8
+        multilabel *label176 marker8
   667:  setaddr *tmp206 *label177
   668:  set :fn54:i 1
   669:  jump *label172 always 0 0
-        gotolabel *label177 marker8
+        multilabel *label177 marker8
   670:  setaddr *tmp206 *label178
   671:  set :fn54:i 5
   672:  jump *label172 always 0 0
-        gotolabel *label178 marker8
+        multilabel *label178 marker8
   673:  setaddr *tmp206 *label179
   674:  set :fn54:i 5
   675:  jump *label172 always 0 0
-        gotolabel *label179 marker8
+        multilabel *label179 marker8
   676:  setaddr *tmp206 *label180
   677:  set :fn54:i 5
         label *label172
@@ -858,23 +858,23 @@ Final code before resolving virtual instructions:
   681:  setaddr *tmp208 *label185
   682:  set :fn55:i 1
   683:  jump *label182 always 0 0
-        gotolabel *label185 marker9
+        multilabel *label185 marker9
   684:  setaddr *tmp208 *label186
   685:  set :fn55:i 1
   686:  jump *label182 always 0 0
-        gotolabel *label186 marker9
+        multilabel *label186 marker9
   687:  setaddr *tmp208 *label187
   688:  set :fn55:i 1
   689:  jump *label182 always 0 0
-        gotolabel *label187 marker9
+        multilabel *label187 marker9
   690:  setaddr *tmp208 *label188
   691:  set :fn55:i 5
   692:  jump *label182 always 0 0
-        gotolabel *label188 marker9
+        multilabel *label188 marker9
   693:  setaddr *tmp208 *label189
   694:  set :fn55:i 5
   695:  jump *label182 always 0 0
-        gotolabel *label189 marker9
+        multilabel *label189 marker9
   696:  setaddr *tmp208 *label190
   697:  set :fn55:i 5
         label *label182
@@ -895,8 +895,8 @@ Final code before resolving virtual instructions:
   709:  set *tmp210 *tmp212
         label *label192
         label *label183
-  710:  goto *tmp208 marker9
-        gotolabel *label190 marker9
+  710:  multijump *tmp208 0 0 marker9
+        multilabel *label190 marker9
         label *label184
   711:  op sub *tmp213 :fn55:gt :fn55:lt
   712:  op abs *tmp214 *tmp213 0
@@ -942,8 +942,8 @@ Final code before resolving virtual instructions:
   744:  set *tmp222 *tmp224
         label *label200
         label *label173
-  745:  goto *tmp206 marker8
-        gotolabel *label180 marker8
+  745:  multijump *tmp206 0 0 marker8
+        multilabel *label180 marker8
         label *label174
   746:  op div *tmp225 :fn54:best :fn54:count
   747:  set *tmp205 *tmp225
@@ -957,23 +957,23 @@ Final code before resolving virtual instructions:
   753:  setaddr *tmp228 *label208
   754:  set :fn57:i 1
   755:  jump *label205 always 0 0
-        gotolabel *label208 marker10
+        multilabel *label208 marker10
   756:  setaddr *tmp228 *label209
   757:  set :fn57:i 1
   758:  jump *label205 always 0 0
-        gotolabel *label209 marker10
+        multilabel *label209 marker10
   759:  setaddr *tmp228 *label210
   760:  set :fn57:i 5
   761:  jump *label205 always 0 0
-        gotolabel *label210 marker10
+        multilabel *label210 marker10
   762:  setaddr *tmp228 *label211
   763:  set :fn57:i 5
   764:  jump *label205 always 0 0
-        gotolabel *label211 marker10
+        multilabel *label211 marker10
   765:  setaddr *tmp228 *label212
   766:  set :fn57:i 5
   767:  jump *label205 always 0 0
-        gotolabel *label212 marker10
+        multilabel *label212 marker10
   768:  setaddr *tmp228 *label213
   769:  set :fn57:i 5
         label *label205
@@ -983,23 +983,23 @@ Final code before resolving virtual instructions:
   773:  setaddr *tmp230 *label218
   774:  set :fn58:i 1
   775:  jump *label215 always 0 0
-        gotolabel *label218 marker11
+        multilabel *label218 marker11
   776:  setaddr *tmp230 *label219
   777:  set :fn58:i 1
   778:  jump *label215 always 0 0
-        gotolabel *label219 marker11
+        multilabel *label219 marker11
   779:  setaddr *tmp230 *label220
   780:  set :fn58:i 5
   781:  jump *label215 always 0 0
-        gotolabel *label220 marker11
+        multilabel *label220 marker11
   782:  setaddr *tmp230 *label221
   783:  set :fn58:i 5
   784:  jump *label215 always 0 0
-        gotolabel *label221 marker11
+        multilabel *label221 marker11
   785:  setaddr *tmp230 *label222
   786:  set :fn58:i 5
   787:  jump *label215 always 0 0
-        gotolabel *label222 marker11
+        multilabel *label222 marker11
   788:  setaddr *tmp230 *label223
   789:  set :fn58:i 5
         label *label215
@@ -1020,8 +1020,8 @@ Final code before resolving virtual instructions:
   801:  set *tmp232 *tmp234
         label *label225
         label *label216
-  802:  goto *tmp230 marker11
-        gotolabel *label223 marker11
+  802:  multijump *tmp230 0 0 marker11
+        multilabel *label223 marker11
         label *label217
   803:  op sub *tmp235 :fn58:gt :fn58:lt
   804:  op abs *tmp236 *tmp235 0
@@ -1067,8 +1067,8 @@ Final code before resolving virtual instructions:
   836:  set *tmp244 *tmp246
         label *label233
         label *label206
-  837:  goto *tmp228 marker10
-        gotolabel *label213 marker10
+  837:  multijump *tmp228 0 0 marker10
+        multilabel *label213 marker10
         label *label207
   838:  op div *tmp247 :fn57:best :fn57:count
   839:  set *tmp227 *tmp247
@@ -1082,23 +1082,23 @@ Final code before resolving virtual instructions:
   845:  setaddr *tmp250 *label241
   846:  set :fn60:i 1
   847:  jump *label238 always 0 0
-        gotolabel *label241 marker12
+        multilabel *label241 marker12
   848:  setaddr *tmp250 *label242
   849:  set :fn60:i 5
   850:  jump *label238 always 0 0
-        gotolabel *label242 marker12
+        multilabel *label242 marker12
   851:  setaddr *tmp250 *label243
   852:  set :fn60:i 5
   853:  jump *label238 always 0 0
-        gotolabel *label243 marker12
+        multilabel *label243 marker12
   854:  setaddr *tmp250 *label244
   855:  set :fn60:i 5
   856:  jump *label238 always 0 0
-        gotolabel *label244 marker12
+        multilabel *label244 marker12
   857:  setaddr *tmp250 *label245
   858:  set :fn60:i 5
   859:  jump *label238 always 0 0
-        gotolabel *label245 marker12
+        multilabel *label245 marker12
   860:  setaddr *tmp250 *label246
   861:  set :fn60:i 5
         label *label238
@@ -1108,23 +1108,23 @@ Final code before resolving virtual instructions:
   865:  setaddr *tmp252 *label251
   866:  set :fn61:i 1
   867:  jump *label248 always 0 0
-        gotolabel *label251 marker13
+        multilabel *label251 marker13
   868:  setaddr *tmp252 *label252
   869:  set :fn61:i 5
   870:  jump *label248 always 0 0
-        gotolabel *label252 marker13
+        multilabel *label252 marker13
   871:  setaddr *tmp252 *label253
   872:  set :fn61:i 5
   873:  jump *label248 always 0 0
-        gotolabel *label253 marker13
+        multilabel *label253 marker13
   874:  setaddr *tmp252 *label254
   875:  set :fn61:i 5
   876:  jump *label248 always 0 0
-        gotolabel *label254 marker13
+        multilabel *label254 marker13
   877:  setaddr *tmp252 *label255
   878:  set :fn61:i 5
   879:  jump *label248 always 0 0
-        gotolabel *label255 marker13
+        multilabel *label255 marker13
   880:  setaddr *tmp252 *label256
   881:  set :fn61:i 5
         label *label248
@@ -1145,8 +1145,8 @@ Final code before resolving virtual instructions:
   893:  set *tmp254 *tmp256
         label *label258
         label *label249
-  894:  goto *tmp252 marker13
-        gotolabel *label256 marker13
+  894:  multijump *tmp252 0 0 marker13
+        multilabel *label256 marker13
         label *label250
   895:  op sub *tmp257 :fn61:gt :fn61:lt
   896:  op abs *tmp258 *tmp257 0
@@ -1192,8 +1192,8 @@ Final code before resolving virtual instructions:
   928:  set *tmp266 *tmp268
         label *label266
         label *label239
-  929:  goto *tmp250 marker12
-        gotolabel *label246 marker12
+  929:  multijump *tmp250 0 0 marker12
+        multilabel *label246 marker12
         label *label240
   930:  op div *tmp269 :fn60:best :fn60:count
   931:  set *tmp249 *tmp269
@@ -1207,23 +1207,23 @@ Final code before resolving virtual instructions:
   937:  setaddr *tmp272 *label274
   938:  set :fn63:i 5
   939:  jump *label271 always 0 0
-        gotolabel *label274 marker14
+        multilabel *label274 marker14
   940:  setaddr *tmp272 *label275
   941:  set :fn63:i 5
   942:  jump *label271 always 0 0
-        gotolabel *label275 marker14
+        multilabel *label275 marker14
   943:  setaddr *tmp272 *label276
   944:  set :fn63:i 5
   945:  jump *label271 always 0 0
-        gotolabel *label276 marker14
+        multilabel *label276 marker14
   946:  setaddr *tmp272 *label277
   947:  set :fn63:i 5
   948:  jump *label271 always 0 0
-        gotolabel *label277 marker14
+        multilabel *label277 marker14
   949:  setaddr *tmp272 *label278
   950:  set :fn63:i 5
   951:  jump *label271 always 0 0
-        gotolabel *label278 marker14
+        multilabel *label278 marker14
   952:  setaddr *tmp272 *label279
   953:  set :fn63:i 5
         label *label271
@@ -1233,23 +1233,23 @@ Final code before resolving virtual instructions:
   957:  setaddr *tmp274 *label284
   958:  set :fn64:i 5
   959:  jump *label281 always 0 0
-        gotolabel *label284 marker15
+        multilabel *label284 marker15
   960:  setaddr *tmp274 *label285
   961:  set :fn64:i 5
   962:  jump *label281 always 0 0
-        gotolabel *label285 marker15
+        multilabel *label285 marker15
   963:  setaddr *tmp274 *label286
   964:  set :fn64:i 5
   965:  jump *label281 always 0 0
-        gotolabel *label286 marker15
+        multilabel *label286 marker15
   966:  setaddr *tmp274 *label287
   967:  set :fn64:i 5
   968:  jump *label281 always 0 0
-        gotolabel *label287 marker15
+        multilabel *label287 marker15
   969:  setaddr *tmp274 *label288
   970:  set :fn64:i 5
   971:  jump *label281 always 0 0
-        gotolabel *label288 marker15
+        multilabel *label288 marker15
   972:  setaddr *tmp274 *label289
   973:  set :fn64:i 5
         label *label281
@@ -1270,8 +1270,8 @@ Final code before resolving virtual instructions:
   985:  set *tmp276 *tmp278
         label *label291
         label *label282
-  986:  goto *tmp274 marker15
-        gotolabel *label289 marker15
+  986:  multijump *tmp274 0 0 marker15
+        multilabel *label289 marker15
         label *label283
   987:  op sub *tmp279 :fn64:gt :fn64:lt
   988:  op abs *tmp280 *tmp279 0
@@ -1317,8 +1317,8 @@ Final code before resolving virtual instructions:
  1020:  set *tmp288 *tmp290
         label *label299
         label *label272
- 1021:  goto *tmp272 marker14
-        gotolabel *label279 marker14
+ 1021:  multijump *tmp272 0 0 marker14
+        multilabel *label279 marker14
         label *label273
  1022:  op div *tmp291 :fn63:best :fn63:count
  1023:  set *tmp271 *tmp291
@@ -1332,35 +1332,35 @@ Final code before resolving virtual instructions:
  1029:  setaddr *tmp294 *label307
  1030:  set :fn66:i 1
  1031:  jump *label304 always 0 0
-        gotolabel *label307 marker16
+        multilabel *label307 marker16
  1032:  setaddr *tmp294 *label308
  1033:  set :fn66:i 2
  1034:  jump *label304 always 0 0
-        gotolabel *label308 marker16
+        multilabel *label308 marker16
  1035:  setaddr *tmp294 *label309
  1036:  set :fn66:i 3
  1037:  jump *label304 always 0 0
-        gotolabel *label309 marker16
+        multilabel *label309 marker16
  1038:  setaddr *tmp294 *label310
  1039:  set :fn66:i 4
  1040:  jump *label304 always 0 0
-        gotolabel *label310 marker16
+        multilabel *label310 marker16
  1041:  setaddr *tmp294 *label311
  1042:  set :fn66:i 5
  1043:  jump *label304 always 0 0
-        gotolabel *label311 marker16
+        multilabel *label311 marker16
  1044:  setaddr *tmp294 *label312
  1045:  set :fn66:i 6
  1046:  jump *label304 always 0 0
-        gotolabel *label312 marker16
+        multilabel *label312 marker16
  1047:  setaddr *tmp294 *label313
  1048:  set :fn66:i 7
  1049:  jump *label304 always 0 0
-        gotolabel *label313 marker16
+        multilabel *label313 marker16
  1050:  setaddr *tmp294 *label314
  1051:  set :fn66:i 8
  1052:  jump *label304 always 0 0
-        gotolabel *label314 marker16
+        multilabel *label314 marker16
  1053:  setaddr *tmp294 *label315
  1054:  set :fn66:i 9
         label *label304
@@ -1370,35 +1370,35 @@ Final code before resolving virtual instructions:
  1058:  setaddr *tmp296 *label320
  1059:  set :fn67:i 1
  1060:  jump *label317 always 0 0
-        gotolabel *label320 marker17
+        multilabel *label320 marker17
  1061:  setaddr *tmp296 *label321
  1062:  set :fn67:i 2
  1063:  jump *label317 always 0 0
-        gotolabel *label321 marker17
+        multilabel *label321 marker17
  1064:  setaddr *tmp296 *label322
  1065:  set :fn67:i 3
  1066:  jump *label317 always 0 0
-        gotolabel *label322 marker17
+        multilabel *label322 marker17
  1067:  setaddr *tmp296 *label323
  1068:  set :fn67:i 4
  1069:  jump *label317 always 0 0
-        gotolabel *label323 marker17
+        multilabel *label323 marker17
  1070:  setaddr *tmp296 *label324
  1071:  set :fn67:i 5
  1072:  jump *label317 always 0 0
-        gotolabel *label324 marker17
+        multilabel *label324 marker17
  1073:  setaddr *tmp296 *label325
  1074:  set :fn67:i 6
  1075:  jump *label317 always 0 0
-        gotolabel *label325 marker17
+        multilabel *label325 marker17
  1076:  setaddr *tmp296 *label326
  1077:  set :fn67:i 7
  1078:  jump *label317 always 0 0
-        gotolabel *label326 marker17
+        multilabel *label326 marker17
  1079:  setaddr *tmp296 *label327
  1080:  set :fn67:i 8
  1081:  jump *label317 always 0 0
-        gotolabel *label327 marker17
+        multilabel *label327 marker17
  1082:  setaddr *tmp296 *label328
  1083:  set :fn67:i 9
         label *label317
@@ -1419,8 +1419,8 @@ Final code before resolving virtual instructions:
  1095:  set *tmp298 *tmp300
         label *label330
         label *label318
- 1096:  goto *tmp296 marker17
-        gotolabel *label328 marker17
+ 1096:  multijump *tmp296 0 0 marker17
+        multilabel *label328 marker17
         label *label319
  1097:  op sub *tmp301 :fn67:gt :fn67:lt
  1098:  op abs *tmp302 *tmp301 0
@@ -1466,8 +1466,8 @@ Final code before resolving virtual instructions:
  1130:  set *tmp310 *tmp312
         label *label338
         label *label305
- 1131:  goto *tmp294 marker16
-        gotolabel *label315 marker16
+ 1131:  multijump *tmp294 0 0 marker16
+        multilabel *label315 marker16
         label *label306
  1132:  op div *tmp313 :fn66:best :fn66:count
  1133:  set *tmp293 *tmp313
@@ -1481,35 +1481,35 @@ Final code before resolving virtual instructions:
  1139:  setaddr *tmp316 *label346
  1140:  set :fn69:i 9
  1141:  jump *label343 always 0 0
-        gotolabel *label346 marker18
+        multilabel *label346 marker18
  1142:  setaddr *tmp316 *label347
  1143:  set :fn69:i 8
  1144:  jump *label343 always 0 0
-        gotolabel *label347 marker18
+        multilabel *label347 marker18
  1145:  setaddr *tmp316 *label348
  1146:  set :fn69:i 7
  1147:  jump *label343 always 0 0
-        gotolabel *label348 marker18
+        multilabel *label348 marker18
  1148:  setaddr *tmp316 *label349
  1149:  set :fn69:i 6
  1150:  jump *label343 always 0 0
-        gotolabel *label349 marker18
+        multilabel *label349 marker18
  1151:  setaddr *tmp316 *label350
  1152:  set :fn69:i 5
  1153:  jump *label343 always 0 0
-        gotolabel *label350 marker18
+        multilabel *label350 marker18
  1154:  setaddr *tmp316 *label351
  1155:  set :fn69:i 4
  1156:  jump *label343 always 0 0
-        gotolabel *label351 marker18
+        multilabel *label351 marker18
  1157:  setaddr *tmp316 *label352
  1158:  set :fn69:i 3
  1159:  jump *label343 always 0 0
-        gotolabel *label352 marker18
+        multilabel *label352 marker18
  1160:  setaddr *tmp316 *label353
  1161:  set :fn69:i 2
  1162:  jump *label343 always 0 0
-        gotolabel *label353 marker18
+        multilabel *label353 marker18
  1163:  setaddr *tmp316 *label354
  1164:  set :fn69:i 1
         label *label343
@@ -1519,35 +1519,35 @@ Final code before resolving virtual instructions:
  1168:  setaddr *tmp318 *label359
  1169:  set :fn70:i 9
  1170:  jump *label356 always 0 0
-        gotolabel *label359 marker19
+        multilabel *label359 marker19
  1171:  setaddr *tmp318 *label360
  1172:  set :fn70:i 8
  1173:  jump *label356 always 0 0
-        gotolabel *label360 marker19
+        multilabel *label360 marker19
  1174:  setaddr *tmp318 *label361
  1175:  set :fn70:i 7
  1176:  jump *label356 always 0 0
-        gotolabel *label361 marker19
+        multilabel *label361 marker19
  1177:  setaddr *tmp318 *label362
  1178:  set :fn70:i 6
  1179:  jump *label356 always 0 0
-        gotolabel *label362 marker19
+        multilabel *label362 marker19
  1180:  setaddr *tmp318 *label363
  1181:  set :fn70:i 5
  1182:  jump *label356 always 0 0
-        gotolabel *label363 marker19
+        multilabel *label363 marker19
  1183:  setaddr *tmp318 *label364
  1184:  set :fn70:i 4
  1185:  jump *label356 always 0 0
-        gotolabel *label364 marker19
+        multilabel *label364 marker19
  1186:  setaddr *tmp318 *label365
  1187:  set :fn70:i 3
  1188:  jump *label356 always 0 0
-        gotolabel *label365 marker19
+        multilabel *label365 marker19
  1189:  setaddr *tmp318 *label366
  1190:  set :fn70:i 2
  1191:  jump *label356 always 0 0
-        gotolabel *label366 marker19
+        multilabel *label366 marker19
  1192:  setaddr *tmp318 *label367
  1193:  set :fn70:i 1
         label *label356
@@ -1568,8 +1568,8 @@ Final code before resolving virtual instructions:
  1205:  set *tmp320 *tmp322
         label *label369
         label *label357
- 1206:  goto *tmp318 marker19
-        gotolabel *label367 marker19
+ 1206:  multijump *tmp318 0 0 marker19
+        multilabel *label367 marker19
         label *label358
  1207:  op sub *tmp323 :fn70:gt :fn70:lt
  1208:  op abs *tmp324 *tmp323 0
@@ -1615,8 +1615,8 @@ Final code before resolving virtual instructions:
  1240:  set *tmp332 *tmp334
         label *label377
         label *label344
- 1241:  goto *tmp316 marker18
-        gotolabel *label354 marker18
+ 1241:  multijump *tmp316 0 0 marker18
+        multilabel *label354 marker18
         label *label345
  1242:  op div *tmp335 :fn69:best :fn69:count
  1243:  set *tmp315 *tmp335
@@ -1630,35 +1630,35 @@ Final code before resolving virtual instructions:
  1249:  setaddr *tmp338 *label385
  1250:  set :fn72:i 1
  1251:  jump *label382 always 0 0
-        gotolabel *label385 marker20
+        multilabel *label385 marker20
  1252:  setaddr *tmp338 *label386
  1253:  set :fn72:i 3
  1254:  jump *label382 always 0 0
-        gotolabel *label386 marker20
+        multilabel *label386 marker20
  1255:  setaddr *tmp338 *label387
  1256:  set :fn72:i 5
  1257:  jump *label382 always 0 0
-        gotolabel *label387 marker20
+        multilabel *label387 marker20
  1258:  setaddr *tmp338 *label388
  1259:  set :fn72:i 7
  1260:  jump *label382 always 0 0
-        gotolabel *label388 marker20
+        multilabel *label388 marker20
  1261:  setaddr *tmp338 *label389
  1262:  set :fn72:i 9
  1263:  jump *label382 always 0 0
-        gotolabel *label389 marker20
+        multilabel *label389 marker20
  1264:  setaddr *tmp338 *label390
  1265:  set :fn72:i 2
  1266:  jump *label382 always 0 0
-        gotolabel *label390 marker20
+        multilabel *label390 marker20
  1267:  setaddr *tmp338 *label391
  1268:  set :fn72:i 4
  1269:  jump *label382 always 0 0
-        gotolabel *label391 marker20
+        multilabel *label391 marker20
  1270:  setaddr *tmp338 *label392
  1271:  set :fn72:i 6
  1272:  jump *label382 always 0 0
-        gotolabel *label392 marker20
+        multilabel *label392 marker20
  1273:  setaddr *tmp338 *label393
  1274:  set :fn72:i 8
         label *label382
@@ -1668,35 +1668,35 @@ Final code before resolving virtual instructions:
  1278:  setaddr *tmp340 *label398
  1279:  set :fn73:i 1
  1280:  jump *label395 always 0 0
-        gotolabel *label398 marker21
+        multilabel *label398 marker21
  1281:  setaddr *tmp340 *label399
  1282:  set :fn73:i 3
  1283:  jump *label395 always 0 0
-        gotolabel *label399 marker21
+        multilabel *label399 marker21
  1284:  setaddr *tmp340 *label400
  1285:  set :fn73:i 5
  1286:  jump *label395 always 0 0
-        gotolabel *label400 marker21
+        multilabel *label400 marker21
  1287:  setaddr *tmp340 *label401
  1288:  set :fn73:i 7
  1289:  jump *label395 always 0 0
-        gotolabel *label401 marker21
+        multilabel *label401 marker21
  1290:  setaddr *tmp340 *label402
  1291:  set :fn73:i 9
  1292:  jump *label395 always 0 0
-        gotolabel *label402 marker21
+        multilabel *label402 marker21
  1293:  setaddr *tmp340 *label403
  1294:  set :fn73:i 2
  1295:  jump *label395 always 0 0
-        gotolabel *label403 marker21
+        multilabel *label403 marker21
  1296:  setaddr *tmp340 *label404
  1297:  set :fn73:i 4
  1298:  jump *label395 always 0 0
-        gotolabel *label404 marker21
+        multilabel *label404 marker21
  1299:  setaddr *tmp340 *label405
  1300:  set :fn73:i 6
  1301:  jump *label395 always 0 0
-        gotolabel *label405 marker21
+        multilabel *label405 marker21
  1302:  setaddr *tmp340 *label406
  1303:  set :fn73:i 8
         label *label395
@@ -1717,8 +1717,8 @@ Final code before resolving virtual instructions:
  1315:  set *tmp342 *tmp344
         label *label408
         label *label396
- 1316:  goto *tmp340 marker21
-        gotolabel *label406 marker21
+ 1316:  multijump *tmp340 0 0 marker21
+        multilabel *label406 marker21
         label *label397
  1317:  op sub *tmp345 :fn73:gt :fn73:lt
  1318:  op abs *tmp346 *tmp345 0
@@ -1764,8 +1764,8 @@ Final code before resolving virtual instructions:
  1350:  set *tmp354 *tmp356
         label *label416
         label *label383
- 1351:  goto *tmp338 marker20
-        gotolabel *label393 marker20
+ 1351:  multijump *tmp338 0 0 marker20
+        multilabel *label393 marker20
         label *label384
  1352:  op div *tmp357 :fn72:best :fn72:count
  1353:  set *tmp337 *tmp357
@@ -1779,35 +1779,35 @@ Final code before resolving virtual instructions:
  1359:  setaddr *tmp360 *label424
  1360:  set :fn75:i 7
  1361:  jump *label421 always 0 0
-        gotolabel *label424 marker22
+        multilabel *label424 marker22
  1362:  setaddr *tmp360 *label425
  1363:  set :fn75:i 4
  1364:  jump *label421 always 0 0
-        gotolabel *label425 marker22
+        multilabel *label425 marker22
  1365:  setaddr *tmp360 *label426
  1366:  set :fn75:i 2
  1367:  jump *label421 always 0 0
-        gotolabel *label426 marker22
+        multilabel *label426 marker22
  1368:  setaddr *tmp360 *label427
  1369:  set :fn75:i 8
  1370:  jump *label421 always 0 0
-        gotolabel *label427 marker22
+        multilabel *label427 marker22
  1371:  setaddr *tmp360 *label428
  1372:  set :fn75:i 1
  1373:  jump *label421 always 0 0
-        gotolabel *label428 marker22
+        multilabel *label428 marker22
  1374:  setaddr *tmp360 *label429
  1375:  set :fn75:i 5
  1376:  jump *label421 always 0 0
-        gotolabel *label429 marker22
+        multilabel *label429 marker22
  1377:  setaddr *tmp360 *label430
  1378:  set :fn75:i 6
  1379:  jump *label421 always 0 0
-        gotolabel *label430 marker22
+        multilabel *label430 marker22
  1380:  setaddr *tmp360 *label431
  1381:  set :fn75:i 9
  1382:  jump *label421 always 0 0
-        gotolabel *label431 marker22
+        multilabel *label431 marker22
  1383:  setaddr *tmp360 *label432
  1384:  set :fn75:i 3
         label *label421
@@ -1817,35 +1817,35 @@ Final code before resolving virtual instructions:
  1388:  setaddr *tmp362 *label437
  1389:  set :fn76:i 7
  1390:  jump *label434 always 0 0
-        gotolabel *label437 marker23
+        multilabel *label437 marker23
  1391:  setaddr *tmp362 *label438
  1392:  set :fn76:i 4
  1393:  jump *label434 always 0 0
-        gotolabel *label438 marker23
+        multilabel *label438 marker23
  1394:  setaddr *tmp362 *label439
  1395:  set :fn76:i 2
  1396:  jump *label434 always 0 0
-        gotolabel *label439 marker23
+        multilabel *label439 marker23
  1397:  setaddr *tmp362 *label440
  1398:  set :fn76:i 8
  1399:  jump *label434 always 0 0
-        gotolabel *label440 marker23
+        multilabel *label440 marker23
  1400:  setaddr *tmp362 *label441
  1401:  set :fn76:i 1
  1402:  jump *label434 always 0 0
-        gotolabel *label441 marker23
+        multilabel *label441 marker23
  1403:  setaddr *tmp362 *label442
  1404:  set :fn76:i 5
  1405:  jump *label434 always 0 0
-        gotolabel *label442 marker23
+        multilabel *label442 marker23
  1406:  setaddr *tmp362 *label443
  1407:  set :fn76:i 6
  1408:  jump *label434 always 0 0
-        gotolabel *label443 marker23
+        multilabel *label443 marker23
  1409:  setaddr *tmp362 *label444
  1410:  set :fn76:i 9
  1411:  jump *label434 always 0 0
-        gotolabel *label444 marker23
+        multilabel *label444 marker23
  1412:  setaddr *tmp362 *label445
  1413:  set :fn76:i 3
         label *label434
@@ -1866,8 +1866,8 @@ Final code before resolving virtual instructions:
  1425:  set *tmp364 *tmp366
         label *label447
         label *label435
- 1426:  goto *tmp362 marker23
-        gotolabel *label445 marker23
+ 1426:  multijump *tmp362 0 0 marker23
+        multilabel *label445 marker23
         label *label436
  1427:  op sub *tmp367 :fn76:gt :fn76:lt
  1428:  op abs *tmp368 *tmp367 0
@@ -1913,8 +1913,8 @@ Final code before resolving virtual instructions:
  1460:  set *tmp376 *tmp378
         label *label455
         label *label422
- 1461:  goto *tmp360 marker22
-        gotolabel *label432 marker22
+ 1461:  multijump *tmp360 0 0 marker22
+        multilabel *label432 marker22
         label *label423
  1462:  op div *tmp379 :fn75:best :fn75:count
  1463:  set *tmp359 *tmp379
@@ -1928,35 +1928,35 @@ Final code before resolving virtual instructions:
  1469:  setaddr *tmp382 *label463
  1470:  set :fn78:i 1
  1471:  jump *label460 always 0 0
-        gotolabel *label463 marker24
+        multilabel *label463 marker24
  1472:  setaddr *tmp382 *label464
  1473:  set :fn78:i 1
  1474:  jump *label460 always 0 0
-        gotolabel *label464 marker24
+        multilabel *label464 marker24
  1475:  setaddr *tmp382 *label465
  1476:  set :fn78:i 1
  1477:  jump *label460 always 0 0
-        gotolabel *label465 marker24
+        multilabel *label465 marker24
  1478:  setaddr *tmp382 *label466
  1479:  set :fn78:i 1
  1480:  jump *label460 always 0 0
-        gotolabel *label466 marker24
+        multilabel *label466 marker24
  1481:  setaddr *tmp382 *label467
  1482:  set :fn78:i 9
  1483:  jump *label460 always 0 0
-        gotolabel *label467 marker24
+        multilabel *label467 marker24
  1484:  setaddr *tmp382 *label468
  1485:  set :fn78:i 9
  1486:  jump *label460 always 0 0
-        gotolabel *label468 marker24
+        multilabel *label468 marker24
  1487:  setaddr *tmp382 *label469
  1488:  set :fn78:i 9
  1489:  jump *label460 always 0 0
-        gotolabel *label469 marker24
+        multilabel *label469 marker24
  1490:  setaddr *tmp382 *label470
  1491:  set :fn78:i 9
  1492:  jump *label460 always 0 0
-        gotolabel *label470 marker24
+        multilabel *label470 marker24
  1493:  setaddr *tmp382 *label471
  1494:  set :fn78:i 5
         label *label460
@@ -1966,35 +1966,35 @@ Final code before resolving virtual instructions:
  1498:  setaddr *tmp384 *label476
  1499:  set :fn79:i 1
  1500:  jump *label473 always 0 0
-        gotolabel *label476 marker25
+        multilabel *label476 marker25
  1501:  setaddr *tmp384 *label477
  1502:  set :fn79:i 1
  1503:  jump *label473 always 0 0
-        gotolabel *label477 marker25
+        multilabel *label477 marker25
  1504:  setaddr *tmp384 *label478
  1505:  set :fn79:i 1
  1506:  jump *label473 always 0 0
-        gotolabel *label478 marker25
+        multilabel *label478 marker25
  1507:  setaddr *tmp384 *label479
  1508:  set :fn79:i 1
  1509:  jump *label473 always 0 0
-        gotolabel *label479 marker25
+        multilabel *label479 marker25
  1510:  setaddr *tmp384 *label480
  1511:  set :fn79:i 9
  1512:  jump *label473 always 0 0
-        gotolabel *label480 marker25
+        multilabel *label480 marker25
  1513:  setaddr *tmp384 *label481
  1514:  set :fn79:i 9
  1515:  jump *label473 always 0 0
-        gotolabel *label481 marker25
+        multilabel *label481 marker25
  1516:  setaddr *tmp384 *label482
  1517:  set :fn79:i 9
  1518:  jump *label473 always 0 0
-        gotolabel *label482 marker25
+        multilabel *label482 marker25
  1519:  setaddr *tmp384 *label483
  1520:  set :fn79:i 9
  1521:  jump *label473 always 0 0
-        gotolabel *label483 marker25
+        multilabel *label483 marker25
  1522:  setaddr *tmp384 *label484
  1523:  set :fn79:i 5
         label *label473
@@ -2015,8 +2015,8 @@ Final code before resolving virtual instructions:
  1535:  set *tmp386 *tmp388
         label *label486
         label *label474
- 1536:  goto *tmp384 marker25
-        gotolabel *label484 marker25
+ 1536:  multijump *tmp384 0 0 marker25
+        multilabel *label484 marker25
         label *label475
  1537:  op sub *tmp389 :fn79:gt :fn79:lt
  1538:  op abs *tmp390 *tmp389 0
@@ -2062,8 +2062,8 @@ Final code before resolving virtual instructions:
  1570:  set *tmp398 *tmp400
         label *label494
         label *label461
- 1571:  goto *tmp382 marker24
-        gotolabel *label471 marker24
+ 1571:  multijump *tmp382 0 0 marker24
+        multilabel *label471 marker24
         label *label462
  1572:  op div *tmp401 :fn78:best :fn78:count
  1573:  set *tmp381 *tmp401
@@ -2090,7 +2090,7 @@ Final code before resolving virtual instructions:
         label *label499
  1588:  set :fn0*retval *tmp403
         label *label497
- 1589:  goto :fn0*retaddr :fn0
+ 1589:  return :fn0*retaddr
  1590:  end
         label *label1
  1591:  op max *tmp406 :fn1:x1 :fn1:x2
@@ -2125,7 +2125,7 @@ Final code before resolving virtual instructions:
         label *label504
  1617:  set :fn1*retval *tmp409
         label *label502
- 1618:  goto :fn1*retaddr :fn1
+ 1618:  return :fn1*retaddr
  1619:  end
         label *label2
  1620:  op min *tmp422 :fn2:x1 :fn2:x2
@@ -2188,7 +2188,7 @@ Final code before resolving virtual instructions:
         label *label513
  1668:  set :fn2*retval *tmp431
         label *label507
- 1669:  goto :fn2*retaddr :fn2
+ 1669:  return :fn2*retaddr
  1670:  end
 
 

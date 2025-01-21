@@ -26,6 +26,10 @@ public class ExpressionEvaluator {
         target.setDoubleValue(result);
     }
 
+    public static boolean invalid(double d) {
+        return Double.isNaN(d) || Double.isInfinite(d);
+    }
+
     public static float clamp01(double value){
         return Math.max(Math.min((float)value, 1f), 0f);
     }

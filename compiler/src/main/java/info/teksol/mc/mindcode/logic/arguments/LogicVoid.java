@@ -42,8 +42,8 @@ public enum LogicVoid implements LogicValue {
 
     @Override
     public String toMlog() {
+        // TODO After introducing types, VOID materializing in code will be an error
+        //throw new MindcodeInternalError("attempt to evaluate void");
         return "null";
-        // Effectively the same as null, but visible in the code
-        //return ":void";
     }
 }

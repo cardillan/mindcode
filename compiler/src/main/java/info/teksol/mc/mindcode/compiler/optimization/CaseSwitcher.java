@@ -145,10 +145,10 @@ class CaseSwitcher extends BaseOptimizer {
             insertInstruction(index++, createJump(newContext, finalLabel, Condition.LESS_THAN, action.variable, LogicNumber.create(min)));
             insertInstruction(index++, createJump(newContext, finalLabel, Condition.GREATER_THAN, action.variable, LogicNumber.create(max)));
         }
-        insertInstruction(index++, createGotoOffset(newContext, labels.getFirst(), action.variable, LogicNumber.create(min), marker));
+        insertInstruction(index++, createMultiJump(newContext, labels.getFirst(), action.variable, LogicNumber.create(min), marker));
 
         for (int i = 0; i < labels.size(); i++) {
-            insertInstruction(index++, createGotoLabel(newContext, labels.get(i), marker));
+            insertInstruction(index++, createMultiLabel(newContext, labels.get(i), marker));
             insertInstruction(index++, createJumpUnconditional(newContext, targets.getOrDefault(min + i, finalLabel)));
         }
 

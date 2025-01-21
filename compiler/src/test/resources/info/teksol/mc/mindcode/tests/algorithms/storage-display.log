@@ -181,12 +181,12 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
  
      5 setaddr :fn0*retaddr *label3
      6 call *label0 :fn0*retval
-     7 gotolabel *label3 :fn0
+     7 label *label3
 -    * set *tmp0 :fn0*retval
      8 set :fn0:first_column false
      9 setaddr :fn0*retaddr *label4
     10 call *label0 :fn0*retval
-    11 gotolabel *label4 :fn0
+    11 label *label4
 -    * set *tmp1 :fn0*retval
     12 draw color 255 255 255 255
     13 set :index 0
@@ -201,11 +201,11 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
 -    * set *tmp8 null
     91 label *label25
     92 label *label6
-    93 goto *tmp2 marker0
+    93 multijump *tmp2 0 0 marker0
  
     99 setaddr :fn1*retaddr *label26
    100 call *label1 :fn1*retval
-   101 gotolabel *label26 :fn1
+   101 label *label26
 -    * set *tmp9 :fn1*retval
    102 set :index 0
    103 setaddr *tmp10 *label30
@@ -213,7 +213,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
  
    171 setaddr :fn2*retaddr *label48
    172 call *label2 :fn2*retval
-   173 gotolabel *label48 :fn2
+   173 label *label48
 -    * set *tmp12 null
    174 jump *label47 always
    175 label *label46
@@ -221,14 +221,14 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
  
    178 setaddr :fn2*retaddr *label49
    179 call *label2 :fn2*retval
-   180 gotolabel *label49 :fn2
+   180 label *label49
 -    * set *tmp12 null
    181 label *label47
    182 op add :index :index 1
    183 op sub :y :y 20
  
    190 call *label1 :fn1*retval
-   191 gotolabel *label52 :fn1
+   191 label *label52
    192 set *tmp15 :fn1*retval
 -    * set *tmp14 *tmp15
    193 jump *label51 always
@@ -236,7 +236,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
 -    * set *tmp14 null
    195 label *label51
    196 label *label28
-   197 goto *tmp10 marker1
+   197 multijump *tmp10 0 0 marker1
  
    423 label *label83
    424 set *tmp21 null
@@ -262,13 +262,13 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
 -    * set *tmp115 *tmp117
    472 label *label87
    473 label *label59
-   474 goto :fn2*retaddr :fn2
+   474 return :fn2*retaddr
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-15 instructions):
  
    189 setaddr :fn1*retaddr *label52
    190 call *label1 :fn1*retval
-   191 gotolabel *label52 :fn1
+   191 label *label52
 -    * set *tmp15 :fn1*retval
    192 jump *label51 always
    193 label *label50
@@ -279,7 +279,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-15 instruct
    210 label *label55
 -    * set :fn0*retval *tmp16
    211 label *label53
-   212 goto :fn0*retaddr :fn0
+   212 return :fn0*retaddr
    213 end
  
    244 op sub *tmp25 :fn3:y 2
@@ -393,14 +393,14 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
 -    * set *tmp16 null
    208 label *label55
    209 label *label53
-   210 goto :fn0*retaddr :fn0
+   210 return :fn0*retaddr
  
    219 draw rect 109 0 176 176
    220 set *tmp17 null
    221 label *label58
 -    * set :fn1*retval *tmp17
    222 label *label56
-   223 goto :fn1*retaddr :fn1
+   223 return :fn1*retaddr
    224 end
 
 Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructions):
@@ -415,11 +415,11 @@ Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructi
 -    * set *tmp17 null
    219 label *label58
    220 label *label56
-   221 goto :fn1*retaddr :fn1
+   221 return :fn1*retaddr
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-   221 goto :fn1*retaddr :fn1
+   221 return :fn1*retaddr
    222 end
    223 label *label2
 -    * op max *tmp18 .AMOUNT 0
@@ -595,7 +595,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
  
    185 setaddr :fn1*retaddr *label52
    186 call *label1 :fn1*retval
-   187 gotolabel *label52 :fn1
+   187 label *label52
 -    * jump *label51 always
    188 label *label50
    189 label *label51
@@ -1287,26 +1287,26 @@ Modifications by Convert case at line 97:5 (+3 instructions):
 -    * jump *label65 notEqual *tmp19 0
 +  223 jump *label91 lessThan *tmp19 0
 +  224 jump *label91 greaterThan *tmp19 9
-+  225 gotooffset *label93 *tmp19 0 *label92
-+  226 gotolabel *label93 *label92
++  225 multijump *label93 *tmp19 0 *label92
++  226 multilabel *label93 *label92
 +  227 jump *label66 always
-+  228 gotolabel *label94 *label92
++  228 multilabel *label94 *label92
 +  229 jump *label68 always
-+  230 gotolabel *label95 *label92
++  230 multilabel *label95 *label92
 +  231 jump *label70 always
-+  232 gotolabel *label96 *label92
++  232 multilabel *label96 *label92
 +  233 jump *label72 always
-+  234 gotolabel *label97 *label92
++  234 multilabel *label97 *label92
 +  235 jump *label74 always
-+  236 gotolabel *label98 *label92
++  236 multilabel *label98 *label92
 +  237 jump *label76 always
-+  238 gotolabel *label99 *label92
++  238 multilabel *label99 *label92
 +  239 jump *label78 always
-+  240 gotolabel *label100 *label92
++  240 multilabel *label100 *label92
 +  241 jump *label80 always
-+  242 gotolabel *label101 *label92
++  242 multilabel *label101 *label92
 +  243 jump *label82 always
-+  244 gotolabel *label102 *label92
++  244 multilabel *label102 *label92
 +  245 jump *label84 always
    246 label *label66
    247 op sub *tmp24 :fn2:x 1
@@ -1401,26 +1401,26 @@ Modifications by Unroll loop at line 87:5 (+266 instructions):
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label91 lessThan *tmp19 0
 -    * jump *label91 greaterThan *tmp19 9
--    * gotooffset *label93 *tmp19 0 *label92
--    * gotolabel *label93 *label92
+-    * multijump *label93 *tmp19 0 *label92
+-    * multilabel *label93 *label92
 -    * jump *label66 always
--    * gotolabel *label94 *label92
+-    * multilabel *label94 *label92
 -    * jump *label68 always
--    * gotolabel *label95 *label92
+-    * multilabel *label95 *label92
 -    * jump *label70 always
--    * gotolabel *label96 *label92
+-    * multilabel *label96 *label92
 -    * jump *label72 always
--    * gotolabel *label97 *label92
+-    * multilabel *label97 *label92
 -    * jump *label74 always
--    * gotolabel *label98 *label92
+-    * multilabel *label98 *label92
 -    * jump *label76 always
--    * gotolabel *label99 *label92
+-    * multilabel *label99 *label92
 -    * jump *label78 always
--    * gotolabel *label100 *label92
+-    * multilabel *label100 *label92
 -    * jump *label80 always
--    * gotolabel *label101 *label92
+-    * multilabel *label101 *label92
 -    * jump *label82 always
--    * gotolabel *label102 *label92
+-    * multilabel *label102 *label92
 -    * jump *label84 always
 -    * label *label66
 -    * op sub *tmp24 :fn2:x 1
@@ -1531,26 +1531,26 @@ Modifications by Unroll loop at line 87:5 (+266 instructions):
 +  222 op mod *tmp19 :fn2:amount 10
 +  223 jump *label135 lessThan *tmp19 0
 +  224 jump *label135 greaterThan *tmp19 9
-+  225 gotooffset *label105 *tmp19 0 *label141
-+  226 gotolabel *label105 *label141
++  225 multijump *label105 *tmp19 0 *label141
++  226 multilabel *label105 *label141
 +  227 jump *label115 always
-+  228 gotolabel *label106 *label141
++  228 multilabel *label106 *label141
 +  229 jump *label117 always
-+  230 gotolabel *label107 *label141
++  230 multilabel *label107 *label141
 +  231 jump *label119 always
-+  232 gotolabel *label108 *label141
++  232 multilabel *label108 *label141
 +  233 jump *label121 always
-+  234 gotolabel *label109 *label141
++  234 multilabel *label109 *label141
 +  235 jump *label123 always
-+  236 gotolabel *label110 *label141
++  236 multilabel *label110 *label141
 +  237 jump *label125 always
-+  238 gotolabel *label111 *label141
++  238 multilabel *label111 *label141
 +  239 jump *label127 always
-+  240 gotolabel *label112 *label141
++  240 multilabel *label112 *label141
 +  241 jump *label129 always
-+  242 gotolabel *label113 *label141
++  242 multilabel *label113 *label141
 +  243 jump *label131 always
-+  244 gotolabel *label114 *label141
++  244 multilabel *label114 *label141
 +  245 jump *label133 always
 +  246 label *label115
 +  247 op sub *tmp24 :fn2:x 1
@@ -1657,26 +1657,26 @@ Modifications by Unroll loop at line 87:5 (+266 instructions):
 +  348 op mod *tmp19 :fn2:amount 10
 +  349 jump *label173 lessThan *tmp19 0
 +  350 jump *label173 greaterThan *tmp19 9
-+  351 gotooffset *label143 *tmp19 0 *label179
-+  352 gotolabel *label143 *label179
++  351 multijump *label143 *tmp19 0 *label179
++  352 multilabel *label143 *label179
 +  353 jump *label153 always
-+  354 gotolabel *label144 *label179
++  354 multilabel *label144 *label179
 +  355 jump *label155 always
-+  356 gotolabel *label145 *label179
++  356 multilabel *label145 *label179
 +  357 jump *label157 always
-+  358 gotolabel *label146 *label179
++  358 multilabel *label146 *label179
 +  359 jump *label159 always
-+  360 gotolabel *label147 *label179
++  360 multilabel *label147 *label179
 +  361 jump *label161 always
-+  362 gotolabel *label148 *label179
++  362 multilabel *label148 *label179
 +  363 jump *label163 always
-+  364 gotolabel *label149 *label179
++  364 multilabel *label149 *label179
 +  365 jump *label165 always
-+  366 gotolabel *label150 *label179
++  366 multilabel *label150 *label179
 +  367 jump *label167 always
-+  368 gotolabel *label151 *label179
++  368 multilabel *label151 *label179
 +  369 jump *label169 always
-+  370 gotolabel *label152 *label179
++  370 multilabel *label152 *label179
 +  371 jump *label171 always
 +  372 label *label153
 +  373 op sub *tmp24 :fn2:x 1
@@ -1783,26 +1783,26 @@ Modifications by Unroll loop at line 87:5 (+266 instructions):
 +  474 op mod *tmp19 :fn2:amount 10
 +  475 jump *label211 lessThan *tmp19 0
 +  476 jump *label211 greaterThan *tmp19 9
-+  477 gotooffset *label181 *tmp19 0 *label217
-+  478 gotolabel *label181 *label217
++  477 multijump *label181 *tmp19 0 *label217
++  478 multilabel *label181 *label217
 +  479 jump *label191 always
-+  480 gotolabel *label182 *label217
++  480 multilabel *label182 *label217
 +  481 jump *label193 always
-+  482 gotolabel *label183 *label217
++  482 multilabel *label183 *label217
 +  483 jump *label195 always
-+  484 gotolabel *label184 *label217
++  484 multilabel *label184 *label217
 +  485 jump *label197 always
-+  486 gotolabel *label185 *label217
++  486 multilabel *label185 *label217
 +  487 jump *label199 always
-+  488 gotolabel *label186 *label217
++  488 multilabel *label186 *label217
 +  489 jump *label201 always
-+  490 gotolabel *label187 *label217
++  490 multilabel *label187 *label217
 +  491 jump *label203 always
-+  492 gotolabel *label188 *label217
++  492 multilabel *label188 *label217
 +  493 jump *label205 always
-+  494 gotolabel *label189 *label217
++  494 multilabel *label189 *label217
 +  495 jump *label207 always
-+  496 gotolabel *label190 *label217
++  496 multilabel *label190 *label217
 +  497 jump *label209 always
 +  498 label *label191
 +  499 op sub *tmp24 :fn2:x 1
@@ -1909,26 +1909,26 @@ Modifications by Unroll loop at line 87:5 (+266 instructions):
 +  600 op mod *tmp19 :fn2:amount 10
 +  601 jump *label249 lessThan *tmp19 0
 +  602 jump *label249 greaterThan *tmp19 9
-+  603 gotooffset *label219 *tmp19 0 *label255
-+  604 gotolabel *label219 *label255
++  603 multijump *label219 *tmp19 0 *label255
++  604 multilabel *label219 *label255
 +  605 jump *label229 always
-+  606 gotolabel *label220 *label255
++  606 multilabel *label220 *label255
 +  607 jump *label231 always
-+  608 gotolabel *label221 *label255
++  608 multilabel *label221 *label255
 +  609 jump *label233 always
-+  610 gotolabel *label222 *label255
++  610 multilabel *label222 *label255
 +  611 jump *label235 always
-+  612 gotolabel *label223 *label255
++  612 multilabel *label223 *label255
 +  613 jump *label237 always
-+  614 gotolabel *label224 *label255
++  614 multilabel *label224 *label255
 +  615 jump *label239 always
-+  616 gotolabel *label225 *label255
++  616 multilabel *label225 *label255
 +  617 jump *label241 always
-+  618 gotolabel *label226 *label255
++  618 multilabel *label226 *label255
 +  619 jump *label243 always
-+  620 gotolabel *label227 *label255
++  620 multilabel *label227 *label255
 +  621 jump *label245 always
-+  622 gotolabel *label228 *label255
++  622 multilabel *label228 *label255
 +  623 jump *label247 always
 +  624 label *label229
 +  625 op sub *tmp24 :fn2:x 1
@@ -2123,7 +2123,7 @@ Modifications by Inline function 'eraseNumbers' defined at line 74:1 (-1 instruc
     94 set :fn1:first_column true
 -    * setaddr :fn1*retaddr *label26
 -    * call *label1 :fn1*retval
--    * gotolabel *label26 :fn1
+-    * label *label26
 +   95 label *label256
 +   96 draw color 0 0 80 255
 +   97 jump *label257 equal :fn1:first_column false
@@ -2142,7 +2142,7 @@ Modifications by Inline function 'eraseNumbers' defined at line 74:1 (-1 instruc
    188 set :fn1:first_column false
 -    * setaddr :fn1*retaddr *label52
 -    * call *label1 :fn1*retval
--    * gotolabel *label52 :fn1
+-    * label *label52
 +  189 label *label260
 +  190 draw color 0 0 80 255
 +  191 jump *label261 equal :fn1:first_column false
@@ -2157,7 +2157,7 @@ Modifications by Inline function 'eraseNumbers' defined at line 74:1 (-1 instruc
    200 label *label28
  
    214 label *label53
-   215 goto :fn0*retaddr :fn0
+   215 return :fn0*retaddr
    216 end
 -    * label *label1
 -    * draw color 0 0 80 255
@@ -2168,7 +2168,7 @@ Modifications by Inline function 'eraseNumbers' defined at line 74:1 (-1 instruc
 -    * draw rect 109 0 176 176
 -    * label *label58
 -    * label *label56
--    * goto :fn1*retaddr :fn1
+-    * return :fn1*retaddr
 -    * end
    217 label *label2
    218 op max :fn2:amount .AMOUNT 0
@@ -2219,7 +2219,7 @@ Modifications by Inline function 'eraseImages' defined at line 65:1 (-1 instruct
      4 set :fn0:first_column true
 -    * setaddr :fn0*retaddr *label3
 -    * call *label0 :fn0*retval
--    * gotolabel *label3 :fn0
+-    * label *label3
 +    5 label *label264
 +    6 draw color 0 0 80 255
 +    7 jump *label265 equal :fn0:first_column false
@@ -2232,7 +2232,7 @@ Modifications by Inline function 'eraseImages' defined at line 65:1 (-1 instruct
     14 set :fn0:first_column false
 -    * setaddr :fn0*retaddr *label4
 -    * call *label0 :fn0*retval
--    * gotolabel *label4 :fn0
+-    * label *label4
 +   15 label *label268
 +   16 draw color 0 0 80 255
 +   17 jump *label269 equal :fn0:first_column false
@@ -2258,7 +2258,7 @@ Modifications by Inline function 'eraseImages' defined at line 65:1 (-1 instruct
 -    * draw rect 93 0 16 176
 -    * label *label55
 -    * label *label53
--    * goto :fn0*retaddr :fn0
+-    * return :fn0*retaddr
 -    * end
    216 label *label2
    217 op max :fn2:amount .AMOUNT 0
@@ -2310,63 +2310,63 @@ Modifications by Unroll iteration loop at line 29:1 (+103 instructions):
 -    * setaddr *tmp2 *label8
 -    * set :item @sand
 -    * jump *label5 always
--    * gotolabel *label8 marker0
+-    * multilabel *label8 marker0
 -    * setaddr *tmp2 *label9
 -    * set :item @copper
 -    * jump *label5 always
--    * gotolabel *label9 marker0
+-    * multilabel *label9 marker0
 -    * setaddr *tmp2 *label10
 -    * set :item @lead
 -    * jump *label5 always
--    * gotolabel *label10 marker0
+-    * multilabel *label10 marker0
 -    * setaddr *tmp2 *label11
 -    * set :item @coal
 -    * jump *label5 always
--    * gotolabel *label11 marker0
+-    * multilabel *label11 marker0
 -    * setaddr *tmp2 *label12
 -    * set :item @titanium
 -    * jump *label5 always
--    * gotolabel *label12 marker0
+-    * multilabel *label12 marker0
 -    * setaddr *tmp2 *label13
 -    * set :item @thorium
 -    * jump *label5 always
--    * gotolabel *label13 marker0
+-    * multilabel *label13 marker0
 -    * setaddr *tmp2 *label14
 -    * set :item @scrap
 -    * jump *label5 always
--    * gotolabel *label14 marker0
+-    * multilabel *label14 marker0
 -    * setaddr *tmp2 *label15
 -    * set :item @graphite
 -    * jump *label5 always
--    * gotolabel *label15 marker0
+-    * multilabel *label15 marker0
 -    * setaddr *tmp2 *label16
 -    * set :item @metaglass
 -    * jump *label5 always
--    * gotolabel *label16 marker0
+-    * multilabel *label16 marker0
 -    * setaddr *tmp2 *label17
 -    * set :item @silicon
 -    * jump *label5 always
--    * gotolabel *label17 marker0
+-    * multilabel *label17 marker0
 -    * setaddr *tmp2 *label18
 -    * set :item @pyratite
 -    * jump *label5 always
--    * gotolabel *label18 marker0
+-    * multilabel *label18 marker0
 -    * setaddr *tmp2 *label19
 -    * set :item @blast-compound
 -    * jump *label5 always
--    * gotolabel *label19 marker0
+-    * multilabel *label19 marker0
 -    * setaddr *tmp2 *label20
 -    * set :item @plastanium
 -    * jump *label5 always
--    * gotolabel *label20 marker0
+-    * multilabel *label20 marker0
 -    * setaddr *tmp2 *label21
 -    * set :item @phase-fabric
 -    * jump *label5 always
--    * gotolabel *label21 marker0
+-    * multilabel *label21 marker0
 -    * setaddr *tmp2 *label22
 -    * set :item @surge-alloy
 -    * jump *label5 always
--    * gotolabel *label22 marker0
+-    * multilabel *label22 marker0
 -    * setaddr *tmp2 *label23
 -    * set :item @spore-pod
 -    * label *label5
@@ -2382,8 +2382,8 @@ Modifications by Unroll iteration loop at line 29:1 (+103 instructions):
 -    * label *label24
 -    * label *label25
 -    * label *label6
--    * goto *tmp2 marker0
--    * gotolabel *label23 marker0
+-    * multijump *tmp2 0 0 marker0
+-    * multilabel *label23 marker0
 -    * label *label7
 +   24 set :item @sand
 +   25 label *label272
@@ -3149,7 +3149,7 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
    212 set :fn2:y :y
 -    * setaddr :fn2*retaddr *label48
 -    * call *label2 :fn2*retval
--    * gotolabel *label48 :fn2
+-    * label *label48
 +  213 label *label369
 +  214 op max :fn2:amount .AMOUNT 0
 +  215 draw color 0 255 0 255
@@ -3158,26 +3158,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  218 op mod *tmp19 :fn2:amount 10
 +  219 jump *label402 lessThan *tmp19 0
 +  220 jump *label402 greaterThan *tmp19 9
-+  221 gotooffset *label372 *tmp19 0 *label524
-+  222 gotolabel *label372 *label524
++  221 multijump *label372 *tmp19 0 *label524
++  222 multilabel *label372 *label524
 +  223 jump *label382 always
-+  224 gotolabel *label373 *label524
++  224 multilabel *label373 *label524
 +  225 jump *label384 always
-+  226 gotolabel *label374 *label524
++  226 multilabel *label374 *label524
 +  227 jump *label386 always
-+  228 gotolabel *label375 *label524
++  228 multilabel *label375 *label524
 +  229 jump *label388 always
-+  230 gotolabel *label376 *label524
++  230 multilabel *label376 *label524
 +  231 jump *label390 always
-+  232 gotolabel *label377 *label524
++  232 multilabel *label377 *label524
 +  233 jump *label392 always
-+  234 gotolabel *label378 *label524
++  234 multilabel *label378 *label524
 +  235 jump *label394 always
-+  236 gotolabel *label379 *label524
++  236 multilabel *label379 *label524
 +  237 jump *label396 always
-+  238 gotolabel *label380 *label524
++  238 multilabel *label380 *label524
 +  239 jump *label398 always
-+  240 gotolabel *label381 *label524
++  240 multilabel *label381 *label524
 +  241 jump *label400 always
 +  242 label *label382
 +  243 op sub *tmp24 :fn2:x 1
@@ -3283,26 +3283,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  343 op mod *tmp19 :fn2:amount 10
 +  344 jump *label439 lessThan *tmp19 0
 +  345 jump *label439 greaterThan *tmp19 9
-+  346 gotooffset *label409 *tmp19 0 *label525
-+  347 gotolabel *label409 *label525
++  346 multijump *label409 *tmp19 0 *label525
++  347 multilabel *label409 *label525
 +  348 jump *label419 always
-+  349 gotolabel *label410 *label525
++  349 multilabel *label410 *label525
 +  350 jump *label421 always
-+  351 gotolabel *label411 *label525
++  351 multilabel *label411 *label525
 +  352 jump *label423 always
-+  353 gotolabel *label412 *label525
++  353 multilabel *label412 *label525
 +  354 jump *label425 always
-+  355 gotolabel *label413 *label525
++  355 multilabel *label413 *label525
 +  356 jump *label427 always
-+  357 gotolabel *label414 *label525
++  357 multilabel *label414 *label525
 +  358 jump *label429 always
-+  359 gotolabel *label415 *label525
++  359 multilabel *label415 *label525
 +  360 jump *label431 always
-+  361 gotolabel *label416 *label525
++  361 multilabel *label416 *label525
 +  362 jump *label433 always
-+  363 gotolabel *label417 *label525
++  363 multilabel *label417 *label525
 +  364 jump *label435 always
-+  365 gotolabel *label418 *label525
++  365 multilabel *label418 *label525
 +  366 jump *label437 always
 +  367 label *label419
 +  368 op sub *tmp24 :fn2:x 1
@@ -3408,26 +3408,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  468 op mod *tmp19 :fn2:amount 10
 +  469 jump *label476 lessThan *tmp19 0
 +  470 jump *label476 greaterThan *tmp19 9
-+  471 gotooffset *label446 *tmp19 0 *label526
-+  472 gotolabel *label446 *label526
++  471 multijump *label446 *tmp19 0 *label526
++  472 multilabel *label446 *label526
 +  473 jump *label456 always
-+  474 gotolabel *label447 *label526
++  474 multilabel *label447 *label526
 +  475 jump *label458 always
-+  476 gotolabel *label448 *label526
++  476 multilabel *label448 *label526
 +  477 jump *label460 always
-+  478 gotolabel *label449 *label526
++  478 multilabel *label449 *label526
 +  479 jump *label462 always
-+  480 gotolabel *label450 *label526
++  480 multilabel *label450 *label526
 +  481 jump *label464 always
-+  482 gotolabel *label451 *label526
++  482 multilabel *label451 *label526
 +  483 jump *label466 always
-+  484 gotolabel *label452 *label526
++  484 multilabel *label452 *label526
 +  485 jump *label468 always
-+  486 gotolabel *label453 *label526
++  486 multilabel *label453 *label526
 +  487 jump *label470 always
-+  488 gotolabel *label454 *label526
++  488 multilabel *label454 *label526
 +  489 jump *label472 always
-+  490 gotolabel *label455 *label526
++  490 multilabel *label455 *label526
 +  491 jump *label474 always
 +  492 label *label456
 +  493 op sub *tmp24 :fn2:x 1
@@ -3533,26 +3533,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  593 op mod *tmp19 :fn2:amount 10
 +  594 jump *label513 lessThan *tmp19 0
 +  595 jump *label513 greaterThan *tmp19 9
-+  596 gotooffset *label483 *tmp19 0 *label527
-+  597 gotolabel *label483 *label527
++  596 multijump *label483 *tmp19 0 *label527
++  597 multilabel *label483 *label527
 +  598 jump *label493 always
-+  599 gotolabel *label484 *label527
++  599 multilabel *label484 *label527
 +  600 jump *label495 always
-+  601 gotolabel *label485 *label527
++  601 multilabel *label485 *label527
 +  602 jump *label497 always
-+  603 gotolabel *label486 *label527
++  603 multilabel *label486 *label527
 +  604 jump *label499 always
-+  605 gotolabel *label487 *label527
++  605 multilabel *label487 *label527
 +  606 jump *label501 always
-+  607 gotolabel *label488 *label527
++  607 multilabel *label488 *label527
 +  608 jump *label503 always
-+  609 gotolabel *label489 *label527
++  609 multilabel *label489 *label527
 +  610 jump *label505 always
-+  611 gotolabel *label490 *label527
++  611 multilabel *label490 *label527
 +  612 jump *label507 always
-+  613 gotolabel *label491 *label527
++  613 multilabel *label491 *label527
 +  614 jump *label509 always
-+  615 gotolabel *label492 *label527
++  615 multilabel *label492 *label527
 +  616 jump *label511 always
 +  617 label *label493
 +  618 op sub *tmp24 :fn2:x 1
@@ -3678,7 +3678,7 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
    738 set :fn2:y :y
 -    * setaddr :fn2*retaddr *label49
 -    * call *label2 :fn2*retval
--    * gotolabel *label49 :fn2
+-    * label *label49
 +  739 label *label528
 +  740 op max :fn2:amount .AMOUNT 0
 +  741 draw color 0 255 0 255
@@ -3687,26 +3687,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  744 op mod *tmp19 :fn2:amount 10
 +  745 jump *label561 lessThan *tmp19 0
 +  746 jump *label561 greaterThan *tmp19 9
-+  747 gotooffset *label531 *tmp19 0 *label683
-+  748 gotolabel *label531 *label683
++  747 multijump *label531 *tmp19 0 *label683
++  748 multilabel *label531 *label683
 +  749 jump *label541 always
-+  750 gotolabel *label532 *label683
++  750 multilabel *label532 *label683
 +  751 jump *label543 always
-+  752 gotolabel *label533 *label683
++  752 multilabel *label533 *label683
 +  753 jump *label545 always
-+  754 gotolabel *label534 *label683
++  754 multilabel *label534 *label683
 +  755 jump *label547 always
-+  756 gotolabel *label535 *label683
++  756 multilabel *label535 *label683
 +  757 jump *label549 always
-+  758 gotolabel *label536 *label683
++  758 multilabel *label536 *label683
 +  759 jump *label551 always
-+  760 gotolabel *label537 *label683
++  760 multilabel *label537 *label683
 +  761 jump *label553 always
-+  762 gotolabel *label538 *label683
++  762 multilabel *label538 *label683
 +  763 jump *label555 always
-+  764 gotolabel *label539 *label683
++  764 multilabel *label539 *label683
 +  765 jump *label557 always
-+  766 gotolabel *label540 *label683
++  766 multilabel *label540 *label683
 +  767 jump *label559 always
 +  768 label *label541
 +  769 op sub *tmp24 :fn2:x 1
@@ -3812,26 +3812,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  869 op mod *tmp19 :fn2:amount 10
 +  870 jump *label598 lessThan *tmp19 0
 +  871 jump *label598 greaterThan *tmp19 9
-+  872 gotooffset *label568 *tmp19 0 *label684
-+  873 gotolabel *label568 *label684
++  872 multijump *label568 *tmp19 0 *label684
++  873 multilabel *label568 *label684
 +  874 jump *label578 always
-+  875 gotolabel *label569 *label684
++  875 multilabel *label569 *label684
 +  876 jump *label580 always
-+  877 gotolabel *label570 *label684
++  877 multilabel *label570 *label684
 +  878 jump *label582 always
-+  879 gotolabel *label571 *label684
++  879 multilabel *label571 *label684
 +  880 jump *label584 always
-+  881 gotolabel *label572 *label684
++  881 multilabel *label572 *label684
 +  882 jump *label586 always
-+  883 gotolabel *label573 *label684
++  883 multilabel *label573 *label684
 +  884 jump *label588 always
-+  885 gotolabel *label574 *label684
++  885 multilabel *label574 *label684
 +  886 jump *label590 always
-+  887 gotolabel *label575 *label684
++  887 multilabel *label575 *label684
 +  888 jump *label592 always
-+  889 gotolabel *label576 *label684
++  889 multilabel *label576 *label684
 +  890 jump *label594 always
-+  891 gotolabel *label577 *label684
++  891 multilabel *label577 *label684
 +  892 jump *label596 always
 +  893 label *label578
 +  894 op sub *tmp24 :fn2:x 1
@@ -3937,26 +3937,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 +  994 op mod *tmp19 :fn2:amount 10
 +  995 jump *label635 lessThan *tmp19 0
 +  996 jump *label635 greaterThan *tmp19 9
-+  997 gotooffset *label605 *tmp19 0 *label685
-+  998 gotolabel *label605 *label685
++  997 multijump *label605 *tmp19 0 *label685
++  998 multilabel *label605 *label685
 +  999 jump *label615 always
-+ 1000 gotolabel *label606 *label685
++ 1000 multilabel *label606 *label685
 + 1001 jump *label617 always
-+ 1002 gotolabel *label607 *label685
++ 1002 multilabel *label607 *label685
 + 1003 jump *label619 always
-+ 1004 gotolabel *label608 *label685
++ 1004 multilabel *label608 *label685
 + 1005 jump *label621 always
-+ 1006 gotolabel *label609 *label685
++ 1006 multilabel *label609 *label685
 + 1007 jump *label623 always
-+ 1008 gotolabel *label610 *label685
++ 1008 multilabel *label610 *label685
 + 1009 jump *label625 always
-+ 1010 gotolabel *label611 *label685
++ 1010 multilabel *label611 *label685
 + 1011 jump *label627 always
-+ 1012 gotolabel *label612 *label685
++ 1012 multilabel *label612 *label685
 + 1013 jump *label629 always
-+ 1014 gotolabel *label613 *label685
++ 1014 multilabel *label613 *label685
 + 1015 jump *label631 always
-+ 1016 gotolabel *label614 *label685
++ 1016 multilabel *label614 *label685
 + 1017 jump *label633 always
 + 1018 label *label615
 + 1019 op sub *tmp24 :fn2:x 1
@@ -4062,26 +4062,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 + 1119 op mod *tmp19 :fn2:amount 10
 + 1120 jump *label672 lessThan *tmp19 0
 + 1121 jump *label672 greaterThan *tmp19 9
-+ 1122 gotooffset *label642 *tmp19 0 *label686
-+ 1123 gotolabel *label642 *label686
++ 1122 multijump *label642 *tmp19 0 *label686
++ 1123 multilabel *label642 *label686
 + 1124 jump *label652 always
-+ 1125 gotolabel *label643 *label686
++ 1125 multilabel *label643 *label686
 + 1126 jump *label654 always
-+ 1127 gotolabel *label644 *label686
++ 1127 multilabel *label644 *label686
 + 1128 jump *label656 always
-+ 1129 gotolabel *label645 *label686
++ 1129 multilabel *label645 *label686
 + 1130 jump *label658 always
-+ 1131 gotolabel *label646 *label686
++ 1131 multilabel *label646 *label686
 + 1132 jump *label660 always
-+ 1133 gotolabel *label647 *label686
++ 1133 multilabel *label647 *label686
 + 1134 jump *label662 always
-+ 1135 gotolabel *label648 *label686
++ 1135 multilabel *label648 *label686
 + 1136 jump *label664 always
-+ 1137 gotolabel *label649 *label686
++ 1137 multilabel *label649 *label686
 + 1138 jump *label666 always
-+ 1139 gotolabel *label650 *label686
++ 1139 multilabel *label650 *label686
 + 1140 jump *label668 always
-+ 1141 gotolabel *label651 *label686
++ 1141 multilabel *label651 *label686
 + 1142 jump *label670 always
 + 1143 label *label652
 + 1144 op sub *tmp24 :fn2:x 1
@@ -4216,26 +4216,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label135 lessThan *tmp19 0
 -    * jump *label135 greaterThan *tmp19 9
--    * gotooffset *label105 *tmp19 0 *label141
--    * gotolabel *label105 *label141
+-    * multijump *label105 *tmp19 0 *label141
+-    * multilabel *label105 *label141
 -    * jump *label115 always
--    * gotolabel *label106 *label141
+-    * multilabel *label106 *label141
 -    * jump *label117 always
--    * gotolabel *label107 *label141
+-    * multilabel *label107 *label141
 -    * jump *label119 always
--    * gotolabel *label108 *label141
+-    * multilabel *label108 *label141
 -    * jump *label121 always
--    * gotolabel *label109 *label141
+-    * multilabel *label109 *label141
 -    * jump *label123 always
--    * gotolabel *label110 *label141
+-    * multilabel *label110 *label141
 -    * jump *label125 always
--    * gotolabel *label111 *label141
+-    * multilabel *label111 *label141
 -    * jump *label127 always
--    * gotolabel *label112 *label141
+-    * multilabel *label112 *label141
 -    * jump *label129 always
--    * gotolabel *label113 *label141
+-    * multilabel *label113 *label141
 -    * jump *label131 always
--    * gotolabel *label114 *label141
+-    * multilabel *label114 *label141
 -    * jump *label133 always
 -    * label *label115
 -    * op sub *tmp24 :fn2:x 1
@@ -4341,26 +4341,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label173 lessThan *tmp19 0
 -    * jump *label173 greaterThan *tmp19 9
--    * gotooffset *label143 *tmp19 0 *label179
--    * gotolabel *label143 *label179
+-    * multijump *label143 *tmp19 0 *label179
+-    * multilabel *label143 *label179
 -    * jump *label153 always
--    * gotolabel *label144 *label179
+-    * multilabel *label144 *label179
 -    * jump *label155 always
--    * gotolabel *label145 *label179
+-    * multilabel *label145 *label179
 -    * jump *label157 always
--    * gotolabel *label146 *label179
+-    * multilabel *label146 *label179
 -    * jump *label159 always
--    * gotolabel *label147 *label179
+-    * multilabel *label147 *label179
 -    * jump *label161 always
--    * gotolabel *label148 *label179
+-    * multilabel *label148 *label179
 -    * jump *label163 always
--    * gotolabel *label149 *label179
+-    * multilabel *label149 *label179
 -    * jump *label165 always
--    * gotolabel *label150 *label179
+-    * multilabel *label150 *label179
 -    * jump *label167 always
--    * gotolabel *label151 *label179
+-    * multilabel *label151 *label179
 -    * jump *label169 always
--    * gotolabel *label152 *label179
+-    * multilabel *label152 *label179
 -    * jump *label171 always
 -    * label *label153
 -    * op sub *tmp24 :fn2:x 1
@@ -4466,26 +4466,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label211 lessThan *tmp19 0
 -    * jump *label211 greaterThan *tmp19 9
--    * gotooffset *label181 *tmp19 0 *label217
--    * gotolabel *label181 *label217
+-    * multijump *label181 *tmp19 0 *label217
+-    * multilabel *label181 *label217
 -    * jump *label191 always
--    * gotolabel *label182 *label217
+-    * multilabel *label182 *label217
 -    * jump *label193 always
--    * gotolabel *label183 *label217
+-    * multilabel *label183 *label217
 -    * jump *label195 always
--    * gotolabel *label184 *label217
+-    * multilabel *label184 *label217
 -    * jump *label197 always
--    * gotolabel *label185 *label217
+-    * multilabel *label185 *label217
 -    * jump *label199 always
--    * gotolabel *label186 *label217
+-    * multilabel *label186 *label217
 -    * jump *label201 always
--    * gotolabel *label187 *label217
+-    * multilabel *label187 *label217
 -    * jump *label203 always
--    * gotolabel *label188 *label217
+-    * multilabel *label188 *label217
 -    * jump *label205 always
--    * gotolabel *label189 *label217
+-    * multilabel *label189 *label217
 -    * jump *label207 always
--    * gotolabel *label190 *label217
+-    * multilabel *label190 *label217
 -    * jump *label209 always
 -    * label *label191
 -    * op sub *tmp24 :fn2:x 1
@@ -4591,26 +4591,26 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label249 lessThan *tmp19 0
 -    * jump *label249 greaterThan *tmp19 9
--    * gotooffset *label219 *tmp19 0 *label255
--    * gotolabel *label219 *label255
+-    * multijump *label219 *tmp19 0 *label255
+-    * multilabel *label219 *label255
 -    * jump *label229 always
--    * gotolabel *label220 *label255
+-    * multilabel *label220 *label255
 -    * jump *label231 always
--    * gotolabel *label221 *label255
+-    * multilabel *label221 *label255
 -    * jump *label233 always
--    * gotolabel *label222 *label255
+-    * multilabel *label222 *label255
 -    * jump *label235 always
--    * gotolabel *label223 *label255
+-    * multilabel *label223 *label255
 -    * jump *label237 always
--    * gotolabel *label224 *label255
+-    * multilabel *label224 *label255
 -    * jump *label239 always
--    * gotolabel *label225 *label255
+-    * multilabel *label225 *label255
 -    * jump *label241 always
--    * gotolabel *label226 *label255
+-    * multilabel *label226 *label255
 -    * jump *label243 always
--    * gotolabel *label227 *label255
+-    * multilabel *label227 *label255
 -    * jump *label245 always
--    * gotolabel *label228 *label255
+-    * multilabel *label228 *label255
 -    * jump *label247 always
 -    * label *label229
 -    * op sub *tmp24 :fn2:x 1
@@ -4730,7 +4730,7 @@ Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instru
 -    * label *label89
 -    * label *label87
 -    * label *label59
--    * goto :fn2*retaddr :fn2
+-    * return :fn2*retaddr
 -    * end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
@@ -4746,16 +4746,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label402 lessThan *tmp19 0
 -    * jump *label402 greaterThan *tmp19 9
--    * gotooffset *label372 *tmp19 0 *label524
+-    * multijump *label372 *tmp19 0 *label524
 +  218 op mod *tmp19 12345 10
 +  219 jump *label402 lessThan 5 0
 +  220 jump *label402 greaterThan 5 9
-+  221 gotooffset *label372 5 0 *label524
-   222 gotolabel *label372 *label524
++  221 multijump *label372 5 0 *label524
+   222 multilabel *label372 *label524
    223 jump *label382 always
-   224 gotolabel *label373 *label524
+   224 multilabel *label373 *label524
  
-   240 gotolabel *label381 *label524
+   240 multilabel *label381 *label524
    241 jump *label400 always
    242 label *label382
 -    * op sub *tmp24 :fn2:x 1
@@ -4925,16 +4925,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label439 lessThan *tmp19 0
 -    * jump *label439 greaterThan *tmp19 9
--    * gotooffset *label409 *tmp19 0 *label525
+-    * multijump *label409 *tmp19 0 *label525
 +  343 op mod *tmp19 1234 10
 +  344 jump *label439 lessThan 4 0
 +  345 jump *label439 greaterThan 4 9
-+  346 gotooffset *label409 4 0 *label525
-   347 gotolabel *label409 *label525
++  346 multijump *label409 4 0 *label525
+   347 multilabel *label409 *label525
    348 jump *label419 always
-   349 gotolabel *label410 *label525
+   349 multilabel *label410 *label525
  
-   365 gotolabel *label418 *label525
+   365 multilabel *label418 *label525
    366 jump *label437 always
    367 label *label419
 -    * op sub *tmp24 :fn2:x 1
@@ -5104,16 +5104,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label476 lessThan *tmp19 0
 -    * jump *label476 greaterThan *tmp19 9
--    * gotooffset *label446 *tmp19 0 *label526
+-    * multijump *label446 *tmp19 0 *label526
 +  468 op mod *tmp19 123 10
 +  469 jump *label476 lessThan 3 0
 +  470 jump *label476 greaterThan 3 9
-+  471 gotooffset *label446 3 0 *label526
-   472 gotolabel *label446 *label526
++  471 multijump *label446 3 0 *label526
+   472 multilabel *label446 *label526
    473 jump *label456 always
-   474 gotolabel *label447 *label526
+   474 multilabel *label447 *label526
  
-   490 gotolabel *label455 *label526
+   490 multilabel *label455 *label526
    491 jump *label474 always
    492 label *label456
 -    * op sub *tmp24 :fn2:x 1
@@ -5283,16 +5283,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label513 lessThan *tmp19 0
 -    * jump *label513 greaterThan *tmp19 9
--    * gotooffset *label483 *tmp19 0 *label527
+-    * multijump *label483 *tmp19 0 *label527
 +  593 op mod *tmp19 12 10
 +  594 jump *label513 lessThan 2 0
 +  595 jump *label513 greaterThan 2 9
-+  596 gotooffset *label483 2 0 *label527
-   597 gotolabel *label483 *label527
++  596 multijump *label483 2 0 *label527
+   597 multilabel *label483 *label527
    598 jump *label493 always
-   599 gotolabel *label484 *label527
+   599 multilabel *label484 *label527
  
-   615 gotolabel *label492 *label527
+   615 multilabel *label492 *label527
    616 jump *label511 always
    617 label *label493
 -    * op sub *tmp24 :fn2:x 1
@@ -5500,16 +5500,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label561 lessThan *tmp19 0
 -    * jump *label561 greaterThan *tmp19 9
--    * gotooffset *label531 *tmp19 0 *label683
+-    * multijump *label531 *tmp19 0 *label683
 +  744 op mod *tmp19 12345 10
 +  745 jump *label561 lessThan 5 0
 +  746 jump *label561 greaterThan 5 9
-+  747 gotooffset *label531 5 0 *label683
-   748 gotolabel *label531 *label683
++  747 multijump *label531 5 0 *label683
+   748 multilabel *label531 *label683
    749 jump *label541 always
-   750 gotolabel *label532 *label683
+   750 multilabel *label532 *label683
  
-   766 gotolabel *label540 *label683
+   766 multilabel *label540 *label683
    767 jump *label559 always
    768 label *label541
 -    * op sub *tmp24 :fn2:x 1
@@ -5679,16 +5679,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label598 lessThan *tmp19 0
 -    * jump *label598 greaterThan *tmp19 9
--    * gotooffset *label568 *tmp19 0 *label684
+-    * multijump *label568 *tmp19 0 *label684
 +  869 op mod *tmp19 1234 10
 +  870 jump *label598 lessThan 4 0
 +  871 jump *label598 greaterThan 4 9
-+  872 gotooffset *label568 4 0 *label684
-   873 gotolabel *label568 *label684
++  872 multijump *label568 4 0 *label684
+   873 multilabel *label568 *label684
    874 jump *label578 always
-   875 gotolabel *label569 *label684
+   875 multilabel *label569 *label684
  
-   891 gotolabel *label577 *label684
+   891 multilabel *label577 *label684
    892 jump *label596 always
    893 label *label578
 -    * op sub *tmp24 :fn2:x 1
@@ -5858,16 +5858,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label635 lessThan *tmp19 0
 -    * jump *label635 greaterThan *tmp19 9
--    * gotooffset *label605 *tmp19 0 *label685
+-    * multijump *label605 *tmp19 0 *label685
 +  994 op mod *tmp19 123 10
 +  995 jump *label635 lessThan 3 0
 +  996 jump *label635 greaterThan 3 9
-+  997 gotooffset *label605 3 0 *label685
-   998 gotolabel *label605 *label685
++  997 multijump *label605 3 0 *label685
+   998 multilabel *label605 *label685
    999 jump *label615 always
-  1000 gotolabel *label606 *label685
+  1000 multilabel *label606 *label685
  
-  1016 gotolabel *label614 *label685
+  1016 multilabel *label614 *label685
   1017 jump *label633 always
   1018 label *label615
 -    * op sub *tmp24 :fn2:x 1
@@ -6037,16 +6037,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod *tmp19 :fn2:amount 10
 -    * jump *label672 lessThan *tmp19 0
 -    * jump *label672 greaterThan *tmp19 9
--    * gotooffset *label642 *tmp19 0 *label686
+-    * multijump *label642 *tmp19 0 *label686
 + 1119 op mod *tmp19 12 10
 + 1120 jump *label672 lessThan 2 0
 + 1121 jump *label672 greaterThan 2 9
-+ 1122 gotooffset *label642 2 0 *label686
-  1123 gotolabel *label642 *label686
++ 1122 multijump *label642 2 0 *label686
+  1123 multilabel *label642 *label686
   1124 jump *label652 always
-  1125 gotolabel *label643 *label686
+  1125 multilabel *label643 *label686
  
-  1141 gotolabel *label651 *label686
+  1141 multilabel *label651 *label686
   1142 jump *label670 always
   1143 label *label652
 -    * op sub *tmp24 :fn2:x 1
@@ -6262,9 +6262,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 12345 10
    214 jump *label402 lessThan 5 0
    215 jump *label402 greaterThan 5 9
-   216 gotooffset *label372 5 0 *label524
+   216 multijump *label372 5 0 *label524
  
-   235 gotolabel *label381 *label524
+   235 multilabel *label381 *label524
    236 jump *label400 always
    237 label *label382
 -    * op sub *tmp24 71 1
@@ -6354,9 +6354,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 1234 10
    325 jump *label439 lessThan 4 0
    326 jump *label439 greaterThan 4 9
-   327 gotooffset *label409 4 0 *label525
+   327 multijump *label409 4 0 *label525
  
-   346 gotolabel *label418 *label525
+   346 multilabel *label418 *label525
    347 jump *label437 always
    348 label *label419
 -    * op sub *tmp24 60 1
@@ -6446,9 +6446,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 123 10
    436 jump *label476 lessThan 3 0
    437 jump *label476 greaterThan 3 9
-   438 gotooffset *label446 3 0 *label526
+   438 multijump *label446 3 0 *label526
  
-   457 gotolabel *label455 *label526
+   457 multilabel *label455 *label526
    458 jump *label474 always
    459 label *label456
 -    * op sub *tmp24 49 1
@@ -6538,9 +6538,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 12 10
    547 jump *label513 lessThan 2 0
    548 jump *label513 greaterThan 2 9
-   549 gotooffset *label483 2 0 *label527
+   549 multijump *label483 2 0 *label527
  
-   568 gotolabel *label492 *label527
+   568 multilabel *label492 *label527
    569 jump *label511 always
    570 label *label493
 -    * op sub *tmp24 38 1
@@ -6651,9 +6651,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 12345 10
    679 jump *label561 lessThan 5 0
    680 jump *label561 greaterThan 5 9
-   681 gotooffset *label531 5 0 *label683
+   681 multijump *label531 5 0 *label683
  
-   700 gotolabel *label540 *label683
+   700 multilabel *label540 *label683
    701 jump *label559 always
    702 label *label541
 -    * op sub *tmp24 157 1
@@ -6743,9 +6743,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 1234 10
    790 jump *label598 lessThan 4 0
    791 jump *label598 greaterThan 4 9
-   792 gotooffset *label568 4 0 *label684
+   792 multijump *label568 4 0 *label684
  
-   811 gotolabel *label577 *label684
+   811 multilabel *label577 *label684
    812 jump *label596 always
    813 label *label578
 -    * op sub *tmp24 146 1
@@ -6835,9 +6835,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 123 10
    901 jump *label635 lessThan 3 0
    902 jump *label635 greaterThan 3 9
-   903 gotooffset *label605 3 0 *label685
+   903 multijump *label605 3 0 *label685
  
-   922 gotolabel *label614 *label685
+   922 multilabel *label614 *label685
    923 jump *label633 always
    924 label *label615
 -    * op sub *tmp24 135 1
@@ -6927,9 +6927,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mod *tmp19 12 10
   1012 jump *label672 lessThan 2 0
   1013 jump *label672 greaterThan 2 9
-  1014 gotooffset *label642 2 0 *label686
+  1014 multijump *label642 2 0 *label686
  
-  1033 gotolabel *label651 *label686
+  1033 multilabel *label651 *label686
   1034 jump *label670 always
   1035 label *label652
 -    * op sub *tmp24 124 1
@@ -7186,8 +7186,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    210 label *label371
 -    * jump *label402 lessThan 5 0
 -    * jump *label402 greaterThan 5 9
-   211 gotooffset *label372 5 0 *label524
-   212 gotolabel *label372 *label524
+   211 multijump *label372 5 0 *label524
+   212 multilabel *label372 *label524
    213 jump *label382 always
  
    311 label *label402
@@ -7202,8 +7202,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    319 label *label408
 -    * jump *label439 lessThan 4 0
 -    * jump *label439 greaterThan 4 9
-   320 gotooffset *label409 4 0 *label525
-   321 gotolabel *label409 *label525
+   320 multijump *label409 4 0 *label525
+   321 multilabel *label409 *label525
    322 jump *label419 always
  
    420 label *label439
@@ -7218,8 +7218,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    428 label *label445
 -    * jump *label476 lessThan 3 0
 -    * jump *label476 greaterThan 3 9
-   429 gotooffset *label446 3 0 *label526
-   430 gotolabel *label446 *label526
+   429 multijump *label446 3 0 *label526
+   430 multilabel *label446 *label526
    431 jump *label456 always
  
    529 label *label476
@@ -7234,8 +7234,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    537 label *label482
 -    * jump *label513 lessThan 2 0
 -    * jump *label513 greaterThan 2 9
-   538 gotooffset *label483 2 0 *label527
-   539 gotolabel *label483 *label527
+   538 multijump *label483 2 0 *label527
+   539 multilabel *label483 *label527
    540 jump *label493 always
  
    638 label *label513
@@ -7258,8 +7258,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    666 label *label530
 -    * jump *label561 lessThan 5 0
 -    * jump *label561 greaterThan 5 9
-   667 gotooffset *label531 5 0 *label683
-   668 gotolabel *label531 *label683
+   667 multijump *label531 5 0 *label683
+   668 multilabel *label531 *label683
    669 jump *label541 always
  
    767 label *label561
@@ -7274,8 +7274,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    775 label *label567
 -    * jump *label598 lessThan 4 0
 -    * jump *label598 greaterThan 4 9
-   776 gotooffset *label568 4 0 *label684
-   777 gotolabel *label568 *label684
+   776 multijump *label568 4 0 *label684
+   777 multilabel *label568 *label684
    778 jump *label578 always
  
    876 label *label598
@@ -7290,8 +7290,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    884 label *label604
 -    * jump *label635 lessThan 3 0
 -    * jump *label635 greaterThan 3 9
-   885 gotooffset *label605 3 0 *label685
-   886 gotolabel *label605 *label685
+   885 multijump *label605 3 0 *label685
+   886 multilabel *label605 *label685
    887 jump *label615 always
  
    985 label *label635
@@ -7306,8 +7306,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-21 in
    993 label *label641
 -    * jump *label672 lessThan 2 0
 -    * jump *label672 greaterThan 2 9
-   994 gotooffset *label642 2 0 *label686
-   995 gotolabel *label642 *label686
+   994 multijump *label642 2 0 *label686
+   995 multilabel *label642 *label686
    996 jump *label652 always
  
   1094 label *label672
@@ -8902,7 +8902,7 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-21 instruct
    986 draw rect 109 0 176 176
    987 label *label262
  
-   993 gotolabel *label45 marker1
+   993 multilabel *label45 marker1
    994 label *label29
    995 drawflush display1
 -    * end
@@ -8940,89 +8940,89 @@ set :index 0
 setaddr *tmp10 *label30
 set :item @sand
 jump *label27 always 0 0
-gotolabel *label30 marker1
+multilabel *label30 marker1
 setaddr *tmp10 *label31
 set :item @copper
 jump *label27 always 0 0
-gotolabel *label31 marker1
+multilabel *label31 marker1
 setaddr *tmp10 *label32
 set :item @lead
 jump *label27 always 0 0
-gotolabel *label32 marker1
+multilabel *label32 marker1
 setaddr *tmp10 *label33
 set :item @coal
 jump *label27 always 0 0
-gotolabel *label33 marker1
+multilabel *label33 marker1
 setaddr *tmp10 *label34
 set :item @titanium
 jump *label27 always 0 0
-gotolabel *label34 marker1
+multilabel *label34 marker1
 setaddr *tmp10 *label35
 set :item @thorium
 jump *label27 always 0 0
-gotolabel *label35 marker1
+multilabel *label35 marker1
 setaddr *tmp10 *label36
 set :item @scrap
 jump *label27 always 0 0
-gotolabel *label36 marker1
+multilabel *label36 marker1
 setaddr *tmp10 *label37
 set :item @graphite
 jump *label27 always 0 0
-gotolabel *label37 marker1
+multilabel *label37 marker1
 setaddr *tmp10 *label38
 set :item @metaglass
 jump *label27 always 0 0
-gotolabel *label38 marker1
+multilabel *label38 marker1
 setaddr *tmp10 *label39
 set :item @silicon
 jump *label27 always 0 0
-gotolabel *label39 marker1
+multilabel *label39 marker1
 setaddr *tmp10 *label40
 set :item @pyratite
 jump *label27 always 0 0
-gotolabel *label40 marker1
+multilabel *label40 marker1
 setaddr *tmp10 *label41
 set :item @blast-compound
 jump *label27 always 0 0
-gotolabel *label41 marker1
+multilabel *label41 marker1
 setaddr *tmp10 *label42
 set :item @plastanium
 jump *label27 always 0 0
-gotolabel *label42 marker1
+multilabel *label42 marker1
 setaddr *tmp10 *label43
 set :item @phase-fabric
 jump *label27 always 0 0
-gotolabel *label43 marker1
+multilabel *label43 marker1
 setaddr *tmp10 *label44
 set :item @surge-alloy
 jump *label27 always 0 0
-gotolabel *label44 marker1
+multilabel *label44 marker1
 setaddr *tmp10 *label45
 set :item @spore-pod
 label *label27
 draw image 0 0 :item 16 0 0
 jump *label46 greaterThanEq :index 8
 draw color 0 255 0 255 0 0
-gotooffset *label372 5 0 *label524
-gotolabel *label372 *label524
+multijump *label372 5 0 *label524
+multilabel *label372 *label524
 jump *label382 always 0 0
-gotolabel *label373 *label524
+multilabel *label373 *label524
 jump *label384 always 0 0
-gotolabel *label374 *label524
+multilabel *label374 *label524
 jump *label386 always 0 0
-gotolabel *label375 *label524
+multilabel *label375 *label524
 jump *label388 always 0 0
-gotolabel *label376 *label524
+multilabel *label376 *label524
 jump *label390 always 0 0
-gotolabel *label377 *label524
+multilabel *label377 *label524
 jump *label392 always 0 0
-gotolabel *label378 *label524
+multilabel *label378 *label524
 jump *label394 always 0 0
-gotolabel *label379 *label524
+multilabel *label379 *label524
 jump *label396 always 0 0
-gotolabel *label380 *label524
+multilabel *label380 *label524
 jump *label398 always 0 0
-gotolabel *label381 *label524
+multilabel *label381 *label524
 jump *label400 always 0 0
 label *label382
 op sub *tmp26 :y 1
@@ -9095,26 +9095,26 @@ draw line 71 *tmp105 71 *tmp104 0 0
 draw line 71 *tmp104 78 *tmp104 0 0
 jump *label405 always 0 0
 label *label405
-gotooffset *label409 4 0 *label525
-gotolabel *label409 *label525
+multijump *label409 4 0 *label525
+multilabel *label409 *label525
 jump *label419 always 0 0
-gotolabel *label410 *label525
+multilabel *label410 *label525
 jump *label421 always 0 0
-gotolabel *label411 *label525
+multilabel *label411 *label525
 jump *label423 always 0 0
-gotolabel *label412 *label525
+multilabel *label412 *label525
 jump *label425 always 0 0
-gotolabel *label413 *label525
+multilabel *label413 *label525
 jump *label427 always 0 0
-gotolabel *label414 *label525
+multilabel *label414 *label525
 jump *label429 always 0 0
-gotolabel *label415 *label525
+multilabel *label415 *label525
 jump *label431 always 0 0
-gotolabel *label416 *label525
+multilabel *label416 *label525
 jump *label433 always 0 0
-gotolabel *label417 *label525
+multilabel *label417 *label525
 jump *label435 always 0 0
-gotolabel *label418 *label525
+multilabel *label418 *label525
 jump *label437 always 0 0
 label *label419
 op sub *tmp26 :y 1
@@ -9187,26 +9187,26 @@ draw line 60 *tmp105 60 *tmp104 0 0
 draw line 60 *tmp104 67 *tmp104 0 0
 jump *label442 always 0 0
 label *label442
-gotooffset *label446 3 0 *label526
-gotolabel *label446 *label526
+multijump *label446 3 0 *label526
+multilabel *label446 *label526
 jump *label456 always 0 0
-gotolabel *label447 *label526
+multilabel *label447 *label526
 jump *label458 always 0 0
-gotolabel *label448 *label526
+multilabel *label448 *label526
 jump *label460 always 0 0
-gotolabel *label449 *label526
+multilabel *label449 *label526
 jump *label462 always 0 0
-gotolabel *label450 *label526
+multilabel *label450 *label526
 jump *label464 always 0 0
-gotolabel *label451 *label526
+multilabel *label451 *label526
 jump *label466 always 0 0
-gotolabel *label452 *label526
+multilabel *label452 *label526
 jump *label468 always 0 0
-gotolabel *label453 *label526
+multilabel *label453 *label526
 jump *label470 always 0 0
-gotolabel *label454 *label526
+multilabel *label454 *label526
 jump *label472 always 0 0
-gotolabel *label455 *label526
+multilabel *label455 *label526
 jump *label474 always 0 0
 label *label456
 op sub *tmp26 :y 1
@@ -9279,26 +9279,26 @@ draw line 49 *tmp105 49 *tmp104 0 0
 draw line 49 *tmp104 56 *tmp104 0 0
 jump *label479 always 0 0
 label *label479
-gotooffset *label483 2 0 *label527
-gotolabel *label483 *label527
+multijump *label483 2 0 *label527
+multilabel *label483 *label527
 jump *label493 always 0 0
-gotolabel *label484 *label527
+multilabel *label484 *label527
 jump *label495 always 0 0
-gotolabel *label485 *label527
+multilabel *label485 *label527
 jump *label497 always 0 0
-gotolabel *label486 *label527
+multilabel *label486 *label527
 jump *label499 always 0 0
-gotolabel *label487 *label527
+multilabel *label487 *label527
 jump *label501 always 0 0
-gotolabel *label488 *label527
+multilabel *label488 *label527
 jump *label503 always 0 0
-gotolabel *label489 *label527
+multilabel *label489 *label527
 jump *label505 always 0 0
-gotolabel *label490 *label527
+multilabel *label490 *label527
 jump *label507 always 0 0
-gotolabel *label491 *label527
+multilabel *label491 *label527
 jump *label509 always 0 0
-gotolabel *label492 *label527
+multilabel *label492 *label527
 jump *label511 always 0 0
 label *label493
 op sub *tmp26 :y 1
@@ -9376,26 +9376,26 @@ draw line 33 :y 33 *tmp122 0 0
 jump *label47 always 0 0
 label *label46
 draw color 0 255 0 255 0 0
-gotooffset *label531 5 0 *label683
-gotolabel *label531 *label683
+multijump *label531 5 0 *label683
+multilabel *label531 *label683
 jump *label541 always 0 0
-gotolabel *label532 *label683
+multilabel *label532 *label683
 jump *label543 always 0 0
-gotolabel *label533 *label683
+multilabel *label533 *label683
 jump *label545 always 0 0
-gotolabel *label534 *label683
+multilabel *label534 *label683
 jump *label547 always 0 0
-gotolabel *label535 *label683
+multilabel *label535 *label683
 jump *label549 always 0 0
-gotolabel *label536 *label683
+multilabel *label536 *label683
 jump *label551 always 0 0
-gotolabel *label537 *label683
+multilabel *label537 *label683
 jump *label553 always 0 0
-gotolabel *label538 *label683
+multilabel *label538 *label683
 jump *label555 always 0 0
-gotolabel *label539 *label683
+multilabel *label539 *label683
 jump *label557 always 0 0
-gotolabel *label540 *label683
+multilabel *label540 *label683
 jump *label559 always 0 0
 label *label541
 op sub *tmp26 :y 1
@@ -9468,26 +9468,26 @@ draw line 157 *tmp105 157 *tmp104 0 0
 draw line 157 *tmp104 164 *tmp104 0 0
 jump *label564 always 0 0
 label *label564
-gotooffset *label568 4 0 *label684
-gotolabel *label568 *label684
+multijump *label568 4 0 *label684
+multilabel *label568 *label684
 jump *label578 always 0 0
-gotolabel *label569 *label684
+multilabel *label569 *label684
 jump *label580 always 0 0
-gotolabel *label570 *label684
+multilabel *label570 *label684
 jump *label582 always 0 0
-gotolabel *label571 *label684
+multilabel *label571 *label684
 jump *label584 always 0 0
-gotolabel *label572 *label684
+multilabel *label572 *label684
 jump *label586 always 0 0
-gotolabel *label573 *label684
+multilabel *label573 *label684
 jump *label588 always 0 0
-gotolabel *label574 *label684
+multilabel *label574 *label684
 jump *label590 always 0 0
-gotolabel *label575 *label684
+multilabel *label575 *label684
 jump *label592 always 0 0
-gotolabel *label576 *label684
+multilabel *label576 *label684
 jump *label594 always 0 0
-gotolabel *label577 *label684
+multilabel *label577 *label684
 jump *label596 always 0 0
 label *label578
 op sub *tmp26 :y 1
@@ -9560,26 +9560,26 @@ draw line 146 *tmp105 146 *tmp104 0 0
 draw line 146 *tmp104 153 *tmp104 0 0
 jump *label601 always 0 0
 label *label601
-gotooffset *label605 3 0 *label685
-gotolabel *label605 *label685
+multijump *label605 3 0 *label685
+multilabel *label605 *label685
 jump *label615 always 0 0
-gotolabel *label606 *label685
+multilabel *label606 *label685
 jump *label617 always 0 0
-gotolabel *label607 *label685
+multilabel *label607 *label685
 jump *label619 always 0 0
-gotolabel *label608 *label685
+multilabel *label608 *label685
 jump *label621 always 0 0
-gotolabel *label609 *label685
+multilabel *label609 *label685
 jump *label623 always 0 0
-gotolabel *label610 *label685
+multilabel *label610 *label685
 jump *label625 always 0 0
-gotolabel *label611 *label685
+multilabel *label611 *label685
 jump *label627 always 0 0
-gotolabel *label612 *label685
+multilabel *label612 *label685
 jump *label629 always 0 0
-gotolabel *label613 *label685
+multilabel *label613 *label685
 jump *label631 always 0 0
-gotolabel *label614 *label685
+multilabel *label614 *label685
 jump *label633 always 0 0
 label *label615
 op sub *tmp26 :y 1
@@ -9652,26 +9652,26 @@ draw line 135 *tmp105 135 *tmp104 0 0
 draw line 135 *tmp104 142 *tmp104 0 0
 jump *label638 always 0 0
 label *label638
-gotooffset *label642 2 0 *label686
-gotolabel *label642 *label686
+multijump *label642 2 0 *label686
+multilabel *label642 *label686
 jump *label652 always 0 0
-gotolabel *label643 *label686
+multilabel *label643 *label686
 jump *label654 always 0 0
-gotolabel *label644 *label686
+multilabel *label644 *label686
 jump *label656 always 0 0
-gotolabel *label645 *label686
+multilabel *label645 *label686
 jump *label658 always 0 0
-gotolabel *label646 *label686
+multilabel *label646 *label686
 jump *label660 always 0 0
-gotolabel *label647 *label686
+multilabel *label647 *label686
 jump *label662 always 0 0
-gotolabel *label648 *label686
+multilabel *label648 *label686
 jump *label664 always 0 0
-gotolabel *label649 *label686
+multilabel *label649 *label686
 jump *label666 always 0 0
-gotolabel *label650 *label686
+multilabel *label650 *label686
 jump *label668 always 0 0
-gotolabel *label651 *label686
+multilabel *label651 *label686
 jump *label670 always 0 0
 label *label652
 op sub *tmp26 :y 1
@@ -9755,6 +9755,6 @@ set :y 152
 draw color 0 0 80 255 0 0
 draw rect 109 0 176 176 0 0
 label *label50
-goto *tmp10 marker1
-gotolabel *label45 marker1
+multijump *tmp10 0 0 marker1
+multilabel *label45 marker1
 drawflush display1

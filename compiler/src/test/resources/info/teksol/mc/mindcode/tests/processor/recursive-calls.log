@@ -100,7 +100,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
     53 print :fn0:b
 -    * set :fn0*retval :fn0:b
     54 label *label7
-    55 return bank1
+    55 returnrec bank1
     56 end
  
     82 set :fn1:b *tmp20
@@ -108,7 +108,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
     84 print :fn1:b
 -    * set :fn1*retval :fn1:b
     85 label *label11
-    86 return bank1
+    86 returnrec bank1
     87 end
  
    113 set :fn2:b *tmp28
@@ -116,7 +116,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
    115 print :fn2:b
 -    * set :fn2*retval :fn2:b
    116 label *label15
-   117 return bank1
+   117 returnrec bank1
    118 end
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
@@ -328,7 +328,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 inst
  
     47 print :fn0:b
     48 label *label7
-    49 return bank1
+    49 returnrec bank1
 -    * end
     50 label *label1
     51 print :fn1:a
@@ -336,7 +336,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 inst
  
     70 print :fn1:b
     71 label *label11
-    72 return bank1
+    72 returnrec bank1
 -    * end
     73 label *label2
     74 print :fn2:a
@@ -344,7 +344,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 inst
  
     94 print :fn2:b
     95 label *label15
-    96 return bank1
+    96 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions):
@@ -444,7 +444,7 @@ label *label8
 op add :fn0:b :fn0:b 1
 print :fn0:a
 print :fn0:b
-return bank1
+returnrec bank1
 label *label1
 print :fn1:a
 print :fn1:b
@@ -463,7 +463,7 @@ label *label12
 op add :fn1:b :fn1:b 1
 print :fn1:a
 print :fn1:b
-return bank1
+returnrec bank1
 label *label2
 print :fn2:a
 print :fn2:b
@@ -483,4 +483,4 @@ label *label16
 op add :fn2:b :fn2:b 1
 print :fn2:a
 print :fn2:b
-return bank1
+returnrec bank1

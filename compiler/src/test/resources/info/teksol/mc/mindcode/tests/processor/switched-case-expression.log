@@ -419,26 +419,26 @@ Modifications by Convert case at line 27:5 (+3 instructions):
 -    * jump *label9 notEqual :fn1:n 0
 +   18 jump *label31 lessThan :fn1:n 0
 +   19 jump *label31 greaterThan :fn1:n 9
-+   20 gotooffset *label33 :fn1:n 0 *label32
-+   21 gotolabel *label33 *label32
++   20 multijump *label33 :fn1:n 0 *label32
++   21 multilabel *label33 *label32
 +   22 jump *label10 always
-+   23 gotolabel *label34 *label32
++   23 multilabel *label34 *label32
 +   24 jump *label12 always
-+   25 gotolabel *label35 *label32
++   25 multilabel *label35 *label32
 +   26 jump *label14 always
-+   27 gotolabel *label36 *label32
++   27 multilabel *label36 *label32
 +   28 jump *label16 always
-+   29 gotolabel *label37 *label32
++   29 multilabel *label37 *label32
 +   30 jump *label18 always
-+   31 gotolabel *label38 *label32
++   31 multilabel *label38 *label32
 +   32 jump *label20 always
-+   33 gotolabel *label39 *label32
++   33 multilabel *label39 *label32
 +   34 jump *label22 always
-+   35 gotolabel *label40 *label32
++   35 multilabel *label40 *label32
 +   36 jump *label24 always
-+   37 gotolabel *label41 *label32
++   37 multilabel *label41 *label32
 +   38 jump *label26 always
-+   39 gotolabel *label42 *label32
++   39 multilabel *label42 *label32
 +   40 jump *label28 always
     41 label *label10
     42 op add .S0 .S0 1
@@ -573,26 +573,26 @@ label *label30
 op mod :fn1:n :fn0:n 10
 jump *label31 lessThan :fn1:n 0
 jump *label31 greaterThan :fn1:n 9
-gotooffset *label33 :fn1:n 0 *label32
-gotolabel *label33 *label32
+multijump *label33 :fn1:n 0 *label32
+multilabel *label33 *label32
 jump *label10 always 0 0
-gotolabel *label34 *label32
+multilabel *label34 *label32
 jump *label12 always 0 0
-gotolabel *label35 *label32
+multilabel *label35 *label32
 jump *label14 always 0 0
-gotolabel *label36 *label32
+multilabel *label36 *label32
 jump *label16 always 0 0
-gotolabel *label37 *label32
+multilabel *label37 *label32
 jump *label18 always 0 0
-gotolabel *label38 *label32
+multilabel *label38 *label32
 jump *label20 always 0 0
-gotolabel *label39 *label32
+multilabel *label39 *label32
 jump *label22 always 0 0
-gotolabel *label40 *label32
+multilabel *label40 *label32
 jump *label24 always 0 0
-gotolabel *label41 *label32
+multilabel *label41 *label32
 jump *label26 always 0 0
-gotolabel *label42 *label32
+multilabel *label42 *label32
 jump *label28 always 0 0
 label *label10
 op add .S0 .S0 1

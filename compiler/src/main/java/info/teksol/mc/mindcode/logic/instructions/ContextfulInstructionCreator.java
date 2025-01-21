@@ -46,18 +46,6 @@ public interface ContextfulInstructionCreator {
         return (GetlinkInstruction) createInstruction(GETLINK, result, index);
     }
 
-    default GotoInstruction createGoto(LogicVariable address, LogicLabel marker) {
-        return (GotoInstruction) createInstruction(GOTO, address, marker);
-    }
-
-    default GotoLabelInstruction createGotoLabel(LogicLabel label, LogicLabel marker) {
-        return (GotoLabelInstruction) createInstruction(GOTOLABEL, label, marker);
-    }
-
-    default GotoOffsetInstruction createGotoOffset(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return (GotoOffsetInstruction) createInstruction(GOTOOFFSET, target, value, offset, marker);
-    }
-
     default JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
         return (JumpInstruction) createInstruction(JUMP, target, condition, x, y);
     }
@@ -72,6 +60,18 @@ public interface ContextfulInstructionCreator {
 
     default LookupInstruction createLookup(LogicKeyword type, LogicVariable result, LogicValue index) {
         return (LookupInstruction) createInstruction(LOOKUP, type, result, index);
+    }
+
+    default MultiJumpInstruction createMultiJump(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
+        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, value, offset, marker);
+    }
+
+    default MultiJumpInstruction createMultiJump(LogicVariable target, LogicLabel marker) {
+        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO, marker);
+    }
+
+    default MultiLabelInstruction createMultiLabel(LogicLabel label, LogicLabel marker) {
+        return (MultiLabelInstruction) createInstruction(MULTILABEL, label, marker);
     }
 
     default NoOpInstruction createNoOp() {
@@ -110,8 +110,12 @@ public interface ContextfulInstructionCreator {
         return (RemarkInstruction) createInstruction(REMARK, what);
     }
 
-    default ReturnInstruction createReturn(LogicVariable stack) {
-        return (ReturnInstruction) createInstruction(RETURN, stack);
+    default ReturnInstruction createReturn(LogicVariable address) {
+        return (ReturnInstruction) createInstruction(RETURN, address);
+    }
+
+    default ReturnRecInstruction createReturnRec(LogicVariable stack) {
+        return (ReturnRecInstruction) createInstruction(RETURNREC, stack);
     }
 
     default SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property) {

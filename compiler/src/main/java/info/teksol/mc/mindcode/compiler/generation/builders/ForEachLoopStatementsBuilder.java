@@ -83,9 +83,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 createIteration();
             }
 
-            // Finalizing code
-            // MUSTDO Set the subcontext here and update DataFlowOptimization to handle the new structure
-            //assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
+            // For-each loops do not put done label into flow control subcontext
+            // Not a bug.
             assembler.createLabel(loopLabels.doneLabel());
 
             if (!values.isEmpty()) {
@@ -132,7 +131,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // The trailing part of the iteration setup. For the last iteration the code is generated after
             // the loop body, so that the program flow naturally exits the loop after the last iteration.
             assembler.setSubcontextType(AstSubcontextType.ITR_TRAILING, 1.0);
-            assembler.createGotoLabel(nextValueLabel, marker);
+            assembler.createMultiLabel(nextValueLabel, marker);
 
             // Copy iterator values back to the array - only for `out` iterators
             for (Iterator iterator : iterators) {
@@ -157,7 +156,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Jumps to the iteration trailing block
             // On the last iteration, this jumps right to the next statement, but it can't be avoided
             assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-            assembler.createGoto(nextAddress, marker);
+            assembler.createMultiJump(nextAddress, marker);
         }
     }
 

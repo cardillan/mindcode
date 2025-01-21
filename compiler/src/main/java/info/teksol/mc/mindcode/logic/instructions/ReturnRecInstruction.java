@@ -8,13 +8,13 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 
 import java.util.List;
 
-public class ReturnInstruction extends BaseInstruction {
+public class ReturnRecInstruction extends BaseInstruction {
 
-    ReturnInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
-        super(astContext, Opcode.RETURN, args, params);
+    ReturnRecInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+        super(astContext, Opcode.RETURNREC, args, params);
     }
 
-    protected ReturnInstruction(BaseInstruction other, AstContext astContext) {
+    protected ReturnRecInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
     }
 
@@ -24,16 +24,16 @@ public class ReturnInstruction extends BaseInstruction {
     }
 
     @Override
-    public ReturnInstruction copy() {
-        return new ReturnInstruction(this, astContext);
+    public ReturnRecInstruction copy() {
+        return new ReturnRecInstruction(this, astContext);
     }
 
     @Override
-    public ReturnInstruction withContext(AstContext astContext) {
-        return new ReturnInstruction(this, astContext);
+    public ReturnRecInstruction withContext(AstContext astContext) {
+        return new ReturnRecInstruction(this, astContext);
     }
 
-    public final LogicVariable getIndirectAddress() {
+    public final LogicVariable getStack() {
         return (LogicVariable) getArg(0);
     }
 

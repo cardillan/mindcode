@@ -108,8 +108,6 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         validateUserFunctionArguments(function, arguments.subList(0, Math.min(parameterCount, arguments.size())));
 
         if (function.isInline()) {
-            // MUSTDO review
-            //return processInLocalScope(() -> handleInlineFunctionCall(function, arguments));
             return handleInlineFunctionCall(function, arguments);
         } else if (!function.isRecursive()) {
             return handleStacklessFunctionCall(function, arguments);
@@ -199,9 +197,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         assembler.createSetAddress(LogicVariable.fnRetAddr(functionPrefix), returnLabel);
         assembler.createCallStackless(function.getLabel(), LogicVariable.fnRetVal(function));
         // Mark position where the function must return
-        // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
-        //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
-        assembler.createGotoLabel(returnLabel, LogicLabel.symbolic(functionPrefix));
+        assembler.createLabel(returnLabel);
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         retrieveFunctionParameters(function, arguments, false);

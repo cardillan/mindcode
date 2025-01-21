@@ -41,7 +41,6 @@ public abstract class AstLiteral extends AstExpression {
 
     public abstract AstLiteral withSourcePosition(SourcePosition sourcePosition);
 
-    // TODO Determine whether something bad may happen with double literals (infinity?)
     public abstract double getDoubleValue();
 
     public abstract long getLongValue();

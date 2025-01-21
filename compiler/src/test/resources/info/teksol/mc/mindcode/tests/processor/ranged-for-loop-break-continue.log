@@ -44,7 +44,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
  
      7 setaddr :fn0*retaddr *label3
      8 call *label0 :fn0*retval
-     9 gotolabel *label3 :fn0
+     9 label *label3
 -    * set *tmp2 :fn0*retval
 -    * set *tmp3 *tmp2
 +   10 set *tmp3 :fn0*retval
@@ -65,7 +65,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
     17 label *label7
  
     23 call *label0 :fn0*retval
-    24 gotolabel *label9 :fn0
+    24 label *label9
     25 set *tmp6 :fn0*retval
 -    * op equal *tmp7 :fn1:i *tmp6
 -    * jump *label10 equal *tmp7 false
@@ -95,7 +95,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     22 call *label0 :fn0*retval
-    23 gotolabel *label9 :fn0
+    23 label *label9
     24 set *tmp6 :fn0*retval
 -    * jump *label10 notEqual :fn1:i *tmp6
 +   25 jump *label10 notEqual :fn1:i :fn0*retval
@@ -107,7 +107,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
  
     21 setaddr :fn0*retaddr *label9
     22 call *label0 :fn0*retval
-    23 gotolabel *label9 :fn0
+    23 label *label9
 -    * set *tmp6 :fn0*retval
     24 jump *label10 notEqual :fn1:i :fn0*retval
     25 jump *label6 always
@@ -157,7 +157,7 @@ Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
  
     21 setaddr :fn0*retaddr *label9
     22 call *label0 :fn0*retval
-    23 gotolabel *label9 :fn0
+    23 label *label9
 -    * jump *label10 notEqual :fn1:i :fn0*retval
 -    * jump *label6 always
 +   24 jump *label6 equal :fn1:i :fn0*retval
@@ -169,7 +169,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 inst
  
     36 set :fn0*retval :fn0:n
     37 label *label12
-    38 goto :fn0*retaddr :fn0
+    38 return :fn0*retaddr
 -    * end
 
 Final code before resolving virtual instructions:
@@ -178,12 +178,12 @@ assertflush
 set :fn0:n 1
 setaddr :fn0*retaddr *label2
 call *label0 :fn0*retval
-gotolabel *label2 :fn0
+label *label2
 set *tmp1 :fn0*retval
 set :fn0:n 10
 setaddr :fn0*retaddr *label3
 call *label0 :fn0*retval
-gotolabel *label3 :fn0
+label *label3
 set *tmp3 :fn0*retval
 set :fn1:i *tmp1
 jump *label6 greaterThanEq *tmp1 :fn0*retval
@@ -194,7 +194,7 @@ print "|"
 set :fn0:n 5
 setaddr :fn0*retaddr *label9
 call *label0 :fn0*retval
-gotolabel *label9 :fn0
+label *label9
 jump *label6 equal :fn1:i :fn0*retval
 label *label5
 op add :fn1:i :fn1:i 1
@@ -205,4 +205,4 @@ stop
 end
 label *label0
 set :fn0*retval :fn0:n
-goto :fn0*retaddr :fn0
+return :fn0*retaddr

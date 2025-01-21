@@ -357,15 +357,15 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo("Hello");
                             """,
-                    createInstruction(SET, "__fn0_x", q("Hello")),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                    createInstruction(SET, ":fn0:x", q("Hello")),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(PRINT, "__fn0_x"),
+                    createInstruction(PRINT, ":fn0:x"),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -399,30 +399,28 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             print(a(a(a(4))));
                             """,
-                    createInstruction(SET, "__fn0_n", "4"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(SET, var(0), "__fn0retval"),
-                    createInstruction(SET, "__fn0_n", var(0)),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1002)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1002), "__fn0"),
-                    createInstruction(SET, var(1), "__fn0retval"),
-                    createInstruction(SET, "__fn0_n", var(1)),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1003)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1003), "__fn0"),
-                    createInstruction(SET, var(2), "__fn0retval"),
+                    createInstruction(SET, ":fn0:n", "4"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(SET, var(0), ":fn0*retval"),
+                    createInstruction(SET, ":fn0:n", var(0)),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(SET, var(1), ":fn0*retval"),
+                    createInstruction(SET, ":fn0:n", var(1)),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1003)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1003)),
+                    createInstruction(SET, var(2), ":fn0*retval"),
                     createInstruction(PRINT, var(2)),
                     createInstruction(END),
-                    // def a
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(OP, "add", var(3), "__fn0_n", "1"),
-                    createInstruction(SET, "__fn0retval", var(3)),
+                    createInstruction(OP, "add", var(3), ":fn0:n", "1"),
+                    createInstruction(SET, ":fn0*retval", var(3)),
                     createInstruction(LABEL, var(1004)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0"),
-                    createInstruction(END)
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -462,7 +460,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, var(4), "__fn0retval"),
                     createInstruction(SET, "__fn0retval", var(4)),
                     createInstruction(LABEL, var(1004)),
-                    createInstruction(RETURN, "bank1"),
+                    createInstruction(RETURNREC, "bank1"),
                     createInstruction(END)
             );
         }
@@ -601,17 +599,17 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out $z);
                             """,
-                    createInstruction(LABEL, var(1111)),
-                    createInstruction(JUMP, var(1111), "equal", "bank1", "null"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(WRITE, "__fn0_x", "bank1", "0"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(JUMP, var(1001), "equal", "bank1", "null"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(WRITE, ":fn0:x", "bank1", "0"),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "__fn0_x", "10"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(SET, ":fn0:x", "10"),
+                    createInstruction(LABEL, var(1003)),
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -643,15 +641,15 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(READ, var(0), "cell1", "0"),
                     createInstruction(SET, var(1), var(0)),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(WRITE, "__fn0_x", "cell1", var(1)),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(WRITE, ":fn0:x", "cell1", var(1)),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "__fn0_x", "10"),
+                    createInstruction(SET, ":fn0:x", "10"),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -665,18 +663,19 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             INDEX = 0;
                             foo(out cell1[INDEX]);
                             """,
-                    createInstruction(SET, "INDEX", "0"),
-                    createInstruction(SET, var(0), "INDEX"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(WRITE, "__fn0_x", "cell1", var(0)),
+                    createInstruction(SET, ".INDEX", "0"),
+                    createInstruction(SET, var(0), ".INDEX"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(WRITE, ":fn0:x", "cell1", var(0)),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(OP, "add", "INDEX", "INDEX", "1"),
-                    createInstruction(SET, "__fn0_x", "INDEX"),
+                    createInstruction(OP, "add", ".INDEX", ".INDEX", "1"),
+                    createInstruction(SET, ":fn0:x", ".INDEX"),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
+
             );
         }
 
@@ -707,7 +706,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, var(1), "__fn0retval"),
                     createInstruction(SET, "__fn0retval", var(1)),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(RETURN, "bank1"),
+                    createInstruction(RETURNREC, "bank1"),
                     createInstruction(END)
             );
         }
@@ -791,20 +790,20 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out $z);
                             """,
-                    createInstruction(LABEL, var(1111)),
-                    createInstruction(JUMP, var(1111), "equal", "bank1", "null"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(JUMP, var(1001), "equal", "bank1", "null"),
                     createInstruction(READ, var(0), "bank1", "0"),
                     createInstruction(SET, var(1), var(0)),
-                    createInstruction(SET, "__fn0_x", var(1)),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(WRITE, "__fn0_x", "bank1", "0"),
+                    createInstruction(SET, ":fn0:x", var(1)),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(WRITE, ":fn0:x", "bank1", "0"),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(OP, "add", "__fn0_x", "__fn0_x", "10"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(OP, "add", ":fn0:x", ":fn0:x", "10"),
+                    createInstruction(LABEL, var(1003)),
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -853,7 +852,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "sub", var(2), "1", var(1)),
                     createInstruction(SET, "__fn0retval", var(2)),
                     createInstruction(LABEL, var(1003)),
-                    createInstruction(RETURN, "bank1"),
+                    createInstruction(RETURNREC, "bank1"),
                     createInstruction(END),
                     // def bar
                     createInstruction(LABEL, var(1001)),
@@ -867,7 +866,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "add", var(4), "1", var(3)),
                     createInstruction(SET, "__fn1retval", var(4)),
                     createInstruction(LABEL, var(1005)),
-                    createInstruction(RETURN, "bank1")
+                    createInstruction(RETURNREC, "bank1")
             );
         }
 
@@ -977,7 +976,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, var(1004)),
                     createInstruction(SET, "__fn0retval", var(2)),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(RETURN, "bank1"),
+                    createInstruction(RETURNREC, "bank1"),
                     createInstruction(END)
             );
         }
@@ -1061,26 +1060,26 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             print(foo(rand(10)));
                             """,
                     createInstruction(OP, "rand", var(0), "10"),
-                    createInstruction(SET, "__fn0_x", var(0)),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(PRINT, "__fn0retval"),
+                    createInstruction(SET, ":fn0:x", var(0)),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(PRINT, ":fn0*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(OP, "equal", var(1), "__fn0_x", "0"),
+                    createInstruction(OP, "equal", var(1), ":fn0:x", "0"),
                     createInstruction(JUMP, var(1003), "equal", var(1), "false"),
-                    createInstruction(SET, "__fn0retval", "10"),
+                    createInstruction(SET, ":fn0*retval", "10"),
                     createInstruction(JUMP, var(1002), "always"),
                     createInstruction(SET, var(2), "null"),
                     createInstruction(JUMP, var(1004), "always"),
                     createInstruction(LABEL, var(1003)),
                     createInstruction(SET, var(2), "null"),
                     createInstruction(LABEL, var(1004)),
-                    createInstruction(OP, "sub", var(3), "__fn0_x", "20"),
-                    createInstruction(SET, "__fn0retval", var(3)),
+                    createInstruction(OP, "sub", var(3), ":fn0:x", "20"),
+                    createInstruction(SET, ":fn0*retval", var(3)),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -1127,7 +1126,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, var(5), "__fn0retval"),
                     createInstruction(SET, "__fn0retval", var(5)),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(RETURN, "bank1")
+                    createInstruction(RETURNREC, "bank1")
             );
         }
     }
@@ -1987,27 +1986,27 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a);
                             foo();
                             """,
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(SET, "b", "__fn0_m"),
-                    createInstruction(SET, var(0), "__fn0retval"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1002)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1002), "__fn0"),
-                    createInstruction(SET, "a", "__fn0_n"),
-                    createInstruction(SET, var(1), "__fn0retval"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1003)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1003), "__fn0"),
-                    createInstruction(SET, var(2), "__fn0retval"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(SET, ":b", ":fn0:m"),
+                    createInstruction(SET, var(0), ":fn0*retval"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(SET, ":a", ":fn0:n"),
+                    createInstruction(SET, var(1), ":fn0*retval"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1003)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1003)),
+                    createInstruction(SET, var(2), ":fn0*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "__fn0_n", "10"),
-                    createInstruction(SET, "__fn0_m", "20"),
-                    createInstruction(SET, "__fn0retval", "__fn0_m"),
+                    createInstruction(SET, ":fn0:n", "10"),
+                    createInstruction(SET, ":fn0:m", "20"),
+                    createInstruction(SET, ":fn0*retval", ":fn0:m"),
                     createInstruction(LABEL, var(1004)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -2049,7 +2048,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, var(3), "__fn0retval"),
                     createInstruction(SET, "__fn0retval", var(3)),
                     createInstruction(LABEL, var(1004)),
-                    createInstruction(RETURN, "bank1")
+                    createInstruction(RETURNREC, "bank1")
             );
         }
 
@@ -2100,31 +2099,31 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a, in b);
                             foo(in a, out b);
                             """,
-                    createInstruction(SET, "b", "1"),
-                    createInstruction(SET, "a", "b"),
-                    createInstruction(SET, "__fn0_n", "a"),
-                    createInstruction(SET, "__fn0_m", "b"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
-                    createInstruction(SET, "a", "__fn0_n"),
-                    createInstruction(SET, var(0), "__fn0retval"),
-                    createInstruction(SET, "__fn0_n", "a"),
-                    createInstruction(SET, "__fn0_m", "b"),
-                    createInstruction(SETADDR, "__fn0retaddr", var(1002)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1002), "__fn0"),
-                    createInstruction(SET, "b", "__fn0_m"),
-                    createInstruction(SET, var(1), "__fn0retval"),
+                    createInstruction(SET, ":b", "1"),
+                    createInstruction(SET, ":a", ":b"),
+                    createInstruction(SET, ":fn0:n", ":a"),
+                    createInstruction(SET, ":fn0:m", ":b"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(SET, ":a", ":fn0:n"),
+                    createInstruction(SET, var(0), ":fn0*retval"),
+                    createInstruction(SET, ":fn0:n", ":a"),
+                    createInstruction(SET, ":fn0:m", ":b"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(SET, ":b", ":fn0:m"),
+                    createInstruction(SET, var(1), ":fn0*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(PRINT, "__fn0_m"),
-                    createInstruction(PRINT, "__fn0_n"),
-                    createInstruction(OP, "mul", "__fn0_n", "__fn0_n", "2"),
-                    createInstruction(OP, "mul", "__fn0_m", "__fn0_m", "2"),
-                    createInstruction(SET, "__fn0retval", "__fn0_m"),
+                    createInstruction(PRINT, ":fn0:m"),
+                    createInstruction(PRINT, ":fn0:n"),
+                    createInstruction(OP, "mul", ":fn0:n", ":fn0:n", "2"),
+                    createInstruction(OP, "mul", ":fn0:m", ":fn0:m", "2"),
+                    createInstruction(SET, ":fn0*retval", ":fn0:m"),
                     createInstruction(LABEL, var(1003)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -2174,7 +2173,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, var(2), "__fn0retval"),
                     createInstruction(SET, "__fn0retval", var(2)),
                     createInstruction(LABEL, var(1003)),
-                    createInstruction(RETURN, "bank1")
+                    createInstruction(RETURNREC, "bank1")
             );
         }
 
@@ -2270,21 +2269,21 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":fn0:b", "2"),
                     createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
                     createInstruction(CALL, var(1000), ":fn0*retval"),
-                    createInstruction(GOTOLABEL, var(1002), ":fn0"),
+                    createInstruction(LABEL, var(1002)),
                     createInstruction(SET, ":result", ":fn0:c"),
                     createInstruction(LABEL, var(1001)),
                     createInstruction(SET, ":fn0:a", "1"),
                     createInstruction(SET, ":fn0:b", "2"),
                     createInstruction(SETADDR, ":fn0*retaddr", var(1004)),
                     createInstruction(CALL, var(1000), ":fn0*retval"),
-                    createInstruction(GOTOLABEL, var(1004), ":fn0"),
+                    createInstruction(LABEL, var(1004)),
                     createInstruction(LABEL, var(1003)),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
                     createInstruction(OP, "add", var(0), ":fn0:a", ":fn0:b"),
                     createInstruction(SET, ":fn0:c", var(0)),
                     createInstruction(LABEL, var(1005)),
-                    createInstruction(GOTO, ":fn0*retaddr", ":fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
     }
@@ -2316,14 +2315,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             foo();
                             """,
-                    createInstruction(SETADDR, "__fn0retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), "__fn0retval"),
-                    createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
+                    createInstruction(CALL, var(1000), ":fn0*retval"),
+                    createInstruction(LABEL, var(1001)),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
                     createInstruction(PRINT, q("foo")),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(GOTO, "__fn0retaddr", "__fn0")
+                    createInstruction(RETURN, ":fn0*retaddr")
             );
         }
 
@@ -2349,7 +2348,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, var(1003)),
                     createInstruction(PRINT, q("foo")),
                     createInstruction(LABEL, var(1002)),
-                    createInstruction(RETURN, "bank1")
+                    createInstruction(RETURNREC, "bank1")
             );
         }
     }

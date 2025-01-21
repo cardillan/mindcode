@@ -96,7 +96,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(LABEL, var(1006)),
                 createInstruction(POP, "cell1", ":fn0:n"),
                 createInstruction(OP, "mul", ":fn0*retval", "2", ":fn0:n"),
-                createInstruction(RETURN, "cell1")
+                createInstruction(RETURNREC, "cell1")
         );
     }
 

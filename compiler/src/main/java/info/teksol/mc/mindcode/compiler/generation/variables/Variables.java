@@ -37,8 +37,6 @@ import java.util.function.Supplier;
 /// - arrays, records and other complex types
 @NullMarked
 public class Variables extends AbstractMessageEmitter {
-    // TODO Add proper detection of relaxed syntax
-    private static final boolean RELAXED_SYNTAX = true;
     private final Set<AstMindcodeNode> reportedErrors = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private final CompilerProfile profile;

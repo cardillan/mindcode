@@ -7,12 +7,15 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
+import info.teksol.mc.mindcode.logic.instructions.ReturnRecInstruction;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BODY;
 
+@NullMarked
 class ReturnOptimizer extends BaseOptimizer {
     public ReturnOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.RETURN_OPTIMIZATION, optimizationContext);
@@ -50,23 +53,23 @@ class ReturnOptimizer extends BaseOptimizer {
         }
 
         LogicList body = contextInstructions(context);
-        ReturnInstruction returnInstruction = findReturnInstruction(body);
-        if (returnInstruction == null || body.stream().noneMatch(ix -> isJumpToReturn(ix, returnInstruction))) {
+        ReturnRecInstruction returnRecInstruction = findReturnInstruction(body);
+        if (returnRecInstruction == null || body.stream().noneMatch(ix -> isJumpToReturn(ix, returnRecInstruction))) {
             return List.of();
         }
 
         return body.stream()
-                .filter(ix -> isJumpToReturn(ix, returnInstruction))
+                .filter(ix -> isJumpToReturn(ix, returnRecInstruction))
                 .map(JumpInstruction.class::cast)
-                .map(ix -> createOptimizationAction(ix, returnInstruction))
+                .map(ix -> createOptimizationAction(ix, returnRecInstruction))
                 .toList();
     }
 
-    private boolean isJumpToReturn(LogicInstruction ix, ReturnInstruction returnInstruction) {
+    private boolean isJumpToReturn(LogicInstruction ix, ReturnRecInstruction returnRecInstruction) {
         return ix instanceof JumpInstruction jump
                 && jump.isUnconditional()
-                && labeledInstruction(jump.getTarget()) == returnInstruction
-                && !hasNoCode(instructionSubList(jump, returnInstruction));
+                && labeledInstruction(jump.getTarget()) == returnRecInstruction
+                && !hasNoCode(instructionSubList(jump, returnRecInstruction));
     }
 
     private boolean hasNoCode(List<LogicInstruction> instructions) {
@@ -74,19 +77,19 @@ class ReturnOptimizer extends BaseOptimizer {
                 .mapToInt(LogicInstruction::getRealSize).sum() == 0;
     }
 
-    private ReturnInstruction findReturnInstruction(LogicList body) {
-        if (body == null || body.isEmpty()) {
+    private @Nullable ReturnRecInstruction findReturnInstruction(LogicList body) {
+        if (body.isEmpty()) {
             return null;
         }
 
         int index = body.getLast() instanceof EndInstruction ? 1 : 0;
-        return body.getFromEnd(index) instanceof ReturnInstruction ret ? ret : null;
+        return body.getFromEnd(index) instanceof ReturnRecInstruction ret ? ret : null;
     }
 
-    private OptimizationAction createOptimizationAction(JumpInstruction ix, ReturnInstruction returnInstruction) {
-        int cost = returnInstruction.getRealSize() - ix.getRealSize();
+    private OptimizationAction createOptimizationAction(JumpInstruction ix, ReturnRecInstruction returnRecInstruction) {
+        int cost = returnRecInstruction.getRealSize() - ix.getRealSize();
         double benefit = ix.getRealSize() * ix.getAstContext().totalWeight();
-        return new ReplaceReturnStatementAction(ix.getAstContext(), cost, benefit, ix, returnInstruction);
+        return new ReplaceReturnStatementAction(ix.getAstContext(), cost, benefit, ix, returnRecInstruction);
     }
 
     private OptimizationResult replaceJumpToReturn(ReplaceReturnStatementAction action, int costLimit) {
@@ -103,10 +106,10 @@ class ReturnOptimizer extends BaseOptimizer {
 
     private class ReplaceReturnStatementAction extends AbstractOptimizationAction {
         private final JumpInstruction original;
-        private final ReturnInstruction replacement;
+        private final ReturnRecInstruction replacement;
 
         public ReplaceReturnStatementAction(AstContext astContext, int cost, double benefit,
-                JumpInstruction original, ReturnInstruction replacement) {
+                JumpInstruction original, ReturnRecInstruction replacement) {
             super(astContext, cost, benefit);
             this.original = original;
             this.replacement = replacement;

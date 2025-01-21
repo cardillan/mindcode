@@ -106,7 +106,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   36 write :value bank1 :index
     37 op add :index :index 1
     38 label *label3
-    39 goto *tmp0 marker0
+    39 multijump *tmp0 0 0 marker0
  
     44 callrec bank1 *label0 *label13 :fn0*retval
     45 label *label13
@@ -208,39 +208,39 @@ Modifications by Unroll iteration loop at line 4:1 (-2 instructions):
 -    * setaddr *tmp0 *label5
 -    * set :value 200
 -    * jump *label2 always
--    * gotolabel *label5 marker0
+-    * multilabel *label5 marker0
 -    * setaddr *tmp0 *label6
 -    * set :value 100
 -    * jump *label2 always
--    * gotolabel *label6 marker0
+-    * multilabel *label6 marker0
 -    * setaddr *tmp0 *label7
 -    * set :value 50
 -    * jump *label2 always
--    * gotolabel *label7 marker0
+-    * multilabel *label7 marker0
 -    * setaddr *tmp0 *label8
 -    * set :value 20
 -    * jump *label2 always
--    * gotolabel *label8 marker0
+-    * multilabel *label8 marker0
 -    * setaddr *tmp0 *label9
 -    * set :value 10
 -    * jump *label2 always
--    * gotolabel *label9 marker0
+-    * multilabel *label9 marker0
 -    * setaddr *tmp0 *label10
 -    * set :value 5
 -    * jump *label2 always
--    * gotolabel *label10 marker0
+-    * multilabel *label10 marker0
 -    * setaddr *tmp0 *label11
 -    * set :value 2
 -    * jump *label2 always
--    * gotolabel *label11 marker0
+-    * multilabel *label11 marker0
 -    * setaddr *tmp0 *label12
 -    * set :value 1
 -    * label *label2
 -    * write :value bank1 :index
 -    * op add :index :index 1
 -    * label *label3
--    * goto *tmp0 marker0
--    * gotolabel *label12 marker0
+-    * multijump *tmp0 0 0 marker0
+-    * multilabel *label12 marker0
 -    * label *label4
 +    4 set :value 200
 +    5 label *label24
@@ -412,7 +412,7 @@ Modifications by Optimize return at line 14:9 (+2 instructions):
     36 jump *label15 notEqual :fn0:amount 0
     37 set :fn0*retval 1
 -    * jump *label14 always
-+   38 return bank1
++   38 returnrec bank1
     39 label *label15
     40 label *label16
     41 set :fn0:result 0
@@ -421,7 +421,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 inst
  
     71 set :fn0*retval :fn0:result
     72 label *label14
-    73 return bank1
+    73 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
@@ -462,7 +462,7 @@ end
 label *label0
 jump *label15 notEqual :fn0:amount 0
 set :fn0*retval 1
-return bank1
+returnrec bank1
 label *label15
 set :fn0:result 0
 set :fn0:i :fn0:index
@@ -490,4 +490,4 @@ op add :fn0:i :fn0:i 1
 jump *label23 lessThan :fn0:i 8
 label *label19
 set :fn0*retval :fn0:result
-return bank1
+returnrec bank1

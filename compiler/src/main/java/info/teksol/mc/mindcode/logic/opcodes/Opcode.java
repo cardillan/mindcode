@@ -57,34 +57,64 @@ public enum Opcode {
     MAKEMARKER      ("makemarker",      "Create a new logic marker in the world. An ID to identify this marker must be provided. Markers currently limited to 20,000 per world."),
     LOCALEPRINT     ("localeprint",     "Add map locale property value to the text buffer. To set map locale bundles in map editor, check Map Info > Locale Bundles. If client is a mobile device, tries to print a property ending in \".mobile\" first."),
 
-    // Unit testing support
+    // Unit testing support. These instructions are left in final code for execution by the processor emulator.
+
     ASSERT_EQUALS   ("assertequals",    1),
     ASSERT_PRINTS   ("assertprints",    1),
     ASSERT_FLUSH    ("assertflush",     1),
 
     // Virtual instructions - resolved when the final code is generated
+    
+    /// No operation. When removing instructions, they can be replaced by no-op to preserve the structure of the code.
+    /// They are removed from the final code.
     NOOP            ("noop",            0),
+    
+    /// A target for jump, set address or goto instructions. Removed from the final code. 
     LABEL           ("label",           0),
-    GOTOLABEL       ("gotolabel",       0),
-    PUSH            ("push",            2),
-    POP             ("pop",             2),
+    
+    /// Simple call. Replaced by an unconditional jump in final code.
     CALL            ("call",            1),
+
+    /// Return from a simple call. Replaced by `set @counter return_address`.
+    RETURN          ("return",          1),
+
+    /// Stores a variable on stack. Used by recursive functions
+    PUSH            ("push",            2),
+
+    /// Restores a variable from stack. Used by recursive functions
+    POP             ("pop",             2),
+
+    /// Recursive call. Replaced by instructions which stores the return address on stack and then jumps to the target
     CALLREC         ("callrec",         3),
-    RETURN          ("return",          3),
-    GOTO            ("goto",            1),
-    GOTOOFFSET      ("gotooffset",      1),
+
+    /// Return from a recursive function. Replaced by instructions which retrieve the return address from stack
+    /// and jump there (using `set @counter address`, since the target is dynamic).
+    RETURNREC       ("returnrec",       3),
+
+    /// A target for the MULTIJUMP instruction. Removed from the final code.
+    /// One MULTIJUMP instruction can target multiple MULTILABELs, choosing the right one at runtime.
+    /// MULTILABELs are tied to a matching MULTIJUMP through a marker.
+    MULTILABEL      ("multilabel",      0),
+
+    /// Jumps to a dynamic target, potentially using computed offset.
+    /// Replaced by a `set @counter ...` or `op add @counter ...` operation.
+    MULTIJUMP       ("multijump",       1),
+
+    /// Assigns program address represented by a label to a variable. Replaced by a `set` instruction.
     SETADDR         ("setaddr",         1),
+
+    /// Represents compiled remark. Replaced by `print`, `jump` + `print` or altogether removed from final code
+    /// depending on compiler options.
     REMARK          ("remark",          2),
 
-    // For custom-made instructions - size is always 1
+    /// Represents a custom-made instruction (mlog or mlogSafe).
     CUSTOM          ("",1),
     ;
 
-    /**
-     * Safe instructions are instructions which do not have any output parameters (and therefore are assumed
-     * to interact with the outside world), or have output parameters and do not interact with the outside world.
-     * Instructions which do have output variables, but do interact with the outside world, are unsafe.
-     */
+    /// Safe instructions are instructions which do not have any output parameters (and therefore are assumed
+    /// to interact with the outside world), or have output parameters and do not interact with the outside world.
+    /// Instructions which do have output variables, but do interact with the outside world, are unsafe, and are
+    /// explicitly marked as such with this attribute.
     private final boolean safe;
     private final String opcode;
     private final String description;

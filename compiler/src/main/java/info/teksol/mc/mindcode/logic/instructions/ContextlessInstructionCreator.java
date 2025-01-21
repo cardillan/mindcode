@@ -47,18 +47,6 @@ public interface ContextlessInstructionCreator {
         return (GetlinkInstruction) createInstruction(astContext, GETLINK, result, index);
     }
 
-    default GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
-        return (GotoInstruction) createInstruction(astContext, GOTO, address, marker);
-    }
-
-    default GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
-        return (GotoLabelInstruction) createInstruction(astContext, GOTOLABEL, label, marker);
-    }
-
-    default GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return (GotoOffsetInstruction) createInstruction(astContext, GOTOOFFSET, target, value, offset, marker);
-    }
-
     default JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
         return (JumpInstruction) createInstruction(astContext, JUMP, target, condition, x, y);
     }
@@ -73,6 +61,18 @@ public interface ContextlessInstructionCreator {
 
     default LookupInstruction createLookup(AstContext astContext, LogicKeyword type, LogicVariable result, LogicValue index) {
         return (LookupInstruction) createInstruction(astContext, LOOKUP, type, result, index);
+    }
+
+    default MultiJumpInstruction createMultiJump(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
+        return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, value, offset, marker);
+    }
+
+    default MultiJumpInstruction createMultiJump(AstContext astContext, LogicVariable target, LogicLabel marker) {
+        return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO, marker);
+    }
+
+    default MultiLabelInstruction createMultiLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
+        return (MultiLabelInstruction) createInstruction(astContext, MULTILABEL, label, marker);
     }
 
     default NoOpInstruction createNoOp(AstContext astContext) {
@@ -111,8 +111,12 @@ public interface ContextlessInstructionCreator {
         return (RemarkInstruction) createInstruction(astContext, REMARK, what);
     }
 
-    default ReturnInstruction createReturn(AstContext astContext, LogicVariable stack) {
-        return (ReturnInstruction) createInstruction(astContext, RETURN, stack);
+    default ReturnInstruction createReturn(AstContext astContext, LogicVariable address, LogicLabel marker) {
+        return (ReturnInstruction) createInstruction(astContext, RETURN, address, marker);
+    }
+
+    default ReturnRecInstruction createReturnRec(AstContext astContext, LogicVariable stack) {
+        return (ReturnRecInstruction) createInstruction(astContext, RETURNREC, stack);
     }
 
     default SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {

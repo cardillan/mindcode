@@ -62,22 +62,22 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructi
  
      2 setaddr :fn1*retaddr *label3
      3 call *label1 :fn1*retval
-     4 gotolabel *label3 :fn1
+     4 label *label3
 -    * set *tmp1 :fn1*retval
      5 set :fn1:s 2
      6 setaddr :fn1*retaddr *label4
      7 call *label1 :fn1*retval
-     8 gotolabel *label4 :fn1
+     8 label *label4
 -    * set *tmp2 :fn1*retval
      9 set :fn1:s 3
     10 setaddr :fn1*retaddr *label5
     11 call *label1 :fn1*retval
-    12 gotolabel *label5 :fn1
+    12 label *label5
 -    * set *tmp3 :fn1*retval
     13 set :fn1:s 4
     14 setaddr :fn1*retaddr *label6
     15 call *label1 :fn1*retval
-    16 gotolabel *label6 :fn1
+    16 label *label6
     17 set *tmp4 :fn1*retval
 -    * set *tmp0 *tmp4
     18 label *label2
@@ -86,19 +86,19 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructi
  
     48 setaddr :fn0*retaddr *label12
     49 call *label0 :fn0*retval
-    50 gotolabel *label12 :fn0
+    50 label *label12
 -    * set *tmp12 :fn0*retval
     51 op add *tmp13 20 :fn1:s
     52 set :fn0:n *tmp13
     53 setaddr :fn0*retaddr *label13
     54 call *label0 :fn0*retval
-    55 gotolabel *label13 :fn0
+    55 label *label13
 -    * set *tmp14 :fn0*retval
     56 op add *tmp15 30 :fn1:s
     57 set :fn0:n *tmp15
     58 setaddr :fn0*retaddr *label14
     59 call *label0 :fn0*retval
-    60 gotolabel *label14 :fn0
+    60 label *label14
 -    * set *tmp16 :fn0*retval
     61 op add *tmp17 40 :fn1:s
     62 set :fn0:n *tmp17
@@ -108,7 +108,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructi
  
     14 setaddr :fn1*retaddr *label6
     15 call *label1 :fn1*retval
-    16 gotolabel *label6 :fn1
+    16 label *label6
 -    * set *tmp4 :fn1*retval
     17 label *label2
     18 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
@@ -117,21 +117,21 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructi
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-1 instructions):
  
     63 call *label0 :fn0*retval
-    64 gotolabel *label15 :fn0
+    64 label *label15
     65 set *tmp18 :fn0*retval
 -    * set :fn1*retval *tmp18
     66 label *label11
-    67 goto :fn1*retaddr :fn1
+    67 return :fn1*retaddr
     68 end
 
 Modifications by Initial phase, Dead Code Elimination, iteration 4 (-1 instructions):
  
     62 setaddr :fn0*retaddr *label15
     63 call *label0 :fn0*retval
-    64 gotolabel *label15 :fn0
+    64 label *label15
 -    * set *tmp18 :fn0*retval
     65 label *label11
-    66 goto :fn1*retaddr :fn1
+    66 return :fn1*retaddr
     67 end
 
 Modifications by Initial phase, Dead Code Elimination, iteration 5 (-1 instructions):
@@ -141,7 +141,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 5 (-1 instructi
     39 print "|"
 -    * set :fn0*retval "|"
     40 label *label7
-    41 goto :fn0*retaddr :fn0
+    41 return :fn0*retaddr
     42 end
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
@@ -156,7 +156,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
     25 label *label8
     26 jump *label10 greaterThanEq :fn0:i 50
  
-    40 goto :fn0*retaddr :fn0
+    40 return :fn0*retaddr
     41 end
     42 label *label1
 -    * op add *tmp11 10 :fn1:s
@@ -164,25 +164,25 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 +   43 op add :fn0:n 10 :fn1:s
     44 setaddr :fn0*retaddr *label12
     45 call *label0 :fn0*retval
-    46 gotolabel *label12 :fn0
+    46 label *label12
 -    * op add *tmp13 20 :fn1:s
 -    * set :fn0:n *tmp13
 +   47 op add :fn0:n 20 :fn1:s
     48 setaddr :fn0*retaddr *label13
     49 call *label0 :fn0*retval
-    50 gotolabel *label13 :fn0
+    50 label *label13
 -    * op add *tmp15 30 :fn1:s
 -    * set :fn0:n *tmp15
 +   51 op add :fn0:n 30 :fn1:s
     52 setaddr :fn0*retaddr *label14
     53 call *label0 :fn0*retval
-    54 gotolabel *label14 :fn0
+    54 label *label14
 -    * op add *tmp17 40 :fn1:s
 -    * set :fn0:n *tmp17
 +   55 op add :fn0:n 40 :fn1:s
     56 setaddr :fn0*retaddr *label15
     57 call *label0 :fn0*retval
-    58 gotolabel *label15 :fn0
+    58 label *label15
 
 Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
  
@@ -913,117 +913,117 @@ Modifications by Inline function 'bar' defined at line 10:1 (+26 instructions):
      1 set :fn1:s 1
 -    * setaddr :fn1*retaddr *label3
 -    * call *label1 :fn1*retval
--    * gotolabel *label3 :fn1
+-    * label *label3
 +    2 label *label118
 +    3 op add :fn0:n 10 :fn1:s
 +    4 setaddr :fn0*retaddr *label119
 +    5 call *label0 :fn0*retval
-+    6 gotolabel *label119 :fn0
++    6 label *label119
 +    7 op add :fn0:n 20 :fn1:s
 +    8 setaddr :fn0*retaddr *label120
 +    9 call *label0 :fn0*retval
-+   10 gotolabel *label120 :fn0
++   10 label *label120
 +   11 op add :fn0:n 30 :fn1:s
 +   12 setaddr :fn0*retaddr *label121
 +   13 call *label0 :fn0*retval
-+   14 gotolabel *label121 :fn0
++   14 label *label121
 +   15 op add :fn0:n 40 :fn1:s
 +   16 setaddr :fn0*retaddr *label122
 +   17 call *label0 :fn0*retval
-+   18 gotolabel *label122 :fn0
++   18 label *label122
 +   19 label *label123
     20 set :fn1:s 2
 -    * setaddr :fn1*retaddr *label4
 -    * call *label1 :fn1*retval
--    * gotolabel *label4 :fn1
+-    * label *label4
 +   21 label *label124
 +   22 op add :fn0:n 10 :fn1:s
 +   23 setaddr :fn0*retaddr *label125
 +   24 call *label0 :fn0*retval
-+   25 gotolabel *label125 :fn0
++   25 label *label125
 +   26 op add :fn0:n 20 :fn1:s
 +   27 setaddr :fn0*retaddr *label126
 +   28 call *label0 :fn0*retval
-+   29 gotolabel *label126 :fn0
++   29 label *label126
 +   30 op add :fn0:n 30 :fn1:s
 +   31 setaddr :fn0*retaddr *label127
 +   32 call *label0 :fn0*retval
-+   33 gotolabel *label127 :fn0
++   33 label *label127
 +   34 op add :fn0:n 40 :fn1:s
 +   35 setaddr :fn0*retaddr *label128
 +   36 call *label0 :fn0*retval
-+   37 gotolabel *label128 :fn0
++   37 label *label128
 +   38 label *label129
     39 set :fn1:s 3
 -    * setaddr :fn1*retaddr *label5
 -    * call *label1 :fn1*retval
--    * gotolabel *label5 :fn1
+-    * label *label5
 +   40 label *label130
 +   41 op add :fn0:n 10 :fn1:s
 +   42 setaddr :fn0*retaddr *label131
 +   43 call *label0 :fn0*retval
-+   44 gotolabel *label131 :fn0
++   44 label *label131
 +   45 op add :fn0:n 20 :fn1:s
 +   46 setaddr :fn0*retaddr *label132
 +   47 call *label0 :fn0*retval
-+   48 gotolabel *label132 :fn0
++   48 label *label132
 +   49 op add :fn0:n 30 :fn1:s
 +   50 setaddr :fn0*retaddr *label133
 +   51 call *label0 :fn0*retval
-+   52 gotolabel *label133 :fn0
++   52 label *label133
 +   53 op add :fn0:n 40 :fn1:s
 +   54 setaddr :fn0*retaddr *label134
 +   55 call *label0 :fn0*retval
-+   56 gotolabel *label134 :fn0
++   56 label *label134
 +   57 label *label135
     58 set :fn1:s 4
 -    * setaddr :fn1*retaddr *label6
 -    * call *label1 :fn1*retval
--    * gotolabel *label6 :fn1
+-    * label *label6
 +   59 label *label136
 +   60 op add :fn0:n 10 :fn1:s
 +   61 setaddr :fn0*retaddr *label137
 +   62 call *label0 :fn0*retval
-+   63 gotolabel *label137 :fn0
++   63 label *label137
 +   64 op add :fn0:n 20 :fn1:s
 +   65 setaddr :fn0*retaddr *label138
 +   66 call *label0 :fn0*retval
-+   67 gotolabel *label138 :fn0
++   67 label *label138
 +   68 op add :fn0:n 30 :fn1:s
 +   69 setaddr :fn0*retaddr *label139
 +   70 call *label0 :fn0*retval
-+   71 gotolabel *label139 :fn0
++   71 label *label139
 +   72 op add :fn0:n 40 :fn1:s
 +   73 setaddr :fn0*retaddr *label140
 +   74 call *label0 :fn0*retval
-+   75 gotolabel *label140 :fn0
++   75 label *label140
 +   76 label *label141
     77 label *label2
     78 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
     79 stop
  
    242 label *label7
-   243 goto :fn0*retaddr :fn0
+   243 return :fn0*retaddr
    244 end
 -    * label *label1
 -    * op add :fn0:n 10 :fn1:s
 -    * setaddr :fn0*retaddr *label12
 -    * call *label0 :fn0*retval
--    * gotolabel *label12 :fn0
+-    * label *label12
 -    * op add :fn0:n 20 :fn1:s
 -    * setaddr :fn0*retaddr *label13
 -    * call *label0 :fn0*retval
--    * gotolabel *label13 :fn0
+-    * label *label13
 -    * op add :fn0:n 30 :fn1:s
 -    * setaddr :fn0*retaddr *label14
 -    * call *label0 :fn0*retval
--    * gotolabel *label14 :fn0
+-    * label *label14
 -    * op add :fn0:n 40 :fn1:s
 -    * setaddr :fn0*retaddr *label15
 -    * call *label0 :fn0*retval
--    * gotolabel *label15 :fn0
+-    * label *label15
 -    * label *label11
--    * goto :fn1*retaddr :fn1
+-    * return :fn1*retaddr
 -    * end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
@@ -1034,22 +1034,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    3 op add :fn0:n 10 1
      4 setaddr :fn0*retaddr *label119
      5 call *label0 :fn0*retval
-     6 gotolabel *label119 :fn0
+     6 label *label119
 -    * op add :fn0:n 20 :fn1:s
 +    7 op add :fn0:n 20 1
      8 setaddr :fn0*retaddr *label120
      9 call *label0 :fn0*retval
-    10 gotolabel *label120 :fn0
+    10 label *label120
 -    * op add :fn0:n 30 :fn1:s
 +   11 op add :fn0:n 30 1
     12 setaddr :fn0*retaddr *label121
     13 call *label0 :fn0*retval
-    14 gotolabel *label121 :fn0
+    14 label *label121
 -    * op add :fn0:n 40 :fn1:s
 +   15 op add :fn0:n 40 1
     16 setaddr :fn0*retaddr *label122
     17 call *label0 :fn0*retval
-    18 gotolabel *label122 :fn0
+    18 label *label122
     19 label *label123
     20 set :fn1:s 2
     21 label *label124
@@ -1057,22 +1057,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   22 op add :fn0:n 10 2
     23 setaddr :fn0*retaddr *label125
     24 call *label0 :fn0*retval
-    25 gotolabel *label125 :fn0
+    25 label *label125
 -    * op add :fn0:n 20 :fn1:s
 +   26 op add :fn0:n 20 2
     27 setaddr :fn0*retaddr *label126
     28 call *label0 :fn0*retval
-    29 gotolabel *label126 :fn0
+    29 label *label126
 -    * op add :fn0:n 30 :fn1:s
 +   30 op add :fn0:n 30 2
     31 setaddr :fn0*retaddr *label127
     32 call *label0 :fn0*retval
-    33 gotolabel *label127 :fn0
+    33 label *label127
 -    * op add :fn0:n 40 :fn1:s
 +   34 op add :fn0:n 40 2
     35 setaddr :fn0*retaddr *label128
     36 call *label0 :fn0*retval
-    37 gotolabel *label128 :fn0
+    37 label *label128
     38 label *label129
     39 set :fn1:s 3
     40 label *label130
@@ -1080,22 +1080,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   41 op add :fn0:n 10 3
     42 setaddr :fn0*retaddr *label131
     43 call *label0 :fn0*retval
-    44 gotolabel *label131 :fn0
+    44 label *label131
 -    * op add :fn0:n 20 :fn1:s
 +   45 op add :fn0:n 20 3
     46 setaddr :fn0*retaddr *label132
     47 call *label0 :fn0*retval
-    48 gotolabel *label132 :fn0
+    48 label *label132
 -    * op add :fn0:n 30 :fn1:s
 +   49 op add :fn0:n 30 3
     50 setaddr :fn0*retaddr *label133
     51 call *label0 :fn0*retval
-    52 gotolabel *label133 :fn0
+    52 label *label133
 -    * op add :fn0:n 40 :fn1:s
 +   53 op add :fn0:n 40 3
     54 setaddr :fn0*retaddr *label134
     55 call *label0 :fn0*retval
-    56 gotolabel *label134 :fn0
+    56 label *label134
     57 label *label135
     58 set :fn1:s 4
     59 label *label136
@@ -1103,22 +1103,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   60 op add :fn0:n 10 4
     61 setaddr :fn0*retaddr *label137
     62 call *label0 :fn0*retval
-    63 gotolabel *label137 :fn0
+    63 label *label137
 -    * op add :fn0:n 20 :fn1:s
 +   64 op add :fn0:n 20 4
     65 setaddr :fn0*retaddr *label138
     66 call *label0 :fn0*retval
-    67 gotolabel *label138 :fn0
+    67 label *label138
 -    * op add :fn0:n 30 :fn1:s
 +   68 op add :fn0:n 30 4
     69 setaddr :fn0*retaddr *label139
     70 call *label0 :fn0*retval
-    71 gotolabel *label139 :fn0
+    71 label *label139
 -    * op add :fn0:n 40 :fn1:s
 +   72 op add :fn0:n 40 4
     73 setaddr :fn0*retaddr *label140
     74 call *label0 :fn0*retval
-    75 gotolabel *label140 :fn0
+    75 label *label140
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
      0 assertflush
@@ -1128,7 +1128,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
      3 setaddr :fn0*retaddr *label119
  
     16 call *label0 :fn0*retval
-    17 gotolabel *label122 :fn0
+    17 label *label122
     18 label *label123
 -    * set :fn1:s 2
     19 label *label124
@@ -1136,7 +1136,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     21 setaddr :fn0*retaddr *label125
  
     34 call *label0 :fn0*retval
-    35 gotolabel *label128 :fn0
+    35 label *label128
     36 label *label129
 -    * set :fn1:s 3
     37 label *label130
@@ -1144,7 +1144,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     39 setaddr :fn0*retaddr *label131
  
     52 call *label0 :fn0*retval
-    53 gotolabel *label134 :fn0
+    53 label *label134
     54 label *label135
 -    * set :fn1:s 4
     55 label *label136
@@ -1157,7 +1157,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
      2 op add :fn0:n 10 1
 -    * setaddr :fn0*retaddr *label119
 -    * call *label0 :fn0*retval
--    * gotolabel *label119 :fn0
+-    * label *label119
 +    3 label *label142
 +    4 op rand :fn0:r 10
 +    5 op add *tmp6 :fn0:n :fn0:r
@@ -1323,7 +1323,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    165 op add :fn0:n 20 1
 -    * setaddr :fn0*retaddr *label120
 -    * call *label0 :fn0*retval
--    * gotolabel *label120 :fn0
+-    * label *label120
 +  166 label *label246
 +  167 op rand :fn0:r 10
 +  168 op add *tmp6 :fn0:n :fn0:r
@@ -1489,7 +1489,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    328 op add :fn0:n 30 1
 -    * setaddr :fn0*retaddr *label121
 -    * call *label0 :fn0*retval
--    * gotolabel *label121 :fn0
+-    * label *label121
 +  329 label *label350
 +  330 op rand :fn0:r 10
 +  331 op add *tmp6 :fn0:n :fn0:r
@@ -1655,7 +1655,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    491 op add :fn0:n 40 1
 -    * setaddr :fn0*retaddr *label122
 -    * call *label0 :fn0*retval
--    * gotolabel *label122 :fn0
+-    * label *label122
 +  492 label *label454
 +  493 op rand :fn0:r 10
 +  494 op add *tmp6 :fn0:n :fn0:r
@@ -1823,7 +1823,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    656 op add :fn0:n 10 2
 -    * setaddr :fn0*retaddr *label125
 -    * call *label0 :fn0*retval
--    * gotolabel *label125 :fn0
+-    * label *label125
 +  657 label *label558
 +  658 op rand :fn0:r 10
 +  659 op add *tmp6 :fn0:n :fn0:r
@@ -1989,7 +1989,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    819 op add :fn0:n 20 2
 -    * setaddr :fn0*retaddr *label126
 -    * call *label0 :fn0*retval
--    * gotolabel *label126 :fn0
+-    * label *label126
 +  820 label *label662
 +  821 op rand :fn0:r 10
 +  822 op add *tmp6 :fn0:n :fn0:r
@@ -2155,7 +2155,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    982 op add :fn0:n 30 2
 -    * setaddr :fn0*retaddr *label127
 -    * call *label0 :fn0*retval
--    * gotolabel *label127 :fn0
+-    * label *label127
 +  983 label *label766
 +  984 op rand :fn0:r 10
 +  985 op add *tmp6 :fn0:n :fn0:r
@@ -2321,7 +2321,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1145 op add :fn0:n 40 2
 -    * setaddr :fn0*retaddr *label128
 -    * call *label0 :fn0*retval
--    * gotolabel *label128 :fn0
+-    * label *label128
 + 1146 label *label870
 + 1147 op rand :fn0:r 10
 + 1148 op add *tmp6 :fn0:n :fn0:r
@@ -2489,7 +2489,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1310 op add :fn0:n 10 3
 -    * setaddr :fn0*retaddr *label131
 -    * call *label0 :fn0*retval
--    * gotolabel *label131 :fn0
+-    * label *label131
 + 1311 label *label974
 + 1312 op rand :fn0:r 10
 + 1313 op add *tmp6 :fn0:n :fn0:r
@@ -2655,7 +2655,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1473 op add :fn0:n 20 3
 -    * setaddr :fn0*retaddr *label132
 -    * call *label0 :fn0*retval
--    * gotolabel *label132 :fn0
+-    * label *label132
 + 1474 label *label1078
 + 1475 op rand :fn0:r 10
 + 1476 op add *tmp6 :fn0:n :fn0:r
@@ -2821,7 +2821,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1636 op add :fn0:n 30 3
 -    * setaddr :fn0*retaddr *label133
 -    * call *label0 :fn0*retval
--    * gotolabel *label133 :fn0
+-    * label *label133
 + 1637 label *label1182
 + 1638 op rand :fn0:r 10
 + 1639 op add *tmp6 :fn0:n :fn0:r
@@ -2987,7 +2987,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1799 op add :fn0:n 40 3
 -    * setaddr :fn0*retaddr *label134
 -    * call *label0 :fn0*retval
--    * gotolabel *label134 :fn0
+-    * label *label134
 + 1800 label *label1286
 + 1801 op rand :fn0:r 10
 + 1802 op add *tmp6 :fn0:n :fn0:r
@@ -3155,7 +3155,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1964 op add :fn0:n 10 4
 -    * setaddr :fn0*retaddr *label137
 -    * call *label0 :fn0*retval
--    * gotolabel *label137 :fn0
+-    * label *label137
 + 1965 label *label1390
 + 1966 op rand :fn0:r 10
 + 1967 op add *tmp6 :fn0:n :fn0:r
@@ -3321,7 +3321,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   2127 op add :fn0:n 20 4
 -    * setaddr :fn0*retaddr *label138
 -    * call *label0 :fn0*retval
--    * gotolabel *label138 :fn0
+-    * label *label138
 + 2128 label *label1494
 + 2129 op rand :fn0:r 10
 + 2130 op add *tmp6 :fn0:n :fn0:r
@@ -3487,7 +3487,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   2290 op add :fn0:n 30 4
 -    * setaddr :fn0*retaddr *label139
 -    * call *label0 :fn0*retval
--    * gotolabel *label139 :fn0
+-    * label *label139
 + 2291 label *label1598
 + 2292 op rand :fn0:r 10
 + 2293 op add *tmp6 :fn0:n :fn0:r
@@ -3653,7 +3653,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   2453 op add :fn0:n 40 4
 -    * setaddr :fn0*retaddr *label140
 -    * call *label0 :fn0*retval
--    * gotolabel *label140 :fn0
+-    * label *label140
 + 2454 label *label1702
 + 2455 op rand :fn0:r 10
 + 2456 op add *tmp6 :fn0:n :fn0:r
@@ -3983,7 +3983,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 -    * print *tmp10
 -    * print "|"
 -    * label *label7
--    * goto :fn0*retaddr :fn0
+-    * return :fn0*retaddr
 -    * end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:

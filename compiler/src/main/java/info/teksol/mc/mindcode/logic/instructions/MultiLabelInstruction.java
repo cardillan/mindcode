@@ -8,24 +8,24 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 
 import java.util.List;
 
-public class GotoLabelInstruction extends BaseInstruction implements LabeledInstruction {
+public class MultiLabelInstruction extends BaseInstruction implements LabeledInstruction {
 
-    GotoLabelInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
-        super(astContext, Opcode.GOTOLABEL, args, params);
+    MultiLabelInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+        super(astContext, Opcode.MULTILABEL, args, params);
     }
 
-    protected GotoLabelInstruction(BaseInstruction other, AstContext astContext) {
+    protected MultiLabelInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
     }
 
     @Override
-    public GotoLabelInstruction copy() {
-        return new GotoLabelInstruction(this, astContext);
+    public MultiLabelInstruction copy() {
+        return new MultiLabelInstruction(this, astContext);
     }
 
     @Override
-    public GotoLabelInstruction withContext(AstContext astContext) {
-        return new GotoLabelInstruction(this, astContext);
+    public MultiLabelInstruction withContext(AstContext astContext) {
+        return new MultiLabelInstruction(this, astContext);
     }
 
     public boolean matches(LogicInstruction instruction) {

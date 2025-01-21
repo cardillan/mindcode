@@ -2,6 +2,7 @@ package info.teksol.mc.emulator;
 
 import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.evaluator.LogicWritable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -96,7 +97,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
             setObject(variable.getObject());
         } else {
             isObject = false;
-            numericValue = invalid(variable.numericValue) ? 0.0 : variable.numericValue;
+            numericValue = ExpressionEvaluator.invalid(variable.numericValue) ? 0.0 : variable.numericValue;
         }
     }
 
@@ -124,7 +125,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public void setDoubleValue(double value) {
         verifyModification();
-        if (invalid(value)) {
+        if (ExpressionEvaluator.invalid(value)) {
             this.isObject = true;
         } else {
             this.isObject = false;
@@ -172,7 +173,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     }
 
     public double getDoubleValue() {
-        return isObject ? object != null ? 1 : 0 : invalid(numericValue) ? 0 : numericValue;
+        return isObject ? object != null ? 1 : 0 : ExpressionEvaluator.invalid(numericValue) ? 0 : numericValue;
     }
 
     public String getStringValue() {
@@ -203,12 +204,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     }
 
     public boolean invalidNumber() {
-        return isObject || invalid(numericValue);
-    }
-
-    // TODO: compiler/optimizer will need to use this eventually
-    public static boolean invalid(double d) {
-        return Double.isNaN(d) || Double.isInfinite(d);
+        return isObject || ExpressionEvaluator.invalid(numericValue);
     }
 
     public static String print(MindustryObject object) {

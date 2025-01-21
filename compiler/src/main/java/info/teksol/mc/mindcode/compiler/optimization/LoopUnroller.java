@@ -425,9 +425,9 @@ class LoopUnroller extends BaseOptimizer {
 
             LogicList trailingCtx = contextInstructions(trailing.get(i));
             if (!trailingCtx.isEmpty()) {
-                // Skips labels/gotolabels, transforms the rest
+                // Skips labels/multilabels, transforms the rest
                 LogicList copy = trailingCtx.transformToContext(newContext,
-                        ix -> ix instanceof LabelInstruction || ix instanceof GotoLabelInstruction || ix instanceof GotoInstruction
+                        ix -> ix instanceof LabelInstruction || ix instanceof MultiLabelInstruction || ix instanceof ReturnInstruction
                                 ? null : transformer.apply(ix));
                 insertInstructions(insertionPoint, copy);
                 insertionPoint += copy.size();

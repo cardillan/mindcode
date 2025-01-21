@@ -43,8 +43,8 @@ class SingleStepEliminator extends BaseOptimizer {
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
 
-                if (ix instanceof GotoLabelInstruction) {
-                    // GotoLabel instruction may be a part of jump tables which must not be affected
+                if (ix instanceof MultiLabelInstruction) {
+                    // MultiLabel instruction may be a part of jump tables which must not be affected
                     lastJump = null;
                 } else if (ix instanceof LabeledInstruction il) {
                     if (il.getLabel().equals(targetLabel)) {

@@ -29,10 +29,12 @@ class JumpThreading extends BaseOptimizer {
                 if (instruction instanceof JumpInstruction jump) {
                     // Target of the jump
                     LogicLabel label = findJumpRedirection(jump);
-                    GotoInstruction labeledGoto = advanced() && labeledInstruction(label) instanceof GotoInstruction ix ? ix : null;
-                    if (labeledGoto != null && jump.isUnconditional()) {
-                        // An unconditional jump targets a goto: replace it with the goto itself
-                        it.set(labeledGoto.withContext(jump.getAstContext()));
+                    LogicInstruction target = labeledInstruction(label);
+                    boolean replaceAdvanced = jump.isUnconditional() && advanced()
+                            && (target instanceof ReturnInstruction || target instanceof MultiJumpInstruction);
+
+                    if (replaceAdvanced) {
+                        it.set(target.withContext(jump.getAstContext()));
                         count++;
                     } else if (!label.equals(jump.getTarget())){
                         startLabelUsed |= label.equals(FIRST_LABEL);

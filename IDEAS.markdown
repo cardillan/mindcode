@@ -14,14 +14,6 @@ Mindcode currently undergoes significant changes to the syntax, which are being 
     * Display message "The error has been logged and will be investigated."
   * Command line app: display message "An internal error occurred. Please report the error at ..."
 * Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization.
-* Refactor stackless function calls
-  * UnreachableCodeEliminator now tracks code paths and recognizes CALL instruction; it is no longer necessary to
-    track all possible return points from a stackless function.
-  * Rename GOTOLABEL --> OFFSETLABEL
-  * Remove marker from GOTO instruction, GOTOs will target normal LABELs
-  * Make ListIterator use GOTOOFFSET (with an offset of 0, hmmm.....)
-  * Only GOTOOFFSET/OFFSETLABEL instructions will be related via marker
-  * Remove exception from OptimizationContext.duplicateLabel (see TODO STACKLESS_CALL)
 * Optimization speedups
   * DataFlowOptimizer: cache VariableState instances at the entry and exit points end of each context. If the
     inbound instance is equal to the cached one, use the cached outbound instance and avoid new processing.

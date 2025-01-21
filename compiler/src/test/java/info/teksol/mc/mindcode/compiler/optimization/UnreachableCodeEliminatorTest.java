@@ -104,34 +104,28 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
                         testc(2);
                         printflush(message1);
                         """,
-                createInstruction(LABEL, var(1111)),
-                createInstruction(JUMP, var(1111), "equal", "bank1", "null"),
-                // call testa (2x)
-                createInstruction(SETADDR, "__fn2retaddr", var(1003)),
-                createInstruction(CALL, var(1002), "__fn2retval"),
-                createInstruction(GOTOLABEL, var(1003), "__fn2"),
-                createInstruction(SETADDR, "__fn2retaddr", var(1004)),
-                createInstruction(CALL, var(1002), "__fn2retval"),
-                createInstruction(GOTOLABEL, var(1004), "__fn2"),
-                // if false + call testb -- removed
-                // call testc (2)
-                createInstruction(SETADDR, "__fn1retaddr", var(1010)),
-                createInstruction(CALL, var(1001), "__fn1retval"),
-                createInstruction(GOTOLABEL, var(1010), "__fn1"),
-                createInstruction(SETADDR, "__fn1retaddr", var(1011)),
-                createInstruction(CALL, var(1001), "__fn1retval"),
-                createInstruction(GOTOLABEL, var(1011), "__fn1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(JUMP, var(1003), "equal", "cell1", "null"),
+                createInstruction(SETADDR, ":fn2*retaddr", var(1004)),
+                createInstruction(CALL, var(1002), ":fn2*retval"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SETADDR, ":fn2*retaddr", var(1005)),
+                createInstruction(CALL, var(1002), ":fn2*retval"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(SETADDR, ":fn1*retaddr", var(1011)),
+                createInstruction(CALL, var(1001), ":fn1*retval"),
+                createInstruction(LABEL, var(1011)),
+                createInstruction(SETADDR, ":fn1*retaddr", var(1012)),
+                createInstruction(CALL, var(1001), ":fn1*retval"),
+                createInstruction(LABEL, var(1012)),
                 createInstruction(PRINTFLUSH, "message1"),
                 createInstruction(END),
-                // def testb -- removed
-                // def testc
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "\"End\""),
-                createInstruction(GOTO, "__fn1retaddr", "__fn1"),
-                // def testa
+                createInstruction(PRINT, q("End")),
+                createInstruction(RETURN, ":fn1*retaddr"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(PRINT, "\"Start\""),
-                createInstruction(GOTO, "__fn2retaddr", "__fn2")
+                createInstruction(PRINT, q("Start")),
+                createInstruction(RETURN, ":fn2*retaddr")
         );
     }
 

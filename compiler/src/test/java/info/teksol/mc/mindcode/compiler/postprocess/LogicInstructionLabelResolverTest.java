@@ -136,7 +136,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                                 createInstruction(POP, cell1, a),
                                 createInstruction(CALLREC, cell1, label1, label2, fn0retval),
                                 createInstruction(LABEL, label1),
-                                createInstruction(RETURN, cell1),
+                                createInstruction(RETURNREC, cell1),
                                 createInstruction(LABEL, label2),
                                 createInstruction(LABEL, label0),
                                 createInstruction(END)

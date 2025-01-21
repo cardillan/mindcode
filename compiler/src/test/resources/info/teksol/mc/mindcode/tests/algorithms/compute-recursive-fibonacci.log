@@ -122,14 +122,14 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     27 label *label5
 -    * set :fn0*retval *tmp2
     28 label *label3
-    29 return bank1
+    29 returnrec bank1
     30 end
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
     27 label *label5
     28 label *label3
-    29 return bank1
+    29 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
@@ -175,4 +175,4 @@ label *label7
 pop bank1 *tmp4
 op add :fn0*retval *tmp4 :fn0*retval
 label *label5
-return bank1
+returnrec bank1

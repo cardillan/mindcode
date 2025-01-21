@@ -13,6 +13,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
 * Fixed compiler errors when placing enhanced comments into loops.
 
+### Miscellaneous
+
+* Renamed virtual instructions to better match their actual use.
+* For-each loop reworked to use MultiJump/MultiLabel instructions instead of (former) goto. Goto was renamed to Return, as it is now used solely for returning from stackless calls. Markers are no longer used with Return to bind it with possible return targets. 
+
 ## 3.0.0-preview1 - 2025-01-17 
 
 ### Fixed

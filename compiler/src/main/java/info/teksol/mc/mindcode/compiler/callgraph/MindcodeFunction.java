@@ -28,7 +28,6 @@ public class MindcodeFunction {
     private final IntRange parameterCount;
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
 
-    // TODO parameters should be ValueStores; add copyFrom method to ValueStore
     private List<LogicVariable> parameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";

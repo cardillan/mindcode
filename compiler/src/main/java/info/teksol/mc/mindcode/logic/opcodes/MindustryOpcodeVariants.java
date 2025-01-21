@@ -314,14 +314,14 @@ public class MindustryOpcodeVariants {
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);
         add(list, V6,  MAX, S, NONE, Opcode.LABEL,       label("label"));
-        add(list, V6,  MAX, S, NONE, Opcode.GOTOLABEL,   label("address"), label("marker"));
+        add(list, V6,  MAX, S, NONE, Opcode.CALL,        label("callAddr"), out("retval"));
+        add(list, V6,  MAX, S, NONE, Opcode.RETURN,      in("address"));
         add(list, V6,  MAX, S, NONE, Opcode.PUSH,        block("memory"), in("value"));
         add(list, V6,  MAX, S, NONE, Opcode.POP,         block("memory"), out("value"));
-        add(list, V6,  MAX, S, NONE, Opcode.CALL,        label("callAddr"), out("retval"));
         add(list, V6,  MAX, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"), out("retval"));
-        add(list, V6,  MAX, S, NONE, Opcode.RETURN,      block("memory"));
-        add(list, V6,  MAX, S, NONE, Opcode.GOTO,        in("address"), label("marker"));
-        add(list, V6,  MAX, S, NONE, Opcode.GOTOOFFSET,  label("address"), in("value"), in("offset"), label("marker"));
+        add(list, V6,  MAX, S, NONE, Opcode.RETURNREC,   block("memory"));
+        add(list, V6,  MAX, S, NONE, Opcode.MULTILABEL,  label("address"), label("marker"));
+        add(list, V6,  MAX, S, NONE, Opcode.MULTIJUMP,   label("address"), in("value"), in("offset"), label("marker"));
         add(list, V6,  MAX, S, NONE, Opcode.SETADDR,     out("result"),   in("address"));
         add(list, V6,  MAX, S, NONE, Opcode.REMARK,      in("remark"));
 

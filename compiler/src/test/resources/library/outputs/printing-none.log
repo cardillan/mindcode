@@ -5,198 +5,198 @@ Final code before resolving virtual instructions:
     1:  set :fn3:number null
     2:  setaddr :fn3*retaddr *label8
     3:  call *label3 :fn3*retval
-        gotolabel *label8 :fn3
+        label *label8
     4:  assertprints "0" "printNumber(null)"
     5:  assertflush
     6:  set :fn3:number 1
     7:  setaddr :fn3*retaddr *label9
     8:  call *label3 :fn3*retval
-        gotolabel *label9 :fn3
+        label *label9
     9:  assertprints "1" "printNumber(1)"
    10:  assertflush
    11:  set :fn3:number 1.5
    12:  setaddr :fn3*retaddr *label10
    13:  call *label3 :fn3*retval
-        gotolabel *label10 :fn3
+        label *label10
    14:  assertprints "1" "printNumber(1.5)"
    15:  assertflush
    16:  set :fn3:number -1.5
    17:  setaddr :fn3*retaddr *label11
    18:  call *label3 :fn3*retval
-        gotolabel *label11 :fn3
+        label *label11
    19:  assertprints "-1" "printNumber(-1.5)"
    20:  assertflush
    21:  set :fn3:number 1234567
    22:  setaddr :fn3*retaddr *label12
    23:  call *label3 :fn3*retval
-        gotolabel *label12 :fn3
+        label *label12
    24:  assertprints "1,234,567" "printNumber(1234567)"
    25:  assertflush
    26:  set :fn3:number -1234567
    27:  setaddr :fn3*retaddr *label13
    28:  call *label3 :fn3*retval
-        gotolabel *label13 :fn3
+        label *label13
    29:  assertprints "-1,234,567" "printNumber(-1234567)"
    30:  assertflush
    31:  set :fn3:number 9009099
    32:  setaddr :fn3*retaddr *label14
    33:  call *label3 :fn3*retval
-        gotolabel *label14 :fn3
+        label *label14
    34:  assertprints "9,009,099" "printNumber(9009099)"
    35:  assertflush
    36:  set :fn4:number 0b1001
    37:  set :fn4:digits 0
    38:  setaddr :fn4*retaddr *label15
    39:  call *label4 :fn4*retval
-        gotolabel *label15 :fn4
+        label *label15
    40:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
    41:  assertflush
    42:  set :fn4:number 0b1010
    43:  set :fn4:digits 6
    44:  setaddr :fn4*retaddr *label16
    45:  call *label4 :fn4*retval
-        gotolabel *label16 :fn4
+        label *label16
    46:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
    47:  assertflush
    48:  set :fn5:number 0xABCDEF
    49:  set :fn5:digits 0
    50:  setaddr :fn5*retaddr *label17
    51:  call *label5 :fn5*retval
-        gotolabel *label17 :fn5
+        label *label17
    52:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
    53:  assertflush
    54:  set :fn5:number 0x1234567890
    55:  set :fn5:digits 0
    56:  setaddr :fn5*retaddr *label18
    57:  call *label5 :fn5*retval
-        gotolabel *label18 :fn5
+        label *label18
    58:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
    59:  assertflush
    60:  set :fn5:number 0xAABBCC
    61:  set :fn5:digits 8
    62:  setaddr :fn5*retaddr *label19
    63:  call *label5 :fn5*retval
-        gotolabel *label19 :fn5
+        label *label19
    64:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
    65:  assertflush
    66:  set :fn6:n null
    67:  setaddr :fn6*retaddr *label20
    68:  call *label6 :fn6*retval
-        gotolabel *label20 :fn6
+        label *label20
    69:  assertprints "null" "printExactFast(null)"
    70:  assertflush
    71:  set :fn6:n 0
    72:  setaddr :fn6*retaddr *label21
    73:  call *label6 :fn6*retval
-        gotolabel *label21 :fn6
+        label *label21
    74:  assertprints "0" "printExactFast(0)"
    75:  assertflush
    76:  set :fn6:n 1
    77:  setaddr :fn6*retaddr *label22
    78:  call *label6 :fn6*retval
-        gotolabel *label22 :fn6
+        label *label22
    79:  assertprints "1" "printExactFast(1)"
    80:  assertflush
    81:  set :fn6:n 1.0000001
    82:  setaddr :fn6*retaddr *label23
    83:  call *label6 :fn6*retval
-        gotolabel *label23 :fn6
+        label *label23
    84:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
    85:  assertflush
    86:  set :fn6:n 3.00000007
    87:  setaddr :fn6*retaddr *label24
    88:  call *label6 :fn6*retval
-        gotolabel *label24 :fn6
+        label *label24
    89:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
    90:  assertflush
    91:  set :fn6:n 3E50
    92:  setaddr :fn6*retaddr *label25
    93:  call *label6 :fn6*retval
-        gotolabel *label25 :fn6
+        label *label25
    94:  assertprints "3E50" "printExactFast(3e50)"
    95:  assertflush
    96:  set :fn6:n 1.0123456789
    97:  setaddr :fn6*retaddr *label26
    98:  call *label6 :fn6*retval
-        gotolabel *label26 :fn6
+        label *label26
    99:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
   100:  assertflush
   101:  set :fn6:n 10000001E13
   102:  setaddr :fn6*retaddr *label27
   103:  call *label6 :fn6*retval
-        gotolabel *label27 :fn6
+        label *label27
   104:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
   105:  assertflush
   106:  set :fn6:n 12345E-54
   107:  setaddr :fn6*retaddr *label28
   108:  call *label6 :fn6*retval
-        gotolabel *label28 :fn6
+        label *label28
   109:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
   110:  assertflush
   111:  set :fn6:n -12345E-54
   112:  setaddr :fn6*retaddr *label29
   113:  call *label6 :fn6*retval
-        gotolabel *label29 :fn6
+        label *label29
   114:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
   115:  assertflush
   116:  set :fn7:n null
   117:  setaddr :fn7*retaddr *label30
   118:  call *label7 :fn7*retval
-        gotolabel *label30 :fn7
+        label *label30
   119:  assertprints "null" "printExactSlow(null)"
   120:  assertflush
   121:  set :fn7:n 0
   122:  setaddr :fn7*retaddr *label31
   123:  call *label7 :fn7*retval
-        gotolabel *label31 :fn7
+        label *label31
   124:  assertprints "0" "printExactSlow(0)"
   125:  assertflush
   126:  set :fn7:n 1
   127:  setaddr :fn7*retaddr *label32
   128:  call *label7 :fn7*retval
-        gotolabel *label32 :fn7
+        label *label32
   129:  assertprints "1.000000000000000" "printExactSlow(1)"
   130:  assertflush
   131:  set :fn7:n 1.0000001
   132:  setaddr :fn7*retaddr *label33
   133:  call *label7 :fn7*retval
-        gotolabel *label33 :fn7
+        label *label33
   134:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
   135:  assertflush
   136:  set :fn7:n 3.00000007
   137:  setaddr :fn7*retaddr *label34
   138:  call *label7 :fn7*retval
-        gotolabel *label34 :fn7
+        label *label34
   139:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
   140:  assertflush
   141:  set :fn7:n 3E50
   142:  setaddr :fn7*retaddr *label35
   143:  call *label7 :fn7*retval
-        gotolabel *label35 :fn7
+        label *label35
   144:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
   145:  assertflush
   146:  set :fn7:n 1.0123456789
   147:  setaddr :fn7*retaddr *label36
   148:  call *label7 :fn7*retval
-        gotolabel *label36 :fn7
+        label *label36
   149:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
   150:  assertflush
   151:  set :fn7:n 10000001E13
   152:  setaddr :fn7*retaddr *label37
   153:  call *label7 :fn7*retval
-        gotolabel *label37 :fn7
+        label *label37
   154:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
   155:  assertflush
   156:  set :fn7:n 12345E-54
   157:  setaddr :fn7*retaddr *label38
   158:  call *label7 :fn7*retval
-        gotolabel *label38 :fn7
+        label *label38
   159:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
   160:  assertflush
   161:  set :fn7:n -12345E-54
   162:  setaddr :fn7*retaddr *label39
   163:  call *label7 :fn7*retval
-        gotolabel *label39 :fn7
+        label *label39
   164:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
   165:  stop
   166:  end
@@ -242,7 +242,7 @@ Final code before resolving virtual instructions:
   196:  format :fn8:n
         label *label41
         label *label40
-  197:  goto :fn3*retaddr :fn3
+  197:  return :fn3*retaddr
   198:  end
         label *label4
   199:  print "{2}"
@@ -272,7 +272,7 @@ Final code before resolving virtual instructions:
   217:  format "0b"
         label *label52
         label *label51
-  218:  goto :fn4*retaddr :fn4
+  218:  return :fn4*retaddr
   219:  end
         label *label5
   220:  print "{2}"
@@ -356,7 +356,7 @@ Final code before resolving virtual instructions:
   276:  format "0x"
         label *label60
         label *label59
-  277:  goto :fn5*retaddr :fn5
+  277:  return :fn5*retaddr
   278:  end
         label *label6
   279:  set :fn11:x :fn6:n
@@ -473,7 +473,7 @@ Final code before resolving virtual instructions:
   367:  set *tmp25 *tmp57
         label *label86
         label *label83
-  368:  goto :fn6*retaddr :fn6
+  368:  return :fn6*retaddr
   369:  end
         label *label7
   370:  set :fn14:x :fn7:n
@@ -533,7 +533,7 @@ Final code before resolving virtual instructions:
   414:  set *tmp61 *tmp76
         label *label111
         label *label108
-  415:  goto :fn7*retaddr :fn7
+  415:  return :fn7*retaddr
   416:  end
 
 
