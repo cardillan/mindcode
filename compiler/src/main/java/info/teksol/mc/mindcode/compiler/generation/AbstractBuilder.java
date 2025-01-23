@@ -229,7 +229,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// @param valueStore the value to use
     /// @return a LogicValue capturing the current value of the valueStore
     protected LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
-        if (valueStore instanceof LogicValue value && value.isConstant()) {
+        if (valueStore instanceof LogicValue value && value.isImmutable()) {
             return value;
         } else {
             LogicVariable tmp = processor.nextTemp().withType(argumentType);

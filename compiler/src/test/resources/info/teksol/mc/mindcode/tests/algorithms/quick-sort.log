@@ -1,11 +1,11 @@
-   146 instructions before optimizations.
+   145 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination.
     11 instructions eliminated by Dead Code Elimination (2 passes, 4 iterations).
      5 instructions eliminated by Jump Optimization (4 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      3 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
-    20 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    19 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      2 instructions modified by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
      1 instructions eliminated by Unreachable Code Elimination.
@@ -18,336 +18,328 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
      9 callrec bank1 *label0 *label2 :fn0*retval
     10 label *label2
 -    * set *tmp1 :fn0*retval
-    11 set *tmp2 SIZE
-    12 set :i 0
-    13 label *label3
- 
-    44 write *tmp20 ARRAY *tmp17
-    45 set *tmp21 :fn1:right
-    46 write :fn1:pivot ARRAY *tmp21
--    * set *tmp16 :fn1:pivot
-    47 jump *label11 always
-    48 label *label10
--    * set *tmp16 null
-    49 label *label11
-    50 set :fn1:index :fn1:left
-    51 set *tmp23 :fn1:right
- 
-    65 write *tmp33 ARRAY *tmp30
-    66 set *tmp34 :fn1:index
-    67 write :fn1:curr ARRAY *tmp34
--    * set *tmp29 :fn1:curr
-    68 jump *label18 always
-    69 label *label17
--    * set *tmp29 null
-    70 label *label18
-    71 op add :fn1:index :fn1:index 1
--    * set *tmp27 :fn1:index
-    72 jump *label16 always
-    73 label *label15
--    * set *tmp27 null
-    74 label *label16
-    75 label *label13
-    76 op add :fn1:i :fn1:i 1
- 
-    84 write *tmp41 ARRAY *tmp38
-    85 set *tmp42 :fn1:index
-    86 write :fn1:pivot ARRAY *tmp42
--    * set *tmp37 :fn1:pivot
-    87 jump *label20 always
-    88 label *label19
--    * set *tmp37 null
-    89 label *label20
-    90 set *tmp12 :fn1:index
-    91 jump *label9 always
- 
-   105 pop bank1 :fn0:pivot_index
-   106 pop bank1 :fn0:right
-   107 pop bank1 :fn0:left
--    * set *tmp45 :fn0*retval
-   108 op add *tmp46 :fn0:new_pivot_index 1
-   109 push bank1 :fn0:left
-   110 push bank1 :fn0:right
-
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 instructions):
- 
-    28 jump *label7 equal *tmp7 false
-    29 op sub *tmp9 :fn0:right :fn0:left
-    30 op idiv *tmp10 *tmp9 2
--    * op add *tmp11 :fn0:left *tmp10
--    * set :fn0:pivot_index *tmp11
-+   31 op add :fn0:pivot_index :fn0:left *tmp10
-    32 set :fn1:left :fn0:left
-    33 set :fn1:right :fn0:right
-    34 set :fn1:pivot_index :fn0:pivot_index
-    35 set *tmp13 :fn1:pivot_index
--    * read *tmp14 ARRAY *tmp13
--    * set :fn1:pivot *tmp14
-+   36 read :fn1:pivot ARRAY *tmp13
-    37 op notEqual *tmp15 :fn1:pivot_index :fn1:right
-    38 jump *label10 equal *tmp15 false
-    39 set *tmp17 :fn1:pivot_index
- 
-    51 label *label12
-    52 jump *label14 greaterThanEq :fn1:i *tmp23
-    53 set *tmp24 :fn1:i
--    * read *tmp25 ARRAY *tmp24
--    * set :fn1:curr *tmp25
-+   54 read :fn1:curr ARRAY *tmp24
-    55 op lessThan *tmp26 :fn1:curr :fn1:pivot
-    56 jump *label15 equal *tmp26 false
-    57 op notEqual *tmp28 :fn1:i :fn1:index
- 
-   117 pop bank1 :fn0:pivot_index
-   118 pop bank1 :fn0:right
-   119 pop bank1 :fn0:left
--    * set *tmp47 :fn0*retval
--    * set *tmp8 *tmp47
-+  120 set *tmp8 :fn0*retval
-   121 jump *label8 always
-   122 label *label7
-   123 set *tmp8 null
-
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
- 
-    24 stop
-    25 end
-    26 label *label0
--    * op greaterThan *tmp7 :fn0:right :fn0:left
--    * jump *label7 equal *tmp7 false
-+   27 jump *label7 lessThanEq :fn0:right :fn0:left
-    28 op sub *tmp9 :fn0:right :fn0:left
-    29 op idiv *tmp10 *tmp9 2
-    30 op add :fn0:pivot_index :fn0:left *tmp10
- 
-    33 set :fn1:pivot_index :fn0:pivot_index
-    34 set *tmp13 :fn1:pivot_index
-    35 read :fn1:pivot ARRAY *tmp13
--    * op notEqual *tmp15 :fn1:pivot_index :fn1:right
--    * jump *label10 equal *tmp15 false
-+   36 jump *label10 equal :fn1:pivot_index :fn1:right
-    37 set *tmp17 :fn1:pivot_index
-    38 set *tmp19 :fn1:right
-    39 read *tmp20 ARRAY *tmp19
- 
-    50 jump *label14 greaterThanEq :fn1:i *tmp23
-    51 set *tmp24 :fn1:i
-    52 read :fn1:curr ARRAY *tmp24
--    * op lessThan *tmp26 :fn1:curr :fn1:pivot
--    * jump *label15 equal *tmp26 false
--    * op notEqual *tmp28 :fn1:i :fn1:index
--    * jump *label17 equal *tmp28 false
-+   53 jump *label15 greaterThanEq :fn1:curr :fn1:pivot
-+   54 jump *label17 equal :fn1:i :fn1:index
-    55 set *tmp30 :fn1:i
-    56 set *tmp32 :fn1:index
-    57 read *tmp33 ARRAY *tmp32
- 
-    69 op add :fn1:i :fn1:i 1
-    70 jump *label12 always
-    71 label *label14
--    * op notEqual *tmp36 :fn1:index :fn1:right
--    * jump *label19 equal *tmp36 false
-+   72 jump *label19 equal :fn1:index :fn1:right
-    73 set *tmp38 :fn1:right
-    74 set *tmp40 :fn1:index
-    75 read *tmp41 ARRAY *tmp40
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-4 instructions):
- 
-    40 write *tmp20 ARRAY *tmp17
-    41 set *tmp21 :fn1:right
-    42 write :fn1:pivot ARRAY *tmp21
--    * jump *label11 always
-    43 label *label10
-    44 label *label11
-    45 set :fn1:index :fn1:left
- 
-    57 write *tmp33 ARRAY *tmp30
-    58 set *tmp34 :fn1:index
-    59 write :fn1:curr ARRAY *tmp34
--    * jump *label18 always
-    60 label *label17
-    61 label *label18
-    62 op add :fn1:index :fn1:index 1
--    * jump *label16 always
-    63 label *label15
-    64 label *label16
-    65 label *label13
- 
-    73 write *tmp41 ARRAY *tmp38
-    74 set *tmp42 :fn1:index
-    75 write :fn1:pivot ARRAY *tmp42
--    * jump *label20 always
-    76 label *label19
-    77 label *label20
-    78 set *tmp12 :fn1:index
-
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
- 
-    85 push bank1 :fn0:right
-    86 push bank1 :fn0:pivot_index
-    87 push bank1 :fn0:new_pivot_index
--    * set :fn0:left :fn0:left
-    88 set :fn0:right *tmp44
-    89 callrec bank1 *label0 *label21 :fn0*retval
-    90 label *label21
- 
-    99 push bank1 :fn0:new_pivot_index
-   100 push bank1 *tmp45
-   101 set :fn0:left *tmp46
--    * set :fn0:right :fn0:right
-   102 callrec bank1 *label0 *label22 :fn0*retval
-   103 label *label22
-   104 pop bank1 *tmp45
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    11 set *tmp2 SIZE
-    12 set :i 0
-    13 label *label3
--    * jump *label5 greaterThanEq :i *tmp2
-+   14 jump *label5 greaterThanEq :i SIZE
-    15 set *tmp3 :i
-    16 set *tmp5 :i
--    * read *tmp4 FINAL *tmp3
--    * read *tmp6 ARRAY *tmp5
-+   17 read *tmp4 FINAL :i
-+   18 read *tmp6 ARRAY :i
-    19 assertequals *tmp4 *tmp6 "unexpected value"
-    20 label *label4
-    21 op add :i :i 1
- 
-    31 set :fn1:left :fn0:left
-    32 set :fn1:right :fn0:right
-    33 set :fn1:pivot_index :fn0:pivot_index
--    * set *tmp13 :fn1:pivot_index
--    * read :fn1:pivot ARRAY *tmp13
--    * jump *label10 equal :fn1:pivot_index :fn1:right
--    * set *tmp17 :fn1:pivot_index
--    * set *tmp19 :fn1:right
--    * read *tmp20 ARRAY *tmp19
--    * write *tmp20 ARRAY *tmp17
--    * set *tmp21 :fn1:right
--    * write :fn1:pivot ARRAY *tmp21
-+   34 set *tmp13 :fn0:pivot_index
-+   35 read :fn1:pivot ARRAY :fn1:pivot_index
-+   36 jump *label10 equal :fn0:pivot_index :fn0:right
-+   37 set *tmp17 :fn0:pivot_index
-+   38 set *tmp19 :fn0:right
-+   39 read *tmp20 ARRAY :fn1:right
-+   40 write *tmp20 ARRAY :fn1:pivot_index
-+   41 set *tmp21 :fn0:right
-+   42 write :fn1:pivot ARRAY :fn1:right
-    43 label *label10
-    44 label *label11
--    * set :fn1:index :fn1:left
--    * set *tmp23 :fn1:right
--    * set :fn1:i :fn1:left
-+   45 set :fn1:index :fn0:left
-+   46 set *tmp23 :fn0:right
-+   47 set :fn1:i :fn0:left
-    48 label *label12
--    * jump *label14 greaterThanEq :fn1:i *tmp23
-+   49 jump *label14 greaterThanEq :fn1:i :fn1:right
-    50 set *tmp24 :fn1:i
--    * read :fn1:curr ARRAY *tmp24
-+   51 read :fn1:curr ARRAY :fn1:i
-    52 jump *label15 greaterThanEq :fn1:curr :fn1:pivot
-    53 jump *label17 equal :fn1:i :fn1:index
-    54 set *tmp30 :fn1:i
-    55 set *tmp32 :fn1:index
--    * read *tmp33 ARRAY *tmp32
--    * write *tmp33 ARRAY *tmp30
-+   56 read *tmp33 ARRAY :fn1:index
-+   57 write *tmp33 ARRAY :fn1:i
-    58 set *tmp34 :fn1:index
--    * write :fn1:curr ARRAY *tmp34
-+   59 write :fn1:curr ARRAY :fn1:index
-    60 label *label17
-    61 label *label18
-    62 op add :fn1:index :fn1:index 1
- 
-    66 op add :fn1:i :fn1:i 1
-    67 jump *label12 always
-    68 label *label14
--    * jump *label19 equal :fn1:index :fn1:right
--    * set *tmp38 :fn1:right
-+   69 jump *label19 equal :fn1:index :fn0:right
-+   70 set *tmp38 :fn0:right
-    71 set *tmp40 :fn1:index
--    * read *tmp41 ARRAY *tmp40
--    * write *tmp41 ARRAY *tmp38
-+   72 read *tmp41 ARRAY :fn1:index
-+   73 write *tmp41 ARRAY :fn1:right
-    74 set *tmp42 :fn1:index
--    * write :fn1:pivot ARRAY *tmp42
-+   75 write :fn1:pivot ARRAY :fn1:index
-    76 label *label19
-    77 label *label20
-    78 set *tmp12 :fn1:index
-    79 jump *label9 always
--    * set *tmp12 null
-    80 label *label9
--    * set :fn0:new_pivot_index *tmp12
--    * op sub *tmp44 :fn0:new_pivot_index 1
-+   81 set :fn0:new_pivot_index :fn1:index
-+   82 op sub *tmp44 *tmp12 1
-    83 push bank1 :fn0:left
-    84 push bank1 :fn0:right
-    85 push bank1 :fn0:pivot_index
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-16 instructions):
- 
-     8 set :fn0:right *tmp0
-     9 callrec bank1 *label0 *label2 :fn0*retval
-    10 label *label2
--    * set *tmp2 SIZE
     11 set :i 0
     12 label *label3
     13 jump *label5 greaterThanEq :i SIZE
--    * set *tmp3 :i
--    * set *tmp5 :i
-    14 read *tmp4 FINAL :i
-    15 read *tmp6 ARRAY :i
-    16 assertequals *tmp4 *tmp6 "unexpected value"
  
-    25 op sub *tmp9 :fn0:right :fn0:left
-    26 op idiv *tmp10 *tmp9 2
-    27 op add :fn0:pivot_index :fn0:left *tmp10
+    43 write *tmp19 ARRAY *tmp16
+    44 set *tmp20 :fn1:right
+    45 write :fn1:pivot ARRAY *tmp20
+-    * set *tmp15 :fn1:pivot
+    46 jump *label11 always
+    47 label *label10
+-    * set *tmp15 null
+    48 label *label11
+    49 set :fn1:index :fn1:left
+    50 set *tmp22 :fn1:right
+ 
+    64 write *tmp32 ARRAY *tmp29
+    65 set *tmp33 :fn1:index
+    66 write :fn1:curr ARRAY *tmp33
+-    * set *tmp28 :fn1:curr
+    67 jump *label18 always
+    68 label *label17
+-    * set *tmp28 null
+    69 label *label18
+    70 op add :fn1:index :fn1:index 1
+-    * set *tmp26 :fn1:index
+    71 jump *label16 always
+    72 label *label15
+-    * set *tmp26 null
+    73 label *label16
+    74 label *label13
+    75 op add :fn1:i :fn1:i 1
+ 
+    83 write *tmp40 ARRAY *tmp37
+    84 set *tmp41 :fn1:index
+    85 write :fn1:pivot ARRAY *tmp41
+-    * set *tmp36 :fn1:pivot
+    86 jump *label20 always
+    87 label *label19
+-    * set *tmp36 null
+    88 label *label20
+    89 set *tmp11 :fn1:index
+    90 jump *label9 always
+ 
+   104 pop bank1 :fn0:pivot_index
+   105 pop bank1 :fn0:right
+   106 pop bank1 :fn0:left
+-    * set *tmp44 :fn0*retval
+   107 op add *tmp45 :fn0:new_pivot_index 1
+   108 push bank1 :fn0:left
+   109 push bank1 :fn0:right
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 instructions):
+ 
+    27 jump *label7 equal *tmp6 false
+    28 op sub *tmp8 :fn0:right :fn0:left
+    29 op idiv *tmp9 *tmp8 2
+-    * op add *tmp10 :fn0:left *tmp9
+-    * set :fn0:pivot_index *tmp10
++   30 op add :fn0:pivot_index :fn0:left *tmp9
+    31 set :fn1:left :fn0:left
+    32 set :fn1:right :fn0:right
+    33 set :fn1:pivot_index :fn0:pivot_index
+    34 set *tmp12 :fn1:pivot_index
+-    * read *tmp13 ARRAY *tmp12
+-    * set :fn1:pivot *tmp13
++   35 read :fn1:pivot ARRAY *tmp12
+    36 op notEqual *tmp14 :fn1:pivot_index :fn1:right
+    37 jump *label10 equal *tmp14 false
+    38 set *tmp16 :fn1:pivot_index
+ 
+    50 label *label12
+    51 jump *label14 greaterThanEq :fn1:i *tmp22
+    52 set *tmp23 :fn1:i
+-    * read *tmp24 ARRAY *tmp23
+-    * set :fn1:curr *tmp24
++   53 read :fn1:curr ARRAY *tmp23
+    54 op lessThan *tmp25 :fn1:curr :fn1:pivot
+    55 jump *label15 equal *tmp25 false
+    56 op notEqual *tmp27 :fn1:i :fn1:index
+ 
+   116 pop bank1 :fn0:pivot_index
+   117 pop bank1 :fn0:right
+   118 pop bank1 :fn0:left
+-    * set *tmp46 :fn0*retval
+-    * set *tmp7 *tmp46
++  119 set *tmp7 :fn0*retval
+   120 jump *label8 always
+   121 label *label7
+   122 set *tmp7 null
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
+ 
+    23 stop
+    24 end
+    25 label *label0
+-    * op greaterThan *tmp6 :fn0:right :fn0:left
+-    * jump *label7 equal *tmp6 false
++   26 jump *label7 lessThanEq :fn0:right :fn0:left
+    27 op sub *tmp8 :fn0:right :fn0:left
+    28 op idiv *tmp9 *tmp8 2
+    29 op add :fn0:pivot_index :fn0:left *tmp9
+ 
+    32 set :fn1:pivot_index :fn0:pivot_index
+    33 set *tmp12 :fn1:pivot_index
+    34 read :fn1:pivot ARRAY *tmp12
+-    * op notEqual *tmp14 :fn1:pivot_index :fn1:right
+-    * jump *label10 equal *tmp14 false
++   35 jump *label10 equal :fn1:pivot_index :fn1:right
+    36 set *tmp16 :fn1:pivot_index
+    37 set *tmp18 :fn1:right
+    38 read *tmp19 ARRAY *tmp18
+ 
+    49 jump *label14 greaterThanEq :fn1:i *tmp22
+    50 set *tmp23 :fn1:i
+    51 read :fn1:curr ARRAY *tmp23
+-    * op lessThan *tmp25 :fn1:curr :fn1:pivot
+-    * jump *label15 equal *tmp25 false
+-    * op notEqual *tmp27 :fn1:i :fn1:index
+-    * jump *label17 equal *tmp27 false
++   52 jump *label15 greaterThanEq :fn1:curr :fn1:pivot
++   53 jump *label17 equal :fn1:i :fn1:index
+    54 set *tmp29 :fn1:i
+    55 set *tmp31 :fn1:index
+    56 read *tmp32 ARRAY *tmp31
+ 
+    68 op add :fn1:i :fn1:i 1
+    69 jump *label12 always
+    70 label *label14
+-    * op notEqual *tmp35 :fn1:index :fn1:right
+-    * jump *label19 equal *tmp35 false
++   71 jump *label19 equal :fn1:index :fn1:right
+    72 set *tmp37 :fn1:right
+    73 set *tmp39 :fn1:index
+    74 read *tmp40 ARRAY *tmp39
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-4 instructions):
+ 
+    39 write *tmp19 ARRAY *tmp16
+    40 set *tmp20 :fn1:right
+    41 write :fn1:pivot ARRAY *tmp20
+-    * jump *label11 always
+    42 label *label10
+    43 label *label11
+    44 set :fn1:index :fn1:left
+ 
+    56 write *tmp32 ARRAY *tmp29
+    57 set *tmp33 :fn1:index
+    58 write :fn1:curr ARRAY *tmp33
+-    * jump *label18 always
+    59 label *label17
+    60 label *label18
+    61 op add :fn1:index :fn1:index 1
+-    * jump *label16 always
+    62 label *label15
+    63 label *label16
+    64 label *label13
+ 
+    72 write *tmp40 ARRAY *tmp37
+    73 set *tmp41 :fn1:index
+    74 write :fn1:pivot ARRAY *tmp41
+-    * jump *label20 always
+    75 label *label19
+    76 label *label20
+    77 set *tmp11 :fn1:index
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    84 push bank1 :fn0:right
+    85 push bank1 :fn0:pivot_index
+    86 push bank1 :fn0:new_pivot_index
+-    * set :fn0:left :fn0:left
+    87 set :fn0:right *tmp43
+    88 callrec bank1 *label0 *label21 :fn0*retval
+    89 label *label21
+ 
+    98 push bank1 :fn0:new_pivot_index
+    99 push bank1 *tmp44
+   100 set :fn0:left *tmp45
+-    * set :fn0:right :fn0:right
+   101 callrec bank1 *label0 *label22 :fn0*retval
+   102 label *label22
+   103 pop bank1 *tmp44
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    13 jump *label5 greaterThanEq :i SIZE
+    14 set *tmp2 :i
+    15 set *tmp4 :i
+-    * read *tmp3 FINAL *tmp2
+-    * read *tmp5 ARRAY *tmp4
++   16 read *tmp3 FINAL :i
++   17 read *tmp5 ARRAY :i
+    18 assertequals *tmp3 *tmp5 "unexpected value"
+    19 label *label4
+    20 op add :i :i 1
+ 
+    30 set :fn1:left :fn0:left
+    31 set :fn1:right :fn0:right
+    32 set :fn1:pivot_index :fn0:pivot_index
+-    * set *tmp12 :fn1:pivot_index
+-    * read :fn1:pivot ARRAY *tmp12
+-    * jump *label10 equal :fn1:pivot_index :fn1:right
+-    * set *tmp16 :fn1:pivot_index
+-    * set *tmp18 :fn1:right
+-    * read *tmp19 ARRAY *tmp18
+-    * write *tmp19 ARRAY *tmp16
+-    * set *tmp20 :fn1:right
+-    * write :fn1:pivot ARRAY *tmp20
++   33 set *tmp12 :fn0:pivot_index
++   34 read :fn1:pivot ARRAY :fn1:pivot_index
++   35 jump *label10 equal :fn0:pivot_index :fn0:right
++   36 set *tmp16 :fn0:pivot_index
++   37 set *tmp18 :fn0:right
++   38 read *tmp19 ARRAY :fn1:right
++   39 write *tmp19 ARRAY :fn1:pivot_index
++   40 set *tmp20 :fn0:right
++   41 write :fn1:pivot ARRAY :fn1:right
+    42 label *label10
+    43 label *label11
+-    * set :fn1:index :fn1:left
+-    * set *tmp22 :fn1:right
+-    * set :fn1:i :fn1:left
++   44 set :fn1:index :fn0:left
++   45 set *tmp22 :fn0:right
++   46 set :fn1:i :fn0:left
+    47 label *label12
+-    * jump *label14 greaterThanEq :fn1:i *tmp22
++   48 jump *label14 greaterThanEq :fn1:i :fn1:right
+    49 set *tmp23 :fn1:i
+-    * read :fn1:curr ARRAY *tmp23
++   50 read :fn1:curr ARRAY :fn1:i
+    51 jump *label15 greaterThanEq :fn1:curr :fn1:pivot
+    52 jump *label17 equal :fn1:i :fn1:index
+    53 set *tmp29 :fn1:i
+    54 set *tmp31 :fn1:index
+-    * read *tmp32 ARRAY *tmp31
+-    * write *tmp32 ARRAY *tmp29
++   55 read *tmp32 ARRAY :fn1:index
++   56 write *tmp32 ARRAY :fn1:i
+    57 set *tmp33 :fn1:index
+-    * write :fn1:curr ARRAY *tmp33
++   58 write :fn1:curr ARRAY :fn1:index
+    59 label *label17
+    60 label *label18
+    61 op add :fn1:index :fn1:index 1
+ 
+    65 op add :fn1:i :fn1:i 1
+    66 jump *label12 always
+    67 label *label14
+-    * jump *label19 equal :fn1:index :fn1:right
+-    * set *tmp37 :fn1:right
++   68 jump *label19 equal :fn1:index :fn0:right
++   69 set *tmp37 :fn0:right
+    70 set *tmp39 :fn1:index
+-    * read *tmp40 ARRAY *tmp39
+-    * write *tmp40 ARRAY *tmp37
++   71 read *tmp40 ARRAY :fn1:index
++   72 write *tmp40 ARRAY :fn1:right
+    73 set *tmp41 :fn1:index
+-    * write :fn1:pivot ARRAY *tmp41
++   74 write :fn1:pivot ARRAY :fn1:index
+    75 label *label19
+    76 label *label20
+    77 set *tmp11 :fn1:index
+    78 jump *label9 always
+-    * set *tmp11 null
+    79 label *label9
+-    * set :fn0:new_pivot_index *tmp11
+-    * op sub *tmp43 :fn0:new_pivot_index 1
++   80 set :fn0:new_pivot_index :fn1:index
++   81 op sub *tmp43 *tmp11 1
+    82 push bank1 :fn0:left
+    83 push bank1 :fn0:right
+    84 push bank1 :fn0:pivot_index
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-15 instructions):
+ 
+    11 set :i 0
+    12 label *label3
+    13 jump *label5 greaterThanEq :i SIZE
+-    * set *tmp2 :i
+-    * set *tmp4 :i
+    14 read *tmp3 FINAL :i
+    15 read *tmp5 ARRAY :i
+    16 assertequals *tmp3 *tmp5 "unexpected value"
+ 
+    25 op sub *tmp8 :fn0:right :fn0:left
+    26 op idiv *tmp9 *tmp8 2
+    27 op add :fn0:pivot_index :fn0:left *tmp9
 -    * set :fn1:left :fn0:left
     28 set :fn1:right :fn0:right
     29 set :fn1:pivot_index :fn0:pivot_index
--    * set *tmp13 :fn0:pivot_index
+-    * set *tmp12 :fn0:pivot_index
 -    * read :fn1:pivot ARRAY :fn1:pivot_index
 +   30 read :fn1:pivot ARRAY :fn0:pivot_index
     31 jump *label10 equal :fn0:pivot_index :fn0:right
--    * set *tmp17 :fn0:pivot_index
--    * set *tmp19 :fn0:right
--    * read *tmp20 ARRAY :fn1:right
--    * write *tmp20 ARRAY :fn1:pivot_index
--    * set *tmp21 :fn0:right
+-    * set *tmp16 :fn0:pivot_index
+-    * set *tmp18 :fn0:right
+-    * read *tmp19 ARRAY :fn1:right
+-    * write *tmp19 ARRAY :fn1:pivot_index
+-    * set *tmp20 :fn0:right
 -    * write :fn1:pivot ARRAY :fn1:right
-+   32 read *tmp20 ARRAY :fn0:right
-+   33 write *tmp20 ARRAY :fn0:pivot_index
++   32 read *tmp19 ARRAY :fn0:right
++   33 write *tmp19 ARRAY :fn0:pivot_index
 +   34 write :fn1:pivot ARRAY :fn0:right
     35 label *label10
     36 label *label11
     37 set :fn1:index :fn0:left
--    * set *tmp23 :fn0:right
+-    * set *tmp22 :fn0:right
     38 set :fn1:i :fn0:left
     39 label *label12
 -    * jump *label14 greaterThanEq :fn1:i :fn1:right
--    * set *tmp24 :fn1:i
+-    * set *tmp23 :fn1:i
 +   40 jump *label14 greaterThanEq :fn1:i :fn0:right
     41 read :fn1:curr ARRAY :fn1:i
     42 jump *label15 greaterThanEq :fn1:curr :fn1:pivot
     43 jump *label17 equal :fn1:i :fn1:index
--    * set *tmp30 :fn1:i
--    * set *tmp32 :fn1:index
-    44 read *tmp33 ARRAY :fn1:index
-    45 write *tmp33 ARRAY :fn1:i
--    * set *tmp34 :fn1:index
+-    * set *tmp29 :fn1:i
+-    * set *tmp31 :fn1:index
+    44 read *tmp32 ARRAY :fn1:index
+    45 write *tmp32 ARRAY :fn1:i
+-    * set *tmp33 :fn1:index
     46 write :fn1:curr ARRAY :fn1:index
     47 label *label17
     48 label *label18
@@ -355,12 +347,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     54 jump *label12 always
     55 label *label14
     56 jump *label19 equal :fn1:index :fn0:right
--    * set *tmp38 :fn0:right
--    * set *tmp40 :fn1:index
-    57 read *tmp41 ARRAY :fn1:index
--    * write *tmp41 ARRAY :fn1:right
--    * set *tmp42 :fn1:index
-+   58 write *tmp41 ARRAY :fn0:right
+-    * set *tmp37 :fn0:right
+-    * set *tmp39 :fn1:index
+    57 read *tmp40 ARRAY :fn1:index
+-    * write *tmp40 ARRAY :fn1:right
+-    * set *tmp41 :fn1:index
++   58 write *tmp40 ARRAY :fn0:right
     59 write :fn1:pivot ARRAY :fn1:index
     60 label *label19
     61 label *label20
@@ -368,27 +360,27 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     63 jump *label9 always
     64 label *label9
     65 set :fn0:new_pivot_index :fn1:index
--    * op sub *tmp44 *tmp12 1
-+   66 op sub *tmp44 :fn1:index 1
+-    * op sub *tmp43 *tmp11 1
++   66 op sub *tmp43 :fn1:index 1
     67 push bank1 :fn0:left
     68 push bank1 :fn0:right
     69 push bank1 :fn0:pivot_index
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
-    25 op sub *tmp9 :fn0:right :fn0:left
-    26 op idiv *tmp10 *tmp9 2
-    27 op add :fn0:pivot_index :fn0:left *tmp10
+    25 op sub *tmp8 :fn0:right :fn0:left
+    26 op idiv *tmp9 *tmp8 2
+    27 op add :fn0:pivot_index :fn0:left *tmp9
 -    * set :fn1:right :fn0:right
 -    * set :fn1:pivot_index :fn0:pivot_index
     28 read :fn1:pivot ARRAY :fn0:pivot_index
     29 jump *label10 equal :fn0:pivot_index :fn0:right
-    30 read *tmp20 ARRAY :fn0:right
+    30 read *tmp19 ARRAY :fn0:right
  
     57 write :fn1:pivot ARRAY :fn1:index
     58 label *label19
     59 label *label20
--    * set *tmp12 :fn1:index
+-    * set *tmp11 :fn1:index
     60 jump *label9 always
     61 label *label9
     62 set :fn0:new_pivot_index :fn1:index
@@ -399,9 +391,9 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     12 label *label3
     13 jump *label5 greaterThanEq :i SIZE
 +   14 label *label23
-    15 read *tmp4 FINAL :i
-    16 read *tmp6 ARRAY :i
-    17 assertequals *tmp4 *tmp6 "unexpected value"
+    15 read *tmp3 FINAL :i
+    16 read *tmp5 ARRAY :i
+    17 assertequals *tmp3 *tmp5 "unexpected value"
     18 label *label4
     19 op add :i :i 1
 -    * jump *label3 always
@@ -425,7 +417,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
 +   54 jump *label24 lessThan :fn1:i :fn0:right
     55 label *label14
     56 jump *label19 equal :fn1:index :fn0:right
-    57 read *tmp41 ARRAY :fn1:index
+    57 read *tmp40 ARRAY :fn1:index
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -435,20 +427,20 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label7 lessThanEq :fn0:right :fn0:left
 +   25 set :fn0*retval null
 +   26 jump *label8 lessThanEq :fn0:right :fn0:left
-    27 op sub *tmp9 :fn0:right :fn0:left
-    28 op idiv *tmp10 *tmp9 2
-    29 op add :fn0:pivot_index :fn0:left *tmp10
+    27 op sub *tmp8 :fn0:right :fn0:left
+    28 op idiv *tmp9 *tmp8 2
+    29 op add :fn0:pivot_index :fn0:left *tmp9
  
     89 pop bank1 :fn0:pivot_index
     90 pop bank1 :fn0:right
     91 pop bank1 :fn0:left
--    * set *tmp8 :fn0*retval
+-    * set *tmp7 :fn0*retval
 +   92 set :fn0*retval :fn0*retval
     93 jump *label8 always
 -    * label *label7
--    * set *tmp8 null
+-    * set *tmp7 null
     94 label *label8
--    * set :fn0*retval *tmp8
+-    * set :fn0*retval *tmp7
     95 label *label6
     96 returnrec bank1
     97 end
@@ -461,7 +453,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
 -    * jump *label9 always
     63 label *label9
     64 set :fn0:new_pivot_index :fn1:index
-    65 op sub *tmp44 :fn1:index 1
+    65 op sub *tmp43 :fn1:index 1
  
     89 pop bank1 :fn0:right
     90 pop bank1 :fn0:left
@@ -489,8 +481,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 -    * jump *label5 greaterThanEq :i SIZE
 +   13 jump *label5 greaterThanEq 0 SIZE
     14 label *label23
-    15 read *tmp4 FINAL :i
-    16 read *tmp6 ARRAY :i
+    15 read *tmp3 FINAL :i
+    16 read *tmp5 ARRAY :i
  
     37 set :fn1:index :fn0:left
     38 set :fn1:i :fn0:left
@@ -515,35 +507,35 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-1 instruction
     24 label *label0
 -    * set :fn0*retval null
     25 jump *label8 lessThanEq :fn0:right :fn0:left
-    26 op sub *tmp9 :fn0:right :fn0:left
-    27 op idiv *tmp10 *tmp9 2
+    26 op sub *tmp8 :fn0:right :fn0:left
+    27 op idiv *tmp9 *tmp8 2
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-28 instructions):
  
     62 label *label9
     63 set :fn0:new_pivot_index :fn1:index
-    64 op sub *tmp44 :fn1:index 1
+    64 op sub *tmp43 :fn1:index 1
 -    * push bank1 :fn0:left
     65 push bank1 :fn0:right
 -    * push bank1 :fn0:pivot_index
     66 push bank1 :fn0:new_pivot_index
-    67 set :fn0:right *tmp44
+    67 set :fn0:right *tmp43
     68 callrec bank1 *label0 *label21 :fn0*retval
     69 label *label21
     70 pop bank1 :fn0:new_pivot_index
 -    * pop bank1 :fn0:pivot_index
     71 pop bank1 :fn0:right
 -    * pop bank1 :fn0:left
-    72 op add *tmp46 :fn0:new_pivot_index 1
+    72 op add *tmp45 :fn0:new_pivot_index 1
 -    * push bank1 :fn0:left
 -    * push bank1 :fn0:right
 -    * push bank1 :fn0:pivot_index
 -    * push bank1 :fn0:new_pivot_index
--    * push bank1 *tmp45
-    73 set :fn0:left *tmp46
+-    * push bank1 *tmp44
+    73 set :fn0:left *tmp45
     74 callrec bank1 *label0 *label22 :fn0*retval
     75 label *label22
--    * pop bank1 *tmp45
+-    * pop bank1 *tmp44
 -    * pop bank1 :fn0:new_pivot_index
 -    * pop bank1 :fn0:pivot_index
 -    * pop bank1 :fn0:right
@@ -568,9 +560,9 @@ label *label2
 set :i 0
 jump *label5 greaterThanEq 0 SIZE
 label *label23
-read *tmp4 FINAL :i
-read *tmp6 ARRAY :i
-assertequals *tmp4 *tmp6 "unexpected value"
+read *tmp3 FINAL :i
+read *tmp5 ARRAY :i
+assertequals *tmp3 *tmp5 "unexpected value"
 op add :i :i 1
 jump *label23 lessThan :i SIZE
 label *label5
@@ -578,13 +570,13 @@ stop
 end
 label *label0
 jump *label8 lessThanEq :fn0:right :fn0:left
-op sub *tmp9 :fn0:right :fn0:left
-op idiv *tmp10 *tmp9 2
-op add :fn0:pivot_index :fn0:left *tmp10
+op sub *tmp8 :fn0:right :fn0:left
+op idiv *tmp9 *tmp8 2
+op add :fn0:pivot_index :fn0:left *tmp9
 read :fn1:pivot ARRAY :fn0:pivot_index
 jump *label10 equal :fn0:pivot_index :fn0:right
-read *tmp20 ARRAY :fn0:right
-write *tmp20 ARRAY :fn0:pivot_index
+read *tmp19 ARRAY :fn0:right
+write *tmp19 ARRAY :fn0:pivot_index
 write :fn1:pivot ARRAY :fn0:right
 label *label10
 set :fn1:index :fn0:left
@@ -594,8 +586,8 @@ label *label24
 read :fn1:curr ARRAY :fn1:i
 jump *label15 greaterThanEq :fn1:curr :fn1:pivot
 jump *label17 equal :fn1:i :fn1:index
-read *tmp33 ARRAY :fn1:index
-write *tmp33 ARRAY :fn1:i
+read *tmp32 ARRAY :fn1:index
+write *tmp32 ARRAY :fn1:i
 write :fn1:curr ARRAY :fn1:index
 label *label17
 op add :fn1:index :fn1:index 1
@@ -604,21 +596,21 @@ op add :fn1:i :fn1:i 1
 jump *label24 lessThan :fn1:i :fn0:right
 label *label14
 jump *label19 equal :fn1:index :fn0:right
-read *tmp41 ARRAY :fn1:index
-write *tmp41 ARRAY :fn0:right
+read *tmp40 ARRAY :fn1:index
+write *tmp40 ARRAY :fn0:right
 write :fn1:pivot ARRAY :fn1:index
 label *label19
 set :fn0:new_pivot_index :fn1:index
-op sub *tmp44 :fn1:index 1
+op sub *tmp43 :fn1:index 1
 push bank1 :fn0:right
 push bank1 :fn0:new_pivot_index
-set :fn0:right *tmp44
+set :fn0:right *tmp43
 callrec bank1 *label0 *label21 :fn0*retval
 label *label21
 pop bank1 :fn0:new_pivot_index
 pop bank1 :fn0:right
-op add *tmp46 :fn0:new_pivot_index 1
-set :fn0:left *tmp46
+op add *tmp45 :fn0:new_pivot_index 1
+set :fn0:left *tmp45
 callrec bank1 *label0 *label22 :fn0*retval
 label *label22
 label *label8

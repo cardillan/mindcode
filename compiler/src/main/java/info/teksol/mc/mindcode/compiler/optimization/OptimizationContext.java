@@ -567,7 +567,7 @@ class OptimizationContext {
         LogicValue argX = resolveValue(vs, jump.getX());
         LogicValue argY = resolveValue(vs, jump.getY());
 
-        if (argX instanceof LogicReadable x && argY instanceof LogicReadable y && x.canEvaluate() && y.canEvaluate()) {
+        if (argX instanceof LogicReadable x && argY instanceof LogicReadable y && x.isConstant() && y.isConstant()) {
             LogicLiteral result = expressionEvaluator.evaluate(jump.getCondition().toOperation(), x, y);
             if (result instanceof LogicBoolean b) {
                 return b;

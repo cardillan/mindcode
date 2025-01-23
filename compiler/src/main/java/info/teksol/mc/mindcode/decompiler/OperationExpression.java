@@ -1,14 +1,17 @@
 package info.teksol.mc.mindcode.decompiler;
 
 import info.teksol.mc.mindcode.logic.arguments.Operation;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class OperationExpression implements MlogExpression {
     private final Operation operation;
     private MlogExpression operand1;
-    private MlogExpression operand2;
+    private @Nullable MlogExpression operand2;
 
     public OperationExpression(Operation operation, MlogVariable operand1, MlogVariable operand2) {
         this.operation = Objects.requireNonNull(operation);
@@ -47,12 +50,14 @@ public class OperationExpression implements MlogExpression {
             if (operation.getOperands() == 1) {
                 return operation.getMindcode() + "(" + operand1.toMlog() + ")";
             } else {
+                assert operand2 != null;
                 return operation.getMindcode() + "(" + operand1.toMlog() + ", " + operand2.toMlog() + ")";
             }
         } else {
             if (operation.getOperands() == 1) {
                 return "(" + operation.getMindcode() + operand1.toMlog() + ")";
             } else {
+                assert operand2 != null;
                 return "(" + operand1.toMlog() + " " + operation.getMindcode() + " " + operand2.toMlog() + ")";
             }
         }

@@ -18,7 +18,7 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     private final double value;
 
     private LogicNumber(SourcePosition sourcePosition, String literal, double value) {
-        super(ArgumentType.NUMERIC_LITERAL);
+        super(ArgumentType.NUMERIC_LITERAL, ValueMutability.CONSTANT);
         this.sourcePosition = sourcePosition;
         this.literal = literal;
         this.value = value;
@@ -37,11 +37,6 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     @Override
     public boolean isNumericLiteral() {
         return true;
-    }
-
-    @Override
-    public boolean isNull() {
-        return false;
     }
 
     @Override

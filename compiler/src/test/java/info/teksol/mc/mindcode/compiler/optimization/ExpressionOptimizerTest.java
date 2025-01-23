@@ -141,8 +141,8 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void optimizesThisXY() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(SENSOR, tmp0, thiz, x),
-                        createInstruction(SENSOR, tmp1, thiz, y),
+                        createInstruction(SENSOR, tmp0, This, x),
+                        createInstruction(SENSOR, tmp1, This, y),
                         createInstruction(END)
                 ),
 

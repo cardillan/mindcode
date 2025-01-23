@@ -21,7 +21,12 @@ public enum LogicVoid implements LogicValue {
     }
 
     @Override
-    public boolean isConstant() {
+    public ValueMutability getMutability() {
+        return ValueMutability.CONSTANT;
+    }
+
+    @Override
+    public boolean isImmutable() {
         return false;
     }
 

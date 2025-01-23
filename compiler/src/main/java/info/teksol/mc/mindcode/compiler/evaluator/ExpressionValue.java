@@ -61,7 +61,7 @@ class ExpressionValue implements LogicReadable {
     }
 
     @Override
-    public boolean canEvaluate() {
+    public boolean isConstant() {
         return true;
     }
 
@@ -107,7 +107,7 @@ class ExpressionValue implements LogicReadable {
         }
 
         @Override
-        public boolean canEvaluate() {
+        public boolean isConstant() {
             return false;
         }
 

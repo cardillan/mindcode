@@ -2,9 +2,9 @@ Name                                     Instructions    Steps   Coverage   Sour
 compute-recursive-fibonacci.mnd:                   32     2477      96.8%   BDE1C81A7769E0CB   4B7DCB0630A3C65A
 compute-sum-of-primes.mnd:                        440     1890      99.7%   B6615E97E02F94A9   4819199119752B49
 memory-read-write.mnd:                              5        5     100.0%   D9539CC21D8111B7   8B4165EC6B0E2D00
-sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   DA0571544EDF695A
-sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   B81D483C275FA57C
-sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   9516C6D025ADD320
-sorting with quick-sort.mnd:                       67    48457      98.5%   8909AE66C1E5A20F   24752CAB7AAE2AE5
-sorting with select-sort.mnd:                      31    35280     100.0%   3F4EE1C8DB9B8B18   B2F17B8896CECE0B
+sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   D7E3E9274B80F9C3
+sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   A429F791F6960D43
+sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   6C9899851FCF5DC7
+sorting with quick-sort.mnd:                       67    48457      98.5%   8909AE66C1E5A20F   9F4AD013C4779EC9
+sorting with select-sort.mnd:                      30    35153     100.0%   3F4EE1C8DB9B8B18   5065B9B69217B56E
 storage-display.mnd:                              661      824      25.2%   F7D56DB08E60751D   8B244DBCAE82A0B6

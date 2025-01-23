@@ -41,7 +41,8 @@ public class Property implements ValueStore {
 
     @Override
     public LogicValue getValue(CodeAssembler assembler) {
-        assembler.createSensor(transferVariable, target, LogicBuiltIn.create(sourcePosition, "@" + propertyName));
+        assembler.createSensor(transferVariable, target,
+                LogicBuiltIn.create(assembler.getProcessor(), sourcePosition, "@" + propertyName));
         return transferVariable;
     }
 

@@ -123,6 +123,16 @@ The impact of the difference in `null` handling by Mindcode is minimal - as has 
 * `strictEqual` comparison, represented by `===` and `!==` in Mindcode.
 * Printing the value using the `print` or `format` instructions: `null` is output for nulls and `0` for zero values.
 
+## String expressions
+
+Only these operations can be applied to string operands:
+
+* equality operators,
+* the `+` operator applied to string literals (resulting in [string concatenation](#string-concatenation)).
+
+> [!IMPORTANT]
+> Using string values in expressions not listed above is not supported in Mindcode and its results are undefined.
+
 # Operators
 
 Mindcode operators follow conventions common to many programming languages. Almost every Mindcode operator maps directly to a Mindustry Logic `op` instruction, but several are Mindcode-specific enhancements.
@@ -193,7 +203,7 @@ Addition and subtraction on numeric values work as usual.
 
 ### String concatenation
 
-The `+` operator may be also used to concatenate string constants and/or literals: 
+The `+` operator may be also used to concatenate string constants and/or literals:
 
 ```
 const NAME = "John";
@@ -222,7 +232,6 @@ for i in 1 .. TOTAL do
     println("Step ", i, MESSAGE);
 end;
 ```
-
 
 Compile-time string concatenation isn't supported for [formattable string literals](SYNTAX.markdown#formattable-string-literals).
 

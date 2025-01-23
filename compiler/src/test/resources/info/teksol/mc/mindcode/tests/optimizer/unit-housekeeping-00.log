@@ -6,12 +6,12 @@
      6 instructions eliminated by Jump Optimization (3 iterations).
     10 instructions eliminated by Single Step Elimination (4 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
-     1 instructions modified by Data Flow Optimization (3 iterations).
+     2 instructions eliminated by Data Flow Optimization (4 iterations).
      7 instructions eliminated by Jump Straightening (3 iterations).
      2 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination.
      2 instructions eliminated by Print Merging.
-   103 instructions after optimizations.
+   101 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -539,66 +539,87 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     34 print ": gathering information..."
     35 label *label3
     36 label *label4
+ 
+   130 jump *label38 always
+   131 label *label37
+   132 jump *label41 equal :flag 0
+-    * ucontrol within .THIS_X .THIS_Y 8 *tmp55
++  133 ucontrol within @thisx @thisy 8 *tmp55
+   134 jump *label43 equal *tmp55 false
+   135 ucontrol flag 0
+   136 jump *label44 always
+   137 label *label43
+-    * ucontrol approach .THIS_X .THIS_Y 4
++  138 ucontrol approach @thisx @thisy 4
+   139 label *label44
+   140 label *label41
+   141 label *label42
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+     0 set .UNIT @mega
+-    * set .THIS_X @thisx
+-    * set .THIS_Y @thisy
+     1 set :first_unit null
+     2 set :index 1
+     3 label *label0
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-    39 print .UNIT
-    40 print ": no active unit found."
-    41 printflush message1
+    37 print .UNIT
+    38 print ": no active unit found."
+    39 printflush message1
 -    * jump *label15 always
-+   42 jump *label0 always
-    43 label *label14
-    44 op strictEqual *tmp9 @unit :first_unit
-    45 op strictEqual *tmp10 :first_unit null
++   40 jump *label0 always
+    41 label *label14
+    42 op strictEqual *tmp9 @unit :first_unit
+    43 op strictEqual *tmp10 :first_unit null
  
-   123 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   124 jump *label39 equal *tmp51 false
-   125 ucontrol itemDrop .CORE :items
+   121 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   122 jump *label39 equal *tmp51 false
+   123 ucontrol itemDrop .CORE :items
 -    * jump *label40 always
-+  126 jump *label38 always
-   127 label *label39
-   128 ucontrol approach .CORE_X .CORE_Y 4
-   129 label *label40
++  124 jump *label38 always
+   125 label *label39
+   126 ucontrol approach .CORE_X .CORE_Y 4
+   127 label *label40
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   146 label *label15
-   147 label *label1
-   148 jump *label0 always
+   144 label *label15
+   145 label *label1
+   146 jump *label0 always
 -    * label *label2
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  
-    83 op floor :x *tmp35
-    84 sensor *tmp37 :controller @y
-    85 op floor :y *tmp37
+    81 op floor :x *tmp35
+    82 sensor *tmp37 :controller @y
+    83 op floor :y *tmp37
 -    * print ", "
 -    * print :x
 -    * print ";"
-+   86 print ", {0};"
-+   87 format :x
-    88 print :y
-    89 jump *label24 always
-    90 label *label25
++   84 print ", {0};"
++   85 format :x
+    86 print :y
+    87 jump *label24 always
+    88 label *label25
  
-   104 label *label31
-   105 label *label32
-   106 jump *label33 lessThanEq :items 0
+   102 label *label31
+   103 label *label32
+   104 jump *label33 lessThanEq :items 0
 -    * print ", "
 -    * print :items
 -    * print " "
-+  107 print ", {0} "
-+  108 format :items
-   109 print :item
-   110 label *label33
-   111 label *label34
++  105 print ", {0} "
++  106 format :items
+   107 print :item
+   108 label *label33
+   109 label *label34
 
 Final code before resolving virtual instructions:
 
 set .UNIT @mega
-set .THIS_X @thisx
-set .THIS_Y @thisy
 set :first_unit null
 set :index 1
 label *label0
@@ -712,12 +733,12 @@ ucontrol approach .CORE_X .CORE_Y 4 0 0
 jump *label38 always 0 0
 label *label37
 jump *label41 equal :flag 0
-ucontrol within .THIS_X .THIS_Y 8 *tmp55 0
+ucontrol within @thisx @thisy 8 *tmp55 0
 jump *label43 equal *tmp55 false
 ucontrol flag 0 0 0 0 0
 jump *label44 always 0 0
 label *label43
-ucontrol approach .THIS_X .THIS_Y 4 0 0
+ucontrol approach @thisx @thisy 4 0 0
 label *label44
 label *label41
 label *label38

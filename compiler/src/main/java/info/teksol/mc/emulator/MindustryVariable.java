@@ -82,8 +82,10 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     }
 
     @Override
-    public boolean canEvaluate() {
-        return true;
+    public boolean isConstant() {
+        // TODO Maybe remove
+        // return true;
+        throw new UnsupportedOperationException();
     }
 
     public boolean isObject() {

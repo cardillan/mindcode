@@ -39,5 +39,22 @@ public class Color {
                 ? String.format("%%%02x%02x%02x", intR, intG, intB)
                 : String.format("%%%02x%02x%02x%02x", intR, intG, intB, intA);
     }
+
+    private static String unpack(double packed) {
+        int value = (int)(Double.doubleToRawLongBits(packed)),
+                intR = ((value & 0xff000000) >>> 24),
+                intG = ((value & 0x00ff0000) >>> 16),
+                intB = ((value & 0x0000ff00) >>> 8),
+                intA = ((value & 0x000000ff));
+
+        return String.format("%%%02x%02x%02x%02x", intR, intG, intB, intA);
+    }
+
+    public static void main(String[] args) {
+        double v = parseColor("%00000001");
+        double w = parseColor("%ffffffff");
+        System.out.println(v);
+        System.out.println(w);
+    }
 }
 

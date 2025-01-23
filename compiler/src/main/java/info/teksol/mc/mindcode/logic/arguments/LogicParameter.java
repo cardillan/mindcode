@@ -2,14 +2,16 @@ package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public class LogicParameter extends LogicVariable {
     private final LogicValue value;
 
     private LogicParameter(SourcePosition position, String name, LogicValue value) {
-        super(position, ArgumentType.PARAMETER, name);
+        super(position, ArgumentType.PARAMETER, ValueMutability.IMMUTABLE, name);
         this.value = Objects.requireNonNull(value);
     }
 

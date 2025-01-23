@@ -1,9 +1,9 @@
-   206 instructions before optimizations.
+   205 instructions before optimizations.
     26 instructions eliminated by Temp Variables Elimination.
     16 instructions eliminated by Dead Code Elimination (3 iterations).
     12 instructions eliminated by Jump Optimization (4 iterations).
     11 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
-   137 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
+   136 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      6 loops improved by Loop Optimization.
    670 instructions added by Loop Unrolling (6 iterations).
@@ -109,8 +109,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instruct
    192 label *label29
 -    * set *tmp63 null
    193 label *label30
-   194 set *tmp65 POSITION
-   195 write :maximum COORD *tmp65
+   194 write :maximum COORD POSITION
+   195 op sub *tmp66 @time :start
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 instructions):
  
@@ -298,15 +298,15 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 ins
    167 label *label29
    168 label *label30
  
-   177 print "ms"
-   178 op div *tmp69 @time FREQ
-   179 op ceil *tmp70 *tmp69
--    * op mul *tmp71 FREQ *tmp70
--    * set :wait *tmp71
-+  180 op mul :wait FREQ *tmp70
-   181 set :loops 0
-   182 label *label31
-   183 op lessThan *tmp72 @time :wait
+   176 print "ms"
+   177 op div *tmp68 @time FREQ
+   178 op ceil *tmp69 *tmp68
+-    * op mul *tmp70 FREQ *tmp69
+-    * set :wait *tmp70
++  179 op mul :wait FREQ *tmp69
+   180 set :loops 0
+   181 label *label31
+   182 op lessThan *tmp71 @time :wait
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-12 instructions):
  
@@ -406,15 +406,15 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-12 ins
    155 jump *label30 always
    156 label *label29
  
-   169 op mul :wait FREQ *tmp70
-   170 set :loops 0
-   171 label *label31
--    * op lessThan *tmp72 @time :wait
--    * jump *label33 equal *tmp72 false
-+  172 jump *label33 greaterThanEq @time :wait
-   173 op add :loops :loops 1
-   174 label *label32
-   175 jump *label31 always
+   168 op mul :wait FREQ *tmp69
+   169 set :loops 0
+   170 label *label31
+-    * op lessThan *tmp71 @time :wait
+-    * jump *label33 equal *tmp71 false
++  171 jump *label33 greaterThanEq @time :wait
+   172 op add :loops :loops 1
+   173 label *label32
+   174 jump *label31 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
  
@@ -478,7 +478,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump *label30 always
    148 label *label29
    149 label *label30
-   150 set *tmp65 POSITION
+   150 write :maximum COORD POSITION
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -586,17 +586,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    129 label *label27
    130 label *label28
    131 op mul *tmp56 :value :scale
- 
-   148 label *label29
-   149 label *label30
-   150 set *tmp65 POSITION
--    * write :maximum COORD *tmp65
-+  151 write :maximum COORD POSITION
-   152 op sub *tmp67 @time :start
-   153 op floor *tmp68 *tmp67
-   154 print "\n"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-11 instructions):
  
     11 printflush message1
     12 draw stroke 1
@@ -661,14 +652,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    107 read :h MEMORY :head
    108 op sub *tmp48 :value :t
    109 op add :value *tmp48 :h
- 
-   136 op mul :maximum 1.5 :newMax
-   137 label *label29
-   138 label *label30
--    * set *tmp65 POSITION
-   139 write :maximum COORD POSITION
-   140 op sub *tmp67 @time :start
-   141 op floor *tmp68 *tmp67
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
@@ -3921,18 +3904,18 @@ Modifications by Final phase, Print Merging, iteration 1 (-16 instructions):
    312 draw rect 10 10 156 156
  
    952 write :maximum COORD POSITION
-   953 op sub *tmp67 @time :start
-   954 op floor *tmp68 *tmp67
+   953 op sub *tmp66 @time :start
+   954 op floor *tmp67 *tmp66
 -    * print "\n"
 -    * print "[lightgray]Loop time: "
--    * print *tmp68
+-    * print *tmp67
 -    * print " "
 -    * print "ms"
 +  955 print "\n[lightgray]Loop time: {0} ms"
-+  956 format *tmp68
-   957 op div *tmp69 @time FREQ
-   958 op ceil *tmp70 *tmp69
-   959 op mul :wait FREQ *tmp70
++  956 format *tmp67
+   957 op div *tmp68 @time FREQ
+   958 op ceil *tmp69 *tmp68
+   959 op mul :wait FREQ *tmp69
 
 Final code before resolving virtual instructions:
 
@@ -4670,13 +4653,13 @@ jump *label29 greaterThanEq *tmp61 :maximum
 op mul :maximum 1.5 :newMax
 label *label29
 write :maximum COORD POSITION
-op sub *tmp67 @time :start
-op floor *tmp68 *tmp67 0
+op sub *tmp66 @time :start
+op floor *tmp67 *tmp66 0
 print "\n[lightgray]Loop time: {0} ms"
-format *tmp68
-op div *tmp69 @time FREQ
-op ceil *tmp70 *tmp69 0
-op mul :wait FREQ *tmp70
+format *tmp67
+op div *tmp68 @time FREQ
+op ceil *tmp69 *tmp68 0
+op mul :wait FREQ *tmp69
 set :loops 0
 jump *label33 greaterThanEq @time :wait
 label *label38

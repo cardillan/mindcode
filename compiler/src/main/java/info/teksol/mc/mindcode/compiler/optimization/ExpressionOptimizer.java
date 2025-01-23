@@ -61,7 +61,7 @@ class ExpressionOptimizer extends BaseOptimizer {
             if (lookupMap != null) {
                 MindustryContent object = lookupMap.get(number.getIntValue());
                 if (object != null) {
-                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object.name())));
+                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object.name(), false)));
                 }
             }
         }
@@ -261,7 +261,7 @@ class ExpressionOptimizer extends BaseOptimizer {
             if (object.getName().equals("@this")) {
                 if (property.getName().equals("@x") || property.getName().equals("@y")) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(),
-                            LogicBuiltIn.create(object.getName() + property.getName().substring(1))));
+                            LogicBuiltIn.create(object.getName() + property.getName().substring(1), false)));
                 }
             } else if (advanced() && property.getName().equals("@id") &&  object.getObject().id() != -1) {
                 logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.create(object.getObject().id())));

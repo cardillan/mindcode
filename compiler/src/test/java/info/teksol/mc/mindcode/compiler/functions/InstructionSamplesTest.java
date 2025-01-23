@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.functions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
-import info.teksol.mc.mindcode.logic.arguments.BaseArgument;
+import info.teksol.mc.mindcode.logic.arguments.GenericArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
@@ -94,7 +94,7 @@ public class InstructionSamplesTest {
             final int index = i;
             List<LogicArgument> params = combinations.stream()
                     .map(l -> l.get(index % l.size()))
-                    .map(BaseArgument::new)
+                    .map(GenericArgument::new)
                     .collect(Collectors.toList());
 
             result.add(processor.createInstruction(STATIC_AST_CONTEXT, opcodeVariant.opcode(), params));

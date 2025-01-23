@@ -117,7 +117,7 @@ public abstract class AbstractTestBase {
     protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
 
     protected static LogicArgument _logic(String str) {
-        return new BaseArgument(str);
+        return new GenericArgument(str);
     }
 
     protected static List<LogicArgument> _logic(String... arguments) {
@@ -225,18 +225,18 @@ public abstract class AbstractTestBase {
             fn0retval   = LogicVariable.fnRetVal("foo", "__fn0retval");
 
     protected static final LogicBuiltIn
-            coal        = LogicBuiltIn.create("@coal"),
-            lead        = LogicBuiltIn.create("@lead"),
-            firstItem   = LogicBuiltIn.create("@firstItem"),
-            enabled     = LogicBuiltIn.create("@enabled"),
-            time        = LogicBuiltIn.create("@time"),
-            unit        = LogicBuiltIn.create("@unit"),
-            thiz        = LogicBuiltIn.create("@this"),
-            x           = LogicBuiltIn.create("@x"),
-            y           = LogicBuiltIn.create("@y"),
-            thisx       = LogicBuiltIn.create("@thisx"),
-            thisy       = LogicBuiltIn.create("@thisy"),
-            id          = LogicBuiltIn.create("@id");
+            coal        = LogicBuiltIn.create("@coal",      false),
+            lead        = LogicBuiltIn.create("@lead",      false),
+            firstItem   = LogicBuiltIn.create("@firstItem", false),
+            enabled     = LogicBuiltIn.create("@enabled",   false),
+            time        = LogicBuiltIn.create("@time",      false),
+            unit        = LogicBuiltIn.create("@unit",      false),
+            This        = LogicBuiltIn.create("@this",      false),
+            x           = LogicBuiltIn.create("@x",         false),
+            y           = LogicBuiltIn.create("@y",         false),
+            thisx       = LogicBuiltIn.create("@thisx",     false),
+            thisy       = LogicBuiltIn.create("@thisy",     false),
+            id          = LogicBuiltIn.create("@id",        false);
 
     protected static final LogicKeyword
             color       = LogicKeyword.create("color"),

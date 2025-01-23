@@ -81,7 +81,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     public LogicInstruction generateSampleInstruction() {
         List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
                 .map(a -> a.type() == InstructionParameterType.UNUSED_OUTPUT ? "0" : a.name())
-                .map(BaseArgument::new)
+                .map(GenericArgument::new)
                 .collect(Collectors.toList());
         return functionMapper.createSampleInstruction(getOpcode(), arguments);
     }

@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * More precise calculations of optimization benefits in loop unrolling and call inlining.
+* 
 
 ### Miscellaneous
 

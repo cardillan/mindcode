@@ -1,11 +1,14 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class LogicLabel extends AbstractArgument implements LogicAddress {
     private final String label;
     private final int address;
 
     private LogicLabel(String label, int address) {
-        super(ArgumentType.LABEL);
+        super(ArgumentType.LABEL, ValueMutability.IMMUTABLE);
         this.label = label;
         this.address = address;
     }

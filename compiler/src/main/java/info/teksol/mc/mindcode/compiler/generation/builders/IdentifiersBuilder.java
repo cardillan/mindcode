@@ -47,7 +47,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         if (LVar.forName(node.getName()) == null) {
             warn(node, "Built-in variable '%s' not recognized.", node.getName());
         }
-        return LogicBuiltIn.create(node.sourcePosition(), node.getName());
+        return LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }
 
     @Override

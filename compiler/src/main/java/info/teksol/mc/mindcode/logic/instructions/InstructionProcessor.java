@@ -130,6 +130,12 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the identifier denotes a main variable
     boolean isGlobalName(String identifier);
 
+    /// Determines whether this identifier corresponds to a volatile built-in value.
+    ///
+    /// @param builtin name of the built-in variable including `@` prefix
+    /// @return true if the built-in variable is volatile.
+    boolean isVolatileBuiltIn(String builtin);
+
     /// Rewrites the literal to conform to mlog limitations. If such a conversion isn't possible, an empty optional
     /// is returned.
     ///

@@ -122,7 +122,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return createInstruction(sampleContext, opcodeVariant.opcode(),
                 opcodeVariant.namedParameters().stream()
                         .map(NamedParameter::name)
-                        .map(BaseArgument::new)
+                        .map(GenericArgument::new)
                         .collect(Collectors.toList())
         );
     }
@@ -477,6 +477,14 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 && identifier.equals(identifier.toUpperCase());
     }
 
+    private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second",
+            "@minute", "@waveNumber", "@waveTime", "@unit", "@links");
+
+    @Override
+    public boolean isVolatileBuiltIn(String builtin) {
+        return VOLATILE_NAMES.contains(builtin);
+    }
+
     private LogicVariable stackPointer() {
         return LogicVariable.STACK_POINTER;
     }
@@ -501,8 +509,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     protected static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
 
     protected Optional<String> mlogFormatWithoutExponent(double absoluteValue, String literal) {
-        // Is it zero?
-        if (absoluteValue <= Double.MIN_NORMAL) {
+        if (absoluteValue == 0.0) {
             return Optional.of("0");
         } else if (1e-20 <= absoluteValue && absoluteValue < Long.MAX_VALUE) {
             // Fits into a long, Mindustry can convert it using double precision.

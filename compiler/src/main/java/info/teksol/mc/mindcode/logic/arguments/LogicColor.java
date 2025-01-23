@@ -17,7 +17,7 @@ public class LogicColor extends AbstractArgument implements LogicLiteral {
     private final String literal;
 
     private LogicColor(SourcePosition sourcePosition, double doubleValue, String literal) {
-        super(ArgumentType.COLOR_LITERAL);
+        super(ArgumentType.COLOR_LITERAL, ValueMutability.CONSTANT);
         this.sourcePosition = sourcePosition;
         this.doubleValue = doubleValue;
         this.literal = Objects.requireNonNull(literal);
@@ -51,18 +51,6 @@ public class LogicColor extends AbstractArgument implements LogicLiteral {
 
     public static LogicColor create(SourcePosition sourcePosition, double doubleValue, String literal) {
         return new LogicColor(sourcePosition, doubleValue, literal);
-    }
-
-    @Override
-    public boolean canEvaluate() {
-        // We cannot compile-time evaluate logic color values,
-        // because the double value is irregular and has no text representation
-        return false;
-    }
-
-    @Override
-    public boolean isNull() {
-        return false;
     }
 
     public boolean isObject() {

@@ -6,11 +6,13 @@ import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+@NullMarked
 public class InstructionExpression implements MlogExpression, MlogInstruction {
     private final Opcode opcode;
     private final List<MlogExpression> arguments;

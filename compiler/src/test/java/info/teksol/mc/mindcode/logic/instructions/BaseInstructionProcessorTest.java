@@ -4,7 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
-import info.teksol.mc.mindcode.logic.arguments.BaseArgument;
+import info.teksol.mc.mindcode.logic.arguments.GenericArgument;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
@@ -67,7 +67,7 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
     @Test
     void replacesAllArguments() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "0");
-        LogicInstruction replaced = ip.replaceAllArgs(original, new BaseArgument("0"), new BaseArgument("255"));
+        LogicInstruction replaced = ip.replaceAllArgs(original, new GenericArgument("0"), new GenericArgument("255"));
         Assertions.assertEquals(
                 createInstruction(DRAW, "clear", "255", "255", "255"),
                 replaced
@@ -79,14 +79,14 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
         LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
         Assertions.assertEquals(
                 List.of(
-                        new TypedArgument(InstructionParameterType.LOCATE, new BaseArgument("ore")),
-                        new TypedArgument(InstructionParameterType.UNUSED, new BaseArgument("core")),
-                        new TypedArgument(InstructionParameterType.UNUSED, new BaseArgument("true")),
-                        new TypedArgument(InstructionParameterType.ORE, new BaseArgument("@lead")),
-                        new TypedArgument(InstructionParameterType.OUTPUT, new BaseArgument("outx")),
-                        new TypedArgument(InstructionParameterType.OUTPUT, new BaseArgument("outy")),
-                        new TypedArgument(InstructionParameterType.RESULT, new BaseArgument("found")),
-                        new TypedArgument(InstructionParameterType.UNUSED_OUTPUT, new BaseArgument("building"))
+                        new TypedArgument(InstructionParameterType.LOCATE, new GenericArgument("ore")),
+                        new TypedArgument(InstructionParameterType.UNUSED, new GenericArgument("core")),
+                        new TypedArgument(InstructionParameterType.UNUSED, new GenericArgument("true")),
+                        new TypedArgument(InstructionParameterType.ORE, new GenericArgument("@lead")),
+                        new TypedArgument(InstructionParameterType.OUTPUT, new GenericArgument("outx")),
+                        new TypedArgument(InstructionParameterType.OUTPUT, new GenericArgument("outy")),
+                        new TypedArgument(InstructionParameterType.RESULT, new GenericArgument("found")),
+                        new TypedArgument(InstructionParameterType.UNUSED_OUTPUT, new GenericArgument("building"))
                 ),
                 ix.getTypedArguments()
         );

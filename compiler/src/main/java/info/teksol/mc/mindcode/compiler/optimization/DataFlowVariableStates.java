@@ -305,7 +305,7 @@ class DataFlowVariableStates {
 
             if (optimizer.canEliminate(instruction, variable)) {
                 // Storing the variable value means the instruction can be completely eliminated (constant propagation)
-                if (value == null || !value.isConstant()) {
+                if (value == null || !value.isImmutable()) {
                     values.remove(variable);
                 } else if (values.get(variable) != null && value.equals(values.get(variable).constantValue)) {
                     AstSubcontextType type = instruction.getAstContext().subcontextType();
@@ -651,7 +651,7 @@ class DataFlowVariableStates {
             this.constantValue = Objects.requireNonNull(constantValue);
             this.instruction = null;
 
-            if (!constantValue.isConstant()) {
+            if (!constantValue.isImmutable()) {
                 throw new IllegalArgumentException("Non-constant value " + constantValue);
             }
         }

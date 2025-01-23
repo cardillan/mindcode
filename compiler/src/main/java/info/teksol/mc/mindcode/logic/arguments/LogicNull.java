@@ -22,8 +22,8 @@ public enum LogicNull implements LogicLiteral {
     }
 
     @Override
-    public boolean isNull() {
-        return true;
+    public ValueMutability getMutability() {
+        return ValueMutability.CONSTANT;
     }
 
     @Override

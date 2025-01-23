@@ -30,12 +30,12 @@ public enum LogicBoolean implements LogicLiteral {
     }
 
     @Override
-    public boolean isObject() {
-        return false;
+    public ValueMutability getMutability() {
+        return ValueMutability.CONSTANT;
     }
 
     @Override
-    public boolean isNull() {
+    public boolean isObject() {
         return false;
     }
 

@@ -20,7 +20,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     private LogicString(SourcePosition sourcePosition,
             String stringValue) {
-        super(ArgumentType.STRING_LITERAL);
+        super(ArgumentType.STRING_LITERAL, ValueMutability.CONSTANT);
         this.sourcePosition = sourcePosition;
         this.stringValue = Objects.requireNonNull(stringValue);
         this.literal = "\"" + stringValue + "\"";
@@ -54,11 +54,6 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     public static LogicString create(SourcePosition sourcePosition, String value) {
         return new LogicString(sourcePosition, value);
-    }
-
-    @Override
-    public boolean isNull() {
-        return false;
     }
 
     public boolean isObject() {

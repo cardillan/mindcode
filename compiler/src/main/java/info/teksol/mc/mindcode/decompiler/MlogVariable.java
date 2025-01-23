@@ -1,10 +1,12 @@
 package info.teksol.mc.mindcode.decompiler;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class MlogVariable implements MlogExpression, LogicArgument {
     private final String name;
 

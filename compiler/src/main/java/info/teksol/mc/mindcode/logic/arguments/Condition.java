@@ -1,7 +1,10 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public enum Condition implements LogicArgument {
     EQUAL           ( "equal",         "==",     true),
     NOT_EQUAL       ( "notEqual",      "not",    false),
@@ -26,6 +29,11 @@ public enum Condition implements LogicArgument {
     @Override
     public ArgumentType getType() {
         return ArgumentType.KEYWORD;
+    }
+
+    @Override
+    public ValueMutability getMutability() {
+        return ValueMutability.IMMUTABLE;
     }
 
     @Override
@@ -57,7 +65,7 @@ public enum Condition implements LogicArgument {
         };
     }
 
-    public Operation toOperation() {
+    public @Nullable Operation toOperation() {
         return switch (this) {
             case EQUAL -> Operation.EQUAL;
             case NOT_EQUAL -> Operation.NOT_EQUAL;

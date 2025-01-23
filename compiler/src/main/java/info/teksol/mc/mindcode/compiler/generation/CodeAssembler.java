@@ -40,6 +40,10 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         astContext = context.rootAstContext();
     }
 
+    public InstructionProcessor getProcessor() {
+        return processor;
+    }
+
     /// This is the sole method that adds an instruction to the list.
     private LogicInstruction addInstruction(LogicInstruction instruction) {
         if (active) {
@@ -140,6 +144,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     public void clearSubcontextType() {
         if (active) {
+            assert astContext.parent() != null;
             astContext = astContext.parent();
         }
     }

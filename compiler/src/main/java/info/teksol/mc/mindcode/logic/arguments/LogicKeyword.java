@@ -1,12 +1,15 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.Objects;
 
+@NullMarked
 public class LogicKeyword extends AbstractArgument {
     private final String keyword;
 
     private LogicKeyword(String keyword) {
-        super(ArgumentType.KEYWORD);
+        super(ArgumentType.KEYWORD, ValueMutability.IMMUTABLE);
         this.keyword = Objects.requireNonNull(keyword);
     }
 

@@ -2,11 +2,14 @@ package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public enum Operation implements LogicArgument {
     EQUAL           (2, true, "equal",         MindcodeLexer.EQUAL),
     NOT_EQUAL       (2, true, "notEqual",      MindcodeLexer.NOT_EQUAL),
@@ -62,14 +65,14 @@ public enum Operation implements LogicArgument {
     ATAN            (1, true,  "atan"),
     ;
 
-    private final String mlog;
+    private final @Nullable String mlog;
     private final String mindcode;
     private final int token;
     private final int operands;
     private final boolean deterministic;
     private final boolean function;
 
-    Operation(int arity, boolean deterministic, String mlog, int token) {
+    Operation(int arity, boolean deterministic, @Nullable String mlog, int token) {
         this.mlog = mlog;
         String literalName = MindcodeLexer.VOCABULARY.getLiteralName(token);
         this.mindcode = literalName.substring(1, literalName.length() - 1);
@@ -103,6 +106,11 @@ public enum Operation implements LogicArgument {
     @Override
     public ArgumentType getType() {
         return ArgumentType.KEYWORD;
+    }
+
+    @Override
+    public ValueMutability getMutability() {
+        return ValueMutability.IMMUTABLE;
     }
 
     public int getOperands() {
@@ -148,7 +156,7 @@ public enum Operation implements LogicArgument {
         };
     }
 
-    public Condition toCondition() {
+    public @Nullable Condition toCondition() {
         return switch (this) {
             case EQUAL -> Condition.EQUAL;
             case NOT_EQUAL -> Condition.NOT_EQUAL;
@@ -177,7 +185,7 @@ public enum Operation implements LogicArgument {
         };
     }
 
-    public Operation swapped() {
+    public @Nullable Operation swapped() {
         return switch(this) {
             case LESS_THAN -> GREATER_THAN;
             case LESS_THAN_EQ -> GREATER_THAN_EQ;
@@ -194,7 +202,7 @@ public enum Operation implements LogicArgument {
             .filter(o -> o.mlog != null)
             .collect(Collectors.toMap(Operation::toMlog, o -> o, (o1, o2) -> o1));
 
-    private static final List<Operation> TOKENS = new ArrayList<>();
+    private static final List<@Nullable Operation> TOKENS = new ArrayList<>();
     static {
         int tokens = MindcodeLexer.VOCABULARY.getMaxTokenType();
         TOKENS.addAll(Collections.nCopies(tokens, null));
