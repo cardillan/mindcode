@@ -3,14 +3,15 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.util.CollectionUtils;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Formats and prints a simple diff between various versions of the program produced by individual optimizers.
- */
+/// Formats and prints a simple diff between various versions of the program produced by individual optimizers.
+@NullMarked
 public class DiffDebugPrinter implements DebugPrinter {
     protected static final String ADD_PREFIX          = "+";
     protected static final String DELETE_PREFIX       = "-";
@@ -34,7 +35,7 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     @Override
-    public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
+    public void registerIteration(@Nullable Optimizer optimizer, String title, List<LogicInstruction> program) {
         versions.add(new ProgramVersion(optimizer, title, program));
     }
 
@@ -190,17 +191,17 @@ public class DiffDebugPrinter implements DebugPrinter {
 
     // Class holding program version and information about the optimizer and iteration which produced it.
     protected static class ProgramVersion {
-        private final Class<? extends Optimizer> optimizerClass;
+        private final @Nullable Class<? extends Optimizer> optimizerClass;
         private final List<LogicInstruction> program;
         private String title;
 
-        public ProgramVersion(Optimizer optimizer, String title, List<LogicInstruction> program) {
+        public ProgramVersion(@Nullable Optimizer optimizer, String title, List<LogicInstruction> program) {
             this.optimizerClass = optimizer == null ? null : optimizer.getClass();
             this.title = title;
             this.program = List.copyOf(program);
         }
 
-        public Class<? extends Optimizer> getOptimizerClass() {
+        public @Nullable Class<? extends Optimizer> getOptimizerClass() {
             return optimizerClass;
         }
 

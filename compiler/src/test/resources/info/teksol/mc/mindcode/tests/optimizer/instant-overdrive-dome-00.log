@@ -1,6 +1,6 @@
   1428 instructions before optimizations.
     52 instructions eliminated by Temp Variables Elimination.
-   262 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
+   263 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
      6 instructions eliminated by Jump Normalization (3 passes, 5 iterations).
     71 instructions eliminated by Jump Optimization (2 passes, 5 iterations).
    113 instructions eliminated by Single Step Elimination (4 passes, 9 iterations).
@@ -15,7 +15,7 @@
     15 instructions updated by JumpThreading.
     18 instructions eliminated by Unreachable Code Elimination.
     75 instructions eliminated by Print Merging.
-   866 instructions after optimizations.
+   865 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 207):
   * Replicate loop condition at line 44:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
@@ -3377,8 +3377,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    366 op len *tmp142 *tmp140 *tmp141
    367 op mul *tmp143 2 *tmp142
 -    * sensor *tmp144 :fn10:unit @speed
+-    * op div :fn10:travel_time *tmp143 *tmp144
 +  368 sensor *tmp144 .UNIT_S1 @speed
-   369 op div :fn10:travel_time *tmp143 *tmp144
++  369 op div :fn10:travel_time *tmp143 .SPEED
    370 op greaterThanEq *tmp139 :fn10:travel_time 47
    371 jump *label100 always
 -    * set *tmp139 null
@@ -5340,7 +5341,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    503 sensor *tmp119 *tmp79 @firstItem
  
    536 sensor *tmp144 .UNIT_S1 @speed
-   537 op div :fn10:travel_time *tmp143 *tmp144
+   537 op div :fn10:travel_time *tmp143 .SPEED
    538 op greaterThanEq *tmp139 :fn10:travel_time 47
 -    * jump *label100 always
    539 label *label100
@@ -6184,7 +6185,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-18 ins
   1296 label *label314
   1297 set *tmp501 false
 
-Modifications by Final phase, Dead Code Elimination, iteration 1 (-5 instructions):
+Modifications by Final phase, Dead Code Elimination, iteration 1 (-6 instructions):
  
     34 set :fn1:firstUnit @unit
     35 jump *label11 equal :fn1:firstUnit null
@@ -6225,6 +6226,14 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-5 instruction
    285 label *label395
    286 label *label396
    287 set :fn3:needed 2
+ 
+   481 op sub *tmp141 .DOME_Y .CORE_Y
+   482 op len *tmp142 *tmp140 *tmp141
+   483 op mul *tmp143 2 *tmp142
+-    * sensor *tmp144 .UNIT_S1 @speed
+   484 op div :fn10:travel_time *tmp143 .SPEED
+   485 op greaterThanEq *tmp139 :fn10:travel_time 47
+   486 label *label100
 
 Modifications by Final phase, Dead Code Elimination, iteration 2 (-5 instructions):
  
@@ -6270,17 +6279,17 @@ Modifications by Final phase, Dead Code Elimination, iteration 2 (-5 instruction
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructions):
  
-  1281 label *label308
-  1282 label *label301
-  1283 label *label302
+  1280 label *label308
+  1281 label *label301
+  1282 label *label302
 -    * jump *label313 always
-  1284 label *label313
-  1285 label *label314
-  1286 set *tmp501 false
+  1283 label *label313
+  1284 label *label314
+  1285 set *tmp501 false
  
-  1296 sensor *tmp211 switch1 @enabled
-  1297 jump *label321 notEqual *tmp211 false
-  1298 label *label135
+  1295 sensor *tmp211 switch1 @enabled
+  1296 jump *label321 notEqual *tmp211 false
+  1297 label *label135
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
@@ -6379,9 +6388,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
    293 jump *label406 lessThanEq :fn3:needed 0
    294 print ", needed: "
  
-   581 jump *label135 equal *tmp211 false
-   582 label *label321
-   583 set :start @time
+   580 jump *label135 equal *tmp211 false
+   581 label *label321
+   582 set :start @time
 -    * print " === [gold]Supplying Overdrive Dome[] === "
 -    * print "\n"
 -    * print "\n"
@@ -6391,33 +6400,33 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print "]"
 -    * print "\n"
 -    * print "\n[green]Silicon[] status:\n"
-+  584 print " === [gold]Supplying Overdrive Dome[] === \n\nUnit type: [green]{0}[]\n\n[green]Silicon[] status:\n"
-+  585 format *tmp3
-   586 sensor :fn15:level .DOME @silicon
-   587 jump *label137 lessThanEq :fn15:level 3
++  583 print " === [gold]Supplying Overdrive Dome[] === \n\nUnit type: [green]{0}[]\n\n[green]Silicon[] status:\n"
++  584 format *tmp3
+   585 sensor :fn15:level .DOME @silicon
+   586 jump *label137 lessThanEq :fn15:level 3
 -    * print "  dome:  [green]"
 -    * print :fn15:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  588 print "  dome:  [green]{0}[]\n"
-+  589 format :fn15:level
-   590 jump *label138 always
-   591 label *label137
++  587 print "  dome:  [green]{0}[]\n"
++  588 format :fn15:level
+   589 jump *label138 always
+   590 label *label137
 -    * print "  dome:  [coral]"
 -    * print :fn15:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  592 print "  dome:  [coral]{0}[]\n"
-+  593 format :fn15:level
-   594 label *label138
-   595 label *label136
-   596 jump *label141 equal .UNIT_S1 null
++  591 print "  dome:  [coral]{0}[]\n"
++  592 format :fn15:level
+   593 label *label138
+   594 label *label136
+   595 jump *label141 equal .UNIT_S1 null
  
-   712 label *label167
-   713 ucontrol flag :fn16:state
-   714 sensor *tmp279 @unit @totalItems
+   711 label *label167
+   712 ucontrol flag :fn16:state
+   713 sensor *tmp279 @unit @totalItems
 -    * print "  "
 -    * print .GROUP1
 -    * print ":"
@@ -6427,23 +6436,23 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp279
 -    * print "["
 -    * print "]"
-+  715 print "  {0}: [gold]{0}[]"
-+  716 format .GROUP1
-+  717 format *tmp279
-   718 jump *label174 lessThan :fn16:distance 0
-   719 print :fn16:msg
-   720 print :fn16:distance
++  714 print "  {0}: [gold]{0}[]"
++  715 format .GROUP1
++  716 format *tmp279
+   717 jump *label174 lessThan :fn16:distance 0
+   718 print :fn16:msg
+   719 print :fn16:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+  721 print "[] sec\n"
-   722 jump *label175 always
-   723 label *label174
-   724 print :fn16:msg
++  720 print "[] sec\n"
+   721 jump *label175 always
+   722 label *label174
+   723 print :fn16:msg
  
-   847 label *label206
-   848 ucontrol flag :fn18:state
-   849 sensor *tmp346 @unit @totalItems
+   846 label *label206
+   847 ucontrol flag :fn18:state
+   848 sensor *tmp346 @unit @totalItems
 -    * print "  "
 -    * print .GROUP2
 -    * print ":"
@@ -6453,46 +6462,46 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp346
 -    * print "["
 -    * print "]"
-+  850 print "  {0}: [gold]{0}[]"
-+  851 format .GROUP2
-+  852 format *tmp346
-   853 jump *label213 lessThan :fn18:distance 0
-   854 print :fn18:msg
-   855 print :fn18:distance
++  849 print "  {0}: [gold]{0}[]"
++  850 format .GROUP2
++  851 format *tmp346
+   852 jump *label213 lessThan :fn18:distance 0
+   853 print :fn18:msg
+   854 print :fn18:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+  856 print "[] sec\n"
-   857 jump *label214 always
-   858 label *label213
-   859 print :fn18:msg
++  855 print "[] sec\n"
+   856 jump *label214 always
+   857 label *label213
+   858 print :fn18:msg
  
-   874 print "\n[green]Phase fabric[] status:\n"
-   875 sensor :fn20:level .DOME @phase-fabric
-   876 jump *label218 lessThanEq :fn20:level 3
+   873 print "\n[green]Phase fabric[] status:\n"
+   874 sensor :fn20:level .DOME @phase-fabric
+   875 jump *label218 lessThanEq :fn20:level 3
 -    * print "  dome:  [green]"
 -    * print :fn20:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  877 print "  dome:  [green]{0}[]\n"
-+  878 format :fn20:level
-   879 jump *label219 always
-   880 label *label218
++  876 print "  dome:  [green]{0}[]\n"
++  877 format :fn20:level
+   878 jump *label219 always
+   879 label *label218
 -    * print "  dome:  [coral]"
 -    * print :fn20:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  881 print "  dome:  [coral]{0}[]\n"
-+  882 format :fn20:level
-   883 label *label219
-   884 label *label217
-   885 jump *label222 equal .UNIT_P1 null
++  880 print "  dome:  [coral]{0}[]\n"
++  881 format :fn20:level
+   882 label *label219
+   883 label *label217
+   884 jump *label222 equal .UNIT_P1 null
  
-  1001 label *label248
-  1002 ucontrol flag :fn21:state
-  1003 sensor *tmp420 @unit @totalItems
+  1000 label *label248
+  1001 ucontrol flag :fn21:state
+  1002 sensor *tmp420 @unit @totalItems
 -    * print "  "
 -    * print .GROUP1
 -    * print ":"
@@ -6502,23 +6511,23 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp420
 -    * print "["
 -    * print "]"
-+ 1004 print "  {0}: [gold]{0}[]"
-+ 1005 format .GROUP1
-+ 1006 format *tmp420
-  1007 jump *label255 lessThan :fn21:distance 0
-  1008 print :fn21:msg
-  1009 print :fn21:distance
++ 1003 print "  {0}: [gold]{0}[]"
++ 1004 format .GROUP1
++ 1005 format *tmp420
+  1006 jump *label255 lessThan :fn21:distance 0
+  1007 print :fn21:msg
+  1008 print :fn21:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+ 1010 print "[] sec\n"
-  1011 jump *label256 always
-  1012 label *label255
-  1013 print :fn21:msg
++ 1009 print "[] sec\n"
+  1010 jump *label256 always
+  1011 label *label255
+  1012 print :fn21:msg
  
-  1136 label *label287
-  1137 ucontrol flag :fn23:state
-  1138 sensor *tmp487 @unit @totalItems
+  1135 label *label287
+  1136 ucontrol flag :fn23:state
+  1137 sensor *tmp487 @unit @totalItems
 -    * print "  "
 -    * print .GROUP2
 -    * print ":"
@@ -6528,33 +6537,33 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp487
 -    * print "["
 -    * print "]"
-+ 1139 print "  {0}: [gold]{0}[]"
-+ 1140 format .GROUP2
-+ 1141 format *tmp487
-  1142 jump *label294 lessThan :fn23:distance 0
-  1143 print :fn23:msg
-  1144 print :fn23:distance
++ 1138 print "  {0}: [gold]{0}[]"
++ 1139 format .GROUP2
++ 1140 format *tmp487
+  1141 jump *label294 lessThan :fn23:distance 0
+  1142 print :fn23:msg
+  1143 print :fn23:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+ 1145 print "[] sec\n"
-  1146 jump *label295 always
-  1147 label *label294
-  1148 print :fn23:msg
++ 1144 print "[] sec\n"
+  1145 jump *label295 always
+  1146 label *label294
+  1147 print :fn23:msg
  
-  1162 label *label258
-  1163 op sub *tmp495 @time :start
-  1164 op floor *tmp496 *tmp495
+  1161 label *label258
+  1162 op sub *tmp495 @time :start
+  1163 op floor *tmp496 *tmp495
 -    * print "\n"
 -    * print "[lightgray]Loop time: "
 -    * print *tmp496
 -    * print " "
 -    * print "ms"
-+ 1165 print "\n[lightgray]Loop time: {0} ms"
-+ 1166 format *tmp496
-  1167 printflush message1
-  1168 op notEqual *tmp497 *tmp3 UNIT_TYPE
-  1169 op greaterThan *tmp498 :unitCheck @time
++ 1164 print "\n[lightgray]Loop time: {0} ms"
++ 1165 format *tmp496
+  1166 printflush message1
+  1167 op notEqual *tmp497 *tmp3 UNIT_TYPE
+  1168 op greaterThan *tmp498 :unitCheck @time
 
 Final code before resolving virtual instructions:
 
@@ -6925,8 +6934,7 @@ op sub *tmp140 .DOME_X .CORE_X
 op sub *tmp141 .DOME_Y .CORE_Y
 op len *tmp142 *tmp140 *tmp141
 op mul *tmp143 2 *tmp142
-sensor *tmp144 .UNIT_S1 @speed
-op div :fn10:travel_time *tmp143 *tmp144
+op div :fn10:travel_time *tmp143 .SPEED
 op greaterThanEq *tmp139 :fn10:travel_time 47
 jump *label101 equal *tmp139 false
 jump *label105 equal .UNIT_S2 null

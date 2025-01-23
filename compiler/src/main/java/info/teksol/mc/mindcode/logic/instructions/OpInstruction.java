@@ -8,12 +8,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class OpInstruction extends BaseResultInstruction {
 
-    OpInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+    OpInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.OP, args, params);
     }
 
@@ -33,18 +36,21 @@ public class OpInstruction extends BaseResultInstruction {
 
     @Override
     public OpInstruction withResult(LogicVariable result) {
+        assert getArgumentTypes() != null;
         return hasSecondOperand()
                 ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getArgumentTypes())
                 : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getArgumentTypes());
     }
 
     public OpInstruction withX(LogicValue x) {
+        assert getArgumentTypes() != null;
         return hasSecondOperand()
                 ? new OpInstruction(astContext, List.of(getArg(0), getArg(1), x, getArg(3)), getArgumentTypes())
                 : new OpInstruction(astContext, List.of(getArg(0), getArg(1), x), getArgumentTypes());
     }
 
     public OpInstruction withY(LogicValue y) {
+        assert getArgumentTypes() != null;
         return new OpInstruction(astContext, List.of(getArg(0), getArg(1), getArg(2), y), getArgumentTypes());
     }
 

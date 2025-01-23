@@ -358,6 +358,13 @@ while on.@enabled do
 end;
 ```
 
+> [!IMPORTANT]
+> Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, if `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
+> 
+> In some cases, the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g. replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
+> 
+> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as missing by querying the `@dead` property.
+
 ### Guard code for linked variables
 
 When declaring a linked variable, Mindcode generates a guard code (single instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:

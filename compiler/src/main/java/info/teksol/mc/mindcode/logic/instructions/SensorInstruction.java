@@ -6,12 +6,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class SensorInstruction extends BaseResultInstruction {
 
-    SensorInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+    SensorInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.SENSOR, args, params);
     }
 
@@ -31,6 +34,7 @@ public class SensorInstruction extends BaseResultInstruction {
 
     @Override
     public SensorInstruction withResult(LogicVariable result) {
+        assert getArgumentTypes() != null;
         return new SensorInstruction(astContext, List.of(result, getObject(), getProperty()), getArgumentTypes());
     }
 

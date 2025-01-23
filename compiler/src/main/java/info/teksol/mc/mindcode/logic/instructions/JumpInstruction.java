@@ -9,12 +9,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class JumpInstruction extends BaseInstruction {
 
-    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+    JumpInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.JUMP, args, params);
     }
 
@@ -46,6 +49,7 @@ public class JumpInstruction extends BaseInstruction {
     }
 
     public JumpInstruction withTarget(LogicLabel target) {
+        assert getArgumentTypes() != null;
         return isUnconditional()
                 ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getArgumentTypes())
                 : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getArgumentTypes());
@@ -55,6 +59,8 @@ public class JumpInstruction extends BaseInstruction {
         if (!isInvertible()) {
             throw new MindcodeInternalError("Jump is not invertible. " + this);
         }
+
+        assert getArgumentTypes() != null;
         return new JumpInstruction(getAstContext(),
                 List.of(getTarget(), getCondition().inverse(), getX(), getY()), getArgumentTypes());
     }

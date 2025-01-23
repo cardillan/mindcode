@@ -126,12 +126,14 @@ public class MlogDecompiler {
                         InstructionExpression definition = (InstructionExpression) content.get(sourceIndex);
                         if (definition != null && definition.getOpcode() == Opcode.OP) {
                             Operation operation = Operation.fromMlog(definition.getArg(0).toMlog());
-                            OperationExpression expression = new OperationExpression(operation,
-                                    new MlogVariable(definition.getArg(2).toMlog()),
-                                    operation.getOperands() == 1 ? null : new MlogVariable(definition.getArg(3).toMlog())
-                            );
-                            ix.replaceVariable(variable, expression);
-                            toRemove.add(sourceIndex);
+                            if (operation != null) {
+                                OperationExpression expression = new OperationExpression(operation,
+                                        new MlogVariable(definition.getArg(2).toMlog()),
+                                        operation.getOperands() == 1 ? null : new MlogVariable(definition.getArg(3).toMlog())
+                                );
+                                ix.replaceVariable(variable, expression);
+                                toRemove.add(sourceIndex);
+                            }
                         }
                     }
                 }
@@ -235,12 +237,12 @@ public class MlogDecompiler {
     }
 
     private void processOp(MlogInstruction ix) {
-        Operation oper = Operation.fromMlog(ix.getArg(0).toMlog());
-        if (oper != null) {
-            if (oper.getOperands() == 2) {
-                cmdIndent(ix, 1, " = ", 2, " ", oper.getMindcode(), " ", 3);
+        Operation operation = Operation.fromMlog(ix.getArg(0).toMlog());
+        if (operation != null) {
+            if (operation.getOperands() == 2) {
+                cmdIndent(ix, 1, " = ", 2, " ", operation.getMindcode(), " ", 3);
             } else {
-                cmdIndent(ix, 1, " = ", oper.getMindcode(), 2);
+                cmdIndent(ix, 1, " = ", operation.getMindcode(), 2);
             }
         } else {
             error(ix);
@@ -253,19 +255,19 @@ public class MlogDecompiler {
             return;
         }
 
-        Operation oper = Operation.fromMlog(ix.getArg(1).toMlog());
-        if (oper == Operation.EQUAL || oper == Operation.NOT_EQUAL) {
+        Operation operation = Operation.fromMlog(ix.getArg(1).toMlog());
+        if (operation == Operation.EQUAL || operation == Operation.NOT_EQUAL) {
             if ("false".equals(ix.getArg(2).toMlog())) {
-                processJumpCondition(ix, 3, oper == Operation.EQUAL);
+                processJumpCondition(ix, 3, operation == Operation.EQUAL);
                 return;
             } else if ("false".equals(ix.getArg(3).toMlog())) {
-                processJumpCondition(ix, 2, oper == Operation.EQUAL);
+                processJumpCondition(ix, 2, operation == Operation.EQUAL);
                 return;
             }
         }
 
-        if (oper != null) {
-            cmd(ix, "if ", 2, " ", oper.getMindcode(), " ", 3, " then goto ", 0);
+        if (operation != null) {
+            cmd(ix, "if ", 2, " ", operation.getMindcode(), " ", 3, " then goto ", 0);
         } else {
             error(ix);
         }

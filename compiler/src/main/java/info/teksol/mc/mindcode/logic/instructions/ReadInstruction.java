@@ -6,12 +6,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class ReadInstruction extends BaseResultInstruction {
 
-    ReadInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+    ReadInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.READ, args, params);
     }
 
@@ -31,6 +34,7 @@ public class ReadInstruction extends BaseResultInstruction {
 
     @Override
     public ReadInstruction withResult(LogicVariable result) {
+        assert getArgumentTypes() != null;
         return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getArgumentTypes());
     }
 

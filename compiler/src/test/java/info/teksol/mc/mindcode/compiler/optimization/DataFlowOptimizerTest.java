@@ -180,13 +180,32 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Nested
     class Volatile {
 
-        // TODO Activate after adding support for volatile declaration for blocks
-        //@Test
-        void recognizesNonvolatileSensorWithBlocks() {
+        @Test
+        void recognizesSensorAsVolatileWithLinkedBlocks() {
+            // Linked blocks are considered immutable: no defensive copies are made. However, since the block can get
+            // linked to a different instance, their properties might change and
             assertCompilesTo(
                     """
                             a = message1.@type;
                             b = message1.@type;
+                            print(a, b);
+                            """,
+                    createInstruction(SENSOR, ":a", "message1", "@type"),
+                    createInstruction(SENSOR, ":b", "message1", "@type"),
+                    createInstruction(PRINT, ":a"),
+                    createInstruction(PRINT, ":b")
+            );
+        }
+
+        @Test
+        void recognizesNonvolatileSensorWithVariables() {
+            // `message1` is a block and is considered volatile when handling `sensor` instruction.
+            // By assigning it to a variable, volatility is removed and superfluous calls are eliminated
+            assertCompilesTo(
+                    """
+                            x = message1;
+                            a = x.@type;
+                            b = x.@type;
                             print(a, b);
                             """,
                     createInstruction(SENSOR, "a", "message1", "@type"),
@@ -195,8 +214,25 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
             );
         }
 
-        //@Test
-        void recognizesNonvolatileSensorWithVariables() {
+        @Test
+        void recognizesVolatileSensorWithVariables() {
+            // `@dead` is a volatile property and needs to be reread every time.
+            assertCompilesTo(
+                    """
+                            x = message1;
+                            a = x.@dead;
+                            b = x.@dead;
+                            print(a, b);
+                            """,
+                    createInstruction(SENSOR, ":a", "message1", "@dead"),
+                    createInstruction(SENSOR, ":b", "message1", "@dead"),
+                    createInstruction(PRINT, ":a"),
+                    createInstruction(PRINT, ":b")
+            );
+        }
+
+        @Test
+        void recognizesNonvolatileSensorWithGetLink() {
             assertCompilesTo(
                     """
                             block = getlink(0);

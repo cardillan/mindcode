@@ -4,7 +4,10 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction copy();
@@ -13,21 +16,21 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction withContext(AstContext astContext);
 
-    boolean belongsTo(AstContext astContext);
+    boolean belongsTo(@Nullable AstContext astContext);
 
-    AstContext findContextOfType(AstContextType contextType);
+    @Nullable AstContext findContextOfType(AstContextType contextType);
 
-    AstContext findTopContextOfType(AstContextType contextType);
+    @Nullable AstContext findTopContextOfType(AstContextType contextType);
 
     default boolean affectsControlFlow() {
         return false;
     }
 
-    default LogicVariable getResult() {
+    default @Nullable LogicVariable getResult() {
         return null;
     }
 
-    default LogicLabel getMarker() {
+    default @Nullable LogicLabel getMarker() {
         return null;
     }
 

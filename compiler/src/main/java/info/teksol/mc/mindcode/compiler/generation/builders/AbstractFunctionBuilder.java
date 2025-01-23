@@ -34,8 +34,6 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
     /// Resolves vararg parameters passed into another function into the full list of values
     /// passed as varargs to current function.
     protected List<FunctionArgument> processArguments(AstFunctionCall call) {
-        // MUSTDO Review. It appears that this might be a problem if the same function was
-        //        called between evaluating an argument and passing it to the parameter
         return variables.excludeVariablesFromTracking(
                 () -> call.getArguments().stream().mapMulti(this::convertArguments).toList());
     }

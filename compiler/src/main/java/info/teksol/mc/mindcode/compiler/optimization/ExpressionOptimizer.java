@@ -8,6 +8,9 @@ import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
 import info.teksol.mc.util.Tuple2;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -15,23 +18,16 @@ import java.util.Optional;
 
 import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 
-/**
- * This optimizer improves and streamlines expressions.
- * <ul><li>
- * Mul/div + floor optimization:
- *      <pre>{@code
- *      op mul __tmp variable1 constant
- *      op floor variable2 __tmp
- *      }</pre>
- * is replaced by
- *      <pre>{@code
- *      op idiv variable2 variable1 (1 / constant)
- *      }</pre>
- * where 1 / constant is evaluated here. If the instruction is div instead of mul, the inverse isn't taken.
- * </li><li>
- * All instructions setting the variable to itself (e.g. `set x x`) are removed.
- * </li></ul>
- */
+/// This optimizer improves and streamlines expressions.
+///   - Mul/div + floor optimization:
+///     <br>
+///     `op mul __tmp variable1 constantop floor variable2 __tmp`<br>
+///     is replaced by
+///     <br>
+///     `op idiv variable2 variable1 (1 / constant)`<br>
+///     where 1 / constant is evaluated here. If the instruction is div instead of mul, the inverse isn't taken.
+///   - All instructions setting the variable to itself (e.g. `set x x`) are removed.
+@NullMarked
 class ExpressionOptimizer extends BaseOptimizer {
     public ExpressionOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.EXPRESSION_OPTIMIZATION, optimizationContext);
@@ -205,13 +201,13 @@ class ExpressionOptimizer extends BaseOptimizer {
      * @param ix instruction to inspect
      * @return a tuple containing a constant operand and the other operand.
      */
-    private Tuple2<LogicValue, LogicValue> extractConstantOperand(OpInstruction ix) {
+    private Tuple2<@NonNull LogicValue, @NonNull LogicValue> extractConstantOperand(OpInstruction ix) {
         return ix.getX().isNumericLiteral()
                 ? Tuple2.ofSame(ix.getX(), ix.getY())
                 : Tuple2.ofSame(ix.getY(), ix.getX());
     }
 
-    private Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
+    private @Nullable Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
         if (!ix.getResult().isTemporaryVariable()) {
             return null;
         } else {
@@ -228,20 +224,20 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
     }
 
-    private Tuple2<LogicValue, LogicValue> invertMultiplicand(LogicValue variable, LogicValue literal) {
+    private @Nullable Tuple2<LogicValue, LogicValue> invertMultiplicand(LogicValue variable, LogicValue literal) {
         // We know literal is a NumericLiteral
-        double multiplicand = ((LogicLiteral) literal).getDoubleValue();
+        double multiplicand = literal.getDoubleValue();
         double divisor = 1.0d / multiplicand;
-        Optional<String> inverted = instructionProcessor.mlogFormat(SourcePosition.EMPTY, divisor, false);
-        return inverted.map(lit -> Tuple2.ofSame(variable, LogicNumber.create(instructionProcessor, lit))).orElse(null);
+        Optional<LogicLiteral> inverted = instructionProcessor.createLiteral(SourcePosition.EMPTY, divisor, false);
+        return inverted.map(lit -> Tuple2.ofSame(variable, lit)).orElse(null);
     }
 
     private void processPackColorInstruction(LogicIterator logicIterator, PackColorInstruction ix) {
         if (ix.inputArgumentsStream().allMatch(LogicArgument::isNumericLiteral)) {
-            float r = clamp01(((LogicLiteral) ix.getR()).getDoubleValue());
-            float g = clamp01(((LogicLiteral) ix.getG()).getDoubleValue());
-            float b = clamp01(((LogicLiteral) ix.getB()).getDoubleValue());
-            float a = clamp01(((LogicLiteral) ix.getA()).getDoubleValue());
+            float r = clamp01(ix.getR().getDoubleValue());
+            float g = clamp01(ix.getG().getDoubleValue());
+            float b = clamp01(ix.getB().getDoubleValue());
+            float a = clamp01(ix.getA().getDoubleValue());
             LogicColor color = LogicColor.create(SourcePosition.EMPTY,
                     Color.toDoubleBitsClamped(r, g, b, a),
                     Color.toColorLiteralClamped(r, g, b, a));
@@ -263,7 +259,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(),
                             LogicBuiltIn.create(object.getName() + property.getName().substring(1), false)));
                 }
-            } else if (advanced() && property.getName().equals("@id") &&  object.getObject().id() != -1) {
+            } else if (advanced() && property.getName().equals("@id") && object.getObject() != null && object.getObject().id() != -1) {
                 logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.create(object.getObject().id())));
             }
         }

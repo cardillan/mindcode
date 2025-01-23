@@ -1,11 +1,11 @@
 Name                                     Instructions   Source CRC         Compiled CRC    
 breakout-00.mnd:                                  184   DAE429A013DB4541   69B37EBA4677044C
-detector-00.mnd:                                  128   76B6ACE9D59CB722   D206612C520334AA
+detector-00.mnd:                                  127   76B6ACE9D59CB722   7F21AEFB6100EB61
 factory-monitor-00.mnd:                           344   863D948F911F2E7A   40D99C4C79017B6C
 factory-monitor-silicon-00.mnd:                   287   92331871E01FEB02   8371CF33B484063C
 factory-monitor-surge-alloy-00.mnd:               184   B570A56D64509A07   E84C89B064B2C3F7
 impact-reactor-logic-00.mnd:                      830   1234A425840A18A8   2E93CE2E051AB200
-instant-overdrive-dome-00.mnd:                    865   F10A217F1B75EE07   1E21C7F1226B655C
+instant-overdrive-dome-00.mnd:                    864   F10A217F1B75EE07   82B689DB4874757F
 item-counter-00.mnd:                               90   DBF0CE14BD53EC86   9501DF88371A20E2
 item-counter-micro-00.mnd:                        128   AB81229C62913E11   21E3F077FFA33257
 item-rate-display-00.mnd:                         657   B3F3156754BCE6C9   ABD0122246C347AA

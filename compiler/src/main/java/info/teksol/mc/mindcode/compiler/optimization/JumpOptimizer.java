@@ -4,32 +4,35 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
 
-/**
- * Turns the following sequence of instructions:
- * <pre>{@code
- *   op <comparison> var1 A B
- *   jump label notEqual|equal var2 false
- * }</pre>
- * into
- * <pre>{@code
- *   jump label <comparison|inverse of comparison> A B
- * }</pre>
- * Requirements:
- * <ol>
- * <li>jump condition is an notEqual/equal comparison to {@code false}</li>
- * <li>{@code var1} and {@code var2} are identical</li>
- * <li>{@code var1} is a {@code __tmp} variable</li>
- * <li>{@code var1} is used only in the two affected instructions</li>
- * <li>{@code <comparison>} can be converted to condition/has an inverse</li>
- * </ol>
- */
+/// Turns the following sequence of instructions:
+///
+/// ```
+/// op <comparison> var1 A B
+/// jump label notEqual|equal var2 false
+/// ```
+///
+/// into
+///
+/// ```
+/// jump label <comparison|inverse of comparison> A B
+/// ```
+///
+/// Requirements:
+/// - jump condition is an notEqual/equal comparison to `false`
+/// - `var1` and `var2` are identical
+/// - `var1` is a `__tmp` variable
+/// - `var1` is used only in the two affected instructions
+/// - `<comparison>` can be converted to condition/has an inverse
+@NullMarked
 class JumpOptimizer extends BaseOptimizer {
-    private OpInstruction lastOp;
+    private @Nullable OpInstruction lastOp;
     private int lastOpIndex;
 
     JumpOptimizer(OptimizationContext optimizationContext) {
@@ -62,7 +65,7 @@ class JumpOptimizer extends BaseOptimizer {
                                 : lastOp.getOperation().toCondition() != null ? lastOp.getOperation() : null;
 
                         if (operation != null) {
-                            iterator.set(createJump(jump.getAstContext(), jump.getTarget(), operation.toCondition(),
+                            iterator.set(createJump(jump.getAstContext(), jump.getTarget(), operation.toExistingCondition(),
                                     lastOp.getX(), lastOp.getY()));
                             removeInstruction(lastOpIndex);
                         }

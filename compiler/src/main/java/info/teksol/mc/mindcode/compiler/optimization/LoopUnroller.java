@@ -11,6 +11,8 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -18,10 +20,10 @@ import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static info.teksol.mc.util.CollectionUtils.resultIn;
+import static java.util.Objects.requireNonNull;
 
-/**
- * Unrolls loops
- */
+/// Unrolls loops
+@NullMarked
 class LoopUnroller extends BaseOptimizer {
     public LoopUnroller(OptimizationContext optimizationContext) {
         super(Optimization.LOOP_UNROLLING, optimizationContext);
@@ -89,7 +91,7 @@ class LoopUnroller extends BaseOptimizer {
 
     // Remove the last jump of condition context if present (it might have been removed by optimizations).
     private LogicList removeFinalJump(LogicList condition) {
-        if (condition.getAstContext().subcontextType() != CONDITION) {
+        if (condition.getExistingAstContext().subcontextType() != CONDITION) {
             throw new MindcodeInternalError("Invalid loop structure.");
         }
         return condition.getLast() instanceof JumpInstruction ? condition.subList(0, condition.size() - 1) : condition;
@@ -121,9 +123,9 @@ class LoopUnroller extends BaseOptimizer {
                 .map(this::contextInstructions)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        if (result.size() > 1 && result.getLast().getAstContext().subcontextType() == CONDITION) {
+        if (result.size() > 1 && result.getLast().getExistingAstContext().subcontextType() == CONDITION) {
             // If there are two condition contexts, only keep the second one
-            if (result.getFirst().getAstContext().subcontextType() == CONDITION) {
+            if (result.getFirst().getExistingAstContext().subcontextType() == CONDITION) {
                 result.removeFirst();
             }
             result.set(result.size() - 1, removeFinalJump(result.getLast()));
@@ -134,7 +136,7 @@ class LoopUnroller extends BaseOptimizer {
         return result;
     }
 
-    private OptimizationAction findPossibleUnrolling(AstContext loop, int costLimit) {
+    private @Nullable OptimizationAction findPossibleUnrolling(AstContext loop, int costLimit) {
         if (loop.findSubcontext(ITR_LEADING) != null) {
             return findPossibleIterationUnrolling(loop, costLimit);
         }
@@ -162,6 +164,8 @@ class LoopUnroller extends BaseOptimizer {
             var variables = optimizationContext.getLoopVariables(loop);
             var initialValue = variables == null ? null : variables.findVariableValue(controlVariable);
             if (initialValue != null && initialValue.getConstantValue() instanceof LogicLiteral initLiteral && initLiteral.isNumericLiteral()) {
+                assert controlVariable != null;
+
                 // List of instructions that will be duplicated
                 List<LogicInstruction> loopIxs = iterationContexts.stream().flatMap(LogicList::stream).toList();
                 List<LogicInstruction> controlIxs = loopIxs.stream().filter(ix -> ix.usesAsOutput(controlVariable)).toList();
@@ -217,7 +221,7 @@ class LoopUnroller extends BaseOptimizer {
             double end = endValue.getDoubleValue();
             double step = controlIxs.stream()
                     .map(OpInstruction.class::cast)
-                    .mapToDouble(ix -> (ix.getOperation() == Operation.ADD ? 1d : -1d) * ((LogicLiteral) ix.getY()).getDoubleValue())
+                    .mapToDouble(ix -> (ix.getOperation() == Operation.ADD ? 1d : -1d) * ix.getY().getDoubleValue())
                     .sum();
 
             if (isInt(start) && isInt(end) && isInt(step)) {
@@ -242,7 +246,7 @@ class LoopUnroller extends BaseOptimizer {
         return -1;
     }
 
-    private LogicLiteral findArgumentValue(JumpInstruction jump, LogicVariable loopControl) {
+    private @Nullable LogicLiteral findArgumentValue(JumpInstruction jump, LogicVariable loopControl) {
         LogicValue argument = jump.getX().equals(loopControl) ? jump.getY() : jump.getX();
         LogicValue resolved = optimizationContext.resolveValue(getVariableStates(jump), argument);
         return resolved instanceof LogicLiteral literal && literal.isNumericLiteral() ? literal : null;
@@ -264,10 +268,12 @@ class LoopUnroller extends BaseOptimizer {
             for (LogicInstruction ix : controlIxs) {
                 OpInstruction op = (OpInstruction) ix;
                 result = op.getX().equals(loopControl)
-                        ? evaluate(op.getOperation(), controlVariable, (LogicLiteral) op.getY())
-                        : evaluate(op.getOperation(), (LogicLiteral) op.getX(), controlVariable);
+                        ? evaluate(op.getOperation(), controlVariable, op.getY())
+                        : evaluate(op.getOperation(), op.getX(), controlVariable);
                 controlVariable.setDoubleValue(result.getDoubleValue());
             }
+
+            requireNonNull(result);
 
             // TODO Awfully ineffective. Evaluate condition without duplicating and evaluating jump
             JumpInstruction test = replaceAllArgs(jump, loopControl, result);
@@ -280,7 +286,7 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     // Finds the control variable of this loop
-    private LogicVariable findLoopControl(AstContext loop, AstContext init, JumpInstruction jump) {
+    private @Nullable LogicVariable findLoopControl(AstContext loop, @Nullable AstContext init, JumpInstruction jump) {
         if (jump.isUnconditional()) {
             return null;    // There isn't any loop control variable
         }
@@ -312,7 +318,7 @@ class LoopUnroller extends BaseOptimizer {
         return result;
     }
 
-    private @NonNull ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, AstContext init, LogicVariable variable) {
+    private @NonNull ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, @Nullable AstContext init, LogicVariable variable) {
         return contextStream(loop)
                 .filter(ix -> !ix.getAstContext().belongsTo(init))
                 .filter(ix -> ix.usesAsOutput(variable))
@@ -336,7 +342,7 @@ class LoopUnroller extends BaseOptimizer {
         }
     }
 
-    private OptimizationAction findPossibleIterationUnrolling(AstContext loop, int costLimit) {
+    private @Nullable OptimizationAction findPossibleIterationUnrolling(AstContext loop, int costLimit) {
         if (!hasSupportedIterationStructure(loop)) {
             return null;
         }
@@ -359,7 +365,7 @@ class LoopUnroller extends BaseOptimizer {
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
 
         // Create a new, non-loop context for unrolled instructions
-        AstContext newContext = loop.parent().createChild(loop.getProfile(), loop.node(), AstContextType.BODY);
+        AstContext newContext = loop.existingParent().createChild(loop.getProfile(), loop.existingNode(), AstContextType.BODY);
         int insertionPoint = firstInstructionIndex(loop);
         for (LogicList list : initContexts) {
             insertInstructions(insertionPoint, list.duplicateToContext(newContext));
@@ -423,7 +429,7 @@ class LoopUnroller extends BaseOptimizer {
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
         // Create a new, non-loop context for unrolled instructions
-        AstContext newContext = loop.parent().createChild(loop.getProfile(), loop.node(), AstContextType.BODY);
+        AstContext newContext = loop.existingParent().createChild(loop.getProfile(), loop.existingNode(), AstContextType.BODY);
         int insertionPoint = firstInstructionIndex(loop);
         for (int i = 0; i < leading.size(); i++) {
             LogicList leadingCtx = removeLeadingIteratorInstructions(contextInstructions(leading.get(i)));
@@ -504,6 +510,7 @@ class LoopUnroller extends BaseOptimizer {
 
         @Override
         public String toString() {
+            assert astContext.node() != null;
             return "Unroll loop at " + astContext.node().sourcePosition().formatForLog();
         }
     }
@@ -520,6 +527,7 @@ class LoopUnroller extends BaseOptimizer {
 
         @Override
         public String toString() {
+            assert astContext.node() != null;
             return "Unroll iteration loop at " + astContext.node().sourcePosition().formatForLog();
         }
     }

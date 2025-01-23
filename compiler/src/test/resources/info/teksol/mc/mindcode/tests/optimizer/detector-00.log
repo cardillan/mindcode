@@ -1,14 +1,15 @@
    252 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    12 instructions eliminated by Dead Code Elimination (4 iterations).
+    13 instructions eliminated by Dead Code Elimination (2 passes, 5 iterations).
      1 instructions eliminated by Jump Normalization (3 iterations).
      2 instructions eliminated by Single Step Elimination (4 iterations).
      1 instructions eliminated by If Expression Optimization (2 iterations).
+     1 instructions modified by Data Flow Optimization (3 iterations).
      7 instructions eliminated by Jump Straightening (3 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
     96 instructions eliminated by Print Merging.
-   128 instructions after optimizations.
+   127 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -281,6 +282,17 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    237 label *label7
    238 jump *label6 always
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   211 print "\n"
+   212 sensor *tmp54 .BLOCK @type
+   213 print "type: "
+-    * print *tmp54
++  214 print *tmp10
+   215 print "\n"
+   216 sensor *tmp55 .BLOCK @flag
+   217 print "flag: "
+
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
     15 print "\"
@@ -315,6 +327,16 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 inst
    244 jump *label0 always
 -    * label *label2
 -    * end
+
+Modifications by Final phase, Dead Code Elimination, iteration 1 (-1 instructions):
+ 
+   212 print "team: "
+   213 print *tmp53
+   214 print "\n"
+-    * sensor *tmp54 .BLOCK @type
+   215 print "type: "
+   216 print *tmp10
+   217 print "\n"
 
 Modifications by Final phase, Print Merging, iteration 1 (-96 instructions):
  
@@ -570,40 +592,39 @@ Modifications by Final phase, Print Merging, iteration 1 (-96 instructions):
 -    * print "team: "
 -    * print *tmp53
 -    * print "\n"
-+  130 format *tmp53
-   131 sensor *tmp54 .BLOCK @type
 -    * print "type: "
--    * print *tmp54
+-    * print *tmp10
 -    * print "\n"
-+  132 format *tmp54
-   133 sensor *tmp55 .BLOCK @flag
++  130 format *tmp53
++  131 format *tmp10
+   132 sensor *tmp55 .BLOCK @flag
 -    * print "flag: "
 -    * print *tmp55
 -    * print "\n"
-+  134 format *tmp55
-   135 sensor *tmp56 .BLOCK @name
++  133 format *tmp55
+   134 sensor *tmp56 .BLOCK @name
 -    * print "name: "
 -    * print *tmp56
 -    * print "\n"
-+  136 format *tmp56
-   137 sensor *tmp57 .BLOCK @config
++  135 format *tmp56
+   136 sensor *tmp57 .BLOCK @config
 -    * print "config: "
 -    * print *tmp57
 -    * print "\n"
-+  138 format *tmp57
-   139 sensor *tmp58 .BLOCK @enabled
++  137 format *tmp57
+   138 sensor *tmp58 .BLOCK @enabled
 -    * print "enabled: "
 -    * print *tmp58
 -    * print "\n"
-+  140 format *tmp58
-   141 sensor *tmp59 .BLOCK @configure
++  139 format *tmp58
+   140 sensor *tmp59 .BLOCK @configure
 -    * print "configure: "
 -    * print *tmp59
 -    * print "\n"
-+  142 format *tmp59
-   143 label *label20
-   144 label *label7
-   145 label *label6
++  141 format *tmp59
+   142 label *label20
+   143 label *label7
+   144 label *label6
 
 Final code before resolving virtual instructions:
 
@@ -730,8 +751,7 @@ jump *label20 notEqual :page 7
 print "other:\nteam: {0}\ntype: {0}\nflag: {0}\nname: {0}\nconfig: {0}\nenabled: {0}\nconfigure: {0}\n"
 sensor *tmp53 .BLOCK @team
 format *tmp53
-sensor *tmp54 .BLOCK @type
-format *tmp54
+format *tmp10
 sensor *tmp55 .BLOCK @flag
 format *tmp55
 sensor *tmp56 .BLOCK @name

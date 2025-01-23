@@ -5,36 +5,39 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.STRING_LITERAL;
 
-/**
- * A simple optimizer which merges together print instructions with string literal arguments. The print instructions
- * will get merged even if they aren't consecutive, assuming there aren't instructions that could break the print
- * sequence ({@code jump}, {@code label} or {@code print [variable]}). Typical sequence of instructions targeted by this
- * optimizer is:
- * <pre>{@code
- * print count
- * print "\n"
- * op div ratio count total
- * op mul ratio ratio 100
- * print "Used: "
- * print ratio
- * print "%"
- * }</pre>
- * Which will get turned to
- * <pre>{@code
- * print count
- * op div ratio count total
- * op mul ratio ratio 100
- * print "\nUsed: "
- * print ratio
- * print "%"
- * }</pre>
- */
+/// A simple optimizer which merges together print instructions with string literal arguments. The print instructions
+/// will get merged even if they aren't consecutive, assuming there aren't instructions that could break the print
+/// sequence (`jump`, `label` or `print variable`). Typical sequence of instructions targeted by this optimizer is:
+///
+/// ```
+/// print count
+/// print "\n"
+/// op div ratio count total
+/// op mul ratio ratio 100
+/// print "Used: "
+/// print ratio
+/// print "%"`
+/// ```
+///
+/// Which will get turned to
+///
+/// ```
+/// print count
+/// op div ratio count total
+/// op mul ratio ratio 100
+/// print "\nUsed: "
+/// print ratio
+/// print "%"
+/// ```
+@NullMarked
 class PrintMerger extends BaseOptimizer {
 
     public PrintMerger(OptimizationContext optimizationContext) {
@@ -42,7 +45,7 @@ class PrintMerger extends BaseOptimizer {
     }
 
     private final List<PrintInstruction> printVars = new ArrayList<>();
-    private LogicInstruction previous;
+    private @Nullable LogicInstruction previous;
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
@@ -79,7 +82,7 @@ class PrintMerger extends BaseOptimizer {
     }
 
     private Merger createPrintMerger() {
-        return instructionProcessor.isSupported(Opcode.FORMAT, List.of()) && noDangerousStrings()
+        return instructionProcessor.isSupported(Opcode.FORMAT) && noDangerousStrings()
                 ? this::tryMergeUsingFormat
                 : this::tryMergeUsingPrint;
     }

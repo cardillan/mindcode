@@ -5,6 +5,7 @@ import info.teksol.mc.messages.MessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 
@@ -102,13 +103,11 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the instruction is effectively deterministic
     boolean isDeterministic(LogicInstruction instruction);
 
-    /// Determines whether the instruction is safe. A safe instruction has no side effects, i.e. performs no action
-    /// apart from changing values of output arguments. Any instruction that modifies the state of the Mindustry world
-    /// is not safe.
+    /// Returns true if an instruction with given opcode is supported by current processor settings (version, edition).
     ///
-    /// @param instruction instruction to inspect
-    /// @return true if the instruction is safe
-    boolean isSafe(LogicInstruction instruction);
+    /// @param opcode instruction opcode
+    /// @return true if the instruction is supported
+    boolean isSupported(Opcode opcode);
 
     /// Returns true if an instruction with given opcode and arguments is supported by current processor
     /// settings (version, edition).
@@ -143,7 +142,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return Optional containing mlog compatible literal, or nothing if mlog compatible equivalent doesn't exist
     Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal);
 
-    Optional<String> mlogFormat(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss);
+    Optional<LogicLiteral> createLiteral(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss);
 
     /// Formats number for text output
     ///

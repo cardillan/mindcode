@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.logic.instructions.CallRecInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SetInstruction;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,22 +20,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
- * independent optimizations are performed:
- * <ul><li>
- * Eliminates push/pop instruction for variables that are not used anywhere else (after being eliminated
- * by other optimizers). The optimization is done globally, in a single pass across the entire program.
- * </li><li>
- * Removes variables from stack matching the following conditions:
- * <ol><li>The variable isn't read by any instruction following the call instruction, up to the end of the function.
- * </li><li>The variable isn't read by any instruction in any loop shared with the call instruction.
- * </li></ol>
- * <b>Note:</b> a variable may be read implicitly by a recursive call.
- * </li><li>
- * Eliminates push/pop instruction for variables that are not modified at all by the function.
- * </li></ul>
- */
+/// Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
+/// independent optimizations are performed:
+/// - Eliminates push/pop instruction for variables that are not used anywhere else (after being eliminated
+///   by other optimizers). The optimization is done globally, in a single pass across the entire program.
+/// - Removes variables from stack matching the following conditions (**Note:** a variable may be read
+///   implicitly by a recursive call):
+///   - The variable isn't read by any instruction following the call instruction, up to the end of the function.
+///   - The variable isn't read by any instruction in any loop shared with the call instruction.
+/// - Eliminates push/pop instruction for variables that are not modified at all by the function.
+@NullMarked
 class StackOptimizer extends BaseOptimizer {
 
     StackOptimizer(OptimizationContext optimizationContext) {
@@ -137,8 +132,9 @@ class StackOptimizer extends BaseOptimizer {
             throw new MindcodeInternalError("Expected RECURSIVE_CALL subcontext, found " + subcontext);
         }
 
-        // TODO Include input parameters only?
-        Set<LogicVariable> result = new HashSet<>(subcontext.function().getParameters());
+        assert subcontext.function() != null;
+        Set<LogicVariable> result = subcontext.function().getParameters()
+                .stream().filter(LogicVariable::isInput).collect(Collectors.toSet());
 
         contextStream(subcontext)
                 .filter(SetInstruction.class::isInstance)

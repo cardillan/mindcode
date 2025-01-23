@@ -11,15 +11,17 @@ import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
-/**
- * Inlines functions
- */
+/// Inlines functions
+@NullMarked
 class FunctionInliner extends BaseOptimizer {
     public FunctionInliner(OptimizationContext optimizationContext) {
         super(Optimization.FUNCTION_INLINING, optimizationContext);
@@ -68,7 +70,7 @@ class FunctionInliner extends BaseOptimizer {
         }
     }
 
-    private OptimizationAction findPossibleInlining(AstContext context, int costLimit) {
+    private @Nullable OptimizationAction findPossibleInlining(AstContext context, int costLimit) {
         if (context.function() == null) {
             // The function is declared, but not used.
             return null;
@@ -95,7 +97,7 @@ class FunctionInliner extends BaseOptimizer {
         return cost <= costLimit ? new InlineFunctionAction(context, cost, benefit) : null;
     }
 
-    private LogicList stripReturnInstructions(LogicList body) {
+    private @Nullable LogicList stripReturnInstructions(@Nullable LogicList body) {
         if (body == null || body.isEmpty()) {
             return null;
         }
@@ -115,7 +117,7 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunction(AstContext context, int costLimit) {
-        MindcodeFunction function = context.function();
+        MindcodeFunction function = Objects.requireNonNull(context.function());
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
@@ -131,6 +133,7 @@ class FunctionInliner extends BaseOptimizer {
                 c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
         for (AstContext call : calls) {
+            assert call.parent() != null;
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
             int insertionPoint = firstInstructionIndex(call);
             LogicList newBody = body.duplicateToContext(newContext);
@@ -160,13 +163,15 @@ class FunctionInliner extends BaseOptimizer {
 
         @Override
         public String toString() {
+            assert astContext.node() != null;
+            assert astContext.function() != null;
             return "Inline function '" + astContext.function().getName() + "' defined at " + astContext.node().sourcePosition().formatForLog();
         }
     }
 
 
 
-    private OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
+    private @Nullable OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
         if (call.function() == null) {
             // Shouldn't happen here
             return null;
@@ -180,8 +185,10 @@ class FunctionInliner extends BaseOptimizer {
 
         // Need to find the function body
         LogicList body = stripReturnInstructions(
-                contextInstructions(context(c -> call.function().equals(c.function())
-                                && c.matches(AstContextType.FUNCTION, BODY)
+                contextInstructions(
+                        existingContext(
+                                c -> c.function() == call.function()
+                                     && c.matches(AstContextType.FUNCTION, BODY)
                         )
                 )
         );
@@ -194,14 +201,14 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
-        MindcodeFunction function = call.function();
+        MindcodeFunction function = call.existingFunction();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
 
         LogicList body = stripReturnInstructions(
                 contextInstructions(
-                        context(c -> c.function() == call.function()
+                        existingContext(c -> c.function() == call.function()
                                         && c.matches(AstContextType.FUNCTION, BODY)
                         )
                 )
@@ -212,7 +219,8 @@ class FunctionInliner extends BaseOptimizer {
 
         trace(() -> "Inlining call " + call + " of function " + function.getName());
 
-        AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
+        AstContext newContext = Objects.requireNonNull(call.parent())
+                .createSubcontext(INLINE_CALL, 1.0);
         int insertionPoint = firstInstructionIndex(call);
         LogicList newBody = body.duplicateToContext(newContext);
         insertInstructions(insertionPoint, newBody);
@@ -235,6 +243,7 @@ class FunctionInliner extends BaseOptimizer {
 
         @Override
         public String toString() {
+            assert astContext.node() != null;
             return "Inline function call at " + astContext.node().sourcePosition().formatForLog();
         }
     }

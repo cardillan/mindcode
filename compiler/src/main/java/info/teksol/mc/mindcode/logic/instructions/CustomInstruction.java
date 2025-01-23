@@ -6,17 +6,20 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+@NullMarked
 public class CustomInstruction implements LogicInstruction {
     private final boolean safe;
     private final String opcode;
     private final List<LogicArgument> args;
-    private final List<InstructionParameterType> params;
-    private final List<TypedArgument> typedArguments;
+    private final @Nullable List<InstructionParameterType> params;
+    private final @Nullable List<TypedArgument> typedArguments;
     private final int inputs;
     private final int outputs;
 
@@ -24,7 +27,7 @@ public class CustomInstruction implements LogicInstruction {
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
 
-    public CustomInstruction(AstContext astContext, boolean safe, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+    public CustomInstruction(AstContext astContext, boolean safe, String opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         this.astContext = Objects.requireNonNull(astContext);
         this.safe = safe;
         this.opcode = Objects.requireNonNull(opcode);
@@ -93,16 +96,16 @@ public class CustomInstruction implements LogicInstruction {
     }
 
     @Override
-    public List<InstructionParameterType> getArgumentTypes() {
+    public @Nullable List<InstructionParameterType> getArgumentTypes() {
         return params;
     }
 
     @Override
     public InstructionParameterType getArgumentType(int index) {
-        return params.get(index);
+        return Objects.requireNonNull(params).get(index);
     }
 
-    public List<TypedArgument> getTypedArguments() {
+    public @Nullable List<TypedArgument> getTypedArguments() {
         return typedArguments;
     }
 
@@ -117,15 +120,15 @@ public class CustomInstruction implements LogicInstruction {
     }
 
     @Override
-    public boolean belongsTo(AstContext astContext) {
+    public boolean belongsTo(@Nullable AstContext astContext) {
         return this.astContext.belongsTo(astContext);
     }
 
-    public AstContext findContextOfType(AstContextType contextType) {
+    public @Nullable AstContext findContextOfType(AstContextType contextType) {
         return astContext.findContextOfType(contextType);
     }
 
-    public AstContext findTopContextOfType(AstContextType contextType) {
+    public @Nullable AstContext findTopContextOfType(AstContextType contextType) {
         return astContext.findTopContextOfType(contextType);
     }
 

@@ -6,11 +6,14 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@NullMarked
 class JumpThreading extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     private boolean startLabelUsed = false;
@@ -76,7 +79,7 @@ class JumpThreading extends BaseOptimizer {
     }
     
     // Determines the jump redirection (one level only)
-    private LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
+    private @Nullable LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
         int target = firstInstructionIndex(in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
             throw new MindcodeInternalError("Could not find label " + label);

@@ -260,16 +260,19 @@ abstract class ActionHandler {
         }
     }
 
-    // MUSTDO Review
+    static void writeOutputToFile(File outputFile, List<String> data) {
+        try {
+            Files.write(outputFile.toPath(), data, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new ProcessingException(e, "Error writing file %s.", outputFile.getPath());
+        }
+    }
+
     static void writeOutput(File outputFile, List<String> data, boolean useErrorOutput) {
         if (isStdInOut(outputFile)) {
             data.forEach(useErrorOutput ? System.err::println : System.out::println);
         } else {
-            try {
-                Files.write(outputFile.toPath(), data, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                throw new ProcessingException(e, "Error writing file %s.", outputFile.getPath());
-            }
+            writeOutputToFile(outputFile, data);
         }
     }
 

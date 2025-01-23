@@ -13,7 +13,7 @@ public class OperationExpression implements MlogExpression {
     private MlogExpression operand1;
     private @Nullable MlogExpression operand2;
 
-    public OperationExpression(Operation operation, MlogVariable operand1, MlogVariable operand2) {
+    public OperationExpression(Operation operation, MlogVariable operand1, @Nullable MlogVariable operand2) {
         this.operation = Objects.requireNonNull(operation);
         this.operand1 = Objects.requireNonNull(operand1);
         this.operand2 = operation.getOperands() == 1 ? null : Objects.requireNonNull(operand2);

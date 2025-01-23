@@ -27,7 +27,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     private static final String RETURN_ADDRESS = "*retaddr";
 
     protected final SourcePosition sourcePosition;
-    protected final @Nullable String functionPrefix;
+    protected final String functionPrefix;
     protected final String name;
     protected final String fullName;
     protected final String mlog;
@@ -38,7 +38,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     // Copy constructor
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
-            @Nullable String functionPrefix, String name, String fullName, String mlog, boolean isVolatile,
+            String functionPrefix, String name, String fullName, String mlog, boolean isVolatile,
             boolean noinit, boolean input, boolean output) {
         super(argumentType, mutability);
         this.sourcePosition = sourcePosition;
@@ -56,7 +56,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability, String name) {
         super(argumentType, mutability);
         this.sourcePosition = sourcePosition;
-        this.functionPrefix = null;
+        this.functionPrefix = "";
         this.name = Objects.requireNonNull(name);
         this.mlog = name;
         this.fullName = name;
@@ -71,7 +71,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
             boolean isVolatile, boolean noinit) {
         super(argumentType, isVolatile ? ValueMutability.VOLATILE : ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
-        this.functionPrefix = null;
+        this.functionPrefix = "";
         this.name = Objects.requireNonNull(name);
         this.mlog = mlog;
         this.fullName = name;
@@ -129,7 +129,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isMainVariable() {
-        return getType() == LOCAL_VARIABLE && functionPrefix == null;
+        return getType() == LOCAL_VARIABLE && functionPrefix.isEmpty();
     }
 
     @Override
@@ -139,7 +139,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isLocalVariable() {
-        return getType() == LOCAL_VARIABLE && functionPrefix != null;
+        return getType() == LOCAL_VARIABLE && functionPrefix.isEmpty();
     }
 
     @Override
@@ -151,7 +151,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return name;
     }
 
-    public @Nullable String getFunctionPrefix() {
+    public String getFunctionPrefix() {
         return functionPrefix;
     }
 
@@ -159,6 +159,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return fullName;
     }
 
+    /// @return true if the parameter is effectively input
     @Override
     public boolean isInput() {
         return input;

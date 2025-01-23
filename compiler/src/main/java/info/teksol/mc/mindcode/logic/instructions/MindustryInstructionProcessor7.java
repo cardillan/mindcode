@@ -1,9 +1,11 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.common.SourcePosition;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 
+@NullMarked
 public class MindustryInstructionProcessor7 extends BaseInstructionProcessor {
 
     MindustryInstructionProcessor7(InstructionProcessorParameters parameters) {

@@ -9,8 +9,10 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FormattableContent;
 import info.teksol.mc.mindcode.compiler.generation.variables.MissingValue;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.Optional;
 
 @NullMarked
@@ -56,6 +58,10 @@ public class LiteralsBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitLiteralColor(AstLiteralColor node) {
+        if (!processor.isSupported(Opcode.PACKCOLOR, List.of())) {
+            error("Color literals requires language target 7 or higher.");
+        }
+
         return LogicColor.create(node.sourcePosition(), node.getLiteral());
     }
 

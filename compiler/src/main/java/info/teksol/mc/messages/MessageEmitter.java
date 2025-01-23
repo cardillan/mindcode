@@ -4,9 +4,6 @@ import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import org.intellij.lang.annotations.PrintFormat;
 
-// TODO remove completely - always use messageConsumer, obtain from CompilerContext when unavailable.
-//      Refactor after switching to the new compiler
-@Deprecated
 public interface MessageEmitter {
     MessageConsumer messageConsumer();
 

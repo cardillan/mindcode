@@ -19,10 +19,14 @@ public enum ValueMutability {
     /// - built-in variables except the volatile ones. This includes almost all built-in variables, such as `@this`,
     ///   `@thisx`, `@coal` and so on. Even `LAccess` built-ins (such as `@dead` or `@controlled`) are runtime
     ///    constants - of course the values returned by `op sensor` for them aren't,
-    /// - logic keywords.
+    /// - logic keywords,
+    /// - linked blocks.
     ///
     /// By their nature, linked blocks aren't runtime constants, as they may change due to blocks being unlinked or
-    /// destroyed. This makes them volatile in general. Current implementation handles them as runtime constants.
+    /// destroyed. This would make them volatile. However, since they can't be meaningfully used in expressions
+    /// (except the `sensor` instruction), making defensive copies of them is unnecessary. They are therefore
+    /// considered immutable. When `sensor` is concerned, though, linked blocks are exempt from immutability and
+    /// results of `sensor` invocations on linked blocks aren't reused even for deterministic properties.
     IMMUTABLE,
 
     /// Represents a value which is not run-time constant, but only changes through an explicit action of the program.

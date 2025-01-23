@@ -6,27 +6,28 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SetInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Generic optimizer to remove all assignments to temporary variables that carry over the output value
- * of the preceding instruction. The {@code set} instruction is removed, while the preceding instruction is updated
- * to replace the temp variable with the target variable used in the {@code set} instruction.
- * The optimization is performed only when the following conditions are met:
- * <ol>
- * <li>The set instruction assigns from a {@code __tmp} variable.</li>
- * <li>The {@code __tmp} variable is used in exactly one other instruction, which immediately precedes
- * the instruction producing the {@code __tmp} variable</li>
- * <li>All arguments of the other instruction referencing the {@code __tmp} variable are output ones.</li>
- * </ol>
- * This optimizer ignores push and pop instructions. The StackUsageOptimizer will remove push/pop instructions of any
- * eliminated variables later on.
- */
+/// Generic optimizer to remove all assignments to temporary variables that carry over the output value
+/// of the preceding instruction. The `set` instruction is removed, while the preceding instruction is updated
+/// to replace the temp variable with the target variable used in the `set` instruction.
+/// The optimization is performed only when the following conditions are met:
+///
+/// - The set instruction assigns from a temporary variable.
+/// - The temporary variable is used in exactly one other instruction, which immediately precedes the instruction
+///   producing the temporary variable
+/// - All arguments of the other instruction referencing the temporary variable are output ones.
+///
+/// This optimizer ignores push and pop instructions. The StackUsageOptimizer will remove push/pop instructions of any
+/// eliminated variables later on.
+@NullMarked
 class TempVariableEliminator extends BaseOptimizer {
-    private Set<LogicArgument> inputTempVariables;
+    private @Nullable Set<LogicArgument> inputTempVariables;
 
     public TempVariableEliminator(OptimizationContext optimizationContext) {
         super(Optimization.TEMP_VARIABLES_ELIMINATION, optimizationContext);
@@ -73,6 +74,7 @@ class TempVariableEliminator extends BaseOptimizer {
     }
 
     private LogicInstruction replaceUnusedOutputs(LogicIterator iterator) {
+        assert inputTempVariables != null;
         LogicInstruction instruction = iterator.next();
         if (instruction.getOutputs() > 0) {
             List<LogicArgument> unusedTemps = instruction.outputArgumentsStream()

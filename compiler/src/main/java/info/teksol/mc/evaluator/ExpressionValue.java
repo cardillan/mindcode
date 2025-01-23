@@ -7,8 +7,6 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 
-import java.util.Optional;
-
 public class ExpressionValue implements LogicWritable {
     private final InstructionProcessor instructionProcessor;
 
@@ -23,8 +21,7 @@ public class ExpressionValue implements LogicWritable {
         if (ExpressionEvaluator.invalid(value)) {
             literal = LogicNull.NULL;
         } else {
-            Optional<String> strValue = instructionProcessor.mlogFormat(SourcePosition.EMPTY, value, false);
-            literal = strValue.map(s -> LogicNumber.create(instructionProcessor, s)).orElse(null);
+            literal = instructionProcessor.createLiteral(SourcePosition.EMPTY, value, false).orElse(null);
         }
     }
 

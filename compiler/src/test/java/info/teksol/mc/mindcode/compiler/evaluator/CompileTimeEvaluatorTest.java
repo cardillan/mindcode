@@ -100,6 +100,17 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void supportColorLiterals() {
+        assertCompilesTo("""
+                        const VALUE = %00112233;
+                        print(2 * VALUE);
+                        """,
+                createInstruction(PRINT, "%00224466")
+        );
+    }
+
+
+    @Test
     void evaluatesStringConcatenation() {
         assertCompilesTo("""
                         a = "A" + "B";

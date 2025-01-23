@@ -9,9 +9,13 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import static info.teksol.mc.mindcode.logic.arguments.LogicNull.NULL;
 import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
+@NullMarked
 class OptimizerExpressionEvaluator {
 
     private final InstructionProcessor ixProcessor;
@@ -24,7 +28,7 @@ class OptimizerExpressionEvaluator {
         expressionValue = new ExpressionValue(instructionProcessor);
     }
 
-    LogicLiteral evaluateOpInstruction(OpInstruction op) {
+    @Nullable LogicLiteral evaluateOpInstruction(OpInstruction op) {
         if (op.hasSecondOperand()) {
             return evaluateBinaryOpInstruction(op);
         } else {
@@ -32,21 +36,20 @@ class OptimizerExpressionEvaluator {
         }
     }
 
-    private LogicLiteral evaluateUnaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicReadable x && x.isConstant()) {
-            return evaluate(op.getOperation(), x, LogicNull.NULL);
+    private @Nullable LogicLiteral evaluateUnaryOpInstruction(OpInstruction op) {
+        if (op.getX().isConstant()) {
+            return evaluate(op.getOperation(), op.getX(), NULL);
         }
         return null;
     }
 
-    private LogicLiteral evaluateBinaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicReadable x && x.isConstant() && op.getY() instanceof LogicReadable y && y.isConstant()) {
-            return evaluate(op.getOperation(), x, y);
-        }
-        return null;
+    private @Nullable LogicLiteral evaluateBinaryOpInstruction(OpInstruction op) {
+        return op.getX().isConstant() && op.getY().isConstant()
+                ? evaluate(op.getOperation(), op.getX(), op.getY())
+                : null;
     }
 
-    OpInstruction extendedEvaluate(VariableStates variableStates, OpInstruction op1) {
+    @Nullable OpInstruction extendedEvaluate(VariableStates variableStates, OpInstruction op1) {
         LogicLiteral x1 = op1.getX() instanceof LogicLiteral l && l.isNumericLiteral() ? l : null;
         LogicLiteral y1 = op1.getY() instanceof LogicLiteral l && l.isNumericLiteral() ? l : null;
         // We need just one literal
@@ -65,7 +68,7 @@ class OptimizerExpressionEvaluator {
                         if (op1.getOperation() == op2.getOperation() && op1.getOperation().isAssociative()) {
                             // Perform the operation on the two literals
                             LogicLiteral literal = evaluate(op1.getOperation(), literal1, literal2);
-                            if (literal != null) {
+                            if (literal != NULL) {
                                 // Construct the instruction
                                 return ixProcessor.createOp(op1.getAstContext(), op1.getOperation(), op1.getResult(), variable, literal);
                             }
@@ -89,23 +92,23 @@ class OptimizerExpressionEvaluator {
         return null;
     }
 
-    private OpInstruction evaluateAddAfterSub(OpInstruction op, Operation add, Operation sub,
+    private @Nullable OpInstruction evaluateAddAfterSub(OpInstruction op, Operation add, Operation sub,
             boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         if (literal2first) {
             LogicLiteral literal = evaluate(add, literal2, literal1);
-            return literal == null || literal.isNull() ? null
+            return literal == NULL || literal.isNull() ? null
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
         } else {
             LogicLiteral literal = evaluate(sub, literal2, literal1);
-            return literal == null ? null
+            return literal == NULL ? null
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
         }
     }
 
-    private OpInstruction evaluateSubAfterAdd(OpInstruction op, Operation add, Operation sub,
+    private @Nullable OpInstruction evaluateSubAfterAdd(OpInstruction op, Operation add, Operation sub,
             boolean literal1first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         LogicLiteral literal = evaluate(sub, literal1, literal2);
-        if (literal != null && !literal.isNull()) {
+        if (literal != NULL && !literal.isNull()) {
             return literal1first
                     ? ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable)
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
@@ -113,13 +116,13 @@ class OptimizerExpressionEvaluator {
         return null;
     }
 
-    private OpInstruction evaluateSubAfterSub(OpInstruction op, Operation add, Operation sub,
+    private @Nullable OpInstruction evaluateSubAfterSub(OpInstruction op, Operation add, Operation sub,
             boolean literal1first, boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         LogicLiteral literal = literal2first
                 ? evaluate(sub, literal2, literal1)
                 : evaluate(add, literal2, literal1);
 
-        if (literal != null && !literal.isNull()) {
+        if (literal != NULL && !literal.isNull()) {
             return literal1first == literal2first
                     ? ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal)
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
@@ -137,8 +140,8 @@ class OptimizerExpressionEvaluator {
 
             case DIV:
                 if (op.getY() instanceof LogicNumber l && l.getDoubleValue() != (long) l.getDoubleValue()) {
-                    LogicNumber reciprocal = l.reciprocal(ixProcessor);
-                    if (reciprocal.toMlog().length() < l.toMlog().length()) {
+                    LogicLiteral reciprocal = l.reciprocal(ixProcessor);
+                    if (reciprocal != null && reciprocal.toMlog().length() < l.toMlog().length()) {
                         return ixProcessor.createOp(op.getAstContext(), MUL, op.getResult(), op.getX(), reciprocal);
                     }
                 }
@@ -158,8 +161,8 @@ class OptimizerExpressionEvaluator {
 
     OpInstruction normalizeMul(OpInstruction op, LogicVariable variable, LogicNumber number) {
         if (number.getDoubleValue() != (long) number.getDoubleValue()) {
-            LogicNumber reciprocal = number.reciprocal(ixProcessor);
-            if (reciprocal.toMlog().length() < number.toMlog().length()) {
+            LogicLiteral reciprocal = number.reciprocal(ixProcessor);
+            if (reciprocal != null && reciprocal.toMlog().length() < number.toMlog().length()) {
                 return ixProcessor.createOp(op.getAstContext(), DIV, op.getResult(), variable, reciprocal);
             }
         }
@@ -171,11 +174,11 @@ class OptimizerExpressionEvaluator {
         return expressionValue.getLiteral();
     }
 
-    public LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
+    public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
-        } else if (jump.getX() instanceof LogicReadable x && x.isConstant() && jump.getY() instanceof LogicReadable y && y.isConstant()) {
-            LogicLiteral literal = evaluate(jump.getCondition().toOperation(), x, y);
+        } else if (jump.getX().isConstant() && jump.getY().isConstant()) {
+            LogicLiteral literal = evaluate(jump.getCondition().toOperation(), jump.getX(), jump.getY());
             return literal instanceof LogicBoolean b ? b : null;
         }
         return null;

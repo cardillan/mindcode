@@ -7,12 +7,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class LookupInstruction extends BaseResultInstruction {
 
-    LookupInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+    LookupInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.LOOKUP, args, params);
     }
 
@@ -32,6 +35,7 @@ public class LookupInstruction extends BaseResultInstruction {
 
     @Override
     public LookupInstruction withResult(LogicVariable result) {
+        assert getArgumentTypes() != null;
         return new LookupInstruction(astContext, List.of(getType(), result, getIndex()), getArgumentTypes());
     }
 

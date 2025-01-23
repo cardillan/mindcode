@@ -13,7 +13,7 @@ public class Color {
     }
 
     public static double toDoubleBitsClamped(float r, float g, float b, float a) {
-        return Double.longBitsToDouble(Color.rgba8888(r, g, b, a) & 0xffffffffL);
+        return Double.longBitsToDouble(rgba8888(r, g, b, a) & 0xffffffffL);
     }
 
     private static int rgba8888(float r, float g, float b, float a) {
@@ -40,7 +40,7 @@ public class Color {
                 : String.format("%%%02x%02x%02x%02x", intR, intG, intB, intA);
     }
 
-    private static String unpack(double packed) {
+    public static String unpack(double packed) {
         int value = (int)(Double.doubleToRawLongBits(packed)),
                 intR = ((value & 0xff000000) >>> 24),
                 intG = ((value & 0x00ff0000) >>> 16),
@@ -48,13 +48,6 @@ public class Color {
                 intA = ((value & 0x000000ff));
 
         return String.format("%%%02x%02x%02x%02x", intR, intG, intB, intA);
-    }
-
-    public static void main(String[] args) {
-        double v = parseColor("%00000001");
-        double w = parseColor("%ffffffff");
-        System.out.println(v);
-        System.out.println(w);
     }
 }
 

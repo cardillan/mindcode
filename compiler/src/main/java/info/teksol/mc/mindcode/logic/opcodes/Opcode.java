@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum Opcode {
+    // INPUT & OUTPUT
     READ            ("read",            "Read a number from a linked memory cell."),
     WRITE           ("write",           "Write a number to a linked memory cell."),
     DRAW            ("draw",            "Add an operation to the drawing buffer. Does not display anything until drawflush is used."),
@@ -12,6 +13,7 @@ public enum Opcode {
     FORMAT          ("format",          "Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid."
             + " Placeholder pattern: \"{number 0-9}\" Example: print \"test {0}\"; format \"example\""),
 
+    // BLOCK CONTROL
     DRAWFLUSH       ("drawflush",       "Flush queued Draw operations to a display."),
     PRINTFLUSH      ("printflush",      "Flush queued Print operations to a message block."),
     GETLINK         ("getlink",         "Get a processor link by index. Starts at 0."),
@@ -19,21 +21,25 @@ public enum Opcode {
     RADAR           ("radar",           "Locate units around a building with range."),
     SENSOR          ("sensor",          "Get data from a building or unit."),
 
+    // OPERATIONS
     SET             ("set",             "Set a variable."),
     OP              ("op",              "Perform an operation on 1-2 variables."),
     LOOKUP          ("lookup",          "Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount."),
     PACKCOLOR       ("packcolor",       "Pack [0, 1] RGBA components into a single number for drawing or rule-setting."),
 
+    // FLOW CONTROL
     WAIT            ("wait",            "Wait a certain number of seconds."),
     STOP            ("stop",            "Halt execution of this processor."),
     END             ("end",             "Jump to the top of the instruction stack."),
     JUMP            ("jump",            "Conditionally jump to another statement."),
 
+    // UNIT CONTROL
     UBIND           ("ubind",           "Bind to the next unit of a type, and store it in @unit."),
     UCONTROL        ("ucontrol",        "Control the currently bound unit."),
     URADAR          ("uradar",          "Locate units around the currently bound unit."),
     ULOCATE         ("ulocate",         "Locate a specific type of position/building anywhere on the map. Requires a bound unit."),
 
+    // WORLD
     GETBLOCK        ("getblock",        "Get tile data at any location."),
     SETBLOCK        ("setblock",        "Set tile data at any location."),
     SPAWN           ("spawn",           "Spawn unit at a location."),

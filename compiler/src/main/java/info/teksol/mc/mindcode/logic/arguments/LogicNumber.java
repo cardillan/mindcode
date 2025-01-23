@@ -80,13 +80,11 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
         }
     }
 
-    public @Nullable LogicNumber reciprocal(InstructionProcessor processor) {
+    public @Nullable LogicLiteral reciprocal(InstructionProcessor processor) {
         if (literal.equals("1")) return this;
         if (value == 0.0) return null;
         double r = 1 / value;
-        return processor.mlogFormat(SourcePosition.EMPTY, r, false)
-                .map(s -> LogicNumber.create(processor, s))
-                .orElse(null);
+        return processor.createLiteral(SourcePosition.EMPTY, r, false).orElse(null);
     }
 
     @Override

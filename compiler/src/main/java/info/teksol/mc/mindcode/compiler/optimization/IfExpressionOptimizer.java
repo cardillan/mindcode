@@ -9,11 +9,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
+import static java.util.Objects.requireNonNull;
 
+@NullMarked
 class IfExpressionOptimizer extends BaseOptimizer {
 
     public IfExpressionOptimizer(OptimizationContext optimizationContext) {
@@ -27,7 +31,8 @@ class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private void optimizeIfExpression(AstContext ifExpression) {
-        LogicList condition = contextInstructions(ifExpression.findSubcontext(CONDITION));
+        AstContext conditionContext = ifExpression.findSubcontext(CONDITION);
+        LogicList condition = contextInstructions(conditionContext);
         if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)
                 || !(condition.getLast() instanceof JumpInstruction jump && jump.isConditional())
                 || !hasExpectedStructure(ifExpression)) {
@@ -57,7 +62,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
             // Replace the temporary variable with the actual target
             // Only if the temporary variable is not reused anywhere
             if (resVar.isTemporaryVariable()
-                    && isReplaceable(instructionAfter = instructionAfter(ifExpression), resVar)
+                    && isReplaceable(requireNonNull(instructionAfter = instructionAfter(ifExpression)), resVar)
                     && instructionCount(ix -> ix.usesAsInput(resVar)) == 1) {
                 if (instructionAfter instanceof SetInstruction finalSet) {
                     resTrue = replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
@@ -148,9 +153,9 @@ class IfExpressionOptimizer extends BaseOptimizer {
                   && instruction.getOpcode() != Opcode.SETADDR;
     }
 
-    private LogicInstruction getLastRealInstruction(LogicList instructions) {
+    private @Nullable LogicInstruction getLastRealInstruction(LogicList instructions) {
         for (int i = 0; i < instructions.size(); i ++) {
-            if (instructions.getFromEnd(i).getRealSize() > 0) {
+            if (requireNonNull(instructions.getFromEnd(i)).getRealSize() > 0) {
                 return instructions.getFromEnd(i);
             }
         }
@@ -171,7 +176,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 second.size() == 1 && second.getFirst() instanceof LabelInstruction;
     }
 
-    private JumpInstruction negateCompoundCondition(LogicList condition) {
+    private @Nullable JumpInstruction negateCompoundCondition(LogicList condition) {
         if (condition.getFromEnd(0) instanceof JumpInstruction jump
             && condition.getFromEnd(1) instanceof OpInstruction op
             && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
@@ -179,7 +184,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
             && jump.getY().equals(LogicBoolean.FALSE)
             && instructionCount(ix -> ix.usesAsInput(op.getResult())) == 1) {
 
-            return createJump(jump.getAstContext(), jump.getTarget(), op.getOperation().toCondition(), op.getX(), op.getY());
+            return createJump(jump.getAstContext(), jump.getTarget(), op.getOperation().toExistingCondition(), op.getX(), op.getY());
         } else {
             return null;
         }
@@ -188,17 +193,17 @@ class IfExpressionOptimizer extends BaseOptimizer {
     private void moveTrueBranchUsingJump(LogicList condition, LogicList trueBranch, LogicList falseBranch, JumpInstruction invertedJump,
             boolean compoundCondition) {
         // Move body
-        int bodyIndex = instructionIndex(trueBranch.getFirst());
+        int bodyIndex = instructionIndex(requireNonNull(trueBranch.getFirst()));
         trueBranch.forEach(ix -> removeInstruction(bodyIndex)); // Removes the body
         removeInstruction(bodyIndex);   // Removes the jump
-        insertBefore(condition.getFirst(), trueBranch);
+        insertBefore(requireNonNull(condition.getFirst()), trueBranch);
 
-        // Get final label (blind cast since the if structure was verified)
-        LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(falseBranch.getLast());
+        // Get final label (blind cast since the `if` structure was verified)
+        LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(requireNonNull(falseBranch.getLast()));
 
         // Update condition
-        int conditionIndex = instructionIndex(condition.getLast());
-        replaceInstruction(conditionIndex, invertedJump.withTarget(labelInstruction.getLabel()));
+        int conditionIndex = instructionIndex(requireNonNull(condition.getLast()));
+        replaceInstruction(conditionIndex, invertedJump.withTarget(requireNonNull(labelInstruction).getLabel()));
 
         // If it was a compound condition, remove it
         // (Note: dead code eliminator in an additional pass would remove it too)
@@ -208,39 +213,39 @@ class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private void moveFalseBranch(LogicList condition, LogicList trueBranch, LogicList falseBranch, JumpInstruction jump) {
-        // Get final label (blind cast since the if structure was verified)
-        LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(falseBranch.getLast());
+        // Get final label (blind cast since the `if` structure was verified)
+        LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(requireNonNull(falseBranch.getLast()));
 
         // Move body
-        int bodyIndex = instructionIndex(falseBranch.getFirst());
+        int bodyIndex = instructionIndex(requireNonNull(falseBranch.getFirst()));
         falseBranch.forEach(ix -> removeInstruction(bodyIndex)); // Removes the body
         removeInstruction(bodyIndex - 1);     // Removes the previous jump
-        insertBefore(condition.getFirst(), falseBranch);
+        insertBefore(requireNonNull(condition.getFirst()), falseBranch);
 
-        replaceInstruction(jump, jump.withTarget(labelInstruction.getLabel()));
+        replaceInstruction(jump, jump.withTarget(requireNonNull(labelInstruction).getLabel()));
     }
 
 
     private void swapBranches(LogicList condition, LogicList trueBranch, LogicList falseBranch, JumpInstruction invertedJump) {
         if (isContinuous(trueBranch) && isContinuous(falseBranch)) {
-            LogicInstruction trueAnchor = instructionAfter(trueBranch.getLast());
-            LogicInstruction falseAnchor = instructionAfter(falseBranch.getLast());
+            LogicInstruction trueAnchor = instructionAfter(requireNonNull(trueBranch.getLast()));
+            LogicInstruction falseAnchor = instructionAfter(requireNonNull(falseBranch.getLast()));
 
             removeBody(trueBranch);
             removeBody(falseBranch);
 
-            insertInstructions(instructionIndex(trueAnchor), falseBranch);
-            insertInstructions(instructionIndex(falseAnchor), trueBranch);
+            insertInstructions(instructionIndex(requireNonNull(trueAnchor)), falseBranch);
+            insertInstructions(instructionIndex(requireNonNull(falseAnchor)), trueBranch);
 
             // Negate compound condition
-            int conditionIndex = instructionIndex(condition.getLast());
+            int conditionIndex = instructionIndex(requireNonNull(condition.getLast()));
             replaceInstruction(conditionIndex, invertedJump);
             removeInstruction(conditionIndex - 1);
         }
     }
 
     private boolean isContinuous(LogicList body) {
-        int index = instructionIndex(body.getFirst());
+        int index = instructionIndex(requireNonNull(body.getFirst()));
         for (LogicInstruction ix : body) {
             if (ix != instructionAt( index++)) {
                 return false;
@@ -250,7 +255,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private void removeBody(LogicList body) {
-        int index = instructionIndex(body.getFirst());
+        int index = instructionIndex(requireNonNull(body.getFirst()));
         for (int i = 0; i < body.size(); i++) {
             removeInstruction(index);
         }

@@ -91,12 +91,12 @@ public enum Operation implements LogicArgument {
         this.function = true;
     }
 
-    public static Operation fromMindcode(String code) {
+    public static @Nullable Operation fromMindcode(String code) {
         return MINDCODE_MAP.get(code);
     }
 
-    public static Operation fromMlog(String name) {
-        return Objects.requireNonNull(MLOG_MAP.get(name), "Unknown or invalid mlog operation " + name);
+    public static @Nullable Operation fromMlog(String name) {
+        return MLOG_MAP.get(name);
     }
 
     public static Operation fromToken(int tokenType) {
@@ -169,6 +169,10 @@ public enum Operation implements LogicArgument {
         };
     }
 
+    public Condition toExistingCondition() {
+        return Objects.requireNonNull(toCondition(), "Operation " + this + " is not a condition");
+    }
+
     public boolean hasInverse() {
         return ordinal() < STRICT_EQUAL.ordinal();
     }
@@ -198,6 +202,7 @@ public enum Operation implements LogicArgument {
     private static final Map<String, Operation> MINDCODE_MAP = Stream.of(values())
             .filter(o -> o.mlog != null)
             .collect(Collectors.toMap(Operation::getMindcode, o -> o));
+
     private static final Map<String, Operation> MLOG_MAP = Stream.of(values())
             .filter(o -> o.mlog != null)
             .collect(Collectors.toMap(Operation::toMlog, o -> o, (o1, o2) -> o1));

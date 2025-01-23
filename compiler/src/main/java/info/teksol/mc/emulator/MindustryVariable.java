@@ -83,9 +83,9 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     @Override
     public boolean isConstant() {
-        // TODO Maybe remove
-        // return true;
-        throw new UnsupportedOperationException();
+        // Won't be called in contexts where MindustryVariable is used
+        // Kept for consistency.
+        return true;
     }
 
     public boolean isObject() {

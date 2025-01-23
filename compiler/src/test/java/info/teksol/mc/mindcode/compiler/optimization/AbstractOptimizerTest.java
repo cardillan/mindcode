@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @NullMarked
 public abstract class AbstractOptimizerTest<T extends Optimizer> extends AbstractCodeGeneratorTest {
-    protected abstract Class<T> getTestedClass();
+    protected abstract @Nullable Class<T> getTestedClass();
 
     protected abstract List<Optimization> getAllOptimizations();
 
@@ -96,7 +97,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     private class FilteredDiffDebugPrinter extends DiffDebugPrinter {
-        private final Class<T> testedClass;
+        private final @Nullable  Class<T> testedClass;
 
         private boolean activated = false;
 
@@ -107,7 +108,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         }
 
         @Override
-        public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
+        public void registerIteration(@Nullable Optimizer optimizer, String title, List<LogicInstruction> program) {
             super.registerIteration(optimizer, title, program);
             if (optimizer != null && optimizer.getClass() == testedClass) {
                 activated = true;

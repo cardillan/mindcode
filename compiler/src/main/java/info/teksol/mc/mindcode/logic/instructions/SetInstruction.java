@@ -6,12 +6,15 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+@NullMarked
 public class SetInstruction extends BaseResultInstruction {
 
-    SetInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
+    SetInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.SET, args, params);
     }
 
@@ -31,10 +34,12 @@ public class SetInstruction extends BaseResultInstruction {
 
     @Override
     public SetInstruction withResult(LogicVariable result) {
+        assert getArgumentTypes() != null;
         return new SetInstruction(astContext, List.of(result, getValue()), getArgumentTypes());
     }
 
     public SetInstruction withValue(LogicValue value) {
+        assert getArgumentTypes() != null;
         return new SetInstruction(astContext, List.of(getResult(), value), getArgumentTypes());
     }
 

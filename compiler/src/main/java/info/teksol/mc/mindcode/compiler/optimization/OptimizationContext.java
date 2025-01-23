@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -16,6 +17,8 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.TraceFile;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -25,6 +28,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 class OptimizationContext {
     private final CompilerProfile profile;
     private final OptimizerExpressionEvaluator expressionEvaluator;
@@ -33,43 +37,31 @@ class OptimizationContext {
     private final CallGraph callGraph;
     private final AstContext rootContext;
 
-    private FunctionDataFlow functionDataFlow;
-    private BitSet unreachableInstructions;
+    private @Nullable FunctionDataFlow functionDataFlow;
+    private @Nullable BitSet unreachableInstructions;
 
     private final TraceFile traceFile;
 
-    /**
-     * Maps instructions to input variable states (i.e. states before the instruction is executed)
-     */
-    private final Map<LogicInstruction, DataFlowVariableStates.VariableStates> variableStates = new IdentityHashMap<>();
+    /// Maps instructions to input variable states (i.e. states before the instruction is executed)
+    private final Map<LogicInstruction, VariableStates> variableStates = new IdentityHashMap<>();
 
-    /**
-     * Holds evaluation of first loop condition variables for loop optimizer.
-     */
-    private final Map<AstContext, DataFlowVariableStates.VariableStates> loopVariables = new HashMap<>();
+    /// Holds evaluation of first loop condition variables for loop optimizer.
+    private final Map<AstContext, VariableStates> loopVariables = new HashMap<>();
 
     private final Set<LogicVariable> staleVariables = new HashSet<>();
 
-    /**
-     * List of variables that serve as a loop control variable in at least one unrolled loop.
-     */
+    /// List of variables that serve as a loop control variable in at least one unrolled loop.
     private final Set<LogicVariable> unrolledVariables = new HashSet<>();
 
-    /**
-     * Set of variables which were detected as uninitialized.
-     */
+    /// Set of variables which were detected as uninitialized.
     private final Set<LogicVariable> uninitializedVariables = new HashSet<>();
 
-    /**
-     * Maps labels to their respective instructions. Built once and then updated after each modification
-     * of the program.
-     */
+    /// Maps labels to their respective instructions. Built once and then updated after each modification
+    /// of the program.
     private final Map<LogicLabel, LabelInstruction> labels;
 
-    /**
-     * Tracks all instructions that target a label. Unused labels (labels whose list of instructions would be empty)
-     * are removed from the program after each iteration finishes.
-     */
+    /// Tracks all instructions that target a label. Unused labels (labels whose list of instructions would be empty)
+    /// are removed from the program after each iteration finishes.
     private final Map<LogicLabel, List<LogicInstruction>> labelReferences = new HashMap<>();
 
     private int modifications = 0;
@@ -144,9 +136,7 @@ class OptimizationContext {
         }
     }
 
-    /**
-     * Prepares the instance for the next round of program modification/optimization.
-     */
+    /// Prepares the instance for the next round of program modification/optimization.
     public void prepare() {
         if (updated) {
             unreachableInstructions = null;
@@ -174,24 +164,22 @@ class OptimizationContext {
 
     //<editor-fold desc="Common optimizer functionality">
     private static class FunctionDataFlow {
-        /** Maps function prefix to a list of variables directly or indirectly read by the function */
+        /// Maps function prefix to a list of variables directly or indirectly read by the function
         private final Map<MindcodeFunction, Set<LogicVariable>> functionReads = new HashMap<>();
 
-        /** Maps function prefix to a list of variables directly or indirectly written by the function */
+        /// Maps function prefix to a list of variables directly or indirectly written by the function
         private final Map<MindcodeFunction, Set<LogicVariable>> functionWrites = new HashMap<>();
 
-        /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
+        /// Contains function prefix of functions that may directly or indirectly call the end() instruction.
         private final Set<MindcodeFunction> endingFunctions = new HashSet<>();
     }
 
-    /**
-     * This method analyses the control flow of the program. It starts at the first instruction and visits
-     * every instruction reachable from there, either by advancing to the next instruction, or by a jump/goto/call.
-     * Bits of visited instruction are cleared and aren't inspected again. When all code paths have reached an
-     * end or an already visited instruction, the analysis stops and what is left are all unreachable instructions.
-     *
-     * @return a BitSet containing positions of unreachable instructions
-     */
+    /// This method analyses the control flow of the program. It starts at the first instruction and visits
+    /// every instruction reachable from there, either by advancing to the next instruction, or by a jump/goto/call.
+    /// Bits of visited instruction are cleared and aren't inspected again. When all code paths have reached an
+    /// end or an already visited instruction, the analysis stops and what is left are all unreachable instructions.
+    ///
+    /// @return a BitSet containing positions of unreachable instructions
     public BitSet getUnreachableInstructions() {
         if (unreachableInstructions == null) {
             if (profile.getOptimizationLevel(Optimization.UNREACHABLE_CODE_ELIMINATION) == OptimizationLevel.NONE) {
@@ -263,10 +251,8 @@ class OptimizationContext {
         return index;
     }
 
-    /**
-     * Creates lists of variables directly or indirectly read/written by each function, and a list of functions
-     * directly or indirectly calling end()
-     */
+    /// Creates lists of variables directly or indirectly read/written by each function, and a list of functions
+    /// directly or indirectly calling end()
     private FunctionDataFlow getFunctionDataFlow() {
         if (functionDataFlow == null) {
             getUnreachableInstructions();               // Make sure they're initialized
@@ -302,12 +288,14 @@ class OptimizationContext {
         return getFunctionDataFlow().endingFunctions;
     }
 
-    /**
-     * Analyzes reads, writes and end() calls by a single function.
-     *
-     * @param context context of the function to analyze
-     */
+    /// Analyzes reads, writes and end() calls by a single function.
+    ///
+    /// @param context context of the function to analyze
     private void analyzeFunctionVariables(AstContext context) {
+        assert unreachableInstructions != null;
+        assert functionDataFlow != null;
+        assert context.function() != null;
+
         Set<LogicVariable> reads = new HashSet<>();
         Set<LogicVariable> writes = new HashSet<>();
 
@@ -337,12 +325,12 @@ class OptimizationContext {
         functionDataFlow.functionWrites.put(context.function(), writes);
     }
 
-    /**
-     * Propagates variable reads/writes and end() calls to calling functions.
-     *
-     * @return true if the propagation lead to some modifications
-     */
+    /// Propagates variable reads/writes and end() calls to calling functions.
+    ///
+    /// @return true if the propagation lead to some modifications
     private boolean propagateFunctionReadsAndWrites() {
+        assert functionDataFlow != null;
+
         CallGraph callGraph = getCallGraph();
         boolean modified = false;
         for (MindcodeFunction function : callGraph.getFunctions()) {
@@ -370,23 +358,23 @@ class OptimizationContext {
     //</editor-fold>
 
     //<editor-fold desc="Label & variable tracking">
-    public void putVariableStates(LogicInstruction instruction, DataFlowVariableStates.VariableStates variableStates) {
+    public void putVariableStates(LogicInstruction instruction, VariableStates variableStates) {
         this.variableStates.put(instruction, variableStates);
     }
 
-    public void storeLoopVariables(AstContext conditionContext, DataFlowVariableStates.VariableStates variableStates) {
+    public void storeLoopVariables(AstContext conditionContext, VariableStates variableStates) {
         loopVariables.put(conditionContext, variableStates);
     }
 
-    public DataFlowVariableStates.VariableStates getVariableStates(LogicInstruction instruction) {
+    public @Nullable VariableStates getVariableStates(LogicInstruction instruction) {
         return variableStates.get(instruction);
     }
 
-    public DataFlowVariableStates.VariableStates getLoopVariables(AstContext conditionContext) {
+    public @Nullable VariableStates getLoopVariables(AstContext conditionContext) {
         return loopVariables.get(conditionContext);
     }
 
-    public LogicValue resolveValue(DataFlowVariableStates.VariableStates variableStates, LogicValue value) {
+    public LogicValue resolveValue(@Nullable VariableStates variableStates, LogicValue value) {
         if (variableStates != null && value instanceof LogicVariable v && !staleVariables.contains(v)) {
             var newValue = variableStates.findVariableValue(v);
             if (newValue != null && newValue.getConstantValue() != null) {
@@ -529,11 +517,11 @@ class OptimizationContext {
         return expressionEvaluator;
     }
 
-    public LogicLiteral evaluateOpInstruction(OpInstruction op) {
+    public @Nullable LogicLiteral evaluateOpInstruction(OpInstruction op) {
         return expressionEvaluator.evaluateOpInstruction(op);
     }
 
-    public OpInstruction extendedEvaluate(DataFlowVariableStates.VariableStates variableStates, OpInstruction op1) {
+    public @Nullable OpInstruction extendedEvaluate(VariableStates variableStates, OpInstruction op1) {
         return expressionEvaluator.extendedEvaluate(variableStates, op1);
     }
 
@@ -549,25 +537,25 @@ class OptimizationContext {
         return expressionEvaluator.evaluate(operation, a, b);
     }
 
-    public LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
+    public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
         return evaluateJumpInstruction(jump, variableStates.get(jump));
     }
 
-    public LogicBoolean evaluateLoopConditionJump(JumpInstruction jump, AstContext loopContext) {
+    public @Nullable LogicBoolean evaluateLoopConditionJump(JumpInstruction jump, AstContext loopContext) {
         return evaluateJumpInstruction(jump, loopVariables.get(loopContext));
     }
 
 
-    private LogicBoolean evaluateJumpInstruction(JumpInstruction jump, DataFlowVariableStates.VariableStates vs) {
+    private @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump, VariableStates vs) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
         }
 
         // Avoid creating new instruction just for the evaluation
-        LogicValue argX = resolveValue(vs, jump.getX());
-        LogicValue argY = resolveValue(vs, jump.getY());
+        LogicValue x = resolveValue(vs, jump.getX());
+        LogicValue y = resolveValue(vs, jump.getY());
 
-        if (argX instanceof LogicReadable x && argY instanceof LogicReadable y && x.isConstant() && y.isConstant()) {
+        if (x.isConstant() && y.isConstant()) {
             LogicLiteral result = expressionEvaluator.evaluate(jump.getCondition().toOperation(), x, y);
             if (result instanceof LogicBoolean b) {
                 return b;
@@ -646,82 +634,68 @@ class OptimizationContext {
     //</editor-fold>
 
     //<editor-fold desc="Finding instructions by position">
-    /**
-     * Return the instruction at given position in the program.
-     *
-     * @param index index of the instruction
-     * @return the instruction at given index
-     */
+    /// Return the instruction at given position in the program.
+    ///
+    /// @param index index of the instruction
+    /// @return the instruction at given index
     LogicInstruction instructionAt(int index) {
         return program.get(index);
     }
 
-    /**
-     * Returns the instruction preceding the given instruction. If such instruction doesn't exist
-     * (because the reference instruction is the first one), returns null. If the reference instruction
-     * isn't found the program, an exception is thrown.
-     *
-     * @param instruction instruction to find in the program
-     * @return instruction before the reference instruction
-     */
-    LogicInstruction instructionBefore(LogicInstruction instruction) {
+    /// Returns the instruction preceding the given instruction. If such instruction doesn't exist
+    /// (because the reference instruction is the first one), returns null. If the reference instruction
+    /// isn't found the program, an exception is thrown.
+    ///
+    /// @param instruction instruction to find in the program
+    /// @return instruction before the reference instruction
+    @Nullable LogicInstruction instructionBefore(LogicInstruction instruction) {
         int index = existingInstructionIndex(instruction);
         return index == 0 ? null : instructionAt(index - 1);
     }
 
-    /**
-     * Returns the instruction following the given instruction. If such instruction doesn't exist
-     * (because the reference instruction is the last one), returns null. If the reference instruction
-     * isn't found the program, an exception is thrown.
-     *
-     * @param instruction instruction to find in the program
-     * @return instruction after the reference instruction
-     */
-    LogicInstruction instructionAfter(LogicInstruction instruction) {
+    /// Returns the instruction following the given instruction. If such instruction doesn't exist
+    /// (because the reference instruction is the last one), returns null. If the reference instruction
+    /// isn't found the program, an exception is thrown.
+    ///
+    /// @param instruction instruction to find in the program
+    /// @return instruction after the reference instruction
+    @Nullable LogicInstruction instructionAfter(LogicInstruction instruction) {
         int index = existingInstructionIndex(instruction) + 1;
         return index == program.size() ? null : instructionAt(index);
     }
 
-    /**
-     * Provides a sublist of the current program. Will fail when such sublist cannot be created.
-     * Returned list won't reflect further changed to the program.
-     *
-     * @param fromIndex starting index
-     * @param toIndex ending index (exclusive)
-     * @return a List containing given instructions.
-     */
+    /// Provides a sublist of the current program. Will fail when such sublist cannot be created.
+    /// Returned list won't reflect further changed to the program.
+    ///
+    /// @param fromIndex starting index
+    /// @param toIndex ending index (exclusive)
+    /// @return a List containing given instructions.
     List<LogicInstruction> instructionSubList(int fromIndex, int toIndex) {
         return List.copyOf(program.subList(fromIndex, toIndex));
     }
 
-    /**
-     * Provides a sublist of the current program. Will fail when such sublist cannot be created.
-     * Returned list won't reflect further changed to the program.
-     *
-     * @param fromInstruction first instruction in the list
-     * @param toInstruction last instruction in the list (inclusive)
-     * @return a List containing given instructions.
-     */
+    /// Provides a sublist of the current program. Will fail when such sublist cannot be created.
+    /// Returned list won't reflect further changed to the program.
+    ///
+    /// @param fromInstruction first instruction in the list
+    /// @param toInstruction last instruction in the list (inclusive)
+    /// @return a List containing given instructions.
     protected List<LogicInstruction> instructionSubList(LogicInstruction fromInstruction, LogicInstruction toInstruction) {
         return instructionSubList(instructionIndex(fromInstruction), instructionIndex(toInstruction) + 1);
     }
 
-    /**
-     * Provides stream of all instructions in the program.
-     *
-     * @return an instruction stream
-     */
+    /// Provides stream of all instructions in the program.
+    ///
+    /// @return an instruction stream
     Stream<LogicInstruction> instructionStream() {
         return program.stream();
     }
 
-    /**
-     * Locates an instruction based on instance identity and returns its index.
-     * Returns -1 when such instruction doesn't exist.
-     *
-     * @param instruction instruction to locate
-     * @return index of the instruction, or -1 if the instruction isn't found.
-     */
+    /// Locates an instruction based on instance identity and returns its index.
+    /// Returns -1 when such instruction doesn't exist.
+    ///
+    /// @param instruction instruction to locate
+    /// @return index of the instruction, or -1 if the instruction isn't found.
     int instructionIndex(LogicInstruction instruction) {
         for (int i = 0; i < program.size(); i++) {
             if (instruction == program.get(i)) {
@@ -731,7 +705,7 @@ class OptimizationContext {
         return -1;
     }
 
-    /** Returns the index of given instruction. When the instruction isn't found, an exception is thrown. */
+    /// Returns the index of given instruction. When the instruction isn't found, an exception is thrown.
     int existingInstructionIndex(LogicInstruction instruction) {
         for (int i = 0; i < program.size(); i++) {
             if (instruction == program.get(i)) {
@@ -744,60 +718,50 @@ class OptimizationContext {
 
     //<editor-fold desc="Finding instructions by properties">
 
-    /**
-     * Starting at given index, finds the first instruction matching predicate.
-     * Returns the index or -1 if not found.
-     *
-     * @param startIndex index to start search from, inclusive
-     * @param matcher predicate matching sought instruction
-     * @return index of the first instruction matching the predicate
-     */
+    /// Starting at given index, finds the first instruction matching predicate.
+    /// Returns the index or -1 if not found.
+    ///
+    /// @param startIndex index to start search from, inclusive
+    /// @param matcher predicate matching sought instruction
+    /// @return index of the first instruction matching the predicate
     protected int firstInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
         return CollectionUtils.indexOf(program, startIndex, matcher);
     }
 
-    /**
-     * Finds the first instruction matching predicate in the entire program.
-     * Returns the index or -1 if not found.
-     *
-     * @param matcher predicate matching sought instruction
-     * @return index of the first instruction matching the predicate
-     */
+    /// Finds the first instruction matching predicate in the entire program.
+    /// Returns the index or -1 if not found.
+    ///
+    /// @param matcher predicate matching sought instruction
+    /// @return index of the first instruction matching the predicate
     protected int firstInstructionIndex(Predicate<LogicInstruction> matcher) {
         return CollectionUtils.indexOf(program, 0, matcher);
     }
 
-    /**
-     * Finds the last instruction matching predicate up to the given instruction index.
-     * Returns the index or -1 if not found.
-     *
-     * @param startIndex index to end search at, inclusive
-     * @param matcher predicate matching sought instruction
-     * @return index of the last instruction matching the predicate, up to the specified index
-     */
+    /// Finds the last instruction matching predicate up to the given instruction index.
+    /// Returns the index or -1 if not found.
+    ///
+    /// @param startIndex index to end search at, inclusive
+    /// @param matcher predicate matching sought instruction
+    /// @return index of the last instruction matching the predicate, up to the specified index
     protected int lastInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
         return CollectionUtils.lastIndexOf(program, startIndex, matcher);
     }
 
-    /**
-     * Finds the last instruction matching predicate in the entire program.
-     * Returns the index or -1 if not found.
-     *
-     * @param matcher predicate matching sought instruction
-     * @return index of the last instruction matching the predicate
-     */
+    /// Finds the last instruction matching predicate in the entire program.
+    /// Returns the index or -1 if not found.
+    ///
+    /// @param matcher predicate matching sought instruction
+    /// @return index of the last instruction matching the predicate
     protected int lastInstructionIndex(Predicate<LogicInstruction> matcher) {
         return CollectionUtils.lastIndexOf(program, program.size() - 1, matcher);
     }
 
-    /**
-     * Finds a first non-label instruction following a label
-     * Returns the index or -1 if not found.
-     * If the label doesn't exist in the program, an exception is thrown.
-     *
-     * @param label target label
-     * @return first non-label instruction following the label
-     */
+    /// Finds a first non-label instruction following a label
+    /// Returns the index or -1 if not found.
+    /// If the label doesn't exist in the program, an exception is thrown.
+    ///
+    /// @param label target label
+    /// @return first non-label instruction following the label
     protected int labeledInstructionIndex(LogicLabel label) {
         LabelInstruction labelInstruction = getLabelInstruction(label);
         int labelIndex = firstInstructionIndex(ix -> ix == labelInstruction);
@@ -808,90 +772,74 @@ class OptimizationContext {
                 ix -> !(ix instanceof LabeledInstruction) && !(ix instanceof NoOpInstruction));
     }
 
-    /**
-     * Starting at given index, find first instruction matching predicate. Return null if not found.
-     *
-     * @param startIndex index to start search from, inclusive
-     * @param matcher predicate matching sought instruction
-     * @return the first instruction matching the predicate
-     */
-    protected LogicInstruction firstInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
+    /// Starting at given index, find first instruction matching predicate. Return null if not found.
+    ///
+    /// @param startIndex index to start search from, inclusive
+    /// @param matcher predicate matching sought instruction
+    /// @return the first instruction matching the predicate
+    protected @Nullable LogicInstruction firstInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
         int result = firstInstructionIndex(startIndex, matcher);
         return result < 0 ? null : program.get(result);
     }
 
-    /**
-     * Finds the first instruction matching predicate. Returns null if not found.
-     *
-     * @param matcher predicate matching sought instruction
-     * @return the first instruction in the entire program matching the predicate
-     */
-    protected LogicInstruction firstInstruction(Predicate<LogicInstruction> matcher) {
+    /// Finds the first instruction matching predicate. Returns null if not found.
+    ///
+    /// @param matcher predicate matching sought instruction
+    /// @return the first instruction in the entire program matching the predicate
+    protected @Nullable LogicInstruction firstInstruction(Predicate<LogicInstruction> matcher) {
         int result = firstInstructionIndex(matcher);
         return result < 0 ? null : program.get(result);
     }
 
-    /**
-     * Finds the last instruction matching predicate up to the given instruction index.
-     * Returns null if not found.
-     *
-     * @param startIndex index to end search at, inclusive
-     * @param matcher predicate matching sought instruction
-     * @return index of the last instruction matching the predicate, up to the specified index
-     */
-    protected LogicInstruction lastInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
+    /// Finds the last instruction matching predicate up to the given instruction index.
+    /// Returns null if not found.
+    ///
+    /// @param startIndex index to end search at, inclusive
+    /// @param matcher predicate matching sought instruction
+    /// @return index of the last instruction matching the predicate, up to the specified index
+    protected @Nullable LogicInstruction lastInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
         int result = lastInstructionIndex(startIndex, matcher);
         return result < 0 ? null : program.get(result);
     }
 
-    /**
-     * Finds the last instruction matching predicate. Returns null if not found.
-     *
-     * @param matcher predicate matching sought instruction
-     * @return the last instruction matching the predicate
-     */
-    protected LogicInstruction lastInstruction(Predicate<LogicInstruction> matcher) {
+    /// Finds the last instruction matching predicate. Returns null if not found.
+    ///
+    /// @param matcher predicate matching sought instruction
+    /// @return the last instruction matching the predicate
+    protected @Nullable LogicInstruction lastInstruction(Predicate<LogicInstruction> matcher) {
         int result = lastInstructionIndex(matcher);
         return result < 0 ? null : program.get(result);
     }
 
-    /**
-     * Finds a first non-label instruction following a label.
-     * Return null when not found
-     */
-    protected LogicInstruction labeledInstruction(LogicLabel label) {
+    /// Finds a first non-label instruction following a label.
+    /// Return null when not found
+    protected @Nullable LogicInstruction labeledInstruction(LogicLabel label) {
         int index = labeledInstructionIndex(label);
         return index < 0 ? null : instructionAt(index);
     }
 
-    /**
-     * Return an independent list of instructions matching predicate.
-     *
-     * @param matcher predicate matching sought instructions
-     * @return list of all instructions matching the predicate.
-     */
+    /// Return an independent list of instructions matching predicate.
+    ///
+    /// @param matcher predicate matching sought instructions
+    /// @return list of all instructions matching the predicate.
     protected List<LogicInstruction> instructions(Predicate<LogicInstruction> matcher) {
         return program.stream().filter(matcher).toList();
     }
-    /**
-     * Return a number of instructions matching predicate.
-     *
-     * @param matcher predicate matching sought instructions
-     * @return number of matching instructions;
-     */
+    /// Return a number of instructions matching predicate.
+    ///
+    /// @param matcher predicate matching sought instructions
+    /// @return number of matching instructions;
     protected int instructionCount(Predicate<LogicInstruction> matcher) {
         return (int) program.stream().filter(matcher).count();
     }
     //</editor-fold>
 
     //<editor-fold desc="General code structure methods">
-    /**
-     * Determines whether the given code block is contained, meaning it doesn't contain jumps outside.
-     * Outside jumps are generated as a result of break, continue or return statements.
-     *
-     * @param codeBlock code block to inspect
-     * @return true if the code block always exits though its last instruction.
-     */
+    /// Determines whether the given code block is contained, meaning it doesn't contain jumps outside.
+    /// Outside jumps are generated as a result of break, continue or return statements.
+    ///
+    /// @param codeBlock code block to inspect
+    /// @return true if the code block always exits though its last instruction.
     protected boolean isContained(List<LogicInstruction> codeBlock) {
         Set<LogicLabel> localLabels = codeBlock.stream()
                 .filter(LabeledInstruction.class::isInstance)
@@ -909,13 +857,11 @@ class OptimizationContext {
                     .allMatch(ix -> getPossibleTargetLabels(ix).allMatch(localLabels::contains));
     }
 
-    /**
-     * Determines whether the given code block is contained, meaning it doesn't contain jumps outside.
-     * Outside jumps are generated as a result of break, continue or return statements.
-     *
-     * @param logicList code block to inspect
-     * @return true if the code block always exits though its last instruction.
-     */
+    /// Determines whether the given code block is contained, meaning it doesn't contain jumps outside.
+    /// Outside jumps are generated as a result of break, continue or return statements.
+    ///
+    /// @param logicList code block to inspect
+    /// @return true if the code block always exits though its last instruction.
     protected boolean isContained(LogicList logicList) {
         return isContained(logicList.instructions);
     }
@@ -962,15 +908,13 @@ class OptimizationContext {
                 .forEachOrdered(staleVariables::add);
     }
 
-    /**
-     * Inserts a new instruction at given index. The instruction must be assigned an AST context suitable for its
-     * position in the program. An instruction must not be placed into the program twice; when an instruction
-     * truly needs to be duplicated, an independent copy with proper AST context needs to be created.
-     *
-     * @param index where to place the instruction
-     * @param instruction instruction to add
-     * @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
-     */
+    /// Inserts a new instruction at given index. The instruction must be assigned an AST context suitable for its
+    /// position in the program. An instruction must not be placed into the program twice; when an instruction
+    /// truly needs to be duplicated, an independent copy with proper AST context needs to be created.
+    ///
+    /// @param index where to place the instruction
+    /// @param instruction instruction to add
+    /// @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
     protected void insertInstruction(int index, LogicInstruction instruction) {
         for (LogicInstruction logicInstruction : program) {
             if (logicInstruction == instruction) {
@@ -985,34 +929,30 @@ class OptimizationContext {
         insertions += instruction.getRealSize();
     }
 
-    /**
-     * Inserts all instruction in the list to the program, starting at given index.
-     * See {@link #insertInstruction(int, LogicInstruction)}.
-     *
-     * @param index where to place the instructions
-     * @param instructions instructions to add
-     * @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
-     */
+    /// Inserts all instruction in the list to the program, starting at given index.
+    /// See [#insertInstruction(int,LogicInstruction)].
+    ///
+    /// @param index where to place the instructions
+    /// @param instructions instructions to add
+    /// @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
     protected void insertInstructions(int index, LogicList instructions) {
         for (LogicInstruction instruction : instructions) {
             insertInstruction(index++, instruction);
         }
     }
 
-    /**
-     * Replaces an instruction at given index. The replacement instruction should either reuse the AST context
-     * of the original instruction at this position, or use a new one specifically created for the purpose
-     * of the replacement.
-     * <p>
-     * Replacing an instruction with the same instruction isn't supported and causes an OptimizationException
-     * to be thrown.
-     *
-     * @param index index of an instruction to be replaced
-     * @param replacement new instruction for given index
-     * @return the new instruction
-     * @throws MindcodeInternalError when trying to replace an instruction with itself, or when the replaced
-     * instruction is already present elsewhere in the program
-     */
+    /// Replaces an instruction at given index. The replacement instruction should either reuse the AST context
+    /// of the original instruction at this position, or use a new one specifically created for the purpose
+    /// of the replacement.
+    ///
+    /// Replacing an instruction with the same instruction isn't supported and causes an OptimizationException
+    /// to be thrown.
+    ///
+    /// @param index index of an instruction to be replaced
+    /// @param replacement new instruction for given index
+    /// @return the new instruction
+    /// @throws MindcodeInternalError when trying to replace an instruction with itself, or when the replaced
+    /// instruction is already present elsewhere in the program
     protected LogicInstruction replaceInstruction(int index, LogicInstruction replacement) {
         for (LogicInstruction logicInstruction : program) {
             if (logicInstruction == replacement) {
@@ -1035,11 +975,9 @@ class OptimizationContext {
         return replacement;
     }
 
-    /**
-     * Removes an instruction at given index.
-     *
-     * @param index index of an instruction to be removed
-     */
+    /// Removes an instruction at given index.
+    ///
+    /// @param index index of an instruction to be removed
     protected void removeInstruction(int index) {
         iterators.forEach(iterator -> iterator.instructionRemoved(index));
         LogicInstruction instruction = program.remove(index);
@@ -1048,59 +986,51 @@ class OptimizationContext {
         deletions += instruction.getRealSize();
     }
 
-    /**
-     * Inserts a new instruction before given, existing instruction. The new instruction must be assigned
-     * an AST context suitable for its position in the program. An instruction must not be placed into the
-     * program twice; when an instruction truly needs to be duplicated, an independent copy with proper
-     * AST context needs to be created.
-     * <p>
-     * If the reference instruction isn't found in the program, an exception is thrown.
-     *
-     * @param anchor instruction before which to place the new instruction
-     * @param inserted instruction to add
-     */
+    /// Inserts a new instruction before given, existing instruction. The new instruction must be assigned
+    /// an AST context suitable for its position in the program. An instruction must not be placed into the
+    /// program twice; when an instruction truly needs to be duplicated, an independent copy with proper
+    /// AST context needs to be created.
+    ///
+    /// If the reference instruction isn't found in the program, an exception is thrown.
+    ///
+    /// @param anchor instruction before which to place the new instruction
+    /// @param inserted instruction to add
     protected void insertBefore(LogicInstruction anchor, LogicInstruction inserted) {
         insertInstruction(existingInstructionIndex(anchor), inserted);
     }
 
-    /**
-     * Inserts a list of instructions before given, existing instruction.
-     * <p>
-     * If the reference instruction isn't found in the program, an exception is thrown.
-     *
-     * @param anchor instruction before which to place the new instruction
-     * @param instructions instructions to add
-     */
+    /// Inserts a list of instructions before given, existing instruction.
+    ///
+    /// If the reference instruction isn't found in the program, an exception is thrown.
+    ///
+    /// @param anchor instruction before which to place the new instruction
+    /// @param instructions instructions to add
     protected void insertBefore(LogicInstruction anchor, LogicList instructions) {
         insertInstructions(existingInstructionIndex(anchor), instructions);
     }
 
-    /**
-     * Inserts a new instruction after given, existing instruction. The new instruction must be assigned
-     * an AST context suitable for its position in the program. An instruction must not be placed into the
-     * program twice; when an instruction truly needs to be duplicated, an independent copy with proper
-     * AST context needs to be created.
-     * <p>
-     * If the reference instruction isn't found in the program, an exception is thrown.
-     *
-     * @param anchor instruction after which to place the new instruction
-     * @param inserted instruction to add
-     */
+    /// Inserts a new instruction after given, existing instruction. The new instruction must be assigned
+    /// an AST context suitable for its position in the program. An instruction must not be placed into the
+    /// program twice; when an instruction truly needs to be duplicated, an independent copy with proper
+    /// AST context needs to be created.
+    ///
+    /// If the reference instruction isn't found in the program, an exception is thrown.
+    ///
+    /// @param anchor instruction after which to place the new instruction
+    /// @param inserted instruction to add
     protected void insertAfter(LogicInstruction anchor, LogicInstruction inserted) {
         insertInstruction(existingInstructionIndex(anchor) + 1, inserted);
     }
 
-    /**
-     * Replaces a given instruction with a new one. The new instruction should either reuse the AST context
-     * of the original instruction at this position, or use a new one specifically created for the purpose
-     * of the replacement.
-     * <p>
-     * If the original instruction isn't found in the program, an exception is thrown.
-     *
-     * @param original index of an instruction to be replaced
-     * @param replacement new instruction to replace the old one
-     * @return the new instruction
-     */
+    /// Replaces a given instruction with a new one. The new instruction should either reuse the AST context
+    /// of the original instruction at this position, or use a new one specifically created for the purpose
+    /// of the replacement.
+    ///
+    /// If the original instruction isn't found in the program, an exception is thrown.
+    ///
+    /// @param original index of an instruction to be replaced
+    /// @param replacement new instruction to replace the old one
+    /// @return the new instruction
     protected LogicInstruction replaceInstruction(LogicInstruction original, LogicInstruction replacement) {
         return replaceInstruction(existingInstructionIndex(original), replacement);
     }
@@ -1110,40 +1040,32 @@ class OptimizationContext {
     }
 
 
-    /**
-     * Removes an existing instruction from the program. If the instruction isn't found, an exception is thrown.
-     *
-     * @param instruction instruction to be removed
-     */
+    /// Removes an existing instruction from the program. If the instruction isn't found, an exception is thrown.
+    ///
+    /// @param instruction instruction to be removed
     protected void removeInstruction(LogicInstruction instruction) {
         removeInstruction(existingInstructionIndex(instruction));
     }
 
-    /**
-     * Removes an instruction immediately preceding given instruction.
-     * If the given instruction isn't found, an exception is thrown.
-     *
-     * @param anchor the reference instruction
-     */
+    /// Removes an instruction immediately preceding given instruction.
+    /// If the given instruction isn't found, an exception is thrown.
+    ///
+    /// @param anchor the reference instruction
     protected void removePrevious(LogicInstruction anchor) {
         removeInstruction(existingInstructionIndex(anchor) - 1);
     }
 
-    /**
-     * Removes an instruction immediately following given instruction.
-     * If the given instruction isn't found, an exception is thrown.
-     *
-     * @param anchor the reference instruction
-     */
+    /// Removes an instruction immediately following given instruction.
+    /// If the given instruction isn't found, an exception is thrown.
+    ///
+    /// @param anchor the reference instruction
     protected void removeFollowing(LogicInstruction anchor) {
         removeInstruction(existingInstructionIndex(anchor) + 1);
     }
 
-    /**
-     * Removes all instructions matching given predicate.
-     *
-     * @param matcher predicate to match instructions to be removed
-     */
+    /// Removes all instructions matching given predicate.
+    ///
+    /// @param matcher predicate to match instructions to be removed
     protected void removeMatchingInstructions(Predicate<LogicInstruction> matcher) {
         for (int index = 0; index < program.size(); index++) {
             if (matcher.test(program.get(index))) {
@@ -1155,14 +1077,13 @@ class OptimizationContext {
     //</editor-fold>
 
     //<editor-fold desc="Program modification using contexts">
-    /**
-     * Returns a label at the very beginning of the given AST context. If such label doesn't exist, creates it.
-     * Note that the label must belong directly to the given context to be reused, labels belonging to
-     * child contexts aren't considered. Care needs to be taken to provide correct context; for nodes modelled
-     * with subcontexts a subcontext should be always provided.
-     */
+
+    /// Returns a label at the very beginning of the given AST context. If such label doesn't exist, creates it.
+    /// Note that the label must belong directly to the given context to be reused, labels belonging to
+    /// child contexts aren't considered. Care needs to be taken to provide correct context; for nodes modelled
+    /// with subcontexts a subcontext should be always provided.
     protected LogicLabel obtainContextLabel(AstContext astContext) {
-        LogicInstruction instruction = firstInstruction(astContext);
+        LogicInstruction instruction = Objects.requireNonNull(firstInstruction(astContext));
         if (instruction instanceof LabelInstruction label && label.getAstContext() == astContext) {
             return label.getLabel();
         } else {
@@ -1176,55 +1097,45 @@ class OptimizationContext {
     //<editor-fold desc="Logic iterator">
     private final List<LogicIterator> iterators = new ArrayList<>();
 
-    /**
-     * Creates a new LogicIterator positioned at the start of the program.
-     *
-     * @return a new LogicIterator instance
-     */
+    /// Creates a new LogicIterator positioned at the start of the program.
+    ///
+    /// @return a new LogicIterator instance
     protected LogicIterator createIterator() {
         return createIteratorAtIndex(0);
     }
 
-    /**
-     * Creates a new LogicIterator positioned at given index.
-     *
-     * @param index initial position of the iterator
-     * @return a new LogicIterator instance
-     */
+    /// Creates a new LogicIterator positioned at given index.
+    ///
+    /// @param index initial position of the iterator
+    /// @return a new LogicIterator instance
     public LogicIterator createIteratorAtIndex(int index) {
         LogicIterator iterator = new LogicIterator(index);
         iterators.add(iterator);
         return iterator;
     }
 
-    /**
-     * Creates a new LogicIterator positioned at given instruction.
-     *
-     * @param instruction target instruction
-     * @return LogicIterator positioned at given instruction
-     */
+    /// Creates a new LogicIterator positioned at given instruction.
+    ///
+    /// @param instruction target instruction
+    /// @return LogicIterator positioned at given instruction
     protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
         return createIteratorAtIndex(existingInstructionIndex(instruction));
     }
 
-    /**
-     * Creates a new LogicIterator positioned at the beginning of given context.
-     *
-     * @param context target context
-     * @return LogicIterator positioned at the beginning of given context
-     */
+    /// Creates a new LogicIterator positioned at the beginning of given context.
+    ///
+    /// @param context target context
+    /// @return LogicIterator positioned at the beginning of given context
     protected LogicIterator createIteratorAtContext(AstContext context) {
         return createIteratorAtIndex(firstInstructionIndex(context));
     }
 
-    /**
-     * This class is modelled after ListIterator. Provides read-only functions at the moment.
-     * All instances of ListIterator reflect changes to the underlying program (if possible).
-     * When ListIterator points at certain instruction, if keeps pointing to it even though
-     * some instructions are removed or added at positions preceding that of the LogicIterator,
-     * regardless of how the modification was done (i.e. even modifications made though
-     * different LogicIterator instance, or by calling methods).
-     */
+    /// This class is modelled after ListIterator. Provides read-only functions at the moment.
+    /// All instances of ListIterator reflect changes to the underlying program (if possible).
+    /// When ListIterator points at certain instruction, if keeps pointing to it even though
+    /// some instructions are removed or added at positions preceding that of the LogicIterator,
+    /// regardless of how the modification was done (i.e. even modifications made though
+    /// different LogicIterator instance, or by calling methods).
     protected class LogicIterator implements ListIterator<LogicInstruction>, AutoCloseable {
         private int cursor;
         private boolean closed = false;
@@ -1251,39 +1162,31 @@ class OptimizationContext {
             cursor = index;
         }
 
-        /**
-         * Creates an independent LogicIterator instance positioned at the same instruction as this instance.
-         *
-         * @return a new LogicIterator instance
-         */
+        /// Creates an independent LogicIterator instance positioned at the same instruction as this instance.
+        ///
+        /// @return a new LogicIterator instance
         public LogicIterator copy() {
             return createIteratorAtIndex(cursor);
         }
 
-        /**
-         * Returns the instruction at given offset from current position. Both positive and negative offsets are valid,
-         * offset 0 returns the instruction that would be returned by calling {@link #next()}. If the resulting
-         * instruction position lies outside the program range, null is returned and no exception is thrown.
-         *
-         * @param offset offset relative to current position
-         * @return instruction at given offset relative to current position, or null
-         */
+        /// Returns the instruction at given offset from current position. Both positive and negative offsets are valid,
+        /// offset 0 returns the instruction that would be returned by calling [#next()]. If the resulting
+        /// instruction position lies outside the program range, null is returned and no exception is thrown.
+        ///
+        /// @param offset offset relative to current position
+        /// @return instruction at given offset relative to current position, or null
         public LogicInstruction peek(int offset) {
             return instructionAt(cursor + offset);
         }
 
-        /**
-         * @return true if there's a next instruction.
-         */
+        /// @return true if there's a next instruction.
         public boolean hasNext() {
             checkClosed();
             return cursor < program.size();
         }
 
-        /**
-         * @return the next instruction
-         * @throws NoSuchElementException when at the end of the program
-         */
+        /// @return the next instruction
+        /// @throws NoSuchElementException when at the end of the program
         public LogicInstruction next() {
             checkClosed();
             int i = cursor;
@@ -1294,9 +1197,7 @@ class OptimizationContext {
             return program.get(lastRet = i);
         }
 
-        /**
-         * @return the index of the next instruction
-         */
+        /// @return the index of the next instruction
         @Override
         public int nextIndex() {
             checkClosed();
@@ -1307,19 +1208,15 @@ class OptimizationContext {
             return lastRet;
         }
 
-        /**
-         * @return true if there's a previous instruction.
-         */
+        /// @return true if there's a previous instruction.
         @Override
         public boolean hasPrevious() {
             checkClosed();
             return cursor != 0;
         }
 
-        /**
-         * @return the previous instruction
-         * @throws NoSuchElementException when at the start of the program
-         */
+        /// @return the previous instruction
+        /// @throws NoSuchElementException when at the start of the program
         public LogicInstruction previous() {
             checkClosed();
             int i = cursor - 1;
@@ -1330,18 +1227,14 @@ class OptimizationContext {
             return program.get(lastRet = i);
         }
 
-        /**
-         * @return the index of the previous instruction
-         */
+        /// @return the index of the previous instruction
         public int previousIndex() {
             checkClosed();
             return cursor - 1;
         }
 
-        /**
-         * Removes the last returned instruction. If no instruction was returned, or it was already removed,
-         * an exception is thrown.
-         */
+        /// Removes the last returned instruction. If no instruction was returned, or it was already removed,
+        /// an exception is thrown.
         public void remove() {
             checkClosed();
             if (lastRet < 0) {
@@ -1352,12 +1245,10 @@ class OptimizationContext {
             lastRet = -1;
         }
 
-        /**
-         * Replaces the last returned instruction with given instruction. If no instruction was returned,
-         * or it was removed in the meantime, an exception is thrown.
-         *
-         * @param replacement instruction with which to replace the last returned instruction
-         */
+        /// Replaces the last returned instruction with given instruction. If no instruction was returned,
+        /// or it was removed in the meantime, an exception is thrown.
+        ///
+        /// @param replacement instruction with which to replace the last returned instruction
         @Override
         public void set(LogicInstruction replacement) {
             checkClosed();
@@ -1367,17 +1258,15 @@ class OptimizationContext {
             replaceInstruction(lastRet, replacement);
         }
 
-        /**
-         * Inserts the specified instruction into the list.
-         * The instruction is inserted immediately before the element that
-         * would be returned by {@link #next}, if any, and after the element
-         * that would be returned by {@link #previous}, if any.
-         * The new element is inserted before the implicit
-         * cursor: a subsequent call to {@code next} would be unaffected, and a
-         * subsequent call to {@code previous} would return the new element.
-         *
-         * @param instruction the instruction to insert
-         */
+        /// Inserts the specified instruction into the list.
+        /// The instruction is inserted immediately before the element that
+        /// would be returned by [#next], if any, and after the element
+        /// that would be returned by [#previous], if any.
+        /// The new element is inserted before the implicit
+        /// cursor: a subsequent call to `next` would be unaffected, and a
+        /// subsequent call to `previous` would return the new element.
+        ///
+        /// @param instruction the instruction to insert
         @Override
         public void add(LogicInstruction instruction) {
             checkClosed();
@@ -1387,9 +1276,7 @@ class OptimizationContext {
             lastRet = -1;
         }
 
-        /**
-         * Provides a stream of instructions between this and upTo (inclusive at this, exclusive at end)
-         */
+        /// Provides a stream of instructions between this and upTo (inclusive at this, exclusive at end)
         public Stream<LogicInstruction> between(LogicIterator upTo) {
             checkClosed();
             upTo.checkClosed();
@@ -1453,7 +1340,7 @@ class OptimizationContext {
         return false;
     }
 
-    private <T> void forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, T> action,
+    private <T> void forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action,
             List<T> result) {
         if (matcher.test(astContext)) {
             T applied = action.apply(astContext);
@@ -1465,7 +1352,7 @@ class OptimizationContext {
     }
 
 
-    private <T> List<T> forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, T> action) {
+    private <T> List<T> forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
         List<T> result = new ArrayList<>();
         forEachContext(astContext, matcher, action, result);
         return List.copyOf(result);
@@ -1476,7 +1363,7 @@ class OptimizationContext {
     }
 
     protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
-            Function<AstContext, T> action) {
+            Function<AstContext, @Nullable T> action) {
         return forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
     }
 
@@ -1492,7 +1379,7 @@ class OptimizationContext {
         return List.copyOf(contexts);
     }
 
-    protected AstContext context(Predicate<AstContext> matcher) {
+    protected @Nullable AstContext context(Predicate<AstContext> matcher) {
         List<AstContext> contexts = contexts(matcher);
         return switch (contexts.size()) {
             case 0 -> null;
@@ -1501,11 +1388,18 @@ class OptimizationContext {
         };
     }
 
-    /**
-     * Creates a list of AST contexts representing inline functions.
-     *
-     * @return list of inline function node contexts
-     */
+    protected AstContext existingContext(Predicate<AstContext> matcher) {
+        List<AstContext> contexts = contexts(matcher);
+        if (contexts.size() == 1) {
+            return contexts.getFirst();
+        } else {
+            throw new MindcodeInternalError("More than one context found.");
+        }
+    }
+
+    /// Creates a list of AST contexts representing inline functions.
+    ///
+    /// @return list of inline function node contexts
     protected List<AstContext> getInlineFunctions() {
         return contexts(c -> c.subcontextType() == AstSubcontextType.INLINE_CALL);
     }
@@ -1517,16 +1411,16 @@ class OptimizationContext {
 
 
     //<editor-fold desc="Finding instructions by context">
-    protected LogicList contextInstructions(AstContext astContext) {
+    protected LogicList contextInstructions(@Nullable AstContext astContext) {
         return astContext == null ? EMPTY :
                 new LogicList(astContext, List.copyOf(instructionStream().filter(ix -> ix.belongsTo(astContext)).toList()));
     }
 
-    protected Stream<LogicInstruction> contextStream(AstContext astContext) {
+    protected Stream<LogicInstruction> contextStream(@Nullable AstContext astContext) {
         return astContext == null ? Stream.empty() : instructionStream().filter(ix -> ix.belongsTo(astContext));
     }
 
-    protected LogicInstruction firstInstruction(AstContext astContext) {
+    protected @Nullable LogicInstruction firstInstruction(@Nullable AstContext astContext) {
         return firstInstruction(ix -> ix.belongsTo(astContext));
     }
 
@@ -1534,7 +1428,7 @@ class OptimizationContext {
         return firstInstructionIndex(ix -> ix.belongsTo(astContext));
     }
 
-    protected LogicInstruction lastInstruction(AstContext astContext) {
+    protected @Nullable LogicInstruction lastInstruction(AstContext astContext) {
         return lastInstruction(ix -> ix.belongsTo(astContext));
     }
 
@@ -1546,7 +1440,7 @@ class OptimizationContext {
         return instructionAt(firstInstructionIndex(ix -> ix.belongsTo(astContext)) - 1);
     }
 
-    protected LogicInstruction instructionAfter(AstContext astContext) {
+    protected @Nullable LogicInstruction instructionAfter(AstContext astContext) {
         int index = lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1;
         while (index < program.size()
                && (instructionAt(index) instanceof LabelInstruction ix && !isActive(ix.getLabel())
@@ -1564,24 +1458,26 @@ class OptimizationContext {
 
     private final LogicList EMPTY = new LogicList(null, java.util.List.of());
 
-    /**
-     * Class for accessing context instructions in an organized manner.
-     * Is always created from a specific AST context.
-     * <p>
-     * TODO allow modifications to be done to the LogicList - a block of code could be created in LogicList
-     *      and then inserted into the program.
-     */
+    /// Class for accessing context instructions in an organized manner.
+    /// Is always created from a specific AST context.
+    ///
+    /// TODO allow modifications to be done to the LogicList - a block of code could be created in LogicList
+    ///      and then inserted into the program.
     protected class LogicList implements Iterable<LogicInstruction> {
-        private final AstContext astContext;
+        private final @Nullable AstContext astContext;
         private final List<LogicInstruction> instructions;
 
-        private LogicList(AstContext astContext, List<LogicInstruction> instructions) {
+        private LogicList(@Nullable AstContext astContext, List<LogicInstruction> instructions) {
             this.astContext = astContext;
             this.instructions = instructions;
         }
 
-        public AstContext getAstContext() {
+        public @Nullable AstContext getAstContext() {
             return astContext;
+        }
+
+        public AstContext getExistingAstContext() {
+            return Objects.requireNonNull(astContext);
         }
 
         public int size() {
@@ -1600,19 +1496,19 @@ class OptimizationContext {
             return instructions.iterator();
         }
 
-        public LogicInstruction get(int index) {
+        public @Nullable LogicInstruction get(int index) {
             return index >= 0 && index < size() ? instructions.get(index) : null;
         }
 
-        public LogicInstruction getFirst() {
+        public @Nullable LogicInstruction getFirst() {
             return get(0);
         }
 
-        public LogicInstruction getLast() {
+        public @Nullable LogicInstruction getLast() {
             return get(size() - 1);
         }
 
-        public LogicInstruction getFromEnd(int index) {
+        public @Nullable LogicInstruction getFromEnd(int index) {
             return index >= 0 && index < size() ? instructions.get(size() - index - 1) : null;
         }
 
@@ -1622,7 +1518,9 @@ class OptimizationContext {
 
         public int indexOf(Predicate<LogicInstruction> matcher) {
             for (int i = 0; i < size(); i++) {
-                if (matcher.test(get(i))) {
+                LogicInstruction ix = get(i);
+                assert ix != null;
+                if (matcher.test(ix)) {
                     return i;
                 }
             }
@@ -1632,7 +1530,9 @@ class OptimizationContext {
 
         public int lastIndexOf(Predicate<LogicInstruction> matcher) {
             for (int i = size() - 1; i >= 0; i--) {
-                if (matcher.test(get(i))) {
+                LogicInstruction ix = get(i);
+                assert ix != null;
+                if (matcher.test(ix)) {
                     return i;
                 }
             }
@@ -1664,14 +1564,12 @@ class OptimizationContext {
             instructions.forEach(action);
         }
 
-        /**
-         * Duplicates this logic list including the context structure. This <b>must</b> be used when duplicating
-         * existing instructions, as reusing existing contexts might lead to context discontinuity (even when placing
-         * the copy right before or after the original - in this case, encompassing context will be continuous, but
-         * child contexts might not be).
-         *
-         * @return LogicList containing duplicated code.
-         */
+        /// Duplicates this logic list including the context structure. This **must** be used when duplicating
+        /// existing instructions, as reusing existing contexts might lead to context discontinuity (even when placing
+        /// the copy right before or after the original - in this case, encompassing context will be continuous, but
+        /// child contexts might not be).
+        ///
+        /// @return LogicList containing duplicated code.
         public LogicList duplicate() {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
@@ -1690,11 +1588,11 @@ class OptimizationContext {
             return transformToContext(newContext, ix -> ix);
         }
 
-        public LogicList duplicateToContext(AstContext newContext, Predicate<LogicInstruction> matcher) {
+        public @Nullable LogicList duplicateToContext(AstContext newContext, Predicate<LogicInstruction> matcher) {
             return transformToContext(newContext, ix -> matcher.test(ix) ? ix : null);
         }
 
-        public LogicList transformToContext(AstContext newContext, Function<LogicInstruction, LogicInstruction> transformer) {
+        public LogicList transformToContext(AstContext newContext, Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }

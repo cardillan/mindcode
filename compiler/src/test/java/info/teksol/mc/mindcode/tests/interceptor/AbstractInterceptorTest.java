@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolve
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.tests.AbstractProcessorTest;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -32,6 +33,8 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
         }
     }
 
+    private @Nullable RunEvaluator evaluator;
+
     @Override
     protected void testAndEvaluateCode(String title, ExpectedMessages expectedMessages, String code,
             Map<String, MindustryBlock> blocks, RunEvaluator evaluator, Path logFile) {
@@ -39,13 +42,11 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
         super.testAndEvaluateCode(title, expectedMessages, code, blocks, evaluator, logFile);
     }
 
-    private RunEvaluator evaluator;
-
     private class InterceptingDebugPrinter extends DiffDebugPrinter {
         private final MindcodeCompiler compiler;
-        private ProgramVersion previous;
-        private ProgramVersion errant;
-        private String title;
+        private @Nullable ProgramVersion previous;
+        private @Nullable ProgramVersion errant;
+        private @Nullable String title;
 
         public InterceptingDebugPrinter(MindcodeCompiler compiler) {
             super(3);
@@ -64,9 +65,10 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
 
         @Override
-        public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
+        public void registerIteration(@Nullable Optimizer optimizer, String title, List<LogicInstruction> program) {
             if (errant == null) {
                 Processor processor = runProgram(program);
+                assert evaluator != null;
                 if (evaluator.asExpected(false, processor)) {
                     previous = new ProgramVersion(optimizer, title, program);
                 } else {
@@ -81,6 +83,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
         @Override
         public void print(Consumer<String> messageConsumer) {
             if (errant != null) {
+                assert previous != null;
                 printDiff(System.out::println, errant.getTitle(), previous.getProgram(), errant.getProgram());
             }
         }

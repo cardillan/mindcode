@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
 
     @Override
-    protected Class<Optimizer> getTestedClass() {
+    protected @Nullable Class<Optimizer> getTestedClass() {
         return null;
     }
 
@@ -50,8 +51,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(JUMP, var(1001), "equal", var(3), "@sorter"),
                 createInstruction(PRINT, q("\n")),
                 createInstruction(PRINT, ":block"),
-                createInstruction(SENSOR, var(6), ":block", "@type"),
-                createInstruction(JUMP, var(1002), "equal", var(6), "@unloader"),
+                createInstruction(JUMP, var(1002), "equal", var(3), "@unloader"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(JUMP, var(1000), "greaterThan", ":n", "0"),
                 createInstruction(LABEL, var(1002)),

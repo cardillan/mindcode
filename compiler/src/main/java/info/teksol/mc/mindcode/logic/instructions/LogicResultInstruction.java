@@ -1,7 +1,9 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface LogicResultInstruction extends LogicInstruction {
 
     LogicVariable getResult();

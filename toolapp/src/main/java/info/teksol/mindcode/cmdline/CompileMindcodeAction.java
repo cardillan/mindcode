@@ -179,7 +179,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
         if (!isStdInOut(logFile)) {
             List<String> errors = messageLogger.getMessages().stream().map(m -> m.formatMessage(positionFormatter)).toList();
-            writeOutput(logFile, errors, true);
+            writeOutputToFile(logFile, errors);
         }
 
         if (messageLogger.hasErrors()) {

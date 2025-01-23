@@ -11,15 +11,16 @@ import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
-/**
- * This optimizer moves loop invariant code in front of given loop.
- */
+/// This optimizer moves loop invariant code in front of given loop.
+@NullMarked
 class LoopHoisting extends BaseOptimizer {
     public LoopHoisting(OptimizationContext optimizationContext) {
         super(Optimization.LOOP_HOISTING, optimizationContext);
@@ -99,6 +100,7 @@ class LoopHoisting extends BaseOptimizer {
 
             for (AstContext invariant : invariantIfs) {
                 if (!contextStream(invariant).allMatch(NoOpInstruction.class::isInstance)) {
+                    assert invariant.node() != null;
                     AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
                     LogicList original = contextInstructions(invariant);
                     LogicList duplicated = original.duplicateToContext(bodyContext);
@@ -113,7 +115,7 @@ class LoopHoisting extends BaseOptimizer {
         if (improved) count++;
     }
 
-    private Set<LogicArgument> findLoopVariables(AstContext loop, List<AstContext> parts, AstContext inspectedContext) {
+    private Set<LogicArgument> findLoopVariables(AstContext loop, List<AstContext> parts, @Nullable AstContext inspectedContext) {
         Map<LogicVariable, Set<LogicVariable>> dependencies = new HashMap<>();
         parts.stream()
                 .map(this::contextInstructions)
@@ -129,6 +131,7 @@ class LoopHoisting extends BaseOptimizer {
                 .contexts(loop,   ctx -> ctx.subcontextType() == OUT_OF_LINE_CALL || ctx.subcontextType() == RECURSIVE_CALL)
                 .stream()
                 .map(AstContext::function)
+                .filter(Objects::nonNull)
                 .filter(f -> !f.equals(loop.function()))
                 .filter(functionWrites::containsKey)
                 .flatMap(f -> functionWrites.get(f).stream())
@@ -162,9 +165,9 @@ class LoopHoisting extends BaseOptimizer {
                 .collect(Collectors.toSet());
     }
 
-    private void addDependencies(AstContext loop, AstContext inspectedContext,
+    private void addDependencies(AstContext loop, @Nullable AstContext inspectedContext,
             Map<LogicVariable, Set<LogicVariable>> dependencies, LogicInstruction instruction) {
-        if (instructionProcessor.isSafe(instruction) && instructionProcessor.isDeterministic(instruction)
+        if (instruction.isSafe() && instructionProcessor.isDeterministic(instruction)
                 && (loop.executesOnce(instruction) || inspectedContext != null && inspectedContext.executesOnce(instruction))) {
             String prefix = instruction.getAstContext().function() == null
                     ? null : instruction.getAstContext().function().getPrefix();
@@ -211,9 +214,7 @@ class LoopHoisting extends BaseOptimizer {
     }
 
     private boolean isMovable(LogicInstruction instruction) {
-        boolean deterministic = instructionProcessor.isDeterministic(instruction);
-        boolean safe = instructionProcessor.isSafe(instruction);
-        return  deterministic && safe;
+        return  instructionProcessor.isDeterministic(instruction) && instruction.isSafe();
     }
 
     private boolean safeToMove(AstContext loop, LogicInstruction instruction) {

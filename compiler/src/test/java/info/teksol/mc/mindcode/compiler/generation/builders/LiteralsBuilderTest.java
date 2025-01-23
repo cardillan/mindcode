@@ -124,13 +124,15 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = 0;
                         a = 01;
                         a = 123;
+                        a = 4.9e-324;
                         """,
                 createInstruction(SET, ":a", "0b0011"),
                 createInstruction(SET, ":a", "0x0123456789ABC"),
                 createInstruction(SET, ":a", "0xfedcba9876543"),
                 createInstruction(SET, ":a", "0"),
                 createInstruction(SET, ":a", "01"),
-                createInstruction(SET, ":a", "123")
+                createInstruction(SET, ":a", "123"),
+                createInstruction(SET, ":a", "49E-325")
         );
     }
 
@@ -256,5 +258,12 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         var b = 0b1000000000000000000000000000000000000000000000000000000000000000;
                         """
         );
+    }
+
+    @Test
+    void refusesColorLiteralsIn6() {
+        assertGeneratesMessage(
+                "Color literals requires language target 7 or higher.",
+                "#set target = 6; a = %123456;");
     }
 }

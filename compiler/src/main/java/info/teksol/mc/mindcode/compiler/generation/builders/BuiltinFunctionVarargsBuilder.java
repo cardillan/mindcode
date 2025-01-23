@@ -44,6 +44,7 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
         } else {
             assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
             Operation op = Operation.fromMlog(call.getFunctionName());
+            assert op != null;
             assembler.createOp(op, result, arguments.get(0).getValue(assembler), arguments.get(1).getValue(assembler));
             for (int i = 2; i < arguments.size(); i++) {
                 assembler.createOp(op, result, result, arguments.get(i).getValue(assembler));

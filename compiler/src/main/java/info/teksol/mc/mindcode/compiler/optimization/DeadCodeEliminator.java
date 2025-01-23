@@ -6,18 +6,21 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@NullMarked
 class DeadCodeEliminator extends BaseOptimizer {
     private final Set<LogicVariable> reads = new HashSet<>();
     private final Map<LogicVariable, List<LogicInstruction>> writes = new HashMap<>();
     private final Set<LogicVariable> eliminations = new HashSet<>();
 
-    private Set<LogicVariable> unused;
-    private Set<LogicVariable> uninitialized;
+    private @Nullable Set<LogicVariable> unused;
+    private @Nullable Set<LogicVariable> uninitialized;
 
     DeadCodeEliminator(OptimizationContext optimizationContext) {
         super(Optimization.DEAD_CODE_ELIMINATION, optimizationContext);
@@ -56,6 +59,8 @@ class DeadCodeEliminator extends BaseOptimizer {
     public void generateFinalMessages() {
         super.generateFinalMessages();
 
+        assert unused != null;
+        assert uninitialized != null;
         optimizationContext.addUninitializedVariables(uninitialized);
         
         if (unused.stream().anyMatch(v -> !v.isOptional())) {

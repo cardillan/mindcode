@@ -10,6 +10,8 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -22,59 +24,46 @@ import static info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordina
 import static info.teksol.mc.util.CollectionUtils.in;
 import static info.teksol.mc.util.CollectionUtils.resultIn;
 
+@NullMarked
 class DataFlowOptimizer extends BaseOptimizer {
-    /**
-     * Stores possible replacement values to each input argument of a replaceable instruction.
-     */
+    /// Stores possible replacement values to each input argument of a replaceable instruction.
     private final Map<LogicInstruction, Map<LogicVariable, LogicValue>> replacements = new IdentityHashMap<>();
 
-    /**
-     * Set of instructions whose sole purpose is to set value to some variable. If the variable isn't subsequently
-     * read, the instruction is useless and can be removed.
-     */
+    /// Set of instructions whose sole purpose is to set value to some variable. If the variable isn't subsequently
+    /// read, the instruction is useless and can be removed.
     final Set<LogicInstruction> defines = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    /**
-     * Set of variable producing instructions that were actually used in the program and need to be kept.
-     */
+    /// Set of variable producing instructions that were actually used in the program and need to be kept.
     final Set<LogicInstruction> keep = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    /**
-     * When an END instruction is encountered, the optimizer accumulates current variable definitions here. Definitions
-     * from this structure are kept for uninitialized variables, so that any values written before the END instruction
-     * executions are preserved.
-     * <p/>
-     * Only main variables are stored here. Global variable writes are always preserved, and local variables
-     * generally do not keep their value between function calls.
-     */
+    /// When an END instruction is encountered, the optimizer accumulates current variable definitions here. Definitions
+    /// from this structure are kept for uninitialized variables, so that any values written before the END instruction
+    /// executions are preserved.
+    ///
+    /// Only main variables are stored here. Global variable writes are always preserved, and local variables
+    /// generally do not keep their value between function calls.
     final Map<LogicVariable, List<LogicInstruction>> orphans = new HashMap<>();
 
-    /** Exceptions to the keep set */
+    /// Exceptions to the keep set
     private final Set<LogicInstruction> useless = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    /**
-     * Set of potentially uninitialized variables. In at least one branch the variable can be read without
-     * being assigned a value first.
-     */
+    /// Set of potentially uninitialized variables. In at least one branch the variable can be read without
+    /// being assigned a value first.
     private final Set<LogicVariable> uninitialized = new HashSet<>();
 
-    /**
-     * Instructions referencing each variable. References are accumulated (not cleared during single pass).
-     */
+    /// Instructions referencing each variable. References are accumulated (not cleared during single pass).
     final Map<LogicVariable, List<LogicInstruction>> references = new HashMap<>();
 
-    /**
-     * When a jump outside its context is encountered, current variable state is copied and assigned to the target
-     * label. Upon encountering the target label all stored states are merged and flushed.
-     * Unresolved label indicates a problem in the data flow analysis -- this would happen if the jump targeted an
-     * earlier label. LogicInstructionGenerator should never generate such code.
-     */
+    /// When a jump outside its context is encountered, current variable state is copied and assigned to the target
+    /// label. Upon encountering the target label all stored states are merged and flushed.
+    /// Unresolved label indicates a problem in the data flow analysis -- this would happen if the jump targeted an
+    /// earlier label. LogicInstructionGenerator should never generate such code.
     private final Map<LogicLabel, List<VariableStates>> labelStates = new HashMap<>();
 
-    /** List of variable states at each point of a call to a function that may invoke an end instruction. */
+    /// List of variable states at each point of a call to a function that may invoke an end instruction.
     private final List<VariableStates> functionEndStates = new ArrayList<>();
 
-    /** An instance used for variable states processing */
+    /// An instance used for variable states processing
     private final DataFlowVariableStates dataFlowVariableStates;
 
     public DataFlowOptimizer(OptimizationContext optimizationContext) {
@@ -223,16 +212,14 @@ class DataFlowOptimizer extends BaseOptimizer {
                 .forEach(optimizationContext::addUninitializedVariable);
     }
 
-    private BitSet unreachables;
+    private @Nullable BitSet unreachables;
 
-    /** Iterator pointing at the processed instruction */
-    private LogicIterator iterator;
+    /// Iterator pointing at the processed instruction
+    private @Nullable LogicIterator iterator;
 
-    /**
-     * Processes a top context, either the main body context, or an out-of-line function context.
-     *
-     * @param context context to process
-     */
+    /// Processes a top context, either the main body context, or an out-of-line function context.
+    ///
+    /// @param context context to process
     private void processTopContext(AstContext context) {
         if (firstInstructionIndex(context) < 0) {
             // Empty top context. Can happen when using constants from imported libraries.
@@ -242,6 +229,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.isFunction()) {
             MindcodeFunction function = context.function();
+            assert function != null;
             // All global variables and all input parameters of a function are initialized when the function is called.
             optimizationContext.getFunctionReads(function).stream()
                     .filter(LogicVariable::isGlobalVariable)
@@ -285,6 +273,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         if (context.isFunction()) {
             // Changes to global variables outside of function are needed
+            assert context.function() != null;
             optimizationContext.getFunctionWrites(context.function()).stream()
                     .filter(LogicVariable::isGlobalVariable)
                     .forEach(v -> finalVariableStates.valueRead(v, null, false, true));
@@ -301,16 +290,14 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    /**
-     * Recursively processes contexts and their instructions. Jumps outside local context are specifically handled.
-     * Context to be processed is either the same as the local context, or a direct child of the local context.
-     *
-     * @param localContext       context which is considered local (jumps outside local context handling)
-     * @param context            context to be processed
-     * @param variableStates     variable states at the beginning of the context
-     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-     * @return the resulting variable states
-     */
+    /// Recursively processes contexts and their instructions. Jumps outside local context are specifically handled.
+    /// Context to be processed is either the same as the local context, or a direct child of the local context.
+    ///
+    /// @param localContext       context which is considered local (jumps outside local context handling)
+    /// @param context            context to be processed
+    /// @param variableStates     variable states at the beginning of the context
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+    /// @return the resulting variable states
     private VariableStates processContext(AstContext localContext, AstContext context, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
@@ -336,16 +323,16 @@ class DataFlowOptimizer extends BaseOptimizer {
         return result;
     }
 
-    /**
-     * Specialized processing of a LOOP context.
-     *
-     * @param localContext       context to process (must be a LOOP context)
-     * @param variableStates     variable states at the beginning of the context
-     * @param modifyInstructions true if instructions may be modified in this run based on known variable states.
-     *                           Set to true when doing the second pass through current loop
-     * @return the resulting variable states
-     */
+    /// Specialized processing of a LOOP context.
+    ///
+    /// @param localContext       context to process (must be a LOOP context)
+    /// @param variableStates     variable states at the beginning of the context
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states.
+    ///                           Set to true when doing the second pass through current loop
+    /// @return the resulting variable states
     private VariableStates processLoopContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+        assert iterator != null;
+
         // Note: this method processes contexts in unnatural order and uses iterator.setNextIndex to keep
         // the iterator position synchronized with what is expected.
         List<AstContext> children = new ArrayList<>(localContext.children());
@@ -419,19 +406,20 @@ class DataFlowOptimizer extends BaseOptimizer {
             boolean openingCondition = children.stream()
                     .map(AstContext::subcontextType)
                     .filter(in(BODY, CONDITION))
-                    .findFirst().get() == CONDITION;
+                    .findFirst().orElseThrow() == CONDITION;
 
             if (openingCondition) {
                 // Evaluate the condition
                 AstContext conditionContext = children.stream()
                         .filter(resultIn(AstContext::subcontextType, CONDITION))
-                        .findFirst().get();
+                        .findFirst().orElseThrow();
                 OptimizationContext.LogicList condition = contextInstructions(conditionContext);
                 long jumps = condition.stream().filter(ix -> ix instanceof JumpInstruction).count();
                 LogicInstruction last = condition.getLast();
                 if (jumps == 0) {
                     // There are no jumps in the context
-                    propagateUninitialized = false;
+                    // Value is already assigned:
+                    // propagateUninitialized = false;
                 } else if (jumps == 1 && last instanceof JumpInstruction jump) {
                     // If the jump evaluates to false, it means it doesn't skip over the loop body
                     LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
@@ -481,14 +469,12 @@ class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
-    /**
-     * Specialized processing of an IF context.
-     *
-     * @param localContext       context to process (must be an IF context)
-     * @param variableStates     variable states at the beginning of the context
-     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-     * @return the resulting variable states
-     */
+    /// Specialized processing of an IF context.
+    ///
+    /// @param localContext       context to process (must be an IF context)
+    /// @param variableStates     variable states at the beginning of the context
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+    /// @return the resulting variable states
     private VariableStates processIfContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
         Iterator<AstContext> children = localContext.children().iterator();
         AstContext condition = null;
@@ -582,14 +568,12 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    /**
-     * Specialized processing of a CASE context.
-     *
-     * @param localContext       context to process (must be an IF context)
-     * @param variableStates     variable states at the beginning of the context
-     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-     * @return the resulting variable states
-     */
+    /// Specialized processing of a CASE context.
+    ///
+    /// @param localContext       context to process (must be an IF context)
+    /// @param variableStates     variable states at the beginning of the context
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+    /// @return the resulting variable states
     private VariableStates processCaseContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
         List<AstContext> children = localContext.children();
         Iterator<AstContext> iterator = children.iterator();
@@ -637,19 +621,19 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    /**
-     * Processes instructions inside a given context. Jumps outside local context are processed by associating
-     * current variable state with target label. Local context might be the context being processed, or a parent
-     * context when jumps within that context are handled specifically (such as by processIfContext).
-     *
-     * @param localContext       context which is considered local
-     * @param context            context to process
-     * @param variableStates     variable states instance to update
-     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-     * @return the resulting variable states
-     */
+    /// Processes instructions inside a given context. Jumps outside local context are processed by associating
+    /// current variable state with target label. Local context might be the context being processed, or a parent
+    /// context when jumps within that context are handled specifically (such as by processIfContext).
+    ///
+    /// @param localContext       context which is considered local
+    /// @param context            context to process
+    /// @param variableStates     variable states instance to update
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+    /// @return the resulting variable states
     private VariableStates processDefaultContext(AstContext localContext, AstContext context,
             VariableStates variableStates, boolean modifyInstructions) {
+        Objects.requireNonNull(iterator);
+        Objects.requireNonNull(unreachables);
         Objects.requireNonNull(variableStates);
 
         while (iterator.hasNext()) {
@@ -685,7 +669,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                     indent(() -> tmp.print("After processing instruction"));
                 }
             } else {
-                AstContext childContext = context.findDirectChild(instruction.getAstContext());
+                AstContext childContext = Objects.requireNonNull(context.findDirectChild(instruction.getAstContext()));
                 int position = iterator.currentIndex();
                 variableStates = processContext(context, childContext, variableStates, modifyInstructions);
                 if (iterator.currentIndex() == position) {
@@ -697,18 +681,16 @@ class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
-    /**
-     * Updates given variable states associated with a given label instruction to include all states deposited on the
-     * label by all nonlocal jumps targeting that label.
-     * <p>
-     * Note: Data Flow Optimizer only expects nonlocal jumps to target labels that are found later in the code than
-     * the jump. This is sufficient at the moment, as all nonlocal jumps are only generated by break, continue or
-     * return statements and adhere to the requirement.
-     *
-     * @param variableStates    current variable states
-     * @param label             label to process
-     * @return given variable states merged with all variable states stored at label
-     */
+    /// Updates given variable states associated with a given label instruction to include all states deposited on the
+    /// label by all nonlocal jumps targeting that label.
+    ///
+    /// Note: Data Flow Optimizer only expects nonlocal jumps to target labels that are found later in the code than
+    /// the jump. This is sufficient at the moment, as all nonlocal jumps are only generated by break, continue or
+    /// return statements and adhere to the requirement.
+    ///
+    /// @param variableStates    current variable states
+    /// @param label             label to process
+    /// @return given variable states merged with all variable states stored at label
     private VariableStates resolveLabel(VariableStates variableStates, LogicLabel label) {
         List<VariableStates> states = labelStates.remove(label);
         if (states != null) {
@@ -721,15 +703,13 @@ class DataFlowOptimizer extends BaseOptimizer {
 
     private int counter = 0;
 
-    /**
-     * Processes a single instruction.
-     *
-     * @param variableStates        variable states before executing the instruction
-     * @param instruction           instruction to process
-     * @param modifyInstructions    true if instructions may be modified in this run based on known variable states
-     * @param reachable             true if the instruction being processed is reachable
-     * @return variable states after executing the instruction
-     */
+    /// Processes a single instruction.
+    ///
+    /// @param variableStates        variable states before executing the instruction
+    /// @param instruction           instruction to process
+    /// @param modifyInstructions    true if instructions may be modified in this run based on known variable states
+    /// @param reachable             true if the instruction being processed is reachable
+    /// @return variable states after executing the instruction
     private VariableStates processInstruction(VariableStates variableStates, LogicInstruction instruction,
             boolean modifyInstructions, boolean reachable) {
         Objects.requireNonNull(variableStates);
@@ -821,7 +801,7 @@ class DataFlowOptimizer extends BaseOptimizer {
     }
 
     // Try to evaluate the instruction
-    private LogicValue evaluateInstruction(LogicInstruction instruction, Map<LogicVariable, LogicValue> valueReplacements) {
+    private @Nullable LogicValue evaluateInstruction(LogicInstruction instruction, Map<LogicVariable, LogicValue> valueReplacements) {
         return switch (instruction) {
             case SetInstruction set when set.getValue() instanceof LogicLiteral literal -> literal;
             case SetInstruction set when set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile() -> builtIn;
@@ -841,14 +821,12 @@ class DataFlowOptimizer extends BaseOptimizer {
         uninitialized.add(variable);
     }
 
-    /**
-     * Determines whether it is possible to eliminate an assignment to a variable by given instruction. Elimination
-     * is generally allowed except cases requiring special protection.
-     *
-     * @param instruction instruction setting the variable
-     * @param variable    variable being inspected
-     * @return true if this assignment can be safely eliminated
-     */
+    /// Determines whether it is possible to eliminate an assignment to a variable by given instruction. Elimination
+    /// is generally allowed except cases requiring special protection.
+    ///
+    /// @param instruction instruction setting the variable
+    /// @param variable    variable being inspected
+    /// @return true if this assignment can be safely eliminated
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
         if (variable.isVolatile()) return false;
 
@@ -867,16 +845,14 @@ class DataFlowOptimizer extends BaseOptimizer {
         };
     }
 
-    /**
-     * Tries to evaluate an OP instruction down to a constant value. Replaces variable arguments to the instruction
-     * with their inferred values if possible.
-     *
-     * @param op                instruction to evaluate
-     * @param valueReplacements value replacements to use
-     * @return a LogicLiteral representing the determined resulting value of the instruction,
-     * or null if the instruction cannot be evaluated
-     */
-    private LogicLiteral evaluateOpInstruction(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements) {
+    /// Tries to evaluate an OP instruction down to a constant value. Replaces variable arguments to the instruction
+    /// with their inferred values if possible.
+    ///
+    /// @param op                instruction to evaluate
+    /// @param valueReplacements value replacements to use
+    /// @return a LogicLiteral representing the determined resulting value of the instruction,
+    ///         or null if the instruction cannot be evaluated
+    private @Nullable LogicLiteral evaluateOpInstruction(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements) {
         OpInstruction op1 = tryReplace(op, valueReplacements, op::getX, op::withX);
         OpInstruction op2 = op1.hasSecondOperand()
                 ? tryReplace(op1, valueReplacements, op1::getY, op1::withY)
@@ -885,15 +861,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         return evaluateOpInstruction(op2);
     }
 
-    /**
-     * Replaces a variable argument to the instruction with its inferred values if possible.
-     *
-     * @param op                instruction to be modified
-     * @param valueReplacements value replacements to use
-     * @param getArgument       lambda expression to extract the desired argument from the instruction
-     * @param replaceArgument   lambda to replace the desired argument with a new value
-     * @return a new, updated instruction, or the original one if no replacement is possible
-     */
+    /// Replaces a variable argument to the instruction with its inferred values if possible.
+    ///
+    /// @param op                instruction to be modified
+    /// @param valueReplacements value replacements to use
+    /// @param getArgument       lambda expression to extract the desired argument from the instruction
+    /// @param replaceArgument   lambda to replace the desired argument with a new value
+    /// @return a new, updated instruction, or the original one if no replacement is possible
     private OpInstruction tryReplace(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements,
             Supplier<LogicValue> getArgument, Function<LogicValue, OpInstruction> replaceArgument) {
         LogicValue value = getArgument.get();
@@ -905,18 +879,16 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    /**
-     * Helper class to manage variable states of branching statements (if, switched case).
-     */
+    /// Helper class to manage variable states of branching statements (if, switched case).
     private class BranchedVariableStates {
-        /** The initial state of the statement, before branching. Set by constructor. */
+        /// The initial state of the statement, before branching. Set by constructor.
         private final VariableStates initial;
 
-        /** State of the currently processed branch. Null if no branch was processed. */
-        private VariableStates current;
+        /// State of the currently processed branch. Null if no branch was processed.
+        private @Nullable VariableStates current;
 
-        /** Final states of all branches merged together. */
-        private VariableStates merged;
+        /// Final states of all branches merged together.
+        private @Nullable VariableStates merged;
 
         private boolean wasReachable;
 
@@ -925,12 +897,10 @@ class DataFlowOptimizer extends BaseOptimizer {
             trace(() -> "*** Creating branch states for local context cx#" + localContext.id);
         }
 
-        /**
-         * Called when a body of a new branch is encountered. Closes the previous branch (if any) by merging it into
-         * the final states, and then creates variable states for the new branch by copying the initial state.
-         *
-         * @param reachable true if the context is reachable, false otherwise
-         */
+        /// Called when a body of a new branch is encountered. Closes the previous branch (if any) by merging it into
+        /// the final states, and then creates variable states for the new branch by copying the initial state.
+        ///
+        /// @param reachable true if the context is reachable, false otherwise
         private void newBranch(AstContext localContext, String caller, boolean reachable) {
             wasReachable |= reachable;
             if (current != null) {
@@ -939,23 +909,19 @@ class DataFlowOptimizer extends BaseOptimizer {
             current = initial.copy("Local context cx#" + localContext.id + ": new conditional branch " + caller + (reachable ? "" : " (unreachable)"), reachable);
         }
 
-        /**
-         * Processes the given context as part of the current branch.
-         *
-         * @param localContext       context which is considered local
-         * @param context            context to be processed
-         * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-         */
+        /// Processes the given context as part of the current branch.
+        ///
+        /// @param localContext       context which is considered local
+        /// @param context            context to be processed
+        /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
         private void processContext(AstContext localContext, AstContext context, boolean modifyInstructions) {
             current = DataFlowOptimizer.this.processContext(localContext, context,
                     current == null ? initial.copy("new conditional branch") : current, modifyInstructions);
         }
 
-        /**
-         * Returns variable states obtained by merging final states of all processed branches together.
-         *
-         * @return final variable states of the branched expression
-         */
+        /// Returns variable states obtained by merging final states of all processed branches together.
+        ///
+        /// @return final variable states of the branched expression
         private VariableStates getFinalStates(AstContext localContext) {
             trace(() -> "Getting final states (local context cx#" + localContext.id + ")");
             if (current == null) {
@@ -969,49 +935,37 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        /**
-         * Returns variable states corresponding to the currently active branch.
-         *
-         * @return final variable states of the branch that was just processed
-         */
+        /// Returns variable states corresponding to the currently active branch.
+        ///
+        /// @return final variable states of the branch that was just processed
         private VariableStates getCurrentStates() {
             return current == null ? initial : current;
         }
     }
 
-    /**
-     * Helper class to manage variable states of branching case statements.
-     */
+    /// Helper class to manage variable states of branching case statements.
     private class CasedVariableStates {
-        /**
-         * Variable state matching the flow that enters the case expression. Each condition is processed on this flow.
-         */
+        /// Variable state matching the flow that enters the case expression. Each condition is processed on this flow.
         private VariableStates incoming;
 
-        /**
-         * Variable state which accumulates all the conditions that occur before a body, and then it processes
-         * the body and flow contexts. ELSE context also creates a body. A separate instance is created before
-         * each body by combining the exit states of conditions leading to that body.
-         */
-        private VariableStates body;
+        /// Variable state which accumulates all the conditions that occur before a body, and then it processes
+        /// the body and flow contexts. ELSE context also creates a body. A separate instance is created before
+        /// each body by combining the exit states of conditions leading to that body.
+        private @Nullable VariableStates body;
 
-        /**
-         * Variable state which combines all the exit states of individual bodies. Represents the final state
-         * of the entire case statement.
-         */
-        private VariableStates outgoing;
+        /// Variable state which combines all the exit states of individual bodies. Represents the final state
+        /// of the entire case statement.
+        private @Nullable VariableStates outgoing;
 
         private CasedVariableStates(VariableStates incoming) {
             this.incoming = incoming;
         }
 
-        /**
-         * Processes the given case statement subcontext.
-         *
-         * @param localContext       context which is considered local
-         * @param context            context to be processed
-         * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-         */
+        /// Processes the given case statement subcontext.
+        ///
+        /// @param localContext       context which is considered local
+        /// @param context            context to be processed
+        /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
         private void processContext(AstContext localContext, AstContext context, boolean modifyInstructions) {
             switch (context.subcontextType()) {
                 case CONDITION -> {
@@ -1056,9 +1010,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        /**
-         * @return outgoing variable states of the case expression
-         */
+        /// @return outgoing variable states of the case expression
         private VariableStates getOutgoingStates() {
             trace(() -> "Getting final states");
             if (outgoing == null || body != null) {

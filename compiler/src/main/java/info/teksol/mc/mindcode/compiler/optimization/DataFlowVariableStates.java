@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -410,7 +411,7 @@ class DataFlowVariableStates {
          * @param variable variable to test
          * @return known value of the variable
          */
-        public VariableValue findVariableValue(LogicValue variable) {
+        public @Nullable VariableValue findVariableValue(LogicValue variable) {
             return variable instanceof LogicVariable v && !stored.contains(v) ? values.get(v) : null;
         }
 

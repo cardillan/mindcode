@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
@@ -11,6 +12,8 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -26,6 +29,7 @@ import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static info.teksol.mc.util.CollectionUtils.indexOf;
 
+@NullMarked
 public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
@@ -179,6 +183,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 List<LogicArgument> args = new ArrayList<>(ix.getArgs());
                 args.set(0, operation);
                 List<InstructionParameterType> params = getParameters(opcode, args);
+                assert params != null;
                 return new OpInstruction(ix.astContext, args, params);
             }
             return createInstructionUnchecked(instruction.getAstContext(), Opcode.fromOpcode(ix.getMlogOpcode()), instruction.getArgs());
@@ -187,8 +192,10 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     private LogicInstruction createGenericInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments,
-            List<InstructionParameterType> params) {
-        List<InstructionParameterType> outputs = params.stream().filter(InstructionParameterType::isOutput).toList();
+            @Nullable List<InstructionParameterType> params) {
+        List<InstructionParameterType> outputs = params == null ? List.of()
+                : params.stream().filter(InstructionParameterType::isOutput).toList();
+
         if (outputs.size() == 1 && outputs.getFirst() == InstructionParameterType.RESULT) {
             return new BaseResultInstruction(astContext, opcode, arguments, params);
         } else {
@@ -271,70 +278,63 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
     }
 
+    private static final EnumMap<Opcode, Integer> instructionSizes = new EnumMap<>(Opcode.class);
+
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {
         if (instruction instanceof CustomInstruction ix) {
             return ix.getArgs().size();
         } else {
-            // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
-            // TODO precompute and cache per opcode
-            return variantsByOpcode.get(instruction.getOpcode()).stream()
-                    .mapToInt(v -> v.namedParameters().size()).max().orElse(0)
-                    + instruction.getOpcode().getAdditionalPrintArguments();
+            return instructionSizes.computeIfAbsent(instruction.getOpcode(), this::computePrintArgumentCount);
         }
     }
 
+    private int computePrintArgumentCount(Opcode opcode) {
+        // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
+        return variantsByOpcode.get(opcode).stream().mapToInt(v -> v.namedParameters().size()).max().orElseThrow()
+               + opcode.getAdditionalPrintArguments();
+    }
+
+    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP);
+    private static final Set<String> CONSTANT_PROPERTIES = Set.of("@size", "@speed", "@type", "@id");
+
     @Override
     public boolean isDeterministic(LogicInstruction instruction) {
-        return switch (instruction.getOpcode()) {
-            case OP -> {
-                OpInstruction ix = (OpInstruction) instruction;
-                yield ix.getOperation().isDeterministic() && nonvolatileArguments(ix);
-            }
-            case SENSOR -> {
-                // TODO Activate after support for volatile variable declaration
-                yield false;
-//                SensorInstruction ix = (SensorInstruction) instruction;
-//                yield nonvolatileArguments(instruction)
-//                        && ix.getProperty() instanceof LogicBuiltIn lbi
-//                        && CONSTANT_PROPERTIES.contains(lbi.getName());
-            }
-            case SET, PACKCOLOR, LOOKUP -> nonvolatileArguments(instruction);
-            case NOOP -> true;
-            default -> false;
+        return DETERMINISTIC_OPCODES.contains(instruction.getOpcode())
+               && hasDeterministicArguments(instruction)
+               && hasNonvolatileArguments(instruction);
+    }
+
+    private boolean hasDeterministicArguments(LogicInstruction instruction) {
+        return switch (instruction) {
+            case OpInstruction ix -> ix.getOperation().isDeterministic();
+            case SensorInstruction ix -> CONSTANT_PROPERTIES.contains(ix.getProperty().toMlog());
+            default -> true;
         };
     }
 
-    private static final Set<String> CONSTANT_PROPERTIES = Set.of("size", "speed", "type", "id");
-
-    private boolean nonvolatileArguments(LogicInstruction instruction) {
-        // TODO Remove the exception for BLOCK after support for volatile variable declaration
+    private boolean hasNonvolatileArguments(LogicInstruction instruction) {
         return instruction.inputArgumentsStream().noneMatch(v -> v.getType() == ArgumentType.BLOCK || v.isVolatile());
     }
 
     @Override
-    public boolean isSafe(LogicInstruction instruction) {
-        // TODO More instructions might be safe
-        return switch (instruction.getOpcode()) {
-            case READ, GETLINK, RADAR, SENSOR, SET, OP, LOOKUP, PACKCOLOR, NOOP -> true;
-            default -> false;
-        };
+    public boolean isSupported(Opcode opcode) {
+        return variantsByOpcode.containsKey(opcode);
     }
 
+    @Override
     public boolean isSupported(Opcode opcode, List<LogicArgument> arguments) {
         return getOpcodeVariant(opcode, arguments) != null;
     }
 
-    /**
-     * Returns true if the given value is allowed to be used in place of the given argument.
-     * For input and output arguments, anything is permissible at the moment (it could be a variable name, a literal,
-     * or in some cases a @constant), but it might be possible to implement more specific checks in the future.
-     * For other arguments, only concrete, version-specific values are permissible.
-     *
-     * @param type type of the argument
-     * @param value value assigned to the argument
-     * @return true if the value is valid for given argument type
-     */
+    /// Returns true if the given value is allowed to be used in place of the given argument.
+    /// For input and output arguments, anything is permissible at the moment (it could be a variable name, a literal,
+    /// or in some cases a @constant), but it might be possible to implement more specific checks in the future.
+    /// For other arguments, only concrete, version-specific values are permissible.
+    ///
+    /// @param type type of the argument
+    /// @param value value assigned to the argument
+    /// @return true if the value is valid for given argument type
     private boolean isValid(InstructionParameterType type, LogicArgument value) {
         if (type.restrictValues()) {
             Collection<String> values = validArgumentValues.get(type);
@@ -344,7 +344,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         }
     }
 
-    protected OpcodeVariant getOpcodeVariant(Opcode opcode, List<? extends LogicArgument> arguments) {
+    protected @Nullable OpcodeVariant getOpcodeVariant(Opcode opcode, List<? extends LogicArgument> arguments) {
         List<OpcodeVariant> variants = variantsByOpcode.get(opcode);
         if (variants == null) {
             return null;
@@ -359,15 +359,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         }
     }
 
-    /**
-     * Returns list of argument types based on instruction opcode and instruction variant. The variant of the
-     * instruction is determined by inspecting its arguments.
-     *
-     * @param opcode opcode of the instruction
-     * @param arguments arguments to the instruction
-     * @return list of types of given arguments
-     */
-    public List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments) {
+    /// Returns list of argument types based on instruction opcode and instruction variant. The variant of the
+    /// instruction is determined by inspecting its arguments.
+    ///
+    /// @param opcode opcode of the instruction
+    /// @param arguments arguments to the instruction
+    /// @return list of types of given arguments
+    public @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, arguments);
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
@@ -498,9 +496,15 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         }
     }
 
+    private static final double COLOR_LITERAL_MAX_VALUE = Color.parseColor("%FFFFFFFF");
+
     @Override
-    public Optional<String> mlogFormat(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss) {
-        return mlogFormat(sourcePosition, value, String.valueOf(value), allowPrecisionLoss);
+    public Optional<LogicLiteral> createLiteral(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss) {
+        if (isSupported(PACKCOLOR) && value > 0 && value <= COLOR_LITERAL_MAX_VALUE) {
+            return Optional.of(LogicColor.create(sourcePosition, Color.unpack(value)));
+        }
+        return mlogFormat(sourcePosition, value, String.valueOf(value), allowPrecisionLoss)
+                .map(literal -> LogicNumber.create(this, sourcePosition, literal));
     }
 
     protected abstract Optional<String> mlogFormat(SourcePosition sourcePosition, double value, String literal, boolean allowPrecisionLoss);

@@ -15,10 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong compile-time and emulator evaluation of `asin`, `acos` and `atan` functions ([#209](https://github.com/cardillan/mindcode/issues/209)).
 * Fixed compile-time evaluation potentially processing functions not available in current target. The only affected target was 6, where non-existent functions `asin`, `acos` and `atan` could be compile-time evaluated instead of reported as non-existent.  
 
+### Added
+
+* Added support for encoding results of compile-time expressions as color literals.
+
 ### Changed
 
 * More precise calculations of optimization benefits in loop unrolling and call inlining.
-* 
+* The `sensor` instruction is considered deterministic if a constant property of a non-volatile value, which is also not a linked variable, is being queried.  
 
 ### Miscellaneous
 

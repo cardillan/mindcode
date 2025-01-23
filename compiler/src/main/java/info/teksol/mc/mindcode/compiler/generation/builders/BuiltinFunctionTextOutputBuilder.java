@@ -30,7 +30,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
     }
 
     public ValueStore handlePrintf(AstFunctionCall call) {
-        if (!processor.isSupported(Opcode.FORMAT, List.of(LogicNull.NULL))) {
+        if (!processor.isSupported(Opcode.FORMAT)) {
             error("The printf function requires language target 8 or higher.");
             return LogicVoid.VOID;
         }

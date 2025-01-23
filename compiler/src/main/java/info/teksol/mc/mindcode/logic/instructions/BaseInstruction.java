@@ -8,17 +8,20 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.BitSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+@NullMarked
 public class BaseInstruction implements LogicInstruction {
     private final Opcode opcode;
     private final List<LogicArgument> args;
-    private final List<InstructionParameterType> params;
-    private final List<TypedArgument> typedArguments;
+    private final @Nullable List<InstructionParameterType> params;
+    private final @Nullable List<TypedArgument> typedArguments;
     private final int inputs;
     private final int outputs;
 
@@ -26,7 +29,7 @@ public class BaseInstruction implements LogicInstruction {
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
 
-    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         this.astContext = Objects.requireNonNull(astContext);
         this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
@@ -56,7 +59,7 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     protected void validate() {
-        if (params != null) {
+        if (typedArguments != null) {
             typedArguments.forEach(arg -> {
                 if (arg.isOutput() && !arg.argument().isWritable() && arg.argument().getType() != ArgumentType.UNSPECIFIED) {
                     throw new MindcodeInternalError("Argument " + arg.argument().toMlog() + " is not writable in " + toMlog());
@@ -95,16 +98,16 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     @Override
-    public List<InstructionParameterType> getArgumentTypes() {
+    public @Nullable List<InstructionParameterType> getArgumentTypes() {
         return params;
     }
 
     @Override
     public InstructionParameterType getArgumentType(int index) {
-        return params.get(index);
+        return Objects.requireNonNull(params).get(index);
     }
 
-    public List<TypedArgument> getTypedArguments() {
+    public @Nullable List<TypedArgument> getTypedArguments() {
         return typedArguments;
     }
 
@@ -122,7 +125,7 @@ public class BaseInstruction implements LogicInstruction {
     private int topContext = 0;
 
     @Override
-    public boolean belongsTo(AstContext astContext) {
+    public boolean belongsTo(@Nullable AstContext astContext) {
         if (false) {
             if (topContext < AstContext.getCurrentCounter()) {
                 topContext = AstContext.getCurrentCounter();
@@ -138,11 +141,11 @@ public class BaseInstruction implements LogicInstruction {
         }
     }
 
-    public AstContext findContextOfType(AstContextType contextType) {
+    public @Nullable AstContext findContextOfType(AstContextType contextType) {
         return astContext.findContextOfType(contextType);
     }
 
-    public AstContext findTopContextOfType(AstContextType contextType) {
+    public @Nullable AstContext findTopContextOfType(AstContextType contextType) {
         return astContext.findTopContextOfType(contextType);
     }
 

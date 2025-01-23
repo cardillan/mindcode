@@ -124,8 +124,8 @@ public final class AstContext {
      * @param other context to match
      * @return true if this context belongs to the other context
      */
-    public boolean belongsTo(AstContext other) {
-        return this == other || (parent != null && parent.belongsTo(other));
+    public boolean belongsTo(@Nullable AstContext other) {
+        return this == other || (other != null && parent != null && parent.belongsTo(other));
     }
 
     public boolean matches(AstContextType contextType) {
@@ -292,6 +292,10 @@ public final class AstContext {
         return node;
     }
 
+    public AstMindcodeNode existingNode() {
+        return Objects.requireNonNull(node);
+    }
+
     public @Nullable SourcePosition sourcePosition() {
         return node != null ? node.sourcePosition() : null;
     }
@@ -302,6 +306,10 @@ public final class AstContext {
 
     public @Nullable MindcodeFunction function() {
         return function;
+    }
+
+    public MindcodeFunction existingFunction() {
+        return Objects.requireNonNull(function);
     }
 
     public boolean isFunction() {
@@ -318,6 +326,10 @@ public final class AstContext {
 
     public @Nullable AstContext parent() {
         return parent;
+    }
+
+    public AstContext existingParent() {
+        return Objects.requireNonNull(parent);
     }
 
     public void updateWeight(double weight) {

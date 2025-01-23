@@ -10,14 +10,18 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.NavigableMap;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
+@NullMarked
 class CaseSwitcher extends BaseOptimizer {
     // Activates generating range limiting instructions for case switching.
     // Only set to false for the purposes of benchmarking.
@@ -52,7 +56,7 @@ class CaseSwitcher extends BaseOptimizer {
     }
 
 
-    private OptimizationAction findPossibleCaseSwitches(AstContext context, int costLimit) {
+    private @Nullable OptimizationAction findPossibleCaseSwitches(AstContext context, int costLimit) {
         LogicVariable variable = null;
         NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
 
@@ -84,14 +88,14 @@ class CaseSwitcher extends BaseOptimizer {
                                     iterator.next();
                                 }
                                 AstContext bodyContext = context.nextChild(ix.getAstContext());
-                                if (iterator.peek(0).belongsTo(bodyContext)) {
+                                if (bodyContext != null && iterator.peek(0).belongsTo(bodyContext)) {
                                     target = obtainContextLabel(bodyContext);
                                 } else {
                                     return null;
                                 }
                             }
 
-                            if (target == null || targets.put(lit.getIntValue(), target) != null) {
+                            if (targets.put(lit.getIntValue(), target) != null) {
                                 return null;
                             }
                         } else if (!jump.isUnconditional()) {
@@ -129,9 +133,9 @@ class CaseSwitcher extends BaseOptimizer {
         AstContext context = action.astContext;
         NavigableMap<Integer, LogicLabel> targets = action.targets;
 
-        int index = firstInstructionIndex(context.findSubcontext(CONDITION));
+        int index = firstInstructionIndex(Objects.requireNonNull(context.findSubcontext(CONDITION)));
         AstContext elseContext = context.findSubcontext(ELSE);
-        AstContext finalContext = elseContext != null ? elseContext : context.lastChild();
+        AstContext finalContext = elseContext != null ? elseContext : Objects.requireNonNull(context.lastChild());
         LogicLabel finalLabel = obtainContextLabel(finalContext);
         AstContext newContext = context.createSubcontext(FLOW_CONTROL, 1.0);
         LogicVariable jumpValue = instructionProcessor.nextTemp();
@@ -179,7 +183,7 @@ class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return "Convert case at " + astContext.node().sourcePosition().formatForLog();
+            return "Convert case at " + Objects.requireNonNull(astContext.node()).sourcePosition().formatForLog();
         }
     }
 }

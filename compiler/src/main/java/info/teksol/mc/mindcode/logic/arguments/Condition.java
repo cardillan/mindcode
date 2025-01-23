@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public enum Condition implements LogicArgument {
@@ -65,7 +64,7 @@ public enum Condition implements LogicArgument {
         };
     }
 
-    public @Nullable Operation toOperation() {
+    public Operation toOperation() {
         return switch (this) {
             case EQUAL -> Operation.EQUAL;
             case NOT_EQUAL -> Operation.NOT_EQUAL;
@@ -74,7 +73,7 @@ public enum Condition implements LogicArgument {
             case GREATER_THAN -> Operation.GREATER_THAN;
             case GREATER_THAN_EQ -> Operation.GREATER_THAN_EQ;
             case STRICT_EQUAL -> Operation.STRICT_EQUAL;
-            default -> null;
+            case ALWAYS -> throw new MindcodeInternalError("No operation for 'always'");
         };
     }
 }

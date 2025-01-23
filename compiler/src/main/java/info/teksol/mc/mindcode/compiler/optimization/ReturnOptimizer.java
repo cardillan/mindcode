@@ -122,6 +122,7 @@ class ReturnOptimizer extends BaseOptimizer {
 
         @Override
         public String toString() {
+            assert astContext.node() != null;
             return "Optimize return at " + astContext.node().sourcePosition().formatForLog();
         }
     }

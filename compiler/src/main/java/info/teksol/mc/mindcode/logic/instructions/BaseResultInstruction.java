@@ -5,21 +5,25 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public class BaseResultInstruction extends BaseInstruction implements LogicResultInstruction {
     private final int resultIndex;
 
-    BaseResultInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+    BaseResultInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, opcode, args, params);
-        resultIndex = params.indexOf(InstructionParameterType.RESULT);
+        resultIndex = params == null ? -1 : params.indexOf(InstructionParameterType.RESULT);
     }
 
     public BaseResultInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
+        assert other.getArgumentTypes() != null;
         resultIndex = other.getArgumentTypes().indexOf(InstructionParameterType.RESULT);
     }
 
@@ -42,6 +46,7 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
     public LogicResultInstruction withResult(LogicVariable result) {
         List<LogicArgument> args = new ArrayList<>(getArgs());
         args.set(resultIndex, result);
+        assert getArgumentTypes() != null;
         return new BaseResultInstruction(astContext, getOpcode(), args, getArgumentTypes());
     }
 }
