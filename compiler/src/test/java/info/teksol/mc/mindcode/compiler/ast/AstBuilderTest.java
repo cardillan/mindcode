@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Objects;
 
 import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
 import static info.teksol.mc.mindcode.logic.arguments.Operation.SUB;
@@ -227,7 +228,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
             assertEquals("/** This is a doc comment */",
-                    module.getStatements().getFirst().getDocComment().getComment());
+                    Objects.requireNonNull(module.getStatements().getFirst().getDocComment()).getComment());
         }
 
         @Test
@@ -240,7 +241,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
             assertEquals("/** This is a doc comment */",
-                    module.getStatements().getFirst().getDocComment().getComment());
+                    Objects.requireNonNull(module.getStatements().getFirst().getDocComment()).getComment());
         }
 
         @Test
@@ -253,7 +254,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
             assertEquals("/** This is a doc comment */",
-                    module.getStatements().getFirst().getDocComment().getComment());
+                    Objects.requireNonNull(module.getStatements().getFirst().getDocComment()).getComment());
         }
 
         @Test
@@ -1750,7 +1751,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
             final String fileName = "s6zoH0%IbSsQH4!MOmpu%eDO-H!#Z81dr2xSYGds6xhTzx^V#ie7UNikF$xtYUAi";
 
             assertBuildsTo(
-                    expectedMessages().add(1, 1, "Error reading file '" + fileName + "'."),
+                    expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
                     "require \"" + fileName + "\";",
                     List.of(
                             new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName))

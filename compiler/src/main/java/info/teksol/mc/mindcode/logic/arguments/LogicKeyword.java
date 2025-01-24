@@ -32,4 +32,6 @@ public class LogicKeyword extends AbstractArgument {
     public static LogicKeyword create(String keyword) {
         return new LogicKeyword(keyword);
     }
+
+    public static final LogicKeyword INVALID = create("");
 }

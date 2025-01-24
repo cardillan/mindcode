@@ -103,7 +103,7 @@ The following attributes are recognized:
   schematic definition. Must not be smaller than calculated dimensions when specified. (In the future, specifying 
   dimensions different from calculated ones might serve some specific purpose.)  
 * `tag`: assigns a tag to the schematic. The tag can be either a String value, or a predefined icon (see
-  [Icons](SYNTAX-1-VARIABLES.markdown#built-in-icons)). `tag` attribute can be specified more than once; all 
+  [Icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons)). `tag` attribute can be specified more than once; all 
   specified tags are attached to the schematic.  
 
 # Block definition

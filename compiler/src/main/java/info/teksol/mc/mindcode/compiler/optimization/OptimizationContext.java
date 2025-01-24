@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -158,7 +159,7 @@ class OptimizationContext {
     public void outputUninitializedVariables(MessageConsumer messageConsumer) {
         uninitializedVariables.stream().filter(v -> !v.isNoinit())
                 .sorted(Comparator.comparing(LogicVariable::sourcePosition))
-                .map(v -> CompilerMessage.warn(v.sourcePosition(), "Variable '%s' is not initialized.", v.getFullName()))
+                .map(v -> CompilerMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_INITIALIZED, v.getFullName()))
                 .forEach(messageConsumer);
     }
 
@@ -533,7 +534,7 @@ class OptimizationContext {
         return expressionEvaluator.normalizeMul(op, variable, number);
     }
 
-    public LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
+    public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
         return expressionEvaluator.evaluate(operation, a, b);
     }
 

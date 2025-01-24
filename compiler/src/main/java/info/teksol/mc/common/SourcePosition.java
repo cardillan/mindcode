@@ -33,6 +33,10 @@ public record SourcePosition(InputFile inputFile,
                 new TextFilePosition(line, column));
     }
 
+    public SourcePosition upTo(SourcePosition end) {
+        return new SourcePosition(inputFile, start, end.end, token);
+    }
+
     public int line() {
         return token.line();
     }

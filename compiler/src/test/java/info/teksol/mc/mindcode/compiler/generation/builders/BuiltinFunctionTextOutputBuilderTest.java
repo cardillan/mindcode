@@ -32,8 +32,8 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesSecondFormattable() {
-            assertGeneratesMessages(
-                    expectedMessages().add("A formattable string literal can only be used as a first argument to the print or remark function."),
+            assertGeneratesMessage(
+                    "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.",
                     """
                             print($"Hello, $", $"Hello $name");
                             """);
@@ -256,8 +256,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void generatesWarningAboutInefficientFormat() {
-            assertCompilesTo(expectedMessages()
-                            .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code."),
+            assertCompilesTo(
+                    expectedMessages()
+                            .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' with formattable string literals instead may produce better code."),
                     """
                             printf("Name: {1}, value: {2}\\n", name, value);
                             """,
@@ -270,7 +271,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void generatesWarningAboutTooManyFormattablePlaceholders() {
             assertCompilesTo(expectedMessages()
-                            .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.")
+                            .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' with formattable string literals instead may produce better code.")
                             .add("The 'printf' function doesn't have enough arguments for placeholders: 2 placeholder(s), 1 argument(s)."),
                     """
                             printf("Name: {1}, value: {2}\\n", name);
@@ -283,7 +284,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void generatesWarningAboutTooFewFormattablePlaceholders() {
             assertCompilesTo(expectedMessages()
-                            .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.")
+                            .add("The 'printf' function is called with a literal format string. Using 'print' or 'println' with formattable string literals instead may produce better code.")
                             .add("The 'printf' function has more arguments than placeholders: 2 placeholder(s), 3 argument(s)."),
                     """
                             printf("Name: {1}, value: {2}\\n", name, value, otherValue);

@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.CompilerMessage;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -175,7 +176,7 @@ class PrintMerger extends BaseOptimizer {
                 .toList();
 
         dangerousStrings.forEach(s -> messageRecipient.accept(
-                CompilerMessage.warn(s.sourcePosition(), "A string literal precludes using 'format' instruction for print merging.")));
+                CompilerMessage.warn(s.sourcePosition(), WARN.FORMAT_PRECLUDED_BY_STRING_LITERAL)));
 
         return dangerousStrings.isEmpty();
     }

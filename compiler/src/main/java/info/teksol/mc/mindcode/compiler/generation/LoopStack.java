@@ -1,10 +1,15 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstBreakStatement;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstContinueStatement;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstLabeledStatement;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -15,44 +20,43 @@ import java.util.function.Function;
 /// Class maintaining the stack of active loops and their break and continue labels.
 @NullMarked
 public class LoopStack extends AbstractMessageEmitter {
-    private record LoopLabels(LogicLabel breakLabel, LogicLabel continueLabel) {
+    public record LoopLabels(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
     }
 
     private final Deque<LoopLabels> stack = new ArrayDeque<>();
-    private final Deque<LogicLabel> breakStack = new ArrayDeque<>();
-    private final Deque<LogicLabel> continueStack = new ArrayDeque<>();
     private final Map<String, LoopLabels> map = new HashMap<>();
-    private final Map<String, LogicLabel> breakMap = new HashMap<>();
-    private final Map<String, LogicLabel> continueMap = new HashMap<>();
 
     public LoopStack(MessageConsumer messageConsumer) {
         super(messageConsumer);
     }
 
-    public void enterLoop(SourcePosition position, String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
-        LoopLabels loopLabels = new LoopLabels(breakLabel, continueLabel);
-        if (!loopLabel.isEmpty()) {
+    public LoopLabels enterLoop(@Nullable AstIdentifier label, LogicLabel breakLabel, LogicLabel continueLabel) {
+        String loopLabel = label == null ? "" : label.getName();
+        LoopLabels loopLabels = new LoopLabels(loopLabel, breakLabel, continueLabel);
+        if (label != null) {
             if (map.containsKey(loopLabel)) {
-                error(position, "Loop label '%s' already in use.", loopLabel);
+                error(label, ERR.LOOP_LABEL_ALREADY_IN_USE, loopLabel);
             } else {
                 map.put(loopLabel, loopLabels);
             }
         }
         stack.push(loopLabels);
+        return loopLabels;
     }
 
-    public LogicLabel getBreakLabel(SourcePosition position, String loopLabel) {
-        return getLabel(position, loopLabel, LoopLabels::breakLabel, "break");
+    public LogicLabel getBreakLabel(AstBreakStatement breakNode) {
+        return getLabel(breakNode, LoopLabels::breakLabel, "break");
     }
 
-    public LogicLabel getContinueLabel(SourcePosition position, String loopLabel) {
-        return getLabel(position, loopLabel, LoopLabels::continueLabel, "continue");
+    public LogicLabel getContinueLabel(AstContinueStatement continueNode) {
+        return getLabel(continueNode, LoopLabels::continueLabel, "continue");
     }
 
-    private LogicLabel getLabel(SourcePosition position, String loopLabel,
-            Function<LoopLabels, LogicLabel> extractor, String statement) {
+    private LogicLabel getLabel(AstLabeledStatement loopNode, Function<LoopLabels, LogicLabel> extractor, String statement) {
+        final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
+
         if (stack.isEmpty()) {
-            error(position, "'%s' statement outside of a do/while/for loop.", statement);
+            error(loopNode, ERR.BREAK_CONTINUE_OUTSIDE_LOOP, statement);
             return LogicLabel.INVALID;
         }
 
@@ -61,22 +65,30 @@ public class LoopStack extends AbstractMessageEmitter {
         } else {
             LoopLabels labels = map.get(loopLabel);
             if (labels == null) {
-                error(position, "Undefined label '%s'.", loopLabel);
+                error(loopNode.getLabel(), ERR.UNDEFINED_LOOP_LABEL, loopLabel);
                 return LogicLabel.INVALID;
             }
             return extractor.apply(labels);
         }
     }
 
-    public void exitLoop(String loopLabel) {
+    public void exitLoop(LoopLabels loopLabels) {
         if (stack.isEmpty()) {
             throw new IllegalStateException("exitLoop on empty stack");
         }
 
-        LoopLabels labels = stack.pop();
+        LoopLabels lastLabels = stack.pop();
+        if (lastLabels != loopLabels) {
+            throw new IllegalStateException("exitLoop: removing non-topmost label");
+        }
 
-        if (!loopLabel.isEmpty() && !labels.equals(map.remove(loopLabel))) {
-            throw new IllegalStateException("exitLoop: removing non-topmost label " + loopLabel);
+        // Do not remove the label from map if it is still found on the stack
+        // This is a graceful recovery from an error where loop label is used twice.
+        if (!loopLabels.loopLabel.isEmpty()) {
+            String loopLabel = loopLabels.loopLabel;
+            if (stack.stream().noneMatch(l -> l.loopLabel().equals(loopLabel))) {
+                map.remove(loopLabel);
+            }
         }
     }
 }

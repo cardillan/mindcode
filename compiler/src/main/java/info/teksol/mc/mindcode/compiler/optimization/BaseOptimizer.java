@@ -197,7 +197,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.normalizeMul(op, variable, number);
     }
 
-    public LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
+    public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
         return optimizationContext.evaluate(operation, a, b);
     }
 

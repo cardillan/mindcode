@@ -12,6 +12,9 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+import static info.teksol.mc.messages.ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS;
+import static info.teksol.mc.messages.ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS;
+
 @NullMarked
 public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
 
@@ -21,8 +24,8 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
 
     public ValueStore handleLength(AstFunctionCall call) {
         if (call.getArguments().size() != 1) {
-            error(call, "Function '%s': wrong number of arguments (expected 1, found %d).",
-                    call.getFunctionName(), call.getArguments().size());
+            error(call, FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
+                    call.getFunctionName(), 1, call.getArguments().size());
             return LogicNumber.ZERO;
         }
 
@@ -39,8 +42,8 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
 
         LogicVariable result = nextNodeResultTemp();
         if (arguments.size() < 2) {
-            error(call, "Not enough arguments to the '%s' function (expected 2 or more, found %d).",
-                    call.getFunctionName(), call.getArguments().size());
+            error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS,
+                    call.getFunctionName(), 2, call.getArguments().size());
         } else {
             assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
             Operation op = Operation.fromMlog(call.getFunctionName());

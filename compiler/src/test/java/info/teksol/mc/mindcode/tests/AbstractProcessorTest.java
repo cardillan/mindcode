@@ -18,6 +18,7 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.function.Executable;
@@ -75,8 +76,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         }
     }
 
-    private void logCompilation(String title, String code, String compiled, int instructions) {
-        String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
+    private void logCompilation(@Nullable String title, String code, String compiled, int instructions) {
+        String name = title != null ? title : testInfo().getDisplayName().replaceAll("\\(\\)", "");
         headers.computeIfAbsent(getClass().getSimpleName(), k ->
                 String.format("%-40s %12s   %-16s   %-16s", "Name", "Instructions", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
@@ -88,9 +89,9 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         results.computeIfAbsent(getClass().getSimpleName(), k -> new ConcurrentLinkedDeque<>()).add(info);
     }
 
-    private void logPerformance(String title, String code, String compiled, Processor processor) {
+    private void logPerformance(@Nullable String title, String code, String compiled, Processor processor) {
         int coverage = 1000 * processor.getCoverage().cardinality() / processor.getInstructions();
-        String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
+        String name = title != null ? title : testInfo().getDisplayName().replaceAll("\\(\\)", "");
         headers.computeIfAbsent(getClass().getSimpleName(), k ->
                 String.format("%-40s %12s   %6s   %8s   %-16s   %-16s", "Name", "Instructions", "Steps", "Coverage", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
@@ -105,7 +106,11 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     // Prevent unit tests hanging due to possible endless loops in generated code
     protected final int MAX_STEPS = 1_000_000;
 
-    private TestInfo testInfo;
+    private @Nullable TestInfo testInfo;
+
+    private TestInfo testInfo() {
+        return Objects.requireNonNull(testInfo);
+    }
 
     @BeforeEach
     void init(TestInfo testInfo) {
@@ -130,7 +135,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
                 .setExecutionFlag(ExecutionFlag.DUMP_VARIABLES_ON_STOP, false);
     }
 
-    private void writeLogFile(Path logFile, MindcodeCompiler compiler, List<LogicInstruction> instructions) {
+    private void writeLogFile(@Nullable Path logFile, MindcodeCompiler compiler, List<LogicInstruction> instructions) {
         if (logFile == null) {
             return;
         }
@@ -172,8 +177,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         blocks.forEach(emulator::addBlock);
     }
 
-    protected void testAndEvaluateCode(String title, ExpectedMessages expectedMessages, String code,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, Path logFile) {
+    protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
+            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         process(expectedMessages,
                 InputFiles.fromSource(code),
                 emulator -> setupEmulator(emulator, blocks),

@@ -4,6 +4,7 @@ import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.generated.ast.visitors.AstDirectiveSetVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.CompilerMessage;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
@@ -51,7 +52,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
     private void processDirective(AstDirectiveSet directive) {
         BiConsumer<CompilerProfile, AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
         if (handler == null) {
-            error(directive.getOption(), "Unknown compiler directive '%s'.", directive.getOption().getText());
+            error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN, directive.getOption().getText());
         } else {
             handler.accept(profile, directive);
         }
@@ -61,7 +62,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
     public Void visitDirectiveSet(@NonNull AstDirectiveSet directive) {
         BiConsumer<CompilerProfile, AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
         if (handler == null) {
-            error(directive.getOption(), "Unknown compiler directive '%s'.", directive.getOption().getText());
+            error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN, directive.getOption().getText());
         } else {
             handler.accept(profile, directive);
         }
@@ -74,9 +75,9 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
 
     private boolean validateSingleValue(AstDirectiveSet node) {
         if (node.getValues().isEmpty()) {
-            error(node.getOption(), "No value specified for option '%s'.", node.getOption().getText());
+            error(node.getOption(), ERR.DIRECTIVE_NO_VALUE, node.getOption().getText());
         } else if (node.getValues().size() > 1) {
-            error(node.getOption(), "Multiple values specified for option '%s'.", node.getOption().getText());
+            error(node.getOption(), ERR.DIRECTIVE_MULTIPLE_VALUES, node.getOption().getText());
         }
 
         return !node.getValues().isEmpty();
@@ -89,7 +90,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (optLevel != null) {
                 profile.setAllOptimizationLevels(optLevel);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -100,7 +101,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             switch (strValue) {
                 case "true"  -> profile.setExecutionFlag(flag, true);
                 case "false" -> profile.setExecutionFlag(flag, false);
-                default      -> firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -112,7 +113,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (goal != null) {
                 profile.setGoal(goal);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -128,7 +129,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
                 }
             } catch (NumberFormatException ignored) {
             }
-            firstValueError(node, "Invalid value '%s' of compiler directive '%s' (expected integer between 1 and  %d).",
+            firstValueError(node, ERR.DIRECTIVE_VALUE_OUT_OF_RANGE,
                     strValue, node.getOption().getText(), CompilerProfile.MAX_INSTRUCTIONS);
         }
     }
@@ -140,7 +141,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (memoryModel != null) {
                 profile.setMemoryModel(memoryModel);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -151,7 +152,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             switch (strValue) {
                 case "true"  -> profile.setLinkedBlockGuards(true);
                 case "false" -> profile.setLinkedBlockGuards(false);
-                default      -> firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -163,7 +164,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (optLevel != null) {
                 profile.setOptimizationLevel(optimization, optLevel);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", level, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, level, node.getOption().getText());
             }
         }
     }
@@ -179,7 +180,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
                 }
             } catch (NumberFormatException ignored) {
             }
-            firstValueError(node, "Invalid value '%s' of compiler directive '%s' (expected integer between 1 and  %d).",
+            firstValueError(node, ERR.DIRECTIVE_VALUE_OUT_OF_RANGE,
                     strValue, node.getOption().getText(), CompilerProfile.MAX_PASSES);
         }
     }
@@ -191,7 +192,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (finalCodeOutput != null) {
                 profile.setFinalCodeOutput(finalCodeOutput);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -204,7 +205,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
                 return;
             } catch (NumberFormatException ignored) {
             }
-            firstValueError(node, "Invalid value '%s' of compiler directive '%s'.",strValue, node.getOption().getText());
+            firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE,strValue, node.getOption().getText());
         }
     }
 
@@ -215,7 +216,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (remarks != null) {
                 profile.setRemarks(remarks);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -226,7 +227,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             switch (strValue) {
                 case "short" -> compilerProfile.setShortCircuitEval(true);
                 case "full"  -> compilerProfile.setShortCircuitEval(false);
-                default      -> firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -236,7 +237,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         for (AstDirectiveValue value : node.getValues()) {
             SortCategory sortCategory = SortCategory.byName(value.getText());
             if (sortCategory == null) {
-                error(value, "Invalid value '%s' of compiler directive '%s'.", value.getText(), node.getOption().getText());
+                error(value, ERR.DIRECTIVE_INVALID_VALUE, value.getText(), node.getOption().getText());
             } else {
                 sortCategories.add(sortCategory);
             }
@@ -258,7 +259,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (syntacticMode != null) {
                 profile.setSyntacticMode(syntacticMode);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }
@@ -274,7 +275,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             if (version != null) {
                 profile.setProcessorVersionEdition(version, edition != null ? edition : ProcessorEdition.S);
             } else {
-                firstValueError(node,"Invalid value '%s' of compiler directive '%s'.", strValue, node.getOption().getText());
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
             }
         }
     }

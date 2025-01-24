@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
@@ -43,7 +44,7 @@ public class FormattableContent implements ValueStore {
 
     @Override
     public LogicValue getValue(CodeAssembler assembler) {
-        assembler.error(sourcePosition, "A formattable string literal can only be used as a first argument to the print or remark function.");
+        assembler.error(sourcePosition, ERR.FORMATTABLE_FORBIDDEN);
         return LogicNull.NULL;
     }
 

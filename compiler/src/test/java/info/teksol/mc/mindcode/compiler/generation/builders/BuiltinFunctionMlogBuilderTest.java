@@ -64,7 +64,7 @@ class BuiltinFunctionMlogBuilderTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesInKeywordWithNumericLiteral() {
-        assertGeneratesMessage("A numeric literal passed to the 'mlog' function must not use any modifier.",
+        assertGeneratesMessage("A literal passed to the 'mlog' function must not use any modifier.",
                 """
                         mlog("foo", in 0);
                         """);

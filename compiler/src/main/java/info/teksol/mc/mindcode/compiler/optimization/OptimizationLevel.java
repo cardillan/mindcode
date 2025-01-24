@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public enum OptimizationLevel {
         return Map.copyOf(map);
     }
 
-    public static OptimizationLevel byName(String level) {
+    public static @Nullable OptimizationLevel byName(String level) {
         return VALUE_MAP.get(level.toLowerCase());
     }
 

@@ -36,8 +36,8 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
     private @Nullable RunEvaluator evaluator;
 
     @Override
-    protected void testAndEvaluateCode(String title, ExpectedMessages expectedMessages, String code,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, Path logFile) {
+    protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
+            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         this.evaluator = evaluator;
         super.testAndEvaluateCode(title, expectedMessages, code, blocks, evaluator, logFile);
     }

@@ -1,6 +1,6 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mc.util.Tuple2;
+import info.teksol.mc.util.Tuple2Nullable;
 import info.teksol.schemacode.config.PositionArray;
 
 import java.util.HashSet;
@@ -11,7 +11,7 @@ class BridgeSolver {
     private final SchematicsBuilder builder;
     private final List<Block> blocks;
     private final BlockPositionMap<Block> positionMap;
-    private final Set<Tuple2<Integer, Integer>> linkBacks = new HashSet<>();
+    private final Set<Tuple2Nullable<Integer, Integer>> linkBacks = new HashSet<>();
 
     private BridgeSolver(SchematicsBuilder builder, List<Block> blocks) {
         this.builder = builder;
@@ -49,7 +49,7 @@ class BridgeSolver {
                         block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
             } else {
                 Block next = getLinkedBlock(linked, false);
-                if (next == block && linkBacks.add(Tuple2.of(Math.min(block.index(), linked.index()), Math.max(block.index(), linked.index())))) {
+                if (next == block && linkBacks.add(Tuple2Nullable.of(Math.min(block.index(), linked.index()), Math.max(block.index(), linked.index())))) {
                     builder.error(block.sourcePosition(),"Two '%s' blocks at %s and %s connect to each other.",
                             block.name(), block.position().toStringAbsolute(), linked.position().toStringAbsolute());
                 }

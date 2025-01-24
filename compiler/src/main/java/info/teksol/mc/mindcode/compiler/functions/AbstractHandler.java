@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
@@ -54,7 +55,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
     protected boolean validateArguments(AstFunctionCall call, List<FunctionArgument> arguments) {
         if (!argumentCount.contains(arguments.size())) {
-            error(call, "Function '%s': wrong number of arguments (expected %s, found %d).",
+            error(call, ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
                     name, argumentCount.getRangeString(), arguments.size());
             return false;
         } else {
@@ -138,53 +139,52 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         return argument.getArgumentValue() instanceof LogicVariable variable && variable.isGlobalVariable();
     }
 
-    protected LogicKeyword validateKeyword(NamedParameter parameter, FunctionArgument argument) {
+    protected LogicKeyword validateKeyword(NamedParameter parameter, FunctionArgument argument, boolean requireValidKeyword) {
+        if (argument.hasInModifier() || argument.hasOutModifier()) {
+            error(argument, ERR.ARGUMENT_KEYWORD_IN_OUT_NOT_ALLOWED);
+            return LogicKeyword.INVALID;
+        }
+
         Collection<String> parameterValues = functionMapper.processor.getParameterValues(parameter.type());
 
         LogicKeyword keyword = BaseFunctionMapper.toKeyword(argument);
         if (!keyword.getKeyword().isEmpty()) {
-            if (argument.hasInModifier() || argument.hasOutModifier()) {
-                error(argument.sourcePosition(), "Parameter '%s' is an mlog keyword, no 'in' or 'out' modifiers allowed.", parameter.name());
-            }
-
             if (!parameterValues.contains(keyword.getKeyword())) {
-                error(argument.sourcePosition(),
-                        "Invalid value '%s' for parameter '%s': allowed values are '%s'.", keyword.getKeyword(),
-                        parameter.type().getTypeName(), String.join("', '", parameterValues));
+                error(argument, ERR.ARGUMENT_KEYWORD_INVALID_VALUE, keyword.getKeyword(),
+                        String.join("', '", parameterValues));
                 // Fill in one of the valid keywords to avoid further errors
-                return LogicKeyword.create(parameterValues.iterator().next());
+                return requireValidKeyword ? LogicKeyword.create(parameterValues.iterator().next()) : LogicKeyword.INVALID;
             }
 
             return keyword;
         } else {
-            error(argument.sourcePosition(),
-                    "Invalid or unspecified value for parameter '%s': allowed values are '%s'.",
-                    parameter.type().getTypeName(), String.join("', '", parameterValues));
+            error(argument, ERR.ARGUMENT_KEYWORD_UNSPECIFIED_VALUE,
+                    String.join("', '", parameterValues));
             // Fill in one of the valid keywords to avoid further errors
-            return LogicKeyword.create(parameterValues.iterator().next());
+            return requireValidKeyword ? LogicKeyword.create(parameterValues.iterator().next()) : LogicKeyword.INVALID;
         }
     }
 
     protected FunctionArgument validateInput(NamedParameter parameter, FunctionArgument argument) {
         if (!argument.hasValue()) {
-            error(argument.sourcePosition(), "Parameter '%s' isn't optional, a value must be provided.", parameter.name());
+            error(argument, ERR.ARGUMENT_NOT_OPTIONAL, parameter.name());
         }
         if (argument.hasOutModifier()) {
-            error(argument.sourcePosition(), "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.name());
+            error(argument, ERR.ARGUMENT_OUT_MODIFIER_DISALLOWED, parameter.name());
         }
         return argument;
     }
 
     protected FunctionArgument validateOutput(NamedParameter parameter, FunctionArgument argument) {
         if (argument.hasInModifier()) {
-            error(argument.sourcePosition(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.name());
+            error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.name());
         }
         if (argument.hasValue()) {
             if (!argument.hasOutModifier()) {
-                error(argument.sourcePosition(), "Parameter '%s' is output and 'out' modifier was not used.", parameter.name());
+                error(argument, ERR.ARGUMENT_OUT_MODIFIER_REQUESTED, parameter.name());
             }
             if (!argument.isLvalue()) {
-                error(argument.sourcePosition(), "Argument assigned to output parameter '%s' is not writable.", parameter.name());
+                error(argument, ERR.ARGUMENT_NOT_LVALUE, parameter.name());
             }
         }
         return argument;
@@ -217,7 +217,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
             // Function call was validated, meaning all mandatory parameters have corresponding arguments
 
             if (p.type().isGlobal() && !isGlobalVariable(arguments.get(argIndex))) {
-                error(arguments.get(argIndex).sourcePosition(), "A global variable is required in a call to '%s'.", name);
+                error(arguments.get(argIndex).sourcePosition(), ERR.ARGUMENT_GLOBAL_VARIABLE_REQUIRED, name);
                 ixArgs.add(LogicVariable.INVALID);
             } else if (p.type() == InstructionParameterType.RESULT) {
                 ixArgs.add(result);
@@ -226,7 +226,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
                 ixArgs.add(target.getValue(assembler()));
             } else if (p.type().isSelector() && !p.type().isFunctionName() || p.type().isKeyword()) {
                 // Selector that IS NOT a function name is taken from the argument list
-                ixArgs.add(validateKeyword(p, arguments.get(argIndex++)));
+                ixArgs.add(validateKeyword(p, arguments.get(argIndex++), true));
             } else if (p.type().isSelector()) {
                 // Selector that IS a function name isn't in an argument list and must be filled in
                 ixArgs.add(p.keyword());
@@ -248,7 +248,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
                 }
             } else {
                 // Nether input nor output???
-                ixArgs.add(validateKeyword(p, arguments.get(argIndex++)));
+                ixArgs.add(validateKeyword(p, arguments.get(argIndex++), true));
                 throw new MindcodeInternalError("Internal error.");
             }
         }

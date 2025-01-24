@@ -1,6 +1,9 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.*;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
@@ -42,7 +45,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitFormattablePlaceholder(AstFormattablePlaceholder node) {
-        return MissingValue.FORMATTABLE_PLACEHOLDER;
+        return new MissingValue(node.sourcePosition());
     }
 
     @Override
@@ -59,7 +62,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitLiteralColor(AstLiteralColor node) {
         if (!processor.isSupported(Opcode.PACKCOLOR, List.of())) {
-            error("Color literals requires language target 7 or higher.");
+            error(node, ERR.LITERAL_COLOR_REQUIRES_TARGET_7);
         }
 
         return LogicColor.create(node.sourcePosition(), node.getLiteral());
@@ -102,13 +105,22 @@ public class LiteralsBuilder extends AbstractBuilder implements
             long value = Long.parseLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix);
 
             if (!node.isSuppressWarning() && value > (1L << 52)) {
-                warn(node, "Literal '%s' exceeds safe range for integer operations (0 .. 2**52).", literal);
+                warn(node, WARN.LITERAL_UNSAFE_DECIMAL_RANGE, literal);
             }
             return LogicNumber.create(node.sourcePosition(), literal, negative ? -value : value);
         } catch (NumberFormatException e) {
-            error(node, "Literal '%s' exceeds maximum possible value.", literal);
+            error(node, ERR.LITERAL_INTEGER_TOO_LARGE, literal, getMaxLiteralValue(radix));
             return LogicNumber.create(node.sourcePosition(), MAX_LONG_VALUE, Long.MAX_VALUE);
         }
+    }
+
+    private String getMaxLiteralValue(int radix) {
+        return switch (radix) {
+            case  2 -> "0b" + Long.toString(Long.MAX_VALUE, radix);
+            case 10 -> Long.toString(Long.MAX_VALUE, radix);
+            case 16 -> "0x" + Long.toString(Long.MAX_VALUE, radix);
+            default -> throw new MindcodeInternalError("Invalid radix: " + radix);
+        };
     }
 
     private LogicNumber visitNumericLiteral(AstLiteral node) {
@@ -116,7 +128,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
         if (literal.isPresent()) {
             return LogicNumber.create(processor, node.sourcePosition(), literal.get());
         } else {
-            error(node, "Value '%s' does not have a valid mlog representation.", node.getLiteral());
+            error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, node.getLiteral());
             return LogicNumber.create(processor, node.sourcePosition(), MAX_LONG_VALUE);
         }
     }

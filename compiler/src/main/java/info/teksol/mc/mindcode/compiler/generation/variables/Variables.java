@@ -2,10 +2,11 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
-import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
@@ -41,7 +42,6 @@ public class Variables extends AbstractMessageEmitter {
 
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
-    private final CallGraph callGraph;
     private final Map<String, ValueStore> globalVariables = Icons.createIconMapAsValueStore();
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
     private FunctionContext functionContext = new GlobalContext();
@@ -52,7 +52,6 @@ public class Variables extends AbstractMessageEmitter {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
-        callGraph = context.callGraph();
         heapTracker = HeapTracker.createDefaultTracker(context);
     }
 
@@ -148,7 +147,7 @@ public class Variables extends AbstractMessageEmitter {
         verifyGlobalDeclaration(identifier, identifier);
 
         if (!isLinkedVariable(linkedTo)) {
-            warn(linkedTo, "Linked variable name '%s' doesn't correspond to any known linked block name.", linkedTo.getName());
+            warn(linkedTo, WARN.LINKED_VARIABLE_NOT_RECOGNIZED, linkedTo.getName());
         }
 
         LogicVariable result = LogicVariable.block(linkedTo);
@@ -179,14 +178,14 @@ public class Variables extends AbstractMessageEmitter {
 
         if (local) {
             if (functionContext.variables().containsKey(name)) {
-                error(identifier, "Multiple declarations of '%s'.", name);
-                return functionContext.variables().get(identifier.getName());
+                error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
+                return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
             }
             return functionContext.registerFunctionVariable(identifier, scope, false);
         } else {
             if (globalVariables.containsKey(name)) {
-                error(identifier, "Multiple declarations of '%s'.", name);
-                return globalVariables.get(identifier.getName());
+                error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
+                return Objects.requireNonNull(globalVariables.get(identifier.getName()));
             }
             return registerGlobalVariable(identifier, LogicVariable.global(identifier,
                     modifiers.contains(Modifier.VOLATILE), modifiers.contains(Modifier.NOINIT)));
@@ -197,7 +196,7 @@ public class Variables extends AbstractMessageEmitter {
         String identifier = identifierNode.getName();
 
         if (functionContext.variables().containsKey(identifier) || globalVariables.containsKey(identifier)) {
-            error(element,"Multiple declarations of '%s'.", identifier);
+            error(element, ERR.VARIABLE_MULTIPLE_DECLARATIONS, identifier);
             return false;
         } else {
             return true;
@@ -219,9 +218,9 @@ public class Variables extends AbstractMessageEmitter {
     public ValueStore resolveVariable(AstIdentifier identifier, boolean local, boolean allowUndeclaredLinks) {
         // Look for local variables first
         if (local && functionContext.variables().containsKey(identifier.getName())) {
-            return functionContext.variables().get(identifier.getName());
+            return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
         } else if (globalVariables.containsKey(identifier.getName())) {
-            return globalVariables.get(identifier.getName());
+            return Objects.requireNonNull(globalVariables.get(identifier.getName()));
         }
 
         if (allowUndeclaredLinks && isLinkedVariable(identifier)) {
@@ -230,8 +229,8 @@ public class Variables extends AbstractMessageEmitter {
 
         if (reportedErrors.add(identifier)) {
             switch (profile.getSyntacticMode()) {
-                case STRICT -> error(identifier, "Variable '%s' is not defined.", identifier.getName());
-                case MIXED  -> warn(identifier, "Variable '%s' is not defined.", identifier.getName());
+                case STRICT -> error(identifier, ERR.VARIABLE_NOT_DEFINED, identifier.getName());
+                case MIXED  -> warn(identifier, WARN.VARIABLE_NOT_DEFINED, identifier.getName());
             }
         }
 
@@ -297,7 +296,7 @@ public class Variables extends AbstractMessageEmitter {
     public void excludeVariablesFromTracking(Runnable expression) {
         excludeVariablesFromTracking(() -> {
             expression.run();
-            return null;
+            return Void.TYPE;
         });
     }
 }

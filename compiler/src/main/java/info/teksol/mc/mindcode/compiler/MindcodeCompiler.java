@@ -246,6 +246,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     private Processor createEmulator() {
+        Objects.requireNonNull(instructionProcessor);
+
         // All flags are already set as we want them to be
         Processor processor = new Processor(instructionProcessor, messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
         addBlocks(processor, "cell", i -> Memory.createMemoryCell());
@@ -351,8 +353,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return steps;
     }
 
-    public @Nullable Processor getEmulator() {
-        return emulator;
+    public Processor getEmulator() {
+        return Objects.requireNonNull(emulator);
     }
 
     // Context implementations

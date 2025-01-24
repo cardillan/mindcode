@@ -1,6 +1,9 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
+import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
@@ -79,11 +82,19 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         return switch(valueStore) {
             case LogicVariable var    -> var;
             case LogicBuiltIn builtIn -> builtIn;
-            default ->{
+            default -> {
                 error(node, message, args);
                 yield LogicVariable.INVALID;
             }
         };
+    }
+
+    protected SourcePosition pos(SourceElement start, SourceElement end) {
+        return start.sourcePosition().upTo(end.sourcePosition());
+    }
+
+    protected SourcePosition pos(List<? extends SourceElement> elements) {
+        return elements.getFirst().sourcePosition().upTo(elements.getLast().sourcePosition());
     }
 
     protected boolean isLocalContext() {
@@ -202,12 +213,12 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
             // We're trying to report the error as precisely as possible
             if (targetNode instanceof AstIdentifier identifier) {
                 // We got a read-only identifier. It can be either a constant, or a parameter
-                error(targetNode, "Assignment to constant or parameter '%s' not allowed.", identifier.getName());
+                error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED, identifier.getName());
             } else {
                 switch (target) {
                     case LogicVariable v -> reportVariableError(targetNode, v);
-                    case LogicLiteral l -> error(targetNode, "Variable expected.");
-                    default -> error(targetNode, "Cannot assign a value to this expression.");
+                    case LogicLiteral l -> error(targetNode, ERR.LVALUE_VARIABLE_EXPECTED);
+                    default -> error(targetNode, ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
                 }
             }
             return LogicVariable.INVALID;
@@ -216,9 +227,9 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
     private void reportVariableError(AstExpression targetNode, LogicVariable variable) {
         switch (variable.getType()) {
-            case BLOCK      -> error(targetNode, "Assignment to variable '%s' representing a linked block not allowed.", variable.getName());
-            case PARAMETER  -> error(targetNode, "Assignment to a parameter not allowed.");
-            default         -> error(targetNode, "Cannot assign a value to this expression.");
+            case BLOCK      -> error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_LINKED_NOT_ALLOWED, variable.getName());
+            case PARAMETER  -> error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_PARAM_NOT_ALLOWED);
+            default         -> error(targetNode, ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
         }
     }
 

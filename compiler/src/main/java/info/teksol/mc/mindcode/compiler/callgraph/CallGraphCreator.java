@@ -1,7 +1,11 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
-import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
@@ -68,8 +72,21 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     /// Inspects the structure of function calls and sets function properties accordingly. Assigns a function prefix
     /// and labels to recursive and stackless functions.
     void buildCallTree() {
+        buildCallTreeAtRoot(functionDefinitions.getMain(), true);
+
+        List<MindcodeFunction> unvisited = functions.stream().filter(f -> !f.isVisited()).toList();
+        for (MindcodeFunction function : unvisited) {
+            if (!function.isVisited()) {
+                buildCallTreeAtRoot(function, false);
+            }
+        }
+
+        functions.stream().filter(f -> !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
+    }
+
+    void buildCallTreeAtRoot(MindcodeFunction function, boolean trackUsages) {
         // Walk the call tree
-        visitFunction(functionDefinitions.getMain(), 1);
+        visitFunction(function, trackUsages, 1);
 
         // 1st level of indirect calls
         functions.forEach(outer ->
@@ -81,8 +98,6 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         // 2nd and other levels of indirection
         // Must end eventually, as there's a finite number of functions to add
         while (propagateIndirectCalls()) ;
-
-        functions.stream().filter(f -> !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
@@ -103,8 +118,9 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     // We expect the number to be rather small (certainly under 10), so the list is quite appropriate here
     private final List<MindcodeFunction> callStack = new ArrayList<>();
 
-    private void visitFunction(MindcodeFunction function, int count) {
-        function.updatePlacement(count);
+    private void visitFunction(MindcodeFunction function, boolean trackUsages, int count) {
+        // Needs to be called to update visited status
+        function.updatePlacement(trackUsages ? count : 0);
 
         int index = callStack.indexOf(function);
         callStack.add(function);
@@ -120,28 +136,28 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             // Visit all children
             // If a function is declared inline, its call count
             int multiplier = function.getDeclaration().isInline() ? count : 1;
-            function.getCallCardinality().forEach((f, calls) -> visitFunction(f, multiplier * calls));
+            function.getCallCardinality().forEach((f, calls) -> visitFunction(f, trackUsages, multiplier * calls));
         }
         callStack.removeLast();
     }
 
     private void validateFunction(MindcodeFunction function) {
         if (function.getDeclaration().isInline() && function.isRecursive()) {
-            error(function.getSourcePosition(), "Recursive function '%s' declared 'inline'.", function.getName());
+            error(function.getSourcePosition(), ERR.FUNCTION_RECURSIVE_INLINE, function.getName());
+        }
+
+        if (!function.getDeclaration().isInline() && function.isVarargs()) {
+            error(function.getSourcePosition(), ERR.FUNCTION_VARARGS_NOT_INLINE, function.getName());
         }
 
         if (profile.getSyntacticMode() != SyntacticMode.STRICT) {
             function.getDeclaredParameters().stream()
-                    .map(AstFunctionParameter::getName)
-                    .filter(processor::isBlockName)
-                    .forEach(name -> error(function.getSourcePosition(),
-                            "Parameter '%s' of function '%s' uses name reserved for linked blocks.", name, function.getName()));
+                    .filter(p -> processor.isBlockName(p.getName()))
+                    .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_LINKED, p.getName(), function.getName()));
 
             function.getDeclaredParameters().stream()
-                    .map(AstFunctionParameter::getName)
-                    .filter(processor::isGlobalName)
-                    .forEach(name -> error(function.getSourcePosition(),
-                            "Parameter '%s' of function '%s' uses name reserved for global variables.", name, function.getName()));
+                    .filter(p -> processor.isGlobalName(p.getName()))
+                    .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_GLOBAL, p.getName(), function.getName()));
         }
     }
 }

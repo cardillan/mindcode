@@ -5,6 +5,7 @@ import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -69,8 +70,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         this.processorEdition = parameters.edition;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
-        opcodeKeywordPosition = variantsByOpcode.keySet().stream()
-                .collect(Collectors.toMap(k -> k, k -> getOpcodeVariantSelectorPosition(k, variantsByOpcode.get(k))));
+        opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
+                k -> getOpcodeVariantSelectorPosition(k, Objects.requireNonNull(variantsByOpcode.get(k)))));
 
         variantsByKeyword = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode,
                 Collectors.toMap(this::getOpcodeVariantKeyword, v -> v)));
@@ -186,7 +187,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 assert params != null;
                 return new OpInstruction(ix.astContext, args, params);
             }
-            return createInstructionUnchecked(instruction.getAstContext(), Opcode.fromOpcode(ix.getMlogOpcode()), instruction.getArgs());
+            return createInstructionUnchecked(instruction.getAstContext(), opcode, instruction.getArgs());
         }
         return instruction;
     }
@@ -291,8 +292,9 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
     private int computePrintArgumentCount(Opcode opcode) {
         // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
-        return variantsByOpcode.get(opcode).stream().mapToInt(v -> v.namedParameters().size()).max().orElseThrow()
-               + opcode.getAdditionalPrintArguments();
+        return Objects.requireNonNull(variantsByOpcode.get(opcode)).stream()
+                .mapToInt(v -> v.namedParameters().size()).max().orElseThrow()
+                + opcode.getAdditionalPrintArguments();
     }
 
     private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP);
@@ -337,7 +339,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     /// @return true if the value is valid for given argument type
     private boolean isValid(InstructionParameterType type, LogicArgument value) {
         if (type.restrictValues()) {
-            Collection<String> values = validArgumentValues.get(type);
+            Collection<String> values = getParameterValues(type);
             return values.contains(value.toMlog());
         } else {
             return true;
@@ -352,10 +354,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             return variants.getFirst();
         } else {
             // Selector keyword position in the list
-            int position = opcodeKeywordPosition.get(opcode);
+            int position = Objects.requireNonNull(opcodeKeywordPosition.get(opcode));
 
             // We know that variantsByKeyword contains opcode, as variantsByOpcode.get(opcode) isn't null
-            return position >= arguments.size() ? null : variantsByKeyword.get(opcode).get(arguments.get(position).toMlog());
+            return position >= arguments.size() ? null
+                    : Objects.requireNonNull(variantsByKeyword.get(opcode)).get(arguments.get(position).toMlog());
         }
     }
 
@@ -371,7 +374,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     public Collection<String> getParameterValues(InstructionParameterType type) {
-        return validArgumentValues.get(type);
+        return Objects.requireNonNull(validArgumentValues.get(type));
     }
 
     protected <T extends LogicInstruction> T validate(T instruction) {
@@ -392,7 +395,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             if (!isValid(type, argument)) {
                 throw new MindcodeInternalError("Invalid value '%s' for parameter '%s': allowed values are '%s'.",
                         argument.toMlog(), namedParameter.name(),
-                        String.join("', '", validArgumentValues.get(type)));
+                        String.join("', '", getParameterValues(type)));
             }
         }
 
@@ -421,7 +424,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     private String getOpcodeVariantKeyword(OpcodeVariant opcodeVariant) {
-        int position = opcodeKeywordPosition.get(opcodeVariant.opcode());
+        int position = Objects.requireNonNull(opcodeKeywordPosition.get(opcodeVariant.opcode()));
         if (position < 0) {
             return "";      // Single-variant opcode; no keyword
         } else {
@@ -576,8 +579,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                     return Optional.empty();
                 }
 
-                messageConsumer.accept(CompilerMessage.warn(sourcePosition,
-                        "Loss of precision while creating mlog literals (original value %s, encoded value %s).",
+                messageConsumer.accept(CompilerMessage.warn(sourcePosition, WARN.LITERAL_LOSS_OF_PRECISION,
                         originalLiteral, rewritten));
             }
         }

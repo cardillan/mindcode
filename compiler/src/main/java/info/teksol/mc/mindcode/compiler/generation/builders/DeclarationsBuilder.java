@@ -1,6 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.generated.ast.visitors.*;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -65,7 +67,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         switch (node.getType()) {
             case STACK -> {
                 if (context.stackTracker().isValid()) {
-                    error(node, "Multiple stack allocation declarations.");
+                    error(node, ERR.ALLOCATION_MULTIPLE_STACK);
                 } else {
                     final Allocation allocation = resolveAllocation(node);
                     context.stackTracker().setStackMemory(allocation.memory);
@@ -76,7 +78,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             }
             case HEAP -> {
                 if (context.heapAllocation() != null) {
-                    error(node, "Multiple heap allocation declarations.");
+                    error(node, ERR.ALLOCATION_MULTIPLE_HEAP);
                 } else {
                     final Allocation allocation = resolveAllocation(node);
                     context.setHeapAllocation(node);
@@ -92,15 +94,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitConstant(AstConstant node) {
         ValueStore valueStore = evaluate(node.getValue());
-//        if (valueStore instanceof LogicNumber number && !processor.hasMlogRepresentation(number.getDoubleValue())) {
-//            error(node, "Value assigned to constant '%s' (%s) does not have a valid mlog representation.",
-//                    node.getConstantName(), number.toMlog());
-//            variables.createConstant(node, LogicNull.NULL);
-//        } else
         if (valueStore instanceof LogicValue value && isNonvolatileConstant(value) || valueStore instanceof FormattableContent) {
             variables.createConstant(node, valueStore);
         } else {
-            error(node.getValue(), "Value assigned to constant '%s' is not a constant expression.", node.getConstantName());
+            error(node.getValue(), ERR.EXPRESSION_NOT_CONSTANT_CONST, node.getConstantName());
             variables.createConstant(node, LogicNull.NULL);
         }
         return LogicVoid.VOID;
@@ -127,19 +124,19 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitParameter(AstParameter node) {
         if (processor.isBlockName(node.getParameterName())) {
-            error(node.getName(), "Name '%s' is reserved for linked blocks.", node.getParameterName());
+            error(node.getName(), ERR.VARIABLE_NAME_RESERVED_FOR_LINKS, node.getParameterName());
         }
 
         ValueStore valueStore = evaluate(node.getValue());
         LogicValue parameterValue;
         if (valueStore instanceof IntermediateValue value) {
-            error(node, "Value assigned to parameter '%s' (%s) does not have a valid mlog representation.",
+            error(node, ERR.LITERAL_NO_VALID_REPRESENTATION_PARAM,
                     node.getParameterName(), value.getLiteral());
             parameterValue = LogicNull.NULL;
         }  else if (valueStore instanceof LogicValue value && isNonvolatileConstant(value)) {
             parameterValue = value;
         } else {
-            error(node.getValue(), "Value assigned to parameter '%s' is not a constant expression.", node.getParameterName());
+            error(node.getValue(), ERR.EXPRESSION_NOT_CONSTANT_PARAM, node.getParameterName());
             parameterValue = LogicNull.NULL;
         }
 
@@ -166,16 +163,16 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         if (isLocalContext()) {
             if (modifiers.contains(Modifier.EXTERNAL)) {
-                error(node, "External variables must be declared in the global scope.");
+                error(modifierElement(node, Modifier.EXTERNAL), ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
             }
             if (modifiers.contains(Modifier.LINKED)) {
-                error(node, "Linked blocks must be declared in the global scope.");
+                error(modifierElement(node, Modifier.LINKED), ERR.SCOPE_LINKED_NOT_GLOBAL);
             }
             if (modifiers.contains(Modifier.NOINIT)) {
-                error(node, "Local variable cannot be declared 'uninitialized'.");
+                error(modifierElement(node, Modifier.NOINIT), ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
             }
             if (modifiers.contains(Modifier.VOLATILE)) {
-                error(node, "Local variable cannot be declared 'volatile'.");
+                error(modifierElement(node, Modifier.VOLATILE), ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
             }
         }
 
@@ -185,7 +182,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             // LINKED variables initializations are handled separately
             if (specification.getExpression() != null && !modifiers.contains(Modifier.LINKED)) {
                 if (modifiers.contains(Modifier.NOINIT)) {
-                    error(node, "Variable declared as 'noinit' cannot be initialized.");
+                    error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALZIED);
                 }
 
                 // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
@@ -223,7 +220,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             case AstIdentifier linkedTo -> variables.createLinkedVariable(specification.getIdentifier(), linkedTo);
             case null -> variables.createLinkedVariable(specification.getIdentifier(), specification.getIdentifier());
             default -> {
-                error(specification.getExpression(), "Identifier expected.");
+                error(specification.getExpression(), ERR.IDENTIFIER_EXPECTED);
                 compile(specification.getExpression());
                 yield LogicVariable.INVALID;
             }
@@ -240,20 +237,28 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             Modifier modifier = astModifier.getModifier();
 
             if (modifiers.contains(modifier)) {
-                error(astModifier, "Repeated modifier '%s'.", modifier.name().toLowerCase());
+                error(astModifier, ERR.VARIABLE_REPEATED_MODIFIER, modifier.name().toLowerCase());
             } else if (modifier.isCompatibleWith(modifiers)) {
                 modifiers.add(modifier);
             } else {
-                error(astModifier, "Modifier '%s' is incompatible with previous modifiers.",
-                        modifier.name().toLowerCase());
+                error(astModifier, ERR.VARIABLE_INCOMPATIBLE_MODIFIER, modifier.name().toLowerCase());
             }
         }
 
         if (modifiers.contains(Modifier.CACHED) && !modifiers.contains(Modifier.EXTERNAL)) {
-            error("Modifier '%s' used without '%s'.", Modifier.CACHED.name().toLowerCase(), Modifier.EXTERNAL.name().toLowerCase());
+            error(modifierElement(node, Modifier.CACHED), ERR.VARIABLE_MISSING_MODIFIER,
+                    Modifier.CACHED.name().toLowerCase(), Modifier.EXTERNAL.name().toLowerCase());
         }
 
         return modifiers;
+    }
+
+    private SourceElement modifierElement(AstVariablesDeclaration node, Modifier modifier) {
+        return node.getModifiers().stream()
+                .filter(m -> m.getModifier() == modifier)
+                .findFirst()
+                .map(SourceElement.class::cast)
+                .orElse(node);
     }
 
     private void generateLinkGuard(LogicVariable variable, boolean noinit) {
@@ -268,11 +273,11 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         ValueStore memory = evaluate(node.getMemory());
         if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
             if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
-                error(node.getMemory(), "Cannot use value assigned to parameter '%s' as a memory for heap or stack.", parameter.getName());
+                error(node.getMemory(), ERR.ALLOCATION_INVALID_MEMORY_VALUE, parameter.getName());
             }
             return variable;
         } else {
-            error(node.getMemory(), "Cannot use '%s' as a memory for heap or stack.", node.getMemory().getName());
+            error(node.getMemory(), ERR.ALLOCATION_INVALID_MEMORY, node.getMemory().getName());
             return LogicVariable.INVALID;
         }
     }
@@ -286,7 +291,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         int endHeapIndex = getIndex(node, false, defaultEndValue) + 1;
 
         if (startHeapIndex >= endHeapIndex) {
-            error(node, "Empty or invalid heap/stack memory range.");
+            error(node, ERR.ALLOCATION_INVALID_RANGE);
         }
 
         generateLinkGuard(memory, false);
@@ -300,11 +305,11 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             int correction = !first && range.isExclusive() ? -1 : 0;
             ValueStore value = evaluate(element);
             if (!(value instanceof LogicNumber number)) {
-                error(element, "Heap/stack declaration must specify constant range.");
+                error(element, ERR.ALLOCATION_MUTABLE_RANGE);
             } else if (!number.isInteger()) {
-                error(element, "Heap/stack declaration must specify integer range.");
-            } else if (number.getIntValue() < 0 || number.getIntValue() + correction >= 512) {
-                error(element, "Heap/stack memory index out of range (0 .. 512).");
+                error(element, ERR.ALLOCATION_NON_INTEGER_RANGE);
+//            } else if (number.getIntValue() < 0 || number.getIntValue() + correction >= 512) {
+//                error(element, ERR.ALLOCATION_OUTSIDE_RANGE);
             } else {
                 return number.getIntValue() + correction;
             }

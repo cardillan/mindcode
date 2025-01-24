@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstWhileLoopStatement;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
@@ -51,9 +52,9 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
 
         // Exit
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-        assembler.createLabel(loopLabels.doneLabel());
+        assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node);
+        exitLoop(node, loopLabels);
     }
 
     private void createWhileLoop(AstWhileLoopStatement node) {
@@ -64,7 +65,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
         final ValueStore condition = evaluate(node.getCondition());
-        assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
+        assembler.createJump(loopLabels.breakLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
@@ -81,8 +82,8 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.createJumpUnconditional(beginLabel);
 
         // Exit
-        assembler.createLabel(loopLabels.doneLabel());
+        assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node);
+        exitLoop(node, loopLabels);
     }
 }

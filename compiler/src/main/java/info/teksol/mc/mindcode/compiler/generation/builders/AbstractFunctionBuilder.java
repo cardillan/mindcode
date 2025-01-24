@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
@@ -22,7 +23,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
     protected boolean validateStandardFunctionArguments(AstFunctionCall call, List<FunctionArgument> arguments, int expectedCount) {
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
         if (arguments.size() != expectedCount) {
-            error(call, "Function '%s': wrong number of arguments (expected %d, found %d).",
+            error(call, ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
                     call.getFunctionName(), expectedCount, arguments.size());
             return false;
         }
@@ -54,7 +55,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
         } else if (argument.hasExpression()) {
             final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
             if (value == LogicVoid.VOID) {
-                warn(argument, "Expression doesn't have any value. Using value-less expressions in function calls is deprecated.");
+                warn(argument, ERR.VOID_ARGUMENT);
             }
 
             if (argument.isOutput()) {

@@ -6,6 +6,7 @@ import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.LogicOperation;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
@@ -101,27 +102,16 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
 
     private AstMindcodeNode evaluateUnaryOp(AstOperatorUnary node, boolean local) {
         Operation operation = node.getOperation();
-        if (operation.getOperands() == 2) {
-            if (operation == Operation.ADD || operation == Operation.SUB) {
-                ExpressionValue left = ExpressionValue.zero(processor);
+        LogicOperation eval = ExpressionEvaluator.getOperation(node.getOperation());
+        if (operation.isDeterministic() && eval != null) {
+            if (operation == Operation.ADD || operation == Operation.SUB || operation.getOperands() == 1) {
                 ExpressionValue right = ExpressionValue.create(processor, evaluateNode(node.getOperand(), local));
+                ExpressionValue left = operation.getOperands() == 1 ? right : ExpressionValue.zero(processor);
                 if (right.isString()) {
-                    error(node, "Unsupported string expression.");
+                    error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
                 } else if (right.isValid()) {
                     Result result = new Result();
-                    ExpressionEvaluator.getOperation(operation).execute(result, left, right);
-                    return result.toAstMindcodeNode(node);
-                }
-            }
-        } else if (operation.isDeterministic()) {
-            LogicOperation eval = ExpressionEvaluator.getOperation(node.getOperation());
-            if (eval != null) {
-                ExpressionValue operand = ExpressionValue.create(processor, evaluateNode(node.getOperand(), local));
-                if (operand.isString()) {
-                    error(node, "Unsupported string expression.");
-                } else if (operand.isValid()) {
-                    Result result = new Result();
-                    eval.execute(result, operand, operand);
+                    eval.execute(result, left, right);
                     return result.toAstMindcodeNode(node);
                 }
             }
@@ -141,7 +131,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                     if (operation == Operation.ADD && !left.isNull() && !right.isNull()) {
                         return new AstLiteralString(node.sourcePosition(), left.print() + right.print());
                     } else {
-                        error(node, "Unsupported string expression.");
+                        error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
                         return node;
                     }
                 } else if (left.isValid() && right.isValid()) {
@@ -231,7 +221,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     }
 
     private AstMindcodeNode evaluateFunctionCall(AstFunctionCall node, boolean local) {
-        if (node.getFunctionName().equals("packcolor")) {
+        if (node.getFunctionName().equals("packcolor") && processor.isSupported(Opcode.PACKCOLOR)) {
             return evaluatePackColor(node, local);
         }
 
@@ -250,7 +240,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 ExpressionValue left = ExpressionValue.create(processor, evaluated.getFirst());
                 ExpressionValue right = ExpressionValue.create(processor, evaluated.getLast());
                 if (left.isString() || right.isString()) {
-                    error(node, "Unsupported string expression.");
+                    error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
                     return node;
                 }
                 Result result = new Result();

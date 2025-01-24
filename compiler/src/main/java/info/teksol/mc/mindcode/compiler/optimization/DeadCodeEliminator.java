@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.CompilerMessage;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -66,7 +67,7 @@ class DeadCodeEliminator extends BaseOptimizer {
         if (unused.stream().anyMatch(v -> !v.isOptional())) {
             unused.stream().filter(v -> !v.isOptional())
                     .sorted(Comparator.comparing(LogicVariable::sourcePosition))
-                    .map(v -> CompilerMessage.warn(v.sourcePosition(), "Variable '%s' is not used.", v.getFullName()))
+                    .map(v -> CompilerMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_USED, v.getFullName()))
                     .forEach(messageRecipient);
         }
     }
@@ -86,7 +87,7 @@ class DeadCodeEliminator extends BaseOptimizer {
 
             // Instruction with at most one output argument are removed immediately
             // Other instructions are inspected further to find out they're fully unused
-            writes.get(key).stream()
+            Objects.requireNonNull(writes.get(key)).stream()
                     .filter(LogicInstruction::isSafe)
                     .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
                     .mapToInt(ix -> firstInstructionIndex(ixx -> ixx == ix))

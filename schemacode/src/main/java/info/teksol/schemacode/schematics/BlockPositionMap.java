@@ -55,7 +55,7 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         return new BlockPositionMap<>(blockMap, positionMap);
     }
 
-    private static  <T extends BlockPosition> void checkCollision(T block, T previous, Set<Tuple2<T, T>> collisions) {
+    private static <T extends BlockPosition> void checkCollision(T block, T previous, Set<Tuple2<T, T>> collisions) {
         if (previous != null && previous != block) {
             collisions.add(block.index() < previous.index() ? Tuple2.of(block, previous) : Tuple2.of(previous, block));
         }

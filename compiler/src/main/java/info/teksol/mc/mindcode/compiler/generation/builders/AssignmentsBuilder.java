@@ -2,6 +2,8 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstAssignmentVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorIncDecVisitor;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstAssignment;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLiteralDecimal;
@@ -10,10 +12,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.Operation;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -24,6 +23,7 @@ import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
 @NullMarked
 public class AssignmentsBuilder extends AbstractBuilder implements AstAssignmentVisitor<ValueStore>, AstOperatorIncDecVisitor<ValueStore> {
+
     public AssignmentsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
@@ -49,8 +49,9 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
     /// If the resulting value is passed up in a new temporary variable (may happen for volatile variables,
     /// for example), the variable is properly registered in the parent node context.
     ///
-    /// @return an instance holding the prior and current value of the modified target (prior is used for
-    ///         postfix operators only)
+    /// @param returnPriorValue indicates the prior value of the target is the result of this node (basically only
+    ///                         true for postfix operators)
+    /// @return a ValueStore instance holding the result of this node
     private ValueStore applyOperation(AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,
             boolean returnPriorValue) {
         // We want to visit target first, so that heap variables are allocated left-to-right.
@@ -66,7 +67,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         LogicValue rvalue;
 
         if (eval == VOID) {
-            warn(valueNode, "Expression doesn't have any value. Using value-less expressions in assignments is deprecated.");
+            warn(valueNode, WARN.VOID_EXPRESSION_DEPRECATED);
             rvalue = NULL;
         } else if (logicValue.isVolatile()) {
             // The variable which keeps the value is volatile. Preserve the value.
@@ -87,6 +88,9 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             // use the r-value that was assigned
             result = target instanceof LogicVariable var && !var.isVolatile() ? var : rvalue;
         } else if (returnPriorValue) {
+            // No need to check for string operands
+            // The grammar won't allow expressions like `"a"++`.
+
             // Evaluate the target and store it as a result
             // We're using a regular temp, not a node result temp, because the variable will be registered
             // in the parent context below
@@ -99,6 +103,9 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
 
             Consumer<LogicVariable> valueSetter = createValueSetter(operation, left, rvalue);
             target.writeValue(assembler, valueSetter);
+        } else if (rvalue instanceof LogicString) {
+            error(pos(targetNode, valueNode), ERR.UNSUPPORTED_STRING_EXPRESSION);
+            result = LogicVariable.INVALID;
         } else {
             // Compound assignment modifies the target. Current value is the left operator.
             LogicValue left = target.getValue(assembler);

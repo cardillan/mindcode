@@ -2,12 +2,14 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.generated.ast.visitors.AstForEachLoopStatementVisitor;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstForEachLoopStatement;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLoopIterator;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.*;
+import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
@@ -66,8 +68,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             // Compute total values to process in the loop (rectifies incorrect list size)
             if (values.size() % iterators.size() != 0) {
-                error(node, "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).",
-                        values.size(), iterators.size());
+                error(pos(node.getValues()), ERR.FOR_EACH_WRONG_NUMBER_OF_VALUES, values.size(), iterators.size());
 
                 // Fill it up using inactive values so that the loop can get compiled
                 while (values.size() % iterators.size() != 0) {
@@ -85,12 +86,12 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             // For-each loops do not put done label into flow control subcontext
             // Not a bug.
-            assembler.createLabel(loopLabels.doneLabel());
+            assembler.createLabel(loopLabels.breakLabel());
 
             if (!values.isEmpty()) {
                 assembler.clearSubcontextType();
             }
-            exitLoop(node);
+            exitLoop(node, loopLabels);
         }
 
         private Iterator processIterator(AstLoopIterator it) {
@@ -98,7 +99,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 if (it.getIterator() instanceof AstIdentifier identifier) {
                     variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
                 } else {
-                    error(it.getIterator(), "Identifier expected.");
+                    // Probably can't happen due to grammar
+                    error(it.getIterator(), ERR.IDENTIFIER_EXPECTED);
                 }
             }
             return new Iterator(it.hasOutModifier(), resolveLValue(it.getIterator()));

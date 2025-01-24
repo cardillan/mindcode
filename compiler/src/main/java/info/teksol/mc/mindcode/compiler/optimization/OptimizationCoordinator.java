@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -91,7 +92,7 @@ public class OptimizationCoordinator {
                 modified = optimizePhase(ITERATED, optimizers, pass);
             }
             if (modified) {
-                messageConsumer.accept(OptimizerMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
+                messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, profile.getOptimizationPasses()));
             }
             optimizePhase(FINAL, optimizers, 0);
 
@@ -100,7 +101,7 @@ public class OptimizationCoordinator {
             messageConsumer.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
 
             if (modified) {
-                messageConsumer.accept(OptimizerMessage.warn("\nOptimization passes limited at %d.",
+                messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMITED,
                         profile.getOptimizationPasses()));
             }
 

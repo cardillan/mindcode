@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
@@ -98,8 +99,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         // Check stack allocations
         if (!context.stackTracker().isValid()) {
-            callGraph.recursiveFunctions().filter(MindcodeFunction::isUsed).forEach(f -> error(f.getDeclaration(),
-                    "Function '%s' is recursive and no stack was allocated.", f.getName()));
+            callGraph.recursiveFunctions().filter(MindcodeFunction::isUsed).forEach(f -> error(f.getDeclaration().getIdentifier(),
+                    ERR.FUNCTION_RECURSIVE_NO_STACK, f.getName()));
         }
 
         // Separate main program from function declarations
@@ -126,8 +127,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         if (profile.getSyntacticMode() != SyntacticMode.RELAXED || node.reportAllScopeErrors()) {
             String message = isLocalContext()
-                    ? "Statement or declaration not allowed within a main code block or function."
-                    : "Code outside a main code block or function.";
+                    ? ERR.SCOPE_DECLARATION_WITHIN_CODE_BLOCK
+                    : ERR.SCOPE_CODE_OUTSIDE_CODE_BLOCK;
 
             if (profile.getSyntacticMode() == SyntacticMode.STRICT || node.reportAllScopeErrors()) {
                 error(node, "%s", message);

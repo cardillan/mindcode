@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
@@ -93,7 +94,7 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
     private ValueStore createFunctionVariable(AstIdentifier identifier, boolean implicitDeclaration) {
         int i = variableReuses.computeIfAbsent(identifier.getName(), k -> new AtomicInteger(0)).getAndIncrement();
         if (implicitDeclaration && i > 0) {
-            error(identifier, "Cannot resolve variable '%s'.", identifier.getName());
+            error(identifier, ERR.VARIABLE_NOT_RESOLVED, identifier.getName());
         }
 
         String suffix = i == 0 ? "" : "." + i;

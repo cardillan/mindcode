@@ -170,7 +170,7 @@ class OptimizerExpressionEvaluator {
     }
 
     public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
-        ExpressionEvaluator.getOperation(operation).execute(expressionValue, a, b);
+        ExpressionEvaluator.existingOperation(operation).execute(expressionValue, a, b);
         return expressionValue.getLiteral();
     }
 

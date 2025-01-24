@@ -3,8 +3,11 @@ package info.teksol.mc.mindcode.compiler;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequire;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequireFile;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequireLibrary;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -40,40 +43,40 @@ public class RequirementsProcessor extends AbstractMessageEmitter {
 
     public @Nullable InputFile processRequirement(AstRequire requirement) {
         if (requirement.isLibrary()) {
-            return loadLibrary(requirement);
+            return loadLibrary((AstRequireLibrary) requirement);
         } else if (profile.isWebApplication()) {
-            error(requirement, "Loading code from external file not supported in web application.");
+            error(requirement, ERR.REQUIRE_WEBAPP_EXT_UNSUPPORTED);
             return null;
         } else {
-            return loadFile(requirement, inputFiles.getBasePath().resolve(requirement.getName()));
+            return loadFile((AstRequireFile) requirement, inputFiles.getBasePath().resolve(requirement.getName()));
         }
     }
 
-    private @Nullable InputFile loadFile(AstRequire requirement, Path path) {
+    private @Nullable InputFile loadFile(AstRequireFile requirement, Path path) {
         try {
             String code = Files.readString(path, StandardCharsets.UTF_8);
             return inputFiles.registerFile(path, code);
         } catch (IOException e) {
-            error(requirement, "Error reading file '%s'.", path);
+            error(requirement.getFile(), ERR.REQUIRE_ERROR_READING_FILE, path);
             return null;
         }
     }
 
-    private @Nullable InputFile loadLibrary(AstRequire requirement) {
+    private @Nullable InputFile loadLibrary(AstRequireLibrary requirement) {
         return LIBRARY_SOURCES.computeIfAbsent(requirement.getName(), s -> loadLibraryFromResource(requirement));
     }
 
-    private @Nullable InputFile loadLibraryFromResource(AstRequire requirement) {
+    private @Nullable InputFile loadLibraryFromResource(AstRequireLibrary requirement) {
         String libraryName = requirement.getName();
         try {
             InputFile library = loadSystemLibrary(libraryName);
             if (library == null) {
-                error(requirement, "Unknown system library '%s'.", libraryName);
+                error(requirement.getLibrary(), ERR.REQUIRE_UNKNOWN_SYSTEM_LIBRARY, libraryName);
             }
             return library;
         } catch (IOException e) {
-            error(requirement, "Error reading system library file '%s'.", libraryName);
-            throw new MindcodeInternalError(e, "Error reading system library file '%s'.", libraryName);
+            error(requirement, ERR.REQUIRE_ERROR_READING_SYSTEM_FILE, libraryName);
+            throw new MindcodeInternalError(e, ERR.REQUIRE_ERROR_READING_SYSTEM_FILE, libraryName);
         }
     }
 

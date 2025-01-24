@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
@@ -49,10 +50,10 @@ public class HeapTracker extends AbstractMessageEmitter {
 
     public ValueStore createVariable(AstIdentifier identifier, Set<Modifier> modifiers) {
         if (!heapAllocated) {
-            error(identifier, "No heap allocated for external variables.");
+            error(identifier, ERR.EXTERNAL_MISSING_HEAP);
         }
         if (currentHeapIndex >= endHeapIndex) {
-            error(identifier, "Not enough capacity in allocated heap for '%s'.", identifier.getName());
+            error(identifier, ERR.EXTERNAL_HEAP_EXCEEDED, identifier.getName());
         }
 
         LogicValue index = LogicNumber.create(currentHeapIndex++);

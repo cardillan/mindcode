@@ -19,18 +19,15 @@ import java.util.function.Consumer;
 /// can't be written to.
 @NullMarked
 public class MissingValue implements ValueStore {
-    public static final MissingValue UNSPECIFIED_FUNCTION_ARGUMENT = new MissingValue(true);
-    public static final MissingValue FORMATTABLE_PLACEHOLDER = new MissingValue(false);
+    private final SourcePosition sourcePosition;
 
-    private final boolean ignoreWrites;
-
-    private MissingValue(boolean ignoreWrites) {
-        this.ignoreWrites = ignoreWrites;
+    public MissingValue(SourcePosition sourcePosition) {
+        this.sourcePosition = sourcePosition;
     }
 
     @Override
     public SourcePosition sourcePosition() {
-        return SourcePosition.EMPTY;
+        return sourcePosition;
     }
 
     @Override
@@ -50,15 +47,11 @@ public class MissingValue implements ValueStore {
 
     @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
-        if (!ignoreWrites) {
-            throw new MindcodeInternalError("Cannot modify this instance.");
-        }
+        throw new MindcodeInternalError("Cannot modify this instance.");
     }
 
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-        if (!ignoreWrites) {
-            throw new MindcodeInternalError("Cannot modify this instance.");
-        }
+        throw new MindcodeInternalError("Cannot modify this instance.");
     }
 }

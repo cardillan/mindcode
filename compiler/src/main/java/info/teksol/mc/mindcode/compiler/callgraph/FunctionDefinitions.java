@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
@@ -64,8 +65,7 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
     private void reportConflict(MindcodeFunction current, MindcodeFunction previous) {
         String defined = previous.getSourcePosition().inputFile() == current.getSourcePosition().inputFile()
                 ? "" :  " defined in " + previous.getSourcePosition().inputFile().getPath();
-        error(current.getSourcePosition(), "Function '%s' conflicts with function '%s'%s.",
-                current.format(), previous.format(), defined);
+        error(current.getSourcePosition(), ERR.FUNCTION_CONFLICT, current.format(), previous.format(), defined);
     }
 
     public MindcodeFunction getMain() {

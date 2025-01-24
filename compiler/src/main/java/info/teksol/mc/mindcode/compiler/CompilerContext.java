@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MessageEmitter;
 import org.jspecify.annotations.NullMarked;
 
 /// Represents a context used during compilation.
@@ -15,6 +16,6 @@ import org.jspecify.annotations.NullMarked;
 /// Context interfaces declare getter methods without the `get` prefix, so that
 /// a record matching the interface can be easily created for testing.
 @NullMarked
-public interface CompilerContext {
+public interface CompilerContext extends MessageEmitter {
     MessageConsumer messageConsumer();
 }

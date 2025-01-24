@@ -72,8 +72,8 @@ public abstract class AbstractTestBase {
         return new Processor(compiler.instructionProcessor(), compiler.messageConsumer(), 1000);
     }
 
-    protected <T> T process(ExpectedMessages expectedMessages, InputFiles inputFiles,
-            @Nullable Consumer<Processor> emulatorInitializer, Function<MindcodeCompiler, T> resultExtractor) {
+    protected <T extends @Nullable Object> T process(ExpectedMessages expectedMessages, InputFiles inputFiles,
+            @Nullable Consumer<Processor> emulatorInitializer, Function<MindcodeCompiler, @Nullable T> resultExtractor) {
         expectedMessages.setAccumulateErrors(true);
         MindcodeCompiler compiler = new MindcodeCompiler(getTargetPhase(), expectedMessages,
                 createCompilerProfile(), inputFiles);

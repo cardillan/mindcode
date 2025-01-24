@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
+import static info.teksol.mc.messages.ERR.*;
+
 @NullMarked
 public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
     private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
@@ -31,7 +34,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
     public ValueStore handlePrintf(AstFunctionCall call) {
         if (!processor.isSupported(Opcode.FORMAT)) {
-            error("The printf function requires language target 8 or higher.");
+            error(call.getIdentifier(), PRINTF_REQUIRES_TARGET_8);
             return LogicVoid.VOID;
         }
 
@@ -40,24 +43,22 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
 
         if (arguments.isEmpty()) {
-            error(call, "Not enough arguments to the '%s' function (expected 1 or more, found %d).",
-                    call.getFunctionName(), call.getArguments().size());
+            error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 1, call.getArguments().size());
+            assembler.clearSubcontextType();
             return LogicVoid.VOID;
         }
 
         if (arguments.getFirst().getArgumentValue() instanceof LogicString str) {
             long placeholders = PLACEHOLDER_MATCHER.matcher(str.format(processor)).results().count();
             if (placeholders == 0) {
-                warn(call, "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.");
+                warn(arguments.getFirst(), WARN.PRINTF_NO_PLACEHOLDERS);
             }
             if (placeholders > arguments.size() - 1) {
-                warn(call, "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).",
-                        placeholders, arguments.size() - 1);
+                warn(pos(arguments), WARN.PRINTF_NOT_ENOUGH_ARGUMENTS, placeholders, arguments.size() - 1);
             } else if (placeholders < arguments.size() - 1) {
-                warn(call, "The 'printf' function has more arguments than placeholders: %d placeholder(s), %d argument(s).",
-                        placeholders, arguments.size() - 1);
+                warn(pos(arguments), WARN.PRINTF_TOO_MANY_ARGUMENTS, placeholders, arguments.size() - 1);
             }
-            warn(call, "The 'printf' function is called with a literal format string. Using 'print' or 'println' instead may produce better code.");
+            warn(arguments.getFirst(), WARN.PRINTF_WITH_LITERAL_FORMAT);
         }
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
 
@@ -74,8 +75,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         if (arguments.isEmpty()) {
             if (formatter.requiresParameter()) {
-                error(call, "Not enough arguments to the '%s' function (expected 1 or more, found %d).",
-                        call.getFunctionName(), arguments.size());
+                error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 1, arguments.size());
             } else if (formatter.createsNewLine()) {
                 formatter.createInstruction(assembler, LogicString.NEW_LINE);
             }
@@ -111,11 +111,11 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             Formatter formatter, List<ValueStore> parts, List<FunctionArgument> arguments) {
         int index = 0;
         for (ValueStore part : parts) {
-            if (part == MissingValue.FORMATTABLE_PLACEHOLDER) {
+            if (part instanceof MissingValue) {
                 if (enhancedComment) {
-                    error(part, "Formattable placeholders not supported in enhanced comments.");
+                    error(part, ENHANCED_COMMENTS_NO_PLACEHOLDERS);
                 } else if (index == arguments.size()) {
-                    error(sourceElement, "Not enough arguments for formattable placeholders.");
+                    error(part, FORMATTABLE_NOT_ENOUGH_ARGS);
                 } else {
                     formatter.createInstruction(assembler, arguments.get(index).getValue(assembler));
                 }
@@ -126,7 +126,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         }
 
         if (index < arguments.size()) {
-            error(sourceElement, "Too many arguments for formattable placeholders.");
+            error(pos(arguments.get(index), arguments.getLast()), FORMATTABLE_TOO_MANY_ARGS);
         }
 
         return LogicVoid.VOID;

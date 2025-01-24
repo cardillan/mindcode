@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstRangedForLoopStatementVisitor;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRangedForLoopStatement;
@@ -8,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -50,7 +52,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
             if (node.getVariable() instanceof AstIdentifier identifier) {
                 variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
             } else {
-                error(node.getVariable(), "Identifier expected.");
+                error(node.getVariable(), ERR.IDENTIFIER_EXPECTED);
             }
         }
 
@@ -63,7 +65,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         assembler.createLabel(beginLabel);
-        assembler.createJump(loopLabels.doneLabel(), condition, loopControlVariable.getValue(assembler), fixedUpperBound);
+        assembler.createJump(loopLabels.breakLabel(), condition, loopControlVariable.getValue(assembler), fixedUpperBound);
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
@@ -84,9 +86,9 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         assembler.createJumpUnconditional(beginLabel);
 
         // Exit
-        assembler.createLabel(loopLabels.doneLabel());
+        assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node);
+        exitLoop(node, loopLabels);
 
         return LogicVoid.VOID;
     }

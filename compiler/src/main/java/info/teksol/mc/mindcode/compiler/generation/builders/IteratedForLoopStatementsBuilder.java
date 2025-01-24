@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstIteratedForLoopStatement;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
@@ -34,7 +35,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.createLabel(beginLabel);
         if (node.getCondition() != null) {
             final ValueStore condition = evaluate(node.getCondition());
-            assembler.createJump(loopLabels.doneLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
+            assembler.createJump(loopLabels.breakLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
         }
 
         // Loop body
@@ -54,9 +55,9 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.createJumpUnconditional(beginLabel);
 
         // Exit
-        assembler.createLabel(loopLabels.doneLabel());
+        assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node);
+        exitLoop(node, loopLabels);
 
         return LogicVoid.VOID;
     }

@@ -3,6 +3,8 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.generated.ast.visitors.AstEnhancedCommentVisitor;
 import info.teksol.mc.generated.ast.visitors.AstFunctionCallVisitor;
 import info.teksol.mc.generated.ast.visitors.AstReturnStatementVisitor;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
@@ -58,17 +60,17 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     public ValueStore visitReturnStatement(AstReturnStatement node) {
         ReturnStack.ReturnRecord returnRecord = returnStack.getReturnRecord();
         if (returnRecord == null) {
-            error(node, "Return statement outside of a function.");
+            error(node, ERR.RETURN_OUTSIDE_FUNCTION);
             return LogicVoid.VOID;
         }
 
         if (returnRecord.value() instanceof LogicVariable target) {
             if (node.getReturnValue() == null) {
-                error(node, "Missing return value in 'return' statement.");
+                error(node, ERR.RETURN_MISSING_VALUE);
             } else {
                 final ValueStore expression = evaluate(node.getReturnValue());
                 if (expression == LogicVoid.VOID) {
-                    warn(node.getReturnValue(), "Expression doesn't have any value. Using value-less expressions in return statements is deprecated.");
+                    warn(node.getReturnValue(), WARN.VOID_RETURN);
                 }
                 returnRecord.value().setValue(assembler, expression.getValue(assembler));
             }
@@ -77,7 +79,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
             assembler.clearSubcontextType();
         } else if (returnRecord.value() instanceof LogicVoid) {
             if (node.getReturnValue() != null) {
-                error(node, "Cannot return a value from a 'void' function.");
+                error(node.getReturnValue(), ERR.RETURN_VALUE_IN_VOID_FUNCTION);
                 // Process the expression anyway to locate errors in it
                 evaluate(node.getReturnValue());
             }

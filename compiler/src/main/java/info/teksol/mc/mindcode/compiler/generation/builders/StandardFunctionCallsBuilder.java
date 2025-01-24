@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
@@ -39,7 +40,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         ValueStore result = functionMapper.handleProperty(call, target, arguments);
         assembler.clearSubcontextType();
         if (result == null) {
-            error(call.getIdentifier(), "Undefined function '%s'.", call.getFunctionName());
+            error(call.getIdentifier(), ERR.METHOD_CALL_UNDEFINED, call.getFunctionName());
             return LogicNull.NULL;
         } else {
             return result;
@@ -78,7 +79,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             return processMatchedFunctionCall(matches.getFirst(), call, arguments);
         } else {
             // No matches or multiple matches.
-            error(call, matches.isEmpty() ? "Unknown function '%s'." : "Cannot resolve function '%s'.",
+            error(call.getIdentifier(), matches.isEmpty() ? ERR.FUNCTION_CALL_UNDEFINED : ERR.FUNCTION_CALL_UNRESOLVED,
                     call.getFunctionName());
             return LogicNull.NULL;
         }
@@ -94,13 +95,13 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         if (function.isVarargs()) {
             if (arguments.size() < parameterCount) {
-                error(call, "Function '%s': wrong number of arguments (expected at least %d, found %d).",
+                error(call, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
                         functionName, parameterCount, arguments.size());
                 return function.isVoid() ? LogicVoid.VOID : LogicNull.NULL;
             }
         } else {
             if (!function.getParameterCount().contains(arguments.size())) {
-                error(call, "Function '%s': wrong number of arguments (expected %s, found %d).",
+                error(call, ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
                         functionName, function.getParameterCount().getRangeString(), arguments.size());
                 return function.isVoid() ? LogicVoid.VOID : LogicNull.NULL;
             }
@@ -119,7 +120,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private void validateUserFunctionArguments(MindcodeFunction function, List<FunctionArgument> arguments) {
         if (function.getDeclaredParameters().size() < arguments.size()) {
             // This needs to be checked beforehand
-            throw new MindcodeInternalError("Argument size mismatch.");
+            throw new MindcodeInternalError("Argument count mismatch.");
         }
 
         for (int i = 0; i < arguments.size(); i++) {
@@ -127,28 +128,28 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             FunctionArgument argument = arguments.get(i);
 
             if (parameter.isCompulsory() && !argument.hasValue()) {
-                error(argument.sourcePosition(), "Parameter '%s' isn't optional, a value must be provided.", parameter.getName());
+                error(argument, ERR.ARGUMENT_NOT_OPTIONAL, parameter.getName());
             }
 
             if (parameter.isOutput()) {
                 if (parameter.isInput()) {
                     // In or out modifier needs to be used
                     if (!argument.hasInModifier() && !argument.hasOutModifier()) {
-                        error(argument.sourcePosition(), "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used.", parameter.getName());
+                        error(argument, ERR.ARGUMENT_IN_OUT_MODIFIER_REQUESTED, parameter.getName());
                     }
                 } else {
                     // Output parameter: the 'in' modifier is forbidden
                     if (argument.hasInModifier()) {
-                        error(argument.sourcePosition(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.getName());
+                        error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.getName());
                     } else if (argument.hasValue() && !argument.hasOutModifier()) {
                         // Out modifier needs to be used
-                        error(argument.sourcePosition(), "Parameter '%s' is output and 'out' modifier was not used.", parameter.getName());
+                        error(argument, ERR.ARGUMENT_OUT_MODIFIER_REQUESTED, parameter.getName());
                     }
                 }
             } else {
                 // Input parameter: the 'out' modifier is forbidden
                 if (argument.hasOutModifier()) {
-                    error(argument.sourcePosition(), "Parameter '%s' isn't output, 'out' modifier not allowed.", parameter.getName());
+                    error(argument, ERR.ARGUMENT_OUT_MODIFIER_DISALLOWED, parameter.getName());
                 }
             }
         }
@@ -160,7 +161,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         // Varargs handling and validation: vararg arguments can't be unspecified.
         List<FunctionArgument> varargs = function.isVarargs() ? arguments.subList(nonVarargCount, arguments.size()) : List.of();
-        varargs.stream().filter(v -> !v.hasValue()).forEach(v -> error(v.sourcePosition(), "Missing value"));
+        varargs.stream().filter(v -> !v.hasValue()).forEach(v -> error(v, ERR.ARGUMENT_UNNAMED_NOT_OPTIONAL));
 
         assembler.setSubcontextType(AstSubcontextType.INLINE_CALL, 1.0);
         enterFunction(function,  varargs);
@@ -186,6 +187,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private LogicValue handleStacklessFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
+        assert function.getLabel() != null;
         String functionPrefix = function.getPrefix();
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
@@ -224,6 +226,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private LogicValue handleRecursiveFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
+        assert function.getLabel() != null;
         LogicVariable stack = stackTracker.getStackMemory();
 
         assembler.setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);

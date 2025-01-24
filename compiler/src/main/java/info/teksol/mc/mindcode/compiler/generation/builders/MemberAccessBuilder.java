@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstMemberAccessVisitor;
 import info.teksol.mc.generated.ast.visitors.AstPropertyAccessVisitor;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMemberAccess;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstPropertyAccess;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
@@ -27,7 +28,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitMemberAccess(AstMemberAccess node) {
-        LogicValue target = resolveTarget(node.getObject(), "Cannot invoke properties on this expression.");
+        LogicValue target = resolveTarget(node.getObject(), ERR.CANNOT_INVOKE_PROPERTIES);
         String propertyName = node.getMember().getName();
         if (validateProperty(propertyName)) {
             return new Property(node.sourcePosition(),
@@ -35,7 +36,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
                     propertyName,
                     unprotectedTemp());
         } else {
-            error(node.getMember(), "Unknown property '%s'.", propertyName);
+            error(node.getMember(), ERR.PROPERTY_UNKNOWN, propertyName);
             return LogicVariable.INVALID;
         }
     }
@@ -52,7 +53,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitPropertyAccess(AstPropertyAccess node) {
-        LogicValue target = resolveTarget(node.getObject(), "Cannot invoke properties on this expression.");
+        LogicValue target = resolveTarget(node.getObject(), ERR.CANNOT_INVOKE_PROPERTIES);
         final LogicVariable resultVar = nextNodeResultTemp();
         assembler.createSensor(resultVar, target, evaluate(node.getProperty()).getValue(assembler));
         return resultVar;

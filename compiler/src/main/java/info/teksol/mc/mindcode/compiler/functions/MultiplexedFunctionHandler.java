@@ -29,7 +29,7 @@ class MultiplexedFunctionHandler extends AbstractHandler implements FunctionHand
 
     @Override
     public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
-        String keyword = validateKeyword(namedParameter, arguments.getFirst()).getKeyword();
+        String keyword = validateKeyword(namedParameter, arguments.getFirst(), false).getKeyword();
         if (keyword.isEmpty()) {
             // Keyword was not recognized and the error has already been reported
             return LogicNull.NULL;

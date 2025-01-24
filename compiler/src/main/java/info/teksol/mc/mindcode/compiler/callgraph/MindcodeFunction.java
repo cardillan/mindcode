@@ -31,10 +31,19 @@ public class MindcodeFunction {
     private List<LogicVariable> parameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";
+
+    /// Number of times the function will be compiled into the code
+    /// At most 1 for non-inine function, any number for inlined functions
     private int placementCount = 0;
+
+    /// Indicates the function was visited while constructing the call tree.
+    /// All functions need to be visited to detect possible recursions among unused functions.
+    private boolean visited = false;
+
+    /// Inlined by any reason: declaration, compiler or optimizer
     private boolean inlined = false;
 
-    // All calls in this function, including unresolved ones
+    /// All calls in this function, including unresolved ones
     private final List<AstFunctionCall> functionCalls = new ArrayList<>();
 
     // Information about user-defined functions called from this function
@@ -54,6 +63,7 @@ public class MindcodeFunction {
         declaration = other.declaration;
         parameterCount = other.parameterCount;
         placementCount = other.placementCount;
+        visited = other.visited;
         inlined = true;
 
         functionCalls.addAll(other.functionCalls);
@@ -207,6 +217,11 @@ public class MindcodeFunction {
         return placementCount > 0;
     }
 
+    /// @return true if this function was visited
+    boolean isVisited() {
+        return visited;
+    }
+
     /// @return the number of places the function is called from
     public int getPlacementCount() {
         return placementCount;
@@ -286,6 +301,7 @@ public class MindcodeFunction {
     }
 
     public void updatePlacement(int count) {
+        visited = true;
         placementCount += count;
     }
 
@@ -323,7 +339,7 @@ public class MindcodeFunction {
     }
 
     public SourcePosition getSourcePosition() {
-        return declaration.sourcePosition();
+        return declaration.getIdentifier().sourcePosition();
     }
 
     public String format() {

@@ -8,7 +8,6 @@ import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
 import info.teksol.mc.util.Tuple2;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -201,7 +200,7 @@ class ExpressionOptimizer extends BaseOptimizer {
      * @param ix instruction to inspect
      * @return a tuple containing a constant operand and the other operand.
      */
-    private Tuple2<@NonNull LogicValue, @NonNull LogicValue> extractConstantOperand(OpInstruction ix) {
+    private Tuple2<LogicValue, LogicValue> extractConstantOperand(OpInstruction ix) {
         return ix.getX().isNumericLiteral()
                 ? Tuple2.ofSame(ix.getX(), ix.getY())
                 : Tuple2.ofSame(ix.getY(), ix.getX());

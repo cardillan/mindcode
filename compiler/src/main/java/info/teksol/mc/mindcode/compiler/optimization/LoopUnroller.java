@@ -270,6 +270,7 @@ class LoopUnroller extends BaseOptimizer {
                 result = op.getX().equals(loopControl)
                         ? evaluate(op.getOperation(), controlVariable, op.getY())
                         : evaluate(op.getOperation(), op.getX(), controlVariable);
+                assert result != null;
                 controlVariable.setDoubleValue(result.getDoubleValue());
             }
 

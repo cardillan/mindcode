@@ -16,8 +16,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
     class Errors {
         @Test
         void refusesUppercaseFunctionParameter() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Parameter 'N' of function 'foo' uses name reserved for global variables."),
+            assertGeneratesMessage(
+                    "Parameter 'N' of function 'foo' uses name reserved for global variables.",
                     """
                             def foo(N)
                                 N;
@@ -29,7 +29,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesBlockNameAsFunctionParameter() {
-            assertGeneratesMessage("Parameter 'switch1' of function 'foo' uses name reserved for linked blocks.",
+            assertGeneratesMessage(
+                    "Parameter 'switch1' of function 'foo' uses name reserved for linked blocks.",
                     """
                             def foo(switch1)
                                 switch1;
@@ -41,7 +42,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesFormattablesAsArguments() {
-            assertGeneratesMessage("A formattable string literal can only be used as a first argument to the print or remark function.",
+            assertGeneratesMessage(
+                    "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.",
                     """
                             inline void foo(x) print(x); end;
                             foo($"Hello");
@@ -50,7 +52,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesBlockNameAsFunctionOutputArgument() {
-            assertGeneratesMessage("Assignment to constant or parameter 'message1' not allowed.",
+            assertGeneratesMessage(
+                    "Assignment to constant or parameter 'message1' not allowed.",
                     """
                             def foo(out n)
                                 n = 10;
@@ -62,8 +65,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesMissingArguments() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Function 'foo': wrong number of arguments (expected 1, found 0)."),
+            assertGeneratesMessage(
+                    "Function 'foo': wrong number of arguments (expected 1, found 0).",
                     """
                             def foo(a)
                                 a;
@@ -75,8 +78,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesTooManyArguments() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Function 'foo': wrong number of arguments (expected 1, found 2)."),
+            assertGeneratesMessage(
+                    "Function 'foo': wrong number of arguments (expected 1, found 2).",
                     """
                             def foo(a)
                                 a;
@@ -88,8 +91,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesVoidVarRefAssignments() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex("Expression doesn't have any value\\..*"),
+            assertGeneratesMessageRegex(
+                    "Expression doesn't have any value\\..*",
                     """
                             void foo()
                                 null;
@@ -101,8 +104,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesVoidVarRefAssignments2() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex("Expression doesn't have any value\\..*"),
+            assertGeneratesMessageRegex(
+                    "Expression doesn't have any value\\..*",
                     """
                             a = printflush(message1);
                             """
@@ -122,8 +125,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesVoidInReturns() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex("Expression doesn't have any value\\..*"),
+            assertGeneratesMessageRegex(
+                    "Expression doesn't have any value\\..*",
                     """
                             def foo()
                                 return printflush(message1);
@@ -135,8 +138,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesMissingArgument() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Parameter 'a' isn't optional, a value must be provided."),
+            assertGeneratesMessage(
+                    "Parameter 'a' isn't optional, a value must be provided.",
                     """
                             def foo(a, b)
                                 a + b;
@@ -148,8 +151,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void reportsMissingModifiers() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Parameter 'a' is declared 'in out' and no 'in' or 'out' argument modifier was used."),
+            assertGeneratesMessage(
+                    "Parameter 'a' is declared 'in out' and no 'in' or 'out' argument modifier was used.",
                     """
                             def foo(in out a)
                                 a = a + 1;
@@ -162,9 +165,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesWrongInModifier() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .add("Parameter 'a' isn't input, 'in' modifier not allowed."),
+            assertGeneratesMessage(
+                    "Parameter 'a' isn't input, 'in' modifier not allowed.",
                     """
                             def foo(out a)
                                 a = 10;
@@ -176,8 +178,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesWrongOutModifier() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Parameter 'a' isn't output, 'out' modifier not allowed."),
+            assertGeneratesMessage(
+                    "Parameter 'a' isn't output, 'out' modifier not allowed.",
                     """
                             def foo(a)
                                 a + 1;
@@ -189,8 +191,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void reportsMissingOutModifier() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Parameter 'a' is output and 'out' modifier was not used."),
+            assertGeneratesMessage(
+                    "Parameter 'a' is output and 'out' modifier was not used.",
                     """
                             def foo(out a)
                                 a = 10;
@@ -204,9 +206,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void reportsFunctionConflicts() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .add(3, 1, "Function 'foo(a, out b)' conflicts with function 'foo(a)'.")
-                            .add(4, 1, "Function 'foo(a, in out b)' conflicts with function 'foo(a, b)'.")
-                            .add(4, 1, "Function 'foo(a, in out b)' conflicts with function 'foo(a, out b)'."),
+                            .add(3, 13, "Function 'foo(a, out b)' conflicts with function 'foo(a)'.")
+                            .add(4, 13, "Function 'foo(a, in out b)' conflicts with function 'foo(a, b)'.")
+                            .add(4, 13, "Function 'foo(a, in out b)' conflicts with function 'foo(a, out b)'."),
                     """
                             inline void foo(a) print(a); end;
                             inline void foo(a, b) print(a, b); end;
@@ -218,9 +220,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void reportsVarargFunctionsConflict() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .add(2, 1, "Function 'foo(a, b, c, d...)' conflicts with function 'foo(a, b, c...)'."),
+            assertGeneratesMessage(2, 13,
+                    "Function 'foo(a, b, c, d...)' conflicts with function 'foo(a, b, c...)'.",
                     """
                             inline void foo(a, b, c...) print(a, b); end;
                             inline void foo(a, b, c, d...) print(a, b, c); end;
@@ -291,7 +292,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesNoModifiers() {
-            assertGeneratesMessages(expectedMessages().add("Parameter 'x' is output and 'out' modifier was not used."),
+            assertGeneratesMessage(
+                    "Parameter 'x' is output and 'out' modifier was not used.",
                     """
                             void foo(out x)
                                 x = 10;
@@ -302,7 +304,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesInModifier() {
-            assertGeneratesMessages(expectedMessages().add("Parameter 'x' isn't input, 'in' modifier not allowed."),
+            assertGeneratesMessage(
+                    "Parameter 'x' isn't input, 'in' modifier not allowed.",
                     """
                             void foo(out x)
                                 x = 10;
@@ -1136,7 +1139,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesWrongAlignment() {
             assertGeneratesMessages(expectedMessages()
-                            .add("Invalid value 'fluffyBunny' for parameter 'alignment': allowed values are 'center'," +
+                            .add("Invalid value 'fluffyBunny' for keyword parameter: allowed values are 'center'," +
                                  " 'top', 'bottom', 'left', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'."),
                     "drawPrint(10, 10, fluffyBunny);");
         }
@@ -1215,12 +1218,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void reportsWrongKeywords() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Invalid value 'building' for parameter 'layer': allowed values are 'floor', 'ore', 'block'.")
-                            .add("Function 'setblock': wrong number of arguments (expected 4, found 6)."),
-                    """
-                            setblock(building, @core-nucleus, x, y, 0, 0);
-                            """);
+            assertGeneratesMessage(
+                    "Invalid value 'building' for keyword parameter: allowed values are 'floor', 'ore', 'block'.",
+                    "setblock(building, @core-nucleus, x, y, 0, 0);"
+            );
         }
     }
 
@@ -1247,10 +1248,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesUnknownMethods() {
-            assertGeneratesMessages(expectedMessages().add("Undefined function 'fluffyBunny'."),
-                    """
-                            cell1.fluffyBunny(Hohoho);
-                            """);
+            assertGeneratesMessage(
+                    "Unknown function 'fluffyBunny'.",
+                    "cell1.fluffyBunny(Hohoho);"
+            );
         }
 
         @Test

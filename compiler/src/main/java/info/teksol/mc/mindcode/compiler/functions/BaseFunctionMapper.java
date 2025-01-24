@@ -16,7 +16,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.*;
-import info.teksol.mc.util.Tuple2;
+import info.teksol.mc.util.Tuple2Nullable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -100,10 +100,10 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
                         )
                 ),
                 sampleGenerators.stream()
-                        .map(s -> Tuple2.<SampleGenerator, @Nullable String>of(s, s.generateSecondarySampleCall()))
+                        .map(s -> Tuple2Nullable.<SampleGenerator, @Nullable String>of(s, s.generateSecondarySampleCall()))
                         .filter(t -> t.e2() != null)
                         .map(t -> new FunctionSample(
-                                        processor.getOpcodeVariants().indexOf(t.e1().getOpcodeVariant()),
+                                        processor.getOpcodeVariants().indexOf(Objects.requireNonNull(t.e1()).getOpcodeVariant()),
                                         t.e1().getName(),
                                         t.e2(),
                                         t.e1().generateSampleInstruction(),
@@ -124,7 +124,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         } else if (argument.getArgumentValue() instanceof LogicBoolean bool) {
             return LogicKeyword.create(bool.toMlog());
         } else {
-            return LogicKeyword.create("");
+            return LogicKeyword.INVALID;
         }
     }
 

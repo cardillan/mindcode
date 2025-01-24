@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.antlr;
 
 import info.teksol.mc.common.InputFile;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeErrorListener;
@@ -31,7 +32,7 @@ public class LexerParser {
         parser.setErrorHandler(new MindcodeErrorStrategy(tokenStream));
         AstModuleContext parseTree = parser.astModule();
         if (errorListener.getAmbiguities() > 0) {
-            messageConsumer.accept(ToolMessage.error("%s: ambiguous source code (%d ambiguities found).",
+            messageConsumer.accept(ToolMessage.error(ERR.INTERNAL_AMBIGUOUS_CODE,
                     inputFile.getDistinctTitle(), errorListener.getAmbiguities()));
         }
         return parseTree;

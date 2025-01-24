@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.logic.opcodes.NamedParameter;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ class StandardPropertyHandler extends AbstractHandler implements PropertyHandler
     }
 
     @Override
-    public String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
+    public @Nullable String generateSecondaryCall(List<NamedParameter> arguments, boolean markOptional) {
         List<NamedParameter> args = new ArrayList<>(arguments);
         NamedParameter block = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
         Objects.requireNonNull(block);

@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.InputFunctionArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
@@ -18,10 +19,10 @@ public class MessageFunctionHandler extends StandardFunctionHandler {
     protected FunctionArgument validateOutput(NamedParameter parameter, FunctionArgument argument) {
         if (parameter.type().isOutput() && argument.getArgumentValue() instanceof LogicBuiltIn builtIn && LogicBuiltIn.WAIT.equals(builtIn)) {
             if (argument.hasInModifier()) {
-                error(argument.sourcePosition(), "Parameter '%s' isn't input, 'in' modifier not allowed.", parameter.name());
+                error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.name());
             }
             if (argument.hasOutModifier()) {
-                error(argument.sourcePosition(), "'out' modifier not allowed with special value '%s'.", builtIn.toMlog());
+                error(argument, ERR.ARGUMENT_WAIT_OUT_NOT_ALLOWED, builtIn.toMlog());
             }
             return argument instanceof InputFunctionArgument a ? a.toOutputFunctionArgument() : argument;
         } else {

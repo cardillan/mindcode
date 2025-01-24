@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.ast;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.messages.CompilerMessage;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
@@ -66,7 +66,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         } else if (result instanceof AstExpression expression) {
             return expression;
         } else {
-            context.messageConsumer().addMessage(CompilerMessage.error(result.sourcePosition(), "Expression is required."));
+            // This is probably not even permitted by the syntax
+            context.error(result, ERR.EXPRESSION_REQUIRED);
             return new AstLiteralNull(result.sourcePosition(), "null");
         }
     }
@@ -570,7 +571,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstMindcodeNode visitAstLiteralColor(AstLiteralColorContext ctx) {
         String literal = ctx.COLOR().getText();
         if (literal.length() != 7 && literal.length() != 9) {
-            context.messageConsumer().addMessage(CompilerMessage.error(pos(ctx), "Invalid format of color literal (supported formats are %%rrggbb or %%rrggbbaa)."));
+            context.error(pos(ctx), ERR.LITERAL_INVALID_COLOR_FORMAT);
             if (literal.length() < 9) {
                 // pad with zeroes
                 return new AstLiteralColor(pos(ctx), literal + "%00000000".substring(literal.length(), 9));

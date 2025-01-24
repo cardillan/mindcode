@@ -3,6 +3,8 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.generated.ast.visitors.AstArrayAccessVisitor;
 import info.teksol.mc.generated.ast.visitors.AstBuiltInIdentifierVisitor;
 import info.teksol.mc.generated.ast.visitors.AstIdentifierVisitor;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstArrayAccess;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstBuiltInIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
@@ -45,7 +47,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitBuiltInIdentifier(AstBuiltInIdentifier node) {
         if (LVar.forName(node.getName()) == null) {
-            warn(node, "Built-in variable '%s' not recognized.", node.getName());
+            warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
         }
         return LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }
@@ -59,11 +61,11 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         ValueStore memory = evaluate(node.getArray());
         if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
             if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
-                error(node.getArray(), "Cannot use value assigned to parameter '%s' to access external memory.", parameter.getName());
+                error(node.getArray(), ERR.ARRAY_PARAMETER_NOT_MEMORY, parameter.getName());
             }
             return variable;
         } else {
-            error(node.getArray(), "'%s' is not an external memory.", node.getArray().getName());
+            error(node.getArray(), ERR.ARRAY_EXPRESSION_NOT_MEMORY, node.getArray().getName());
             return LogicVariable.INVALID;
         }
     }

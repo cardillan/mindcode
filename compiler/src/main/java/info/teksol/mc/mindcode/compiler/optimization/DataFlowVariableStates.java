@@ -369,9 +369,9 @@ class DataFlowVariableStates {
         /// Returns a VariableValue instance keeping the information about the variable's value, or null if nothing
         /// is known.
         ///
-        /// @param variable variable to test
+        /// @param variable variable to test (null is acceptable)
         /// @return known value of the variable
-        public @Nullable VariableValue findVariableValue(LogicValue variable) {
+        public @Nullable VariableValue findVariableValue(@Nullable LogicValue variable) {
             return variable instanceof LogicVariable v && !stored.contains(v) ? values.get(v) : null;
         }
 

@@ -2,6 +2,7 @@ package info.teksol.mc.evaluator;
 
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -13,8 +14,12 @@ public class ExpressionEvaluator {
     public static final double doubleDegRad = 0.017453292519943295;
     public static final double doubleRadDeg = 57.29577951308232;
 
-    public static LogicOperation getOperation(Operation operation) {
+    public static @Nullable LogicOperation getOperation(Operation operation) {
         return OPERATIONS.get(operation);
+    }
+
+    public static LogicOperation existingOperation(Operation operation) {
+        return Objects.requireNonNull(OPERATIONS.get(operation));
     }
 
     public static int getNumberOfArguments(Operation operation) {

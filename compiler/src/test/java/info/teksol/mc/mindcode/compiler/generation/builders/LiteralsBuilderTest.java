@@ -180,7 +180,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void generatesImprecisionWarningForFloatLiteralsVersion7() {
         assertGeneratesMessage(
-                "Loss of precision while creating mlog literals (original value 1e25, encoded value 9.999999562023526E24).",
+                "Loss of precision while creating mlog literal (original value 1e25, encoded value 9.999999562023526E24).",
                 """
                         #set target = 7;
                         var a = 1e25;
@@ -226,7 +226,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '9223372036854775807' exceeds safe range for integer operations (0 .. 2**52).")
-                        .add("Literal '9223372036854775808' exceeds maximum possible value."),
+                        .add("Literal '9223372036854775808' exceeds maximum possible value (9223372036854775807)."),
                 """
                         var a = 9223372036854775807;
                         var b = 9223372036854775808;
@@ -239,7 +239,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '0x7fffffffffffffff' exceeds safe range for integer operations (0 .. 2**52).")
-                        .add("Literal '0x8000000000000000' exceeds maximum possible value."),
+                        .add("Literal '0x8000000000000000' exceeds maximum possible value (0x7fffffffffffffff)."),
                 """
                         var a = 0x7fffffffffffffff;
                         var b = 0x8000000000000000;
@@ -252,7 +252,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '0b0111111111111111111111111111111111111111111111111111111111111111' exceeds safe range for integer operations (0 .. 2**52).")
-                        .add("Literal '0b1000000000000000000000000000000000000000000000000000000000000000' exceeds maximum possible value."),
+                        .add("Literal '0b1000000000000000000000000000000000000000000000000000000000000000' exceeds maximum possible value (0b111111111111111111111111111111111111111111111111111111111111111)."),
                 """
                         var a = 0b0111111111111111111111111111111111111111111111111111111111111111;
                         var b = 0b1000000000000000000000000000000000000000000000000000000000000000;

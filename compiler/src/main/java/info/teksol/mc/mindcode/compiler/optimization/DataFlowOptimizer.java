@@ -789,6 +789,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
                 MindcodeFunction function = instruction.getAstContext().function();
+                assert function != null;
                 variableStates.updateAfterFunctionCall(function, instruction);
                 if (modifyInstructions && optimizationContext.getEndingFunctions().contains(function)) {
                     functionEndStates.add(variableStates.copy("function end handling"));

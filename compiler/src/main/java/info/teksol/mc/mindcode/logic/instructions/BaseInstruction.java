@@ -107,8 +107,8 @@ public class BaseInstruction implements LogicInstruction {
         return Objects.requireNonNull(params).get(index);
     }
 
-    public @Nullable List<TypedArgument> getTypedArguments() {
-        return typedArguments;
+    public List<TypedArgument> getTypedArguments() {
+        return Objects.requireNonNull(typedArguments);
     }
 
     @Override
