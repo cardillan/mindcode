@@ -3,8 +3,11 @@ package info.teksol.schemacode.ast;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public record AstConnection(SourcePosition sourcePosition, AstCoordinates position, String id) implements AstConfiguration {
+@NullMarked
+public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordinates position, @Nullable String id) implements AstConfiguration {
 
     public AstConnection(SourcePosition sourcePosition, AstCoordinates position) {
         this(sourcePosition, position, null);
@@ -30,5 +33,10 @@ public record AstConnection(SourcePosition sourcePosition, AstCoordinates positi
         } else {
             return builder.getBlockPosition(this, id).position();
         }
+    }
+
+    @Override
+    public AstConnection withEmptyPosition() {
+        return new AstConnection(SourcePosition.EMPTY, eraseNullablePosition(position), id);
     }
 }

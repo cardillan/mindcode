@@ -3,8 +3,11 @@ package info.teksol.schemacode.ast;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, String relativeTo) implements AstSchemaItem {
+@NullMarked
+public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, @Nullable String relativeTo) implements AstSchemaItem {
 
     public AstCoordinates(SourcePosition sourcePosition, int x, int y, String relativeTo) {
         this(sourcePosition,new Position(x, y), true, relativeTo);
@@ -39,7 +42,7 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
         }
     }
 
-    public String getRelativeTo() {
+    public @Nullable String getRelativeTo() {
         return relativeTo;
     }
 
@@ -49,5 +52,10 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
 
     public AstCoordinates relativeTo(String id) {
         return new AstCoordinates(sourcePosition, getX(), getY(), id);
+    }
+
+    @Override
+    public AstCoordinates withEmptyPosition() {
+        return new AstCoordinates(SourcePosition.EMPTY, coordinates, relative, relativeTo);
     }
 }

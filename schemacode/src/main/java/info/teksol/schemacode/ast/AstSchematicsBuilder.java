@@ -11,10 +11,13 @@ import info.teksol.schemacode.schematics.Language;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     private final InputFile inputFile;
@@ -31,7 +34,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends AstSchemaItem> T maybeVisit(ParseTree tree) {
+    private <T extends AstSchemaItem> @Nullable T maybeVisit(@Nullable ParseTree tree) {
         return tree == null ? null : (T) visit(tree);
     }
 
@@ -286,7 +289,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     // Labels
 
-    private static List<String> processLabels(SchemacodeParser.LabelListContext labels) {
+    private static List<String> processLabels(SchemacodeParser.@Nullable LabelListContext labels) {
         return labels == null
                 ? List.of()
                 : labels.Id().stream()

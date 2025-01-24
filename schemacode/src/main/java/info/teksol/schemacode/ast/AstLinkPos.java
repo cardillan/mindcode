@@ -4,10 +4,14 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
-public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection, String name, boolean virtual) implements AstLink {
+@NullMarked
+public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection, @Nullable String name, boolean virtual) implements AstLink {
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
@@ -15,6 +19,11 @@ public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection
     }
 
     private String trueLinkName() {
-        return name == null ? connection().id() : name;
+        return name == null ? Objects.requireNonNull(connection().id()) : name;
+    }
+
+    @Override
+    public AstLinkPos withEmptyPosition() {
+        return new AstLinkPos(SourcePosition.EMPTY, erasePosition(connection), name, virtual);
     }
 }

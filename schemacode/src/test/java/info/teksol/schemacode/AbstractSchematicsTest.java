@@ -15,6 +15,7 @@ import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Block;
 import info.teksol.schemacode.schematics.Schematic;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,21 @@ public abstract class AbstractSchematicsTest {
         return new Position(x, y);
     }
 
+    protected static void assertAstEquals(AstDefinitions expected, AstDefinitions actual) {
+        Assertions.assertEquals(expected.withEmptyPosition(), actual.withEmptyPosition());
+    }
+
+    protected static void assertAstEquals(Schematic expected, Schematic actual) {
+        Assertions.assertEquals(expected, actual);
+    }
+
     public static PositionArray pa(Position... positions) {
         return positions.length == 0 ? PositionArray.EMPTY : new PositionArray(positions);
     }
 
     protected SourcePosition pos(int line, int column) {
-        return new SourcePosition(inputFiles.getMainInputFile(), line, column);
+        //return new SourcePosition(inputFiles.getMainInputFile(), line, column);
+        return SourcePosition.EMPTY;
     }
 
     // Block index generator. Class is re-instantiated for each test, index always starts from zero.
@@ -88,7 +98,7 @@ public abstract class AbstractSchematicsTest {
 
     protected Schematic buildSchematics(String source) {
         inputFiles.registerSource(source);
-        AstDefinitions definitions = createDefinitions(source);
+        AstDefinitions definitions = createDefinitions(source).withEmptyPosition();
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
         return SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messageListener("buildSchematics"));
     }

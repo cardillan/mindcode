@@ -22,7 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * More precise calculations of optimization benefits in loop unrolling and call inlining.
-* The `sensor` instruction is considered deterministic if a constant property of a non-volatile value, which is also not a linked variable, is being queried.  
+* The `sensor` instruction is considered deterministic if a deterministic property of a non-volatile value, which is also not a linked variable, is being queried.
+* When clicking on an error or warning in the web application, the entire portion of the source code causing the error or warning is selected.    
 
 ### Miscellaneous
 

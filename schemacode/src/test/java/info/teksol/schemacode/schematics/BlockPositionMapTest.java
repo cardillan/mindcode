@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class BlockPositionMapTest extends AbstractSchematicsTest {
 
     @Test
@@ -72,7 +70,7 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -95,6 +93,6 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 }

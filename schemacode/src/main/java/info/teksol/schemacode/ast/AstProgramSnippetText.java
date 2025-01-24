@@ -2,7 +2,9 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record AstProgramSnippetText(SourcePosition sourcePosition, AstText programText) implements AstProgramSnippet {
 
     @Override
@@ -23,5 +25,10 @@ public record AstProgramSnippetText(SourcePosition sourcePosition, AstText progr
     @Override
     public int getIndent(SchematicsBuilder builder) {
         return programText.getIndent(builder);
+    }
+
+    @Override
+    public AstProgramSnippetText withEmptyPosition() {
+        return new AstProgramSnippetText(SourcePosition.EMPTY, erasePosition(programText));
     }
 }

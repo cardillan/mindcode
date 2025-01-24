@@ -3,10 +3,12 @@ package info.teksol.schemacode.ast;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NullMarked
 public record AstProgram(SourcePosition sourcePosition, List<AstProgramSnippet> snippets) implements AstSchemaItem {
 
     public AstProgram(SourcePosition sourcePosition, AstProgramSnippet... snippets) {
@@ -27,5 +29,10 @@ public record AstProgram(SourcePosition sourcePosition, List<AstProgramSnippet> 
 
     public SourcePositionTranslator createPositionTranslator(SchematicsBuilder builder) {
         return MultipartPositionTranslator.createTranslator(builder, snippets);
+    }
+
+    @Override
+    public AstProgram withEmptyPosition() {
+        return new AstProgram(SourcePosition.EMPTY, erasePositions(snippets));
     }
 }

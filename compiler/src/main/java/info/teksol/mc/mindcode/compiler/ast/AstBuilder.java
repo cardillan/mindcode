@@ -125,11 +125,15 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     //<editor-fold desc="Helper functions (other)">
     private SourcePosition pos(ParserRuleContext ctx) {
-        return SourcePosition.create(inputFile, ctx.getStart());
+        return SourcePosition.create(inputFile, ctx.getStart(), ctx.getStop(), ctx.getStart());
     }
 
     private SourcePosition pos(Token token) {
         return SourcePosition.create(inputFile, token);
+    }
+
+    private SourcePosition pos(Token start, Token end, Token token) {
+        return SourcePosition.create(inputFile, start, end, token);
     }
 
     private SourcePosition pos(TerminalNode node) {
@@ -619,7 +623,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rules: expressions/operators (unary)">
     @Override
     public AstOperatorUnary visitAstOperatorUnary(MindcodeParser.AstOperatorUnaryContext ctx) {
-        return new AstOperatorUnary(pos(ctx.op),
+        return new AstOperatorUnary(pos(ctx.op, ctx.exp.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.exp));
     }
@@ -653,7 +657,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rules: expressions/operators (binary)">
     @Override
     public AstOperatorBinary visitAstOperatorBinaryExp(MindcodeParser.AstOperatorBinaryExpContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -661,7 +665,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -669,7 +673,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -677,7 +681,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -685,7 +689,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryBitwiseAnd(MindcodeParser.AstOperatorBinaryBitwiseAndContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -693,7 +697,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryBitwiseOr(MindcodeParser.AstOperatorBinaryBitwiseOrContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -701,7 +705,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryInequality(MindcodeParser.AstOperatorBinaryInequalityContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -709,7 +713,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -717,7 +721,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));
@@ -725,7 +729,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstOperatorBinary visitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx) {
-        return new AstOperatorBinary(pos(ctx.op),
+        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
                 operation(ctx.op),
                 visitAstExpression(ctx.left),
                 visitAstExpression(ctx.right));

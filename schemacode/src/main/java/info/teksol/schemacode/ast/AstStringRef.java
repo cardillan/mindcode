@@ -2,7 +2,9 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record AstStringRef(SourcePosition sourcePosition, String reference) implements AstText {
 
     @Override
@@ -18,5 +20,10 @@ public record AstStringRef(SourcePosition sourcePosition, String reference) impl
     @Override
     public int getIndent(SchematicsBuilder builder) {
         return builder.getText(this, reference).getIndent(builder);
+    }
+
+    @Override
+    public AstStringRef withEmptyPosition() {
+        return new AstStringRef(SourcePosition.EMPTY, reference);
     }
 }

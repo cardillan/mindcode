@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     protected AstDefinitions definitionWithBlocks(AstBlock... blocks) {
-        return new AstDefinitions(pos(1, 1), List.of(new AstSchematic(pos(1, 1), List.of(), List.of(blocks))));
+        return new AstDefinitions(pos(1, 1), List.of(new AstSchematic(pos(1, 1), List.of(), List.of(blocks)))).withEmptyPosition();
     }
 
     @Test
@@ -79,7 +80,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         )
                 ));
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -98,7 +99,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -153,7 +154,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         )
                 ));
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -179,7 +180,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -202,7 +203,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -251,7 +252,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -273,7 +274,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -295,7 +296,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -331,7 +332,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -353,7 +354,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 new AstBlock(pos(5, 5), List.of(), "@conveyor", new AstCoordinates(pos(5, 18), 3, 0), new AstDirection(pos(5, 27), "west"), null)
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -389,7 +390,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -411,7 +412,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -432,7 +433,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -459,7 +460,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -493,7 +494,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -528,7 +529,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -563,7 +564,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -588,7 +589,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -609,7 +610,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -630,7 +631,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -651,7 +652,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -673,7 +674,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -696,7 +697,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -719,7 +720,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -745,7 +746,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -786,7 +787,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -812,7 +813,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -838,7 +839,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -864,7 +865,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -890,7 +891,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -916,7 +917,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -942,7 +943,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -968,7 +969,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -994,7 +995,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1061,7 +1062,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1087,7 +1088,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1113,7 +1114,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1139,7 +1140,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1165,7 +1166,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1191,7 +1192,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1217,7 +1218,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1243,7 +1244,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -1269,7 +1270,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
 
@@ -1299,7 +1300,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test

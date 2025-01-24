@@ -11,8 +11,6 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class PowerGridSolverTest extends AbstractSchematicsTest {
 
     @Test
@@ -91,7 +89,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -139,7 +137,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -158,7 +156,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @Test
@@ -177,7 +175,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 )
         );
 
-        assertEquals(expected, actual);
+        assertAstEquals(expected, actual);
     }
 
     @TestFactory

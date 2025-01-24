@@ -131,7 +131,7 @@
                 <#items as msg>
                     <li class="text-red-700">
                         <#if msg.hasPosition()>
-                            <a class="underline" href="#" onclick="jumpToPosition(${msg.line}, ${msg.charPositionInLine}); return false;">${msg.position}</a>:
+                            <a class="underline" href="#" onclick="jumpToPosition(${msg.startLine}, ${msg.startColumn}, ${msg.endLine}, ${msg.endColumn}); return false;">${msg.position}</a>:
                         </#if>
                         ${msg.message}
                     </li>
@@ -149,7 +149,7 @@
                 <#items as msg>
                     <li class="text-red-700">
                         <#if msg.hasPosition()>
-                            <a class="underline" href="#" onclick="jumpToPosition(${msg.line}, ${msg.charPositionInLine}); return false;">${msg.position}</a>
+                            <a class="underline" href="#" onclick="jumpToPosition(${msg.startLine}, ${msg.startColumn}, ${msg.endLine}, ${msg.endColumn}); return false;">${msg.position}</a>
                         </#if>
                         ${msg.message}
                     </li>
@@ -210,44 +210,59 @@
 </script>
 
 <script>
-    function jumpToPosition(line, char) {
+    function jumpToPosition(startLine, startChar, endLine, endChar) {
         const textarea = document.getElementById('source');
         const lines = textarea.value.split('\n');
 
         // Ensure the specified line exists
-        if (line > lines.length || line < 1) {
-            alert('Line number out of range');
+        if (startLine > lines.length || endLine > lines.length) {
+            alert('Cannot find error position -- has the code been edited? Please recompile.');
             return;
         }
 
         // Calculate the position by summing up the lengths of all preceding lines + chars in the target line
-        let position = 0;
-        for (let i = 0; i < line - 1; i++) {
-            position += lines[i].length + 1; // +1 for the newline character
+        let startPosition = 0;
+        for (let i = 0; i < startLine - 1; i++) {
+            startPosition += lines[i].length + 1; // +1 for the newline character
         }
 
-        // Move the cursor to the calculated position
-        textarea.setSelectionRange(0, 0);
-        textarea.setSelectionRange(position, position + lines[line - 1].length);
+        // Calculate the position by summing up the lengths of all preceding lines + chars in the target line
+        let endPosition = 0;
+        for (let j = 0; j < endLine - 1; j++) {
+            endPosition += lines[j].length + 1; // +1 for the newline character
+        }
 
-        position += char - 1; // Char position within the line
+        if (startChar - 1 > lines[startLine - 1].length || endChar - 1 > lines[endLine - 1].length) {
+            alert('Cannot find error position -- has the code been edited? Please recompile.');
+            return;
+        }
+
+        let fullStart = startPosition + startChar - 1;
+        let fullEnd = endPosition + endChar - 1;
+
+        if (fullStart === fullEnd) {
+            let fullLineEnd = startPosition + lines[startLine - 1].length;
+            textarea.setSelectionRange(0, 0);
+            textarea.setSelectionRange(startPosition, fullLineEnd);
+        } else {
+            textarea.setSelectionRange(0, 0);
+            textarea.setSelectionRange(fullStart, fullEnd);
+        }
 
         // Set focus on the textarea
         textarea.focus();
 
-
         // Now scroll the textarea to bring the cursor into view
         // Scroll to ensure the cursor is vertically centered
         const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight);
-        const cursorY = (line / lines.length) * textarea.scrollHeight;
+        const cursorY = (startLine / lines.length) * textarea.scrollHeight;
         const textareaHeight = textarea.clientHeight;
 
         // Scroll so that the cursor is in the middle
         textarea.scrollTop = cursorY - textareaHeight / 2 + lineHeight / 2;
 
         setTimeout(() => {
-            // Deselect text after highlight (optional)
-            textarea.setSelectionRange(position, position);
+            textarea.setSelectionRange(fullStart, fullEnd);
         }, 250);
     }
 </script>

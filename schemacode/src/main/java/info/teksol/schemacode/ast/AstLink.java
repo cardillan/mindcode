@@ -3,9 +3,11 @@ package info.teksol.schemacode.ast;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
 
+@NullMarked
 public interface AstLink extends AstSchemaItem {
 
     void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition);

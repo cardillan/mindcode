@@ -3,11 +3,13 @@ package info.teksol.schemacode.ast;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@NullMarked
 public record AstProgramSnippetFile(SourcePosition sourcePosition, AstText fileName) implements AstProgramSnippet {
 
     @Override
@@ -43,5 +45,10 @@ public record AstProgramSnippetFile(SourcePosition sourcePosition, AstText fileN
             builder.error("Loading code from external file not supported in web application.");
             return SourcePosition.EMPTY;
         }
+    }
+
+    @Override
+    public AstProgramSnippetFile withEmptyPosition() {
+        return new AstProgramSnippetFile(SourcePosition.EMPTY, erasePosition(fileName));
     }
 }

@@ -2,7 +2,9 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record AstStringBlock(SourcePosition sourcePosition, String text, int indent) implements AstText {
 
     @Override
@@ -32,7 +34,8 @@ public record AstStringBlock(SourcePosition sourcePosition, String text, int ind
         return new AstStringBlock(sourcePosition.nextLine(), text, indent);
     }
 
-    public static AstStringBlock fromText(String text) {
-        return new AstStringBlock(SourcePosition.EMPTY, text, 0);
+    @Override
+    public AstStringBlock withEmptyPosition() {
+        return new AstStringBlock(SourcePosition.EMPTY, text, indent);
     }
 }

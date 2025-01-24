@@ -4,7 +4,9 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record AstStringLiteral(SourcePosition sourcePosition, String text) implements AstText {
 
     @Override
@@ -31,5 +33,10 @@ public record AstStringLiteral(SourcePosition sourcePosition, String text) imple
 
     public static AstStringLiteral fromText(SourcePosition pos, String text) {
         return new AstStringLiteral(pos, text);
+    }
+
+    @Override
+    public AstStringLiteral withEmptyPosition() {
+        return new AstStringLiteral(SourcePosition.EMPTY, text);
     }
 }
