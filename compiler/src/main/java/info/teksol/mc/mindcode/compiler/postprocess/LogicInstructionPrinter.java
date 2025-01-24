@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
 import info.teksol.mc.mindcode.logic.instructions.RemarkInstruction;
 import info.teksol.mc.profile.FinalCodeOutput;
+import org.jspecify.annotations.NullMarked;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class LogicInstructionPrinter {
 
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {

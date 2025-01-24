@@ -21,16 +21,16 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
    135 stop
    136 end
    137 label *label3
--    * op mul *tmp4 :fn3:actual 100000000
--    * set :fn4:x *tmp4
-+  138 op mul :fn4:x :fn3:actual 100000000
-   139 op add *tmp6 :fn4:x 0.5
--    * op floor *tmp7 *tmp6
--    * set *tmp5 *tmp7
-+  140 op floor *tmp5 *tmp6
-   141 label *label11
-   142 op div *tmp8 *tmp5 100000000
-   143 assertequals :fn3:expected *tmp8 :fn3:title
+-    * op mul *tmp88 :fn3:actual 100000000
+-    * set :fn29:x *tmp88
++  138 op mul :fn29:x :fn3:actual 100000000
+   139 op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp91 *tmp90
+-    * set *tmp89 *tmp91
++  140 op floor *tmp89 *tmp90
+   141 label *label72
+   142 op div *tmp92 *tmp89 100000000
+   143 assertequals :fn3:expected *tmp92 :fn3:title
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
  
@@ -219,84 +219,84 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
 -    * setaddr :fn3*retaddr *label4
 -    * call *label3 :fn3*retval
 -    * label *label4
-+   48 label *label12
-+   49 op mul :fn4:x :fn3:actual 100000000
-+   50 op add *tmp6 :fn4:x 0.5
-+   51 op floor *tmp5 *tmp6
-+   52 label *label13
-+   53 op div *tmp8 *tmp5 100000000
-+   54 assertequals :fn3:expected *tmp8 :fn3:title
-+   55 label *label14
++   48 label *label73
++   49 op mul :fn29:x :fn3:actual 100000000
++   50 op add *tmp90 :fn29:x 0.5
++   51 op floor *tmp89 *tmp90
++   52 label *label74
++   53 op div *tmp92 *tmp89 100000000
++   54 assertequals :fn3:expected *tmp92 :fn3:title
++   55 label *label75
     56 set :fn3:expected -1
     57 set :fn3:actual -1
     58 set :fn3:title "cos"
 -    * setaddr :fn3*retaddr *label5
 -    * call *label3 :fn3*retval
 -    * label *label5
-+   59 label *label15
-+   60 op mul :fn4:x :fn3:actual 100000000
-+   61 op add *tmp6 :fn4:x 0.5
-+   62 op floor *tmp5 *tmp6
-+   63 label *label16
-+   64 op div *tmp8 *tmp5 100000000
-+   65 assertequals :fn3:expected *tmp8 :fn3:title
-+   66 label *label17
++   59 label *label76
++   60 op mul :fn29:x :fn3:actual 100000000
++   61 op add *tmp90 :fn29:x 0.5
++   62 op floor *tmp89 *tmp90
++   63 label *label77
++   64 op div *tmp92 *tmp89 100000000
++   65 assertequals :fn3:expected *tmp92 :fn3:title
++   66 label *label78
     67 set :fn3:expected 1
     68 set :fn3:actual 0.9999999999999999
     69 set :fn3:title "tan"
 -    * setaddr :fn3*retaddr *label6
 -    * call *label3 :fn3*retval
 -    * label *label6
-+   70 label *label18
-+   71 op mul :fn4:x :fn3:actual 100000000
-+   72 op add *tmp6 :fn4:x 0.5
-+   73 op floor *tmp5 *tmp6
-+   74 label *label19
-+   75 op div *tmp8 *tmp5 100000000
-+   76 assertequals :fn3:expected *tmp8 :fn3:title
-+   77 label *label20
++   70 label *label79
++   71 op mul :fn29:x :fn3:actual 100000000
++   72 op add *tmp90 :fn29:x 0.5
++   73 op floor *tmp89 *tmp90
++   74 label *label80
++   75 op div *tmp92 *tmp89 100000000
++   76 assertequals :fn3:expected *tmp92 :fn3:title
++   77 label *label81
     78 set :fn3:expected 90
     79 set :fn3:actual 90
     80 set :fn3:title "asin"
 -    * setaddr :fn3*retaddr *label7
 -    * call *label3 :fn3*retval
 -    * label *label7
-+   81 label *label21
-+   82 op mul :fn4:x :fn3:actual 100000000
-+   83 op add *tmp6 :fn4:x 0.5
-+   84 op floor *tmp5 *tmp6
-+   85 label *label22
-+   86 op div *tmp8 *tmp5 100000000
-+   87 assertequals :fn3:expected *tmp8 :fn3:title
-+   88 label *label23
++   81 label *label82
++   82 op mul :fn29:x :fn3:actual 100000000
++   83 op add *tmp90 :fn29:x 0.5
++   84 op floor *tmp89 *tmp90
++   85 label *label83
++   86 op div *tmp92 *tmp89 100000000
++   87 assertequals :fn3:expected *tmp92 :fn3:title
++   88 label *label84
     89 set :fn3:expected 0
     90 set :fn3:actual 0
     91 set :fn3:title "acos"
 -    * setaddr :fn3*retaddr *label8
 -    * call *label3 :fn3*retval
 -    * label *label8
-+   92 label *label24
-+   93 op mul :fn4:x :fn3:actual 100000000
-+   94 op add *tmp6 :fn4:x 0.5
-+   95 op floor *tmp5 *tmp6
-+   96 label *label25
-+   97 op div *tmp8 *tmp5 100000000
-+   98 assertequals :fn3:expected *tmp8 :fn3:title
-+   99 label *label26
++   92 label *label85
++   93 op mul :fn29:x :fn3:actual 100000000
++   94 op add *tmp90 :fn29:x 0.5
++   95 op floor *tmp89 *tmp90
++   96 label *label86
++   97 op div *tmp92 *tmp89 100000000
++   98 assertequals :fn3:expected *tmp92 :fn3:title
++   99 label *label87
    100 set :fn3:expected 45
    101 set :fn3:actual 45
    102 set :fn3:title "atan"
 -    * setaddr :fn3*retaddr *label9
 -    * call *label3 :fn3*retval
 -    * label *label9
-+  103 label *label27
-+  104 op mul :fn4:x :fn3:actual 100000000
-+  105 op add *tmp6 :fn4:x 0.5
-+  106 op floor *tmp5 *tmp6
-+  107 label *label28
-+  108 op div *tmp8 *tmp5 100000000
-+  109 assertequals :fn3:expected *tmp8 :fn3:title
-+  110 label *label29
++  103 label *label88
++  104 op mul :fn29:x :fn3:actual 100000000
++  105 op add *tmp90 :fn29:x 0.5
++  106 op floor *tmp89 *tmp90
++  107 label *label89
++  108 op div *tmp92 *tmp89 100000000
++  109 assertequals :fn3:expected *tmp92 :fn3:title
++  110 label *label90
    111 assertequals -8 -8 "unary minus"
    112 assertequals 1 true "boolean negation 1"
    113 assertequals 0 false "boolean negation 2"
@@ -305,13 +305,13 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    130 stop
    131 end
 -    * label *label3
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
--    * label *label11
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
--    * label *label10
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
+-    * label *label72
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
+-    * label *label71
 -    * return :fn3*retaddr
 -    * end
 
@@ -319,99 +319,99 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     46 set :fn3:actual 1
     47 set :fn3:title "sin"
-    48 label *label12
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
-+   49 op mul :fn4:x 1 100000000
-+   50 op add *tmp6 100000000 0.5
-+   51 op floor *tmp5 100000000.5
-    52 label *label13
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
-+   53 op div *tmp8 100000000 100000000
+    48 label *label73
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
++   49 op mul :fn29:x 1 100000000
++   50 op add *tmp90 100000000 0.5
++   51 op floor *tmp89 100000000.5
+    52 label *label74
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
++   53 op div *tmp92 100000000 100000000
 +   54 assertequals 1 1 "sin"
-    55 label *label14
+    55 label *label75
     56 set :fn3:expected -1
     57 set :fn3:actual -1
     58 set :fn3:title "cos"
-    59 label *label15
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
-+   60 op mul :fn4:x -1 100000000
-+   61 op add *tmp6 -100000000 0.5
-+   62 op floor *tmp5 -99999999.5
-    63 label *label16
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
-+   64 op div *tmp8 -100000000 100000000
+    59 label *label76
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
++   60 op mul :fn29:x -1 100000000
++   61 op add *tmp90 -100000000 0.5
++   62 op floor *tmp89 -99999999.5
+    63 label *label77
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
++   64 op div *tmp92 -100000000 100000000
 +   65 assertequals -1 -1 "cos"
-    66 label *label17
+    66 label *label78
     67 set :fn3:expected 1
     68 set :fn3:actual 0.9999999999999999
     69 set :fn3:title "tan"
-    70 label *label18
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
-+   71 op mul :fn4:x 0.9999999999999999 100000000
-+   72 op add *tmp6 99999999.99999999 0.5
-+   73 op floor *tmp5 100000000.49999999
-    74 label *label19
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
-+   75 op div *tmp8 100000000 100000000
+    70 label *label79
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
++   71 op mul :fn29:x 0.9999999999999999 100000000
++   72 op add *tmp90 99999999.99999999 0.5
++   73 op floor *tmp89 100000000.49999999
+    74 label *label80
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
++   75 op div *tmp92 100000000 100000000
 +   76 assertequals 1 1 "tan"
-    77 label *label20
+    77 label *label81
     78 set :fn3:expected 90
     79 set :fn3:actual 90
     80 set :fn3:title "asin"
-    81 label *label21
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
-+   82 op mul :fn4:x 90 100000000
-+   83 op add *tmp6 9000000000 0.5
-+   84 op floor *tmp5 9000000000.5
-    85 label *label22
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
-+   86 op div *tmp8 9000000000 100000000
+    81 label *label82
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
++   82 op mul :fn29:x 90 100000000
++   83 op add *tmp90 9000000000 0.5
++   84 op floor *tmp89 9000000000.5
+    85 label *label83
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
++   86 op div *tmp92 9000000000 100000000
 +   87 assertequals 90 90 "asin"
-    88 label *label23
+    88 label *label84
     89 set :fn3:expected 0
     90 set :fn3:actual 0
     91 set :fn3:title "acos"
-    92 label *label24
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
-+   93 op mul :fn4:x 0 100000000
-+   94 op add *tmp6 0 0.5
-+   95 op floor *tmp5 0.5
-    96 label *label25
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
-+   97 op div *tmp8 0 100000000
+    92 label *label85
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
++   93 op mul :fn29:x 0 100000000
++   94 op add *tmp90 0 0.5
++   95 op floor *tmp89 0.5
+    96 label *label86
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
++   97 op div *tmp92 0 100000000
 +   98 assertequals 0 0 "acos"
-    99 label *label26
+    99 label *label87
    100 set :fn3:expected 45
    101 set :fn3:actual 45
    102 set :fn3:title "atan"
-   103 label *label27
--    * op mul :fn4:x :fn3:actual 100000000
--    * op add *tmp6 :fn4:x 0.5
--    * op floor *tmp5 *tmp6
-+  104 op mul :fn4:x 45 100000000
-+  105 op add *tmp6 4500000000 0.5
-+  106 op floor *tmp5 4500000000.5
-   107 label *label28
--    * op div *tmp8 *tmp5 100000000
--    * assertequals :fn3:expected *tmp8 :fn3:title
-+  108 op div *tmp8 4500000000 100000000
+   103 label *label88
+-    * op mul :fn29:x :fn3:actual 100000000
+-    * op add *tmp90 :fn29:x 0.5
+-    * op floor *tmp89 *tmp90
++  104 op mul :fn29:x 45 100000000
++  105 op add *tmp90 4500000000 0.5
++  106 op floor *tmp89 4500000000.5
+   107 label *label89
+-    * op div *tmp92 *tmp89 100000000
+-    * assertequals :fn3:expected *tmp92 :fn3:title
++  108 op div *tmp92 4500000000 100000000
 +  109 assertequals 45 45 "atan"
-   110 label *label29
+   110 label *label90
    111 assertequals -8 -8 "unary minus"
    112 assertequals 1 true "boolean negation 1"
 
@@ -423,69 +423,69 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :fn3:expected 1
 -    * set :fn3:actual 1
 -    * set :fn3:title "sin"
-    45 label *label12
--    * op mul :fn4:x 1 100000000
--    * op add *tmp6 100000000 0.5
--    * op floor *tmp5 100000000.5
-    46 label *label13
--    * op div *tmp8 100000000 100000000
+    45 label *label73
+-    * op mul :fn29:x 1 100000000
+-    * op add *tmp90 100000000 0.5
+-    * op floor *tmp89 100000000.5
+    46 label *label74
+-    * op div *tmp92 100000000 100000000
     47 assertequals 1 1 "sin"
-    48 label *label14
+    48 label *label75
 -    * set :fn3:expected -1
 -    * set :fn3:actual -1
 -    * set :fn3:title "cos"
-    49 label *label15
--    * op mul :fn4:x -1 100000000
--    * op add *tmp6 -100000000 0.5
--    * op floor *tmp5 -99999999.5
-    50 label *label16
--    * op div *tmp8 -100000000 100000000
+    49 label *label76
+-    * op mul :fn29:x -1 100000000
+-    * op add *tmp90 -100000000 0.5
+-    * op floor *tmp89 -99999999.5
+    50 label *label77
+-    * op div *tmp92 -100000000 100000000
     51 assertequals -1 -1 "cos"
-    52 label *label17
+    52 label *label78
 -    * set :fn3:expected 1
 -    * set :fn3:actual 0.9999999999999999
 -    * set :fn3:title "tan"
-    53 label *label18
--    * op mul :fn4:x 0.9999999999999999 100000000
--    * op add *tmp6 99999999.99999999 0.5
--    * op floor *tmp5 100000000.49999999
-    54 label *label19
--    * op div *tmp8 100000000 100000000
+    53 label *label79
+-    * op mul :fn29:x 0.9999999999999999 100000000
+-    * op add *tmp90 99999999.99999999 0.5
+-    * op floor *tmp89 100000000.49999999
+    54 label *label80
+-    * op div *tmp92 100000000 100000000
     55 assertequals 1 1 "tan"
-    56 label *label20
+    56 label *label81
 -    * set :fn3:expected 90
 -    * set :fn3:actual 90
 -    * set :fn3:title "asin"
-    57 label *label21
--    * op mul :fn4:x 90 100000000
--    * op add *tmp6 9000000000 0.5
--    * op floor *tmp5 9000000000.5
-    58 label *label22
--    * op div *tmp8 9000000000 100000000
+    57 label *label82
+-    * op mul :fn29:x 90 100000000
+-    * op add *tmp90 9000000000 0.5
+-    * op floor *tmp89 9000000000.5
+    58 label *label83
+-    * op div *tmp92 9000000000 100000000
     59 assertequals 90 90 "asin"
-    60 label *label23
+    60 label *label84
 -    * set :fn3:expected 0
 -    * set :fn3:actual 0
 -    * set :fn3:title "acos"
-    61 label *label24
--    * op mul :fn4:x 0 100000000
--    * op add *tmp6 0 0.5
--    * op floor *tmp5 0.5
-    62 label *label25
--    * op div *tmp8 0 100000000
+    61 label *label85
+-    * op mul :fn29:x 0 100000000
+-    * op add *tmp90 0 0.5
+-    * op floor *tmp89 0.5
+    62 label *label86
+-    * op div *tmp92 0 100000000
     63 assertequals 0 0 "acos"
-    64 label *label26
+    64 label *label87
 -    * set :fn3:expected 45
 -    * set :fn3:actual 45
 -    * set :fn3:title "atan"
-    65 label *label27
--    * op mul :fn4:x 45 100000000
--    * op add *tmp6 4500000000 0.5
--    * op floor *tmp5 4500000000.5
-    66 label *label28
--    * op div *tmp8 4500000000 100000000
+    65 label *label88
+-    * op mul :fn29:x 45 100000000
+-    * op add *tmp90 4500000000 0.5
+-    * op floor *tmp89 4500000000.5
+    66 label *label89
+-    * op div *tmp92 4500000000 100000000
     67 assertequals 45 45 "atan"
-    68 label *label29
+    68 label *label90
     69 assertequals -8 -8 "unary minus"
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):

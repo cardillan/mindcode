@@ -68,7 +68,7 @@ class OptimizerExpressionEvaluator {
                         if (op1.getOperation() == op2.getOperation() && op1.getOperation().isAssociative()) {
                             // Perform the operation on the two literals
                             LogicLiteral literal = evaluate(op1.getOperation(), literal1, literal2);
-                            if (literal != NULL) {
+                            if (literal != null) {
                                 // Construct the instruction
                                 return ixProcessor.createOp(op1.getAstContext(), op1.getOperation(), op1.getResult(), variable, literal);
                             }
@@ -96,11 +96,11 @@ class OptimizerExpressionEvaluator {
             boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         if (literal2first) {
             LogicLiteral literal = evaluate(add, literal2, literal1);
-            return literal == NULL || literal.isNull() ? null
+            return literal == null || literal.isNull() ? null
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
         } else {
             LogicLiteral literal = evaluate(sub, literal2, literal1);
-            return literal == NULL ? null
+            return literal == null || literal.isNull() ? null
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
         }
     }
@@ -108,7 +108,7 @@ class OptimizerExpressionEvaluator {
     private @Nullable OpInstruction evaluateSubAfterAdd(OpInstruction op, Operation add, Operation sub,
             boolean literal1first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         LogicLiteral literal = evaluate(sub, literal1, literal2);
-        if (literal != NULL && !literal.isNull()) {
+        if (literal != null && !literal.isNull()) {
             return literal1first
                     ? ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable)
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
@@ -122,7 +122,7 @@ class OptimizerExpressionEvaluator {
                 ? evaluate(sub, literal2, literal1)
                 : evaluate(add, literal2, literal1);
 
-        if (literal != NULL && !literal.isNull()) {
+        if (literal != null && !literal.isNull()) {
             return literal1first == literal2first
                     ? ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal)
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
@@ -169,7 +169,7 @@ class OptimizerExpressionEvaluator {
         return op;
     }
 
-    public LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
+    public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
         ExpressionEvaluator.getOperation(operation).execute(expressionValue, a, b);
         return expressionValue.getLiteral();
     }

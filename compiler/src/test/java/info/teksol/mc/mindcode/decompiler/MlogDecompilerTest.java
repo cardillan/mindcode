@@ -1,9 +1,11 @@
 package info.teksol.mc.mindcode.decompiler;
 
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@NullMarked
 class MlogDecompilerTest {
 
     private String decompile(String mlog) {

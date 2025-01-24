@@ -1,24 +1,23 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.List;
 
 import static info.teksol.mc.mindcode.compiler.optimization.Optimization.*;
 
+@NullMarked
 public enum OptimizationPhase {
-    /**
-     * Optimizers in this phase are run only once in the initial pass. Here should be optimizers completely independent
-     * of other optimizers (i.e. they won't benefit from multiple passes).
-     */
+    /// Optimizers in this phase are run only once in the initial pass. Here should be optimizers completely independent
+    /// of other optimizers (i.e. they won't benefit from multiple passes).
     INITIAL("Initial",
             CASE_EXPRESSION_OPTIMIZATION,
             DEAD_CODE_ELIMINATION,
             TEMP_VARIABLES_ELIMINATION
     ),
 
-    /**
-     * Optimizers that can benefit from other optimizers' modifications. Will be run in multiple passes
-     * until no more changes are done. The AST context structure is kept updated for these optimizers.
-     */
+    /// Optimizers that can benefit from other optimizers' modifications. Will be run in multiple passes
+    /// until no more changes are done. The AST context structure is kept updated for these optimizers.
     ITERATED("Iterated",
             JUMP_NORMALIZATION,
             JUMP_STRAIGHTENING,
@@ -35,10 +34,8 @@ public enum OptimizationPhase {
             RETURN_OPTIMIZATION
     ),
 
-    /**
-     * Optimizers run in a single pass at the end of the optimization. These optimizers can make changes incompatible
-     * with the AST context structure, therefore are separated from the previous phase.
-     */
+    /// Optimizers run in a single pass at the end of the optimization. These optimizers can make changes incompatible
+    /// with the AST context structure, therefore are separated from the previous phase.
     FINAL("Final",
             JUMP_NORMALIZATION,
             JUMP_STRAIGHTENING,

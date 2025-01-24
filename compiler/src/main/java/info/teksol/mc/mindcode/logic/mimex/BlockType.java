@@ -1,9 +1,14 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@NullMarked
 public record BlockType(
         String contentName,
         String name,
@@ -24,11 +29,15 @@ public record BlockType(
         return MindustryContents.BLOCK_MAP.size();
     }
 
-    public static BlockType forName(String name) {
+    public static BlockType existing(String name) {
+        return Objects.requireNonNull(MindustryContents.BLOCK_MAP.get(name));
+    }
+
+    public static @Nullable BlockType forName(String name) {
         return MindustryContents.BLOCK_MAP.get(name);
     }
 
-    public static BlockType forId(int id) {
+    public static @Nullable BlockType forId(int id) {
         return MindustryContents.BLOCK_ID_MAP.get(id);
     }
 

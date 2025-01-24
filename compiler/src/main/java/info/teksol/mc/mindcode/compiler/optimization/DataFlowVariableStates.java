@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
@@ -21,6 +22,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.PARA
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.RECURSIVE_CALL;
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator.TRACE;
 
+@NullMarked
 class DataFlowVariableStates {
 
     private final DataFlowOptimizer optimizer;
@@ -38,68 +40,54 @@ class DataFlowVariableStates {
         return new VariableStates();
     }
 
-    /** Provides unique IDs to instances for easy identification during debug. */
+    /// Provides unique IDs to instances for easy identification during debug.
     private final AtomicInteger counter = new AtomicInteger();
 
-    /**
-     * Describes known states of variables. Instances are primarily created by analysing code blocks, and then
-     * merged when two or more code branches merge. Merging operations may produce variables with multiple definitions.
-     * When merging two instances prescribing conflicting values/expressions to the same variable,
-     * the values/expressions are purged.
-     */
+    /// Describes known states of variables. Instances are primarily created by analysing code blocks, and then
+    /// merged when two or more code branches merge. Merging operations may produce variables with multiple definitions.
+    /// When merging two instances prescribing conflicting values/expressions to the same variable,
+    /// the values/expressions are purged.
     class VariableStates {
         private final int id;
 
-        /** Modification counter for change detection */
+        /// Modification counter for change detection
         private int modifications = 0;
 
-        /**
-         * Maps variables to their known values, which might be a constant represented by a literal,
-         * or an expression represented by an instruction.
-         */
+        /// Maps variables to their known values, which might be a constant represented by a literal,
+        /// or an expression represented by an instruction.
         private final Map<LogicVariable, VariableValue> values;
 
-        /**
-         * Maps variables to a list of instructions defining its current value (potentially more than one
-         * due to branching).
-         */
+        /// Maps variables to a list of instructions defining its current value (potentially more than one
+        /// due to branching).
         private final Map<LogicVariable, List<LogicInstruction>> definitions;
 
-        /**
-         * Identifies instructions that do not have to be kept, because they set value the variable already had.
-         * Organized by variable for easier housekeeping.
-         */
+        /// Identifies instructions that do not have to be kept, because they set value the variable already had.
+        /// Organized by variable for easier housekeeping.
         private final Map<LogicVariable, LogicInstruction> useless;
 
-        /** Maps variables to prior variables containing the same expression. */
+        /// Maps variables to prior variables containing the same expression.
         private final Map<LogicVariable, LogicVariable> equivalences;
 
-        /** Set of initialized variables. */
+        /// Set of initialized variables.
         private final Set<LogicVariable> initialized;
 
-        /**
-         * Set of variables stored on stack. Storing a variable on stack preserves its value during subsequent
-         * modification (i.e. when setting parameter value for the recursive call) - the exact same value will be
-         * restored from stack later on.
-         */
+        /// Set of variables stored on stack. Storing a variable on stack preserves its value during subsequent
+        /// modification (i.e. when setting parameter value for the recursive call) - the exact same value will be
+        /// restored from stack later on.
         private final Set<LogicVariable> stored;
 
-        /**
-         * Indicates the program flow of this instance is terminated: an unconditional jump outside local context
-         * was encountered. A new copy was created to be merged at the jump target was created, and this copy must
-         * be discarded in merges down the line.
-         */
+        /// Indicates the program flow of this instance is terminated: an unconditional jump outside local context
+        /// was encountered. A new copy was created to be merged at the jump target was created, and this copy must
+        /// be discarded in merges down the line.
         private boolean dead;
 
-        /**
-         * Indicates the instance is reachable. Unreachable instances represent contexts that were unreachable right
-         * from the start (e.g. inactive branches of if statements). Unreachable instances are discarded in merges.
-         * <p>
-         * TODO: Unreachable variable states are probably the same as dead ones. Investigate possible merging.
-         */
+        /// Indicates the instance is reachable. Unreachable instances represent contexts that were unreachable right
+        /// from the start (e.g. inactive branches of if statements). Unreachable instances are discarded in merges.
+        ///
+        /// TODO: Unreachable variable states are probably the same as dead ones. Investigate possible merging.
         private final boolean reachable;
 
-        /** An isolated instance only tracks values of variables, cannot be used to determine definitions or reaches. */
+        /// An isolated instance only tracks values of variables, cannot be used to determine definitions or reaches.
         private boolean isolated;
 
         public String getId() {
@@ -143,65 +131,53 @@ class DataFlowVariableStates {
                     e -> new ArrayList<>(e.getValue())));
         }
 
-        /**
-         * @return useless instructions, organized by variable they produce.
-         */
+        /// @return useless instructions, organized by variable they produce.
         public Map<LogicVariable, LogicInstruction> getUseless() {
             return useless;
         }
 
-        /**
-         * Creates a copy of variable states, for evaluating parallel branches.
-         *
-         * @param reason debug message
-         * @return an independent copy of this instance
-         */
+        /// Creates a copy of variable states, for evaluating parallel branches.
+        ///
+        /// @param reason debug message
+        /// @return an independent copy of this instance
         public VariableStates copy(String reason) {
             return copy(reason, reachable);
         }
 
-        /**
-         * Creates a copy of variable states, for evaluating parallel branches.
-         *
-         * @param reason debug message
-         * @return an independent copy of this instance
-         */
+        /// Creates a copy of variable states, for evaluating parallel branches.
+        ///
+        /// @param reason debug message
+        /// @return an independent copy of this instance
         public VariableStates copy(String reason, boolean reachable) {
             VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated, reachable && this.reachable);
             trace(() -> "*** " + reason + ": created VariableStates instance " + copy.getId() + " as a copy of " + getId());
             return copy;
         }
 
-        /**
-         * Creates an isolated copy of this instance. An isolated copy only tracks values of variables, it doesn't
-         * propagate definitions or reaches. It is used when processing the context is incomplete, e.g. for first
-         * iteration of loops.
-         *
-         * @return an isolated copy of this instance
-         */
+        /// Creates an isolated copy of this instance. An isolated copy only tracks values of variables, it doesn't
+        /// propagate definitions or reaches. It is used when processing the context is incomplete, e.g. for first
+        /// iteration of loops.
+        ///
+        /// @return an isolated copy of this instance
         public VariableStates isolatedCopy() {
             return new VariableStates(this, id, true);
         }
 
-        /**
-         * An isolated instance only tracks values of variables, but cannot be used to determine definitions or reaches.
-         *
-         * @return true if the instance is isolated.
-         */
+        /// An isolated instance only tracks values of variables, but cannot be used to determine definitions or reaches.
+        ///
+        /// @return true if the instance is isolated.
         public boolean isIsolated() {
             return isolated;
         }
 
-        /**
-         * Marks this instance dead - current execution path was terminated (either by an unconditional jump,
-         * or by the END instruction). The context will be ignored upon merging. If the path was terminated by a jump,
-         * a copy of this context must have been created to be joined at the target label.
-         *
-         * @param markRead when set to true, all active definitions of user defined variables will be preserved.
-         *                 To be used with the END instruction to make sure the assignments to user defined variables
-         *                 won't be removed.
-         * @return this instance marked as dead.
-         */
+        /// Marks this instance dead - current execution path was terminated (either by an unconditional jump,
+        /// or by the END instruction). The context will be ignored upon merging. If the path was terminated by a jump,
+        /// a copy of this context must have been created to be joined at the target label.
+        ///
+        /// @param markRead when set to true, all active definitions of user defined variables will be preserved.
+        ///                 To be used with the END instruction to make sure the assignments to user defined variables
+        ///                 won't be removed.
+        /// @return this instance marked as dead.
         public VariableStates setDead(boolean markRead) {
             if (markRead && !isolated) {
                 definitions.entrySet().stream()
@@ -222,11 +198,9 @@ class DataFlowVariableStates {
             return "    " + optimizer.instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction);
         }
 
-        /**
-         * Purges all expressions and values depending on given variable. To be called after the variable value changes.
-         *
-         * @param variable variable to be purged
-         */
+        /// Purges all expressions and values depending on given variable. To be called after the variable value changes.
+        ///
+        /// @param variable variable to be purged
         // Called when a variable value changes to purge all dependent expressions
         private void invalidateVariable(LogicVariable variable) {
             modifications++;
@@ -243,7 +217,7 @@ class DataFlowVariableStates {
 
             if (TRACE) {
                 trace(values.values().stream().filter(exp -> exp.dependsOn(invalids))
-                        .map(exp -> "   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction.toMlog()));
+                        .map(exp -> "   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.getInstructionMlog()));
                 trace(equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
                         .map(e -> "   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
             }
@@ -253,12 +227,10 @@ class DataFlowVariableStates {
             equivalences.values().removeIf(invalids::contains);
         }
 
-        /**
-         * Called when a variable has been stored on stack.
-         *
-         * @param variable variable to be stored
-         * @return this
-         */
+        /// Called when a variable has been stored on stack.
+        ///
+        /// @param variable variable to be stored
+        /// @return this
         public VariableStates pushVariable(LogicVariable variable) {
             modifications++;
             trace(() -> "Pushing variable " + variable.toMlog());
@@ -268,12 +240,10 @@ class DataFlowVariableStates {
             return this;
         }
 
-        /**
-         * Called when a variable has been restored from stack.
-         *
-         * @param variable variable to be restored
-         * @return this
-         */
+        /// Called when a variable has been restored from stack.
+        ///
+        /// @param variable variable to be restored
+        /// @return this
         public VariableStates popVariable(LogicVariable variable) {
             modifications++;
             trace(() -> "Popping variable " + variable.toMlog());
@@ -283,17 +253,15 @@ class DataFlowVariableStates {
             return this;
         }
 
-        /**
-         * Called to record a new value assigned to a variable.
-         *
-         * @param variable    variable being assigned a new value
-         * @param instruction instruction performing the assignment
-         * @param value       the value being assigned, null means the instruction assigns an unknown value (e.g. value
-         *                    provided by sensor instruction, or random value)
-         * @param reuseValue  indicates the value assigned to the variable can be reused by later optimizations
-         *                    (values inferred on the first pass through a loop must not be reused)
-         */
-        public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value, boolean reuseValue) {
+        /// Called to record a new value assigned to a variable.
+        ///
+        /// @param variable    variable being assigned a new value
+        /// @param instruction instruction performing the assignment
+        /// @param value       the value being assigned, null means the instruction assigns an unknown value (e.g. value
+        ///                    provided by sensor instruction, or random value)
+        /// @param reuseValue  indicates the value assigned to the variable can be reused by later optimizations
+        ///                    (values inferred on the first pass through a loop must not be reused)
+        public void valueSet(LogicVariable variable, LogicInstruction instruction, @Nullable LogicValue value, boolean reuseValue) {
             modifications++;
             if (stored.contains(variable)) {
                 invalidateVariable(variable);
@@ -362,23 +330,19 @@ class DataFlowVariableStates {
             }
         }
 
-        /**
-         * Marks the variable as initialized, typically when a value is assigned to it.
-         *
-         * @param variable variable that is being initialized
-         */
+        /// Marks the variable as initialized, typically when a value is assigned to it.
+        ///
+        /// @param variable variable that is being initialized
         public void markInitialized(LogicVariable variable) {
             modifications++;
             initialized.add(variable);
         }
 
-        /**
-         * Resets the variable after a call to a function that writes to the variable, eliminating all information
-         * about possible values. Variables stored on stack during the call aren't reset, because they're protected
-         * by being stored on the stack.
-         *
-         * @param variable variable to reset
-         */
+        /// Resets the variable after a call to a function that writes to the variable, eliminating all information
+        /// about possible values. Variables stored on stack during the call aren't reset, because they're protected
+        /// by being stored on the stack.
+        ///
+        /// @param variable variable to reset
         public void valueReset(LogicVariable variable) {
             modifications++;
             if (stored.contains(variable)) {
@@ -390,12 +354,10 @@ class DataFlowVariableStates {
             }
         }
 
-        /**
-         * Updates states of variables when a function call occurs.
-         *
-         * @param function    function to process
-         * @param instruction instruction that caused the call
-         */
+        /// Updates states of variables when a function call occurs.
+        ///
+        /// @param function    function to process
+        /// @param instruction instruction that caused the call
         public void updateAfterFunctionCall(MindcodeFunction function, LogicInstruction instruction) {
             modifications++;
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
@@ -404,53 +366,45 @@ class DataFlowVariableStates {
             initialized.add(LogicVariable.fnRetVal(function));
         }
 
-        /**
-         * Returns a VariableValue instance keeping the information about the variable's value, or null if nothing
-         * is known.
-         *
-         * @param variable variable to test
-         * @return known value of the variable
-         */
+        /// Returns a VariableValue instance keeping the information about the variable's value, or null if nothing
+        /// is known.
+        ///
+        /// @param variable variable to test
+        /// @return known value of the variable
         public @Nullable VariableValue findVariableValue(LogicValue variable) {
             return variable instanceof LogicVariable v && !stored.contains(v) ? values.get(v) : null;
         }
 
-        /**
-         * Marks the variable as read, to protect instructions assigning a value to the variable. This is a generic
-         * version that doesn't take a specific instruction performing the access to the variable.
-         *
-         * @param variable variable to be marked as read
-         * @return constant value of the variable, or null if there isn't a known constant value of the variable
-         */
-        public LogicValue valueRead(LogicVariable variable) {
+        /// Marks the variable as read, to protect instructions assigning a value to the variable. This is a generic
+        /// version that doesn't take a specific instruction performing the access to the variable.
+        ///
+        /// @param variable variable to be marked as read
+        /// @return constant value of the variable, or null if there isn't a known constant value of the variable
+        public @Nullable LogicValue valueRead(LogicVariable variable) {
             return valueRead(variable, null, true, true);
         }
 
-        /**
-         * Marks a variable as read by given instruction. The instruction might not be given if the read status
-         * doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
-         * has a constant value. Reports uninitialized variables.
-         *
-         * @param variable    variable to be marked
-         * @param instruction instruction that reads the variable, may be null
-         * @return constant value of the variable, or null if there isn't a known constant value of the variable
-         */
-        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reachable) {
+        /// Marks a variable as read by given instruction. The instruction might not be given if the read status
+        /// doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
+        /// has a constant value. Reports uninitialized variables.
+        ///
+        /// @param variable    variable to be marked
+        /// @param instruction instruction that reads the variable, may be null
+        /// @return constant value of the variable, or null if there isn't a known constant value of the variable
+        public @Nullable LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reachable) {
             return valueRead(variable, instruction, true, reachable);
         }
 
-        /**
-         * Marks a variable as read by given instruction. The instruction might not be given if the read status
-         * doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
-         * has a constant value.
-         *
-         * @param variable            variable to be marked
-         * @param instruction         instruction that reads the variable, may be null
-         * @param reportUninitialized true to report variables that might not be initialized at this read
-         * @param ixReachable         indicates whether the instruction is reachable
-         * @return constant value of the variable, or null if there isn't a known constant value of the variable
-         */
-        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized,
+        /// Marks a variable as read by given instruction. The instruction might not be given if the read status
+        /// doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
+        /// has a constant value.
+        ///
+        /// @param variable            variable to be marked
+        /// @param instruction         instruction that reads the variable, may be null
+        /// @param reportUninitialized true to report variables that might not be initialized at this read
+        /// @param ixReachable         indicates whether the instruction is reachable
+        /// @return constant value of the variable, or null if there isn't a known constant value of the variable
+        public @Nullable LogicValue valueRead(LogicVariable variable, @Nullable LogicInstruction instruction, boolean reportUninitialized,
                 boolean ixReachable) {
             modifications++;
             trace(() -> "Value read: " + variable.toMlog() + " (instance " + getId() + ")" + (ixReachable ? "" : " instruction unreachable)"));
@@ -493,26 +447,22 @@ class DataFlowVariableStates {
             }
         }
 
-        /**
-         * Returns a variable that is known to contain the same value as given variable, meaning that the given variable
-         * can be safely replaced by the returned one. The concrete value is not necessarily known, only the fact
-         * that they're the same.
-         *
-         * @param variable variable to inspect
-         * @return a prior variable known to contain the same value
-         */
-        public LogicVariable findEquivalent(LogicVariable variable) {
+        /// Returns a variable that is known to contain the same value as given variable, meaning that the given variable
+        /// can be safely replaced by the returned one. The concrete value is not necessarily known, only the fact
+        /// that they're the same.
+        ///
+        /// @param variable variable to inspect
+        /// @return a prior variable known to contain the same value
+        public @Nullable LogicVariable findEquivalent(LogicVariable variable) {
             return stored.contains(variable) ? null : equivalences.get(variable);
         }
 
-        /**
-         * Merges two variable states. Each state was produced by a code path, and it isn't known which one was
-         * executed.
-         *
-         * @param other                  states to merge to this one
-         * @param propagateUninitialized propagate uninitialized variables from the other instance
-         * @param reason                 reasons for the merge, for debug purposes
-         */
+        /// Merges two variable states. Each state was produced by a code path, and it isn't known which one was
+        /// executed.
+        ///
+        /// @param other                  states to merge to this one
+        /// @param propagateUninitialized propagate uninitialized variables from the other instance
+        /// @param reason                 reasons for the merge, for debug purposes
         public VariableStates merge(VariableStates other, boolean propagateUninitialized, String reason) {
             trace("*** Merge " + reason);
             optimizationContext.indentInc();
@@ -571,12 +521,10 @@ class DataFlowVariableStates {
             return this;
         }
 
-        /**
-         * Merges variable definitions.
-         *
-         * @param map1 instance to merge into
-         * @param map2 instance to be merged
-         */
+        /// Merges variable definitions.
+        ///
+        /// @param map1 instance to merge into
+        /// @param map2 instance to be merged
         private void merge(Map<LogicVariable, List<LogicInstruction>> map1, Map<LogicVariable, List<LogicInstruction>> map2) {
             for (LogicVariable variable : map2.keySet()) {
                 if (map1.containsKey(variable)) {
@@ -638,14 +586,14 @@ class DataFlowVariableStates {
     }
 
     class VariableValue {
-        /** Variable containing the result of the expression. */
+        /// Variable containing the result of the expression.
         private final LogicVariable variable;
 
-        /** Constant value of the variable, if known */
-        private final LogicValue constantValue;
+        /// Constant value of the variable, if known
+        private final @Nullable LogicValue constantValue;
 
-        /** The instruction producing the expression. */
-        private final LogicInstruction instruction;
+        /// The instruction producing the expression.
+        private final @Nullable LogicInstruction instruction;
 
         public VariableValue(LogicVariable variable, LogicValue constantValue) {
             this.variable = Objects.requireNonNull(variable);
@@ -663,11 +611,15 @@ class DataFlowVariableStates {
             this.instruction = Objects.requireNonNull(instruction);
         }
 
-        public LogicInstruction getInstruction() {
+        public @Nullable LogicInstruction getInstruction() {
             return instruction;
         }
 
-        public LogicValue getConstantValue() {
+        public String getInstructionMlog() {
+            return instruction == null ? "<no instruction>" : instruction.toMlog();
+        }
+
+        public @Nullable LogicValue getConstantValue() {
             return constantValue;
         }
 
@@ -679,35 +631,29 @@ class DataFlowVariableStates {
             return constantValue == null;
         }
 
-        /**
-         * Determines whether the expression depends on the given variable.
-         *
-         * @param variable variable to inspect
-         * @return true if the expression reads the value of given variable
-         */
+        /// Determines whether the expression depends on the given variable.
+        ///
+        /// @param variable variable to inspect
+        /// @return true if the expression reads the value of given variable
         public boolean dependsOn(LogicVariable variable) {
-            return isExpression() && instruction.usesAsInput(variable);
+            return instruction != null && instruction.usesAsInput(variable);
         }
 
-        /**
-         * Determines whether the expression depends on any of the given variables.
-         *
-         * @param variables variables to inspect
-         * @return true if the expression reads the value of some of the variables
-         */
+        /// Determines whether the expression depends on any of the given variables.
+        ///
+        /// @param variables variables to inspect
+        /// @return true if the expression reads the value of some of the variables
         public boolean dependsOn(Set<LogicVariable> variables) {
-            return isExpression() && instruction.inputArgumentsStream()
+            return instruction != null && instruction.inputArgumentsStream()
                     .anyMatch(arg -> arg instanceof LogicVariable v && variables.contains(v));
         }
 
-        /**
-         * Determines whether this expression is equivalent to the one produced by the given instruction.
-         *
-         * @param instruction instruction defining the second expression
-         * @return true if the two expressions are equal
-         */
+        /// Determines whether this expression is equivalent to the one produced by the given instruction.
+        ///
+        /// @param instruction instruction defining the second expression
+        /// @return true if the two expressions are equal
         public boolean isEqual(VariableStates variableStates, LogicInstruction instruction) {
-            if (!isExpression() || this.instruction.getOpcode() != instruction.getOpcode()) {
+            if (this.instruction == null || this.instruction.getOpcode() != instruction.getOpcode()) {
                 return false;
             }
 
@@ -734,26 +680,22 @@ class DataFlowVariableStates {
             return isExpression() && instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
         }
 
-        /**
-         * If the passed in value is a variable and there exists a preexisting variable holding the same value,
-         * returns the preexisting variable.
-         *
-         * @param value value to remap
-         * @return an equivalent variable if it exists, otherwise the original value
-         */
+        /// If the passed in value is a variable and there exists a preexisting variable holding the same value,
+        /// returns the preexisting variable.
+        ///
+        /// @param value value to remap
+        /// @return an equivalent variable if it exists, otherwise the original value
         public LogicArgument remap(VariableStates variableStates, LogicArgument value) {
             return value instanceof LogicVariable var && variableStates.equivalences.containsKey(var)
                     ? variableStates.equivalences.get(var) : value;
         }
 
-        /**
-         * Determines whether the two instructions are equal. Both instructions need to have the same opcode
-         * (the opcode is not checked).
-         *
-         * @param first  instruction to compare
-         * @param second instruction to compare
-         * @return true if the two instructions are equal
-         */
+        /// Determines whether the two instructions are equal. Both instructions need to have the same opcode
+        /// (the opcode is not checked).
+        ///
+        /// @param first  instruction to compare
+        /// @param second instruction to compare
+        /// @return true if the two instructions are equal
         private boolean isInstructionEqual(VariableStates variableStates, LogicInstruction first, LogicInstruction second) {
             List<LogicArgument> args1 = first.getArgs();
             List<LogicArgument> args2 = second.getArgs();
@@ -774,15 +716,13 @@ class DataFlowVariableStates {
             return true;
         }
 
-        /**
-         * Determines whether two OP instructions produce the same expression. It is already known at least one
-         * of the instructions has a deterministic operation. The obvious case is when the two instructions have
-         * equivalent operations and inputs. Additionally, commutative and inverse operations are handled.
-         *
-         * @param first  first instruction to compare
-         * @param second second instruction to compare
-         * @return true if the two instructions produce the same expression
-         */
+        /// Determines whether two OP instructions produce the same expression. It is already known at least one
+        /// of the instructions has a deterministic operation. The obvious case is when the two instructions have
+        /// equivalent operations and inputs. Additionally, commutative and inverse operations are handled.
+        ///
+        /// @param first  first instruction to compare
+        /// @param second second instruction to compare
+        /// @return true if the two instructions produce the same expression
         private boolean isOpEqual(VariableStates variableStates, OpInstruction first, OpInstruction second) {
             if (isVolatile(first)) {
                 return false;
@@ -823,9 +763,11 @@ class DataFlowVariableStates {
 
         @Override
         public String toString() {
-            return "variable " + variable.toMlog() + ": " + (isExpression()
-                    ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
-                    : " constant " + constantValue);
+            return "variable " + variable.toMlog() + ": " + (
+                    instruction != null
+                            ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
+                            : " constant " + constantValue
+            );
         }
     }
 

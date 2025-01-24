@@ -8,6 +8,8 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.function.Consumer;
 /// based on the compiler profile, and only generates mlog instructions compatible with the chosen target.
 ///
 /// Variables holding instances of this interface should be named "processor".
+@NullMarked
 public interface InstructionProcessor extends ContextlessInstructionCreator, MessageEmitter {
 
     ProcessorVersion getProcessorVersion();
@@ -39,7 +42,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     String nextFunctionPrefix();
     LogicVariable unusedVariable();
 
-    List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
+    @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
 
     Collection<String> getParameterValues(InstructionParameterType type);
 

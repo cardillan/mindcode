@@ -1,6 +1,9 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
+import org.jspecify.annotations.NullMarked;
+
 /// Defines the character of the value as seen by the compiler.
+@NullMarked
 public enum ValueMutability {
 
     /// Represents a value which is a compile-time constant and can be compile-time evaluated. In most cases, these

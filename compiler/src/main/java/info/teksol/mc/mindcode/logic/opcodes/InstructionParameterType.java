@@ -1,47 +1,50 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.*;
 
+@NullMarked
 public enum InstructionParameterType {
-    /** Alignment for the DRAW PRINT instruction. */
+    ///  Alignment for the DRAW PRINT instruction. 
     ALIGNMENT       ("alignment", Flags.KEYWORD, "center", "top", "bottom", "left", "right",
             "topLeft", "topRight", "bottomLeft", "bottomRight"),
 
-    /** Input parameter accepting blocks (buildings). */
+    ///  Input parameter accepting blocks (buildings). 
     BLOCK           (Flags.INPUT),
 
-    /** Selector for the CONTROL instruction. */
+    ///  Selector for the CONTROL instruction. 
     BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** A boolean parameter - expected as an input */
+    ///  A boolean parameter - expected as an input 
     BOOL            (Flags.INPUT),
 
-    /** True/false to set/clear status in STATUS instruction. */
+    ///  True/false to set/clear status in STATUS instruction. 
     CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Selector for the JUMP instruction. */
+    ///  Selector for the JUMP instruction. 
     CONDITION       (Flags.SELECTOR),
 
-    /** Type of cut scene in CUTSCENE instruction */
+    ///  Type of cut scene in CUTSCENE instruction 
     CUTSCENE        (Flags.SELECTOR),
 
-    /** Selector for the DRAW instruction. */
+    ///  Selector for the DRAW instruction. 
     DRAW            (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Type of visual effect */
+    ///  Type of visual effect 
     EFFECT          (Flags.SELECTOR),
 
-    /** Item to fetch in FETCH instruction */
+    ///  Item to fetch in FETCH instruction 
     FETCH           (Flags.SELECTOR),
 
-    /** An input parameter requiring a global variable - see the SYNC instruction. */
+    ///  An input parameter requiring a global variable - see the SYNC instruction. 
     GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
 
-    /** A const parameter. Specifies group of buildings to locate. */
+    ///  A const parameter. Specifies group of buildings to locate. 
     GROUP           ("blockGroup", Flags.KEYWORD,
             allVersions(
                     "core", "storage", "generator", "turret", "factory", "repair", "battery", "reactor"),
@@ -49,37 +52,35 @@ public enum InstructionParameterType {
                     "rally", "resupply")
     ),
 
-    /** Non-specific input parameter. Accepts literals and variables */
+    ///  Non-specific input parameter. Accepts literals and variables 
     INPUT           (Flags.INPUT),
 
-    /** Non-specific input/output parameter for custom-made instructions. Accepts literals and variables */
+    ///  Non-specific input/output parameter for custom-made instructions. Accepts literals and variables 
     INPUT_OUTPUT    (Flags.INPUT | Flags.OUTPUT),
 
-    /** A label pseudo-parameter. */
+    ///  A label pseudo-parameter. 
     LABEL           (Flags.INPUT),
 
-    /** Layer in getBlock instruction. */
+    ///  Layer in getBlock instruction. 
     LAYER           ("layer", Flags.KEYWORD, "floor", "ore", "block", "building"),
 
-    /** Selector for the ULOCATE instruction. No Flags.FUNCTION! */
+    ///  Selector for the ULOCATE instruction. No Flags.FUNCTION! 
     LOCATE          (Flags.SELECTOR),
 
-    /**
-     * A const parameter. Specifies lookup category. The entire instruction is only available in V7;
-     * the parameter keywords therefore aren't version specific.
-     */
+    /// A const parameter. Specifies lookup category. The entire instruction is only available in V7;
+    /// the parameter keywords therefore aren't version specific.
     LOOKUP          ("itemType", Flags.KEYWORD, "block", "unit", "item", "liquid"),
 
-    /** Type of message in MESSAGE instruction */
+    ///  Type of message in MESSAGE instruction 
     MAKE_MARKER     ("markerType", Flags.KEYWORD, "shapeText", "point", "shape", "text", "line", "texture", "quad"),
 
-    /** Type of message in MESSAGE instruction */
+    ///  Type of message in MESSAGE instruction 
     MESSAGE         (Flags.SELECTOR),
 
-    /** Selector for the OP instruction. */
+    ///  Selector for the OP instruction. 
     OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Input parameter accepting ore type. */
+    ///  Input parameter accepting ore type. 
     ORE             ("oreType", Flags.INPUT,
             allVersions(
                     "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
@@ -89,25 +90,25 @@ public enum InstructionParameterType {
                     "@beryllium", "@tungsten", "@oxide", "@carbide", "@fissile-matter", "@dormant-cyst")
     ),
 
-    /** Output parameter. Sets a value of a variable in parameter list. */
+    ///  Output parameter. Sets a value of a variable in parameter list. 
     OUTPUT          (Flags.OUTPUT),
 
-    /** A const parameter. Specifies properties of units searchable by radar. */
+    ///  A const parameter. Specifies properties of units searchable by radar. 
     RADAR           ("category", Flags.KEYWORD, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
 
-    /** A const parameter. Specifies property to sort radar outputs by. */
+    ///  A const parameter. Specifies property to sort radar outputs by. 
     RADAR_SORT      ("sortBy", Flags.KEYWORD, "distance", "health", "shield", "armor", "maxHealth"),
 
-    /** Output parameter. Maps to the return value of a function. */
+    ///  Output parameter. Maps to the return value of a function. 
     RESULT          (Flags.OUTPUT),
 
-    /** Game rule in SETRULE instruction */
+    ///  Game rule in SETRULE instruction 
     RULE            (Flags.SELECTOR),
 
-    /** Scope for the playsound instruction: true=positional, false=global */
+    ///  Scope for the playsound instruction: true=positional, false=global 
     SCOPE           (Flags.SELECTOR),
 
-    /** Input parameter accepting property id. */
+    ///  Input parameter accepting property id. 
     SENSOR          ("property", Flags.INPUT,
             allVersions(
                     "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
@@ -133,13 +134,13 @@ public enum InstructionParameterType {
                     "@cameraX", "@cameraY", "@cameraWidth", "@cameraHeight", "@solid")
     ),
 
-    /** For the SET MARKER instruction */
+    ///  For the SET MARKER instruction 
     SET_MARKER      (Flags.SELECTOR),
 
-    /** Settable layer in SETBLOCK instruction */
+    ///  Settable layer in SETBLOCK instruction 
     SETTABLE_LAYER  ("layer", Flags.SELECTOR, "floor", "ore", "block"),
 
-    /** Sound to play */
+    ///  Sound to play 
     SOUND           ("sound", Flags.INPUT, "@sfx-artillery", "@sfx-bang", "@sfx-beam", "@sfx-bigshot", "@sfx-bioLoop",
             "@sfx-blaster", "@sfx-bolt", "@sfx-boom", "@sfx-break", "@sfx-build", "@sfx-buttonClick", "@sfx-cannon", "@sfx-click",
             "@sfx-combustion", "@sfx-conveyor", "@sfx-corexplode", "@sfx-cutter", "@sfx-door", "@sfx-drill", "@sfx-drillCharge",
@@ -155,11 +156,11 @@ public enum InstructionParameterType {
             "@sfx-spray", "@sfx-steam", "@sfx-swish", "@sfx-techloop", "@sfx-thruster", "@sfx-titanExplosion", "@sfx-torch",
             "@sfx-tractorbeam", "@sfx-wave", "@sfx-wind", "@sfx-wind2", "@sfx-wind3", "@sfx-windhowl"),
 
-    /** Unit status in STATUS instruction. */
+    ///  Unit status in STATUS instruction. 
     STATUS          ("status", Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
             "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
 
-    /** Input parameter accepting unit type. */
+    ///  Input parameter accepting unit type. 
     UNIT            ("unitType", Flags.INPUT,
             allVersions(
                     "@dagger", "@mace", "@fortress", "@scepter", "@reign",
@@ -177,16 +178,16 @@ public enum InstructionParameterType {
                     "@evoke", "@incite", "@emanate")
     ),
 
-    /** Selector for the UCONTROL instruction. */
+    ///  Selector for the UCONTROL instruction. 
     UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Non-specific parameter type for generic instructions */
+    ///  Non-specific parameter type for generic instructions 
     UNSPECIFIED     (0),
 
-    /** An unused input parameter. Ignored by given opcode variant. */
+    ///  An unused input parameter. Ignored by given opcode variant. 
     UNUSED          (Flags.UNUSED),
 
-    /** An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. */
+    ///  An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. 
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
     WEATHER         ("weather", Flags.INPUT, "@snowing", "@rain", "@sandstorm", "@sporestorm", "@fog", "@suspend-particles"),
@@ -219,65 +220,47 @@ public enum InstructionParameterType {
         return typeName;
     }
 
-    /**
-     * @return true if this parameter type determines the name of the function
-     */
+    /// @return true if this parameter type determines the name of the function
     public boolean isFunctionName() {
         return (flags & Flags.FUNCTION) != 0;
     }
 
-    /**
-     * @return true if this parameter is a constant value from a list, but not a selector.
-     */
+    /// @return true if this parameter is a constant value from a list, but not a selector.
     public boolean isKeyword() {
         return flags == Flags.KEYWORD;
     }
 
-    /**
-     * @return true if this parameter can read a variable
-     */
+    /// @return true if this parameter can read a variable
     public boolean isInput() {
         return (flags & Flags.INPUT) != 0;
     }
 
-    /**
-     * @return true if this parameter can write to a variable
-     */
+    /// @return true if this parameter can write to a variable
     public boolean isOutput() {
         return (flags & Flags.OUTPUT) != 0;
     }
 
-    /**
-     * @return true if this parameter can read or write to a variable
-     */
+    /// @return true if this parameter can read or write to a variable
     public boolean isInputOrOutput() {
         return (flags & (Flags.INPUT + Flags.OUTPUT)) != 0;
     }
 
-    /**
-     * @return true if this parameter type determines the variant of the instruction
-     */
+    /// @return true if this parameter type determines the variant of the instruction
     public boolean isSelector() {
         return (flags & Flags.SELECTOR) != 0;
     }
 
-    /**
-     * @return true if this parameter is unused
-     */
+    /// @return true if this parameter is unused
     public boolean isUnused() {
         return (flags & Flags.UNUSED) != 0;
     }
 
-    /**
-     * @return true if this parameter must be a global variable
-     */
+    /// @return true if this parameter must be a global variable
     public boolean isGlobal() {
         return (flags & Flags.GLOBAL) != 0;
     }
 
-    /**
-     * @return true if the value of this parameter must be one from the allowed values list
-     */
+    /// @return true if the value of this parameter must be one from the allowed values list
     public boolean restrictValues() {
         return (flags & (Flags.INPUT | Flags.OUTPUT | Flags.UNUSED)) == 0;
     }
@@ -311,25 +294,25 @@ public enum InstructionParameterType {
     // Note: FUNCTION >> SELECTOR >> KEYWORD
 
     private static final class Flags {
-        /** Keyword parameter (cannot use a variable). */
+        ///  Keyword parameter (cannot use a variable). 
         private static final int KEYWORD = 0;
 
-        /** Input parameter (can use a variable). */
+        ///  Input parameter (can use a variable). 
         private static final int INPUT = 1;
 
-        /** Output parameter (must use a variable for output value). */
+        ///  Output parameter (must use a variable for output value). 
         private static final int OUTPUT = 2;
 
-        /**  Opcode-variant-selecting parameter. Possible values are given by existing opcode variants for given version. */
+        ///   Opcode-variant-selecting parameter. Possible values are given by existing opcode variants for given version. 
         private static final int SELECTOR = 4;
 
-        /** Defines the name of a function (or property). Must be a selector. */
+        ///  Defines the name of a function (or property). Must be a selector. 
         private static final int FUNCTION = 8;
 
-        /** Unused parameter. Doesn't map to Mindcode functions. */
+        ///  Unused parameter. Doesn't map to Mindcode functions. 
         private static final int UNUSED = 16;
 
-        /** Parameter requiring a global variable (see the SYNC instruction). */
+        ///  Parameter requiring a global variable (see the SYNC instruction). 
         private static final int GLOBAL = 32;
     }
 }

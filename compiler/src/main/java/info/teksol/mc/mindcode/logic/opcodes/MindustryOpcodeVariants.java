@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
 import info.teksol.mc.mindcode.logic.arguments.Operation;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.S;
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.W;
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.*;
 
+@NullMarked
 public class MindustryOpcodeVariants {
     private static final MindustryOpcodeVariants data = new MindustryOpcodeVariants();
 

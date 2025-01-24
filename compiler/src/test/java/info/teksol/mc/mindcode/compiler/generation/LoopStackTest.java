@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mc.common.SourcePosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@NullMarked
 public class LoopStackTest {
     private final LoopStack loopStack = new LoopStack(ExpectedMessages.none());
     private final LogicLabel

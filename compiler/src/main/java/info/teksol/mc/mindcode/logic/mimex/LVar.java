@@ -1,7 +1,11 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Collection;
 
+@NullMarked
 public record LVar(
         String contentName,
         String name,
@@ -16,7 +20,7 @@ public record LVar(
         return -1;
     }
 
-    public static LVar forName(String name) {
+    public static @Nullable LVar forName(String name) {
         return MindustryContents.LVAR_MAP.get(name);
     }
 

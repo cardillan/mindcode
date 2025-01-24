@@ -1,23 +1,23 @@
 assertflush
 print "{2}"
-op floor :fn8:n 0 0
-format :fn8:n
+op floor :fn32:n 0 0
+format :fn32:n
 assertprints "0" "printNumber(null)"
 assertflush
 print "{2}"
-op floor :fn8:n 1 0
-format :fn8:n
+op floor :fn32:n 1 0
+format :fn32:n
 assertprints "1" "printNumber(1)"
 assertflush
 print "{2}"
-op floor :fn8:n 1.5 0
-format :fn8:n
+op floor :fn32:n 1.5 0
+format :fn32:n
 assertprints "1" "printNumber(1.5)"
 assertflush
 print "{2}"
-op floor :fn8:n 1.5 0
+op floor :fn32:n 1.5 0
 format "-{2}"
-format :fn8:n
+format :fn32:n
 assertprints "-1" "printNumber(-1.5)"
 assertflush
 print "{2}"
@@ -117,7 +117,7 @@ format "{2}0"
 format "0x"
 assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
 assertflush
-op abs *tmp23 null 0
+op abs *tmp104 null 0
 print null
 assertprints "null" "printExactFast(null)"
 assertflush
@@ -217,33 +217,33 @@ jump 293 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 stop
 end
-op abs *tmp23 :fn6:n 0
-jump 223 greaterThan *tmp23 0
+op abs *tmp104 :fn6:n 0
+jump 223 greaterThan *tmp104 0
 print :fn6:n
 set @counter :fn6*retaddr
 jump 226 greaterThanEq :fn6:n 0
 print "-"
 op abs :fn6:n :fn6:n 0
-op log10 *tmp29 :fn6:n 0
-op floor :fn6:exp *tmp29 0
-op sub *tmp31 0 :fn6:exp
-op pow *tmp32 10 *tmp31
-op mul :fn6:base :fn6:n *tmp32
-op add *tmp35 :fn6:base 0.5
-op floor *tmp34 *tmp35 0
-op sub *tmp37 :fn6:base *tmp34
-op abs :fn6:cmp *tmp37 0
+op log10 *tmp110 :fn6:n 0
+op floor :fn6:exp *tmp110 0
+op sub *tmp112 0 :fn6:exp
+op pow *tmp113 10 *tmp112
+op mul :fn6:base :fn6:n *tmp113
+op add *tmp116 :fn6:base 0.5
+op floor *tmp115 *tmp116 0
+op sub *tmp118 :fn6:base *tmp115
+op abs :fn6:cmp *tmp118 0
 jump 238 greaterThan :fn6:cmp 0
 print :fn6:base
 jump 289 always 0 0
 jump 241 lessThanEq :fn6:cmp 0.00001
 print :fn6:base
 jump 289 always 0 0
-op floor *tmp43 :fn6:base 0
-print *tmp43
+op floor *tmp124 :fn6:base 0
+print *tmp124
 print "."
-op mod *tmp44 :fn6:base 1
-op mul :fn6:base *tmp44 100000
+op mod *tmp125 :fn6:base 1
+op mul :fn6:base *tmp125 100000
 op floor :fn6:t :fn6:base 0
 jump 250 greaterThanEq :fn6:t 10
 print "0000"
@@ -257,8 +257,8 @@ jump 258 always 0 0
 jump 258 greaterThanEq :fn6:t 10000
 print "0"
 print :fn6:t
-op mod *tmp44 :fn6:base 1
-op mul :fn6:base *tmp44 100000
+op mod *tmp125 :fn6:base 1
+op mul :fn6:base *tmp125 100000
 op floor :fn6:t :fn6:base 0
 jump 265 greaterThanEq :fn6:t 10
 print "0000"
@@ -272,8 +272,8 @@ jump 273 always 0 0
 jump 273 greaterThanEq :fn6:t 10000
 print "0"
 print :fn6:t
-op mod *tmp44 :fn6:base 1
-op mul :fn6:base *tmp44 100000
+op mod *tmp125 :fn6:base 1
+op mul :fn6:base *tmp125 100000
 op floor :fn6:t :fn6:base 0
 jump 280 greaterThanEq :fn6:t 10
 print "0000"
@@ -291,81 +291,81 @@ jump 292 equal :fn6:exp 0
 print "E"
 print :fn6:exp
 set @counter :fn6*retaddr
-op abs *tmp59 :fn7:n 0
-jump 297 greaterThan *tmp59 0
+op abs *tmp140 :fn7:n 0
+jump 297 greaterThan *tmp140 0
 print :fn7:n
 set @counter :fn7*retaddr
 jump 300 greaterThanEq :fn7:n 0
 print "-"
 op abs :fn7:n :fn7:n 0
-op log10 *tmp65 :fn7:n 0
-op floor :fn7:exp *tmp65 0
-op sub *tmp67 0 :fn7:exp
-op pow *tmp68 10 *tmp67
-op mul :fn7:base :fn7:n *tmp68
-op floor *tmp70 :fn7:base 0
-print *tmp70
+op log10 *tmp146 :fn7:n 0
+op floor :fn7:exp *tmp146 0
+op sub *tmp148 0 :fn7:exp
+op pow *tmp149 10 *tmp148
+op mul :fn7:base :fn7:n *tmp149
+op floor *tmp151 :fn7:base 0
+print *tmp151
 print "."
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
-op mod *tmp71 :fn7:base 1
-op mul :fn7:base *tmp71 10
-op floor *tmp74 :fn7:base 0
-print *tmp74
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
+op mod *tmp152 :fn7:base 1
+op mul :fn7:base *tmp152 10
+op floor *tmp155 :fn7:base 0
+print *tmp155
 jump 371 equal :fn7:exp 0
 print "E"
 print :fn7:exp

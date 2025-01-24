@@ -19,15 +19,15 @@ import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 import static info.teksol.mc.emulator.processor.ExecutionFlag.*;
 
-/**
- * Mindustry Processor emulator.
- */
+/// Mindustry Processor emulator.
+@NullMarked
 public class Processor extends AbstractMessageEmitter {
     private final InstructionProcessor instructionProcessor;
     private final Set<ExecutionFlag> flags;
@@ -44,8 +44,8 @@ public class Processor extends AbstractMessageEmitter {
     private static final int TEXT_OUTPUT_LIMIT = 10000;
     private static final int TEXT_BUFFER_LIMIT = 400;
     private static final int GRAPHICS_BUFFER_LIMIT = 256;
-    private TextBuffer textBuffer;
-    private GraphicsBuffer graphicsBuffer;
+    private TextBuffer textBuffer = TextBuffer.EMPTY;
+    private GraphicsBuffer graphicsBuffer = GraphicsBuffer.EMPTY;
     private List<Assertion> assertions = new ArrayList<>();
 
     public Processor(InstructionProcessor instructionProcessor, MessageConsumer messageConsumer,
@@ -77,7 +77,7 @@ public class Processor extends AbstractMessageEmitter {
     }
 
     public TextBuffer getTextBuffer() {
-        return textBuffer;
+        return Objects.requireNonNull(textBuffer);
     }
 
     public int getSteps() {

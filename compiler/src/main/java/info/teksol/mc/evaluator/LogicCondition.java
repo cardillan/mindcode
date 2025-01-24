@@ -1,8 +1,9 @@
 package info.teksol.mc.evaluator;
 
-/**
- * Interface representing a Mindustry Logic condition.
- */
+import org.jspecify.annotations.NullMarked;
+
+/// Interface representing a Mindustry Logic condition.
+@NullMarked
 public interface LogicCondition {
     boolean evaluate(LogicReadable a, LogicReadable b);
 }

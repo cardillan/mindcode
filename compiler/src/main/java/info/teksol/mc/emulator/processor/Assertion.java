@@ -2,9 +2,11 @@ package info.teksol.mc.emulator.processor;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.ToolMessage;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public record Assertion(String expected, String actual, String title) {
 
     public boolean success() {

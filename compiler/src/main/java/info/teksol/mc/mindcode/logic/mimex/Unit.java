@@ -1,5 +1,9 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+@NullMarked
 public record Unit(
         String contentName,
         String name,
@@ -10,11 +14,11 @@ public record Unit(
         return MindustryContents.UNIT_MAP.size();
     }
 
-    public static Unit forId(int id) {
+    public static @Nullable Unit forId(int id) {
         return MindustryContents.UNIT_ID_MAP.get(id);
     }
 
-    public static Unit forName(String name) {
+    public static @Nullable Unit forName(String name) {
         return MindustryContents.UNIT_MAP.get(name);
     }
 }

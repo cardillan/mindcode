@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.WORLD_PROCE
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@NullMarked
 public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
 
     private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax" + File.separatorChar;
@@ -126,7 +128,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         }
 
         w.println();
-        w.println("## Instruction `" + opcode.toString() + "`");
+        w.println("## Instruction `" + opcode + "`");
         w.println();
         w.println(opcode.getDescription());
         w.println();

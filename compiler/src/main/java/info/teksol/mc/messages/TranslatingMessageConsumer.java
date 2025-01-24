@@ -1,7 +1,8 @@
 package info.teksol.mc.messages;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class TranslatingMessageConsumer implements MessageConsumer {
      private final MessageConsumer consumer;
      private final SourcePositionTranslator translator;
@@ -12,7 +13,7 @@ public class TranslatingMessageConsumer implements MessageConsumer {
      }
 
      @Override
-     public void addMessage(@NotNull MindcodeMessage message) {
+     public void addMessage(MindcodeMessage message) {
           consumer.accept(message.translatePosition(translator));
      }
 }

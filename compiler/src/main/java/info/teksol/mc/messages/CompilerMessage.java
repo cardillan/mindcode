@@ -2,11 +2,13 @@ package info.teksol.mc.messages;
 
 import info.teksol.mc.common.SourcePosition;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
+@NullMarked
 public record CompilerMessage(MessageLevel level, SourcePosition sourcePosition, String message) implements MindcodeMessage {
 
     public CompilerMessage {

@@ -5,17 +5,30 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.Comparator;
 
 @NullMarked
-public record SourcePosition(@Nullable InputFile inputFile,
+public record SourcePosition(InputFile inputFile,
                              TextFilePosition start,
                              TextFilePosition end,
                              TextFilePosition token) implements Comparable<SourcePosition> {
 
-    public static SourcePosition EMPTY = new SourcePosition(null, 1, 1);
+    private static final InputFile EMPTY_INPUT_FILE = new InputFile() {
+        @Override public int getId() { return Integer.MIN_VALUE; }
+        @Override public boolean isStandaloneSource() { return false; }
+        @Override public boolean isLibrary() { return false; }
+        @Override public String getCode() { return ""; }
+        @Override public Path getPath() { return Path.of(""); }
+        @Override public Path getRelativePath() { return Path.of(""); }
+        @Override public String getAbsolutePath() { return ""; }
+        @Override public String getDistinctPath() { return ""; }
+        @Override public String getDistinctTitle() { return ""; }
+    };
 
-    public SourcePosition(@Nullable InputFile inputFile, int line, int column) {
+    public static SourcePosition EMPTY = new SourcePosition(EMPTY_INPUT_FILE, 1, 1);
+
+    public SourcePosition(InputFile inputFile, int line, int column) {
         this(inputFile, new TextFilePosition(line, column), new TextFilePosition(line, column),
                 new TextFilePosition(line, column));
     }
@@ -29,11 +42,11 @@ public record SourcePosition(@Nullable InputFile inputFile,
     }
 
     public String formatForIde() {
-        return (inputFile == null ? "" : inputFile.getAbsolutePath()) + ":" + line() + ":" + column();
+        return (inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getAbsolutePath()) + ":" + line() + ":" + column();
     }
 
     public String formatForLog() {
-        String distinctPath = inputFile == null ? "" : inputFile.getDistinctPath();
+        String distinctPath = inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getDistinctPath();
         return distinctPath.isEmpty() ? "line " + line() + ":" + column() : distinctPath + ":" + line() + ":" + column();
     }
 
@@ -52,15 +65,15 @@ public record SourcePosition(@Nullable InputFile inputFile,
     }
 
     public boolean isEmpty() {
-        return inputFile == null;
+        return inputFile == EMPTY_INPUT_FILE;
     }
 
     public String getDistinctPath() {
-        return inputFile == null ? "" : inputFile.getDistinctPath();
+        return inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getDistinctPath();
     }
 
     public boolean isLibrary() {
-        return inputFile != null && inputFile.isLibrary();
+        return inputFile == EMPTY_INPUT_FILE && inputFile.isLibrary();
     }
 
     public SourcePosition withColumn(int column) {

@@ -45,7 +45,7 @@ public class ExpectedMessages implements MessageConsumer {
         return new ExpectedMessages(List.of()) {
             @Override
             public void addMessage(MindcodeMessage mindcodeMessage) {
-                throw new UnexpectedMessageException("Unexpected message encountered: " + mindcodeMessage);
+                throw new IllegalStateException("Unexpected message encountered: " + mindcodeMessage);
             }
         };
     }

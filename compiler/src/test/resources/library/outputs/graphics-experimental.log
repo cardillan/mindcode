@@ -30,21 +30,21 @@ Final code before resolving virtual instructions:
     4:  jump *label5 equal display5 null
     5:  sensor :fn0:type display1 @type
     6:  set :fn0*retval 80
-    7:  jump *label69 equal :fn0:type @logic-display
+    7:  jump *label70 equal :fn0:type @logic-display
     8:  set :fn0*retval null
-    9:  jump *label68 notEqual :fn0:type @large-logic-display
+    9:  jump *label69 notEqual :fn0:type @large-logic-display
    10:  set :fn0*retval 176
-        label *label68
         label *label69
+        label *label70
    11:  assertequals 176 :fn0*retval "large display size"
    12:  sensor :fn0:type display5 @type
    13:  set :fn0*retval 80
-   14:  jump *label74 equal :fn0:type @logic-display
+   14:  jump *label75 equal :fn0:type @logic-display
    15:  set :fn0*retval null
-   16:  jump *label73 notEqual :fn0:type @large-logic-display
+   16:  jump *label74 notEqual :fn0:type @large-logic-display
    17:  set :fn0*retval 176
-        label *label73
         label *label74
+        label *label75
    18:  assertequals 80 :fn0*retval "small display size"
    19:  assertequals 0.2 0.2 "red channel"
    20:  assertequals 0.4 0.4 "green channel"

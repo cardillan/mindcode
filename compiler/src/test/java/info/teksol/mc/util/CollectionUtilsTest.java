@@ -1,5 +1,6 @@
 package info.teksol.mc.util;
 
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import static info.teksol.mc.util.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@NullMarked
 public class CollectionUtilsTest {
 
     private static final List<String> list = List.of("a", "b", "c", "d", "a", "b", "c");

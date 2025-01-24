@@ -1,5 +1,9 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+@NullMarked
 public record Liquid(
         String contentName,
         String name,
@@ -10,11 +14,11 @@ public record Liquid(
         return MindustryContents.LIQUID_MAP.size();
     }
 
-    public static Liquid forId(int id) {
+    public static @Nullable Liquid forId(int id) {
         return MindustryContents.LIQUID_ID_MAP.get(id);
     }
 
-    public static Liquid forName(String name) {
+    public static @Nullable Liquid forName(String name) {
         return MindustryContents.LIQUID_MAP.get(name);
     }
 }

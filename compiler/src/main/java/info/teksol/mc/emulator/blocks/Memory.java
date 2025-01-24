@@ -2,11 +2,13 @@ package info.teksol.mc.emulator.blocks;
 
 import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
 
 import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_MEMORY_ACCESS;
 
+@NullMarked
 public class Memory extends MindustryBlock {
     private final double[] memory;
 
@@ -36,18 +38,18 @@ public class Memory extends MindustryBlock {
     }
 
     public static Memory createMemoryCell() {
-        return new Memory("cell", BlockType.forName("@memory-cell"), 64);
+        return new Memory("cell", BlockType.existing("@memory-cell"), 64);
     }
 
     public static Memory createMemoryCell(double[] array) {
-        return new Memory("cell", BlockType.forName("@memory-cell"), Arrays.copyOf(array, 64));
+        return new Memory("cell", BlockType.existing("@memory-cell"), Arrays.copyOf(array, 64));
     }
 
     public static Memory createMemoryBank() {
-        return new Memory("bank", BlockType.forName("@memory-bank"), 512);
+        return new Memory("bank", BlockType.existing("@memory-bank"), 512);
     }
 
     public static Memory createMemoryBank(double[] array) {
-        return new Memory("bank", BlockType.forName("@memory-bank"), Arrays.copyOf(array, 512));
+        return new Memory("bank", BlockType.existing("@memory-bank"), Arrays.copyOf(array, 512));
     }
 }

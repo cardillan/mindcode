@@ -1,10 +1,14 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@NullMarked
 public enum ProcessorVersion {
     V6      (6, 0),
     V7      (7, 0),
@@ -32,7 +36,7 @@ public enum ProcessorVersion {
     private static final List<ProcessorVersion> ALL = List.of(values());
     private static final Map<String, ProcessorVersion> MAP = createMap();
 
-    public static ProcessorVersion byCode(String code) {
+    public static @Nullable ProcessorVersion byCode(String code) {
         return MAP.get(code);
     }
 
@@ -54,9 +58,5 @@ public enum ProcessorVersion {
                 consumer.accept(entry.getKey() + "w");
             }
         }).toList();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(getPossibleVersions());
     }
 }

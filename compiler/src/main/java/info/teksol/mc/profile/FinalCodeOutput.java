@@ -1,9 +1,12 @@
 package info.teksol.mc.profile;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public enum FinalCodeOutput {
     PLAIN,
     FLAT_AST,

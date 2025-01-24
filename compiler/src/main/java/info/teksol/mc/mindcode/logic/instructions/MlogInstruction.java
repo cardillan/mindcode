@@ -5,11 +5,13 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Stream;
 
+@NullMarked
 public interface MlogInstruction {
     /// @return the instruction opcode.
     Opcode getOpcode();
@@ -86,11 +88,11 @@ public interface MlogInstruction {
 
     ///  @return true if the instruction uses the given argument as an input argument
     default boolean usesAsInput(LogicArgument arg) {
-        return arg != null && inputArgumentsStream().anyMatch(arg::equals);
+        return inputArgumentsStream().anyMatch(arg::equals);
     }
 
     ///  @return true if the instruction uses the given argument as an output argument
     default boolean usesAsOutput(LogicArgument arg) {
-        return arg != null && outputArgumentsStream().anyMatch(arg::equals);
+        return outputArgumentsStream().anyMatch(arg::equals);
     }
 }

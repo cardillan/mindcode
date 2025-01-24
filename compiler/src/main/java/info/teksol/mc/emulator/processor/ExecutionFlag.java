@@ -1,8 +1,11 @@
 package info.teksol.mc.emulator.processor;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.EnumSet;
 import java.util.List;
 
+@NullMarked
 public enum ExecutionFlag {
     TRACE_EXECUTION                 ("output instruction and variable states at each execution step", true, false),
     DUMP_VARIABLES_ON_STOP          ("output variable values when the 'stop' instruction is encountered"),

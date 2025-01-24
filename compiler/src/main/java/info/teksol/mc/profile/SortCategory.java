@@ -1,10 +1,14 @@
 package info.teksol.mc.profile;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@NullMarked
 public enum SortCategory {
     LINKED,
     PARAMS,
@@ -30,7 +34,7 @@ public enum SortCategory {
         return Arrays.stream(values()).collect(Collectors.toMap(v -> v.name().toLowerCase(), v -> v));
     }
 
-    public static SortCategory byName(String category) {
+    public static @Nullable SortCategory byName(String category) {
         return VALUE_MAP.get(category.toLowerCase());
     }
 

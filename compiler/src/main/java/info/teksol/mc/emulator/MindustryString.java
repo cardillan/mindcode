@@ -1,5 +1,8 @@
 package info.teksol.mc.emulator;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class MindustryString extends AbstractMindustryObject {
 
     public MindustryString(String name) {

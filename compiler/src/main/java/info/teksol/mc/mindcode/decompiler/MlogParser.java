@@ -4,10 +4,13 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class MlogParser {
     private final InstructionProcessor instructionProcessor;
     private final String mlog;
@@ -98,10 +101,14 @@ public class MlogParser {
                     List<MlogExpression> arguments = tokens.stream().skip(1).map(this::arg)
                             .collect(Collectors.toCollection(ArrayList::new));
                     List<InstructionParameterType> parameters = instructionProcessor.getParameters(opcode, arguments);
-                    while (arguments.size() < parameters.size()) {
-                        arguments.add(arg("0"));
+                    if (parameters != null) {
+                        while (arguments.size() < parameters.size()) {
+                            arguments.add(arg("0"));
+                        }
+                        content.add(new InstructionExpression(opcode, arguments.subList(0, parameters.size()), parameters));
+                    } else {
+                        content.add(error("Unrecognized instruction type of opcode '" + tokens.getFirst() + "'."));
                     }
-                    content.add(new InstructionExpression(opcode, arguments.subList(0, parameters.size()),parameters));
                 } else {
                     content.add(error("Unrecognized opcode '" + tokens.getFirst() + "'."));
                 }
@@ -113,7 +120,7 @@ public class MlogParser {
         return new MlogVariable(mlog);
     }
 
-    private String parseString() {
+    private @Nullable String parseString() {
         int from = pos;
 
         while (++pos < mlog.length()) {

@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.*;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_INVALID_IDENTIFIER;
 import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_UNINITIALIZED_VAR;
 
+@NullMarked
 public class MindustryVariables {
     private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("^[-a-zA-Z0-9_.:*$]+$");
 

@@ -958,19 +958,19 @@ set @counter :fn0*retaddr
 op max :fn1:y2 :fn1:x1 :fn1:x2
 op min :fn1:y3 :fn1:x3 :fn1:x4
 jump 963 greaterThan :fn1:y2 :fn1:y3
-op add *tmp410 :fn1:y2 :fn1:y3
-op div :fn1*retval *tmp410 2
+op add *tmp413 :fn1:y2 :fn1:y3
+op div :fn1*retval *tmp413 2
 set @counter :fn1*retaddr
 op min :fn1:y1 :fn1:x1 :fn1:x2
 op max :fn1:y4 :fn1:x3 :fn1:x4
 jump 969 lessThan :fn1:y1 :fn1:y4
-op add *tmp416 :fn1:y1 :fn1:y4
-op div :fn1*retval *tmp416 2
+op add *tmp419 :fn1:y1 :fn1:y4
+op div :fn1*retval *tmp419 2
 set @counter :fn1*retaddr
-op max *tmp418 :fn1:y1 :fn1:y3
-op min *tmp419 :fn1:y2 :fn1:y4
-op add *tmp420 *tmp418 *tmp419
-op div :fn1*retval *tmp420 2
+op max *tmp421 :fn1:y1 :fn1:y3
+op min *tmp422 :fn1:y2 :fn1:y4
+op add *tmp423 *tmp421 *tmp422
+op div :fn1*retval *tmp423 2
 set @counter :fn1*retaddr
 op min :fn2:y1 :fn2:x1 :fn2:x2
 op max :fn2:y2 :fn2:x1 :fn2:x2
@@ -978,9 +978,9 @@ op min :fn2:y4 :fn2:x4 :fn2:x5
 op max :fn2:y5 :fn2:x4 :fn2:x5
 jump 983 greaterThanEq :fn2:y4 :fn2:y1
 set :fn2:y4 :fn2:y1
-set :fn81:t :fn2:y2
+set :fn82:t :fn2:y2
 set :fn2:y2 :fn2:y5
-set :fn2:y5 :fn81:t
+set :fn2:y5 :fn82:t
 jump 988 lessThanEq :fn2:x3 :fn2:y2
 op min :fn2*retval :fn2:y2 :fn2:y5
 jump 991 greaterThanEq :fn2:y2 :fn2:y4

@@ -33,7 +33,6 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     protected DebugPrinter getDebugPrinter() {
         return new FilteredDiffDebugPrinter();
     }
-
     @Override
     protected CompilationPhase getTargetPhase() {
         return CompilationPhase.OPTIMIZER;

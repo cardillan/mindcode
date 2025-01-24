@@ -1,12 +1,14 @@
 package info.teksol.mc.evaluator;
 
 import info.teksol.mc.mindcode.logic.arguments.Operation;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+@NullMarked
 public class ExpressionEvaluator {
     public static final double doubleDegRad = 0.017453292519943295;
     public static final double doubleRadDeg = 57.29577951308232;

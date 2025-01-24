@@ -1,10 +1,13 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.List;
 import java.util.function.Function;
 
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
+@NullMarked
 public enum Optimization {
     TEMP_VARIABLES_ELIMINATION("Temp Variables Elimination",
             TempVariableEliminator::new,

@@ -1,9 +1,13 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public enum Opcode {
     // INPUT & OUTPUT
     READ            ("read",            "Read a number from a linked memory cell."),
@@ -196,7 +200,7 @@ public enum Opcode {
     private static final Map<String, Opcode> MAP = Stream.of(values())
             .collect(Collectors.toMap(Opcode::getOpcode, o -> o));
 
-    public static Opcode fromOpcode(String opcode) {
+    public static @Nullable Opcode fromOpcode(String opcode) {
         return MAP.get(opcode);
     }
 }

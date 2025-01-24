@@ -1,5 +1,8 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public enum FunctionMapping {
     NONE,       // No mapping
     FUNC,       // Mapping to function

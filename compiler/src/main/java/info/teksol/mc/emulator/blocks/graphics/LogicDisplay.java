@@ -3,10 +3,12 @@ package info.teksol.mc.emulator.blocks.graphics;
 import info.teksol.mc.emulator.blocks.MindustryBlock;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 public class LogicDisplay extends MindustryBlock {
     private final int sizeX;
     private final int sizeY;
@@ -41,11 +43,11 @@ public class LogicDisplay extends MindustryBlock {
     }
 
     public static LogicDisplay createLogicDisplay() {
-        return new LogicDisplay("display", BlockType.forName("@logic-display"), 80);
+        return new LogicDisplay("display", BlockType.existing("@logic-display"), 80);
     }
 
     public static LogicDisplay createLargeLogicDisplay() {
-        return new LogicDisplay("display", BlockType.forName("@large-logic-display"), 176);
+        return new LogicDisplay("display", BlockType.existing("@large-logic-display"), 176);
     }
 
     public static LogicDisplay createLogicDisplay(boolean large) {

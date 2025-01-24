@@ -672,54 +672,54 @@ Final code before resolving virtual instructions:
         label *label106
   184:  set :fn49:lt 0
   185:  set :fn49:gt 0
-  186:  jump *label708 greaterThanEq 1 :fn48:i
+  186:  jump *label709 greaterThanEq 1 :fn48:i
   187:  set :fn49:lt 1
-  188:  jump *label711 always 0 0
-        label *label708
-  189:  jump *label709 lessThanEq 1 :fn48:i
-  190:  set :fn49:gt 1
+  188:  jump *label712 always 0 0
         label *label709
-        label *label711
-  191:  jump *label716 greaterThanEq 1 :fn48:i
+  189:  jump *label710 lessThanEq 1 :fn48:i
+  190:  set :fn49:gt 1
+        label *label710
+        label *label712
+  191:  jump *label717 greaterThanEq 1 :fn48:i
   192:  op add :fn49:lt :fn49:lt 1
-  193:  jump *label719 always 0 0
-        label *label716
-  194:  jump *label717 lessThanEq 1 :fn48:i
-  195:  op add :fn49:gt :fn49:gt 1
+  193:  jump *label720 always 0 0
         label *label717
-        label *label719
-  196:  jump *label724 greaterThanEq 1 :fn48:i
+  194:  jump *label718 lessThanEq 1 :fn48:i
+  195:  op add :fn49:gt :fn49:gt 1
+        label *label718
+        label *label720
+  196:  jump *label725 greaterThanEq 1 :fn48:i
   197:  op add :fn49:lt :fn49:lt 1
-  198:  jump *label727 always 0 0
-        label *label724
-  199:  jump *label725 lessThanEq 1 :fn48:i
-  200:  op add :fn49:gt :fn49:gt 1
+  198:  jump *label728 always 0 0
         label *label725
-        label *label727
-  201:  jump *label732 greaterThanEq 1 :fn48:i
+  199:  jump *label726 lessThanEq 1 :fn48:i
+  200:  op add :fn49:gt :fn49:gt 1
+        label *label726
+        label *label728
+  201:  jump *label733 greaterThanEq 1 :fn48:i
   202:  op add :fn49:lt :fn49:lt 1
-  203:  jump *label735 always 0 0
-        label *label732
-  204:  jump *label733 lessThanEq 1 :fn48:i
-  205:  op add :fn49:gt :fn49:gt 1
+  203:  jump *label736 always 0 0
         label *label733
-        label *label735
-  206:  jump *label740 greaterThanEq 1 :fn48:i
+  204:  jump *label734 lessThanEq 1 :fn48:i
+  205:  op add :fn49:gt :fn49:gt 1
+        label *label734
+        label *label736
+  206:  jump *label741 greaterThanEq 1 :fn48:i
   207:  op add :fn49:lt :fn49:lt 1
-  208:  jump *label743 always 0 0
-        label *label740
-  209:  jump *label741 lessThanEq 1 :fn48:i
-  210:  op add :fn49:gt :fn49:gt 1
+  208:  jump *label744 always 0 0
         label *label741
-        label *label743
-  211:  jump *label748 greaterThanEq 5 :fn48:i
+  209:  jump *label742 lessThanEq 1 :fn48:i
+  210:  op add :fn49:gt :fn49:gt 1
+        label *label742
+        label *label744
+  211:  jump *label749 greaterThanEq 5 :fn48:i
   212:  op add :fn49:lt :fn49:lt 1
-  213:  jump *label751 always 0 0
-        label *label748
-  214:  jump *label749 lessThanEq 5 :fn48:i
-  215:  op add :fn49:gt :fn49:gt 1
+  213:  jump *label752 always 0 0
         label *label749
-        label *label751
+  214:  jump *label750 lessThanEq 5 :fn48:i
+  215:  op add :fn49:gt :fn49:gt 1
+        label *label750
+        label *label752
   216:  op sub *tmp169 :fn49:gt :fn49:lt
   217:  op abs :fn49:dif *tmp169 0
   218:  set *tmp174 false
@@ -1164,78 +1164,78 @@ Final code before resolving virtual instructions:
         label *label304
   550:  set :fn67:lt 0
   551:  set :fn67:gt 0
-  552:  jump *label635 greaterThanEq 1 :fn66:i
+  552:  jump *label636 greaterThanEq 1 :fn66:i
   553:  set :fn67:lt 1
-  554:  jump *label638 always 0 0
-        label *label635
-  555:  jump *label636 lessThanEq 1 :fn66:i
-  556:  set :fn67:gt 1
+  554:  jump *label639 always 0 0
         label *label636
-        label *label638
-  557:  jump *label643 greaterThanEq 2 :fn66:i
+  555:  jump *label637 lessThanEq 1 :fn66:i
+  556:  set :fn67:gt 1
+        label *label637
+        label *label639
+  557:  jump *label644 greaterThanEq 2 :fn66:i
   558:  op add :fn67:lt :fn67:lt 1
-  559:  jump *label646 always 0 0
-        label *label643
-  560:  jump *label644 lessThanEq 2 :fn66:i
-  561:  op add :fn67:gt :fn67:gt 1
+  559:  jump *label647 always 0 0
         label *label644
-        label *label646
-  562:  jump *label651 greaterThanEq 3 :fn66:i
+  560:  jump *label645 lessThanEq 2 :fn66:i
+  561:  op add :fn67:gt :fn67:gt 1
+        label *label645
+        label *label647
+  562:  jump *label652 greaterThanEq 3 :fn66:i
   563:  op add :fn67:lt :fn67:lt 1
-  564:  jump *label654 always 0 0
-        label *label651
-  565:  jump *label652 lessThanEq 3 :fn66:i
-  566:  op add :fn67:gt :fn67:gt 1
+  564:  jump *label655 always 0 0
         label *label652
-        label *label654
-  567:  jump *label659 greaterThanEq 4 :fn66:i
+  565:  jump *label653 lessThanEq 3 :fn66:i
+  566:  op add :fn67:gt :fn67:gt 1
+        label *label653
+        label *label655
+  567:  jump *label660 greaterThanEq 4 :fn66:i
   568:  op add :fn67:lt :fn67:lt 1
-  569:  jump *label662 always 0 0
-        label *label659
-  570:  jump *label660 lessThanEq 4 :fn66:i
-  571:  op add :fn67:gt :fn67:gt 1
+  569:  jump *label663 always 0 0
         label *label660
-        label *label662
-  572:  jump *label667 greaterThanEq 5 :fn66:i
+  570:  jump *label661 lessThanEq 4 :fn66:i
+  571:  op add :fn67:gt :fn67:gt 1
+        label *label661
+        label *label663
+  572:  jump *label668 greaterThanEq 5 :fn66:i
   573:  op add :fn67:lt :fn67:lt 1
-  574:  jump *label670 always 0 0
-        label *label667
-  575:  jump *label668 lessThanEq 5 :fn66:i
-  576:  op add :fn67:gt :fn67:gt 1
+  574:  jump *label671 always 0 0
         label *label668
-        label *label670
-  577:  jump *label675 greaterThanEq 6 :fn66:i
+  575:  jump *label669 lessThanEq 5 :fn66:i
+  576:  op add :fn67:gt :fn67:gt 1
+        label *label669
+        label *label671
+  577:  jump *label676 greaterThanEq 6 :fn66:i
   578:  op add :fn67:lt :fn67:lt 1
-  579:  jump *label678 always 0 0
-        label *label675
-  580:  jump *label676 lessThanEq 6 :fn66:i
-  581:  op add :fn67:gt :fn67:gt 1
+  579:  jump *label679 always 0 0
         label *label676
-        label *label678
-  582:  jump *label683 greaterThanEq 7 :fn66:i
+  580:  jump *label677 lessThanEq 6 :fn66:i
+  581:  op add :fn67:gt :fn67:gt 1
+        label *label677
+        label *label679
+  582:  jump *label684 greaterThanEq 7 :fn66:i
   583:  op add :fn67:lt :fn67:lt 1
-  584:  jump *label686 always 0 0
-        label *label683
-  585:  jump *label684 lessThanEq 7 :fn66:i
-  586:  op add :fn67:gt :fn67:gt 1
+  584:  jump *label687 always 0 0
         label *label684
-        label *label686
-  587:  jump *label691 greaterThanEq 8 :fn66:i
+  585:  jump *label685 lessThanEq 7 :fn66:i
+  586:  op add :fn67:gt :fn67:gt 1
+        label *label685
+        label *label687
+  587:  jump *label692 greaterThanEq 8 :fn66:i
   588:  op add :fn67:lt :fn67:lt 1
-  589:  jump *label694 always 0 0
-        label *label691
-  590:  jump *label692 lessThanEq 8 :fn66:i
-  591:  op add :fn67:gt :fn67:gt 1
+  589:  jump *label695 always 0 0
         label *label692
-        label *label694
-  592:  jump *label699 greaterThanEq 9 :fn66:i
+  590:  jump *label693 lessThanEq 8 :fn66:i
+  591:  op add :fn67:gt :fn67:gt 1
+        label *label693
+        label *label695
+  592:  jump *label700 greaterThanEq 9 :fn66:i
   593:  op add :fn67:lt :fn67:lt 1
-  594:  jump *label702 always 0 0
-        label *label699
-  595:  jump *label700 lessThanEq 9 :fn66:i
-  596:  op add :fn67:gt :fn67:gt 1
+  594:  jump *label703 always 0 0
         label *label700
-        label *label702
+  595:  jump *label701 lessThanEq 9 :fn66:i
+  596:  op add :fn67:gt :fn67:gt 1
+        label *label701
+        label *label703
   597:  op sub *tmp301 :fn67:gt :fn67:lt
   598:  op abs :fn67:dif *tmp301 0
   599:  set *tmp306 false
@@ -1716,45 +1716,45 @@ Final code before resolving virtual instructions:
         label *label1
   957:  op max :fn1:y2 :fn1:x1 :fn1:x2
   958:  op min :fn1:y3 :fn1:x3 :fn1:x4
-  959:  jump *label503 greaterThan :fn1:y2 :fn1:y3
-  960:  op add *tmp410 :fn1:y2 :fn1:y3
-  961:  op div :fn1*retval *tmp410 2
+  959:  jump *label504 greaterThan :fn1:y2 :fn1:y3
+  960:  op add *tmp413 :fn1:y2 :fn1:y3
+  961:  op div :fn1*retval *tmp413 2
   962:  return :fn1*retaddr
-        label *label503
+        label *label504
   963:  op min :fn1:y1 :fn1:x1 :fn1:x2
   964:  op max :fn1:y4 :fn1:x3 :fn1:x4
-  965:  jump *label505 lessThan :fn1:y1 :fn1:y4
-  966:  op add *tmp416 :fn1:y1 :fn1:y4
-  967:  op div :fn1*retval *tmp416 2
+  965:  jump *label506 lessThan :fn1:y1 :fn1:y4
+  966:  op add *tmp419 :fn1:y1 :fn1:y4
+  967:  op div :fn1*retval *tmp419 2
   968:  return :fn1*retaddr
-        label *label505
-  969:  op max *tmp418 :fn1:y1 :fn1:y3
-  970:  op min *tmp419 :fn1:y2 :fn1:y4
-  971:  op add *tmp420 *tmp418 *tmp419
-  972:  op div :fn1*retval *tmp420 2
+        label *label506
+  969:  op max *tmp421 :fn1:y1 :fn1:y3
+  970:  op min *tmp422 :fn1:y2 :fn1:y4
+  971:  op add *tmp423 *tmp421 *tmp422
+  972:  op div :fn1*retval *tmp423 2
   973:  return :fn1*retaddr
         label *label2
   974:  op min :fn2:y1 :fn2:x1 :fn2:x2
   975:  op max :fn2:y2 :fn2:x1 :fn2:x2
   976:  op min :fn2:y4 :fn2:x4 :fn2:x5
   977:  op max :fn2:y5 :fn2:x4 :fn2:x5
-  978:  jump *label508 greaterThanEq :fn2:y4 :fn2:y1
+  978:  jump *label509 greaterThanEq :fn2:y4 :fn2:y1
   979:  set :fn2:y4 :fn2:y1
-  980:  set :fn81:t :fn2:y2
+  980:  set :fn82:t :fn2:y2
   981:  set :fn2:y2 :fn2:y5
-  982:  set :fn2:y5 :fn81:t
-        label *label508
-  983:  jump *label512 lessThanEq :fn2:x3 :fn2:y2
+  982:  set :fn2:y5 :fn82:t
+        label *label509
+  983:  jump *label513 lessThanEq :fn2:x3 :fn2:y2
   984:  op min :fn2*retval :fn2:y2 :fn2:y5
-  985:  jump *label513 greaterThanEq :fn2:y2 :fn2:y4
+  985:  jump *label514 greaterThanEq :fn2:y2 :fn2:y4
   986:  op min :fn2*retval :fn2:x3 :fn2:y4
   987:  return :fn2*retaddr
-        label *label512
-  988:  op min :fn2*retval :fn2:y2 :fn2:y4
-  989:  jump *label517 lessThanEq :fn2:x3 :fn2:y4
-  990:  op min :fn2*retval :fn2:x3 :fn2:y5
-        label *label517
         label *label513
+  988:  op min :fn2*retval :fn2:y2 :fn2:y4
+  989:  jump *label518 lessThanEq :fn2:x3 :fn2:y4
+  990:  op min :fn2*retval :fn2:x3 :fn2:y5
+        label *label518
+        label *label514
   991:  return :fn2*retaddr
 
 
@@ -1821,11 +1821,11 @@ stop instruction encountered, dumping variable values:
 *tmp389: 0.0
 *tmp391: 8.0
 *tmp394: 1.0
-*tmp410: 10.0
-*tmp416: 10.0
-*tmp418: 4.0
-*tmp419: 6.0
-*tmp420: 10.0
+*tmp413: 10.0
+*tmp419: 10.0
+*tmp421: 4.0
+*tmp422: 6.0
+*tmp423: 10.0
 :fn0*retaddr: 24.0
 :fn0*retval: -1.0
 :fn0:x: -5.0
@@ -1939,5 +1939,5 @@ stop instruction encountered, dumping variable values:
 :fn79:gt: 4.0
 :fn79:i: 5.0
 :fn79:lt: 4.0
-:fn81:t: 5.0
+:fn82:t: 5.0
 @counter: 950.0

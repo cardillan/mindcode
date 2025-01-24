@@ -1,10 +1,12 @@
 package info.teksol.mc.messages;
 
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 import java.util.Objects;
 
+@NullMarked
 public record TimingMessage(MessageLevel level, String message) implements MindcodeMessage {
 
     public TimingMessage {

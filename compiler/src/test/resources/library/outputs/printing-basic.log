@@ -73,275 +73,275 @@ Final code before resolving virtual instructions:
 
     0:  assertflush
     1:  print "{2}"
-    2:  op floor :fn8:n 0 0
-    3:  format :fn8:n
+    2:  op floor :fn32:n 0 0
+    3:  format :fn32:n
     4:  assertprints "0" "printNumber(null)"
     5:  assertflush
     6:  print "{2}"
-    7:  op floor :fn8:n 1 0
-    8:  format :fn8:n
+    7:  op floor :fn32:n 1 0
+    8:  format :fn32:n
     9:  assertprints "1" "printNumber(1)"
    10:  assertflush
    11:  print "{2}"
-   12:  op floor :fn8:n 1.5 0
-   13:  format :fn8:n
+   12:  op floor :fn32:n 1.5 0
+   13:  format :fn32:n
    14:  assertprints "1" "printNumber(1.5)"
    15:  assertflush
    16:  print "{2}"
-   17:  op floor :fn8:n 1.5 0
+   17:  op floor :fn32:n 1.5 0
    18:  format "-{2}"
-   19:  format :fn8:n
+   19:  format :fn32:n
    20:  assertprints "-1" "printNumber(-1.5)"
    21:  assertflush
    22:  print "{2}"
-   23:  op floor :fn8:n 1234567 0
-        label *label281
-   24:  op mod :fn8:mod :fn8:n 1000
-   25:  jump *label282 greaterThanEq :fn8:mod 10
-   26:  set *tmp7 "{2},00{1}"
-   27:  jump *label285 always 0 0
-        label *label282
-   28:  jump *label283 greaterThanEq :fn8:mod 100
-   29:  set *tmp7 "{2},0{1}"
-   30:  jump *label284 always 0 0
-        label *label283
-   31:  set *tmp7 "{2},{1}"
-        label *label284
-        label *label285
-   32:  format *tmp7
-   33:  format :fn8:mod
-   34:  op idiv :fn8:n :fn8:n 1000
-   35:  jump *label281 greaterThan :fn8:n 999
-   36:  format :fn8:n
+   23:  op floor :fn32:n 1234567 0
+        label *label341
+   24:  op mod :fn32:mod :fn32:n 1000
+   25:  jump *label342 greaterThanEq :fn32:mod 10
+   26:  set *tmp88 "{2},00{1}"
+   27:  jump *label345 always 0 0
+        label *label342
+   28:  jump *label343 greaterThanEq :fn32:mod 100
+   29:  set *tmp88 "{2},0{1}"
+   30:  jump *label344 always 0 0
+        label *label343
+   31:  set *tmp88 "{2},{1}"
+        label *label344
+        label *label345
+   32:  format *tmp88
+   33:  format :fn32:mod
+   34:  op idiv :fn32:n :fn32:n 1000
+   35:  jump *label341 greaterThan :fn32:n 999
+   36:  format :fn32:n
    37:  assertprints "1,234,567" "printNumber(1234567)"
    38:  assertflush
    39:  print "{2}"
-   40:  op floor :fn8:n 1234567 0
+   40:  op floor :fn32:n 1234567 0
    41:  format "-{2}"
-        label *label294
-   42:  op mod :fn8:mod :fn8:n 1000
-   43:  jump *label295 greaterThanEq :fn8:mod 10
-   44:  set *tmp7 "{2},00{1}"
-   45:  jump *label298 always 0 0
-        label *label295
-   46:  jump *label296 greaterThanEq :fn8:mod 100
-   47:  set *tmp7 "{2},0{1}"
-   48:  jump *label297 always 0 0
-        label *label296
-   49:  set *tmp7 "{2},{1}"
-        label *label297
-        label *label298
-   50:  format *tmp7
-   51:  format :fn8:mod
-   52:  op idiv :fn8:n :fn8:n 1000
-   53:  jump *label294 greaterThan :fn8:n 999
-   54:  format :fn8:n
+        label *label354
+   42:  op mod :fn32:mod :fn32:n 1000
+   43:  jump *label355 greaterThanEq :fn32:mod 10
+   44:  set *tmp88 "{2},00{1}"
+   45:  jump *label358 always 0 0
+        label *label355
+   46:  jump *label356 greaterThanEq :fn32:mod 100
+   47:  set *tmp88 "{2},0{1}"
+   48:  jump *label357 always 0 0
+        label *label356
+   49:  set *tmp88 "{2},{1}"
+        label *label357
+        label *label358
+   50:  format *tmp88
+   51:  format :fn32:mod
+   52:  op idiv :fn32:n :fn32:n 1000
+   53:  jump *label354 greaterThan :fn32:n 999
+   54:  format :fn32:n
    55:  assertprints "-1,234,567" "printNumber(-1234567)"
    56:  assertflush
    57:  print "{2}"
-   58:  op floor :fn8:n 9009099 0
-        label *label307
-   59:  op mod :fn8:mod :fn8:n 1000
-   60:  jump *label308 greaterThanEq :fn8:mod 10
-   61:  set *tmp7 "{2},00{1}"
-   62:  jump *label311 always 0 0
-        label *label308
-   63:  jump *label309 greaterThanEq :fn8:mod 100
-   64:  set *tmp7 "{2},0{1}"
-   65:  jump *label310 always 0 0
-        label *label309
-   66:  set *tmp7 "{2},{1}"
-        label *label310
-        label *label311
-   67:  format *tmp7
-   68:  format :fn8:mod
-   69:  op idiv :fn8:n :fn8:n 1000
-   70:  jump *label307 greaterThan :fn8:n 999
-   71:  format :fn8:n
+   58:  op floor :fn32:n 9009099 0
+        label *label367
+   59:  op mod :fn32:mod :fn32:n 1000
+   60:  jump *label368 greaterThanEq :fn32:mod 10
+   61:  set *tmp88 "{2},00{1}"
+   62:  jump *label371 always 0 0
+        label *label368
+   63:  jump *label369 greaterThanEq :fn32:mod 100
+   64:  set *tmp88 "{2},0{1}"
+   65:  jump *label370 always 0 0
+        label *label369
+   66:  set *tmp88 "{2},{1}"
+        label *label370
+        label *label371
+   67:  format *tmp88
+   68:  format :fn32:mod
+   69:  op idiv :fn32:n :fn32:n 1000
+   70:  jump *label367 greaterThan :fn32:n 999
+   71:  format :fn32:n
    72:  assertprints "9,009,099" "printNumber(9009099)"
    73:  assertflush
    74:  print "{2}"
-   75:  set :fn9:digits 0
-   76:  op floor :fn9:n 0b1001 0
-        label *label206
-   77:  op and *tmp11 :fn9:n 1
+   75:  set :fn33:digits 0
+   76:  op floor :fn33:n 0b1001 0
+        label *label266
+   77:  op and *tmp92 :fn33:n 1
    78:  format "{2}{1}"
-   79:  format *tmp11
-   80:  op shr :fn9:n :fn9:n 1
-   81:  op sub :fn9:digits :fn9:digits 1
-   82:  jump *label206 greaterThan :fn9:n 0
-   83:  jump *label212 lessThanEq :fn9:digits 0
-        label *label210
+   79:  format *tmp92
+   80:  op shr :fn33:n :fn33:n 1
+   81:  op sub :fn33:digits :fn33:digits 1
+   82:  jump *label266 greaterThan :fn33:n 0
+   83:  jump *label272 lessThanEq :fn33:digits 0
+        label *label270
    84:  format "{2}0"
-   85:  op sub :fn9:digits :fn9:digits 1
-   86:  jump *label210 greaterThan :fn9:digits 0
-        label *label212
+   85:  op sub :fn33:digits :fn33:digits 1
+   86:  jump *label270 greaterThan :fn33:digits 0
+        label *label272
    87:  format "0b"
    88:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
    89:  assertflush
    90:  print "{2}"
-   91:  set :fn9:digits 6
-   92:  op floor :fn9:n 0b1010 0
-        label *label216
-   93:  op and *tmp11 :fn9:n 1
+   91:  set :fn33:digits 6
+   92:  op floor :fn33:n 0b1010 0
+        label *label276
+   93:  op and *tmp92 :fn33:n 1
    94:  format "{2}{1}"
-   95:  format *tmp11
-   96:  op shr :fn9:n :fn9:n 1
-   97:  op sub :fn9:digits :fn9:digits 1
-   98:  jump *label216 greaterThan :fn9:n 0
-   99:  jump *label222 lessThanEq :fn9:digits 0
-        label *label220
+   95:  format *tmp92
+   96:  op shr :fn33:n :fn33:n 1
+   97:  op sub :fn33:digits :fn33:digits 1
+   98:  jump *label276 greaterThan :fn33:n 0
+   99:  jump *label282 lessThanEq :fn33:digits 0
+        label *label280
   100:  format "{2}0"
-  101:  op sub :fn9:digits :fn9:digits 1
-  102:  jump *label220 greaterThan :fn9:digits 0
-        label *label222
+  101:  op sub :fn33:digits :fn33:digits 1
+  102:  jump *label280 greaterThan :fn33:digits 0
+        label *label282
   103:  format "0b"
   104:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
   105:  assertflush
   106:  print "{2}"
-  107:  set :fn10:digits 0
-  108:  op floor :fn10:n 0xABCDEF 0
-        label *label317
-  109:  op mod :fn10:digit :fn10:n 16
-  110:  jump *label320 lessThan :fn10:digit 0
-  111:  jump *label319 lessThanEq :fn10:digit 9
-  112:  jump *label320 always 0 0
-        label *label319
+  107:  set :fn34:digits 0
+  108:  op floor :fn34:n 0xABCDEF 0
+        label *label377
+  109:  op mod :fn34:digit :fn34:n 16
+  110:  jump *label380 lessThan :fn34:digit 0
+  111:  jump *label379 lessThanEq :fn34:digit 9
+  112:  jump *label380 always 0 0
+        label *label379
   113:  format "{2}{1}"
-  114:  format :fn10:digit
-  115:  jump *label333 always 0 0
-        label *label320
-  116:  jump *label322 notEqual :fn10:digit 10
+  114:  format :fn34:digit
+  115:  jump *label393 always 0 0
+        label *label380
+  116:  jump *label382 notEqual :fn34:digit 10
   117:  format "{2}A"
-  118:  jump *label333 always 0 0
-        label *label322
-  119:  jump *label324 notEqual :fn10:digit 11
+  118:  jump *label393 always 0 0
+        label *label382
+  119:  jump *label384 notEqual :fn34:digit 11
   120:  format "{2}B"
-  121:  jump *label333 always 0 0
-        label *label324
-  122:  jump *label326 notEqual :fn10:digit 12
+  121:  jump *label393 always 0 0
+        label *label384
+  122:  jump *label386 notEqual :fn34:digit 12
   123:  format "{2}C"
-  124:  jump *label333 always 0 0
-        label *label326
-  125:  jump *label328 notEqual :fn10:digit 13
+  124:  jump *label393 always 0 0
+        label *label386
+  125:  jump *label388 notEqual :fn34:digit 13
   126:  format "{2}D"
-  127:  jump *label333 always 0 0
-        label *label328
-  128:  jump *label330 notEqual :fn10:digit 14
+  127:  jump *label393 always 0 0
+        label *label388
+  128:  jump *label390 notEqual :fn34:digit 14
   129:  format "{2}E"
-  130:  jump *label333 always 0 0
-        label *label330
-  131:  jump *label332 notEqual :fn10:digit 15
+  130:  jump *label393 always 0 0
+        label *label390
+  131:  jump *label392 notEqual :fn34:digit 15
   132:  format "{2}F"
-        label *label332
-        label *label333
-  133:  op shr :fn10:n :fn10:n 4
-  134:  op sub :fn10:digits :fn10:digits 1
-  135:  jump *label317 greaterThan :fn10:n 0
-  136:  jump *label339 lessThanEq :fn10:digits 0
-        label *label337
+        label *label392
+        label *label393
+  133:  op shr :fn34:n :fn34:n 4
+  134:  op sub :fn34:digits :fn34:digits 1
+  135:  jump *label377 greaterThan :fn34:n 0
+  136:  jump *label399 lessThanEq :fn34:digits 0
+        label *label397
   137:  format "{2}0"
-  138:  op sub :fn10:digits :fn10:digits 1
-  139:  jump *label337 greaterThan :fn10:digits 0
-        label *label339
+  138:  op sub :fn34:digits :fn34:digits 1
+  139:  jump *label397 greaterThan :fn34:digits 0
+        label *label399
   140:  format "0x"
   141:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
   142:  assertflush
   143:  print "{2}"
-  144:  set :fn10:digits 0
-  145:  op floor :fn10:n 0x1234567890 0
-        label *label343
-  146:  op mod :fn10:digit :fn10:n 16
-  147:  jump *label346 lessThan :fn10:digit 0
-  148:  jump *label345 lessThanEq :fn10:digit 9
-  149:  jump *label346 always 0 0
-        label *label345
+  144:  set :fn34:digits 0
+  145:  op floor :fn34:n 0x1234567890 0
+        label *label403
+  146:  op mod :fn34:digit :fn34:n 16
+  147:  jump *label406 lessThan :fn34:digit 0
+  148:  jump *label405 lessThanEq :fn34:digit 9
+  149:  jump *label406 always 0 0
+        label *label405
   150:  format "{2}{1}"
-  151:  format :fn10:digit
-  152:  jump *label359 always 0 0
-        label *label346
-  153:  jump *label348 notEqual :fn10:digit 10
+  151:  format :fn34:digit
+  152:  jump *label419 always 0 0
+        label *label406
+  153:  jump *label408 notEqual :fn34:digit 10
   154:  format "{2}A"
-  155:  jump *label359 always 0 0
-        label *label348
-  156:  jump *label350 notEqual :fn10:digit 11
+  155:  jump *label419 always 0 0
+        label *label408
+  156:  jump *label410 notEqual :fn34:digit 11
   157:  format "{2}B"
-  158:  jump *label359 always 0 0
-        label *label350
-  159:  jump *label352 notEqual :fn10:digit 12
+  158:  jump *label419 always 0 0
+        label *label410
+  159:  jump *label412 notEqual :fn34:digit 12
   160:  format "{2}C"
-  161:  jump *label359 always 0 0
-        label *label352
-  162:  jump *label354 notEqual :fn10:digit 13
+  161:  jump *label419 always 0 0
+        label *label412
+  162:  jump *label414 notEqual :fn34:digit 13
   163:  format "{2}D"
-  164:  jump *label359 always 0 0
-        label *label354
-  165:  jump *label356 notEqual :fn10:digit 14
+  164:  jump *label419 always 0 0
+        label *label414
+  165:  jump *label416 notEqual :fn34:digit 14
   166:  format "{2}E"
-  167:  jump *label359 always 0 0
-        label *label356
-  168:  jump *label358 notEqual :fn10:digit 15
+  167:  jump *label419 always 0 0
+        label *label416
+  168:  jump *label418 notEqual :fn34:digit 15
   169:  format "{2}F"
-        label *label358
-        label *label359
-  170:  op shr :fn10:n :fn10:n 4
-  171:  op sub :fn10:digits :fn10:digits 1
-  172:  jump *label343 greaterThan :fn10:n 0
-  173:  jump *label365 lessThanEq :fn10:digits 0
-        label *label363
+        label *label418
+        label *label419
+  170:  op shr :fn34:n :fn34:n 4
+  171:  op sub :fn34:digits :fn34:digits 1
+  172:  jump *label403 greaterThan :fn34:n 0
+  173:  jump *label425 lessThanEq :fn34:digits 0
+        label *label423
   174:  format "{2}0"
-  175:  op sub :fn10:digits :fn10:digits 1
-  176:  jump *label363 greaterThan :fn10:digits 0
-        label *label365
+  175:  op sub :fn34:digits :fn34:digits 1
+  176:  jump *label423 greaterThan :fn34:digits 0
+        label *label425
   177:  format "0x"
   178:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
   179:  assertflush
   180:  print "{2}"
-  181:  set :fn10:digits 8
-  182:  op floor :fn10:n 0xAABBCC 0
-        label *label369
-  183:  op mod :fn10:digit :fn10:n 16
-  184:  jump *label372 lessThan :fn10:digit 0
-  185:  jump *label371 lessThanEq :fn10:digit 9
-  186:  jump *label372 always 0 0
-        label *label371
+  181:  set :fn34:digits 8
+  182:  op floor :fn34:n 0xAABBCC 0
+        label *label429
+  183:  op mod :fn34:digit :fn34:n 16
+  184:  jump *label432 lessThan :fn34:digit 0
+  185:  jump *label431 lessThanEq :fn34:digit 9
+  186:  jump *label432 always 0 0
+        label *label431
   187:  format "{2}{1}"
-  188:  format :fn10:digit
-  189:  jump *label385 always 0 0
-        label *label372
-  190:  jump *label374 notEqual :fn10:digit 10
+  188:  format :fn34:digit
+  189:  jump *label445 always 0 0
+        label *label432
+  190:  jump *label434 notEqual :fn34:digit 10
   191:  format "{2}A"
-  192:  jump *label385 always 0 0
-        label *label374
-  193:  jump *label376 notEqual :fn10:digit 11
+  192:  jump *label445 always 0 0
+        label *label434
+  193:  jump *label436 notEqual :fn34:digit 11
   194:  format "{2}B"
-  195:  jump *label385 always 0 0
-        label *label376
-  196:  jump *label378 notEqual :fn10:digit 12
+  195:  jump *label445 always 0 0
+        label *label436
+  196:  jump *label438 notEqual :fn34:digit 12
   197:  format "{2}C"
-  198:  jump *label385 always 0 0
-        label *label378
-  199:  jump *label380 notEqual :fn10:digit 13
+  198:  jump *label445 always 0 0
+        label *label438
+  199:  jump *label440 notEqual :fn34:digit 13
   200:  format "{2}D"
-  201:  jump *label385 always 0 0
-        label *label380
-  202:  jump *label382 notEqual :fn10:digit 14
+  201:  jump *label445 always 0 0
+        label *label440
+  202:  jump *label442 notEqual :fn34:digit 14
   203:  format "{2}E"
-  204:  jump *label385 always 0 0
-        label *label382
-  205:  jump *label384 notEqual :fn10:digit 15
+  204:  jump *label445 always 0 0
+        label *label442
+  205:  jump *label444 notEqual :fn34:digit 15
   206:  format "{2}F"
-        label *label384
-        label *label385
-  207:  op shr :fn10:n :fn10:n 4
-  208:  op sub :fn10:digits :fn10:digits 1
-  209:  jump *label369 greaterThan :fn10:n 0
-  210:  jump *label391 lessThanEq :fn10:digits 0
-        label *label389
+        label *label444
+        label *label445
+  207:  op shr :fn34:n :fn34:n 4
+  208:  op sub :fn34:digits :fn34:digits 1
+  209:  jump *label429 greaterThan :fn34:n 0
+  210:  jump *label451 lessThanEq :fn34:digits 0
+        label *label449
   211:  format "{2}0"
-  212:  op sub :fn10:digits :fn10:digits 1
-  213:  jump *label389 greaterThan :fn10:digits 0
-        label *label391
+  212:  op sub :fn34:digits :fn34:digits 1
+  213:  jump *label449 greaterThan :fn34:digits 0
+        label *label451
   214:  format "0x"
   215:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
   216:  assertflush
@@ -467,219 +467,223 @@ Final code before resolving virtual instructions:
   316:  stop
   317:  end
         label *label6
-  318:  op abs *tmp23 :fn6:n 0
-  319:  jump *label85 greaterThan *tmp23 0
+  318:  op abs *tmp104 :fn6:n 0
+  319:  jump *label145 greaterThan *tmp104 0
   320:  print :fn6:n
-  321:  jump *label86 always 0 0
-        label *label85
-  322:  jump *label87 greaterThanEq :fn6:n 0
+  321:  jump *label146 always 0 0
+        label *label145
+  322:  jump *label147 greaterThanEq :fn6:n 0
   323:  print "-"
   324:  op abs :fn6:n :fn6:n 0
-        label *label87
-  325:  op log10 *tmp29 :fn6:n 0
-  326:  op floor :fn6:exp *tmp29 0
-  327:  op sub *tmp31 0 :fn6:exp
-  328:  op pow *tmp32 10 *tmp31
-  329:  op mul :fn6:base :fn6:n *tmp32
-  330:  op add *tmp35 :fn6:base 0.5
-  331:  op floor *tmp34 *tmp35 0
-  332:  op sub *tmp37 :fn6:base *tmp34
-  333:  op abs :fn6:cmp *tmp37 0
-  334:  jump *label90 greaterThan :fn6:cmp 0
+        label *label147
+  325:  op log10 *tmp110 :fn6:n 0
+  326:  op floor :fn6:exp *tmp110 0
+  327:  op sub *tmp112 0 :fn6:exp
+  328:  op pow *tmp113 10 *tmp112
+  329:  op mul :fn6:base :fn6:n *tmp113
+  330:  op add *tmp116 :fn6:base 0.5
+  331:  op floor *tmp115 *tmp116 0
+  332:  op sub *tmp118 :fn6:base *tmp115
+  333:  op abs :fn6:cmp *tmp118 0
+  334:  jump *label150 greaterThan :fn6:cmp 0
   335:  print :fn6:base
-  336:  jump *label91 always 0 0
-        label *label90
-  337:  jump *label92 lessThanEq :fn6:cmp 0.00001
+  336:  jump *label151 always 0 0
+        label *label150
+  337:  jump *label152 lessThanEq :fn6:cmp 0.00001
   338:  print :fn6:base
-  339:  jump *label93 always 0 0
-        label *label92
-  340:  op floor *tmp43 :fn6:base 0
-  341:  print *tmp43
+  339:  jump *label153 always 0 0
+        label *label152
+  340:  op floor *tmp124 :fn6:base 0
+  341:  print *tmp124
   342:  print "."
-  343:  op mod *tmp44 :fn6:base 1
-  344:  op mul :fn6:base *tmp44 100000
+  343:  op mod *tmp125 :fn6:base 1
+  344:  op mul :fn6:base *tmp125 100000
   345:  op floor :fn6:t :fn6:base 0
-  346:  jump *label174 greaterThanEq :fn6:t 10
+  346:  jump *label234 greaterThanEq :fn6:t 10
   347:  print "0000"
-  348:  jump *label181 always 0 0
-        label *label174
-  349:  jump *label175 greaterThanEq :fn6:t 100
+  348:  jump *label241 always 0 0
+        label *label234
+  349:  jump *label235 greaterThanEq :fn6:t 100
   350:  print "000"
-  351:  jump *label180 always 0 0
-        label *label175
-  352:  jump *label176 greaterThanEq :fn6:t 1000
+  351:  jump *label240 always 0 0
+        label *label235
+  352:  jump *label236 greaterThanEq :fn6:t 1000
   353:  print "00"
-  354:  jump *label179 always 0 0
-        label *label176
-  355:  jump *label177 greaterThanEq :fn6:t 10000
+  354:  jump *label239 always 0 0
+        label *label236
+  355:  jump *label237 greaterThanEq :fn6:t 10000
   356:  print "0"
-        label *label177
-        label *label179
-        label *label180
-        label *label181
+        label *label237
+        label *label239
+        label *label240
+        label *label241
   357:  print :fn6:t
-  358:  op mod *tmp44 :fn6:base 1
-  359:  op mul :fn6:base *tmp44 100000
+  358:  op mod *tmp125 :fn6:base 1
+  359:  op mul :fn6:base *tmp125 100000
   360:  op floor :fn6:t :fn6:base 0
-  361:  jump *label185 greaterThanEq :fn6:t 10
+  361:  jump *label245 greaterThanEq :fn6:t 10
   362:  print "0000"
-  363:  jump *label192 always 0 0
-        label *label185
-  364:  jump *label186 greaterThanEq :fn6:t 100
+  363:  jump *label252 always 0 0
+        label *label245
+  364:  jump *label246 greaterThanEq :fn6:t 100
   365:  print "000"
-  366:  jump *label191 always 0 0
-        label *label186
-  367:  jump *label187 greaterThanEq :fn6:t 1000
+  366:  jump *label251 always 0 0
+        label *label246
+  367:  jump *label247 greaterThanEq :fn6:t 1000
   368:  print "00"
-  369:  jump *label190 always 0 0
-        label *label187
-  370:  jump *label188 greaterThanEq :fn6:t 10000
+  369:  jump *label250 always 0 0
+        label *label247
+  370:  jump *label248 greaterThanEq :fn6:t 10000
   371:  print "0"
-        label *label188
-        label *label190
-        label *label191
-        label *label192
+        label *label248
+        label *label250
+        label *label251
+        label *label252
   372:  print :fn6:t
-  373:  op mod *tmp44 :fn6:base 1
-  374:  op mul :fn6:base *tmp44 100000
+  373:  op mod *tmp125 :fn6:base 1
+  374:  op mul :fn6:base *tmp125 100000
   375:  op floor :fn6:t :fn6:base 0
-  376:  jump *label196 greaterThanEq :fn6:t 10
+  376:  jump *label256 greaterThanEq :fn6:t 10
   377:  print "0000"
-  378:  jump *label203 always 0 0
-        label *label196
-  379:  jump *label197 greaterThanEq :fn6:t 100
+  378:  jump *label263 always 0 0
+        label *label256
+  379:  jump *label257 greaterThanEq :fn6:t 100
   380:  print "000"
-  381:  jump *label202 always 0 0
-        label *label197
-  382:  jump *label198 greaterThanEq :fn6:t 1000
+  381:  jump *label262 always 0 0
+        label *label257
+  382:  jump *label258 greaterThanEq :fn6:t 1000
   383:  print "00"
-  384:  jump *label201 always 0 0
-        label *label198
-  385:  jump *label199 greaterThanEq :fn6:t 10000
+  384:  jump *label261 always 0 0
+        label *label258
+  385:  jump *label259 greaterThanEq :fn6:t 10000
   386:  print "0"
-        label *label199
-        label *label201
-        label *label202
-        label *label203
+        label *label259
+        label *label261
+        label *label262
+        label *label263
   387:  print :fn6:t
-        label *label93
-        label *label91
-  388:  jump *label106 equal :fn6:exp 0
+        label *label153
+        label *label151
+  388:  jump *label166 equal :fn6:exp 0
   389:  print "E"
   390:  print :fn6:exp
-        label *label106
-        label *label86
+        label *label166
+        label *label146
   391:  return :fn6*retaddr
   392:  end
         label *label7
-  393:  op abs *tmp59 :fn7:n 0
-  394:  jump *label110 greaterThan *tmp59 0
+  393:  op abs *tmp140 :fn7:n 0
+  394:  jump *label170 greaterThan *tmp140 0
   395:  print :fn7:n
-  396:  jump *label111 always 0 0
-        label *label110
-  397:  jump *label112 greaterThanEq :fn7:n 0
+  396:  jump *label171 always 0 0
+        label *label170
+  397:  jump *label172 greaterThanEq :fn7:n 0
   398:  print "-"
   399:  op abs :fn7:n :fn7:n 0
-        label *label112
-  400:  op log10 *tmp65 :fn7:n 0
-  401:  op floor :fn7:exp *tmp65 0
-  402:  op sub *tmp67 0 :fn7:exp
-  403:  op pow *tmp68 10 *tmp67
-  404:  op mul :fn7:base :fn7:n *tmp68
-  405:  op floor *tmp70 :fn7:base 0
-  406:  print *tmp70
+        label *label172
+  400:  op log10 *tmp146 :fn7:n 0
+  401:  op floor :fn7:exp *tmp146 0
+  402:  op sub *tmp148 0 :fn7:exp
+  403:  op pow *tmp149 10 *tmp148
+  404:  op mul :fn7:base :fn7:n *tmp149
+  405:  op floor *tmp151 :fn7:base 0
+  406:  print *tmp151
   407:  print "."
-  408:  op mod *tmp71 :fn7:base 1
-  409:  op mul :fn7:base *tmp71 10
-  410:  op floor *tmp74 :fn7:base 0
-  411:  print *tmp74
-  412:  op mod *tmp71 :fn7:base 1
-  413:  op mul :fn7:base *tmp71 10
-  414:  op floor *tmp74 :fn7:base 0
-  415:  print *tmp74
-  416:  op mod *tmp71 :fn7:base 1
-  417:  op mul :fn7:base *tmp71 10
-  418:  op floor *tmp74 :fn7:base 0
-  419:  print *tmp74
-  420:  op mod *tmp71 :fn7:base 1
-  421:  op mul :fn7:base *tmp71 10
-  422:  op floor *tmp74 :fn7:base 0
-  423:  print *tmp74
-  424:  op mod *tmp71 :fn7:base 1
-  425:  op mul :fn7:base *tmp71 10
-  426:  op floor *tmp74 :fn7:base 0
-  427:  print *tmp74
-  428:  op mod *tmp71 :fn7:base 1
-  429:  op mul :fn7:base *tmp71 10
-  430:  op floor *tmp74 :fn7:base 0
-  431:  print *tmp74
-  432:  op mod *tmp71 :fn7:base 1
-  433:  op mul :fn7:base *tmp71 10
-  434:  op floor *tmp74 :fn7:base 0
-  435:  print *tmp74
-  436:  op mod *tmp71 :fn7:base 1
-  437:  op mul :fn7:base *tmp71 10
-  438:  op floor *tmp74 :fn7:base 0
-  439:  print *tmp74
-  440:  op mod *tmp71 :fn7:base 1
-  441:  op mul :fn7:base *tmp71 10
-  442:  op floor *tmp74 :fn7:base 0
-  443:  print *tmp74
-  444:  op mod *tmp71 :fn7:base 1
-  445:  op mul :fn7:base *tmp71 10
-  446:  op floor *tmp74 :fn7:base 0
-  447:  print *tmp74
-  448:  op mod *tmp71 :fn7:base 1
-  449:  op mul :fn7:base *tmp71 10
-  450:  op floor *tmp74 :fn7:base 0
-  451:  print *tmp74
-  452:  op mod *tmp71 :fn7:base 1
-  453:  op mul :fn7:base *tmp71 10
-  454:  op floor *tmp74 :fn7:base 0
-  455:  print *tmp74
-  456:  op mod *tmp71 :fn7:base 1
-  457:  op mul :fn7:base *tmp71 10
-  458:  op floor *tmp74 :fn7:base 0
-  459:  print *tmp74
-  460:  op mod *tmp71 :fn7:base 1
-  461:  op mul :fn7:base *tmp71 10
-  462:  op floor *tmp74 :fn7:base 0
-  463:  print *tmp74
-  464:  op mod *tmp71 :fn7:base 1
-  465:  op mul :fn7:base *tmp71 10
-  466:  op floor *tmp74 :fn7:base 0
-  467:  print *tmp74
-  468:  jump *label118 equal :fn7:exp 0
+  408:  op mod *tmp152 :fn7:base 1
+  409:  op mul :fn7:base *tmp152 10
+  410:  op floor *tmp155 :fn7:base 0
+  411:  print *tmp155
+  412:  op mod *tmp152 :fn7:base 1
+  413:  op mul :fn7:base *tmp152 10
+  414:  op floor *tmp155 :fn7:base 0
+  415:  print *tmp155
+  416:  op mod *tmp152 :fn7:base 1
+  417:  op mul :fn7:base *tmp152 10
+  418:  op floor *tmp155 :fn7:base 0
+  419:  print *tmp155
+  420:  op mod *tmp152 :fn7:base 1
+  421:  op mul :fn7:base *tmp152 10
+  422:  op floor *tmp155 :fn7:base 0
+  423:  print *tmp155
+  424:  op mod *tmp152 :fn7:base 1
+  425:  op mul :fn7:base *tmp152 10
+  426:  op floor *tmp155 :fn7:base 0
+  427:  print *tmp155
+  428:  op mod *tmp152 :fn7:base 1
+  429:  op mul :fn7:base *tmp152 10
+  430:  op floor *tmp155 :fn7:base 0
+  431:  print *tmp155
+  432:  op mod *tmp152 :fn7:base 1
+  433:  op mul :fn7:base *tmp152 10
+  434:  op floor *tmp155 :fn7:base 0
+  435:  print *tmp155
+  436:  op mod *tmp152 :fn7:base 1
+  437:  op mul :fn7:base *tmp152 10
+  438:  op floor *tmp155 :fn7:base 0
+  439:  print *tmp155
+  440:  op mod *tmp152 :fn7:base 1
+  441:  op mul :fn7:base *tmp152 10
+  442:  op floor *tmp155 :fn7:base 0
+  443:  print *tmp155
+  444:  op mod *tmp152 :fn7:base 1
+  445:  op mul :fn7:base *tmp152 10
+  446:  op floor *tmp155 :fn7:base 0
+  447:  print *tmp155
+  448:  op mod *tmp152 :fn7:base 1
+  449:  op mul :fn7:base *tmp152 10
+  450:  op floor *tmp155 :fn7:base 0
+  451:  print *tmp155
+  452:  op mod *tmp152 :fn7:base 1
+  453:  op mul :fn7:base *tmp152 10
+  454:  op floor *tmp155 :fn7:base 0
+  455:  print *tmp155
+  456:  op mod *tmp152 :fn7:base 1
+  457:  op mul :fn7:base *tmp152 10
+  458:  op floor *tmp155 :fn7:base 0
+  459:  print *tmp155
+  460:  op mod *tmp152 :fn7:base 1
+  461:  op mul :fn7:base *tmp152 10
+  462:  op floor *tmp155 :fn7:base 0
+  463:  print *tmp155
+  464:  op mod *tmp152 :fn7:base 1
+  465:  op mul :fn7:base *tmp152 10
+  466:  op floor *tmp155 :fn7:base 0
+  467:  print *tmp155
+  468:  jump *label178 equal :fn7:exp 0
   469:  print "E"
   470:  print :fn7:exp
-        label *label118
-        label *label111
+        label *label178
+        label *label171
   471:  return :fn7*retaddr
   472:  end
 
 
 stop instruction encountered, dumping variable values:
-*tmp11: 1.0
-*tmp23: 1.2345E-50
-*tmp29: -49.90850890573205
-*tmp31: 50.0
-*tmp32: 1.0E50
-*tmp34: 1.0
-*tmp35: 1.7345000000000002
-*tmp37: 0.23450000000000015
-*tmp43: 1.0
-*tmp44: 0.9999983634211276
-*tmp59: 1.2345E-50
-*tmp65: -49.90850890573205
-*tmp67: 50.0
-*tmp68: 1.0E50
-*tmp7: {2},00{1}
-*tmp70: 1.0
-*tmp71: 0.015276668818842154
-*tmp74: 0.0
-:fn10:digit: 10.0
-:fn10:digits: 0.0
-:fn10:n: 0.0
+*tmp104: 1.2345E-50
+*tmp110: -49.90850890573205
+*tmp112: 50.0
+*tmp113: 1.0E50
+*tmp115: 1.0
+*tmp116: 1.7345000000000002
+*tmp118: 0.23450000000000015
+*tmp124: 1.0
+*tmp125: 0.9999983634211276
+*tmp140: 1.2345E-50
+*tmp146: -49.90850890573205
+*tmp148: 50.0
+*tmp149: 1.0E50
+*tmp151: 1.0
+*tmp152: 0.015276668818842154
+*tmp155: 0.0
+*tmp88: {2},00{1}
+*tmp92: 1.0
+:fn32:mod: 9.0
+:fn32:n: 9.0
+:fn33:digits: 0.0
+:fn33:n: 0.0
+:fn34:digit: 10.0
+:fn34:digits: 0.0
+:fn34:n: 0.0
 :fn6*retaddr: 265.0
 :fn6:base: 1.2345000000000002
 :fn6:cmp: 0.23450000000000015
@@ -690,8 +694,4 @@ stop instruction encountered, dumping variable values:
 :fn7:base: 0.15276668818842154
 :fn7:exp: -50.0
 :fn7:n: 1.2345E-50
-:fn8:mod: 9.0
-:fn8:n: 9.0
-:fn9:digits: 0.0
-:fn9:n: 0.0
 @counter: 317.0

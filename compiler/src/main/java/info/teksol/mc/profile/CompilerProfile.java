@@ -13,18 +13,16 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Represents the configuration profile for a compiler/schematics builder/processor emulator, encapsulating various
- * parameters and settings that influence code compilation, schematics construction and code execution
- * on the emulated processor.
- * <p>
- * Some default values and limits differ between the command-line tool and the web application.
- * <p>
- * Generally, the settings in the CompilerProfile can be set using compiler directives (#set and others),
- * and by the command-line arguments.
- * <p>
- * Variables holding instances of this interface should be named "profile".
- */
+/// Represents the configuration profile for a compiler/schematics builder/processor emulator, encapsulating various
+/// parameters and settings that influence code compilation, schematics construction and code execution
+/// on the emulated processor.
+///
+/// Some default values and limits differ between the command-line tool and the web application.
+///
+/// Generally, the settings in the CompilerProfile can be set using compiler directives (#set and others),
+/// and by the command-line arguments.
+///
+/// Variables holding instances of this interface should be named "profile".
 @NullMarked
 public class CompilerProfile {
     public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
@@ -69,29 +67,25 @@ public class CompilerProfile {
     private List<String> additionalTags = List.of();
     private SourcePositionTranslator positionTranslator = p -> p;
 
-    /**
-     * Constructs a new instance of the CompilerProfile class.
-     *
-     * @param webApplication a boolean indicating whether the profile is intended for a web application.
-     *                       If true, the default settings for web applications are applied; otherwise,
-     *                       default settings for the command-line tool are used.
-     * @param level          the global optimization level to be applied across all optimization types.
-     */
+    /// Constructs a new instance of the CompilerProfile class.
+    ///
+    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
+    ///                       If true, the default settings for web applications are applied; otherwise,
+    ///                       default settings for the command-line tool are used.
+    /// @param level          the global optimization level to be applied across all optimization types.
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
 
-    /**
-     * Constructs a new instance of the CompilerProfile class.
-     *
-     * @param webApplication a boolean indicating whether the profile is intended for a web application.
-     *                        If true, the default settings for web applications are applied; otherwise,
-     *                        default settings for the command-line tool are used.
-     * @param optimizations   a varargs parameter containing a set of optimizations to be applied. Each optimization
-     *                        is configured with an advanced level if specified.
-     */
+    /// Constructs a new instance of the CompilerProfile class.
+    ///
+    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
+    ///                        If true, the default settings for web applications are applied; otherwise,
+    ///                        default settings for the command-line tool are used.
+    /// @param optimizations   a varargs parameter containing a set of optimizations to be applied. Each optimization
+    ///                        is configured with an advanced level if specified.
     public CompilerProfile(boolean webApplication, Optimization... optimizations) {
         this.webApplication = webApplication;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
@@ -100,48 +94,40 @@ public class CompilerProfile {
                 o -> optimSet.contains(o) ? OptimizationLevel.ADVANCED : OptimizationLevel.NONE));
     }
 
-    /**
-     * Creates a {@link CompilerProfile} instance configured with command-line tool defaults and
-     * experimental optimizations.
-     *
-     * @return a {@link CompilerProfile} instance configured with the experimental optimization level.
-     */
+    /// Creates a [CompilerProfile] instance configured with command-line tool defaults and
+    /// experimental optimizations.
+    ///
+    /// @return a [CompilerProfile] instance configured with the experimental optimization level.
     public static CompilerProfile experimentalOptimizations() {
         return new CompilerProfile(false,OptimizationLevel.EXPERIMENTAL);
     }
 
-    /**
-     * Creates a {@link CompilerProfile} instance configured with full optimizations.
-     *
-     * @param webApplication a boolean indicating whether the profile is intended for a web application.
-     *                       If true, it applies optimizations specific to web applications; otherwise,
-     *                       it applies optimizations for general-purpose environments.
-     * @return a {@link CompilerProfile} instance configured with the advanced optimization level.
-     */
+    /// Creates a [CompilerProfile] instance configured with full optimizations.
+    ///
+    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
+    ///                       If true, it applies optimizations specific to web applications; otherwise,
+    ///                       it applies optimizations for general-purpose environments.
+    /// @return a [CompilerProfile] instance configured with the advanced optimization level.
     public static CompilerProfile fullOptimizations(boolean webApplication) {
         return new CompilerProfile(webApplication, OptimizationLevel.ADVANCED);
     }
 
-    /**
-     * Creates a {@link CompilerProfile} instance configured with the standard optimizations.
-     *
-     * @param webApplication a boolean indicating whether the profile is intended for a web application.
-     *                       If true, it applies settings optimized for web applications; otherwise,
-     *                       it applies settings suitable for command-line environments.
-     * @return a {@link CompilerProfile} instance configured with the standard optimization level.
-     */
+    /// Creates a [CompilerProfile] instance configured with the standard optimizations.
+    ///
+    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
+    ///                       If true, it applies settings optimized for web applications; otherwise,
+    ///                       it applies settings suitable for command-line environments.
+    /// @return a [CompilerProfile] instance configured with the standard optimization level.
     public static CompilerProfile standardOptimizations(boolean webApplication) {
         return new CompilerProfile(webApplication, OptimizationLevel.BASIC);
     }
 
-    /**
-     * Creates a {@link CompilerProfile} instance with no optimizations applied.
-     *
-     * @param webApplication a boolean indicating whether the compiler profile is intended for a web application.
-     *                       If true, the profile is optimized for web application settings; otherwise, it is
-     *                       configured for command-line tools.
-     * @return a {@link CompilerProfile} instance configured with no optimizations.
-     */
+    /// Creates a [CompilerProfile] instance with no optimizations applied.
+    ///
+    /// @param webApplication a boolean indicating whether the compiler profile is intended for a web application.
+    ///                       If true, the profile is optimized for web application settings; otherwise, it is
+    ///                       configured for command-line tools.
+    /// @return a [CompilerProfile] instance configured with no optimizations.
     public static CompilerProfile noOptimizations(boolean webApplication) {
         return new CompilerProfile(webApplication, OptimizationLevel.NONE);
     }

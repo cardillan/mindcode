@@ -1,8 +1,11 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.List;
 import java.util.stream.Stream;
 
+@NullMarked
 public record OpcodeVariant(
         ProcessorVersion versionFrom,
         ProcessorVersion versionTo,

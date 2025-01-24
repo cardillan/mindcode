@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
 import info.teksol.mc.mindcode.logic.opcodes.*;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.V7;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@NullMarked
 class BaseFunctionMapperTest extends AbstractFunctionMapperTest {
 
     @Test

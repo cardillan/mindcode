@@ -1,9 +1,13 @@
 package info.teksol.mc.profile;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public enum SyntacticMode {
     STRICT,
     MIXED,
@@ -18,7 +22,7 @@ public enum SyntacticMode {
                         e -> e));
     }
 
-    public static SyntacticMode byName(String level) {
+    public static @Nullable SyntacticMode byName(String level) {
         return VALUE_MAP.get(level.toLowerCase());
     }
 

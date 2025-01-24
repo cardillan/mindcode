@@ -7,12 +7,15 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.evaluator.LogicWritable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
 import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_NOT_AN_OBJECT;
 
+@NullMarked
 public class MindustryVariable implements LogicWritable, LogicReadable {
     private final String name;
     private final boolean mlogConstant;
@@ -20,11 +23,11 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     // Actual value of the variable. Variables are created as null objects.
     private boolean isObject;
-    private MindustryObject object;
+    private @Nullable MindustryObject object;
     private double numericValue;
 
     private MindustryVariable(String name, boolean mlogConstant, boolean counter, boolean isObject,
-            MindustryObject object, double numericValue) {
+            @Nullable MindustryObject object, double numericValue) {
         this.name = Objects.requireNonNull(name);
         this.mlogConstant = mlogConstant;
         this.counter = counter;
@@ -103,7 +106,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         }
     }
 
-    public void setObject(MindustryObject object) {
+    public void setObject(@Nullable MindustryObject object) {
         verifyModification();
         if (counter) {
             throw new ExecutionException(ExecutionFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '%s'.", name);
@@ -163,7 +166,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         }
     }
 
-    public MindustryObject getObject() {
+    public @Nullable MindustryObject getObject() {
         return isObject ? object : null;
     }
 
@@ -209,7 +212,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return isObject || ExpressionEvaluator.invalid(numericValue);
     }
 
-    public static String print(MindustryObject object) {
+    public static String print(@Nullable MindustryObject object) {
         return object == null ? "null" : object.format();
     }
 }

@@ -2093,101 +2093,101 @@ Final code before resolving virtual instructions:
  1589:  return :fn0*retaddr
  1590:  end
         label *label1
- 1591:  op max *tmp406 :fn1:x1 :fn1:x2
- 1592:  set :fn1:y2 *tmp406
- 1593:  op min *tmp407 :fn1:x3 :fn1:x4
- 1594:  set :fn1:y3 *tmp407
- 1595:  op lessThanEq *tmp408 :fn1:y2 :fn1:y3
- 1596:  jump *label503 equal *tmp408 false
- 1597:  op add *tmp410 :fn1:y2 :fn1:y3
- 1598:  op div *tmp411 *tmp410 2
- 1599:  set *tmp409 *tmp411
- 1600:  jump *label504 always 0 0
-        label *label503
- 1601:  op min *tmp412 :fn1:x1 :fn1:x2
- 1602:  set :fn1:y1 *tmp412
- 1603:  op max *tmp413 :fn1:x3 :fn1:x4
- 1604:  set :fn1:y4 *tmp413
- 1605:  op greaterThanEq *tmp414 :fn1:y1 :fn1:y4
- 1606:  jump *label505 equal *tmp414 false
- 1607:  op add *tmp416 :fn1:y1 :fn1:y4
- 1608:  op div *tmp417 *tmp416 2
- 1609:  set *tmp415 *tmp417
- 1610:  jump *label506 always 0 0
-        label *label505
- 1611:  op max *tmp418 :fn1:y1 :fn1:y3
- 1612:  op min *tmp419 :fn1:y2 :fn1:y4
- 1613:  op add *tmp420 *tmp418 *tmp419
- 1614:  op div *tmp421 *tmp420 2
- 1615:  set *tmp415 *tmp421
-        label *label506
- 1616:  set *tmp409 *tmp415
+ 1591:  op max *tmp409 :fn1:x1 :fn1:x2
+ 1592:  set :fn1:y2 *tmp409
+ 1593:  op min *tmp410 :fn1:x3 :fn1:x4
+ 1594:  set :fn1:y3 *tmp410
+ 1595:  op lessThanEq *tmp411 :fn1:y2 :fn1:y3
+ 1596:  jump *label504 equal *tmp411 false
+ 1597:  op add *tmp413 :fn1:y2 :fn1:y3
+ 1598:  op div *tmp414 *tmp413 2
+ 1599:  set *tmp412 *tmp414
+ 1600:  jump *label505 always 0 0
         label *label504
- 1617:  set :fn1*retval *tmp409
-        label *label502
+ 1601:  op min *tmp415 :fn1:x1 :fn1:x2
+ 1602:  set :fn1:y1 *tmp415
+ 1603:  op max *tmp416 :fn1:x3 :fn1:x4
+ 1604:  set :fn1:y4 *tmp416
+ 1605:  op greaterThanEq *tmp417 :fn1:y1 :fn1:y4
+ 1606:  jump *label506 equal *tmp417 false
+ 1607:  op add *tmp419 :fn1:y1 :fn1:y4
+ 1608:  op div *tmp420 *tmp419 2
+ 1609:  set *tmp418 *tmp420
+ 1610:  jump *label507 always 0 0
+        label *label506
+ 1611:  op max *tmp421 :fn1:y1 :fn1:y3
+ 1612:  op min *tmp422 :fn1:y2 :fn1:y4
+ 1613:  op add *tmp423 *tmp421 *tmp422
+ 1614:  op div *tmp424 *tmp423 2
+ 1615:  set *tmp418 *tmp424
+        label *label507
+ 1616:  set *tmp412 *tmp418
+        label *label505
+ 1617:  set :fn1*retval *tmp412
+        label *label503
  1618:  return :fn1*retaddr
  1619:  end
         label *label2
- 1620:  op min *tmp422 :fn2:x1 :fn2:x2
- 1621:  set :fn2:y1 *tmp422
- 1622:  op max *tmp423 :fn2:x1 :fn2:x2
- 1623:  set :fn2:y2 *tmp423
- 1624:  op min *tmp424 :fn2:x4 :fn2:x5
- 1625:  set :fn2:y4 *tmp424
- 1626:  op max *tmp425 :fn2:x4 :fn2:x5
- 1627:  set :fn2:y5 *tmp425
- 1628:  op lessThan *tmp426 :fn2:y4 :fn2:y1
- 1629:  jump *label508 equal *tmp426 false
- 1630:  set :fn80:a :fn2:y1
- 1631:  set :fn80:b :fn2:y4
- 1632:  set :fn80:t :fn80:a
- 1633:  set :fn80:a :fn80:b
- 1634:  set :fn80:b :fn80:t
- 1635:  set *tmp428 :fn80:b
-        label *label510
- 1636:  set :fn2:y1 :fn80:a
- 1637:  set :fn2:y4 :fn80:b
- 1638:  set :fn81:a :fn2:y2
- 1639:  set :fn81:b :fn2:y5
- 1640:  set :fn81:t :fn81:a
- 1641:  set :fn81:a :fn81:b
- 1642:  set :fn81:b :fn81:t
- 1643:  set *tmp429 :fn81:b
+ 1620:  op min *tmp425 :fn2:x1 :fn2:x2
+ 1621:  set :fn2:y1 *tmp425
+ 1622:  op max *tmp426 :fn2:x1 :fn2:x2
+ 1623:  set :fn2:y2 *tmp426
+ 1624:  op min *tmp427 :fn2:x4 :fn2:x5
+ 1625:  set :fn2:y4 *tmp427
+ 1626:  op max *tmp428 :fn2:x4 :fn2:x5
+ 1627:  set :fn2:y5 *tmp428
+ 1628:  op lessThan *tmp429 :fn2:y4 :fn2:y1
+ 1629:  jump *label509 equal *tmp429 false
+ 1630:  set :fn81:a :fn2:y1
+ 1631:  set :fn81:b :fn2:y4
+ 1632:  set :fn81:t :fn81:a
+ 1633:  set :fn81:a :fn81:b
+ 1634:  set :fn81:b :fn81:t
+ 1635:  set *tmp431 :fn81:b
         label *label511
- 1644:  set :fn2:y2 :fn81:a
- 1645:  set :fn2:y5 :fn81:b
- 1646:  set *tmp427 *tmp429
- 1647:  jump *label509 always 0 0
-        label *label508
- 1648:  set *tmp427 null
-        label *label509
- 1649:  op greaterThan *tmp430 :fn2:x3 :fn2:y2
- 1650:  jump *label512 equal *tmp430 false
- 1651:  op lessThan *tmp432 :fn2:y2 :fn2:y4
- 1652:  jump *label514 equal *tmp432 false
- 1653:  op min *tmp434 :fn2:x3 :fn2:y4
- 1654:  set *tmp433 *tmp434
- 1655:  jump *label515 always 0 0
-        label *label514
- 1656:  op min *tmp435 :fn2:y2 :fn2:y5
- 1657:  set *tmp433 *tmp435
-        label *label515
- 1658:  set *tmp431 *tmp433
- 1659:  jump *label513 always 0 0
+ 1636:  set :fn2:y1 :fn81:a
+ 1637:  set :fn2:y4 :fn81:b
+ 1638:  set :fn82:a :fn2:y2
+ 1639:  set :fn82:b :fn2:y5
+ 1640:  set :fn82:t :fn82:a
+ 1641:  set :fn82:a :fn82:b
+ 1642:  set :fn82:b :fn82:t
+ 1643:  set *tmp432 :fn82:b
         label *label512
- 1660:  op greaterThan *tmp436 :fn2:x3 :fn2:y4
- 1661:  jump *label516 equal *tmp436 false
- 1662:  op min *tmp438 :fn2:x3 :fn2:y5
- 1663:  set *tmp437 *tmp438
- 1664:  jump *label517 always 0 0
+ 1644:  set :fn2:y2 :fn82:a
+ 1645:  set :fn2:y5 :fn82:b
+ 1646:  set *tmp430 *tmp432
+ 1647:  jump *label510 always 0 0
+        label *label509
+ 1648:  set *tmp430 null
+        label *label510
+ 1649:  op greaterThan *tmp433 :fn2:x3 :fn2:y2
+ 1650:  jump *label513 equal *tmp433 false
+ 1651:  op lessThan *tmp435 :fn2:y2 :fn2:y4
+ 1652:  jump *label515 equal *tmp435 false
+ 1653:  op min *tmp437 :fn2:x3 :fn2:y4
+ 1654:  set *tmp436 *tmp437
+ 1655:  jump *label516 always 0 0
+        label *label515
+ 1656:  op min *tmp438 :fn2:y2 :fn2:y5
+ 1657:  set *tmp436 *tmp438
         label *label516
- 1665:  op min *tmp439 :fn2:y2 :fn2:y4
- 1666:  set *tmp437 *tmp439
-        label *label517
- 1667:  set *tmp431 *tmp437
+ 1658:  set *tmp434 *tmp436
+ 1659:  jump *label514 always 0 0
         label *label513
- 1668:  set :fn2*retval *tmp431
-        label *label507
+ 1660:  op greaterThan *tmp439 :fn2:x3 :fn2:y4
+ 1661:  jump *label517 equal *tmp439 false
+ 1662:  op min *tmp441 :fn2:x3 :fn2:y5
+ 1663:  set *tmp440 *tmp441
+ 1664:  jump *label518 always 0 0
+        label *label517
+ 1665:  op min *tmp442 :fn2:y2 :fn2:y4
+ 1666:  set *tmp440 *tmp442
+        label *label518
+ 1667:  set *tmp434 *tmp440
+        label *label514
+ 1668:  set :fn2*retval *tmp434
+        label *label508
  1669:  return :fn2*retaddr
  1670:  end
 
@@ -2519,42 +2519,42 @@ stop instruction encountered, dumping variable values:
 *tmp403: -1.0
 *tmp404: 1.0
 *tmp405: -1.0
-*tmp406: 6.0
-*tmp407: 4.0
-*tmp408: 0.0
-*tmp409: 5.0
+*tmp409: 6.0
 *tmp41: 1.0
-*tmp410: 10.0
-*tmp411: 5.0
-*tmp412: 2.0
-*tmp413: 8.0
-*tmp414: 0.0
-*tmp415: 5.0
-*tmp416: 10.0
-*tmp417: 5.0
-*tmp418: 4.0
-*tmp419: 6.0
+*tmp410: 4.0
+*tmp411: 0.0
+*tmp412: 5.0
+*tmp413: 10.0
+*tmp414: 5.0
+*tmp415: 2.0
+*tmp416: 8.0
+*tmp417: 0.0
+*tmp418: 5.0
+*tmp419: 10.0
 *tmp42: -1.0
-*tmp420: 10.0
-*tmp421: 5.0
-*tmp422: 5.0
-*tmp423: 5.0
+*tmp420: 5.0
+*tmp421: 4.0
+*tmp422: 6.0
+*tmp423: 10.0
 *tmp424: 5.0
 *tmp425: 5.0
-*tmp426: 0.0
-*tmp427: null
-*tmp428: 4.0
-*tmp429: 5.0
+*tmp426: 5.0
+*tmp427: 5.0
+*tmp428: 5.0
+*tmp429: 0.0
 *tmp43: 1.0
-*tmp430: 0.0
-*tmp431: 5.0
-*tmp432: 1.0
-*tmp433: 5.0
+*tmp430: null
+*tmp431: 4.0
+*tmp432: 5.0
+*tmp433: 0.0
 *tmp434: 5.0
-*tmp436: 0.0
+*tmp435: 1.0
+*tmp436: 5.0
 *tmp437: 5.0
-*tmp439: 5.0
+*tmp439: 0.0
 *tmp44: 0.0
+*tmp440: 5.0
+*tmp442: 5.0
 *tmp45: 1.0
 *tmp46: 0.0
 *tmp47: 1.0E-50
@@ -2831,12 +2831,12 @@ stop instruction encountered, dumping variable values:
 :fn79:lt: 4.0
 :fn79:n: 5.0
 :fn7:x: 2.1
-:fn80:a: 1.0
-:fn80:b: 4.0
-:fn80:t: 4.0
-:fn81:a: 2.0
-:fn81:b: 5.0
-:fn81:t: 5.0
+:fn81:a: 1.0
+:fn81:b: 4.0
+:fn81:t: 4.0
+:fn82:a: 2.0
+:fn82:b: 5.0
+:fn82:t: 5.0
 :fn8:x: 2.5
 :fn9:x: -3.5
 @counter: 1577.0

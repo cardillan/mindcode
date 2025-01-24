@@ -1,15 +1,18 @@
 package info.teksol.mc.emulator;
 
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
+@NullMarked
 public class AbstractMindustryObject implements MindustryObject {
     private final String name;
     private final int id;
-    private final MindustryContent type;
+    private @Nullable final MindustryContent type;
 
-    public AbstractMindustryObject(String name, int id, MindustryContent type) {
+    public AbstractMindustryObject(String name, int id, @Nullable MindustryContent type) {
         this.name = Objects.requireNonNull(name);
         this.id = id;
         this.type = type;
@@ -31,7 +34,7 @@ public class AbstractMindustryObject implements MindustryObject {
     }
 
     @Override
-    public MindustryContent type() {
+    @Nullable public MindustryContent type() {
         return type;
     }
 }

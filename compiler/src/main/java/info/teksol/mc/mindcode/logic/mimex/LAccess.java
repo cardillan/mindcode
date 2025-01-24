@@ -1,5 +1,9 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+@NullMarked
 public record LAccess(
         String contentName,
         String name,
@@ -14,7 +18,7 @@ public record LAccess(
         return -1;
     }
 
-    public static LAccess forName(String name) {
+    public static @Nullable LAccess forName(String name) {
         return MindustryContents.LACCESS_MAP.get(name);
     }
 }

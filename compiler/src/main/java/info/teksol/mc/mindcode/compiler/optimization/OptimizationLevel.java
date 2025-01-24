@@ -1,8 +1,11 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@NullMarked
 public enum OptimizationLevel {
     NONE,
     BASIC,

@@ -6,9 +6,11 @@ import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public class InstructionProcessorFactory {
     private static final MessageConsumer nullMessageConsumer = msg -> {};
 

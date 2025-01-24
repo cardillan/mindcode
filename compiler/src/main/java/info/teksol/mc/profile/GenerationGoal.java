@@ -1,9 +1,13 @@
 package info.teksol.mc.profile;
 
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public enum GenerationGoal {
     SIZE,
     SPEED,
@@ -18,7 +22,7 @@ public enum GenerationGoal {
                         e -> e));
     }
 
-    public static GenerationGoal byName(String level) {
+    public static @Nullable GenerationGoal byName(String level) {
         return VALUE_MAP.get(level.toLowerCase());
     }
 

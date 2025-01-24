@@ -5,6 +5,7 @@
       <option name="METHOD_MATCHER_CONFIG" value="java.util.Formatter,format,java.io.Writer,append,com.google.common.base.Preconditions,checkNotNull,org.hibernate.Session,close,java.io.PrintWriter,printf,java.io.PrintStream,printf,info.teksol.mindcode.compiler.optimization.BaseOptimizer,createIteratorAtContext" />
     </inspection_tool>
     <inspection_tool class="BooleanMethodIsAlwaysInverted" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ConstantValue" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="EmptyStatementBody" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_reportEmptyBlocks" value="true" />
     </inspection_tool>

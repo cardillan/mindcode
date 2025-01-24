@@ -1,9 +1,11 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@NullMarked
 class OptimizationCoordinatorTest {
 
     @Test

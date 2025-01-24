@@ -10,11 +10,14 @@ import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.TraceFile;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 
+@NullMarked
 public class OptimizationCoordinator {
     public static final boolean TRACE = false;
     public static final boolean DEBUG_PRINT = TRACE;
@@ -27,7 +30,7 @@ public class OptimizationCoordinator {
     private final MessageConsumer messageConsumer;
     private final CompilerProfile profile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
-    private OptimizationContext optimizationContext;
+    private @Nullable OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
             MessageConsumer messageConsumer) {
@@ -45,6 +48,8 @@ public class OptimizationCoordinator {
     }
 
     protected Map<Optimization, Optimizer> createOptimizers() {
+        assert optimizationContext != null;
+
         Map<Optimization, Optimizer> result = new LinkedHashMap<>();
         for (Optimization optimization : Optimization.LIST) {
             OptimizationLevel level = profile.getOptimizationLevel(optimization);
@@ -109,6 +114,8 @@ public class OptimizationCoordinator {
     }
 
     private boolean optimizePhase(OptimizationPhase phase, Map<Optimization, Optimizer> optimizers, int pass) {
+        assert optimizationContext != null;
+
         boolean modified = false;
         for (Optimization optimization : phase.optimizations) {
             if (phase == FINAL) {
@@ -188,7 +195,7 @@ public class OptimizationCoordinator {
             Comparator.comparingDouble(OptimizationAction::efficiency)
                     .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
 
-    private void outputPossibleOptimization(OptimizationAction opt, int costLimit, OptimizationAction selected, int difference) {
+    private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference) {
         OptimizerMessage message;
         if (opt == selected) {
             message = OptimizerMessage.debug("  * %-60s cost %5d, benefit %10.1f, efficiency %10.1f (%+d instructions)",

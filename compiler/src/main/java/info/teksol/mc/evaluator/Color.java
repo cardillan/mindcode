@@ -1,7 +1,10 @@
 package info.teksol.mc.evaluator;
 
+import org.jspecify.annotations.NullMarked;
+
 import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 
+@NullMarked
 public class Color {
 
     public static double parseColor(String symbol) {

@@ -1,5 +1,8 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public enum ArgumentType {
     // Represents a nonexistent value (value of a void function or a loop)
     VOID,

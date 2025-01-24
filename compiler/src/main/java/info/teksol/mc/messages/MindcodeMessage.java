@@ -2,7 +2,9 @@ package info.teksol.mc.messages;
 
 import info.teksol.mc.common.PositionFormatter;
 import info.teksol.mc.common.SourcePosition;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface MindcodeMessage {
 
     default SourcePosition sourcePosition() {
@@ -13,10 +15,8 @@ public interface MindcodeMessage {
         return this;
     }
 
-    /**
-     * Unstable messages may change from run to run, and therefore aren't suitable for storing
-     * in log files which are under version control.
-     */
+    /// Unstable messages may change from run to run, and therefore aren't suitable for storing
+    /// in log files which are under version control.
     default boolean isStable() {
         return true;
     }

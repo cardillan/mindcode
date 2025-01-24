@@ -3,10 +3,12 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.MindcodeMessage;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 import java.util.Objects;
 
+@NullMarked
 public record OptimizerMessage(MessageLevel level, String message) implements MindcodeMessage {
 
     public OptimizerMessage {

@@ -4,9 +4,11 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 class MultipartPositionTranslator implements SourcePositionTranslator {
     record Part(int newLines, int lastLineLength, InputFile inputFile, int lineOffset, int columnOffset) {}
     private final List<Part> parts;

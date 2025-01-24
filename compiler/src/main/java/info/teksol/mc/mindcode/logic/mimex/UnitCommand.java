@@ -1,5 +1,8 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public record UnitCommand(
         String contentName,
         String name,

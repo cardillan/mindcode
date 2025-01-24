@@ -1,9 +1,12 @@
 package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
+@NullMarked
 public enum Modifier {
     CACHED          (MindcodeLexer.CACHED),
     EXTERNAL        (MindcodeLexer.EXTERNAL),
@@ -22,16 +25,16 @@ public enum Modifier {
         return COMPATIBILITY_MAP.get(this).containsAll(others);
     }
 
-    private static final List<Modifier> TOKENS = tokens();
+    private static final List<@Nullable Modifier> TOKENS = tokens();
     private static final Map<Modifier, Set<Modifier>> COMPATIBILITY_MAP = compatibilityMap();
 
     public static Modifier fromToken(int tokenType) {
         return Objects.requireNonNull(TOKENS.get(tokenType), "Unknown or invalid token " + tokenType);
     }
 
-    private static List<Modifier> tokens() {
+    private static List<@Nullable Modifier> tokens() {
         int count = MindcodeLexer.VOCABULARY.getMaxTokenType();
-        List<Modifier> tokens = new ArrayList<>(Collections.nCopies(count, null));
+        List<@Nullable Modifier> tokens = new ArrayList<>(Collections.nCopies(count, null));
         for (Modifier modifier : Modifier.values()) {
             if (modifier.token >= 0) {
                 tokens.set(modifier.token, modifier);

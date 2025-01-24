@@ -6,11 +6,14 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public class ExpressionValue implements LogicWritable {
     private final InstructionProcessor instructionProcessor;
 
-    private LogicLiteral literal;
+    private @Nullable LogicLiteral literal;
 
     public ExpressionValue(InstructionProcessor instructionProcessor) {
         this.instructionProcessor = instructionProcessor;
@@ -35,7 +38,7 @@ public class ExpressionValue implements LogicWritable {
         literal = LogicBoolean.get(value);
     }
 
-    public LogicLiteral getLiteral() {
+    public @Nullable LogicLiteral getLiteral() {
         return literal;
     }
 }

@@ -2,10 +2,12 @@ package info.teksol.mc.profile;
 
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@NullMarked
 class CompilerProfileTest {
 
     @Test

@@ -1,10 +1,12 @@
 package info.teksol.mc.evaluator;
 
 import info.teksol.mc.mindcode.logic.arguments.Condition;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@NullMarked
 public class ConditionEvaluator {
 
     public static LogicCondition getCondition(Condition operation) {

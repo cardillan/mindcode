@@ -3,10 +3,12 @@ package info.teksol.mc.emulator.blocks.graphics;
 import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 public class GraphicsBuffer {
     private final int sizeLimit;
     private final List<DrawInstruction> drawInstructions = new ArrayList<>();
@@ -42,4 +44,6 @@ public class GraphicsBuffer {
     public void clear() {
         drawInstructions.clear();
     }
+
+    public static final GraphicsBuffer EMPTY = new GraphicsBuffer(0);
 }

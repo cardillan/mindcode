@@ -3,7 +3,9 @@ package info.teksol.mc.messages;
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public abstract class AbstractMessageLogger implements MessageLogger, MessageConsumer {
 
     public void error(SourceElement element, @PrintFormat String format, Object... args) {

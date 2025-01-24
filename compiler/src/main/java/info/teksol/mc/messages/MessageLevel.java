@@ -1,7 +1,9 @@
 package info.teksol.mc.messages;
 
 import info.teksol.mc.util.StringUtils;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public enum MessageLevel {
     ERROR,
     WARNING,

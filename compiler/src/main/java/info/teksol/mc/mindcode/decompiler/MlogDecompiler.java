@@ -11,9 +11,11 @@ import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 
+@NullMarked
 public class MlogDecompiler {
     private final FunctionMapper functionMapper;
     private final Map<Integer, String> labels;
@@ -124,7 +126,7 @@ public class MlogDecompiler {
                     if ((/*results.contains(variable) ||*/ !nonlinearVariables.contains(variable)) && definitions.containsKey(variable.toMlog())) {
                         Integer sourceIndex = definitions.get(variable.toMlog());
                         InstructionExpression definition = (InstructionExpression) content.get(sourceIndex);
-                        if (definition != null && definition.getOpcode() == Opcode.OP) {
+                        if (definition.getOpcode() == Opcode.OP) {
                             Operation operation = Operation.fromMlog(definition.getArg(0).toMlog());
                             if (operation != null) {
                                 OperationExpression expression = new OperationExpression(operation,

@@ -3,7 +3,9 @@ package info.teksol.mc.messages;
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface MessageEmitter {
     MessageConsumer messageConsumer();
 

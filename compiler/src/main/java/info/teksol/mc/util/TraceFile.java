@@ -1,10 +1,13 @@
 package info.teksol.mc.util;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@NullMarked
 public abstract class TraceFile implements AutoCloseable {
     public static final TraceFile NULL_TRACE = new TraceFilePassive();
 

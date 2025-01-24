@@ -1,7 +1,10 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 abstract class AbstractOptimizationAction implements OptimizationAction {
     protected final AstContext astContext;
     protected final int cost;
@@ -24,7 +27,7 @@ abstract class AbstractOptimizationAction implements OptimizationAction {
     }
 
     @Override
-    public String functionPrefix() {
+    public @Nullable String functionPrefix() {
         return null;
     }
 
@@ -37,4 +40,6 @@ abstract class AbstractOptimizationAction implements OptimizationAction {
     public double benefit() {
         return benefit;
     }
+
+    public abstract String toString();
 }

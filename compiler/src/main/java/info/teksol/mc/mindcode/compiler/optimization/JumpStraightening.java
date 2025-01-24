@@ -27,12 +27,12 @@ import org.jspecify.annotations.NullMarked;
 /// These sequences of instructions may arise when using break or continue statements:
 ///
 /// ```
-/// while true
+/// while true do
 ///     ...
-///     if not_alive
-///         break
-///     end
-/// end
+///     if not_alive then
+///         break;
+///     end;
+/// end;
 /// ```
 @NullMarked
 class JumpStraightening extends BaseOptimizer {

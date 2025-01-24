@@ -1,9 +1,11 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+@NullMarked
 public record TypedArgument(InstructionParameterType type, LogicArgument argument) {
     public TypedArgument {
         Objects.requireNonNull(type);

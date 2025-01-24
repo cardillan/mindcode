@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +13,11 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class Icons {
 
     public static Map<String, LogicValue> createIconMap() {
@@ -52,7 +55,7 @@ public class Icons {
 
     private static Map<String, LogicString> initializeIconMap() {
         try (InputStream input = Icons.class.getResourceAsStream(RESOURCE_NAME)) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(input)));
             return reader.lines()
                     .filter(l -> !l.startsWith("//") && !l.isBlank())
                     .map(l -> l.split(";"))
