@@ -13,7 +13,6 @@ import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockPosition;
-import org.intellij.lang.annotations.PrintFormat;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -43,10 +42,6 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
             AstDefinitions definitions, MessageConsumer messageListener) {
         return new SchematicsBuilder(inputFiles, compilerProfile, messageListener, definitions);
-    }
-
-    public void warn(@PrintFormat String message, Object... args) {
-        addMessage(ToolMessage.warn(message, args));
     }
 
     public CompilerProfile getCompilerProfile() {

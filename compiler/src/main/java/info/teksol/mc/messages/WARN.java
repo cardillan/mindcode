@@ -7,6 +7,7 @@ public class WARN {
     public static final String LINKED_VARIABLE_NOT_RECOGNIZED = "Linked variable name '%s' doesn't correspond to any known linked block name.";
     public static final String LITERAL_LOSS_OF_PRECISION = "Loss of precision while creating mlog literal (original value %s, encoded value %s).";
     public static final String LITERAL_UNSAFE_DECIMAL_RANGE = "Literal '%s' exceeds safe range for integer operations (0 .. 2**52).";
+    public static final String MISSING_PRINTFLUSH_ADDED = "Automatically added missing 'printflush(message1);' call to the end of the program.";
     public static final String OPTIMIZATION_PASSES_LIMITED = "\nOptimization passes limited at %d.";
     public static final String OPTIMIZATION_PASSES_LIMIT_REACHED = "Optimization passes limit (%d) reached.";
     public static final String PRINTF_NOT_ENOUGH_ARGUMENTS = "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).";

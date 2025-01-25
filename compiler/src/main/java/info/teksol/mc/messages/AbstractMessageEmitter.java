@@ -48,6 +48,11 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
     }
 
     @Override
+    public void warn(@PrintFormat String format, Object... args) {
+        addMessage(ToolMessage.warn(format, args));
+    }
+
+    @Override
     public void info(@PrintFormat String format, Object... args) {
         addMessage(ToolMessage.info(format, args));
     }

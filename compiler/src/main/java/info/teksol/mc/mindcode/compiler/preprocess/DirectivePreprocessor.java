@@ -157,6 +157,17 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
     }
 
+    private void setAutoPrintflush(CompilerProfile compilerProfile, AstDirectiveSet node) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            switch (strValue) {
+                case "true"  -> profile.setAutoPrintflush(true);
+                case "false" -> profile.setAutoPrintflush(false);
+                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
+            }
+        }
+    }
+
     private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, AstDirectiveSet node) {
         if (validateSingleValue(node)) {
             String level = node.getValues().getFirst().getText();
@@ -282,6 +293,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
 
     private Map<String, BiConsumer<CompilerProfile, AstDirectiveSet>> createOptionHandlers() {
         Map<String,BiConsumer<CompilerProfile, AstDirectiveSet>> map = new HashMap<>();
+        map.put("auto-printflush", this::setAutoPrintflush);
         map.put("boolean-eval", this::setShortCircuitEval);
         map.put("goal", this::setGenerationGoal);
         map.put("instruction-limit", this::setInstructionLimit);

@@ -51,6 +51,7 @@ public abstract class AbstractTestBase {
         return CompilerProfile.experimentalOptimizations()
                 .setProcessorVersion(getProcessorVersion())
                 .setProcessorEdition(getProcessorEdition())
+                .setAutoPrintflush(false)
                 .setDebugLevel(3)
                 .setPrintStackTrace(true)
                 .setRun(true);

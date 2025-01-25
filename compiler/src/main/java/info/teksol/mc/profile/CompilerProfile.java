@@ -50,6 +50,7 @@ public class CompilerProfile {
     private Remarks remarks = Remarks.PASSIVE;
     private MemoryModel memoryModel = MemoryModel.VOLATILE;
     private boolean shortCircuitEval = false;
+    private boolean autoPrintflush = true;
     private @Nullable FinalCodeOutput finalCodeOutput = null;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
@@ -256,6 +257,15 @@ public class CompilerProfile {
 
     public CompilerProfile setShortCircuitEval(boolean shortCircuitEval) {
         this.shortCircuitEval = shortCircuitEval;
+        return this;
+    }
+
+    public boolean isAutoPrintflush() {
+        return autoPrintflush;
+    }
+
+    public CompilerProfile setAutoPrintflush(boolean autoPrintflush) {
+        this.autoPrintflush = autoPrintflush;
         return this;
     }
 

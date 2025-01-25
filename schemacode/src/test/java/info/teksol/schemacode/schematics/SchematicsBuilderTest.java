@@ -811,7 +811,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 schematic
                     dimensions = (1, 1)
                     @micro-processor at (0, 0) processor
-                        mindcode = "print(@this);"
+                        mindcode = "print(@this); printflush(message1);"
                     end
                 end
                 """);
@@ -821,7 +821,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         block(pos(3, 5), "@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(),
-                                        "print @this\n"
+                                        "print @this\nprintflush message1\n"
                                 )
                         )
                 )

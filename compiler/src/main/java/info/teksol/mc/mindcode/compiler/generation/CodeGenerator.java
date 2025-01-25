@@ -1,10 +1,13 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
@@ -12,7 +15,11 @@ import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
@@ -103,6 +110,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
                     ERR.FUNCTION_RECURSIVE_NO_STACK, f.getName()));
         }
 
+        AstContext astContext = assembler.getAstContext();
+        int endIndex = assembler.getInstructions().size();
+
         // Separate main program from function declarations
         assembler.createCompilerEnd();
 
@@ -114,6 +124,24 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         // Restore back just in case
         nested--;
+
+        addMissingPrintflush(astContext, endIndex);
+    }
+
+    private void addMissingPrintflush(AstContext astContext, int position) {
+        List<LogicInstruction> program = assembler.getInstructions();
+        if (!profile.isAutoPrintflush()
+                || program.stream().noneMatch(ix -> ix.getOpcode() == Opcode.PRINT)
+                || program.stream().anyMatch(ix -> ix.getOpcode() == Opcode.PRINTFLUSH
+                || ix instanceof DrawInstruction dri && dri.getType().getKeyword().equals("print"))) {
+            return;
+        }
+
+        program.add(position,
+                context.instructionProcessor().createPrintflush(astContext,
+                        LogicVariable.block(SourcePosition.EMPTY, "message1")));
+
+        warn(WARN.MISSING_PRINTFLUSH_ADDED);
     }
 
     // `true` if a warning about code in global scope was emitted

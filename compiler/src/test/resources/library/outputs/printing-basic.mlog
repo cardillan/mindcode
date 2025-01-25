@@ -265,40 +265,41 @@ assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
 set :fn7:n 3.00000007
 set :fn7*retaddr 268
-jump 296 always 0 0
+jump 297 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
 set :fn7:n 3E50
 set :fn7*retaddr 273
-jump 296 always 0 0
+jump 297 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
 set :fn7:n 1.0123456789
 set :fn7*retaddr 278
-jump 296 always 0 0
+jump 297 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
 set :fn7:n 10000001E13
 set :fn7*retaddr 283
-jump 296 always 0 0
+jump 297 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
 set :fn7:n 12345E-54
 set :fn7*retaddr 288
-jump 296 always 0 0
+jump 297 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
 set :fn7:n -12345E-54
 set :fn7*retaddr 293
-jump 296 always 0 0
+jump 297 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 stop
+printflush message1
 end
 op abs *tmp140 :fn7:n 0
-jump 300 greaterThan *tmp140 0
+jump 301 greaterThan *tmp140 0
 print :fn7:n
 set @counter :fn7*retaddr
-jump 303 greaterThanEq :fn7:n 0
+jump 304 greaterThanEq :fn7:n 0
 print "-"
 op abs :fn7:n :fn7:n 0
 op log10 *tmp146 :fn7:n 0
@@ -369,7 +370,7 @@ op mod *tmp152 :fn7:base 1
 op mul :fn7:base *tmp152 10
 op floor *tmp155 :fn7:base 0
 print *tmp155
-jump 374 equal :fn7:exp 0
+jump 375 equal :fn7:exp 0
 print "E"
 print :fn7:exp
 set @counter :fn7*retaddr

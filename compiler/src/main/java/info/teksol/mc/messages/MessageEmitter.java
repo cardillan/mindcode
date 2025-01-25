@@ -21,6 +21,8 @@ public interface MessageEmitter {
 
     void warn(SourcePosition position, @PrintFormat String format, Object... args);
 
+    void warn(@PrintFormat String format, Object... args);
+
     void info(@PrintFormat String format, Object... args);
 
     void timing(@PrintFormat String format, Object... args);

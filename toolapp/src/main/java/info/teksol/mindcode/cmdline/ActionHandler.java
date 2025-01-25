@@ -82,6 +82,11 @@ abstract class ActionHandler {
                 .type(Arguments.booleanType())
                 .setDefault(defaults.isLinkedBlockGuards());
 
+        compiler.addArgument("--printflush")
+                .help("when set to true, automatically adds a 'printflush message' instruction at the end of the program if one is missing")
+                .type(Arguments.booleanType())
+                .setDefault(defaults.isAutoPrintflush());
+
         compiler.addArgument("--sort-variables")
                 .help("prepends the final code with instructions which ensure variables are created inside the processor" +
                       " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
