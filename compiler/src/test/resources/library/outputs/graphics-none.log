@@ -212,20 +212,20 @@ Final code before resolving virtual instructions:
   147:  sensor *tmp26 :fn0:display @type
   148:  set :fn0:type *tmp26
   149:  op equal *tmp27 :fn0:type @logic-display
-  150:  jump *label63 equal *tmp27 false
+  150:  jump *label62 equal *tmp27 false
   151:  set *tmp28 80
-  152:  jump *label64 always 0 0
-        label *label63
-  153:  op equal *tmp29 :fn0:type @large-logic-display
-  154:  jump *label65 equal *tmp29 false
-  155:  set *tmp30 176
-  156:  jump *label66 always 0 0
-        label *label65
-  157:  set *tmp30 null
-        label *label66
-  158:  set *tmp28 *tmp30
-        label *label64
-  159:  set :fn0*retval *tmp28
+  152:  jump *label63 always 0 0
         label *label62
+  153:  op equal *tmp29 :fn0:type @large-logic-display
+  154:  jump *label64 equal *tmp29 false
+  155:  set *tmp30 176
+  156:  jump *label65 always 0 0
+        label *label64
+  157:  set *tmp30 null
+        label *label65
+  158:  set *tmp28 *tmp30
+        label *label63
+  159:  set :fn0*retval *tmp28
+        label *label61
   160:  return :fn0*retaddr
   161:  end

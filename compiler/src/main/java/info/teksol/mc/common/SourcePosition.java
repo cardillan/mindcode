@@ -77,7 +77,7 @@ public record SourcePosition(InputFile inputFile,
     }
 
     public boolean isLibrary() {
-        return inputFile == EMPTY_INPUT_FILE && inputFile.isLibrary();
+        return inputFile.isLibrary();
     }
 
     public SourcePosition withColumn(int column) {

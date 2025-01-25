@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for encoding results of compile-time expressions as color literals.
 * Added capability to automatically add a `printflush message1` instruction at the end of the main program body if missing from program.
 * Added the `auto-printflush` compiler directive and `--auto-printflush` command-line option to control the addition of the `printflush message1` instruction.
+* Added explanatory messages to the web app when compiling the source yields an empty program. 
 
 ### Changed
 

@@ -5,6 +5,8 @@ import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.samples.Sample;
 import info.teksol.mindcode.samples.Samples;
@@ -120,7 +122,7 @@ public class HomeController {
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = compiler.getOutput();
+        final String compiledCode = getCompilerCode(sourceCode, compiler);
         return new ModelAndView(
                 "home",
                 "model",
@@ -138,6 +140,55 @@ public class HomeController {
                         processRunOutput(compiler),
                         compiler.getSteps())
         );
+    }
+
+    private String getCompilerCode(String sourceCode, MindcodeCompiler compiler) {
+        if (sourceCode.isBlank() || compiler.hasErrors()) {
+            return "";
+        } else if (isEmpty(compiler.getUnoptimized())) {
+            if (compiler.getCallGraph().getFunctions().stream().filter(f -> !f.getDeclaration().sourcePosition().isLibrary()).count() > 1) {
+                return """
+                        Oops! Your program didn't generate any code.
+                        
+                        However, it looks like you defined some functions.
+                        Maybe you just forgot to call them?
+                        """;
+            } else {
+                return """
+                        Oops! Your program didn't generate any code.
+                        
+                        It appears you haven't entered any statements
+                        or expressions that actually do something.
+                        Maybe you only have comments in your program,
+                        or declarations that don't produce actual code,
+                        such as constant declarations.
+                        """;
+            }
+        } else if (isEmpty(compiler.getInstructions())) {
+            return """
+                        Whoa! Your program generated some code,
+                        but it was all removed by the optimizer.
+                        
+                        Mindcode removes all unused parts of the program,
+                        and those statements that to not have an effect
+                        on the Mindustry world.
+                        
+                        If your program computes some values, just add
+                        a print() function to output the results of your
+                        computations. For example:
+                        
+                        a = 1;
+                        b = 2;
+                        c = a * a + b * b;
+                        println(c);    // <-- prints the result of the computation
+                        """;
+        } else {
+            return compiler.getOutput();
+        }
+    }
+
+    private boolean isEmpty(List<LogicInstruction> program) {
+        return program.isEmpty() || program.size() <= 2 && program.getFirst().getOpcode() == Opcode.END;
     }
 
     public List<WebappMessage> errors(MindcodeCompiler compiler) {
