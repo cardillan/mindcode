@@ -78,7 +78,7 @@ The range is evaluated before the loop begins. If the value of the upper bound c
 Loop over a fixed collection of values or expressions:
 
 ```
-for var u in @mono, @poly, @mega do
+for u in @mono, @poly, @mega do
     ubind(u);
     if @unit != null then
         break;

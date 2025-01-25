@@ -71,7 +71,7 @@ class SingleStepEliminator extends BaseOptimizer {
 
                                 // This becomes the last jump, other properties remain unchanged
                                 lastJump = jump;
-                            } else if (advanced() && sequential) {
+                            } else if (sequential) {
                                 // Removing jump identical to the previous one with effective instructions between them,
                                 // but these instructions are safe.
                                 // Keeping lastJump intact
@@ -107,7 +107,7 @@ class SingleStepEliminator extends BaseOptimizer {
 
         removableJumps.forEach(this::invalidateInstruction);
 
-        if (phase == OptimizationPhase.FINAL && advanced()) {
+        if (phase == OptimizationPhase.FINAL) {
             int index = optimizationContext.getProgram().size() - 1;
             while (index >= 0) {
                 LogicInstruction lastIx = optimizationContext.getProgram().get(index);

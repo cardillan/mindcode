@@ -14,7 +14,7 @@
      6 instructions added by Case Switching (8 iterations).
      2 case expressions converted to switched jumps Case Switching.
     28 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
-    60 instructions updated by JumpThreading.
+    62 instructions updated by JumpThreading.
    261 instructions eliminated by Unreachable Code Elimination.
     14 instructions eliminated by Print Merging.
    604 instructions after optimizations.
@@ -5653,543 +5653,565 @@ Modifications by Final phase, Jump Straightening, iteration 1 (-4 instructions):
   1147 label *label458
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set .CONTAINER null
+     2 set .MEMORY null
+     3 set .MESSAGE null
  
-   289 write :fn3:amount .MEMORY :index
-   290 jump *label76 notEqual :fn3:amount :fn3:last
-   291 draw color 255 255 0 255
+    76 op land *tmp16 *tmp13 *tmp15
+    77 op equal *tmp17 .LINKS @links
+    78 op land *tmp18 *tmp16 *tmp17
+-    * jump *label19 equal *tmp18 false
++   79 jump __start__ equal *tmp18 false
+    80 label *label632
+    81 set :start @time
+    82 sensor .CAPACITY .CONTAINER @itemCapacity
+ 
+   290 write :fn3:amount .MEMORY :index
+   291 jump *label76 notEqual :fn3:amount :fn3:last
+   292 draw color 255 255 0 255
 -    * jump *label77 always
-+  292 jump *label199 always
-   293 label *label76
-   294 jump *label78 greaterThanEq :fn3:amount :fn3:last
-   295 draw color 255 80 80 255
++  293 jump *label199 always
+   294 label *label76
+   295 jump *label78 greaterThanEq :fn3:amount :fn3:last
+   296 draw color 255 80 80 255
 -    * jump *label79 always
-+  296 jump *label199 always
-   297 label *label78
-   298 draw color 0 255 0 255
-   299 label *label79
-   300 label *label77
++  297 jump *label199 always
+   298 label *label78
+   299 draw color 0 255 0 255
+   300 label *label79
+   301 label *label77
 -    * jump *label71 always
-+  301 jump *label199 always
-   302 label *label70
-   303 jump *label72 notEqual :fn3:amount .CAPACITY
-   304 draw color 0 255 0 255
++  302 jump *label199 always
+   303 label *label70
+   304 jump *label72 notEqual :fn3:amount .CAPACITY
+   305 draw color 0 255 0 255
 -    * jump *label73 always
-+  305 jump *label199 always
-   306 label *label72
-   307 jump *label74 lessThanEq :fn3:amount .LIMIT
-   308 draw color 255 255 0 255
++  306 jump *label199 always
+   307 label *label72
+   308 jump *label74 lessThanEq :fn3:amount .LIMIT
+   309 draw color 255 255 0 255
 -    * jump *label75 always
-+  309 jump *label199 always
-   310 label *label74
-   311 draw color 255 80 80 255
-   312 label *label75
++  310 jump *label199 always
+   311 label *label74
+   312 draw color 255 80 80 255
+   313 label *label75
  
-   315 label *label164
-   316 label *label165
-   317 jump *label199 always
+   316 label *label164
+   317 label *label165
+   318 jump *label199 always
 -    * jump *label196 lessThan *tmp53 0
 -    * jump *label196 greaterThan *tmp53 9
-+  318 jump *label233 lessThan *tmp53 0
-+  319 jump *label233 greaterThan *tmp53 9
-   320 multijump *label166 *tmp53 0 *label237
-   321 multilabel *label166 *label237
-   322 jump *label176 always
++  319 jump *label233 lessThan *tmp53 0
++  320 jump *label233 greaterThan *tmp53 9
+   321 multijump *label166 *tmp53 0 *label237
+   322 multilabel *label166 *label237
+   323 jump *label176 always
  
-   340 jump *label194 always
-   341 label *label176
-   342 draw lineRect *tmp58 *tmp60 9 14
+   341 jump *label194 always
+   342 label *label176
+   343 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label197 always
-+  343 jump *label233 always
-   344 label *label177
-   345 label *label178
-   346 draw line *tmp62 :y *tmp62 *tmp65
++  344 jump *label233 always
+   345 label *label177
+   346 label *label178
+   347 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label197 always
-+  347 jump *label233 always
-   348 label *label179
-   349 label *label180
-   350 draw line :x :y *tmp66 :y
-   351 draw line :x :y *tmp66 *tmp68
-   352 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   353 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  348 jump *label233 always
+   349 label *label179
+   350 label *label180
+   351 draw line :x :y *tmp66 :y
+   352 draw line :x :y *tmp66 *tmp68
+   353 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   354 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label197 always
-+  354 jump *label233 always
-   355 label *label181
-   356 label *label182
-   357 draw line :x :y *tmp77 *tmp78
-   358 draw line :x *tmp78 *tmp77 *tmp78
-   359 draw line :x *tmp78 *tmp77 *tmp84
-   360 draw line :x *tmp84 *tmp77 *tmp84
++  355 jump *label233 always
+   356 label *label181
+   357 label *label182
+   358 draw line :x :y *tmp77 *tmp78
+   359 draw line :x *tmp78 *tmp77 *tmp78
+   360 draw line :x *tmp78 *tmp77 *tmp84
+   361 draw line :x *tmp84 *tmp77 *tmp84
 -    * jump *label197 always
-+  361 jump *label233 always
-   362 label *label183
-   363 label *label184
-   364 draw line *tmp88 :y *tmp88 *tmp90
-   365 draw line :x *tmp90 *tmp88 *tmp90
-   366 draw line :x *tmp90 *tmp88 *tmp96
++  362 jump *label233 always
+   363 label *label183
+   364 label *label184
+   365 draw line *tmp88 :y *tmp88 *tmp90
+   366 draw line :x *tmp90 *tmp88 *tmp90
+   367 draw line :x *tmp90 *tmp88 *tmp96
 -    * jump *label197 always
-+  367 jump *label233 always
-   368 label *label185
-   369 label *label186
-   370 draw line :x :y *tmp97 *tmp98
-   371 draw line :x *tmp98 *tmp97 *tmp98
-   372 draw line :x *tmp98 :x *tmp103
-   373 draw line :x *tmp103 *tmp97 *tmp103
++  368 jump *label233 always
+   369 label *label185
+   370 label *label186
+   371 draw line :x :y *tmp97 *tmp98
+   372 draw line :x *tmp98 *tmp97 *tmp98
+   373 draw line :x *tmp98 :x *tmp103
+   374 draw line :x *tmp103 *tmp97 *tmp103
 -    * jump *label197 always
-+  374 jump *label233 always
-   375 label *label187
-   376 label *label188
-   377 draw lineRect *tmp108 *tmp110 9 8
-   378 draw line :x *tmp111 *tmp112 *tmp113
++  375 jump *label233 always
+   376 label *label187
+   377 label *label188
+   378 draw lineRect *tmp108 *tmp110 9 8
+   379 draw line :x *tmp111 *tmp112 *tmp113
 -    * jump *label197 always
-+  379 jump *label233 always
-   380 label *label189
-   381 label *label190
-   382 draw line :x :y *tmp114 *tmp115
-   383 draw line :x *tmp115 *tmp114 *tmp115
++  380 jump *label233 always
+   381 label *label189
+   382 label *label190
+   383 draw line :x :y *tmp114 *tmp115
+   384 draw line :x *tmp115 *tmp114 *tmp115
 -    * jump *label197 always
-+  384 jump *label233 always
-   385 label *label191
-   386 label *label192
-   387 draw lineRect *tmp120 *tmp122 9 14
-   388 draw line :x *tmp123 *tmp124 *tmp123
++  385 jump *label233 always
+   386 label *label191
+   387 label *label192
+   388 draw lineRect *tmp120 *tmp122 9 14
+   389 draw line :x *tmp123 *tmp124 *tmp123
 -    * jump *label197 always
-+  389 jump *label233 always
-   390 label *label193
-   391 label *label194
-   392 draw lineRect *tmp127 *tmp130 9 8
++  390 jump *label233 always
+   391 label *label193
+   392 label *label194
+   393 draw lineRect *tmp127 *tmp130 9 8
  
-   523 label *label236
-   524 label *label239
-   525 jump *label273 always
+   524 label *label236
+   525 label *label239
+   526 jump *label273 always
 -    * jump *label270 lessThan *tmp53 0
 -    * jump *label270 greaterThan *tmp53 9
-+  526 jump *label307 lessThan *tmp53 0
-+  527 jump *label307 greaterThan *tmp53 9
-   528 multijump *label240 *tmp53 0 *label311
-   529 multilabel *label240 *label311
-   530 jump *label250 always
++  527 jump *label307 lessThan *tmp53 0
++  528 jump *label307 greaterThan *tmp53 9
+   529 multijump *label240 *tmp53 0 *label311
+   530 multilabel *label240 *label311
+   531 jump *label250 always
  
-   548 jump *label268 always
-   549 label *label250
-   550 draw lineRect *tmp58 *tmp60 9 14
+   549 jump *label268 always
+   550 label *label250
+   551 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label271 always
-+  551 jump *label307 always
-   552 label *label251
-   553 label *label252
-   554 draw line *tmp62 :y *tmp62 *tmp65
++  552 jump *label307 always
+   553 label *label251
+   554 label *label252
+   555 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label271 always
-+  555 jump *label307 always
-   556 label *label253
-   557 label *label254
-   558 draw line :fn3:x :y *tmp66 :y
-   559 draw line :fn3:x :y *tmp66 *tmp68
-   560 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   561 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  556 jump *label307 always
+   557 label *label253
+   558 label *label254
+   559 draw line :fn3:x :y *tmp66 :y
+   560 draw line :fn3:x :y *tmp66 *tmp68
+   561 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   562 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label271 always
-+  562 jump *label307 always
-   563 label *label255
-   564 label *label256
-   565 draw line :fn3:x :y *tmp77 *tmp78
-   566 draw line :fn3:x *tmp78 *tmp77 *tmp78
-   567 draw line :fn3:x *tmp78 *tmp77 *tmp84
-   568 draw line :fn3:x *tmp84 *tmp77 *tmp84
++  563 jump *label307 always
+   564 label *label255
+   565 label *label256
+   566 draw line :fn3:x :y *tmp77 *tmp78
+   567 draw line :fn3:x *tmp78 *tmp77 *tmp78
+   568 draw line :fn3:x *tmp78 *tmp77 *tmp84
+   569 draw line :fn3:x *tmp84 *tmp77 *tmp84
 -    * jump *label271 always
-+  569 jump *label307 always
-   570 label *label257
-   571 label *label258
-   572 draw line *tmp88 :y *tmp88 *tmp90
-   573 draw line :fn3:x *tmp90 *tmp88 *tmp90
-   574 draw line :fn3:x *tmp90 *tmp88 *tmp96
++  570 jump *label307 always
+   571 label *label257
+   572 label *label258
+   573 draw line *tmp88 :y *tmp88 *tmp90
+   574 draw line :fn3:x *tmp90 *tmp88 *tmp90
+   575 draw line :fn3:x *tmp90 *tmp88 *tmp96
 -    * jump *label271 always
-+  575 jump *label307 always
-   576 label *label259
-   577 label *label260
-   578 draw line :fn3:x :y *tmp97 *tmp98
-   579 draw line :fn3:x *tmp98 *tmp97 *tmp98
-   580 draw line :fn3:x *tmp98 :fn3:x *tmp103
-   581 draw line :fn3:x *tmp103 *tmp97 *tmp103
++  576 jump *label307 always
+   577 label *label259
+   578 label *label260
+   579 draw line :fn3:x :y *tmp97 *tmp98
+   580 draw line :fn3:x *tmp98 *tmp97 *tmp98
+   581 draw line :fn3:x *tmp98 :fn3:x *tmp103
+   582 draw line :fn3:x *tmp103 *tmp97 *tmp103
 -    * jump *label271 always
-+  582 jump *label307 always
-   583 label *label261
-   584 label *label262
-   585 draw lineRect *tmp108 *tmp110 9 8
-   586 draw line :fn3:x *tmp111 *tmp112 *tmp113
++  583 jump *label307 always
+   584 label *label261
+   585 label *label262
+   586 draw lineRect *tmp108 *tmp110 9 8
+   587 draw line :fn3:x *tmp111 *tmp112 *tmp113
 -    * jump *label271 always
-+  587 jump *label307 always
-   588 label *label263
-   589 label *label264
-   590 draw line :fn3:x :y *tmp114 *tmp115
-   591 draw line :fn3:x *tmp115 *tmp114 *tmp115
++  588 jump *label307 always
+   589 label *label263
+   590 label *label264
+   591 draw line :fn3:x :y *tmp114 *tmp115
+   592 draw line :fn3:x *tmp115 *tmp114 *tmp115
 -    * jump *label271 always
-+  592 jump *label307 always
-   593 label *label265
-   594 label *label266
-   595 draw lineRect *tmp120 *tmp122 9 14
-   596 draw line :fn3:x *tmp123 *tmp124 *tmp123
++  593 jump *label307 always
+   594 label *label265
+   595 label *label266
+   596 draw lineRect *tmp120 *tmp122 9 14
+   597 draw line :fn3:x *tmp123 *tmp124 *tmp123
 -    * jump *label271 always
-+  597 jump *label307 always
-   598 label *label267
-   599 label *label268
-   600 draw lineRect *tmp127 *tmp130 9 8
++  598 jump *label307 always
+   599 label *label267
+   600 label *label268
+   601 draw lineRect *tmp127 *tmp130 9 8
  
-   731 label *label310
-   732 label *label313
-   733 jump *label347 always
+   732 label *label310
+   733 label *label313
+   734 jump *label347 always
 -    * jump *label344 lessThan *tmp53 0
 -    * jump *label344 greaterThan *tmp53 9
-+  734 jump *label381 lessThan *tmp53 0
-+  735 jump *label381 greaterThan *tmp53 9
-   736 multijump *label314 *tmp53 0 *label385
-   737 multilabel *label314 *label385
-   738 jump *label324 always
++  735 jump *label381 lessThan *tmp53 0
++  736 jump *label381 greaterThan *tmp53 9
+   737 multijump *label314 *tmp53 0 *label385
+   738 multilabel *label314 *label385
+   739 jump *label324 always
  
-   756 jump *label342 always
-   757 label *label324
-   758 draw lineRect *tmp58 *tmp60 9 14
+   757 jump *label342 always
+   758 label *label324
+   759 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label345 always
-+  759 jump *label381 always
-   760 label *label325
-   761 label *label326
-   762 draw line *tmp62 :y *tmp62 *tmp65
++  760 jump *label381 always
+   761 label *label325
+   762 label *label326
+   763 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label345 always
-+  763 jump *label381 always
-   764 label *label327
-   765 label *label328
-   766 draw line :fn3:x :y *tmp66 :y
-   767 draw line :fn3:x :y *tmp66 *tmp68
-   768 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   769 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  764 jump *label381 always
+   765 label *label327
+   766 label *label328
+   767 draw line :fn3:x :y *tmp66 :y
+   768 draw line :fn3:x :y *tmp66 *tmp68
+   769 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   770 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label345 always
-+  770 jump *label381 always
-   771 label *label329
-   772 label *label330
-   773 draw line :fn3:x :y *tmp77 *tmp78
-   774 draw line :fn3:x *tmp78 *tmp77 *tmp78
-   775 draw line :fn3:x *tmp78 *tmp77 *tmp84
-   776 draw line :fn3:x *tmp84 *tmp77 *tmp84
++  771 jump *label381 always
+   772 label *label329
+   773 label *label330
+   774 draw line :fn3:x :y *tmp77 *tmp78
+   775 draw line :fn3:x *tmp78 *tmp77 *tmp78
+   776 draw line :fn3:x *tmp78 *tmp77 *tmp84
+   777 draw line :fn3:x *tmp84 *tmp77 *tmp84
 -    * jump *label345 always
-+  777 jump *label381 always
-   778 label *label331
-   779 label *label332
-   780 draw line *tmp88 :y *tmp88 *tmp90
-   781 draw line :fn3:x *tmp90 *tmp88 *tmp90
-   782 draw line :fn3:x *tmp90 *tmp88 *tmp96
++  778 jump *label381 always
+   779 label *label331
+   780 label *label332
+   781 draw line *tmp88 :y *tmp88 *tmp90
+   782 draw line :fn3:x *tmp90 *tmp88 *tmp90
+   783 draw line :fn3:x *tmp90 *tmp88 *tmp96
 -    * jump *label345 always
-+  783 jump *label381 always
-   784 label *label333
-   785 label *label334
-   786 draw line :fn3:x :y *tmp97 *tmp98
-   787 draw line :fn3:x *tmp98 *tmp97 *tmp98
-   788 draw line :fn3:x *tmp98 :fn3:x *tmp103
-   789 draw line :fn3:x *tmp103 *tmp97 *tmp103
++  784 jump *label381 always
+   785 label *label333
+   786 label *label334
+   787 draw line :fn3:x :y *tmp97 *tmp98
+   788 draw line :fn3:x *tmp98 *tmp97 *tmp98
+   789 draw line :fn3:x *tmp98 :fn3:x *tmp103
+   790 draw line :fn3:x *tmp103 *tmp97 *tmp103
 -    * jump *label345 always
-+  790 jump *label381 always
-   791 label *label335
-   792 label *label336
-   793 draw lineRect *tmp108 *tmp110 9 8
-   794 draw line :fn3:x *tmp111 *tmp112 *tmp113
++  791 jump *label381 always
+   792 label *label335
+   793 label *label336
+   794 draw lineRect *tmp108 *tmp110 9 8
+   795 draw line :fn3:x *tmp111 *tmp112 *tmp113
 -    * jump *label345 always
-+  795 jump *label381 always
-   796 label *label337
-   797 label *label338
-   798 draw line :fn3:x :y *tmp114 *tmp115
-   799 draw line :fn3:x *tmp115 *tmp114 *tmp115
++  796 jump *label381 always
+   797 label *label337
+   798 label *label338
+   799 draw line :fn3:x :y *tmp114 *tmp115
+   800 draw line :fn3:x *tmp115 *tmp114 *tmp115
 -    * jump *label345 always
-+  800 jump *label381 always
-   801 label *label339
-   802 label *label340
-   803 draw lineRect *tmp120 *tmp122 9 14
-   804 draw line :fn3:x *tmp123 *tmp124 *tmp123
++  801 jump *label381 always
+   802 label *label339
+   803 label *label340
+   804 draw lineRect *tmp120 *tmp122 9 14
+   805 draw line :fn3:x *tmp123 *tmp124 *tmp123
 -    * jump *label345 always
-+  805 jump *label381 always
-   806 label *label341
-   807 label *label342
-   808 draw lineRect *tmp127 *tmp130 9 8
++  806 jump *label381 always
+   807 label *label341
+   808 label *label342
+   809 draw lineRect *tmp127 *tmp130 9 8
  
-   939 label *label384
-   940 label *label387
-   941 jump *label421 always
+   940 label *label384
+   941 label *label387
+   942 jump *label421 always
 -    * jump *label418 lessThan *tmp53 0
 -    * jump *label418 greaterThan *tmp53 9
-+  942 jump *label455 lessThan *tmp53 0
-+  943 jump *label455 greaterThan *tmp53 9
-   944 multijump *label388 *tmp53 0 *label459
-   945 multilabel *label388 *label459
-   946 jump *label398 always
++  943 jump *label455 lessThan *tmp53 0
++  944 jump *label455 greaterThan *tmp53 9
+   945 multijump *label388 *tmp53 0 *label459
+   946 multilabel *label388 *label459
+   947 jump *label398 always
  
-   964 jump *label416 always
-   965 label *label398
-   966 draw lineRect *tmp58 *tmp60 9 14
+   965 jump *label416 always
+   966 label *label398
+   967 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label419 always
-+  967 jump *label455 always
-   968 label *label399
-   969 label *label400
-   970 draw line *tmp62 :y *tmp62 *tmp65
++  968 jump *label455 always
+   969 label *label399
+   970 label *label400
+   971 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label419 always
-+  971 jump *label455 always
-   972 label *label401
-   973 label *label402
-   974 draw line :fn3:x :y *tmp66 :y
-   975 draw line :fn3:x :y *tmp66 *tmp68
-   976 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   977 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  972 jump *label455 always
+   973 label *label401
+   974 label *label402
+   975 draw line :fn3:x :y *tmp66 :y
+   976 draw line :fn3:x :y *tmp66 *tmp68
+   977 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   978 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label419 always
-+  978 jump *label455 always
-   979 label *label403
-   980 label *label404
-   981 draw line :fn3:x :y *tmp77 *tmp78
-   982 draw line :fn3:x *tmp78 *tmp77 *tmp78
-   983 draw line :fn3:x *tmp78 *tmp77 *tmp84
-   984 draw line :fn3:x *tmp84 *tmp77 *tmp84
++  979 jump *label455 always
+   980 label *label403
+   981 label *label404
+   982 draw line :fn3:x :y *tmp77 *tmp78
+   983 draw line :fn3:x *tmp78 *tmp77 *tmp78
+   984 draw line :fn3:x *tmp78 *tmp77 *tmp84
+   985 draw line :fn3:x *tmp84 *tmp77 *tmp84
 -    * jump *label419 always
-+  985 jump *label455 always
-   986 label *label405
-   987 label *label406
-   988 draw line *tmp88 :y *tmp88 *tmp90
-   989 draw line :fn3:x *tmp90 *tmp88 *tmp90
-   990 draw line :fn3:x *tmp90 *tmp88 *tmp96
++  986 jump *label455 always
+   987 label *label405
+   988 label *label406
+   989 draw line *tmp88 :y *tmp88 *tmp90
+   990 draw line :fn3:x *tmp90 *tmp88 *tmp90
+   991 draw line :fn3:x *tmp90 *tmp88 *tmp96
 -    * jump *label419 always
-+  991 jump *label455 always
-   992 label *label407
-   993 label *label408
-   994 draw line :fn3:x :y *tmp97 *tmp98
-   995 draw line :fn3:x *tmp98 *tmp97 *tmp98
-   996 draw line :fn3:x *tmp98 :fn3:x *tmp103
-   997 draw line :fn3:x *tmp103 *tmp97 *tmp103
++  992 jump *label455 always
+   993 label *label407
+   994 label *label408
+   995 draw line :fn3:x :y *tmp97 *tmp98
+   996 draw line :fn3:x *tmp98 *tmp97 *tmp98
+   997 draw line :fn3:x *tmp98 :fn3:x *tmp103
+   998 draw line :fn3:x *tmp103 *tmp97 *tmp103
 -    * jump *label419 always
-+  998 jump *label455 always
-   999 label *label409
-  1000 label *label410
-  1001 draw lineRect *tmp108 *tmp110 9 8
-  1002 draw line :fn3:x *tmp111 *tmp112 *tmp113
++  999 jump *label455 always
+  1000 label *label409
+  1001 label *label410
+  1002 draw lineRect *tmp108 *tmp110 9 8
+  1003 draw line :fn3:x *tmp111 *tmp112 *tmp113
 -    * jump *label419 always
-+ 1003 jump *label455 always
-  1004 label *label411
-  1005 label *label412
-  1006 draw line :fn3:x :y *tmp114 *tmp115
-  1007 draw line :fn3:x *tmp115 *tmp114 *tmp115
++ 1004 jump *label455 always
+  1005 label *label411
+  1006 label *label412
+  1007 draw line :fn3:x :y *tmp114 *tmp115
+  1008 draw line :fn3:x *tmp115 *tmp114 *tmp115
 -    * jump *label419 always
-+ 1008 jump *label455 always
-  1009 label *label413
-  1010 label *label414
-  1011 draw lineRect *tmp120 *tmp122 9 14
-  1012 draw line :fn3:x *tmp123 *tmp124 *tmp123
++ 1009 jump *label455 always
+  1010 label *label413
+  1011 label *label414
+  1012 draw lineRect *tmp120 *tmp122 9 14
+  1013 draw line :fn3:x *tmp123 *tmp124 *tmp123
 -    * jump *label419 always
-+ 1013 jump *label455 always
-  1014 label *label415
-  1015 label *label416
-  1016 draw lineRect *tmp127 *tmp130 9 8
++ 1014 jump *label455 always
+  1015 label *label415
+  1016 label *label416
+  1017 draw lineRect *tmp127 *tmp130 9 8
  
-  1147 label *label458
-  1148 label *label461
-  1149 jump *label495 always
+  1148 label *label458
+  1149 label *label461
+  1150 jump *label495 always
 -    * jump *label492 lessThan *tmp53 0
 -    * jump *label492 greaterThan *tmp53 9
-+ 1150 jump *label529 lessThan *tmp53 0
-+ 1151 jump *label529 greaterThan *tmp53 9
-  1152 multijump *label462 *tmp53 0 *label533
-  1153 multilabel *label462 *label533
-  1154 jump *label472 always
++ 1151 jump *label529 lessThan *tmp53 0
++ 1152 jump *label529 greaterThan *tmp53 9
+  1153 multijump *label462 *tmp53 0 *label533
+  1154 multilabel *label462 *label533
+  1155 jump *label472 always
  
-  1172 jump *label490 always
-  1173 label *label472
-  1174 draw lineRect *tmp58 *tmp60 9 14
+  1173 jump *label490 always
+  1174 label *label472
+  1175 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label493 always
-+ 1175 jump *label529 always
-  1176 label *label473
-  1177 label *label474
-  1178 draw line *tmp62 :y *tmp62 *tmp65
++ 1176 jump *label529 always
+  1177 label *label473
+  1178 label *label474
+  1179 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label493 always
-+ 1179 jump *label529 always
-  1180 label *label475
-  1181 label *label476
-  1182 draw line :fn3:x :y *tmp66 :y
-  1183 draw line :fn3:x :y *tmp66 *tmp68
-  1184 draw line *tmp66 *tmp68 *tmp66 *tmp72
-  1185 draw line *tmp73 *tmp72 *tmp66 *tmp72
++ 1180 jump *label529 always
+  1181 label *label475
+  1182 label *label476
+  1183 draw line :fn3:x :y *tmp66 :y
+  1184 draw line :fn3:x :y *tmp66 *tmp68
+  1185 draw line *tmp66 *tmp68 *tmp66 *tmp72
+  1186 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label493 always
-+ 1186 jump *label529 always
-  1187 label *label477
-  1188 label *label478
-  1189 draw line :fn3:x :y *tmp77 *tmp78
-  1190 draw line :fn3:x *tmp78 *tmp77 *tmp78
-  1191 draw line :fn3:x *tmp78 *tmp77 *tmp84
-  1192 draw line :fn3:x *tmp84 *tmp77 *tmp84
++ 1187 jump *label529 always
+  1188 label *label477
+  1189 label *label478
+  1190 draw line :fn3:x :y *tmp77 *tmp78
+  1191 draw line :fn3:x *tmp78 *tmp77 *tmp78
+  1192 draw line :fn3:x *tmp78 *tmp77 *tmp84
+  1193 draw line :fn3:x *tmp84 *tmp77 *tmp84
 -    * jump *label493 always
-+ 1193 jump *label529 always
-  1194 label *label479
-  1195 label *label480
-  1196 draw line *tmp88 :y *tmp88 *tmp90
-  1197 draw line :fn3:x *tmp90 *tmp88 *tmp90
-  1198 draw line :fn3:x *tmp90 *tmp88 *tmp96
++ 1194 jump *label529 always
+  1195 label *label479
+  1196 label *label480
+  1197 draw line *tmp88 :y *tmp88 *tmp90
+  1198 draw line :fn3:x *tmp90 *tmp88 *tmp90
+  1199 draw line :fn3:x *tmp90 *tmp88 *tmp96
 -    * jump *label493 always
-+ 1199 jump *label529 always
-  1200 label *label481
-  1201 label *label482
-  1202 draw line :fn3:x :y *tmp97 *tmp98
-  1203 draw line :fn3:x *tmp98 *tmp97 *tmp98
-  1204 draw line :fn3:x *tmp98 :fn3:x *tmp103
-  1205 draw line :fn3:x *tmp103 *tmp97 *tmp103
++ 1200 jump *label529 always
+  1201 label *label481
+  1202 label *label482
+  1203 draw line :fn3:x :y *tmp97 *tmp98
+  1204 draw line :fn3:x *tmp98 *tmp97 *tmp98
+  1205 draw line :fn3:x *tmp98 :fn3:x *tmp103
+  1206 draw line :fn3:x *tmp103 *tmp97 *tmp103
 -    * jump *label493 always
-+ 1206 jump *label529 always
-  1207 label *label483
-  1208 label *label484
-  1209 draw lineRect *tmp108 *tmp110 9 8
-  1210 draw line :fn3:x *tmp111 *tmp112 *tmp113
++ 1207 jump *label529 always
+  1208 label *label483
+  1209 label *label484
+  1210 draw lineRect *tmp108 *tmp110 9 8
+  1211 draw line :fn3:x *tmp111 *tmp112 *tmp113
 -    * jump *label493 always
-+ 1211 jump *label529 always
-  1212 label *label485
-  1213 label *label486
-  1214 draw line :fn3:x :y *tmp114 *tmp115
-  1215 draw line :fn3:x *tmp115 *tmp114 *tmp115
++ 1212 jump *label529 always
+  1213 label *label485
+  1214 label *label486
+  1215 draw line :fn3:x :y *tmp114 *tmp115
+  1216 draw line :fn3:x *tmp115 *tmp114 *tmp115
 -    * jump *label493 always
-+ 1216 jump *label529 always
-  1217 label *label487
-  1218 label *label488
-  1219 draw lineRect *tmp120 *tmp122 9 14
-  1220 draw line :fn3:x *tmp123 *tmp124 *tmp123
++ 1217 jump *label529 always
+  1218 label *label487
+  1219 label *label488
+  1220 draw lineRect *tmp120 *tmp122 9 14
+  1221 draw line :fn3:x *tmp123 *tmp124 *tmp123
 -    * jump *label493 always
-+ 1221 jump *label529 always
-  1222 label *label489
-  1223 label *label490
-  1224 draw lineRect *tmp127 *tmp130 9 8
++ 1222 jump *label529 always
+  1223 label *label489
+  1224 label *label490
+  1225 draw lineRect *tmp127 *tmp130 9 8
+ 
+  1364 draw color 0 0 80 255
+  1365 jump *label136 always
+  1366 draw rect 23 0 70 176
+-    * jump *label137 always
++ 1367 multijump *tmp35 0 0 marker1
+  1368 label *label136
+  1369 draw rect 109 0 176 176
+  1370 label *label137
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-261 instructions):
  
-    84 draw color 0 0 80 255
-    85 draw rect 0 0 23 176
-    86 jump *label22 always
+    85 draw color 0 0 80 255
+    86 draw rect 0 0 23 176
+    87 jump *label22 always
 -    * label *label21
 -    * draw rect 93 0 16 176
-    87 label *label22
-    88 label *label20
-    89 draw color 0 0 80 255
-    90 jump *label24 always
+    88 label *label22
+    89 label *label20
+    90 draw color 0 0 80 255
+    91 jump *label24 always
 -    * draw rect 0 0 23 176
 -    * jump *label25 always
-    91 label *label24
-    92 draw rect 93 0 16 176
-    93 label *label25
+    92 label *label24
+    93 draw rect 93 0 16 176
+    94 label *label25
  
-    96 label *label535
-    97 draw image 15 159 @sand 16 0
-    98 jump *label536 always
+    97 label *label535
+    98 draw image 15 159 @sand 16 0
+    99 jump *label536 always
 -    * draw color 255 255 255 255
-    99 label *label536
-   100 label *label537
-   101 label *label538
-   102 label *label541
-   103 draw image 15 139 @copper 16 0
-   104 jump *label542 always
+   100 label *label536
+   101 label *label537
+   102 label *label538
+   103 label *label541
+   104 draw image 15 139 @copper 16 0
+   105 jump *label542 always
 -    * draw color 255 255 255 255
-   105 label *label542
-   106 label *label543
-   107 label *label544
-   108 label *label547
-   109 draw image 15 119 @lead 16 0
-   110 jump *label548 always
+   106 label *label542
+   107 label *label543
+   108 label *label544
+   109 label *label547
+   110 draw image 15 119 @lead 16 0
+   111 jump *label548 always
 -    * draw color 255 255 255 255
-   111 label *label548
-   112 label *label549
-   113 label *label550
-   114 label *label553
-   115 draw image 15 99 @coal 16 0
-   116 jump *label554 always
+   112 label *label548
+   113 label *label549
+   114 label *label550
+   115 label *label553
+   116 draw image 15 99 @coal 16 0
+   117 jump *label554 always
 -    * draw color 255 255 255 255
-   117 label *label554
-   118 label *label555
-   119 label *label556
-   120 label *label559
-   121 draw image 15 79 @titanium 16 0
-   122 jump *label560 always
+   118 label *label554
+   119 label *label555
+   120 label *label556
+   121 label *label559
+   122 draw image 15 79 @titanium 16 0
+   123 jump *label560 always
 -    * draw color 255 255 255 255
-   123 label *label560
-   124 label *label561
-   125 label *label562
-   126 label *label565
-   127 draw image 15 59 @thorium 16 0
-   128 jump *label566 always
+   124 label *label560
+   125 label *label561
+   126 label *label562
+   127 label *label565
+   128 draw image 15 59 @thorium 16 0
+   129 jump *label566 always
 -    * draw color 255 255 255 255
-   129 label *label566
-   130 label *label567
-   131 label *label568
-   132 label *label571
-   133 draw image 15 39 @scrap 16 0
-   134 jump *label572 always
+   130 label *label566
+   131 label *label567
+   132 label *label568
+   133 label *label571
+   134 draw image 15 39 @scrap 16 0
+   135 jump *label572 always
 -    * draw color 255 255 255 255
-   135 label *label572
-   136 label *label573
-   137 label *label574
+   136 label *label572
+   137 label *label573
+   138 label *label574
  
-   144 label *label583
-   145 draw image 101 159 @metaglass 16 0
-   146 jump *label584 always
+   145 label *label583
+   146 draw image 101 159 @metaglass 16 0
+   147 jump *label584 always
 -    * draw color 255 255 255 255
-   147 label *label584
-   148 label *label585
-   149 label *label586
-   150 label *label589
-   151 draw image 101 139 @silicon 16 0
-   152 jump *label590 always
+   148 label *label584
+   149 label *label585
+   150 label *label586
+   151 label *label589
+   152 draw image 101 139 @silicon 16 0
+   153 jump *label590 always
 -    * draw color 255 255 255 255
-   153 label *label590
-   154 label *label591
-   155 label *label592
-   156 label *label595
-   157 draw image 101 119 @pyratite 16 0
-   158 jump *label596 always
+   154 label *label590
+   155 label *label591
+   156 label *label592
+   157 label *label595
+   158 draw image 101 119 @pyratite 16 0
+   159 jump *label596 always
 -    * draw color 255 255 255 255
-   159 label *label596
-   160 label *label597
-   161 label *label598
-   162 label *label601
-   163 draw image 101 99 @blast-compound 16 0
-   164 jump *label602 always
+   160 label *label596
+   161 label *label597
+   162 label *label598
+   163 label *label601
+   164 draw image 101 99 @blast-compound 16 0
+   165 jump *label602 always
 -    * draw color 255 255 255 255
-   165 label *label602
-   166 label *label603
-   167 label *label604
-   168 label *label607
-   169 draw image 101 79 @plastanium 16 0
-   170 jump *label608 always
+   166 label *label602
+   167 label *label603
+   168 label *label604
+   169 label *label607
+   170 draw image 101 79 @plastanium 16 0
+   171 jump *label608 always
 -    * draw color 255 255 255 255
-   171 label *label608
-   172 label *label609
-   173 label *label610
-   174 label *label613
-   175 draw image 101 59 @phase-fabric 16 0
-   176 jump *label614 always
+   172 label *label608
+   173 label *label609
+   174 label *label610
+   175 label *label613
+   176 draw image 101 59 @phase-fabric 16 0
+   177 jump *label614 always
 -    * draw color 255 255 255 255
-   177 label *label614
-   178 label *label615
-   179 label *label616
-   180 label *label619
-   181 draw image 101 39 @surge-alloy 16 0
-   182 jump *label620 always
+   178 label *label614
+   179 label *label615
+   180 label *label616
+   181 label *label619
+   182 draw image 101 39 @surge-alloy 16 0
+   183 jump *label620 always
 -    * draw color 255 255 255 255
-   183 label *label620
-   184 label *label621
-   185 label *label622
-   186 label *label625
-   187 draw image 101 19 @spore-pod 16 0
-   188 jump *label626 always
+   184 label *label620
+   185 label *label621
+   186 label *label622
+   187 label *label625
+   188 draw image 101 19 @spore-pod 16 0
+   189 jump *label626 always
 -    * draw color 255 255 255 255
-   189 label *label626
-   190 label *label627
-   191 label *label628
+   190 label *label626
+   191 label *label627
+   192 label *label628
  
-   196 draw color 0 0 80 255
-   197 draw rect 23 0 70 176
-   198 jump *label49 always
+   197 draw color 0 0 80 255
+   198 draw rect 23 0 70 176
+   199 jump *label49 always
 -    * label *label48
 -    * draw rect 109 0 176 176
-   199 label *label49
-   200 label *label47
-   201 set :index 0
+   200 label *label49
+   201 label *label47
+   202 set :index 0
  
-   294 label *label164
-   295 label *label165
-   296 jump *label199 always
+   295 label *label164
+   296 label *label165
+   297 jump *label199 always
 -    * jump *label233 lessThan *tmp53 0
 -    * jump *label233 greaterThan *tmp53 9
 -    * multijump *label166 *tmp53 0 *label237
@@ -6271,82 +6293,82 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-261 in
 -    * label *label197
 -    * label *label198
 -    * jump *label233 always
-   297 label *label199
-   298 op mod *tmp133 :fn3:amount 10
-   299 jump *label230 lessThan *tmp133 0
+   298 label *label199
+   299 op mod *tmp133 :fn3:amount 10
+   300 jump *label230 lessThan *tmp133 0
  
-   324 op sub *tmp140 :y 1
-   325 draw lineRect *tmp138 *tmp140 9 14
-   326 jump *label231 always
+   325 op sub *tmp140 :y 1
+   326 draw lineRect *tmp138 *tmp140 9 14
+   327 jump *label231 always
 -    * label *label211
-   327 label *label212
-   328 op add *tmp142 :x 6
-   329 op add *tmp145 :y 12
-   330 draw line *tmp142 :y *tmp142 *tmp145
-   331 jump *label231 always
+   328 label *label212
+   329 op add *tmp142 :x 6
+   330 op add *tmp145 :y 12
+   331 draw line *tmp142 :y *tmp142 *tmp145
+   332 jump *label231 always
 -    * label *label213
-   332 label *label214
-   333 op add *tmp146 :x 7
-   334 draw line :x :y *tmp146 :y
+   333 label *label214
+   334 op add *tmp146 :x 7
+   335 draw line :x :y *tmp146 :y
  
-   339 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   340 draw line :x *tmp154 *tmp146 *tmp154
-   341 jump *label231 always
+   340 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   341 draw line :x *tmp154 *tmp146 *tmp154
+   342 jump *label231 always
 -    * label *label215
-   342 label *label216
-   343 op add *tmp158 :x 7
-   344 op add *tmp160 :y 12
+   343 label *label216
+   344 op add *tmp158 :x 7
+   345 op add *tmp160 :y 12
  
-   348 draw line :x *tmp162 *tmp158 *tmp162
-   349 draw line :x *tmp160 *tmp158 *tmp160
-   350 jump *label231 always
+   349 draw line :x *tmp162 *tmp158 *tmp162
+   350 draw line :x *tmp160 *tmp158 *tmp160
+   351 jump *label231 always
 -    * label *label217
-   351 label *label218
-   352 op add *tmp168 :x 7
-   353 op add *tmp170 :y 12
+   352 label *label218
+   353 op add *tmp168 :x 7
+   354 op add *tmp170 :y 12
  
-   356 draw line :x *tmp171 *tmp168 *tmp171
-   357 draw line :x *tmp171 :x *tmp170
-   358 jump *label231 always
+   357 draw line :x *tmp171 *tmp168 *tmp171
+   358 draw line :x *tmp171 :x *tmp170
+   359 jump *label231 always
 -    * label *label219
-   359 label *label220
-   360 op add *tmp176 :x 7
-   361 draw line :x :y *tmp176 :y
+   360 label *label220
+   361 op add *tmp176 :x 7
+   362 draw line :x :y *tmp176 :y
  
-   366 draw line :x *tmp179 :x *tmp184
-   367 draw line :x *tmp184 *tmp176 *tmp184
-   368 jump *label231 always
+   367 draw line :x *tmp179 :x *tmp184
+   368 draw line :x *tmp184 *tmp176 *tmp184
+   369 jump *label231 always
 -    * label *label221
-   369 label *label222
-   370 op add *tmp188 :y 12
-   371 draw line :x :y :x *tmp188
+   370 label *label222
+   371 op add *tmp188 :y 12
+   372 draw line :x :y :x *tmp188
  
-   376 draw line :x *tmp192 *tmp189 *tmp192
-   377 draw line :x *tmp188 *tmp189 *tmp188
-   378 jump *label231 always
+   377 draw line :x *tmp192 *tmp189 *tmp192
+   378 draw line :x *tmp188 *tmp189 *tmp188
+   379 jump *label231 always
 -    * label *label223
-   379 label *label224
-   380 op add *tmp200 :x 6
-   381 op add *tmp203 :y 12
-   382 draw line *tmp200 :y *tmp200 *tmp203
-   383 draw line :x *tmp203 *tmp200 *tmp203
-   384 jump *label231 always
+   380 label *label224
+   381 op add *tmp200 :x 6
+   382 op add *tmp203 :y 12
+   383 draw line *tmp200 :y *tmp200 *tmp203
+   384 draw line :x *tmp203 *tmp200 *tmp203
+   385 jump *label231 always
 -    * label *label225
-   385 label *label226
-   386 op sub *tmp209 :x 1
-   387 op sub *tmp211 :y 1
+   386 label *label226
+   387 op sub *tmp209 :x 1
+   388 op sub *tmp211 :y 1
  
-   390 op add *tmp213 :x 7
-   391 draw line :x *tmp212 *tmp213 *tmp212
-   392 jump *label231 always
+   391 op add *tmp213 :x 7
+   392 draw line :x *tmp212 *tmp213 *tmp212
+   393 jump *label231 always
 -    * label *label227
-   393 label *label228
-   394 op add *tmp215 :x 7
-   395 draw line :x :y *tmp215 :y
+   394 label *label228
+   395 op add *tmp215 :x 7
+   396 draw line :x :y *tmp215 :y
  
-   412 label *label236
-   413 label *label239
-   414 jump *label273 always
+   413 label *label236
+   414 label *label239
+   415 jump *label273 always
 -    * jump *label307 lessThan *tmp53 0
 -    * jump *label307 greaterThan *tmp53 9
 -    * multijump *label240 *tmp53 0 *label311
@@ -6428,82 +6450,82 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-261 in
 -    * label *label271
 -    * label *label272
 -    * jump *label307 always
-   415 label *label273
-   416 op mod *tmp133 :fn3:amount 10
-   417 jump *label304 lessThan *tmp133 0
+   416 label *label273
+   417 op mod *tmp133 :fn3:amount 10
+   418 jump *label304 lessThan *tmp133 0
  
-   442 op sub *tmp140 :y 1
-   443 draw lineRect *tmp138 *tmp140 9 14
-   444 jump *label305 always
+   443 op sub *tmp140 :y 1
+   444 draw lineRect *tmp138 *tmp140 9 14
+   445 jump *label305 always
 -    * label *label285
-   445 label *label286
-   446 op add *tmp142 :fn3:x 6
-   447 op add *tmp145 :y 12
-   448 draw line *tmp142 :y *tmp142 *tmp145
-   449 jump *label305 always
+   446 label *label286
+   447 op add *tmp142 :fn3:x 6
+   448 op add *tmp145 :y 12
+   449 draw line *tmp142 :y *tmp142 *tmp145
+   450 jump *label305 always
 -    * label *label287
-   450 label *label288
-   451 op add *tmp146 :fn3:x 7
-   452 draw line :fn3:x :y *tmp146 :y
+   451 label *label288
+   452 op add *tmp146 :fn3:x 7
+   453 draw line :fn3:x :y *tmp146 :y
  
-   457 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   458 draw line :fn3:x *tmp154 *tmp146 *tmp154
-   459 jump *label305 always
+   458 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   459 draw line :fn3:x *tmp154 *tmp146 *tmp154
+   460 jump *label305 always
 -    * label *label289
-   460 label *label290
-   461 op add *tmp158 :fn3:x 7
-   462 op add *tmp160 :y 12
+   461 label *label290
+   462 op add *tmp158 :fn3:x 7
+   463 op add *tmp160 :y 12
  
-   466 draw line :fn3:x *tmp162 *tmp158 *tmp162
-   467 draw line :fn3:x *tmp160 *tmp158 *tmp160
-   468 jump *label305 always
+   467 draw line :fn3:x *tmp162 *tmp158 *tmp162
+   468 draw line :fn3:x *tmp160 *tmp158 *tmp160
+   469 jump *label305 always
 -    * label *label291
-   469 label *label292
-   470 op add *tmp168 :fn3:x 7
-   471 op add *tmp170 :y 12
+   470 label *label292
+   471 op add *tmp168 :fn3:x 7
+   472 op add *tmp170 :y 12
  
-   474 draw line :fn3:x *tmp171 *tmp168 *tmp171
-   475 draw line :fn3:x *tmp171 :fn3:x *tmp170
-   476 jump *label305 always
+   475 draw line :fn3:x *tmp171 *tmp168 *tmp171
+   476 draw line :fn3:x *tmp171 :fn3:x *tmp170
+   477 jump *label305 always
 -    * label *label293
-   477 label *label294
-   478 op add *tmp176 :fn3:x 7
-   479 draw line :fn3:x :y *tmp176 :y
+   478 label *label294
+   479 op add *tmp176 :fn3:x 7
+   480 draw line :fn3:x :y *tmp176 :y
  
-   484 draw line :fn3:x *tmp179 :fn3:x *tmp184
-   485 draw line :fn3:x *tmp184 *tmp176 *tmp184
-   486 jump *label305 always
+   485 draw line :fn3:x *tmp179 :fn3:x *tmp184
+   486 draw line :fn3:x *tmp184 *tmp176 *tmp184
+   487 jump *label305 always
 -    * label *label295
-   487 label *label296
-   488 op add *tmp188 :y 12
-   489 draw line :fn3:x :y :fn3:x *tmp188
+   488 label *label296
+   489 op add *tmp188 :y 12
+   490 draw line :fn3:x :y :fn3:x *tmp188
  
-   494 draw line :fn3:x *tmp192 *tmp189 *tmp192
-   495 draw line :fn3:x *tmp188 *tmp189 *tmp188
-   496 jump *label305 always
+   495 draw line :fn3:x *tmp192 *tmp189 *tmp192
+   496 draw line :fn3:x *tmp188 *tmp189 *tmp188
+   497 jump *label305 always
 -    * label *label297
-   497 label *label298
-   498 op add *tmp200 :fn3:x 6
-   499 op add *tmp203 :y 12
-   500 draw line *tmp200 :y *tmp200 *tmp203
-   501 draw line :fn3:x *tmp203 *tmp200 *tmp203
-   502 jump *label305 always
+   498 label *label298
+   499 op add *tmp200 :fn3:x 6
+   500 op add *tmp203 :y 12
+   501 draw line *tmp200 :y *tmp200 *tmp203
+   502 draw line :fn3:x *tmp203 *tmp200 *tmp203
+   503 jump *label305 always
 -    * label *label299
-   503 label *label300
-   504 op sub *tmp209 :fn3:x 1
-   505 op sub *tmp211 :y 1
+   504 label *label300
+   505 op sub *tmp209 :fn3:x 1
+   506 op sub *tmp211 :y 1
  
-   508 op add *tmp213 :fn3:x 7
-   509 draw line :fn3:x *tmp212 *tmp213 *tmp212
-   510 jump *label305 always
+   509 op add *tmp213 :fn3:x 7
+   510 draw line :fn3:x *tmp212 *tmp213 *tmp212
+   511 jump *label305 always
 -    * label *label301
-   511 label *label302
-   512 op add *tmp215 :fn3:x 7
-   513 draw line :fn3:x :y *tmp215 :y
+   512 label *label302
+   513 op add *tmp215 :fn3:x 7
+   514 draw line :fn3:x :y *tmp215 :y
  
-   530 label *label310
-   531 label *label313
-   532 jump *label347 always
+   531 label *label310
+   532 label *label313
+   533 jump *label347 always
 -    * jump *label381 lessThan *tmp53 0
 -    * jump *label381 greaterThan *tmp53 9
 -    * multijump *label314 *tmp53 0 *label385
@@ -6585,82 +6607,82 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-261 in
 -    * label *label345
 -    * label *label346
 -    * jump *label381 always
-   533 label *label347
-   534 op mod *tmp133 :fn3:amount 10
-   535 jump *label378 lessThan *tmp133 0
+   534 label *label347
+   535 op mod *tmp133 :fn3:amount 10
+   536 jump *label378 lessThan *tmp133 0
  
-   560 op sub *tmp140 :y 1
-   561 draw lineRect *tmp138 *tmp140 9 14
-   562 jump *label379 always
+   561 op sub *tmp140 :y 1
+   562 draw lineRect *tmp138 *tmp140 9 14
+   563 jump *label379 always
 -    * label *label359
-   563 label *label360
-   564 op add *tmp142 :fn3:x 6
-   565 op add *tmp145 :y 12
-   566 draw line *tmp142 :y *tmp142 *tmp145
-   567 jump *label379 always
+   564 label *label360
+   565 op add *tmp142 :fn3:x 6
+   566 op add *tmp145 :y 12
+   567 draw line *tmp142 :y *tmp142 *tmp145
+   568 jump *label379 always
 -    * label *label361
-   568 label *label362
-   569 op add *tmp146 :fn3:x 7
-   570 draw line :fn3:x :y *tmp146 :y
+   569 label *label362
+   570 op add *tmp146 :fn3:x 7
+   571 draw line :fn3:x :y *tmp146 :y
  
-   575 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   576 draw line :fn3:x *tmp154 *tmp146 *tmp154
-   577 jump *label379 always
+   576 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   577 draw line :fn3:x *tmp154 *tmp146 *tmp154
+   578 jump *label379 always
 -    * label *label363
-   578 label *label364
-   579 op add *tmp158 :fn3:x 7
-   580 op add *tmp160 :y 12
+   579 label *label364
+   580 op add *tmp158 :fn3:x 7
+   581 op add *tmp160 :y 12
  
-   584 draw line :fn3:x *tmp162 *tmp158 *tmp162
-   585 draw line :fn3:x *tmp160 *tmp158 *tmp160
-   586 jump *label379 always
+   585 draw line :fn3:x *tmp162 *tmp158 *tmp162
+   586 draw line :fn3:x *tmp160 *tmp158 *tmp160
+   587 jump *label379 always
 -    * label *label365
-   587 label *label366
-   588 op add *tmp168 :fn3:x 7
-   589 op add *tmp170 :y 12
+   588 label *label366
+   589 op add *tmp168 :fn3:x 7
+   590 op add *tmp170 :y 12
  
-   592 draw line :fn3:x *tmp171 *tmp168 *tmp171
-   593 draw line :fn3:x *tmp171 :fn3:x *tmp170
-   594 jump *label379 always
+   593 draw line :fn3:x *tmp171 *tmp168 *tmp171
+   594 draw line :fn3:x *tmp171 :fn3:x *tmp170
+   595 jump *label379 always
 -    * label *label367
-   595 label *label368
-   596 op add *tmp176 :fn3:x 7
-   597 draw line :fn3:x :y *tmp176 :y
+   596 label *label368
+   597 op add *tmp176 :fn3:x 7
+   598 draw line :fn3:x :y *tmp176 :y
  
-   602 draw line :fn3:x *tmp179 :fn3:x *tmp184
-   603 draw line :fn3:x *tmp184 *tmp176 *tmp184
-   604 jump *label379 always
+   603 draw line :fn3:x *tmp179 :fn3:x *tmp184
+   604 draw line :fn3:x *tmp184 *tmp176 *tmp184
+   605 jump *label379 always
 -    * label *label369
-   605 label *label370
-   606 op add *tmp188 :y 12
-   607 draw line :fn3:x :y :fn3:x *tmp188
+   606 label *label370
+   607 op add *tmp188 :y 12
+   608 draw line :fn3:x :y :fn3:x *tmp188
  
-   612 draw line :fn3:x *tmp192 *tmp189 *tmp192
-   613 draw line :fn3:x *tmp188 *tmp189 *tmp188
-   614 jump *label379 always
+   613 draw line :fn3:x *tmp192 *tmp189 *tmp192
+   614 draw line :fn3:x *tmp188 *tmp189 *tmp188
+   615 jump *label379 always
 -    * label *label371
-   615 label *label372
-   616 op add *tmp200 :fn3:x 6
-   617 op add *tmp203 :y 12
-   618 draw line *tmp200 :y *tmp200 *tmp203
-   619 draw line :fn3:x *tmp203 *tmp200 *tmp203
-   620 jump *label379 always
+   616 label *label372
+   617 op add *tmp200 :fn3:x 6
+   618 op add *tmp203 :y 12
+   619 draw line *tmp200 :y *tmp200 *tmp203
+   620 draw line :fn3:x *tmp203 *tmp200 *tmp203
+   621 jump *label379 always
 -    * label *label373
-   621 label *label374
-   622 op sub *tmp209 :fn3:x 1
-   623 op sub *tmp211 :y 1
+   622 label *label374
+   623 op sub *tmp209 :fn3:x 1
+   624 op sub *tmp211 :y 1
  
-   626 op add *tmp213 :fn3:x 7
-   627 draw line :fn3:x *tmp212 *tmp213 *tmp212
-   628 jump *label379 always
+   627 op add *tmp213 :fn3:x 7
+   628 draw line :fn3:x *tmp212 *tmp213 *tmp212
+   629 jump *label379 always
 -    * label *label375
-   629 label *label376
-   630 op add *tmp215 :fn3:x 7
-   631 draw line :fn3:x :y *tmp215 :y
+   630 label *label376
+   631 op add *tmp215 :fn3:x 7
+   632 draw line :fn3:x :y *tmp215 :y
  
-   648 label *label384
-   649 label *label387
-   650 jump *label421 always
+   649 label *label384
+   650 label *label387
+   651 jump *label421 always
 -    * jump *label455 lessThan *tmp53 0
 -    * jump *label455 greaterThan *tmp53 9
 -    * multijump *label388 *tmp53 0 *label459
@@ -6742,82 +6764,82 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-261 in
 -    * label *label419
 -    * label *label420
 -    * jump *label455 always
-   651 label *label421
-   652 op mod *tmp133 :fn3:amount 10
-   653 jump *label452 lessThan *tmp133 0
+   652 label *label421
+   653 op mod *tmp133 :fn3:amount 10
+   654 jump *label452 lessThan *tmp133 0
  
-   678 op sub *tmp140 :y 1
-   679 draw lineRect *tmp138 *tmp140 9 14
-   680 jump *label453 always
+   679 op sub *tmp140 :y 1
+   680 draw lineRect *tmp138 *tmp140 9 14
+   681 jump *label453 always
 -    * label *label433
-   681 label *label434
-   682 op add *tmp142 :fn3:x 6
-   683 op add *tmp145 :y 12
-   684 draw line *tmp142 :y *tmp142 *tmp145
-   685 jump *label453 always
+   682 label *label434
+   683 op add *tmp142 :fn3:x 6
+   684 op add *tmp145 :y 12
+   685 draw line *tmp142 :y *tmp142 *tmp145
+   686 jump *label453 always
 -    * label *label435
-   686 label *label436
-   687 op add *tmp146 :fn3:x 7
-   688 draw line :fn3:x :y *tmp146 :y
+   687 label *label436
+   688 op add *tmp146 :fn3:x 7
+   689 draw line :fn3:x :y *tmp146 :y
  
-   693 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   694 draw line :fn3:x *tmp154 *tmp146 *tmp154
-   695 jump *label453 always
+   694 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   695 draw line :fn3:x *tmp154 *tmp146 *tmp154
+   696 jump *label453 always
 -    * label *label437
-   696 label *label438
-   697 op add *tmp158 :fn3:x 7
-   698 op add *tmp160 :y 12
+   697 label *label438
+   698 op add *tmp158 :fn3:x 7
+   699 op add *tmp160 :y 12
  
-   702 draw line :fn3:x *tmp162 *tmp158 *tmp162
-   703 draw line :fn3:x *tmp160 *tmp158 *tmp160
-   704 jump *label453 always
+   703 draw line :fn3:x *tmp162 *tmp158 *tmp162
+   704 draw line :fn3:x *tmp160 *tmp158 *tmp160
+   705 jump *label453 always
 -    * label *label439
-   705 label *label440
-   706 op add *tmp168 :fn3:x 7
-   707 op add *tmp170 :y 12
+   706 label *label440
+   707 op add *tmp168 :fn3:x 7
+   708 op add *tmp170 :y 12
  
-   710 draw line :fn3:x *tmp171 *tmp168 *tmp171
-   711 draw line :fn3:x *tmp171 :fn3:x *tmp170
-   712 jump *label453 always
+   711 draw line :fn3:x *tmp171 *tmp168 *tmp171
+   712 draw line :fn3:x *tmp171 :fn3:x *tmp170
+   713 jump *label453 always
 -    * label *label441
-   713 label *label442
-   714 op add *tmp176 :fn3:x 7
-   715 draw line :fn3:x :y *tmp176 :y
+   714 label *label442
+   715 op add *tmp176 :fn3:x 7
+   716 draw line :fn3:x :y *tmp176 :y
  
-   720 draw line :fn3:x *tmp179 :fn3:x *tmp184
-   721 draw line :fn3:x *tmp184 *tmp176 *tmp184
-   722 jump *label453 always
+   721 draw line :fn3:x *tmp179 :fn3:x *tmp184
+   722 draw line :fn3:x *tmp184 *tmp176 *tmp184
+   723 jump *label453 always
 -    * label *label443
-   723 label *label444
-   724 op add *tmp188 :y 12
-   725 draw line :fn3:x :y :fn3:x *tmp188
+   724 label *label444
+   725 op add *tmp188 :y 12
+   726 draw line :fn3:x :y :fn3:x *tmp188
  
-   730 draw line :fn3:x *tmp192 *tmp189 *tmp192
-   731 draw line :fn3:x *tmp188 *tmp189 *tmp188
-   732 jump *label453 always
+   731 draw line :fn3:x *tmp192 *tmp189 *tmp192
+   732 draw line :fn3:x *tmp188 *tmp189 *tmp188
+   733 jump *label453 always
 -    * label *label445
-   733 label *label446
-   734 op add *tmp200 :fn3:x 6
-   735 op add *tmp203 :y 12
-   736 draw line *tmp200 :y *tmp200 *tmp203
-   737 draw line :fn3:x *tmp203 *tmp200 *tmp203
-   738 jump *label453 always
+   734 label *label446
+   735 op add *tmp200 :fn3:x 6
+   736 op add *tmp203 :y 12
+   737 draw line *tmp200 :y *tmp200 *tmp203
+   738 draw line :fn3:x *tmp203 *tmp200 *tmp203
+   739 jump *label453 always
 -    * label *label447
-   739 label *label448
-   740 op sub *tmp209 :fn3:x 1
-   741 op sub *tmp211 :y 1
+   740 label *label448
+   741 op sub *tmp209 :fn3:x 1
+   742 op sub *tmp211 :y 1
  
-   744 op add *tmp213 :fn3:x 7
-   745 draw line :fn3:x *tmp212 *tmp213 *tmp212
-   746 jump *label453 always
+   745 op add *tmp213 :fn3:x 7
+   746 draw line :fn3:x *tmp212 *tmp213 *tmp212
+   747 jump *label453 always
 -    * label *label449
-   747 label *label450
-   748 op add *tmp215 :fn3:x 7
-   749 draw line :fn3:x :y *tmp215 :y
+   748 label *label450
+   749 op add *tmp215 :fn3:x 7
+   750 draw line :fn3:x :y *tmp215 :y
  
-   766 label *label458
-   767 label *label461
-   768 jump *label495 always
+   767 label *label458
+   768 label *label461
+   769 jump *label495 always
 -    * jump *label529 lessThan *tmp53 0
 -    * jump *label529 greaterThan *tmp53 9
 -    * multijump *label462 *tmp53 0 *label533
@@ -6899,276 +6921,276 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-261 in
 -    * label *label493
 -    * label *label494
 -    * jump *label529 always
-   769 label *label495
-   770 op mod *tmp133 :fn3:amount 10
-   771 jump *label526 lessThan *tmp133 0
+   770 label *label495
+   771 op mod *tmp133 :fn3:amount 10
+   772 jump *label526 lessThan *tmp133 0
  
-   796 op sub *tmp140 :y 1
-   797 draw lineRect *tmp138 *tmp140 9 14
-   798 jump *label527 always
+   797 op sub *tmp140 :y 1
+   798 draw lineRect *tmp138 *tmp140 9 14
+   799 jump *label527 always
 -    * label *label507
-   799 label *label508
-   800 op add *tmp142 :fn3:x 6
-   801 op add *tmp145 :y 12
-   802 draw line *tmp142 :y *tmp142 *tmp145
-   803 jump *label527 always
+   800 label *label508
+   801 op add *tmp142 :fn3:x 6
+   802 op add *tmp145 :y 12
+   803 draw line *tmp142 :y *tmp142 *tmp145
+   804 jump *label527 always
 -    * label *label509
-   804 label *label510
-   805 op add *tmp146 :fn3:x 7
-   806 draw line :fn3:x :y *tmp146 :y
+   805 label *label510
+   806 op add *tmp146 :fn3:x 7
+   807 draw line :fn3:x :y *tmp146 :y
  
-   811 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   812 draw line :fn3:x *tmp154 *tmp146 *tmp154
-   813 jump *label527 always
+   812 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   813 draw line :fn3:x *tmp154 *tmp146 *tmp154
+   814 jump *label527 always
 -    * label *label511
-   814 label *label512
-   815 op add *tmp158 :fn3:x 7
-   816 op add *tmp160 :y 12
+   815 label *label512
+   816 op add *tmp158 :fn3:x 7
+   817 op add *tmp160 :y 12
  
-   820 draw line :fn3:x *tmp162 *tmp158 *tmp162
-   821 draw line :fn3:x *tmp160 *tmp158 *tmp160
-   822 jump *label527 always
+   821 draw line :fn3:x *tmp162 *tmp158 *tmp162
+   822 draw line :fn3:x *tmp160 *tmp158 *tmp160
+   823 jump *label527 always
 -    * label *label513
-   823 label *label514
-   824 op add *tmp168 :fn3:x 7
-   825 op add *tmp170 :y 12
+   824 label *label514
+   825 op add *tmp168 :fn3:x 7
+   826 op add *tmp170 :y 12
  
-   828 draw line :fn3:x *tmp171 *tmp168 *tmp171
-   829 draw line :fn3:x *tmp171 :fn3:x *tmp170
-   830 jump *label527 always
+   829 draw line :fn3:x *tmp171 *tmp168 *tmp171
+   830 draw line :fn3:x *tmp171 :fn3:x *tmp170
+   831 jump *label527 always
 -    * label *label515
-   831 label *label516
-   832 op add *tmp176 :fn3:x 7
-   833 draw line :fn3:x :y *tmp176 :y
+   832 label *label516
+   833 op add *tmp176 :fn3:x 7
+   834 draw line :fn3:x :y *tmp176 :y
  
-   838 draw line :fn3:x *tmp179 :fn3:x *tmp184
-   839 draw line :fn3:x *tmp184 *tmp176 *tmp184
-   840 jump *label527 always
+   839 draw line :fn3:x *tmp179 :fn3:x *tmp184
+   840 draw line :fn3:x *tmp184 *tmp176 *tmp184
+   841 jump *label527 always
 -    * label *label517
-   841 label *label518
-   842 op add *tmp188 :y 12
-   843 draw line :fn3:x :y :fn3:x *tmp188
+   842 label *label518
+   843 op add *tmp188 :y 12
+   844 draw line :fn3:x :y :fn3:x *tmp188
  
-   848 draw line :fn3:x *tmp192 *tmp189 *tmp192
-   849 draw line :fn3:x *tmp188 *tmp189 *tmp188
-   850 jump *label527 always
+   849 draw line :fn3:x *tmp192 *tmp189 *tmp192
+   850 draw line :fn3:x *tmp188 *tmp189 *tmp188
+   851 jump *label527 always
 -    * label *label519
-   851 label *label520
-   852 op add *tmp200 :fn3:x 6
-   853 op add *tmp203 :y 12
-   854 draw line *tmp200 :y *tmp200 *tmp203
-   855 draw line :fn3:x *tmp203 *tmp200 *tmp203
-   856 jump *label527 always
+   852 label *label520
+   853 op add *tmp200 :fn3:x 6
+   854 op add *tmp203 :y 12
+   855 draw line *tmp200 :y *tmp200 *tmp203
+   856 draw line :fn3:x *tmp203 *tmp200 *tmp203
+   857 jump *label527 always
 -    * label *label521
-   857 label *label522
-   858 op sub *tmp209 :fn3:x 1
-   859 op sub *tmp211 :y 1
+   858 label *label522
+   859 op sub *tmp209 :fn3:x 1
+   860 op sub *tmp211 :y 1
  
-   862 op add *tmp213 :fn3:x 7
-   863 draw line :fn3:x *tmp212 *tmp213 *tmp212
-   864 jump *label527 always
+   863 op add *tmp213 :fn3:x 7
+   864 draw line :fn3:x *tmp212 *tmp213 *tmp212
+   865 jump *label527 always
 -    * label *label523
-   865 label *label524
-   866 op add *tmp215 :fn3:x 7
-   867 draw line :fn3:x :y *tmp215 :y
+   866 label *label524
+   867 op add *tmp215 :fn3:x 7
+   868 draw line :fn3:x :y *tmp215 :y
  
-   891 set :x 157
-   892 draw color 0 0 80 255
-   893 jump *label136 always
+   892 set :x 157
+   893 draw color 0 0 80 255
+   894 jump *label136 always
 -    * draw rect 23 0 70 176
--    * jump *label137 always
-   894 label *label136
-   895 draw rect 109 0 176 176
-   896 label *label137
+-    * multijump *tmp35 0 0 marker1
+   895 label *label136
+   896 draw rect 109 0 176 176
+   897 label *label137
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-24 instructions):
  
-    83 draw stroke 2
-    84 draw color 0 0 80 255
-    85 draw rect 0 0 23 176
+    84 draw stroke 2
+    85 draw color 0 0 80 255
+    86 draw rect 0 0 23 176
 -    * jump *label22 always
-    86 label *label22
-    87 label *label20
-    88 draw color 0 0 80 255
+    87 label *label22
+    88 label *label20
+    89 draw color 0 0 80 255
 -    * jump *label24 always
-    89 label *label24
-    90 draw rect 93 0 16 176
-    91 label *label25
+    90 label *label24
+    91 draw rect 93 0 16 176
+    92 label *label25
  
-    93 draw color 255 255 255 255
-    94 label *label535
-    95 draw image 15 159 @sand 16 0
+    94 draw color 255 255 255 255
+    95 label *label535
+    96 draw image 15 159 @sand 16 0
 -    * jump *label536 always
-    96 label *label536
-    97 label *label537
-    98 label *label538
-    99 label *label541
-   100 draw image 15 139 @copper 16 0
+    97 label *label536
+    98 label *label537
+    99 label *label538
+   100 label *label541
+   101 draw image 15 139 @copper 16 0
 -    * jump *label542 always
-   101 label *label542
-   102 label *label543
-   103 label *label544
-   104 label *label547
-   105 draw image 15 119 @lead 16 0
+   102 label *label542
+   103 label *label543
+   104 label *label544
+   105 label *label547
+   106 draw image 15 119 @lead 16 0
 -    * jump *label548 always
-   106 label *label548
-   107 label *label549
-   108 label *label550
-   109 label *label553
-   110 draw image 15 99 @coal 16 0
+   107 label *label548
+   108 label *label549
+   109 label *label550
+   110 label *label553
+   111 draw image 15 99 @coal 16 0
 -    * jump *label554 always
-   111 label *label554
-   112 label *label555
-   113 label *label556
-   114 label *label559
-   115 draw image 15 79 @titanium 16 0
+   112 label *label554
+   113 label *label555
+   114 label *label556
+   115 label *label559
+   116 draw image 15 79 @titanium 16 0
 -    * jump *label560 always
-   116 label *label560
-   117 label *label561
-   118 label *label562
-   119 label *label565
-   120 draw image 15 59 @thorium 16 0
+   117 label *label560
+   118 label *label561
+   119 label *label562
+   120 label *label565
+   121 draw image 15 59 @thorium 16 0
 -    * jump *label566 always
-   121 label *label566
-   122 label *label567
-   123 label *label568
-   124 label *label571
-   125 draw image 15 39 @scrap 16 0
+   122 label *label566
+   123 label *label567
+   124 label *label568
+   125 label *label571
+   126 draw image 15 39 @scrap 16 0
 -    * jump *label572 always
-   126 label *label572
-   127 label *label573
-   128 label *label574
+   127 label *label572
+   128 label *label573
+   129 label *label574
  
-   134 label *label580
-   135 label *label583
-   136 draw image 101 159 @metaglass 16 0
+   135 label *label580
+   136 label *label583
+   137 draw image 101 159 @metaglass 16 0
 -    * jump *label584 always
-   137 label *label584
-   138 label *label585
-   139 label *label586
-   140 label *label589
-   141 draw image 101 139 @silicon 16 0
+   138 label *label584
+   139 label *label585
+   140 label *label586
+   141 label *label589
+   142 draw image 101 139 @silicon 16 0
 -    * jump *label590 always
-   142 label *label590
-   143 label *label591
-   144 label *label592
-   145 label *label595
-   146 draw image 101 119 @pyratite 16 0
+   143 label *label590
+   144 label *label591
+   145 label *label592
+   146 label *label595
+   147 draw image 101 119 @pyratite 16 0
 -    * jump *label596 always
-   147 label *label596
-   148 label *label597
-   149 label *label598
-   150 label *label601
-   151 draw image 101 99 @blast-compound 16 0
+   148 label *label596
+   149 label *label597
+   150 label *label598
+   151 label *label601
+   152 draw image 101 99 @blast-compound 16 0
 -    * jump *label602 always
-   152 label *label602
-   153 label *label603
-   154 label *label604
-   155 label *label607
-   156 draw image 101 79 @plastanium 16 0
+   153 label *label602
+   154 label *label603
+   155 label *label604
+   156 label *label607
+   157 draw image 101 79 @plastanium 16 0
 -    * jump *label608 always
-   157 label *label608
-   158 label *label609
-   159 label *label610
-   160 label *label613
-   161 draw image 101 59 @phase-fabric 16 0
+   158 label *label608
+   159 label *label609
+   160 label *label610
+   161 label *label613
+   162 draw image 101 59 @phase-fabric 16 0
 -    * jump *label614 always
-   162 label *label614
-   163 label *label615
-   164 label *label616
-   165 label *label619
-   166 draw image 101 39 @surge-alloy 16 0
+   163 label *label614
+   164 label *label615
+   165 label *label616
+   166 label *label619
+   167 draw image 101 39 @surge-alloy 16 0
 -    * jump *label620 always
-   167 label *label620
-   168 label *label621
-   169 label *label622
-   170 label *label625
-   171 draw image 101 19 @spore-pod 16 0
+   168 label *label620
+   169 label *label621
+   170 label *label622
+   171 label *label625
+   172 draw image 101 19 @spore-pod 16 0
 -    * jump *label626 always
-   172 label *label626
-   173 label *label627
-   174 label *label628
+   173 label *label626
+   174 label *label627
+   175 label *label628
  
-   178 set :y 152
-   179 draw color 0 0 80 255
-   180 draw rect 23 0 70 176
+   179 set :y 152
+   180 draw color 0 0 80 255
+   181 draw rect 23 0 70 176
 -    * jump *label49 always
-   181 label *label49
-   182 label *label47
-   183 set :index 0
+   182 label *label49
+   183 label *label47
+   184 set :index 0
  
-   393 label *label235
-   394 label *label236
-   395 label *label239
+   394 label *label235
+   395 label *label236
+   396 label *label239
 -    * jump *label273 always
-   396 label *label273
-   397 op mod *tmp133 :fn3:amount 10
-   398 jump *label304 lessThan *tmp133 0
+   397 label *label273
+   398 op mod *tmp133 :fn3:amount 10
+   399 jump *label304 lessThan *tmp133 0
  
-   510 label *label309
-   511 label *label310
-   512 label *label313
+   511 label *label309
+   512 label *label310
+   513 label *label313
 -    * jump *label347 always
-   513 label *label347
-   514 op mod *tmp133 :fn3:amount 10
-   515 jump *label378 lessThan *tmp133 0
+   514 label *label347
+   515 op mod *tmp133 :fn3:amount 10
+   516 jump *label378 lessThan *tmp133 0
  
-   627 label *label383
-   628 label *label384
-   629 label *label387
+   628 label *label383
+   629 label *label384
+   630 label *label387
 -    * jump *label421 always
-   630 label *label421
-   631 op mod *tmp133 :fn3:amount 10
-   632 jump *label452 lessThan *tmp133 0
+   631 label *label421
+   632 op mod *tmp133 :fn3:amount 10
+   633 jump *label452 lessThan *tmp133 0
  
-   744 label *label457
-   745 label *label458
-   746 label *label461
+   745 label *label457
+   746 label *label458
+   747 label *label461
 -    * jump *label495 always
-   747 label *label495
-   748 op mod *tmp133 :fn3:amount 10
-   749 jump *label526 lessThan *tmp133 0
+   748 label *label495
+   749 op mod *tmp133 :fn3:amount 10
+   750 jump *label526 lessThan *tmp133 0
  
-   868 set :y 152
-   869 set :x 157
-   870 draw color 0 0 80 255
+   869 set :y 152
+   870 set :x 157
+   871 draw color 0 0 80 255
 -    * jump *label136 always
-   871 label *label136
-   872 draw rect 109 0 176 176
-   873 label *label137
+   872 label *label136
+   873 draw rect 109 0 176 176
+   874 label *label137
  
-   898 op land *tmp18 *tmp16 *tmp17
-   899 jump *label632 notEqual *tmp18 false
-   900 label *label19
+   899 op land *tmp18 *tmp16 *tmp17
+   900 jump *label632 notEqual *tmp18 false
+   901 label *label19
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
  
-     2 set .MESSAGE null
-     3 set .DISPLAY null
-     4 label *label0
+     3 set .MESSAGE null
+     4 set .DISPLAY null
+     5 label *label0
 -    * print "Configuring storage display..."
 -    * print "\n"
-+    5 print "Configuring storage display...\n"
-     6 set .LINKS @links
-     7 set :n .LINKS
-     8 label *label3
++    6 print "Configuring storage display...\n"
+     7 set .LINKS @links
+     8 set :n .LINKS
+     9 label *label3
  
-    10 label *label138
-    11 op sub :n :n 1
-    12 getlink :block :n
+    11 label *label138
+    12 op sub :n :n 1
+    13 getlink :block :n
 -    * print "Found: "
 -    * print :block
 -    * print "\n"
-+   13 print "Found: {0}\n"
-+   14 format :block
-    15 sensor *tmp5 :block @type
-    16 jump *label7 notEqual *tmp5 @message
-    17 label *label8
++   14 print "Found: {0}\n"
++   15 format :block
+    16 sensor *tmp5 :block @type
+    17 jump *label7 notEqual *tmp5 @message
+    18 label *label8
  
-    41 label *label4
-    42 jump *label138 greaterThan :n 0
-    43 label *label5
+    42 label *label4
+    43 jump *label138 greaterThan :n 0
+    44 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -7181,39 +7203,40 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 -    * print "Display: "
 -    * print .DISPLAY
 -    * print "\n"
-+   44 print "Message: {0}\nMemory: {0}\nContainer: {0}\nDisplay: {0}\n"
-+   45 format .MESSAGE
-+   46 format .MEMORY
-+   47 format .CONTAINER
-+   48 format .DISPLAY
-    49 op equal *tmp7 .CONTAINER null
-    50 op equal *tmp8 .DISPLAY null
-    51 op or *tmp9 *tmp7 *tmp8
-    52 jump *label15 equal *tmp9 false
++   45 print "Message: {0}\nMemory: {0}\nContainer: {0}\nDisplay: {0}\n"
++   46 format .MESSAGE
++   47 format .MEMORY
++   48 format .CONTAINER
++   49 format .DISPLAY
+    50 op equal *tmp7 .CONTAINER null
+    51 op equal *tmp8 .DISPLAY null
+    52 op or *tmp9 *tmp7 *tmp8
+    53 jump *label15 equal *tmp9 false
 -    * print "No container or display."
 -    * print "\n"
-+   53 print "No container or display.\n"
-    54 label *label15
-    55 label *label16
-    56 printflush .MESSAGE
++   54 print "No container or display.\n"
+    55 label *label15
+    56 label *label16
+    57 printflush .MESSAGE
  
-   871 drawflush display1
-   872 op sub *tmp234 @time :start
-   873 op floor :elapsed *tmp234
+   872 drawflush display1
+   873 op sub *tmp234 @time :start
+   874 op floor :elapsed *tmp234
 -    * print "Storage Display"
 -    * print "\n"
 -    * print "Elapsed: "
 -    * print :elapsed
 -    * print " "
 -    * print "ms"
-+  874 print "Storage Display\nElapsed: {0} ms"
-+  875 format :elapsed
-   876 printflush message1
-   877 label *label18
-   878 sensor *tmp12 .CONTAINER @dead
++  875 print "Storage Display\nElapsed: {0} ms"
++  876 format :elapsed
+   877 printflush message1
+   878 label *label18
+   879 sensor *tmp12 .CONTAINER @dead
 
 Final code before resolving virtual instructions:
 
+label __start__
 set .CONTAINER null
 set .MEMORY null
 set .MESSAGE null
@@ -7274,7 +7297,7 @@ op equal *tmp15 *tmp14 0
 op land *tmp16 *tmp13 *tmp15
 op equal *tmp17 .LINKS @links
 op land *tmp18 *tmp16 *tmp17
-jump *label19 equal *tmp18 false
+jump __start__ equal *tmp18 false
 label *label632
 set :start @time
 sensor .CAPACITY .CONTAINER @itemCapacity
@@ -7965,4 +7988,3 @@ op land *tmp16 *tmp13 *tmp15
 op equal *tmp17 .LINKS @links
 op land *tmp18 *tmp16 *tmp17
 jump *label632 notEqual *tmp18 false
-label *label19

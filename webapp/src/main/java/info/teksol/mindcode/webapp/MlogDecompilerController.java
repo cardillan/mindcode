@@ -1,7 +1,7 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ public class MlogDecompilerController {
                         List.of(),
                         List.of(),
                         List.of(),
-                        OptimizationLevel.BASIC.name(),
+                        OptimizationLevel.ADVANCED.name(),
                         null,
                         0)
         );

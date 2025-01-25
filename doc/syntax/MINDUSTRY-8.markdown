@@ -88,7 +88,7 @@ end;
 // The text buffer must not contain any placeholders lower than {3}.
 def myPrintNumber(n)
     print("{2}");
-    formatNumber(n);
+    myFormatNumber(n);
 end;
 
 println("The numbers are {2} and {3}.");

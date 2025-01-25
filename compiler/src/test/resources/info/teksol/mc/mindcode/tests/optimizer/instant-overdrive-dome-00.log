@@ -12,7 +12,7 @@
    157 instructions added by Loop Unrolling (7 iterations).
      1 loops unrolled by Loop Unrolling.
     17 instructions eliminated by Jump Straightening (5 iterations).
-    15 instructions updated by JumpThreading.
+    24 instructions updated by JumpThreading.
     18 instructions eliminated by Unreachable Code Elimination.
     75 instructions eliminated by Print Merging.
    865 instructions after optimizations.
@@ -5958,216 +5958,301 @@ Modifications by Final phase, Jump Straightening, iteration 1 (-17 instructions)
   1131 ubind *tmp3
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 remark "This is the preferred unit type to use for bringing in supplies."
+     2 remark "If no units of this type exist, we'll try using other types."
+     3 set UNIT_TYPE @flare
  
-    46 op or *tmp21 *tmp18 *tmp20
-    47 jump *label19 equal *tmp21 false
-    48 op add :fn1:free :fn1:free 1
+    47 op or *tmp21 *tmp18 *tmp20
+    48 jump *label19 equal *tmp21 false
+    49 op add :fn1:free :fn1:free 1
 -    * jump *label21 lessThan :fn1:free 2
-+   49 jump *label20 lessThan :fn1:free 2
-    50 set *tmp4 true
-    51 jump *label10 always
-    52 label *label21
++   50 jump *label20 lessThan :fn1:free 2
+    51 set *tmp4 true
+    52 jump *label10 always
+    53 label *label21
  
-   109 op or *tmp53 *tmp50 *tmp52
-   110 jump *label328 equal *tmp53 false
-   111 op add :fn3:free :fn3:free 1
+   110 op or *tmp53 *tmp50 *tmp52
+   111 jump *label328 equal *tmp53 false
+   112 op add :fn3:free :fn3:free 1
 -    * jump *label326 lessThan :fn3:free 2
-+  112 jump *label329 lessThan :fn3:free 2
-   113 set *tmp36 true
-   114 jump *label338 always
-   115 label *label326
++  113 jump *label329 lessThan :fn3:free 2
+   114 set *tmp36 true
+   115 jump *label338 always
+   116 label *label326
  
-   176 op or *tmp53 *tmp50 *tmp52
-   177 jump *label352 equal *tmp53 false
-   178 op add :fn3:free :fn3:free 1
+   177 op or *tmp53 *tmp50 *tmp52
+   178 jump *label352 equal *tmp53 false
+   179 op add :fn3:free :fn3:free 1
 -    * jump *label350 lessThan :fn3:free 2
-+  179 jump *label353 lessThan :fn3:free 2
-   180 set *tmp36 true
-   181 jump *label362 always
-   182 label *label350
++  180 jump *label353 lessThan :fn3:free 2
+   181 set *tmp36 true
+   182 jump *label362 always
+   183 label *label350
  
-   243 op or *tmp53 *tmp50 *tmp52
-   244 jump *label376 equal *tmp53 false
-   245 op add :fn3:free :fn3:free 1
+   244 op or *tmp53 *tmp50 *tmp52
+   245 jump *label376 equal *tmp53 false
+   246 op add :fn3:free :fn3:free 1
 -    * jump *label374 lessThan :fn3:free 2
-+  246 jump *label377 lessThan :fn3:free 2
-   247 set *tmp36 true
-   248 jump *label386 always
-   249 label *label374
++  247 jump *label377 lessThan :fn3:free 2
+   248 set *tmp36 true
+   249 jump *label386 always
+   250 label *label374
  
-   310 op or *tmp53 *tmp50 *tmp52
-   311 jump *label400 equal *tmp53 false
-   312 op add :fn3:free :fn3:free 1
+   311 op or *tmp53 *tmp50 *tmp52
+   312 jump *label400 equal *tmp53 false
+   313 op add :fn3:free :fn3:free 1
 -    * jump *label398 lessThan :fn3:free 2
-+  313 jump *label401 lessThan :fn3:free 2
-   314 set *tmp36 true
-   315 jump *label410 always
-   316 label *label398
++  314 jump *label401 lessThan :fn3:free 2
+   315 set *tmp36 true
+   316 jump *label410 always
+   317 label *label398
  
-   722 jump *label164 lessThan *tmp254 .UNIT_CAPACITY
-   723 ucontrol approach .DOME_X .DOME_Y 6
-   724 set :fn16:state 3
+   413 label *label70
+   414 ubind *tmp3
+   415 set :fn7:firstUnit @unit
+-    * jump *label73 equal :fn7:firstUnit null
++  416 jump __start__ equal :fn7:firstUnit null
+   417 label *label75
+   418 sensor *tmp92 @unit @controlled
+   419 jump *label68 equal *tmp92 0
+ 
+   449 label *label83
+   450 ubind *tmp3
+   451 set :fn9:firstUnit @unit
+-    * jump *label86 equal :fn9:firstUnit null
++  452 jump __start__ equal :fn9:firstUnit null
+   453 label *label88
+   454 sensor *tmp112 @unit @controlled
+   455 jump *label81 equal *tmp112 0
+ 
+   523 label *label106
+   524 ubind *tmp3
+   525 set :fn12:firstUnit @unit
+-    * jump *label109 equal :fn12:firstUnit null
++  526 jump __start__ equal :fn12:firstUnit null
+   527 label *label111
+   528 sensor *tmp161 @unit @controlled
+   529 jump *label104 equal *tmp161 0
+ 
+   559 label *label119
+   560 ubind *tmp3
+   561 set :fn14:firstUnit @unit
+-    * jump *label122 equal :fn14:firstUnit null
++  562 jump __start__ equal :fn14:firstUnit null
+   563 label *label124
+   564 sensor *tmp181 @unit @controlled
+   565 jump *label117 equal *tmp181 0
+ 
+   627 op add :unitCheck @time 5000
+   628 label *label133
+   629 sensor *tmp211 switch1 @enabled
+-    * jump *label135 equal *tmp211 false
++  630 jump __start__ equal *tmp211 false
+   631 label *label321
+   632 set :start @time
+   633 print " === [gold]Supplying Overdrive Dome[] === "
+ 
+   669 label *label142
+   670 ubind *tmp3
+   671 set :fn17:firstUnit @unit
+-    * jump *label145 equal :fn17:firstUnit null
++  672 jump __start__ equal :fn17:firstUnit null
+   673 label *label147
+   674 sensor *tmp230 @unit @controlled
+   675 jump *label140 equal *tmp230 0
+ 
+   723 jump *label164 lessThan *tmp254 .UNIT_CAPACITY
+   724 ucontrol approach .DOME_X .DOME_Y 6
+   725 set :fn16:state 3
 -    * jump *label165 always
-+  725 jump *label163 always
-   726 label *label164
-   727 set :fn16:msg ", loading\n"
-   728 label *label165
++  726 jump *label163 always
+   727 label *label164
+   728 set :fn16:msg ", loading\n"
+   729 label *label165
  
-   752 set :fn16:msg ", waiting\n"
-   753 label *label171
-   754 sensor *tmp269 @unit @totalItems
+   753 set :fn16:msg ", waiting\n"
+   754 label *label171
+   755 sensor *tmp269 @unit @totalItems
 -    * jump *label172 greaterThan *tmp269 0
-+  755 jump *label169 greaterThan *tmp269 0
-   756 ucontrol approach .CORE_X .CORE_Y 6
-   757 set :fn16:state 2
-   758 label *label172
++  756 jump *label169 greaterThan *tmp269 0
+   757 ucontrol approach .CORE_X .CORE_Y 6
+   758 set :fn16:state 2
+   759 label *label172
  
-   865 jump *label203 lessThan *tmp321 .UNIT_CAPACITY
-   866 ucontrol approach .DOME_X .DOME_Y 6
-   867 set :fn18:state 3
+   812 label *label181
+   813 ubind *tmp3
+   814 set :fn19:firstUnit @unit
+-    * jump *label184 equal :fn19:firstUnit null
++  815 jump __start__ equal :fn19:firstUnit null
+   816 label *label186
+   817 sensor *tmp297 @unit @controlled
+   818 jump *label179 equal *tmp297 0
+ 
+   866 jump *label203 lessThan *tmp321 .UNIT_CAPACITY
+   867 ucontrol approach .DOME_X .DOME_Y 6
+   868 set :fn18:state 3
 -    * jump *label204 always
-+  868 jump *label202 always
-   869 label *label203
-   870 set :fn18:msg ", loading\n"
-   871 label *label204
++  869 jump *label202 always
+   870 label *label203
+   871 set :fn18:msg ", loading\n"
+   872 label *label204
  
-   895 set :fn18:msg ", waiting\n"
-   896 label *label210
-   897 sensor *tmp336 @unit @totalItems
+   896 set :fn18:msg ", waiting\n"
+   897 label *label210
+   898 sensor *tmp336 @unit @totalItems
 -    * jump *label211 greaterThan *tmp336 0
-+  898 jump *label208 greaterThan *tmp336 0
-   899 ucontrol approach .CORE_X .CORE_Y 6
-   900 set :fn18:state 2
-   901 label *label211
++  899 jump *label208 greaterThan *tmp336 0
+   900 ucontrol approach .CORE_X .CORE_Y 6
+   901 set :fn18:state 2
+   902 label *label211
  
-  1033 jump *label245 lessThan *tmp395 .UNIT_CAPACITY
-  1034 ucontrol approach .DOME_X .DOME_Y 6
-  1035 set :fn21:state 3
+   980 label *label223
+   981 ubind *tmp3
+   982 set :fn22:firstUnit @unit
+-    * jump *label226 equal :fn22:firstUnit null
++  983 jump __start__ equal :fn22:firstUnit null
+   984 label *label228
+   985 sensor *tmp371 @unit @controlled
+   986 jump *label221 equal *tmp371 0
+ 
+  1034 jump *label245 lessThan *tmp395 .UNIT_CAPACITY
+  1035 ucontrol approach .DOME_X .DOME_Y 6
+  1036 set :fn21:state 3
 -    * jump *label246 always
-+ 1036 jump *label244 always
-  1037 label *label245
-  1038 set :fn21:msg ", loading\n"
-  1039 label *label246
++ 1037 jump *label244 always
+  1038 label *label245
+  1039 set :fn21:msg ", loading\n"
+  1040 label *label246
  
-  1063 set :fn21:msg ", waiting\n"
-  1064 label *label252
-  1065 sensor *tmp410 @unit @totalItems
+  1064 set :fn21:msg ", waiting\n"
+  1065 label *label252
+  1066 sensor *tmp410 @unit @totalItems
 -    * jump *label253 greaterThan *tmp410 0
-+ 1066 jump *label250 greaterThan *tmp410 0
-  1067 ucontrol approach .CORE_X .CORE_Y 6
-  1068 set :fn21:state 2
-  1069 label *label253
++ 1067 jump *label250 greaterThan *tmp410 0
+  1068 ucontrol approach .CORE_X .CORE_Y 6
+  1069 set :fn21:state 2
+  1070 label *label253
  
-  1176 jump *label284 lessThan *tmp462 .UNIT_CAPACITY
-  1177 ucontrol approach .DOME_X .DOME_Y 6
-  1178 set :fn23:state 3
+  1123 label *label262
+  1124 ubind *tmp3
+  1125 set :fn24:firstUnit @unit
+-    * jump *label265 equal :fn24:firstUnit null
++ 1126 jump __start__ equal :fn24:firstUnit null
+  1127 label *label267
+  1128 sensor *tmp438 @unit @controlled
+  1129 jump *label260 equal *tmp438 0
+ 
+  1177 jump *label284 lessThan *tmp462 .UNIT_CAPACITY
+  1178 ucontrol approach .DOME_X .DOME_Y 6
+  1179 set :fn23:state 3
 -    * jump *label285 always
-+ 1179 jump *label283 always
-  1180 label *label284
-  1181 set :fn23:msg ", loading\n"
-  1182 label *label285
++ 1180 jump *label283 always
+  1181 label *label284
+  1182 set :fn23:msg ", loading\n"
+  1183 label *label285
  
-  1206 set :fn23:msg ", waiting\n"
-  1207 label *label291
-  1208 sensor *tmp477 @unit @totalItems
+  1207 set :fn23:msg ", waiting\n"
+  1208 label *label291
+  1209 sensor *tmp477 @unit @totalItems
 -    * jump *label292 greaterThan *tmp477 0
-+ 1209 jump *label289 greaterThan *tmp477 0
-  1210 ucontrol approach .CORE_X .CORE_Y 6
-  1211 set :fn23:state 2
-  1212 label *label292
++ 1210 jump *label289 greaterThan *tmp477 0
+  1211 ucontrol approach .CORE_X .CORE_Y 6
+  1212 set :fn23:state 2
+  1213 label *label292
  
-  1275 set :fn25:free 0
-  1276 ubind UNIT_TYPE
-  1277 set :fn25:firstUnit @unit
+  1276 set :fn25:free 0
+  1277 ubind UNIT_TYPE
+  1278 set :fn25:firstUnit @unit
 -    * jump *label301 equal :fn25:firstUnit null
-+ 1278 jump *label313 equal :fn25:firstUnit null
-  1279 set *tmp513 2
-  1280 set :fn26:unit @unit
-  1281 sensor *tmp510 :fn26:unit @speed
++ 1279 jump *label313 equal :fn25:firstUnit null
+  1280 set *tmp513 2
+  1281 set :fn26:unit @unit
+  1282 sensor *tmp510 :fn26:unit @speed
  
-  1292 op or *tmp518 *tmp515 *tmp517
-  1293 jump *label309 equal *tmp518 false
-  1294 op add :fn25:free :fn25:free 1
+  1293 op or *tmp518 *tmp515 *tmp517
+  1294 jump *label309 equal *tmp518 false
+  1295 op add :fn25:free :fn25:free 1
 -    * jump *label311 lessThan :fn25:free *tmp513
-+ 1295 jump *label310 lessThan :fn25:free *tmp513
-  1296 set *tmp501 true
-  1297 jump *label300 always
-  1298 label *label311
++ 1296 jump *label310 lessThan :fn25:free *tmp513
+  1297 set *tmp501 true
+  1298 jump *label300 always
+  1299 label *label311
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-18 instructions):
  
-    49 jump *label20 lessThan :fn1:free 2
-    50 set *tmp4 true
-    51 jump *label10 always
+    50 jump *label20 lessThan :fn1:free 2
+    51 set *tmp4 true
+    52 jump *label10 always
 -    * label *label21
 -    * label *label22
 -    * jump *label20 always
-    52 label *label19
-    53 op add :fn1:occupied :fn1:occupied 1
-    54 label *label20
+    53 label *label19
+    54 op add :fn1:occupied :fn1:occupied 1
+    55 label *label20
  
-   109 jump *label329 lessThan :fn3:free 2
-   110 set *tmp36 true
-   111 jump *label338 always
+   110 jump *label329 lessThan :fn3:free 2
+   111 set *tmp36 true
+   112 jump *label338 always
 -    * label *label326
 -    * label *label327
 -    * jump *label329 always
-   112 label *label328
-   113 op add :fn3:occupied :fn3:occupied 1
-   114 label *label329
+   113 label *label328
+   114 op add :fn3:occupied :fn3:occupied 1
+   115 label *label329
  
-   173 jump *label353 lessThan :fn3:free 2
-   174 set *tmp36 true
-   175 jump *label362 always
+   174 jump *label353 lessThan :fn3:free 2
+   175 set *tmp36 true
+   176 jump *label362 always
 -    * label *label350
 -    * label *label351
 -    * jump *label353 always
-   176 label *label352
-   177 op add :fn3:occupied :fn3:occupied 1
-   178 label *label353
+   177 label *label352
+   178 op add :fn3:occupied :fn3:occupied 1
+   179 label *label353
  
-   237 jump *label377 lessThan :fn3:free 2
-   238 set *tmp36 true
-   239 jump *label386 always
+   238 jump *label377 lessThan :fn3:free 2
+   239 set *tmp36 true
+   240 jump *label386 always
 -    * label *label374
 -    * label *label375
 -    * jump *label377 always
-   240 label *label376
-   241 op add :fn3:occupied :fn3:occupied 1
-   242 label *label377
+   241 label *label376
+   242 op add :fn3:occupied :fn3:occupied 1
+   243 label *label377
  
-   301 jump *label401 lessThan :fn3:free 2
-   302 set *tmp36 true
-   303 jump *label410 always
+   302 jump *label401 lessThan :fn3:free 2
+   303 set *tmp36 true
+   304 jump *label410 always
 -    * label *label398
 -    * label *label399
 -    * jump *label401 always
-   304 label *label400
-   305 op add :fn3:occupied :fn3:occupied 1
-   306 label *label401
+   305 label *label400
+   306 op add :fn3:occupied :fn3:occupied 1
+   307 label *label401
  
-   344 printflush message1
-   345 label *label8
-   346 jump *label7 always
+   345 printflush message1
+   346 label *label8
+   347 jump *label7 always
 -    * label *label9
 -    * set *tmp3 null
-   347 label *label6
-   348 print "[gold]Binding units..."
-   349 printflush message1
+   348 label *label6
+   349 print "[gold]Binding units..."
+   350 printflush message1
  
-  1278 jump *label310 lessThan :fn25:free *tmp513
-  1279 set *tmp501 true
-  1280 jump *label300 always
+  1279 jump *label310 lessThan :fn25:free *tmp513
+  1280 set *tmp501 true
+  1281 jump *label300 always
 -    * label *label311
 -    * label *label312
 -    * jump *label310 always
-  1281 label *label309
-  1282 op add :fn25:occupied :fn25:occupied 1
-  1283 label *label310
+  1282 label *label309
+  1283 op add :fn25:occupied :fn25:occupied 1
+  1284 label *label310
  
-  1292 label *label301
-  1293 label *label302
-  1294 jump *label313 always
+  1293 label *label301
+  1294 label *label302
+  1295 jump *label313 always
 -    * print UNIT_TYPE
 -    * print ":"
 -    * print " occupied: "
@@ -6181,216 +6266,216 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-18 ins
 -    * label *label315
 -    * label *label316
 -    * print "\n"
-  1295 label *label313
-  1296 label *label314
-  1297 set *tmp501 false
+  1296 label *label313
+  1297 label *label314
+  1298 set *tmp501 false
 
 Modifications by Final phase, Dead Code Elimination, iteration 1 (-6 instructions):
  
-    34 set :fn1:firstUnit @unit
-    35 jump *label11 equal :fn1:firstUnit null
-    36 set :fn2:unit @unit
+    35 set :fn1:firstUnit @unit
+    36 jump *label11 equal :fn1:firstUnit null
+    37 set :fn2:unit @unit
 -    * sensor *tmp13 :fn2:unit @speed
+    38 label *label13
+    39 label *label15
+    40 set :fn1:needed 2
+ 
+    94 set :fn3:firstUnit @unit
+    95 jump *label332 equal :fn3:firstUnit null
+    96 set :fn4:unit @unit
+-    * sensor *tmp45 :fn4:unit @speed
+    97 label *label323
+    98 label *label324
+    99 set :fn3:needed 2
+ 
+   157 set :fn3:firstUnit @unit
+   158 jump *label356 equal :fn3:firstUnit null
+   159 set :fn4:unit @unit
+-    * sensor *tmp45 :fn4:unit @speed
+   160 label *label347
+   161 label *label348
+   162 set :fn3:needed 2
+ 
+   220 set :fn3:firstUnit @unit
+   221 jump *label380 equal :fn3:firstUnit null
+   222 set :fn4:unit @unit
+-    * sensor *tmp45 :fn4:unit @speed
+   223 label *label371
+   224 label *label372
+   225 set :fn3:needed 2
+ 
+   283 set :fn3:firstUnit @unit
+   284 jump *label404 equal :fn3:firstUnit null
+   285 set :fn4:unit @unit
+-    * sensor *tmp45 :fn4:unit @speed
+   286 label *label395
+   287 label *label396
+   288 set :fn3:needed 2
+ 
+   482 op sub *tmp141 .DOME_Y .CORE_Y
+   483 op len *tmp142 *tmp140 *tmp141
+   484 op mul *tmp143 2 *tmp142
+-    * sensor *tmp144 .UNIT_S1 @speed
+   485 op div :fn10:travel_time *tmp143 .SPEED
+   486 op greaterThanEq *tmp139 :fn10:travel_time 47
+   487 label *label100
+
+Modifications by Final phase, Dead Code Elimination, iteration 2 (-5 instructions):
+ 
+    34 ubind UNIT_TYPE
+    35 set :fn1:firstUnit @unit
+    36 jump *label11 equal :fn1:firstUnit null
+-    * set :fn2:unit @unit
     37 label *label13
     38 label *label15
     39 set :fn1:needed 2
  
+    92 ubind @flare
     93 set :fn3:firstUnit @unit
     94 jump *label332 equal :fn3:firstUnit null
-    95 set :fn4:unit @unit
--    * sensor *tmp45 :fn4:unit @speed
-    96 label *label323
-    97 label *label324
-    98 set :fn3:needed 2
- 
-   156 set :fn3:firstUnit @unit
-   157 jump *label356 equal :fn3:firstUnit null
-   158 set :fn4:unit @unit
--    * sensor *tmp45 :fn4:unit @speed
-   159 label *label347
-   160 label *label348
-   161 set :fn3:needed 2
- 
-   219 set :fn3:firstUnit @unit
-   220 jump *label380 equal :fn3:firstUnit null
-   221 set :fn4:unit @unit
--    * sensor *tmp45 :fn4:unit @speed
-   222 label *label371
-   223 label *label372
-   224 set :fn3:needed 2
- 
-   282 set :fn3:firstUnit @unit
-   283 jump *label404 equal :fn3:firstUnit null
-   284 set :fn4:unit @unit
--    * sensor *tmp45 :fn4:unit @speed
-   285 label *label395
-   286 label *label396
-   287 set :fn3:needed 2
- 
-   481 op sub *tmp141 .DOME_Y .CORE_Y
-   482 op len *tmp142 *tmp140 *tmp141
-   483 op mul *tmp143 2 *tmp142
--    * sensor *tmp144 .UNIT_S1 @speed
-   484 op div :fn10:travel_time *tmp143 .SPEED
-   485 op greaterThanEq *tmp139 :fn10:travel_time 47
-   486 label *label100
-
-Modifications by Final phase, Dead Code Elimination, iteration 2 (-5 instructions):
- 
-    33 ubind UNIT_TYPE
-    34 set :fn1:firstUnit @unit
-    35 jump *label11 equal :fn1:firstUnit null
--    * set :fn2:unit @unit
-    36 label *label13
-    37 label *label15
-    38 set :fn1:needed 2
- 
-    91 ubind @flare
-    92 set :fn3:firstUnit @unit
-    93 jump *label332 equal :fn3:firstUnit null
 -    * set :fn4:unit @unit
-    94 label *label323
-    95 label *label324
-    96 set :fn3:needed 2
+    95 label *label323
+    96 label *label324
+    97 set :fn3:needed 2
  
-   153 ubind @poly
-   154 set :fn3:firstUnit @unit
-   155 jump *label356 equal :fn3:firstUnit null
+   154 ubind @poly
+   155 set :fn3:firstUnit @unit
+   156 jump *label356 equal :fn3:firstUnit null
 -    * set :fn4:unit @unit
-   156 label *label347
-   157 label *label348
-   158 set :fn3:needed 2
+   157 label *label347
+   158 label *label348
+   159 set :fn3:needed 2
  
-   215 ubind @mega
-   216 set :fn3:firstUnit @unit
-   217 jump *label380 equal :fn3:firstUnit null
+   216 ubind @mega
+   217 set :fn3:firstUnit @unit
+   218 jump *label380 equal :fn3:firstUnit null
 -    * set :fn4:unit @unit
-   218 label *label371
-   219 label *label372
-   220 set :fn3:needed 2
+   219 label *label371
+   220 label *label372
+   221 set :fn3:needed 2
  
-   277 ubind @mono
-   278 set :fn3:firstUnit @unit
-   279 jump *label404 equal :fn3:firstUnit null
+   278 ubind @mono
+   279 set :fn3:firstUnit @unit
+   280 jump *label404 equal :fn3:firstUnit null
 -    * set :fn4:unit @unit
-   280 label *label395
-   281 label *label396
-   282 set :fn3:needed 2
+   281 label *label395
+   282 label *label396
+   283 set :fn3:needed 2
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructions):
  
-  1280 label *label308
-  1281 label *label301
-  1282 label *label302
+  1281 label *label308
+  1282 label *label301
+  1283 label *label302
 -    * jump *label313 always
-  1283 label *label313
-  1284 label *label314
-  1285 set *tmp501 false
+  1284 label *label313
+  1285 label *label314
+  1286 set *tmp501 false
  
-  1295 sensor *tmp211 switch1 @enabled
-  1296 jump *label321 notEqual *tmp211 false
-  1297 label *label135
+  1296 sensor *tmp211 switch1 @enabled
+  1297 jump *label321 notEqual *tmp211 false
+  1298 label *label135
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
  
-    15 sensor *tmp1 switch1 @enabled
-    16 jump *label5 notEqual *tmp1 false
-    17 label *label320
+    16 sensor *tmp1 switch1 @enabled
+    17 jump *label5 notEqual *tmp1 false
+    18 label *label320
 -    * print "[coral]Activate switch to begin supplying overdrive dome..."
 -    * print "\n"
-+   18 print "[coral]Activate switch to begin supplying overdrive dome...\n"
-    19 printflush message1
-    20 label *label4
-    21 sensor *tmp1 switch1 @enabled
++   19 print "[coral]Activate switch to begin supplying overdrive dome...\n"
+    20 printflush message1
+    21 label *label4
+    22 sensor *tmp1 switch1 @enabled
  
-    23 label *label5
-    24 label *label7
-    25 printflush null
+    24 label *label5
+    25 label *label7
+    26 printflush null
 -    * print "[gold]Looking for suitable unit type:[]"
 -    * print "\n"
-+   26 print "[gold]Looking for suitable unit type:[]\n"
-    27 remark "chooseUnitType: $UNIT_TYPE"
-    28 set :fn1:needed 0
-    29 set :fn1:occupied 0
++   27 print "[gold]Looking for suitable unit type:[]\n"
+    28 remark "chooseUnitType: $UNIT_TYPE"
+    29 set :fn1:needed 0
+    30 set :fn1:occupied 0
  
-    59 label *label11
-    60 label *label12
-    61 print UNIT_TYPE
+    60 label *label11
+    61 label *label12
+    62 print UNIT_TYPE
 -    * print ":"
 -    * print " occupied: "
 -    * print :fn1:occupied
 -    * print ","
 -    * print " free: "
-+   62 print ": occupied: {0}, free: "
-+   63 format :fn1:occupied
-    64 print :fn1:free
-    65 jump *label25 lessThanEq :fn1:needed 0
-    66 print ", needed: "
++   63 print ": occupied: {0}, free: "
++   64 format :fn1:occupied
+    65 print :fn1:free
+    66 jump *label25 lessThanEq :fn1:needed 0
+    67 print ", needed: "
  
-   113 label *label331
-   114 label *label332
-   115 label *label333
+   114 label *label331
+   115 label *label332
+   116 label *label333
 -    * print @flare
 -    * print ":"
 -    * print " occupied: "
 -    * print :fn3:occupied
 -    * print ","
 -    * print " free: "
-+  116 print "flare: occupied: {0}, free: "
-+  117 format :fn3:occupied
-   118 print :fn3:free
-   119 jump *label334 lessThanEq :fn3:needed 0
-   120 print ", needed: "
++  117 print "flare: occupied: {0}, free: "
++  118 format :fn3:occupied
+   119 print :fn3:free
+   120 jump *label334 lessThanEq :fn3:needed 0
+   121 print ", needed: "
  
-   171 label *label355
-   172 label *label356
-   173 label *label357
+   172 label *label355
+   173 label *label356
+   174 label *label357
 -    * print @poly
 -    * print ":"
 -    * print " occupied: "
 -    * print :fn3:occupied
 -    * print ","
 -    * print " free: "
-+  174 print "poly: occupied: {0}, free: "
-+  175 format :fn3:occupied
-   176 print :fn3:free
-   177 jump *label358 lessThanEq :fn3:needed 0
-   178 print ", needed: "
++  175 print "poly: occupied: {0}, free: "
++  176 format :fn3:occupied
+   177 print :fn3:free
+   178 jump *label358 lessThanEq :fn3:needed 0
+   179 print ", needed: "
  
-   229 label *label379
-   230 label *label380
-   231 label *label381
+   230 label *label379
+   231 label *label380
+   232 label *label381
 -    * print @mega
 -    * print ":"
 -    * print " occupied: "
 -    * print :fn3:occupied
 -    * print ","
 -    * print " free: "
-+  232 print "mega: occupied: {0}, free: "
-+  233 format :fn3:occupied
-   234 print :fn3:free
-   235 jump *label382 lessThanEq :fn3:needed 0
-   236 print ", needed: "
++  233 print "mega: occupied: {0}, free: "
++  234 format :fn3:occupied
+   235 print :fn3:free
+   236 jump *label382 lessThanEq :fn3:needed 0
+   237 print ", needed: "
  
-   287 label *label403
-   288 label *label404
-   289 label *label405
+   288 label *label403
+   289 label *label404
+   290 label *label405
 -    * print @mono
 -    * print ":"
 -    * print " occupied: "
 -    * print :fn3:occupied
 -    * print ","
 -    * print " free: "
-+  290 print "mono: occupied: {0}, free: "
-+  291 format :fn3:occupied
-   292 print :fn3:free
-   293 jump *label406 lessThanEq :fn3:needed 0
-   294 print ", needed: "
++  291 print "mono: occupied: {0}, free: "
++  292 format :fn3:occupied
+   293 print :fn3:free
+   294 jump *label406 lessThanEq :fn3:needed 0
+   295 print ", needed: "
  
-   580 jump *label135 equal *tmp211 false
-   581 label *label321
-   582 set :start @time
+   581 jump __start__ equal *tmp211 false
+   582 label *label321
+   583 set :start @time
 -    * print " === [gold]Supplying Overdrive Dome[] === "
 -    * print "\n"
 -    * print "\n"
@@ -6400,33 +6485,33 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print "]"
 -    * print "\n"
 -    * print "\n[green]Silicon[] status:\n"
-+  583 print " === [gold]Supplying Overdrive Dome[] === \n\nUnit type: [green]{0}[]\n\n[green]Silicon[] status:\n"
-+  584 format *tmp3
-   585 sensor :fn15:level .DOME @silicon
-   586 jump *label137 lessThanEq :fn15:level 3
++  584 print " === [gold]Supplying Overdrive Dome[] === \n\nUnit type: [green]{0}[]\n\n[green]Silicon[] status:\n"
++  585 format *tmp3
+   586 sensor :fn15:level .DOME @silicon
+   587 jump *label137 lessThanEq :fn15:level 3
 -    * print "  dome:  [green]"
 -    * print :fn15:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  587 print "  dome:  [green]{0}[]\n"
-+  588 format :fn15:level
-   589 jump *label138 always
-   590 label *label137
++  588 print "  dome:  [green]{0}[]\n"
++  589 format :fn15:level
+   590 jump *label138 always
+   591 label *label137
 -    * print "  dome:  [coral]"
 -    * print :fn15:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  591 print "  dome:  [coral]{0}[]\n"
-+  592 format :fn15:level
-   593 label *label138
-   594 label *label136
-   595 jump *label141 equal .UNIT_S1 null
++  592 print "  dome:  [coral]{0}[]\n"
++  593 format :fn15:level
+   594 label *label138
+   595 label *label136
+   596 jump *label141 equal .UNIT_S1 null
  
-   711 label *label167
-   712 ucontrol flag :fn16:state
-   713 sensor *tmp279 @unit @totalItems
+   712 label *label167
+   713 ucontrol flag :fn16:state
+   714 sensor *tmp279 @unit @totalItems
 -    * print "  "
 -    * print .GROUP1
 -    * print ":"
@@ -6436,23 +6521,23 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp279
 -    * print "["
 -    * print "]"
-+  714 print "  {0}: [gold]{0}[]"
-+  715 format .GROUP1
-+  716 format *tmp279
-   717 jump *label174 lessThan :fn16:distance 0
-   718 print :fn16:msg
-   719 print :fn16:distance
++  715 print "  {0}: [gold]{0}[]"
++  716 format .GROUP1
++  717 format *tmp279
+   718 jump *label174 lessThan :fn16:distance 0
+   719 print :fn16:msg
+   720 print :fn16:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+  720 print "[] sec\n"
-   721 jump *label175 always
-   722 label *label174
-   723 print :fn16:msg
++  721 print "[] sec\n"
+   722 jump *label175 always
+   723 label *label174
+   724 print :fn16:msg
  
-   846 label *label206
-   847 ucontrol flag :fn18:state
-   848 sensor *tmp346 @unit @totalItems
+   847 label *label206
+   848 ucontrol flag :fn18:state
+   849 sensor *tmp346 @unit @totalItems
 -    * print "  "
 -    * print .GROUP2
 -    * print ":"
@@ -6462,46 +6547,46 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp346
 -    * print "["
 -    * print "]"
-+  849 print "  {0}: [gold]{0}[]"
-+  850 format .GROUP2
-+  851 format *tmp346
-   852 jump *label213 lessThan :fn18:distance 0
-   853 print :fn18:msg
-   854 print :fn18:distance
++  850 print "  {0}: [gold]{0}[]"
++  851 format .GROUP2
++  852 format *tmp346
+   853 jump *label213 lessThan :fn18:distance 0
+   854 print :fn18:msg
+   855 print :fn18:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+  855 print "[] sec\n"
-   856 jump *label214 always
-   857 label *label213
-   858 print :fn18:msg
++  856 print "[] sec\n"
+   857 jump *label214 always
+   858 label *label213
+   859 print :fn18:msg
  
-   873 print "\n[green]Phase fabric[] status:\n"
-   874 sensor :fn20:level .DOME @phase-fabric
-   875 jump *label218 lessThanEq :fn20:level 3
+   874 print "\n[green]Phase fabric[] status:\n"
+   875 sensor :fn20:level .DOME @phase-fabric
+   876 jump *label218 lessThanEq :fn20:level 3
 -    * print "  dome:  [green]"
 -    * print :fn20:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  876 print "  dome:  [green]{0}[]\n"
-+  877 format :fn20:level
-   878 jump *label219 always
-   879 label *label218
++  877 print "  dome:  [green]{0}[]\n"
++  878 format :fn20:level
+   879 jump *label219 always
+   880 label *label218
 -    * print "  dome:  [coral]"
 -    * print :fn20:level
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  880 print "  dome:  [coral]{0}[]\n"
-+  881 format :fn20:level
-   882 label *label219
-   883 label *label217
-   884 jump *label222 equal .UNIT_P1 null
++  881 print "  dome:  [coral]{0}[]\n"
++  882 format :fn20:level
+   883 label *label219
+   884 label *label217
+   885 jump *label222 equal .UNIT_P1 null
  
-  1000 label *label248
-  1001 ucontrol flag :fn21:state
-  1002 sensor *tmp420 @unit @totalItems
+  1001 label *label248
+  1002 ucontrol flag :fn21:state
+  1003 sensor *tmp420 @unit @totalItems
 -    * print "  "
 -    * print .GROUP1
 -    * print ":"
@@ -6511,23 +6596,23 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp420
 -    * print "["
 -    * print "]"
-+ 1003 print "  {0}: [gold]{0}[]"
-+ 1004 format .GROUP1
-+ 1005 format *tmp420
-  1006 jump *label255 lessThan :fn21:distance 0
-  1007 print :fn21:msg
-  1008 print :fn21:distance
++ 1004 print "  {0}: [gold]{0}[]"
++ 1005 format .GROUP1
++ 1006 format *tmp420
+  1007 jump *label255 lessThan :fn21:distance 0
+  1008 print :fn21:msg
+  1009 print :fn21:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+ 1009 print "[] sec\n"
-  1010 jump *label256 always
-  1011 label *label255
-  1012 print :fn21:msg
++ 1010 print "[] sec\n"
+  1011 jump *label256 always
+  1012 label *label255
+  1013 print :fn21:msg
  
-  1135 label *label287
-  1136 ucontrol flag :fn23:state
-  1137 sensor *tmp487 @unit @totalItems
+  1136 label *label287
+  1137 ucontrol flag :fn23:state
+  1138 sensor *tmp487 @unit @totalItems
 -    * print "  "
 -    * print .GROUP2
 -    * print ":"
@@ -6537,36 +6622,37 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 -    * print *tmp487
 -    * print "["
 -    * print "]"
-+ 1138 print "  {0}: [gold]{0}[]"
-+ 1139 format .GROUP2
-+ 1140 format *tmp487
-  1141 jump *label294 lessThan :fn23:distance 0
-  1142 print :fn23:msg
-  1143 print :fn23:distance
++ 1139 print "  {0}: [gold]{0}[]"
++ 1140 format .GROUP2
++ 1141 format *tmp487
+  1142 jump *label294 lessThan :fn23:distance 0
+  1143 print :fn23:msg
+  1144 print :fn23:distance
 -    * print "["
 -    * print "] sec"
 -    * print "\n"
-+ 1144 print "[] sec\n"
-  1145 jump *label295 always
-  1146 label *label294
-  1147 print :fn23:msg
++ 1145 print "[] sec\n"
+  1146 jump *label295 always
+  1147 label *label294
+  1148 print :fn23:msg
  
-  1161 label *label258
-  1162 op sub *tmp495 @time :start
-  1163 op floor *tmp496 *tmp495
+  1162 label *label258
+  1163 op sub *tmp495 @time :start
+  1164 op floor *tmp496 *tmp495
 -    * print "\n"
 -    * print "[lightgray]Loop time: "
 -    * print *tmp496
 -    * print " "
 -    * print "ms"
-+ 1164 print "\n[lightgray]Loop time: {0} ms"
-+ 1165 format *tmp496
-  1166 printflush message1
-  1167 op notEqual *tmp497 *tmp3 UNIT_TYPE
-  1168 op greaterThan *tmp498 :unitCheck @time
++ 1165 print "\n[lightgray]Loop time: {0} ms"
++ 1166 format *tmp496
+  1167 printflush message1
+  1168 op notEqual *tmp497 *tmp3 UNIT_TYPE
+  1169 op greaterThan *tmp498 :unitCheck @time
 
 Final code before resolving virtual instructions:
 
+label __start__
 remark "This is the preferred unit type to use for bringing in supplies."
 remark "If no units of this type exist, we'll try using other types."
 set UNIT_TYPE @flare
@@ -6862,7 +6948,7 @@ jump *label68 notEqual *tmp87 false
 label *label69
 ubind *tmp3
 set :fn7:firstUnit @unit
-jump *label73 equal :fn7:firstUnit null
+jump __start__ equal :fn7:firstUnit null
 label *label75
 sensor *tmp92 @unit @controlled
 jump *label68 equal *tmp92 0
@@ -6872,7 +6958,6 @@ sensor *tmp96 :fn7:firstUnit @dead
 op equal *tmp97 *tmp96 0
 op land *tmp98 *tmp95 *tmp97
 jump *label75 notEqual *tmp98 false
-label *label73
 end
 label *label68
 ucontrol flag 1 0 0 0 0
@@ -6889,7 +6974,7 @@ jump *label81 notEqual *tmp107 false
 label *label82
 ubind *tmp3
 set :fn9:firstUnit @unit
-jump *label86 equal :fn9:firstUnit null
+jump __start__ equal :fn9:firstUnit null
 label *label88
 sensor *tmp112 @unit @controlled
 jump *label81 equal *tmp112 0
@@ -6899,7 +6984,6 @@ sensor *tmp116 :fn9:firstUnit @dead
 op equal *tmp117 *tmp116 0
 op land *tmp118 *tmp115 *tmp117
 jump *label88 notEqual *tmp118 false
-label *label86
 end
 label *label81
 ucontrol flag 1 0 0 0 0
@@ -6948,7 +7032,7 @@ jump *label104 notEqual *tmp156 false
 label *label105
 ubind *tmp3
 set :fn12:firstUnit @unit
-jump *label109 equal :fn12:firstUnit null
+jump __start__ equal :fn12:firstUnit null
 label *label111
 sensor *tmp161 @unit @controlled
 jump *label104 equal *tmp161 0
@@ -6958,7 +7042,6 @@ sensor *tmp165 :fn12:firstUnit @dead
 op equal *tmp166 *tmp165 0
 op land *tmp167 *tmp164 *tmp166
 jump *label111 notEqual *tmp167 false
-label *label109
 end
 label *label104
 ucontrol flag 1 0 0 0 0
@@ -6975,7 +7058,7 @@ jump *label117 notEqual *tmp176 false
 label *label118
 ubind *tmp3
 set :fn14:firstUnit @unit
-jump *label122 equal :fn14:firstUnit null
+jump __start__ equal :fn14:firstUnit null
 label *label124
 sensor *tmp181 @unit @controlled
 jump *label117 equal *tmp181 0
@@ -6985,7 +7068,6 @@ sensor *tmp185 :fn14:firstUnit @dead
 op equal *tmp186 *tmp185 0
 op land *tmp187 *tmp184 *tmp186
 jump *label124 notEqual *tmp187 false
-label *label122
 end
 label *label117
 ucontrol flag 1 0 0 0 0
@@ -7034,7 +7116,7 @@ op lessThan *tmp208 *tmp206 *tmp207
 op or .SUPPLY_P_FIRST *tmp200 *tmp208
 op add :unitCheck @time 5000
 sensor *tmp211 switch1 @enabled
-jump *label135 equal *tmp211 false
+jump __start__ equal *tmp211 false
 label *label321
 set :start @time
 print " === [gold]Supplying Overdrive Dome[] === \n\nUnit type: [green]{0}[]\n\n[green]Silicon[] status:\n"
@@ -7059,7 +7141,7 @@ jump *label140 notEqual *tmp225 false
 label *label141
 ubind *tmp3
 set :fn17:firstUnit @unit
-jump *label145 equal :fn17:firstUnit null
+jump __start__ equal :fn17:firstUnit null
 label *label147
 sensor *tmp230 @unit @controlled
 jump *label140 equal *tmp230 0
@@ -7069,7 +7151,6 @@ sensor *tmp234 :fn17:firstUnit @dead
 op equal *tmp235 *tmp234 0
 op land *tmp236 *tmp233 *tmp235
 jump *label147 notEqual *tmp236 false
-label *label145
 end
 label *label140
 set :fn16:msg ""
@@ -7178,7 +7259,7 @@ jump *label179 notEqual *tmp292 false
 label *label180
 ubind *tmp3
 set :fn19:firstUnit @unit
-jump *label184 equal :fn19:firstUnit null
+jump __start__ equal :fn19:firstUnit null
 label *label186
 sensor *tmp297 @unit @controlled
 jump *label179 equal *tmp297 0
@@ -7188,7 +7269,6 @@ sensor *tmp301 :fn19:firstUnit @dead
 op equal *tmp302 *tmp301 0
 op land *tmp303 *tmp300 *tmp302
 jump *label186 notEqual *tmp303 false
-label *label184
 end
 label *label179
 set :fn18:msg ""
@@ -7314,7 +7394,7 @@ jump *label221 notEqual *tmp366 false
 label *label222
 ubind *tmp3
 set :fn22:firstUnit @unit
-jump *label226 equal :fn22:firstUnit null
+jump __start__ equal :fn22:firstUnit null
 label *label228
 sensor *tmp371 @unit @controlled
 jump *label221 equal *tmp371 0
@@ -7324,7 +7404,6 @@ sensor *tmp375 :fn22:firstUnit @dead
 op equal *tmp376 *tmp375 0
 op land *tmp377 *tmp374 *tmp376
 jump *label228 notEqual *tmp377 false
-label *label226
 end
 label *label221
 set :fn21:msg ""
@@ -7433,7 +7512,7 @@ jump *label260 notEqual *tmp433 false
 label *label261
 ubind *tmp3
 set :fn24:firstUnit @unit
-jump *label265 equal :fn24:firstUnit null
+jump __start__ equal :fn24:firstUnit null
 label *label267
 sensor *tmp438 @unit @controlled
 jump *label260 equal *tmp438 0
@@ -7443,7 +7522,6 @@ sensor *tmp442 :fn24:firstUnit @dead
 op equal *tmp443 *tmp442 0
 op land *tmp444 *tmp441 *tmp443
 jump *label267 notEqual *tmp444 false
-label *label265
 end
 label *label260
 set :fn23:msg ""
@@ -7599,4 +7677,3 @@ op add :unitCheck @time 5000
 label *label298
 sensor *tmp211 switch1 @enabled
 jump *label321 notEqual *tmp211 false
-label *label135

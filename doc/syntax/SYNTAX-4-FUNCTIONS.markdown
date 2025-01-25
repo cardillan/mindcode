@@ -158,7 +158,6 @@ wait 1000
 set .after .synced
 op sub *tmp0 .after .before
 print *tmp0
-end
 ```
 
 As can be seen, the code actually does compute the difference between the value of the variable from two different points in time.
@@ -344,7 +343,6 @@ jump 11 always 0 0
 print "Iteration 3:"
 print "Setting cell1[3] to 9"
 write 9 cell1 3
-end
 ```
 
 As you can see, remarks produced by two different `remark()` function calls are not merged together.
@@ -369,7 +367,6 @@ produces
 jump 2 always 0 0
 print "Compiled for RELEASE"
 print "Hello"
-end
 ```
 
 In strict syntax mode, remarks can oly be used inside code blocks.
@@ -425,7 +422,6 @@ print "Maximal value"
 set MAX 100
 op sub *tmp0 MAX MIN
 print *tmp0
-end
 ```
 
 # System library functions
@@ -642,7 +638,7 @@ inline void foo(args...)
 end;
 
 foo(1, 2, 3, 4);
-foo(1, 2, 3, 4, 5);         // Causes error in the call to println() function, as it expects exactly 4 arguments 
+foo(1, 2, 3, 4, 5);         // Causes error in the call to println($"Values...") function, as it expects exactly 4 arguments 
 ```
 
 An `out` argument may also be passed via vararg to a function that accepts it: 

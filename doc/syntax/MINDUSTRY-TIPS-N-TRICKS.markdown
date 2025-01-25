@@ -134,9 +134,9 @@ In the second case, the doubling of square bracket is not strictly necessary, be
 It is also possible to use built-in Mindustry icons in the `print` instruction, for example
 
 ```
-println(ITEM_COAL, ": ", vault1.coal);
-println(ITEM_LEAD, ": ", vault1.lead);
-println(ITEM_SAND, ": ", vault1.sand);
+println(ITEM_COAL, ": ", vault1.@coal);
+println(ITEM_LEAD, ": ", vault1.@lead);
+println(ITEM_SAND, ": ", vault1.@sand);
 
 print($"Using $UNIT_MEGA to transport items...\n"); 
 ```
@@ -149,9 +149,9 @@ When printing numbers, Mindustry prints the full representation of a number. It 
 
 ```
 start_time = @time;
-do_some_stuff();
+// do some stuff
 duration = @time - start_time;
-println("Elapsed: ", floor(duration), " ms");
+println($"Elapsed: ${floor(duration)} ms");
 ```
 
 When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead. The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI.
@@ -178,7 +178,7 @@ You need to specify a unit type when binding a unit (e.g. `ubind(@poly)`). If th
 The `@unit` variable is special, as it always contain the unit currently bound to the processor. You can store this value in another variable. One possible reason to do that is that you can use such variable to determine you've already encountered all existing units:
 
 ```
-var count
+var count;
 var firstUnit = ubind(@poly);
 if firstUnit != null then
     count = 1;
@@ -259,7 +259,7 @@ def myFindFreeUnit(unitType, initialFlag)
         ubind(unitType);
         if @unit == null then
             print($"No unit of type $unit_type found.");
-        elsif @unit.controlled != 0 then
+        elsif @unit.@controlled != 0 then
             print($"Looking for a free $unit_type...");
         else
             flag(initialFlag);		// Mark unit as active

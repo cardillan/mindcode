@@ -23,7 +23,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * More precise calculations of optimization benefits in loop unrolling and call inlining.
 * The `sensor` instruction is considered deterministic if a deterministic property of a non-volatile value, which is also not a linked variable, is being queried.
-* When clicking on an error or warning in the web application, the entire portion of the source code causing the error or warning is selected.    
+* When clicking on an error or warning in the web application, the entire portion of the source code causing the error or warning is selected.
+* Most advanced optimizations were moved to the `basic` level. Only optimizations that might be incorrect in some contexts (such as optimizations replacing computed IDs of Mindustry items with IDs known to the compiler) are left on the advanced level. 
+* The default optimization level in the web application is now `advanced`.
 
 ### Miscellaneous
 

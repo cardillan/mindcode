@@ -8,7 +8,7 @@
     35 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-     2 instructions updated by JumpThreading.
+     3 instructions updated by JumpThreading.
      4 instructions eliminated by Print Merging.
    287 instructions after optimizations.
 
@@ -1654,62 +1654,76 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
    212 op add :y 4 *tmp118
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set FROM_INDEX 0
+     2 set TO_INDEX 8
+     3 set EXPECTED_BOOST 1.5
  
-    98 jump *label28 lessThanEq :power 0
-    99 op add *tmp55 :y 7
-   100 draw image 12 *tmp55 :icon 16 0
+    34 control enabled switch1 0
+    35 label *label8
+    36 sensor *tmp14 switch1 @enabled
+-    * jump *label10 notEqual *tmp14 0
++   37 jump __start__ notEqual *tmp14 0
+    38 label *label73
+    39 set :start @time
+    40 print "Silicon Factory Monitor"
+ 
+    99 jump *label28 lessThanEq :power 0
+   100 op add *tmp55 :y 7
+   101 draw image 12 *tmp55 :icon 16 0
 -    * jump *label29 always
-+  101 jump *label27 always
-   102 label *label28
-   103 draw color 255 80 80 255
-   104 op add *tmp56 :y 3
++  102 jump *label27 always
+   103 label *label28
+   104 draw color 255 80 80 255
+   105 op add *tmp56 :y 3
  
-   227 op add *tmp129 :x 7
-   228 op add *tmp130 :y 7
-   229 draw image *tmp129 *tmp130 :icon 16 0
+   228 op add *tmp129 :x 7
+   229 op add *tmp130 :y 7
+   230 draw image *tmp129 *tmp130 :icon 16 0
 -    * jump *label56 always
-+  230 jump *label54 always
-   231 label *label55
-   232 draw color 255 80 80 255
-   233 op add *tmp131 :y 3
++  231 jump *label54 always
+   232 label *label55
+   233 draw color 255 80 80 255
+   234 op add *tmp131 :y 3
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   356 sensor *tmp14 switch1 @enabled
-   357 jump *label73 equal *tmp14 0
-   358 label *label10
+   357 sensor *tmp14 switch1 @enabled
+   358 jump *label73 equal *tmp14 0
+   359 label *label10
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-   337 label *label70
-   338 label *label67
-   339 label *label68
+   338 label *label70
+   339 label *label67
+   340 label *label68
 -    * print "\nNominal production: "
 -    * print :expected_flow_str
 -    * print "/min"
 -    * print "\nActual production: "
 -    * print :flow_str
 -    * print "/min"
-+  340 print "\nNominal production: {0}/min\nActual production: {0}/min"
-+  341 format :expected_flow_str
-+  342 format :flow_str
-   343 label *label65
-   344 label *label66
-   345 drawflush display1
-   346 op sub *tmp192 @time :start
-   347 op floor *tmp193 *tmp192
++  341 print "\nNominal production: {0}/min\nActual production: {0}/min"
++  342 format :expected_flow_str
++  343 format :flow_str
+   344 label *label65
+   345 label *label66
+   346 drawflush display1
+   347 op sub *tmp192 @time :start
+   348 op floor *tmp193 *tmp192
 -    * print "\nUpdate time: "
 -    * print *tmp193
 -    * print " ms"
-+  348 print "\nUpdate time: {0} ms"
-+  349 format *tmp193
-   350 printflush message1
-   351 label *label9
-   352 sensor *tmp14 switch1 @enabled
++  349 print "\nUpdate time: {0} ms"
++  350 format *tmp193
+   351 printflush message1
+   352 label *label9
+   353 sensor *tmp14 switch1 @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set FROM_INDEX 0
 set TO_INDEX 8
 set EXPECTED_BOOST 1.5
@@ -1744,7 +1758,7 @@ set :expected_flow_str null
 set :icon null
 control enabled switch1 0 0 0 0
 sensor *tmp14 switch1 @enabled
-jump *label10 notEqual *tmp14 0
+jump __start__ notEqual *tmp14 0
 label *label73
 set :start @time
 print "Silicon Factory Monitor"
@@ -2039,4 +2053,3 @@ format *tmp193
 printflush message1
 sensor *tmp14 switch1 @enabled
 jump *label73 equal *tmp14 0
-label *label10

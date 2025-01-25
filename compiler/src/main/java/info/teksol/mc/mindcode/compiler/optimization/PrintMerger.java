@@ -12,8 +12,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.STRING_LITERAL;
-
 /// A simple optimizer which merges together print instructions with string literal arguments. The print instructions
 /// will get merged even if they aren't consecutive, assuming there aren't instructions that could break the print
 /// sequence (`jump`, `label` or `print variable`). Typical sequence of instructions targeted by this optimizer is:
@@ -98,17 +96,15 @@ class PrintMerger extends BaseOptimizer {
     // If the merge is not possible, sets previous to current
     private void tryMergeUsingPrint(LogicIterator iterator, PrintInstruction current) {
         if (previous instanceof PrintInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
-            if (advanced() || prev.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
-                String str1 = prev.getValue().format(instructionProcessor);
-                String str2 = current.getValue().format(instructionProcessor);
-                // Do not merge strings if the combined length is over 34, unless advanced
-                if (advanced() || str1.length() + str2.length() <= 34) {
-                    PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
-                    removeInstruction(this.previous);
-                    iterator.set(merged);
-                    this.previous = merged;
-                    return;
-                }
+            String str1 = prev.getValue().format(instructionProcessor);
+            String str2 = current.getValue().format(instructionProcessor);
+            // Do not merge strings if the combined length is over 34, unless advanced
+            if (advanced() || str1.length() + str2.length() <= 34) {
+                PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
+                removeInstruction(this.previous);
+                iterator.set(merged);
+                this.previous = merged;
+                return;
             }
         }
 

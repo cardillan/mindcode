@@ -3,26 +3,26 @@
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      4 instructions eliminated by Jump Normalization (4 iterations).
      4 instructions eliminated by Jump Optimization (4 iterations).
-     9 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-    18 instructions eliminated by Expression Optimization (3 iterations).
-    62 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
+    10 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+    15 instructions eliminated by Expression Optimization (3 iterations).
+    65 instructions eliminated by Data Flow Optimization (4 passes, 13 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
     14 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
     19 instructions eliminated by Print Merging.
-    39 instructions after optimizations.
+    38 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 906):
-  * Unroll iteration loop at *blocks:57:9                        cost     0, benefit      975.0, efficiency   Infinity (-10 instructions)
+  * Unroll iteration loop at *blocks:57:9                        cost     0, benefit      975.0, efficiency   Infinity (-13 instructions)
     Unroll iteration loop at *blocks:66:13                       cost     0, benefit    24375.0, efficiency   Infinity
     Unroll iteration loop at *blocks:75:9                        cost     0, benefit      975.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 916):
+Pass 1: speed optimization selection (cost limit 919):
   * Unroll iteration loop at *blocks:66:13                       cost     0, benefit    24375.0, efficiency   Infinity (-3 instructions)
     Unroll iteration loop at *blocks:75:9                        cost     0, benefit      975.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 919):
+Pass 1: speed optimization selection (cost limit 922):
   * Unroll iteration loop at *blocks:75:9                        cost     0, benefit      975.0, efficiency   Infinity (+5 instructions)
 
 Final code before resolving virtual instructions:
@@ -74,4 +74,3 @@ Final code before resolving virtual instructions:
    35:  printflush :fn0:message
    36:  jump *label2 equal :fn0:foundAll false
    37:  assertequals :message message1 "Located message1 block"
-   38:  end

@@ -9,6 +9,7 @@
      1 instructions added by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
      3 instructions eliminated by Jump Straightening (3 iterations).
+     1 instructions updated by JumpThreading.
     20 instructions eliminated by Print Merging.
     90 instructions after optimizations.
 
@@ -634,18 +635,33 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    141 write 0 .MEMORY :n
    142 op add :n :n 1
 
+Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set MIN_BATCH 10
+     2 set MAX_BATCH 1000
+     3 set :lastCell 0
+ 
+   137 write 0 .MEMORY :lastCell
+   138 set :n 0
+   139 label *label29
+-    * jump *label31 greaterThanEq 0 @links
++  140 jump __start__ greaterThanEq 0 @links
+   141 label *label34
+   142 write 0 .MEMORY :n
+   143 op add :n :n 1
+
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   143 label *label30
-   144 jump *label34 lessThan :n @links
-   145 label *label31
+   144 label *label30
+   145 jump *label34 lessThan :n @links
+   146 label *label31
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
  
-    99 set :startTime @time
-   100 label *label27
-   101 label *label28
+   100 set :startTime @time
+   101 label *label27
+   102 label *label28
 -    * print "Item Counter                  "
 -    * print "\n"
 -    * print "Total items: [gold]"
@@ -668,24 +684,25 @@ Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
 -    * print "["
 -    * print "] ms"
 -    * print "\n"
-+  102 print "Item Counter                  \nTotal items: [gold]{0}[]\nRate: [green]{0}[] items/min\nBatch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
-+  103 format :total
-+  104 format :ratePerMin
-+  105 format :batch
-+  106 format :elapsed
-   107 op sub *tmp58 @time :start
-   108 op floor *tmp59 *tmp58
++  103 print "Item Counter                  \nTotal items: [gold]{0}[]\nRate: [green]{0}[] items/min\nBatch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
++  104 format :total
++  105 format :ratePerMin
++  106 format :batch
++  107 format :elapsed
+   108 op sub *tmp58 @time :start
+   109 op floor *tmp59 *tmp58
 -    * print "[lightgray]Loop time: "
 -    * print *tmp59
 -    * print " "
 -    * print "ms"
-+  109 format *tmp59
-   110 printflush message1
-   111 label *label14
-   112 sensor *tmp18 switch1 @enabled
++  110 format *tmp59
+   111 printflush message1
+   112 label *label14
+   113 sensor *tmp18 switch1 @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set MIN_BATCH 10
 set MAX_BATCH 1000
 set :lastCell 0
@@ -788,9 +805,8 @@ label *label15
 control enabled switch1 0 0 0 0
 write 0 .MEMORY :lastCell
 set :n 0
-jump *label31 greaterThanEq 0 @links
+jump __start__ greaterThanEq 0 @links
 label *label34
 write 0 .MEMORY :n
 op add :n :n 1
 jump *label34 lessThan :n @links
-label *label31

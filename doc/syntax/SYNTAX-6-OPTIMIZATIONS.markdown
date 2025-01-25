@@ -33,10 +33,8 @@ The optimization is performed only when the following conditions are met:
 
 This optimization inspects the entire code and removes all instructions that write to variables, if none of the variables written to are actually read anywhere in the code.
 
-This optimization support `basic` and `advanced` levels of optimization. On the `advanced` level, the optimization removes all dead assignments, even assignments to unused program parameters, global variables and main variables.
-
 Dead Code Elimination also inspects your code and prints out suspicious variables:
-* _Unused variables_: those are the variables that were, or could be, eliminated. On `basic` level, some unused variables might not be reported.
+* _Unused variables_: those are the variables that were eliminated.
 * _Uninitialized variables_: those are global variables that are read by the program, but never written to. (The [Data Flow Optimization](#data-flow-optimization) detects uninitialized local and function variables.)
 
 Both cases deserve a closer inspection, as they might indicate a problem with your program.
@@ -80,14 +78,17 @@ Prerequisites:
 
 This optimizer simplifies the following sequences of jump that are a result of certain combinations of optimizations:
 
-* No jumps are removed from jump tables.
 * A conditional or unconditional jump targeting the next instruction.
 * A conditional or unconditional jump is removed if there is an identical jump immediately following it. The second jump may be a target of another jump. 
-* On the `advanced` level, a jump is removed if there is an identical jump preceding it and these conditions are met:
+* The `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving execution of one instruction.
+* A jump is removed if there is an identical jump preceding it and these conditions are met:
   * the jump doesn't contain volatile variables,
-  * there are no instructions affecting control flow between the jumps, including points targeted by jumps,
+  * there are no instructions affecting control flow between the jumps, including landing points of other jumps,
   * there are no instructions modifying the jump condition variables between the jumps. 
-* On the `advanced` level, the `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving execution of one instruction.
+
+The rationale behind the optimization described in the last point is that if any of the removed conditional jumps conditions were evaluated to `true`, so would be the condition of the first jump in the sequence, so the other jumps cannot fire, even though the value of the condition isn't known at the compile time. These sequences of jumps may appear as a result of unrolled loops.    
+
+Note: jumps that are part of a larger structure (jump tables) are not affected by this optimization.
 
 ## Expression Optimization
 
@@ -125,12 +126,12 @@ In case of commutative operations, the result is the same if the first and secon
 Some mlog operations are produced by different Mindcode operators. When the optimizations are only applied to operations corresponding to specific Mindcode operators, these operators are listed in the **Operator** column.  
 
 > [!IMPORTANT]
-> Some optimizations applied to `or`, `and`, `land`, `xor`, `shl` and `shr` operations applied to non-integer or non-boolean values may produce different results from unoptimized code: unoptimized code would result into an integer value (or boolean value in case of `land`), while the optimized code may produce a non-integer value. Passing a non-integer/non-boolean value into these operators is unusual, but not impossible. These optimizations are therefore only performed on `advanced` level and can be turned off by setting the level to `basic`. 
+> Some optimizations applied to `or`, `and`, `land`, `xor`, `shl` and `shr` operations applied to non-integer or non-boolean values may produce different results from unoptimized code: unoptimized code would result into an integer value (or boolean value in case of `land`), while the optimized code may produce a non-integer value. Passing a non-integer/non-boolean value into these operators is unusual, but not impossible. These optimizations are therefore only performed on `advanced` level and can be turned off by setting the level to `basic`.
 
 If the optimization level is `advanced`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
-* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given id and if it finds one, the instruction is replaced by `set var <object>`, where `<object>` is an item, liquid, block or unit literal.      
+* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given id and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block or unit literal.      
 
 Mindcode contains a list of known Mindustry objects and their IDs, obtained from the latest Mindustry version. These IDs are expected to be immutable, but the optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be different from the IDs known to Mindcode.   
 
@@ -150,6 +151,7 @@ else
     positive += 1;
     x;
 end;
+print(abs);
 ```
 
 produces this code:
@@ -157,11 +159,11 @@ produces this code:
 ```
 jump 4 greaterThanEq :x 0
 op add :negative :negative 1
-op sub :abs 0 :x
+op sub *tmp1 0 :x
 jump 6 always 0 0
 op add :positive :positive 1
-set :abs :x
-end
+set *tmp1 :x
+print *tmp1
 ```
 
 As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
@@ -210,47 +212,52 @@ jump 0 always 0 0
 print "thousands"
 ```
 
-This optimization is available on the `advanced` level.
-
 ### Forward assignment
 
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
 ```
-param x = 5;
+x = rand(10) - 5;
 text = x < 0 ? "negative" : "positive";
+print("Value is ", text);
 ```
 
 Without If Expression Optimization, the produced code is
 
 ```
-jump 3 greaterThanEq x 0
-set *tmp1 "negative"
-jump 4 always 0 0
-set *tmp1 "positive"
-set :text *tmp1
+op rand *tmp0 10 0
+op sub :x *tmp0 5
+jump 5 greaterThanEq :x 0
+set *tmp3 "negative"
+jump 6 always 0 0
+set *tmp3 "positive"
+print "Value is "
+print *tmp3
 ```
 
 Execution speed:
-* x is negative: 4 instructions (0, 1, 2) are executed,
-* x is positive: 3 instructions (0, 3) are executed.
+* x is negative: 4 instructions (2, 3, 4) are executed,
+* x is positive: 3 instructions (2, 5) are executed.
 
 The If Expression Optimization turns the code into this:
 
 ```
-set :text "positive"
-jump 3 greaterThanEq x 0
-set :text "negative"
+op rand *tmp0 10 0
+op sub :x *tmp0 5
+set *tmp3 "positive"
+jump 5 greaterThanEq :x 0
+set *tmp3 "negative"
+print "Value is "
+print *tmp3
 ```
 
 Execution speed:
-* x is negative: 4 instructions (0, 1, 2) are executed,
-* x is positive: 3 instructions (0, 1) are executed.
+* x is negative: 4 instructions (2, 3, 4) are executed,
+* x is positive: 3 instructions (2, 3) are executed.
 
 The execution time is the same. However, one less instruction is generated.
 
 The forward assignment optimization is performed when these conditions are met:
-* optimization level is `advanced`,
 * both branches assign a value to the same variable (resulting variable) as the last statement,
 * the resulting variable is not global (global variables can be modified or used in function calls),
 * the resulting variable is not used in the condition in any way,
@@ -284,7 +291,6 @@ jump 4 strictEqual *tmp0 0
 print "dead"
 jump 0 always 0 0
 print "alive"
-end
 ```
 
 ### Chained if-else statements
@@ -292,6 +298,7 @@ end
 The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 
 ```
+#set if-expression-optimization = none;
 y = if x < 0 then
     "negative";
 elsif x > 0 then
@@ -299,32 +306,34 @@ elsif x > 0 then
 else
     "zero";
 end;
+print("value is ", y);
 ```
 
 produces
 
 ```
-set y "negative"
-jump 5 lessThan x 0
-set y "zero"
-jump 5 lessThanEq x 0
-set y "positive"
-end
+set *tmp1 "negative"
+jump 5 lessThan :x 0
+set *tmp1 "zero"
+jump 5 lessThanEq :x 0
+set *tmp1 "positive"
+print "value is "
+print *tmp1
 ```
 
 saving three instructions over the code without if statement optimization:
 
 ```
-jump 3 greaterThanEq x 0
+jump 3 greaterThanEq :x 0
 set *tmp1 "negative"
 jump 8 always 0 0
-jump 6 lessThanEq x 0
+jump 6 lessThanEq :x 0
 set *tmp3 "positive"
 jump 7 always 0 0
 set *tmp3 "zero"
 set *tmp1 *tmp3
-set y *tmp1
-end
+print "value is "
+print *tmp1
 ```
 
 ## Data Flow Optimization
@@ -333,54 +342,8 @@ This optimization inspects the actual data flow in the program and removes instr
 
 Data Flow Optimizations can have profound effect on the resulting code. User-defined variables can get completely eliminated, and variables in expressions can get replaced by various other variables that were determined to hold the same value. The goal of these replacements is to allow elimination of some instructions. The optimizer doesn't try to avoid variable replacements that do not lead to instruction elimination - this would make the resulting code more understandable, but the optimizer would have to be more complex and therefore more prone to errors.
 
-> [!IMPORTANT]
-> One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change crucial parameters in the compiled code without a need to recompile entire program. To this end, assignments to [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) are never removed. Any changes to `set` instructions in the compiled code assigning value to program parameters are fully supported and the resulting program is fully functional, as if the value was assigned to the program parameter in the source code itself.
-> 
-> All other variables can be completely removed by this optimization. Even if they stay in the compiled code, changing the value assigned to any variables other than program parameters may not produce the same effect as compiling the program with the changed value. In other words, **changing a value assigned to a global, main or local variable in the compiled code may break the compiled program.**
-
-> If you wish to create a parametrized code, follow these rules for best results:
->
-> * Use program parameters as placeholders for the parametrized values.
-> * Declare the parameters at the very beginning of the program (this way the parameters will be easy to find in the compiled code).
-> * If you sanitize or otherwise modify the parameter value before being used by the program, store the results of these operations in another variable. Program parameters are read-only in Mindcode and cannot be modified once set.
-> * Do not modify instructions other than `set` instructions assigning values to program parameters in the compiled code.
- 
 > [!WARNING]
-> In older versions of Mindcode, global variables were intended for program parametrization. In current version, global variables are fully optimized in a way similar to main or local variables and aren't suitable for program parametrization. 
-
-### Optimization levels
-
-On `basic` optimization level, the Data Flow Optimization preserves last values assigned to main variables (except main variables that served as a loop control variable in at least one unrolled loop). This protection is employed to allow trying out snippets of code in the web application (which runs on `basic` optimization level by default) without the optimizer eliminating most or all of the compiled code due to it not having any effect on the Mindustry world.
-
-```
-#set optimization = basic;
-x0 = 0.001;
-y0 = 0.002;
-x1 = x0 * x0 + y0 * y0;
-y1 = 2 * x0 * y0;
-```
-
-produces
-
-```
-set x0 0.001
-set y0 0.002
-op add x1 0.000001 0.000004
-op mul y1 0.002 0.002
-end
-```
-
-On `advanced` optimization level, no special protection to main variables is awarded, and they can be completely removed from the resulting code:
-
-```
-#set optimization = advanced;
-x0 = 0.001;
-y0 = 0.002;
-x1 = x0 * x0 + y0 * y0;
-y1 = 2 * x0 * y0;
-```
-
-produces an empty program. All the assignment were removed as they wouldn't have any effect on the Mindustry world when run in actual logic processor.
+> In older versions of Mindcode, global variables were intended for program parametrization. In current version, global variables are fully optimized in a way similar to main or local variables and aren't suitable for program parametrization. [Program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) need to be used instead.
 
 ### Handling of uninitialized variables
 
@@ -469,11 +432,9 @@ compiles to:
 ```
 op rand :a 20 0
 print :a
-op rand :a 30 0
-end
 ```
 
-The first assignment to `:a` is removed, because `:a` is not read before another value is assigned to it. The last assignment to `:a` is [preserved on `basic` optimization level](#optimization-levels), but would be removed on `advanced` level, because `:a` is not read after that assignment at all.
+The first assignment to `:a` is removed, because `:a` is not read before another value is assigned to it. The last assignment to `:a` is removed, because `:a` is not read after that assignment at all.
 
 An assignment can also become unnecessary due to other optimizations.
 
@@ -482,7 +443,6 @@ An assignment can also become unnecessary due to other optimizations.
 When a variable is used in an instruction and the value of the variable is known to be a constant value, the variable itself is replaced by the constant value. This can in turn make the original assignment unnecessary. See for example:
 
 ```
-#set optimization = advanced;
 a = 10;
 b = 20;
 c = @tick + b;
@@ -504,7 +464,6 @@ Constant propagation described above ensures that constant values are used inste
 For example:
 
 ```
-#set optimization = advanced;
 a = 10;
 b = 20;
 c = a + b;
@@ -521,7 +480,7 @@ Looks quite spectacular, doesn't it? Here's what happened:
 
 * The optimizer figured out that variables `a` and `b` are not needed, because they only hold a constant value.
 * Then it found out the `c = a + b` expression has a constant value too.
-* What was left was a sequence of print statements, each printing a constant value. [Print Merging optimization](#print-merging) on `advanced` level then merged it all together.
+* What was left was a sequence of print statements, each printing a constant value. [Print Merging optimization](#print-merging) then merged it all together.
 
 Not every opportunity for constant folding is detected at this moment. While `x = 1 + y + 2;` is optimized to `op add :x :y 3`, `x = 1 + y + z + 2;` it too complex to process as this moment and the constant values of `1` and `2` won't be folded at compile time.
 
@@ -551,7 +510,6 @@ print :a
 print :b
 print :c
 print :d
-end
 ```
 
 Again, not every possible opportunity is used. Instructions are not rearranged, for example, even if doing so would allow more evaluations to be reused.
@@ -579,7 +537,6 @@ op add :x 1 *tmp5
 op add :y 2 *tmp5
 print :x
 print :y
-end
 ```
 
 ### Function call optimizations
@@ -605,17 +562,16 @@ for i in 0 ... MAX do
 end;
 ```
 
-the evaluation of `2 * A` is moved in front of the loop in the compiled code:
+the evaluation of `2 * MAX` is moved in front of the loop in the compiled code:
 
 ```
 set MAX 10
 set :i 0
-op mul *tmp1 2 MAX
-jump 7 greaterThanEq 0 MAX
-print *tmp1
+op mul *tmp0 2 MAX
+jump 0 greaterThanEq 0 MAX
+print *tmp0
 op add :i :i 1
 jump 4 lessThan :i MAX
-end
 ```
 
 A loop condition is processed as well as a loop body, and invariant code in nested loops is hoisted all the way to the top when possible: 
@@ -636,22 +592,20 @@ compiles into
 ```
 set MAX 10
 set :j 0
-op add *tmp1 MAX 10
-jump 11 greaterThanEq 0 MAX
+op add *tmp0 MAX 10
+jump 0 greaterThanEq 0 MAX
 set :i 0
-jump 9 greaterThanEq 0 *tmp1
+jump 9 greaterThanEq 0 *tmp0
 op add :i :i 1
 print :i
-jump 6 lessThan :i *tmp1
+jump 6 lessThan :i *tmp0
 op add :j :j 1
 jump 4 lessThan :j MAX
-end
 ```
 
-On `advanced` optimization level, Loop Hoisting is capable of handling some `if` expressions as well:
+Loop Hoisting is capable of handling some `if` expressions as well:
 
 ```
-#set optimization = advanced;
 param MAX = 10;
 for i in 1 ... MAX do
     k = (MAX % 2 == 0) ? "Even" : "Odd";
@@ -665,13 +619,13 @@ produces
 ```
 set MAX 10
 set :i 1
-set *tmp3 "Odd"
-op mod *tmp1 MAX 2
-jump 6 notEqual *tmp1 0
-set *tmp3 "Even"
+set *tmp2 "Odd"
+op mod *tmp0 MAX 2
+jump 6 notEqual *tmp0 0
+set *tmp2 "Even"
 jump 11 greaterThanEq 1 MAX
 print :i
-print *tmp3
+print *tmp2
 op add :i :i 1
 jump 7 lessThan :i MAX
 print "end"
@@ -680,7 +634,7 @@ print "end"
 At this moment, the following limitations apply:
 
 * If the loop contains a stackless or recursive function call, global variables that might be modified by that function call are marked as loop dependent and expressions based on them aren't hoisted, since the compiler must assume the value of the global variable would potentially change inside these functions.
-* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(A < 0 ? "positive" : "negative");`), it won't be optimized.   
+* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(x < 0 ? "positive" : "negative");`), it won't be optimized.   
 
 ## Loop Optimization
 
@@ -711,7 +665,6 @@ write 1 cell1 :i
 op add :i :i 1
 jump 3 lessThan :i LIMIT
 print "Done."
-end
 ```
 
 Executing the entire loop (including the `i` variable initialization) takes 32 steps. Without optimization, the loop would require 43 steps. That's quite significant difference, especially for tight loops.
@@ -738,7 +691,6 @@ sensor *tmp1 switch2 @enabled
 op land *tmp2 *tmp0 *tmp1
 jump 4 notEqual *tmp2 false
 print "A switch has been reset."
-end
 ```
 
 ## Loop Unrolling
@@ -787,7 +739,6 @@ The price for this speedup is the increased number of instructions themselves. S
 Apart from removing the superfluous instructions, loop unrolling also replaces variables with constant values. This can make further optimizations opportunities arise, especially for a Data Flow Optimizer and possibly for others. A not particularly practical, but nonetheless striking example is this program which computes the sum of numbers from 0 to 100:
 
 ```
-#set optimization = advanced;
 sum = 0;
 for i in 0 .. 100 do
     sum += i;
@@ -799,7 +750,6 @@ which compiles to:
 
 ```
 print 5050
-end
 ```
 
 What happened here is this: the loop was unrolled to individual instructions in this basic form:
@@ -986,7 +936,6 @@ print instruction:
 
 ```
 print "11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"
-end
 ```
 
 ### List iteration loop with modifications
@@ -1008,10 +957,9 @@ User defined, non-recursive function which is called just once in the entire pro
 
 This optimization can inline additional functions that aren't recursive and also aren't declared `inline` in the source code. If there's enough instruction space, all function calls may be inlined and the original function body removed from the program. 
 
-When the optimization level is set to `advanced` and there isn't enough instruction space, only a single one or several specific function calls may be inlined; in such case the original function body remains in the program and is used by the function calls that weren't inlined. If there are only last two function calls remaining, either both 
-of them, or none of them, will be inlined.    
+When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in such case the original function body remains in the program and is used by the function calls that weren't inlined. If there are only last two function calls remaining, either both of them, or none of them, will be inlined.    
 
-It is therefore no longer necessary to use the `inline` keyword, except in cases when Mindcode's automatic inlining chooses function different from the one(s) you prefer to be inlined. 
+It is therefore no longer necessary to use the `inline` keyword, except in cases when Mindcode's automatic inlining chooses function different from the one(s) you prefer to be inlined, or when using functions with variable number of parameters.  
 
 ## Case Switching
 
@@ -1155,11 +1103,11 @@ end;
 
 If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
 
-* on `advanced` level, `end` instruction is handled identically to `jump 0 always`,
+* `end` instruction is handled identically to `jump 0 always`,
 * conditional jumps in the jump chain are followed if:
-  * their condition is identical to the condition of the first jump, and
+  * their condition is identical to the condition of the first jump in the chain, and
   * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.).
-* unconditional jumps targeting an indirect jump (a `set @counter` instruction, internally represented by a virtual `goto` instruction) are replaced with the indirect jump itself.  
+* unconditional jumps targeting an indirect jump (i.e. an instruction assigning value to `@counter`) are replaced with the indirect jump itself. 
   
 No instructions are removed or added, but the execution of the code is faster.
 
@@ -1172,8 +1120,6 @@ This optimizer removes instructions that are unreachable. There are several ways
 3. User defined functions which are called from an unreachable region.
 
 Instruction removal is done by analyzing the control flow of the program and removing instructions that are never executed. When [Jump Normalization](#jump-normalization) is not active, some section of unreachable code may not be recognized.
-
-The `end` instruction, even when not reachable, is not removed unless the optimization level is `advanced`. Main body program and function definitions are each terminated by the `end` instruction and removing it might make the produced code somewhat less readable.
 
 ## Stack Optimization
 
@@ -1201,19 +1147,18 @@ print("Items: ", items);
 print("\nTime: ", @time "\n");
 ```
 
-On `advanced` level, all constant values - not just string constants - are merged. For example:
+All constant values - not just string constants - are merged. For example:
 
 ```
-#set optimization = advanced;
 const MAX_VALUE = 10;
-print($"Step $i of $MAX_VALUE\n");
+println($"Step $i of $MAX_VALUE");
 ```
 
 produces
 
 ```
 print "Step "
-print i
+print :i
 print " of 10\n"
 ```
 
@@ -1239,7 +1184,6 @@ print :mid
 print ", maximum: "
 print :max
 print "\n"
-end
 ```
 
 The optimization utilizing `format` saves three instructions by producing
@@ -1253,7 +1197,7 @@ format :max
 
 The format instruction is used in optimization when these conditions are met:
 
-- The language target supports the format instruction (`8A` or later)
+- The language target supports the format instruction (`8.0` or later)
 - The compiled code entering this optimization contains neither a string literal containing a `{0}` placeholder, nor any other substrings that could produce the `{0}` in a text buffer (for example, `print("{{1}}"); format("0");` produces `{0}` in the text buffer and disables this optimization).
 
 If the `{0}` placeholder is avoided, the formatting mechanism can be used freely in the code without any limitations and the print merging optimization with the format instruction can still happen. Just use placeholders starting at `{1}`:
@@ -1276,7 +1220,6 @@ format "Before"
 print "Value: {0}\n"
 format a
 format "After"
-end
 ```
 
 and will output

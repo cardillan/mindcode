@@ -3,7 +3,7 @@
     13 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
      6 instructions eliminated by Jump Optimization (4 iterations).
-    11 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    17 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
    577 instructions eliminated by Data Flow Optimization (10 passes, 31 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -11,8 +11,9 @@
      7 loops unrolled by Loop Unrolling.
     17 instructions added by Function Inlining (12 iterations).
      5 function calls inlined by Function Inlining.
+     8 instructions updated by JumpThreading.
      4 instructions eliminated by Unreachable Code Elimination.
-   440 instructions after optimizations.
+   434 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 937):
     Unroll loop at line 29:5                                     cost    33, benefit      300.0, efficiency        9.1
@@ -6653,9 +6654,83 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    880 label *label169
    881 label *label170
 
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+     7 op and :fn0*retval *tmp21 4
+     8 label *label67
+     9 op equal :fn1:result :fn0*retval false
+-    * jump *label73 equal :fn1:result false
++   10 jump *label76 equal :fn1:result false
+    11 label *label406
+    12 label *label407
+    13 read *tmp35 BITMAP 0
+ 
+   311 op and :fn0*retval *tmp21 8
+   312 label *label80
+   313 op equal :fn1:result :fn0*retval false
+-    * jump *label86 equal :fn1:result false
++  314 jump *label89 equal :fn1:result false
+   315 label *label306
+   316 label *label307
+   317 read *tmp35 BITMAP 0
+ 
+   527 op and :fn0*retval *tmp21 32
+   528 label *label95
+   529 op equal :fn1:result :fn0*retval false
+-    * jump *label101 equal :fn1:result false
++  530 jump *label104 equal :fn1:result false
+   531 label *label251
+   532 label *label252
+   533 read *tmp35 BITMAP 1
+ 
+   651 op and :fn0*retval *tmp21 64
+   652 label *label108
+   653 op equal :fn1:result :fn0*retval false
+-    * jump *label114 equal :fn1:result false
++  654 jump *label117 equal :fn1:result false
+   655 label *label211
+   656 label *label212
+   657 read *tmp35 BITMAP 1
+ 
+   747 op and :fn0*retval *tmp21 256
+   748 label *label123
+   749 op equal :fn1:result :fn0*retval false
+-    * jump *label129 equal :fn1:result false
++  750 jump *label132 equal :fn1:result false
+   751 label *label189
+   752 label *label190
+   753 read *tmp35 BITMAP 3
+ 
+   805 op and :fn0*retval *tmp21 512
+   806 label *label136
+   807 op equal :fn1:result :fn0*retval false
+-    * jump *label142 equal :fn1:result false
++  808 jump *label145 equal :fn1:result false
+   809 label *label176
+   810 label *label177
+   811 read *tmp35 BITMAP 3
+ 
+   847 op and :fn0*retval *tmp21 2048
+   848 label *label151
+   849 op equal :fn1:result :fn0*retval false
+-    * jump *label157 equal :fn1:result false
++  850 jump *label160 equal :fn1:result false
+   851 label *label152
+   852 jump *label156 always
+   853 label *label153
+ 
+   869 op and :fn0*retval *tmp21 4096
+   870 label *label164
+   871 op equal :fn1:result :fn0*retval false
+-    * jump *label170 equal :fn1:result false
++  872 jump *label173 equal :fn1:result false
+   873 label *label165
+   874 jump *label169 always
+   875 label *label166
+
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 instructions):
  
-   850 jump *label157 equal :fn1:result false
+   850 jump *label160 equal :fn1:result false
    851 label *label152
    852 jump *label156 always
 -    * label *label153
@@ -6667,7 +6742,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 inst
    854 label *label157
    855 label *label158
  
-   867 jump *label170 equal :fn1:result false
+   867 jump *label173 equal :fn1:result false
    868 label *label165
    869 jump *label169 always
 -    * label *label166
@@ -6679,46 +6754,94 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 inst
    871 label *label170
    872 label *label171
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-3 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-9 instructions):
  
-   849 op equal :fn1:result :fn0*retval false
-   850 jump *label157 equal :fn1:result false
-   851 label *label152
+   301 label *label73
+   302 label *label74
+   303 label *label75
+-    * jump *label76 equal :fn1:result false
+   304 op add :fn2:sum 5 5
+   305 label *label76
+   306 label *label77
+ 
+   514 label *label86
+   515 label *label87
+   516 label *label88
+-    * jump *label89 equal :fn1:result false
+   517 op add :fn2:sum :fn2:sum 7
+   518 label *label89
+   519 label *label90
+ 
+   639 label *label101
+   640 label *label102
+   641 label *label103
+-    * jump *label104 equal :fn1:result false
+   642 op add :fn2:sum :fn2:sum 11
+   643 label *label104
+   644 label *label105
+ 
+   732 label *label114
+   733 label *label115
+   734 label *label116
+-    * jump *label117 equal :fn1:result false
+   735 op add :fn2:sum :fn2:sum 13
+   736 label *label117
+   737 label *label118
+ 
+   791 label *label129
+   792 label *label130
+   793 label *label131
+-    * jump *label132 equal :fn1:result false
+   794 op add :fn2:sum :fn2:sum 17
+   795 label *label132
+   796 label *label133
+ 
+   830 label *label142
+   831 label *label143
+   832 label *label144
+-    * jump *label145 equal :fn1:result false
+   833 op add :fn2:sum :fn2:sum 19
+   834 label *label145
+   835 label *label146
+ 
+   843 op equal :fn1:result :fn0*retval false
+   844 jump *label160 equal :fn1:result false
+   845 label *label152
 -    * jump *label156 always
-   852 label *label156
-   853 label *label157
-   854 label *label158
+   846 label *label156
+   847 label *label157
+   848 label *label158
  
-   865 op equal :fn1:result :fn0*retval false
-   866 jump *label170 equal :fn1:result false
-   867 label *label165
+   859 op equal :fn1:result :fn0*retval false
+   860 jump *label173 equal :fn1:result false
+   861 label *label165
 -    * jump *label169 always
-   868 label *label169
-   869 label *label170
-   870 label *label171
+   862 label *label169
+   863 label *label170
+   864 label *label171
  
-   913 label *label2
-   914 assertequals 21536 :fn2:sum "sumPrimesUpTo(500)"
-   915 stop
+   907 label *label2
+   908 assertequals 21536 :fn2:sum "sumPrimesUpTo(500)"
+   909 stop
 -    * end
 
 Modifications by Final phase, Single Step Elimination, iteration 2 (-2 instructions):
  
-   847 op and :fn0*retval *tmp21 2048
-   848 label *label151
-   849 op equal :fn1:result :fn0*retval false
--    * jump *label157 equal :fn1:result false
-   850 label *label152
-   851 label *label156
-   852 label *label157
+   841 op and :fn0*retval *tmp21 2048
+   842 label *label151
+   843 op equal :fn1:result :fn0*retval false
+-    * jump *label160 equal :fn1:result false
+   844 label *label152
+   845 label *label156
+   846 label *label157
  
-   862 op and :fn0*retval *tmp21 4096
-   863 label *label164
-   864 op equal :fn1:result :fn0*retval false
--    * jump *label170 equal :fn1:result false
-   865 label *label165
-   866 label *label169
-   867 label *label170
+   856 op and :fn0*retval *tmp21 4096
+   857 label *label164
+   858 op equal :fn1:result :fn0*retval false
+-    * jump *label173 equal :fn1:result false
+   859 label *label165
+   860 label *label169
+   861 label *label170
 
 Final code before resolving virtual instructions:
 
@@ -6727,7 +6850,7 @@ set :fn2:sum 5
 read *tmp21 BITMAP 0
 op and :fn0*retval *tmp21 4
 op equal :fn1:result :fn0*retval false
-jump *label73 equal :fn1:result false
+jump *label76 equal :fn1:result false
 read *tmp35 BITMAP 0
 op or *tmp38 *tmp35 4096
 write *tmp38 BITMAP 0
@@ -6872,14 +6995,12 @@ write *tmp38 BITMAP 5
 read *tmp35 BITMAP 5
 op or *tmp38 *tmp35 128
 write *tmp38 BITMAP 5
-label *label73
-jump *label76 equal :fn1:result false
 op add :fn2:sum 5 5
 label *label76
 read *tmp21 BITMAP 0
 op and :fn0*retval *tmp21 8
 op equal :fn1:result :fn0*retval false
-jump *label86 equal :fn1:result false
+jump *label89 equal :fn1:result false
 read *tmp35 BITMAP 0
 op or *tmp38 *tmp35 16777216
 write *tmp38 BITMAP 0
@@ -6979,14 +7100,12 @@ write *tmp38 BITMAP 5
 read *tmp35 BITMAP 5
 op or *tmp38 *tmp35 256
 write *tmp38 BITMAP 5
-label *label86
-jump *label89 equal :fn1:result false
 op add :fn2:sum :fn2:sum 7
 label *label89
 read *tmp21 BITMAP 0
 op and :fn0*retval *tmp21 32
 op equal :fn1:result :fn0*retval false
-jump *label101 equal :fn1:result false
+jump *label104 equal :fn1:result false
 read *tmp35 BITMAP 1
 op or *tmp38 *tmp35 4096
 write *tmp38 BITMAP 1
@@ -7041,14 +7160,12 @@ write *tmp38 BITMAP 4
 read *tmp35 BITMAP 5
 op or *tmp38 *tmp35 128
 write *tmp38 BITMAP 5
-label *label101
-jump *label104 equal :fn1:result false
 op add :fn2:sum :fn2:sum 11
 label *label104
 read *tmp21 BITMAP 0
 op and :fn0*retval *tmp21 64
 op equal :fn1:result :fn0*retval false
-jump *label114 equal :fn1:result false
+jump *label117 equal :fn1:result false
 read *tmp35 BITMAP 1
 op or *tmp38 *tmp35 68719476736
 write *tmp38 BITMAP 1
@@ -7088,14 +7205,12 @@ write *tmp38 BITMAP 4
 read *tmp35 BITMAP 5
 op or *tmp38 *tmp35 1
 write *tmp38 BITMAP 5
-label *label114
-jump *label117 equal :fn1:result false
 op add :fn2:sum :fn2:sum 13
 label *label117
 read *tmp21 BITMAP 0
 op and :fn0*retval *tmp21 256
 op equal :fn1:result :fn0*retval false
-jump *label129 equal :fn1:result false
+jump *label132 equal :fn1:result false
 read *tmp35 BITMAP 3
 op or *tmp38 *tmp35 1
 write *tmp38 BITMAP 3
@@ -7117,14 +7232,12 @@ write *tmp38 BITMAP 4
 read *tmp35 BITMAP 5
 op or *tmp38 *tmp35 64
 write *tmp38 BITMAP 5
-label *label129
-jump *label132 equal :fn1:result false
 op add :fn2:sum :fn2:sum 17
 label *label132
 read *tmp21 BITMAP 0
 op and :fn0*retval *tmp21 512
 op equal :fn1:result :fn0*retval false
-jump *label142 equal :fn1:result false
+jump *label145 equal :fn1:result false
 read *tmp35 BITMAP 3
 op or *tmp38 *tmp35 68719476736
 write *tmp38 BITMAP 3
@@ -7137,8 +7250,6 @@ write *tmp38 BITMAP 4
 read *tmp35 BITMAP 4
 op or *tmp38 *tmp35 35184372088832
 write *tmp38 BITMAP 4
-label *label142
-jump *label145 equal :fn1:result false
 op add :fn2:sum :fn2:sum 19
 label *label145
 read *tmp21 BITMAP 0

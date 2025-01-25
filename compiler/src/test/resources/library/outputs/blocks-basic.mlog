@@ -36,5 +36,3 @@ op and :fn0:foundAll :fn0:foundAll :memory
 printflush :fn0:message
 jump 2 equal :fn0:foundAll false
 assertequals :message message1 "Located message1 block"
-end
-print "Compiled by Mindcode - github.com/cardillan/mindcode"

@@ -2,72 +2,481 @@
     20 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
     36 instructions eliminated by Dead Code Elimination (6 iterations).
-     5 instructions eliminated by Jump Normalization (5 iterations).
-    20 instructions eliminated by Jump Optimization (5 iterations).
-    29 instructions eliminated by Single Step Elimination (3 passes, 11 iterations).
-     1 instructions eliminated by If Expression Optimization (4 iterations).
-    68 instructions eliminated by Data Flow Optimization (7 passes, 22 iterations).
-     2 instructions eliminated by Loop Optimization (4 iterations).
+   115 instructions eliminated by Jump Normalization (3 passes, 6 iterations).
+    20 instructions eliminated by Jump Optimization (6 iterations).
+    48 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     1 instructions modified by Expression Optimization (5 iterations).
+     2 instructions eliminated by If Expression Optimization (5 iterations).
+   483 instructions eliminated by Data Flow Optimization (20 passes, 62 iterations).
+     2 instructions eliminated by Loop Optimization (5 iterations).
      5 loops improved by Loop Optimization.
-   100 instructions added by Loop Unrolling (9 iterations).
+   100 instructions added by Loop Unrolling (23 iterations).
      2 loops unrolled by Loop Unrolling.
-   168 instructions added by Function Inlining (9 iterations).
-    12 function calls inlined by Function Inlining.
-     6 instructions eliminated by Jump Straightening (5 iterations).
-     6 instructions updated by JumpThreading.
-    24 instructions eliminated by Unreachable Code Elimination.
-   473 instructions after optimizations.
+  1101 instructions added by Function Inlining (23 iterations).
+    26 function calls inlined by Function Inlining.
+     6 instructions eliminated by Jump Straightening (6 iterations).
+    54 instructions updated by JumpThreading.
+   449 instructions eliminated by Unreachable Code Elimination.
+    61 instructions eliminated by Print Merging.
+   375 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 685):
+Pass 1: speed optimization selection (cost limit 686):
     Unroll loop at *printing:240:13                              cost    27, benefit      187.5, efficiency        6.9
   * Unroll loop at *printing:285:9                               cost    53, benefit     3750.0, efficiency       70.8 (+53 instructions)
-    Inline function 'printNumber' defined at *printing:67:1      cost   107, benefit       24.5, efficiency        0.2
+    Inline function 'printNumber' defined at *printing:67:1      cost   101, benefit       24.5, efficiency        0.2
     Inline function 'printBinaryNumber' defined at *printing:124:1 cost    12, benefit        8.0, efficiency        0.7
     Inline function 'printHexNumber' defined at *printing:190:1  cost    67, benefit       12.0, efficiency        0.2
     Inline function 'printExactFast' defined at *printing:216:1  cost   404, benefit       35.0, efficiency        0.1
     Inline function 'printExactSlow' defined at *printing:272:1  cost   215, benefit       35.0, efficiency        0.2
+    Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 8:20                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 9:27                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 10:28                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 11:27                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 12:24                           cost    13, benefit        4.0, efficiency        0.3
+    Inline function call at line 13:26                           cost    13, benefit        4.0, efficiency        0.3
+    Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 17:22                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 18:19                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 19:19                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 20:35                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 21:35                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 22:22                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 23:30                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 24:38                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 25:40                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 26:41                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 27:22                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 28:19                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 29:35                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 30:35                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 31:35                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 32:38                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 33:35                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 34:38                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 35:39                           cost    24, benefit        3.5, efficiency        0.1
+    Inline function call at line 36:40                           cost    24, benefit        3.5, efficiency        0.1
 
-Pass 1: speed optimization selection (cost limit 632):
+Pass 1: speed optimization selection (cost limit 633):
   * Unroll loop at *printing:240:13                              cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
-    Inline function 'printNumber' defined at *printing:67:1      cost   107, benefit       24.5, efficiency        0.2
+    Inline function 'printNumber' defined at *printing:67:1      cost   101, benefit       24.5, efficiency        0.2
     Inline function 'printBinaryNumber' defined at *printing:124:1 cost    12, benefit        8.0, efficiency        0.7
     Inline function 'printHexNumber' defined at *printing:190:1  cost    67, benefit       12.0, efficiency        0.2
     Inline function 'printExactFast' defined at *printing:216:1  cost   404, benefit       35.0, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+    Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 8:20                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 9:27                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 10:28                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 11:27                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 12:24                           cost    13, benefit        4.0, efficiency        0.3
+    Inline function call at line 13:26                           cost    13, benefit        4.0, efficiency        0.3
+    Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 17:22                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 18:19                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 19:19                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 20:35                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 21:35                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 22:22                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 23:30                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 24:38                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 25:40                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 26:41                           cost    45, benefit        3.5, efficiency        0.1
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 605):
-    Inline function 'printNumber' defined at *printing:67:1      cost   107, benefit       24.5, efficiency        0.2
+Pass 1: speed optimization selection (cost limit 606):
+    Inline function 'printNumber' defined at *printing:67:1      cost   101, benefit       24.5, efficiency        0.2
   * Inline function 'printBinaryNumber' defined at *printing:124:1 cost    12, benefit        8.0, efficiency        0.7 (+4 instructions)
     Inline function 'printHexNumber' defined at *printing:190:1  cost    67, benefit       12.0, efficiency        0.2
   ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+    Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 8:20                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 9:27                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 10:28                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 11:27                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 12:24                           cost    13, benefit        4.0, efficiency        0.3
+    Inline function call at line 13:26                           cost    13, benefit        4.0, efficiency        0.3
+    Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 601):
-  * Inline function 'printNumber' defined at *printing:67:1      cost   107, benefit       24.5, efficiency        0.2 (+84 instructions)
+Pass 1: speed optimization selection (cost limit 602):
+  * Inline function 'printNumber' defined at *printing:67:1      cost   101, benefit       24.5, efficiency        0.2 (+78 instructions)
     Inline function 'printHexNumber' defined at *printing:190:1  cost    67, benefit       12.0, efficiency        0.2
   ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+    Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 8:20                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 9:27                            cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 10:28                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 11:27                           cost    17, benefit        3.5, efficiency        0.2
+    Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 517):
+Pass 1: speed optimization selection (cost limit 524):
   * Inline function 'printHexNumber' defined at *printing:190:1  cost    67, benefit       12.0, efficiency        0.2 (+57 instructions)
   ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+    Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
+    Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 1: speed optimization selection (cost limit 460):
+Pass 1: speed optimization selection (cost limit 467):
   ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0 (+50 instructions)
+    Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 2: speed optimization selection (cost limit 481):
-  ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
+Pass 1: speed optimization selection (cost limit 417):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   575, benefit       31.5, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0 (+49 instructions)
+    Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 3: speed optimization selection (cost limit 497):
-  ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
+Pass 1: speed optimization selection (cost limit 368):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   503, benefit       28.0, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0 (+58 instructions)
+    Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
-Pass 4: speed optimization selection (cost limit 497):
-  ! Inline function 'printExactFast' defined at *printing:216:1  cost   647, benefit       35.0, efficiency        0.1
+Pass 1: speed optimization selection (cost limit 310):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   431, benefit       24.5, efficiency        0.1
   ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function call at line 20:35                           cost    72, benefit        3.5, efficiency        0.0 (+52 instructions)
+    Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 1: speed optimization selection (cost limit 258):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   359, benefit       21.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function call at line 21:35                           cost    72, benefit        3.5, efficiency        0.0 (+49 instructions)
+    Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 1: speed optimization selection (cost limit 209):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   287, benefit       17.5, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function call at line 22:22                           cost    72, benefit        3.5, efficiency        0.0 (+49 instructions)
+    Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 1: speed optimization selection (cost limit 160):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   215, benefit       14.0, efficiency        0.1
+  * Inline function call at line 23:30                           cost    72, benefit        3.5, efficiency        0.0 (+49 instructions)
+    Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 1: speed optimization selection (cost limit 111):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost   143, benefit       10.5, efficiency        0.1
+  * Inline function call at line 24:38                           cost    72, benefit        3.5, efficiency        0.0 (+49 instructions)
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 1: speed optimization selection (cost limit 62):
+  ! Inline function 'printExactFast' defined at *printing:216:1  cost    71, benefit        7.0, efficiency        0.1
+  ! Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 2: speed optimization selection (cost limit 158):
+  * Inline function 'printExactFast' defined at *printing:216:1  cost    71, benefit        7.0, efficiency        0.1 (+10 instructions)
+    Inline function call at line 25:40                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 26:41                           cost    72, benefit        3.5, efficiency        0.0
+    Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 2: speed optimization selection (cost limit 148):
+  * Inline function call at line 27:22                           cost    77, benefit        3.5, efficiency        0.0 (+23 instructions)
+    Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 2: speed optimization selection (cost limit 125):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   615, benefit       31.5, efficiency        0.1
+  * Inline function call at line 28:19                           cost    77, benefit        3.5, efficiency        0.0 (+22 instructions)
+    Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 2: speed optimization selection (cost limit 103):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   538, benefit       28.0, efficiency        0.1
+  * Inline function call at line 29:35                           cost    77, benefit        3.5, efficiency        0.0 (+30 instructions)
+    Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 2: speed optimization selection (cost limit 73):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   461, benefit       24.5, efficiency        0.1
+  ! Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 3: speed optimization selection (cost limit 96):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   461, benefit       24.5, efficiency        0.1
+  * Inline function call at line 30:35                           cost    77, benefit        3.5, efficiency        0.0 (+22 instructions)
+    Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+    Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 3: speed optimization selection (cost limit 74):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   384, benefit       21.0, efficiency        0.1
+  ! Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 4: speed optimization selection (cost limit 74):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   384, benefit       21.0, efficiency        0.1
+  ! Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
+
+Pass 5: speed optimization selection (cost limit 74):
+  ! Inline function 'printExactSlow' defined at *printing:272:1  cost   384, benefit       21.0, efficiency        0.1
+  ! Inline function call at line 31:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 32:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 33:35                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 34:38                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 35:39                           cost    77, benefit        3.5, efficiency        0.0
+  ! Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Final code before resolving virtual instructions:
 
@@ -98,576 +507,424 @@ Final code before resolving virtual instructions:
         label *label341
    24:  op mod :fn32:mod :fn32:n 1000
    25:  jump *label342 greaterThanEq :fn32:mod 10
-   26:  set *tmp88 "{2},00{1}"
+   26:  format "{2},00{1}"
    27:  jump *label345 always 0 0
         label *label342
    28:  jump *label343 greaterThanEq :fn32:mod 100
-   29:  set *tmp88 "{2},0{1}"
+   29:  format "{2},0{1}"
    30:  jump *label344 always 0 0
         label *label343
-   31:  set *tmp88 "{2},{1}"
+   31:  format "{2},{1}"
         label *label344
         label *label345
-   32:  format *tmp88
-   33:  format :fn32:mod
-   34:  op idiv :fn32:n :fn32:n 1000
-   35:  jump *label341 greaterThan :fn32:n 999
-   36:  format :fn32:n
-   37:  assertprints "1,234,567" "printNumber(1234567)"
-   38:  assertflush
-   39:  print "{2}"
-   40:  op floor :fn32:n 1234567 0
-   41:  format "-{2}"
+   32:  format :fn32:mod
+   33:  op idiv :fn32:n :fn32:n 1000
+   34:  jump *label341 greaterThan :fn32:n 999
+   35:  format :fn32:n
+   36:  assertprints "1,234,567" "printNumber(1234567)"
+   37:  assertflush
+   38:  print "{2}"
+   39:  op floor :fn32:n 1234567 0
+   40:  format "-{2}"
         label *label354
-   42:  op mod :fn32:mod :fn32:n 1000
-   43:  jump *label355 greaterThanEq :fn32:mod 10
-   44:  set *tmp88 "{2},00{1}"
-   45:  jump *label358 always 0 0
+   41:  op mod :fn32:mod :fn32:n 1000
+   42:  jump *label355 greaterThanEq :fn32:mod 10
+   43:  format "{2},00{1}"
+   44:  jump *label358 always 0 0
         label *label355
-   46:  jump *label356 greaterThanEq :fn32:mod 100
-   47:  set *tmp88 "{2},0{1}"
-   48:  jump *label357 always 0 0
+   45:  jump *label356 greaterThanEq :fn32:mod 100
+   46:  format "{2},0{1}"
+   47:  jump *label357 always 0 0
         label *label356
-   49:  set *tmp88 "{2},{1}"
+   48:  format "{2},{1}"
         label *label357
         label *label358
-   50:  format *tmp88
-   51:  format :fn32:mod
-   52:  op idiv :fn32:n :fn32:n 1000
-   53:  jump *label354 greaterThan :fn32:n 999
-   54:  format :fn32:n
-   55:  assertprints "-1,234,567" "printNumber(-1234567)"
-   56:  assertflush
-   57:  print "{2}"
-   58:  op floor :fn32:n 9009099 0
+   49:  format :fn32:mod
+   50:  op idiv :fn32:n :fn32:n 1000
+   51:  jump *label354 greaterThan :fn32:n 999
+   52:  format :fn32:n
+   53:  assertprints "-1,234,567" "printNumber(-1234567)"
+   54:  assertflush
+   55:  print "{2}"
+   56:  op floor :fn32:n 9009099 0
         label *label367
-   59:  op mod :fn32:mod :fn32:n 1000
-   60:  jump *label368 greaterThanEq :fn32:mod 10
-   61:  set *tmp88 "{2},00{1}"
-   62:  jump *label371 always 0 0
+   57:  op mod :fn32:mod :fn32:n 1000
+   58:  jump *label368 greaterThanEq :fn32:mod 10
+   59:  format "{2},00{1}"
+   60:  jump *label371 always 0 0
         label *label368
-   63:  jump *label369 greaterThanEq :fn32:mod 100
-   64:  set *tmp88 "{2},0{1}"
-   65:  jump *label370 always 0 0
+   61:  jump *label369 greaterThanEq :fn32:mod 100
+   62:  format "{2},0{1}"
+   63:  jump *label370 always 0 0
         label *label369
-   66:  set *tmp88 "{2},{1}"
+   64:  format "{2},{1}"
         label *label370
         label *label371
-   67:  format *tmp88
-   68:  format :fn32:mod
-   69:  op idiv :fn32:n :fn32:n 1000
-   70:  jump *label367 greaterThan :fn32:n 999
-   71:  format :fn32:n
-   72:  assertprints "9,009,099" "printNumber(9009099)"
-   73:  assertflush
-   74:  print "{2}"
-   75:  set :fn33:digits 0
-   76:  op floor :fn33:n 0b1001 0
+   65:  format :fn32:mod
+   66:  op idiv :fn32:n :fn32:n 1000
+   67:  jump *label367 greaterThan :fn32:n 999
+   68:  format :fn32:n
+   69:  assertprints "9,009,099" "printNumber(9009099)"
+   70:  assertflush
+   71:  print "{2}"
+   72:  set :fn33:digits 0
+   73:  op floor :fn33:n 0b1001 0
         label *label266
-   77:  op and *tmp92 :fn33:n 1
-   78:  format "{2}{1}"
-   79:  format *tmp92
-   80:  op shr :fn33:n :fn33:n 1
-   81:  op sub :fn33:digits :fn33:digits 1
-   82:  jump *label266 greaterThan :fn33:n 0
-   83:  jump *label272 lessThanEq :fn33:digits 0
+   74:  op and *tmp92 :fn33:n 1
+   75:  format "{2}{1}"
+   76:  format *tmp92
+   77:  op shr :fn33:n :fn33:n 1
+   78:  op sub :fn33:digits :fn33:digits 1
+   79:  jump *label266 greaterThan :fn33:n 0
+   80:  jump *label272 lessThanEq :fn33:digits 0
         label *label270
-   84:  format "{2}0"
-   85:  op sub :fn33:digits :fn33:digits 1
-   86:  jump *label270 greaterThan :fn33:digits 0
+   81:  format "{2}0"
+   82:  op sub :fn33:digits :fn33:digits 1
+   83:  jump *label270 greaterThan :fn33:digits 0
         label *label272
-   87:  format "0b"
-   88:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
-   89:  assertflush
-   90:  print "{2}"
-   91:  set :fn33:digits 6
-   92:  op floor :fn33:n 0b1010 0
+   84:  format "0b"
+   85:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
+   86:  assertflush
+   87:  print "{2}"
+   88:  set :fn33:digits 6
+   89:  op floor :fn33:n 0b1010 0
         label *label276
-   93:  op and *tmp92 :fn33:n 1
-   94:  format "{2}{1}"
-   95:  format *tmp92
-   96:  op shr :fn33:n :fn33:n 1
-   97:  op sub :fn33:digits :fn33:digits 1
-   98:  jump *label276 greaterThan :fn33:n 0
-   99:  jump *label282 lessThanEq :fn33:digits 0
+   90:  op and *tmp92 :fn33:n 1
+   91:  format "{2}{1}"
+   92:  format *tmp92
+   93:  op shr :fn33:n :fn33:n 1
+   94:  op sub :fn33:digits :fn33:digits 1
+   95:  jump *label276 greaterThan :fn33:n 0
+   96:  jump *label282 lessThanEq :fn33:digits 0
         label *label280
-  100:  format "{2}0"
-  101:  op sub :fn33:digits :fn33:digits 1
-  102:  jump *label280 greaterThan :fn33:digits 0
+   97:  format "{2}0"
+   98:  op sub :fn33:digits :fn33:digits 1
+   99:  jump *label280 greaterThan :fn33:digits 0
         label *label282
-  103:  format "0b"
-  104:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
-  105:  assertflush
-  106:  print "{2}"
-  107:  set :fn34:digits 0
-  108:  op floor :fn34:n 0xABCDEF 0
+  100:  format "0b"
+  101:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
+  102:  assertflush
+  103:  print "{2}"
+  104:  set :fn34:digits 0
+  105:  op floor :fn34:n 0xABCDEF 0
         label *label377
-  109:  op mod :fn34:digit :fn34:n 16
-  110:  jump *label380 lessThan :fn34:digit 0
-  111:  jump *label379 lessThanEq :fn34:digit 9
-  112:  jump *label380 always 0 0
+  106:  op mod :fn34:digit :fn34:n 16
+  107:  jump *label380 lessThan :fn34:digit 0
+  108:  jump *label379 lessThanEq :fn34:digit 9
+  109:  jump *label380 always 0 0
         label *label379
-  113:  format "{2}{1}"
-  114:  format :fn34:digit
-  115:  jump *label393 always 0 0
+  110:  format "{2}{1}"
+  111:  format :fn34:digit
+  112:  jump *label393 always 0 0
         label *label380
-  116:  jump *label382 notEqual :fn34:digit 10
-  117:  format "{2}A"
-  118:  jump *label393 always 0 0
+  113:  jump *label382 notEqual :fn34:digit 10
+  114:  format "{2}A"
+  115:  jump *label393 always 0 0
         label *label382
-  119:  jump *label384 notEqual :fn34:digit 11
-  120:  format "{2}B"
-  121:  jump *label393 always 0 0
+  116:  jump *label384 notEqual :fn34:digit 11
+  117:  format "{2}B"
+  118:  jump *label393 always 0 0
         label *label384
-  122:  jump *label386 notEqual :fn34:digit 12
-  123:  format "{2}C"
-  124:  jump *label393 always 0 0
+  119:  jump *label386 notEqual :fn34:digit 12
+  120:  format "{2}C"
+  121:  jump *label393 always 0 0
         label *label386
-  125:  jump *label388 notEqual :fn34:digit 13
-  126:  format "{2}D"
-  127:  jump *label393 always 0 0
+  122:  jump *label388 notEqual :fn34:digit 13
+  123:  format "{2}D"
+  124:  jump *label393 always 0 0
         label *label388
-  128:  jump *label390 notEqual :fn34:digit 14
-  129:  format "{2}E"
-  130:  jump *label393 always 0 0
+  125:  jump *label390 notEqual :fn34:digit 14
+  126:  format "{2}E"
+  127:  jump *label393 always 0 0
         label *label390
-  131:  jump *label392 notEqual :fn34:digit 15
-  132:  format "{2}F"
+  128:  jump *label392 notEqual :fn34:digit 15
+  129:  format "{2}F"
         label *label392
         label *label393
-  133:  op shr :fn34:n :fn34:n 4
-  134:  op sub :fn34:digits :fn34:digits 1
-  135:  jump *label377 greaterThan :fn34:n 0
-  136:  jump *label399 lessThanEq :fn34:digits 0
+  130:  op shr :fn34:n :fn34:n 4
+  131:  op sub :fn34:digits :fn34:digits 1
+  132:  jump *label377 greaterThan :fn34:n 0
+  133:  jump *label399 lessThanEq :fn34:digits 0
         label *label397
-  137:  format "{2}0"
-  138:  op sub :fn34:digits :fn34:digits 1
-  139:  jump *label397 greaterThan :fn34:digits 0
+  134:  format "{2}0"
+  135:  op sub :fn34:digits :fn34:digits 1
+  136:  jump *label397 greaterThan :fn34:digits 0
         label *label399
-  140:  format "0x"
-  141:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
-  142:  assertflush
-  143:  print "{2}"
-  144:  set :fn34:digits 0
-  145:  op floor :fn34:n 0x1234567890 0
+  137:  format "0x"
+  138:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+  139:  assertflush
+  140:  print "{2}"
+  141:  set :fn34:digits 0
+  142:  op floor :fn34:n 0x1234567890 0
         label *label403
-  146:  op mod :fn34:digit :fn34:n 16
-  147:  jump *label406 lessThan :fn34:digit 0
-  148:  jump *label405 lessThanEq :fn34:digit 9
-  149:  jump *label406 always 0 0
+  143:  op mod :fn34:digit :fn34:n 16
+  144:  jump *label406 lessThan :fn34:digit 0
+  145:  jump *label405 lessThanEq :fn34:digit 9
+  146:  jump *label406 always 0 0
         label *label405
-  150:  format "{2}{1}"
-  151:  format :fn34:digit
-  152:  jump *label419 always 0 0
+  147:  format "{2}{1}"
+  148:  format :fn34:digit
+  149:  jump *label419 always 0 0
         label *label406
-  153:  jump *label408 notEqual :fn34:digit 10
-  154:  format "{2}A"
-  155:  jump *label419 always 0 0
+  150:  jump *label408 notEqual :fn34:digit 10
+  151:  format "{2}A"
+  152:  jump *label419 always 0 0
         label *label408
-  156:  jump *label410 notEqual :fn34:digit 11
-  157:  format "{2}B"
-  158:  jump *label419 always 0 0
+  153:  jump *label410 notEqual :fn34:digit 11
+  154:  format "{2}B"
+  155:  jump *label419 always 0 0
         label *label410
-  159:  jump *label412 notEqual :fn34:digit 12
-  160:  format "{2}C"
-  161:  jump *label419 always 0 0
+  156:  jump *label412 notEqual :fn34:digit 12
+  157:  format "{2}C"
+  158:  jump *label419 always 0 0
         label *label412
-  162:  jump *label414 notEqual :fn34:digit 13
-  163:  format "{2}D"
-  164:  jump *label419 always 0 0
+  159:  jump *label414 notEqual :fn34:digit 13
+  160:  format "{2}D"
+  161:  jump *label419 always 0 0
         label *label414
-  165:  jump *label416 notEqual :fn34:digit 14
-  166:  format "{2}E"
-  167:  jump *label419 always 0 0
+  162:  jump *label416 notEqual :fn34:digit 14
+  163:  format "{2}E"
+  164:  jump *label419 always 0 0
         label *label416
-  168:  jump *label418 notEqual :fn34:digit 15
-  169:  format "{2}F"
+  165:  jump *label418 notEqual :fn34:digit 15
+  166:  format "{2}F"
         label *label418
         label *label419
-  170:  op shr :fn34:n :fn34:n 4
-  171:  op sub :fn34:digits :fn34:digits 1
-  172:  jump *label403 greaterThan :fn34:n 0
-  173:  jump *label425 lessThanEq :fn34:digits 0
+  167:  op shr :fn34:n :fn34:n 4
+  168:  op sub :fn34:digits :fn34:digits 1
+  169:  jump *label403 greaterThan :fn34:n 0
+  170:  jump *label425 lessThanEq :fn34:digits 0
         label *label423
-  174:  format "{2}0"
-  175:  op sub :fn34:digits :fn34:digits 1
-  176:  jump *label423 greaterThan :fn34:digits 0
+  171:  format "{2}0"
+  172:  op sub :fn34:digits :fn34:digits 1
+  173:  jump *label423 greaterThan :fn34:digits 0
         label *label425
-  177:  format "0x"
-  178:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
-  179:  assertflush
-  180:  print "{2}"
-  181:  set :fn34:digits 8
-  182:  op floor :fn34:n 0xAABBCC 0
+  174:  format "0x"
+  175:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
+  176:  assertflush
+  177:  print "{2}"
+  178:  set :fn34:digits 8
+  179:  op floor :fn34:n 0xAABBCC 0
         label *label429
-  183:  op mod :fn34:digit :fn34:n 16
-  184:  jump *label432 lessThan :fn34:digit 0
-  185:  jump *label431 lessThanEq :fn34:digit 9
-  186:  jump *label432 always 0 0
+  180:  op mod :fn34:digit :fn34:n 16
+  181:  jump *label432 lessThan :fn34:digit 0
+  182:  jump *label431 lessThanEq :fn34:digit 9
+  183:  jump *label432 always 0 0
         label *label431
-  187:  format "{2}{1}"
-  188:  format :fn34:digit
-  189:  jump *label445 always 0 0
+  184:  format "{2}{1}"
+  185:  format :fn34:digit
+  186:  jump *label445 always 0 0
         label *label432
-  190:  jump *label434 notEqual :fn34:digit 10
-  191:  format "{2}A"
-  192:  jump *label445 always 0 0
+  187:  jump *label434 notEqual :fn34:digit 10
+  188:  format "{2}A"
+  189:  jump *label445 always 0 0
         label *label434
-  193:  jump *label436 notEqual :fn34:digit 11
-  194:  format "{2}B"
-  195:  jump *label445 always 0 0
+  190:  jump *label436 notEqual :fn34:digit 11
+  191:  format "{2}B"
+  192:  jump *label445 always 0 0
         label *label436
-  196:  jump *label438 notEqual :fn34:digit 12
-  197:  format "{2}C"
-  198:  jump *label445 always 0 0
+  193:  jump *label438 notEqual :fn34:digit 12
+  194:  format "{2}C"
+  195:  jump *label445 always 0 0
         label *label438
-  199:  jump *label440 notEqual :fn34:digit 13
-  200:  format "{2}D"
-  201:  jump *label445 always 0 0
+  196:  jump *label440 notEqual :fn34:digit 13
+  197:  format "{2}D"
+  198:  jump *label445 always 0 0
         label *label440
-  202:  jump *label442 notEqual :fn34:digit 14
-  203:  format "{2}E"
-  204:  jump *label445 always 0 0
+  199:  jump *label442 notEqual :fn34:digit 14
+  200:  format "{2}E"
+  201:  jump *label445 always 0 0
         label *label442
-  205:  jump *label444 notEqual :fn34:digit 15
-  206:  format "{2}F"
+  202:  jump *label444 notEqual :fn34:digit 15
+  203:  format "{2}F"
         label *label444
         label *label445
-  207:  op shr :fn34:n :fn34:n 4
-  208:  op sub :fn34:digits :fn34:digits 1
-  209:  jump *label429 greaterThan :fn34:n 0
-  210:  jump *label451 lessThanEq :fn34:digits 0
+  204:  op shr :fn34:n :fn34:n 4
+  205:  op sub :fn34:digits :fn34:digits 1
+  206:  jump *label429 greaterThan :fn34:n 0
+  207:  jump *label451 lessThanEq :fn34:digits 0
         label *label449
-  211:  format "{2}0"
-  212:  op sub :fn34:digits :fn34:digits 1
-  213:  jump *label449 greaterThan :fn34:digits 0
+  208:  format "{2}0"
+  209:  op sub :fn34:digits :fn34:digits 1
+  210:  jump *label449 greaterThan :fn34:digits 0
         label *label451
-  214:  format "0x"
-  215:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+  211:  format "0x"
+  212:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+  213:  assertflush
+  214:  print null
+  215:  assertprints "null" "printExactFast(null)"
   216:  assertflush
-  217:  set :fn6:n null
-  218:  setaddr :fn6*retaddr *label20
-  219:  call *label6 :fn6*retval
-        label *label20
-  220:  assertprints "null" "printExactFast(null)"
-  221:  assertflush
-  222:  set :fn6:n 0
-  223:  setaddr :fn6*retaddr *label21
-  224:  call *label6 :fn6*retval
-        label *label21
-  225:  assertprints "0" "printExactFast(0)"
-  226:  assertflush
-  227:  set :fn6:n 1
-  228:  setaddr :fn6*retaddr *label22
-  229:  call *label6 :fn6*retval
-        label *label22
-  230:  assertprints "1" "printExactFast(1)"
+  217:  print 0
+  218:  assertprints "0" "printExactFast(0)"
+  219:  assertflush
+  220:  print 1
+  221:  assertprints "1" "printExactFast(1)"
+  222:  assertflush
+  223:  print "1.000000100000000"
+  224:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
+  225:  assertflush
+  226:  print "3.000000070000000"
+  227:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
+  228:  assertflush
+  229:  print "3E50"
+  230:  assertprints "3E50" "printExactFast(3e50)"
   231:  assertflush
-  232:  set :fn6:n 1.0000001
-  233:  setaddr :fn6*retaddr *label23
-  234:  call *label6 :fn6*retval
-        label *label23
-  235:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
-  236:  assertflush
-  237:  set :fn6:n 3.00000007
-  238:  setaddr :fn6*retaddr *label24
-  239:  call *label6 :fn6*retval
-        label *label24
-  240:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
-  241:  assertflush
-  242:  set :fn6:n 3E50
-  243:  setaddr :fn6*retaddr *label25
-  244:  call *label6 :fn6*retval
-        label *label25
-  245:  assertprints "3E50" "printExactFast(3e50)"
+  232:  print 1.0123456789
+  233:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
+  234:  assertflush
+  235:  print "1.000000099999999E20"
+  236:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
+  237:  assertflush
+  238:  print "1.2345000000000002E-50"
+  239:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+  240:  assertflush
+  241:  print "-1.2345000000000002E-50"
+  242:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+  243:  assertflush
+  244:  print null
+  245:  assertprints "null" "printExactSlow(null)"
   246:  assertflush
-  247:  set :fn6:n 1.0123456789
-  248:  setaddr :fn6*retaddr *label26
-  249:  call *label6 :fn6*retval
-        label *label26
-  250:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
-  251:  assertflush
-  252:  set :fn6:n 10000001E13
-  253:  setaddr :fn6*retaddr *label27
-  254:  call *label6 :fn6*retval
-        label *label27
-  255:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
-  256:  assertflush
-  257:  set :fn6:n 12345E-54
-  258:  setaddr :fn6*retaddr *label28
-  259:  call *label6 :fn6*retval
-        label *label28
-  260:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
-  261:  assertflush
-  262:  set :fn6:n -12345E-54
-  263:  setaddr :fn6*retaddr *label29
-  264:  call *label6 :fn6*retval
-        label *label29
-  265:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
-  266:  assertflush
-  267:  set :fn7:n null
-  268:  setaddr :fn7*retaddr *label30
-  269:  call *label7 :fn7*retval
-        label *label30
-  270:  assertprints "null" "printExactSlow(null)"
-  271:  assertflush
-  272:  set :fn7:n 0
-  273:  setaddr :fn7*retaddr *label31
-  274:  call *label7 :fn7*retval
-        label *label31
-  275:  assertprints "0" "printExactSlow(0)"
-  276:  assertflush
-  277:  set :fn7:n 1
-  278:  setaddr :fn7*retaddr *label32
-  279:  call *label7 :fn7*retval
-        label *label32
-  280:  assertprints "1.000000000000000" "printExactSlow(1)"
-  281:  assertflush
-  282:  set :fn7:n 1.0000001
-  283:  setaddr :fn7*retaddr *label33
-  284:  call *label7 :fn7*retval
-        label *label33
-  285:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
-  286:  assertflush
-  287:  set :fn7:n 3.00000007
-  288:  setaddr :fn7*retaddr *label34
-  289:  call *label7 :fn7*retval
+  247:  print 0
+  248:  assertprints "0" "printExactSlow(0)"
+  249:  assertflush
+  250:  print "1.000000000000000"
+  251:  assertprints "1.000000000000000" "printExactSlow(1)"
+  252:  assertflush
+  253:  op abs *tmp140 1.0000001 0
+  254:  op log10 *tmp146 1.0000001 0
+  255:  op floor :fn7:exp 0.000000043429446044209946 0
+  256:  op sub *tmp148 0 0
+  257:  op pow *tmp149 10 0
+  258:  op floor *tmp151 1.0000001 0
+  259:  print "1.000000100000000"
+  260:  op mod *tmp152 0.005838671768287895 1
+  261:  op mul :fn7:base 0.005838671768287895 10
+  262:  op floor *tmp155 0.05838671768287895 0
+  263:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+  264:  assertflush
+  265:  set :fn7:n 3.00000007
+  266:  setaddr :fn7*retaddr *label34
+  267:  call *label7 :fn7*retval
         label *label34
-  290:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
-  291:  assertflush
-  292:  set :fn7:n 3E50
-  293:  setaddr :fn7*retaddr *label35
-  294:  call *label7 :fn7*retval
+  268:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  269:  assertflush
+  270:  set :fn7:n 3E50
+  271:  setaddr :fn7*retaddr *label35
+  272:  call *label7 :fn7*retval
         label *label35
-  295:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
-  296:  assertflush
-  297:  set :fn7:n 1.0123456789
-  298:  setaddr :fn7*retaddr *label36
-  299:  call *label7 :fn7*retval
+  273:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  274:  assertflush
+  275:  set :fn7:n 1.0123456789
+  276:  setaddr :fn7*retaddr *label36
+  277:  call *label7 :fn7*retval
         label *label36
-  300:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
-  301:  assertflush
-  302:  set :fn7:n 10000001E13
-  303:  setaddr :fn7*retaddr *label37
-  304:  call *label7 :fn7*retval
+  278:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  279:  assertflush
+  280:  set :fn7:n 10000001E13
+  281:  setaddr :fn7*retaddr *label37
+  282:  call *label7 :fn7*retval
         label *label37
-  305:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
-  306:  assertflush
-  307:  set :fn7:n 12345E-54
-  308:  setaddr :fn7*retaddr *label38
-  309:  call *label7 :fn7*retval
+  283:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  284:  assertflush
+  285:  set :fn7:n 12345E-54
+  286:  setaddr :fn7*retaddr *label38
+  287:  call *label7 :fn7*retval
         label *label38
-  310:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
-  311:  assertflush
-  312:  set :fn7:n -12345E-54
-  313:  setaddr :fn7*retaddr *label39
-  314:  call *label7 :fn7*retval
+  288:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  289:  assertflush
+  290:  set :fn7:n -12345E-54
+  291:  setaddr :fn7*retaddr *label39
+  292:  call *label7 :fn7*retval
         label *label39
-  315:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-  316:  stop
-  317:  end
-        label *label6
-  318:  op abs *tmp104 :fn6:n 0
-  319:  jump *label145 greaterThan *tmp104 0
-  320:  print :fn6:n
-  321:  jump *label146 always 0 0
-        label *label145
-  322:  jump *label147 greaterThanEq :fn6:n 0
-  323:  print "-"
-  324:  op abs :fn6:n :fn6:n 0
-        label *label147
-  325:  op log10 *tmp110 :fn6:n 0
-  326:  op floor :fn6:exp *tmp110 0
-  327:  op sub *tmp112 0 :fn6:exp
-  328:  op pow *tmp113 10 *tmp112
-  329:  op mul :fn6:base :fn6:n *tmp113
-  330:  op add *tmp116 :fn6:base 0.5
-  331:  op floor *tmp115 *tmp116 0
-  332:  op sub *tmp118 :fn6:base *tmp115
-  333:  op abs :fn6:cmp *tmp118 0
-  334:  jump *label150 greaterThan :fn6:cmp 0
-  335:  print :fn6:base
-  336:  jump *label151 always 0 0
-        label *label150
-  337:  jump *label152 lessThanEq :fn6:cmp 0.00001
-  338:  print :fn6:base
-  339:  jump *label153 always 0 0
-        label *label152
-  340:  op floor *tmp124 :fn6:base 0
-  341:  print *tmp124
-  342:  print "."
-  343:  op mod *tmp125 :fn6:base 1
-  344:  op mul :fn6:base *tmp125 100000
-  345:  op floor :fn6:t :fn6:base 0
-  346:  jump *label234 greaterThanEq :fn6:t 10
-  347:  print "0000"
-  348:  jump *label241 always 0 0
-        label *label234
-  349:  jump *label235 greaterThanEq :fn6:t 100
-  350:  print "000"
-  351:  jump *label240 always 0 0
-        label *label235
-  352:  jump *label236 greaterThanEq :fn6:t 1000
-  353:  print "00"
-  354:  jump *label239 always 0 0
-        label *label236
-  355:  jump *label237 greaterThanEq :fn6:t 10000
-  356:  print "0"
-        label *label237
-        label *label239
-        label *label240
-        label *label241
-  357:  print :fn6:t
-  358:  op mod *tmp125 :fn6:base 1
-  359:  op mul :fn6:base *tmp125 100000
-  360:  op floor :fn6:t :fn6:base 0
-  361:  jump *label245 greaterThanEq :fn6:t 10
-  362:  print "0000"
-  363:  jump *label252 always 0 0
-        label *label245
-  364:  jump *label246 greaterThanEq :fn6:t 100
-  365:  print "000"
-  366:  jump *label251 always 0 0
-        label *label246
-  367:  jump *label247 greaterThanEq :fn6:t 1000
-  368:  print "00"
-  369:  jump *label250 always 0 0
-        label *label247
-  370:  jump *label248 greaterThanEq :fn6:t 10000
-  371:  print "0"
-        label *label248
-        label *label250
-        label *label251
-        label *label252
-  372:  print :fn6:t
-  373:  op mod *tmp125 :fn6:base 1
-  374:  op mul :fn6:base *tmp125 100000
-  375:  op floor :fn6:t :fn6:base 0
-  376:  jump *label256 greaterThanEq :fn6:t 10
-  377:  print "0000"
-  378:  jump *label263 always 0 0
-        label *label256
-  379:  jump *label257 greaterThanEq :fn6:t 100
-  380:  print "000"
-  381:  jump *label262 always 0 0
-        label *label257
-  382:  jump *label258 greaterThanEq :fn6:t 1000
-  383:  print "00"
-  384:  jump *label261 always 0 0
-        label *label258
-  385:  jump *label259 greaterThanEq :fn6:t 10000
-  386:  print "0"
-        label *label259
-        label *label261
-        label *label262
-        label *label263
-  387:  print :fn6:t
-        label *label153
-        label *label151
-  388:  jump *label166 equal :fn6:exp 0
-  389:  print "E"
-  390:  print :fn6:exp
-        label *label166
-        label *label146
-  391:  return :fn6*retaddr
-  392:  end
+  293:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  294:  stop
+  295:  end
         label *label7
-  393:  op abs *tmp140 :fn7:n 0
-  394:  jump *label170 greaterThan *tmp140 0
-  395:  print :fn7:n
-  396:  jump *label171 always 0 0
+  296:  op abs *tmp140 :fn7:n 0
+  297:  jump *label170 greaterThan *tmp140 0
+  298:  print :fn7:n
+  299:  return :fn7*retaddr
         label *label170
-  397:  jump *label172 greaterThanEq :fn7:n 0
-  398:  print "-"
-  399:  op abs :fn7:n :fn7:n 0
+  300:  jump *label172 greaterThanEq :fn7:n 0
+  301:  print "-"
+  302:  op abs :fn7:n :fn7:n 0
         label *label172
-  400:  op log10 *tmp146 :fn7:n 0
-  401:  op floor :fn7:exp *tmp146 0
-  402:  op sub *tmp148 0 :fn7:exp
-  403:  op pow *tmp149 10 *tmp148
-  404:  op mul :fn7:base :fn7:n *tmp149
-  405:  op floor *tmp151 :fn7:base 0
-  406:  print *tmp151
-  407:  print "."
-  408:  op mod *tmp152 :fn7:base 1
-  409:  op mul :fn7:base *tmp152 10
-  410:  op floor *tmp155 :fn7:base 0
-  411:  print *tmp155
-  412:  op mod *tmp152 :fn7:base 1
-  413:  op mul :fn7:base *tmp152 10
-  414:  op floor *tmp155 :fn7:base 0
-  415:  print *tmp155
-  416:  op mod *tmp152 :fn7:base 1
-  417:  op mul :fn7:base *tmp152 10
-  418:  op floor *tmp155 :fn7:base 0
-  419:  print *tmp155
-  420:  op mod *tmp152 :fn7:base 1
-  421:  op mul :fn7:base *tmp152 10
-  422:  op floor *tmp155 :fn7:base 0
-  423:  print *tmp155
-  424:  op mod *tmp152 :fn7:base 1
-  425:  op mul :fn7:base *tmp152 10
-  426:  op floor *tmp155 :fn7:base 0
-  427:  print *tmp155
-  428:  op mod *tmp152 :fn7:base 1
-  429:  op mul :fn7:base *tmp152 10
-  430:  op floor *tmp155 :fn7:base 0
-  431:  print *tmp155
-  432:  op mod *tmp152 :fn7:base 1
-  433:  op mul :fn7:base *tmp152 10
-  434:  op floor *tmp155 :fn7:base 0
-  435:  print *tmp155
-  436:  op mod *tmp152 :fn7:base 1
-  437:  op mul :fn7:base *tmp152 10
-  438:  op floor *tmp155 :fn7:base 0
-  439:  print *tmp155
-  440:  op mod *tmp152 :fn7:base 1
-  441:  op mul :fn7:base *tmp152 10
-  442:  op floor *tmp155 :fn7:base 0
-  443:  print *tmp155
-  444:  op mod *tmp152 :fn7:base 1
-  445:  op mul :fn7:base *tmp152 10
-  446:  op floor *tmp155 :fn7:base 0
-  447:  print *tmp155
-  448:  op mod *tmp152 :fn7:base 1
-  449:  op mul :fn7:base *tmp152 10
-  450:  op floor *tmp155 :fn7:base 0
-  451:  print *tmp155
-  452:  op mod *tmp152 :fn7:base 1
-  453:  op mul :fn7:base *tmp152 10
-  454:  op floor *tmp155 :fn7:base 0
-  455:  print *tmp155
-  456:  op mod *tmp152 :fn7:base 1
-  457:  op mul :fn7:base *tmp152 10
-  458:  op floor *tmp155 :fn7:base 0
-  459:  print *tmp155
-  460:  op mod *tmp152 :fn7:base 1
-  461:  op mul :fn7:base *tmp152 10
-  462:  op floor *tmp155 :fn7:base 0
-  463:  print *tmp155
-  464:  op mod *tmp152 :fn7:base 1
-  465:  op mul :fn7:base *tmp152 10
-  466:  op floor *tmp155 :fn7:base 0
-  467:  print *tmp155
-  468:  jump *label178 equal :fn7:exp 0
-  469:  print "E"
-  470:  print :fn7:exp
+  303:  op log10 *tmp146 :fn7:n 0
+  304:  op floor :fn7:exp *tmp146 0
+  305:  op sub *tmp148 0 :fn7:exp
+  306:  op pow *tmp149 10 *tmp148
+  307:  op mul :fn7:base :fn7:n *tmp149
+  308:  op floor *tmp151 :fn7:base 0
+  309:  print *tmp151
+  310:  print "."
+  311:  op mod *tmp152 :fn7:base 1
+  312:  op mul :fn7:base *tmp152 10
+  313:  op floor *tmp155 :fn7:base 0
+  314:  print *tmp155
+  315:  op mod *tmp152 :fn7:base 1
+  316:  op mul :fn7:base *tmp152 10
+  317:  op floor *tmp155 :fn7:base 0
+  318:  print *tmp155
+  319:  op mod *tmp152 :fn7:base 1
+  320:  op mul :fn7:base *tmp152 10
+  321:  op floor *tmp155 :fn7:base 0
+  322:  print *tmp155
+  323:  op mod *tmp152 :fn7:base 1
+  324:  op mul :fn7:base *tmp152 10
+  325:  op floor *tmp155 :fn7:base 0
+  326:  print *tmp155
+  327:  op mod *tmp152 :fn7:base 1
+  328:  op mul :fn7:base *tmp152 10
+  329:  op floor *tmp155 :fn7:base 0
+  330:  print *tmp155
+  331:  op mod *tmp152 :fn7:base 1
+  332:  op mul :fn7:base *tmp152 10
+  333:  op floor *tmp155 :fn7:base 0
+  334:  print *tmp155
+  335:  op mod *tmp152 :fn7:base 1
+  336:  op mul :fn7:base *tmp152 10
+  337:  op floor *tmp155 :fn7:base 0
+  338:  print *tmp155
+  339:  op mod *tmp152 :fn7:base 1
+  340:  op mul :fn7:base *tmp152 10
+  341:  op floor *tmp155 :fn7:base 0
+  342:  print *tmp155
+  343:  op mod *tmp152 :fn7:base 1
+  344:  op mul :fn7:base *tmp152 10
+  345:  op floor *tmp155 :fn7:base 0
+  346:  print *tmp155
+  347:  op mod *tmp152 :fn7:base 1
+  348:  op mul :fn7:base *tmp152 10
+  349:  op floor *tmp155 :fn7:base 0
+  350:  print *tmp155
+  351:  op mod *tmp152 :fn7:base 1
+  352:  op mul :fn7:base *tmp152 10
+  353:  op floor *tmp155 :fn7:base 0
+  354:  print *tmp155
+  355:  op mod *tmp152 :fn7:base 1
+  356:  op mul :fn7:base *tmp152 10
+  357:  op floor *tmp155 :fn7:base 0
+  358:  print *tmp155
+  359:  op mod *tmp152 :fn7:base 1
+  360:  op mul :fn7:base *tmp152 10
+  361:  op floor *tmp155 :fn7:base 0
+  362:  print *tmp155
+  363:  op mod *tmp152 :fn7:base 1
+  364:  op mul :fn7:base *tmp152 10
+  365:  op floor *tmp155 :fn7:base 0
+  366:  print *tmp155
+  367:  op mod *tmp152 :fn7:base 1
+  368:  op mul :fn7:base *tmp152 10
+  369:  op floor *tmp155 :fn7:base 0
+  370:  print *tmp155
+  371:  jump *label178 equal :fn7:exp 0
+  372:  print "E"
+  373:  print :fn7:exp
         label *label178
-        label *label171
-  471:  return :fn7*retaddr
-  472:  end
+  374:  return :fn7*retaddr
 
 
 stop instruction encountered, dumping variable values:
-*tmp104: 1.2345E-50
-*tmp110: -49.90850890573205
-*tmp112: 50.0
-*tmp113: 1.0E50
-*tmp115: 1.0
-*tmp116: 1.7345000000000002
-*tmp118: 0.23450000000000015
-*tmp124: 1.0
-*tmp125: 0.9999983634211276
 *tmp140: 1.2345E-50
 *tmp146: -49.90850890573205
 *tmp148: 50.0
@@ -675,7 +932,6 @@ stop instruction encountered, dumping variable values:
 *tmp151: 1.0
 *tmp152: 0.015276668818842154
 *tmp155: 0.0
-*tmp88: {2},00{1}
 *tmp92: 1.0
 :fn32:mod: 9.0
 :fn32:n: 9.0
@@ -684,14 +940,8 @@ stop instruction encountered, dumping variable values:
 :fn34:digit: 10.0
 :fn34:digits: 0.0
 :fn34:n: 0.0
-:fn6*retaddr: 265.0
-:fn6:base: 1.2345000000000002
-:fn6:cmp: 0.23450000000000015
-:fn6:exp: -50.0
-:fn6:n: 1.2345E-50
-:fn6:t: 99999.0
-:fn7*retaddr: 315.0
+:fn7*retaddr: 293.0
 :fn7:base: 0.15276668818842154
 :fn7:exp: -50.0
 :fn7:n: 1.2345E-50
-@counter: 317.0
+@counter: 295.0

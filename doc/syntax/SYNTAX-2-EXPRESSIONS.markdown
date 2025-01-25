@@ -133,6 +133,29 @@ Only these operations can be applied to string operands:
 > [!IMPORTANT]
 > Using string values in expressions not listed above is not supported in Mindcode and its results are undefined.
 
+## Undefined expression
+
+Behavior of expressions producing side effects that may affect any other value in the same expression is intentionally not defined in Mindcode. Examples of such expressions are:
+
+```
+a = rand(0);
+print(++a + a++);
+cell1[++a] = ++a;
+print(a++, a);
+```
+
+In each of these expressions, Mindcode is free to evaluate individual subexpressions in any order.
+
+To get consistent behavior, these expressions need to be rewritten to eliminate side effects affecting other parts of the same expression, for example:
+
+```
+index = ++a;
+cell1[index] = ++a;
+
+b = a++;
+print(b, a);
+```
+
 # Operators
 
 Mindcode operators follow conventions common to many programming languages. Almost every Mindcode operator maps directly to a Mindustry Logic `op` instruction, but several are Mindcode-specific enhancements.
@@ -437,7 +460,9 @@ end;
 
 println(b > 0 ? "Greater than zero" : "Not greater then zero");
 println(b == 0 ? "Equal to zero" : "Not equal to zero");
+println(b === 0 ? "Strictly equal to zero" : "Not strictly equal to zero");
 printflush(message1);
+stopProcessor();
 ```
 
 After ten iterations, we'd expect the value to be equal to `0` precisely, but due to the numerical imprecision this is not the case. As the equality comparison compensates for small differences, but relational operators do not, the code produces this result:
@@ -445,6 +470,7 @@ After ten iterations, we'd expect the value to be equal to `0` precisely, but du
 ```
 Greater than zero
 Equal to zero
+Not strictly equal to zero
 ```
 
 > [!TIP]
@@ -452,7 +478,6 @@ Equal to zero
 
 > [!IMPORTANT]
 > As has been shown above, `x <= 0` may evaluate to `false`, even though `x == 0` evaluates to `true`. This is especially important to consider if you use these operators in loop conditions where the loop control variable is updated using floating point operations: the number of iterations of the loop may be different from what would be expected if all numerical operations were absolutely precise.
-
 
 ---
 

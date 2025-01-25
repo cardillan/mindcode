@@ -91,24 +91,22 @@ class LoopHoisting extends BaseOptimizer {
             improved = true;
         }
 
-        if (advanced()) {
-            // Try to find invariant Ifs
-            List<AstContext> invariantIfs = parts.stream()
-                    .flatMap(c -> c.children().stream())
-                    .filter(c -> safeIfContext(loop, parts, c) && onlyLocalJumps(c))
-                    .toList();
+        // Try to find invariant Ifs
+        List<AstContext> invariantIfs = parts.stream()
+                .flatMap(c -> c.children().stream())
+                .filter(c -> safeIfContext(loop, parts, c) && onlyLocalJumps(c))
+                .toList();
 
-            for (AstContext invariant : invariantIfs) {
-                if (!contextStream(invariant).allMatch(NoOpInstruction.class::isInstance)) {
-                    assert invariant.node() != null;
-                    AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
-                    LogicList original = contextInstructions(invariant);
-                    LogicList duplicated = original.duplicateToContext(bodyContext);
-                    int index = firstInstructionIndex(anchor);
-                    insertInstructions(index, duplicated);
-                    original.forEach(this::removeInstruction);
-                    improved = true;
-                }
+        for (AstContext invariant : invariantIfs) {
+            if (!contextStream(invariant).allMatch(NoOpInstruction.class::isInstance)) {
+                assert invariant.node() != null;
+                AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
+                LogicList original = contextInstructions(invariant);
+                LogicList duplicated = original.duplicateToContext(bodyContext);
+                int index = firstInstructionIndex(anchor);
+                insertInstructions(index, duplicated);
+                original.forEach(this::removeInstruction);
+                improved = true;
             }
         }
 

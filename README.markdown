@@ -53,6 +53,9 @@ Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in 
 
 You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with the Mindustry World is supported.
 
+> [!TIP]
+> Mindcode performs a variety of different optimizations. The mlog code it produces may bear little resemblance to the original source code at a first glance.
+
 ### Offline
 
 Alternatively, you can download the command-line compiler and use Mindcode [from within an IDE](doc/syntax/TOOLS-IDE-INTEGRATION.markdown).

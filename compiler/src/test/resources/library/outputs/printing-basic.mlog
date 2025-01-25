@@ -24,13 +24,12 @@ print "{2}"
 op floor :fn32:n 1234567 0
 op mod :fn32:mod :fn32:n 1000
 jump 28 greaterThanEq :fn32:mod 10
-set *tmp88 "{2},00{1}"
+format "{2},00{1}"
 jump 32 always 0 0
 jump 31 greaterThanEq :fn32:mod 100
-set *tmp88 "{2},0{1}"
+format "{2},0{1}"
 jump 32 always 0 0
-set *tmp88 "{2},{1}"
-format *tmp88
+format "{2},{1}"
 format :fn32:mod
 op idiv :fn32:n :fn32:n 1000
 jump 24 greaterThan :fn32:n 999
@@ -41,34 +40,32 @@ print "{2}"
 op floor :fn32:n 1234567 0
 format "-{2}"
 op mod :fn32:mod :fn32:n 1000
-jump 46 greaterThanEq :fn32:mod 10
-set *tmp88 "{2},00{1}"
-jump 50 always 0 0
-jump 49 greaterThanEq :fn32:mod 100
-set *tmp88 "{2},0{1}"
-jump 50 always 0 0
-set *tmp88 "{2},{1}"
-format *tmp88
+jump 45 greaterThanEq :fn32:mod 10
+format "{2},00{1}"
+jump 49 always 0 0
+jump 48 greaterThanEq :fn32:mod 100
+format "{2},0{1}"
+jump 49 always 0 0
+format "{2},{1}"
 format :fn32:mod
 op idiv :fn32:n :fn32:n 1000
-jump 42 greaterThan :fn32:n 999
+jump 41 greaterThan :fn32:n 999
 format :fn32:n
 assertprints "-1,234,567" "printNumber(-1234567)"
 assertflush
 print "{2}"
 op floor :fn32:n 9009099 0
 op mod :fn32:mod :fn32:n 1000
-jump 63 greaterThanEq :fn32:mod 10
-set *tmp88 "{2},00{1}"
-jump 67 always 0 0
-jump 66 greaterThanEq :fn32:mod 100
-set *tmp88 "{2},0{1}"
-jump 67 always 0 0
-set *tmp88 "{2},{1}"
-format *tmp88
+jump 61 greaterThanEq :fn32:mod 10
+format "{2},00{1}"
+jump 65 always 0 0
+jump 64 greaterThanEq :fn32:mod 100
+format "{2},0{1}"
+jump 65 always 0 0
+format "{2},{1}"
 format :fn32:mod
 op idiv :fn32:n :fn32:n 1000
-jump 59 greaterThan :fn32:n 999
+jump 57 greaterThan :fn32:n 999
 format :fn32:n
 assertprints "9,009,099" "printNumber(9009099)"
 assertflush
@@ -80,11 +77,11 @@ format "{2}{1}"
 format *tmp92
 op shr :fn33:n :fn33:n 1
 op sub :fn33:digits :fn33:digits 1
-jump 77 greaterThan :fn33:n 0
-jump 87 lessThanEq :fn33:digits 0
+jump 74 greaterThan :fn33:n 0
+jump 84 lessThanEq :fn33:digits 0
 format "{2}0"
 op sub :fn33:digits :fn33:digits 1
-jump 84 greaterThan :fn33:digits 0
+jump 81 greaterThan :fn33:digits 0
 format "0b"
 assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
 assertflush
@@ -96,11 +93,11 @@ format "{2}{1}"
 format *tmp92
 op shr :fn33:n :fn33:n 1
 op sub :fn33:digits :fn33:digits 1
-jump 93 greaterThan :fn33:n 0
-jump 103 lessThanEq :fn33:digits 0
+jump 90 greaterThan :fn33:n 0
+jump 100 lessThanEq :fn33:digits 0
 format "{2}0"
 op sub :fn33:digits :fn33:digits 1
-jump 100 greaterThan :fn33:digits 0
+jump 97 greaterThan :fn33:digits 0
 format "0b"
 assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
 assertflush
@@ -108,36 +105,36 @@ print "{2}"
 set :fn34:digits 0
 op floor :fn34:n 0xABCDEF 0
 op mod :fn34:digit :fn34:n 16
-jump 116 lessThan :fn34:digit 0
-jump 113 lessThanEq :fn34:digit 9
-jump 116 always 0 0
+jump 113 lessThan :fn34:digit 0
+jump 110 lessThanEq :fn34:digit 9
+jump 113 always 0 0
 format "{2}{1}"
 format :fn34:digit
-jump 133 always 0 0
-jump 119 notEqual :fn34:digit 10
+jump 130 always 0 0
+jump 116 notEqual :fn34:digit 10
 format "{2}A"
-jump 133 always 0 0
-jump 122 notEqual :fn34:digit 11
+jump 130 always 0 0
+jump 119 notEqual :fn34:digit 11
 format "{2}B"
-jump 133 always 0 0
-jump 125 notEqual :fn34:digit 12
+jump 130 always 0 0
+jump 122 notEqual :fn34:digit 12
 format "{2}C"
-jump 133 always 0 0
-jump 128 notEqual :fn34:digit 13
+jump 130 always 0 0
+jump 125 notEqual :fn34:digit 13
 format "{2}D"
-jump 133 always 0 0
-jump 131 notEqual :fn34:digit 14
+jump 130 always 0 0
+jump 128 notEqual :fn34:digit 14
 format "{2}E"
-jump 133 always 0 0
-jump 133 notEqual :fn34:digit 15
+jump 130 always 0 0
+jump 130 notEqual :fn34:digit 15
 format "{2}F"
 op shr :fn34:n :fn34:n 4
 op sub :fn34:digits :fn34:digits 1
-jump 109 greaterThan :fn34:n 0
-jump 140 lessThanEq :fn34:digits 0
+jump 106 greaterThan :fn34:n 0
+jump 137 lessThanEq :fn34:digits 0
 format "{2}0"
 op sub :fn34:digits :fn34:digits 1
-jump 137 greaterThan :fn34:digits 0
+jump 134 greaterThan :fn34:digits 0
 format "0x"
 assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
 assertflush
@@ -145,36 +142,36 @@ print "{2}"
 set :fn34:digits 0
 op floor :fn34:n 0x1234567890 0
 op mod :fn34:digit :fn34:n 16
-jump 153 lessThan :fn34:digit 0
-jump 150 lessThanEq :fn34:digit 9
-jump 153 always 0 0
+jump 150 lessThan :fn34:digit 0
+jump 147 lessThanEq :fn34:digit 9
+jump 150 always 0 0
 format "{2}{1}"
 format :fn34:digit
-jump 170 always 0 0
-jump 156 notEqual :fn34:digit 10
+jump 167 always 0 0
+jump 153 notEqual :fn34:digit 10
 format "{2}A"
-jump 170 always 0 0
-jump 159 notEqual :fn34:digit 11
+jump 167 always 0 0
+jump 156 notEqual :fn34:digit 11
 format "{2}B"
-jump 170 always 0 0
-jump 162 notEqual :fn34:digit 12
+jump 167 always 0 0
+jump 159 notEqual :fn34:digit 12
 format "{2}C"
-jump 170 always 0 0
-jump 165 notEqual :fn34:digit 13
+jump 167 always 0 0
+jump 162 notEqual :fn34:digit 13
 format "{2}D"
-jump 170 always 0 0
-jump 168 notEqual :fn34:digit 14
+jump 167 always 0 0
+jump 165 notEqual :fn34:digit 14
 format "{2}E"
-jump 170 always 0 0
-jump 170 notEqual :fn34:digit 15
+jump 167 always 0 0
+jump 167 notEqual :fn34:digit 15
 format "{2}F"
 op shr :fn34:n :fn34:n 4
 op sub :fn34:digits :fn34:digits 1
-jump 146 greaterThan :fn34:n 0
-jump 177 lessThanEq :fn34:digits 0
+jump 143 greaterThan :fn34:n 0
+jump 174 lessThanEq :fn34:digits 0
 format "{2}0"
 op sub :fn34:digits :fn34:digits 1
-jump 174 greaterThan :fn34:digits 0
+jump 171 greaterThan :fn34:digits 0
 format "0x"
 assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
 assertflush
@@ -182,220 +179,126 @@ print "{2}"
 set :fn34:digits 8
 op floor :fn34:n 0xAABBCC 0
 op mod :fn34:digit :fn34:n 16
-jump 190 lessThan :fn34:digit 0
-jump 187 lessThanEq :fn34:digit 9
-jump 190 always 0 0
+jump 187 lessThan :fn34:digit 0
+jump 184 lessThanEq :fn34:digit 9
+jump 187 always 0 0
 format "{2}{1}"
 format :fn34:digit
-jump 207 always 0 0
-jump 193 notEqual :fn34:digit 10
+jump 204 always 0 0
+jump 190 notEqual :fn34:digit 10
 format "{2}A"
-jump 207 always 0 0
-jump 196 notEqual :fn34:digit 11
+jump 204 always 0 0
+jump 193 notEqual :fn34:digit 11
 format "{2}B"
-jump 207 always 0 0
-jump 199 notEqual :fn34:digit 12
+jump 204 always 0 0
+jump 196 notEqual :fn34:digit 12
 format "{2}C"
-jump 207 always 0 0
-jump 202 notEqual :fn34:digit 13
+jump 204 always 0 0
+jump 199 notEqual :fn34:digit 13
 format "{2}D"
-jump 207 always 0 0
-jump 205 notEqual :fn34:digit 14
+jump 204 always 0 0
+jump 202 notEqual :fn34:digit 14
 format "{2}E"
-jump 207 always 0 0
-jump 207 notEqual :fn34:digit 15
+jump 204 always 0 0
+jump 204 notEqual :fn34:digit 15
 format "{2}F"
 op shr :fn34:n :fn34:n 4
 op sub :fn34:digits :fn34:digits 1
-jump 183 greaterThan :fn34:n 0
-jump 214 lessThanEq :fn34:digits 0
+jump 180 greaterThan :fn34:n 0
+jump 211 lessThanEq :fn34:digits 0
 format "{2}0"
 op sub :fn34:digits :fn34:digits 1
-jump 211 greaterThan :fn34:digits 0
+jump 208 greaterThan :fn34:digits 0
 format "0x"
 assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
 assertflush
-set :fn6:n null
-set :fn6*retaddr 220
-jump 318 always 0 0
+print null
 assertprints "null" "printExactFast(null)"
 assertflush
-set :fn6:n 0
-set :fn6*retaddr 225
-jump 318 always 0 0
+print 0
 assertprints "0" "printExactFast(0)"
 assertflush
-set :fn6:n 1
-set :fn6*retaddr 230
-jump 318 always 0 0
+print 1
 assertprints "1" "printExactFast(1)"
 assertflush
-set :fn6:n 1.0000001
-set :fn6*retaddr 235
-jump 318 always 0 0
+print "1.000000100000000"
 assertprints "1.000000100000000" "printExactFast(1.0000001)"
 assertflush
-set :fn6:n 3.00000007
-set :fn6*retaddr 240
-jump 318 always 0 0
+print "3.000000070000000"
 assertprints "3.000000070000000" "printExactFast(3.00000007)"
 assertflush
-set :fn6:n 3E50
-set :fn6*retaddr 245
-jump 318 always 0 0
+print "3E50"
 assertprints "3E50" "printExactFast(3e50)"
 assertflush
-set :fn6:n 1.0123456789
-set :fn6*retaddr 250
-jump 318 always 0 0
+print 1.0123456789
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
-set :fn6:n 10000001E13
-set :fn6*retaddr 255
-jump 318 always 0 0
+print "1.000000099999999E20"
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
 assertflush
-set :fn6:n 12345E-54
-set :fn6*retaddr 260
-jump 318 always 0 0
+print "1.2345000000000002E-50"
 assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush
-set :fn6:n -12345E-54
-set :fn6*retaddr 265
-jump 318 always 0 0
+print "-1.2345000000000002E-50"
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
-set :fn7:n null
-set :fn7*retaddr 270
-jump 393 always 0 0
+print null
 assertprints "null" "printExactSlow(null)"
 assertflush
-set :fn7:n 0
-set :fn7*retaddr 275
-jump 393 always 0 0
+print 0
 assertprints "0" "printExactSlow(0)"
 assertflush
-set :fn7:n 1
-set :fn7*retaddr 280
-jump 393 always 0 0
+print "1.000000000000000"
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
-set :fn7:n 1.0000001
-set :fn7*retaddr 285
-jump 393 always 0 0
+op abs *tmp140 1.0000001 0
+op log10 *tmp146 1.0000001 0
+op floor :fn7:exp 0.000000043429446044209946 0
+op sub *tmp148 0 0
+op pow *tmp149 10 0
+op floor *tmp151 1.0000001 0
+print "1.000000100000000"
+op mod *tmp152 0.005838671768287895 1
+op mul :fn7:base 0.005838671768287895 10
+op floor *tmp155 0.05838671768287895 0
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
 set :fn7:n 3.00000007
-set :fn7*retaddr 290
-jump 393 always 0 0
+set :fn7*retaddr 268
+jump 296 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
 set :fn7:n 3E50
-set :fn7*retaddr 295
-jump 393 always 0 0
+set :fn7*retaddr 273
+jump 296 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
 set :fn7:n 1.0123456789
-set :fn7*retaddr 300
-jump 393 always 0 0
+set :fn7*retaddr 278
+jump 296 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
 set :fn7:n 10000001E13
-set :fn7*retaddr 305
-jump 393 always 0 0
+set :fn7*retaddr 283
+jump 296 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
 set :fn7:n 12345E-54
-set :fn7*retaddr 310
-jump 393 always 0 0
+set :fn7*retaddr 288
+jump 296 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
 set :fn7:n -12345E-54
-set :fn7*retaddr 315
-jump 393 always 0 0
+set :fn7*retaddr 293
+jump 296 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 stop
 end
-op abs *tmp104 :fn6:n 0
-jump 322 greaterThan *tmp104 0
-print :fn6:n
-jump 391 always 0 0
-jump 325 greaterThanEq :fn6:n 0
-print "-"
-op abs :fn6:n :fn6:n 0
-op log10 *tmp110 :fn6:n 0
-op floor :fn6:exp *tmp110 0
-op sub *tmp112 0 :fn6:exp
-op pow *tmp113 10 *tmp112
-op mul :fn6:base :fn6:n *tmp113
-op add *tmp116 :fn6:base 0.5
-op floor *tmp115 *tmp116 0
-op sub *tmp118 :fn6:base *tmp115
-op abs :fn6:cmp *tmp118 0
-jump 337 greaterThan :fn6:cmp 0
-print :fn6:base
-jump 388 always 0 0
-jump 340 lessThanEq :fn6:cmp 0.00001
-print :fn6:base
-jump 388 always 0 0
-op floor *tmp124 :fn6:base 0
-print *tmp124
-print "."
-op mod *tmp125 :fn6:base 1
-op mul :fn6:base *tmp125 100000
-op floor :fn6:t :fn6:base 0
-jump 349 greaterThanEq :fn6:t 10
-print "0000"
-jump 357 always 0 0
-jump 352 greaterThanEq :fn6:t 100
-print "000"
-jump 357 always 0 0
-jump 355 greaterThanEq :fn6:t 1000
-print "00"
-jump 357 always 0 0
-jump 357 greaterThanEq :fn6:t 10000
-print "0"
-print :fn6:t
-op mod *tmp125 :fn6:base 1
-op mul :fn6:base *tmp125 100000
-op floor :fn6:t :fn6:base 0
-jump 364 greaterThanEq :fn6:t 10
-print "0000"
-jump 372 always 0 0
-jump 367 greaterThanEq :fn6:t 100
-print "000"
-jump 372 always 0 0
-jump 370 greaterThanEq :fn6:t 1000
-print "00"
-jump 372 always 0 0
-jump 372 greaterThanEq :fn6:t 10000
-print "0"
-print :fn6:t
-op mod *tmp125 :fn6:base 1
-op mul :fn6:base *tmp125 100000
-op floor :fn6:t :fn6:base 0
-jump 379 greaterThanEq :fn6:t 10
-print "0000"
-jump 387 always 0 0
-jump 382 greaterThanEq :fn6:t 100
-print "000"
-jump 387 always 0 0
-jump 385 greaterThanEq :fn6:t 1000
-print "00"
-jump 387 always 0 0
-jump 387 greaterThanEq :fn6:t 10000
-print "0"
-print :fn6:t
-jump 391 equal :fn6:exp 0
-print "E"
-print :fn6:exp
-set @counter :fn6*retaddr
-end
 op abs *tmp140 :fn7:n 0
-jump 397 greaterThan *tmp140 0
+jump 300 greaterThan *tmp140 0
 print :fn7:n
-jump 471 always 0 0
-jump 400 greaterThanEq :fn7:n 0
+set @counter :fn7*retaddr
+jump 303 greaterThanEq :fn7:n 0
 print "-"
 op abs :fn7:n :fn7:n 0
 op log10 *tmp146 :fn7:n 0
@@ -466,9 +369,8 @@ op mod *tmp152 :fn7:base 1
 op mul :fn7:base *tmp152 10
 op floor *tmp155 :fn7:base 0
 print *tmp155
-jump 471 equal :fn7:exp 0
+jump 374 equal :fn7:exp 0
 print "E"
 print :fn7:exp
 set @counter :fn7*retaddr
-end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

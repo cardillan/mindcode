@@ -81,7 +81,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 falseBranch = contextInstructions(ifExpression.child(3));
             }
 
-            if (advanced() && canMoveForward) {
+            if (canMoveForward) {
                 LogicVariable updatedResVar = resTrue.getResult();
 
                 boolean globalSafe = !updatedResVar.isGlobalVariable()
@@ -147,10 +147,9 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     private boolean isReplaceable(LogicInstruction instruction, LogicVariable resVar) {
         return instruction instanceof SetInstruction set && set.getValue().equals(resVar)
-               || advanced()
-                  && instruction.usesAsInput(resVar)
-                  && instruction.getOpcode() != Opcode.JUMP
-                  && instruction.getOpcode() != Opcode.SETADDR;
+                || instruction.usesAsInput(resVar)
+                && instruction.getOpcode() != Opcode.JUMP
+                && instruction.getOpcode() != Opcode.SETADDR;
     }
 
     private @Nullable LogicInstruction getLastRealInstruction(LogicList instructions) {

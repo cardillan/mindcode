@@ -8,7 +8,7 @@
      1 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
      8 instructions eliminated by Jump Straightening (3 iterations).
-     4 instructions updated by JumpThreading.
+     5 instructions updated by JumpThreading.
     26 instructions eliminated by Print Merging.
     93 instructions after optimizations.
 
@@ -480,61 +480,74 @@ Modifications by Replicate loop condition at line 68:1 (+1 instructions):
    148 end
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set .SWITCH null
+     2 set .DISPLAY null
+     3 set .MESSAGE null
  
-    32 jump *label14 notEqual *tmp8 @titanium
-    33 label *label15
-    34 set .TITANIUM :block
+    33 jump *label14 notEqual *tmp8 @titanium
+    34 label *label15
+    35 set .TITANIUM :block
 -    * jump *label13 always
-+   35 jump *label6 always
-    36 label *label14
-    37 jump *label16 notEqual *tmp8 @silicon
-    38 label *label17
-    39 set .SILICON :block
++   36 jump *label6 always
+    37 label *label14
+    38 jump *label16 notEqual *tmp8 @silicon
+    39 label *label17
+    40 set .SILICON :block
 -    * jump *label13 always
-+   40 jump *label6 always
-    41 label *label16
-    42 jump *label18 notEqual *tmp8 @copper
-    43 label *label19
-    44 set .COPPER :block
++   41 jump *label6 always
+    42 label *label16
+    43 jump *label18 notEqual *tmp8 @copper
+    44 label *label19
+    45 set .COPPER :block
 -    * jump *label13 always
-+   45 jump *label6 always
-    46 label *label18
++   46 jump *label6 always
+    47 label *label18
 -    * jump *label20 notEqual *tmp8 @lead
-+   47 jump *label6 notEqual *tmp8 @lead
-    48 label *label21
-    49 set .LEAD :block
-    50 label *label20
++   48 jump *label6 notEqual *tmp8 @lead
+    49 label *label21
+    50 set .LEAD :block
+    51 label *label20
+ 
+   109 control enabled .SWITCH 0
+   110 label *label24
+   111 sensor *tmp26 .SWITCH @enabled
+-    * jump *label26 notEqual *tmp26 0
++  112 jump __start__ notEqual *tmp26 0
+   113 label *label28
+   114 set :start @time
+   115 draw clear 0 0 80
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   145 sensor *tmp26 .SWITCH @enabled
-   146 jump *label28 equal *tmp26 0
-   147 label *label26
+   146 sensor *tmp26 .SWITCH @enabled
+   147 jump *label28 equal *tmp26 0
+   148 label *label26
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
  
-     5 set .SILICON null
-     6 set .COPPER null
-     7 set .LEAD null
+     6 set .SILICON null
+     7 set .COPPER null
+     8 set .LEAD null
 -    * print "Surge Alloy Factory Driver Monitor"
 -    * print "\n"
 -    * print "Configuring..."
 -    * print "\n"
-+    8 print "Surge Alloy Factory Driver Monitor\nConfiguring...\n"
-     9 set :n @links
-    10 label *label3
-    11 jump *label5 lessThanEq :n 0
++    9 print "Surge Alloy Factory Driver Monitor\nConfiguring...\n"
+    10 set :n @links
+    11 label *label3
+    12 jump *label5 lessThanEq :n 0
  
-    53 set .DISPLAY :block
-    54 jump *label6 always
-    55 label *label22
+    54 set .DISPLAY :block
+    55 jump *label6 always
+    56 label *label22
 -    * print "\n"
 -    * print :block
 -    * print " is not supported."
-+   56 print "\n{0} is not supported."
-+   57 format :block
-    58 label *label6
++   57 print "\n{0} is not supported."
++   58 format :block
+    59 label *label6
 -    * print "\n"
 -    * print "Nominal production: "
 -    * print null
@@ -545,10 +558,10 @@ Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
 -    * print null
 -    * print "/"
 -    * print "min"
-+   59 print "\nNominal production: null/min\nActual production: null/min"
-    60 label *label4
-    61 jump *label27 greaterThan :n 0
-    62 label *label5
++   60 print "\nNominal production: null/min\nActual production: null/min"
+    61 label *label4
+    62 jump *label27 greaterThan :n 0
+    63 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -570,20 +583,21 @@ Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
 -    * print "Lead: "
 -    * print .LEAD
 -    * print "\n"
-+   63 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nTitanium: {0}\nSilicon: {0}\nCopper: {0}\nLead: {0}\n"
-+   64 format .MESSAGE
-+   65 format .SWITCH
-+   66 format .DISPLAY
-+   67 format .TITANIUM
-+   68 format .SILICON
-+   69 format .COPPER
-+   70 format .LEAD
-    71 printflush .MESSAGE
-    72 label *label1
-    73 op equal *tmp10 .TITANIUM null
++   64 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nTitanium: {0}\nSilicon: {0}\nCopper: {0}\nLead: {0}\n"
++   65 format .MESSAGE
++   66 format .SWITCH
++   67 format .DISPLAY
++   68 format .TITANIUM
++   69 format .SILICON
++   70 format .COPPER
++   71 format .LEAD
+    72 printflush .MESSAGE
+    73 label *label1
+    74 op equal *tmp10 .TITANIUM null
 
 Final code before resolving virtual instructions:
 
+label __start__
 set .SWITCH null
 set .DISPLAY null
 set .MESSAGE null
@@ -654,7 +668,7 @@ op or *tmp16 *tmp14 *tmp15
 jump *label0 notEqual *tmp16 false
 control enabled .SWITCH 0 0 0 0
 sensor *tmp26 .SWITCH @enabled
-jump *label26 notEqual *tmp26 0
+jump __start__ notEqual *tmp26 0
 label *label28
 set :start @time
 draw clear 0 0 80 0 0 0
@@ -689,4 +703,3 @@ print *tmp38
 printflush .MESSAGE
 sensor *tmp26 .SWITCH @enabled
 jump *label28 equal *tmp26 0
-label *label26

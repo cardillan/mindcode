@@ -51,7 +51,7 @@ public class ExpressionEvaluator {
         }
     }
 
-    public static boolean strictEquals(LogicReadable a, LogicReadable b) {
+    public static boolean strictlyEquals(LogicReadable a, LogicReadable b) {
         return (a.isObject() == b.isObject()) && (a.isObject()
                 ? Objects.equals(a.getObject(), b.getObject())
                 : a.getDoubleValue() == b.getDoubleValue()
@@ -90,7 +90,7 @@ public class ExpressionEvaluator {
         map.put(Operation.LESS_THAN_EQ,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() <= b.getDoubleValue()));
         map.put(Operation.GREATER_THAN,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
         map.put(Operation.GREATER_THAN_EQ,  (r, a, b) -> r.setBooleanValue(a.getDoubleValue() >= b.getDoubleValue()));
-        map.put(Operation.STRICT_EQUAL,     (r, a, b) -> r.setBooleanValue(strictEquals(a, b)));
+        map.put(Operation.STRICT_EQUAL,     (r, a, b) -> r.setBooleanValue(strictlyEquals(a, b)));
 
         map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));

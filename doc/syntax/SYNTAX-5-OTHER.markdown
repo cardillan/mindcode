@@ -112,16 +112,12 @@ Use the `optimization` option to set the optimization level of the compiler:
 
 Possible values for this option are:
 
-* `none`
-* `basic`
-* `advanced`
-* `experimental`
+* `none`: deactivates all optimizations.
+* `basic`: performs most optimizations, except those that depend on certain assumptions about the program or Mindustry Logic.
+* `advanced`: performs additional optimizations based upon some assumptions about Mindustry Logic (e.g. that numerical id produced by a lookup instruction for Mindustry content elements is stable) or the source code (e.g. that it doesn't depend on expressions converting null values to non-null ones). 
+* `experimental`: perform optimizations that are currently in the experimental phase.
 
-The `none` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations. The `advanced` optimizations performs all the available optimizations, even those that might take more time, or which make changes that are potentially risky or make understanding of the resulting mlog code more difficult.
-
-The `experimental` level is used for new optimizations that are still being evaluated, or for optimizations that might alter the meaning of existing code. Optimizations performed on the experimental level will typically be migrated to advanced or basic levels eventually.
-
-The default optimization level for the web application compiler is `basic`, for the command line compiler it is `advanced`.
+The default optimization level is `advanced`.
 
 ## Option `passes`
 
@@ -140,31 +136,31 @@ A more complex code can usually benefit from more optimization passes. On the ot
 It is possible to set the level of individual optimization tasks. Every optimization is assigned a name, and this name can be used in the compiler directive like this:
 
 ```
-#set dead-code-elimination = advanced;
+#set expression-optimization = basic;
 ```
 
-Not all optimizations support the `advanced` level. For those the level `advanced` is the same as `basic`. The complete list of available optimizations, including the option name for setting the level of given optimization and availability of the advanced optimization level is:
+Most optimizations don't support the `advanced` level. For those the level `advanced` is the same as `basic`. The complete list of available optimizations, including the option name for setting the level of given optimization and availability of the advanced optimization level is:
 
 | Optimization                                                                                       | Option name                  | Advanced |
 |----------------------------------------------------------------------------------------------------|------------------------------|:--------:|
 | [Temporary Variables Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) | temp-variables-elimination   |    N     |
 | [Case Expression Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-expression-optimization)       | case-expression-optimization |    N     |
-| [Dead Code Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#dead-code-elimination)                     | dead-code-elimination        |    Y     |
+| [Dead Code Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#dead-code-elimination)                     | dead-code-elimination        |    N     |
 | [Jump Normalization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-normalization)                           | jump-normalization           |    N     |
 | [Jump Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-optimization)                             | jump-optimization            |    N     |
-| [Single Step Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination)                 | single-step-elimination      |    Y     |
+| [Single Step Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination)                 | single-step-elimination      |    N     |
 | [Expression Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization)                 | expression-optimization      |    Y     |
-| [If Expression Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization)           | if-expression-optimization   |    Y     |
-| [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)                   | data-flow-optimization       |    Y     |
-| [Loop Hoisting](SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting)                                     | loop-hoisting                |    Y     |
+| [If Expression Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization)           | if-expression-optimization   |    N     |
+| [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)                   | data-flow-optimization       |    N     |
+| [Loop Hoisting](SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting)                                     | loop-hoisting                |    N     |
 | [Loop Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization)                             | loop-optimization            |    N     |
 | [Loop Unrolling](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)                                   | loop-unrolling               |    Y     |
-| [Function Inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                             | function-inlining            |    Y     |
+| [Function Inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                             | function-inlining            |    N     |
 | [Case Switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                                   | case-switching               |    N     |
 | [Return Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                         | case-switching               |    N     |
 | [Jump Straightening](SYNTAX-6-OPTIMIZATIONS.markdown#jump-straightening)                           | return-optimization          |    N     |
-| [Jump Threading](SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading)                                   | jump-threading               |    Y     |
-| [Unreachable Code Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination)       | unreachable-code-elimination |    Y     |
+| [Jump Threading](SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading)                                   | jump-threading               |    N     |
+| [Unreachable Code Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination)       | unreachable-code-elimination |    N     |
 | [Stack Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                           | stack-optimization           |    N     |
 | [Print Merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                                     | print-merging                |    Y     |
 

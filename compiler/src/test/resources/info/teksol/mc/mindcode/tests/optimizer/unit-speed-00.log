@@ -6,6 +6,7 @@
      7 instructions eliminated by Data Flow Optimization (9 iterations).
      5 instructions added by Loop Optimization (2 iterations).
      6 loops improved by Loop Optimization.
+     1 instructions updated by JumpThreading.
     10 instructions eliminated by Print Merging.
     71 instructions after optimizations.
 
@@ -350,30 +351,45 @@ Modifications by Replicate loop condition at line 58:1 (+1 instructions):
    104 label *label17
    105 end
 
+Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set UNIT @flare
+     2 op sub .DY @maph 10
+     3 op sub *tmp2 .DY 10
+ 
+    80 op div :speed *tmp30 100
+    81 label *label15
+    82 sensor *tmp32 switch1 @enabled
+-    * jump *label17 notEqual *tmp32 false
++   83 jump __start__ notEqual *tmp32 false
+    84 label *label23
+    85 print "Measurement results ("
+    86 print UNIT
+
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   102 sensor *tmp32 switch1 @enabled
-   103 jump *label23 equal *tmp32 false
-   104 label *label17
+   103 sensor *tmp32 switch1 @enabled
+   104 jump *label23 equal *tmp32 false
+   105 label *label17
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
-    21 sensor *tmp10 switch1 @enabled
-    22 jump *label5 notEqual *tmp10 false
-    23 label *label19
+    22 sensor *tmp10 switch1 @enabled
+    23 jump *label5 notEqual *tmp10 false
+    24 label *label19
 -    * print "Press button to start measuring "
 -    * print UNIT
 -    * print " speed."
-+   24 print "Press button to start measuring {0} speed."
-+   25 format UNIT
-    26 printflush message1
-    27 label *label4
-    28 sensor *tmp10 switch1 @enabled
++   25 print "Press button to start measuring {0} speed."
++   26 format UNIT
+    27 printflush message1
+    28 label *label4
+    29 sensor *tmp10 switch1 @enabled
  
-    80 sensor *tmp32 switch1 @enabled
-    81 jump *label17 notEqual *tmp32 false
-    82 label *label23
+    81 sensor *tmp32 switch1 @enabled
+    82 jump __start__ notEqual *tmp32 false
+    83 label *label23
 -    * print "Measurement results ("
 -    * print UNIT
 -    * print "):"
@@ -390,19 +406,20 @@ Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
 -    * print :speed
 -    * print "tiles/s"
 -    * print "\nPress button to repeat"
-+   83 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
-+   84 format UNIT
-+   85 format @mapw
-+   86 format @maph
-+   87 format :elapsed
-+   88 format :distance
-+   89 format :speed
-    90 printflush message1
-    91 label *label16
-    92 sensor *tmp32 switch1 @enabled
++   84 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
++   85 format UNIT
++   86 format @mapw
++   87 format @maph
++   88 format :elapsed
++   89 format :distance
++   90 format :speed
+    91 printflush message1
+    92 label *label16
+    93 sensor *tmp32 switch1 @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set UNIT @flare
 op sub .DY @maph 10
 op sub *tmp2 .DY 10
@@ -473,7 +490,7 @@ op div *tmp28 :distance :elapsed
 op idiv *tmp30 *tmp28 0.00001
 op div :speed *tmp30 100
 sensor *tmp32 switch1 @enabled
-jump *label17 notEqual *tmp32 false
+jump __start__ notEqual *tmp32 false
 label *label23
 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
 format UNIT
@@ -485,4 +502,3 @@ format :speed
 printflush message1
 sensor *tmp32 switch1 @enabled
 jump *label23 equal *tmp32 false
-label *label17

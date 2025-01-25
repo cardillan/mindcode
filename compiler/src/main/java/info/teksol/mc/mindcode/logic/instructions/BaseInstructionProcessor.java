@@ -279,7 +279,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
     }
 
-    private static final EnumMap<Opcode, Integer> instructionSizes = new EnumMap<>(Opcode.class);
+    private final EnumMap<Opcode, Integer> instructionSizes = new EnumMap<>(Opcode.class);
 
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {

@@ -78,7 +78,7 @@ public class DecompilerController {
                         result.errors(WebappMessage::transform),
                         result.warnings(WebappMessage::transform),
                         result.infos(WebappMessage::transform),
-                        OptimizationLevel.BASIC.name(),
+                        OptimizationLevel.ADVANCED.name(),
                         null,
                         0)
         );

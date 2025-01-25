@@ -10,7 +10,7 @@
      3 instructions added by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
     11 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
-     1 instructions updated by JumpThreading.
+     2 instructions updated by JumpThreading.
     22 instructions eliminated by Print Merging.
    344 instructions after optimizations.
 
@@ -1917,47 +1917,60 @@ Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
    293 getlink :factory :n
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set FROM_INDEX 0
+     2 set TO_INDEX 16
+     3 set EXPECTED_BOOST 1.5
  
-   347 op add *tmp134 :x 7
-   348 op add *tmp135 :y 7
-   349 draw image *tmp134 *tmp135 :icon 16 0
+   271 control enabled .SWITCH 0
+   272 label *label49
+   273 sensor *tmp89 .SWITCH @enabled
+-    * jump *label51 notEqual *tmp89 0
++  274 jump __start__ notEqual *tmp89 0
+   275 label *label86
+   276 set :start @time
+   277 print "Universal Factory Monitor"
+ 
+   348 op add *tmp134 :x 7
+   349 op add *tmp135 :y 7
+   350 draw image *tmp134 *tmp135 :icon 16 0
 -    * jump *label72 always
-+  350 jump *label70 always
-   351 label *label71
-   352 draw color 255 80 80 255
-   353 op add *tmp136 :y 3
++  351 jump *label70 always
+   352 label *label71
+   353 draw color 255 80 80 255
+   354 op add *tmp136 :y 3
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   444 sensor *tmp89 .SWITCH @enabled
-   445 jump *label86 equal *tmp89 0
-   446 label *label51
+   445 sensor *tmp89 .SWITCH @enabled
+   446 jump *label86 equal *tmp89 0
+   447 label *label51
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
  
-    15 set :icon null
-    16 label *label0
-    17 label *label83
+    16 set :icon null
+    17 label *label0
+    18 label *label83
 -    * print "Universal Factory Monitor"
 -    * print "\n"
-+   18 print "Universal Factory Monitor\n"
-    19 set :n @links
-    20 label *label3
-    21 jump *label5 lessThanEq :n 0
++   19 print "Universal Factory Monitor\n"
+    20 set :n @links
+    21 label *label3
+    22 jump *label5 lessThanEq :n 0
  
-   131 set .OUTPUT @plastanium
-   132 jump *label6 always
-   133 label *label25
+   132 set .OUTPUT @plastanium
+   133 jump *label6 always
+   134 label *label25
 -    * print "\n  "
 -    * print :block
 -    * print " not supported"
-+  134 print "\n  {0} not supported"
-+  135 format :block
-   136 label *label6
-   137 label *label4
-   138 jump *label84 greaterThan :n 0
-   139 label *label5
++  135 print "\n  {0} not supported"
++  136 format :block
+   137 label *label6
+   138 label *label4
+   139 jump *label84 greaterThan :n 0
+   140 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -1985,45 +1998,46 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
 -    * print "Output: "
 -    * print .OUTPUT
 -    * print "\n"
-+  140 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nMonitoring: {0}\nCapacity: {0}\nResource 1: {0}\nResource 2: {0}\nResource 3: {0}\nOutput: {0}\n"
-+  141 format .MESSAGE
-+  142 format .SWITCH
-+  143 format .DISPLAY
-+  144 format .TYPE
-+  145 format .CAPACITY
-+  146 format .RES1
-+  147 format .RES2
-+  148 format .RES3
-+  149 format .OUTPUT
-   150 op equal *tmp26 .DISPLAY null
-   151 op equal *tmp27 .TYPE null
-   152 op or *tmp28 *tmp26 *tmp27
++  141 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nMonitoring: {0}\nCapacity: {0}\nResource 1: {0}\nResource 2: {0}\nResource 3: {0}\nOutput: {0}\n"
++  142 format .MESSAGE
++  143 format .SWITCH
++  144 format .DISPLAY
++  145 format .TYPE
++  146 format .CAPACITY
++  147 format .RES1
++  148 format .RES2
++  149 format .RES3
++  150 format .OUTPUT
+   151 op equal *tmp26 .DISPLAY null
+   152 op equal *tmp27 .TYPE null
+   153 op or *tmp28 *tmp26 *tmp27
  
-   254 jump *label51 notEqual *tmp89 0
-   255 label *label86
-   256 set :start @time
+   255 jump __start__ notEqual *tmp89 0
+   256 label *label86
+   257 set :start @time
 -    * print "Universal Factory Monitor"
 -    * print "\n"
 -    * print "Monitoring: "
-+  257 print "Universal Factory Monitor\nMonitoring: "
-   258 print .TYPE
-   259 draw color 0 0 80 255
-   260 draw rect :clx :cly :clw :clh
++  258 print "Universal Factory Monitor\nMonitoring: "
+   259 print .TYPE
+   260 draw color 0 0 80 255
+   261 draw rect :clx :cly :clw :clh
  
-   415 drawflush .DISPLAY
-   416 op sub *tmp177 @time :start
-   417 op floor *tmp178 *tmp177
+   416 drawflush .DISPLAY
+   417 op sub *tmp177 @time :start
+   418 op floor *tmp178 *tmp177
 -    * print "\nDraw time: "
 -    * print *tmp178
 -    * print " ms"
-+  418 print "\nDraw time: {0} ms"
-+  419 format *tmp178
-   420 printflush .MESSAGE
-   421 label *label50
-   422 sensor *tmp89 .SWITCH @enabled
++  419 print "\nDraw time: {0} ms"
++  420 format *tmp178
+   421 printflush .MESSAGE
+   422 label *label50
+   423 sensor *tmp89 .SWITCH @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set FROM_INDEX 0
 set TO_INDEX 16
 set EXPECTED_BOOST 1.5
@@ -2259,7 +2273,7 @@ label *label36
 label *label30
 control enabled .SWITCH 0 0 0 0
 sensor *tmp89 .SWITCH @enabled
-jump *label51 notEqual *tmp89 0
+jump __start__ notEqual *tmp89 0
 label *label86
 set :start @time
 print "Universal Factory Monitor\nMonitoring: "
@@ -2416,4 +2430,3 @@ format *tmp178
 printflush .MESSAGE
 sensor *tmp89 .SWITCH @enabled
 jump *label86 equal *tmp89 0
-label *label51

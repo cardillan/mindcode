@@ -230,7 +230,6 @@ compiles to
 ```
 print 10
 printflush message1
-end
 ```
 
 Variable `a` in the above example was removed, because it is possible to use the value assigned to it (`10`) directly later in the program. Variable `b` was removed, as it is not used in any subsequent computation at all. 
@@ -456,6 +455,7 @@ $dy = 1;
 // Explicity declared varaibles
 cached external a, b = 90;        
 noinit cached external c;
+c = a + b;
 ```
 
 The above will compile to:
@@ -603,8 +603,8 @@ Mindustry has a set of built-in icons that are represented by specific Unicode c
 Printing an icon is as easy as this:
 
 ```
-println(ITEM_LEAD, " ", vault1.lead);       // As a list of values
-println($"$ITEM_COAL ${vault1.coal}");      // As formattable literal
+println(ITEM_LEAD, " ", vault1.@lead);       // As a list of values
+println($"$ITEM_COAL ${vault1.@coal}");      // As formattable literal
 printflush(message1);
 ```
 Built-in icon constants are defined in the global scope. User defined constants, parameters and variables in the global scope must not use identifiers used by these constants.
@@ -1303,6 +1303,7 @@ Implicit and explicit variable names used in source code are translated to mlog 
 If the same main or local variable is declared multiple times in the same function (in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and subsequent declarations, separated by `.` (a dot):
 
 ```
+#set optimization = off;
 begin var i = 1; end;
 begin var i = 2; end;
 ```
@@ -1312,6 +1313,7 @@ compiles into
 ```
 set :i 1
 set :i.1 2
+end
 ```
 
 ---

@@ -7,6 +7,7 @@
     19 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
     13 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
+     1 instructions updated by JumpThreading.
     11 instructions eliminated by Print Merging.
     84 instructions after optimizations.
 
@@ -519,18 +520,33 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     54 op add .MILLIS .MILLIS 1000
     55 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
 
+Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set .SIGN_MILLIS null
+     2 set .SORTER sorter1
+     3 set .VAULT vault1
+ 
+    40 read *tmp19 .BANK 509
+    41 op strictEqual *tmp20 .SESSION_KEY *tmp19
+    42 op land *tmp21 *tmp17 *tmp20
+-    * jump *label5 equal *tmp21 false
++   43 jump __start__ equal *tmp21 false
+    44 label *label15
+    45 set :start @time
+    46 op add :wait :wait 1000
+
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   108 op land *tmp21 *tmp17 *tmp20
-   109 jump *label15 notEqual *tmp21 false
-   110 label *label5
+   109 op land *tmp21 *tmp17 *tmp20
+   110 jump *label15 notEqual *tmp21 false
+   111 label *label5
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
  
-    68 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
-    69 op div :seconds .MILLIS 1000
-    70 op sub :elapsed @time :start
+    69 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
+    70 op div :seconds .MILLIS 1000
+    71 op sub :elapsed @time :start
 -    * print "Measured interval: "
 -    * print :seconds
 -    * print " sec"
@@ -551,21 +567,22 @@ Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
 -    * print "\nElapsed: "
 -    * print :elapsed
 -    * print " ms"
-+   71 print "Measured interval: {0} sec\nItem: {0}\nItems shipped: {0}\nContainer level: 0\nFlow rate: {0}\nTotal: {0}\nLast total: {0}\nIndex: {0}\nElapsed: {0} ms"
-+   72 format :seconds
-+   73 format :item
-+   74 format :shipped
-+   75 format :flow_rate_str
-+   76 format :shipped
-+   77 format :last_total
-+   78 format :index
-+   79 format :elapsed
-    80 printflush message1
-    81 set :loops 0
-    82 label *label10
++   72 print "Measured interval: {0} sec\nItem: {0}\nItems shipped: {0}\nContainer level: 0\nFlow rate: {0}\nTotal: {0}\nLast total: {0}\nIndex: {0}\nElapsed: {0} ms"
++   73 format :seconds
++   74 format :item
++   75 format :shipped
++   76 format :flow_rate_str
++   77 format :shipped
++   78 format :last_total
++   79 format :index
++   80 format :elapsed
+    81 printflush message1
+    82 set :loops 0
+    83 label *label10
 
 Final code before resolving virtual instructions:
 
+label __start__
 set .SIGN_MILLIS null
 set .SORTER sorter1
 set .VAULT vault1
@@ -605,7 +622,7 @@ op land *tmp17 *tmp14 *tmp16
 read *tmp19 .BANK 509
 op strictEqual *tmp20 .SESSION_KEY *tmp19
 op land *tmp21 *tmp17 *tmp20
-jump *label5 equal *tmp21 false
+jump __start__ equal *tmp21 false
 label *label15
 set :start @time
 op add :wait :wait 1000
@@ -658,4 +675,3 @@ read *tmp19 .BANK 509
 op strictEqual *tmp20 .SESSION_KEY *tmp19
 op land *tmp21 *tmp17 *tmp20
 jump *label15 notEqual *tmp21 false
-label *label5

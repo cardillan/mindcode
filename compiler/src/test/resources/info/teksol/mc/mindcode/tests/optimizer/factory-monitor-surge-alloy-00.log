@@ -8,7 +8,7 @@
      1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
-     1 instructions updated by JumpThreading.
+     2 instructions updated by JumpThreading.
     10 instructions eliminated by Print Merging.
    184 instructions after optimizations.
 
@@ -801,28 +801,41 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    199 label *label35
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set FROM_INDEX 0
+     2 set EXPECTED_BOOST 1.5
+     3 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
  
-   137 op add *tmp68 :x 7
-   138 op add *tmp69 :y 7
-   139 draw image *tmp68 *tmp69 :icon 16 0
+    16 control enabled switch1 0
+    17 label *label2
+    18 sensor *tmp7 switch1 @enabled
+-    * jump *label4 notEqual *tmp7 0
++   19 jump __start__ notEqual *tmp7 0
+    20 label *label43
+    21 print "Surge Alloy Factory Monitor"
+    22 jump *label5 equal bank1 null
+ 
+   138 op add *tmp68 :x 7
+   139 op add *tmp69 :y 7
+   140 draw image *tmp68 *tmp69 :icon 16 0
 -    * jump *label31 always
-+  140 jump *label29 always
-   141 label *label30
-   142 op add :x12 :x 12
-   143 op add :y3 :y 3
++  141 jump *label29 always
+   142 label *label30
+   143 op add :x12 :x 12
+   144 op add :y3 :y 3
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   233 sensor *tmp7 switch1 @enabled
-   234 jump *label43 equal *tmp7 0
-   235 label *label4
+   234 sensor *tmp7 switch1 @enabled
+   235 jump *label43 equal *tmp7 0
+   236 label *label4
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
-    55 label *label10
-    56 label *label7
-    57 label *label8
+    56 label *label10
+    57 label *label7
+    58 label *label8
 -    * print "\n"
 -    * print "Nominal production: "
 -    * print .EXPECTED_FLOW_STR
@@ -833,29 +846,30 @@ Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
 -    * print :flow_str
 -    * print "/"
 -    * print "min"
-+   58 print "\nNominal production: {0}/min\nActual production: {0}/min"
-+   59 format .EXPECTED_FLOW_STR
-+   60 format :flow_str
-    61 label *label5
-    62 label *label6
-    63 set :start @time
++   59 print "\nNominal production: {0}/min\nActual production: {0}/min"
++   60 format .EXPECTED_FLOW_STR
++   61 format :flow_str
+    62 label *label5
+    63 label *label6
+    64 set :start @time
  
-   216 drawflush display1
-   217 op sub *tmp103 @time :start
-   218 op floor *tmp104 *tmp103
+   217 drawflush display1
+   218 op sub *tmp103 @time :start
+   219 op floor *tmp104 *tmp103
 -    * print "\n"
 -    * print "Update time: "
 -    * print *tmp104
 -    * print " "
 -    * print "ms"
-+  219 print "\nUpdate time: {0} ms"
-+  220 format *tmp104
-   221 printflush message1
-   222 label *label3
-   223 sensor *tmp7 switch1 @enabled
++  220 print "\nUpdate time: {0} ms"
++  221 format *tmp104
+   222 printflush message1
+   223 label *label3
+   224 sensor *tmp7 switch1 @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set FROM_INDEX 0
 set EXPECTED_BOOST 1.5
 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
@@ -873,7 +887,7 @@ set :icon null
 set :flow_str null
 control enabled switch1 0 0 0 0
 sensor *tmp7 switch1 @enabled
-jump *label4 notEqual *tmp7 0
+jump __start__ notEqual *tmp7 0
 label *label43
 print "Surge Alloy Factory Monitor"
 jump *label5 equal bank1 null
@@ -1066,4 +1080,3 @@ format *tmp104
 printflush message1
 sensor *tmp7 switch1 @enabled
 jump *label43 equal *tmp7 0
-label *label4

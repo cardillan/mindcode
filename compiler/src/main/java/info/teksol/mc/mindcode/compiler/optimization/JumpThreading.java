@@ -33,7 +33,7 @@ class JumpThreading extends BaseOptimizer {
                     // Target of the jump
                     LogicLabel label = findJumpRedirection(jump);
                     LogicInstruction target = labeledInstruction(label);
-                    boolean replaceAdvanced = jump.isUnconditional() && advanced()
+                    boolean replaceAdvanced = jump.isUnconditional()
                             && (target instanceof ReturnInstruction || target instanceof MultiJumpInstruction);
 
                     if (replaceAdvanced) {
@@ -95,7 +95,7 @@ class JumpThreading extends BaseOptimizer {
         } 
 
         // Handle end instruction only in advanced mode
-        if (next == null || (next instanceof EndInstruction && advanced())) {
+        if (next == null || (next instanceof EndInstruction)) {
             return FIRST_LABEL;
         }
 
@@ -105,15 +105,11 @@ class JumpThreading extends BaseOptimizer {
     
     // Returns true if the next jump is semantically identical to the first jump
     private boolean isIdenticalJump(JumpInstruction firstJump, JumpInstruction nextJump) {
-        if (advanced()) {
-            List<LogicArgument> args1 = firstJump.getArgs();
-            List<LogicArgument> args2 = nextJump.getArgs();
+        List<LogicArgument> args1 = firstJump.getArgs();
+        List<LogicArgument> args2 = nextJump.getArgs();
 
-            // Compare everything but labels; exclude volatile variables
-            return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
-                    && args1.stream().noneMatch(LogicArgument::isVolatile);
-        } else {
-            return false;
-        }
+        // Compare everything but labels; exclude volatile variables
+        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
+                && args1.stream().noneMatch(LogicArgument::isVolatile);
     }
 }

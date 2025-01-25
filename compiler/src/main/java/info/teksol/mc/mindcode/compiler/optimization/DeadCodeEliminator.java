@@ -83,7 +83,7 @@ class DeadCodeEliminator extends BaseOptimizer {
         uselessWrites.removeAll(reads);
         for (LogicVariable key : uselessWrites) {
             // Preserve global and main variable assignments unless advanced
-            if ((key.isGlobalVariable() || key.isMainVariable()) && !advanced()) continue;
+            //if ((key.isGlobalVariable() || key.isMainVariable()) && !advanced()) continue;
 
             // Instruction with at most one output argument are removed immediately
             // Other instructions are inspected further to find out they're fully unused

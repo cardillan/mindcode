@@ -10,6 +10,7 @@
      5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (4 iterations).
+     1 instructions updated by JumpThreading.
     14 instructions eliminated by Print Merging.
    184 instructions after optimizations.
 
@@ -1339,39 +1340,54 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    153 label *label34
    154 label *label24
 
+Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set FROM_INDEX 0
+     2 set TO_INDEX 16
+     3 set CAPACITY 120
+ 
+   171 control enabled .SWITCH 0
+   172 label *label42
+   173 sensor *tmp76 .SWITCH @enabled
+-    * jump *label44 notEqual *tmp76 0
++  174 jump __start__ notEqual *tmp76 0
+   175 label *label62
+   176 set :start @time
+   177 draw color 0 0 80 255
+
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   254 sensor *tmp76 .SWITCH @enabled
-   255 jump *label62 equal *tmp76 0
-   256 label *label44
+   255 sensor *tmp76 .SWITCH @enabled
+   256 jump *label62 equal *tmp76 0
+   257 label *label44
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
  
-     6 set .MESSAGE null
-     7 label *label0
-     8 label *label58
+     7 set .MESSAGE null
+     8 label *label0
+     9 label *label58
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+    9 print "Mass Driver Monitor\n"
-    10 set :n @links
-    11 label *label3
-    12 jump *label5 lessThanEq :n 0
-    13 label *label59
-    14 op sub :n :n 1
-    15 getlink :block :n
++   10 print "Mass Driver Monitor\n"
+    11 set :n @links
+    12 label *label3
+    13 jump *label5 lessThanEq :n 0
+    14 label *label59
+    15 op sub :n :n 1
+    16 getlink :block :n
 -    * print "Found: "
 -    * print :block
 -    * print "\n"
-+   16 print "Found: {0}\n"
-+   17 format :block
-    18 sensor *tmp6 :block @type
-    19 jump *label7 notEqual *tmp6 @message
-    20 label *label8
++   17 print "Found: {0}\n"
++   18 format :block
+    19 sensor *tmp6 :block @type
+    20 jump *label7 notEqual *tmp6 @message
+    21 label *label8
  
-    41 label *label4
-    42 jump *label59 greaterThan :n 0
-    43 label *label5
+    42 label *label4
+    43 jump *label59 greaterThan :n 0
+    44 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -1384,38 +1400,39 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 -    * print "Display: "
 -    * print .DISPLAY
 -    * print "\n"
-+   44 print "Message: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: {0}\n"
-+   45 format .MESSAGE
-+   46 format .SWITCH
-+   47 format .MEMORY
-+   48 format .DISPLAY
-    49 jump *label15 notEqual .DISPLAY null
++   45 print "Message: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: {0}\n"
++   46 format .MESSAGE
++   47 format .SWITCH
++   48 format .MEMORY
++   49 format .DISPLAY
+    50 jump *label15 notEqual .DISPLAY null
 -    * print "No display."
 -    * print "\n"
-+   50 print "No display.\n"
-    51 label *label15
-    52 label *label16
-    53 printflush .MESSAGE
++   51 print "No display.\n"
+    52 label *label15
+    53 label *label16
+    54 printflush .MESSAGE
  
-   231 jump *label61 lessThan :n @links
-   232 label *label47
-   233 drawflush .DISPLAY
+   232 jump *label61 lessThan :n @links
+   233 label *label47
+   234 drawflush .DISPLAY
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+  234 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
-   235 op sub *tmp116 @time :start
-   236 op floor *tmp117 *tmp116
++  235 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
+   236 op sub *tmp116 @time :start
+   237 op floor *tmp117 *tmp116
 -    * print "[lightgray]Draw time: "
 -    * print *tmp117
 -    * print " "
 -    * print "ms"
-+  237 format *tmp117
-   238 printflush .MESSAGE
-   239 label *label43
-   240 sensor *tmp76 .SWITCH @enabled
++  238 format *tmp117
+   239 printflush .MESSAGE
+   240 label *label43
+   241 sensor *tmp76 .SWITCH @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set FROM_INDEX 0
 set TO_INDEX 16
 set CAPACITY 120
@@ -1563,7 +1580,7 @@ label *label41
 label *label37
 control enabled .SWITCH 0 0 0 0
 sensor *tmp76 .SWITCH @enabled
-jump *label44 notEqual *tmp76 0
+jump __start__ notEqual *tmp76 0
 label *label62
 set :start @time
 draw color 0 0 80 255 0 0
@@ -1636,4 +1653,3 @@ format *tmp117
 printflush .MESSAGE
 sensor *tmp76 .SWITCH @enabled
 jump *label62 equal *tmp76 0
-label *label44

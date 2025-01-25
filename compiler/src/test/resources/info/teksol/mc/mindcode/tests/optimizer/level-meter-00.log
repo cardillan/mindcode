@@ -9,7 +9,7 @@
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
      8 instructions eliminated by Jump Straightening (3 iterations).
-     1 instructions updated by JumpThreading.
+     2 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination.
     13 instructions eliminated by Print Merging.
    154 instructions after optimizations.
@@ -632,48 +632,61 @@ Modifications by Replicate loop condition at line 122:1 (+1 instructions):
    209 end
 
 Modifications by Final phase, Jump Threading, iteration 1:
++    0 label __start__
+     1 set TICKS 60
+     2 set .MEMORY null
+     3 set .SWITCH null
  
-   126 jump *label23 equal *tmp9 false
-   127 print "\nNo memory or container."
-   128 printflush .MESSAGE
+   127 jump *label23 equal *tmp9 false
+   128 print "\nNo memory or container."
+   129 printflush .MESSAGE
 -    * jump *label24 always
-+  129 jump *label0 always
-   130 label *label23
-   131 printflush .MESSAGE
-   132 jump *label2 always
++  130 jump *label0 always
+   131 label *label23
+   132 printflush .MESSAGE
+   133 jump *label2 always
+ 
+   150 control enabled .SWITCH 0
+   151 label *label25
+   152 sensor *tmp25 .SWITCH @enabled
+-    * jump *label27 notEqual *tmp25 0
++  153 jump __start__ notEqual *tmp25 0
+   154 label *label39
+   155 set :startTime @time
+   156 set :prevTick :nextTick
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   130 label *label23
-   131 printflush .MESSAGE
-   132 jump *label2 always
+   131 label *label23
+   132 printflush .MESSAGE
+   133 jump *label2 always
 -    * label *label24
 -    * label *label1
 -    * jump *label0 always
-   133 label *label2
-   134 write .START_INDEX .MEMORY 0
-   135 write .END_INDEX .MEMORY 2
+   134 label *label2
+   135 write .START_INDEX .MEMORY 0
+   136 write .END_INDEX .MEMORY 2
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructions):
  
-   129 jump *label0 always
-   130 label *label23
-   131 printflush .MESSAGE
+   130 jump *label0 always
+   131 label *label23
+   132 printflush .MESSAGE
 -    * jump *label2 always
-   132 label *label2
-   133 write .START_INDEX .MEMORY 0
-   134 write .END_INDEX .MEMORY 2
+   133 label *label2
+   134 write .START_INDEX .MEMORY 0
+   135 write .END_INDEX .MEMORY 2
  
-   202 sensor *tmp25 .SWITCH @enabled
-   203 jump *label39 equal *tmp25 0
-   204 label *label27
+   203 sensor *tmp25 .SWITCH @enabled
+   204 jump *label39 equal *tmp25 0
+   205 label *label27
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
  
-   112 label *label4
-   113 jump *label37 greaterThan :n 0
-   114 label *label5
+   113 label *label4
+   114 jump *label37 greaterThan :n 0
+   115 label *label5
 -    * print "\nMessage: "
 -    * print .MESSAGE
 -    * print "\nSwitch: "
@@ -681,17 +694,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "\nMemory: "
 -    * print .MEMORY
 -    * print "\nContainer: "
-+  115 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nContainer: "
-+  116 format .MESSAGE
-+  117 format .SWITCH
-+  118 format .MEMORY
-   119 print .CONTAINER
-   120 op equal *tmp7 .CONTAINER null
-   121 op equal *tmp8 .MEMORY null
++  116 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nContainer: "
++  117 format .MESSAGE
++  118 format .SWITCH
++  119 format .MEMORY
+   120 print .CONTAINER
+   121 op equal *tmp7 .CONTAINER null
+   122 op equal *tmp8 .MEMORY null
  
-   177 write :scaled .MEMORY :index
-   178 op sub *tmp49 :index .SIZE
-   179 write :scaled .MEMORY *tmp49
+   178 write :scaled .MEMORY :index
+   179 op sub *tmp49 :index .SIZE
+   180 write :scaled .MEMORY *tmp49
 -    * print "Item/Liquid/Energy Level Meter\n"
 -    * print "StartIndex: "
 -    * print .START_INDEX
@@ -705,22 +718,23 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "Scaled: "
 -    * print :scaled
 -    * print "\n"
-+  180 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
-+  181 format .START_INDEX
-+  182 format :index
-+  183 format :amount
-+  184 format :scaled
-   185 op sub *tmp51 @time :startTime
++  181 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
++  182 format .START_INDEX
++  183 format :index
++  184 format :amount
++  185 format :scaled
+   186 op sub *tmp51 @time :startTime
 -    * print "Elapsed: "
 -    * print *tmp51
 -    * print "\n"
-+  186 format *tmp51
-   187 printflush .MESSAGE
-   188 label *label26
-   189 sensor *tmp25 .SWITCH @enabled
++  187 format *tmp51
+   188 printflush .MESSAGE
+   189 label *label26
+   190 sensor *tmp25 .SWITCH @enabled
 
 Final code before resolving virtual instructions:
 
+label __start__
 set TICKS 60
 set .MEMORY null
 set .SWITCH null
@@ -858,7 +872,7 @@ op min :index *tmp20 .END_INDEX
 set :nextTick @tick
 control enabled .SWITCH 0 0 0 0
 sensor *tmp25 .SWITCH @enabled
-jump *label27 notEqual *tmp25 0
+jump __start__ notEqual *tmp25 0
 label *label39
 set :startTime @time
 set :prevTick :nextTick
@@ -898,4 +912,3 @@ format *tmp51
 printflush .MESSAGE
 sensor *tmp25 .SWITCH @enabled
 jump *label39 equal *tmp25 0
-label *label27
