@@ -8,6 +8,7 @@
 [![Static Badge](https://img.shields.io/badge/web%20app-blue?link=http%3A%2F%2Fmindcode.herokuapp.com%2F)](http://mindcode.herokuapp.com/)
 [![Static Badge](https://img.shields.io/badge/doc-mincdcode-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](doc/syntax/SYNTAX.markdown)
 [![Static Badge](https://img.shields.io/badge/doc-mlog-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](https://yrueii.github.io/Mlog%20Documentation/)
+[![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/cardillan/mindcode?query=is%3Aopen%20label%3Abug&label=open%20bugs&color=red&link=https%3A%2F%2Fgithub.com%2Fcardillan%2Fmindcode%2Fissues%3Fq%3Dis%253Aissue%2520state%253Aopen%2520label%253Abug)](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
 [![Static Badge](https://img.shields.io/badge/chat-discord-blue?link=https%3A%2F%2Fdiscord.gg%2FA8vdVdvf)](https://discord.gg/A8vdVdvf)
 
 </div>
@@ -22,6 +23,8 @@
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
 ## Latest development
+
+See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug) for open bugs and possible workarounds. 
 
 > [!NOTE]
 > Deprecated functionalities from Mindcode 2.x were removed. The system for specifying [language version targets](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) has been changed.

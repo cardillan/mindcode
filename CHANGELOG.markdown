@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.0.0-preview2 - Future release
+## 3.0.0 - 2025-01-26
 
 ### Fixed
 
@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
 * Fixed compiler errors when placing enhanced comments into loops.
 * Fixed wrong compile-time and emulator evaluation of `asin`, `acos` and `atan` functions ([#209](https://github.com/cardillan/mindcode/issues/209)).
-* Fixed compile-time evaluation potentially processing functions not available in current target. The only affected target was 6, where non-existent functions `asin`, `acos` and `atan` could be compile-time evaluated instead of reported as non-existent.  
+* Fixed compile-time evaluation potentially processing functions not available in current target. The only affected target was 6, where non-existent functions `asin`, `acos`, `atan` and `packcolor` could be compile-time evaluated instead of reported as non-existent.  
 
 ### Added
 
@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * More precise calculations of optimization benefits in loop unrolling and call inlining.
-* The `sensor` instruction is considered deterministic if a deterministic property of a non-volatile value, which is also not a linked variable, is being queried.
+* The `sensor` instruction is considered deterministic if a deterministic property of a non-volatile value, which is not a linked variable, is being queried.
 * When clicking on an error or warning in the web application, the entire portion of the source code causing the error or warning is selected.
 * Most advanced optimizations were moved to the `basic` level. Only optimizations that might be incorrect in some contexts (such as optimizations replacing computed IDs of Mindustry items with IDs known to the compiler) are left on the advanced level. 
 * The default optimization level in the web application is now `advanced`.

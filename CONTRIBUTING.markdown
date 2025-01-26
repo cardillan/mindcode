@@ -1,22 +1,23 @@
 # Contributing
 
-There's currently a bunch of issues marked with the `help wanted` label. You can also have a look [here](https://github.com/cardillan/mindcode/discussions/167). 
+There's currently a bunch of issues marked with the [`help wanted`](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22) label. You can also have a look [here](https://github.com/cardillan/mindcode/discussions/167). 
 
 ## Guidelines
 
 Mindcode uses JDK22, Maven and Spring Boot. 
 
 The project consists of separate modules:
-* `mindcode-annotations` contains annotation preprocessor used for automatic code generation
+* `mindcode-annotations` contains annotation preprocessor used for automatic code generation.
 * `mindcode-compiler` contains several independent parts:
   * Mindcode compiler, itself consisting of the grammar definition, parser, AST builder, code generator and optimizer.
   * Processor emulator, capable of running mlog code in an emulated environment with limited support for Mindustry World interaction.
 * `mindcode-exttest` tool for testing Mindcode compiler/processor emulator under various compiler settings. 
+* `mindcode-samples`: contains Mindcode and Schemacode samples for the web application.
 * `mindcode-schemacode`: contains the grammar definition, compiler and decompiler for Schemacode.
 * `mindcode-toolapp`: contains the command-line interface.
 * `mindcode-webapp`: contains the web application frontend.
 
-Unit tests are used primarily to verify that source code gets compiled, optimized and executed as expected. This use of unit test
+Unit tests are used primarily to verify that source code gets compiled, optimized and executed as expected. This use of unit test is probably quite out of the ordinary, and as a result, unit tests might take some time to execute. Additions of unit tests that would be more in line with the standard usage, even though not always present in current code, is encouraged. Note that some unit tests are outright abused to generate parts of the documentation (sorry).
 
 Please do not make large changes before discussing them first. Especially do not alter existing syntax without prior agreement.
 
@@ -24,7 +25,7 @@ The grammar, AST builder and code generator were recently completely rewritten a
 
 ### System library
 
-Mindcode now provides a [system library](doc/syntax/SYSTEM-LIBRARY.markdown). Contributions to the system library are welcome: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
+Mindcode now provides a [system library](doc/syntax/SYSTEM-LIBRARY.markdown). Contributions to the system library are welcome and very appreciated: if you have some general utility functions you are willing to share, incorporating them to the system library would help all Mindcode users.
 
 ## Running Mindcode locally
 
