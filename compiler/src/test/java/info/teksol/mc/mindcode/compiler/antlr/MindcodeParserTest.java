@@ -266,6 +266,28 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
+        void parsesArrayDeclarations() {
+            assertParses("""
+                    var a[];
+                    var a[10];
+                    var a[] = (1, 2, 3);
+                    var a[3] = (1, 2, 3);
+                    var a[], b;
+                    var a[10], b;
+                    var a[] = (1, 2, 3), b;
+                    var a[3] = (1, 2, 3), b;
+                    var b = 5, a[];
+                    var b = 5, a[10];
+                    var b = 5, a[] = (1, 2, 3);
+                    var b = 5, a[3] = (1, 2, 3);
+                    var c[], a[], d[];
+                    var c[], a[10], d[];
+                    var c[], a[] = (1, 2, 3), d[];
+                    var c[], a[3] = (1, 2, 3), d[];
+                    """);
+        }
+
+        @Test
         void refusesInvalidParamIdentifiers1() {
             assertGeneratesMessages(
                     expectedMessages().addRegex(1, 8, "Parse error: .*"),

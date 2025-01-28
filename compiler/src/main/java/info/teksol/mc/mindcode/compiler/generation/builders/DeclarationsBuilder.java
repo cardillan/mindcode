@@ -180,7 +180,13 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             ValueStore variable = createVariable(modifiers, specification);
 
             // LINKED variables initializations are handled separately
-            if (specification.getExpression() != null && !modifiers.contains(Modifier.LINKED)) {
+            if (specification.isArray()) {
+                throw new MindcodeInternalError("Array variables are not supported yet");
+            } else if (!specification.getExpressions().isEmpty() && !modifiers.contains(Modifier.LINKED)) {
+                if (specification.getExpressions().size() != 1) {
+                    throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
+                }
+
                 if (modifiers.contains(Modifier.NOINIT)) {
                     error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALZIED);
                 }
@@ -188,7 +194,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
                 // resolved in the scope containing the node. However, the expression needs to be evaluated
                 // in local scope, as all executable code must be placed there.
-                ValueStore value = processInLocalScope( () -> evaluate(specification.getExpression()));
+                ValueStore value = processInLocalScope( () -> evaluate(specification.getExpressions().getFirst()));
                 // Produces warning when the variable is a linked block
                 ValueStore target = resolveLValue(specification.getIdentifier(), variable);
                 target.setValue(assembler, value.getValue(assembler));
@@ -215,16 +221,22 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
     }
 
-    private ValueStore createLinkedVariable(Set<Modifier> modifiers, AstVariableSpecification specification) {
-        LogicVariable variable = switch (specification.getExpression()) {
-            case AstIdentifier linkedTo -> variables.createLinkedVariable(specification.getIdentifier(), linkedTo);
-            case null -> variables.createLinkedVariable(specification.getIdentifier(), specification.getIdentifier());
-            default -> {
-                error(specification.getExpression(), ERR.IDENTIFIER_EXPECTED);
-                compile(specification.getExpression());
-                yield LogicVariable.INVALID;
+    private LogicVariable createLinkedVariable(Set<Modifier> modifiers, AstVariableSpecification specification) {
+        LogicVariable variable;
+
+        if (specification.getExpressions().isEmpty()) {
+            variable = variables.createLinkedVariable(specification.getIdentifier(), specification.getIdentifier());
+        } else if (specification.getExpressions().size() == 1) {
+            if (specification.getExpressions().getFirst() instanceof AstIdentifier linkedTo) {
+                variable = variables.createLinkedVariable(specification.getIdentifier(), linkedTo);
+            } else {
+                error(specification.getExpressions().getFirst(), ERR.IDENTIFIER_EXPECTED);
+                compile(specification.getExpressions().getFirst());
+                variable = LogicVariable.INVALID;
             }
-        };
+        } else {
+            throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
+        }
 
         generateLinkGuard(variable, modifiers.contains(Modifier.NOINIT));
         return variable;

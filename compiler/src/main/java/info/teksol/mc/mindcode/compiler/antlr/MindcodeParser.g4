@@ -86,6 +86,11 @@ variableSpecList
 
 variableSpecification
     : id = (IDENTIFIER | EXTIDENTIFIER) (ASSIGN exp = expression)?
+    | id = (IDENTIFIER | EXTIDENTIFIER) LBRACKET length = expression? RBRACKET (ASSIGN values = valueList)?
+    ;
+
+valueList
+    : LPAREN values = expressionList RPAREN
     ;
 
 // lvalue can be a target of an implicit assignment - prefix/postfix increment/decrement and loop iterator.

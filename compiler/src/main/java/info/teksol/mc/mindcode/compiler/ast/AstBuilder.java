@@ -289,9 +289,27 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     private AstVariableSpecification createVariableSpecification(VariableSpecificationContext ctx) {
-        return new AstVariableSpecification(pos(ctx),
-                identifier(ctx.id),
-                visitAstExpressionIfNonNull(ctx.expression()));
+        if (ctx.LBRACKET() != null) {
+            return new AstVariableSpecification(pos(ctx),
+                    identifier(ctx.id),
+                    true,
+                    visitAstExpressionIfNonNull(ctx.length),
+                    processExpressionList(ctx.valueList().expressionList()));
+        } else {
+            return new AstVariableSpecification(pos(ctx),
+                    identifier(ctx.id),
+                    false,
+                    null,
+                    processInitialValue(ctx.expression()));
+        }
+    }
+
+    private List<AstExpression> processInitialValue(@Nullable ExpressionContext ctx) {
+        return ctx == null ? List.of() : List.of(visitAstExpression(ctx));
+    }
+
+    private List<AstExpression> processInitialArrayValues(@Nullable ValueListContext ctx) {
+        return ctx == null ? List.of() : processExpressionList(ctx.expressionList());
     }
 
     @Override
