@@ -23,10 +23,13 @@ public enum ArgumentType {
     // Labels
     LABEL,
 
+    // Arrays
+    ARRAY,
+
     // User variables
     BLOCK,
     PARAMETER,                      // Program parameter
-    GLOBAL_VARIABLE,
+    GLOBAL_VARIABLE,                // Also array elements
     LOCAL_VARIABLE,
 
     // Compiler generated variables

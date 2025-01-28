@@ -30,6 +30,7 @@ import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.generation.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
 import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.NullDebugPrinter;
@@ -53,7 +54,7 @@ import java.util.function.Function;
 
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
-        CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext {
+        CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext, VariablesContext {
     // MindcodeCompiler serves as a compiler context too
     private static final ThreadLocal<MindcodeCompiler> context = new ThreadLocal<>();
 
@@ -289,6 +290,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     public static CompileTimeEvaluatorContext getCompileTimeEvaluatorContext() {
+        return getContext();
+    }
+
+    public static VariablesContext getVariablesContext() {
         return getContext();
     }
 

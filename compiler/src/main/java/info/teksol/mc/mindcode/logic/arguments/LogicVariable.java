@@ -263,6 +263,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(EMPTY, COMPILER, ValueMutability.MUTABLE, name);
     }
 
+    public static LogicVariable arrayElement(AstIdentifier identifier, int index) {
+        return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
+                identifier.getName() + "[" + index + "]", "." + identifier.getName() + "*" + index, false, true);
+    }
+
     /// Return the variable passed as an argument to unused instruction parameters.
     /// @return variable for unused instruction parameters
     public static LogicVariable unusedVariable() {

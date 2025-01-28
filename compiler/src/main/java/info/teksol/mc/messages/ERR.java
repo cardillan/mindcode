@@ -23,7 +23,18 @@ public class ERR {
     public static final String ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED = "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.";
     public static final String ARGUMENT_WAIT_OUT_NOT_ALLOWED = "'out' modifier not allowed with special value '%s'.";
     public static final String ARRAY_EXPRESSION_NOT_MEMORY = "'%s' is not an external memory.";
+    public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
+    public static final String ARRAY_LINKED = "Arrays cannot be declared 'linked'.";
+    public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
+    public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
+    public static final String ARRAY_NOINIT = "Arrays cannot be declared 'noinit'.";
+    public static final String ARRAY_NON_INTEGER_SIZE = "Array size must be an integer.";
     public static final String ARRAY_PARAMETER_NOT_MEMORY = "Cannot use value assigned to parameter '%s' to access external memory.";
+    public static final String ARRAY_SIZE_MISMATCH = "Number of initial values provided doesn't match the declared array size.";
+    public static final String ARRAY_SIZE_NOT_SPECIFIED = "Array size not specified.";
+    public static final String ARRAY_SIZE_OUTSIDE_RANGE = "Array size out of range (1 .. %d).";
+    public static final String ARRAY_VOLATILE = "Arrays cannot be declared 'volatile'.";
+    public static final String ARRAY_CACHED = "Arrays cannot be declared 'cached'.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
@@ -36,6 +47,7 @@ public class ERR {
     public static final String EXPRESSION_NOT_CONSTANT_PARAM = "Value assigned to parameter '%s' is not a constant expression.";
     public static final String EXPRESSION_REQUIRED = "Expression is required.";
     public static final String EXTERNAL_HEAP_EXCEEDED = "Not enough capacity in allocated heap for '%s'.";
+    public static final String EXTERNAL_HEAP_EXCEEDED_ARRAY = "Not enough capacity in allocated heap for array '%s' (required %d, available %d).";
     public static final String EXTERNAL_MISSING_HEAP = "No heap allocated for external variables.";
     public static final String FORMATTABLE_FORBIDDEN = "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.";
     public static final String FORMATTABLE_NOT_ENOUGH_ARGS = "Not enough arguments for formattable placeholders.";

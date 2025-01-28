@@ -10,10 +10,7 @@ import info.teksol.mc.mindcode.compiler.evaluator.IntermediateValue;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.FormattableContent;
-import info.teksol.mc.mindcode.compiler.generation.variables.HeapTracker;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
+import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 
@@ -36,6 +33,9 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         AstRequireLibraryVisitor<ValueStore>,
         AstVariablesDeclarationVisitor<ValueStore>
 {
+    private static final int MAX_INTERNAL_ARRAY_SIZE = 250;
+    private static final int MAX_EXTERNAL_ARRAY_SIZE = 2048;
+
     private static final Set<ArgumentType> constantExpressionTypes = Set.of(
             NULL_LITERAL,
             BOOLEAN_LITERAL,
@@ -162,48 +162,123 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         Set<Modifier> modifiers = getEffectiveModifiers(node);
 
         if (isLocalContext()) {
-            if (modifiers.contains(Modifier.EXTERNAL)) {
-                error(modifierElement(node, Modifier.EXTERNAL), ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
-            }
-            if (modifiers.contains(Modifier.LINKED)) {
-                error(modifierElement(node, Modifier.LINKED), ERR.SCOPE_LINKED_NOT_GLOBAL);
-            }
-            if (modifiers.contains(Modifier.NOINIT)) {
-                error(modifierElement(node, Modifier.NOINIT), ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
-            }
-            if (modifiers.contains(Modifier.VOLATILE)) {
-                error(modifierElement(node, Modifier.VOLATILE), ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
-            }
+            node.getModifiers().forEach(this::verifyLocalContextModifiers);
         }
 
         for (AstVariableSpecification specification : node.getVariables()) {
-            ValueStore variable = createVariable(modifiers, specification);
-
-            // LINKED variables initializations are handled separately
             if (specification.isArray()) {
-                throw new MindcodeInternalError("Array variables are not supported yet");
-            } else if (!specification.getExpressions().isEmpty() && !modifiers.contains(Modifier.LINKED)) {
-                if (specification.getExpressions().size() != 1) {
-                    throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
+                node.getModifiers().forEach(this::verifyArrayModifiers);
+                if (isLocalContext()) {
+                    error(specification, ERR.ARRAY_LOCAL);
                 }
 
-                if (modifiers.contains(Modifier.NOINIT)) {
-                    error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALZIED);
-                }
-
-                // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
-                // resolved in the scope containing the node. However, the expression needs to be evaluated
-                // in local scope, as all executable code must be placed there.
-                ValueStore value = processInLocalScope( () -> evaluate(specification.getExpressions().getFirst()));
-                // Produces warning when the variable is a linked block
-                ValueStore target = resolveLValue(specification.getIdentifier(), variable);
-                target.setValue(assembler, value.getValue(assembler));
-            } else if (!modifiers.contains(Modifier.NOINIT)) {
-                variable.initialize(assembler);
+                processArray(modifiers, specification);
+            } else {
+                processVariable(modifiers, specification);
             }
         }
 
         return LogicVoid.VOID;
+    }
+
+    private void verifyLocalContextModifiers(AstVariableModifier element) {
+        switch (element.getModifier()) {
+            case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
+            case LINKED   -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
+            case NOINIT   -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
+            case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
+        }
+    }
+
+    private void processArray(Set<Modifier> modifiers, AstVariableSpecification specification) {
+
+        int declaredSize = getDeclaredArraySize(modifiers, specification);
+        int initialSize = specification.getExpressions().size();
+
+        if (declaredSize > 0 && initialSize > 0) {
+            if (initialSize != declaredSize) {
+                error(specification, ERR.ARRAY_SIZE_MISMATCH);
+            }
+            declaredSize = initialSize;
+        } else if (declaredSize < 0 && initialSize == 0) {
+            error(specification, ERR.ARRAY_SIZE_NOT_SPECIFIED);
+        }
+
+        if (declaredSize <= 0) {
+            declaredSize = initialSize;
+        }
+
+        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers);
+
+        for (int i = 0; i < initialSize; i++) {
+            AstExpression initExpression = specification.getExpressions().get(i);
+            ValueStore initValue = processInLocalScope(() -> evaluate(initExpression));
+            array.getElements().get(i).setValue(assembler, initValue.getValue(assembler));
+        }
+    }
+
+    private void verifyArrayModifiers(AstVariableModifier element) {
+        switch (element.getModifier()) {
+            case LINKED   -> error(element, ERR.ARRAY_LINKED);
+            case NOINIT   -> error(element, ERR.ARRAY_NOINIT);
+            case VOLATILE -> error(element, ERR.ARRAY_VOLATILE);
+            case CACHED   -> error(element, ERR.ARRAY_CACHED);
+        }
+    }
+
+    private int getDeclaredArraySize(Set<Modifier> modifiers, AstVariableSpecification specification) {
+        if (specification.getArraySize() == null) return -1;
+        int maxSize = modifiers.contains(Modifier.EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
+
+        ValueStore size = evaluate(specification.getArraySize());
+        if (!(size instanceof LogicNumber number)) {
+            error(specification.getArraySize(), ERR.ARRAY_MUTABLE_SIZE);
+        } else if (!number.isInteger()) {
+            error(specification.getArraySize(), ERR.ARRAY_NON_INTEGER_SIZE);
+        } else {
+            int value = number.getIntValue();
+            if (value > 0 && value <= maxSize) {
+                return value;
+            }
+
+            error(specification.getArraySize(), ERR.ARRAY_SIZE_OUTSIDE_RANGE, maxSize);
+        }
+
+        // Error
+        return 0;
+    }
+
+    private void processVariable(Set<Modifier> modifiers, AstVariableSpecification specification) {
+        ValueStore variable = createVariable(modifiers, specification);
+
+        if (modifiers.contains(Modifier.LINKED)) {
+            // Linked variables are initialized at creation
+            return;
+        }
+
+        if (specification.getExpressions().isEmpty()) {
+            if (!modifiers.contains(Modifier.NOINIT)) {
+                // Initializes external cached variables by reading the value from memory block
+                variable.initialize(assembler);
+            }
+        } else {
+            if (specification.getExpressions().size() != 1) {
+                // Shouldn't happen
+                throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
+            }
+
+            if (modifiers.contains(Modifier.NOINIT)) {
+                error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALZIED);
+            }
+
+            // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
+            // resolved in the scope containing the node. However, the expression needs to be evaluated
+            // in local scope, as all executable code must be placed there.
+            ValueStore value = processInLocalScope( () -> evaluate(specification.getExpressions().getFirst()));
+            // Produces warning when the variable is a linked block
+            ValueStore target = resolveLValue(specification.getIdentifier(), variable);
+            target.setValue(assembler, value.getValue(assembler));
+        }
     }
 
     private ValueStore createVariable(Set<Modifier> modifiers, AstVariableSpecification specification) {
@@ -298,7 +373,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         LogicVariable memory = resolveMemory(node);
         int defaultEndValue = memory.getType() == BLOCK
                               && processor.isBlockName(memory.getName())
-                              && memory.getName().startsWith("bank") ? 512 : 64;
+                              && memory.getName().startsWith("bank") ? 511 : 63;
         int startHeapIndex = getIndex(node, true, 0);
         int endHeapIndex = getIndex(node, false, defaultEndValue) + 1;
 

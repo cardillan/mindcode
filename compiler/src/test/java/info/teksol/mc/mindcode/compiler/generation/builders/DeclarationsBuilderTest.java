@@ -171,6 +171,111 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class ExternalArrayDeclarations {
+        @Test
+        void compilesUninitializedArrayDeclarations() {
+            assertCompiles("allocate heap in cell1; external a[10];");
+        }
+
+        @Test
+        void compilesInitializedArrayDeclarations() {
+            assertCompilesTo("""
+                            allocate heap in cell1;
+                            external a[] = (1, 2, 3);
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(WRITE, "1", "cell1", "0"),
+                    createInstruction(WRITE, "2", "cell1", "1"),
+                    createInstruction(WRITE, "3", "cell1", "2")
+            );
+        }
+
+        @Test
+        void compilesInitializedArrayDeclarationsNoSize() {
+            assertCompilesTo("""
+                            allocate heap in cell1;
+                            external a[] = (1, 2, 3);
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(WRITE, "1", "cell1", "0"),
+                    createInstruction(WRITE, "2", "cell1", "1"),
+                    createInstruction(WRITE, "3", "cell1", "2")
+            );
+        }
+
+        @Test
+        void reportsUnknownArraySize() {
+            assertGeneratesMessage(
+                    "Array size not specified.",
+                    "allocate heap in cell1; external a[];");
+        }
+
+        @Test
+        void reportsNonConstantArraySize() {
+            assertGeneratesMessage(
+                    "Array size must be constant.",
+                    "allocate heap in cell1; external a[n];");
+        }
+
+        @Test
+        void reportsNonIntegerArraySize() {
+            assertGeneratesMessage(
+                    "Array size must be an integer.",
+                    "allocate heap in cell1; external a[0.75];");
+        }
+
+        @Test
+        void reportsNegativeArraySize() {
+            assertGeneratesMessage(
+                    "Array size out of range (1 .. 2048).",
+                    "allocate heap in cell1; external a[-10];");
+        }
+
+        @Test
+        void reportsArraySizeMismatch() {
+            assertGeneratesMessage(
+                    "Number of initial values provided doesn't match the declared array size.",
+                    "allocate heap in cell1[0 ... 10]; external a[10] = (1, 2, 3);");
+        }
+
+        @Test
+        void reportsInsufficientHeapCapacity() {
+            assertGeneratesMessage(
+                    "Not enough capacity in allocated heap for array 'a' (required 100, available 64).",
+                    "allocate heap in cell1; external a[100];");
+        }
+
+        @Test
+        void reportsInsufficientHeapCapacity2() {
+            assertGeneratesMessage(
+                    "Not enough capacity in allocated heap for array 'b' (required 100, available 54).",
+                    "allocate heap in cell1; external a[10], b[100];");
+        }
+
+        @Test
+        void refusesLocalArray() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("External variables must be declared in the global scope.")
+                            .add("Arrays must be declared in the global scope.")
+                            .add("No heap allocated for external variables."),
+                    """
+                            begin
+                                external a[10];
+                            end;
+                            """);
+        }
+
+        @Test
+        void refusesCachedArray() {
+            assertGeneratesMessage(
+                    "Arrays cannot be declared 'cached'.",
+                    "allocate heap in cell1; external cached a[10];");
+        }
+    }
+
+    @Nested
     class HeapAllocationDeclarations {
 
         @Test
@@ -319,6 +424,112 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Statement or declaration not allowed within a main code block or function.",
                     "begin allocate heap in cell1; end;");
+        }
+    }
+
+    @Nested
+    class InternalArrayDeclarations {
+        @Test
+        void compilesUninitializedArrayDeclarations() {
+            assertCompiles("var a[10];");
+        }
+
+        @Test
+        void compilesInitializedArrayDeclarations() {
+            assertCompilesTo(
+                    "var a[3] = (1, 2, 3);",
+                    createInstruction(SET, ".a*0", "1"),
+                    createInstruction(SET, ".a*1", "2"),
+                    createInstruction(SET, ".a*2", "3")
+            );
+        }
+
+        @Test
+        void compilesInitializedArrayDeclarationsNoSize() {
+            assertCompilesTo(
+                    "var a[] = (1, 2, 3);",
+                    createInstruction(SET, ".a*0", "1"),
+                    createInstruction(SET, ".a*1", "2"),
+                    createInstruction(SET, ".a*2", "3")
+            );
+        }
+
+        @Test
+        void reportsUnknownArraySize() {
+            assertGeneratesMessage(
+                    "Array size not specified.",
+                    "var a[];");
+        }
+
+        @Test
+        void reportsNonConstantArraySize() {
+            assertGeneratesMessage(
+                    "Array size must be constant.",
+                    "var a[n];");
+        }
+
+        @Test
+        void reportsNonIntegerArraySize() {
+            assertGeneratesMessage(
+                    "Array size must be an integer.",
+                    "var a[0.75];");
+        }
+
+        @Test
+        void reportsNegativeArraySize() {
+            assertGeneratesMessage(
+                    "Array size out of range (1 .. 250).",
+                    "var a[-10];");
+        }
+
+        @Test
+        void reportsTooLargeArraySize() {
+            assertGeneratesMessage(
+                    "Array size out of range (1 .. 250).",
+                    "var a[1000];");
+        }
+
+        @Test
+        void reportsArraySizeMismatch() {
+            assertGeneratesMessage(
+                    "Number of initial values provided doesn't match the declared array size.",
+                    "var a[10] = (1, 2, 3);");
+        }
+
+        @Test
+        void refusesLocalArray() {
+            assertGeneratesMessage(
+                    "Arrays must be declared in the global scope.",
+                    "begin var a[10]; end;");
+        }
+
+        @Test
+        void refusesLinkedArray() {
+            assertGeneratesMessage(
+                    "Arrays cannot be declared 'linked'.",
+                    "linked a[10];");
+        }
+
+        @Test
+        void refusesNoinitArray() {
+            assertGeneratesMessage(
+                    "Arrays cannot be declared 'noinit'.",
+                    "noinit a[10];");
+        }
+
+        @Test
+        void refusesVolatileArray() {
+            assertGeneratesMessage(
+                    "Arrays cannot be declared 'volatile'.",
+                    "volatile a[10];");
+        }
+
+        @Test
+        void refusesCachedArray() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Arrays cannot be declared 'cached'.")
+                            .add("Modifier 'cached' used without 'external'."),
+                    "cached a[10];");
         }
     }
 
@@ -510,7 +721,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             inline void foo()
                                 print(a);
                             end;
-
+                            
                             begin
                                 var a = 10;
                                 print(a);

@@ -294,7 +294,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                     identifier(ctx.id),
                     true,
                     visitAstExpressionIfNonNull(ctx.length),
-                    processExpressionList(ctx.valueList().expressionList()));
+                    processInitialArrayValues(ctx.valueList()));
         } else {
             return new AstVariableSpecification(pos(ctx),
                     identifier(ctx.id),

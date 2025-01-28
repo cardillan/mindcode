@@ -141,7 +141,7 @@ public class Variables extends AbstractMessageEmitter {
     /// Registers a linked variable (implicitly global). Reports possible name clashes. Warns when the variable
     /// doesn't conform to linked variable names.
     ///
-    /// @param variable variable specification
+    /// @param identifier variable name
     /// @return ValueStore instance representing the linked variable
     public LogicVariable createLinkedVariable(AstIdentifier identifier, AstIdentifier linkedTo) {
         verifyGlobalDeclaration(identifier, identifier);
@@ -155,9 +155,9 @@ public class Variables extends AbstractMessageEmitter {
         return result;
     }
 
-    /// Registers a standard variable in given scope. Reports possible name clashes.
+    /// Registers an external variable in given scope. Reports possible name clashes.
     ///
-    /// @param variable variable specification
+    /// @param identifier variable name
     /// @return ValueStore instance representing the created variable
     public ValueStore createExternalVariable(AstIdentifier identifier, Set<Modifier> modifiers) {
         ValueStore result = verifyGlobalDeclaration(identifier, identifier)
@@ -168,10 +168,31 @@ public class Variables extends AbstractMessageEmitter {
         return result;
     }
 
+    /// Registers an array. Scope is always global.
+    ///
+    /// @param variable variable specification
+    /// @return ValueStore instance representing the created variable
+    public ArrayStore createArray(AstIdentifier identifier, int size, Set<Modifier> modifiers) {
+        ArrayStore result;
+
+        if (!verifyGlobalDeclaration(identifier, identifier)) {
+            result = InternalArray.createInvalid(identifier, size);
+        } else if (modifiers.contains(Modifier.EXTERNAL)) {
+            result = ExternalArray.create(heapTracker, identifier, size);
+        } else {
+            result = InternalArray.create(identifier, size);
+        }
+
+        globalVariables.putIfAbsent(identifier.getName(), result);
+        return result;
+    }
+
     /// Registers a standard variable in given scope. Reports possible name clashes.
     ///
-    /// @param local    true if the variable should be registered in local scope, false for global scope
-    /// @param variable variable specification
+    /// @param local      true if the variable should be registered in local scope, false for global scope
+    /// @param identifier variable name
+    /// @param scope      scope of the variable
+    /// @param modifiers  declaration modifiers
     /// @return ValueStore instance representing the created variable
     public ValueStore createVariable(boolean local, AstIdentifier identifier, VariableScope scope, Set<Modifier> modifiers) {
         String name = identifier.getName();

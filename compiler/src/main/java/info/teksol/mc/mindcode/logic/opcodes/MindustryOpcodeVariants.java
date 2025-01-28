@@ -225,39 +225,39 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("zoom"), in("level"));
         add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("stop"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("warn"),            in("x"), in("y"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("cross"),           in("x"), in("y"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("blockFall"),       in("x"), in("y"), unused("0"), unused("0"), in("blocktype"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("placeBlock"),      in("x"), in("y"), in("size"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("placeBlockSpark"), in("x"), in("y"), in("size"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("breakBlock"),      in("x"), in("y"), in("size"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("spawn"),           in("x"), in("y"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("trail"),           in("x"), in("y"), in("size"),     in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("breakProp"),       in("x"), in("y"), in("size"),     in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeCloud"),      in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("vapor"),           in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("hit"),             in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("hitSquare"),       in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("shootSmall"),      in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("shootBig"),        in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSmall"),      in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeBig"),        in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeColor"),      in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSquare"),     in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokeSquareBig"),  in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("spark"),           in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkBig"),        in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkShoot"),      in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkShootBig"),   in("x"), in("y"), in("rotation"), in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("drill"),           in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("drillBig"),        in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("lightBlock"),      in("x"), in("y"), in("size"),     in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("explosion"),       in("x"), in("y"), in("size"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("smokePuff"),       in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("sparkExplosion"),  in("x"), in("y"), unused("0"),    in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("crossExplosion"),  in("x"), in("y"), in("size"),     in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("wave"),            in("x"), in("y"), in("size"),     in("color"));
-        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  cutscene("bubble"),          in("x"), in("y"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("warn"),            in("x"), in("y"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("cross"),           in("x"), in("y"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("blockFall"),       in("x"), in("y"), unused("0"), unused("0"), in("blocktype"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("placeBlock"),      in("x"), in("y"), in("size"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("placeBlockSpark"), in("x"), in("y"), in("size"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("breakBlock"),      in("x"), in("y"), in("size"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("spawn"),           in("x"), in("y"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("trail"),           in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("breakProp"),       in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokeCloud"),      in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("vapor"),           in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("hit"),             in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("hitSquare"),       in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("shootSmall"),      in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("shootBig"),        in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokeSmall"),      in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokeBig"),        in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokeColor"),      in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokeSquare"),     in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokeSquareBig"),  in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("spark"),           in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("sparkBig"),        in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("sparkShoot"),      in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("sparkShootBig"),   in("x"), in("y"), in("rotation"), in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("drill"),           in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("drillBig"),        in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("lightBlock"),      in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("explosion"),       in("x"), in("y"), in("size"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("smokePuff"),       in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("sparkExplosion"),  in("x"), in("y"), unused("0"),    in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("crossExplosion"),  in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("wave"),            in("x"), in("y"), in("size"),     in("color"));
+        add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("bubble"),          in("x"), in("y"));
 
         add(list, V7,  V7A, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"));
         add(list, V8A, MAX, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"), bool("effect"));
@@ -325,6 +325,8 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.MULTILABEL,  label("address"), label("marker"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTIJUMP,   label("address"), in("value"), in("offset"), label("marker"));
         add(list, V6,  MAX, S, NONE, Opcode.SETADDR,     out("result"),   in("address"));
+        add(list, V6,  MAX, S, NONE, Opcode.READARR,     res("result"), block("cell1"), in("at"));
+        add(list, V6,  MAX, S, NONE, Opcode.WRITEARR,    in("value"),   block("cell1"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.REMARK,      in("remark"));
 
         return List.copyOf(list);
@@ -332,6 +334,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter align(String name) {
         return new NamedParameter(InstructionParameterType.ALIGNMENT, name);
+    }
+
+    public static NamedParameter array(String name) {
+        return new NamedParameter(InstructionParameterType.ARRAY, name);
     }
 
     public static NamedParameter bctrl(String name) {

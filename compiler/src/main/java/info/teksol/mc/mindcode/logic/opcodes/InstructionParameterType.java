@@ -8,13 +8,18 @@ import java.util.Set;
 
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.*;
 
+// MUSTDO Fill in parameter names for all keywords/selectors. Change error message to include a parameter name.
+
 @NullMarked
 public enum InstructionParameterType {
     ///  Alignment for the DRAW PRINT instruction. 
     ALIGNMENT       ("alignment", Flags.KEYWORD, "center", "top", "bottom", "left", "right",
             "topLeft", "topRight", "bottomLeft", "bottomRight"),
 
-    ///  Input parameter accepting blocks (buildings). 
+    ///  Alignment for the DRAW PRINT instruction.
+    ARRAY           (Flags.SPECIAL),
+
+    ///  Input parameter accepting blocks (buildings).
     BLOCK           (Flags.INPUT),
 
     ///  Selector for the CONTROL instruction. 
@@ -65,7 +70,7 @@ public enum InstructionParameterType {
     LAYER           ("layer", Flags.KEYWORD, "floor", "ore", "block", "building"),
 
     ///  Selector for the ULOCATE instruction. No Flags.FUNCTION! 
-    LOCATE          (Flags.SELECTOR),
+    LOCATE          ("locate", Flags.SELECTOR),
 
     /// A const parameter. Specifies lookup category. The entire instruction is only available in V7;
     /// the parameter keywords therefore aren't version specific.
@@ -204,6 +209,12 @@ public enum InstructionParameterType {
         this.allowedValues = List.of();
     }
 
+    InstructionParameterType(String typeName, int flags) {
+        this.typeName = typeName;
+        this.flags = flags;
+        this.allowedValues = List.of();
+    }
+
     InstructionParameterType(String typeName, int flags, String... keywords) {
         this.typeName = typeName;
         this.flags = flags;
@@ -294,25 +305,28 @@ public enum InstructionParameterType {
     // Note: FUNCTION >> SELECTOR >> KEYWORD
 
     private static final class Flags {
-        ///  Keyword parameter (cannot use a variable). 
+        /// Keyword parameter (cannot use a variable).
         private static final int KEYWORD = 0;
 
-        ///  Input parameter (can use a variable). 
+        /// Input parameter (can use a variable).
         private static final int INPUT = 1;
 
-        ///  Output parameter (must use a variable for output value). 
+        /// Output parameter (must use a variable for output value).
         private static final int OUTPUT = 2;
 
-        ///   Opcode-variant-selecting parameter. Possible values are given by existing opcode variants for given version. 
+        /// Opcode-variant-selecting parameter. Possible values are given by existing opcode variants for given version.
         private static final int SELECTOR = 4;
 
-        ///  Defines the name of a function (or property). Must be a selector. 
+        /// Defines the name of a function (or property). Must be a selector.
         private static final int FUNCTION = 8;
 
-        ///  Unused parameter. Doesn't map to Mindcode functions. 
+        /// Unused parameter. Doesn't map to Mindcode functions.
         private static final int UNUSED = 16;
 
-        ///  Parameter requiring a global variable (see the SYNC instruction). 
+        /// Parameter requiring a global variable (see the SYNC instruction).
         private static final int GLOBAL = 32;
+
+        /// Parameter not corresponding to an existing mlog parameter type (e.g. array)
+        private static final int SPECIAL = 64;
     }
 }

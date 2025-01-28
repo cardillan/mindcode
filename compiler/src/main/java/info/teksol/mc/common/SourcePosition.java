@@ -8,6 +8,13 @@ import org.jspecify.annotations.Nullable;
 import java.nio.file.Path;
 import java.util.Comparator;
 
+/// Represents a position in a source file. The position has three components: start, end and token.
+/// Token must lie between start and end (inclusive). Token is most often equal to start, albeit in some cases,
+///  it can lie between start and end (e.g. in a binary expression, start and end correspond to the entire
+/// expression, while token corresponds to the position of the operator).
+///
+/// When start is equal to end, the position marks a single specific spot in the input file (e.g. a position
+/// of a missing semicolon).
 @NullMarked
 public record SourcePosition(InputFile inputFile,
                              TextFilePosition start,

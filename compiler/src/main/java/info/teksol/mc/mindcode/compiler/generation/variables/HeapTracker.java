@@ -11,7 +11,9 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /// Tracks heap usage. Creates heap variables and assigns indexes to them.
 @NullMarked
@@ -61,5 +63,19 @@ public class HeapTracker extends AbstractMessageEmitter {
         return modifiers.contains(Modifier.CACHED)
                 ? new ExternalCachedVariable(identifier.sourcePosition(), heapMemory, index, LogicVariable.global(identifier))
                 : new ExternalVariable(identifier.sourcePosition(), heapMemory, index, processor.nextTemp());
+    }
+
+    public List<ValueStore> createArray(AstIdentifier identifier, int size) {
+        if (!heapAllocated) {
+            error(identifier, ERR.EXTERNAL_MISSING_HEAP);
+        }
+
+        if (currentHeapIndex + size > endHeapIndex) {
+            error(identifier, ERR.EXTERNAL_HEAP_EXCEEDED_ARRAY, identifier.getName(),
+                    size, endHeapIndex - currentHeapIndex);
+        }
+
+        return IntStream.range(0, size).mapToObj(index -> (ValueStore) new ExternalVariable(identifier.sourcePosition(),
+                heapMemory, LogicNumber.create(currentHeapIndex++), processor.nextTemp())).toList();
     }
 }
