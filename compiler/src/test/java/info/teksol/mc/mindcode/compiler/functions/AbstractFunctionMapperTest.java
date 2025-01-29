@@ -5,6 +5,8 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssemblerContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
@@ -40,6 +42,51 @@ public class AbstractFunctionMapperTest {
         return new BaseFunctionMapper(functionMapperContext);
     }
 
+    protected static class VariablesContextImpl extends AbstractMessageEmitter implements VariablesContext {
+        private final CompilerProfile compilerProfile;
+        private final InstructionProcessor instructionProcessor;
+
+        public VariablesContextImpl(MessageConsumer messageConsumer, CompilerProfile compilerProfile,
+                InstructionProcessor instructionProcessor) {
+            super(messageConsumer);
+            this.compilerProfile = compilerProfile;
+            this.instructionProcessor = instructionProcessor;
+        }
+
+        @Override
+        public CompilerProfile compilerProfile() {
+            return compilerProfile;
+        }
+
+        @Override
+        public InstructionProcessor instructionProcessor() {
+            return instructionProcessor;
+        }
+    }
+
+
+    protected static class CodeAssemblerContextImpl extends VariablesContextImpl implements CodeAssemblerContext {
+        private final Variables variables;
+        private final AstContext rootAstContext;
+
+        public CodeAssemblerContextImpl(MessageConsumer messageConsumer, CompilerProfile compilerProfile,
+                InstructionProcessor instructionProcessor, AstContext rootAstContext) {
+            super(messageConsumer, compilerProfile, instructionProcessor);
+            this.rootAstContext = rootAstContext;
+            this.variables = new Variables(this);
+        }
+
+        @Override
+        public AstContext rootAstContext() {
+            return rootAstContext;
+        }
+
+        @Override
+        public Variables variables() {
+            return variables;
+        }
+    }
+
     protected static class FunctionMapperContextImpl extends AbstractMessageEmitter implements FunctionMapperContext {
         private final InstructionProcessor instructionProcessor;
         private final CodeAssembler assembler;
@@ -59,35 +106,6 @@ public class AbstractFunctionMapperTest {
         @Override
         public CodeAssembler assembler() {
             return assembler;
-        }
-    }
-
-    protected static class CodeAssemblerContextImpl extends AbstractMessageEmitter implements CodeAssemblerContext {
-        private final CompilerProfile compilerProfile;
-        private final InstructionProcessor instructionProcessor;
-        private final AstContext rootAstContext;
-
-        public CodeAssemblerContextImpl(MessageConsumer messageConsumer, CompilerProfile compilerProfile,
-                InstructionProcessor instructionProcessor, AstContext rootAstContext) {
-            super(messageConsumer);
-            this.compilerProfile = compilerProfile;
-            this.instructionProcessor = instructionProcessor;
-            this.rootAstContext = rootAstContext;
-        }
-
-        @Override
-        public CompilerProfile compilerProfile() {
-            return compilerProfile;
-        }
-
-        @Override
-        public InstructionProcessor instructionProcessor() {
-            return instructionProcessor;
-        }
-
-        @Override
-        public AstContext rootAstContext() {
-            return rootAstContext;
         }
     }
 }

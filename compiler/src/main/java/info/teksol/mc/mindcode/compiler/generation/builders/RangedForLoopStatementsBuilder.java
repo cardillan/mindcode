@@ -44,7 +44,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         ValueStore upperValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getLastValue()));
 
         // Store the upper value in a temporary variable registered in parent.
-        LogicValue fixedUpperBound = defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
+        LogicValue fixedUpperBound = assembler.defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
 
         // Condition for variable exceeding the upper bound of the range
         Condition condition = outsideRangeCondition(node.getRange());
@@ -59,7 +59,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         ValueStore loopControlVariable = resolveLValue(node.getVariable());
         loopControlVariable.setValue(assembler, lowerValue.getValue(assembler));
 
-        final LogicLabel beginLabel = nextLabel();
+        final LogicLabel beginLabel = assembler.nextLabel();
         LoopLabels loopLabels = enterLoop(node);
 
         // Condition

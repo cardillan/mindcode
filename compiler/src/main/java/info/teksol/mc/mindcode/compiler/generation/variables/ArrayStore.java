@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstArrayAccess;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -13,17 +13,20 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 import java.util.function.Consumer;
 
+/// Represents an array (internal or external). Provides means for accessing array elements statically or dynamically.
 @NullMarked
 public abstract class ArrayStore implements ValueStore {
     protected final SourcePosition sourcePosition;
     protected final String name;
     protected final List<ValueStore> elements;
 
-    public ArrayStore(AstIdentifier arrayIdentifier, List<ValueStore> elements) {
-        this.sourcePosition = arrayIdentifier.sourcePosition();
-        this.name = arrayIdentifier.getName();
+    public ArrayStore(SourcePosition sourcePosition, String name, List<ValueStore> elements) {
+        this.sourcePosition = sourcePosition;
+        this.name = name;
         this.elements = elements;
     }
+
+    public abstract ValueStore getElement(CodeAssembler assembler, AstArrayAccess node, ValueStore index);
 
     @Override
     public SourcePosition sourcePosition() {
@@ -45,7 +48,7 @@ public abstract class ArrayStore implements ValueStore {
     @Override
     public final boolean isComplex() {
         // This class can never be used in a context where isComplex matters.
-        throw new MindcodeInternalError("Unsupported for FormattableContent.");
+        throw new MindcodeInternalError("Unsupported for ArrayStore.");
     }
 
     @Override

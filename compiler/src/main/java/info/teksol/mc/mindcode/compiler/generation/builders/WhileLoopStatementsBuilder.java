@@ -33,7 +33,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
     }
 
     private void createDoWhileLoop(AstWhileLoopStatement node) {
-        final LogicLabel beginLabel = nextLabel();
+        final LogicLabel beginLabel = assembler.nextLabel();
         LoopLabels loopLabels = enterLoop(node);
 
         // Loop body
@@ -58,7 +58,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
     }
 
     private void createWhileLoop(AstWhileLoopStatement node) {
-        final LogicLabel beginLabel = nextLabel();
+        final LogicLabel beginLabel = assembler.nextLabel();
         LoopLabels loopLabels = enterLoop(node);
 
         // Condition

@@ -167,8 +167,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         enterFunction(function,  varargs);
         setupFunctionParameters(function, arguments.subList(0, nonVarargCount), false);
 
-        final LogicValue returnValue = function.isVoid() ? LogicVoid.VOID : nextNodeResultTemp();
-        final LogicLabel returnLabel = nextLabel();
+        final LogicValue returnValue = function.isVoid() ? LogicVoid.VOID : assembler.nextNodeResultTemp();
+        final LogicLabel returnLabel = assembler.nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
 
         ValueStore result = evaluateBody(function.getBody());
@@ -195,7 +195,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final boolean isVoid = function.isVoid();
 
         assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
-        final LogicLabel returnLabel = nextLabel();
+        final LogicLabel returnLabel = assembler.nextLabel();
         assembler.createSetAddress(LogicVariable.fnRetAddr(functionPrefix), returnLabel);
         assembler.createCallStackless(function.getLabel(), LogicVariable.fnRetVal(function));
         // Mark position where the function must return
@@ -241,7 +241,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         setupFunctionParameters(function, arguments, recursiveCall);
 
         // Recursive function call
-        final LogicLabel returnLabel = nextLabel();
+        final LogicLabel returnLabel = assembler.nextLabel();
         assembler.createCallRecursive(stack, function.getLabel(), returnLabel, LogicVariable.fnRetVal(function));
         assembler.createLabel(returnLabel); // where the function must return
 
@@ -289,7 +289,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             FunctionArgument argument = arguments.get(index);
             if (function.getDeclaredParameter(index).isInput()) {
                 if (misplacedInput(function, argument, function.getParameters().get(index))) {
-                    LogicVariable temp = unprotectedTemp();
+                    LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, argument.getValue(assembler));
                     argumentValues.offer(temp);
                 } else {
@@ -343,7 +343,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             if (argument.isOutput()) {
                 LogicVariable parameter = function.getParameter(i);
                 if (misplacedOutput(function, argument, parameter)) {
-                    LogicVariable temp = unprotectedTemp();
+                    LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, parameter.getValue(assembler));
                     finalizers.add(Tuple2.of(argument, temp));
                 } else {
@@ -365,7 +365,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // Allocate 'return value' type temp variable for it, so that it won't be eliminated;
             // this is easier than ensuring optimizers do not eliminate normal temporary variables
             // that received return values from functions.
-            final LogicVariable resultVariable = nextNodeResultTemp();
+            final LogicVariable resultVariable = assembler.nextNodeResultTemp();
             assembler.setSubcontextType(function, AstSubcontextType.RETURN_VALUE);
             assembler.createSet(resultVariable, LogicVariable.fnRetVal(function));
             return resultVariable;

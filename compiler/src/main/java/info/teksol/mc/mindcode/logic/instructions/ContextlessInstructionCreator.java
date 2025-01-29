@@ -107,6 +107,10 @@ public interface ContextlessInstructionCreator {
         return (ReadInstruction) createInstruction(astContext, READ, result, memory, index);
     }
 
+    default ReadArrInstruction createReadArr(AstContext astContext, LogicVariable result, LogicArray array, LogicValue index) {
+        return (ReadArrInstruction) createInstruction(astContext, READARR, result, array, index);
+    }
+
     default RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
         return (RemarkInstruction) createInstruction(astContext, REMARK, what);
     }
@@ -141,5 +145,9 @@ public interface ContextlessInstructionCreator {
 
     default WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index) {
         return (WriteInstruction) createInstruction(astContext, WRITE, value, memory, index);
+    }
+
+    default WriteArrInstruction createWriteArr(AstContext astContext, LogicValue value, LogicArray array, LogicValue index) {
+        return (WriteArrInstruction) createInstruction(astContext, WRITEARR, value, array, index);
     }
 }

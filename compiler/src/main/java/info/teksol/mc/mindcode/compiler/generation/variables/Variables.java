@@ -8,7 +8,6 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
-import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -48,7 +47,7 @@ public class Variables extends AbstractMessageEmitter {
 
     private HeapTracker heapTracker;
 
-    public Variables(CodeGeneratorContext context) {
+    public Variables(VariablesContext context) {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
@@ -178,7 +177,7 @@ public class Variables extends AbstractMessageEmitter {
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(identifier, size);
         } else if (modifiers.contains(Modifier.EXTERNAL)) {
-            result = ExternalArray.create(heapTracker, identifier, size);
+            result = heapTracker.createArray(identifier, size);
         } else {
             result = InternalArray.create(identifier, size);
         }

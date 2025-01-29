@@ -1236,7 +1236,7 @@ Function parameters are valid within the scope of the entire function, and are a
 
 # Dynamic linking to blocks
 
-Mindustry Logic provides functions which allow you to access linked blocks, or even blocks not linked to the processor, dynamically through the [`getlink()`](FUNCTIONS_80.markdown#instruction-getlink), [`ulocate()`](FUNCTIONS_80.markdown#instruction-ulocate) and other functions.
+Mindustry Logic provides functions which allow you to access linked blocks, or even blocks not linked to the processor, dynamically through the [`getlink()`](FUNCTIONS-80.markdown#instruction-getlink), [`ulocate()`](FUNCTIONS-80.markdown#instruction-ulocate) and other functions.
 
 These functions return a reference to a block. This reference can be stored in a regular variable, which can then be used to perform operations on the block in the same way as linked variables:
 

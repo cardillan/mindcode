@@ -41,6 +41,17 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void refusesArraysAsArguments() {
+            assertGeneratesMessage(
+                    "Invalid array reference.",
+                    """
+                            inline void foo(x) print(x); end;
+                            var a[10];
+                            foo(a);
+                            """);
+        }
+
+        @Test
         void refusesFormattablesAsArguments() {
             assertGeneratesMessage(
                     "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.",

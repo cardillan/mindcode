@@ -33,7 +33,7 @@ public class HeapTracker extends AbstractMessageEmitter {
         this.heapAllocated = true;
     }
 
-    private HeapTracker(CodeGeneratorContext context) {
+    private HeapTracker(VariablesContext context) {
         super(context.messageConsumer());
         this.processor = context.instructionProcessor();
         this.heapMemory = LogicVariable.INVALID;
@@ -42,7 +42,7 @@ public class HeapTracker extends AbstractMessageEmitter {
         this.heapAllocated = false;
     }
 
-    public static HeapTracker createDefaultTracker(CodeGeneratorContext context) {
+    public static HeapTracker createDefaultTracker(VariablesContext context) {
         return new HeapTracker(context);
     }
 
@@ -65,7 +65,7 @@ public class HeapTracker extends AbstractMessageEmitter {
                 : new ExternalVariable(identifier.sourcePosition(), heapMemory, index, processor.nextTemp());
     }
 
-    public List<ValueStore> createArray(AstIdentifier identifier, int size) {
+    public ExternalArray createArray(AstIdentifier identifier, int size) {
         if (!heapAllocated) {
             error(identifier, ERR.EXTERNAL_MISSING_HEAP);
         }
@@ -75,7 +75,10 @@ public class HeapTracker extends AbstractMessageEmitter {
                     size, endHeapIndex - currentHeapIndex);
         }
 
-        return IntStream.range(0, size).mapToObj(index -> (ValueStore) new ExternalVariable(identifier.sourcePosition(),
+        int baseIndex = currentHeapIndex;
+        List<ValueStore> elements = IntStream.range(0, size).mapToObj(index -> (ValueStore) new ExternalVariable(identifier.sourcePosition(),
                 heapMemory, LogicNumber.create(currentHeapIndex++), processor.nextTemp())).toList();
+
+        return new ExternalArray(identifier.sourcePosition(), identifier.getName(), heapMemory, baseIndex, elements);
     }
 }

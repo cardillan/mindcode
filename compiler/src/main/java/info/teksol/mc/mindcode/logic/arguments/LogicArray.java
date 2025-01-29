@@ -1,18 +1,29 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import org.jspecify.annotations.NullMarked;
 
-///  Represents an array
+///  Represents an internal/external array
 @NullMarked
 public class LogicArray extends AbstractArgument {
+    private final String arrayName;
+    protected final String mlog;
 
-    public LogicArray(ArgumentType argumentType, ValueMutability mutability) {
+    private LogicArray(String arrayName) {
         super(ArgumentType.ARRAY, ValueMutability.MUTABLE);
+        this.arrayName = arrayName;
+        this.mlog = "." + arrayName + "[]";
+    }
+
+    public String getArrayName() {
+        return arrayName;
     }
 
     @Override
     public String toMlog() {
-        throw new MindcodeInternalError("No mlog representation for an array");
+        return mlog;
+    }
+
+    public static LogicArray create(String arrayName) {
+        return new LogicArray(arrayName);
     }
 }

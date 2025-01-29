@@ -7,7 +7,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.CustomInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -22,10 +24,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/// CodeAssembler provides means for creating code from AST tree: methods for creating individual instructions and
+/// methods for maintaining and tracking AST context. The AST context tracked by this instance is automatically
+/// injected into all created instructions, so that the caller doesn't have to handle that.
+///
+/// Labels and temporary variables may also be generated through CodeAssembler.
 @NullMarked
 public class CodeAssembler extends AbstractMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
+    private final Variables variables;
     private final List<LogicInstruction> instructions = new ArrayList<>();
     private AstContext astContext;
     private boolean internalError = false;
@@ -37,11 +45,65 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        variables = context.variables();
         astContext = context.rootAstContext();
     }
 
     public InstructionProcessor getProcessor() {
         return processor;
+    }
+
+    public LogicLabel nextLabel() {
+        return processor.nextLabel();
+    }
+
+    public LogicLabel nextMarker() {
+        return processor.nextMarker();
+    }
+
+    /// Allocates a new temporary variable whose lifespan doesn't enter another node (child, sibling or parent).
+    /// The variable will **NOT** be pushed on the stack for recursive calls.
+    ///
+    /// @return a temporary variable for use strictly within the current AST node
+    public LogicVariable unprotectedTemp() {
+        return processor.nextTemp();
+    }
+
+    /// Allocates a new temporary variable whose scope is limited to a node (i.e. not needed outside that node).
+    /// The variable will be pushed on the stack if needed.
+    ///
+    /// @return a temporary variable for use within and below the current AST node
+    public LogicVariable nextTemp() {
+        LogicVariable variable = processor.nextTemp();
+        variables.registerNodeVariable(variable);
+        return variable;
+    }
+
+    /// Allocates a new temporary variable which transfers a value from child to parent node.
+    /// The variable will be pushed on the stack if needed.
+    ///
+    /// @return a temporary variable for use within the parent of the current AST node
+    public LogicVariable nextNodeResultTemp() {
+        LogicVariable variable = processor.nextTemp();
+        variables.registerParentNodeVariable(variable);
+        return variable;
+    }
+
+    /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
+    /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
+    /// directly, as it cannot be changed.
+    ///
+    /// @param valueStore the value to use
+    /// @return a LogicValue capturing the current value of the valueStore
+    public LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
+        if (valueStore instanceof LogicValue value && value.isImmutable()) {
+            return value;
+        } else {
+            LogicVariable tmp = processor.nextTemp().withType(argumentType);
+            variables.registerNodeVariable(tmp);
+            createSet(tmp, valueStore.getValue(this));
+            return tmp;
+        }
     }
 
     /// This is the sole method that adds an instruction to the list.
@@ -57,9 +119,9 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Internal errors may arise from compiling invalid source code. In such case it is possible that
     /// unsupported methods may get called (such as writing a value into input argument of a function).
     ///
-    /// When other errors are encountered and reported when compiling source code, it is assumed that
+    /// When other errors are encountered and reported while compiling source code, it is assumed that
     /// all internal errors arose due to the errors in the source code. However, when internal errors
-    /// are indicated without a syntax error being reported, it means we have an internal error.
+    /// are indicated without a syntax error being reported, it means a bug in the compiler.
     /// Produced code is probably invalid and must not be published.
     public void setInternalError() {
         internalError = true;

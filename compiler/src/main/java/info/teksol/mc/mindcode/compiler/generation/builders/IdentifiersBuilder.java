@@ -5,18 +5,21 @@ import info.teksol.mc.generated.ast.visitors.AstBuiltInIdentifierVisitor;
 import info.teksol.mc.generated.ast.visitors.AstIdentifierVisitor;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstArrayAccess;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstBuiltInIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ExternalVariable;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.Set;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
@@ -39,9 +42,12 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitArrayAccess(AstArrayAccess node) {
-        LogicVariable memory = resolveMemory(node);
-        LogicValue index = defensiveCopy(evaluate(node.getIndex()), TMP_VARIABLE);
-        return new ExternalVariable(node.getArray().sourcePosition(), memory, index, unprotectedTemp());
+        ValueStore valueStore = evaluate(node.getArray());
+        return switch (valueStore) {
+            case LogicVariable memory   -> memoryArrayAccess(node, memory);
+            case ArrayStore array       -> storeArrayAccess(node, array);
+            default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
+        };
     }
 
     @Override
@@ -54,19 +60,46 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitIdentifier(AstIdentifier identifier) {
-        return variables.resolveVariable(identifier, isLocalContext(), allowUndeclaredLinks());
+        return variables.resolveVariable(identifier, isLocalContext(), allowUndeclaredLinks())
+                .withSourcePosition(identifier.sourcePosition());
     }
 
-    private LogicVariable resolveMemory(AstArrayAccess node) {
-        ValueStore memory = evaluate(node.getArray());
-        if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
-            if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
+    private ValueStore memoryArrayAccess(AstArrayAccess node, LogicVariable memory) {
+        LogicValue index = assembler.defensiveCopy(evaluate(node.getIndex()), TMP_VARIABLE);
+        return new ExternalVariable(node.getArray().sourcePosition(), resolveMemory(node, memory), index, assembler.unprotectedTemp());
+    }
+
+    // TODO TYPES: type checking of the memory variable
+    private LogicVariable resolveMemory(AstArrayAccess node, LogicVariable memory) {
+        if (memoryExpressionTypes.contains(memory.getType()) || memory.isMainVariable()) {
+            if (memory instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
                 error(node.getArray(), ERR.ARRAY_PARAMETER_NOT_MEMORY, parameter.getName());
             }
-            return variable;
+            return memory;
         } else {
             error(node.getArray(), ERR.ARRAY_EXPRESSION_NOT_MEMORY, node.getArray().getName());
             return LogicVariable.INVALID;
         }
+    }
+
+    private ValueStore storeArrayAccess(AstArrayAccess node, ArrayStore array) {
+        ValueStore index = evaluate(node.getIndex());
+
+        if (index instanceof LogicNumber number) {
+            List<ValueStore> elements = array.getElements();
+
+            if (!number.isLong()) {
+                assembler.error(number.sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
+                return LogicVariable.INVALID;
+            } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
+                assembler.error(number.sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+                return LogicVariable.INVALID;
+            } else {
+                return elements.get(number.getIntValue());
+            }
+        }
+
+        // The ArrayStore implementation is responsible for making a defensive copy of the index if needed
+        return array.getElement(assembler, node, index);
     }
 }

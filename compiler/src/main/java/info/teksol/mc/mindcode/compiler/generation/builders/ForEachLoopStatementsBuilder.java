@@ -43,9 +43,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     private class ForEachLoopBuilder extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
         private final List<ValueStore> values;
         private final List<Iterator> iterators;
-        private final LogicLabel bodyLabel = nextLabel();
-        private final LogicLabel marker = nextMarker();
-        private final LogicVariable nextAddress = nextTemp();
+        private final LogicLabel bodyLabel = assembler.nextLabel();
+        private final LogicLabel marker = assembler.nextMarker();
+        private final LogicVariable nextAddress = assembler.nextTemp();
         private final LoopLabels loopLabels;
 
         // Used to traverse the value list during leading/trailing code creation.
@@ -113,7 +113,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             // Setting the iterator address first. It is possible to use `continue` in the value list
             // (why, oh why?), in which case the next iteration is performed.
-            LogicLabel nextValueLabel = nextLabel();
+            LogicLabel nextValueLabel = assembler.nextLabel();
             assembler.createSetAddress(nextAddress, nextValueLabel);
 
             // Copy values from the list to iterators

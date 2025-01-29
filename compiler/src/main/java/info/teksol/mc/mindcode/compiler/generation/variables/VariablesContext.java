@@ -1,7 +1,10 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.mindcode.compiler.CompilerContext;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.profile.CompilerProfile;
 
 public interface VariablesContext extends CompilerContext {
-    Variables variables();
+    CompilerProfile compilerProfile();
+    InstructionProcessor instructionProcessor();
 }

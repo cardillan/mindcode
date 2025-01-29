@@ -40,7 +40,7 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
         final List<FunctionArgument> arguments = processArguments(call);
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
 
-        LogicVariable result = nextNodeResultTemp();
+        LogicVariable result = assembler.nextNodeResultTemp();
         if (arguments.size() < 2) {
             error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS,
                     call.getFunctionName(), 2, call.getArguments().size());

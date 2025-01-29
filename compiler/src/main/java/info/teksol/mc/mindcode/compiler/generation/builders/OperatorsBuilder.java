@@ -23,17 +23,17 @@ public class OperatorsBuilder extends AbstractBuilder implements AstOperatorBina
     public ValueStore visitOperatorBinary(AstOperatorBinary node) {
         final ValueStore left = evaluate(node.getLeft());
         final ValueStore right = evaluate(node.getRight());
-        final LogicVariable tmp = nextNodeResultTemp();
+        final LogicVariable tmp = assembler.nextNodeResultTemp();
 
         switch (node.getOperation()) {
             case BOOLEAN_OR -> {
-                final LogicVariable tmp2 = unprotectedTemp();
+                final LogicVariable tmp2 = assembler.unprotectedTemp();
                 assembler.createOp(Operation.BOOLEAN_OR, tmp2, left.getValue(assembler), right.getValue(assembler));
                 // Ensure the result is 0 or 1
                 assembler.createOp(Operation.NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
             case STRICT_NOT_EQUAL -> {
-                final LogicVariable tmp2 = unprotectedTemp();
+                final LogicVariable tmp2 = assembler.unprotectedTemp();
                 assembler.createOp(Operation.STRICT_EQUAL, tmp2, left.getValue(assembler), right.getValue(assembler));
                 assembler.createOp(Operation.EQUAL, tmp, tmp2, LogicBoolean.FALSE);
             }
@@ -53,7 +53,7 @@ public class OperatorsBuilder extends AbstractBuilder implements AstOperatorBina
             return operand;  // Unary plus is a no-op
         }
 
-        final LogicVariable tmp = nextNodeResultTemp();
+        final LogicVariable tmp = assembler.nextNodeResultTemp();
         LogicValue operandValue = operand.getValue(assembler);
         switch (operation) {
             case SUB -> assembler.createOp(Operation.SUB, tmp, LogicNumber.ZERO, operandValue);

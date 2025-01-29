@@ -163,6 +163,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case PRINTFLUSH  -> new PrintflushInstruction(astContext, arguments, params);
             case PUSH        -> new PushInstruction(astContext, arguments, params);
             case READ        -> new ReadInstruction(astContext, arguments, params);
+            case READARR     -> new ReadArrInstruction(astContext, arguments, params);
             case REMARK      -> new RemarkInstruction(astContext, arguments, params);
             case RETURN      -> new ReturnInstruction(astContext, arguments, params);
             case RETURNREC   -> new ReturnRecInstruction(astContext, arguments, params);
@@ -171,6 +172,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case SETADDR     -> new SetAddressInstruction(astContext, arguments, params);
             case STOP        -> new StopInstruction(astContext);
             case WRITE       -> new WriteInstruction(astContext, arguments, params);
+            case WRITEARR    -> new WriteArrInstruction(astContext, arguments, params);
             default          ->  createGenericInstruction(astContext, opcode, arguments, params);
         };
     }

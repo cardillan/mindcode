@@ -65,10 +65,10 @@ At this point, `7` is still the default target for both command line tool and we
 
 All supported functions and their respective Mindustry instruction counterparts can be found in the function reference. Please note that the reference serves just to document all existing functions and the way they are compiled to Mindustry Logic, but it does not aim to describe the behavior of the functions/instructions.
 
-* [Function reference for Mindustry Logic 6.0](FUNCTIONS_60.markdown)
-* [Function reference for Mindustry Logic 7.0](FUNCTIONS_70.markdown)
-* [Function reference for Mindustry Logic 7.1](FUNCTIONS_71.markdown)
-* [Function reference for Mindustry Logic 8.0](FUNCTIONS_80.markdown)
+* [Function reference for Mindustry Logic 6.0](FUNCTIONS-60.markdown)
+* [Function reference for Mindustry Logic 7.0](FUNCTIONS-70.markdown)
+* [Function reference for Mindustry Logic 7.1](FUNCTIONS-71.markdown)
+* [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)
 
 ## Instruction mapping rules
 
@@ -101,7 +101,7 @@ There is a special case for `control` instruction setting a single value on a li
 
 The `block` in the examples can be a regular variable or a linked variable.
 
-Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS_70.markdown#instruction-setprop) instruction.
+Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS-70.markdown#instruction-setprop) instruction.
 
 ## Alternative `sensor` syntax
 

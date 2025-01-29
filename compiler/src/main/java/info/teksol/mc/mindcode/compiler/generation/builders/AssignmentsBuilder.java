@@ -71,7 +71,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             rvalue = NULL;
         } else if (logicValue.isVolatile()) {
             // The variable which keeps the value is volatile. Preserve the value.
-            LogicVariable tmp = nextTemp();
+            LogicVariable tmp = assembler.nextTemp();
             assembler.createSet(tmp, logicValue);
             rvalue = tmp;
         } else {
@@ -97,7 +97,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             // TODO Specific optimization for postfix operators - swap assignment and increment
             //      Also in loops
             LogicValue left = target.getValue(assembler);
-            LogicVariable tmp = nextTemp();
+            LogicVariable tmp = assembler.nextTemp();
             assembler.createSet(tmp, left);
             result = tmp;
 
@@ -121,7 +121,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
                 // Assigning to a volatile variable or a complex storage: compute the value first, then use it as a result
                 // We're using a regular temp, not a node result temp, because the variable will be registered
                 // in the parent context below
-                LogicVariable tmp = nextTemp();
+                LogicVariable tmp = assembler.nextTemp();
                 valueSetter.accept(tmp);
                 target.setValue(assembler, tmp);
                 result = tmp;
@@ -141,7 +141,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
     private Consumer<LogicVariable> createValueSetter(Operation operation, LogicValue left, LogicValue rvalue) {
         if (operation == Operation.BOOLEAN_OR) {
             return variable -> {
-                final LogicVariable tmp = nextTemp();
+                final LogicVariable tmp = assembler.nextTemp();
                 assembler.createOp(Operation.BOOLEAN_OR, tmp, left, rvalue);
                 // Ensure the result is 0 or 1
                 assembler.createOp(Operation.NOT_EQUAL, variable, tmp, LogicBoolean.FALSE);

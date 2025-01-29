@@ -350,7 +350,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     private void generateLinkGuard(LogicVariable variable, boolean noinit) {
         if (variable.getType() == BLOCK && profile.isLinkedBlockGuards() && guardedBlockNames.add(variable.toMlog()) && !noinit) {
-            LogicLabel label = nextLabel();
+            LogicLabel label = assembler.nextLabel();
             assembler.createLabel(label);
             assembler.createJump(label,Condition.EQUAL, variable, LogicNull.NULL);
         }

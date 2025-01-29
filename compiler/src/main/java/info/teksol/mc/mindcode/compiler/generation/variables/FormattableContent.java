@@ -57,4 +57,9 @@ public class FormattableContent implements ValueStore {
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Unsupported for FormattableContent.");
     }
+
+    @Override
+    public FormattableContent withSourcePosition(SourcePosition sourcePosition) {
+        return new FormattableContent(sourcePosition, parts);
+    }
 }

@@ -5,7 +5,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapperContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -13,12 +13,12 @@ import org.jspecify.annotations.Nullable;
 public interface CodeGeneratorContext extends
         CodeAssemblerContext,
         CompileTimeEvaluatorContext,
-        FunctionMapperContext,
-        VariablesContext {
+        FunctionMapperContext {
     CompileTimeEvaluator compileTimeEvaluator();
     ReturnStack returnStack();
     StackTracker stackTracker();
     void setHeapAllocation(AstAllocation heapAllocation);
     @Nullable AstAllocation heapAllocation();
     CallGraph callGraph();
+    Variables variables();
 }

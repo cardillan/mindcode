@@ -233,60 +233,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         }
     }
 
-    /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
-    /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
-    /// directly, as it cannot be changed.
-    ///
-    /// @param valueStore the value to use
-    /// @return a LogicValue capturing the current value of the valueStore
-    protected LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
-        if (valueStore instanceof LogicValue value && value.isImmutable()) {
-            return value;
-        } else {
-            LogicVariable tmp = processor.nextTemp().withType(argumentType);
-            variables.registerNodeVariable(tmp);
-            assembler.createSet(tmp, valueStore.getValue(assembler));
-            return tmp;
-        }
-    }
-
-    /// Allocates a new temporary variable whose lifespan doesn't enter another node (child, sibling or parent).
-    /// The variable will **NOT** be pushed on the stack for recursive calls.
-    ///
-    /// @return a temporary variable for use strictly within the current AST node
-    protected LogicVariable unprotectedTemp() {
-        return processor.nextTemp();
-    }
-
-
-    /// Allocates a new temporary variable whose scope is limited to a node (i.e. not needed outside that node).
-    /// The variable will be pushed on the stack if needed.
-    ///
-    /// @return a temporary variable for use within and below the current AST node
-    protected LogicVariable nextTemp() {
-        LogicVariable variable = processor.nextTemp();
-        variables.registerNodeVariable(variable);
-        return variable;
-    }
-
-    /// Allocates a new temporary variable which transfers a value from child to parent node.
-    /// The variable will be pushed on the stack if needed.
-    ///
-    /// @return a temporary variable for use within the parent of the current AST node
-    protected LogicVariable nextNodeResultTemp() {
-        LogicVariable variable = processor.nextTemp();
-        variables.registerParentNodeVariable(variable);
-        return variable;
-    }
-
-    public LogicLabel nextLabel() {
-        return processor.nextLabel();
-    }
-
-    public LogicLabel nextMarker() {
-        return processor.nextMarker();
-    }
-
     protected Condition insideRangeCondition(AstRange range) {
         return range.isExclusive() ? Condition.LESS_THAN : Condition.LESS_THAN_EQ;
     }

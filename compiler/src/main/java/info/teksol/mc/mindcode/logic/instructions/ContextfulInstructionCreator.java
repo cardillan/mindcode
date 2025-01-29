@@ -106,6 +106,10 @@ public interface ContextfulInstructionCreator {
         return (ReadInstruction) createInstruction(READ, result, memory, index);
     }
 
+    default ReadArrInstruction createReadArr(LogicVariable result, LogicArray array, LogicValue index) {
+        return (ReadArrInstruction) createInstruction(READARR, result, array, index);
+    }
+
     default RemarkInstruction createRemark(LogicValue what) {
         return (RemarkInstruction) createInstruction(REMARK, what);
     }
@@ -140,5 +144,9 @@ public interface ContextfulInstructionCreator {
 
     default WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
         return (WriteInstruction) createInstruction(WRITE, value, memory, index);
+    }
+
+    default WriteArrInstruction createWriteArr(LogicValue value, LogicArray array, LogicValue index) {
+        return (WriteArrInstruction) createInstruction(WRITEARR, value, array, index);
     }
 }

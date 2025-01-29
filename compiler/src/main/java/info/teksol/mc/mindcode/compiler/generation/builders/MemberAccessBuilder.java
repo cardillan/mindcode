@@ -32,9 +32,9 @@ public class MemberAccessBuilder extends AbstractBuilder implements
         String propertyName = node.getMember().getName();
         if (validateProperty(propertyName)) {
             return new Property(node.sourcePosition(),
-                    defensiveCopy(target, ArgumentType.TMP_VARIABLE),
+                    assembler.defensiveCopy(target, ArgumentType.TMP_VARIABLE),
                     propertyName,
-                    unprotectedTemp());
+                    assembler.unprotectedTemp());
         } else {
             error(node.getMember(), ERR.PROPERTY_UNKNOWN, propertyName);
             return LogicVariable.INVALID;
@@ -54,7 +54,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitPropertyAccess(AstPropertyAccess node) {
         LogicValue target = resolveTarget(node.getObject(), ERR.CANNOT_INVOKE_PROPERTIES);
-        final LogicVariable resultVar = nextNodeResultTemp();
+        final LogicVariable resultVar = assembler.nextNodeResultTemp();
         assembler.createSensor(resultVar, target, evaluate(node.getProperty()).getValue(assembler));
         return resultVar;
     }

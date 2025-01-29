@@ -154,8 +154,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking:** changed the default language target from ML7 to ML7A. The following functions are affected:
-  * `getBlock`: previously, the building at given coordinates was returned through an output parameter. In ML7A, the building is returned through function return value. See [`getBlock()`](doc/syntax/FUNCTIONS_71.markdown#instruction-ucontrol).
-  * `ulocate`: previously, the function returned a boolean value (`true` when the building was found, `false` otherwise). In ML7A, the function returns a building (if found), and the `found` flag is returned through an output parameter. See [`getBlock()`](doc/syntax/FUNCTIONS_71.markdown#instruction-ulocate).
+  * `getBlock`: previously, the building at given coordinates was returned through an output parameter. In ML7A, the building is returned through function return value. See [`getBlock()`](doc/syntax/FUNCTIONS-71.markdown#instruction-ucontrol).
+  * `ulocate`: previously, the function returned a boolean value (`true` when the building was found, `false` otherwise). In ML7A, the function returns a building (if found), and the `found` flag is returned through an output parameter. See [`getBlock()`](doc/syntax/FUNCTIONS-71.markdown#instruction-ulocate).
 * Changed automatic generation of Intellij IDEA settings files to only modify the zip files when the contents of the contained files changes.
 * Changed Loop Unrolling Optimization to handle more cases of loop control variable modification on advanced level.
 
@@ -494,7 +494,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Added limited support for the new `sync` instruction through the `sync()` function. The function requires a global
   variable as a parameter (see [the `sync()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-sync-function) for 
   the description of the function and the limitations imposed on it).
-* Added support for the [`effect` instruction](doc/syntax/FUNCTIONS_71.markdown#instruction-effect).
+* Added support for the [`effect` instruction](doc/syntax/FUNCTIONS-71.markdown#instruction-effect).
 * Added more capabilities to the
   [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization): 
   * Replacing `@this.x` and `@this.y` expressions by the `@thisx`/`@thisy` built-in constants.
@@ -735,7 +735,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added support for the [`unitHealth` function](doc/syntax/FUNCTIONS_70.markdown#instruction-setrule).
+* Added support for the [`unitHealth` function](doc/syntax/FUNCTIONS-70.markdown#instruction-setrule).
 
 ### Fixed
 
@@ -751,7 +751,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS_70.markdown#instruction-op) in Mindustry v145.
+* Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS-70.markdown#instruction-op) in Mindustry v145.
 
 ## 2023-06-17
 
@@ -898,11 +898,11 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added language target `7A`, i.e. Mindcode Logic version 7, revision A. Uses the same instruction set as `7`, except  
   the `getBlock` and `ulocate` functions returning the located block/building.
-  See [`getBlock`](doc/syntax/FUNCTIONS_71.markdown#instruction-ucontrol),
-  [`ulocate`](doc/syntax/FUNCTIONS_71.markdown#instruction-ulocate). Target `7` is still default both in webapp 
+  See [`getBlock`](doc/syntax/FUNCTIONS-71.markdown#instruction-ucontrol),
+  [`ulocate`](doc/syntax/FUNCTIONS-71.markdown#instruction-ulocate). Target `7` is still default both in webapp 
   and in the command line tool, so the change doesn't break existing code.
 * Added support for the reintroduced `ucontrol pathfind` instruction. When issued, navigates current unit to given 
-  location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS_71.markdown#instruction-ucontrol). 
+  location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS-71.markdown#instruction-ucontrol). 
 * Added command line options for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schematic-action-help)
   to specify order in which blocks are written to the schematic definition file and when to generate the `facing` 
   directive.
@@ -1009,7 +1009,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Changed
 
-* Changed [`ubind` function](doc/syntax/FUNCTIONS_70.markdown#instruction-ubind) to return the freshly bound unit.
+* Changed [`ubind` function](doc/syntax/FUNCTIONS-70.markdown#instruction-ubind) to return the freshly bound unit.
 * Changed [encoding of numeric values to mlog](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic).
 
 ### Fixed
@@ -1057,7 +1057,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   The value assigned must be a compile-time constant expression.
 * Added [compiler directives](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) (`#set`): optimization and target instruction set 
   can be now set from the web app compiler.
-* Support for the new [`setprop` world processor instruction](doc/syntax/FUNCTIONS_70.markdown#instruction-setprop)
+* Support for the new [`setprop` world processor instruction](doc/syntax/FUNCTIONS-70.markdown#instruction-setprop)
   available in Mindustry v143.  
 
 ### Changed

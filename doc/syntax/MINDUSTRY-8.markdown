@@ -2,7 +2,7 @@
 
 Mindustry version 8 will hopefully be released soon. The expected new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to 8 either by command-line argument, or by the `#set target = 8;` directive.
 
-The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.0](FUNCTIONS_80.markdown).
+The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown).
 
 To run the code produced by Mindcode Logic 8, you need to use one of the development versions of Mindustry (a "bleeding-edge" version).
 
@@ -301,4 +301,4 @@ Adds a map locale property value to the text buffer.
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS_80.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)
+[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS-80.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)

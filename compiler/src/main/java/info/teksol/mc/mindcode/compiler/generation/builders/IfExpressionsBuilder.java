@@ -39,9 +39,9 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
         assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
         final ValueStore condition = variables.excludeVariablesFromTracking(() -> evaluate(node.getCondition()));
 
-        final LogicVariable tmp = nextNodeResultTemp();
-        final LogicLabel elseBranch = nextLabel();
-        final LogicLabel endBranch = nextLabel();
+        final LogicVariable tmp = assembler.nextNodeResultTemp();
+        final LogicLabel elseBranch = assembler.nextLabel();
+        final LogicLabel endBranch = assembler.nextLabel();
 
         assembler.createJump(elseBranch, Condition.EQUAL, condition.getValue(assembler), FALSE);
 

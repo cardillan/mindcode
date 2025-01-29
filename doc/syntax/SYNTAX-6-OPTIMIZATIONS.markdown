@@ -1287,4 +1287,4 @@ The benefit of an optimization is then computed as the sum of weights of instruc
 
 ---
 
-[« Previous: Advanced features](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS_60.markdown)
+[« Previous: Advanced features](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS-60.markdown)

@@ -1,6 +1,6 @@
 # Mindcode
 
-Mindcode is a high-level language for [Mindustry](https://github.com/anuke/mindustry). The language design was inspired mostly by Ruby, but there are quite a few differences. Mindcode aims to provide programmatic access to full Mindustry Logic functionality. Mindustry Logic instructions interacting with Mindustry World are available through functions (see [Function reference for Mindustry Logic 8.0](FUNCTIONS_80.markdown)). Other instructions are used by expressions, control structures and other statements in Mindcode.
+Mindcode is a high-level language for [Mindustry](https://github.com/anuke/mindustry). The language design was inspired mostly by Ruby, but there are quite a few differences. Mindcode aims to provide programmatic access to full Mindustry Logic functionality. Mindustry Logic instructions interacting with Mindustry World are available through functions (see [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)). Other instructions are used by expressions, control structures and other statements in Mindcode.
 
 This documentation covers the basics of Mindcode syntax:
 
@@ -14,10 +14,10 @@ This documentation covers the basics of Mindcode syntax:
 
 Function reference for individual compiler versions:
 
-* [Function reference for Mindustry Logic 6.0](FUNCTIONS_60.markdown)
-* [Function reference for Mindustry Logic 7.0](FUNCTIONS_70.markdown)
-* [Function reference for Mindustry Logic 7.1](FUNCTIONS_71.markdown)
-* [Function reference for Mindustry Logic 8.0](FUNCTIONS_80.markdown)
+* [Function reference for Mindustry Logic 6.0](FUNCTIONS-60.markdown)
+* [Function reference for Mindustry Logic 7.0](FUNCTIONS-70.markdown)
+* [Function reference for Mindustry Logic 7.1](FUNCTIONS-71.markdown)
+* [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)
 
 For Mindustry Logic 8 and later, new mlog instructions and a Mindcode system library of functions are supported:
 

@@ -21,17 +21,17 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
 
     @Override
     public ValueStore visitCaseExpression(AstCaseExpression node) {
-        LogicVariable resultVar = nextNodeResultTemp();
-        LogicLabel exitLabel = nextLabel();
+        LogicVariable resultVar = assembler.nextNodeResultTemp();
+        LogicLabel exitLabel = assembler.nextLabel();
 
         double multiplier = 1.0 / node.getAlternatives().size();
         int remain = node.getAlternatives().size();
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
-        LogicValue caseValue = defensiveCopy(evaluate(node.getExpression()), ArgumentType.AST_VARIABLE);
+        LogicValue caseValue = assembler.defensiveCopy(evaluate(node.getExpression()), ArgumentType.AST_VARIABLE);
 
         for (AstCaseAlternative alternative : node.getAlternatives()) {
-            LogicLabel nextAlt = nextLabel();         // Next alternative
-            LogicLabel bodyLabel = nextLabel();       // Body of this alternative
+            LogicLabel nextAlt = assembler.nextLabel();         // Next alternative
+            LogicLabel bodyLabel = assembler.nextLabel();       // Body of this alternative
             double whenMultiplier = multiplier * remain--;
 
             variables.excludeVariablesFromTracking(() -> {
@@ -42,7 +42,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
                     if (value instanceof AstRange range) {
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
-                        LogicLabel nextExp = nextLabel();       // Next value in when list
+                        LogicLabel nextExp = assembler.nextLabel();       // Next value in when list
                         ValueStore minValue = evaluate(range.getFirstValue());
                         assembler.createJump(nextExp, Condition.LESS_THAN, caseValue, minValue.getValue(assembler));
                         // The max value is only evaluated when the min value lets us through

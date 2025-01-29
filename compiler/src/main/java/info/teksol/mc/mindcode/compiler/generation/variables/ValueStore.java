@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
 /// Represents a read-write or read-only value (l-value or r-value). L-values are variables, including external ones,
 /// and, in the future, array or structure elements. R-values are all l-values plus constants and parameters.
 ///
-/// Some nodes might not be even r-values (e.g. a formattable string literal). These must be specifically
+/// Some nodes might not be even r-values (e.g. a formattable string literal or array). These must be specifically
 /// handled when needed (within the context on an inline function call, for example). Such implementations should
 /// emit errors when {@code getValue} is called (this will prevent the instance from being assigned to an mlog
 /// variable) and provide a different mechanism for accessing the contained information.
@@ -96,5 +97,11 @@ public interface ValueStore extends SourceElement {
     ///
     /// @param assembler assembler instance used to produce code for setting the value, if needed
     default void storeValue(CodeAssembler assembler) {
+    }
+
+    /// Returns an instance with updated source position. Only implementations that report errors
+    /// from calls to internal methods need to implement this method.
+    default ValueStore withSourcePosition(SourcePosition sourcePosition) {
+        return this;
     }
 }

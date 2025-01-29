@@ -293,10 +293,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return getContext();
     }
 
-    public static VariablesContext getVariablesContext() {
-        return getContext();
-    }
-
     // Compiler outputs
     public CommonTokenStream getTokenStream(InputFile inputFile) {
         return tokenStreams.get(inputFile);
