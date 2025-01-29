@@ -216,7 +216,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
         // Sort variables
-        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(instructionProcessor, profile);
+        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(profile, instructionProcessor);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code
@@ -285,7 +285,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     // Root method for obtaining compiler contexts
     // Allows finding all out-of-line usages of compiler context through call hierarchy.
-    private static MindcodeCompiler getContext() {
+    public static MindcodeCompiler getContext() {
         return context.get();
     }
 

@@ -48,14 +48,6 @@ public interface MlogInstruction {
     @Nullable
     List<InstructionParameterType> getArgumentTypes();
 
-    /// Returns the true size of the instruction. Real instructions have a size of 1, virtual instruction may get
-    /// resolved to more (or less) real instructions.
-    ///
-    /// @return real size of the instruction
-    default int getRealSize() {
-        return getOpcode().getSize();
-    }
-
     /// @return the mlog representation of the instruction
     default String toMlog() {
         return LogicInstructionPrinter.toStringSimple(this);

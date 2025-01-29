@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
@@ -73,8 +74,7 @@ class ReturnOptimizer extends BaseOptimizer {
     }
 
     private boolean hasNoCode(List<LogicInstruction> instructions) {
-        return instructions.subList(1, instructions.size() - 1).stream()
-                .mapToInt(LogicInstruction::getRealSize).sum() == 0;
+        return InstructionCounter.computeSize(instructions.subList(1, instructions.size() - 1)) == 0;
     }
 
     private @Nullable ReturnRecInstruction findReturnInstruction(LogicList body) {
@@ -87,8 +87,8 @@ class ReturnOptimizer extends BaseOptimizer {
     }
 
     private OptimizationAction createOptimizationAction(JumpInstruction ix, ReturnRecInstruction returnRecInstruction) {
-        int cost = returnRecInstruction.getRealSize() - ix.getRealSize();
-        double benefit = ix.getRealSize() * ix.getAstContext().totalWeight();
+        int cost = returnRecInstruction.getRealSize(null) - ix.getRealSize(null);
+        double benefit = ix.getRealSize(null) * ix.getAstContext().totalWeight();
         return new ReplaceReturnStatementAction(ix.getAstContext(), cost, benefit, ix, returnRecInstruction);
     }
 

@@ -8,7 +8,6 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
 import org.jspecify.annotations.NullMarked;
@@ -89,7 +88,7 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
 
-        int bodySize = body.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        int bodySize = body.realSize();
         int cost = (bodySize - 1) * calls.size() - bodySize;
 
         return cost <= costLimit ? new InlineFunctionAction(context, cost, benefit) : null;
@@ -194,7 +193,7 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
         // Cost: body size minus one (return) times number of calls minus body size (we'll remove the original)
-        int cost = body.stream().mapToInt(LogicInstruction::getRealSize).sum() - 1;
+        int cost = body.realSize() - 1;
         return cost <= costLimit ? new InlineFunctionCallAction(call, cost, benefit) : null;
     }
 

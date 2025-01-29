@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.emulator.MindustryVariable;
 import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstForEachLoopStatement;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
@@ -172,9 +173,8 @@ class LoopUnroller extends BaseOptimizer {
 
                 // Real size of one unrolled iteration. We ignore loop control updates (jump is already removed)
                 // Loop control updates will only be removed by Data Flow Optimization later on.
-                int size = loopIxs.stream().mapToInt(LogicInstruction::getRealSize).sum()
-                        - controlIxs.stream().mapToInt(LogicInstruction::getRealSize).sum();
-                int originalSize = contextStream(loop).mapToInt(LogicInstruction::getRealSize).sum();
+                int size = InstructionCounter.computeSize(loopIxs) - InstructionCounter.computeSize(controlIxs.stream());
+                int originalSize = InstructionCounter.computeSize(contextStream(loop));
 
                 int loopLimit = size <= 0 ? costLimit : costLimit / size;
                 int loops = findLoopCount(loop, jump, controlVariable, initLiteral, controlIxs, loopLimit);
@@ -353,7 +353,7 @@ class LoopUnroller extends BaseOptimizer {
 
         int loops = leading.size();
         int savings = computeSavedInstructions(loop, loops);
-        int size = body.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        int size = body.realSize();
 
         // Optimization cost could actually get negative
         int cost = Math.max(size * loops - savings, 0);

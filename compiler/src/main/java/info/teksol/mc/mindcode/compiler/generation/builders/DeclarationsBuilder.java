@@ -208,7 +208,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             declaredSize = initialSize;
         }
 
-        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers);
+        ArrayStore<?> array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers);
 
         for (int i = 0; i < initialSize; i++) {
             AstExpression initExpression = specification.getExpressions().get(i);

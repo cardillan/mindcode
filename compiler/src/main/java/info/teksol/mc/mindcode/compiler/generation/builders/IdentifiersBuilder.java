@@ -86,7 +86,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         ValueStore index = evaluate(node.getIndex());
 
         if (index instanceof LogicNumber number) {
-            List<ValueStore> elements = array.getElements();
+            List<? extends ValueStore> elements = array.getElements();
 
             if (!number.isLong()) {
                 assembler.error(number.sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);

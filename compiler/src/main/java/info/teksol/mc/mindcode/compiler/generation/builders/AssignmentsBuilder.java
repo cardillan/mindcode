@@ -150,5 +150,4 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             return variable -> assembler.createOp(operation, variable, left, rvalue);
         }
     }
-
 }

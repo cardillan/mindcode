@@ -115,8 +115,8 @@ public interface ContextlessInstructionCreator {
         return (RemarkInstruction) createInstruction(astContext, REMARK, what);
     }
 
-    default ReturnInstruction createReturn(AstContext astContext, LogicVariable address, LogicLabel marker) {
-        return (ReturnInstruction) createInstruction(astContext, RETURN, address, marker);
+    default ReturnInstruction createReturn(AstContext astContext, LogicVariable address) {
+        return (ReturnInstruction) createInstruction(astContext, RETURN, address);
     }
 
     default ReturnRecInstruction createReturnRec(AstContext astContext, LogicVariable stack) {

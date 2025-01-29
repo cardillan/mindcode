@@ -796,6 +796,14 @@ class DataFlowOptimizer extends BaseOptimizer {
                     functionEndStates.add(variableStates.copy("function end handling"));
                 }
             }
+            case READARR -> {
+                ReadArrInstruction ix = (ReadArrInstruction) instruction;
+                ix.getArray().getElements().forEach(e -> variableStates.valueRead(e,instruction, false, reachable));
+            }
+            case WRITEARR -> {
+                WriteArrInstruction ix = (WriteArrInstruction) instruction;
+                ix.getArray().getElements().forEach(variableStates::valueReset);
+            }
         }
 
         indentDec();

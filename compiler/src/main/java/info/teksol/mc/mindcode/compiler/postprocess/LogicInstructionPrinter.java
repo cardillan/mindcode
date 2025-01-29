@@ -198,16 +198,16 @@ public class LogicInstructionPrinter {
         @Override
         public String printLineNumber(LogicInstruction instruction, String decoration) {
             String result;
-            if (instruction.getRealSize() == 0) {
+            if (instruction.getRealSize(null) == 0) {
                 result = "%5s%s   ".formatted("", decoration);
                 lastRemark = false;
             } else {
                 result = "%5d%s:  ".formatted(lineNumber, decoration);
-                if (instruction instanceof RemarkInstruction && instruction.getRealSize() == 2) {
+                if (instruction instanceof RemarkInstruction && instruction.getRealSize(null) == 2) {
                     lineNumber += lastRemark ? 1 : 2;
                     lastRemark = true;
                 } else {
-                    lineNumber += instruction.getRealSize();
+                    lineNumber += instruction.getRealSize(null);
                     lastRemark = false;
                 }
             }

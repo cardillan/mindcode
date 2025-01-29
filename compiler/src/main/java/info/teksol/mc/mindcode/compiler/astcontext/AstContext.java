@@ -89,6 +89,13 @@ public final class AstContext {
         return child;
     }
 
+    public AstContext createSubcontext(AstContextType contextType, AstSubcontextType subcontextType, double weight) {
+        // Subcontext always inherits compiler profile from parent context
+        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
+        children.add(child);
+        return child;
+    }
+
     public Map<AstContext, AstContext> createDeepCopy() {
         Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
         createDeepCopy(map, parent);

@@ -24,6 +24,9 @@ public enum AstContextType {
     PROPERTY        ("PROP"),
     HEAP_ACCESS     ("HEAP"),
     ALLOCATION      ("ALOC"),
+
+    ARRAY_READ      ("RARR"),
+    ARRAY_WRITE     ("WARR"),
     ;
 
     public final String text;

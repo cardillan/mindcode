@@ -14,13 +14,15 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /// Represents an array (internal or external). Provides means for accessing array elements statically or dynamically.
+///
+/// @param <E> precise type representing the element of the array
 @NullMarked
-public abstract class ArrayStore implements ValueStore {
+public abstract class ArrayStore<E extends ValueStore> implements ValueStore {
     protected final SourcePosition sourcePosition;
     protected final String name;
-    protected final List<ValueStore> elements;
+    protected final List<E> elements;
 
-    public ArrayStore(SourcePosition sourcePosition, String name, List<ValueStore> elements) {
+    public ArrayStore(SourcePosition sourcePosition, String name, List<E> elements) {
         this.sourcePosition = sourcePosition;
         this.name = name;
         this.elements = elements;
@@ -41,7 +43,7 @@ public abstract class ArrayStore implements ValueStore {
         return elements.size();
     }
 
-    public List<ValueStore> getElements() {
+    public List<E> getElements() {
         return elements;
     }
 

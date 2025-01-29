@@ -87,7 +87,7 @@ class JumpThreading extends BaseOptimizer {
 
         // Find next real instruction
         // If null, it means the jump leads to a label which doesn't have a valid instruction after
-        LogicInstruction next = firstInstruction(target + 1, ix -> ix.getRealSize() > 0);
+        LogicInstruction next = firstInstruction(target + 1, ix -> ix.getRealSize(null) > 0);
         
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {

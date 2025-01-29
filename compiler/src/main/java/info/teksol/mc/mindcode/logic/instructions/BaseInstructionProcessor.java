@@ -207,6 +207,21 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
+    public void expand(Map<String, LogicLabel> tableMap, LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+        switch (instruction) {
+            case ReadArrInstruction ix -> {
+
+            }
+
+            case WriteArrInstruction ix -> {
+
+            }
+
+            default -> consumer.accept(instruction);
+        }
+    }
+
+    @Override
     public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         AstContext astContext = instruction.getAstContext();
 

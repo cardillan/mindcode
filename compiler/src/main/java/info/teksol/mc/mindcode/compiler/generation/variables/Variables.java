@@ -171,8 +171,8 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param variable variable specification
     /// @return ValueStore instance representing the created variable
-    public ArrayStore createArray(AstIdentifier identifier, int size, Set<Modifier> modifiers) {
-        ArrayStore result;
+    public ArrayStore<?> createArray(AstIdentifier identifier, int size, Set<Modifier> modifiers) {
+        ArrayStore<?> result;
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(identifier, size);

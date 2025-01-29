@@ -9,7 +9,6 @@ import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -108,7 +107,7 @@ class LoopOptimizer extends BaseOptimizer {
                         jump.getCondition().inverse(), jump.getX(), jump.getY());
             }
 
-            int cost = conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
+            int cost = conditionEvaluation.realSize();
             if (optimize) {
                 // Perform the optimization now
                 if (removeOriginal || cost <= costLimit) {

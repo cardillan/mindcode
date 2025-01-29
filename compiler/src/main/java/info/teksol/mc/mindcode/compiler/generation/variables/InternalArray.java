@@ -16,22 +16,22 @@ import java.util.stream.IntStream;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
-public class InternalArray extends ArrayStore {
+public class InternalArray extends ArrayStore<LogicVariable> {
     private final LogicArray logicArray;
 
-    private InternalArray(SourcePosition sourcePosition, String name, List<ValueStore> elements) {
+    private InternalArray(SourcePosition sourcePosition, String name, List<LogicVariable> elements) {
         super(sourcePosition, name, elements);
-        logicArray = LogicArray.create(name);
+        logicArray = LogicArray.create(this);
     }
 
     public static InternalArray create(AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(), identifier.getName(), IntStream.range(0, size)
-                .mapToObj(index -> (ValueStore) LogicVariable.arrayElement(identifier, index)).toList());
+                .mapToObj(index -> LogicVariable.arrayElement(identifier, index)).toList());
     }
 
     public static InternalArray createInvalid(AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(), identifier.getName(), IntStream.of(size)
-                .mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList());
+                .mapToObj(index -> LogicVariable.INVALID).toList());
     }
 
     @Override

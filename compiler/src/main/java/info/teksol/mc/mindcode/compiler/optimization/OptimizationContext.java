@@ -4,6 +4,7 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -927,7 +928,7 @@ class OptimizationContext {
         program.add(index, instruction);
         instructionAdded(instruction);
         updated = true;
-        insertions += instruction.getRealSize();
+        insertions += instruction.getRealSize(null);
     }
 
     /// Inserts all instruction in the list to the program, starting at given index.
@@ -964,7 +965,7 @@ class OptimizationContext {
         instructionRemoved(original);
         instructionAdded(replacement);
         updated = true;
-        int difference = original.getRealSize() - replacement.getRealSize();
+        int difference = original.getRealSize(null) - replacement.getRealSize(null);
         if (difference == 0) {
             modifications++;
         } else if (difference > 0) {
@@ -984,7 +985,7 @@ class OptimizationContext {
         LogicInstruction instruction = program.remove(index);
         instructionRemoved(instruction);
         updated = true;
-        deletions += instruction.getRealSize();
+        deletions += instruction.getRealSize(null);
     }
 
     /// Inserts a new instruction before given, existing instruction. The new instruction must be assigned
@@ -1486,7 +1487,7 @@ class OptimizationContext {
         }
 
         public int realSize() {
-            return instructions.stream().mapToInt(LogicInstruction::getRealSize).sum();
+            return InstructionCounter.computeSize(stream());
         }
 
         public boolean isEmpty() {

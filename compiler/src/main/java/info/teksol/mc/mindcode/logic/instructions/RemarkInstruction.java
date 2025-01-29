@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class RemarkInstruction extends BaseInstruction {
@@ -36,7 +37,7 @@ public class RemarkInstruction extends BaseInstruction {
     }
 
     @Override
-    public int getRealSize() {
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
         return switch (astContext.getProfile().getRemarks()) {
             case NONE -> 0;
             case ACTIVE -> 1;

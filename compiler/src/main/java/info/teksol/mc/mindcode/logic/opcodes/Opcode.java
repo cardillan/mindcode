@@ -118,10 +118,10 @@ public enum Opcode {
     REMARK          ("remark",          2),
 
     /// Read array element
-    READARR         ("readarr",         6),
+    READARR         ("readarr",         4),
 
     /// Write array element
-    WRITEARR        ("writearr",        6),
+    WRITEARR        ("writearr",        4),
 
     /// Represents a custom-made instruction (mlog or mlogSafe).
     CUSTOM          ("",1),

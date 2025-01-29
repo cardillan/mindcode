@@ -268,6 +268,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 identifier.getName() + "[" + index + "]", "." + identifier.getName() + "*" + index, false, true);
     }
 
+    public static LogicVariable arrayAccess(String arrayName, String suffix) {
+        return new LogicVariable(EMPTY, COMPILER,
+                arrayName + suffix, "." + arrayName + suffix, false, true);
+    }
+
     /// Return the variable passed as an argument to unused instruction parameters.
     /// @return variable for unused instruction parameters
     public static LogicVariable unusedVariable() {

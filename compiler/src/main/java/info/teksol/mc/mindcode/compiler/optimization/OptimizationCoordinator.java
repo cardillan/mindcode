@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -79,7 +80,7 @@ public class OptimizationCoordinator {
             optimizationContext = new OptimizationContext(traceFile, profile, instructionProcessor, program,
                     callGraph, rootAstContext);
 
-            int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+            int count = codeSize();
             messageConsumer.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
 
             debugPrinter.registerIteration(null, "", List.copyOf(program));
@@ -97,7 +98,7 @@ public class OptimizationCoordinator {
             optimizePhase(FINAL, optimizers, 0);
 
             optimizers.values().forEach(Optimizer::generateFinalMessages);
-            int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+            int newCount = codeSize();
             messageConsumer.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
 
             if (modified) {
@@ -189,7 +190,7 @@ public class OptimizationCoordinator {
     }
 
     private int codeSize() {
-        return program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        return InstructionCounter.computeSizeShared(program);
     }
 
     private static final Comparator<OptimizationAction> ACTION_COMPARATOR =

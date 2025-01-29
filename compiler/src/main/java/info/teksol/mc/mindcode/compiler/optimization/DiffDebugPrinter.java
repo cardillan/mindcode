@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.util.CollectionUtils;
@@ -106,8 +107,8 @@ public class DiffDebugPrinter implements DebugPrinter {
             return;
         }
 
-        int sizeBefore = before.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        int sizeAfter = after.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        int sizeBefore = InstructionCounter.computeSizeShared(before);
+        int sizeAfter = InstructionCounter.computeSizeShared(after);
         String sizeChange = sizeBefore == sizeAfter ? "" : " (%+d instructions)".formatted(sizeAfter - sizeBefore);
 
         List<String> output = new ArrayList<>();

@@ -113,7 +113,7 @@ class SingleStepEliminator extends BaseOptimizer {
                 LogicInstruction lastIx = optimizationContext.getProgram().get(index);
                 if (isJumpToStart(lastIx)) {
                     optimizationContext.removeInstruction(index);
-                } else if (lastIx.getRealSize() > 0) {
+                } else if (lastIx.getRealSize(null) > 0) {
                     break;
                 }
                 index--;
