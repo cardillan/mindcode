@@ -22,6 +22,7 @@ public class ERR {
     public static final String ARGUMENT_UNNAMED_NOT_OPTIONAL = "Parameter corresponding to this argument isn't optional, a value must be provided.";
     public static final String ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED = "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.";
     public static final String ARGUMENT_WAIT_OUT_NOT_ALLOWED = "'out' modifier not allowed with special value '%s'.";
+    public static final String ARRAY_ASSIGNMENT_SIZE_MISMATCH = "The arrays in the array expression have different sizes: %s[%d] versus %s[%d].";
     public static final String ARRAY_CACHED = "Arrays cannot be declared 'cached'.";
     public static final String ARRAY_EXPRESSION_NOT_MEMORY = "'%s' is not an external memory.";
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
@@ -36,6 +37,7 @@ public class ERR {
     public static final String ARRAY_SIZE_MISMATCH = "Number of initial values provided doesn't match the declared array size.";
     public static final String ARRAY_SIZE_NOT_SPECIFIED = "Array size not specified.";
     public static final String ARRAY_SIZE_OUTSIDE_RANGE = "Array size out of range (1 .. %d).";
+    public static final String ARRAY_UNSUPPORTED_OPERATION = "Unsupported array expression.";
     public static final String ARRAY_VOLATILE = "Arrays cannot be declared 'volatile'.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";

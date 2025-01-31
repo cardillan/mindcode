@@ -49,6 +49,11 @@ public class FormattableContent implements ValueStore {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        assembler.error(sourcePosition, ERR.FORMATTABLE_FORBIDDEN);
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
         throw new MindcodeInternalError("Unsupported for FormattableContent.");
     }

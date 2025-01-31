@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstArrayAccess;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -28,7 +28,7 @@ public abstract class ArrayStore<E extends ValueStore> implements ValueStore {
         this.elements = elements;
     }
 
-    public abstract ValueStore getElement(CodeAssembler assembler, AstArrayAccess node, ValueStore index);
+    public abstract ValueStore getElement(CodeAssembler assembler, AstExpression node, ValueStore index);
 
     @Override
     public SourcePosition sourcePosition() {
@@ -62,6 +62,11 @@ public abstract class ArrayStore<E extends ValueStore> implements ValueStore {
     public final LogicValue getValue(CodeAssembler assembler) {
         assembler.error(sourcePosition, ERR.ARRAY_FORBIDDEN);
         return LogicNull.NULL;
+    }
+
+    @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        assembler.error(sourcePosition, ERR.ARRAY_FORBIDDEN);
     }
 
     @Override

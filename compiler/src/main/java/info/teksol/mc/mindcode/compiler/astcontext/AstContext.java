@@ -67,6 +67,15 @@ public final class AstContext {
         return child;
     }
 
+    public AstContext createChild(CompilerProfile profile, AstMindcodeNode node, AstContextType contextType,
+            AstSubcontextType subcontextType) {
+        AstContext child = new AstContext(profile, function, level + 1, node, contextType, subcontextType,
+                this, 1.0);
+        children.add(child);
+
+        return child;
+    }
+
     public AstContext createFunctionDeclaration(CompilerProfile profile, MindcodeFunction function, AstMindcodeNode node,
             AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),

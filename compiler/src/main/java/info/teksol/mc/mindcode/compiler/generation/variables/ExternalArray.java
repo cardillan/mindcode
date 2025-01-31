@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstArrayAccess;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -28,7 +28,7 @@ public class ExternalArray extends ArrayStore<ExternalVariable> {
     }
 
     @Override
-    public ValueStore getElement(CodeAssembler assembler, AstArrayAccess node, ValueStore index) {
+    public ValueStore getElement(CodeAssembler assembler, AstExpression node, ValueStore index) {
         if (baseIndex == 0) {
             LogicValue fixedIndex = assembler.defensiveCopy(index, TMP_VARIABLE);
             return new ExternalArrayElement(node, fixedIndex, assembler.nextTemp());
@@ -45,11 +45,11 @@ public class ExternalArray extends ArrayStore<ExternalVariable> {
     }
 
     private class ExternalArrayElement implements ValueStore {
-        private final AstArrayAccess node;
+        private final AstExpression node;
         private final LogicValue index;
         private final LogicVariable transferVariable;
 
-        public ExternalArrayElement(AstArrayAccess node, LogicValue index, LogicVariable transferVariable) {
+        public ExternalArrayElement(AstExpression node, LogicValue index, LogicVariable transferVariable) {
             this.node = node;
             this.index = index;
             this.transferVariable = transferVariable;
@@ -69,6 +69,11 @@ public class ExternalArray extends ArrayStore<ExternalVariable> {
         public LogicValue getValue(CodeAssembler assembler) {
             assembler.createRead(transferVariable, memory, index);
             return transferVariable;
+        }
+
+        @Override
+        public void readValue(CodeAssembler assembler, LogicVariable target) {
+            assembler.createRead(target, memory, index);
         }
 
         @Override

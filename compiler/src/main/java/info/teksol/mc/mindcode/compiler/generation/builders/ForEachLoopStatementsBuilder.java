@@ -207,6 +207,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
+        public void readValue(CodeAssembler assembler, LogicVariable target) {
+            value().readValue(assembler, target);
+        }
+
+        @Override
         public void setValue(CodeAssembler assembler, LogicValue value) {
             verifyLValue().setValue(assembler, value);
         }
@@ -267,6 +272,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         @Override
         public LogicValue getValue(CodeAssembler assembler) {
             return LogicVariable.INVALID;
+        }
+
+        @Override
+        public void readValue(CodeAssembler assembler, LogicVariable target) {
+            // Do nothing
         }
 
         @Override

@@ -54,6 +54,16 @@ public interface ValueStore extends SourceElement {
     /// @return value maintained by this instance
     LogicValue getValue(CodeAssembler assembler);
 
+    /// Writes a value represented by this instance into given target variable.
+    ///
+    /// Some node values might not be R-values (formattable strings or vararg identifiers, for example.)
+    /// These values should emit errors when they're being read. They need special handling based on their
+    /// type.
+    ///
+    /// @param assembler assembler instance used to produce code for writing the value
+    /// @param target    variable to write the current value to
+    void readValue(CodeAssembler assembler, LogicVariable target);
+
     /// Sets the l-value to the given value, creating the necessary instructions for it.
     ///
     /// @param assembler assembler instance used to produce code for setting the value, if needed

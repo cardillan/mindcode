@@ -211,6 +211,23 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         }
     }
 
+    public void setContextType(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
+        if (active) {
+            astContext = astContext.createChild(profile, node, contextType, subcontextType);
+        }
+    }
+
+    public void clearContextType(AstMindcodeNode node) {
+        if (active) {
+            if (astContext.node() != node) {
+                throw new MindcodeInternalError("Unexpected AST context " + astContext);
+            }
+
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+        }
+    }
+
     @Override
     public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
         return addInstruction(processor.createInstruction(astContext, opcode, arguments));

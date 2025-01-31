@@ -47,6 +47,11 @@ public class ExternalCachedVariable implements ValueStore {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        assembler.createSet(target, transferVariable);
+    }
+
+    @Override
     public void initialize(CodeAssembler assembler) {
         assembler.createRead(transferVariable, memory, index);
     }

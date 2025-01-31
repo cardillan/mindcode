@@ -47,6 +47,11 @@ public class ExternalVariable implements ValueStore {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        assembler.createRead(target, memory, index);
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
         assembler.createWrite(value, memory, index);
     }

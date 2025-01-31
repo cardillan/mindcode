@@ -46,6 +46,11 @@ public class MissingValue implements ValueStore {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        throw new MindcodeInternalError("Trying to read an unspecified function argument");
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
         throw new MindcodeInternalError("Cannot modify this instance.");
     }

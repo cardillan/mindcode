@@ -11,6 +11,114 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
 
     @Nested
+    class ArrayAssignments {
+
+        @Test
+        void compilesInternalToInternalArrayAssignment() {
+            assertCompilesTo("""
+                            var a[3], b[3];
+                            a = b;
+                            """,
+                    createInstruction(SET, ".a*0", ".b*0"),
+                    createInstruction(SET, ".a*1", ".b*1"),
+                    createInstruction(SET, ".a*2", ".b*2")
+            );
+        }
+
+        @Test
+        void compilesInternalToExternalArrayAssignment() {
+            assertCompilesTo("""
+                            allocate heap in bank1;
+                            external a[3];
+                            var b[3];
+                            a = b;
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
+                    createInstruction(WRITE, ".b*0", "bank1", "0"),
+                    createInstruction(WRITE, ".b*1", "bank1", "1"),
+                    createInstruction(WRITE, ".b*2", "bank1", "2")
+            );
+        }
+
+        @Test
+        void compilesExternalToInternalArrayAssignment() {
+            assertCompilesTo("""
+                            allocate heap in bank1;
+                            var a[3];
+                            external b[3];
+                            a = b;
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
+                    createInstruction(READ, ".a*0", "bank1", "0"),
+                    createInstruction(READ, ".a*1", "bank1", "1"),
+                    createInstruction(READ, ".a*2", "bank1", "2")
+            );
+        }
+
+        @Test
+        void compilesExternalToExternalArrayAssignment() {
+            assertCompilesTo("""
+                            allocate heap in bank1;
+                            external a[3], b[3], c[3];
+                            b = c;
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
+                    createInstruction(SET, var(9), "0"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(OP, "add", var(10), var(9), "3"),
+                    createInstruction(OP, "add", var(12), var(9), "6"),
+                    createInstruction(READ, var(13), "bank1", var(12)),
+                    createInstruction(WRITE, var(13), "bank1", var(10)),
+                    createInstruction(OP, "add", var(9), var(9), "1"),
+                    createInstruction(JUMP, var(1001), "lessThan", var(9), "3"),
+                    createInstruction(LABEL, var(1002))
+            );
+        }
+
+        @Test
+        void compilesChainArrayAssignment() {
+            assertCompilesTo("""
+                            var a[3], b[3], c[3];
+                            a = b = c;
+                            """,
+                    createInstruction(SET, ".b*0", ".c*0"),
+                    createInstruction(SET, ".b*1", ".c*1"),
+                    createInstruction(SET, ".b*2", ".c*2"),
+                    createInstruction(SET, ".a*0", ".b*0"),
+                    createInstruction(SET, ".a*1", ".b*1"),
+                    createInstruction(SET, ".a*2", ".b*2")
+            );
+        }
+
+        @Test
+        void refusesCompoundArrayAssignments() {
+            assertGeneratesMessage(
+                    "Unsupported array expression.",
+                    "var a[10]; a = 5;"
+            );
+        }
+
+        @Test
+        void refusesPostfixArrayOperators() {
+            assertGeneratesMessage(
+                    "Unsupported array expression.",
+                    "var a[10]; a++;"
+            );
+        }
+
+        @Test
+        void refusesPrefixArrayOperators() {
+            assertGeneratesMessage(
+                    "Unsupported array expression.",
+                    "var a[10]; --a;"
+            );
+        }
+    }
+
+    @Nested
     class CompoundAssignments {
         @Test
         void compilesPowerAssignment() {
@@ -99,7 +207,6 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
     }
-
 
     @Nested
     class IncrementDecrementOperators {
@@ -209,8 +316,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesAssignmentToLiteral() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Variable expected."),
+            assertGeneratesMessage(
+                    "Variable expected.",
                     "10 = a;");
         }
     }
@@ -219,15 +326,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
     class InvalidAssignments {
         @Test
         void refusesAssignmentToLiteral() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Variable expected."),
+            assertGeneratesMessage(
+                    "Variable expected.",
                     "10 = a;");
         }
 
         @Test
         void refusesAssignmentToConstants() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Assignment to constant or parameter 'a' not allowed."),
+            assertGeneratesMessage(
+                    "Assignment to constant or parameter 'a' not allowed.",
                     """
                             const a = 10;
                             a = 20;
@@ -236,8 +343,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesAssignmentToParameters() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Assignment to constant or parameter 'a' not allowed."),
+            assertGeneratesMessage(
+                    "Assignment to constant or parameter 'a' not allowed.",
                     """
                             param a = 10;
                             a = 20;
@@ -246,8 +353,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesAssignmentToExpression() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Cannot assign a value to this expression."),
+            assertGeneratesMessage(
+                    "Cannot assign a value to this expression.",
                     """
                             a + b = c;
                             """);
@@ -273,13 +380,13 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             void foo()
                                 null;
                             end;
-    
+                            
                             def bar()
                                 x = foo();
                                 print(foo());
                                 return foo();
                             end;
-    
+                            
                             bar();
                             """
             );
@@ -356,15 +463,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesVoidAssignments() {
-            assertGeneratesMessages(expectedMessages()
-                            .addRegex(1, 5, "Parse error: extraneous input 'const' expecting.*"),
+            assertGeneratesMessageRegex(1, 5,
+                    "Parse error: extraneous input 'const' expecting.*",
                     "a = const b = 0;");
         }
 
         @Test
         void refusesInvalidAssignments() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Cannot assign a value to this expression."),
+            assertGeneratesMessage(
+                    "Cannot assign a value to this expression.",
                     "a + b = 10;");
         }
     }

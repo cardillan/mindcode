@@ -8,9 +8,14 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstAssignment;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLiteralDecimal;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorIncDec;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ExternalArray;
+import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
@@ -30,14 +35,15 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
 
     @Override
     public ValueStore visitAssignment(AstAssignment node) {
-        return applyOperation(node.getTarget(), node.getValue(), node.getOperation(), false);
+        return applyOperation(node, node.getTarget(), node.getValue(), node.getOperation(), false);
     }
 
     @Override
     public ValueStore visitOperatorIncDec(AstOperatorIncDec node) {
-        // The other operand for increment/decrement is literal one. We're creating it here so that it gets
+        // The other operand for increment/decrement is literal `1` (one). We're creating it here so that it gets
         // a valid input position.
-        return applyOperation(node.getOperand(),
+        return applyOperation(node,
+                node.getOperand(),
                 new AstLiteralDecimal(node.getOperand().sourcePosition(), "1"),
                 node.getOperation(),
                 node.getType() == AstOperatorIncDec.Type.POSTFIX);
@@ -52,11 +58,18 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
     /// @param returnPriorValue indicates the prior value of the target is the result of this node (basically only
     ///                         true for postfix operators)
     /// @return a ValueStore instance holding the result of this node
-    private ValueStore applyOperation(AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,
+    private ValueStore applyOperation(AstExpression node, AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,
             boolean returnPriorValue) {
-        // We want to visit target first, so that heap variables are allocated left-to-right.
-        ValueStore target = resolveLValue(targetNode);
+        ValueStore targetValue = evaluate(targetNode);
         ValueStore eval = evaluate(valueNode);
+
+        if (targetValue instanceof ArrayStore<?> targetArray) {
+            return applyArrayOperation(node, targetArray, eval, operation, returnPriorValue);
+        }
+
+
+        // We want to visit target first, so that heap variables are allocated left-to-right.
+        ValueStore target = resolveLValue(targetNode, targetValue);
         if (!target.isLvalue()) {
             return NULL;
         }
@@ -149,5 +162,83 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         } else {
             return variable -> assembler.createOp(operation, variable, left, rvalue);
         }
+    }
+
+    private ValueStore applyArrayOperation(AstExpression node, ArrayStore<?> targetArray, ValueStore eval,
+            @Nullable Operation operation, boolean returnPriorValue) {
+        if (operation != null || !(eval instanceof ArrayStore<?> valueArray)) {
+            error(node, ERR.ARRAY_UNSUPPORTED_OPERATION);
+            return targetArray;
+        }
+
+        int size = targetArray.getSize();
+
+        if (size != valueArray.getSize()) {
+            error(node, ERR.ARRAY_ASSIGNMENT_SIZE_MISMATCH, targetArray.getName(), size,
+                    valueArray.getName(), valueArray.getSize());
+            return targetArray;
+        }
+
+        switch (valueArray) {
+            case InternalArray valueInt when targetArray instanceof InternalArray targetInt -> {
+                copyInternalArrays(targetInt, valueInt);
+            }
+
+            case InternalArray valueInt -> {
+                for (int i = 0; i < size; i++) {
+                    targetArray.getElements().get(i).setValue(assembler, valueInt.getElements().get(i));
+                }
+            }
+
+            case ExternalArray valueExt when targetArray instanceof InternalArray targetInt -> {
+                for (int i = 0; i < size; i++) {
+                    valueExt.getElements().get(i).readValue(assembler, targetInt.getElements().get(i));
+                }
+            }
+
+            default -> {
+                copyArraysUsingLoop(node, targetArray, valueArray);
+            }
+        }
+
+        return targetArray;
+    }
+
+    private void copyInternalArrays(InternalArray targetInt, InternalArray valueInt) {
+        // TODO: handle subarray overlaps
+        int size = targetInt.getSize();
+        for (int i = 0; i < size; i++) {
+            targetInt.getElements().get(i).setValue(assembler, valueInt.getElements().get(i));
+        }
+    }
+
+    private void copyArraysUsingLoop(AstExpression node, ArrayStore<?> targetArray, ArrayStore<?> valueArray) {
+        LogicVariable index = assembler.nextTemp().withType(ArgumentType.LOCAL_VARIABLE);
+        index.setValue(assembler, LogicNumber.ZERO);
+
+        assembler.setContextType(node, AstContextType.LOOP, AstSubcontextType.BASIC);
+
+        int size = targetArray.getSize();
+        LogicNumber limit = LogicNumber.create(size);
+
+        final LogicLabel beginLabel = assembler.nextLabel();
+
+        // Loop body
+        assembler.setSubcontextType(AstSubcontextType.BODY, size);
+        assembler.createLabel(beginLabel);
+
+        // Copy
+        targetArray.getElement(assembler, node, index).setValue(assembler, valueArray.getElement(assembler, node, index).getValue(assembler));
+        assembler.createOp(Operation.ADD, index, index, LogicNumber.ONE);
+
+        // Condition
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, size);
+        assembler.createJump(beginLabel, Condition.LESS_THAN, index, limit);
+
+        // Exit
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
+        assembler.createLabel(assembler.nextLabel());
+        assembler.clearSubcontextType();
+        assembler.clearContextType(node);
     }
 }

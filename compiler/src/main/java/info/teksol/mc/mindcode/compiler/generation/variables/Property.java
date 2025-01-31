@@ -13,13 +13,13 @@ import java.util.function.Consumer;
 @NullMarked
 public class Property implements ValueStore {
     private final SourcePosition sourcePosition;
-    private final LogicValue target;
+    private final LogicValue object;
     private final String propertyName;
     private final LogicVariable transferVariable;
 
-    public Property(SourcePosition sourcePosition, LogicValue target, String propertyName, LogicVariable transferVariable) {
+    public Property(SourcePosition sourcePosition, LogicValue object, String propertyName, LogicVariable transferVariable) {
         this.sourcePosition = sourcePosition;
-        this.target = target;
+        this.object = object;
         this.propertyName = propertyName;
         this.transferVariable = transferVariable;
     }
@@ -41,20 +41,26 @@ public class Property implements ValueStore {
 
     @Override
     public LogicValue getValue(CodeAssembler assembler) {
-        assembler.createSensor(transferVariable, target,
+        assembler.createSensor(transferVariable, object,
                 LogicBuiltIn.create(assembler.getProcessor(), sourcePosition, "@" + propertyName));
         return transferVariable;
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable result) {
+        assembler.createSensor(result, object,
+                LogicBuiltIn.create(assembler.getProcessor(), sourcePosition, "@" + propertyName));
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
-        assembler.createControl(LogicKeyword.create(propertyName), target, value);
+        assembler.createControl(LogicKeyword.create(propertyName), object, value);
     }
 
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        assembler.createControl(LogicKeyword.create(propertyName), target, transferVariable);
+        assembler.createControl(LogicKeyword.create(propertyName), object, transferVariable);
     }
 
     @Override
@@ -64,6 +70,6 @@ public class Property implements ValueStore {
 
     @Override
     public void storeValue(CodeAssembler assembler) {
-        assembler.createControl(LogicKeyword.create(propertyName), target, transferVariable);
+        assembler.createControl(LogicKeyword.create(propertyName), object, transferVariable);
     }
 }

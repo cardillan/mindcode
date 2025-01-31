@@ -68,6 +68,11 @@ public class MissingFunctionArgument implements FunctionArgument {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        // Do nothing
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
         // Do nothing
     }

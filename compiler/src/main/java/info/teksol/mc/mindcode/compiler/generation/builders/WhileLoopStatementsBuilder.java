@@ -51,7 +51,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(assembler), FALSE);
 
         // Exit
-        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
         assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
         exitLoop(node, loopLabels);

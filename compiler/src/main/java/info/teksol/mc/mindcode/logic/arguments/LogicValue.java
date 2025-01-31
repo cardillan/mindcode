@@ -30,6 +30,11 @@ public interface LogicValue extends LogicArgument, ValueStore {
     }
 
     @Override
+    default void readValue(CodeAssembler assembler, LogicVariable target) {
+        assembler.createSet(target, this);
+    }
+
+    @Override
     default void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Cannot modify readable value.");
     }

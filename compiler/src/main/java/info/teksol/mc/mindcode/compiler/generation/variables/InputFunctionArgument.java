@@ -66,6 +66,11 @@ public class InputFunctionArgument implements FunctionArgument {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        value.readValue(assembler, target);
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue newValue) {
         assembler.setInternalError();
     }

@@ -77,6 +77,11 @@ public class IdentifierFunctionArgument implements FunctionArgument {
     }
 
     @Override
+    public void readValue(CodeAssembler assembler, LogicVariable target) {
+        getArgumentValue().readValue(assembler, target);
+    }
+
+    @Override
     public void setValue(CodeAssembler assembler, LogicValue newValue) {
         assembler.setInternalError();
     }
