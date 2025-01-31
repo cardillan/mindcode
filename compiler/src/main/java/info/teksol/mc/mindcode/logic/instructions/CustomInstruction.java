@@ -71,6 +71,11 @@ public class CustomInstruction implements LogicInstruction {
     }
 
     @Override
+    public LogicInstruction withSideEffects(SideEffects sideEffects) {
+        return this;
+    }
+
+    @Override
     public Opcode getOpcode() {
         return Opcode.CUSTOM;
     }
@@ -117,6 +122,11 @@ public class CustomInstruction implements LogicInstruction {
     @Override
     public int getOutputs() {
         return outputs;
+    }
+
+    @Override
+    public SideEffects sideEffects() {
+        return BaseInstruction.NO_SIDE_EFFECTS;
     }
 
     @Override

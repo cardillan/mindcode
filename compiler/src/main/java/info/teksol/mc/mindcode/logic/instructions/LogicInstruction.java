@@ -18,6 +18,11 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction withContext(AstContext astContext);
 
+    /// Provides side effects of this instruction
+    SideEffects sideEffects();
+
+    LogicInstruction withSideEffects(SideEffects sideEffects);
+
     boolean belongsTo(@Nullable AstContext astContext);
 
     @Nullable AstContext findContextOfType(AstContextType contextType);

@@ -62,6 +62,10 @@ public interface ContextfulInstructionCreator {
         return (LookupInstruction) createInstruction(LOOKUP, type, result, index);
     }
 
+    default MultiCallInstruction createMultiCall(LogicLabel target, LogicVariable offset, LogicLabel marker) {
+        return (MultiCallInstruction) createInstruction(MULTICALL, target, offset, marker);
+    }
+
     default MultiJumpInstruction createMultiJump(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
         return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, value, offset, marker);
     }

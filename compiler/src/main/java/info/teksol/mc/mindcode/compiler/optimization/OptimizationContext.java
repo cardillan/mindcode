@@ -15,6 +15,7 @@ import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.Vari
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.TraceFile;
@@ -60,7 +61,7 @@ class OptimizationContext {
 
     /// Maps labels to their respective instructions. Built once and then updated after each modification
     /// of the program.
-    private final Map<LogicLabel, LabelInstruction> labels;
+    private final Map<LogicLabel, LabelInstruction> labels = new HashMap<>();
 
     /// Tracks all instructions that target a label. Unused labels (labels whose list of instructions would be empty)
     /// are removed from the program after each iteration finishes.
@@ -82,15 +83,21 @@ class OptimizationContext {
 
         expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
 
-        labels = instructionStream()
+        rebuildLabelReferences();
+        adjustWeights();
+    }
+
+    public void rebuildLabelReferences() {
+        labels.clear();
+        labelReferences.clear();
+
+        instructionStream()
                 .filter(LabelInstruction.class::isInstance)
                 .map(LabelInstruction.class::cast)
-                .collect(Collectors.toMap(LabelInstruction::getLabel, ix -> ix));
+                .forEach(this::addLabelInstruction);
 
         /* Create label references */
         instructionStream().forEachOrdered(this::addLabelReferences);
-
-        adjustWeights();
     }
 
     InstructionProcessor getInstructionProcessor() {
@@ -227,14 +234,14 @@ class OptimizationContext {
                         heads.offer(findLabelIndex(call.getRetAddr()));
                         continue MainLoop;
                     }
-                    case MULTIJUMP -> {
-                        MultiJumpInstruction gotoIx = (MultiJumpInstruction) ix;
+                    case MULTIJUMP, MULTICALL -> {
                         for (int i = 0; i < program.size(); i++) {
                             if (program.get(i) instanceof MultiLabelInstruction gli && gli.getMarker().equals(ix.getMarker())) {
                                 heads.offer(i);
                             }
                         }
-                        continue MainLoop;
+                        // Terminate control flow for MultiJump
+                        if (ix.getOpcode() == Opcode.MULTIJUMP) continue MainLoop;
                     }
                 }
 
@@ -421,10 +428,10 @@ class OptimizationContext {
     private void addLabelReferences(LogicInstruction instruction) {
         final Function<LogicLabel, List<LogicInstruction>> mappingFunction = v -> new ArrayList<>();
         switch (instruction) {
-            case JumpInstruction ix       -> labelReferences.computeIfAbsent(ix.getTarget(), mappingFunction).add(ix);
-            case SetAddressInstruction ix -> labelReferences.computeIfAbsent(ix.getLabel(), mappingFunction).add(ix);
-            case CallInstruction ix       -> labelReferences.computeIfAbsent(ix.getCallAddr(), mappingFunction).add(ix);
-            case MultiJumpInstruction ix  -> {
+            case JumpInstruction ix         -> labelReferences.computeIfAbsent(ix.getTarget(), mappingFunction).add(ix);
+            case SetAddressInstruction ix   -> labelReferences.computeIfAbsent(ix.getLabel(), mappingFunction).add(ix);
+            case CallInstruction ix         -> labelReferences.computeIfAbsent(ix.getCallAddr(), mappingFunction).add(ix);
+            case MultiTargetInstruction ix  -> {
                 if (ix.getTarget() instanceof LogicLabel label) {
                     labelReferences.computeIfAbsent(label, mappingFunction).add(ix);
                 }
@@ -440,10 +447,10 @@ class OptimizationContext {
 
     private void removeLabelReferences(LogicInstruction instruction) {
         switch (instruction) {
-            case JumpInstruction ix       -> clearReferences(ix.getTarget(), ix);
-            case SetAddressInstruction ix -> clearReferences(ix.getLabel(), ix);
-            case CallInstruction ix       -> clearReferences(ix.getCallAddr(), ix);
-            case MultiJumpInstruction ix  -> {
+            case JumpInstruction ix         -> clearReferences(ix.getTarget(), ix);
+            case SetAddressInstruction ix   -> clearReferences(ix.getLabel(), ix);
+            case CallInstruction ix         -> clearReferences(ix.getCallAddr(), ix);
+            case MultiTargetInstruction ix  -> {
                 if (ix.getTarget() instanceof LogicLabel label) {
                     clearReferences(label, ix);
                 }
@@ -871,7 +878,7 @@ class OptimizationContext {
     private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
         return switch (instruction) {
             case JumpInstruction ix         -> Stream.of(ix.getTarget());
-            case MultiJumpInstruction ix    -> markedLabels(ix);
+            case MultiTargetInstruction ix  -> markedLabels(ix);
             default                         -> Stream.empty();
         };
     }
@@ -924,6 +931,17 @@ class OptimizationContext {
             }
         }
 
+        insertInstructionUnchecked(index, instruction);
+    }
+
+    /// Inserts a new instruction at given index. The instruction must be assigned an AST context suitable for its
+    /// position in the program. An instruction must not be placed into the program twice; when an instruction
+    /// truly needs to be duplicated, an independent copy with proper AST context needs to be created.
+    ///
+    /// @param index where to place the instruction
+    /// @param instruction instruction to add
+    /// @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
+    protected void insertInstructionUnchecked(int index, LogicInstruction instruction) {
         iterators.forEach(iterator -> iterator.instructionAdded(index));
         program.add(index, instruction);
         instructionAdded(instruction);

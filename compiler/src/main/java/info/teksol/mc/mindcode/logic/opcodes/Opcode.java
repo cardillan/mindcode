@@ -110,6 +110,10 @@ public enum Opcode {
     /// Replaced by a `set @counter ...` or `op add @counter ...` operation.
     MULTIJUMP       ("multijump",       1),
 
+    /// Calls a dynamic target (mechanism for internal arrays), potentially using computed offset.
+    /// Replaced by a `op add @counter ...` operation.
+    MULTICALL       ("multicall",       1),
+
     /// Assigns program address represented by a label to a variable. Replaced by a `set` instruction.
     SETADDR         ("setaddr",         1),
 

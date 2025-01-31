@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class CallInstruction extends BaseInstruction implements CallingInstruction {
@@ -18,18 +19,23 @@ public class CallInstruction extends BaseInstruction implements CallingInstructi
         super(astContext, Opcode.CALL, args, params);
     }
 
-    protected CallInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected CallInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public CallInstruction copy() {
-        return new CallInstruction(this, astContext);
+        return new CallInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public CallInstruction withContext(AstContext astContext) {
-        return new CallInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new CallInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public CallInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new CallInstruction(this, astContext, sideEffects);
     }
 
     public final LogicLabel getCallAddr() {

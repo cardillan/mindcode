@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class ReadArrInstruction extends BaseResultInstruction implements ArrayAccessInstruction {
@@ -17,8 +18,23 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
         super(astContext, Opcode.READARR, args, params);
     }
 
-    protected ReadArrInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected ReadArrInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
+    }
+
+    @Override
+    public ReadArrInstruction copy() {
+        return new ReadArrInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public ReadArrInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new ReadArrInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public ReadArrInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new ReadArrInstruction(this, astContext, sideEffects);
     }
 
     @Override
@@ -27,18 +43,14 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
     }
 
     @Override
-    public ReadArrInstruction copy() {
-        return new ReadArrInstruction(this, astContext);
-    }
-
-    @Override
-    public ReadArrInstruction withContext(AstContext astContext) {
-        return new ReadArrInstruction(this, astContext);
-    }
-
-    @Override
     public ReadArrInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
         return new ReadArrInstruction(astContext, List.of(result, getArray(), getIndex()), getArgumentTypes());
+    }
+
+    @Override
+    public SideEffects sideEffects() {
+        //return SideEffects.reads(getArray().getElements());
+        return SideEffects.readsAndWrites(getArray().getElements(), List.of(getArray().readVal));
     }
 }

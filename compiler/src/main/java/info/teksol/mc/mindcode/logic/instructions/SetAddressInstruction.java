@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class SetAddressInstruction extends BaseInstruction {
@@ -18,18 +19,23 @@ public class SetAddressInstruction extends BaseInstruction {
         super(astContext, Opcode.SETADDR, args, params);
     }
 
-    protected SetAddressInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected SetAddressInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public SetAddressInstruction copy() {
-        return new SetAddressInstruction(this, astContext);
+        return new SetAddressInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public SetAddressInstruction withContext(AstContext astContext) {
-        return new SetAddressInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new SetAddressInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public SetAddressInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new SetAddressInstruction(this, astContext, sideEffects);
     }
 
     public final LogicVariable getResult() {

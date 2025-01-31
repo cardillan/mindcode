@@ -2,6 +2,8 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.Color;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -42,6 +44,8 @@ class ExpressionOptimizer extends BaseOptimizer {
                     case PackColorInstruction ix  -> processPackColorInstruction(it, ix);
                     case SetInstruction ix        -> processSetInstruction(it, ix);
                     case SensorInstruction ix     -> processSensorInstruction(it, ix);
+                    case ReadArrInstruction ix    -> processReadArrInstruction(it, ix);
+                    case WriteArrInstruction ix   -> processWriteArrInstruction(it, ix);
                     default -> {}
                 }
             }
@@ -260,6 +264,34 @@ class ExpressionOptimizer extends BaseOptimizer {
                 }
             } else if (advanced() && property.getName().equals("@id") && object.getObject() != null && object.getObject().id() != -1) {
                 logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.create(object.getObject().id())));
+            }
+        }
+    }
+
+    private void processReadArrInstruction(LogicIterator logicIterator, ReadArrInstruction ix) {
+        if (ix.getIndex() instanceof LogicNumber number) {
+            List<LogicVariable> elements = ix.getArray().getElements();
+            if (!number.isLong()) {
+                throw new MindcodeInternalError(ERR.ARRAY_NON_INTEGER_INDEX);
+            } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
+                throw new MindcodeInternalError(ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+            } else {
+                LogicVariable logicVariable = elements.get(number.getIntValue());
+                logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), logicVariable));
+            }
+        }
+    }
+
+    private void processWriteArrInstruction(LogicIterator logicIterator, WriteArrInstruction ix) {
+        if (ix.getIndex() instanceof LogicNumber number) {
+            List<LogicVariable> elements = ix.getArray().getElements();
+            if (!number.isLong()) {
+                throw new MindcodeInternalError(ERR.ARRAY_NON_INTEGER_INDEX);
+            } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
+                throw new MindcodeInternalError(ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+            } else {
+                LogicVariable logicVariable = elements.get(number.getIntValue());
+                logicIterator.set(createSet(ix.getAstContext(), logicVariable, ix.getValue()));
             }
         }
     }

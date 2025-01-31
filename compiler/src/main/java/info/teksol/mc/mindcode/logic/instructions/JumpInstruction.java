@@ -13,6 +13,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class JumpInstruction extends BaseInstruction {
@@ -21,8 +22,23 @@ public class JumpInstruction extends BaseInstruction {
         super(astContext, Opcode.JUMP, args, params);
     }
 
-    protected JumpInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected JumpInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
+    }
+
+    @Override
+    public JumpInstruction copy() {
+        return new JumpInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public JumpInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new JumpInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public JumpInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new JumpInstruction(this, astContext, sideEffects);
     }
 
     @Override
@@ -36,16 +52,6 @@ public class JumpInstruction extends BaseInstruction {
         if (astContext.subcontextType() == AstSubcontextType.BODY) {
             throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + this);
         }
-    }
-
-    @Override
-    public JumpInstruction copy() {
-        return new JumpInstruction(this, astContext);
-    }
-
-    @Override
-    public JumpInstruction withContext(AstContext astContext) {
-        return new JumpInstruction(this, astContext);
     }
 
     public JumpInstruction withTarget(LogicLabel target) {

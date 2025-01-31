@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class WriteArrInstruction extends BaseInstruction implements ArrayAccessInstruction {
@@ -17,8 +18,23 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
         super(astContext, Opcode.WRITEARR, args, params);
     }
 
-    protected WriteArrInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected WriteArrInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
+    }
+
+    @Override
+    public WriteArrInstruction copy() {
+        return new WriteArrInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public WriteArrInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new WriteArrInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public WriteArrInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new WriteArrInstruction(this, astContext, sideEffects);
     }
 
     @Override
@@ -26,17 +42,13 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
         return getArray().getWriteJumpTableId();
     }
 
-    @Override
-    public WriteArrInstruction copy() {
-        return new WriteArrInstruction(this, astContext);
-    }
-
-    @Override
-    public WriteArrInstruction withContext(AstContext astContext) {
-        return new WriteArrInstruction(this, astContext);
-    }
-
     public final LogicValue getValue() {
         return (LogicValue) getArg(0);
+    }
+
+    @Override
+    public SideEffects sideEffects() {
+        //return SideEffects.writes(getArray().getElements());
+        return SideEffects.readsAndWrites(List.of(getArray().writeVal), getArray().getElements());
     }
 }

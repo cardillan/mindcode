@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class PrintflushInstruction extends BaseInstruction {
@@ -17,19 +18,25 @@ public class PrintflushInstruction extends BaseInstruction {
         super(astContext, Opcode.PRINTFLUSH, args, params);
     }
 
-    protected PrintflushInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected PrintflushInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public PrintflushInstruction copy() {
-        return new PrintflushInstruction(this, astContext);
+        return new PrintflushInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public PrintflushInstruction withContext(AstContext astContext) {
-        return new PrintflushInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new PrintflushInstruction(this, astContext, sideEffects);
     }
+
+    @Override
+    public PrintflushInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new PrintflushInstruction(this, astContext, sideEffects);
+    }
+
 
     public final LogicValue getBlock() {
         return (LogicValue) getArg(0);

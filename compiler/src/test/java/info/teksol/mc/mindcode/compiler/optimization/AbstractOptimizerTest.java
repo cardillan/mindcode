@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
+import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpander;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -82,7 +83,8 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     protected OptimizationCoordinator createMindcodeOptimizer(MessageConsumer messageConsumer) {
-        return new OptimizationCoordinator(ip, profile, messageConsumer);
+        return new OptimizationCoordinator(ip, profile, messageConsumer,
+                new LogicInstructionArrayExpander(profile, ip));
     }
 
     protected List<LogicInstruction> optimizeInstructions(MessageConsumer messageConsumer, List<LogicInstruction> instructions) {

@@ -10,6 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @NullMarked
 public class RemarkInstruction extends BaseInstruction {
@@ -18,18 +19,23 @@ public class RemarkInstruction extends BaseInstruction {
         super(astContext, Opcode.REMARK, args, params);
     }
 
-    private RemarkInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected RemarkInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public RemarkInstruction copy() {
-        return new RemarkInstruction(this, astContext);
+        return new RemarkInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public RemarkInstruction withContext(AstContext astContext) {
-        return new RemarkInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new RemarkInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public RemarkInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new RemarkInstruction(this, astContext, sideEffects);
     }
 
     public final LogicValue getValue() {

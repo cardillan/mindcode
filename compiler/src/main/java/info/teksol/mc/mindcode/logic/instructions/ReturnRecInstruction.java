@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class ReturnRecInstruction extends BaseInstruction {
@@ -17,23 +18,28 @@ public class ReturnRecInstruction extends BaseInstruction {
         super(astContext, Opcode.RETURNREC, args, params);
     }
 
-    protected ReturnRecInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected ReturnRecInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
+    }
+
+    @Override
+    public ReturnRecInstruction copy() {
+        return new ReturnRecInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public ReturnRecInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new ReturnRecInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public ReturnRecInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new ReturnRecInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public boolean affectsControlFlow() {
         return true;
-    }
-
-    @Override
-    public ReturnRecInstruction copy() {
-        return new ReturnRecInstruction(this, astContext);
-    }
-
-    @Override
-    public ReturnRecInstruction withContext(AstContext astContext) {
-        return new ReturnRecInstruction(this, astContext);
     }
 
     public final LogicVariable getStack() {

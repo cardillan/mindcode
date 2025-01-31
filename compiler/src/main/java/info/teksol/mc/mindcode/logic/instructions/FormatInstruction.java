@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class FormatInstruction extends BaseInstruction {
@@ -17,18 +18,23 @@ public class FormatInstruction extends BaseInstruction {
         super(astContext, Opcode.FORMAT, args, params);
     }
 
-    private FormatInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected FormatInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public FormatInstruction copy() {
-        return new FormatInstruction(this, astContext);
+        return new FormatInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public FormatInstruction withContext(AstContext astContext) {
-        return new FormatInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new FormatInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public FormatInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new FormatInstruction(this, astContext, sideEffects);
     }
 
     public final LogicValue getValue() {

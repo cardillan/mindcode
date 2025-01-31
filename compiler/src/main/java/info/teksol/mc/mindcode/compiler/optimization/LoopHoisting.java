@@ -7,10 +7,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -137,6 +134,14 @@ class LoopHoisting extends BaseOptimizer {
 
         modifiedVariables.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
 
+        // Handle side effects!
+        Set<LogicVariable> sideEffectModifications = optimizationContext
+                .instructionStream()
+                .filter(ix -> ix.sideEffects() != BaseInstruction.NO_SIDE_EFFECTS)
+                .<LogicVariable>mapMulti((ix, consumer) -> ix.sideEffects().apply(v -> {}, consumer))
+                .collect(Collectors.toSet());
+
+        sideEffectModifications.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
 
         // All variables generated in ITR_LEADING contexts are loop variables
         List<LogicVariable> iteratorVariables = loop.children().stream()

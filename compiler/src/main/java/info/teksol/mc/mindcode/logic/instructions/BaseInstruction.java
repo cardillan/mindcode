@@ -18,6 +18,8 @@ import java.util.stream.IntStream;
 
 @NullMarked
 public class BaseInstruction implements LogicInstruction {
+    public static SideEffects NO_SIDE_EFFECTS = SideEffects.none();
+
     private final Opcode opcode;
     private final List<LogicArgument> args;
     private final @Nullable List<InstructionParameterType> params;
@@ -25,11 +27,16 @@ public class BaseInstruction implements LogicInstruction {
     private final int inputs;
     private final int outputs;
 
+    // Contains the side effects of the instruction
+    protected final SideEffects sideEffects;
+
     // Used to mark instructions with additional information to optimizers.
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
 
-    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params,
+            SideEffects sideEffects) {
+        this.sideEffects = Objects.requireNonNull(sideEffects);
         this.astContext = Objects.requireNonNull(astContext);
         this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
@@ -47,7 +54,12 @@ public class BaseInstruction implements LogicInstruction {
         validate();
     }
 
-    protected BaseInstruction(BaseInstruction other, AstContext astContext) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
+        this(astContext, opcode, args, params, NO_SIDE_EFFECTS);
+    }
+
+    protected BaseInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        this.sideEffects = Objects.requireNonNull(sideEffects);
         this.astContext = Objects.requireNonNull(astContext);
         this.opcode = other.opcode;
         this.args = other.args;
@@ -74,12 +86,17 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public BaseInstruction copy() {
-        return new BaseInstruction(this, astContext);
+        return new BaseInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public BaseInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new BaseInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new BaseInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public LogicInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new BaseInstruction(this, astContext, sideEffects);
     }
 
     @Override
@@ -119,6 +136,11 @@ public class BaseInstruction implements LogicInstruction {
     @Override
     public int getOutputs() {
         return outputs;
+    }
+
+    @Override
+    public SideEffects sideEffects() {
+        return sideEffects;
     }
 
     private final BitSet contextMap = new BitSet();

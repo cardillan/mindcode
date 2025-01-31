@@ -268,8 +268,20 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 identifier.getName() + "[" + index + "]", "." + identifier.getName() + "*" + index, false, true);
     }
 
-    public static LogicVariable arrayAccess(String arrayName, String suffix) {
-        return new LogicVariable(EMPTY, COMPILER,
+    public static LogicVariable arrayReadAccess(String arrayName) {
+        String suffix = "*r";
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
+                arrayName + suffix, "." + arrayName + suffix, false, true);
+    }
+
+    public static LogicVariable arrayWriteAccess(String arrayName) {
+        String suffix = "*w";
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
+                arrayName + suffix, "." + arrayName + suffix, false, true);
+    }
+
+    public static LogicVariable arrayReturn(String arrayName, String suffix) {
+        return new LogicVariable(EMPTY, FUNCTION_RETADDR,
                 arrayName + suffix, "." + arrayName + suffix, false, true);
     }
 

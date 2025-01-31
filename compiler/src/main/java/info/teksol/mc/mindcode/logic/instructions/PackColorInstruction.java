@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class PackColorInstruction extends BaseResultInstruction {
@@ -17,18 +18,23 @@ public class PackColorInstruction extends BaseResultInstruction {
         super(astContext, Opcode.PACKCOLOR, args, params);
     }
 
-    protected PackColorInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected PackColorInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public PackColorInstruction copy() {
-        return new PackColorInstruction(this, astContext);
+        return new PackColorInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public PackColorInstruction withContext(AstContext astContext) {
-        return new PackColorInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new PackColorInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public PackColorInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new PackColorInstruction(this, astContext, sideEffects);
     }
 
     @Override

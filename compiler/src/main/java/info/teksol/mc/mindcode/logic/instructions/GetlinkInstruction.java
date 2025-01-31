@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class GetlinkInstruction extends BaseResultInstruction {
@@ -18,18 +19,23 @@ public class GetlinkInstruction extends BaseResultInstruction {
         super(astContext, Opcode.GETLINK, args, params);
     }
 
-    protected GetlinkInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected GetlinkInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public GetlinkInstruction copy() {
-        return new GetlinkInstruction(this, astContext);
+        return new GetlinkInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public GetlinkInstruction withContext(AstContext astContext) {
-        return new GetlinkInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new GetlinkInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public GetlinkInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new GetlinkInstruction(this, astContext, sideEffects);
     }
 
     @Override

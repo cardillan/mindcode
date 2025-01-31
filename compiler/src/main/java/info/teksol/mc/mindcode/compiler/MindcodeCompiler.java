@@ -35,6 +35,7 @@ import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
+import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpander;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolver;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
@@ -200,12 +201,14 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
 
+        LogicInstructionArrayExpander arrayExpander = new LogicInstructionArrayExpander(profile, instructionProcessor);
+
         // OPTIMIZE
         long optimizeStart = System.nanoTime();
         if (profile.optimizationsActive() && instructions.size() > 1) {
             final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                     ? debugPrinterProvider.apply(profile.getDebugLevel()) : new NullDebugPrinter();
-            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer);
+            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer, arrayExpander);
             optimizer.setDebugPrinter(debugPrinter);
             instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
             debugPrinter.print(this::debug);
@@ -214,6 +217,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
+
+        // Run program through the array expander again, as optimizations might have been inactive.
+        instructions = arrayExpander.expandArrayInstructions(instructions);
 
         // Sort variables
         LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(profile, instructionProcessor);

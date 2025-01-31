@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class CallRecInstruction extends BaseInstruction implements CallingInstruction {
@@ -18,18 +19,23 @@ public class CallRecInstruction extends BaseInstruction implements CallingInstru
         super(astContext, Opcode.CALLREC, args, params);
     }
 
-    protected CallRecInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected CallRecInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public CallRecInstruction copy() {
-        return new CallRecInstruction(this, astContext);
+        return new CallRecInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public CallRecInstruction withContext(AstContext astContext) {
-        return new CallRecInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new CallRecInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public CallRecInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new CallRecInstruction(this, astContext, sideEffects);
     }
 
     public final LogicVariable getStack() {

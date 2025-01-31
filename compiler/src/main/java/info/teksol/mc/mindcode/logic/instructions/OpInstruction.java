@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class OpInstruction extends BaseResultInstruction {
@@ -20,18 +21,23 @@ public class OpInstruction extends BaseResultInstruction {
         super(astContext, Opcode.OP, args, params);
     }
 
-    protected OpInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected OpInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public OpInstruction copy() {
-        return new OpInstruction(this, astContext);
+        return new OpInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public OpInstruction withContext(AstContext astContext) {
-        return new OpInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new OpInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public OpInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new OpInstruction(this, astContext, sideEffects);
     }
 
     @Override

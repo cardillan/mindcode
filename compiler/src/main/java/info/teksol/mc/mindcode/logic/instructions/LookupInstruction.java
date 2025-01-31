@@ -11,6 +11,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class LookupInstruction extends BaseResultInstruction {
@@ -19,18 +20,23 @@ public class LookupInstruction extends BaseResultInstruction {
         super(astContext, Opcode.LOOKUP, args, params);
     }
 
-    protected LookupInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected LookupInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public LookupInstruction copy() {
-        return new LookupInstruction(this, astContext);
+        return new LookupInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public LookupInstruction withContext(AstContext astContext) {
-        return new LookupInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new LookupInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public LookupInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new LookupInstruction(this, astContext, sideEffects);
     }
 
     @Override

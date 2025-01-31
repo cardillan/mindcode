@@ -1,11 +1,8 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.CompilerProfile;
@@ -13,7 +10,6 @@ import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -120,9 +116,6 @@ public class LogicInstructionLabelResolver {
             return program;
         }
 
-        // Expand jump tables
-        program = expandJumpTables(program);
-
         // Save the last instruction before it is resolved
         LogicInstruction last = program.getLast();
 
@@ -136,103 +129,6 @@ public class LogicInstructionLabelResolver {
         }
 
         return program;
-    }
-
-    private List<LogicInstruction> expandJumpTables(List<LogicInstruction> program) {
-        // Read tables
-        Map<String, List<LogicInstruction>> readJumpTables = program.stream()
-                .filter(ReadArrInstruction.class::isInstance)
-                .map(ReadArrInstruction.class::cast)
-                .map(ArrayAccessInstruction::getArray)
-                .distinct()
-                .collect(Collectors.toMap(LogicArray::getReadJumpTableId, this::buildReadJumpTable));
-
-        // Write tables
-        Map<String, List<LogicInstruction>> writeJumpTables = program.stream()
-                .filter(WriteArrInstruction.class::isInstance)
-                .map(WriteArrInstruction.class::cast)
-                .map(ArrayAccessInstruction::getArray)
-                .distinct()
-                .collect(Collectors.toMap(LogicArray::getWriteJumpTableId, this::buildWriteJumpTable));
-
-        Map<String, List<LogicInstruction>> jumpTables = new HashMap<>(readJumpTables);
-        jumpTables.putAll(writeJumpTables);
-
-        List<LogicInstruction> expanded = program.stream()
-                .mapMulti((LogicInstruction ix, Consumer<LogicInstruction> consumer)
-                        -> expandInstruction(ix, jumpTables, consumer))
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        readJumpTables.values().forEach(expanded::addAll);
-        writeJumpTables.values().forEach(expanded::addAll);
-
-        return expanded;
-    }
-
-    private List<LogicInstruction> buildReadJumpTable(LogicArray array) {
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.ARRAY_READ, AstSubcontextType.BASIC, 1.0);
-        List<LogicInstruction> result = new ArrayList<>();
-        LogicLabel marker = processor.nextMarker();
-
-        result.add(processor.createEnd(astContext));
-        for (LogicVariable element : array.getElements()) {
-            result.add(processor.createMultiLabel(astContext, processor.nextLabel(), marker));
-            result.add(processor.createSet(astContext, array.readVal, element));
-            result.add(processor.createReturn(astContext, array.readRet));
-        }
-
-        return result;
-    }
-
-    private List<LogicInstruction> buildWriteJumpTable(LogicArray array) {
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.ARRAY_WRITE, AstSubcontextType.BASIC, 1.0);
-        List<LogicInstruction> result = new ArrayList<>();
-        LogicLabel marker = processor.nextMarker();
-
-        result.add(processor.createEnd(astContext));
-        for (LogicVariable element : array.getElements()) {
-            result.add(processor.createMultiLabel(astContext, processor.nextLabel(), marker));
-            result.add(processor.createSet(astContext, element, array.writeVal));
-            result.add(processor.createReturn(astContext, array.writeRet));
-        }
-
-        return result;
-    }
-
-    private void expandInstruction(LogicInstruction instruction, Map<String, List<LogicInstruction>> jumpTables, Consumer<LogicInstruction> consumer) {
-        if (!(instruction instanceof ArrayAccessInstruction ix)) {
-            consumer.accept(instruction);
-            return;
-        }
-
-        AstContext astContext = ix.getAstContext();
-        LogicArray array = ix.getArray();
-        LogicVariable temp = processor.nextTemp();
-        LogicLabel marker = Objects.requireNonNull(jumpTables.get(ix.getJumpTableId()).get(1).getMarker());
-        LogicLabel target = ((LabeledInstruction) jumpTables.get(ix.getJumpTableId()).get(1)).getLabel();
-        LogicLabel returnLabel = processor.nextLabel();
-
-        switch (instruction) {
-            case ReadArrInstruction rix -> {
-                consumer.accept(processor.createSetAddress(astContext, array.readRet, returnLabel));
-                consumer.accept(processor.createOp(astContext, Operation.MUL, temp, ix.getIndex(), LogicNumber.TWO));
-                consumer.accept(processor.createMultiJump(astContext, target, temp, LogicNumber.ZERO, marker));
-                consumer.accept(processor.createMultiLabel(astContext, returnLabel, marker));
-                consumer.accept(processor.createSet(astContext, rix.getResult(), array.readVal));
-            }
-
-            case WriteArrInstruction wix -> {
-                consumer.accept(processor.createSetAddress(astContext, array.writeRet, returnLabel));
-                consumer.accept(processor.createSet(astContext, array.writeVal, wix.getValue()));
-                consumer.accept(processor.createOp(astContext, Operation.MUL, temp, ix.getIndex(), LogicNumber.TWO));
-                consumer.accept(processor.createMultiJump(astContext, target, temp, LogicNumber.ZERO, marker));
-                consumer.accept(processor.createMultiLabel(astContext, returnLabel, marker));
-            }
-
-            default -> consumer.accept(instruction);
-        }
     }
 
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
@@ -312,7 +208,15 @@ public class LogicInstructionLabelResolver {
         final List<LogicInstruction> result = new ArrayList<>();
 
         for (final LogicInstruction instruction : program) {
-            if (instruction instanceof MultiJumpInstruction ix) {
+            if (instruction instanceof MultiCallInstruction ix) {
+                if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
+                    LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
+                            OP, Operation.ADD, LogicBuiltIn.COUNTER, LogicNumber.create(label.getAddress()), ix.getOffset());
+                    result.add(newInstruction);
+                } else {
+                    throw new MindcodeInternalError("MultiCall target '%s' is not a label.", ix.getTarget());
+                }
+            } else if (instruction instanceof MultiJumpInstruction ix) {
                 if (ix.getTarget() instanceof LogicVariable var) {
                     LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
                             SET, LogicBuiltIn.COUNTER, var);

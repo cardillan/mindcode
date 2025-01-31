@@ -21,20 +21,25 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
         resultIndex = params == null ? -1 : params.indexOf(InstructionParameterType.RESULT);
     }
 
-    public BaseResultInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    public BaseResultInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
         assert other.getArgumentTypes() != null;
         resultIndex = other.getArgumentTypes().indexOf(InstructionParameterType.RESULT);
     }
 
     @Override
     public BaseResultInstruction copy() {
-        return new BaseResultInstruction(this, astContext);
+        return new BaseResultInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public BaseResultInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new BaseResultInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new BaseResultInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public BaseResultInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new BaseResultInstruction(this, astContext, sideEffects);
     }
 
     @Override

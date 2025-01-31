@@ -21,10 +21,10 @@ public class LogicArray extends AbstractArgument {
         this.array = array;
         this.mlog = "." + array.getName() + "[]";
 
-        readVal = LogicVariable.arrayAccess(array.getName(), "*r");
-        readRet = LogicVariable.arrayAccess(array.getName(), "*rret");
-        writeVal = LogicVariable.arrayAccess(array.getName(), "*w");
-        writeRet = LogicVariable.arrayAccess(array.getName(), "*wret");
+        readVal = LogicVariable.arrayReadAccess(array.getName());
+        readRet = LogicVariable.arrayReturn(array.getName(), "*rret");
+        writeVal = LogicVariable.arrayWriteAccess(array.getName());
+        writeRet = LogicVariable.arrayReturn(array.getName(), "*wret");
     }
 
     public String getArrayName() {

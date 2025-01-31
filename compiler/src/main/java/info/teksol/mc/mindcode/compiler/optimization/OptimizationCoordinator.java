@@ -6,9 +6,12 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
+import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpander;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.TraceFile;
@@ -30,15 +33,17 @@ public class OptimizationCoordinator {
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
     private final MessageConsumer messageConsumer;
+    private final LogicInstructionArrayExpander arrayExpander;
     private final CompilerProfile profile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private @Nullable OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
-            MessageConsumer messageConsumer) {
+            MessageConsumer messageConsumer, LogicInstructionArrayExpander arrayExpander) {
         this.instructionProcessor = instructionProcessor;
         this.messageConsumer = messageConsumer;
         this.profile = profile;
+        this.arrayExpander = arrayExpander;
     }
 
     public static boolean isDebugOn() {
@@ -88,13 +93,41 @@ public class OptimizationCoordinator {
             Map<Optimization, Optimizer> optimizers = createOptimizers();
 
             optimizePhase(INITIAL, optimizers, 0);
+
+            int pass = 1;
             boolean modified = true;
-            for (int pass = 1; modified && pass <= profile.getOptimizationPasses(); pass++) {
-                modified = optimizePhase(ITERATED, optimizers, pass);
+
+            // We reserve one pass for the phase after the expansion
+            while (modified && pass < profile.getOptimizationPasses()) {
+                modified = optimizePhase(ITERATED, optimizers, pass++);
             }
+
+            if (arrayExpander.analyze(program)) {
+                for (int index = 0; index < program.size(); index++) {
+                    if (program.get(index) instanceof ArrayAccessInstruction ix) {
+                        List<LogicInstruction> expanded = arrayExpander.expand(ix);
+                        optimizationContext.removeInstruction(index);
+                        for (LogicInstruction instruction : expanded) {
+                            optimizationContext.insertInstructionUnchecked(index++, instruction);
+                        }
+                    }
+                }
+
+                boolean generateEndSeparator = program.getLast().getOpcode() == Opcode.END;
+                for (LogicInstruction instruction : arrayExpander.getJumpTables(generateEndSeparator)) {
+                    optimizationContext.insertInstructionUnchecked(program.size(), instruction);
+                }
+                modified = true;
+            }
+
+            while (modified && pass <= profile.getOptimizationPasses()) {
+                modified = optimizePhase(ITERATED, optimizers, pass++);
+            }
+
             if (modified) {
                 messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, profile.getOptimizationPasses()));
             }
+
             optimizePhase(FINAL, optimizers, 0);
 
             optimizers.values().forEach(Optimizer::generateFinalMessages);

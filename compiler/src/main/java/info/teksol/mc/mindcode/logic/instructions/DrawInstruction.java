@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class DrawInstruction extends BaseInstruction {
@@ -18,18 +19,23 @@ public class DrawInstruction extends BaseInstruction {
         super(astContext, Opcode.DRAW, args, params);
     }
 
-    protected DrawInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected DrawInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public DrawInstruction copy() {
-        return new DrawInstruction(this, astContext);
+        return new DrawInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public DrawInstruction withContext(AstContext astContext) {
-        return new DrawInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new DrawInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public DrawInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new DrawInstruction(this, astContext, sideEffects);
     }
 
     public final LogicKeyword getType() {

@@ -63,6 +63,10 @@ public interface ContextlessInstructionCreator {
         return (LookupInstruction) createInstruction(astContext, LOOKUP, type, result, index);
     }
 
+    default MultiCallInstruction createMultiCall(AstContext astContext, LogicLabel target, LogicVariable offset, LogicLabel marker) {
+        return (MultiCallInstruction) createInstruction(astContext, MULTICALL, target, offset, marker);
+    }
+
     default MultiJumpInstruction createMultiJump(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
         return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, value, offset, marker);
     }

@@ -33,8 +33,8 @@ class JumpThreading extends BaseOptimizer {
                     // Target of the jump
                     LogicLabel label = findJumpRedirection(jump);
                     LogicInstruction target = labeledInstruction(label);
-                    boolean replaceAdvanced = jump.isUnconditional()
-                            && (target instanceof ReturnInstruction || target instanceof MultiJumpInstruction);
+                    boolean replaceAdvanced = jump.isUnconditional() && (target instanceof ReturnInstruction
+                            || target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction);
 
                     if (replaceAdvanced) {
                         it.set(target.withContext(jump.getAstContext()));

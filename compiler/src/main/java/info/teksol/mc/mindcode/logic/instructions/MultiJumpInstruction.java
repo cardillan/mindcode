@@ -8,31 +8,37 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
-public class MultiJumpInstruction extends BaseInstruction {
+public class MultiJumpInstruction extends BaseInstruction implements MultiTargetInstruction {
 
     MultiJumpInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.MULTIJUMP, args, params);
     }
 
-    protected MultiJumpInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected MultiJumpInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
+    }
+
+    @Override
+    public MultiJumpInstruction copy() {
+        return new MultiJumpInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public MultiJumpInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new MultiJumpInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public MultiJumpInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new MultiJumpInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public boolean affectsControlFlow() {
         return true;
-    }
-
-    @Override
-    public MultiJumpInstruction copy() {
-        return new MultiJumpInstruction(this, astContext);
-    }
-
-    @Override
-    public MultiJumpInstruction withContext(AstContext astContext) {
-        return new MultiJumpInstruction(this, astContext);
     }
 
     public final LogicAddress getTarget() {

@@ -221,6 +221,11 @@ class DataFlowOptimizer extends BaseOptimizer {
     ///
     /// @param context context to process
     private void processTopContext(AstContext context) {
+        // Jump tables. Nothing to optimize here; on the contrary, they must not be disturbed.
+        if (context.matches(AstContextType.ARRAY_READ) || context.matches(AstContextType.ARRAY_WRITE)) {
+            return;
+        }
+
         if (firstInstructionIndex(context) < 0) {
             // Empty top context. Can happen when using constants from imported libraries.
             return;
@@ -787,6 +792,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 .map(LogicVariable.class::cast)
                 .forEach(arg -> variableStates.valueSet(arg, instruction, value, modifyInstructions));
 
+        // Function call side effects
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
                 MindcodeFunction function = instruction.getAstContext().function();
@@ -796,15 +802,14 @@ class DataFlowOptimizer extends BaseOptimizer {
                     functionEndStates.add(variableStates.copy("function end handling"));
                 }
             }
-            case READARR -> {
-                ReadArrInstruction ix = (ReadArrInstruction) instruction;
-                ix.getArray().getElements().forEach(e -> variableStates.valueRead(e,instruction, false, reachable));
-            }
-            case WRITEARR -> {
-                WriteArrInstruction ix = (WriteArrInstruction) instruction;
-                ix.getArray().getElements().forEach(variableStates::valueReset);
-            }
         }
+
+        // General side effects
+        instruction.sideEffects().apply(
+                variable -> variableStates.valueRead(variable, instruction, false, reachable),
+//                variable -> variableStates.valueSet(variable, instruction, null, modifyInstructions));
+                variableStates::valueReset);
+
 
         indentDec();
         return variableStates;

@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class SensorInstruction extends BaseResultInstruction {
@@ -18,18 +19,23 @@ public class SensorInstruction extends BaseResultInstruction {
         super(astContext, Opcode.SENSOR, args, params);
     }
 
-    protected SensorInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected SensorInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public SensorInstruction copy() {
-        return new SensorInstruction(this, astContext);
+        return new SensorInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public SensorInstruction withContext(AstContext astContext) {
-        return new SensorInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new SensorInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public SensorInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new SensorInstruction(this, astContext, sideEffects);
     }
 
     @Override

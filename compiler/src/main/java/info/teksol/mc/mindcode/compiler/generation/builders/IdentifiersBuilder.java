@@ -45,7 +45,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         ValueStore valueStore = evaluate(node.getArray());
         return switch (valueStore) {
             case LogicVariable memory   -> memoryArrayAccess(node, memory);
-            case ArrayStore array       -> storeArrayAccess(node, array);
+            case ArrayStore<?> array    -> storeArrayAccess(node, array);
             default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
         };
     }
@@ -82,7 +82,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         }
     }
 
-    private ValueStore storeArrayAccess(AstArrayAccess node, ArrayStore array) {
+    private ValueStore storeArrayAccess(AstArrayAccess node, ArrayStore<?> array) {
         ValueStore index = evaluate(node.getIndex());
 
         if (index instanceof LogicNumber number) {

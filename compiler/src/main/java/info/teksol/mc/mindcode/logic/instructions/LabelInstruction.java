@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class LabelInstruction extends BaseInstruction implements LabeledInstruction {
@@ -17,18 +18,23 @@ public class LabelInstruction extends BaseInstruction implements LabeledInstruct
         super(astContext, Opcode.LABEL, args, params);
     }
 
-    protected LabelInstruction(BaseInstruction other, AstContext astContext) {
-        super(other, astContext);
+    protected LabelInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
+        super(other, astContext, sideEffects);
     }
 
     @Override
     public LabelInstruction copy() {
-        return new LabelInstruction(this, astContext);
+        return new LabelInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public LabelInstruction withContext(AstContext astContext) {
-        return new LabelInstruction(this, astContext);
+        return Objects.equals(this.astContext, astContext) ? this : new LabelInstruction(this, astContext, sideEffects);
+    }
+
+    @Override
+    public LabelInstruction withSideEffects(SideEffects sideEffects) {
+        return Objects.equals(this.sideEffects, sideEffects) ? this : new LabelInstruction(this, astContext, sideEffects);
     }
 
     @Override

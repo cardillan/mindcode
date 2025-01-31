@@ -338,4 +338,22 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                 )
         );
     }
+
+    @Test
+    void optimizesArrayAccess() {
+        assertCompilesTo("""
+                        var a[10];
+                        a[0] = 1;
+                        a[1] = 2;
+                        a[2] = 3;
+                        print(a[0], a[1], a[2]);
+                        """,
+                createInstruction(SET, ".a*0", "1"),
+                createInstruction(SET, ".a*1", "2"),
+                createInstruction(SET, ".a*2", "3"),
+                createInstruction(PRINT, ".a*0"),
+                createInstruction(PRINT, ".a*1"),
+                createInstruction(PRINT, ".a*2")
+        );
+    }
 }

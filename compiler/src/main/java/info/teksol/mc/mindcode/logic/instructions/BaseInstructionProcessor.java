@@ -153,6 +153,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case JUMP        -> new JumpInstruction(astContext, arguments, params);
             case LABEL       -> new LabelInstruction(astContext, arguments, params);
             case LOOKUP      -> new LookupInstruction(astContext, arguments, params);
+            case MULTICALL   -> new MultiCallInstruction(astContext, arguments, params);
             case MULTIJUMP   -> new MultiJumpInstruction(astContext, arguments, params);
             case MULTILABEL  -> new MultiLabelInstruction(astContext, arguments, params);
             case NOOP        -> new NoOpInstruction(astContext);
@@ -258,7 +259,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
             }
             default -> {
-                // MultiJumpInstruction is handled by LabelResolver, as the actual label value needs to be known
+                // MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
                 consumer.accept(instruction);
             }
         }
@@ -270,7 +271,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         if (instruction instanceof CustomInstruction ix) {
             return (T) new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
         } else {
-            return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
+            return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs)
+                    .withSideEffects(instruction.sideEffects());
         }
     }
 
@@ -314,7 +316,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 + opcode.getAdditionalPrintArguments();
     }
 
-    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP);
+    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP, SETADDR);
     private static final Set<String> CONSTANT_PROPERTIES = Set.of("@size", "@speed", "@type", "@id");
 
     @Override
