@@ -1505,7 +1505,7 @@ class OptimizationContext {
         }
 
         public int realSize() {
-            return InstructionCounter.computeSize(stream());
+            return InstructionCounter.localSize(stream());
         }
 
         public boolean isEmpty() {

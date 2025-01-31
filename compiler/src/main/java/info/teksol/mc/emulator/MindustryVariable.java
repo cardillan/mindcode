@@ -196,8 +196,8 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         return (int) getDoubleValue();
     }
 
-    public boolean getBooleanValue() {
-        return isObject ? object != null : Math.abs(numericValue) >= 0.00001;
+    public boolean isInteger() {
+        return getIntValue() == getDoubleValue();
     }
 
     public String print(InstructionProcessor instructionProcessor) {

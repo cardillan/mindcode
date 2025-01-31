@@ -172,9 +172,11 @@ class LoopUnroller extends BaseOptimizer {
                 List<LogicInstruction> controlIxs = loopIxs.stream().filter(ix -> ix.usesAsOutput(controlVariable)).toList();
 
                 // Real size of one unrolled iteration. We ignore loop control updates (jump is already removed)
+                // Internal array access with control variable as an index is considered.
                 // Loop control updates will only be removed by Data Flow Optimization later on.
-                int size = InstructionCounter.computeSize(loopIxs) - InstructionCounter.computeSize(controlIxs.stream());
-                int originalSize = InstructionCounter.computeSize(contextStream(loop));
+                int size = InstructionCounter.localSize(loopIxs, ix -> getReplacementSize(ix, controlVariable))
+                        - InstructionCounter.localSize(controlIxs.stream());
+                int originalSize = InstructionCounter.localSize(contextStream(loop));
 
                 int loopLimit = size <= 0 ? costLimit : costLimit / size;
                 int loops = findLoopCount(loop, jump, controlVariable, initLiteral, controlIxs, loopLimit);
@@ -187,6 +189,12 @@ class LoopUnroller extends BaseOptimizer {
         }
 
         return null;
+    }
+
+    private int getReplacementSize(LogicInstruction instruction, LogicVariable controlVariable) {
+        return instruction instanceof ArrayAccessInstruction ix && ix.getIndex().equals(controlVariable)
+                ? 1
+                : instruction.getRealSize(null);
     }
 
     private int findLoopCount(AstContext loop, JumpInstruction jump, LogicVariable loopControl,

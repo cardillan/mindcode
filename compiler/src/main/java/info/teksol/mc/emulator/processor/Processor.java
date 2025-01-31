@@ -174,6 +174,10 @@ public class Processor extends AbstractMessageEmitter {
                 }
 
                 // Report possible wrong jump and @counter assignments at the errant instruction
+                if (!counter.isInteger()) {
+                    throw new ExecutionException(ERR_INVALID_COUNTER, "Non-integer value of of '@counter' (%s) .", counter.printExact());
+                }
+
                 int newIndex = counter.getIntValue();
                 if (newIndex < 0 || newIndex > program.size()) {
                     counter.setIntValue(0);

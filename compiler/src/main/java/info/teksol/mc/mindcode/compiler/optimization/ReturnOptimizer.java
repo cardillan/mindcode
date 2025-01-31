@@ -74,7 +74,7 @@ class ReturnOptimizer extends BaseOptimizer {
     }
 
     private boolean hasNoCode(List<LogicInstruction> instructions) {
-        return InstructionCounter.computeSize(instructions.subList(1, instructions.size() - 1)) == 0;
+        return InstructionCounter.localSize(instructions.subList(1, instructions.size() - 1)) == 0;
     }
 
     private @Nullable ReturnRecInstruction findReturnInstruction(LogicList body) {

@@ -118,6 +118,8 @@ public class OptimizationCoordinator {
                     optimizationContext.insertInstructionUnchecked(program.size(), instruction);
                 }
                 modified = true;
+
+                debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
             }
 
             while (modified && pass <= profile.getOptimizationPasses()) {
@@ -223,7 +225,7 @@ public class OptimizationCoordinator {
     }
 
     private int codeSize() {
-        return InstructionCounter.computeSizeShared(program);
+        return InstructionCounter.globalSize(program);
     }
 
     private static final Comparator<OptimizationAction> ACTION_COMPARATOR =

@@ -107,8 +107,8 @@ public class DiffDebugPrinter implements DebugPrinter {
             return;
         }
 
-        int sizeBefore = InstructionCounter.computeSizeShared(before);
-        int sizeAfter = InstructionCounter.computeSizeShared(after);
+        int sizeBefore = InstructionCounter.globalSize(before);
+        int sizeAfter = InstructionCounter.globalSize(after);
         String sizeChange = sizeBefore == sizeAfter ? "" : " (%+d instructions)".formatted(sizeAfter - sizeBefore);
 
         List<String> output = new ArrayList<>();

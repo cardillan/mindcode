@@ -51,7 +51,7 @@ public class LogicInstructionLabelResolver {
             order.add(LogicNull.NULL);
         }
 
-        int limit = profile.getInstructionLimit() - InstructionCounter.computeSize(program);
+        int limit = profile.getInstructionLimit() - InstructionCounter.localSize(program);
         if (limit <= 0) {
             return program;
         }

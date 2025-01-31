@@ -230,7 +230,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         if (specification.getArraySize() == null) return -1;
         int maxSize = modifiers.contains(Modifier.EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
 
-        ValueStore size = evaluate(specification.getArraySize());
+        ValueStore size = processInLocalScope(() -> evaluate(specification.getArraySize()));
         if (!(size instanceof LogicNumber number)) {
             error(specification.getArraySize(), ERR.ARRAY_MUTABLE_SIZE);
         } else if (!number.isInteger()) {
