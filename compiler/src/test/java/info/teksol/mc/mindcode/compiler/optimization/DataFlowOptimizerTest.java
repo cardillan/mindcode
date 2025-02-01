@@ -75,18 +75,19 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(OP, "add", ":i", ":i", "1"),
                     createInstruction(JUMP, var(1007), "lessThan", ":i", "LIMIT"),
                     createInstruction(END),
-                    createInstruction(MULTILABEL, var(1010), "marker1"),
-                    createInstruction(SET, ".a*r", ".a*0"),
-                    createInstruction(RETURN, ".a*rret"),
-                    createInstruction(MULTILABEL, var(1011), "marker1"),
-                    createInstruction(SET, ".a*r", ".a*1"),
-                    createInstruction(RETURN, ".a*rret"),
                     createInstruction(MULTILABEL, var(1008), "marker0"),
                     createInstruction(SET, ".a*0", ".a*w"),
                     createInstruction(RETURN, ".a*wret"),
                     createInstruction(MULTILABEL, var(1009), "marker0"),
                     createInstruction(SET, ".a*1", ".a*w"),
-                    createInstruction(RETURN, ".a*wret")            );
+                    createInstruction(RETURN, ".a*wret"),
+                    createInstruction(MULTILABEL, var(1010), "marker1"),
+                    createInstruction(SET, ".a*r", ".a*0"),
+                    createInstruction(RETURN, ".a*rret"),
+                    createInstruction(MULTILABEL, var(1011), "marker1"),
+                    createInstruction(SET, ".a*r", ".a*1"),
+                    createInstruction(RETURN, ".a*rret")
+            );
         }
     }
 

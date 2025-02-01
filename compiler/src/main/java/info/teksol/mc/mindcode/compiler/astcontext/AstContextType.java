@@ -22,7 +22,7 @@ public enum AstContextType {
     ASSIGNMENT      ("ASGN"),
     OPERATOR        ("OPER"),
     PROPERTY        ("PROP"),
-    HEAP_ACCESS     ("HEAP"),
+    ARRAY_ACCESS    ("HEAP"),
     ALLOCATION      ("ALOC"),
 
     ARRAY_READ      ("RARR"),

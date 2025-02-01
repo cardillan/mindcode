@@ -102,6 +102,7 @@ lvalue
     | id = EXTIDENTIFIER                                                                # astIdentifierExt
     | builtin = BUILTINIDENTIFIER                                                       # astBuiltInIdentifier
     | array = IDENTIFIER LBRACKET index = expression RBRACKET                           # astArrayAccess
+    | array = IDENTIFIER LBRACKET range = astRange RBRACKET                             # astSubarray
     ;
 
 

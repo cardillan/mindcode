@@ -14,15 +14,16 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.ExternalArray;
-import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+import static info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore.ArrayType.EXTERNAL;
+import static info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore.ArrayType.INTERNAL;
 import static info.teksol.mc.mindcode.logic.arguments.LogicNull.NULL;
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
@@ -164,62 +165,67 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         }
     }
 
-    private ValueStore applyArrayOperation(AstExpression node, ArrayStore<?> targetArray, ValueStore eval,
+    @SuppressWarnings("unchecked")
+    private ValueStore applyArrayOperation(AstExpression node, ArrayStore<?> target, ValueStore eval,
             @Nullable Operation operation, boolean returnPriorValue) {
-        if (operation != null || !(eval instanceof ArrayStore<?> valueArray)) {
+        if (operation != null || !(eval instanceof ArrayStore<?> source)) {
             error(node, ERR.ARRAY_UNSUPPORTED_OPERATION);
-            return targetArray;
+            return target;
         }
 
-        int size = targetArray.getSize();
+        int size = target.getSize();
 
-        if (size != valueArray.getSize()) {
-            error(node, ERR.ARRAY_ASSIGNMENT_SIZE_MISMATCH, targetArray.getName(), size,
-                    valueArray.getName(), valueArray.getSize());
-            return targetArray;
+        if (size != source.getSize()) {
+            error(node, ERR.ARRAY_ASSIGNMENT_SIZE_MISMATCH, target.getName(), size,
+                    source.getName(), source.getSize());
+            return target;
         }
 
-        switch (valueArray) {
-            case InternalArray valueInt when targetArray instanceof InternalArray targetInt -> {
-                copyInternalArrays(targetInt, valueInt);
+        if (source.getArrayType() == INTERNAL && target.getArrayType() == INTERNAL) {
+            copyInternalArrays((ArrayStore<@NonNull LogicVariable>) target,
+                    (ArrayStore<@NonNull LogicVariable>) source);
+        } else if (source.getArrayType() == INTERNAL && target.getArrayType() == EXTERNAL) {
+            for (int i = 0; i < size; i++) {
+                target.getElements().get(i).setValue(assembler, (LogicValue) source.getElements().get(i));
             }
-
-            case InternalArray valueInt -> {
-                for (int i = 0; i < size; i++) {
-                    targetArray.getElements().get(i).setValue(assembler, valueInt.getElements().get(i));
-                }
+        } else if (source.getArrayType() == EXTERNAL && target.getArrayType() == INTERNAL) {
+            for (int i = 0; i < size; i++) {
+                source.getElements().get(i).readValue(assembler, (LogicVariable) target.getElements().get(i));
             }
-
-            case ExternalArray valueExt when targetArray instanceof InternalArray targetInt -> {
-                for (int i = 0; i < size; i++) {
-                    valueExt.getElements().get(i).readValue(assembler, targetInt.getElements().get(i));
-                }
-            }
-
-            default -> {
-                copyArraysUsingLoop(node, targetArray, valueArray);
-            }
+        } else {
+            copyArraysUsingLoop(node, target, source);
         }
 
-        return targetArray;
+        return target;
     }
 
-    private void copyInternalArrays(InternalArray targetInt, InternalArray valueInt) {
-        // TODO: handle subarray overlaps
-        int size = targetInt.getSize();
-        for (int i = 0; i < size; i++) {
-            targetInt.getElements().get(i).setValue(assembler, valueInt.getElements().get(i));
+    private void copyInternalArrays(ArrayStore<LogicVariable> target, ArrayStore<LogicVariable> source) {
+        int size = target.getSize();
+        if (target.getStartOffset() <= source.getStartOffset()) {
+            // Forward direction
+            for (int i = 0; i < size; i++) {
+                target.getElements().get(i).setValue(assembler, source.getElements().get(i));
+            }
+        } else {
+            // Reverse direction
+            for (int i = size - 1; i >= 0; i--) {
+                target.getElements().get(i).setValue(assembler, source.getElements().get(i));
+            }
         }
     }
 
-    private void copyArraysUsingLoop(AstExpression node, ArrayStore<?> targetArray, ArrayStore<?> valueArray) {
+    private void copyArraysUsingLoop(AstExpression node, ArrayStore<?> target, ArrayStore<?> source) {
+        boolean reverse = target.getStartOffset() > source.getStartOffset();
+        int size = target.getSize();
+
         LogicVariable index = assembler.nextTemp().withType(ArgumentType.LOCAL_VARIABLE);
-        index.setValue(assembler, LogicNumber.ZERO);
+        if (reverse) {
+            index.setValue(assembler, LogicNumber.create(size - 1));
+        } else {
+            index.setValue(assembler, LogicNumber.ZERO);
+        }
 
         assembler.setContextType(node, AstContextType.LOOP, AstSubcontextType.BASIC);
-
-        int size = targetArray.getSize();
-        LogicNumber limit = LogicNumber.create(size);
 
         final LogicLabel beginLabel = assembler.nextLabel();
 
@@ -228,12 +234,16 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         assembler.createLabel(beginLabel);
 
         // Copy
-        targetArray.getElement(assembler, node, index).setValue(assembler, valueArray.getElement(assembler, node, index).getValue(assembler));
-        assembler.createOp(Operation.ADD, index, index, LogicNumber.ONE);
+        target.getElement(assembler, node, index).setValue(assembler, source.getElement(assembler, node, index).getValue(assembler));
+        assembler.createOp(reverse ? Operation.SUB : Operation.ADD, index, index, LogicNumber.ONE);
 
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, size);
-        assembler.createJump(beginLabel, Condition.LESS_THAN, index, limit);
+        if (reverse) {
+            assembler.createJump(beginLabel, Condition.GREATER_THAN_EQ, index, LogicNumber.ZERO);
+        } else {
+            assembler.createJump(beginLabel, Condition.LESS_THAN, index, LogicNumber.create(size));
+        }
 
         // Exit
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);

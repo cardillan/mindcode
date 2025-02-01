@@ -16,10 +16,10 @@ public class LogicArray extends AbstractArgument {
     public final LogicVariable writeVal;
     public final LogicVariable writeRet;
 
-    private LogicArray(InternalArray array) {
+    private LogicArray(InternalArray array, String range) {
         super(ArgumentType.ARRAY, ValueMutability.MUTABLE);
         this.array = array;
-        this.mlog = "." + array.getName() + "[]";
+        this.mlog = array.getName() + range;
 
         readVal = LogicVariable.arrayReadAccess(array.getName());
         readRet = LogicVariable.arrayReturn(array.getName(), "*rret");
@@ -53,6 +53,10 @@ public class LogicArray extends AbstractArgument {
     }
 
     public static LogicArray create(InternalArray array) {
-        return new LogicArray(array);
+        return new LogicArray(array, "[]");
+    }
+
+    public static LogicArray create(InternalArray array, int start, int end) {
+        return new LogicArray(array, "[" + start + "..." + end + "]");
     }
 }

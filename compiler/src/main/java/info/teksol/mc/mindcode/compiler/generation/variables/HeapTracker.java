@@ -79,6 +79,6 @@ public class HeapTracker extends AbstractMessageEmitter {
         List<ExternalVariable> elements = IntStream.range(0, size).mapToObj(index -> new ExternalVariable(identifier.sourcePosition(),
                 heapMemory, LogicNumber.create(currentHeapIndex++), processor.nextTemp())).toList();
 
-        return new ExternalArray(identifier.sourcePosition(), identifier.getName(), heapMemory, baseIndex, elements);
+        return new ExternalArray(identifier.sourcePosition(), "." + identifier.getName(), heapMemory, baseIndex, elements);
     }
 }

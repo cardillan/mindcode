@@ -459,6 +459,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 identifier(ctx.array),
                 visitAstExpression(ctx.index));
     }
+
+    @Override
+    public AstMindcodeNode visitAstSubarray(AstSubarrayContext ctx) {
+        return new AstSubarray(pos(ctx),
+                identifier(ctx.array),
+                visitAstRange(ctx.range));
+    }
     //</editor-fold>
 
     //<editor-fold desc="Rules: function calls">

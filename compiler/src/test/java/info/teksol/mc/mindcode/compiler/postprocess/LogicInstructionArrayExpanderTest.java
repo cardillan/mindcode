@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
@@ -48,10 +49,10 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ".a*wret", "13"),
                 createInstruction(JUMP, "16", "greaterThanEq", "0", "LIMIT"),
                 createInstruction(OP, "mul", var(6), ":i", "2"),
-                createInstruction(OP, "add", "@counter", "20", var(6)),
+                createInstruction(OP, "add", "@counter", "26", var(6)),
                 createInstruction(OP, "add", var(4), ".a*r", "1"),
                 createInstruction(SET, ".a*w", var(4)),
-                createInstruction(OP, "add", "@counter", "26", var(6)),
+                createInstruction(OP, "add", "@counter", "20", var(6)),
                 createInstruction(PRINT, ".a*r"),
                 createInstruction(OP, "add", ":i", ":i", "1"),
                 createInstruction(JUMP, "8", "lessThan", ":i", "LIMIT"),
@@ -59,19 +60,19 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                 createInstruction(PRINT, ".a*1"),
                 createInstruction(PRINT, ".a*2"),
                 createInstruction(END),
-                createInstruction(SET, ".a*r", ".a*0"),
-                createInstruction(SET, "@counter", ".a*rret"),
-                createInstruction(SET, ".a*r", ".a*1"),
-                createInstruction(SET, "@counter", ".a*rret"),
-                createInstruction(SET, ".a*r", ".a*2"),
-                createInstruction(SET, "@counter", ".a*rret"),
                 createInstruction(SET, ".a*0", ".a*w"),
                 createInstruction(SET, "@counter", ".a*wret"),
                 createInstruction(SET, ".a*1", ".a*w"),
                 createInstruction(SET, "@counter", ".a*wret"),
                 createInstruction(SET, ".a*2", ".a*w"),
                 createInstruction(SET, "@counter", ".a*wret"),
-                createInstruction(PRINT, q("Compiled by Mindcode - github.com/cardillan/mindcode"))
+                createInstruction(SET, ".a*r", ".a*0"),
+                createInstruction(SET, "@counter", ".a*rret"),
+                createInstruction(SET, ".a*r", ".a*1"),
+                createInstruction(SET, "@counter", ".a*rret"),
+                createInstruction(SET, ".a*r", ".a*2"),
+                createInstruction(SET, "@counter", ".a*rret"),
+                createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
         );
     }
 

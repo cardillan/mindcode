@@ -392,4 +392,54 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
     }
+
+    @Nested
+    class Subarrays {
+        @Test
+        void compilesInternalSubarrays() {
+            assertCompiles("var a[10]; a[3 .. 5];");
+        }
+
+        @Test
+        void reportsOutOfBoundsStartIndex() {
+            assertGeneratesMessage(
+                    "Subarray index -5 out of range 0 .. 9.",
+                    "var a[10]; a[-5 .. 8];");
+        }
+
+        @Test
+        void reportsOutOfBoundsEndIndex() {
+            assertGeneratesMessage(
+                    "Subarray index 12 out of range 0 .. 9.",
+                    "var a[10]; a[8 .. 12];");
+        }
+
+        @Test
+        void reportsNonConstantindices() {
+            assertGeneratesMessage(
+                    "Subarray specification must use constant range.",
+                    "var a[10]; a[0 .. n];");
+        }
+
+        @Test
+        void reportsNonIntegerIndex() {
+            assertGeneratesMessage(
+                    "Subarray specification must use integer range.",
+                    "var a[10]; a[3 .. 5.5];");
+        }
+
+        @Test
+        void reportsNegativeSubarraySize() {
+            assertGeneratesMessage(
+                    "Empty or invalid subarray range.",
+                    "var a[10]; a [1 .. 0];");
+        }
+
+        @Test
+        void reportsZeroSubarraySize() {
+            assertGeneratesMessage(
+                    "Empty or invalid subarray range.",
+                    "var a[10]; a [1 ... 1];");
+        }
+    }
 }

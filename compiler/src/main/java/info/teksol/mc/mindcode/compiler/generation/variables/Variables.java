@@ -234,7 +234,7 @@ public class Variables extends AbstractMessageEmitter {
     ///         are excluded
     /// @param allowUndeclaredLinks `true` to automatically declare undeclared linked variables without an error.
     ///         Used by `param` and `allocate` nodes.
-    /// @return Value instance containing the variable
+    /// @return ValueStore instance containing the variable
     public ValueStore resolveVariable(AstIdentifier identifier, boolean local, boolean allowUndeclaredLinks) {
         // Look for local variables first
         if (local && functionContext.variables().containsKey(identifier.getName())) {
@@ -255,6 +255,21 @@ public class Variables extends AbstractMessageEmitter {
         }
 
         return createImplicitVariable(identifier);
+    }
+
+    /// Tries to find a variable among declared variables. Returns null when not found.
+    ///
+    /// @param identifier variable identifier
+    /// @param local      `true` to search in the local context as well.
+    /// @return ValueStore instance containing the variable
+    public @Nullable ValueStore findVariable(AstIdentifier identifier, boolean local) {
+        // Look for local variables first
+        if (local && functionContext.variables().containsKey(identifier.getName())) {
+            return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
+        } else if (globalVariables.containsKey(identifier.getName())) {
+            return Objects.requireNonNull(globalVariables.get(identifier.getName()));
+        }
+        return null;
     }
 
     /// Indicates a new function is being processed. Function processing can become nested when

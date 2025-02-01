@@ -4,10 +4,9 @@ import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.BaseInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
-import info.teksol.mc.mindcode.logic.instructions.ReadArrInstruction;
-import info.teksol.mc.mindcode.logic.instructions.WriteArrInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -68,7 +67,7 @@ class DeadCodeEliminator extends BaseOptimizer {
         
         if (unused.stream().anyMatch(v -> !v.isOptional())) {
             unused.stream().filter(v -> !v.isOptional())
-                    .sorted(Comparator.comparing(LogicVariable::sourcePosition))
+                    .sorted(Comparator.comparing(LogicVariable::sourcePosition).thenComparing(LogicVariable::getFullName))
                     .map(v -> CompilerMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_USED, v.getFullName()))
                     .forEach(messageRecipient);
         }
@@ -87,11 +86,10 @@ class DeadCodeEliminator extends BaseOptimizer {
             // Preserve global and main variable assignments unless advanced
             //if ((key.isGlobalVariable() || key.isMainVariable()) && !advanced()) continue;
 
-            // Instruction with at most one output argument are removed immediately
-            // Other instructions are inspected further to find out they're fully unused
+            // Remove instructions with all writes unread
             Objects.requireNonNull(writes.get(key)).stream()
                     .filter(LogicInstruction::isSafe)
-                    .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
+                    .filter(this::allWritesUnread)
                     .mapToInt(ix -> firstInstructionIndex(ixx -> ixx == ix))
                     .filter(i -> i >= 0)
                     .forEach(this::invalidateInstruction);
@@ -102,15 +100,32 @@ class DeadCodeEliminator extends BaseOptimizer {
 
 
     
-    /**
-     * @param instruction instruction to examine
-     * @return true if all output arguments of the instruction are unread
-     */
+    /// Determines whether all writes performed by the instruction are unread --> the instruction is superfluous.
+    ///
+    /// @param instruction instruction to examine
+    /// @return true if all output arguments of the instruction are unread
     private boolean allWritesUnread(LogicInstruction instruction) {
-        return instruction.outputArgumentsStream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .noneMatch(reads::contains);
+        if (instruction.sideEffects() == BaseInstruction.NO_SIDE_EFFECTS) {
+            // Faster handling for instructions with no side effects
+
+            // Instruction with at most one output argument are removed immediately
+            // Other instructions are inspected further to find out they're fully unused
+            return instruction.getOutputs() < 2 || instruction.outputArgumentsStream()
+                    .filter(LogicVariable.class::isInstance)
+                    .map(LogicVariable.class::cast)
+                    .noneMatch(reads::contains);
+        } else {
+            List<LogicVariable> writes = new ArrayList<>();
+            instruction.outputArgumentsStream()
+                    .filter(LogicVariable.class::isInstance)
+                    .map(LogicVariable.class::cast)
+                    .forEach(writes::add);
+
+            // The instruction has side effects
+            instruction.sideEffects().apply(read -> {}, writes::add);
+
+            return writes.stream().noneMatch(reads::contains);
+        }
     }
 
     private void addWrite(LogicInstruction instruction, LogicVariable variable) {
@@ -125,11 +140,11 @@ class DeadCodeEliminator extends BaseOptimizer {
                 .map(LogicVariable.class::cast)
                 .forEach(reads::add);
 
-        if (instruction instanceof ReadArrInstruction ix) {
-            reads.addAll(ix.getArray().getElements());
-        } else if (instruction instanceof WriteArrInstruction ix) {
-            ix.getArray().getElements().forEach(v -> addWrite(instruction, v));
-        } else if (instruction.getOpcode() != Opcode.CALL && instruction.getOpcode() != Opcode.CALLREC) {
+        instruction.sideEffects().apply(
+                reads::add,
+                write -> addWrite(instruction, write));
+
+        if (instruction.getOpcode() != Opcode.CALL && instruction.getOpcode() != Opcode.CALLREC) {
             instruction.outputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)

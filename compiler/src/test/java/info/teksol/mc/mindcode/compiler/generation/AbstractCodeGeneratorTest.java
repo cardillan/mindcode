@@ -184,11 +184,11 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
                         Collectors.joining("\n", "\nGenerated messages:\n", ""));
     }
 
-    private static final Pattern variablePattern = Pattern.compile("^[.:*]?[a-zA-Z_].*");
+    private static final Pattern variablePattern = Pattern.compile("^[.:*]?[a-zA-Z_][^*]*");
 
     private boolean evaluateDirectly(String value) {
         // Everything except variables needs to be evaluated directly
-        // Variables can be substituted
+        // Variables can be substituted, EXCEPT indexed variables
         return !variablePattern.matcher(value).matches();
     }
 

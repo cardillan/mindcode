@@ -28,6 +28,10 @@ public class IdentifierFunctionArgument implements FunctionArgument {
         return identifier.sourcePosition();
     }
 
+    public AstIdentifier getIdentifier() {
+        return identifier;
+    }
+
     public LogicKeyword getKeyword() {
         return LogicKeyword.create(identifier.getName());
     }

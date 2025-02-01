@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstLoopIterator;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.*;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
@@ -19,6 +20,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -48,9 +50,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final LogicVariable nextAddress = assembler.nextTemp();
         private final LoopLabels loopLabels;
 
-        // Used to traverse the value list during leading/trailing code creation.
-        private int leadingIndex = 0;
-        private int trailingIndex = 0;
+        private int consumedValues = 0;
 
         public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
             super(builder, node);
@@ -66,21 +66,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 }
             }
 
-            // Compute total values to process in the loop (rectifies incorrect list size)
-            if (values.size() % iterators.size() != 0) {
-                error(pos(node.getValues()), ERR.FOR_EACH_WRONG_NUMBER_OF_VALUES, values.size(), iterators.size());
-
-                // Fill it up using inactive values so that the loop can get compiled
-                while (values.size() % iterators.size() != 0) {
-                    values.add(INACTIVE_VALUE);
-                }
-            }
-
             loopLabels = enterLoop(node);
         }
 
         private void build() {
-            while (leadingIndex < values.size()) {
+            while (!values.isEmpty()) {
                 createIteration();
             }
 
@@ -88,10 +78,15 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Not a bug.
             assembler.createLabel(loopLabels.breakLabel());
 
-            if (!values.isEmpty()) {
+            if (consumedValues > 0) {
                 assembler.clearSubcontextType();
             }
             exitLoop(node, loopLabels);
+
+            // Compute total values to process in the loop (rectifies incorrect list size)
+            if (consumedValues % iterators.size() != 0) {
+                error(pos(node.getValues()), ERR.FOR_EACH_WRONG_NUMBER_OF_VALUES, consumedValues, iterators.size());
+            }
         }
 
         private Iterator processIterator(AstLoopIterator it) {
@@ -116,13 +111,18 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             LogicLabel nextValueLabel = assembler.nextLabel();
             assembler.createSetAddress(nextAddress, nextValueLabel);
 
+            LinkedList<ValueStore> outputValues = new LinkedList<>();
+
             // Copy values from the list to iterators
             for (Iterator iterator : iterators) {
-                ValueStore value = values.get(leadingIndex++);
+                ValueStore value = nextValue();
                 iterator.setValue(value.getValue(assembler));
+                if (iterator.out) {
+                    outputValues.add(value);
+                }
             }
 
-            if (leadingIndex < values.size()) {
+            if (!values.isEmpty()) {
                 // This isn't a last iteration: jump to the loop body
                 assembler.createJumpUnconditional(bodyLabel);
             } else {
@@ -138,10 +138,34 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Copy iterator values back to the array - only for `out` iterators
             for (Iterator iterator : iterators) {
                 if (iterator.out) {
-                    values.get(trailingIndex).setValue(assembler, iterator.getValue());
+                    outputValues.removeFirst().setValue(assembler, iterator.getValue());
+//                    ValueStore value = outputValues.removeFirst();
+//                    if (value.isLvalue()) {
+//                        value.setValue(assembler, iterator.getValue());
+//                    } else if (value instanceof FunctionArgument functionArgument) {
+//                        error(value.sourcePosition(), ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
+//                    }
                 }
-                trailingIndex++;
             }
+        }
+
+        private ValueStore nextValue() {
+            if (values.isEmpty()) {
+                return INACTIVE_VALUE;
+            }
+
+            consumedValues++;
+            ValueStore value = values.removeFirst();
+
+            if (value instanceof DeferredValueStore deferredValueStore) {
+                ValueStore evaluated = deferredValueStore.value();
+                if (evaluated instanceof ArrayStore<?> arrayStore) {
+                    values.addAll(0, arrayStore.getElements());
+                    return values.removeFirst();
+                }
+            }
+
+            return value;
         }
 
         private void createBody() {
@@ -198,7 +222,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         @Override
         public boolean isLvalue() {
-            return value().isLvalue();
+            return verifyLValue().isLvalue();
         }
 
         @Override
@@ -223,12 +247,12 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         @Override
         public LogicValue getWriteVariable(CodeAssembler assembler) {
-            return value().getWriteVariable(assembler);
+            return verifyLValue().getWriteVariable(assembler);
         }
 
         @Override
         public void storeValue(CodeAssembler assembler) {
-            value().storeValue(assembler);
+            verifyLValue().storeValue(assembler);
         }
     }
 

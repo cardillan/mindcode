@@ -389,4 +389,55 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                     "for out i in 1, 2, 3 do end;");
         }
     }
+
+    @Nested
+    class Subarrays {
+        @Test
+        void compilesInternalSubarrayForLoop() {
+            assertCompilesTo("""
+                            var a[10];
+                            for i in a[5 .. 6] do print(i); end;
+                            """,
+                    createInstruction(SETADDR, var(0), var(1003)),
+                    createInstruction(SET, ":i", ".a*5"),
+                    createInstruction(JUMP, var(1000), "always"),
+                    createInstruction(MULTILABEL, var(1003), "marker0"),
+                    createInstruction(SETADDR, var(0), var(1004)),
+                    createInstruction(SET, ":i", ".a*6"),
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(MULTIJUMP, var(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, var(1004), "marker0"),
+                    createInstruction(LABEL, var(1002))
+            );
+        }
+
+        @Test
+        void compilesExternalSubarrayForLoop() {
+            assertCompilesTo("""
+                            allocate heap in cell1;
+                            external a[10];
+                            for i in a[5 .. 6] do print(i); end;
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(SETADDR, var(10), var(1004)),
+                    createInstruction(READ, var(5), "cell1", "5"),
+                    createInstruction(SET, ":i", var(5)),
+                    createInstruction(JUMP, var(1001), "always"),
+                    createInstruction(MULTILABEL, var(1004), "marker0"),
+                    createInstruction(SETADDR, var(10), var(1005)),
+                    createInstruction(READ, var(6), "cell1", "6"),
+                    createInstruction(SET, ":i", var(6)),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(LABEL, var(1002)),
+                    createInstruction(MULTIJUMP, var(10), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, var(1005), "marker0"),
+                    createInstruction(LABEL, var(1003))
+
+            );
+        }
+    }
 }

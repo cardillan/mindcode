@@ -46,6 +46,6 @@ public class AstArrayAccess extends AstExpression {
 
     @Override
     public AstContextType getContextType() {
-        return AstContextType.HEAP_ACCESS;
+        return AstContextType.ARRAY_ACCESS;
     }
 }

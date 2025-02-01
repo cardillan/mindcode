@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -57,7 +58,7 @@ public class InputFunctionArgument implements FunctionArgument {
 
     @Override
     public boolean isLvalue() {
-        return value.isLvalue();
+        return false;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class InputFunctionArgument implements FunctionArgument {
 
     @Override
     public void setValue(CodeAssembler assembler, LogicValue newValue) {
-        assembler.setInternalError();
+        assembler.error(argument, ERR.LVALUE_CANNOT_ASSIGN_TO_ARGUMENT);
     }
 
     @Override

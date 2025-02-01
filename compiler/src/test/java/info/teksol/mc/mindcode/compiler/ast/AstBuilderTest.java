@@ -51,6 +51,20 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
         }
+
+        @Test
+        void buildsSubarray() {
+            assertBuildsTo("""
+                            array[10 ... 20];
+                            """,
+                    List.of(
+                            new AstSubarray(EMPTY,
+                                    new AstIdentifier(EMPTY, "array"),
+                                    new AstRange(EMPTY, number(10), number(20), true)
+                            )
+                    )
+            );
+        }
     }
 
     @Nested

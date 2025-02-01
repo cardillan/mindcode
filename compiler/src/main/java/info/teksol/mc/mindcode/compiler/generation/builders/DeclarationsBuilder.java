@@ -33,8 +33,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         AstRequireLibraryVisitor<ValueStore>,
         AstVariablesDeclarationVisitor<ValueStore>
 {
-    private static final int MAX_INTERNAL_ARRAY_SIZE = 250;
-    private static final int MAX_EXTERNAL_ARRAY_SIZE = 2048;
+    public static final int MAX_INTERNAL_ARRAY_SIZE = 250;
+    public static final int MAX_EXTERNAL_ARRAY_SIZE = 2048;
 
     private static final Set<ArgumentType> constantExpressionTypes = Set.of(
             NULL_LITERAL,
@@ -191,7 +191,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private void processArray(Set<Modifier> modifiers, AstVariableSpecification specification) {
-
         int declaredSize = getDeclaredArraySize(modifiers, specification);
         int initialSize = specification.getExpressions().size();
 

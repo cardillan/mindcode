@@ -475,4 +475,105 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                     "a + b = 10;");
         }
     }
+
+    @Nested
+    class Subarrays {
+        @Test
+        void compilesInternalSubarrayAssignmentForward() {
+            assertCompilesTo("""
+                            var a[3];
+                            a[0 .. 1] = a[1 .. 2];
+                            """,
+                    createInstruction(SET, ".a*0", ".a*1"),
+                    createInstruction(SET, ".a*1", ".a*2")
+            );
+        }
+
+        @Test
+        void compilesInternalSubarrayAssignmentReverse() {
+            assertCompilesTo("""
+                            var a[3];
+                            a[1 .. 2] = a[0 .. 1];
+                            """,
+                    createInstruction(SET, ".a*2", ".a*1"),
+                    createInstruction(SET, ".a*1", ".a*0")
+            );
+        }
+
+        @Test
+        void compilesExternalSubarrayAssignmentForward() {
+            assertCompilesTo("""
+                            allocate heap in cell1;
+                            external a[3];
+                            a[0 .. 1] = a[1 .. 2];
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(SET, var(3), "0"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(SET, var(4), var(3)),
+                    createInstruction(OP, "add", var(6), var(3), "1"),
+                    createInstruction(READ, var(7), "cell1", var(6)),
+                    createInstruction(WRITE, var(7), "cell1", var(4)),
+                    createInstruction(OP, "add", var(3), var(3), "1"),
+                    createInstruction(JUMP, var(1001), "lessThan", var(3), "2"),
+                    createInstruction(LABEL, var(1002))
+            );
+        }
+
+        @Test
+        void compilesExternalSubarrayAssignmentReverse() {
+            assertCompilesTo("""
+                            allocate heap in cell1;
+                            external a[3];
+                            a[1 .. 2] = a[0 .. 1];
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(SET, var(3), "1"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(OP, "add", var(4), var(3), "1"),
+                    createInstruction(SET, var(6), var(3)),
+                    createInstruction(READ, var(7), "cell1", var(6)),
+                    createInstruction(WRITE, var(7), "cell1", var(4)),
+                    createInstruction(OP, "sub", var(3), var(3), "1"),
+                    createInstruction(JUMP, var(1001), "greaterThanEq", var(3), "0"),
+                    createInstruction(LABEL, var(1002))
+            );
+        }
+
+        @Test
+        void compilesMemorySubarrayAssignmentForward() {
+            assertCompilesTo("""
+                            cell1[0 .. 1] = cell1[1 .. 2];
+                            """,
+                    createInstruction(SET, var(4), "0"),
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(SET, var(5), var(4)),
+                    createInstruction(OP, "add", var(7), var(4), "1"),
+                    createInstruction(READ, var(8), "cell1", var(7)),
+                    createInstruction(WRITE, var(8), "cell1", var(5)),
+                    createInstruction(OP, "add", var(4), var(4), "1"),
+                    createInstruction(JUMP, var(1000), "lessThan", var(4), "2"),
+                    createInstruction(LABEL, var(1001))
+            );
+        }
+
+        @Test
+        void compilesMemorySubarrayAssignmentReverse() {
+            assertCompilesTo("""
+                            cell1[1 .. 2] = cell1[0 .. 1];
+                            """,
+                    createInstruction(SET, var(4), "1"),
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(OP, "add", var(5), var(4), "1"),
+                    createInstruction(SET, var(7), var(4)),
+                    createInstruction(READ, var(8), "cell1", var(7)),
+                    createInstruction(WRITE, var(8), "cell1", var(5)),
+                    createInstruction(OP, "sub", var(4), var(4), "1"),
+                    createInstruction(JUMP, var(1000), "greaterThanEq", var(4), "0"),
+                    createInstruction(LABEL, var(1001))
+            );
+        }
+    }
 }

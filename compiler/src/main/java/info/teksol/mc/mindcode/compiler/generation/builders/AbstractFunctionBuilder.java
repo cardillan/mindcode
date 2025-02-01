@@ -40,31 +40,62 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
     }
 
     /// Converts argument declarations from function call to actual argument values. The mapping is
-    /// 1:1 except varargs, where the vararg argument is mapped to the full list of values.
+    /// 1:1 except varargs and arrays, where the vararg/array arguments are mapped to the full list of values.
     protected void convertArguments(AstFunctionArgument argument, Consumer<FunctionArgument> consumer) {
         if (variables.isVarargParameter(argument.getExpression())) {
             variables.getVarargs().forEach(consumer);
         } else {
-            consumer.accept(convertArgument(argument));
+            convertArgument(argument, consumer);
         }
     }
 
-    protected FunctionArgument convertArgument(AstFunctionArgument argument) {
+    protected void convertArgument(AstFunctionArgument argument, Consumer<FunctionArgument> consumer) {
         if (!argument.hasModifier() && argument.getExpression() instanceof AstIdentifier identifier) {
-            return new IdentifierFunctionArgument(() -> evaluate(identifier), identifier);
+            // If it is an array, expand it right here
+            ValueStore valueStore = variables.findVariable(identifier, false);
+            if (valueStore instanceof ArrayStore<?> array) {
+                expandArray(argument, array, consumer);
+            } else {
+                consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier));
+            }
         } else if (argument.hasExpression()) {
             final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
             if (value == LogicVoid.VOID) {
                 warn(argument, ERR.VOID_ARGUMENT);
             }
 
-            if (argument.isOutput()) {
-                // Only provide the transfer variable when needed - for complex values
-                return new OutputFunctionArgument(argument, resolveLValue(argument.getExpression(), value),
-                        value.isComplex() ? assembler.nextTemp() : null);
+            if (value instanceof ArrayStore<?> array) {
+                expandArray(argument, array, consumer);
             } else {
-                return new InputFunctionArgument(argument, value);
+                consumer.accept(wrapArgumentValue(argument, value));
             }
+        } else {
+            consumer.accept(new MissingFunctionArgument(argument));
+        }
+    }
+
+    protected void expandArray(AstFunctionArgument argument, ArrayStore<?> array, Consumer<FunctionArgument> consumer) {
+        array.getElements().stream().map(value -> wrapArgumentValue(argument, value)).forEach(consumer);
+    }
+
+    protected FunctionArgument wrapArgumentValue(AstFunctionArgument argument, ValueStore value) {
+        if (argument.isOutput()) {
+            // Only provide the transfer variable when needed - for complex values
+            assert argument.getExpression() != null;
+            return new OutputFunctionArgument(argument, resolveLValue(argument.getExpression(), value),
+                    value.isComplex() ? assembler.nextTemp() : null);
+        } else {
+            return new InputFunctionArgument(argument, value);
+        }
+    }
+
+    protected FunctionArgument convertArgument(AstFunctionArgument argument) {
+        if (argument.hasExpression()) {
+            final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
+            if (value == LogicVoid.VOID) {
+                warn(argument, ERR.VOID_ARGUMENT);
+            }
+            return wrapArgumentValue(argument, value);
         } else {
             return new MissingFunctionArgument(argument);
         }

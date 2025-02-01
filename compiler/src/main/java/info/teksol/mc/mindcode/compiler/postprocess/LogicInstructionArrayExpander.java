@@ -55,6 +55,11 @@ public class LogicInstructionArrayExpander {
         if (expanded) return false;
         expanded = true;
 
+        // Subarray support (separate processing for read/write):
+        // 1. Gather all array access instructions
+        // 2. Group by array name, find min/max index per array
+        // 3. Build the jump table for the resulting range, remember to adjust offset
+
         for (LogicInstruction instruction : program) {
             switch (instruction) {
                 case ReadArrInstruction ix  -> jumpTables.computeIfAbsent(ix.getArray().getReadJumpTableId(),  _ -> buildReadJumpTable(ix.getArray()));

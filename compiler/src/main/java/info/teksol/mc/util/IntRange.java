@@ -2,6 +2,7 @@ package info.teksol.mc.util;
 
 import org.jspecify.annotations.NullMarked;
 
+/// Integer range, closed on both ends: index is in range iff start <= index <= end.
 @NullMarked
 public record IntRange(int min, int max) implements Comparable<IntRange> {
 
@@ -25,6 +26,10 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
 
     public String getRangeString() {
         return min == max ? String.valueOf(min) : min + " to " + max;
+    }
+
+    public String getRangeLiteral() {
+        return min + " ... " + (max + 1);
     }
 
     @Override

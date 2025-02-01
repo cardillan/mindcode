@@ -171,7 +171,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public boolean isOptional() {
-        return output && !input;
+        // MUSTDO: better detection of transfer variables
+        return output && !input || mlog.endsWith("*r") || mlog.endsWith("*w");
     }
 
     @Override
@@ -271,18 +272,18 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable arrayReadAccess(String arrayName) {
         String suffix = "*r";
         return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
-                arrayName + suffix, "." + arrayName + suffix, false, true);
+                arrayName + suffix, arrayName + suffix, false, true);
     }
 
     public static LogicVariable arrayWriteAccess(String arrayName) {
         String suffix = "*w";
         return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
-                arrayName + suffix, "." + arrayName + suffix, false, true);
+                arrayName + suffix, arrayName + suffix, false, true);
     }
 
     public static LogicVariable arrayReturn(String arrayName, String suffix) {
         return new LogicVariable(EMPTY, FUNCTION_RETADDR,
-                arrayName + suffix, "." + arrayName + suffix, false, true);
+                arrayName + suffix, arrayName + suffix, false, true);
     }
 
     /// Return the variable passed as an argument to unused instruction parameters.

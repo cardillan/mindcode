@@ -41,6 +41,11 @@ public class OutputFunctionArgument extends InputFunctionArgument {
     }
 
     @Override
+    public boolean isLvalue() {
+        return value.isLvalue();
+    }
+
+    @Override
     public LogicValue getValue(CodeAssembler assembler) {
         if (value.isComplex()) {
             // Argument is both input and output. Currently not possible, but if such an instruction appears,
@@ -51,7 +56,6 @@ public class OutputFunctionArgument extends InputFunctionArgument {
             return value.getValue(assembler);
         }
     }
-
 
     @Override
     public void setValue(CodeAssembler assembler, LogicValue newValue) {
