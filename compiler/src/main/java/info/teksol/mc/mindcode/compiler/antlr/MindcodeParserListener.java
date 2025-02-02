@@ -1036,15 +1036,25 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitElsifBranch(MindcodeParser.ElsifBranchContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#loopIteratorList}.
+	 * Enter a parse tree produced by {@link MindcodeParser#loopIteratorGroups}.
 	 * @param ctx the parse tree
 	 */
-	void enterLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx);
+	void enterLoopIteratorGroups(MindcodeParser.LoopIteratorGroupsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#loopIteratorList}.
+	 * Exit a parse tree produced by {@link MindcodeParser#loopIteratorGroups}.
 	 * @param ctx the parse tree
 	 */
-	void exitLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx);
+	void exitLoopIteratorGroups(MindcodeParser.LoopIteratorGroupsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#astLoopIteratorGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstLoopIteratorGroup(MindcodeParser.AstLoopIteratorGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#astLoopIteratorGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstLoopIteratorGroup(MindcodeParser.AstLoopIteratorGroupContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#astLoopIterator}.
 	 * @param ctx the parse tree
@@ -1055,4 +1065,14 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#astLoopValueLists}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstLoopValueLists(MindcodeParser.AstLoopValueListsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#astLoopValueLists}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstLoopValueLists(MindcodeParser.AstLoopValueListsContext ctx);
 }

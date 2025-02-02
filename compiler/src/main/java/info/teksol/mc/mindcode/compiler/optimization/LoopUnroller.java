@@ -337,7 +337,8 @@ class LoopUnroller extends BaseOptimizer {
     private int computeSavedInstructions(AstContext loop, int iterations) {
         if (loop.node() instanceof AstForEachLoopStatement forEachLoop) {
             // Assignments potentially saved
-            int assignments = forEachLoop.getIterators().stream().mapToInt(it -> it.hasOutModifier() ? 2 : 1).sum();
+            int assignments = forEachLoop.getIterators().stream().flatMap(l -> l.getIterators().stream())
+                    .mapToInt(it -> it.hasOutModifier() ? 2 : 1).sum();
 
             // Instructions saved per loop:
             // Set address

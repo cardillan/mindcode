@@ -1018,9 +1018,10 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstForEachLoopStatement(EMPTY,
                                     id("Label"),
-                                    false,
-                                    List.of(new AstLoopIterator(EMPTY, a, false)),
-                                    List.of(number(10), number(20), number(30)),
+                                    List.of(new AstLoopIteratorGroup(EMPTY, false,
+                                            List.of(new AstLoopIterator(EMPTY, a, false)))),
+                                    List.of(new AstExpressionList(EMPTY,
+                                            List.of(number(10), number(20), number(30)))),
                                     List.of(call(id("print"), arg(a)))
                             )
                     )
@@ -1038,12 +1039,19 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstForEachLoopStatement(EMPTY,
                                     id("Label"),
-                                    true,
                                     List.of(
-                                            new AstLoopIterator(EMPTY, a, false),
-                                            new AstLoopIterator(EMPTY, b, false)
+                                            new AstLoopIteratorGroup(EMPTY, true,
+                                                    List.of(
+                                                            new AstLoopIterator(EMPTY, a, false),
+                                                            new AstLoopIterator(EMPTY, b, false)
+                                                    )
+                                            )
                                     ),
-                                    List.of(number(10), number(20), number(30), number(40)),
+                                    List.of(
+                                            new AstExpressionList(EMPTY,
+                                                    List.of(number(10), number(20), number(30), number(40))
+                                            )
+                                    ),
                                     List.of(
                                             call(id("print"),
                                                     arg(new AstOperatorBinary(EMPTY, ADD, a, b))
@@ -1065,14 +1073,18 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstForEachLoopStatement(EMPTY,
                                     id("Label"),
-                                    true,
                                     List.of(
-                                            new AstLoopIterator(EMPTY, id("i"), true),
-                                            new AstLoopIterator(EMPTY, id("j"), true)
+                                            new AstLoopIteratorGroup(EMPTY, true,
+                                                    List.of(
+                                                            new AstLoopIterator(EMPTY, id("i"), true),
+                                                            new AstLoopIterator(EMPTY, id("j"), true)
+                                                    )
+                                            )
                                     ),
-                                    List.of(a, b, c, d),
-                                    List.of(new AstAssignment(EMPTY, null, id("j"), id("i"))
-                                    )
+                                    List.of(
+                                            new AstExpressionList(EMPTY, List.of(a, b, c, d))
+                                    ),
+                                    List.of(new AstAssignment(EMPTY, null, id("j"), id("i")))
                             )
                     )
             );
@@ -1088,10 +1100,37 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstForEachLoopStatement(EMPTY,
                                     null,
-                                    false,
-                                    List.of(new AstLoopIterator(EMPTY, a, false)),
-                                    List.of(builtIn("@mono"), builtIn("@poly"), builtIn("@mega")),
+                                    List.of(new AstLoopIteratorGroup(EMPTY, false,
+                                            List.of(new AstLoopIterator(EMPTY, a, false)))),
+                                    List.of(new AstExpressionList(EMPTY,
+                                            List.of(builtIn("@mono"), builtIn("@poly"), builtIn("@mega")))),
                                     List.of(call(id("print"), arg(a)))
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsParallelForEachLoop() {
+            assertBuildsTo("""
+                            for var a; var out b in 1, 2 ; c, d do
+                                b = a;
+                            end;
+                            """,
+                    List.of(
+                            new AstForEachLoopStatement(EMPTY,
+                                    null,
+                                    List.of(
+                                            new AstLoopIteratorGroup(EMPTY, true,
+                                                    List.of(new AstLoopIterator(EMPTY, a, false))),
+                                            new AstLoopIteratorGroup(EMPTY, true,
+                                                    List.of(new AstLoopIterator(EMPTY, b, true)))
+                                    ),
+                                    List.of(
+                                            new AstExpressionList(EMPTY, List.of(number(1), number(2))),
+                                            new AstExpressionList(EMPTY, List.of(c, d))
+                                    ),
+                                    List.of(new AstAssignment(EMPTY, null, b, a))
                             )
                     )
             );

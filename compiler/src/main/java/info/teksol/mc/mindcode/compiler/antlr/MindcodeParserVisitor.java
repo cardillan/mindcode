@@ -615,15 +615,27 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElsifBranch(MindcodeParser.ElsifBranchContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#loopIteratorList}.
+	 * Visit a parse tree produced by {@link MindcodeParser#loopIteratorGroups}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx);
+	T visitLoopIteratorGroups(MindcodeParser.LoopIteratorGroupsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#astLoopIteratorGroup}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstLoopIteratorGroup(MindcodeParser.AstLoopIteratorGroupContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#astLoopIterator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#astLoopValueLists}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstLoopValueLists(MindcodeParser.AstLoopValueListsContext ctx);
 }

@@ -1097,13 +1097,25 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) { }
+	@Override public void enterLoopIteratorGroups(MindcodeParser.LoopIteratorGroupsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) { }
+	@Override public void exitLoopIteratorGroups(MindcodeParser.LoopIteratorGroupsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstLoopIteratorGroup(MindcodeParser.AstLoopIteratorGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstLoopIteratorGroup(MindcodeParser.AstLoopIteratorGroupContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1116,6 +1128,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstLoopValueLists(MindcodeParser.AstLoopValueListsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstLoopValueLists(MindcodeParser.AstLoopValueListsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

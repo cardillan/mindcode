@@ -58,6 +58,8 @@ public class ERR {
     public static final String FORMATTABLE_NOT_ENOUGH_ARGS = "Not enough arguments for formattable placeholders.";
     public static final String FORMATTABLE_TOO_MANY_ARGS = "Too many arguments for formattable placeholders.";
     public static final String FOR_EACH_WRONG_NUMBER_OF_VALUES = "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).";
+    public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";
+    public static final String FOR_EACH_ITERATORS_VALUES_MISMATCH = "Number of iterator specifications (%d) doesn't match number of value lists (%d).";
     public static final String FUNCTION_CALL_NOT_ENOUGH_ARGS = "Not enough arguments to the '%s' function (expected %d or more, found %d).";
     public static final String FUNCTION_CALL_UNDEFINED = "Unknown function '%s'.";
     public static final String FUNCTION_CALL_UNRESOLVED = "Cannot resolve function '%s'.";

@@ -55,8 +55,8 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                         """,
                 createInstruction(PRINT, q("Rate: {0} items/sec\nElapsed: {0} ms\n")),
                 createInstruction(FORMAT, ":rate"),
-                createInstruction(OP, "sub", var(0), "@time", ":start"),
-                createInstruction(FORMAT, var(0))
+                createInstruction(OP, "sub", tmp(0), "@time", ":start"),
+                createInstruction(FORMAT, tmp(0))
         );
     }
 
@@ -76,19 +76,19 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                 createInstruction(PRINT, q("Rate: ")),
                 createInstruction(PRINT, ":rate"),
                 createInstruction(PRINT, q(" items/sec{0}\n")),
-                createInstruction(OP, "rand", var(0), "1"),
-                createInstruction(OP, "greaterThan", var(1), var(0), "0.5"),
-                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                createInstruction(OP, "rand", tmp(0), "1"),
+                createInstruction(OP, "greaterThan", tmp(1), tmp(0), "0.5"),
+                createInstruction(JUMP, label(0), "equal", tmp(1), "false"),
                 createInstruction(FORMAT, q(" ALERT!")),
-                createInstruction(SET, var(2), q(" ALERT!")),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, tmp(2), q(" ALERT!")),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
                 createInstruction(FORMAT, q("")),
-                createInstruction(SET, var(2), q("")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(OP, "sub", var(3), "@time", ":start"),
+                createInstruction(SET, tmp(2), q("")),
+                createInstruction(LABEL, label(1)),
+                createInstruction(OP, "sub", tmp(3), "@time", ":start"),
                 createInstruction(PRINT, q("Elapsed: ")),
-                createInstruction(PRINT, var(3)),
+                createInstruction(PRINT, tmp(3)),
                 createInstruction(PRINT, q(" ms\n"))
         );
     }

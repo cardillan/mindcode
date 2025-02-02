@@ -367,7 +367,9 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesWrongNumberOfValues() {
             assertGeneratesMessages(expectedMessages()
-                            .add("The number of values in the list (3) must be an integer multiple of the number of iterators (2)."),
+                            .add("The number of values in the list (3) must be an integer multiple of the number of iterators (2).")
+                            .add("Not enough values to supply this iterator group (provided: 3, required: 4).")
+                    ,
                     "for i, j in 1, 2, 3 do end;");
         }
 
@@ -387,6 +389,91 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesLiteralsAsOutValues() {
             assertGeneratesMessages(expectedMessages().add("Variable expected.").repeat(3),
                     "for out i in 1, 2, 3 do end;");
+        }
+
+        @Test
+        void refusesUnevenListLengths() {
+            assertGeneratesMessage(
+                    "Not enough values to supply this iterator group (provided: 1, required: 2).",
+                    "for i; j in 1, 2; 3 do end;");
+        }
+
+    }
+
+    @Nested
+    class ParallelIterations {
+        @Test
+        void compilesBasicParallelIterations() {
+            assertCompilesTo("""
+                            for i; j in 1, 2; 3, 4 do print(i+j); end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", "3"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(SET, ":i", "2"),
+                    createInstruction(SET, ":j", "4"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(1), ":i", ":j"),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesOutputParallelIteration() {
+            assertCompilesTo("""
+                            for i; out j in 1, 2; a, b do j = i; end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", ":a"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SET, ":a", ":j"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(SET, ":i", "2"),
+                    createInstruction(SET, ":j", ":b"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":j", ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(SET, ":b", ":j"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesUnevenParallelIteration() {
+            assertCompilesTo("""
+                            for i, j; out k in 1, 2, 3, 4; a, b do k = i + j; end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", "2"),
+                    createInstruction(SET, ":k", ":a"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SET, ":a", ":k"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(SET, ":i", "3"),
+                    createInstruction(SET, ":j", "4"),
+                    createInstruction(SET, ":k", ":b"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(1), ":i", ":j"),
+                    createInstruction(SET, ":k", tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(SET, ":b", ":k"),
+                    createInstruction(LABEL, label(2))
+            );
         }
     }
 
@@ -437,6 +524,28 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(MULTILABEL, var(1005), "marker0"),
                     createInstruction(LABEL, var(1003))
 
+            );
+        }
+
+        @Test
+        void compilesMemorySubarrayForLoop() {
+            assertCompilesTo("""
+                            for i in cell1[5 .. 6] do print(i); end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(READ, tmp(1), "cell1", "5"),
+                    createInstruction(SET, ":i", tmp(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(READ, tmp(2), "cell1", "6"),
+                    createInstruction(SET, ":i", tmp(2)),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(LABEL, label(2))
             );
         }
     }

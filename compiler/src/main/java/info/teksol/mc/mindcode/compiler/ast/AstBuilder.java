@@ -362,14 +362,26 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstForEachLoopStatement visitAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx) {
         return new AstForEachLoopStatement(pos(ctx),
                 identifierIfNonNull(ctx.label),
-                ctx.type != null,
                 processAstLoopIteratorList(ctx.iterators),
-                processExpressionList(ctx.values),
+                processValueListsList(ctx.values),
                 processBody(ctx.body));
     }
 
-    private List<AstLoopIterator> processAstLoopIteratorList(MindcodeParser.LoopIteratorListContext ctx) {
-        return ctx.astLoopIterator().stream().map(this::visitAstLoopIterator).toList();
+    private List<AstLoopIteratorGroup> processAstLoopIteratorList(MindcodeParser.LoopIteratorGroupsContext ctx) {
+        return ctx.astLoopIteratorGroup().stream().map(this::visitAstLoopIteratorGroup).toList();
+    }
+
+    private List<AstExpressionList> processValueListsList(MindcodeParser.AstLoopValueListsContext ctx) {
+        return ctx.expressionList().stream()
+                .map(list -> new AstExpressionList(pos(list), processExpressionList(list)))
+                .toList();
+    }
+
+    @Override
+    public AstLoopIteratorGroup visitAstLoopIteratorGroup(AstLoopIteratorGroupContext ctx) {
+        return new AstLoopIteratorGroup(pos(ctx),
+                ctx.type != null,
+                ctx.astLoopIterator().stream().map(this::visitAstLoopIterator).toList());
     }
 
     @Override

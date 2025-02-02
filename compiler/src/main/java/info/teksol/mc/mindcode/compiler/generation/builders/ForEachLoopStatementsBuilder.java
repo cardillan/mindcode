@@ -3,10 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.generated.ast.visitors.AstForEachLoopStatementVisitor;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstForEachLoopStatement;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstLoopIterator;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.*;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
@@ -19,11 +16,12 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
@@ -36,69 +34,90 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
     @Override
     public ValueStore visitForEachLoopStatement(AstForEachLoopStatement node) {
-        if (!node.getValues().isEmpty()) {
+        if (!node.getValueLists().isEmpty()) {
             new ForEachLoopBuilder(this, node).build();
         }
         return VOID;
     }
 
     private class ForEachLoopBuilder extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
-        private final List<ValueStore> values;
-        private final List<Iterator> iterators;
+        private final List<IterationGroup> iterationGroups;
         private final LogicLabel bodyLabel = assembler.nextLabel();
         private final LogicLabel marker = assembler.nextMarker();
         private final LogicVariable nextAddress = assembler.nextTemp();
         private final LoopLabels loopLabels;
 
-        private int consumedValues = 0;
+        private List<Iterator> processIteratorGroup(AstLoopIteratorGroup group) {
+            return group.getIterators().stream().map(iterator -> processIterator(group, iterator)).toList();
+        }
+
+        private Iterator processIterator(AstLoopIteratorGroup group, AstLoopIterator iterator) {
+            if (group.hasDeclaration()) {
+                if (iterator.getIterator() instanceof AstIdentifier identifier) {
+                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
+                } else {
+                    // Probably can't happen due to grammar
+                    error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);
+                }
+            }
+            return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()));
+        }
+
+        private LinkedList<ValueStore> processValueGroup(AstExpressionList expressionList) {
+            return expressionList.getExpressions().stream().mapMulti(this::processValue)
+                    .collect(Collectors.toCollection(LinkedList::new));
+        }
+
+        private void processValue(AstExpression expression, Consumer<ValueStore> consumer) {
+            if (variables.isVarargParameter(expression)) {
+                variables.getVarargs().forEach(consumer);
+            } else {
+                consumer.accept(new DeferredValueStore(expression));
+            }
+        }
+
+        private List<IterationGroup> combineIteratorsAndValues(List<List<Iterator>> iterators, List<LinkedList<ValueStore>> values) {
+            if (iterators.size() != values.size()) {
+                error(node, ERR.FOR_EACH_ITERATORS_VALUES_MISMATCH, iterators.size(), values.size());
+            }
+
+            return IntStream.range(0, Math.max(iterators.size(), values.size()))
+                    .mapToObj(i -> new IterationGroup(
+                            i < iterators.size() ? iterators.get(i) : List.of(new Iterator(false, LogicVariable.INVALID)),
+                            i < values.size() ? values.get(i) : new LinkedList<>())
+                    ).toList();
+        }
+
+        private boolean hasMoreData() {
+            return iterationGroups.stream().anyMatch(IterationGroup::hasMoreData);
+        }
 
         public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
             super(builder, node);
-            values = new ArrayList<>(node.getValues().size() + variables.getVarargs().size());
-            iterators = node.getIterators().stream().map(this::processIterator).toList();
-
-            // Prepare list of values for the loop, including varargs if any
-            for (AstExpression expression : node.getValues()) {
-                if (variables.isVarargParameter(expression)) {
-                    values.addAll(variables.getVarargs());
-                } else {
-                    values.add(new DeferredValueStore(expression));
-                }
-            }
+            iterationGroups = combineIteratorsAndValues(
+                    node.getIterators().stream().map(this::processIteratorGroup).toList(),
+                    node.getValueLists().stream().map(this::processValueGroup).toList());
 
             loopLabels = enterLoop(node);
         }
 
         private void build() {
-            while (!values.isEmpty()) {
+            int iterations = 0;
+            while (hasMoreData()) {
                 createIteration();
+                iterations++;
             }
 
             // For-each loops do not put done label into flow control subcontext
             // Not a bug.
             assembler.createLabel(loopLabels.breakLabel());
 
-            if (consumedValues > 0) {
+            if (iterations > 0) {
                 assembler.clearSubcontextType();
             }
             exitLoop(node, loopLabels);
 
-            // Compute total values to process in the loop (rectifies incorrect list size)
-            if (consumedValues % iterators.size() != 0) {
-                error(pos(node.getValues()), ERR.FOR_EACH_WRONG_NUMBER_OF_VALUES, consumedValues, iterators.size());
-            }
-        }
-
-        private Iterator processIterator(AstLoopIterator it) {
-            if (node.hasDeclaration()) {
-                if (it.getIterator() instanceof AstIdentifier identifier) {
-                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
-                } else {
-                    // Probably can't happen due to grammar
-                    error(it.getIterator(), ERR.IDENTIFIER_EXPECTED);
-                }
-            }
-            return new Iterator(it.hasOutModifier(), resolveLValue(it.getIterator()));
+            iterationGroups.forEach(IterationGroup::generateMessage);
         }
 
         private void createIteration() {
@@ -111,18 +130,12 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             LogicLabel nextValueLabel = assembler.nextLabel();
             assembler.createSetAddress(nextAddress, nextValueLabel);
 
-            LinkedList<ValueStore> outputValues = new LinkedList<>();
+            LinkedList<IterationElement> outputs = new LinkedList<>();
 
             // Copy values from the list to iterators
-            for (Iterator iterator : iterators) {
-                ValueStore value = nextValue();
-                iterator.setValue(value.getValue(assembler));
-                if (iterator.out) {
-                    outputValues.add(value);
-                }
-            }
+            iterationGroups.forEach(group -> group.generateIterationSetup(outputs));
 
-            if (!values.isEmpty()) {
+            if (hasMoreData()) {
                 // This isn't a last iteration: jump to the loop body
                 assembler.createJumpUnconditional(bodyLabel);
             } else {
@@ -136,36 +149,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             assembler.createMultiLabel(nextValueLabel, marker);
 
             // Copy iterator values back to the array - only for `out` iterators
-            for (Iterator iterator : iterators) {
-                if (iterator.out) {
-                    outputValues.removeFirst().setValue(assembler, iterator.getValue());
-//                    ValueStore value = outputValues.removeFirst();
-//                    if (value.isLvalue()) {
-//                        value.setValue(assembler, iterator.getValue());
-//                    } else if (value instanceof FunctionArgument functionArgument) {
-//                        error(value.sourcePosition(), ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
-//                    }
-                }
+            for (IterationElement output : outputs) {
+                output.value.setValue(assembler, output.iterator.getValue());
             }
-        }
-
-        private ValueStore nextValue() {
-            if (values.isEmpty()) {
-                return INACTIVE_VALUE;
-            }
-
-            consumedValues++;
-            ValueStore value = values.removeFirst();
-
-            if (value instanceof DeferredValueStore deferredValueStore) {
-                ValueStore evaluated = deferredValueStore.value();
-                if (evaluated instanceof ArrayStore<?> arrayStore) {
-                    values.addAll(0, arrayStore.getElements());
-                    return values.removeFirst();
-                }
-            }
-
-            return value;
         }
 
         private void createBody() {
@@ -256,6 +242,81 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
     }
 
+    private final class IterationGroup {
+        private final List<Iterator> iterators;
+        private final LinkedList<ValueStore> values;
+        private int consumedValues = 0;
+        private int missing = 0;
+
+        private IterationGroup(List<Iterator> iterators, LinkedList<ValueStore> values) {
+            this.iterators = iterators;
+            this.values = values;
+        }
+
+        boolean hasMoreData() {
+            return !values.isEmpty();
+        }
+
+        private SourcePosition sourcePosition() {
+            return iterators.getFirst().var.sourcePosition().upTo(iterators.getLast().var.sourcePosition());
+        }
+
+        private ValueStore nextValue() {
+            if (values.isEmpty()) {
+                if (missing == 0) {
+                    error(sourcePosition(), ERR.FOR_EACH_WRONG_NUMBER_OF_VALUES, consumedValues, iterators.size());
+                }
+                missing++;
+                return INACTIVE_VALUE;
+            }
+
+            consumedValues++;
+            ValueStore value = values.removeFirst();
+
+            if (value instanceof DeferredValueStore deferredValueStore) {
+                ValueStore evaluated = deferredValueStore.value();
+                if (evaluated instanceof ArrayStore<?> arrayStore) {
+                    values.addAll(0, arrayStore.getElements());
+                    return values.removeFirst();
+                }
+            }
+
+            return value;
+        }
+
+        void generateIterationSetup(List<IterationElement> outputs) {
+            if (values.isEmpty()) {
+                missing += iterators.size();
+            } else {
+                for (Iterator iterator : iterators) {
+                    ValueStore value = nextValue();
+                    iterator.setValue(value.getValue(assembler));
+                    if (iterator.out) {
+                        outputs.add(new IterationElement(iterator, value));
+                    }
+                }
+            }
+        }
+
+        List<IterationElement> next() {
+            if (values.isEmpty()) {
+                missing += iterators.size();
+                return iterators.stream().map(it -> new IterationElement(it, INACTIVE_VALUE)).toList();
+            } else {
+                return iterators.stream().map(it -> new IterationElement(it, nextValue())).toList();
+            }
+        }
+
+        void generateMessage() {
+            if (missing > 0) {
+                error(sourcePosition(), ERR.FOR_EACH_UNBALANCED_GROUPS, consumedValues, consumedValues + missing);
+            }
+        }
+    }
+
+    private record IterationElement(Iterator iterator, ValueStore value) {
+    }
+
     ///  Represents an iterator variable in the loop
     private final class Iterator {
         public final boolean out;
@@ -275,7 +336,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
     }
 
-    private static final InactiveValueStore INACTIVE_VALUE = new InactiveValueStore();
+    private static final ValueStore INACTIVE_VALUE = new InactiveValueStore();
 
     private static class InactiveValueStore implements ValueStore {
         @Override

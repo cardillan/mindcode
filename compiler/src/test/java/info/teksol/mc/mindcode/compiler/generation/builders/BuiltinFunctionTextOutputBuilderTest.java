@@ -75,9 +75,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             println($"Value: ${x + y}.");
                             """,
-                    createInstruction(OP, "add", var(0), ":x", ":y"),
+                    createInstruction(OP, "add", tmp(0), ":x", ":y"),
                     createInstruction(PRINT, q("Value: ")),
-                    createInstruction(PRINT, var(0)),
+                    createInstruction(PRINT, tmp(0)),
                     createInstruction(PRINT, q(".")),
                     createInstruction(PRINT, q("\n"))
             );

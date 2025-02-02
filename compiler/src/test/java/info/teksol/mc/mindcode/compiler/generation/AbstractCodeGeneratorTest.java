@@ -167,12 +167,6 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
     private final Map<String, String> expectedToActual = new LinkedHashMap<>();
     private final Map<String, String> actualToExpected = new LinkedHashMap<>();
 
-    protected String var(int id) {
-        String key = "___" + id;
-        registered.add(key);
-        return key;
-    }
-
     protected void assertFailed(List<LogicInstruction> expected, List<LogicInstruction> actual, String message) {
         assertEquals(formatAsCode(expected), formatAsCode(actual), message);
     }
@@ -247,13 +241,31 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
         return str.toString();
     }
 
+    protected String var(int id) {
+        String key = "___" + id;
+        registered.add(key);
+        return key;
+    }
+
+    protected String tmp(int id) {
+        String key = "*tmp" + id;
+        registered.add(key);
+        return key;
+    }
+
+    protected String label(int id) {
+        String key = "*label" + id;
+        registered.add(key);
+        return key;
+    }
+
     private String escape(String value) {
-        if (value.startsWith("var(")) {
+        if (value.startsWith("tmp(") || value.startsWith("label(")) {
             return value;
         } else if (value.startsWith("*tmp")) {
-            return "var(" + value.substring(4) + ")";
+            return "tmp(" + value.substring(4) + ")";
         } else if (value.startsWith("*label")) {
-            return "var(" + (1000 + Integer.parseInt(value.substring(6))) + ")";
+            return "label(" + value.substring(6) + ")";
         } else if (value.startsWith("\"") && value.endsWith("\"")) {
             return "q(" + value.replace("\n", "\\n") + ")";
         } else {
