@@ -5,6 +5,6 @@ memory-read-write.mnd:                              5        5     100.0%   D953
 sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   D7E3E9274B80F9C3
 sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   A429F791F6960D43
 sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   6C9899851FCF5DC7
-sorting with quick-sort.mnd:                       67    48457      98.5%   8909AE66C1E5A20F   9F4AD013C4779EC9
+sorting with quick-sort.mnd:                       66    48456      98.4%   8909AE66C1E5A20F   63D441052F939A6B
 sorting with select-sort.mnd:                      30    35153     100.0%   3F4EE1C8DB9B8B18   5065B9B69217B56E
 storage-display.mnd:                              655      776      24.5%   F7D56DB08E60751D   8D3EFBC691094BDC

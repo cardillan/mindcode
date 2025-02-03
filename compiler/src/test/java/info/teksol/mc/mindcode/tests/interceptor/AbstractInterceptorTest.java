@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 @NullMarked
 public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
-    private static final boolean INTERCEPT = false;
+    private static final boolean INTERCEPT = true;
 
     @Override
     protected void setDebugPrinterProvider(MindcodeCompiler compiler) {

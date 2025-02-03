@@ -3,7 +3,7 @@
     15 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Optimization (3 iterations).
      3 instructions eliminated by Single Step Elimination (4 iterations).
-     7 instructions eliminated by Data Flow Optimization (4 iterations).
+     7 instructions eliminated by Data Flow Optimization (5 iterations).
      3 instructions eliminated by Unreachable Code Elimination.
     12 instructions eliminated by Stack Optimization.
     98 instructions after optimizations.
@@ -239,7 +239,20 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    100 label *label17
    101 op add :fn2:b :fn2:b 1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    65 callrec bank1 *label1 *label14 :fn1*retval
+    66 label *label14
+    67 set *tmp17 :fn1:a
+-    * set *tmp18 :fn1:b
++   68 set :fn1:a :fn1:b
+    69 set :fn1:b *tmp17
+-    * set :fn1:a *tmp18
+    70 pop bank1 :fn1:n
+    71 label *label12
+    72 label *label13
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
     34 push bank1 :fn0:b
     35 set *tmp7 :fn0:b
@@ -262,26 +275,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     64 set :fn1:b *tmp16
     65 callrec bank1 *label1 *label14 :fn1*retval
     66 label *label14
-    67 set *tmp17 :fn1:a
-    68 set *tmp18 :fn1:b
--    * set :fn1:b *tmp17
-+   69 set :fn1:b :fn1:a
-    70 set :fn1:a *tmp18
-    71 pop bank1 :fn1:n
-    72 label *label12
  
-    88 push bank1 :fn2:a
-    89 set *tmp25 :fn2:b
-    90 set *tmp26 :fn2:a
+    87 push bank1 :fn2:a
+    88 set *tmp25 :fn2:b
+    89 set *tmp26 :fn2:a
 -    * set :fn2:n *tmp24
 -    * set :fn2:a *tmp25
-+   91 op sub :fn2:n :fn2:n 1
-+   92 set :fn2:a :fn2:b
-    93 set :fn2:b *tmp26
-    94 callrec bank1 *label2 *label18 :fn2*retval
-    95 label *label18
++   90 op sub :fn2:n :fn2:n 1
++   91 set :fn2:a :fn2:b
+    92 set :fn2:b *tmp26
+    93 callrec bank1 *label2 *label18 :fn2*retval
+    94 label *label18
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-6 instructions):
  
     28 print :fn0:b
     29 op add :fn0:a :fn0:a 1
@@ -304,13 +310,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     57 set *tmp16 :fn1:a
     58 op sub :fn1:n :fn1:n 1
     59 set :fn1:a :fn1:b
-    60 set :fn1:b *tmp16
-    61 callrec bank1 *label1 *label14 :fn1*retval
-    62 label *label14
--    * set *tmp17 :fn1:a
-    63 set *tmp18 :fn1:b
-    64 set :fn1:b :fn1:a
-    65 set :fn1:a *tmp18
  
     77 print :fn2:b
     78 op add :fn2:a :fn2:a 1
@@ -373,9 +372,9 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions)
     54 op sub :fn1:n :fn1:n 1
     55 set :fn1:a :fn1:b
  
-    59 set *tmp18 :fn1:b
-    60 set :fn1:b :fn1:a
-    61 set :fn1:a *tmp18
+    59 set *tmp17 :fn1:a
+    60 set :fn1:a :fn1:b
+    61 set :fn1:b *tmp17
 -    * pop bank1 :fn1:n
     62 label *label12
     63 label *label13
@@ -456,9 +455,9 @@ set :fn1:a :fn1:b
 set :fn1:b *tmp16
 callrec bank1 *label1 *label14 :fn1*retval
 label *label14
-set *tmp18 :fn1:b
-set :fn1:b :fn1:a
-set :fn1:a *tmp18
+set *tmp17 :fn1:a
+set :fn1:a :fn1:b
+set :fn1:b *tmp17
 label *label12
 op add :fn1:b :fn1:b 1
 print :fn1:a

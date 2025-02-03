@@ -840,30 +840,30 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             foo(10, in 1, in 2);
                             """,
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1001), "equal", "bank1", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     createInstruction(SET, "*sp", "0"),
                     createInstruction(SET, ":fn0:n", "10"),
                     createInstruction(SET, ":fn0:a", "1"),
                     createInstruction(SET, ":fn0:b", "2"),
-                    createInstruction(CALLREC, "bank1", var(1000), var(1002), ":fn0*retval"),
-                    createInstruction(LABEL, var(1002)),
+                    createInstruction(CALLREC, "bank1", label(0), label(2), ":fn0*retval"),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(END),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1004), "notEqual", ":fn0:n", "0"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(4), "notEqual", ":fn0:n", "0"),
                     createInstruction(SET, ":fn0:a", "5"),
                     createInstruction(SET, ":fn0:b", "10"),
                     createInstruction(RETURNREC, "bank1"),
-                    createInstruction(LABEL, var(1004)),
-                    createInstruction(SET, var(5), ":fn0:a"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(5), ":fn0:a"),
                     createInstruction(OP, "sub", ":fn0:n", ":fn0:n", "1"),
                     createInstruction(SET, ":fn0:a", ":fn0:b"),
-                    createInstruction(SET, ":fn0:b", var(5)),
-                    createInstruction(CALLREC, "bank1", var(1000), var(1006), ":fn0*retval"),
-                    createInstruction(LABEL, var(1006)),
-                    createInstruction(SET, var(7), ":fn0:b"),
-                    createInstruction(SET, ":fn0:b", ":fn0:a"),
-                    createInstruction(SET, ":fn0:a", var(7)),
+                    createInstruction(SET, ":fn0:b", tmp(5)),
+                    createInstruction(CALLREC, "bank1", label(0), label(6), ":fn0*retval"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(SET, tmp(6), ":fn0:a"),
+                    createInstruction(SET, ":fn0:a", ":fn0:b"),
+                    createInstruction(SET, ":fn0:b", tmp(6)),
                     createInstruction(RETURNREC, "bank1")
             );
         }
@@ -940,7 +940,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         }
 
         @Test
-        public void preservesGlobalVariablesWithFunctionCalls() {
+        public void handlesGlobalVariablesWithFunctionCalls() {
             assertCompilesTo("""
                             inline def bar(n)
                                 foo(n);
@@ -954,19 +954,18 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             foo(X);
                             bar(Y);
                             """,
-                    createInstruction(OP, "rand", ".X", "1000"),
-                    createInstruction(OP, "rand", ".Y", "1000"),
-                    createInstruction(SET, ":fn0:n", ".X"),
-                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), ":fn0*retval"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, ":fn0:n", ".Y"),
-                    createInstruction(SETADDR, ":fn0*retaddr", var(1003)),
-                    createInstruction(CALL, var(1000), ":fn0*retval"),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(PRINT, ".Y"),
+                    createInstruction(OP, "rand", ":fn0:n", "1000"),
+                    createInstruction(OP, "rand", ":fn1:n", "1000"),
+                    createInstruction(SETADDR, ":fn0*retaddr", label(1)),
+                    createInstruction(CALL, label(0), ":fn0*retval"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":fn0:n", ":fn1:n"),
+                    createInstruction(SETADDR, ":fn0*retaddr", label(3)),
+                    createInstruction(CALL, label(0), ":fn0*retval"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ":fn1:n"),
                     createInstruction(END),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":fn0:n"),
                     createInstruction(RETURN, ":fn0*retaddr")
             );
@@ -975,9 +974,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         public void preservesVariableStateAcrossPushAndPop() {
             // Explanation of the test:
-            // The recursive call foo(m, n - 1) modifies __fn0_n (it is set to n - 1 when passing new value to the recursive call)
+            // The recursive call foo(m, n - 1) modifies :fn0:n (it is set to n - 1 when passing new value to the recursive call)
             // Data Flow analysis of push/pop should determine the value of n remains unchanged after the call
-            // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by __fn0_n
+            // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by :fn0:n
             assertCompilesTo("""
                             allocate stack in bank1[0...512];
                             def foo(n)
@@ -1009,9 +1008,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         //@Test
         public void preservesVariableStateAcrossPushAndPopInLoop() {
             // Explanation of the test:
-            // The recursive call foo(m, n - 1) modifies __fn0_n (it is set to n - 1 when passing new value to the recursive call)
+            // The recursive call foo(m, n - 1) modifies :fn0:n (it is set to n - 1 when passing new value to the recursive call)
             // Data Flow analysis of push/pop should determine the value of n remains unchanged after the call
-            // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by __fn0_n
+            // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by :fn0:n
             //
             // TODO Data Flow analysis currently doesn't understand push/pop. Needs to implement a functionality to save
             //      variable state on push and restore it on pop. Might be difficult, as invalidating a variable
@@ -1027,24 +1026,24 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             foo(10);
                             """,
                     createInstruction(SET, "__sp", "0"),
-                    createInstruction(SET, "__fn0_n", "10"),
-                    createInstruction(CALLREC, "bank1", var(1000), var(1001), "__fn0retval"),
+                    createInstruction(SET, ":fn0:n", "10"),
+                    createInstruction(CALLREC, "bank1", var(1000), var(1001), ":fn0*retval"),
                     createInstruction(LABEL, var(1001)),
                     createInstruction(END),
                     createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "__fn0_i", "1"),
-                    createInstruction(JUMP, var(1005), "greaterThan", "1", "__fn0_n"),
+                    createInstruction(SET, ":fn0:i", "1"),
+                    createInstruction(JUMP, var(1005), "greaterThan", "1", ":fn0:n"),
                     createInstruction(LABEL, var(1007)),
-                    createInstruction(PRINT, "__fn0_n"),
-                    createInstruction(PUSH, "bank1", "__fn0_n"),
-                    createInstruction(PUSH, "bank1", "__fn0_i"),
-                    createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
-                    createInstruction(CALLREC, "bank1", var(1000), var(1006), "__fn0retval"),
+                    createInstruction(PRINT, ":fn0:n"),
+                    createInstruction(PUSH, "bank1", ":fn0:n"),
+                    createInstruction(PUSH, "bank1", ":fn0:i"),
+                    createInstruction(OP, "sub", ":fn0:n", ":fn0:n", "1"),
+                    createInstruction(CALLREC, "bank1", var(1000), var(1006), ":fn0*retval"),
                     createInstruction(LABEL, var(1006)),
-                    createInstruction(POP, "bank1", "__fn0_i"),
-                    createInstruction(POP, "bank1", "__fn0_n"),
-                    createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
-                    createInstruction(JUMP, var(1007), "lessThanEq", "__fn0_i", "__fn0_n"),
+                    createInstruction(POP, "bank1", ":fn0:i"),
+                    createInstruction(POP, "bank1", ":fn0:n"),
+                    createInstruction(OP, "add", ":fn0:i", ":fn0:i", "1"),
+                    createInstruction(JUMP, var(1007), "lessThanEq", ":fn0:i", ":fn0:n"),
                     createInstruction(LABEL, var(1005)),
                     createInstruction(RETURNREC, "bank1")
             );
@@ -1407,11 +1406,11 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             bar(0);
                             """,
-                    createInstruction(SET, "__fn0_n", "0"),
+                    createInstruction(SET, ":fn0:n", "0"),
                     createInstruction(LABEL, var(1005)),
-                    createInstruction(OP, "add", "__fn0_n", "__fn0_n", "1"),
-                    createInstruction(PRINT, "__fn0_n"),
-                    createInstruction(JUMP, var(1005), "lessThan", "__fn0_n", "1000")
+                    createInstruction(OP, "add", ":fn0:n", ":fn0:n", "1"),
+                    createInstruction(PRINT, ":fn0:n"),
+                    createInstruction(JUMP, var(1005), "lessThan", ":fn0:n", "1000")
             );
         }
 
@@ -1423,8 +1422,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             bar(@time);
                             """,
-                    createInstruction(SET, "__fn0_n", "@time"),
-                    createInstruction(PRINT, "__fn0_n")
+                    createInstruction(SET, ":fn0:n", "@time"),
+                    createInstruction(PRINT, ":fn0:n")
             );
         }
     }

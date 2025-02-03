@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -54,6 +55,11 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// Instructions referencing each variable. References are accumulated (not cleared during single pass).
     final Map<LogicVariable, List<LogicInstruction>> references = new HashMap<>();
 
+    /// Holds the variables defined by an instruction, and other instructions using that variable.
+    /// If there's just one such reference, and this reference is a Set instruction, the target of the Set can be
+    /// injected into the definition.
+    final Map<LogicInstruction, Map<LogicVariable, List<@Nullable LogicInstruction>>> definitionReferences = new IdentityHashMap<>();
+
     /// When a jump outside its context is encountered, current variable state is copied and assigned to the target
     /// label. Upon encountering the target label all stored states are merged and flushed.
     /// Unresolved label indicates a problem in the data flow analysis -- this would happen if the jump targeted an
@@ -66,9 +72,16 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// An instance used for variable states processing
     private final DataFlowVariableStates dataFlowVariableStates;
 
+    ///  Instruction counter; in encountered order
+    private int counter = 0;
+
     public DataFlowOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.DATA_FLOW_OPTIMIZATION, optimizationContext);
         dataFlowVariableStates = new DataFlowVariableStates(this);
+    }
+
+    int getCounter() {
+        return counter;
     }
 
     @Override
@@ -80,6 +93,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         uninitialized.clear();
         replacements.clear();
         references.clear();
+        definitionReferences.clear();
         labelStates.clear();
         functionEndStates.clear();
 
@@ -88,6 +102,34 @@ class DataFlowOptimizer extends BaseOptimizer {
         unreachables = optimizationContext.getUnreachableInstructions();
 
         getRootContext().children().forEach(this::processTopContext);
+
+        if (experimental()) {
+            boolean updated = false;
+            for (LogicInstruction instruction : definitionReferences.keySet()) {
+                int index = instructionIndex(instruction);
+                if (index < 0) continue;
+
+                Map<LogicVariable, List<@Nullable LogicInstruction>> logicVariableListMap = definitionReferences.get(instruction);
+                for (LogicVariable variable : logicVariableListMap.keySet()) {
+                    List<@Nullable LogicInstruction> list = logicVariableListMap.get(variable);
+                    if (list.size() == 1 && list.getFirst() instanceof SetInstruction set && set.getValue().equals(variable)) {
+                        if (!canEliminate(instruction, variable)) continue;
+                        if (instruction.inputArgumentsStream().anyMatch(v -> v.equals(variable))) continue;
+
+                        int setIndex = instructionIndex(set);
+                        if (setIndex >= 0) {
+                            invalidateInstruction(setIndex);
+                            replaceInstruction(index, replaceAllArgs(instruction, variable, set.getResult()));
+                            updated = true;
+                        }
+                    }
+                }
+            }
+
+            if (updated) {
+                return true;
+            }
+        }
 
         // Keep defining instructions for orphaned, uninitialized variables.
         orphans.entrySet().stream()
@@ -707,8 +749,6 @@ class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
-    private int counter = 0;
-
     /// Processes a single instruction.
     ///
     /// @param variableStates        variable states before executing the instruction
@@ -721,8 +761,9 @@ class DataFlowOptimizer extends BaseOptimizer {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
+        counter++;
+
         if (TRACE) {
-            counter++;
             trace("*" + counter + " Processing instruction ix#" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
@@ -844,6 +885,8 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// @return true if this assignment can be safely eliminated
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
         if (variable.isVolatile()) return false;
+        if (variable.getType() == ArgumentType.FUNCTION_RETVAL
+                && (instruction.getOpcode() == Opcode.CALL || instruction.getOpcode() == Opcode.CALLREC)) return false;
 
         return switch (variable.getType()) {
             case COMPILER, FUNCTION_RETADDR, PARAMETER -> false;

@@ -55,11 +55,10 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         print(x, y);
                         """,
                 createInstruction(SET, "c", "10"),
-                createInstruction(OP, "mul", "__fn0_b", "c", "10"),
-                createInstruction(SET, "x", "__fn0_b"),
-                createInstruction(OP, "mul", "__fn0_b", "c", "20"),
-                createInstruction(PRINT, "x"),
-                createInstruction(PRINT, "__fn0_b")
+                createInstruction(OP, "mul", ":x", "c", "10"),
+                createInstruction(OP, "mul", ":fn0:b", "c", "20"),
+                createInstruction(PRINT, ":x"),
+                createInstruction(PRINT, ":fn0:b")
         );
     }
 
@@ -146,11 +145,10 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         end;
                         print(foo() + foo());
                         """,
+                createInstruction(OP, "rand", tmp(0), "10"),
                 createInstruction(OP, "rand", ":fn0*retval", "10"),
-                createInstruction(SET, var(0), ":fn0*retval"),
-                createInstruction(OP, "rand", ":fn0*retval", "10"),
-                createInstruction(OP, "add", var(2), var(0), ":fn0*retval"),
-                createInstruction(PRINT, var(2))
+                createInstruction(OP, "add", tmp(2), tmp(0), ":fn0*retval"),
+                createInstruction(PRINT, tmp(2))
         );
     }
 
@@ -164,11 +162,10 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         end;
                         print(foo(10) + foo(20));
                         """,
-                createInstruction(OP, "rand", "__fn0_t", "10"),
-                createInstruction(SET, var(0), "__fn0_t"),
-                createInstruction(OP, "rand", "__fn0_t", "20"),
-                createInstruction(OP, "add", var(2), var(0), "__fn0_t"),
-                createInstruction(PRINT, var(2))
+                createInstruction(OP, "rand", tmp(0), "10"),
+                createInstruction(OP, "rand", ":fn0*retval", "20"),
+                createInstruction(OP, "add", tmp(2), tmp(0), ":fn0*retval"),
+                createInstruction(PRINT, tmp(2))
         );
     }
 
@@ -182,10 +179,10 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         print(foo());
                         print(foo());
                         """,
-                createInstruction(OP, "rand", "__fn0_t", "10"),
-                createInstruction(PRINT, "__fn0_t"),
-                createInstruction(OP, "rand", "__fn0_t", "10"),
-                createInstruction(PRINT, "__fn0_t")
+                createInstruction(OP, "rand", ":fn0*retval", "10"),
+                createInstruction(PRINT, ":fn0*retval"),
+                createInstruction(OP, "rand", ":fn0*retval", "10"),
+                createInstruction(PRINT, ":fn0*retval")
         );
     }
 

@@ -539,6 +539,35 @@ print :x
 print :y
 ```
 
+### Backpropagation
+
+Backpropagation is a separate optimization which allows to modify instructions prior to the one being inspected: when a set instruction assigning a source variable to a target variable is encountered, the original instruction producing ("defining") the source variable is found. If the target variable's value is not needed between the assignments, and the source variable is not needed elsewhere, the set is dropped and the source variable is replaced with the target variable in the defining instruction.
+
+The results of this optimization can be demonstrated on this code:
+
+```
+#set optimization = experimental;
+i = rand(10);
+a = i;
+i = rand(20);
+b = i;
+print(a, b);
+```
+
+which compiles to
+
+```
+op rand :a 10 0
+op rand :b 20 0
+print :a
+print :b
+printflush message1
+```
+
+Of course, the source code typically doesn't contain such constructs, but this essentially is what some other optimizations, such as inlining function calls or unrolling a list iteration loop with modification may produce.
+
+The backpropagation optimization is available on the `experimental` level.
+
 ### Function call optimizations
 
 Variables and expressions passed as arguments to inline functions, as well as return values of inline functions, are processed in the same way as other local variables. Using an inlined function therefore doesn't incur any overhead at all in Mindcode.

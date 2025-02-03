@@ -18,8 +18,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.PARAMETERS;
-import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.RECURSIVE_CALL;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator.TRACE;
 
 @NullMarked
@@ -59,7 +58,10 @@ class DataFlowVariableStates {
 
         /// Maps variables to a list of instructions defining its current value (potentially more than one
         /// due to branching).
-        private final Map<LogicVariable, List<LogicInstruction>> definitions;
+        private final Map<LogicVariable, Definition> definitions;
+
+        /// Maps variables to their last encountered read instruction position.
+        private final Map<LogicVariable, Integer> reads;
 
         /// Identifies instructions that do not have to be kept, because they set value the variable already had.
         /// Organized by variable for easier housekeeping.
@@ -103,6 +105,7 @@ class DataFlowVariableStates {
             values = new LinkedHashMap<>();
             definitions = new HashMap<>();
             equivalences = new HashMap<>();
+            reads = new HashMap<>();
             useless = new HashMap<>();
             initialized = new HashSet<>();
             stored = new HashSet<>();
@@ -115,6 +118,7 @@ class DataFlowVariableStates {
             values = new LinkedHashMap<>(other.values);
             definitions = deepCopy(other.definitions);
             equivalences = new HashMap<>(other.equivalences);
+            reads = new HashMap<>(other.reads);
             useless = new HashMap<>(other.useless);
             initialized = new HashSet<>(other.initialized);
             stored = new HashSet<>(other.stored);
@@ -126,9 +130,8 @@ class DataFlowVariableStates {
             this(other, id, isolated, other.reachable);
         }
 
-        private static Map<LogicVariable, List<LogicInstruction>> deepCopy(Map<LogicVariable, List<LogicInstruction>> original) {
-            return original.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
-                    e -> new ArrayList<>(e.getValue())));
+        private static Map<LogicVariable, Definition> deepCopy(Map<LogicVariable, Definition> original) {
+            return original.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,e -> e.getValue().copy()));
         }
 
         /// @return useless instructions, organized by variable they produce.
@@ -183,7 +186,7 @@ class DataFlowVariableStates {
                 definitions.entrySet().stream()
                         .filter(e -> e.getKey().isMainVariable() || e.getKey().isGlobalVariable())
                         .forEachOrdered(e -> optimizer.orphans.computeIfAbsent(e.getKey(),
-                                l -> new ArrayList<>()).addAll(e.getValue()));
+                                l -> new ArrayList<>()).addAll(e.getValue().instructions));
             }
             dead = true;
             modifications++;
@@ -295,7 +298,8 @@ class DataFlowVariableStates {
                 optimizer.defines.add(instruction);
             }
             initialized.add(variable);
-            definitions.put(variable, List.of(instruction));
+            definitions.put(variable, new Definition(optimizer.getCounter(), List.of(instruction)));
+            reads.remove(variable);
 
             // Purge expressions based on the previous value of this variable
             invalidateVariable(variable);
@@ -350,6 +354,7 @@ class DataFlowVariableStates {
             } else {
                 trace(() -> "Value reset: " + variable.toMlog());
                 values.remove(variable);
+                reads.remove(variable);
                 invalidateVariable(variable);
             }
         }
@@ -409,6 +414,8 @@ class DataFlowVariableStates {
             modifications++;
             trace(() -> "Value read: " + variable.toMlog() + " (instance " + getId() + ")" + (ixReachable ? "" : " instruction unreachable)"));
 
+            reads.put(variable, optimizer.getCounter());
+
             // Do not report uninitialized reads in unreachable and dead states
             boolean report = reportUninitialized && !isolated && !dead && reachable && ixReachable;
             if (report && !initialized.contains(variable) && variable.getType() != ArgumentType.BLOCK) {
@@ -417,16 +424,54 @@ class DataFlowVariableStates {
             }
 
             if (definitions.containsKey(variable)) {
+                List<LogicInstruction> definingInstructions = definitions.get(variable).instructions;
                 if (TRACE) {
                     trace("Definitions of " + variable.toMlog());
-                    trace(definitions.get(variable).stream().map(this::printInstruction));
+                    trace(definingInstructions.stream().map(this::printInstruction));
                 }
                 // Variable value was read, keep all instructions that define its value
                 if (!isolated && ixReachable) {
                     if (TRACE) {
-                        trace(definitions.get(variable).stream().map(ix -> "--> Keeping instruction: " + ix.toMlog() + " (variable read)"));
+                        trace(definingInstructions.stream().map(ix -> "--> Keeping instruction: " + ix.toMlog() + " (variable read)"));
                     }
-                    optimizer.keep.addAll(definitions.get(variable));
+                    optimizer.keep.addAll(definingInstructions);
+                }
+
+                // When a variable is read, we're storing information about that read with all defining instructions
+                // of that variable. When it is discovered that there's precisely one set instruction reading that variable,
+                // the target of the set instruction can be injected into the definition and the set instruction can be
+                // removed.
+                //
+                // However, this is no possible if the target of the set instruction has been read between the defining
+                // instruction and current instruction, since this would change the value of the target variable in that
+                // read.
+                //
+                // When the value is read by an instruction other than set, the information is recorded too, because
+                // it means the substitution cannot be made.
+                //
+                // Process:
+                // - all defining instructions are inspected
+                // - a valid reference is added when these conditions are met:
+                //   - the referring instruction is a set instruction reading current variable
+                //   - definition of the variable is known (it is, we're here)
+                //   - definition of the variable is just one instruction (we're being safe)
+                //   - the result of the set wasn't read after this variable was defined
+                //   - the set is not part of for-each iterator setup
+                // - in the other case, an invalid reference is added
+                int defineIndex = definitions.get(variable).counter;
+                for (LogicInstruction definition : definingInstructions) {
+                    LogicInstruction reference;
+                    if (definingInstructions.size() == 1 && instruction instanceof SetInstruction set && set.getValue() == variable
+                            && !set.getAstContext().matches(ITR_LEADING, ITR_TRAILING)) {
+                        Integer readIndex = reads.get(set.getResult());
+                        reference = readIndex == null || readIndex < defineIndex ? instruction : null;
+                    } else {
+                        reference = null;
+                    }
+
+                    optimizer.definitionReferences.computeIfAbsent(definition, key -> new HashMap<>())
+                                .computeIfAbsent(variable, v -> new ArrayList<>()).add(reference);
+                    trace("Registering usage of " + variable.toMlog());
                 }
             }
 
@@ -441,9 +486,9 @@ class DataFlowVariableStates {
         public void protectVariable(LogicVariable variable) {
             if (definitions.containsKey(variable)) {
                 if (TRACE) {
-                    trace(definitions.get(variable).stream().map(ix -> "--> Keeping instruction: " + ix.toMlog() + " (variable protected)"));
+                    trace(definitions.get(variable).instructions.stream().map(ix -> "--> Keeping instruction: " + ix.toMlog() + " (variable protected)"));
                 }
-                optimizer.keep.addAll(definitions.get(variable));
+                optimizer.keep.addAll(definitions.get(variable).instructions);
             }
         }
 
@@ -487,6 +532,12 @@ class DataFlowVariableStates {
 
             merge(definitions, other.definitions);
 
+            for (LogicVariable variable : other.reads.keySet()) {
+                if (!reads.containsKey(variable) || reads.get(variable) < other.reads.get(variable)) {
+                    reads.put(variable, other.reads.get(variable));
+                }
+            }
+
             // Only keep values that are the same in both instances
             values.keySet().retainAll(other.values.keySet());
             for (LogicVariable variable : other.values.keySet()) {
@@ -525,23 +576,24 @@ class DataFlowVariableStates {
         ///
         /// @param map1 instance to merge into
         /// @param map2 instance to be merged
-        private void merge(Map<LogicVariable, List<LogicInstruction>> map1, Map<LogicVariable, List<LogicInstruction>> map2) {
+        private void merge(Map<LogicVariable, Definition> map1, Map<LogicVariable, Definition> map2) {
             for (LogicVariable variable : map2.keySet()) {
                 if (map1.containsKey(variable)) {
-                    List<LogicInstruction> current = map1.get(variable);
-                    List<LogicInstruction> theOther = map2.get(variable);
-                    if (!sameInstances(current, theOther)) {
+                    Definition current = map1.get(variable);
+                    Definition theOther = map2.get(variable);
+                    if (current.counter != theOther.counter || !sameInstances(current.instructions, theOther.instructions)) {
                         // Merge the two lists
-                        if (current.size() == 1 && theOther.size() == 1) {
-                            ArrayList<LogicInstruction> union = new ArrayList<>();
-                            union.add(current.getFirst());
-                            union.add(theOther.getFirst());
-                            map1.put(variable, union);
+                        if (current.instructions.size() == 1 && theOther.instructions.size() == 1) {
+                            map1.put(variable, new Definition(
+                                    Math.min(current.counter, theOther.counter),
+                                    List.of(current.instructions.getFirst(), theOther.instructions.getFirst())));
                         } else {
-                            Set<LogicInstruction> union = createIdentitySet(current.size() + theOther.size());
-                            union.addAll(current);
-                            union.addAll(theOther);
-                            map1.put(variable, new ArrayList<>(union));
+                            Set<LogicInstruction> union = createIdentitySet(current.instructions.size() + theOther.instructions.size());
+                            union.addAll(current.instructions);
+                            union.addAll(theOther.instructions);
+                            map1.put(variable, new Definition(
+                                    Math.min(current.counter, theOther.counter),
+                                    List.copyOf(union)));
                         }
                         invalidateVariable(variable);
                     }
@@ -572,7 +624,7 @@ class DataFlowVariableStates {
                 values.values().forEach(v -> trace("    " + v));
                 definitions.forEach((k, v) -> {
                     trace("    Definitions of " + k.toMlog());
-                    v.forEach(ix -> trace("        " + optimizer.instructionIndex(ix)
+                    v.instructions.forEach(ix -> trace("        " + optimizer.instructionIndex(ix)
                             + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
                 });
                 equivalences.forEach((k, v) -> trace("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
@@ -580,6 +632,10 @@ class DataFlowVariableStates {
                     trace("    Initialized: <none>");
                 } else {
                     trace("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
+                }
+                if (!reads.isEmpty()) {
+                    trace("    Reads:");
+                    reads.forEach((k, v) -> trace("        " + k.toMlog() + ": " + v));
                 }
             }
         }
@@ -768,6 +824,27 @@ class DataFlowVariableStates {
                             ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
                             : " constant " + constantValue
             );
+        }
+    }
+
+    static class Definition {
+        /// The instruction counter of this variable's definition
+        final int counter;
+
+        ///  List of defining instructions
+        final List<LogicInstruction> instructions;
+
+        public Definition(int counter, LogicInstruction instruction) {
+            this(counter, List.of(instruction));
+        }
+
+        public Definition(int counter, List<LogicInstruction> instructions) {
+            this.counter = counter;
+            this.instructions = instructions;
+        }
+
+        public Definition copy() {
+            return new Definition(counter, List.copyOf(instructions));
         }
     }
 

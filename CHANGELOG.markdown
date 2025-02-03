@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.1.0 - Future release
+
+### Experimental features
+
+* Added the "backpropagation" optimization to Data Flow Optimization (closes [#151](https://github.com/cardillan/mindcode/issues/151)).
+
 ## 3.0.0 - 2025-01-26
 
 ### Fixed
