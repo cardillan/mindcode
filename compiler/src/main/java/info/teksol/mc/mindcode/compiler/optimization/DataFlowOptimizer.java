@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.Definition;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
@@ -55,10 +56,8 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// Instructions referencing each variable. References are accumulated (not cleared during single pass).
     final Map<LogicVariable, List<LogicInstruction>> references = new HashMap<>();
 
-    /// Holds the variables defined by an instruction, and other instructions using that variable.
-    /// If there's just one such reference, and this reference is a Set instruction, the target of the Set can be
-    /// injected into the definition.
-    final Map<LogicInstruction, Map<LogicVariable, List<@Nullable LogicInstruction>>> definitionReferences = new IdentityHashMap<>();
+    /// Holds all variable definitions and their uses.
+    final Set<Definition> definitions = Collections.newSetFromMap(new IdentityHashMap<>());
 
     /// When a jump outside its context is encountered, current variable state is copied and assigned to the target
     /// label. Upon encountering the target label all stored states are merged and flushed.
@@ -93,36 +92,47 @@ class DataFlowOptimizer extends BaseOptimizer {
         uninitialized.clear();
         replacements.clear();
         references.clear();
-        definitionReferences.clear();
+        definitions.clear();
         labelStates.clear();
         functionEndStates.clear();
 
         clearVariableStates();
 
+        if (currentPass <= 1) {
+            trace("!!! Skipping backpropagation optimization on first pass.\n\n");
+        }
+
         unreachables = optimizationContext.getUnreachableInstructions();
 
         getRootContext().children().forEach(this::processTopContext);
 
-        if (experimental()) {
+        if (experimental() && currentPass > 1) {
             boolean updated = false;
-            for (LogicInstruction instruction : definitionReferences.keySet()) {
-                int index = instructionIndex(instruction);
-                if (index < 0) continue;
+            for (Definition definition : definitions) {
+                // Temporary: do not process multiple definitions
+                //if (dependencies.getDefinitions().size() != 1) continue;
 
-                Map<LogicVariable, List<@Nullable LogicInstruction>> logicVariableListMap = definitionReferences.get(instruction);
-                for (LogicVariable variable : logicVariableListMap.keySet()) {
-                    List<@Nullable LogicInstruction> list = logicVariableListMap.get(variable);
-                    if (list.size() == 1 && list.getFirst() instanceof SetInstruction set && set.getValue().equals(variable)) {
-                        if (!canEliminate(instruction, variable)) continue;
-                        if (instruction.inputArgumentsStream().anyMatch(v -> v.equals(variable))) continue;
+                LogicVariable variable = definition.variable;
+                if (definition.getReference() instanceof SetInstruction set && set.getValue().equals(variable)) {
+                    int setIndex = instructionIndex(set);
+                    if (setIndex < 0) continue;
 
-                        int setIndex = instructionIndex(set);
-                        if (setIndex >= 0) {
-                            invalidateInstruction(setIndex);
-                            replaceInstruction(index, replaceAllArgs(instruction, variable, set.getResult()));
-                            updated = true;
-                        }
+                    // Find instruction indexes and bail out if some of them are missing
+                    List<Integer> indexes = definition.instructions.stream().map(this::instructionIndex).filter(i -> i >= 0).toList();
+                    if (indexes.size() != definition.instructions.size()) continue;
+
+                    // All definitions are replaceable and none of them depends on the variable
+                    boolean canReplace = definition.instructions.stream().allMatch(ix ->
+                            canEliminate(ix, variable) && ix.inputArgumentsStream().noneMatch(v -> v.equals(variable)));
+
+                    if (!canReplace) continue;
+
+                    for (int index : indexes) {
+                        LogicInstruction instruction = instructionAt(index);
+                        replaceInstruction(index, replaceAllArgs(instruction, variable, set.getResult()));
                     }
+                    invalidateInstruction(setIndex);
+                    updated = true;
                 }
             }
 
@@ -896,7 +906,8 @@ class DataFlowOptimizer extends BaseOptimizer {
                 // (can be optimized freely).
                 // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
                 AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
-                yield !variable.isOutput() || functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix());
+                yield !variable.isOutput() || functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix())
+                        || functionCtx.function() == null || functionCtx.function().isInline();
             }
             // Includes global variables
             default -> true;

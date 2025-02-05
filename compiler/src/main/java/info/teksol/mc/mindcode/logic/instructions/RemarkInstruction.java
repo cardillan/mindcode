@@ -10,7 +10,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @NullMarked
 public class RemarkInstruction extends BaseInstruction {
@@ -30,12 +29,12 @@ public class RemarkInstruction extends BaseInstruction {
 
     @Override
     public RemarkInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new RemarkInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new RemarkInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public RemarkInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new RemarkInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new RemarkInstruction(this, astContext, sideEffects);
     }
 
     public final LogicValue getValue() {

@@ -197,6 +197,7 @@ public class OptimizationCoordinator {
                     .max(ACTION_COMPARATOR).orElse(null);
             if (selectedAction != null) {
                 optimizationContext.prepare();
+                optimizationContext.debugPrintProgram(String.format("%n*** Performing optimization %s ***%n", selectedAction), true);
                 OptimizationResult result = selectedAction.apply(costLimit);
                 optimizationContext.finish();
 

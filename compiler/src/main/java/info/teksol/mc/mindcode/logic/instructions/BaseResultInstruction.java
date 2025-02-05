@@ -10,7 +10,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class BaseResultInstruction extends BaseInstruction implements LogicResultInstruction {
@@ -34,12 +33,12 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
 
     @Override
     public BaseResultInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new BaseResultInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new BaseResultInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public BaseResultInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new BaseResultInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new BaseResultInstruction(this, astContext, sideEffects);
     }
 
     @Override

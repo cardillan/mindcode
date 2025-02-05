@@ -55,8 +55,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     /// @return true to re-run the optimization
     protected abstract boolean optimizeProgram(OptimizationPhase phase);
 
+    protected int currentPass = 0;
+
     @Override
     public boolean optimize(OptimizationPhase phase, int pass) {
+        currentPass = pass;
         boolean repeat;
         boolean modified = false;
         int iteration = 1;
@@ -67,9 +70,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             trace(() -> String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n", getName().toUpperCase(),
                     phase, pass, thisIteration));
 
-            optimizationContext.debugPrintProgram(
-                    String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n", getName().toUpperCase(),
-                            phase, pass, thisIteration));
+            optimizationContext.debugPrintProgram(String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n",
+                    getName().toUpperCase(), phase, pass, thisIteration), false);
 
             repeat = optimizeProgram(phase);
             optimizationContext.finish();

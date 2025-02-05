@@ -190,6 +190,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
                     List<Executable> executables = new ArrayList<>();
                     executables.add(() -> evaluator.asExpected(true, compiler.getEmulator()));
                     compiler.getAssertions().forEach(a -> executables.add(() -> assertTrue(a.success(), a.generateErrorMessage())));
+                    executables.add(() -> assertNull(compiler.getExecutionException()));
                     assertAll(executables);
 
                     return null;
@@ -280,5 +281,9 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     protected void testCode(String code, String... expectedOutputs) {
         testAndEvaluateCode(null, expectedMessages(), code, Map.of(), outputEvaluator(List.of(expectedOutputs)), null);
+    }
+
+    protected void testAssertions(String code) {
+        testAndEvaluateCode(null, expectedMessages(), code, Map.of(), assertEvaluator(), null);
     }
 }

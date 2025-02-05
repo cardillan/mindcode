@@ -144,15 +144,15 @@ class OptimizationContext {
         return updated;
     }
 
-    void debugPrintProgram(String title) {
+    void debugPrintProgram(String title, boolean outputTitle) {
         if (OptimizationCoordinator.DEBUG_PRINT) {
-            if (!OptimizationCoordinator.TRACE) {
+            if (!OptimizationCoordinator.TRACE || outputTitle) {
                 traceFile.outputProgram(title);
             }
             traceFile.outputProgram("Program before optimization:");
             BitSet unreachables = computeUnreachableInstructions();
             String text = LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, program,
-                    index -> unreachables.get(index) ? " [ ]" : " [x]");
+                    index -> String.format(" [%c] cx#%-4d", unreachables.get(index) ? ' ' : 'x', program.get(index).getAstContext().id));
             traceFile.outputProgram(text);
         }
     }

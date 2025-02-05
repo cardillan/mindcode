@@ -30,21 +30,21 @@ assertequals true true "isZero(0)"
 assertequals false false "isZero(1e-50)"
 assertequals false false "isZero(-1e-50)"
 assertequals false false "isZero(0.01,0.01)"
-op add *tmp55 null 0
-assertequals 0 *tmp55 "nullToZero(null)"
-op add *tmp56 1 0
-assertequals 1 *tmp56 "nullToZero(1)"
+op add :fn19:result null 0
+assertequals 0 :fn19:result "nullToZero(null)"
+op add :fn20:result 1 0
+assertequals 1 :fn20:result "nullToZero(1)"
 assertequals 0 false "boolean(0)"
 assertequals 1 true "boolean(100)"
 assertequals 1 true "boolean(-100)"
 assertequals 1 true "boolean(-0.001)"
 assertequals 0 false "boolean(0.0000001)"
-op or *tmp67 0.9 0
-assertequals 0 *tmp67 "integer(0.9)"
-op or *tmp68 -5.9 0
-assertequals -5 *tmp68 "integer(-5.9)"
-op or *tmp69 100 0
-assertequals 100 *tmp69 "integer(100)"
+op or :fn26:result 0.9 0
+assertequals 0 :fn26:result "integer(0.9)"
+op or :fn27:result -5.9 0
+assertequals -5 :fn27:result "integer(-5.9)"
+op or :fn28:result 100 0
+assertequals 100 :fn28:result "integer(100)"
 assertequals 1 1 "sum(1)"
 assertequals 10 10 "sum(1,2,3,4)"
 assertequals 1 1 "avg(1)"

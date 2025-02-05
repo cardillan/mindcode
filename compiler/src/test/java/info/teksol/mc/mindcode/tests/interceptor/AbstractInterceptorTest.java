@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.tests.interceptor;
 
 import info.teksol.mc.emulator.blocks.Memory;
 import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.emulator.processor.Processor;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
@@ -54,12 +55,18 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             this.compiler = compiler;
         }
 
+        boolean runtimeError = false;
+
         private Processor runProgram(List<LogicInstruction> program) {
             List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.compilerProfile(), compiler.instructionProcessor(), program);
             Processor processor = new Processor(compiler.instructionProcessor(), expectedMessages(), 1000);
             processor.addBlock("bank1", Memory.createMemoryBank());
             processor.addBlock("bank2", Memory.createMemoryBank());
-            processor.run(instructions, MAX_STEPS);
+            try {
+                processor.run(instructions, MAX_STEPS);
+            } catch (ExecutionException e) {
+                runtimeError = true;
+            }
             return processor;
         }
 
@@ -69,7 +76,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             if (errant == null) {
                 Processor processor = runProgram(program);
                 assert evaluator != null;
-                if (evaluator.asExpected(false, processor)) {
+                if (!runtimeError && evaluator.asExpected(false, processor)) {
                     previous = new ProgramVersion(optimizer, title, program);
                 } else {
                     if (previous == null) {

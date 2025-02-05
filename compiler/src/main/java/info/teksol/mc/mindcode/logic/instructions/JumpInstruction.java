@@ -13,7 +13,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class JumpInstruction extends BaseInstruction {
@@ -33,12 +32,12 @@ public class JumpInstruction extends BaseInstruction {
 
     @Override
     public JumpInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new JumpInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new JumpInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public JumpInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new JumpInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new JumpInstruction(this, astContext, sideEffects);
     }
 
     @Override

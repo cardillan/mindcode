@@ -10,7 +10,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class WriteInstruction extends BaseInstruction {
@@ -30,12 +29,12 @@ public class WriteInstruction extends BaseInstruction {
 
     @Override
     public WriteInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new WriteInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new WriteInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public WriteInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new WriteInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new WriteInstruction(this, astContext, sideEffects);
     }
 
     public final LogicValue getValue() {

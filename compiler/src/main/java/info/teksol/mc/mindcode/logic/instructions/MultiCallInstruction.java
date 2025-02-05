@@ -11,7 +11,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class MultiCallInstruction extends BaseInstruction implements MultiTargetInstruction {
@@ -31,12 +30,12 @@ public class MultiCallInstruction extends BaseInstruction implements MultiTarget
 
     @Override
     public MultiCallInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new MultiCallInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new MultiCallInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public MultiCallInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new MultiCallInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new MultiCallInstruction(this, astContext, sideEffects);
     }
 
     @Override

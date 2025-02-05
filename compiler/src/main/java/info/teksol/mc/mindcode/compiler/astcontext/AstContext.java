@@ -390,7 +390,8 @@ public final class AstContext {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (AstContext) obj;
-        return this.level == that.level &&
+        return this.id == that.id &&
+                this.level == that.level &&
                 Objects.equals(this.node, that.node) &&
                 Objects.equals(this.contextType, that.contextType) &&
                 Objects.equals(this.subcontextType, that.subcontextType) &&

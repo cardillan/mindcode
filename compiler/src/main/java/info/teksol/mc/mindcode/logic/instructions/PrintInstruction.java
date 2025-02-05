@@ -9,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class PrintInstruction extends BaseInstruction {
@@ -29,12 +28,12 @@ public class PrintInstruction extends BaseInstruction {
 
     @Override
     public PrintInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new PrintInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new PrintInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public PrintInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new PrintInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new PrintInstruction(this, astContext, sideEffects);
     }
 
     public final LogicValue getValue() {

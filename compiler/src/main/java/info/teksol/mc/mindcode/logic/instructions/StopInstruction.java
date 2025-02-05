@@ -5,7 +5,6 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class StopInstruction extends BaseInstruction {
@@ -25,12 +24,12 @@ public class StopInstruction extends BaseInstruction {
 
     @Override
     public StopInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new StopInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new StopInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public StopInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new StopInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new StopInstruction(this, astContext, sideEffects);
     }
 
     @Override

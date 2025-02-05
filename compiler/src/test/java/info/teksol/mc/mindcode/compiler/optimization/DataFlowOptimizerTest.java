@@ -55,8 +55,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(JUMP, label(2), "greaterThanEq", "0", "LIMIT"),
                     createInstruction(LABEL, label(6)),
                     createInstruction(OP, "add", tmp(2), ":i", "1"),
-                    createInstruction(OP, "mul", tmp(3), "2", tmp(2)),
-                    createInstruction(SET, ".a*w", tmp(3)),
+                    createInstruction(OP, "mul", ".a*w", "2", tmp(2)),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
                     createInstruction(MULTICALL, label(8), tmp(6), "marker0"),
                     createInstruction(LABEL, label(12)),
@@ -861,9 +860,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(SET, ":fn0:b", tmp(5)),
                     createInstruction(CALLREC, "bank1", label(0), label(6), ":fn0*retval"),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(SET, tmp(6), ":fn0:a"),
-                    createInstruction(SET, ":fn0:a", ":fn0:b"),
-                    createInstruction(SET, ":fn0:b", tmp(6)),
+                    createInstruction(SET, tmp(7), ":fn0:b"),
+                    createInstruction(SET, ":fn0:b", ":fn0:a"),
+                    createInstruction(SET, ":fn0:a", tmp(7)),
                     createInstruction(RETURNREC, "bank1")
             );
         }

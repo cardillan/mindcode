@@ -116,7 +116,7 @@ class DataFlowVariableStates {
             this.id = id;
             this.isolated = isolated;
             values = new LinkedHashMap<>(other.values);
-            definitions = deepCopy(other.definitions);
+            definitions = new HashMap<>(other.definitions);        // Definitions are shared
             equivalences = new HashMap<>(other.equivalences);
             reads = new HashMap<>(other.reads);
             useless = new HashMap<>(other.useless);
@@ -128,10 +128,6 @@ class DataFlowVariableStates {
 
         private VariableStates(VariableStates other, int id, boolean isolated) {
             this(other, id, isolated, other.reachable);
-        }
-
-        private static Map<LogicVariable, Definition> deepCopy(Map<LogicVariable, Definition> original) {
-            return original.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,e -> e.getValue().copy()));
         }
 
         /// @return useless instructions, organized by variable they produce.
@@ -298,7 +294,10 @@ class DataFlowVariableStates {
                 optimizer.defines.add(instruction);
             }
             initialized.add(variable);
-            definitions.put(variable, new Definition(optimizer.getCounter(), List.of(instruction)));
+
+            Definition definition = new Definition(variable, optimizer.getCounter(), instruction);
+            optimizer.definitions.add(definition);
+            definitions.put(variable, definition);
             reads.remove(variable);
 
             // Purge expressions based on the previous value of this variable
@@ -356,6 +355,7 @@ class DataFlowVariableStates {
                 values.remove(variable);
                 reads.remove(variable);
                 invalidateVariable(variable);
+                definitions.computeIfAbsent(variable, v -> new Definition(variable, optimizer.getCounter())).inexact = true;
             }
         }
 
@@ -423,10 +423,13 @@ class DataFlowVariableStates {
                 optimizer.addUninitialized(variable);
             }
 
-            if (definitions.containsKey(variable)) {
-                List<LogicInstruction> definingInstructions = definitions.get(variable).instructions;
+            // TODO Use uninitialized definitions to track uninitialized variables
+            Definition definition = definitions.get(variable);
+
+            if (definition != null) {
+                List<LogicInstruction> definingInstructions = definition.instructions;
                 if (TRACE) {
-                    trace("Definitions of " + variable.toMlog());
+                    trace("Definitions of " + variable.toMlog() + " (*" + definition.counter + "): ");
                     trace(definingInstructions.stream().map(this::printInstruction));
                 }
                 // Variable value was read, keep all instructions that define its value
@@ -458,21 +461,19 @@ class DataFlowVariableStates {
                 //   - the result of the set wasn't read after this variable was defined
                 //   - the set is not part of for-each iterator setup
                 // - in the other case, an invalid reference is added
-                int defineIndex = definitions.get(variable).counter;
-                for (LogicInstruction definition : definingInstructions) {
-                    LogicInstruction reference;
-                    if (definingInstructions.size() == 1 && instruction instanceof SetInstruction set && set.getValue() == variable
-                            && !set.getAstContext().matches(ITR_LEADING, ITR_TRAILING)) {
-                        Integer readIndex = reads.get(set.getResult());
-                        reference = readIndex == null || readIndex < defineIndex ? instruction : null;
-                    } else {
-                        reference = null;
-                    }
-
-                    optimizer.definitionReferences.computeIfAbsent(definition, key -> new HashMap<>())
-                                .computeIfAbsent(variable, v -> new ArrayList<>()).add(reference);
-                    trace("Registering usage of " + variable.toMlog());
+                // Note: presence of a null reference prevents the optimization
+                int defineIndex = definition.counter;
+                LogicInstruction reference;
+                if (instruction instanceof SetInstruction set && set.getValue() == variable
+                        && !definition.inexact && !set.getAstContext().matches(ITR_LEADING, ITR_TRAILING)) {
+                    Integer readIndex = reads.get(set.getResult());
+                    reference = readIndex == null || readIndex < defineIndex ? instruction : null;
+                } else {
+                    reference = null;
                 }
+
+                definition.references.add(reference);
+                trace("Registering usage of " + variable.toMlog());
             }
 
             if (instruction != null && !isolated) {
@@ -580,42 +581,29 @@ class DataFlowVariableStates {
             for (LogicVariable variable : map2.keySet()) {
                 if (map1.containsKey(variable)) {
                     Definition current = map1.get(variable);
-                    Definition theOther = map2.get(variable);
-                    if (current.counter != theOther.counter || !sameInstances(current.instructions, theOther.instructions)) {
-                        // Merge the two lists
-                        if (current.instructions.size() == 1 && theOther.instructions.size() == 1) {
-                            map1.put(variable, new Definition(
-                                    Math.min(current.counter, theOther.counter),
-                                    List.of(current.instructions.getFirst(), theOther.instructions.getFirst())));
-                        } else {
-                            Set<LogicInstruction> union = createIdentitySet(current.instructions.size() + theOther.instructions.size());
-                            union.addAll(current.instructions);
-                            union.addAll(theOther.instructions);
-                            map1.put(variable, new Definition(
-                                    Math.min(current.counter, theOther.counter),
-                                    List.copyOf(union)));
-                        }
-                        invalidateVariable(variable);
-                    }
+                    Definition other = map2.get(variable);
+                    if (current == other) continue;
+
+                    Definition merged = current.merge(other);
+                    optimizer.definitions.remove(current);
+                    optimizer.definitions.remove(other);
+                    optimizer.definitions.add(merged);
+                    map1.put(variable, merged);
+                    invalidateVariable(variable);
                 } else {
-                    map1.put(variable, map2.get(variable));
+                    Definition other = map2.get(variable);
+                    other.inexact = true;
+                    map1.put(variable, other);
                     invalidateVariable(variable);
                 }
             }
-        }
 
-        private <E> boolean sameInstances(List<E> list1, List<E> list2) {
-            if (list1.size() != list2.size()) {
-                return false;
-            }
-
-            for (int i = 0; i < list1.size(); i++) {
-                if (list1.get(i) != list2.get(i)) {
-                    return false;
+            for (Definition definition : map1.values()) {
+                if (!map2.containsKey(definition.variable)) {
+                    definition.inexact = true;
+                    invalidateVariable(definition.variable);
                 }
             }
-
-            return true;
         }
 
         void print(String title) {
@@ -623,7 +611,7 @@ class DataFlowVariableStates {
                 trace(title + ": VariableStates instance " + getId());
                 values.values().forEach(v -> trace("    " + v));
                 definitions.forEach((k, v) -> {
-                    trace("    Definitions of " + k.toMlog());
+                    trace("    Definitions of " + k.toMlog() + " (*" + v.counter + "):");
                     v.instructions.forEach(ix -> trace("        " + optimizer.instructionIndex(ix)
                             + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
                 });
@@ -635,7 +623,7 @@ class DataFlowVariableStates {
                 }
                 if (!reads.isEmpty()) {
                     trace("    Reads:");
-                    reads.forEach((k, v) -> trace("        " + k.toMlog() + ": " + v));
+                    reads.forEach((k, v) -> trace("        " + k.toMlog() + " (*" + v + ")"));
                 }
             }
         }
@@ -827,25 +815,95 @@ class DataFlowVariableStates {
         }
     }
 
+    /// A definition of a variable. A definition is created when a value is assigned to a variable.
+    /// When a variable is updated inexactly (e.g. by a function call), the definition is marked as such.
+    /// When code paths split, the definition is inherited by both code paths - reads in both code paths
+    /// update the same definition.
+    /// When code paths merge, the definitions merge too - this is the only way for a definition to
+    /// obtain multiple defining instructions. If a variable isn't defined on all code paths, it will become inexact.
+    /// TODO: distinguish uninitialized and inexact.
     static class Definition {
+        final LogicVariable variable;
+
         /// The instruction counter of this variable's definition
         final int counter;
+
+        /// The value of this variable was changed inexactly (i.e. by a function call).
+        boolean inexact;
 
         ///  List of defining instructions
         final List<LogicInstruction> instructions;
 
-        public Definition(int counter, LogicInstruction instruction) {
-            this(counter, List.of(instruction));
+        ///  List of instructions depending on this version of the variable
+        final Set<@Nullable LogicInstruction> references = createIdentitySet(5);
+
+        public Definition(LogicVariable variable, int counter) {
+            this(variable, counter, true, List.of());
         }
 
-        public Definition(int counter, List<LogicInstruction> instructions) {
+        public Definition(LogicVariable variable, int counter, LogicInstruction instruction) {
+            this(variable, counter, false, List.of(instruction));
+        }
+
+        public Definition(LogicVariable variable, int counter, boolean inexact, List<LogicInstruction> instructions) {
+            this.variable = variable;
             this.counter = counter;
+            this.inexact = inexact;
             this.instructions = instructions;
         }
 
-        public Definition copy() {
-            return new Definition(counter, List.copyOf(instructions));
+        public @Nullable LogicInstruction getReference() {
+            return references.size() == 1 ? references.iterator().next() : null;
         }
+
+        Definition merge(Definition other) {
+            if (!variable.equals(other.variable)) {
+                throw new MindcodeInternalError("Trying to merge definitions of different variables.");
+            }
+
+            Definition result = new Definition(variable, Math.min(counter, other.counter), inexact || other.inexact,
+                    union(instructions, other.instructions));
+
+            result.references.addAll(references);
+            result.references.addAll(other.references);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Definition{" +
+                    "variable=" + variable +
+                    ", counter=" + counter +
+                    ", inexact=" + inexact +
+                    ", instructions=" + instructions.size() +
+                    ", references=" + references.size() +
+                    '}';
+        }
+    }
+
+    private static List<LogicInstruction> union(List<LogicInstruction> list1, List<LogicInstruction> list2) {
+        if (sameInstances(list1, list2)) {
+            return list1;
+        } else {
+            Set<LogicInstruction> union = createIdentitySet(list1.size() + list2.size());
+            union.addAll(list1);
+            union.addAll(list2);
+            return List.copyOf(union);
+        }
+    }
+
+    private static <E> boolean sameInstances(List<E> list1, List<E> list2) {
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < list1.size(); i++) {
+            if (list1.get(i) != list2.get(i)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void trace(Stream<String> text) {

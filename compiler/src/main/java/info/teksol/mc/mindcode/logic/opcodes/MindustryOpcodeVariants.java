@@ -313,9 +313,9 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("expected"), in("title"));
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH);
 
-        // Assertions log
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT,
-                type("type"), in("min"), cond("minOp"), in("value"), cond("maxOp"), in("max"), in("message"));
+        // Assertions mod
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_BOUNDS,
+                type("type"), in("multiple"), in("min"), cond("minOp"), in("value"), cond("maxOp"), in("max"), in("message"));
 
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);

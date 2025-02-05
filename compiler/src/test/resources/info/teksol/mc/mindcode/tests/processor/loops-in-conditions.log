@@ -43,104 +43,115 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 inst
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
      0 assertflush
--    * set :fn1:n 4
-+    1 set *tmp2 4
+     1 set :fn1:n 4
      2 set :fn1:c 0
 -    * set *tmp2 :fn1:n
-     3 set :fn1:i 0
-     4 label *label2
-     5 jump *label4 greaterThanEq :fn1:i *tmp2
++    3 set *tmp2 4
+     4 set :fn1:i 0
+     5 label *label2
+-    * jump *label4 greaterThanEq :fn1:i *tmp2
++    6 jump *label4 greaterThanEq :fn1:i :fn1:n
+     7 op add :fn1:c :fn1:c :fn1:i
+     8 label *label3
+     9 op add :fn1:i :fn1:i 1
  
-    14 jump *label1 always
-    15 set *tmp1 null
+    13 print "|"
+    14 set *tmp1 :fn1:c
+    15 jump *label1 always
+-    * set *tmp1 null
     16 label *label1
--    * set :fn2:n 8
-+   17 set *tmp4 8
+    17 set :fn2:n 8
     18 set :fn2:c 0
 -    * set *tmp4 :fn2:n
-    19 set :fn2:i 0
-    20 label *label6
-    21 jump *label8 greaterThanEq :fn2:i *tmp4
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
++   19 set *tmp4 8
+    20 set :fn2:i 0
+    21 label *label6
+-    * jump *label8 greaterThanEq :fn2:i *tmp4
++   22 jump *label8 greaterThanEq :fn2:i :fn2:n
+    23 op add :fn2:c :fn2:c :fn2:i
+    24 label *label7
+    25 op add :fn2:i :fn2:i 1
  
+    29 print "|"
+    30 set *tmp3 :fn2:c
+    31 jump *label5 always
+-    * set *tmp3 null
+    32 label *label5
+-    * jump *label9 greaterThanEq *tmp1 *tmp3
++   33 jump *label9 greaterThanEq :fn1:c :fn2:c
+    34 print "Less"
+    35 set *tmp6 0
+    36 jump *label10 always
+ 
+    39 label *label10
+    40 set :fn0:result *tmp6
+    41 print "|"
+-    * print :fn0:result
++   42 print *tmp6
+    43 label *label0
+    44 assertprints "6|28|Less|0" "loops in conditions"
+    45 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+     0 assertflush
+     1 set :fn1:n 4
      2 set :fn1:c 0
+-    * set *tmp2 4
      3 set :fn1:i 0
      4 label *label2
--    * jump *label4 greaterThanEq :fn1:i *tmp2
+-    * jump *label4 greaterThanEq :fn1:i :fn1:n
 +    5 jump *label4 greaterThanEq :fn1:i 4
      6 op add :fn1:c :fn1:c :fn1:i
      7 label *label3
      8 op add :fn1:i :fn1:i 1
  
+    10 label *label4
+    11 print :fn1:c
     12 print "|"
-    13 set *tmp1 :fn1:c
-    14 jump *label1 always
--    * set *tmp1 null
-    15 label *label1
-    16 set *tmp4 8
-    17 set :fn2:c 0
-    18 set :fn2:i 0
-    19 label *label6
--    * jump *label8 greaterThanEq :fn2:i *tmp4
-+   20 jump *label8 greaterThanEq :fn2:i 8
-    21 op add :fn2:c :fn2:c :fn2:i
-    22 label *label7
-    23 op add :fn2:i :fn2:i 1
+-    * set *tmp1 :fn1:c
+    13 jump *label1 always
+    14 label *label1
+    15 set :fn2:n 8
+    16 set :fn2:c 0
+-    * set *tmp4 8
+    17 set :fn2:i 0
+    18 label *label6
+-    * jump *label8 greaterThanEq :fn2:i :fn2:n
++   19 jump *label8 greaterThanEq :fn2:i 8
+    20 op add :fn2:c :fn2:c :fn2:i
+    21 label *label7
+    22 op add :fn2:i :fn2:i 1
  
-    27 print "|"
-    28 set *tmp3 :fn2:c
-    29 jump *label5 always
--    * set *tmp3 null
-    30 label *label5
--    * jump *label9 greaterThanEq *tmp1 *tmp3
-+   31 jump *label9 greaterThanEq :fn1:c :fn2:c
-    32 print "Less"
-    33 set *tmp6 0
-    34 jump *label10 always
+    24 label *label8
+    25 print :fn2:c
+    26 print "|"
+-    * set *tmp3 :fn2:c
+    27 jump *label5 always
+    28 label *label5
+    29 jump *label9 greaterThanEq :fn1:c :fn2:c
  
-    37 label *label10
-    38 set :fn0:result *tmp6
-    39 print "|"
--    * print :fn0:result
-+   40 print *tmp6
-    41 label *label0
-    42 assertprints "6|28|Less|0" "loops in conditions"
-    43 stop
+    33 label *label9
+    34 set *tmp6 1
+    35 label *label10
+-    * set :fn0:result *tmp6
+    36 print "|"
+    37 print *tmp6
+    38 label *label0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-5 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
      0 assertflush
--    * set *tmp2 4
+-    * set :fn1:n 4
      1 set :fn1:c 0
      2 set :fn1:i 0
      3 label *label2
  
-     9 label *label4
-    10 print :fn1:c
     11 print "|"
--    * set *tmp1 :fn1:c
     12 jump *label1 always
     13 label *label1
--    * set *tmp4 8
+-    * set :fn2:n 8
     14 set :fn2:c 0
     15 set :fn2:i 0
     16 label *label6
- 
-    22 label *label8
-    23 print :fn2:c
-    24 print "|"
--    * set *tmp3 :fn2:c
-    25 jump *label5 always
-    26 label *label5
-    27 jump *label9 greaterThanEq :fn1:c :fn2:c
- 
-    31 label *label9
-    32 set *tmp6 1
-    33 label *label10
--    * set :fn0:result *tmp6
-    34 print "|"
-    35 print *tmp6
-    36 label *label0
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
  

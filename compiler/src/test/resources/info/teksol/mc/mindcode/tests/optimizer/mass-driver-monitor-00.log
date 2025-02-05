@@ -6,13 +6,13 @@
     12 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-    18 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    19 instructions eliminated by Data Flow Optimization (3 passes, 8 iterations).
      5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (4 iterations).
      1 instructions updated by JumpThreading.
     14 instructions eliminated by Print Merging.
-   184 instructions after optimizations.
+   183 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 798):
   * Replicate loop condition at line 91:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
@@ -1340,26 +1340,44 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    153 label *label34
    154 label *label24
 
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+   142 op sub :crx 93 2
+   143 op add :crw 83 1
+   144 set :cry 0
+-    * set *tmp62 176
++  145 set :crh 176
+   146 jump *label36 greaterThanEq TO_INDEX 16
+   147 op mod *tmp63 TO_INDEX 8
+   148 op mul *tmp64 *tmp63 22
+-    * op add *tmp62 4 *tmp64
++  149 op add :crh 4 *tmp64
+   150 label *label36
+-    * set :crh *tmp62
+   151 label *label33
+   152 label *label34
+   153 label *label24
+
 Modifications by Final phase, Jump Threading, iteration 1:
 +    0 label __start__
      1 set FROM_INDEX 0
      2 set TO_INDEX 16
      3 set CAPACITY 120
  
-   171 control enabled .SWITCH 0
-   172 label *label42
-   173 sensor *tmp76 .SWITCH @enabled
+   170 control enabled .SWITCH 0
+   171 label *label42
+   172 sensor *tmp76 .SWITCH @enabled
 -    * jump *label44 notEqual *tmp76 0
-+  174 jump __start__ notEqual *tmp76 0
-   175 label *label62
-   176 set :start @time
-   177 draw color 0 0 80 255
++  173 jump __start__ notEqual *tmp76 0
+   174 label *label62
+   175 set :start @time
+   176 draw color 0 0 80 255
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   255 sensor *tmp76 .SWITCH @enabled
-   256 jump *label62 equal *tmp76 0
-   257 label *label44
+   254 sensor *tmp76 .SWITCH @enabled
+   255 jump *label62 equal *tmp76 0
+   256 label *label44
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
@@ -1413,22 +1431,22 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
     53 label *label16
     54 printflush .MESSAGE
  
-   232 jump *label61 lessThan :n @links
-   233 label *label47
-   234 drawflush .DISPLAY
+   231 jump *label61 lessThan :n @links
+   232 label *label47
+   233 drawflush .DISPLAY
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+  235 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
-   236 op sub *tmp116 @time :start
-   237 op floor *tmp117 *tmp116
++  234 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
+   235 op sub *tmp116 @time :start
+   236 op floor *tmp117 *tmp116
 -    * print "[lightgray]Draw time: "
 -    * print *tmp117
 -    * print " "
 -    * print "ms"
-+  238 format *tmp117
-   239 printflush .MESSAGE
-   240 label *label43
-   241 sensor *tmp76 .SWITCH @enabled
++  237 format *tmp117
+   238 printflush .MESSAGE
+   239 label *label43
+   240 sensor *tmp76 .SWITCH @enabled
 
 Final code before resolving virtual instructions:
 
@@ -1557,13 +1575,12 @@ jump *label33 lessThan TO_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
 set :cry 0
-set *tmp62 176
+set :crh 176
 jump *label36 greaterThanEq TO_INDEX 16
 op mod *tmp63 TO_INDEX 8
 op mul *tmp64 *tmp63 22
-op add *tmp62 4 *tmp64
+op add :crh 4 *tmp64
 label *label36
-set :crh *tmp62
 label *label33
 label *label24
 label *label18

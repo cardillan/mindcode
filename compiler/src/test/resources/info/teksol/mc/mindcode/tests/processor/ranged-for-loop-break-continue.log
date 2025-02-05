@@ -92,7 +92,47 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     28 label *label11
     29 label *label5
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    22 call *label0 :fn0*retval
+    23 label *label9
+    24 set *tmp6 :fn0*retval
+-    * jump *label10 notEqual :fn1:i *tmp6
++   25 jump *label10 notEqual :fn1:i :fn0*retval
+    26 jump *label6 always
+    27 label *label10
+    28 label *label11
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    21 setaddr :fn0*retaddr *label9
+    22 call *label0 :fn0*retval
+    23 label *label9
+-    * set *tmp6 :fn0*retval
+    24 jump *label10 notEqual :fn1:i :fn0*retval
+    25 jump *label6 always
+    26 label *label10
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    11 set :fn1:i *tmp1
+    12 label *label4
+    13 jump *label6 greaterThanEq :fn1:i *tmp3
++   14 label *label13
+    15 jump *label7 notEqual :fn1:i 3
+    16 jump *label5 always
+    17 label *label7
+ 
+    28 label *label11
+    29 label *label5
+    30 op add :fn1:i :fn1:i 1
+-    * jump *label4 always
++   31 jump *label13 lessThan :fn1:i *tmp3
+    32 label *label6
+    33 label *label1
+    34 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
      2 setaddr :fn0*retaddr *label2
      3 call *label0 :fn0*retval
@@ -107,49 +147,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * set :fn1:i *tmp1
     11 label *label4
     12 jump *label6 greaterThanEq :fn1:i *tmp3
-    13 jump *label7 notEqual :fn1:i 3
+    13 label *label13
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
- 
-    21 call *label0 :fn0*retval
-    22 label *label9
-    23 set *tmp6 :fn0*retval
--    * jump *label10 notEqual :fn1:i *tmp6
-+   24 jump *label10 notEqual :fn1:i :fn0*retval
-    25 jump *label6 always
-    26 label *label10
-    27 label *label11
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
- 
-    20 setaddr :fn0*retaddr *label9
-    21 call *label0 :fn0*retval
-    22 label *label9
--    * set *tmp6 :fn0*retval
-    23 jump *label10 notEqual :fn1:i :fn0*retval
-    24 jump *label6 always
-    25 label *label10
-
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
- 
-    10 set *tmp3 :fn0*retval
-    11 label *label4
-    12 jump *label6 greaterThanEq :fn1:i *tmp3
-+   13 label *label13
-    14 jump *label7 notEqual :fn1:i 3
-    15 jump *label5 always
-    16 label *label7
- 
-    27 label *label11
-    28 label *label5
-    29 op add :fn1:i :fn1:i 1
--    * jump *label4 always
-+   30 jump *label13 lessThan :fn1:i *tmp3
-    31 label *label6
-    32 label *label1
-    33 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
      9 label *label3
     10 set *tmp3 :fn0*retval

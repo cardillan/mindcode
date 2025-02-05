@@ -131,8 +131,8 @@ public class LogicInstructionArrayExpander {
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", ix.sourcePosition().formatForMlog(), 0, maxIndex);
 
         if (boundaryChecks == RuntimeChecks.ASSERT) {
-            consumer.accept(processor.createInstruction(astContext, Opcode.ASSERT, LogicKeyword.create("even"),
-                    LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ, max, LogicString.create(errorMessage)));
+            consumer.accept(processor.createInstruction(astContext, Opcode.ASSERT_BOUNDS, LogicKeyword.create("multiple"),
+                    LogicNumber.TWO, LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ, max, LogicString.create(errorMessage)));
             return;
         }
 

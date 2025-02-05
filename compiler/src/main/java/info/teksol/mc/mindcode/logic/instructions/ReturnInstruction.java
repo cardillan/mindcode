@@ -9,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class ReturnInstruction extends BaseInstruction {
@@ -29,12 +28,12 @@ public class ReturnInstruction extends BaseInstruction {
 
     @Override
     public ReturnInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new ReturnInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new ReturnInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public ReturnInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new ReturnInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new ReturnInstruction(this, astContext, sideEffects);
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class ReadInstruction extends BaseResultInstruction {
@@ -30,12 +29,12 @@ public class ReadInstruction extends BaseResultInstruction {
 
     @Override
     public ReadInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new ReadInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new ReadInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public ReadInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new ReadInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new ReadInstruction(this, astContext, sideEffects);
     }
 
     @Override

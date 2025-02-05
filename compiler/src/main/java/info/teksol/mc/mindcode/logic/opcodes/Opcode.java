@@ -74,7 +74,7 @@ public enum Opcode {
     ASSERT_FLUSH    ("assertflush",     1),
 
     /// Instruction supported by the Mlog Assertions mod.
-    ASSERT          ("assert",          1),
+    ASSERT_BOUNDS   ("assertBounds",          1),
 
     // Virtual instructions - resolved when the final code is generated
     

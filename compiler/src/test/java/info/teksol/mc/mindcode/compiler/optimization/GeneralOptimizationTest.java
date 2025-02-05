@@ -71,29 +71,29 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         $x = fn(4) + fn(5);
                         $y = $x + 1;
                         """,
-                createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1001), "equal", "cell1", "null"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(JUMP, label(1), "equal", "cell1", "null"),
                 createInstruction(SET, "*sp", "33"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(JUMP, var(1002), "equal", "cell2", "null"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(JUMP, label(2), "equal", "cell2", "null"),
                 createInstruction(SET, ":fn0:n", "4"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1003), ":fn0*retval"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(SET, var(1), ":fn0*retval"),
+                createInstruction(CALLREC, "cell1", label(0), label(3), ":fn0*retval"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(SET, tmp(1), ":fn0*retval"),
                 createInstruction(SET, ":fn0:n", "5"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1004), ":fn0*retval"),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(OP, "add", var(3), var(1), ":fn0*retval"),
-                createInstruction(WRITE, var(3), "cell2", "3"),
-                createInstruction(READ, var(0), "cell2", "3"),
-                createInstruction(OP, "add", var(5), var(0), "1"),
-                createInstruction(WRITE, var(5), "cell2", "4"),
+                createInstruction(CALLREC, "cell1", label(0), label(4), ":fn0*retval"),
+                createInstruction(LABEL, label(4)),
+                createInstruction(OP, "add", tmp(3), tmp(1), ":fn0*retval"),
+                createInstruction(WRITE, tmp(3), "cell2", "3"),
+                createInstruction(READ, tmp(0), "cell2", "3"),
+                createInstruction(OP, "add", tmp(5), tmp(0), "1"),
+                createInstruction(WRITE, tmp(5), "cell2", "4"),
                 createInstruction(END),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, label(0)),
                 createInstruction(PUSH, "cell1", ":fn0:n"),
                 createInstruction(OP, "sub", ":fn0:n", ":fn0:n", "1"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1006), ":fn0*retval"),
-                createInstruction(LABEL, var(1006)),
+                createInstruction(CALLREC, "cell1", label(0), label(6), ":fn0*retval"),
+                createInstruction(LABEL, label(6)),
                 createInstruction(POP, "cell1", ":fn0:n"),
                 createInstruction(OP, "mul", ":fn0*retval", "2", ":fn0:n"),
                 createInstruction(RETURNREC, "cell1")
@@ -119,9 +119,9 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         addr_FLAG = 0;
                         conveyor1.enabled = cell1[addr_FLAG] == 0;
                         """,
-                createInstruction(READ, var(0), "cell1", "0"),
-                createInstruction(OP, "equal", var(1), var(0), "0"),
-                createInstruction(CONTROL, "enabled", "conveyor1", var(1))
+                createInstruction(READ, tmp(0), "cell1", "0"),
+                createInstruction(OP, "equal", tmp(1), tmp(0), "0"),
+                createInstruction(CONTROL, "enabled", "conveyor1", tmp(1))
         );
     }
 
@@ -136,11 +136,11 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(SENSOR, "silicon", "reconstructor1", "@silicon"),
                 createInstruction(SENSOR, "graphite", "reconstructor1", "@graphite"),
                 createInstruction(SENSOR, "capacity", "reconstructor1", "@itemCapacity"),
-                createInstruction(OP, "lessThan", var(3), "silicon", "capacity"),
-                createInstruction(OP, "lessThan", var(4), "graphite", "capacity"),
-                createInstruction(OP, "or", var(5), var(3), var(4)),
-                createInstruction(OP, "equal", var(6), var(5), "false"),
-                createInstruction(CONTROL, "enabled", "conveyor1", var(6))
+                createInstruction(OP, "lessThan", tmp(3), "silicon", "capacity"),
+                createInstruction(OP, "lessThan", tmp(4), "graphite", "capacity"),
+                createInstruction(OP, "or", tmp(5), tmp(3), tmp(4)),
+                createInstruction(OP, "equal", tmp(6), tmp(5), "false"),
+                createInstruction(CONTROL, "enabled", "conveyor1", tmp(6))
         );
     }
 
@@ -153,8 +153,8 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         """,
                 createInstruction(SENSOR, "level", "nucleus1", "@coal"),
                 createInstruction(PRINT, "level"),
-                createInstruction(OP, "lessThan", var(0), "level", "10"),
-                createInstruction(CONTROL, "enabled", "conveyor1", var(0))
+                createInstruction(OP, "lessThan", tmp(0), "level", "10"),
+                createInstruction(CONTROL, "enabled", "conveyor1", tmp(0))
         );
     }
 
@@ -188,8 +188,8 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         $c = 3;
                         """,
                 createInstruction(SET, "HEAPPTR", "cell3"),
-                createInstruction(READ, var(0), "HEAPPTR", "0"),
-                createInstruction(PRINT, var(0)),
+                createInstruction(READ, tmp(0), "HEAPPTR", "0"),
+                createInstruction(PRINT, tmp(0)),
                 createInstruction(WRITE, "1", "HEAPPTR", "0"),
                 createInstruction(WRITE, "2", "HEAPPTR", "1"),
                 createInstruction(WRITE, "3", "HEAPPTR", "2")
@@ -304,24 +304,24 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print(result);
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SET, "__fn0_c", "0"),
-                createInstruction(SET, "__fn0_i", "0"),
-                createInstruction(LABEL, var(1012)),
-                createInstruction(READ, var(2), "cell1", "__fn0_i"),
-                createInstruction(OP, "add", "__fn0_c", "__fn0_c", var(2)),
-                createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
-                createInstruction(JUMP, var(1012), "lessThan", "__fn0_i", "1000"),
-                createInstruction(SET, "__fn1_c", "0"),
-                createInstruction(SET, "__fn1_i", "0"),
-                createInstruction(LABEL, var(1013)),
-                createInstruction(READ, var(6), "cell1", "__fn1_i"),
-                createInstruction(OP, "add", "__fn1_c", "__fn1_c", var(6)),
-                createInstruction(OP, "add", "__fn1_i", "__fn1_i", "1"),
-                createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", "2000"),
-                createInstruction(JUMP, var(1010), "greaterThanEq", "__fn0_c", "__fn1_c"),
+                createInstruction(SET, ":fn0:c", "0"),
+                createInstruction(SET, ":fn0:i", "0"),
+                createInstruction(LABEL, label(10)),
+                createInstruction(READ, tmp(3), "cell1", ":fn0:i"),
+                createInstruction(OP, "add", ":fn0:c", ":fn0:c", tmp(3)),
+                createInstruction(OP, "add", ":fn0:i", ":fn0:i", "1"),
+                createInstruction(JUMP, label(10), "lessThan", ":fn0:i", "1000"),
+                createInstruction(SET, ":fn1:c", "0"),
+                createInstruction(SET, ":fn1:i", "0"),
+                createInstruction(LABEL, label(11)),
+                createInstruction(READ, tmp(7), "cell1", ":fn1:i"),
+                createInstruction(OP, "add", ":fn1:c", ":fn1:c", tmp(7)),
+                createInstruction(OP, "add", ":fn1:i", ":fn1:i", "1"),
+                createInstruction(JUMP, label(11), "lessThan", ":fn1:i", "2000"),
+                createInstruction(JUMP, label(8), "greaterThanEq", ":fn0:c", ":fn1:c"),
                 createInstruction(PRINT, q("Less0")),
                 createInstruction(JUMP, "__start__", "always"),
-                createInstruction(LABEL, var(1010)),
+                createInstruction(LABEL, label(8)),
                 createInstruction(PRINT, "1")
         );
     }
@@ -375,8 +375,8 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print(b);
                         """,
                 createInstruction(SET, "a", "10"),
-                customInstruction("foo", "a", "__fn0_y"),
-                createInstruction(PRINT, "__fn0_y")
+                customInstruction("foo", "a", ":fn0:y"),
+                createInstruction(PRINT, ":fn0:y")
         );
     }
 
@@ -390,11 +390,11 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         foo(rand(10) > 5 ? 10 : 5);
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(OP, "rand", var(0), "10"),
-                createInstruction(JUMP, var(1000), "lessThanEq", var(0), "5"),
+                createInstruction(OP, "rand", tmp(0), "10"),
+                createInstruction(JUMP, label(0), "lessThanEq", tmp(0), "5"),
                 customInstruction("foo", "10"),
                 createInstruction(JUMP, "__start__", "always"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, label(0)),
                 customInstruction("foo", "5")
         );
     }
@@ -409,8 +409,8 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         
                         print(foo(10));
                         """,
-                customInstruction("foo", "10", "__fn0_y"),
-                createInstruction(PRINT, "__fn0_y")
+                customInstruction("foo", "10", ":fn0:y"),
+                createInstruction(PRINT, ":fn0:y")
         );
     }
 
@@ -428,8 +428,8 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         y = foo();
                         print(x);
                         """,
-                customInstruction("foo", "__fn0_x"),
-                createInstruction(PRINT, "__fn0_x")
+                customInstruction("foo", ":fn0:x"),
+                createInstruction(PRINT, ":fn0:x")
         );
     }
 
@@ -447,9 +447,9 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         y = foo();
                         print(x);
                         """,
-                customInstruction("foo", "__fn0_x"),
-                customInstruction("foo", "__fn1_x"),
-                createInstruction(PRINT, "__fn0_x")
+                customInstruction("foo", ":x"),
+                customInstruction("foo", ":fn1:x"),
+                createInstruction(PRINT, ":x")
         );
     }
 
@@ -478,9 +478,9 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         """,
                 createInstruction(SET, "a", "1"),
                 createInstruction(OP, "mul", "b", "2", "20"),
-                createInstruction(JUMP, var(1001), "lessThanEq", "a", "0"),
+                createInstruction(JUMP, label(1), "lessThanEq", "a", "0"),
                 createInstruction(OP, "mul", "b", "2", "10"),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(LABEL, label(1)),
                 createInstruction(PRINT, "b")
         );
     }

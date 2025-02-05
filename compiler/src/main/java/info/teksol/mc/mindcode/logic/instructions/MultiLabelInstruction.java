@@ -9,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 @NullMarked
 public class MultiLabelInstruction extends BaseInstruction implements LabeledInstruction {
@@ -29,12 +28,12 @@ public class MultiLabelInstruction extends BaseInstruction implements LabeledIns
 
     @Override
     public MultiLabelInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new MultiLabelInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new MultiLabelInstruction(this, astContext, sideEffects);
     }
 
     @Override
     public MultiLabelInstruction withSideEffects(SideEffects sideEffects) {
-        return Objects.equals(this.sideEffects, sideEffects) ? this : new MultiLabelInstruction(this, astContext, sideEffects);
+        return this.sideEffects == sideEffects ? this : new MultiLabelInstruction(this, astContext, sideEffects);
     }
 
     public boolean matches(LogicInstruction instruction) {

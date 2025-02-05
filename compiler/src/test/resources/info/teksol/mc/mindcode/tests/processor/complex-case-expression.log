@@ -137,7 +137,138 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-4 ins
     67 jump *label6 always
     68 set *tmp4 null
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    16 call *label0 :fn0*retval
+    17 label *label10
+    18 set *tmp6 :fn0*retval
+-    * jump *label8 notEqual :fn1:i *tmp6
++   19 jump *label8 notEqual :fn1:i :fn0*retval
+    20 label *label9
+    21 set *tmp4 "A"
+    22 jump *label7 always
+ 
+    26 call *label0 :fn0*retval
+    27 label *label13
+    28 set *tmp7 :fn0*retval
+-    * jump *label12 equal :fn1:i *tmp7
++   29 jump *label12 equal :fn1:i :fn0*retval
+    30 set :fn0:n 3
+    31 setaddr :fn0*retaddr *label14
+    32 call *label0 :fn0*retval
+    33 label *label14
+    34 set *tmp8 :fn0*retval
+-    * jump *label12 equal :fn1:i *tmp8
++   35 jump *label12 equal :fn1:i :fn0*retval
+    36 jump *label11 notEqual :fn1:i 4
+    37 label *label12
+    38 set *tmp4 "B"
+ 
+    41 jump *label15 notEqual :fn1:i 5
+    42 label *label16
+    43 jump *label5 always
+-    * set *tmp4 null
+    44 jump *label7 always
+    45 label *label15
+    46 set :fn0:n 6
+ 
+    48 call *label0 :fn0*retval
+    49 label *label20
+    50 set *tmp9 :fn0*retval
+-    * jump *label19 lessThan :fn1:i *tmp9
++   51 jump *label19 lessThan :fn1:i :fn0*retval
+    52 set :fn0:n 8
+    53 setaddr :fn0*retaddr *label21
+    54 call *label0 :fn0*retval
+    55 label *label21
+    56 set *tmp10 :fn0*retval
+-    * jump *label18 lessThanEq :fn1:i *tmp10
++   57 jump *label18 lessThanEq :fn1:i :fn0*retval
+    58 label *label19
+    59 jump *label17 always
+    60 label *label18
+ 
+    64 jump *label22 notEqual :fn1:i 10
+    65 label *label23
+    66 jump *label6 always
+-    * set *tmp4 null
+    67 jump *label7 always
+    68 label *label22
+    69 set *tmp4 "D"
+    70 label *label7
+    71 set :fn1:str *tmp4
+-    * print :fn1:str
++   72 print *tmp4
+    73 label *label5
+    74 op add :fn1:i :fn1:i 1
+    75 jump *label4 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6 instructions):
+ 
+    15 setaddr :fn0*retaddr *label10
+    16 call *label0 :fn0*retval
+    17 label *label10
+-    * set *tmp6 :fn0*retval
+    18 jump *label8 notEqual :fn1:i :fn0*retval
+    19 label *label9
+    20 set *tmp4 "A"
+ 
+    24 setaddr :fn0*retaddr *label13
+    25 call *label0 :fn0*retval
+    26 label *label13
+-    * set *tmp7 :fn0*retval
+    27 jump *label12 equal :fn1:i :fn0*retval
+    28 set :fn0:n 3
+    29 setaddr :fn0*retaddr *label14
+    30 call *label0 :fn0*retval
+    31 label *label14
+-    * set *tmp8 :fn0*retval
+    32 jump *label12 equal :fn1:i :fn0*retval
+    33 jump *label11 notEqual :fn1:i 4
+    34 label *label12
+ 
+    44 setaddr :fn0*retaddr *label20
+    45 call *label0 :fn0*retval
+    46 label *label20
+-    * set *tmp9 :fn0*retval
+    47 jump *label19 lessThan :fn1:i :fn0*retval
+    48 set :fn0:n 8
+    49 setaddr :fn0*retaddr *label21
+    50 call *label0 :fn0*retval
+    51 label *label21
+-    * set *tmp10 :fn0*retval
+    52 jump *label18 lessThanEq :fn1:i :fn0*retval
+    53 label *label19
+    54 jump *label17 always
+ 
+    63 label *label22
+    64 set *tmp4 "D"
+    65 label *label7
+-    * set :fn1:str *tmp4
+    66 print *tmp4
+    67 label *label5
+    68 op add :fn1:i :fn1:i 1
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    11 set :fn1:i *tmp1
+    12 label *label4
+    13 jump *label6 greaterThan :fn1:i *tmp3
++   14 label *label25
+    15 set :fn0:n 1
+    16 setaddr :fn0*retaddr *label10
+    17 call *label0 :fn0*retval
+ 
+    67 print *tmp4
+    68 label *label5
+    69 op add :fn1:i :fn1:i 1
+-    * jump *label4 always
++   70 jump *label25 lessThanEq :fn1:i *tmp3
+    71 label *label6
+    72 label *label1
+    73 assertprints "ABBBCCCD" "complex-case-expression"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
      2 setaddr :fn0*retaddr *label2
      3 call *label0 :fn0*retval
@@ -152,140 +283,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * set :fn1:i *tmp1
     11 label *label4
     12 jump *label6 greaterThan :fn1:i *tmp3
-    13 set :fn0:n 1
+    13 label *label25
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
- 
-    15 call *label0 :fn0*retval
-    16 label *label10
-    17 set *tmp6 :fn0*retval
--    * jump *label8 notEqual :fn1:i *tmp6
-+   18 jump *label8 notEqual :fn1:i :fn0*retval
-    19 label *label9
-    20 set *tmp4 "A"
-    21 jump *label7 always
- 
-    25 call *label0 :fn0*retval
-    26 label *label13
-    27 set *tmp7 :fn0*retval
--    * jump *label12 equal :fn1:i *tmp7
-+   28 jump *label12 equal :fn1:i :fn0*retval
-    29 set :fn0:n 3
-    30 setaddr :fn0*retaddr *label14
-    31 call *label0 :fn0*retval
-    32 label *label14
-    33 set *tmp8 :fn0*retval
--    * jump *label12 equal :fn1:i *tmp8
-+   34 jump *label12 equal :fn1:i :fn0*retval
-    35 jump *label11 notEqual :fn1:i 4
-    36 label *label12
-    37 set *tmp4 "B"
- 
-    40 jump *label15 notEqual :fn1:i 5
-    41 label *label16
-    42 jump *label5 always
--    * set *tmp4 null
-    43 jump *label7 always
-    44 label *label15
-    45 set :fn0:n 6
- 
-    47 call *label0 :fn0*retval
-    48 label *label20
-    49 set *tmp9 :fn0*retval
--    * jump *label19 lessThan :fn1:i *tmp9
-+   50 jump *label19 lessThan :fn1:i :fn0*retval
-    51 set :fn0:n 8
-    52 setaddr :fn0*retaddr *label21
-    53 call *label0 :fn0*retval
-    54 label *label21
-    55 set *tmp10 :fn0*retval
--    * jump *label18 lessThanEq :fn1:i *tmp10
-+   56 jump *label18 lessThanEq :fn1:i :fn0*retval
-    57 label *label19
-    58 jump *label17 always
-    59 label *label18
- 
-    63 jump *label22 notEqual :fn1:i 10
-    64 label *label23
-    65 jump *label6 always
--    * set *tmp4 null
-    66 jump *label7 always
-    67 label *label22
-    68 set *tmp4 "D"
-    69 label *label7
-    70 set :fn1:str *tmp4
--    * print :fn1:str
-+   71 print *tmp4
-    72 label *label5
-    73 op add :fn1:i :fn1:i 1
-    74 jump *label4 always
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-6 instructions):
- 
-    14 setaddr :fn0*retaddr *label10
-    15 call *label0 :fn0*retval
-    16 label *label10
--    * set *tmp6 :fn0*retval
-    17 jump *label8 notEqual :fn1:i :fn0*retval
-    18 label *label9
-    19 set *tmp4 "A"
- 
-    23 setaddr :fn0*retaddr *label13
-    24 call *label0 :fn0*retval
-    25 label *label13
--    * set *tmp7 :fn0*retval
-    26 jump *label12 equal :fn1:i :fn0*retval
-    27 set :fn0:n 3
-    28 setaddr :fn0*retaddr *label14
-    29 call *label0 :fn0*retval
-    30 label *label14
--    * set *tmp8 :fn0*retval
-    31 jump *label12 equal :fn1:i :fn0*retval
-    32 jump *label11 notEqual :fn1:i 4
-    33 label *label12
- 
-    43 setaddr :fn0*retaddr *label20
-    44 call *label0 :fn0*retval
-    45 label *label20
--    * set *tmp9 :fn0*retval
-    46 jump *label19 lessThan :fn1:i :fn0*retval
-    47 set :fn0:n 8
-    48 setaddr :fn0*retaddr *label21
-    49 call *label0 :fn0*retval
-    50 label *label21
--    * set *tmp10 :fn0*retval
-    51 jump *label18 lessThanEq :fn1:i :fn0*retval
-    52 label *label19
-    53 jump *label17 always
- 
-    62 label *label22
-    63 set *tmp4 "D"
-    64 label *label7
--    * set :fn1:str *tmp4
-    65 print *tmp4
-    66 label *label5
-    67 op add :fn1:i :fn1:i 1
-
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
- 
-    10 set *tmp3 :fn0*retval
-    11 label *label4
-    12 jump *label6 greaterThan :fn1:i *tmp3
-+   13 label *label25
-    14 set :fn0:n 1
-    15 setaddr :fn0*retaddr *label10
-    16 call *label0 :fn0*retval
- 
-    66 print *tmp4
-    67 label *label5
-    68 op add :fn1:i :fn1:i 1
--    * jump *label4 always
-+   69 jump *label25 lessThanEq :fn1:i *tmp3
-    70 label *label6
-    71 label *label1
-    72 assertprints "ABBBCCCD" "complex-case-expression"
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
      9 label *label3
     10 set *tmp3 :fn0*retval

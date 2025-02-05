@@ -166,7 +166,7 @@ public enum InstructionParameterType {
             "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
 
     /// Expected type of value
-    TYPE            ("valueType", Flags.KEYWORD, "any", "notNull", "decimal", "integer", "even", "odd"),
+    TYPE            ("valueType", Flags.KEYWORD, "any", "notNull", "decimal", "integer", "multiple"),
 
     ///  Input parameter accepting unit type.
     UNIT            ("unitType", Flags.INPUT,

@@ -94,16 +94,12 @@ public class InterceptorTest extends AbstractInterceptorTest {
 
     @Test
     void solveCurrentProblem() {
-        testCode("""
-                        Y1 = rand(0);
-                        DIR1 = @thisx;
-                        if DIR1 == 1 then
-                            Y1 = Y1 + 1;
-                        else
-                            Y1 = Y1 - 1;
+        testAssertions("""
+                        #set target = 8;
+                        require printing;
+                        begin
+                            assertPrints("9,009,099", printNumber(9009099), "printNumber(9009099)");
                         end;
-                        print(Y1);
-                        """,
-                "1");
+                        """);
     }
 }

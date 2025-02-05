@@ -6,13 +6,13 @@
     16 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      5 instructions eliminated by If Expression Optimization (3 iterations).
-    27 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+    28 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      3 instructions added by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
     11 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
-     2 instructions updated by JumpThreading.
+     3 instructions updated by JumpThreading.
     22 instructions eliminated by Print Merging.
-   344 instructions after optimizations.
+   343 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 621):
   * Replicate loop condition at line 160:1                       cost     1, benefit       25.0, efficiency       25.0 (-5 instructions)
@@ -1904,17 +1904,35 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    262 label *label45
    263 set :crx 0
 
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+   251 op sub :crx 93 2
+   252 op add :crw 83 1
+   253 set :cry 0
+-    * set *tmp82 176
++  254 set :crh 176
+   255 jump *label48 greaterThanEq TO_INDEX 16
+   256 op mod *tmp83 TO_INDEX 8
+   257 op mul *tmp84 *tmp83 22
+-    * op add *tmp82 4 *tmp84
++  258 op add :crh 4 *tmp84
+   259 label *label48
+-    * set :crh *tmp82
+   260 jump *label46 always
+   261 label *label45
+   262 set :crx 0
+
 Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
  
-   287 label *label52
-   288 jump *label54 greaterThanEq 0 *tmp92
-   289 label *label85
+   286 label *label52
+   287 jump *label54 greaterThanEq 0 *tmp92
+   288 label *label85
 -    * jump *label55 lessThan :index TO_INDEX
 -    * jump *label54 always
-+  290 jump *label54 greaterThanEq :index TO_INDEX
-   291 label *label55
-   292 label *label56
-   293 getlink :factory :n
++  289 jump *label54 greaterThanEq :index TO_INDEX
+   290 label *label55
+   291 label *label56
+   292 getlink :factory :n
 
 Modifications by Final phase, Jump Threading, iteration 1:
 +    0 label __start__
@@ -1922,29 +1940,38 @@ Modifications by Final phase, Jump Threading, iteration 1:
      2 set TO_INDEX 16
      3 set EXPECTED_BOOST 1.5
  
-   271 control enabled .SWITCH 0
-   272 label *label49
-   273 sensor *tmp89 .SWITCH @enabled
--    * jump *label51 notEqual *tmp89 0
-+  274 jump __start__ notEqual *tmp89 0
-   275 label *label86
-   276 set :start @time
-   277 print "Universal Factory Monitor"
+   253 op add :crw 83 1
+   254 set :cry 0
+   255 set :crh 176
+-    * jump *label48 greaterThanEq TO_INDEX 16
++  256 jump *label46 greaterThanEq TO_INDEX 16
+   257 op mod *tmp83 TO_INDEX 8
+   258 op mul *tmp84 *tmp83 22
+   259 op add :crh 4 *tmp84
  
-   348 op add *tmp134 :x 7
-   349 op add *tmp135 :y 7
-   350 draw image *tmp134 *tmp135 :icon 16 0
+   270 control enabled .SWITCH 0
+   271 label *label49
+   272 sensor *tmp89 .SWITCH @enabled
+-    * jump *label51 notEqual *tmp89 0
++  273 jump __start__ notEqual *tmp89 0
+   274 label *label86
+   275 set :start @time
+   276 print "Universal Factory Monitor"
+ 
+   347 op add *tmp134 :x 7
+   348 op add *tmp135 :y 7
+   349 draw image *tmp134 *tmp135 :icon 16 0
 -    * jump *label72 always
-+  351 jump *label70 always
-   352 label *label71
-   353 draw color 255 80 80 255
-   354 op add *tmp136 :y 3
++  350 jump *label70 always
+   351 label *label71
+   352 draw color 255 80 80 255
+   353 op add *tmp136 :y 3
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-   445 sensor *tmp89 .SWITCH @enabled
-   446 jump *label86 equal *tmp89 0
-   447 label *label51
+   444 sensor *tmp89 .SWITCH @enabled
+   445 jump *label86 equal *tmp89 0
+   446 label *label51
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
@@ -2012,28 +2039,28 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
    152 op equal *tmp27 .TYPE null
    153 op or *tmp28 *tmp26 *tmp27
  
-   255 jump __start__ notEqual *tmp89 0
-   256 label *label86
-   257 set :start @time
+   254 jump __start__ notEqual *tmp89 0
+   255 label *label86
+   256 set :start @time
 -    * print "Universal Factory Monitor"
 -    * print "\n"
 -    * print "Monitoring: "
-+  258 print "Universal Factory Monitor\nMonitoring: "
-   259 print .TYPE
-   260 draw color 0 0 80 255
-   261 draw rect :clx :cly :clw :clh
++  257 print "Universal Factory Monitor\nMonitoring: "
+   258 print .TYPE
+   259 draw color 0 0 80 255
+   260 draw rect :clx :cly :clw :clh
  
-   416 drawflush .DISPLAY
-   417 op sub *tmp177 @time :start
-   418 op floor *tmp178 *tmp177
+   415 drawflush .DISPLAY
+   416 op sub *tmp177 @time :start
+   417 op floor *tmp178 *tmp177
 -    * print "\nDraw time: "
 -    * print *tmp178
 -    * print " ms"
-+  419 print "\nDraw time: {0} ms"
-+  420 format *tmp178
-   421 printflush .MESSAGE
-   422 label *label50
-   423 sensor *tmp89 .SWITCH @enabled
++  418 print "\nDraw time: {0} ms"
++  419 format *tmp178
+   420 printflush .MESSAGE
+   421 label *label50
+   422 sensor *tmp89 .SWITCH @enabled
 
 Final code before resolving virtual instructions:
 
@@ -2255,13 +2282,11 @@ jump *label45 lessThan TO_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
 set :cry 0
-set *tmp82 176
-jump *label48 greaterThanEq TO_INDEX 16
+set :crh 176
+jump *label46 greaterThanEq TO_INDEX 16
 op mod *tmp83 TO_INDEX 8
 op mul *tmp84 *tmp83 22
-op add *tmp82 4 *tmp84
-label *label48
-set :crh *tmp82
+op add :crh 4 *tmp84
 jump *label46 always 0 0
 label *label45
 set :crx 0

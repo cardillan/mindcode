@@ -6,7 +6,7 @@
     10 instructions eliminated by Jump Optimization (4 iterations).
     10 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-     9 instructions eliminated by Data Flow Optimization (2 passes, 11 iterations).
+     9 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
      7 instructions eliminated by Jump Straightening (4 iterations).
@@ -718,140 +718,124 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    223 print :block
    224 op add :n :n 1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
- 
-     5 set .STATE null
-     6 set .START .SWITCH
-     7 set .SENSOR .STATE
--    * set .ON .START
-+    8 set .MAXIMUM .START
-     9 set .MESSAGE .SENSOR
--    * set .MAXIMUM .ON
-    10 set .ACTIVE_TEXT .MESSAGE
-    11 label *label0
-    12 print "Configuring regulator..."
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
      3 set .SORTER null
      4 set .SWITCH null
      5 set .STATE null
 -    * set .START .SWITCH
 -    * set .SENSOR .STATE
--    * set .MAXIMUM .START
+-    * set .ON .START
 -    * set .MESSAGE .SENSOR
+-    * set .MAXIMUM .ON
 -    * set .ACTIVE_TEXT .MESSAGE
 +    6 set .START null
 +    7 set .SENSOR null
-+    8 set .MAXIMUM .SWITCH
++    8 set .ON .SWITCH
 +    9 set .MESSAGE .STATE
-+   10 set .ACTIVE_TEXT .SENSOR
-    11 label *label0
-    12 print "Configuring regulator..."
-    13 print "\n"
++   10 set .MAXIMUM .START
++   11 set .ACTIVE_TEXT .SENSOR
+    12 label *label0
+    13 print "Configuring regulator..."
+    14 print "\n"
  
-   105 sensor *tmp14 .SORTER @type
-   106 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   107 set :fn0:newState true
+   106 sensor *tmp14 .SORTER @type
+   107 op strictEqual .INVERTED *tmp14 @inverted-sorter
+   108 set :fn0:newState true
 -    * jump *label24 equal .STATE true
-+  108 jump *label24 equal null true
-   109 set .STATE true
++  109 jump *label24 equal null true
+   110 set .STATE true
 -    * op xor .ON .INVERTED :fn0:newState
-+  110 op xor .ON .INVERTED true
-   111 jump *label26 equal .ON false
-   112 set *tmp20 "\nCurrently active:[green]"
-   113 jump *label27 always
++  111 op xor .ON .INVERTED true
+   112 jump *label26 equal .ON false
+   113 set *tmp20 "\nCurrently active:[green]"
+   114 jump *label27 always
  
-   119 label *label25
-   120 label *label23
-   121 set .CYCLES 0
+   120 label *label25
+   121 label *label23
+   122 set .CYCLES 0
 -    * set *tmp21 .SWITCH
-   122 control enabled .SWITCH 0
-   123 label *label28
-   124 sensor *tmp23 .SWITCH @enabled
+   123 control enabled .SWITCH 0
+   124 label *label28
+   125 sensor *tmp23 .SWITCH @enabled
  
-   149 jump *label36 equal .STATE true
-   150 set .STATE true
-   151 op add .CYCLES .CYCLES 1
+   150 jump *label36 equal .STATE true
+   151 set .STATE true
+   152 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED :fn1:newState
-+  152 op xor .ON .INVERTED true
-   153 jump *label38 equal .ON false
-   154 set *tmp41 "\nCurrently active:[green]"
-   155 jump *label39 always
++  153 op xor .ON .INVERTED true
+   154 jump *label38 equal .ON false
+   155 set *tmp41 "\nCurrently active:[green]"
+   156 jump *label39 always
  
-   167 jump *label43 equal .STATE false
-   168 set .STATE false
-   169 op add .CYCLES .CYCLES 1
+   168 jump *label43 equal .STATE false
+   169 set .STATE false
+   170 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED :fn2:newState
-+  170 op xor .ON .INVERTED false
-   171 jump *label45 equal .ON false
-   172 set *tmp48 "\nCurrently active:[green]"
-   173 jump *label46 always
++  171 op xor .ON .INVERTED false
+   172 jump *label45 equal .ON false
+   173 set *tmp48 "\nCurrently active:[green]"
+   174 jump *label46 always
  
-   215 label *label49
-   216 jump *label51 greaterThanEq :n @links
-   217 getlink :block :n
+   216 label *label49
+   217 jump *label51 greaterThanEq :n @links
+   218 getlink :block :n
 -    * set *tmp52 :block
-   218 control enabled :block .ON
-   219 print "\n    "
-   220 print :block
+   219 control enabled :block .ON
+   220 print "\n    "
+   221 print :block
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
+ 
+     5 set .STATE null
+     6 set .START null
+     7 set .SENSOR null
+-    * set .ON .SWITCH
+-    * set .MESSAGE .STATE
+-    * set .MAXIMUM .START
+-    * set .ACTIVE_TEXT .SENSOR
++    8 set .ON null
++    9 set .MESSAGE null
++   10 set .MAXIMUM null
++   11 set .ACTIVE_TEXT null
+    12 label *label0
+    13 print "Configuring regulator..."
+    14 print "\n"
+ 
+   105 label *label2
+   106 sensor *tmp14 .SORTER @type
+   107 op strictEqual .INVERTED *tmp14 @inverted-sorter
+-    * set :fn0:newState true
+   108 jump *label24 equal null true
+   109 set .STATE true
+   110 op xor .ON .INVERTED true
+ 
+   145 op mul *tmp33 100 :amount
+   146 op idiv :pct *tmp33 :max
+   147 jump *label33 greaterThan :pct PCT_LOW
+-    * set :fn1:newState true
+   148 jump *label36 equal .STATE true
+   149 set .STATE true
+   150 op add .CYCLES .CYCLES 1
+ 
+   162 jump *label34 always
+   163 label *label33
+   164 jump *label40 lessThan :pct PCT_HIGH
+-    * set :fn2:newState false
+   165 jump *label43 equal .STATE false
+   166 set .STATE false
+   167 op add .CYCLES .CYCLES 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-3 instructions):
  
      2 set .CONTAINER null
      3 set .SORTER null
      4 set .SWITCH null
 -    * set .STATE null
-+    5 set .MESSAGE null
-     6 set .START null
-     7 set .SENSOR null
-     8 set .MAXIMUM .SWITCH
--    * set .MESSAGE .STATE
-     9 set .ACTIVE_TEXT .SENSOR
-    10 label *label0
-    11 print "Configuring regulator..."
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-3 instructions):
- 
-     5 set .MESSAGE null
-     6 set .START null
-     7 set .SENSOR null
--    * set .MAXIMUM .SWITCH
--    * set .ACTIVE_TEXT .SENSOR
-+    8 set .MAXIMUM null
-+    9 set .ACTIVE_TEXT null
-    10 label *label0
-    11 print "Configuring regulator..."
-    12 print "\n"
- 
-   103 label *label2
-   104 sensor *tmp14 .SORTER @type
-   105 op strictEqual .INVERTED *tmp14 @inverted-sorter
--    * set :fn0:newState true
-   106 jump *label24 equal null true
-   107 set .STATE true
-   108 op xor .ON .INVERTED true
- 
-   143 op mul *tmp33 100 :amount
-   144 op idiv :pct *tmp33 :max
-   145 jump *label33 greaterThan :pct PCT_LOW
--    * set :fn1:newState true
-   146 jump *label36 equal .STATE true
-   147 set .STATE true
-   148 op add .CYCLES .CYCLES 1
- 
-   160 jump *label34 always
-   161 label *label33
-   162 jump *label40 lessThan :pct PCT_HIGH
--    * set :fn2:newState false
-   163 jump *label43 equal .STATE false
-   164 set .STATE false
-   165 op add .CYCLES .CYCLES 1
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
- 
-     6 set .START null
-     7 set .SENSOR null
+     5 set .START null
+     6 set .SENSOR null
+-    * set .ON null
+     7 set .MESSAGE null
      8 set .MAXIMUM null
 -    * set .ACTIVE_TEXT null
      9 label *label0
@@ -1051,7 +1035,7 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructi
 
 Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
  
-     8 set .SENSOR null
+     8 set .MESSAGE null
      9 set .MAXIMUM null
     10 label *label0
 -    * print "Configuring regulator..."
@@ -1185,9 +1169,9 @@ set PCT_HIGH 80
 set .CONTAINER null
 set .SORTER null
 set .SWITCH null
-set .MESSAGE null
 set .START null
 set .SENSOR null
+set .MESSAGE null
 set .MAXIMUM null
 label *label0
 print "Configuring regulator...\n"

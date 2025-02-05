@@ -6,7 +6,7 @@
     92 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
      4 instructions modified by Expression Optimization (4 iterations).
      8 instructions eliminated by If Expression Optimization (4 iterations).
-   336 instructions eliminated by Data Flow Optimization (6 passes, 27 iterations).
+   336 instructions eliminated by Data Flow Optimization (6 passes, 24 iterations).
     35 instructions added by Loop Unrolling (10 iterations).
      6 loops unrolled by Loop Unrolling.
     34 instructions updated by JumpThreading.
@@ -490,21 +490,21 @@ Final code before resolving virtual instructions:
    29:  assertequals false false "isZero(1e-50)"
    30:  assertequals false false "isZero(-1e-50)"
    31:  assertequals false false "isZero(0.01,0.01)"
-   32:  op add *tmp55 null 0
-   33:  assertequals 0 *tmp55 "nullToZero(null)"
-   34:  op add *tmp56 1 0
-   35:  assertequals 1 *tmp56 "nullToZero(1)"
+   32:  op add :fn19:result null 0
+   33:  assertequals 0 :fn19:result "nullToZero(null)"
+   34:  op add :fn20:result 1 0
+   35:  assertequals 1 :fn20:result "nullToZero(1)"
    36:  assertequals 0 false "boolean(0)"
    37:  assertequals 1 true "boolean(100)"
    38:  assertequals 1 true "boolean(-100)"
    39:  assertequals 1 true "boolean(-0.001)"
    40:  assertequals 0 false "boolean(0.0000001)"
-   41:  op or *tmp67 0.9 0
-   42:  assertequals 0 *tmp67 "integer(0.9)"
-   43:  op or *tmp68 -5.9 0
-   44:  assertequals -5 *tmp68 "integer(-5.9)"
-   45:  op or *tmp69 100 0
-   46:  assertequals 100 *tmp69 "integer(100)"
+   41:  op or :fn26:result 0.9 0
+   42:  assertequals 0 :fn26:result "integer(0.9)"
+   43:  op or :fn27:result -5.9 0
+   44:  assertequals -5 :fn27:result "integer(-5.9)"
+   45:  op or :fn28:result 100 0
+   46:  assertequals 100 :fn28:result "integer(100)"
    47:  assertequals 1 1 "sum(1)"
    48:  assertequals 10 10 "sum(1,2,3,4)"
    49:  assertequals 1 1 "avg(1)"
@@ -1826,16 +1826,12 @@ stop instruction encountered, dumping variable values:
 *tmp418: 4.0
 *tmp419: 6.0
 *tmp420: 10.0
-*tmp55: 0.0
-*tmp56: 1.0
-*tmp67: 0.0
-*tmp68: -5.0
-*tmp69: 100.0
 :fn0*retaddr: 24.0
 :fn0*retval: -1.0
 :fn0:x: -5.0
 :fn1*retaddr: 96.0
 :fn1*retval: 5.0
+:fn19:result: 0.0
 :fn1:x1: 6.0
 :fn1:x2: 2.0
 :fn1:x3: 8.0
@@ -1846,6 +1842,10 @@ stop instruction encountered, dumping variable values:
 :fn1:y4: 8.0
 :fn2*retaddr: 138.0
 :fn2*retval: 5.0
+:fn20:result: 1.0
+:fn26:result: 0.0
+:fn27:result: -5.0
+:fn28:result: 100.0
 :fn2:x1: 5.0
 :fn2:x2: 5.0
 :fn2:x3: 5.0

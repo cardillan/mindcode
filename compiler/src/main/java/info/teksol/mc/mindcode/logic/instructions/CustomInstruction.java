@@ -67,7 +67,7 @@ public class CustomInstruction implements LogicInstruction {
 
     @Override
     public CustomInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new CustomInstruction(this, astContext);
+        return this.astContext == astContext ? this : new CustomInstruction(this, astContext);
     }
 
     @Override

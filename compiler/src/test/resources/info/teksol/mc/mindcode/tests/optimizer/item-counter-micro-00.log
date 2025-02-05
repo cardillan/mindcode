@@ -6,7 +6,7 @@
     17 instructions eliminated by Jump Optimization (3 iterations).
     22 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      2 instructions eliminated by Expression Optimization (2 iterations).
-     9 instructions eliminated by Data Flow Optimization (9 iterations).
+     9 instructions eliminated by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
      3 instructions eliminated by Jump Straightening (3 iterations).
@@ -946,34 +946,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    220 print *tmp87
    221 print " "
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
- 
-    89 set :b3 :b4
-    90 set :b2 :b3
-    91 set :b1 :b2
--    * set :a4 :b1
--    * set :a3 :a4
--    * set :a2 :a3
--    * set :a1 :a2
-+   92 set :a3 :b1
-+   93 set :a1 :a3
-    94 set :ratePerMin 0
-    95 set :startTime @time
-    96 label *label19
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
- 
-    89 set :b3 :b4
-    90 set :b2 :b3
-    91 set :b1 :b2
--    * set :a3 :b1
--    * set :a1 :a3
-+   92 set :a1 :b1
-    93 set :ratePerMin 0
-    94 set :startTime @time
-    95 label *label19
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      2 set :lastCell 0
      3 label *label0
@@ -1004,47 +977,53 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
 -    * set :b3 :b4
 -    * set :b2 :b3
 -    * set :b1 :b2
--    * set :a1 :b1
+-    * set :a4 :b1
+-    * set :a3 :a4
+-    * set :a2 :a3
+-    * set :a1 :a2
 +   89 set :b3 0
 +   90 set :b2 :b4
 +   91 set :b1 :b3
-+   92 set :a1 :b2
-    93 set :ratePerMin 0
-    94 set :startTime @time
-    95 label *label19
++   92 set :a4 :b2
++   93 set :a3 :b1
++   94 set :a2 :a4
++   95 set :a1 :a3
+    96 set :ratePerMin 0
+    97 set :startTime @time
+    98 label *label19
  
-   130 op div :rate .BATCH :duration
-   131 set *tmp46 :lastCell
-   132 op mul *tmp48 :rate 166.66666666666666
+   133 op div :rate .BATCH :duration
+   134 set *tmp46 :lastCell
+   135 op mul *tmp48 :rate 166.66666666666666
 -    * write *tmp48 .MEMORY *tmp46
-+  133 write *tmp48 .MEMORY :lastCell
-   134 op idiv :ratePerMin :rate 0.0000016666666666666667
++  136 write *tmp48 .MEMORY :lastCell
+   137 op idiv :ratePerMin :rate 0.0000016666666666666667
 -    * jump *label40 greaterThan :duration .BATCH_DURATION
 -    * op add *tmp53 .BATCH .BATCH_STEP
-+  135 jump *label40 greaterThan :duration 2000
-+  136 op add *tmp53 .BATCH 1
-   137 op min .BATCH *tmp53 .EFF_MAX_BATCH
-   138 op mul .BATCH_TXT .BATCH 10
-   139 label *label40
++  138 jump *label40 greaterThan :duration 2000
++  139 op add *tmp53 .BATCH 1
+   140 op min .BATCH *tmp53 .EFF_MAX_BATCH
+   141 op mul .BATCH_TXT .BATCH 10
+   142 label *label40
  
-   196 op mul .BATCH_TXT .BATCH 10
-   197 op add :limit :batches .BATCH
-   198 set *tmp82 :lastCell
+   199 op mul .BATCH_TXT .BATCH 10
+   200 op add :limit :batches .BATCH
+   201 set *tmp82 :lastCell
 -    * write 0 .MEMORY *tmp82
-+  199 write 0 .MEMORY :lastCell
-   200 set :ratePerMin 0
-   201 set :startTime @time
-   202 label *label58
++  202 write 0 .MEMORY :lastCell
+   203 set :ratePerMin 0
+   204 set :startTime @time
+   205 label *label58
  
-   227 label *label21
-   228 control enabled switch1 0
-   229 set *tmp91 :lastCell
+   230 label *label21
+   231 control enabled switch1 0
+   232 set *tmp91 :lastCell
 -    * write 0 .MEMORY *tmp91
-+  230 write 0 .MEMORY :lastCell
-   231 write 0 .MEMORY 0
-   232 end
++  233 write 0 .MEMORY :lastCell
+   234 write 0 .MEMORY 0
+   235 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-5 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
  
      3 label *label0
      4 set .CONV4 null
@@ -1077,39 +1056,45 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-5
     87 set :b3 0
 -    * set :b2 :b4
 -    * set :b1 :b3
--    * set :a1 :b2
+-    * set :a4 :b2
+-    * set :a3 :b1
+-    * set :a2 :a4
+-    * set :a1 :a3
 +   88 set :b2 0
 +   89 set :b1 0
-+   90 set :a1 :b4
-    91 set :ratePerMin 0
-    92 set :startTime @time
-    93 label *label19
++   90 set :a4 :b4
++   91 set :a3 :b3
++   92 set :a2 :b2
++   93 set :a1 :b1
+    94 set :ratePerMin 0
+    95 set :startTime @time
+    96 label *label19
  
-   126 op sub :duration @time :startTime
-   127 set :startTime @time
-   128 op div :rate .BATCH :duration
+   129 op sub :duration @time :startTime
+   130 set :startTime @time
+   131 op div :rate .BATCH :duration
 -    * set *tmp46 :lastCell
-   129 op mul *tmp48 :rate 166.66666666666666
-   130 write *tmp48 .MEMORY :lastCell
-   131 op idiv :ratePerMin :rate 0.0000016666666666666667
+   132 op mul *tmp48 :rate 166.66666666666666
+   133 write *tmp48 .MEMORY :lastCell
+   134 op idiv :ratePerMin :rate 0.0000016666666666666667
  
-   192 op max .BATCH *tmp78 .EFF_MIN_BATCH
-   193 op mul .BATCH_TXT .BATCH 10
-   194 op add :limit :batches .BATCH
+   195 op max .BATCH *tmp78 .EFF_MIN_BATCH
+   196 op mul .BATCH_TXT .BATCH 10
+   197 op add :limit :batches .BATCH
 -    * set *tmp82 :lastCell
-   195 write 0 .MEMORY :lastCell
-   196 set :ratePerMin 0
-   197 set :startTime @time
+   198 write 0 .MEMORY :lastCell
+   199 set :ratePerMin 0
+   200 set :startTime @time
  
-   222 jump *label19 always
-   223 label *label21
-   224 control enabled switch1 0
+   225 jump *label19 always
+   226 label *label21
+   227 control enabled switch1 0
 -    * set *tmp91 :lastCell
-   225 write 0 .MEMORY :lastCell
-   226 write 0 .MEMORY 0
-   227 end
+   228 write 0 .MEMORY :lastCell
+   229 write 0 .MEMORY 0
+   230 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
      5 set .CONV3 null
      6 set .CONV2 null
@@ -1123,17 +1108,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5:
     87 set :b3 0
     88 set :b2 0
     89 set :b1 0
--    * set :a1 :b4
-+   90 set :a1 0
-    91 set :ratePerMin 0
-    92 set :startTime @time
-    93 label *label19
+-    * set :a4 :b4
+-    * set :a3 :b3
+-    * set :a2 :b2
+-    * set :a1 :b1
++   90 set :a4 0
++   91 set :a3 0
++   92 set :a2 0
++   93 set :a1 0
+    94 set :ratePerMin 0
+    95 set :startTime @time
+    96 label *label19
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-4 instructions):
  
     87 set :b3 0
     88 set :b2 0
     89 set :b1 0
+-    * set :a4 0
+-    * set :a3 0
+-    * set :a2 0
 -    * set :a1 0
     90 set :ratePerMin 0
     91 set :startTime @time
