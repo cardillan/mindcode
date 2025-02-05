@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.profile.MemoryModel;
 import org.jspecify.annotations.NullMarked;
@@ -19,8 +18,6 @@ public interface Optimizer {
     void setGoal(GenerationGoal goal);
 
     void setMemoryModel(MemoryModel memoryModel);
-
-    void setMessageRecipient(MessageConsumer messageRecipient);
 
     void setDebugPrinter(DebugPrinter debugPrinter);
 

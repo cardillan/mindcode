@@ -72,7 +72,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     final Allocation allocation = resolveAllocation(node);
                     context.stackTracker().setStackMemory(allocation.memory);
                     if (callGraph.containsRecursiveFunction()) {
-                        assembler.createSet(LogicVariable.STACK_POINTER, LogicNumber.create(allocation.start));
+                        assembler.createSet(LogicVariable.STACK_POINTER,
+                                LogicNumber.create(node.sourcePosition(), allocation.start));
                     }
                 }
             }

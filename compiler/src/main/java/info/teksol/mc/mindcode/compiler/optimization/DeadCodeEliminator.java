@@ -69,7 +69,7 @@ class DeadCodeEliminator extends BaseOptimizer {
             unused.stream().filter(v -> !v.isOptional())
                     .sorted(Comparator.comparing(LogicVariable::sourcePosition).thenComparing(LogicVariable::getFullName))
                     .map(v -> CompilerMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_USED, v.getFullName()))
-                    .forEach(messageRecipient);
+                    .forEach(messageConsumer);
         }
     }
 

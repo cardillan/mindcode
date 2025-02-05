@@ -15,15 +15,18 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     public static final LogicString NEW_LINE = create(SourcePosition.EMPTY, "\\n");
 
     private final SourcePosition sourcePosition;
-    private final String stringValue;
+    private final String value;
     private final String literal;
 
-    private LogicString(SourcePosition sourcePosition,
-            String stringValue) {
+    private LogicString(SourcePosition sourcePosition, String literal, String value) {
         super(ArgumentType.STRING_LITERAL, ValueMutability.CONSTANT);
         this.sourcePosition = sourcePosition;
-        this.stringValue = Objects.requireNonNull(stringValue);
-        this.literal = "\"" + stringValue + "\"";
+        this.literal = Objects.requireNonNull(literal);
+        this.value = Objects.requireNonNull(value);
+    }
+
+    private LogicString(SourcePosition sourcePosition, String value) {
+        this(sourcePosition, "\"" + value + "\"", value);
     }
 
     @Override
@@ -33,7 +36,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     @Override
     public String format(@Nullable InstructionProcessor instructionProcessor) {
-        return stringValue;
+        return value;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     @Override
     public String toString() {
         return "LogicString{" +
-                "stringValue='" + stringValue + '\'' +
+                "stringValue='" + value + '\'' +
                 '}';
     }
 
@@ -60,8 +63,8 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
         return true;
     }
 
-    public String getStringValue() {
-        return stringValue;
+    public String getValue() {
+        return value;
     }
 
     @Override
@@ -76,12 +79,17 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     @Override
     public Object getObject() {
-        return new MindustryString(stringValue);
+        return new MindustryString(value);
+    }
+
+    @Override
+    public LogicString withSourcePosition(SourcePosition sourcePosition) {
+        return new LogicString(sourcePosition, literal, value);
     }
 
     @Override
     public AstMindcodeNode asAstNode(SourcePosition position) {
-        return new AstLiteralString(position, stringValue);
+        return new AstLiteralString(position, value);
     }
 }
 

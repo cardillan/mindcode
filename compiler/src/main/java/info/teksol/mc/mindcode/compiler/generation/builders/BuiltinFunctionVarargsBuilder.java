@@ -32,7 +32,7 @@ public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = processArguments(call);
         assembler.clearSubcontextType();
-        return LogicNumber.create(arguments.size());
+        return LogicNumber.create(call.sourcePosition(), arguments.size());
     }
 
     public ValueStore handleMinMax(AstFunctionCall call) {

@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.AbstractTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -49,10 +48,6 @@ class DiffDebugPrinterTest extends AbstractTestBase {
 
         @Override
         public void setMemoryModel(MemoryModel memoryModel) {
-        }
-
-        @Override
-        public void setMessageRecipient(MessageConsumer messageRecipient) {
         }
 
         @Override

@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.ExpressionValue;
 import info.teksol.mc.evaluator.LogicReadable;
@@ -38,14 +39,14 @@ class OptimizerExpressionEvaluator {
 
     private @Nullable LogicLiteral evaluateUnaryOpInstruction(OpInstruction op) {
         if (op.getX().isConstant()) {
-            return evaluate(op.getOperation(), op.getX(), NULL);
+            return evaluate(op.sourcePosition(), op.getOperation(), op.getX(), NULL);
         }
         return null;
     }
 
     private @Nullable LogicLiteral evaluateBinaryOpInstruction(OpInstruction op) {
         return op.getX().isConstant() && op.getY().isConstant()
-                ? evaluate(op.getOperation(), op.getX(), op.getY())
+                ? evaluate(op.sourcePosition(), op.getOperation(), op.getX(), op.getY())
                 : null;
     }
 
@@ -67,7 +68,7 @@ class OptimizerExpressionEvaluator {
                     if (value instanceof LogicVariable variable) {
                         if (op1.getOperation() == op2.getOperation() && op1.getOperation().isAssociative()) {
                             // Perform the operation on the two literals
-                            LogicLiteral literal = evaluate(op1.getOperation(), literal1, literal2);
+                            LogicLiteral literal = evaluate(op1.sourcePosition(), op1.getOperation(), literal1, literal2);
                             if (literal != null) {
                                 // Construct the instruction
                                 return ixProcessor.createOp(op1.getAstContext(), op1.getOperation(), op1.getResult(), variable, literal);
@@ -95,11 +96,11 @@ class OptimizerExpressionEvaluator {
     private @Nullable OpInstruction evaluateAddAfterSub(OpInstruction op, Operation add, Operation sub,
             boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         if (literal2first) {
-            LogicLiteral literal = evaluate(add, literal2, literal1);
+            LogicLiteral literal = evaluate(op.sourcePosition(), add, literal2, literal1);
             return literal == null || literal.isNull() ? null
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
         } else {
-            LogicLiteral literal = evaluate(sub, literal2, literal1);
+            LogicLiteral literal = evaluate(op.sourcePosition(), sub, literal2, literal1);
             return literal == null || literal.isNull() ? null
                     : ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
         }
@@ -107,7 +108,7 @@ class OptimizerExpressionEvaluator {
 
     private @Nullable OpInstruction evaluateSubAfterAdd(OpInstruction op, Operation add, Operation sub,
             boolean literal1first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
-        LogicLiteral literal = evaluate(sub, literal1, literal2);
+        LogicLiteral literal = evaluate(op.sourcePosition(), sub, literal1, literal2);
         if (literal != null && !literal.isNull()) {
             return literal1first
                     ? ixProcessor.createOp(op.getAstContext(), sub, op.getResult(), literal, variable)
@@ -119,8 +120,8 @@ class OptimizerExpressionEvaluator {
     private @Nullable OpInstruction evaluateSubAfterSub(OpInstruction op, Operation add, Operation sub,
             boolean literal1first, boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
         LogicLiteral literal = literal2first
-                ? evaluate(sub, literal2, literal1)
-                : evaluate(add, literal2, literal1);
+                ? evaluate(op.sourcePosition(), sub, literal2, literal1)
+                : evaluate(op.sourcePosition(), add, literal2, literal1);
 
         if (literal != null && !literal.isNull()) {
             return literal1first == literal2first
@@ -169,16 +170,16 @@ class OptimizerExpressionEvaluator {
         return op;
     }
 
-    public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
+    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, LogicReadable a, LogicReadable b) {
         ExpressionEvaluator.existingOperation(operation).execute(expressionValue, a, b);
-        return expressionValue.getLiteral();
+        return expressionValue.getLiteral(sourcePosition);
     }
 
     public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
         } else if (jump.getX().isConstant() && jump.getY().isConstant()) {
-            LogicLiteral literal = evaluate(jump.getCondition().toOperation(), jump.getX(), jump.getY());
+            LogicLiteral literal = evaluate(jump.sourcePosition(), jump.getCondition().toOperation(), jump.getX(), jump.getY());
             return literal instanceof LogicBoolean b ? b : null;
         }
         return null;

@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
@@ -34,6 +35,7 @@ import java.util.stream.Stream;
 @NullMarked
 class OptimizationContext {
     private final CompilerProfile profile;
+    private final MessageConsumer messageConsumer;
     private final OptimizerExpressionEvaluator expressionEvaluator;
     private final InstructionProcessor instructionProcessor;
     private final List<LogicInstruction> program;
@@ -72,9 +74,11 @@ class OptimizationContext {
     private int deletions = 0;
     private boolean updated;
 
-    OptimizationContext(TraceFile traceFile, CompilerProfile profile, InstructionProcessor instructionProcessor,
-            List<LogicInstruction> program, CallGraph callGraph, AstContext rootContext) {
+    OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile profile,
+            InstructionProcessor instructionProcessor, List<LogicInstruction> program, CallGraph callGraph,
+            AstContext rootContext) {
         this.traceFile = traceFile;
+        this.messageConsumer = messageConsumer;
         this.profile = profile;
         this.instructionProcessor = instructionProcessor;
         this.program = program;
@@ -98,6 +102,10 @@ class OptimizationContext {
 
         /* Create label references */
         instructionStream().forEachOrdered(this::addLabelReferences);
+    }
+
+    public MessageConsumer getMessageConsumer() {
+        return messageConsumer;
     }
 
     InstructionProcessor getInstructionProcessor() {
@@ -542,8 +550,8 @@ class OptimizationContext {
         return expressionEvaluator.normalizeMul(op, variable, number);
     }
 
-    public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
-        return expressionEvaluator.evaluate(operation, a, b);
+    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, LogicReadable a, LogicReadable b) {
+        return expressionEvaluator.evaluate(sourcePosition, operation, a, b);
     }
 
     public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
@@ -565,7 +573,7 @@ class OptimizationContext {
         LogicValue y = resolveValue(vs, jump.getY());
 
         if (x.isConstant() && y.isConstant()) {
-            LogicLiteral result = expressionEvaluator.evaluate(jump.getCondition().toOperation(), x, y);
+            LogicLiteral result = expressionEvaluator.evaluate(jump.sourcePosition(), jump.getCondition().toOperation(), x, y);
             if (result instanceof LogicBoolean b) {
                 return b;
             }

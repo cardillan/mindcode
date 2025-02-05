@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
@@ -168,11 +167,10 @@ class PrintMerger extends BaseOptimizer {
                 .flatMap(LogicInstruction::inputArgumentsStream)
                 .filter(LogicString.class::isInstance)
                 .map(LogicString.class::cast)
-                .filter(s -> containsDangerousStrings(s.getStringValue()))
+                .filter(s -> containsDangerousStrings(s.getValue()))
                 .toList();
 
-        dangerousStrings.forEach(s -> messageRecipient.accept(
-                CompilerMessage.warn(s.sourcePosition(), WARN.FORMAT_PRECLUDED_BY_STRING_LITERAL)));
+        dangerousStrings.forEach(s -> warn(s.sourcePosition(), WARN.FORMAT_PRECLUDED_BY_STRING_LITERAL));
 
         return dangerousStrings.isEmpty();
     }

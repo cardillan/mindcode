@@ -38,7 +38,7 @@ public class ExpressionValue implements LogicWritable {
         literal = LogicBoolean.get(value);
     }
 
-    public @Nullable LogicLiteral getLiteral() {
-        return literal;
+    public @Nullable LogicLiteral getLiteral(SourcePosition position) {
+        return literal == null ? null : literal.withSourcePosition(position);
     }
 }

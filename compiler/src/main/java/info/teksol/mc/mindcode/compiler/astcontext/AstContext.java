@@ -312,8 +312,8 @@ public final class AstContext {
         return Objects.requireNonNull(node);
     }
 
-    public @Nullable SourcePosition sourcePosition() {
-        return node != null ? node.sourcePosition() : null;
+    public SourcePosition sourcePosition() {
+        return node != null ? node.sourcePosition() : SourcePosition.EMPTY;
     }
 
     public @Nullable String functionPrefix() {

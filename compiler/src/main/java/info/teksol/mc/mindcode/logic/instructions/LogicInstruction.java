@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
@@ -15,6 +16,10 @@ public interface LogicInstruction extends MlogInstruction {
     LogicInstruction copy();
 
     AstContext getAstContext();
+
+    default SourcePosition sourcePosition() {
+        return getAstContext().sourcePosition();
+    }
 
     LogicInstruction withContext(AstContext astContext);
 

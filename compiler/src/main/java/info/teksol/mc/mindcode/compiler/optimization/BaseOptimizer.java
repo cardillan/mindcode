@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -197,8 +198,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.normalizeMul(op, variable, number);
     }
 
-    public @Nullable LogicLiteral evaluate(Operation operation, LogicReadable a, LogicReadable b) {
-        return optimizationContext.evaluate(operation, a, b);
+    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, LogicReadable a, LogicReadable b) {
+        return optimizationContext.evaluate(sourcePosition, operation, a, b);
     }
 
     public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {

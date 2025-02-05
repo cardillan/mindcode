@@ -77,6 +77,11 @@ public class LogicColor extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
+    public LogicColor withSourcePosition(SourcePosition sourcePosition) {
+        return new LogicColor(sourcePosition, doubleValue, literal);
+    }
+
+    @Override
     public AstMindcodeNode asAstNode(SourcePosition position) {
         return new AstLiteralColor(position, literal);
     }

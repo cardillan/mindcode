@@ -16,5 +16,10 @@ public interface LogicLiteral extends LogicValue {
         return this == LogicNull.NULL;
     }
 
+    @Override
+    default LogicLiteral withSourcePosition(SourcePosition sourcePosition) {
+        return this;
+    }
+
     AstMindcodeNode asAstNode(SourcePosition position);
 }

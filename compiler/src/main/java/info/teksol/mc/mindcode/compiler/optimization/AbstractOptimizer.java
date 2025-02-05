@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-abstract class AbstractOptimizer implements Optimizer, ContextlessInstructionCreator {
+abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optimizer, ContextlessInstructionCreator {
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
@@ -24,9 +24,9 @@ abstract class AbstractOptimizer implements Optimizer, ContextlessInstructionCre
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
-    protected MessageConsumer messageRecipient = s -> {};
 
     public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
+        super(optimizationContext.getMessageConsumer());
         this.optimization = optimization;
         this.optimizationContext = optimizationContext;
         this.instructionProcessor = optimizationContext.getInstructionProcessor();
@@ -67,11 +67,6 @@ abstract class AbstractOptimizer implements Optimizer, ContextlessInstructionCre
         this.debugPrinter = debugPrinter;
     }
 
-    @Override
-    public void setMessageRecipient(MessageConsumer messageRecipient) {
-        this.messageRecipient = messageRecipient;
-    }
-
     protected boolean advanced() {
         return level == OptimizationLevel.ADVANCED || level == OptimizationLevel.EXPERIMENTAL;
     }
@@ -81,7 +76,7 @@ abstract class AbstractOptimizer implements Optimizer, ContextlessInstructionCre
     }
 
     protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {
-        messageRecipient.accept(new OptimizerMessage(level, String.format(format, args)));
+        addMessage(new OptimizerMessage(level, String.format(format, args)));
     }
 
     @Override

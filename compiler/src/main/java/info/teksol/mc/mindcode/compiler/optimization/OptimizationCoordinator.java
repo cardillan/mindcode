@@ -62,7 +62,6 @@ public class OptimizationCoordinator {
             OptimizationLevel level = profile.getOptimizationLevel(optimization);
             if (level != OptimizationLevel.NONE) {
                 Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
-                optimizer.setMessageRecipient(messageConsumer);
                 optimizer.setDebugPrinter(debugPrinter);
 
                 optimizer.setLevel(level);
@@ -82,8 +81,8 @@ public class OptimizationCoordinator {
         program.addAll(instructions);
 
         try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
-            optimizationContext = new OptimizationContext(traceFile, profile, instructionProcessor, program,
-                    callGraph, rootAstContext);
+            optimizationContext = new OptimizationContext(traceFile, messageConsumer, profile, instructionProcessor,
+                    program, callGraph, rootAstContext);
 
             int count = codeSize();
             messageConsumer.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
