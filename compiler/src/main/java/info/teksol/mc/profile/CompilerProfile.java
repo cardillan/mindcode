@@ -47,6 +47,7 @@ public class CompilerProfile {
     private SyntacticMode syntacticMode = SyntacticMode.RELAXED;
     private boolean linkedBlockGuards = true;
     private GenerationGoal goal = GenerationGoal.AUTO;
+    private RuntimeChecks boundaryChecks = RuntimeChecks.NONE;
     private Remarks remarks = Remarks.PASSIVE;
     private MemoryModel memoryModel = MemoryModel.VOLATILE;
     private boolean shortCircuitEval = false;
@@ -212,6 +213,15 @@ public class CompilerProfile {
 
     public CompilerProfile setSyntacticMode(SyntacticMode syntacticMode) {
         this.syntacticMode = syntacticMode;
+        return this;
+    }
+
+    public RuntimeChecks getBoundaryChecks() {
+        return boundaryChecks;
+    }
+
+    public CompilerProfile setBoundaryChecks(RuntimeChecks boundaryChecks) {
+        this.boundaryChecks = boundaryChecks;
         return this;
     }
 

@@ -198,7 +198,7 @@ public class LogicInstructionPrinter {
         @Override
         public String printLineNumber(LogicInstruction instruction, String decoration) {
             String result;
-            if (instruction.getRealSize(null) == 0) {
+            if (!instruction.isReal()) {
                 result = "%5s%s   ".formatted("", decoration);
                 lastRemark = false;
             } else {

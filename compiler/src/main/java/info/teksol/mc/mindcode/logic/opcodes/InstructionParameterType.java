@@ -165,7 +165,10 @@ public enum InstructionParameterType {
     STATUS          ("status", Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
             "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
 
-    ///  Input parameter accepting unit type. 
+    /// Expected type of value
+    TYPE            ("valueType", Flags.KEYWORD, "any", "notNull", "decimal", "integer", "even", "odd"),
+
+    ///  Input parameter accepting unit type.
     UNIT            ("unitType", Flags.INPUT,
             allVersions(
                     "@dagger", "@mace", "@fortress", "@scepter", "@reign",

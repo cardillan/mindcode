@@ -62,7 +62,7 @@ class JumpStraightening extends BaseOptimizer {
                                         iterator.set(createNoOp(astContext));
                                         break;
                                     }
-                                } else if (instruction.getRealSize(null) != 0) {
+                                } else if (instruction.isReal()) {
                                     break;
                                 }
                             }

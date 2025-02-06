@@ -313,6 +313,10 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("expected"), in("title"));
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH);
 
+        // Assertions log
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT,
+                type("type"), in("min"), cond("minOp"), in("value"), cond("maxOp"), in("max"), in("message"));
+
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);
         add(list, V6,  MAX, S, NONE, Opcode.LABEL,       label("label"));
@@ -464,6 +468,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter status(String name) {
         return new NamedParameter(InstructionParameterType.STATUS, name);
+    }
+
+    public static NamedParameter type(String name) {
+        return new NamedParameter(InstructionParameterType.TYPE, name);
     }
 
     public static NamedParameter uctrl(String name) {

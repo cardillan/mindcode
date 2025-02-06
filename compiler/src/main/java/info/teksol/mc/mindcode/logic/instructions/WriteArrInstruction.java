@@ -48,7 +48,6 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
 
     @Override
     public SideEffects sideEffects() {
-        //return SideEffects.writes(getArray().getElements());
         return SideEffects.readsAndWrites(List.of(getArray().writeVal), getArray().getElements());
     }
 }

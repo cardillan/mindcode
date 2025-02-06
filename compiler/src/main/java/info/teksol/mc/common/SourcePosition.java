@@ -61,6 +61,11 @@ public record SourcePosition(InputFile inputFile,
         return distinctPath.isEmpty() ? "line " + line() + ":" + column() : distinctPath + ":" + line() + ":" + column();
     }
 
+    public String formatForMlog() {
+        String distinctPath = inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getDistinctPath();
+        return distinctPath.isEmpty() ? "position " + line() + ":" + column() : distinctPath + ":" + line() + ":" + column();
+    }
+
     public static SourcePosition create(InputFile inputFile, Token token) {
         return new SourcePosition(inputFile,
                 new TextFilePosition(token.getLine(), token.getCharPositionInLine() + 1),

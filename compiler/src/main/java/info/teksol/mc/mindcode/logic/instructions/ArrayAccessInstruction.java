@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.logic.arguments.LogicArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import org.jspecify.annotations.Nullable;
@@ -29,7 +30,7 @@ public interface ArrayAccessInstruction extends LogicInstruction{
             }
         }
 
-        // MUSTDO Dynamic calculation
-        return getOpcode().getSize();
+        int checkSize = MindcodeCompiler.getContext().compilerProfile().getBoundaryChecks().getSize();
+        return getOpcode().getSize() + checkSize;
     }
 }

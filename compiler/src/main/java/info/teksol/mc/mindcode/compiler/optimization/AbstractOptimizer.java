@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.instructions.ContextlessInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.profile.MemoryModel;
 import org.intellij.lang.annotations.PrintFormat;
@@ -40,6 +41,10 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     @Override
     public String getName() {
         return optimization.getName();
+    }
+
+    public CompilerProfile getProfile() {
+        return optimizationContext.getProfile();
     }
 
     @Override

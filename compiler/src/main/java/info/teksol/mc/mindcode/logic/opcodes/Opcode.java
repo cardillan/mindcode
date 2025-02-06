@@ -73,6 +73,9 @@ public enum Opcode {
     ASSERT_PRINTS   ("assertprints",    1),
     ASSERT_FLUSH    ("assertflush",     1),
 
+    /// Instruction supported by the Mlog Assertions mod.
+    ASSERT          ("assert",          1),
+
     // Virtual instructions - resolved when the final code is generated
     
     /// No operation. When removing instructions, they can be replaced by no-op to preserve the structure of the code.
@@ -128,7 +131,7 @@ public enum Opcode {
     WRITEARR        ("writearr",        4),
 
     /// Represents a custom-made instruction (mlog or mlogSafe).
-    CUSTOM          ("",1),
+    CUSTOM          ("",                1),
     ;
 
     /// Safe instructions are instructions which do not have any output parameters (and therefore are assumed

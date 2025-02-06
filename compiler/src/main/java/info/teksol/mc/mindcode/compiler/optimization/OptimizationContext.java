@@ -108,6 +108,10 @@ class OptimizationContext {
         return messageConsumer;
     }
 
+    public CompilerProfile getProfile() {
+        return profile;
+    }
+
     InstructionProcessor getInstructionProcessor() {
         return instructionProcessor;
     }

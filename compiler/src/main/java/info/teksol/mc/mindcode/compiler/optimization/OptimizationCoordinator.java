@@ -109,6 +109,7 @@ public class OptimizationCoordinator {
                         for (LogicInstruction instruction : expanded) {
                             optimizationContext.insertInstructionUnchecked(index++, instruction);
                         }
+                        index--;
                     }
                 }
 

@@ -195,13 +195,13 @@ all-sources:
   - source: "C:\Home\golem-old\mindcode\factory-monitor-surge-alloy.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\power-plant-battery-level.mnd"
+  - source: "C:\Home\golem\power-plant\power-plant-battery-level.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\power-plant-reactor-control.mnd"
+  - source: "C:\Home\golem\power-plant\power-plant-reactor-control.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\instant-overdrive-dome.mnd"
+  - source: "C:\Home\golem\overdrive\overdrive-dome.mnd"
     samples: 100
 
   - source: "C:\Home\golem-old\mindcode\instant-overdrive-projector.mnd"

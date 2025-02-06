@@ -95,6 +95,18 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
     }
 
+    private void setBoundaryChecks(CompilerProfile compilerProfile, AstDirectiveSet node) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            RuntimeChecks boundaryChecks = RuntimeChecks.byName(strValue);
+            if (boundaryChecks != null) {
+                profile.setBoundaryChecks(boundaryChecks);
+            } else {
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
+            }
+        }
+    }
+
     private void setExecutionFlag(ExecutionFlag flag, CompilerProfile profile, AstDirectiveSet node) {
         if (validateSingleValue(node)) {
             String strValue = node.getValues().getFirst().getText();
@@ -295,10 +307,11 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         Map<String,BiConsumer<CompilerProfile, AstDirectiveSet>> map = new HashMap<>();
         map.put("auto-printflush", this::setAutoPrintflush);
         map.put("boolean-eval", this::setShortCircuitEval);
+        map.put("boundary-checks", this::setBoundaryChecks);
         map.put("goal", this::setGenerationGoal);
         map.put("instruction-limit", this::setInstructionLimit);
-        map.put("memory-model", this::setMemoryModel);
         map.put("link-guards", this::setLinkGuards);
+        map.put("memory-model", this::setMemoryModel);
         map.put("optimization", this::setAllOptimizationsLevel);
         map.put("passes", this::setOptimizationPasses);
         map.put("print-unresolved", this::setPrintUnresolved);

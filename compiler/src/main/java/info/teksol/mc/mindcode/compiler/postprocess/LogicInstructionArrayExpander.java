@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.RuntimeChecks;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
@@ -101,6 +102,7 @@ public class LogicInstructionArrayExpander {
             case ReadArrInstruction rix -> {
                 consumer.accept(processor.createSetAddress(astContext, array.readRet, returnLabel));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, ix.getIndex(), LogicNumber.TWO));
+                generateBoundsCheck(consumer, rix, temp);
                 consumer.accept(processor.createMultiCall(astContext, target, temp, marker).withSideEffects(rix.sideEffects()));
                 consumer.accept(processor.createLabel(astContext, returnLabel));
                 consumer.accept(processor.createSet(astContext, rix.getResult(), array.readVal));
@@ -110,11 +112,55 @@ public class LogicInstructionArrayExpander {
                 consumer.accept(processor.createSetAddress(astContext, array.writeRet, returnLabel));
                 consumer.accept(processor.createSet(astContext, array.writeVal, wix.getValue()));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, ix.getIndex(), LogicNumber.TWO));
+                generateBoundsCheck(consumer, wix, temp);
                 consumer.accept(processor.createMultiCall(astContext, target, temp, marker).withSideEffects(wix.sideEffects()));
                 consumer.accept(processor.createLabel(astContext, returnLabel));
             }
 
             default -> consumer.accept(instruction);
+        }
+    }
+
+    private void generateBoundsCheck(Consumer<LogicInstruction> consumer, ArrayAccessInstruction ix, LogicVariable index) {
+        RuntimeChecks boundaryChecks = ix.getAstContext().getProfile().getBoundaryChecks();
+        if (boundaryChecks == RuntimeChecks.NONE) return;
+
+        AstContext astContext = ix.getAstContext();
+        int maxIndex = ix.getArray().getSize() - 1;
+        LogicNumber max = LogicNumber.create(maxIndex * 2L);
+        String errorMessage = String.format("%s: index out of bounds (%d to %d)", ix.sourcePosition().formatForMlog(), 0, maxIndex);
+
+        if (boundaryChecks == RuntimeChecks.ASSERT) {
+            consumer.accept(processor.createInstruction(astContext, Opcode.ASSERT, LogicKeyword.create("even"),
+                    LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ, max, LogicString.create(errorMessage)));
+            return;
+        }
+
+        AstContext ctx = astContext.createChild(profile, Objects.requireNonNull(astContext.node()),
+                AstContextType.IF, AstSubcontextType.CONDITION);
+
+        switch (boundaryChecks) {
+            case MINIMAL -> {
+                LogicLabel logicLabel1 = processor.nextLabel();
+                consumer.accept(processor.createLabel(ctx, logicLabel1));
+                consumer.accept(processor.createJump(ctx, logicLabel1, Condition.LESS_THAN, index, LogicNumber.ZERO));
+                LogicLabel logicLabel2 = processor.nextLabel();
+                consumer.accept(processor.createLabel(ctx, logicLabel2));
+                consumer.accept(processor.createJump(ctx, logicLabel2, Condition.GREATER_THAN, index, max));
+            }
+
+            case SIMPLE, DESCRIBED -> {
+                LogicLabel logicLabelStop = processor.nextLabel();
+                LogicLabel logicLabelRun = processor.nextLabel();
+                consumer.accept(processor.createJump(ctx, logicLabelStop, Condition.LESS_THAN, index, LogicNumber.ZERO));
+                consumer.accept(processor.createJump(ctx, logicLabelRun, Condition.LESS_THAN_EQ, index, max));
+                consumer.accept(processor.createLabel(ctx, logicLabelStop));
+                if (boundaryChecks == RuntimeChecks.DESCRIBED) {
+                    consumer.accept(processor.createPrint(ctx, LogicString.create(errorMessage)));
+                }
+                consumer.accept(processor.createStop(ctx));
+                consumer.accept(processor.createLabel(ctx, logicLabelRun));
+            }
         }
     }
 

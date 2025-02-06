@@ -154,7 +154,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     private @Nullable LogicInstruction getLastRealInstruction(LogicList instructions) {
         for (int i = 0; i < instructions.size(); i ++) {
-            if (requireNonNull(instructions.getFromEnd(i)).getRealSize(null) > 0) {
+            if (requireNonNull(instructions.getFromEnd(i)).isReal()) {
                 return instructions.getFromEnd(i);
             }
         }

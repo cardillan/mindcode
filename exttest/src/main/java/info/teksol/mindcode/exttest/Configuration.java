@@ -145,6 +145,7 @@ public record Configuration(
         public CompilerProfile createCompilerProfile(int testCase) {
             CompilerProfile profile = new CompilerProfile(false, OptimizationLevel.NONE)
                     .setOptimizationPasses(50)
+                    .setAutoPrintflush(false)
                     .setRun(run);
 
             // Goal first
