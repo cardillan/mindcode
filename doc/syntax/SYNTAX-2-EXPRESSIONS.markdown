@@ -407,7 +407,7 @@ Constant expressions can be used in [constant](SYNTAX-1-VARIABLES.markdown#const
 Furthermore, expressions that contain some constant subexpressions (e.g. `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
 
 > [!TIP]
-> Compile-time expression evaluation gives identical results to performing the computation on an actual Mindustry Logic processor, emulating the behavior corresponding to selected language target.
+> Compile-time expression evaluation produces results identical computations performed on an actual Mindustry Logic processor, emulating the behavior corresponding to the selected language/processor target.
 
 ## Constant expressions in Mindustry Logic 7 and earlier
 
@@ -418,8 +418,8 @@ When evaluating expressions, it isn't required that all the intermediate values 
 ```
 #set target = 7;
 print(10 ** 50);            // Cannot be evaluated
-print(10 ** (2 * 25));      // Multiplication can be evaluated, exponentiation cannot
-print(log10(10 ** 50));     // Can be evaluated even though 10 ** 50 cannot
+print(10 ** (2 * 24));      // Multiplication can be evaluated, exponentiation cannot
+print(log10(10 ** 45));     // Can be evaluated even though 10 ** 50 cannot
 ```
 
 produces
@@ -427,8 +427,9 @@ produces
 ```
 op pow *tmp0 10 50
 print *tmp0
-print *tmp0
-print 50
+op pow *tmp1 10 48
+print *tmp1
+print 45
 ```
 
 # Range expressions
@@ -448,7 +449,7 @@ Ranges cannot be assigned to variables and can only be used in several contexts:
 
 # Addendum: comparison precision
 
-To illustrate hoe equality and relational operations work in Mindustry Logic, consider this example:
+To illustrate how equality and relational operations work in Mindustry Logic, consider this example:
 
 ```
 param a = 0.1;

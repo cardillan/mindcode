@@ -296,8 +296,7 @@ Mindustry Logic recognizes special literals designed for encoding colors. These 
 
 These literals are written into the mlog code exactly as they appear in Mindcode. If the value of the literal doesn't fit the supported format, a compilation error occurs.
 
-> [!NOTE]
-> Color literals are stored as `double` values, however the value is created by Mindustry Logic by directly manipulating the bits of the `double` representation of the value, instead of regular floating point operations. As a result, the numeric value of the literal is non-standard and is not representable as any Mindustry Logic numerical literal. No compile-time evaluation takes place on the values of color literals. 
+If the result of a compile-time evaluated expression lies within the range of color literals, it is encoded into mlog as a color literal.
 
 ### String literals
 
@@ -305,7 +304,8 @@ Finally, there are string literals, a sequence of characters enclosed in double 
 
 `"A string literal."`
 
-Double quotes in string literals aren't supported in Mindustry Logic at all. Mindcode recognizes them in string literals in source code if they are properly escaped, i.e. `\"`, but generates a warning and replaces them by single quotes in the compiled code (`Hello, "friend"!`, which would be encoded as `"Hello, \"friend\"!"`in the source code, becomes `Hello, 'friend'!`). Embedding double quotes in string literals is deprecated and will be removed in a future release - such literals, when encountered, will cause a syntax error. 
+> [!NOTE]
+> It is not possible to include a double quote inside string literals, because Mindustry Logic itself doesn't support them. Trying to include a double quote in a string literal using backslash escape, as is usual in other languages (e.g. `"This is an embedded \"quote\""`) leads to syntax error.   
 
 ### Formattable string literals
 
@@ -313,7 +313,7 @@ Formattable string literals are a special case of string literals which can only
 
 `$"A formattable string literal."`
 
-Double quotes aren't supported in formattable string literal, even if they're escaped. Concatenation of strings with the formattable string literal is supported through the string interpolation:
+Concatenation of strings with the formattable string literal is supported through the string interpolation:
 
 ```
 const FORMAT = $"$ITEM_COAL coal: ${vault1.@coal}";
@@ -329,7 +329,7 @@ When Mindustry processes the mlog code in Mindustry Logic, it handles numeric li
 * Integers and decimal numbers are ultimately stored with `double` precision - this representation supports up to about 16 valid digits. Decimal numbers may specify a lot more digits after the decimal separator, but superfluous ones will be ignored.
 * All integers up to 9,007,199,254,740,992 (2<sup>53</sup>) can be represented precisely in `double` precision.
 * Integers between 2<sup>53</sup> and 2<sup>63</sup>-1 may lose precision when converted to `double`.
-* The maximum value of integers and decimal numbers is 9,223,372,036,854,775,807 (2<sup>63</sup>-1). The result of parsing integer literals larger than this value are not consistent; apparently, sometimes an arithmetic overflow happens, otherwise the result is `null`.
+* The maximum value of integers and decimal numbers is 9,223,372,036,854,775,807 (2<sup>63</sup>-1). The results of parsing integer literals larger than this value are not consistent; apparently, sometimes an arithmetic overflow happens, otherwise the result is `null`.
 * **Mindustry Logic version 7 and earlier**: The range of values that is recognized when using exponential notation is about 10<sup>-38</sup> to 10<sup>38</sup>. However, numbers in exponential notation are converted with `float` precision, only preserving 6 to 7 valid digits.
 
 To find a way around these constraints, Mindcode always reads the value of the numeric literal and then converts it to Mindustry Logic compatible literal using these rules (first applicable rule is used):

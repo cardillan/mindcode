@@ -12,7 +12,7 @@ These variables can contain a number, an object, or a `null` value. An object ca
 
 ### Numeric conversion
 
-When a variable is used in a numeric operation, it  is converted to a number depending on its value:
+When a variable is used in a numeric operation, it is converted to a number depending on its value:
 
 * a number is used as-is, or might be converted to an integer when needed.
 * `null` is converted to `0`,
@@ -27,7 +27,7 @@ All numeric values, both integer and floating-point, are stored as `double`, a 6
 > 
 > Values larger than 2<sup>63</sup> are converted to 2<sup>63</sup> during integer conversion.  
 >
-> While `long` values are able to keep 64 bits, `double` values only hold 53 significant bits of precision. Processor variables are therefore limited to 53 significant bits after integer conversion. When an integer operation produces a number between 2<sup>53</sup> and 2<sup>63</sup>-1, up to twelve least significant bits of the integer value may become lost upon the final conversion (a _double conversion_) of the resulting value to `double`.
+> While `long` values are able to keep 64 bits, `double` values only hold 53 significant bits of precision. Processor variables are therefore limited to 53 significant bits after integer conversion. When an integer operation produces a number between 2<sup>53</sup> and 2<sup>63</sup>-1, the result is rounded to the closest double representation for storage in a processor variable. This operation (a _double conversion_) may alter the values of all the 53 least significant bits of the integer representation of the number.
 >
 > Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion happens at every step of computation in mlog.
 
@@ -35,7 +35,7 @@ Producing integer numbers this large would be somewhat unusual in a typical Mind
  
 ## Linked blocks
 
-Linked blocks provide the most basic means for a processor to interacts with blocks (i.e. buildings) in the Mindustry World. When a block is linked to a processor, a special, read-only variable is created in the processor which represents the linked block. The variable name is created using a base block name, i.e. one-word representation of the block type name (e.g. `battery` for `@battery-large` or `cell` for `@memory-cell`) and a unique number starting from one.
+Linked blocks provide the most basic means for a processor to interacts with blocks (i.e. buildings) in the Mindustry World. When a block is linked to a processor, a special, read-only variable which represents the linked block is created in the processor. The variable name is created using a base block name, i.e. one-word representation of the block type name (e.g. `battery` for `@battery-large` or `cell` for `@memory-cell`) and a unique number starting from one.
 
 > [!IMPORTANT]
 > Assignments to variables representing linked blocks are silently ignored by the processor. If a processor variable with the same name as a newly linked block exists in a processor when the block is linked, it is removed from the processor and replaced by a processor variable representing the linked block. 
@@ -202,7 +202,7 @@ Mindcode allows you to read these variables and, in some special cases, assign a
 Apart from built-in variables whose value may change, Mindustry also has built-in constants representing various in-game objects, such as unit types (`@flare`), block types (`@micro-processor`), items (`@coal`), liquids (`@cryofluid`) or object properties (`@totalItems`).
 
 > [!NOTE]
-> The value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a game from a save file. Take it into account especially when programming loops that should terminate at some predetermined time.
+> The value of time variables (`@tick`, `@time` and so on) may actually decrease - compared to a previously obtained value - when loading a game from a save file. Take it into account especially when programming loops that should terminate at some predetermined time.
 
 # Mindcode variables
 
@@ -234,7 +234,7 @@ printflush message1
 
 Variable `a` in the above example was removed, because it is possible to use the value assigned to it (`10`) directly later in the program. Variable `b` was removed, as it is not used in any subsequent computation at all. 
 
-The only exception to this rule are [program parameters](#program-parameters), which are always preserved, but even program parameters are removed when unused.
+The only exception to this rule are [program parameters](#program-parameters), which are preserved, unless they are not used in the program at all.
 
 ## Variable scope
 
@@ -247,10 +247,10 @@ Variables are limited to a certain scope and are considered nonexistent outside 
 
 ## Implicit variables
 
-Implicit variables are created when first encountered in the code. The kind and scope of the variable is determined by the name used for the variable:
+Implicit variables are only supported in the [`relaxed` syntax](SYNTAX.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name used for the variable:
 
-* **Linked variables**: if the variable name corresponds to a known linked block, it is automatically regarded as a linked variable referring ot that block and its scope is global (e.g. `cell1` or `switch2`). To use a linked block not recognized by Mindcode, an explicit declaration is required. 
-* **External variables**: if the variable name starts with the `$` prefix, the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global (e.g. `$Total`). See [External variables](#external-variables) for information on creating the heap.
+* **Linked variables**: if the variable name corresponds to a known linked block, it is automatically regarded as a linked variable referring to that block, and its scope is global (e.g. `cell1` or `switch2`). To use a linked block not recognized by Mindcode (e.g. a block provided by a mod extension), an explicit declaration is required. 
+* **External variables**: if the variable name starts with the `$` prefix, the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global (e.g. `$Total`). See [External variables](#external-variables) for information on heap declaration.
 * **Global variables**: if the variable name doesn't contain lowercase characters, it is a regular variable in the global scope (e.g. `COUNT`).
 * **Main/local variables**: if the variable name contains at least one lowercase character, it is a regular variable in either the main (if used outside a function) or local (if used within a function) scope (e.g. `unitType`).
 
@@ -271,7 +271,7 @@ printflush(message1);
 
 This code displays `20, 5` on the `message1` block in Mindustry world, since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and `local` in the main code block.
 
-In relaxed syntax, using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed. In strict syntax, such parameters are allowed.
+In `relaxed` syntax, using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed. In `strict` syntax, such parameters are allowed.
 
 > [!NOTE]
 > In previous versions of Mindcode, global variables also served as program parameters [described below](#program-parameters). This usage of global variables is no longer supported.
@@ -282,7 +282,7 @@ Explicit variables are created using explicit declaration. The kind of the varia
 
 There are no name restrictions on explicitly declared variables, except the `$` prefix, which can only be used on explicitly declared external variables. Specifically, it is possible to use a name of a linked block for explicitly declared variables (e.g. `wave1`).
 
-When a main or local variable has the same name as a global variable, the global variable is said to be shadowed and cannot be accessed in the corresponding code block.
+When a main or local variable has the same name as a global variable, the global variable is said to be _shadowed_ and cannot be accessed in the corresponding code block.
 
 # Variable declarations
 
@@ -294,7 +294,7 @@ Regular variables directly correspond to Mindustry Logic variables. They are the
 [noinit] [volatile] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
 ```
 
-When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, even function calls.
+When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
 
 When declaring global variables, these additional modifiers can be used:
 
@@ -320,7 +320,7 @@ begin
         println(d);
     end;
     
-    // Global variable. Variable 'a' declared in above code block is no longer in scope.
+    // Global variable. Variable 'a' declared in code block above is no longer in scope.
     println(a);
 end;
 ```
@@ -441,7 +441,7 @@ When an initial value is provided, it is assigned to the variable and written to
 Cached variables are useful in situations where you want to store latest values in a memory to be reused when the processor is reset. `noinit` cached variables are useful for unidirectional sending of data between processors. In both cases, you can read from the variables without any performance penalty, but all writes are automatically propagated to the memory without any explicit code.
 
 > [!IMPORTANT]
-> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to an external memory. 
+> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory. 
 
 Examples:
 
