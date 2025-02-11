@@ -42,10 +42,24 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void processesBasicCode2() {
         testCode("""
-                param a = 25;
-                print(sqrt(a));
-                """,
+                        param a = 25;
+                        print(sqrt(a));
+                        """,
                 "5");
+    }
+
+    @Test
+    void processesAssertBounds() {
+        testCode(expectedMessages()
+                        .add("Failed runtime check: 'position 4:1: index out of bounds (0 to 0)'."),
+                """
+                        #set boundary-checks = assert;
+                        #set err-runtime-check-failed = false;
+                        var a[1];
+                        a[1 + rand(0)] = 10;
+                        print(a);
+                        stopProcessor();
+                        """);
     }
 
     @Test

@@ -102,15 +102,15 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--err-not-a-number {true,false}] [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
-                [--err-graphics-buffer-overflow {true,false}] [-o LEVEL] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input]
-                [output]
+                [--err-graphics-buffer-overflow {true,false}] [--err-runtime-check-failed {true,false}] [-o LEVEL]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
+                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}]
+                [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a Mindcode source file into text mlog file.
 
@@ -219,6 +219,8 @@ run options:
                          stop execution when no placeholder for the 'format' instruction exists in the buffer
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
+  --err-runtime-check-failed {true,false}
+                         stop execution when a runtime check fails.
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not

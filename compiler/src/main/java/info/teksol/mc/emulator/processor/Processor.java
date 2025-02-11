@@ -201,6 +201,7 @@ public class Processor extends AbstractMessageEmitter {
     private boolean execute(LogicInstruction instruction) {
         return switch(instruction.getOpcode()) {
             case ASSERT_EQUALS  -> executeAssertEquals(instruction);
+            case ASSERT_BOUNDS  -> executeAssertBounds(instruction);
             case ASSERT_FLUSH   -> executeAssertFlush(instruction);
             case ASSERT_PRINTS  -> executeAssertPrints(instruction);
             case DRAW           -> executeDraw((DrawInstruction) instruction);
@@ -254,6 +255,48 @@ public class Processor extends AbstractMessageEmitter {
         String actual = getExistingVariable(ix.getArg(1)).printExact();
         String title = getExistingVariable(ix.getArg(2)).printExact();
         assertions.add(new Assertion(expected, actual, title));
+        return true;
+    }
+
+    private AssertionType getAssertionType(String value) {
+        AssertionType type = AssertionType.byName(value);
+        if (type == null) {
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported assertion type '%s'.", value);
+        }
+        return type;
+    }
+
+    private AssertOp getAssertOp(String value) {
+        AssertOp op = AssertOp.byName(value);
+        if (op == null) {
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported assert operation '%s'.", value);
+        }
+        return op;
+    }
+
+    private boolean executeAssertBounds(LogicInstruction ix) {
+        AssertionType type = getAssertionType(ix.getArg(0).toMlog());
+        MindustryVariable multiple = getExistingVariable(ix.getArg(1));
+        MindustryVariable min = getExistingVariable(ix.getArg(2));
+        AssertOp opMin = getAssertOp(ix.getArg(3).toMlog());
+        MindustryVariable value = getExistingVariable(ix.getArg(4));
+        AssertOp opMax = getAssertOp(ix.getArg(5).toMlog());
+        MindustryVariable max = getExistingVariable(ix.getArg(6));
+
+        if ((value.isObject() ? type.objFunction.get(value.getObject()) : type.function.get(value.getDoubleValue()))
+                && (type != AssertionType.multiple || (value.getDoubleValue() % multiple.getDoubleValue() == 0))
+                && (opMin.function.get(min.getDoubleValue(), value.getDoubleValue()))
+                && (opMax.function.get(value.getDoubleValue(), max.getDoubleValue()))) {
+            // We're okay
+        } else {
+            if (getFlag(ERR_RUNTIME_CHECK_FAILED)) {
+                throw new ExecutionException(ERR_RUNTIME_CHECK_FAILED, "Failed runtime check: '%s'.",
+                        getExistingVariable(ix.getArg(7)).printExact());
+            } else {
+                warn("Failed runtime check: '%s'.", getExistingVariable(ix.getArg(7)).printExact());
+            }
+        }
+
         return true;
     }
 
