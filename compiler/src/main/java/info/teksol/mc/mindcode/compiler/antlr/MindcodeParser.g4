@@ -40,8 +40,8 @@ statement
     | REQUIRE library = IDENTIFIER                                                      # astRequireLibrary
     | inline = (INLINE | NOINLINE)? type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
-    | (label = IDENTIFIER COLON)? FOR iterators = loopIteratorGroups IN
-        values = loopValueLists DO body = astStatementList? END                      # astForEachLoopStatement
+    | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups
+        DO body = astStatementList? END                                                 # astForEachLoopStatement
     | (label = IDENTIFIER COLON)? FOR init = declarationOrExpressionList?
         SEMICOLON condition = expression? SEMICOLON update = expressionList?
         DO body = astStatementList? END                                                 # astIteratedForLoopStatement
@@ -270,18 +270,18 @@ elsifBranch
 
 // Loops
 
-loopIteratorGroups
-    : (astLoopIteratorGroup SEMICOLON)* astLoopIteratorGroup
+iteratorsValuesGroups
+    : (astIteratorsValuesGroup SEMICOLON)* astIteratorsValuesGroup
     ;
 
-astLoopIteratorGroup
-    : type = typeSpec? (astLoopIterator COMMA)* astLoopIterator
+astIteratorsValuesGroup
+    : iteratorGroup IN expressionList
     ;
 
-astLoopIterator
+iteratorGroup
+    : type = typeSpec? (astIterator COMMA)* astIterator
+    ;
+
+astIterator
     : modifier = OUT? variable = lvalue
-    ;
-
-loopValueLists
-    : (expressionList SEMICOLON)* expressionList
     ;

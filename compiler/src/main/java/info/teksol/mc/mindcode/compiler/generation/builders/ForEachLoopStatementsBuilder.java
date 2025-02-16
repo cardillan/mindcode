@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
@@ -34,9 +33,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
     @Override
     public ValueStore visitForEachLoopStatement(AstForEachLoopStatement node) {
-        if (!node.getValueLists().isEmpty()) {
-            new ForEachLoopBuilder(this, node).build();
-        }
+        new ForEachLoopBuilder(this, node).build();
         return VOID;
     }
 
@@ -47,11 +44,20 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final LogicVariable nextAddress = assembler.nextTemp();
         private final LoopLabels loopLabels;
 
-        private List<Iterator> processIteratorGroup(AstLoopIteratorGroup group) {
-            return group.getIterators().stream().map(iterator -> processIterator(group, iterator)).toList();
+        public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
+            super(builder, node);
+            iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
+            loopLabels = enterLoop(node);
         }
 
-        private Iterator processIterator(AstLoopIteratorGroup group, AstLoopIterator iterator) {
+        private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
+            return new IterationGroup(
+                    group.getIterators().stream().map(iterator -> processIterator(group, iterator)).toList(),
+                    group.getValues().getExpressions().stream().mapMulti(this::processValue)
+                            .collect(Collectors.toCollection(LinkedList::new)));
+        }
+
+        private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
             if (group.hasDeclaration()) {
                 if (iterator.getIterator() instanceof AstIdentifier identifier) {
                     variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
@@ -63,11 +69,6 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()));
         }
 
-        private LinkedList<ValueStore> processValueGroup(AstExpressionList expressionList) {
-            return expressionList.getExpressions().stream().mapMulti(this::processValue)
-                    .collect(Collectors.toCollection(LinkedList::new));
-        }
-
         private void processValue(AstExpression expression, Consumer<ValueStore> consumer) {
             if (variables.isVarargParameter(expression)) {
                 variables.getVarargs().forEach(consumer);
@@ -76,29 +77,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             }
         }
 
-        private List<IterationGroup> combineIteratorsAndValues(List<List<Iterator>> iterators, List<LinkedList<ValueStore>> values) {
-            if (iterators.size() != values.size()) {
-                error(node, ERR.FOR_EACH_ITERATORS_VALUES_MISMATCH, iterators.size(), values.size());
-            }
-
-            return IntStream.range(0, Math.max(iterators.size(), values.size()))
-                    .mapToObj(i -> new IterationGroup(
-                            i < iterators.size() ? iterators.get(i) : List.of(new Iterator(false, LogicVariable.INVALID)),
-                            i < values.size() ? values.get(i) : new LinkedList<>())
-                    ).toList();
-        }
-
         private boolean hasMoreData() {
             return iterationGroups.stream().anyMatch(IterationGroup::hasMoreData);
-        }
-
-        public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
-            super(builder, node);
-            iterationGroups = combineIteratorsAndValues(
-                    node.getIterators().stream().map(this::processIteratorGroup).toList(),
-                    node.getValueLists().stream().map(this::processValueGroup).toList());
-
-            loopLabels = enterLoop(node);
         }
 
         private void build() {

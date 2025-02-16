@@ -362,31 +362,21 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstForEachLoopStatement visitAstForEachLoopStatement(MindcodeParser.AstForEachLoopStatementContext ctx) {
         return new AstForEachLoopStatement(pos(ctx),
                 identifierIfNonNull(ctx.label),
-                processAstLoopIteratorList(ctx.iterators),
-                processValueListsList(ctx.values),
+                ctx.iteratorsValuesGroups().astIteratorsValuesGroup().stream().map(this::visitAstIteratorsValuesGroup).toList(),
                 processBody(ctx.body));
     }
 
-    private List<AstLoopIteratorGroup> processAstLoopIteratorList(MindcodeParser.LoopIteratorGroupsContext ctx) {
-        return ctx.astLoopIteratorGroup().stream().map(this::visitAstLoopIteratorGroup).toList();
-    }
-
-    private List<AstExpressionList> processValueListsList(MindcodeParser.AstLoopValueListsContext ctx) {
-        return ctx.expressionList().stream()
-                .map(list -> new AstExpressionList(pos(list), processExpressionList(list)))
-                .toList();
+    @Override
+    public AstIteratorsValuesGroup visitAstIteratorsValuesGroup(AstIteratorsValuesGroupContext ctx) {
+        return new AstIteratorsValuesGroup(pos(ctx),
+                ctx.iteratorGroup().type != null,
+                ctx.iteratorGroup().astIterator().stream().map(this::visitAstIterator).toList(),
+                new AstExpressionList(pos(ctx.expressionList()), processExpressionList(ctx.expressionList())));
     }
 
     @Override
-    public AstLoopIteratorGroup visitAstLoopIteratorGroup(AstLoopIteratorGroupContext ctx) {
-        return new AstLoopIteratorGroup(pos(ctx),
-                ctx.type != null,
-                ctx.astLoopIterator().stream().map(this::visitAstLoopIterator).toList());
-    }
-
-    @Override
-    public AstLoopIterator visitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) {
-        return new AstLoopIterator(pos(ctx),
+    public AstIterator visitAstIterator(MindcodeParser.AstIteratorContext ctx) {
+        return new AstIterator(pos(ctx),
                 visitAstExpression(ctx.variable),
                 ctx.modifier != null);
     }

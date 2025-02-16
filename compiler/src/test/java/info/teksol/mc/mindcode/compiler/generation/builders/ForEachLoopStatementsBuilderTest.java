@@ -395,7 +395,7 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesUnevenListLengths() {
             assertGeneratesMessage(
                     "Not enough values to supply this iterator group (provided: 1, required: 2).",
-                    "for i; j in 1, 2; 3 do end;");
+                    "for i in 1, 2; j in 3 do end;");
         }
 
     }
@@ -405,7 +405,7 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesBasicParallelIterations() {
             assertCompilesTo("""
-                            for i; j in 1, 2; 3, 4 do print(i+j); end;
+                            for i in 1, 2; j in 3, 4 do print(i+j); end;
                             """,
                     createInstruction(SETADDR, tmp(0), label(3)),
                     createInstruction(SET, ":i", "1"),
@@ -428,7 +428,7 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesOutputParallelIteration() {
             assertCompilesTo("""
-                            for i; out j in 1, 2; a, b do j = i; end;
+                            for i in 1, 2; out j in a, b do j = i; end;
                             """,
                     createInstruction(SETADDR, tmp(0), label(3)),
                     createInstruction(SET, ":i", "1"),
@@ -452,7 +452,7 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesUnevenParallelIteration() {
             assertCompilesTo("""
-                            for i, j; out k in 1, 2, 3, 4; a, b do k = i + j; end;
+                            for i, j in 1, 2, 3, 4; out k in a, b do k = i + j; end;
                             """,
                     createInstruction(SETADDR, tmp(0), label(3)),
                     createInstruction(SET, ":i", "1"),

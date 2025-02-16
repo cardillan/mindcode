@@ -648,26 +648,26 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLoopIteratorGroups(MindcodeParser.LoopIteratorGroupsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIteratorsValuesGroups(MindcodeParser.IteratorsValuesGroupsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAstLoopIteratorGroup(MindcodeParser.AstLoopIteratorGroupContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstIteratorsValuesGroup(MindcodeParser.AstIteratorsValuesGroupContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAstLoopIterator(MindcodeParser.AstLoopIteratorContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIteratorGroup(MindcodeParser.IteratorGroupContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAstLoopValueLists(MindcodeParser.AstLoopValueListsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstIterator(MindcodeParser.AstIteratorContext ctx) { return visitChildren(ctx); }
 }

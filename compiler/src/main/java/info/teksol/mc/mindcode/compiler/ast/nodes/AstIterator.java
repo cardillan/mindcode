@@ -9,11 +9,11 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode
-public class AstLoopIterator extends AstFragment {
+public class AstIterator extends AstFragment {
     private final AstExpression iterator;
     private final boolean outModifier;
 
-    public AstLoopIterator(SourcePosition sourcePosition, AstExpression iterator, boolean outModifier) {
+    public AstIterator(SourcePosition sourcePosition, AstExpression iterator, boolean outModifier) {
         super(sourcePosition, children(iterator));
         this.iterator = iterator;
         this.outModifier = outModifier;
@@ -31,7 +31,7 @@ public class AstLoopIterator extends AstFragment {
     public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        AstLoopIterator that = (AstLoopIterator) o;
+        AstIterator that = (AstIterator) o;
         return outModifier == that.outModifier && Objects.equals(iterator, that.iterator);
     }
 
