@@ -72,7 +72,13 @@ variableDeclaration
     ;
 
 declModifier
-    : modifier = (EXTERNAL | LINKED | CACHED | VOLATILE | NOINIT)
+    : modifier = EXTERNAL (memory = IDENTIFIER)?
+    | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
+    | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
+    | modifier = LINKED
+    | modifier = CACHED
+    | modifier = VOLATILE
+    | modifier = NOINIT
     ;
 
 // To be extended in the future with more types

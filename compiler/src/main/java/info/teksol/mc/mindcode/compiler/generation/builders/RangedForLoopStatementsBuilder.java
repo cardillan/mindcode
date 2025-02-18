@@ -15,7 +15,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Set;
+import java.util.Map;
 
 @NullMarked
 public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstRangedForLoopStatementVisitor<ValueStore> {
@@ -50,7 +50,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         Condition condition = outsideRangeCondition(node.getRange());
         if (node.hasDeclaration()) {
             if (node.getVariable() instanceof AstIdentifier identifier) {
-                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
+                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Map.of());
             } else {
                 error(node.getVariable(), ERR.IDENTIFIER_EXPECTED);
             }

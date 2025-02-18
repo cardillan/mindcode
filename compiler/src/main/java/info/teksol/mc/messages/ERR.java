@@ -1,14 +1,8 @@
 package info.teksol.mc.messages;
 
 public class ERR {
-    public static final String ALLOCATION_INVALID_MEMORY = "Cannot use '%s' as a memory for heap or stack.";
-    public static final String ALLOCATION_INVALID_MEMORY_VALUE = "Cannot use value assigned to parameter '%s' as a memory for heap or stack.";
-    public static final String ALLOCATION_INVALID_RANGE = "Empty or invalid heap/stack memory range.";
     public static final String ALLOCATION_MULTIPLE_HEAP = "Multiple heap allocation declarations.";
     public static final String ALLOCATION_MULTIPLE_STACK = "Multiple stack allocation declarations.";
-    public static final String ALLOCATION_MUTABLE_RANGE = "Heap/stack declaration must specify constant range.";
-    public static final String ALLOCATION_NON_INTEGER_RANGE = "Heap/stack declaration must specify integer range.";
-//    public static final String ALLOCATION_OUTSIDE_RANGE = "Heap/stack memory index out of range (0 .. 512).";
     public static final String ARGUMENT_GLOBAL_VARIABLE_REQUIRED = "A global variable is required in a call to '%s'.";
     public static final String ARGUMENT_IN_MODIFIER_NOT_ALLOWED = "Parameter '%s' isn't input, 'in' modifier not allowed.";
     public static final String ARGUMENT_IN_OUT_MODIFIER_REQUESTED = "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used.";
@@ -21,8 +15,8 @@ public class ERR {
     public static final String ARGUMENT_OUT_MODIFIER_REQUESTED = "Parameter '%s' is output and 'out' modifier was not used.";
     public static final String ARGUMENT_UNNAMED_NOT_OPTIONAL = "Parameter corresponding to this argument isn't optional, a value must be provided.";
     public static final String ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED = "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.";
-    public static final String ARGUMENT_WRITE_TO_INPUT = "Parameter '%s' is output and 'out' modifier was not used.";
     public static final String ARGUMENT_WAIT_OUT_NOT_ALLOWED = "'out' modifier not allowed with special value '%s'.";
+    public static final String ARGUMENT_WRITE_TO_INPUT = "Parameter '%s' is output and 'out' modifier was not used.";
     public static final String ARRAY_ASSIGNMENT_SIZE_MISMATCH = "The arrays in the array expression have different sizes: %s[%d] versus %s[%d].";
     public static final String ARRAY_CACHED = "Arrays cannot be declared 'cached'.";
     public static final String ARRAY_EXPRESSION_NOT_MEMORY = "'%s' is not an external memory.";
@@ -51,15 +45,23 @@ public class ERR {
     public static final String EXPRESSION_NOT_CONSTANT_CONST = "Value assigned to constant '%s' is not a constant expression.";
     public static final String EXPRESSION_NOT_CONSTANT_PARAM = "Value assigned to parameter '%s' is not a constant expression.";
     public static final String EXPRESSION_REQUIRED = "Expression is required.";
-    public static final String EXTERNAL_HEAP_EXCEEDED = "Not enough capacity in allocated heap for '%s'.";
-    public static final String EXTERNAL_HEAP_EXCEEDED_ARRAY = "Not enough capacity in allocated heap for array '%s' (required %d, available %d).";
-    public static final String EXTERNAL_MISSING_HEAP = "No heap allocated for external variables.";
+    public static final String EXT_STORAGE_EXCEEDED = "Not enough capacity in external storage for '%s'.";
+    public static final String EXT_STORAGE_EXCEEDED_ARRAY = "Not enough capacity in external storage for array '%s' (required %d, available %d).";
+    public static final String EXT_STORAGE_INVALID_MEMORY = "Cannot use '%s' as external storage.";
+    public static final String EXT_STORAGE_INVALID_MEMORY_VALUE = "Cannot use value assigned to parameter '%s' as a memory for external storage.";
+    public static final String EXT_STORAGE_INVALID_RANGE = "Empty or invalid external storage memory range.";
+    public static final String EXT_STORAGE_MISSING_HEAP = "No heap allocated for external variables.";
+    public static final String EXT_STORAGE_MUTABLE_INDEX = "External storage declaration must specify constant index.";
+    public static final String EXT_STORAGE_MUTABLE_RANGE = "External storage declaration must specify constant range.";
+    public static final String EXT_STORAGE_NON_INTEGER_INDEX = "External storage declaration must specify integer index.";
+    public static final String EXT_STORAGE_NON_INTEGER_RANGE = "External storage declaration must specify integer range.";
+    //    public static final String EXT_STORAGE_OUTSIDE_RANGE = "External storage memory index out of range (0 .. 512).";
     public static final String FORMATTABLE_FORBIDDEN = "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.";
     public static final String FORMATTABLE_NOT_ENOUGH_ARGS = "Not enough arguments for formattable placeholders.";
     public static final String FORMATTABLE_TOO_MANY_ARGS = "Too many arguments for formattable placeholders.";
-    public static final String FOR_EACH_WRONG_NUMBER_OF_VALUES = "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).";
-    public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";
     public static final String FOR_EACH_ITERATORS_VALUES_MISMATCH = "Number of iterator specifications (%d) doesn't match number of value lists (%d).";
+    public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";
+    public static final String FOR_EACH_WRONG_NUMBER_OF_VALUES = "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).";
     public static final String FUNCTION_CALL_NOT_ENOUGH_ARGS = "Not enough arguments to the '%s' function (expected %d or more, found %d).";
     public static final String FUNCTION_CALL_UNDEFINED = "Unknown function '%s'.";
     public static final String FUNCTION_CALL_UNRESOLVED = "Cannot resolve function '%s'.";
@@ -79,8 +81,8 @@ public class ERR {
     public static final String LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED = "Assignment to constant or parameter '%s' not allowed.";
     public static final String LVALUE_ASSIGNMENT_TO_LINKED_NOT_ALLOWED = "Assignment to variable '%s' representing a linked block not allowed.";
     public static final String LVALUE_ASSIGNMENT_TO_PARAM_NOT_ALLOWED = "Assignment to a parameter not allowed.";
-    public static final String LVALUE_CANNOT_ASSIGN_TO_EXPRESSION = "Cannot assign a value to this expression.";
     public static final String LVALUE_CANNOT_ASSIGN_TO_ARGUMENT = "Function is trying to assign a value to an argument not declared 'out'.";
+    public static final String LVALUE_CANNOT_ASSIGN_TO_EXPRESSION = "Cannot assign a value to this expression.";
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
     public static final String METHOD_CALL_UNDEFINED = "Unknown function '%s'.";
     public static final String MLOG_FIRST_ARGUMENT_NOT_LITERAL = "First argument to the '%s' function must be a string literal.";

@@ -10,9 +10,10 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /// Tracks heap usage. Creates heap variables and assigns indexes to them.
@@ -50,28 +51,28 @@ public class HeapTracker extends AbstractMessageEmitter {
         return new HeapTracker(context, heapMemory, startHeapIndex, endHeapIndex);
     }
 
-    public ValueStore createVariable(AstIdentifier identifier, Set<Modifier> modifiers) {
+    public ValueStore createVariable(AstIdentifier identifier, Map<Modifier, @Nullable Object> modifiers) {
         if (!heapAllocated) {
-            error(identifier, ERR.EXTERNAL_MISSING_HEAP);
+            error(identifier, ERR.EXT_STORAGE_MISSING_HEAP);
         }
         if (currentHeapIndex >= endHeapIndex) {
-            error(identifier, ERR.EXTERNAL_HEAP_EXCEEDED, identifier.getName());
+            error(identifier, ERR.EXT_STORAGE_EXCEEDED, identifier.getName());
         }
 
         LogicValue index = LogicNumber.create(currentHeapIndex++);
 
-        return modifiers.contains(Modifier.CACHED)
+        return modifiers.containsKey(Modifier.CACHED)
                 ? new ExternalCachedVariable(identifier.sourcePosition(), heapMemory, index, LogicVariable.global(identifier))
                 : new ExternalVariable(identifier.sourcePosition(), heapMemory, index, processor.nextTemp());
     }
 
     public ExternalArray createArray(AstIdentifier identifier, int size) {
         if (!heapAllocated) {
-            error(identifier, ERR.EXTERNAL_MISSING_HEAP);
+            error(identifier, ERR.EXT_STORAGE_MISSING_HEAP);
         }
 
         if (currentHeapIndex + size > endHeapIndex) {
-            error(identifier, ERR.EXTERNAL_HEAP_EXCEEDED_ARRAY, identifier.getName(),
+            error(identifier, ERR.EXT_STORAGE_EXCEEDED_ARRAY, identifier.getName(),
                     size, endHeapIndex - currentHeapIndex);
         }
 

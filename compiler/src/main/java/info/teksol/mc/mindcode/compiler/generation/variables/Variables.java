@@ -102,7 +102,7 @@ public class Variables extends AbstractMessageEmitter {
     /// @return ValueStore instance representing the variable
     private ValueStore createImplicitVariable(AstIdentifier identifier) {
         if (identifier.isExternal()) {
-            return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Set.of()));
+            return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Map.of()));
         } else if (isLinkedVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         } else if (isGlobalVariable(identifier)) {
@@ -154,15 +154,20 @@ public class Variables extends AbstractMessageEmitter {
         return result;
     }
 
+    private HeapTracker getHeapTracker(Map<Modifier, @Nullable Object> modifiers) {
+        return modifiers.get(Modifier.EXTERNAL) instanceof HeapTracker externalTracker ? externalTracker : heapTracker;
+    }
+
     /// Registers an external variable in given scope. Reports possible name clashes.
     ///
     /// @param identifier variable name
     /// @return ValueStore instance representing the created variable
-    public ValueStore createExternalVariable(AstIdentifier identifier, Set<Modifier> modifiers) {
-        ValueStore result = verifyGlobalDeclaration(identifier, identifier)
-                ? heapTracker.createVariable(identifier, modifiers)
-                : LogicVariable.INVALID;
+    public ValueStore createExternalVariable(AstIdentifier identifier, Map<Modifier, @Nullable Object> modifiers) {
+        if (!verifyGlobalDeclaration(identifier, identifier)) {
+            return LogicVariable.INVALID;
+        }
 
+        ValueStore result = getHeapTracker(modifiers).createVariable(identifier, modifiers);
         globalVariables.putIfAbsent(identifier.getName(), result);
         return result;
     }
@@ -171,13 +176,13 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param variable variable specification
     /// @return ValueStore instance representing the created variable
-    public ArrayStore<?> createArray(AstIdentifier identifier, int size, Set<Modifier> modifiers) {
+    public ArrayStore<?> createArray(AstIdentifier identifier, int size, Map<Modifier, @Nullable Object> modifiers) {
         ArrayStore<?> result;
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(identifier, size);
-        } else if (modifiers.contains(Modifier.EXTERNAL)) {
-            result = heapTracker.createArray(identifier, size);
+        } else if (modifiers.containsKey(Modifier.EXTERNAL)) {
+            result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {
             result = InternalArray.create(identifier, size);
         }
@@ -193,7 +198,7 @@ public class Variables extends AbstractMessageEmitter {
     /// @param scope      scope of the variable
     /// @param modifiers  declaration modifiers
     /// @return ValueStore instance representing the created variable
-    public ValueStore createVariable(boolean local, AstIdentifier identifier, VariableScope scope, Set<Modifier> modifiers) {
+    public ValueStore createVariable(boolean local, AstIdentifier identifier, VariableScope scope, Map<Modifier, @Nullable Object> modifiers) {
         String name = identifier.getName();
 
         if (local) {
@@ -208,7 +213,7 @@ public class Variables extends AbstractMessageEmitter {
                 return Objects.requireNonNull(globalVariables.get(identifier.getName()));
             }
             return registerGlobalVariable(identifier, LogicVariable.global(identifier,
-                    modifiers.contains(Modifier.VOLATILE), modifiers.contains(Modifier.NOINIT)));
+                    modifiers.containsKey(Modifier.VOLATILE), modifiers.containsKey(Modifier.NOINIT)));
         }
     }
 

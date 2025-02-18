@@ -18,7 +18,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -60,7 +60,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
             if (group.hasDeclaration()) {
                 if (iterator.getIterator() instanceof AstIdentifier identifier) {
-                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Set.of());
+                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Map.of());
                 } else {
                     // Probably can't happen due to grammar
                     error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);

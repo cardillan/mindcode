@@ -206,6 +206,19 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesInitializedArrayDeclarationsNoSizeExternalStorage() {
+            assertCompilesTo("""
+                            external cell1 a[] = (1, 2, 3);
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(WRITE, "1", "cell1", "0"),
+                    createInstruction(WRITE, "2", "cell1", "1"),
+                    createInstruction(WRITE, "3", "cell1", "2")
+            );
+        }
+
+        @Test
         void reportsUnknownArraySize() {
             assertGeneratesMessage(
                     "Array size not specified.",
@@ -243,14 +256,14 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsInsufficientHeapCapacity() {
             assertGeneratesMessage(
-                    "Not enough capacity in allocated heap for array 'a' (required 100, available 64).",
+                    "Not enough capacity in external storage for array 'a' (required 100, available 64).",
                     "allocate heap in cell1; external a[100];");
         }
 
         @Test
         void reportsInsufficientHeapCapacity2() {
             assertGeneratesMessage(
-                    "Not enough capacity in allocated heap for array 'b' (required 100, available 54).",
+                    "Not enough capacity in external storage for array 'b' (required 100, available 54).",
                     "allocate heap in cell1; external a[10], b[100];");
         }
 
@@ -310,7 +323,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesInvalidMemoryDeclarationConstant() {
             assertGeneratesMessages(
-                    expectedMessages().add("Cannot use 'memory' as a memory for heap or stack."),
+                    expectedMessages().add("Cannot use 'memory' as external storage."),
                     """
                             const memory = @coal;
                             allocate heap in memory;
@@ -320,7 +333,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesInvalidMemoryDeclarationParameter() {
             assertGeneratesMessages(
-                    expectedMessages().add("Cannot use value assigned to parameter 'memory' as a memory for heap or stack."),
+                    expectedMessages().add("Cannot use value assigned to parameter 'memory' as a memory for external storage."),
                     """
                             param memory = @coal;
                             allocate heap in memory;
@@ -340,20 +353,20 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesNonConstantRanges() {
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack declaration must specify constant range."),
+                    expectedMessages().add("External storage declaration must specify constant range."),
                     "allocate heap in bank1[a .. 10];");
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack declaration must specify constant range."),
+                    expectedMessages().add("External storage declaration must specify constant range."),
                     "allocate heap in bank1[0 .. b];");
         }
 
         @Test
         void refusesNonIntegerRanges() {
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack declaration must specify integer range."),
+                    expectedMessages().add("External storage declaration must specify integer range."),
                     "allocate heap in bank1[10.5 .. 20];");
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack declaration must specify integer range."),
+                    expectedMessages().add("External storage declaration must specify integer range."),
                     "allocate heap in bank1[0 .. 15.8];");
         }
 
@@ -363,16 +376,16 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("allocate heap in bank1[0 ... 512];");
             assertCompiles("allocate heap in bank1[0 .. 511];");
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack memory index out of range (0 .. 512)."),
+                    expectedMessages().add("external storage memory index out of range (0 .. 512)."),
                     "allocate heap in bank1[0 ... 513];");
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack memory index out of range (0 .. 512)."),
+                    expectedMessages().add("external storage memory index out of range (0 .. 512)."),
                     "allocate heap in bank1[0 .. 512];");
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack memory index out of range (0 .. 512)."),
+                    expectedMessages().add("external storage memory index out of range (0 .. 512)."),
                     "allocate heap in bank1[-1 .. 0];");
             assertGeneratesMessages(
-                    expectedMessages().add("Heap/stack memory index out of range (0 .. 512)."),
+                    expectedMessages().add("external storage memory index out of range (0 .. 512)."),
                     "allocate heap in bank1[512 ... 512];");
         }
 
@@ -381,10 +394,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("allocate heap in bank1[0 .. 0];");
             assertCompiles("allocate heap in bank1[1 ... 2];");
             assertGeneratesMessages(
-                    expectedMessages().add("Empty or invalid heap/stack memory range."),
+                    expectedMessages().add("Empty or invalid external storage memory range."),
                     "allocate heap in bank1[0 ... 0];");
             assertGeneratesMessages(
-                    expectedMessages().add("Empty or invalid heap/stack memory range."),
+                    expectedMessages().add("Empty or invalid external storage memory range."),
                     "allocate heap in bank1[1 .. 0];");
         }
 
@@ -393,8 +406,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             // Make sure each excess variable is reported only once
             assertGeneratesMessages(
                     expectedMessages()
-                            .add("Not enough capacity in allocated heap for '$B'.")
-                            .add("Not enough capacity in allocated heap for '$C'."),
+                            .add("Not enough capacity in external storage for '$B'.")
+                            .add("Not enough capacity in external storage for '$C'."),
                     """
                             allocate heap in cell1[0 ... 1];
                             $A = $B;
@@ -642,11 +655,28 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void compilesExternalVariableDeclarations() {
+        void compilesHeapVariableDeclarations() {
             assertCompilesTo("""
                             allocate heap in cell1;
                             external a;
                             external b = a;
+                            print(b);
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
+                    createInstruction(READ, var(0), "cell1", "0"),
+                    createInstruction(WRITE, var(0), "cell1", "1"),
+                    createInstruction(READ, var(1), "cell1", "1"),
+                    createInstruction(PRINT, var(1))
+            );
+        }
+
+
+        @Test
+        void compilesExternalVariableDeclarations() {
+            assertCompilesTo("""
+                            external cell1[0] a;
+                            external cell1[1] b = a;
                             print(b);
                             """,
                     createInstruction(LABEL, var(1000)),
@@ -807,6 +837,13 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Variable declared as 'noinit' cannot be initialized.",
                     "noinit var a = 10;");
+        }
+
+        @Test
+        void refusesTooSmallExternalSpace() {
+            assertGeneratesMessage(
+                    "Not enough capacity in external storage for 'c'.",
+                    "external cell1[0 .. 1] a, b, c;");
         }
     }
 }

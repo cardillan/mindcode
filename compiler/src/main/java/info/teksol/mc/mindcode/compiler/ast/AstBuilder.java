@@ -285,7 +285,17 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     private AstVariableModifier createVariableModifier(DeclModifierContext ctx) {
-        return new AstVariableModifier(pos(ctx), Modifier.fromToken(ctx.modifier.getType()));
+        Modifier modifier = Modifier.fromToken(ctx.modifier.getType());
+        return new AstVariableModifier(pos(ctx), modifier, createModifierParametrization(modifier, ctx));
+    }
+
+    private @Nullable AstMindcodeNode createModifierParametrization(Modifier modifier, DeclModifierContext ctx) {
+        if (modifier == Modifier.EXTERNAL && ctx.memory != null) {
+            return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
+                    visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
+        } else {
+            return null;
+        }
     }
 
     private AstVariableSpecification createVariableSpecification(VariableSpecificationContext ctx) {

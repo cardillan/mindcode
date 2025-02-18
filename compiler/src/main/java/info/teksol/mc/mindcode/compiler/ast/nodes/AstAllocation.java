@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstAllocation extends AstDeclaration {
+public class AstAllocation extends AstDeclaration implements ExternalStorage {
     public enum AllocationType { HEAP, STACK }
 
     private final AllocationType type;
