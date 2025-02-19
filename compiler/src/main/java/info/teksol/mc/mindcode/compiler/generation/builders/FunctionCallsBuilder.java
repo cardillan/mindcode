@@ -101,6 +101,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
             case "min", "max"   -> varargsBuilder.get().handleMinMax(call);
             case "mlog"         -> mlogBuilder.get().handleMlog(call, false);
             case "mlogSafe"     -> mlogBuilder.get().handleMlog(call, true);
+            case "ascii"        -> textBuilder.get().handleAscii(call);
             case "printf"       -> textBuilder.get().handlePrintf(call);
             case "print"        -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT);
             case "println"      -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN);

@@ -167,6 +167,11 @@ FLOAT                   : DecDigit+ DecExponent
                         | DecDigit* DOT DecDigit+ DecExponent?
                         ;
 
+// A single character. Converted to its ASCII value
+CHAR                    : '\'' ~[\r\n'] '\''
+                        | '\'\\\'\''
+                        ;
+
 // Directives
 HASHSET                 : '#set' -> pushMode(InDirective) ;
 

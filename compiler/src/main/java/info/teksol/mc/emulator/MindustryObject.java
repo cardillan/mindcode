@@ -29,4 +29,10 @@ public interface MindustryObject {
     default @Nullable MindustryContent type() {
         return null;
     }
+
+    /// @return icon string literal for this object
+    default @Nullable String iconString() {
+        MindustryContent type = type();
+        return type == null ? null : type.iconString();
+    }
 }

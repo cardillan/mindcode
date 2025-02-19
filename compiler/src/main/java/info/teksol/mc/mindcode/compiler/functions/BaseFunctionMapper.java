@@ -168,7 +168,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
         // Subtract one more for target
         int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused - 1;
-        String name = selector.isPresent() ? selector.get().name() : opcodeVariant.opcode().toString();
+        String name = selector.map(NamedParameter::name).orElseGet(() -> opcodeVariant.opcode().toString());
         return new StandardPropertyHandler(this, name, opcodeVariant, numArgs, results > 0);
     }
 
@@ -196,9 +196,13 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         // Handle special cases
         // Note: the print() function is handled by the compiler to cover the formating variant,
         // but it is included here to handle documentation and decompilation.
-        switch(opcode) {
-            case FORMAT, PRINT: return new VariableArityFunctionHandler(this, opcode.toString(), opcodeVariant);
-            case UBIND:         return new UbindFunctionHandler(this, opcode.toString(), opcodeVariant);
+        switch (opcode) {
+            case FORMAT, PRINT, PRINTCHAR:
+                return new VariableArityFunctionHandler(this, opcode.toString(), opcodeVariant);
+
+            case UBIND:
+                return new UbindFunctionHandler(this, opcode.toString(), opcodeVariant);
+
             case MESSAGE:
                 if (processorVersion.ordinal() >= ProcessorVersion.V8A.ordinal()) {
                     return new MessageFunctionHandler(this, opcode.toString(), opcodeVariant);
@@ -239,6 +243,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         return new StandardFunctionHandler(this, name, opcodeVariant, minArgs, numArgs, results > 0);
     }
 
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     private String functionName(OpcodeVariant opcodeVariant, @Nullable NamedParameter selector) {
         return switch (opcodeVariant.opcode()) {
             case DRAW   -> switch (Objects.requireNonNull(selector).name()) {

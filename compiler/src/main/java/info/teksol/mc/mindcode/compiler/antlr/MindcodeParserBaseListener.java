@@ -689,6 +689,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstOperatorBinaryShift(MindcodeParser.AstOperatorBinaryShiftContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -393,6 +393,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astLiteralChar}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astOperatorBinaryShift}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

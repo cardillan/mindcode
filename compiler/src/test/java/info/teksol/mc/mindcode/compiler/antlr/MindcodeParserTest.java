@@ -88,8 +88,7 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(3, 5, "Parse error: .*")
                             .addRegex(3, 7, "Parse error: .*")
                             .addRegex(4, 9, "Parse error: .*")
-                            .addRegex(5, 5, "Parse error: .*")
-                    ,
+                            .addRegex(5, 5, "Parse error: .*"),
                     """
                             [index];
                             array[];
@@ -144,9 +143,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesUnbalancedBegin() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(4, 1, "Parse error: .*"),
+            assertGeneratesMessageRegex(4, 1, "Parse error: .*",
                     """
                             begin
                                 id;
@@ -155,9 +152,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesUnbalancedEnd() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(2, 1, "Parse error: .*"),
+            assertGeneratesMessageRegex(2, 1, "Parse error: .*",
                     """
                                 id;
                             end;
@@ -289,15 +284,13 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesInvalidParamIdentifiers1() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 8, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
                     "param x.y = 10;");
         }
 
         @Test
         void refusesInvalidParamIdentifiers2() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 9, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 9, "Parse error: .*",
                     "param a + b = 10;");
         }
 
@@ -321,15 +314,13 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesInvalidConstIdentifiers1() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 8, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
                     "const x.y = 10;");
         }
 
         @Test
         void refusesInvalidConstIdentifiers2() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 9, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 9, "Parse error: .*",
                     "const a + b = 10;");
         }
 
@@ -353,9 +344,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesInvalidAllocationType() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 10, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 10, "Parse error: .*",
                     "allocate memory in cell1[10 .. 20];");
         }
 
@@ -364,40 +353,31 @@ class MindcodeParserTest extends AbstractParserTest {
             assertGeneratesMessages(
                     expectedMessages()
                             .addRegex(1, 23, "Parse error: .*")
-                            .addRegex(1, 27, "Parse error: .*")
-                    ,
+                            .addRegex(1, 27, "Parse error: .*"),
                     "allocate heap in cell1(10 .. 20);");
         }
 
         @Test
         void refusesInvalidAllocationRange2() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 29, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 29, "Parse error: .*",
                     "allocate heap in cell1[10 . 20];");
         }
 
         @Test
         void refusesInvalidAllocationRange3() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 30, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 30, "Parse error: .*",
                     "allocate heap in cell1[10 .... 20];");
         }
 
         @Test
         void refusesInvalidAllocationRange4() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 26, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 26, "Parse error: .*",
                     "allocate heap in cell1[10];");
         }
 
         @Test
         void refusesInvalidAllocationRange5() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 18, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 18, "Parse error: .*",
                     "allocate heap in $cell1[10 .. 20];");
         }
 
@@ -444,12 +424,8 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesNonProperty() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 12, "Parse error: .*"),
-                    """
-                            identifier.$identifier;
-                            """);
+            assertGeneratesMessageRegex(1, 12, "Parse error: .*",
+                    "identifier.$identifier;");
         }
     }
 
@@ -464,9 +440,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesEnhancedCommentWithMultilineInterpolation() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 40, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 40, "Parse error: .*",
                     """
                             /// This is a comment with multiline ${
                                 interpolation}
@@ -477,8 +451,7 @@ class MindcodeParserTest extends AbstractParserTest {
         void refusesNestedEnhancedComments() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .addRegex("Parse error: .*").atLeast(1)
-                    ,
+                            .addRegex("Parse error: .*").atLeast(1),
                     """
                             /// Nested ${ /// interpolation }
                             """);
@@ -546,35 +519,20 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesWrongPrefixPostfix() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 4, "Parse error: .*")
-                    ,
-                    """
-                            ++a--;
-                            """);
+            assertGeneratesMessageRegex(1, 4, "Parse error: .*",
+                    "++a--;");
         }
 
         @Test
         void refusesWrongTernaryOperator1() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 6, "Parse error: .*")
-                    ,
-                    """
-                            a ? b;
-                            """);
+            assertGeneratesMessageRegex(1, 6, "Parse error: .*",
+                    "a ? b;");
         }
 
         @Test
         void refusesWrongTernaryOperator2() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 5, "Parse error: .*")
-                    ,
-                    """
-                            a : b;
-                            """);
+            assertGeneratesMessageRegex(1, 5, "Parse error: .*",
+                    "a : b;");
         }
     }
 
@@ -582,16 +540,12 @@ class MindcodeParserTest extends AbstractParserTest {
     class Formattables {
         @Test
         void parsesFormattableWithValue() {
-            assertParses("""
-                    $"foo$bar";"baz";
-                    """);
+            assertParses("$\"foo$bar\";\"baz\";");
         }
 
         @Test
         void parsesFormattableWithEscape() {
-            assertParses("""
-                    $"foo\\$bar";
-                    """);
+            assertParses("$\"foo\\$bar\";");
         }
 
         @Test
@@ -605,9 +559,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void parsesMultipleFormattables() {
-            assertParses("""
-                    $"Formattable with ${first} and ${second} interpolation";
-                    """);
+            assertParses("$\"Formattable with ${first} and ${second} interpolation\";");
         }
 
         @Test
@@ -627,10 +579,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesNestedFormattable() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(2, 5, "Parse error: .*")
-                    ,
+            assertGeneratesMessageRegex(2, 5, "Parse error: .*",
                     """
                             $"Formattable with ${
                                 $"a nested"
@@ -679,9 +628,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesMisplacedOutValues() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 13, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 13, "Parse error: .*",
                     "for i in a, out b, c do x; end;");
         }
 
@@ -799,22 +746,19 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesBothModifiers() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 8, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
                     "inline noinline def foo() end;");
         }
 
         @Test
         void refusesExternalName() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 6, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 6, "Parse error: .*",
                     "void $foo() end;");
         }
 
         @Test
         void refusesMissingParameter() {
-            assertGeneratesMessages(
-                    expectedMessages().addRegex(1, 13, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 13, "Parse error: .*",
                     "void foo(a, , b) end;");
         }
 
@@ -909,17 +853,13 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesMissingDo() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 24, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 24, "Parse error: .*",
                     "for i = 0; i < 10; i++ print(i); end;");
         }
 
         @Test
         void refusesMissingSemicolon() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 18, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 18, "Parse error: .*",
                     "for i = 0; i < 10 do print(i); end;");
         }
 
@@ -989,20 +929,33 @@ class MindcodeParserTest extends AbstractParserTest {
                     null;
                     true;
                     false;
+                    'A';
                     """);
         }
 
         @Test
         void refusesQuotesWithinLiterals() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 12, "Parse error: .*")
-                    ,
-                    """
-                            a = "Hi, \\"friend\\"";
-                            """);
+            assertGeneratesMessageRegex(1, 12, "Parse error: .*",
+                    "a = \"Hi, \\\"friend\\\"\";");
         }
 
+        @Test
+        void refusesEmptyCharLiteral() {
+            assertGeneratesMessageRegex(1, 5, "Parse error: .*",
+                    "a = '';\n");
+        }
+
+        @Test
+        void refusesTooLongCharLiteral() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 5, "Parse error: .*")
+                            .addRegex(1, 8, "Parse error: .*")
+                    ,
+                    """
+                            a = '\\n';
+                            """);
+        }
     }
 
     @Nested
@@ -1035,9 +988,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesMissingDo() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 19, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 19, "Parse error: .*",
                     "for i in 0 ... 10 a; end;");
         }
 
@@ -1069,8 +1020,7 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(1, 2, "Parse error: .*")
                             .addRegex(2, 2, "Parse error: .*")
                             .addRegex(3, 2, "Parse error: .*")
-                            .addRegex(4, 2, "Parse error: .*")
-                    ,
+                            .addRegex(4, 2, "Parse error: .*"),
                     """
                             a
                             b
@@ -1084,8 +1034,7 @@ class MindcodeParserTest extends AbstractParserTest {
             assertGeneratesMessages(
                     expectedMessages()
                             .addRegex(1, 3, "Parse error: .*")
-                            .addRegex(3, 3, "Parse error: .*")
-                    ,
+                            .addRegex(3, 3, "Parse error: .*"),
                     """
                             xx
                             // This is a comment
@@ -1110,24 +1059,14 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesInvalidLabels() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 8, "Parse error: .*")
-                    ,
-                    """
-                            break x + 1;
-                            """);
+            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
+                    "break x + 1;");
         }
 
         @Test
         void refusesInvalidValues() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 7, "Parse error: .*")
-                    ,
-                    """
-                            return for i in 0 ... 10 do a; end;
-                            """);
+            assertGeneratesMessageRegex(1, 7, "Parse error: .*",
+                    "return for i in 0 ... 10 do a; end;");
         }
     }
 
@@ -1158,17 +1097,13 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesWhileDoMissingDo() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 13, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 13, "Parse error: .*",
                     "while a < b foo(); end;");
         }
 
         @Test
         void refusesDoWhileMissingCondition() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .addRegex(1, 16, "Parse error: .*"),
+            assertGeneratesMessageRegex(1, 16, "Parse error: .*",
                     "do foo(); while;");
         }
 

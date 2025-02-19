@@ -137,6 +137,7 @@ expression
     | HEXADECIMAL                                                                       # astLiteralHexadecimal
     | DECIMAL                                                                           # astLiteralDecimal
     | FLOAT                                                                             # astLiteralFloat
+    | CHAR                                                                              # astLiteralChar
     | NULL                                                                              # astLiteralNull
     | value = (TRUE | FALSE)                                                            # astLiteralBoolean
     | exp = lvalue postfix = (INCREMENT | DECREMENT)                                    # astOperatorIncDecPostfix

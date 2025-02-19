@@ -424,6 +424,27 @@ op sub *tmp0 MAX MIN
 print *tmp0
 ```
 
+## The `ascii()` function
+
+The `ascii()` function takes a string constant as an argument, and returns the ASCII value of the first character of its argument. 
+
+The function allows obtaining ASCII values from built-in string constants (icons) and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
+
+```
+#set target = 8;
+external cell1 a = ascii(ITEM_COAL);
+printchar(a);
+```
+
+compiles to 
+
+```
+jump 0 equal cell1 null
+write 63539 cell1 0
+read *tmp0 cell1 0
+printchar *tmp0
+```
+
 # System library functions
 
 The system function discussed so far are supported directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY.markdown).

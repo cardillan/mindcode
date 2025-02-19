@@ -99,6 +99,10 @@ public interface ContextlessInstructionCreator {
         return (PrintInstruction) createInstruction(astContext, PRINT, what);
     }
 
+    default PrintCharInstruction createPrintChar(AstContext astContext, LogicValue what) {
+        return (PrintCharInstruction) createInstruction(astContext, PRINTCHAR, what);
+    }
+
     default PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock) {
         return (PrintflushInstruction) createInstruction(astContext, PRINTFLUSH, messageBlock);
     }

@@ -92,4 +92,64 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                 createInstruction(PRINT, q(" ms\n"))
         );
     }
+
+    @Test
+    void optimizesPrintChar() {
+        assertCompilesTo("""
+                        printchar(65);
+                        printchar(66);
+                        print("C");
+                        """,
+                createInstruction(PRINT, q("ABC"))
+        );
+    }
+
+    @Test
+    void optimizesPrintCharNoFormat() {
+        assertCompilesTo(
+                expectedMessages().add("A string literal precludes using 'format' instruction for print merging."),
+                """
+                        param x = "{0}";
+                        printchar(65);
+                        printchar(66);
+                        print("C");
+                        """,
+                createInstruction(SET, "x", q("{0}")),
+                createInstruction(PRINT, q("ABC"))
+        );
+    }
+
+    @Test
+    void skipsNonConstantPrintChar() {
+        assertCompilesTo("""
+                        param ch = 65;
+                        print("a");
+                        printchar(ch);
+                        print("b");
+                        """,
+                createInstruction(SET, "ch", "65"),
+                createInstruction(PRINT, q("a")),
+                createInstruction(PRINTCHAR, "ch"),
+                createInstruction(PRINT, q("b"))
+        );
+    }
+
+    @Test
+    void skipsNonRepresentablesInPrintChar() {
+        assertCompilesTo("""
+                        printchar(30);
+                        printchar(31);
+                        printchar(32);
+                        printchar(33);
+                        printchar(34);
+                        printchar(35);
+                        printchar(36);
+                        """,
+                createInstruction(PRINTCHAR, "30"),
+                createInstruction(PRINTCHAR, "31"),
+                createInstruction(PRINT, q(" !")),
+                createInstruction(PRINTCHAR, "34"),
+                createInstruction(PRINT, q("#$"))
+        );
+    }
 }

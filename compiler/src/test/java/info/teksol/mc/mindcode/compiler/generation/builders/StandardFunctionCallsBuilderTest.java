@@ -1621,10 +1621,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesWeatherInstructions() {
             assertCompilesTo(
-                    expectedMessages()
-                            .add("Built-in variable '@rain' not recognized.")
-                            .add("Built-in variable '@fluffyBunny' not recognized.")
-                    ,
+                    expectedMessages().add("Built-in variable '@fluffyBunny' not recognized."),
                     """
                             active = weathersense(@snow);
                             weatherset(@rain, true);
@@ -1640,12 +1637,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void compilesPlaysound() {
-            assertCompilesTo(
-                    expectedMessages()
-                            .add("Built-in variable '@sfx-railgun' not recognized.")
-                            .add("Built-in variable '@sfx-laser' not recognized.")
-                    ,
-                    """
+            assertCompilesTo("""
                             playsound(true, @sfx-railgun, 1, 1, 100, 10, true);
                             playsound(false, @sfx-laser, 1, 1, 0.5, false);
                             """,
@@ -1726,6 +1718,15 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
 
+
+        @Test
+        void compilesPrintChar() {
+            assertCompilesTo("""
+                            printchar(65);
+                            """,
+                    createInstruction(PRINTCHAR, "65")
+            );
+        }
     }
 
     @Nested

@@ -24,6 +24,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
         AstFormattablePlaceholderVisitor<ValueStore>,
         AstLiteralBinaryVisitor<ValueStore>,
         AstLiteralBooleanVisitor<ValueStore>,
+        AstLiteralCharVisitor<ValueStore>,
         AstLiteralColorVisitor<ValueStore>,
         AstLiteralDecimalVisitor<ValueStore>,
         AstLiteralEscapeVisitor<ValueStore>,
@@ -57,6 +58,11 @@ public class LiteralsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitLiteralBoolean(AstLiteralBoolean node) {
         return node.getValue() ? LogicBoolean.TRUE : LogicBoolean.FALSE;
+    }
+
+    @Override
+    public ValueStore visitLiteralChar(AstLiteralChar node) {
+        return LogicNumber.create(node.sourcePosition(), node.getLongValue());
     }
 
     @Override

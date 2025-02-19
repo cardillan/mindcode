@@ -25,8 +25,13 @@ public record BlockType(
         List<String> unitPlans
 ) implements MindustryContent {
 
+    @Override
+    public ContentType contentType() {
+        return ContentType.BLOCK;
+    }
+
     public static int count() {
-        return MindustryContents.BLOCK_MAP.size();
+        return MindustryContents.BLOCK_ID_MAP.size();
     }
 
     public static BlockType existing(String name) {

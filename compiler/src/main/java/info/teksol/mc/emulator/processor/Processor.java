@@ -214,6 +214,7 @@ public class Processor extends AbstractMessageEmitter {
             case OP             -> executeOp((OpInstruction) instruction);
             case PACKCOLOR      -> executePackColor((PackColorInstruction) instruction);
             case PRINT          -> executePrint((PrintInstruction) instruction);
+            case PRINTCHAR      -> executePrintChar((PrintCharInstruction) instruction);
             case PRINTFLUSH     -> executePrintflush((PrintflushInstruction) instruction);
             case READ           -> executeRead((ReadInstruction) instruction);
             case SENSOR         -> executeSensor((SensorInstruction) instruction);
@@ -419,6 +420,17 @@ public class Processor extends AbstractMessageEmitter {
     private boolean executePrint(PrintInstruction ix) {
         MindustryVariable var = getExistingVariable(ix.getValue());
         textBuffer.print(var.print(instructionProcessor));
+        return true;
+    }
+
+    private boolean executePrintChar(PrintCharInstruction ix) {
+        MindustryVariable var = getExistingVariable(ix.getValue());
+        if (var.isObject()) {
+            if (var.getObject() == null) return true;
+            textBuffer.print(Objects.requireNonNullElse(var.getObject().iconString(), ""));
+        } else {
+            textBuffer.print(String.valueOf((char)Math.floor(var.getDoubleValue())));
+        }
         return true;
     }
 

@@ -115,6 +115,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             }
 
             if (body.get(i) instanceof AstEnhancedComment comment && lineStart != i) {
+                //noinspection SuspiciousListRemoveInLoop
                 body.remove(i);
                 body.add(lineStart, comment);
             }
@@ -643,6 +644,19 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstLiteralFloat visitAstLiteralFloat(MindcodeParser.AstLiteralFloatContext ctx) {
         String literal = ctx.FLOAT().getText();
         return new AstLiteralFloat(pos(ctx), literal, false);
+    }
+
+    @Override
+    public AstLiteralChar visitAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx) {
+        String literal = ctx.CHAR().getText();
+        return switch (literal.length()) {
+            case 3 -> new AstLiteralChar(pos(ctx), literal.charAt(1));
+            case 4 -> new AstLiteralChar(pos(ctx), literal.charAt(2));
+            default -> {
+                context.error(pos(ctx), ERR.LITERAL_INVALID_CHAR_FORMAT);
+                yield new AstLiteralChar(pos(ctx), ' ');
+            }
+        };
     }
 
     @Override

@@ -10,6 +10,11 @@ public record Item(
         int id
 ) implements MindustryContent {
 
+    @Override
+    public ContentType contentType() {
+        return ContentType.ITEM;
+    }
+
     public static int count() {
         return MindustryContents.ITEM_MAP.size();
     }

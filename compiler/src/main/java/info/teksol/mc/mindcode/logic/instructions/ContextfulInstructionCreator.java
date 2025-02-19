@@ -98,6 +98,10 @@ public interface ContextfulInstructionCreator {
         return (PrintInstruction) createInstruction(PRINT, what);
     }
 
+    default PrintCharInstruction createPrintChar(LogicValue what) {
+        return (PrintCharInstruction) createInstruction(PRINTCHAR, what);
+    }
+
     default PrintflushInstruction createPrintflush(LogicVariable messageBlock) {
         return (PrintflushInstruction) createInstruction(PRINTFLUSH, messageBlock);
     }

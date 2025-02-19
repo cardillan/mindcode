@@ -1,7 +1,10 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -42,7 +45,7 @@ class PrintMerger extends BaseOptimizer {
         super(Optimization.PRINT_MERGING, optimizationContext);
     }
 
-    private final List<PrintInstruction> printVars = new ArrayList<>();
+    private final List<PrintingInstruction> printVars = new ArrayList<>();
     private @Nullable LogicInstruction previous;
 
     @Override
@@ -55,8 +58,8 @@ class PrintMerger extends BaseOptimizer {
             while (iterator.hasNext()) {
                 LogicInstruction current = iterator.next();
                 switch (current.getOpcode()) {
-                    case PRINT  -> printMerger.tryMerge(iterator, (PrintInstruction) current);
-                    case REMARK -> tryMergeRemark(iterator, (RemarkInstruction) current);
+                    case PRINT, PRINTCHAR -> printMerger.tryMerge(iterator, (PrintingInstruction) current);
+                    case REMARK           -> tryMergeRemark(iterator, (RemarkInstruction) current);
 
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
@@ -90,15 +93,39 @@ class PrintMerger extends BaseOptimizer {
         printVars.clear();
     }
 
+    private @Nullable String printValue(PrintingInstruction ix) {
+        if (!ix.getValue().isConstant()) return null;
+
+        return switch (ix) {
+            case PrintInstruction p -> p.getValue().format(instructionProcessor);
+            case PrintCharInstruction p -> printCharValue(p);
+            default -> throw new MindcodeInternalError("Unhandled instruction type: " + ix.getClass().getSimpleName());
+        };
+    }
+
+    private @Nullable String printCharValue(PrintCharInstruction ix) {
+        return switch (ix.getValue()) {
+            case LogicNumber number -> {
+                char ch = (char) Math.floor(number.getDoubleValue());
+                boolean isPrintable = !Character.isISOControl(ch) && !Character.isSurrogate(ch);
+                yield isPrintable && ch != '"' ? String.valueOf(ch) : null;
+            }
+
+            case LogicBuiltIn builtIn -> builtIn.getObject() != null ? builtIn.getObject().iconString() : null;
+
+            default -> null;
+        };
+    }
+
     // Tries to merge previous and current prints.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
-    private void tryMergeUsingPrint(LogicIterator iterator, PrintInstruction current) {
-        if (previous instanceof PrintInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
-            String str1 = prev.getValue().format(instructionProcessor);
-            String str2 = current.getValue().format(instructionProcessor);
+    private void tryMergeUsingPrint(LogicIterator iterator, PrintingInstruction current) {
+        if (previous instanceof PrintingInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
+            String str1 = printValue(prev);
+            String str2 = printValue(current);
             // Do not merge strings if the combined length is over 34, unless advanced
-            if (advanced() || str1.length() + str2.length() <= 34) {
+            if (str1 != null && str2 != null && (advanced() || str1.length() + str2.length() <= 34)) {
                 PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
                 removeInstruction(this.previous);
                 iterator.set(merged);
@@ -111,27 +138,31 @@ class PrintMerger extends BaseOptimizer {
     }
 
     private interface Merger {
-        void tryMerge(LogicIterator iterator, PrintInstruction current);
+        void tryMerge(LogicIterator iterator, PrintingInstruction current);
     }
 
     // Tries to merge previous and current format.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
-    private void tryMergeUsingFormat(LogicIterator iterator, PrintInstruction current) {
-        if (previous instanceof PrintInstruction prev && prev.getValue().isConstant()) {
-            StringBuilder str = new StringBuilder(prev.getValue().format(instructionProcessor));
-            if (current.getValue().isConstant()) {
-                for (PrintInstruction p : printVars) {
+    private void tryMergeUsingFormat(LogicIterator iterator, PrintingInstruction current) {
+        String previousStr, currentStr;
+        if (previous instanceof PrintingInstruction prev && (previousStr = printValue(prev)) != null) {
+            if (current.getValue().isConstant() && (currentStr = printValue(current)) != null) {
+                StringBuilder str = new StringBuilder(previousStr);
+                for (PrintingInstruction p : printVars) {
                     str.append("{0}");
                     optimizationContext.replaceInstruction(p, createFormat(p.getAstContext(), p.getValue()));
                 }
                 printVars.clear();
-                str.append(current.getValue().format(instructionProcessor));
+                str.append(currentStr);
                 iterator.remove();
 
                 PrintInstruction updated = createPrint(prev.getAstContext(), LogicString.create(str.toString()));
                 optimizationContext.replaceInstruction(prev, updated);
                 previous = updated;
+            } else if (current instanceof PrintCharInstruction) {
+                // Unresolvable printchar breaks the sequence
+                reset();
             } else {
                 printVars.add(current);
             }

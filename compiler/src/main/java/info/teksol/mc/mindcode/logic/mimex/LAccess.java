@@ -14,6 +14,11 @@ public record LAccess(
 ) implements MindustryContent {
 
     @Override
+    public ContentType contentType() {
+        return ContentType.LACCESS;
+    }
+
+    @Override
     public int id() {
         return -1;
     }

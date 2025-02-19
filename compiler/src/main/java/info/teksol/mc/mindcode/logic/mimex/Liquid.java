@@ -10,6 +10,11 @@ public record Liquid(
         int id
 ) implements MindustryContent {
 
+    @Override
+    public ContentType contentType() {
+        return ContentType.LIQUID;
+    }
+
     public static int count() {
         return MindustryContents.LIQUID_MAP.size();
     }

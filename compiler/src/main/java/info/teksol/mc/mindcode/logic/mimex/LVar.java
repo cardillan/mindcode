@@ -16,6 +16,11 @@ public record LVar(
 ) implements MindustryContent {
 
     @Override
+    public ContentType contentType() {
+        return ContentType.LVAR;
+    }
+
+    @Override
     public int id() {
         return -1;
     }

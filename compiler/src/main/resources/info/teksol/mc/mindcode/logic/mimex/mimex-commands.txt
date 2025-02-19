@@ -6,3 +6,8 @@ rebuild;2
 assist;3
 mine;4
 boost;5
+enterPayload;6
+loadUnits;7
+loadBlocks;8
+unloadPayload;9
+loopPayload;10

@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.1.0 - Future release
 
+### Fixed
+
+* Fixed wrong block/unit logic IDs ([#224](https://github.com/cardillan/mindcode/issues/224)).
+
+### Added
+
+* Added support for the new `printchar` instruction in compiler, optimizer and processor emulator.
+* Added character literals (e.g. `'A'`). The value of the literal is the ASCII value of the character in quotes.
+* Added `ascii()` function. The function returns the ASCII value of the first character of a string literal or constant.
+
 ### Experimental features
 
 * Added the "backpropagation" optimization to Data Flow Optimization (closes [#151](https://github.com/cardillan/mindcode/issues/151)).

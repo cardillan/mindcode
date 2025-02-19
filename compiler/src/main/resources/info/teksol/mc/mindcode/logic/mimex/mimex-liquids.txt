@@ -5,9 +5,9 @@ slag;1
 oil;2
 cryofluid;3
 neoplasm;4
-arkycite;5
-gallium;6
-ozone;7
-hydrogen;8
+arkycite;10
+gallium;8
+ozone;6
+hydrogen;5
 nitrogen;9
-cyanogen;10
+cyanogen;7

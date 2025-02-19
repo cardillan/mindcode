@@ -11,32 +11,56 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
 
     @Nested
-    class FormattableErrors {
+    class Ascii {
         @Test
-        void refusesTooFewValues() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Not enough arguments for formattable placeholders."),
+        void refusesNonStringArgument() {
+            assertGeneratesMessage(
+                    "The argument to the 'ascii' function must be a non-empty string constant or literal.",
+                    "ascii(rand(10));");
+        }
+
+        @Test
+        void refusesEmptyStringArgument() {
+            assertGeneratesMessage(
+                    "The argument to the 'ascii' function must be a non-empty string constant or literal.",
                     """
-                            print($"First: $, second: $.", first);
+                            ascii("");
                             """);
         }
 
         @Test
+        void compilesAsciiFunction() {
+            assertCompilesTo("""
+                            a = ascii("AA");
+                            b = ascii("BB");
+                            """,
+                    createInstruction(SET, "a", "65"),
+                    createInstruction(SET, "b", "66")
+            );
+        }
+    }
+
+    @Nested
+    class FormattableErrors {
+        @Test
+        void refusesTooFewValues() {
+            assertGeneratesMessage(
+                    "Not enough arguments for formattable placeholders.",
+                    "print($\"First: $, second: $.\", first);");
+        }
+
+        @Test
         void refusesTooManyValues() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Too many arguments for formattable placeholders."),
-                    """
-                            print($"First: $, second: $.", first, second, third);
-                            """);
+            assertGeneratesMessage(
+                    "Too many arguments for formattable placeholders.",
+                    "print($\"First: $, second: $.\", first, second, third);");
         }
 
         @Test
         void refusesSecondFormattable() {
             assertGeneratesMessage(
                     "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.",
-                    """
-                            print($"Hello, $", $"Hello $name");
-                            """);
+                    "print($\"Hello, $\", $\"Hello $name\");");
         }
     }
 
@@ -174,7 +198,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             const fmt = $"Value: ${x + y}.";
                             const x = 1;
                             const y = 2;
-
+                            
                             void foo(x, y)
                                 print(fmt);
                             end;

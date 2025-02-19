@@ -56,6 +56,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, S, FUNC, Opcode.DRAW,       draw("reset"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.PRINT,      in("what"));
+        add(list, V8A, MAX, S, FUNC, Opcode.PRINTCHAR,  in("value"));
         add(list, V8A, MAX, S, FUNC, Opcode.FORMAT,     in("value"));
 
         add(list, V6,  MAX, S, BOTH, Opcode.DRAWFLUSH,  block("display1"));

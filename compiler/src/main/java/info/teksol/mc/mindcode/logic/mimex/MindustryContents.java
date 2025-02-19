@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,15 +22,16 @@ public class MindustryContents {
     static final Map<String, LVar> LVAR_MAP = new LVarReader("mimex-vars.txt").createFromResource();
 
     static final Map<Integer, BlockType> BLOCK_ID_MAP = BLOCK_MAP.values().stream()
+            .filter(block -> "shown".equals(block.visibility()))
             .collect(Collectors.toMap(BlockType::id, block -> block));
     static final Map<Integer, Item> ITEM_ID_MAP = ITEM_MAP.values().stream()
-            .collect(Collectors.toMap(Item::id, item -> item));
+             .collect(Collectors.toMap(Item::id, obj -> obj, (a, b) -> a, HashMap::new));
     static final Map<Integer, Liquid> LIQUID_ID_MAP = LIQUID_MAP.values().stream()
-            .collect(Collectors.toMap(Liquid::id, liquid -> liquid));
+            .collect(Collectors.toMap(Liquid::id, obj -> obj, (a, b) -> a, HashMap::new));
     static final Map<Integer, Unit> UNIT_ID_MAP = UNIT_MAP.values().stream()
-            .collect(Collectors.toMap(Unit::id, unit -> unit));
+            .collect(Collectors.toMap(Unit::id, obj -> obj, (a, b) -> a, HashMap::new));
     static final Map<Integer, UnitCommand> UNITCOMMAND_ID_MAP = UNITCOMMAND_MAP.values().stream()
-            .collect(Collectors.toMap(UnitCommand::id, command -> command));
+            .collect(Collectors.toMap(UnitCommand::id, obj -> obj, (a, b) -> a, HashMap::new));
 
     private static final Map<String, MindustryContent> ALL_CONSTANTS =
             Stream.of(ITEM_MAP, LIQUID_MAP, UNIT_MAP, UNITCOMMAND_MAP, BLOCK_MAP)
@@ -61,6 +59,11 @@ public class MindustryContents {
 
     public static MindustryContent unregistered(String name) {
         return new MindustryContent() {
+            @Override
+            public ContentType contentType() {
+                return ContentType.UNKNOWN;
+            }
+
             @Override
             public String contentName() {
                 return name.substring(1);
@@ -118,12 +121,16 @@ public class MindustryContents {
 
         public Map<String, T> createFromResource() {
             try {
-                ArrayList<@Nullable T> list = new ArrayList<>(createUnregistered());
+                ArrayList<@Nullable T> list = new ArrayList<>();
                 for (int i = 1; i < lines.size(); i++) {
                     String[] columns = lines.get(i).split(";", -1);
                     list.add(create(columns));
                 }
-                return list.stream().filter(Objects::nonNull).collect(Collectors.toMap(T::name, t -> t));
+                Map<String, T> result = list.stream().filter(Objects::nonNull).collect(Collectors.toMap(T::name,
+                        t -> t, (a, b) -> a, LinkedHashMap::new));
+                createUnregistered().forEach(t -> result.putIfAbsent(t.name(), t));
+
+                return result;
             } catch (Exception e) {
                 throw new RuntimeException("Error parsing file " + resourceName, e);
             }

@@ -11,10 +11,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FormattableContent;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.MissingValue;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.LogicNull;
-import info.teksol.mc.mindcode.logic.arguments.LogicString;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,6 +27,26 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
     public BuiltinFunctionTextOutputBuilder(AbstractBuilder builder) {
         super(builder);
+    }
+
+    public ValueStore handleAscii(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        ValueStore result;
+        if (validateStandardFunctionArguments(call, arguments, 1)) {
+            if (arguments.getFirst().getArgumentValue() instanceof LogicString str && !str.getValue().isEmpty()) {
+                result = LogicNumber.create(str.getValue().charAt(0));
+            } else {
+                error(call, ASCII_INVALID_ARGUMENT);
+                result = LogicVoid.VOID;
+            }
+        } else {
+            result = LogicVoid.VOID;
+        }
+
+        assembler.clearSubcontextType();
+        return result;
     }
 
     public ValueStore handlePrintf(AstFunctionCall call) {

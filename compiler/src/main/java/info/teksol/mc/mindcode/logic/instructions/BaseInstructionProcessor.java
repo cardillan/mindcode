@@ -161,6 +161,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case PACKCOLOR   -> new PackColorInstruction(astContext, arguments, params);
             case POP         -> new PopInstruction(astContext, arguments, params);
             case PRINT       -> new PrintInstruction(astContext, arguments, params);
+            case PRINTCHAR   -> new PrintCharInstruction(astContext, arguments, params);
             case PRINTFLUSH  -> new PrintflushInstruction(astContext, arguments, params);
             case PUSH        -> new PushInstruction(astContext, arguments, params);
             case READ        -> new ReadInstruction(astContext, arguments, params);

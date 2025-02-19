@@ -660,6 +660,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstOperatorBinaryMul(MindcodeParser.AstOperatorBinaryMulContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astLiteralChar}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astLiteralChar}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astOperatorBinaryShift}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

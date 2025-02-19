@@ -161,10 +161,12 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = null;
                         a = true;
                         a = false;
+                        a = 'A';
                         """,
                 createInstruction(SET, "a", "null"),
                 createInstruction(SET, "a", "true"),
-                createInstruction(SET, "a", "false")
+                createInstruction(SET, "a", "false"),
+                createInstruction(SET, "a", "65")
         );
     }
 

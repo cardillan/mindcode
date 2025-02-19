@@ -34,6 +34,7 @@ public class ERR {
     public static final String ARRAY_SIZE_OUTSIDE_RANGE = "Array size out of range (1 .. %d).";
     public static final String ARRAY_UNSUPPORTED_OPERATION = "Unsupported array expression.";
     public static final String ARRAY_VOLATILE = "Arrays cannot be declared 'volatile'.";
+    public static final String ASCII_INVALID_ARGUMENT = "The argument to the 'ascii' function must be a non-empty string constant or literal.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
@@ -75,6 +76,7 @@ public class ERR {
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals requires language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_COLOR_FORMAT = "Invalid format of color literal (supported formats are %%rrggbb or %%rrggbbaa).";
+    public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
     public static final String LITERAL_NO_VALID_REPRESENTATION = "Value '%s' does not have a valid mlog representation.";
     public static final String LITERAL_NO_VALID_REPRESENTATION_PARAM = "Value assigned to parameter '%s' (%s) does not have a valid mlog representation.";
     public static final String LOOP_LABEL_ALREADY_IN_USE = "Loop label '%s' already in use.";
