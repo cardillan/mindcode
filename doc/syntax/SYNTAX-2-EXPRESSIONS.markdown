@@ -398,6 +398,40 @@ y = y * 2;
 x = x + y;
 ```
 
+### Array assignments
+
+It is possible to assign arrays using the assignment operator, assuming both arrays have the same size. Assignments can be chained. Assignments between internal and external arrays are also supported, as well as subarrays. Examples:
+
+```
+external cell1 a[10];
+var b[10];
+var c[20];
+
+b = a;                      // Copies the entire array
+a[0 ... 5] = b[5 ... 10];   // Copies subarrays
+v[0 ... 10] = b;            // Possible, since the subarray has the same size as the array
+```
+
+To use a memory cell/bank in array assignments, it is necessary to use subarrays even when accessing the entire memory cell/bank:
+
+```
+var a[64];
+a = cell1[0 ... 64];        // Copies the entire memory cell into the array
+a = cell1;                  // Error - not supported                    
+```
+
+By using subarrays, it is possible to copy overlapping regions of arrays, effectively shifting the array content up or down:
+
+```
+var a[10];
+a[0 ... 9] = a[1 ... 10];   // Shifts towards array start  
+a[1 ... 10] = a[0 ... 9];   // Shifts towards array end
+```
+
+When overlapping regions of arrays are copied, Mindcode makes sure to perform the operation in correct order to prevent array elements from being overwritten before their content is read.
+
+If one or both of the arrays being assigned is internal, the assignment is compiled as a series of `set` instructions without loops. Assignments between two external arrays are compiled as a loop. 
+
 # Constant expressions
 
 Expressions or parts of expressions that are constant are evaluated at compile time. For example, `print(60 / 1000)` compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime. Most of Mindcode operators and deterministic built-in functions can be used in constant expressions.

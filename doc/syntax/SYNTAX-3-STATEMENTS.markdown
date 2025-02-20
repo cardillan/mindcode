@@ -78,7 +78,7 @@ The range is evaluated before the loop begins. If the value of the upper bound c
 Loop over a fixed collection of values or expressions:
 
 ```
-for u in @mono, @poly, @mega do
+for var u in @mono, @poly, @mega do
     ubind(u);
     if @unit != null then
         break;
@@ -90,7 +90,7 @@ printflush(message1);
 
 Tries to bind a mono, poly or mega, in this order, ending the loop when successfully binding one.
 
-The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated at the beginning of the iteration utilizing the expression. This loop
+The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic itself doesn't support dynamic arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated at the beginning of the iteration utilizing the expression. This loop
 
 ```
 var n = 0;
@@ -134,9 +134,40 @@ end;
 
 This code prints out "22" and not "21", as might be expected.
 
-### Modifications of values in the list
+### Arrays
 
-If the elements of the list being iterated over are variables, it is possible to change their value by declaring the loop control variable with the `out` modifier:
+When an array or subarray is used in the value list (external or internal), the array elements are concatenated with the rest of the list:
+
+```
+var a[] = (1, 2, 3, 4, 5);
+external cell1 b[] = (6, 7, 8, 9);
+
+// Prints 1234506789
+for var i in a, 0, b do
+    print(i);
+end;
+println();
+
+// Prints 12342345
+for var i in a[0 .. 3], a[1 .. 4] do
+    print(i);
+end;  
+println();
+
+// Prints 3 7 5 13 17
+for var i, j in a, 0, b do
+    println(i + j);
+end;  
+```
+
+> [!TIP]
+> It is generally more efficient to use list iteration loop rather than other forms of loops (e.g. range iteration loop combined with index access) for internal arrays. For external arrays, index access is about as effective as list iteration loop, but produces smaller code.
+> 
+> When loop unrolling optimization is applied, the resulting code is identical regardless of the type of loop used.  
+
+### Modifications of variables in the list
+
+If the elements of the list being iterated over are variables or arrays, it is possible to change their values by declaring the loop control variable with the `out` modifier:
 
 ```
 var a = 1, b = 2, c = 3, d = 4;
@@ -184,6 +215,70 @@ If some of the elements in the list cannot be modified, it is an error if it is 
 ```
 for var out i in a, b, c + 1, d do
     i = rand(10);
+end;
+```
+
+### Parallel iteration
+
+It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. THe only requirement is that all iterator group must be provided with data for the same number of iterations. 
+
+```
+var a[20], b[10];
+
+// Ten iterations in total: a has 20 elements, but feeds 2 iterators
+for var i, j in a; var out k in b do
+    b = i + j;
+end;
+```
+
+By combining subarrays and parallel iteration, arrays can be processed by list iteration loops in many ways. For example, it is possible to iterate over all adjacent pairs of elements in the array:
+
+```
+var a[10];
+
+var index = 0;
+for var out i in a do
+    i = index++;
+end;
+
+for var e1 in a[0 ... 9]; e2 in a[1 ... 10] do
+    print(e1, e2, " ");
+end;
+
+printflush(message1);
+```
+
+This code outputs `01 12 23 34 45 56 67 78 89 `.
+
+This can be used in, for example, a bubble sort algorithm:
+
+```
+const SIZE = 10;
+var a[SIZE];
+
+for var out i in a do
+    i = floor(rand(1000));
+end;
+
+for var i in a do
+    println(i);
+end;
+
+// Bubblesort!
+do
+    var swapped = false;
+    for var out i in a[0 ... 9]; var out j in a[1 ... 10] do
+        if i > j then
+            var x = i; i = j; j = x;
+            swapped = true; 
+        end;
+    end;
+while swapped;
+
+println();
+
+for var i in a do
+    println(i);
 end;
 ```
 

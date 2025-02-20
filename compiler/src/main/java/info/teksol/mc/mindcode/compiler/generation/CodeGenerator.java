@@ -19,6 +19,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
@@ -131,9 +132,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private void addMissingPrintflush(AstContext astContext, int position) {
         List<LogicInstruction> program = assembler.getInstructions();
         if (!profile.isAutoPrintflush()
-                || program.stream().noneMatch(ix -> ix.getOpcode() == Opcode.PRINT)
+                || program.stream().noneMatch(ix -> ix instanceof PrintingInstruction)
                 || program.stream().anyMatch(ix -> ix.getOpcode() == Opcode.PRINTFLUSH
-                || ix instanceof DrawInstruction dri && dri.getType().getKeyword().equals("print"))) {
+                || ix instanceof DrawInstruction dix && dix.getType().getKeyword().equals("print"))) {
             return;
         }
 

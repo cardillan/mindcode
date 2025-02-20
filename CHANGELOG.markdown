@@ -12,13 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* Added support for [internal and external arrays/subarrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#arrays) (closes [#213](https://github.com/cardillan/mindcode/issues/213)).
+* Added parallel iteration through arrays or lists in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops).   
 * Added support for the new `printchar` instruction in compiler, optimizer and processor emulator.
-* Added character literals (e.g. `'A'`). The value of the literal is the ASCII value of the character in quotes.
-* Added `ascii()` function. The function returns the ASCII value of the first character of a string literal or constant.
+* Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g. `'A'`). The value of the literal is the ASCII value of the character in quotes.
+* Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function returns the ASCII value of the first character of a string literal or constant.
 
 ### Experimental features
 
 * Added the "backpropagation" optimization to Data Flow Optimization (closes [#151](https://github.com/cardillan/mindcode/issues/151)).
+* Added support for compiling in runtime checks for checking internal array elements are not accessed out of bounds. One of the methods uses the MlogAssertions mod, which is currently only available for Mindustry 7.    
 
 ## 3.0.0 - 2025-01-26
 
@@ -360,7 +363,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 Experimental features may contain bugs, break existing code or produce suboptimal code, and are subject to change.
 
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
-* Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
+* Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-variables-in-the-list).
 * Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
 * Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool.
 * Added a capability to the command line tool to compile several source files at once using the [`--append` command line argument](doc/syntax/TOOLS-CMDLINE.markdown#additional-input-files).

@@ -298,6 +298,25 @@ These literals are written into the mlog code exactly as they appear in Mindcode
 
 If the result of a compile-time evaluated expression lies within the range of color literals, it is encoded into mlog as a color literal.
 
+### Character literals
+
+Mindcode supports character literals. These consists of a single character enclosed in single quotes: `'a'`. It is possible to use both single- and double quotes in a character literal, i.e. `'\''` and `'"'` respectively.
+
+Character literals have a numeric value equal to the ASCII value of the enclosed character. When converting the literal to mlog, the numeric value is used, as Mindustry Logic doesn't support character literals - `'A'` is equivalent to `65`, for example.
+
+Character literals are most useful with the Mindustry Logic 8 `printchar` instruction, for example:
+
+```
+#set target = 8;
+
+// Prints ABCDEFGHIJKLMNOPQRSTUVWXYZ
+for ch in 'A' .. 'Z' do
+   printchar(ch);
+end;
+```
+
+It is also possible to output double quotes to the text buffer using this `printchar('"');` (or `printchar(34);`, which is equivalent, but less readable). There's no other way to print double quotes in Mindustry Logic. 
+
 ### String literals
 
 Finally, there are string literals, a sequence of characters enclosed in double quotes:

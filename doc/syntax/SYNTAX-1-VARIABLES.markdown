@@ -179,9 +179,11 @@ Mindustry provides special blocks that are capable of holding numeric values ind
 * `@memory-bank`
 * `@world-cell`
 
-Values written to these blocks are available to all processors that obtain a link to the block (with possible exception to team rules), and can be used to communicate between processors. Once written, the values remain in the memory block until the block is destroyed.
+All these blocks consist of individual elements, which are identified by an index.
 
-Only numeric values are supported by memory blocks. When the program attempts to write a non-numeric value to the block, the value actually written is 0 (for `null`) or 1 (for all other non-null objects).
+Values written to the elements of these blocks are available to all processors that obtain a link to the block (with possible exception to team rules), and can be used to communicate between processors. Once written, the values remain in the memory block until the block is destroyed.
+
+Only numeric values are supported by memory block elements. When the program attempts to write a non-numeric value to an element, the value actually written is 0 (for `null`) or 1 (for all other non-null objects).
 
 ## Mindustry Logic built-in variables
 
@@ -283,6 +285,41 @@ Explicit variables are created using explicit declaration. The kind of the varia
 There are no name restrictions on explicitly declared variables, except the `$` prefix, which can only be used on explicitly declared external variables. Specifically, it is possible to use a name of a linked block for explicitly declared variables (e.g. `wave1`).
 
 When a main or local variable has the same name as a global variable, the global variable is said to be _shadowed_ and cannot be accessed in the corresponding code block.
+
+# Arrays
+
+Arrays consists of elements which can be accessed via an integer index. The index is specified in square brackets: `a[5]` accesses an element of array `a` at the position `5`. The first element has an index of 0, therefore `a[1]` refers to the **second** element, and `a[9]` refers to the last element of an array of size 10. 
+
+## Implicit arrays
+
+All [memory blocks](#external-memory) can be accessed as an array in Mindcode. These arrays do not need to be declared and are used by referencing the memory block directly: `cell1[0] = 10;` writes the value of `10` to the first element of the `cell1` memory cell. It is possible to access an implicit array even when the reference to the memory block is stored in another variable: `memory = bank1; print(memory[8]);`. The array size depends on the memory block used, and Mindcode doesn't check bounds when accessing implicit arrays in any way.
+
+As implicit arrays are stored in memory blocks, they can only hold numeric values.
+
+## External arrays
+
+External arrays are explicitly declared, and are allocated on the [heap](#heap) similarly to other external variables. The array size is specified when declaring the array, but Mindcode again  doesn't check bounds when accessing implicit arrays in any way. Accessing an element outside the bounds of an external array may cause other elements or variables stored on the heap to be accessed instead. 
+
+As external arrays are stored in memory blocks, they can only hold numeric values.
+
+## Internal arrays
+
+Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _jump tables_. Since obtaining an element of such arrays involves manipulating the `@counter` variable, these arrays are also called _@counter arrays_. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings and so on.
+
+Accessing individual elements of internal arrays is slower than accessing elements of external arrays, and consumes additional instruction space for jump tables. However, when Mindcode is able to resolve the index during compilation, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g. when unrolling all loops in the program), the jump tables might be eliminated entirely, keeping only the individual element variables in the resulting code. 
+
+## Subarrays
+
+For some operations, such as array assignments, list-iteration loops and function calls, it is possible to select a portion of the array for operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external and internal arrays: 
+
+```
+var a[10];
+external $a[10];
+
+cell1[0 ... 5];         // Elements 0 to 4 from cell1 memory cell 
+$a[5 .. 8];             // Elements 5 to 8 of an external array
+a[8 .. 9];              // Last two elements of an internal array  
+```
 
 # Variable declarations
 
@@ -469,6 +506,70 @@ write 90 cell4 35
 op add .c .a 90
 write .c cell4 36
 ```
+
+## External arrays
+
+It is possible to allocate an array of a fixed length from the heap. An external array consists of a fixed number of elements. Individual array elements are governed by the same rules as external variables. External arrays are declared using this syntax:
+
+```
+external [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
+```
+
+> [!TIP]
+> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `external var x[10];`.
+
+`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array:
+
+```
+allocate heap in cell1[32 .. 64];
+external $array[3] = (10, 20, 30);
+```
+
+compiles into
+
+```
+jump 0 equal cell1 null
+write 10 cell1 32
+write 20 cell1 33
+write 30 cell1 34
+```
+
+External arrays must be declared in global scope and are therefore always global. Declared external arrays can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
+
+When initial values are provided, they are written to corresponding memory slots at the moment of the declaration.
+
+`external` is a modifier, and the `var` keyword is optional when `external` is used. When declaring external arrays, the `noinit` and `cached` modifiers cannot be used.
+
+## Internal arrays
+
+[Internal arrays](#internal-arrays) are declared using this syntax:
+
+```
+[var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
+```
+
+> [!TIP]
+> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `external var x[10];`.
+
+`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array. The initiali values are asigned directly to array element variables:
+
+```
+var array[3] = (rand(10), rand(20), rand(30));
+print(array);
+```
+
+compiles into
+
+```
+op rand .array*0 10 0
+op rand .array*1 20 0
+op rand .array*2 30 0
+print .array*0
+print .array*1
+print .array*2
+```
+
+Internal arrays must be declared in global scope and are therefore always global.
 
 ## Program parameters
 
