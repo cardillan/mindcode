@@ -11,7 +11,7 @@
     <p>
     <nav class="my-4">
         <ul class="flex space-around">
-            <@com.sample name="control-two-units"       >Controlling units</@com.sample>
+            <@com.sample name="control-multiple-units"  >Controlling units</@com.sample>
             <@com.sample name="one-thorium"             >Controlling a block</@com.sample>
             <@com.sample name="many-thorium"            >Controlling more&nbsp;blocks</@com.sample>
             <@com.sample name="heal-damaged-building"   >Healing buildings</@com.sample>
