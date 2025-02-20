@@ -14,13 +14,15 @@
 </div>
 <br>
 
-**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, such as variable declaration, arrays, various types of loops, inline, stackless and recursive functions, modules, system library etc. Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
+**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays, conditional statements and loops, functions, modules, system library etc. Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
 ## Mindcode Syntax
 
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
+
+You can also visit [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts.
 
 ## Latest development
 
@@ -69,7 +71,7 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 If you don't know much about Mindustry Logic, you can read more information about it here:
 
-* [Mlog Documentation](https://yrueii.github.io/MlogDocs/) <small>Feb 2025</small>
+* [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated Feb 2025)
 
 You can also get help on these Discord servers:
 

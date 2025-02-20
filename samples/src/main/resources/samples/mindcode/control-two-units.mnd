@@ -1,38 +1,47 @@
-// Binds two different units, stores them in variables and controls
-// both them simultaneously by moving them around in a pattern
+// Binds multiple different units, stores them in an array and controls
+// all them simultaneously by moving them around in a pattern
+
+#set syntax = strict;
 
 // Units is a system library providing functions
 // for easy acquisition of units
 require units;
 
-// We'll write messages onto this block
-// It is used by the units system library to output messages as well
+const UNITS = 6;   // Number of units to control
+
+// We'll output messages onto this block
 param message = message1;
 
-// This is a global variable
+// Global variables/arrays declarations
+var flag = 1 + rand(1000);
 var angle = 0;
 
-// The entire code needs to be enclosed in a code block (begin ... end)
+var types[UNITS] = (@poly, @poly, @mega, @poly, @poly, @mega);
+var units[UNITS];
+
+// The main code needs to be enclosed in a code block (begin ... end)
 begin
-    // Finds a free unit of given type, not returning until such a unit is found
-    // Sets the flags of these units to a nonzero value (1)
-    // Stores the acquired units in variables
-    var poly = waitForFreeUnit(message, "Control two units example\n", @poly, 1);
-    var mega = waitForFreeUnit(message, "Control two units example\n", @mega, 1);
-
     while true do
-        controlUnit(poly);
-        controlUnit(mega);
-    end;
-end;
+        // The out keyword here means any change in unit gets propagated
+        // to the corresponding units element
+        for var type in types; var out unit in units do
+            if unit == null or unit.@dead then
+                // Finds a free unit of given type, not returning until such a unit is found
+                // Sets the flags of these units to a nonzero value
+                // Stores the acquired units in the array
+                unit = findFreeUnit(type, flag);
+            end;
 
-// A function
-void controlUnit(unit)
-    // Binds the unit stored in a variable
-    ubind(unit);
-    move(@thisx + 10 * sin(angle), @thisy + 10 * cos(angle));
-    print($"Currently bound unit is ${@unit}.");
-    printflush(message);
-    wait(0.8);
-    angle += 45;
+            if unit != null
+                // Binds the unit stored in a variable
+                ubind(unit);
+                move(@thisx + 15 * sin(angle), @thisy + 15 * cos(angle));
+                print($"Currently bound unit is ${@unit}.");
+                printflush(message);
+                angle += 20;
+            end;
+
+            wait(0.8);
+        end;
+    end;
 end;
