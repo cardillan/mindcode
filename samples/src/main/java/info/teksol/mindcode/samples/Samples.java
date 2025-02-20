@@ -13,7 +13,7 @@ public class Samples {
 
     public static Map<String, Sample> loadMindcodeSamples() {
         final List<String> sampleNames = List.of(
-                "control-two-units",
+                "control-multiple-units",
                 "relaxed:one-thorium",
                 "relaxed:many-thorium",
                 "heal-damaged-building",

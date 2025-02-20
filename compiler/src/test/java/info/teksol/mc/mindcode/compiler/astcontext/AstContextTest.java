@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
 class AstContextTest {
-    private final CompilerProfile profile = CompilerProfile.standardOptimizations(false);
+    private final CompilerProfile profile = CompilerProfile.fullOptimizations(false);
     private final AstContext root = AstContext.createRootNode(profile);
     private final CallGraph callGraph = CallGraph.createEmpty();
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,

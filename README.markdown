@@ -71,7 +71,7 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 If you don't know much about Mindustry Logic, you can read more information about it here:
 
-* [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated Feb 2025)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated Feb 2025)
 
 You can also get help on these Discord servers:
 

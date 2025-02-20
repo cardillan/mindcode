@@ -15,14 +15,14 @@ class CompilerProfileTest {
         String encoded = new CompilerProfile(false)
                 .setAllOptimizationLevels(OptimizationLevel.BASIC)
                 .setGoal(GenerationGoal.SPEED)
-                .setOptimizationLevel(Optimization.CASE_EXPRESSION_OPTIMIZATION, OptimizationLevel.ADVANCED)
+                .setOptimizationLevel(Optimization.CASE_EXPRESSION_OPTIMIZATION, OptimizationLevel.EXPERIMENTAL)
                 .encode();
 
         CompilerProfile profile = new CompilerProfile(false).decode(encoded);
 
         assertEquals(GenerationGoal.SPEED, profile.getGoal());
         for (Optimization optimization : Optimization.LIST) {
-            assertEquals(optimization == Optimization.CASE_EXPRESSION_OPTIMIZATION ? OptimizationLevel.ADVANCED : OptimizationLevel.BASIC,
+            assertEquals(optimization == Optimization.CASE_EXPRESSION_OPTIMIZATION ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.BASIC,
                     profile.getOptimizationLevel(optimization),
                     "Error decoding optimization level of " + optimization);
         }

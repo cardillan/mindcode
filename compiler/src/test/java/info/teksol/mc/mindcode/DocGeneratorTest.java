@@ -343,7 +343,7 @@ public class DocGeneratorTest {
 
             CompilerProfile profile = createCompilerProfile()
                     .setProcessorVersion(ProcessorVersion.MAX)
-                    .setAllOptimizationLevels(OptimizationLevel.ADVANCED)
+                    .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL)
                     .setGoal(goal)
                     .setSignature(false);
 

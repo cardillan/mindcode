@@ -120,7 +120,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     private static final AstContext sampleContext = AstContext.createRootNode(
-            CompilerProfile.standardOptimizations(false));
+            CompilerProfile.fullOptimizations(false));
 
     @Override
     public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {

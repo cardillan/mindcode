@@ -125,7 +125,7 @@ abstract class ActionHandler {
                 .help("sets global optimization level for all optimizers")
                 .type(Arguments.caseInsensitiveEnumType(OptimizationLevel.class))
                 .metavar("LEVEL")
-                .setDefault(OptimizationLevel.ADVANCED);
+                .setDefault(OptimizationLevel.EXPERIMENTAL);
 
         for (Optimization optimization : Optimization.LIST) {
             optimizations.addArgument("--" + optimization.getOptionName())

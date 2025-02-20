@@ -77,10 +77,10 @@ public class HomeController {
     public ModelAndView getHomePage(
         @RequestParam(name = "s", defaultValue = "") String id,
         @RequestParam(name = "mindcode", defaultValue = "") String src,
-        @RequestParam(name = "optimizationLevel", defaultValue = "ADVANCED") String optimizationLevel,
+        @RequestParam(name = "optimizationLevel", defaultValue = "EXPERIMENTAL") String optimizationLevel,
         @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
-        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.ADVANCED);
+        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.EXPERIMENTAL);
         boolean run = "true".equals(compileAndRun);
         final String sampleName;
         final String sourceCode;

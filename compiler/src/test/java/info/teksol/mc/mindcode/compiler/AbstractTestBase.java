@@ -48,7 +48,7 @@ public abstract class AbstractTestBase {
     }
 
     protected CompilerProfile createCompilerProfile() {
-        return CompilerProfile.experimentalOptimizations()
+        return CompilerProfile.fullOptimizations(false)
                 .setProcessorVersion(getProcessorVersion())
                 .setProcessorEdition(getProcessorEdition())
                 .setAutoPrintflush(false)

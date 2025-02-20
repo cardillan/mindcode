@@ -127,7 +127,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                         .setAllOptimizationLevels(OptimizationLevel.NONE)
                         .setInstructionLimit(1100);
                 for (int i = 0; i < index; i++) {
-                    compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.ADVANCED);
+                    compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.EXPERIMENTAL);
                 }
                 processDrawingCode(result, index == 0 ? "None" : "+ " + optimizations.get(index - 1).getName(),
                         compilerProfile, code, number);

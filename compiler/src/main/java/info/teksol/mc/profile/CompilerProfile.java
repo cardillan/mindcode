@@ -93,15 +93,7 @@ public class CompilerProfile {
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         Set<Optimization> optimSet = Set.of(optimizations);
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
-                o -> optimSet.contains(o) ? OptimizationLevel.ADVANCED : OptimizationLevel.NONE));
-    }
-
-    /// Creates a [CompilerProfile] instance configured with command-line tool defaults and
-    /// experimental optimizations.
-    ///
-    /// @return a [CompilerProfile] instance configured with the experimental optimization level.
-    public static CompilerProfile experimentalOptimizations() {
-        return new CompilerProfile(false,OptimizationLevel.EXPERIMENTAL);
+                o -> optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
     }
 
     /// Creates a [CompilerProfile] instance configured with full optimizations.
@@ -111,17 +103,7 @@ public class CompilerProfile {
     ///                       it applies optimizations for general-purpose environments.
     /// @return a [CompilerProfile] instance configured with the advanced optimization level.
     public static CompilerProfile fullOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.ADVANCED);
-    }
-
-    /// Creates a [CompilerProfile] instance configured with the standard optimizations.
-    ///
-    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
-    ///                       If true, it applies settings optimized for web applications; otherwise,
-    ///                       it applies settings suitable for command-line environments.
-    /// @return a [CompilerProfile] instance configured with the standard optimization level.
-    public static CompilerProfile standardOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.BASIC);
+        return new CompilerProfile(webApplication, OptimizationLevel.EXPERIMENTAL);
     }
 
     /// Creates a [CompilerProfile] instance with no optimizations applied.

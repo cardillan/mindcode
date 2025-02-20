@@ -32,7 +32,7 @@ begin
                 unit = findFreeUnit(type, flag);
             end;
 
-            if unit != null
+            if unit != null then
                 // Binds the unit stored in a variable
                 ubind(unit);
                 move(@thisx + 15 * sin(angle), @thisy + 15 * cos(angle));

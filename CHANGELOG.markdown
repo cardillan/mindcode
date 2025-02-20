@@ -4,20 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.1.0 - Future release
+## 3.1.0 - 2025-02-20
 
 ### Fixed
 
+* Fixed some syntax errors reported at wrong places ([#214](https://github.com/cardillan/mindcode/issues/214)).
 * Fixed wrong block/unit logic IDs ([#224](https://github.com/cardillan/mindcode/issues/224)).
 * Fixed error decompiling schematics with Air Factory ([#225](https://github.com/cardillan/mindcode/issues/225)).
 
 ### Added
 
 * Added support for [internal and external arrays/subarrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#arrays) (closes [#213](https://github.com/cardillan/mindcode/issues/213)).
-* Added parallel iteration through arrays or lists in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops).   
+* Added parallel iteration through arrays/lists in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops).   
 * Added support for the new `printchar` instruction in compiler, optimizer and processor emulator.
 * Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g. `'A'`). The value of the literal is the ASCII value of the character in quotes.
 * Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function returns the ASCII value of the first character of a string literal or constant.
+
+### Changed
+
+* The default optimization level in both the web application and command line compiler is now `experimental`.
 
 ### Experimental features
 

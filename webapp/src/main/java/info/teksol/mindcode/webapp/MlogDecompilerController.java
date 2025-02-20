@@ -84,7 +84,7 @@ public class MlogDecompilerController {
                         List.of(),
                         List.of(),
                         List.of(),
-                        OptimizationLevel.ADVANCED.name(),
+                        OptimizationLevel.EXPERIMENTAL.name(),
                         null,
                         0)
         );

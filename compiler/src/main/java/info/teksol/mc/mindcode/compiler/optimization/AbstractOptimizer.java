@@ -21,7 +21,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
-    protected OptimizationLevel level = OptimizationLevel.ADVANCED;
+    protected OptimizationLevel level = OptimizationLevel.EXPERIMENTAL;
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
