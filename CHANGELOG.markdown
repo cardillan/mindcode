@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed wrong block/unit logic IDs ([#224](https://github.com/cardillan/mindcode/issues/224)).
+* Fixed error decompiling schematics with Air Factory ([#225](https://github.com/cardillan/mindcode/issues/225)).
 
 ### Added
 

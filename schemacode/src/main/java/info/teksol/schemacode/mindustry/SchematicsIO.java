@@ -179,11 +179,11 @@ public class SchematicsIO {
         }
 
         int index = integer.value();
-        if (index < 0 || index >= blockType.unitPlans().size()) {
+        if (index < -1 || index >= blockType.unitPlans().size()) {
             throw new SchematicsInternalError("Invalid plan index %d for unit factory %s.", index, blockType.name());
         }
 
-        return new UnitPlan(blockType.unitPlans().get(index));
+        return index < 0 ? UnitPlan.EMPTY : new UnitPlan(blockType.unitPlans().get(index));
     }
 
     private static Configuration mapConfig(BlockType block, int value, Position position) {
